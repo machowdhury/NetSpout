@@ -1,0 +1,29 @@
+samples:
+- name: cisco-mdt-streaming-metrics
+  description: High-fidelity Cisco IOS-XE and IOS-XR Model-Driven Telemetry (MDT) streaming interface and CPU metrics
+  interval: 10
+  count: 10
+  randomizeEvents: true
+  tokens:
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+  lines:
+    - index: cisco_mdt_metrics
+      sourcetype: cisco:ios:mdt:metric
+      source: cisco:ios:mdt
+      host: leaf01.dc.cisco.com
+      _time: "$EPOCH$"
+      _raw: '{"time": $EPOCH$, "event": "metric", "source": "cisco:ios:mdt", "sourcetype": "cisco:ios:mdt:metric", "host": "leaf01.dc.cisco.com", "index": "cisco_mdt_metrics", "fields": {"metric_name:cpu.utilization": 24.8, "metric_name:memory.utilization": 36.4, "metric_name:interface.octets.in": 9845129840.0, "metric_name:interface.octets.out": 8741029810.0, "metric_name:interface.errors.in": 0.0, "metric_name:interface.errors.out": 0.0, "metric_name:carrier.transitions": 1.0, "_value": 24.8, "interface": "GigabitEthernet0/0/1", "vendor": "cisco", "device": "leaf01"}}'
+    - index: cisco_mdt_metrics
+      sourcetype: cisco:ios:mdt:metric
+      source: cisco:ios:mdt
+      host: leaf02.dc.cisco.com
+      _time: "$EPOCH$"
+      _raw: '{"time": $EPOCH$, "event": "metric", "source": "cisco:ios:mdt", "sourcetype": "cisco:ios:mdt:metric", "host": "leaf02.dc.cisco.com", "index": "cisco_mdt_metrics", "fields": {"metric_name:cpu.utilization": 28.2, "metric_name:memory.utilization": 41.2, "metric_name:interface.octets.in": 12845129840.0, "metric_name:interface.octets.out": 11741029810.0, "metric_name:interface.errors.in": 0.0, "metric_name:interface.errors.out": 0.0, "metric_name:carrier.transitions": 0.0, "_value": 28.2, "interface": "GigabitEthernet0/0/2", "vendor": "cisco", "device": "leaf02"}}'
+    - index: cisco_mdt_metrics
+      sourcetype: cisco:ios:mdt:metric
+      source: cisco:ios:mdt
+      host: spine01.dc.cisco.com
+      _time: "$EPOCH$"
+      _raw: '{"time": $EPOCH$, "event": "metric", "source": "cisco:ios:mdt", "sourcetype": "cisco:ios:mdt:metric", "host": "spine01.dc.cisco.com", "index": "cisco_mdt_metrics", "fields": {"metric_name:queue_depth_bytes": 14200.0, "metric_name:buffer_utilization_pct": 18.5, "metric_name:bgp.prefixes.received": 1420.0, "metric_name:bgp.prefixes.advertised": 850.0, "_value": 18.5, "device": "spine01", "vendor": "cisco"}}'

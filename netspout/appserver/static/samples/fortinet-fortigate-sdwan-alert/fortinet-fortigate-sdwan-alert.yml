@@ -1,0 +1,24 @@
+samples:
+  - name: fortinet-fortigate-sdwan-alert
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: fgt_event
+        host: "sensor-01.acme.corp"
+        _raw: 'date=2026-09-18 time=17:15:51 devname="FGT-Edge-01" devid="FGT60E4Q16000001" vd="root" type="event" subtype="sdwan" level="warning" logid="0100022923" msg="SD-WAN SLA path quality degradation alert" sla_rule="SLA_Voice_HighPri" interface="wan2" latency=142.5 jitter=28.4 packet_loss=6.8 link_status="degraded" action="failover"'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: fgt_event
+        host: "sensor-01.acme.corp"
+        _raw: 'date=2026-09-18 time=17:15:53 devname="FGT-Edge-01" devid="FGT60E4Q16000001" vd="root" type="event" subtype="sdwan" level="notice" logid="0100022924" msg="SD-WAN path failover completed to wan1" sla_rule="SLA_Voice_HighPri" interface="wan1" latency=18.2 jitter=2.1 packet_loss=0.0 link_status="optimal" action="active"'

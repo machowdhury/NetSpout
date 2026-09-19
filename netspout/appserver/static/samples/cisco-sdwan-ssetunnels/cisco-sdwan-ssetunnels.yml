@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-ssetunnels
+  description: Real Network Assurance replay for cisco:sdwan:ssetunnels (sdwan index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: sdwan
+      sourcetype: cisco:sdwan:ssetunnels
+      source: cisco_catalyst_sdwan_site_and_tunnel_health:sse_tunnels:netops
+      host: https://192.168.100.17
+      _time: "$EPOCH$"
+      _raw: '{"device-state": "Up", "tunnel-if-name": "Tunnel17000102", "vdevice-name": "172.80.1.10", "createTimeStamp": $EPOCH_MS$, "sse-tcsm": "-", "vdevice-host-name": "C1131X-site8000", "tunnelType": "SSE-Private access", "vdevice-dataKey": "172.80.1.10-Tunnel17000102--", "destination-data-center": "35.171.214.188", "vmanage-system-ip": "172.80.1.10", "tenantId": "default", "lastupdated": $EPOCH_MS$, "sig-state": "Up", "eventNumber": 0, "site-name": "Montreal", "device-packets-in": 0, "device-packets-out": 0, "site-id": "8000", "tunnel-name": "us-east-1", "tunnel-id": "666447230", "tunnel-type": "IPSEC", "provider": "Cisco Secure Access", "lastModified": $EPOCH_MS$}'
+    - index: sdwan
+      sourcetype: cisco:sdwan:ssetunnels
+      source: cisco_catalyst_sdwan_site_and_tunnel_health:sse_tunnels:netops
+      host: https://192.168.100.17
+      _time: "$EPOCH$"
+      _raw: '{"device-state": "Up", "tunnel-if-name": "Tunnel17000102", "vdevice-name": "172.80.1.10", "createTimeStamp": $EPOCH_MS$, "sse-tcsm": "-", "vdevice-host-name": "C1131X-site8000", "tunnelType": "SSE-Private access", "vdevice-dataKey": "172.80.1.10-Tunnel17000102--", "destination-data-center": "35.171.214.188", "vmanage-system-ip": "172.80.1.10", "tenantId": "default", "lastupdated": $EPOCH_MS$, "sig-state": "Up", "eventNumber": 0, "site-name": "Montreal", "device-packets-in": 0, "device-packets-out": 0, "site-id": "8000", "tunnel-name": "us-east-1", "tunnel-id": "666447230", "tunnel-type": "IPSEC", "provider": "Cisco Secure Access", "lastModified": $EPOCH_MS$}'

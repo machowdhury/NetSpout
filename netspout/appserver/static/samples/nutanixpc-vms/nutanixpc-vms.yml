@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-VMS - HEALTHY BASELINE ###
+  - name: nutanixpc-vms-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/config/vms
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/config/vms-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_vms
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Vm", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "memorySizeBytes": 137438953472, "numCoresPerSocket": 1, "numCpus": 32, "guestOsName": "Ubuntu Linux (64-bit)", "virtualHardwareVersion": 10, "name": "vND-4.3-roberbur-2", "cluster": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.ClusterReference", "extId": "00061768-f76f-4f95-3e5f-0025b500016f"}, "host": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.HostReference", "extId": "0cfd1bd1-a620-42d6-974b-e8fc372649cd"}, "ownershipInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnershipInfo", "owner": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnerReference", "entityType": "USER", "extId": "00000000-0000-0000-0000-000000000000"}}, "powerState": "ON", "disks": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Disk", "extId": "89bd66ba-2c9c-465e-aa2c-b3418bdc854e", "diskAddress": {"index": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 48318382080, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}, {"extId": "50f3cfe0-7b2a-4cee-a2ee-0b4e6650140f", "diskAddress": {"index": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 3298534883328, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}], "cdRoms": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRom", "extId": "72cfbb49-8412-4814-a2e4-c95df2e0e34d", "diskAddress": {"index": 2, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRomAddress", "busType": "IDE"}}], "nics": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Nic", "extId": "3fe37573-1077-4e9a-91f5-1deb05701750", "backingInfo": {"macAddress": "00:50:56:b7:69:c1", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-CORE(VLAN810)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}, {"extId": "ac230d44-9be5-447a-980b-e424c7f32568", "backingInfo": {"macAddress": "00:50:56:b7:eb:41", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-SHARED-OOB(VLAN807)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"ipv4Addresses": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.7.31"}], "ipv6Addresses": ["fe80::250:56ff:feb7:eb41"], "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}]}'
+
+  ### NUTANIXPC-VMS - DEGRADED / WARNING ###
+  - name: nutanixpc-vms-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/config/vms
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_vms
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Vm", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "memorySizeBytes": 137438953472, "numCoresPerSocket": 1, "numCpus": 32, "guestOsName": "Ubuntu Linux (64-bit)", "virtualHardwareVersion": 10, "name": "vND-4.3-roberbur-2", "cluster": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.ClusterReference", "extId": "00061768-f76f-4f95-3e5f-0025b500016f"}, "host": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.HostReference", "extId": "0cfd1bd1-a620-42d6-974b-e8fc372649cd"}, "ownershipInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnershipInfo", "owner": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnerReference", "entityType": "USER", "extId": "00000000-0000-0000-0000-000000000000"}}, "powerState": "ON", "disks": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Disk", "extId": "89bd66ba-2c9c-465e-aa2c-b3418bdc854e", "diskAddress": {"index": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 48318382080, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}, {"extId": "50f3cfe0-7b2a-4cee-a2ee-0b4e6650140f", "diskAddress": {"index": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 3298534883328, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}], "cdRoms": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRom", "extId": "72cfbb49-8412-4814-a2e4-c95df2e0e34d", "diskAddress": {"index": 2, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRomAddress", "busType": "IDE"}}], "nics": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Nic", "extId": "3fe37573-1077-4e9a-91f5-1deb05701750", "backingInfo": {"macAddress": "00:50:56:b7:69:c1", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-CORE(VLAN810)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}, {"extId": "ac230d44-9be5-447a-980b-e424c7f32568", "backingInfo": {"macAddress": "00:50:56:b7:eb:41", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-SHARED-OOB(VLAN807)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"ipv4Addresses": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.7.31"}], "ipv6Addresses": ["fe80::250:56ff:feb7:eb41"], "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}]}'
+
+  ### NUTANIXPC-VMS - CRITICAL / FAILURE ###
+  - name: nutanixpc-vms-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/config/vms
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_vms
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Vm", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "memorySizeBytes": 137438953472, "numCoresPerSocket": 1, "numCpus": 32, "guestOsName": "Ubuntu Linux (64-bit)", "virtualHardwareVersion": 10, "name": "vND-4.3-roberbur-2", "cluster": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.ClusterReference", "extId": "00061768-f76f-4f95-3e5f-0025b500016f"}, "host": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.HostReference", "extId": "0cfd1bd1-a620-42d6-974b-e8fc372649cd"}, "ownershipInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnershipInfo", "owner": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.OwnerReference", "entityType": "USER", "extId": "00000000-0000-0000-0000-000000000000"}}, "powerState": "ON", "disks": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Disk", "extId": "89bd66ba-2c9c-465e-aa2c-b3418bdc854e", "diskAddress": {"index": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 48318382080, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}, {"extId": "50f3cfe0-7b2a-4cee-a2ee-0b4e6650140f", "diskAddress": {"index": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.DiskAddress", "busType": "SCSI"}, "backingInfo": {"diskSizeBytes": 3298534883328, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDisk", "storageContainer": {"extId": "77dc68c6-0fa6-4a9a-b432-1838cb8a625b", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.VmDiskContainerReference"}}}], "cdRoms": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRom", "extId": "72cfbb49-8412-4814-a2e4-c95df2e0e34d", "diskAddress": {"index": 2, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.CdRomAddress", "busType": "IDE"}}], "nics": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.Nic", "extId": "3fe37573-1077-4e9a-91f5-1deb05701750", "backingInfo": {"macAddress": "00:50:56:b7:69:c1", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-CORE(VLAN810)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}, {"extId": "ac230d44-9be5-447a-980b-e424c7f32568", "backingInfo": {"macAddress": "00:50:56:b7:eb:41", "isConnected": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicBackingInfo", "adapterType": "VMXNET3"}, "networkInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.NicNetworkInfo", "portGroupInfo": {"name": "MAPLE-SHARED-OOB(VLAN807)", "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.PortGroupInfo"}, "ipAddressInfo": {"ipv4Addresses": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.7.31"}], "ipv6Addresses": ["fe80::250:56ff:feb7:eb41"], "$reserved": {"$fv": "v4.r0"}, "$objectType": "vmm.v4.esxi.config.IpAddressInfo"}}}]}'

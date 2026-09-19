@@ -1,0 +1,208 @@
+samples:
+  ### PHASE 1: GLOBAL HEALTHY BASELINE ACROSS ALL DOMAINS ###
+  - name: mix-domain-steady-state
+    interval: 60
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # Core Telemetry
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 40000000, "metric_name:interface_generic_counters.bytes_received": 18500000, "metric_name:interface_generic_counters.bytes_sent": 17200000, "metric_name:interface_generic_counters.input_drops": 0, "metric_name:interface_generic_counters.output_drops": 0, "metric_name:bgp_status.session_state": 5, "interface_name": "FortyGigE0/0/1/1"}}'
+      # SD-WAN Fabric
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1", "state": "Up", "health": "green", "loss_percentage": 0.0, "latency": 14.5, "jitter": 1.8, "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      # Campus LAN
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "Cat9k-Core-01", "deviceFamily": "Switches and Hubs", "deviceHealthScore": 100, "reachabilityStatus": "reachable", "cpuHealth": 100, "memoryHealth": 100, "site": "Toronto_DC1"}'
+      # Wireless Mobility
+      - index: catalyst
+        source: cisco:dnac:clienthealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac.corp.local
+        _raw: '{"clientId": "c4:b3:01:8a:22:10", "clientHealthScore": 100, "rssi": -52, "snr": 38, "dataRate": 540, "apName": "AP-Floor1-West", "location": "Toronto_DC1#Floor1", "timestamp": "$GOTS$"}'
+      # Data Center ACI
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-dc01.corp.local
+        _raw: '{"component": "fabricHealthTotal", "dn": "topology/health", "cur": 100, "aseverity": "cleared", "Role": "fabric"}'
+
+  ### PHASE 2: CONGESTION SPREAD & MULTI-DOMAIN DEGRADATION ###
+  - name: mix-domain-cascading-degradation
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 1800
+        upper: 4500
+      - name: LATENCY
+        format: template
+        type: random
+        replacement: float
+        precision: 1
+        lower: 175.0
+        upper: 290.0
+    lines:
+      # Core packet drops
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bytes_received": 2500000, "metric_name:interface_generic_counters.input_drops": $DROPS$, "metric_name:interface_generic_counters.output_drops": $DROPS$, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": 54, "interface_name": "FortyGigE0/0/1/1"}}'
+      # SD-WAN Tunnel SLA Breached
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1", "state": "Up", "health": "yellow", "loss_percentage": 5.4, "latency": $LATENCY$, "jitter": 42.1, "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      # Campus Switch Alarm
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P3", "title": "Core Uplink Experiencing Packet Loss on Cat9k-Core-01", "status": "active", "category": "Performance", "site": "Toronto_DC1"}'
+      # Wireless Client Degradation
+      - index: catalyst
+        source: cisco:dnac:clienthealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac.corp.local
+        _raw: '{"clientId": "c4:b3:01:8a:22:10", "clientHealthScore": 45, "rssi": -82, "snr": 12, "dataRate": 24, "apName": "AP-Floor1-West", "timestamp": "$GOTS$"}'
+
+  ### PHASE 3: CATASTROPHIC CASCADING OUTAGE ACROSS ALL PLATFORMS ###
+  - name: mix-domain-total-outage
+    interval: 15
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # Core Router: Interface Down & BGP Session Reset
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bytes_received": 0, "metric_name:interface_generic_counters.input_drops": 18500, "metric_name:bgp_status.session_state": 0, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": 98, "interface_name": "FortyGigE0/0/1/1"}}'
+      # SD-WAN: BGP Neighbor Down & Tunnel Red
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3264: *$TS$: %BGP-5-ADJCHANGE: neighbor 10.201.152.1 vpn vrf UBC_TENANT Down Neighbor deleted'
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1", "state": "Down", "health": "red", "loss_percentage": 100.0, "latency": 0.0, "jitter": 0.0, "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      - index: sdwan
+        source: cisco:sdwan:sitehealth
+        sourcetype: cisco:sdwan:sitehealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"site_name": "Toronto_DC1", "site_health": "critical", "overall_score": 1.0, "tunnels_health": "bad", "devices_health": "bad", "apps_health": "bad"}'
+      # Campus LAN: Switch Unreachable P1
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P1", "title": "Switch Unreachable: Cat9k-Core-01", "status": "active", "category": "Availability", "site": "Toronto_DC1", "description": "Core switch isolated following backbone link failure"}'
+      # Wireless / ISE: Supplicant Timeout & Auth Failure
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: ise-node01.corp.local
+        _raw: '$GOTS$ ise-node01 CISE_Failed_Authentications 0001234599 1 0 2026-03-17 14:30:00.000 +00:00 0001234599 5400 ERROR Failed-Attempt: 802.1X authentication failed, User-Name=jdoe, MAC=c4:b3:01:8a:22:10, FailureReason=RADIUS server unreachable from switch'
+      # Data Center ACI: Critical Leaf Fault
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-dc01.corp.local
+        _raw: '{"component": "fabricNode", "dn": "topology/pod-1/node-101", "cur": 50, "aseverity": "critical", "Role": "leaf"}'
+
+  ### PHASE 4: MULTI-DOMAIN RECONVERGENCE & RESTORATION ###
+  - name: mix-domain-automated-recovery
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # Core Secondary Link Up
+      - index: cisco_metrics
+        source: "10.0.255.172"
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.172", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bytes_received": 19000000, "metric_name:bgp_status.session_state": 5, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": 4, "interface_name": "FortyGigE0/0/1/0"}}'
+      # SD-WAN BGP Peer Re-established
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3270: *$TS$: %BGP-5-ADJCHANGE: neighbor 10.201.152.2 vpn vrf UBC_TENANT Up'
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1_backup", "state": "Up", "health": "green", "loss_percentage": 0.0, "latency": 15.1, "jitter": 2.1, "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      # Campus Issue Resolved
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P1", "title": "Switch Unreachable: Cat9k-Core-01", "status": "resolved", "category": "Availability", "site": "Toronto_DC1", "resolution": "Failover to redundant core operational. All downstream devices reachable."}'
+      # ACI Health Restored
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-dc01.corp.local
+        _raw: '{"component": "fabricHealthTotal", "dn": "topology/health", "cur": 99, "aseverity": "cleared", "Role": "fabric"}'

@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-EVENTS - HEALTHY BASELINE ###
+  - name: kube-events-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: sck-splunk-otel-collector-k8s-cluster-receiver-6f48f77d4f-tkt8n
+          - weight: 2
+            choice: sck-splunk-otel-collector-k8s-cluster-receiver-6f48f77d4f-tkt8n-peer
+    lines:
+      - index: em_logs
+        source: kubernetes
+        sourcetype: kube:events
+        host: $HOST$
+        _raw: 'Service uses deprecated annotation metallb.universe.tf/loadBalancerIPs'
+
+  ### KUBE-EVENTS - DEGRADED / WARNING ###
+  - name: kube-events-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: sck-splunk-otel-collector-k8s-cluster-receiver-6f48f77d4f-tkt8n
+    lines:
+      - index: em_logs
+        source: kubernetes
+        sourcetype: kube:events
+        host: $HOST$
+        _raw: 'Service uses deprecated annotation metallb.universe.tf/loadBalancerIPs'
+
+  ### KUBE-EVENTS - CRITICAL / FAILURE ###
+  - name: kube-events-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: sck-splunk-otel-collector-k8s-cluster-receiver-6f48f77d4f-tkt8n
+    lines:
+      - index: em_logs
+        source: kubernetes
+        sourcetype: kube:events
+        host: $HOST$
+        _raw: 'Service uses deprecated annotation metallb.universe.tf/loadBalancerIPs'

@@ -1,0 +1,49 @@
+samples:
+  ### HEALTHY BGP & ROUTING METRICS ###
+  - name: cisco-metrics-bgp-rib-healthy
+    interval: 60
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: PREFIXES
+        format: template
+        type: random
+        replacement: int
+        lower: 4
+        upper: 16
+    lines:
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:bgp_status.peer_as": 65013, "metric_name:bgp_status.session_state": 5, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted": $PREFIXES$, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.performance_statistics/global/ipv4rib_server/rib_connection_down_count": 0, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.vrf/network_count": 24, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast"}}'
+      - index: cisco_metrics
+        source: 10.0.255.172
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.172", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:bgp_status.peer_as": 65014, "metric_name:bgp_status.session_state": 5, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted": 8, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.performance_statistics/global/ipv4rib_server/rib_connection_down_count": 0, "neighbor_address": "10.30.4.138", "af_name": "ipv4-unicast"}}'
+
+  ### BGP SESSION DOWN & FLAPPING ###
+  - name: cisco-metrics-bgp-rib-failure
+    interval: 60
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: FLAPS
+        format: template
+        type: random
+        replacement: int
+        lower: 3
+        upper: 12
+    lines:
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:bgp_status.peer_as": 65013, "metric_name:bgp_status.session_state": 0, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted": 0, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.performance_statistics/global/ipv4rib_server/rib_connection_down_count": 2, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.vrf/network_count": 0, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast"}}'

@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-SYSLOG - HEALTHY BASELINE ###
+  - name: nutanixpc-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.4.141
+          - weight: 2
+            choice: 10.0.4.141-peer
+    lines:
+      - index: nutanixpc
+        source: udp:5519
+        sourcetype: nutanixpc_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $ISO_TIMESTAMP$ CCHCI-AHV-01 Genesis_7: 2026-09-18 17:34:07 INFO ovs.py:103 - Finished running get_bridge_name_by_port_name, took 0.03659343719482422 seconds'
+
+  ### NUTANIXPC-SYSLOG - DEGRADED / WARNING ###
+  - name: nutanixpc-syslog-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.4.141
+    lines:
+      - index: nutanixpc
+        source: udp:5519
+        sourcetype: nutanixpc_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $ISO_TIMESTAMP$ CCHCI-AHV-01 Genesis_7: 2026-09-18 17:34:07 INFO ovs.py:103 - Finished running get_bridge_name_by_port_name, took 0.03659343719482422 seconds'
+
+  ### NUTANIXPC-SYSLOG - CRITICAL / FAILURE ###
+  - name: nutanixpc-syslog-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.4.141
+    lines:
+      - index: nutanixpc
+        source: udp:5519
+        sourcetype: nutanixpc_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $ISO_TIMESTAMP$ CCHCI-AHV-01 Genesis_7: 2026-09-18 17:34:07 INFO ovs.py:103 - Finished running get_bridge_name_by_port_name, took 0.03659343719482422 seconds'

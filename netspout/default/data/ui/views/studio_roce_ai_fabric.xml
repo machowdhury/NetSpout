@@ -1,0 +1,125 @@
+<dashboard version="1.1" theme="dark">
+  <label>AI Data Center Fabric - RoCE v2 (MV-002)</label>
+  <description>PFC buffer utilization, ECN marking, and loss-less RDMA fabric telemetry during AI all-reduce gradient synchronization.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-002)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-002</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Spine to Leaf Links -->
+  <line x1="450" y1="50" x2="300" y2="140" stroke="#334155" stroke-width="2"/>
+  <line x1="450" y1="50" x2="650" y2="140" stroke="#334155" stroke-width="2"/>
+  <line x1="900" y1="50" x2="300" y2="140" stroke="#334155" stroke-width="2"/>
+  <line x1="900" y1="50" x2="650" y2="140" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,4"/>
+  <!-- Leaf to GPU Links -->
+  <line x1="300" y1="140" x2="150" y2="190" stroke="#10b981" stroke-width="2"/>
+  <line x1="650" y1="140" x2="800" y2="190" stroke="#ef4444" stroke-width="3"/>
+  <line x1="650" y1="140" x2="1050" y2="190" stroke="#10b981" stroke-width="2"/>
+  <!-- Spines -->
+  <rect x="370" y="20" width="160" height="50" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+  <text x="450" y="42" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">ai-spine-01 (800G)</text>
+  <text x="450" y="58" fill="#10b981" font-size="8" text-anchor="middle">Arista 7800R3 (ECN Enabled)</text>
+  <rect x="820" y="20" width="160" height="50" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+  <text x="900" y="42" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">ai-spine-02 (800G)</text>
+  <text x="900" y="58" fill="#ef4444" font-size="8" text-anchor="middle">PFC Pause RX: 48,201</text>
+  <!-- Leafs -->
+  <rect x="220" y="115" width="160" height="50" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+  <text x="300" y="137" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">ai-leaf-01 (400G)</text>
+  <text x="300" y="153" fill="#10b981" font-size="8" text-anchor="middle">Buffer Occupancy: 24.2%</text>
+  <rect x="570" y="115" width="160" height="50" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+  <text x="650" y="137" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">ai-leaf-02 (400G)</text>
+  <text x="650" y="153" fill="#ef4444" font-size="8" text-anchor="middle">Buffer Congestion: 98.4%</text>
+  <!-- Incident Callout -->
+  <rect x="940" y="115" width="380" height="75" rx="4" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="955" y="135" fill="#a5b4fc" font-size="10" font-weight="bold">INCIDENT FOCUS: RoCE v2 Congestion Collapse</text>
+  <text x="955" y="153" fill="#cbd5e1" font-size="9">Port Eth1/1 buffer saturation triggers PFC Pause storms.</text>
+  <text x="955" y="171" fill="#f87171" font-size="9">Head-of-Line blocking detected on GPU Cluster 2.</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>PFC Pause Frames (Eth1/1)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_performance_metrics sourcetype="arista:telemetry:json" | spath pfc_pause_rx | stats max(pfc_pause_rx) as pfc | eval pfc=if(isnull(pfc), 48201, pfc)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[10000,40000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">frames</option>
+        <option name="underLabel">PFC PAUSE FRAMES (ETH1/1)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Peak Ingress Buffer Utilization</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_performance_metrics sourcetype="arista:telemetry:json" | spath buffer_utilization_pct | stats max(buffer_utilization_pct) as buf | eval buf=if(isnull(buf), 98.4, buf)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[70,90]</option>
+        <option name="useColors">1</option>
+        <option name="unit">%</option>
+        <option name="underLabel">PEAK INGRESS BUFFER UTILIZATION</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

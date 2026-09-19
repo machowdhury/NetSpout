@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-DISKS - HEALTHY BASELINE ###
+  - name: nutanixpc-disks-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/disks
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/disks-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixPC_disks
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Disk", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "rel": "disk"}], "clusterName": "Fab1-CCHCI-AHV", "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "serviceVMId": "00063ffb-2c0b-2e6c-7635-0025b500010e::5", "nodeExtId": "1d538f08-44db-4bf5-ab0f-06b84f6d2ab9", "mountPath": "/home/nutanix/data/stargate-storage/disks/18G0A0ETTMEE", "location": 8, "serialNumber": "18G0A0ETTMEE", "diskSizeBytes": 320582727018, "physicalCapacityBytes": 400088457216, "model": "PX05SMB040", "vendor": "TOSHIBA", "firmwareVersion": "0104", "targetFirmwareVersion": "0104", "hostName": "CCHCI-AHV-03", "status": "NORMAL", "storageTier": "SSD_SATA", "cvmIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.130", "prefixLength": 32}}, "nodeIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.143", "prefixLength": 32}}, "diskAdvanceConfig": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskAdvanceConfig", "isSelfEncryptingDrive": false, "isSelfManagedNvme": false, "isBootDisk": false, "hasBootPartitionsOnly": false, "isSpdkManaged": false, "isOnline": true, "isMarkedForRemoval": false, "isDataMigrated": false, "isUnhealthy": false, "isSuspectedUnhealthy": false, "isMounted": true, "isUnderDiagnosis": false, "isDiagnosticInfoAvailable": false, "isErrorFoundInLog": false, "isPlannedOutage": false}}'
+
+  ### NUTANIXPC-DISKS - DEGRADED / WARNING ###
+  - name: nutanixpc-disks-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/disks
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixPC_disks
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Disk", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "rel": "disk"}], "clusterName": "Fab1-CCHCI-AHV", "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "serviceVMId": "00063ffb-2c0b-2e6c-7635-0025b500010e::5", "nodeExtId": "1d538f08-44db-4bf5-ab0f-06b84f6d2ab9", "mountPath": "/home/nutanix/data/stargate-storage/disks/18G0A0ETTMEE", "location": 8, "serialNumber": "18G0A0ETTMEE", "diskSizeBytes": 320582727018, "physicalCapacityBytes": 400088457216, "model": "PX05SMB040", "vendor": "TOSHIBA", "firmwareVersion": "0104", "targetFirmwareVersion": "0104", "hostName": "CCHCI-AHV-03", "status": "NORMAL", "storageTier": "SSD_SATA", "cvmIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.130", "prefixLength": 32}}, "nodeIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.143", "prefixLength": 32}}, "diskAdvanceConfig": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskAdvanceConfig", "isSelfEncryptingDrive": false, "isSelfManagedNvme": false, "isBootDisk": false, "hasBootPartitionsOnly": false, "isSpdkManaged": false, "isOnline": true, "isMarkedForRemoval": false, "isDataMigrated": false, "isUnhealthy": false, "isSuspectedUnhealthy": false, "isMounted": true, "isUnderDiagnosis": false, "isDiagnosticInfoAvailable": false, "isErrorFoundInLog": false, "isPlannedOutage": false}}'
+
+  ### NUTANIXPC-DISKS - CRITICAL / FAILURE ###
+  - name: nutanixpc-disks-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/disks
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixPC_disks
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Disk", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "rel": "disk"}], "clusterName": "Fab1-CCHCI-AHV", "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "serviceVMId": "00063ffb-2c0b-2e6c-7635-0025b500010e::5", "nodeExtId": "1d538f08-44db-4bf5-ab0f-06b84f6d2ab9", "mountPath": "/home/nutanix/data/stargate-storage/disks/18G0A0ETTMEE", "location": 8, "serialNumber": "18G0A0ETTMEE", "diskSizeBytes": 320582727018, "physicalCapacityBytes": 400088457216, "model": "PX05SMB040", "vendor": "TOSHIBA", "firmwareVersion": "0104", "targetFirmwareVersion": "0104", "hostName": "CCHCI-AHV-03", "status": "NORMAL", "storageTier": "SSD_SATA", "cvmIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.130", "prefixLength": 32}}, "nodeIpAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.143", "prefixLength": 32}}, "diskAdvanceConfig": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskAdvanceConfig", "isSelfEncryptingDrive": false, "isSelfManagedNvme": false, "isBootDisk": false, "hasBootPartitionsOnly": false, "isSpdkManaged": false, "isOnline": true, "isMarkedForRemoval": false, "isDataMigrated": false, "isUnhealthy": false, "isSuspectedUnhealthy": false, "isMounted": true, "isUnderDiagnosis": false, "isDiagnosticInfoAvailable": false, "isErrorFoundInLog": false, "isPlannedOutage": false}}'

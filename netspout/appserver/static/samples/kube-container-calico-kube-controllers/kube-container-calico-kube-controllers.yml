@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-CALICO-KUBE-CONTROLLERS - HEALTHY BASELINE ###
+  - name: kube-container-calico-kube-controllers-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-kube-controllers-79949b87d-swfnj_43fa3bbc-fc9b-479d-87d1-ded360b977c4/calico-kube-controllers/276.log
+        sourcetype: kube:container:calico-kube-controllers
+        host: $HOST$
+        _raw: '2026-09-18 17:12:41.037 [INFO][1] kube-controllers/resources.go 350: Main client watcher loop'
+
+  ### KUBE-CONTAINER-CALICO-KUBE-CONTROLLERS - DEGRADED / WARNING ###
+  - name: kube-container-calico-kube-controllers-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-kube-controllers-79949b87d-swfnj_43fa3bbc-fc9b-479d-87d1-ded360b977c4/calico-kube-controllers/276.log
+        sourcetype: kube:container:calico-kube-controllers
+        host: $HOST$
+        _raw: '2026-09-18 17:12:41.037 [INFO][1] kube-controllers/resources.go 350: Main client watcher loop'
+
+  ### KUBE-CONTAINER-CALICO-KUBE-CONTROLLERS - CRITICAL / FAILURE ###
+  - name: kube-container-calico-kube-controllers-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-kube-controllers-79949b87d-swfnj_43fa3bbc-fc9b-479d-87d1-ded360b977c4/calico-kube-controllers/276.log
+        sourcetype: kube:container:calico-kube-controllers
+        host: $HOST$
+        _raw: '2026-09-18 17:12:41.037 [INFO][1] kube-controllers/resources.go 350: Main client watcher loop'

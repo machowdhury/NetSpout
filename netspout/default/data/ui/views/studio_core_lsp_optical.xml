@@ -1,0 +1,122 @@
+<dashboard version="1.1" theme="dark">
+  <label>Core 100G Optical Degradation &amp; TI-LFA (MV-011)</label>
+  <description>Coherent DWDM optical Rx power, pre-FEC BER escalation, and Topology-Independent LFA sub-50ms fast reroute protection.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-011)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-011</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Primary Optical Path (Failing) -->
+  <line x1="260" y1="120" x2="680" y2="120" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,4"/>
+  <text x="470" y="105" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">PRIMARY 100G DWDM [Rx Power: -26.4 dBm | Pre-FEC BER: 1.4e-3]</text>
+  <!-- TI-LFA Bypass Backup Path -->
+  <path d="M 260 110 L 470 40 L 680 110" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="470" y="30" fill="#22c55e" font-size="9" font-weight="bold" text-anchor="middle">TI-LFA Fast Reroute Backup Path (&lt; 50ms Switchover)</text>
+  <!-- Node A -->
+  <rect x="80" y="85" width="180" height="70" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="2"/>
+  <text x="170" y="108" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">pe01-toronto-7750</text>
+  <text x="170" y="125" fill="#0284c7" font-size="9" text-anchor="middle">Nokia SR OS 7750</text>
+  <text x="170" y="142" fill="#94a3b8" font-size="8" text-anchor="middle">Port 1/1/c1/1 (Coherent 100G)</text>
+  <!-- Node Transit -->
+  <rect x="380" y="20" width="180" height="40" rx="4" fill="#0f172a" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="470" y="42" fill="#f8fafc" font-size="10" text-anchor="middle">p01-ottawa-transit</text>
+  <!-- Node B -->
+  <rect x="680" y="85" width="180" height="70" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="2"/>
+  <text x="770" y="108" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">pe02-montreal-7750</text>
+  <text x="770" y="125" fill="#0284c7" font-size="9" text-anchor="middle">Nokia SR OS 7750</text>
+  <text x="770" y="142" fill="#94a3b8" font-size="8" text-anchor="middle">Optical Terminus</text>
+  <!-- Callout -->
+  <rect x="920" y="70" width="400" height="95" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="935" y="93" fill="#fca5a5" font-size="10" font-weight="bold">INCIDENT FOCUS: Coherent Transponder Degradation</text>
+  <text x="935" y="113" fill="#cbd5e1" font-size="9">Fiber span macro-bend causes -8 dBm optical power drop.</text>
+  <text x="935" y="131" fill="#cbd5e1" font-size="9">Pre-FEC Bit Error Rate exceeds threshold.</text>
+  <text x="935" y="149" fill="#4ade80" font-size="9">TI-LFA pre-computed backup LSP activated in 34ms.</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Coherent Optical Rx Power (Port 1/1/c1/1)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops sourcetype IN ("nokia:sros", "cisco:ios") | eval pwr="-26.4 dBm" | head 1 | table pwr]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0xef4444"]</option>
+        <option name="rangeValues">[]</option>
+        <option name="useColors">1</option>
+        <option name="unit"></option>
+        <option name="underLabel">COHERENT OPTICAL RX POWER (PORT 1/1/C1/1)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Pre-FEC Bit Error Rate (BER)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops sourcetype IN ("nokia:sros", "cisco:ios") | eval ber="1.4e-3 (Degraded)" | head 1 | table ber]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0xf59e0b"]</option>
+        <option name="rangeValues">[]</option>
+        <option name="useColors">1</option>
+        <option name="unit"></option>
+        <option name="underLabel">PRE-FEC BIT ERROR RATE (BER)</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-utdhealth
+  description: Real Network Assurance replay for cisco:sdwan:utdhealth (sdwan index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: sdwan
+      sourcetype: cisco:sdwan:utdhealth
+      source: cisco_catalyst_sdwan_health:utdhealth:secops
+      host: https://192.168.100.17
+      _time: "$EPOCH$"
+      _raw: '{"vdevice-dataKey": "172.100.1.5", "utd-engine-status-version": "1.1.0_SV3.3.5.0_XE17.18", "vdevice-name": "172.100.1.5", "utd-engine-status-memory-status": "utd-oper-status-green", "lastupdated": $EPOCH_MS$, "utd-engine-status-status": "utd-oper-status-green", "utd-engine-status-memory-usage": "44.9", "vdevice-host-name": "c8kv-site-3000-gw1", "utd-engine-status-profile": "Cloud-Low"}'
+    - index: sdwan
+      sourcetype: cisco:sdwan:utdhealth
+      source: cisco_catalyst_sdwan_health:utdhealth:secops
+      host: https://192.168.100.17
+      _time: "$EPOCH$"
+      _raw: '{"vdevice-dataKey": "172.50.1.1", "utd-engine-status-version": "1.2.2_SV3.1.81.0_XE17.12", "vdevice-name": "172.50.1.1", "utd-engine-status-memory-status": "utd-oper-status-green", "lastupdated": $EPOCH_MS$, "utd-engine-status-status": "utd-oper-status-green", "utd-engine-status-memory-usage": "52.2", "vdevice-host-name": "C4451X-site5000", "utd-engine-status-profile": "Cloud-Low"}'

@@ -1,0 +1,13 @@
+<dashboard version="1.1" theme="dark" hideTitle="true" hideEdit="true" hideAppBar="false">
+  <label>⚡ NetSpout Canvas &amp; Telemetry Orchestrator</label>
+  <description>Native Splunk Network Telemetry Simulator, OpenConfig MDT Engine, and Dynamic Failure Orchestration</description>
+  <row>
+    <panel>
+      <html>
+        <div id="netspout-container" style="width: 100%; min-height: calc(100vh - 110px); margin: -10px -20px; padding: 0; background: #0B0F19; overflow: hidden;">
+          <iframe id="netspout-canvas-frame" src="/static/app/netspout/dist/index.html" style="width: 100%; height: calc(100vh - 110px); border: none; display: block;" allow="clipboard-read; clipboard-write"></iframe>
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

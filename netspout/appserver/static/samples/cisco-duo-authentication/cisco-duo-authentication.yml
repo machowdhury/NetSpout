@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-AUTHENTICATION - HEALTHY BASELINE ###
+  - name: cisco-duo-authentication-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+
+  ### CISCO-DUO-AUTHENTICATION - DEGRADED / WARNING ###
+  - name: cisco-duo-authentication-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+
+  ### CISCO-DUO-AUTHENTICATION - CRITICAL / FAILURE ###
+  - name: cisco-duo-authentication-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'

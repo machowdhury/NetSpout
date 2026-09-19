@@ -1,0 +1,37 @@
+samples:
+  ### VMWARE ESX HEALTHY PERF TELEMETRY ###
+  - name: vmware-esx-perf-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: CPU_PCT
+        format: template
+        type: random
+        replacement: int
+        lower: 10
+        upper: 16
+      - name: MEM_PCT
+        format: template
+        type: random
+        replacement: int
+        lower: 24
+        upper: 32
+    lines:
+      - index: main
+        source: vmware:perf
+        sourcetype: vmware:perf:cpu
+        host: esx-maple-compute-01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "epoch": $EPOCH$, "host": "esx-maple-compute-01.maple.ciscolabs.com", "vm_name": "web-srv-01", "cpu.usage.average": $CPU_PCT$, "cpu.usagemhz.average": 480, "status": "green"}'
+      - index: main
+        source: vmware:perf
+        sourcetype: vmware:perf:net
+        host: esx-maple-compute-01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "epoch": $EPOCH$, "host": "esx-maple-compute-01.maple.ciscolabs.com", "vm_name": "web-srv-01", "net.usage.average": 1420, "net.droppedRx.summation": 0, "net.droppedTx.summation": 0, "vmnic": "vmnic0", "link_status": "UP"}'

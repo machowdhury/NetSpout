@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-TUNNELHEALTH - HEALTHY BASELINE ###
+  - name: cisco-sdwan-tunnelhealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+          - weight: 2
+            choice: https://10.20.1.105-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: $HOST$
+        _raw: '{"loss_percentage": 0.0, "latency": 0.0, "jitter": 0.0, "tx_octets": 10411.0, "rx_octets": 67099.0, "vqoe_score": 10.0, "name": "1.1.1.110:private2-1.1.1.100:private2", "remote_color": "private2", "remote_system_ip": "1.1.1.100", "remote-host-name": "SD-WAN_Edge-Kanata", "remote_site_id": "100", "remoteDeviceClass": "cisco-router", "remote_latitude": "45.3422", "remote_longitude": "-75.92656", "local_color": "private2", "local_system_ip": "1.1.1.110", "device-type": "vedge", "deviceClass": "cisco-router", "site_id": "110", "state": "Up", "health": "green", "lastUpdated": 1784258197832}'
+
+  ### CISCO-SDWAN-TUNNELHEALTH - DEGRADED / WARNING ###
+  - name: cisco-sdwan-tunnelhealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: $HOST$
+        _raw: '{"loss_percentage": 0.0, "latency": 0.0, "jitter": 0.0, "tx_octets": 10411.0, "rx_octets": 67099.0, "vqoe_score": 10.0, "name": "1.1.1.110:private2-1.1.1.100:private2", "remote_color": "private2", "remote_system_ip": "1.1.1.100", "remote-host-name": "SD-WAN_Edge-Kanata", "remote_site_id": "100", "remoteDeviceClass": "cisco-router", "remote_latitude": "45.3422", "remote_longitude": "-75.92656", "local_color": "private2", "local_system_ip": "1.1.1.110", "device-type": "vedge", "deviceClass": "cisco-router", "site_id": "110", "state": "Up", "health": "green", "lastUpdated": 1784258197832}'
+
+  ### CISCO-SDWAN-TUNNELHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-tunnelhealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: $HOST$
+        _raw: '{"loss_percentage": 0.0, "latency": 0.0, "jitter": 0.0, "tx_octets": 10411.0, "rx_octets": 67099.0, "vqoe_score": 10.0, "name": "1.1.1.110:private2-1.1.1.100:private2", "remote_color": "private2", "remote_system_ip": "1.1.1.100", "remote-host-name": "SD-WAN_Edge-Kanata", "remote_site_id": "100", "remoteDeviceClass": "cisco-router", "remote_latitude": "45.3422", "remote_longitude": "-75.92656", "local_color": "private2", "local_system_ip": "1.1.1.110", "device-type": "vedge", "deviceClass": "cisco-router", "site_id": "110", "state": "Up", "health": "green", "lastUpdated": 1784258197832}'

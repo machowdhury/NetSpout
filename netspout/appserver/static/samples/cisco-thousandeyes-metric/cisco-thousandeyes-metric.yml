@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-THOUSANDEYES-METRIC - HEALTHY BASELINE ###
+  - name: cisco-thousandeyes-metric-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: unknown
+          - weight: 2
+            choice: unknown-peer
+    lines:
+      - index: main
+        source: cisco:thousandeyes:stream
+        sourcetype: cisco:thousandeyes:metric
+        host: $HOST$
+        _raw: 'metric'
+
+  ### CISCO-THOUSANDEYES-METRIC - DEGRADED / WARNING ###
+  - name: cisco-thousandeyes-metric-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: unknown
+    lines:
+      - index: main
+        source: cisco:thousandeyes:stream
+        sourcetype: cisco:thousandeyes:metric
+        host: $HOST$
+        _raw: 'metric'
+
+  ### CISCO-THOUSANDEYES-METRIC - CRITICAL / FAILURE ###
+  - name: cisco-thousandeyes-metric-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: unknown
+    lines:
+      - index: main
+        source: cisco:thousandeyes:stream
+        sourcetype: cisco:thousandeyes:metric
+        host: $HOST$
+        _raw: 'metric'

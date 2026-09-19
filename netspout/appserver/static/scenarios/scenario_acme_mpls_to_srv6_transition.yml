@@ -1,0 +1,203 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: MPLS-TO-SRV6 HEALTHY INTERWORKING (COEXISTENCE BASELINE)          ###
+  ### SID Utilization: 30% (4,820/16k), 0 Zombie SIDs, Stable Locator Age,      ###
+  ### Flex-Algo 128 (Low Latency) Compliant, 100% BGP SRv6 Services Up          ###
+  ### ========================================================================= ###
+  - name: srv6-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. SRv6 Locator Status & ASIC SID Utilization (4,820 / 16,000 = 30.1% - Optimal Green)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 4820, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 128, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.create_timestamp/age_in_nano_seconds": 2764800000000000, "name": "loc-lat-algo128", "locator_name": "loc-lat-algo128", "algorithm": "Algo-128-LowLatency", "Usage_Pct": 30.1, "status": "Operational", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:srv6-locators"}}'
+
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 3950, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 0, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.create_timestamp/age_in_nano_seconds": 4838400000000000, "name": "loc-be-algo0", "locator_name": "loc-be-algo0", "algorithm": "Algo-0-BestEffort", "Usage_Pct": 24.7, "status": "Operational", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:srv6-locators"}}'
+
+      # 2. SID Function State & Zombie Audit: 100% In-Use, Zero Stale/Pending
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid.sid_functionvalue": 1, "sid": "2001:db8:acme:6::uDT4", "state": "in-use", "behaviour": "uDT4", "vrf_name": "CORP_DATA", "Status": "OK: All Clear", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:locator-all-sids"}}'
+
+      # 3. BGP SRv6 Service Density: L3VPN (24 SIDs) & EVPN (16 SIDs) Active in Memory
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_count": 24, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_memory": 13002342, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_count": 16, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_memory": 8598320, "instance_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:srv6-services"}}'
+
+      # 4. TI-LFA Resiliency Score & End.X Adjacency: 100% Protected Physical Links
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:ti_lfa_protection_pct": 100.0, "metric_name:protected_links": 8, "metric_name:total_links": 8, "status": "Protected", "path": "Cisco-IOS-XR-clns-isis-oper:ti-lfa"}}'
+
+      # 5. FIB Routes per VRF: Hardware Synchronized (4,820 Routes Programmed)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-fib-common-oper:fib/nodes/node/protocols/protocol/vrfs/vrf/summary.routes": 4820, "node_name": "0/0/CPU0", "protocol_name": "SRv6", "vrf_name": "CORP_DATA", "path": "Cisco-IOS-XR-fib-common-oper:fib-summary"}}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: SRV6 TRANSITION FAILURE MODES (CRITICAL ANOMALIES TRIGGERED)      ###
+  ### 1. ASIC SID Exhaustion (15,480/16k = 96.8% NPU OOR Trap)                   ###
+  ### 2. Zombie SIDs (Stale SIDs Leaking Memory after VRF Migration)             ###
+  ### 3. Locator Age Reset (Silent Process Crash on Algo 128)                    ###
+  ### 4. Flex-Algo Compliance Breach (Low Latency Traffic Misrouted to Algo 0)   ###
+  ### ========================================================================= ###
+  - name: srv6-stage2-transition-failure-modes
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. FAILURE MODE 1: Hardware ASIC SID Exhaustion (15,480/16,000 = 96.8% - NPU OOR Trap)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 15480, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 128, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.create_timestamp/age_in_nano_seconds": 18000000000, "name": "loc-lat-algo128", "locator_name": "loc-lat-algo128", "algorithm": "Algo-128-LowLatency", "Usage_Pct": 96.8, "status": "CRITICAL_NPU_OOR", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:srv6-locators"}}'
+
+      # 2. FAILURE MODE 2: Zombie SIDs & Delayed-Delete Memory Leak
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid.sid_functionvalue": 0, "sid": "2001:db8:acme:6::uDT4:legacy_vpn10", "state": "stale", "behaviour": "uDT4", "vrf_name": "UNASSIGNED_LEAK", "Status": "CRITICAL: ZOMBIE SIDs DETECTED", "leak_bytes": 892400, "path": "Cisco-IOS-XR-segment-routing-srv6-oper:locator-all-sids"}}'
+
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid.sid_functionvalue": 0, "sid": "2001:db8:acme:6::uA:peer5", "state": "pending-delete", "behaviour": "uA", "vrf_name": "default", "Status": "CRITICAL: ZOMBIE SIDs DETECTED", "leak_bytes": 450100, "path": "Cisco-IOS-XR-segment-routing-srv6-oper:locator-all-sids"}}'
+
+      # 3. FAILURE MODE 3: Locator Age Reset (18s Uptime - Silent Daemon Crash)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:locator_age_reset_count": 1, "metric_name:age_in_seconds": 18, "locator_name": "loc-lat-algo128", "alert": "LOCATOR_AGE_RESET_DETECTED", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:locators-age"}}'
+
+      # 4. FAILURE MODE 4: Flex-Algorithm Path Compliance Failure (Algo 128 Traffic Falling to Algo 0)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:configured_algo": 128, "metric_name:forwarding_algo": 0, "metric_name:sla_latency_penalty_ms": 38.5, "vrf_name": "CORP_VOIP", "service": "L3VPN_VOIP_CRITICAL", "compliance_status": "NON_COMPLIANT_FLEXALGO_LEAK", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:flex-algo-compliance"}}'
+
+      # 5. Service & Route Collapse in BGP / FIB
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_count": 18, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_memory": 9800120, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_count": 12, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_memory": 6200000, "instance_name": "default", "status": "Degraded", "path": "Cisco-IOS-XR-ipv4-bgp-oper:srv6-services"}}'
+
+      # 6. Real-Time Syslog Notifications
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %ROUTING-SRV6-3-NPU_OOR_ALARM: Hardware ASIC SID table approaching limit: 15480/16000 (96.8% utilization). New SRv6 SIDs cannot be programmed into hardware forwarding tables'
+
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %ROUTING-SRV6-4-ZOMBIE_SID_AUDIT: Detected 14 stale/pending SIDs in locator loc-legacy-mpls-vpn10 without active BGP next-hop. Intercepting transit packets'
+
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %ROUTING-SRV6-3-FLEXALGO_COMPLIANCE: Service CORP_VOIP configured for Flex-Algo 128 dropped to Algo 0 Best Effort due to unresolved prefix-SID. Latency SLA breached'
+
+  ### ========================================================================= ###
+  ### STAGE 3: REMEDIATION & ASSURANCE RESTORATION                               ###
+  ### SIDs Purged (5,120/16k = 32%), Zombie Cleaned, Flex-Algo Restored to 128   ###
+  ### ========================================================================= ###
+  - name: srv6-stage3-remediated
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. SID Table De-allocated: 5,120 / 16,000 (32.0% - Optimal Green)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 5120, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 128, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.create_timestamp/age_in_nano_seconds": 2764920000000000, "name": "loc-lat-algo128", "locator_name": "loc-lat-algo128", "algorithm": "Algo-128-LowLatency", "Usage_Pct": 32.0, "status": "Operational", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:srv6-locators"}}'
+
+      # 2. Zombie SIDs Purged & Garbage Collected
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locator-all-sids/locator-all-sid.sid_functionvalue": 1, "sid": "2001:db8:acme:6::uDT4:remediated", "state": "in-use", "behaviour": "uDT4", "vrf_name": "CORP_DATA", "Status": "OK: All Clear", "leak_bytes": 0, "path": "Cisco-IOS-XR-segment-routing-srv6-oper:locator-all-sids"}}'
+
+      # 3. Flex-Algorithm Compliance Restored
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:configured_algo": 128, "metric_name:forwarding_algo": 128, "metric_name:sla_latency_penalty_ms": 0.0, "vrf_name": "CORP_VOIP", "service": "L3VPN_VOIP_CRITICAL", "compliance_status": "COMPLIANT", "path": "Cisco-IOS-XR-segment-routing-srv6-oper:flex-algo-compliance"}}'
+
+      # 4. BGP SRv6 Services Restored (24 L3 SIDs, 16 L2 SIDs)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_count": 24, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer3_svc_memory": 13150000, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_count": 16, "metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/default-vrf/process-info.global/prefix_sid_srv6_layer2_svc_memory": 8620000, "instance_name": "default", "status": "Operational", "path": "Cisco-IOS-XR-ipv4-bgp-oper:srv6-services"}}'
+
+      # 5. Syslog Recovery
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %ROUTING-SRV6-6-NPU_OOR_CLEARED: Hardware ASIC SID utilization returned to normal: 5120/16000 (32.0%). All locators fully programmed'

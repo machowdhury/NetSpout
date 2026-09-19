@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-CALICO-NODE - HEALTHY BASELINE ###
+  - name: kube-container-calico-node-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/calico-node/4.log
+        sourcetype: kube:container:calico-node
+        host: $HOST$
+        _raw: '2026-09-18 17:33:47.664 [INFO][90] monitor-addresses/autodetection_methods.go 103: Using autodetected IPv4 address on interface ens33: 10.0.10.104/24'
+
+  ### KUBE-CONTAINER-CALICO-NODE - DEGRADED / WARNING ###
+  - name: kube-container-calico-node-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/calico-node/4.log
+        sourcetype: kube:container:calico-node
+        host: $HOST$
+        _raw: '2026-09-18 17:33:47.664 [INFO][90] monitor-addresses/autodetection_methods.go 103: Using autodetected IPv4 address on interface ens33: 10.0.10.104/24'
+
+  ### KUBE-CONTAINER-CALICO-NODE - CRITICAL / FAILURE ###
+  - name: kube-container-calico-node-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/calico-node/4.log
+        sourcetype: kube:container:calico-node
+        host: $HOST$
+        _raw: '2026-09-18 17:33:47.664 [INFO][90] monitor-addresses/autodetection_methods.go 103: Using autodetected IPv4 address on interface ens33: 10.0.10.104/24'

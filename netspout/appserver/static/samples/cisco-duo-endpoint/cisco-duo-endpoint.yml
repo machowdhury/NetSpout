@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-ENDPOINT - HEALTHY BASELINE ###
+  - name: cisco-duo-endpoint-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:endpoint
+        host: $HOST$
+        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'
+
+  ### CISCO-DUO-ENDPOINT - DEGRADED / WARNING ###
+  - name: cisco-duo-endpoint-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:endpoint
+        host: $HOST$
+        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'
+
+  ### CISCO-DUO-ENDPOINT - CRITICAL / FAILURE ###
+  - name: cisco-duo-endpoint-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:endpoint
+        host: $HOST$
+        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'

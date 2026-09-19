@@ -1,0 +1,24 @@
+samples:
+  - name: aruba-syslog
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: aruba:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:15:25 aruba-wlc-01 authmgr[1842]: <522008> <INFO> client_mac=00:1a:1e:2b:4c:5d username=jdoe@acme.corp bssid=20:a6:cd:44:11:00 ap_name=AP-Campus-Fl2-West radio_channel=36 rssi=42 snr=38 auth_status=SUCCESS vlan=104 reason="Client authentication succeeded"'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: aruba:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:15:26 aruba-wlc-01 stm[2014]: <501093> <WARN> ap_name=AP-Campus-Fl2-West radio_channel=36 event="Radio channel assignment drop" prev_channel=36 new_channel=44 interference_level=high rssi=28 reason="Radar detection / DFS channel switch"'

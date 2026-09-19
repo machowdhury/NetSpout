@@ -1,0 +1,24 @@
+samples:
+  - name: zscaler-sse-tunnel
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:zscaler:nss
+        sourcetype: zscaler:tunnel
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:31 zscaler-nss zscalernss-tunnel: datetime=Fri Sep 18 17:16:31 2026,tunnel_name="Zscaler-GRE-Toronto-Primary",tunnel_status="DOWN",remote_ip=198.51.100.200,local_ip=10.0.255.50,drop_reason="Keepalive timeout exceeded",downtime_sec=45'
+      - index: netops_logs
+        source: api:zscaler:nss
+        sourcetype: zscaler:tunnel
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:34 zscaler-nss zscalernss-tunnel: datetime=Fri Sep 18 17:16:34 2026,tunnel_name="Zscaler-GRE-Toronto-Backup",tunnel_status="UP",remote_ip=198.51.100.201,local_ip=10.0.255.50,drop_reason="None",downtime_sec=0'

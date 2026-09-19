@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-COREDNS - HEALTHY BASELINE ###
+  - name: kube-container-coredns-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_coredns-ccd8f67bc-grrq8_0d8bbcbc-d465-4987-bb9c-d5591999e06b/coredns/12.log
+        sourcetype: kube:container:coredns
+        host: $HOST$
+        _raw: '[ERROR] plugin/errors: 2 api.segment.io. A: read udp 10.1.5.229:43377->10.0.10.23:53: i/o timeout'
+
+  ### KUBE-CONTAINER-COREDNS - DEGRADED / WARNING ###
+  - name: kube-container-coredns-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_coredns-ccd8f67bc-grrq8_0d8bbcbc-d465-4987-bb9c-d5591999e06b/coredns/12.log
+        sourcetype: kube:container:coredns
+        host: $HOST$
+        _raw: '[ERROR] plugin/errors: 2 api.segment.io. A: read udp 10.1.5.229:43377->10.0.10.23:53: i/o timeout'
+
+  ### KUBE-CONTAINER-COREDNS - CRITICAL / FAILURE ###
+  - name: kube-container-coredns-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_coredns-ccd8f67bc-grrq8_0d8bbcbc-d465-4987-bb9c-d5591999e06b/coredns/12.log
+        sourcetype: kube:container:coredns
+        host: $HOST$
+        _raw: '[ERROR] plugin/errors: 2 api.segment.io. A: read udp 10.1.5.229:43377->10.0.10.23:53: i/o timeout'

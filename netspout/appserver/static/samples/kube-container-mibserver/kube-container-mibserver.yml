@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-MIBSERVER - HEALTHY BASELINE ###
+  - name: kube-container-mibserver-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mibserver-65cd4dd796-v8k2l_6717b80e-368b-45c3-bfc3-196519c0c0af/mibserver/12.log
+        sourcetype: kube:container:mibserver
+        host: $HOST$
+        _raw: '10.0.10.104 - - [18/Sep/2026:17:34:40 +0000] "GET / HTTP/1.1" 200 112 "-" "kube-probe/1.33" "-"'
+
+  ### KUBE-CONTAINER-MIBSERVER - DEGRADED / WARNING ###
+  - name: kube-container-mibserver-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mibserver-65cd4dd796-v8k2l_6717b80e-368b-45c3-bfc3-196519c0c0af/mibserver/12.log
+        sourcetype: kube:container:mibserver
+        host: $HOST$
+        _raw: '10.0.10.104 - - [18/Sep/2026:17:34:40 +0000] "GET / HTTP/1.1" 200 112 "-" "kube-probe/1.33" "-"'
+
+  ### KUBE-CONTAINER-MIBSERVER - CRITICAL / FAILURE ###
+  - name: kube-container-mibserver-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mibserver-65cd4dd796-v8k2l_6717b80e-368b-45c3-bfc3-196519c0c0af/mibserver/12.log
+        sourcetype: kube:container:mibserver
+        host: $HOST$
+        _raw: '10.0.10.104 - - [18/Sep/2026:17:34:40 +0000] "GET / HTTP/1.1" 200 112 "-" "kube-probe/1.33" "-"'

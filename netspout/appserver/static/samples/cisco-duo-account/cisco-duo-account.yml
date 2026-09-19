@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-ACCOUNT - HEALTHY BASELINE ###
+  - name: cisco-duo-account-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:account
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "account_id": "DAOSZ4YYK0VOGIA1JIYJ", "admin_count": 5, "edition": "Duo Premier", "integration_count": 14, "telephony_credits_remaining": 0, "user_count": 68, "user_pending_deletion_count": 0, "timestamp": 1789752783, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "account"}'
+
+  ### CISCO-DUO-ACCOUNT - DEGRADED / WARNING ###
+  - name: cisco-duo-account-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:account
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "account_id": "DAOSZ4YYK0VOGIA1JIYJ", "admin_count": 5, "edition": "Duo Premier", "integration_count": 14, "telephony_credits_remaining": 0, "user_count": 68, "user_pending_deletion_count": 0, "timestamp": 1789752783, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "account"}'
+
+  ### CISCO-DUO-ACCOUNT - CRITICAL / FAILURE ###
+  - name: cisco-duo-account-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:account
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "account_id": "DAOSZ4YYK0VOGIA1JIYJ", "admin_count": 5, "edition": "Duo Premier", "integration_count": 14, "telephony_credits_remaining": 0, "user_count": 68, "user_pending_deletion_count": 0, "timestamp": 1789752783, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "account"}'

@@ -1,0 +1,233 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: ACME CAMPUS HEALTHY BASELINE (CAMPUS: 100, BRANCHES: 100)        ###
+  ### All layers optimal: clean switch ports, low AP radio util, instant auth   ###
+  ### ========================================================================= ###
+  - name: campus-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Composite Campus Health Score: 100 (Wired: 100, Wireless: 100)
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"category": "Campus", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "siteId": "ottawa-sda-02", "healthScore": 100, "overallHealth": 100, "wiredHealth": 100, "wirelessHealth": 100, "totalDeviceCount": 28, "goodCount": 28, "badCount": 0, "time": "$EPOCH_MS$", "cisco_catalyst_host": "https://dnac-ottawa.corp.acme.com"}'
+
+      # 2. Access Switch Health: 0 Port Errors, 0 Flaps, 100% Health
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "IpAddress": "10.120.20.11", "DeviceFamily": "Switches and Hubs", "Platform": "C9300-48UXM", "DeviceRole": "ACCESS", "Reachability": "Reachable", "OverallHealth": 100, "HealthScore": 100, "InterfaceLinkErrHealth": 100, "interfaceName": "GigabitEthernet1/0/12", "rx-errors": 0, "tx-errors": 0, "rx-crc": 0, "num-flaps": 0, "CPUUtilization": 12, "MemoryUtilization": 28, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 3. Access Point Health & Radio Telemetry: 21% Radio Util, Low Noise, Optimal Coverage
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "AP-OTT02-Bld1-Fl2", "IpAddress": "10.120.20.55", "DeviceFamily": "Unified AP", "Platform": "C9130AXI-B", "DeviceRole": "ACCESS_POINT", "Reachability": "Reachable", "OverallHealth": 100, "HealthScore": 100, "RadioUtilizationGhz50": 21, "RadioUtilizationGhz24": 18, "NoiseHealthGhz50": 100, "InterferenceHealthGhz50": 100, "AirQualityHealthGhz50": 98, "ClientCountGhz50": 14, "ClientCountGhz24": 6, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectedSwitch": "OTT02-ACC-SW01.ottawa.acme.com", "connectedPort": "GigabitEthernet1/0/12", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 4. Wireless Client Experience & Onboarding: 100% Score, Fast DHCP (14ms), RSSI -55 dBm
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC01_Client
+        sourcetype: cisco:dnac:client
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"id": "6C:40:08:92:E1:2A", "macAddress": "6C:40:08:92:E1:2A", "type": "Wireless", "name": "Executive-MacBook-Ottawa", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectionStatus": "connected", "health": {"overallScore": 100, "onboardingScore": 100, "connectedScore": 100, "rssiThreshold": -72, "snrThreshold": 25}, "connection": {"ssid": "ACME-Corp-Secure", "band": "5GHz", "channel": "36", "rssi": -55, "snr": 38, "apName": "AP-OTT02-Bld1-Fl2"}, "onboarding": {"avgDhcpDuration": 14, "avgAuthDuration": 8, "assocFailureReason": null, "aaaFailureReason": "SUCCESS", "dhcpFailureReason": "SUCCESS", "latestFailureReason": null}, "traffic": {"rxRate": 450.0, "txRate": 380.0, "rxLinkErrorPercentage": 0.0, "txLinkErrorPercentage": 0.0}, "lastUpdatedTime": $EPOCH_MS$}'
+
+      # 5. Client Health Summary Score
+      - index: main
+        source: cisco_catalyst_dnac_clienthealth://DNAC01_ClientHealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"siteId": "ottawa-sda-02", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "clientType": "ALL", "clientCount": 182, "clientUniqueCount": 182, "scoreValue": 100, "poorClientCount": 0, "fairClientCount": 2, "goodClientCount": 180, "scoreType": "ALL", "endtime": $EPOCH_MS$}'
+
+      # 6. Issue & AI Assurance Engine: 0 P1/P2 Issues, Baselines Normal
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC01_Issue
+        sourcetype: cisco:dnac:issue
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"IssueID": "00000000-0000-0000-0000-000000000000", "IssueName": "All Campus Systems Operational", "IssueSpecificPriority": "INFO", "IssuePriority": "P4", "IssueStatus": "cleared", "IssueCount": 0, "IssueAiDriven": "Yes", "DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "IssueSpecificTimestamp": $EPOCH_MS$}'
+
+      # 7. Configuration Compliance: 100% Golden Image Adherence
+      - index: main
+        source: cisco_catalyst_dnac_compliance://DNAC01_Compliance
+        sourcetype: cisco:dnac:compliance
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "ComplianceStatus": "COMPLIANT", "ImageVersion": "17.12.3", "GoldenImageMatch": "True", "EoXStatus": "SUPPORTED", "ComplianceLastUpdateTime": $EPOCH_MS$}'
+
+      # 8. PSIRT Security Advisories: 0 Critical Unpatched CVEs
+      - index: main
+        source: cisco_catalyst_dnac_securityadvisory://DNAC01_SecAdv
+        sourcetype: cisco:dnac:securityadvisory
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "AdvisoryCount": 0, "CriticalCVE": 0, "HighCVE": 0, "Status": "SECURE", "LastUpdated": $EPOCH_MS$}'
+
+      # 9. Real-Time Webhook Event: Heartbeat Normal
+      - index: main
+        source: http:DNAC_EVENT
+        sourcetype: cisco:dnac:event
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"timestamp": "$ISO_TS$", "eventType": "NETWORK_HEARTBEAT", "severity": "INFO", "domain": "CAMPUS", "site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "summary": "Ottawa Campus telemetry streaming nominal"}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: OTTAWA WI-FI SLOW DEGRADATION (CAMPUS HEALTH DROPS TO 50)         ###
+  ### Cross-Domain Root Cause: Switch Port Gi1/0/12 CRC Flap -> AP Radio Saturation ###
+  ### -> Client Onboarding Fails -> AI Assurance Baseline Violation Fires         ###
+  ### ========================================================================= ###
+  - name: campus-stage2-ottawa-wifi-slow-degraded
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Top-Level Campus Health Score DROPS TO 50 (Red/Amber Box on ITSI Glass Table)
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"category": "Campus", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "siteId": "ottawa-sda-02", "healthScore": 50, "overallHealth": 50, "wiredHealth": 62, "wirelessHealth": 38, "totalDeviceCount": 28, "goodCount": 14, "badCount": 14, "time": "$EPOCH_MS$", "reason": "Cross-domain failure: Access switch port flap propagating to AP radio saturation and client onboarding failure", "cisco_catalyst_host": "https://dnac-ottawa.corp.acme.com"}'
+
+      # 2. Wired Physical / Switch Root Cause: Port Gi1/0/12 Surging CRC Errors & Link Flaps
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "IpAddress": "10.120.20.11", "DeviceFamily": "Switches and Hubs", "Platform": "C9300-48UXM", "DeviceRole": "ACCESS", "Reachability": "Reachable", "OverallHealth": 50, "HealthScore": 50, "InterfaceLinkErrHealth": 20, "interfaceName": "GigabitEthernet1/0/12", "rx-errors": 18450, "tx-errors": 1420, "rx-crc": 16980, "num-flaps": 6, "oper-status": "flapping", "connectedDevice": "AP-OTT02-Bld1-Fl2", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 3. Wireless AP Radio Degradation: Radio Utilization Explodes to 92%, High Noise (-68 dBm)
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "AP-OTT02-Bld1-Fl2", "IpAddress": "10.120.20.55", "DeviceFamily": "Unified AP", "Platform": "C9130AXI-B", "DeviceRole": "ACCESS_POINT", "Reachability": "Reachable", "OverallHealth": 40, "HealthScore": 40, "RadioUtilizationGhz50": 92, "RadioUtilizationGhz24": 86, "NoiseHealthGhz50": 35, "InterferenceHealthGhz50": 30, "AirQualityHealthGhz50": 42, "ClientCountGhz50": 42, "ClientCountGhz24": 18, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectedSwitch": "OTT02-ACC-SW01.ottawa.acme.com", "connectedPort": "GigabitEthernet1/0/12", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 4. Client Experience Breakdown: Onboarding Drops to 35, DHCP Spikes to 4800ms, RSSI -82 dBm
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC01_Client
+        sourcetype: cisco:dnac:client
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"id": "6C:40:08:92:E1:2A", "macAddress": "6C:40:08:92:E1:2A", "type": "Wireless", "name": "Executive-MacBook-Ottawa", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectionStatus": "degraded", "health": {"overallScore": 35, "onboardingScore": 30, "connectedScore": 40, "rssiThreshold": -72, "snrThreshold": 25}, "connection": {"ssid": "ACME-Corp-Secure", "band": "5GHz", "channel": "36", "rssi": -82, "snr": 11, "apName": "AP-OTT02-Bld1-Fl2"}, "onboarding": {"avgDhcpDuration": 4820, "avgAuthDuration": 2350, "assocFailureReason": "AP_OVERLOAD_OR_FRAME_DROP", "aaaFailureReason": "TIMEOUT", "dhcpFailureReason": "DHCP_ACK_TIMEOUT", "latestFailureReason": "dhcpRootCause"}, "traffic": {"rxRate": 12.0, "txRate": 8.0, "rxLinkErrorPercentage": 14.8, "txLinkErrorPercentage": 18.2}, "lastUpdatedTime": $EPOCH_MS$}'
+
+      # 5. Client Health Aggregate Collapse
+      - index: main
+        source: cisco_catalyst_dnac_clienthealth://DNAC01_ClientHealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"siteId": "ottawa-sda-02", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "clientType": "ALL", "clientCount": 182, "clientUniqueCount": 182, "scoreValue": 45, "poorClientCount": 98, "fairClientCount": 42, "goodClientCount": 42, "scoreType": "ALL", "endtime": $EPOCH_MS$}'
+
+      # 6. AI Assurance Issues (P1 & P2 Spike): Root Cause & Anomaly Detection
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC01_Issue
+        sourcetype: cisco:dnac:issue
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"IssueID": "c847921a-49ef-430b-a019-91f8c3218aa1", "IssueName": "Interface GigabitEthernet1/0/12 on Switch OTT02-ACC-SW01 is flapping and accumulating CRC errors", "IssueSpecificPriority": "P1", "IssuePriority": "P1", "IssueSpecificSeverity": "HIGH", "IssueStatus": "active", "IssueCount": 6, "IssueAiDriven": "Yes", "IssueSpecificCategory": "Wired Infrastructure", "DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "IssueSpecificDescription": "Physical layer fault detected on port connected to AP-OTT02-Bld1-Fl2. High frame drops causing upstream wireless degradation.", "IssueSpecificTimestamp": $EPOCH_MS$}'
+
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC01_Issue
+        sourcetype: cisco:dnac:issue
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"IssueID": "b9182390-12ab-4411-9988-bb7361928371", "IssueName": "AP Radio Utilization exceeded learned AI Baseline on AP-OTT02-Bld1-Fl2 (5GHz Radio: 92% vs Baseline: 22%)", "IssueSpecificPriority": "P2", "IssuePriority": "P2", "IssueSpecificSeverity": "MEDIUM", "IssueStatus": "active", "IssueCount": 1, "IssueAiDriven": "Yes", "IssueSpecificCategory": "RF and Wireless", "DeviceName": "AP-OTT02-Bld1-Fl2", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "IssueSpecificDescription": "AI baseline anomaly detected: 5GHz channel utilization is 4.1 standard deviations above diurnal profile. Throughput degradation imminent.", "IssueSpecificTimestamp": $EPOCH_MS$}'
+
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC01_Issue
+        sourcetype: cisco:dnac:issue
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"IssueID": "a1728394-fa43-4122-8371-ce9281740921", "IssueName": "Wireless client onboarding failure surge: DHCP Ack timeout rate > 40%", "IssueSpecificPriority": "P2", "IssuePriority": "P2", "IssueSpecificSeverity": "HIGH", "IssueStatus": "active", "IssueCount": 1, "IssueAiDriven": "Yes", "IssueSpecificCategory": "Client Experience", "DeviceName": "AP-OTT02-Bld1-Fl2", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "IssueSpecificDescription": "Clients unable to complete IP address assignment due to packet drops on upstream switch port.", "IssueSpecificTimestamp": $EPOCH_MS$}'
+
+      # 7. Real-Time Webhook Event: Cross-Domain Alert Trigger
+      - index: main
+        source: http:DNAC_EVENT
+        sourcetype: cisco:dnac:event
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"timestamp": "$ISO_TS$", "eventType": "CROSS_DOMAIN_INCIDENT", "severity": "CRITICAL", "domain": "CAMPUS", "site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "summary": "Physical layer CRC errors on OTT02-ACC-SW01:Gi1/0/12 propagating to AP-OTT02-Bld1-Fl2 radio saturation. Campus Health degraded to 50"}'
+
+  ### ========================================================================= ###
+  ### STAGE 3: REMEDIATION & AUTO-RECOVERY (CAMPUS HEALTH RESTORED TO 100)      ###
+  ### SFP/Patch Cable Replaced -> Port Gi1/0/12 Clean -> AP Radio Recovers      ###
+  ### -> Client Onboarding Normalizes -> Issues Cleared                         ###
+  ### ========================================================================= ###
+  - name: campus-stage3-remediated
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Composite Campus Health RESTORED TO 100
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"category": "Campus", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "siteId": "ottawa-sda-02", "healthScore": 100, "overallHealth": 100, "wiredHealth": 100, "wirelessHealth": 100, "totalDeviceCount": 28, "goodCount": 28, "badCount": 0, "time": "$EPOCH_MS$", "reason": "Remediation complete: Cable swapped, CRC errors cleared, AP radio nominal", "cisco_catalyst_host": "https://dnac-ottawa.corp.acme.com"}'
+
+      # 2. Access Switch Port Gi1/0/12: CRC Errors Ceased, Status Operational Ready
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "IpAddress": "10.120.20.11", "DeviceFamily": "Switches and Hubs", "Platform": "C9300-48UXM", "DeviceRole": "ACCESS", "Reachability": "Reachable", "OverallHealth": 100, "HealthScore": 100, "InterfaceLinkErrHealth": 100, "interfaceName": "GigabitEthernet1/0/12", "rx-errors": 0, "tx-errors": 0, "rx-crc": 0, "num-flaps": 0, "oper-status": "up", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 3. AP Radio Performance Normalized (20% Utilization, Air Quality 99)
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "AP-OTT02-Bld1-Fl2", "IpAddress": "10.120.20.55", "DeviceFamily": "Unified AP", "Platform": "C9130AXI-B", "DeviceRole": "ACCESS_POINT", "Reachability": "Reachable", "OverallHealth": 100, "HealthScore": 100, "RadioUtilizationGhz50": 20, "RadioUtilizationGhz24": 19, "NoiseHealthGhz50": 100, "InterferenceHealthGhz50": 100, "AirQualityHealthGhz50": 99, "ClientCountGhz50": 18, "ClientCountGhz24": 7, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "LastUpdateTime": $EPOCH_MS$}'
+
+      # 4. Client Onboarding and Experience Normalized
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC01_Client
+        sourcetype: cisco:dnac:client
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"id": "6C:40:08:92:E1:2A", "macAddress": "6C:40:08:92:E1:2A", "type": "Wireless", "name": "Executive-MacBook-Ottawa", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectionStatus": "connected", "health": {"overallScore": 100, "onboardingScore": 100, "connectedScore": 100, "rssiThreshold": -72, "snrThreshold": 25}, "connection": {"ssid": "ACME-Corp-Secure", "band": "5GHz", "channel": "36", "rssi": -54, "snr": 39, "apName": "AP-OTT02-Bld1-Fl2"}, "onboarding": {"avgDhcpDuration": 13, "avgAuthDuration": 7, "assocFailureReason": null, "aaaFailureReason": "SUCCESS", "dhcpFailureReason": "SUCCESS", "latestFailureReason": null}, "traffic": {"rxRate": 480.0, "txRate": 410.0, "rxLinkErrorPercentage": 0.0, "txLinkErrorPercentage": 0.0}, "lastUpdatedTime": $EPOCH_MS$}'
+
+      # 5. Issues Cleared in Catalyst Center AI Engine
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC01_Issue
+        sourcetype: cisco:dnac:issue
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"IssueID": "c847921a-49ef-430b-a019-91f8c3218aa1", "IssueName": "Interface GigabitEthernet1/0/12 on Switch OTT02-ACC-SW01 is flapping and accumulating CRC errors", "IssueSpecificPriority": "P1", "IssuePriority": "P1", "IssueStatus": "cleared", "IssueCount": 0, "IssueAiDriven": "Yes", "DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "IssueSpecificTimestamp": $EPOCH_MS$}'

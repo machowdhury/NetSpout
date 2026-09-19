@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-SYS-5-CONFIG-P - HEALTHY BASELINE ###
+  - name: cisco-sdwan-sys-5-config-p-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+          - weight: 2
+            choice: 10.201.50.12-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:SYS-5-CONFIG_P
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14667: *$SYSLOG_TIMESTAMP$.559: %SYS-5-CONFIG_P: Configured programmatically by process iosp_dmiauthd_conn_100001_vty_100001 from console as system-ompd-fwd on vty4294966494'
+
+  ### CISCO-SDWAN-SYS-5-CONFIG-P - DEGRADED / WARNING ###
+  - name: cisco-sdwan-sys-5-config-p-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:SYS-5-CONFIG_P
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14667: *$SYSLOG_TIMESTAMP$.559: %SYS-5-CONFIG_P: Configured programmatically by process iosp_dmiauthd_conn_100001_vty_100001 from console as system-ompd-fwd on vty4294966494'
+
+  ### CISCO-SDWAN-SYS-5-CONFIG-P - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-sys-5-config-p-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:SYS-5-CONFIG_P
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14667: *$SYSLOG_TIMESTAMP$.559: %SYS-5-CONFIG_P: Configured programmatically by process iosp_dmiauthd_conn_100001_vty_100001 from console as system-ompd-fwd on vty4294966494'

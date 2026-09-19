@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-LICENSES - HEALTHY BASELINE ###
+  - name: cisco-intersight-licenses-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: licenseAccountLicenseData
+        sourcetype: cisco:intersight:licenses
+        host: $HOST$
+        _raw: '{"Account": {"Moid": "660de283756461330140b580", "ObjectType": "iam.Account", "link": "https://intersight.com/api/v1/iam/Accounts/660de283756461330140b580"}, "AccountId": "660de283756461330140b580", "AccountMoid": "660de283756461330140b580", "AuthExpireTime": "2026-12-16 19:44:09", "AuthInitialTime": "2026-09-17 19:49:10", "AuthNextTime": "2026-09-18 07:49:10", "Category": "e", "CreateTime": "$ISO_TIMESTAMP$", "DefaultLicenseType": "Advantage", "DefaultLicenseTypeNewerModels": "Advantage", "DomainGroupMoid": "660de283756461330140b581", "ErrorDesc": "", "Group": "default", "HighestCompliantLicenseTier": "Advantage", "LastCssmSync": "$ISO_TIMESTAMP$", "LastRenew": "$ISO_TIMESTAMP$", "LastSync": "$ISO_TIMESTAMP$", "LastUpdatedTime": "$ISO_TIMESTAMP$", "LicenseState": "", "LicenseTechSupportInfo": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "660de286636f6e3201b04ad4", "ObjectType": "license.AccountLicenseData", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "RegisterExpireTime": "2027-09-12 05:38:40", "RegisterInitialTime": "2024-04-03 23:14:21", "RegisterNextTime": "1970-01-01 00:00:00", "RegistrationStatus": "REGISTERED", "RenewFailureString": "", "SharedScope": "", "SmartAccount": "InternalTestDemoAccount1.cisco.com", "SmartAccountDomain": "internaltestdemoaccount1.cisco.com", "SmartApiEnabled": false, "SmartApiSyncStatus": "FailedToEnable", "SyncStatus": "UpdateSuccess", "Tags": [{"Key": "MigrateM8BaseToDefault", "Propagated": false, "SysTag": false, "Type": "KeyValue", "Value": "true"}], "VirtualAccount": "se.ott02OLD", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-LICENSES - DEGRADED / WARNING ###
+  - name: cisco-intersight-licenses-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: licenseAccountLicenseData
+        sourcetype: cisco:intersight:licenses
+        host: $HOST$
+        _raw: '{"Account": {"Moid": "660de283756461330140b580", "ObjectType": "iam.Account", "link": "https://intersight.com/api/v1/iam/Accounts/660de283756461330140b580"}, "AccountId": "660de283756461330140b580", "AccountMoid": "660de283756461330140b580", "AuthExpireTime": "2026-12-16 19:44:09", "AuthInitialTime": "2026-09-17 19:49:10", "AuthNextTime": "2026-09-18 07:49:10", "Category": "e", "CreateTime": "$ISO_TIMESTAMP$", "DefaultLicenseType": "Advantage", "DefaultLicenseTypeNewerModels": "Advantage", "DomainGroupMoid": "660de283756461330140b581", "ErrorDesc": "", "Group": "default", "HighestCompliantLicenseTier": "Advantage", "LastCssmSync": "$ISO_TIMESTAMP$", "LastRenew": "$ISO_TIMESTAMP$", "LastSync": "$ISO_TIMESTAMP$", "LastUpdatedTime": "$ISO_TIMESTAMP$", "LicenseState": "", "LicenseTechSupportInfo": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "660de286636f6e3201b04ad4", "ObjectType": "license.AccountLicenseData", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "RegisterExpireTime": "2027-09-12 05:38:40", "RegisterInitialTime": "2024-04-03 23:14:21", "RegisterNextTime": "1970-01-01 00:00:00", "RegistrationStatus": "REGISTERED", "RenewFailureString": "", "SharedScope": "", "SmartAccount": "InternalTestDemoAccount1.cisco.com", "SmartAccountDomain": "internaltestdemoaccount1.cisco.com", "SmartApiEnabled": false, "SmartApiSyncStatus": "FailedToEnable", "SyncStatus": "UpdateSuccess", "Tags": [{"Key": "MigrateM8BaseToDefault", "Propagated": false, "SysTag": false, "Type": "KeyValue", "Value": "true"}], "VirtualAccount": "se.ott02OLD", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-LICENSES - CRITICAL / FAILURE ###
+  - name: cisco-intersight-licenses-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: licenseAccountLicenseData
+        sourcetype: cisco:intersight:licenses
+        host: $HOST$
+        _raw: '{"Account": {"Moid": "660de283756461330140b580", "ObjectType": "iam.Account", "link": "https://intersight.com/api/v1/iam/Accounts/660de283756461330140b580"}, "AccountId": "660de283756461330140b580", "AccountMoid": "660de283756461330140b580", "AuthExpireTime": "2026-12-16 19:44:09", "AuthInitialTime": "2026-09-17 19:49:10", "AuthNextTime": "2026-09-18 07:49:10", "Category": "e", "CreateTime": "$ISO_TIMESTAMP$", "DefaultLicenseType": "Advantage", "DefaultLicenseTypeNewerModels": "Advantage", "DomainGroupMoid": "660de283756461330140b581", "ErrorDesc": "", "Group": "default", "HighestCompliantLicenseTier": "Advantage", "LastCssmSync": "$ISO_TIMESTAMP$", "LastRenew": "$ISO_TIMESTAMP$", "LastSync": "$ISO_TIMESTAMP$", "LastUpdatedTime": "$ISO_TIMESTAMP$", "LicenseState": "", "LicenseTechSupportInfo": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "660de286636f6e3201b04ad4", "ObjectType": "license.AccountLicenseData", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "RegisterExpireTime": "2027-09-12 05:38:40", "RegisterInitialTime": "2024-04-03 23:14:21", "RegisterNextTime": "1970-01-01 00:00:00", "RegistrationStatus": "REGISTERED", "RenewFailureString": "", "SharedScope": "", "SmartAccount": "InternalTestDemoAccount1.cisco.com", "SmartAccountDomain": "internaltestdemoaccount1.cisco.com", "SmartApiEnabled": false, "SmartApiSyncStatus": "FailedToEnable", "SyncStatus": "UpdateSuccess", "Tags": [{"Key": "MigrateM8BaseToDefault", "Propagated": false, "SysTag": false, "Type": "KeyValue", "Value": "true"}], "VirtualAccount": "se.ott02OLD", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'

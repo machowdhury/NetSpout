@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-SPEAKER - HEALTHY BASELINE ###
+  - name: kube-container-speaker-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_speaker-c4pl4_21ffe2d3-0063-4cf2-9f16-fca58bcdb3c4/speaker/165.log
+        sourcetype: kube:container:speaker
+        host: $HOST$
+        _raw: '{"caller":"layer2_status_controller.go:111","controller":"Layer2StatusReconciler","end reconcile":"sc4snmp/snmp-splunk-connect-for-snmp-trap","level":"info","ts":"$ISO_TIMESTAMP$"}'
+
+  ### KUBE-CONTAINER-SPEAKER - DEGRADED / WARNING ###
+  - name: kube-container-speaker-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_speaker-c4pl4_21ffe2d3-0063-4cf2-9f16-fca58bcdb3c4/speaker/165.log
+        sourcetype: kube:container:speaker
+        host: $HOST$
+        _raw: '{"caller":"layer2_status_controller.go:111","controller":"Layer2StatusReconciler","end reconcile":"sc4snmp/snmp-splunk-connect-for-snmp-trap","level":"info","ts":"$ISO_TIMESTAMP$"}'
+
+  ### KUBE-CONTAINER-SPEAKER - CRITICAL / FAILURE ###
+  - name: kube-container-speaker-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_speaker-c4pl4_21ffe2d3-0063-4cf2-9f16-fca58bcdb3c4/speaker/165.log
+        sourcetype: kube:container:speaker
+        host: $HOST$
+        _raw: '{"caller":"layer2_status_controller.go:111","controller":"Layer2StatusReconciler","end reconcile":"sc4snmp/snmp-splunk-connect-for-snmp-trap","level":"info","ts":"$ISO_TIMESTAMP$"}'

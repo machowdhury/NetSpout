@@ -1,0 +1,28 @@
+samples:
+- name: cisco-dc-aci-class
+  description: Real Network Assurance replay for cisco:dc:aci:class (main index)
+  interval: 60
+  count: 1
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: main
+      sourcetype: cisco:dc:aci:class
+      source: apic:class
+      host: apic-inb.maple.ciscolabs.com
+      _time: "$EPOCH$"
+      _raw: '$GOTS$	adminSt=in-service	childAction=	clearDamp=0	dampFilter=0	dampHalfLife=15	dampMaxSuppressTime=45	dampReuse=750	dampSuppress=2000	dn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets	l3extInstP_descr=	l3extInstP_dn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets	l3extInstP_name=All-Subnets	l3extOut_descr=	l3extOut_dn=uni/tn-common/out-L3Out-OSPF	l3extOut_name=L3Out-OSPF	modTs=2025-08-17T01:00:51.000-05:00	monPolDn=uni/tn-common/monepg-default	name=All-Subnets	operSt=online	parentDn=uni/tn-common/out-L3Out-OSPF	pref=unspecified	rp=no	rtMapDn=	status=	targetDscp=unspecified	apic_host=apic-inb.maple.ciscolabs.com	component=l3extInstP'

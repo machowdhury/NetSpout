@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-PRISMCENTRALS - HEALTHY BASELINE ###
+  - name: nutanixpc-prismcentrals-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/clusters
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/clusters-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_prismCentrals
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Cluster", "extId": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "name": "CCHCI-PC", "nodes": {"numberOfNodes": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeReference", "nodeList": [{"nodeUuid": "9126a468-46ed-4f3a-af0e-82de8185335c", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeListItemReference", "controllerVmIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.120", "prefixLength": 32}}}]}, "config": {"incarnationId": 785974201913393490, "hypervisorTypes": ["$UNKNOWN"], "timezone": "America/Los_Angeles", "clusterSoftwareMap": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.SoftwareMapReference", "softwareType": "NCC", "version": "ncc-5.1.1"}, {"softwareType": "PRISM_CENTRAL", "version": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6"}], "isRemoteSupportEnabled": false, "isLts": false, "isAvailable": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterConfigReference", "buildInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BuildReference", "buildType": "release", "version": "2024.3", "fullVersion": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6", "commitId": "65c1d82b97162bf232e5453e933f1a84ed1db2f6", "shortCommitId": "65c1d8"}, "clusterFunction": ["PRISM_CENTRAL"], "authorizedPublicKeyList": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PublicKey", "name": "9126a468-46ed-4f3a-af0e-82de8185335c", "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQHooMhsOBQNcLXx8yP9u2RI2o35Lng+jIEquNio6aOoEo5erdKMck2rM/Z/t8NgH0uNrOd8oM+paEqjTWh/6v/AfETYbp8YZEEU6riQUh2glINczKQLp6I93LGcqF+JehgO9SkhFsGbIe6GibuwC1umwLcQj2aBt5swmiKCzNgT/aRGni6P9TR0/r/uH6RANTJTzZdcqozOXirK4yY/v7LCvt5Bm7Bz4VjOARak3VcGi21wwPTB5T577MlktCDe7SJZxqqINXWR6QGs7AprjAASz95H/RRgqSpv7uIfaS/Y4Zp1J2Pr7Nic7ZF/Luybt6qiTPFI/lx5TMpPgJVf3V nutanix@ntnx-10-0-4-120-a-pcvm"}], "redundancyFactor": 1, "clusterArch": "X86_64", "faultToleranceState": {"currentMaxFaultTolerance": 0, "desiredMaxFaultTolerance": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.FaultToleranceState", "domainAwarenessLevel": "NODE", "currentClusterFaultTolerance": "CFT_0N_AND_0D", "desiredClusterFaultTolerance": "CFT_0N_AND_0D"}, "pulseStatus": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PulseStatus", "isEnabled": false}}, "network": {"externalSubnet": "10.0.4.0/255.255.255.0", "internalSubnet": "10.0.4.0/255.255.255.0", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterNetworkReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "externalDataServiceIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "nameServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "127.0.0.1", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.201", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.202", "prefixLength": 32}}], "ntpServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.252", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.253", "prefixLength": 32}}], "backplane": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BackplaneNetworkParams", "isSegmentationEnabled": false}}, "pc_ip": "10.0.4.120"}'
+
+  ### NUTANIXPC-PRISMCENTRALS - DEGRADED / WARNING ###
+  - name: nutanixpc-prismcentrals-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/clusters
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_prismCentrals
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Cluster", "extId": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "name": "CCHCI-PC", "nodes": {"numberOfNodes": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeReference", "nodeList": [{"nodeUuid": "9126a468-46ed-4f3a-af0e-82de8185335c", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeListItemReference", "controllerVmIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.120", "prefixLength": 32}}}]}, "config": {"incarnationId": 785974201913393490, "hypervisorTypes": ["$UNKNOWN"], "timezone": "America/Los_Angeles", "clusterSoftwareMap": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.SoftwareMapReference", "softwareType": "NCC", "version": "ncc-5.1.1"}, {"softwareType": "PRISM_CENTRAL", "version": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6"}], "isRemoteSupportEnabled": false, "isLts": false, "isAvailable": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterConfigReference", "buildInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BuildReference", "buildType": "release", "version": "2024.3", "fullVersion": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6", "commitId": "65c1d82b97162bf232e5453e933f1a84ed1db2f6", "shortCommitId": "65c1d8"}, "clusterFunction": ["PRISM_CENTRAL"], "authorizedPublicKeyList": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PublicKey", "name": "9126a468-46ed-4f3a-af0e-82de8185335c", "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQHooMhsOBQNcLXx8yP9u2RI2o35Lng+jIEquNio6aOoEo5erdKMck2rM/Z/t8NgH0uNrOd8oM+paEqjTWh/6v/AfETYbp8YZEEU6riQUh2glINczKQLp6I93LGcqF+JehgO9SkhFsGbIe6GibuwC1umwLcQj2aBt5swmiKCzNgT/aRGni6P9TR0/r/uH6RANTJTzZdcqozOXirK4yY/v7LCvt5Bm7Bz4VjOARak3VcGi21wwPTB5T577MlktCDe7SJZxqqINXWR6QGs7AprjAASz95H/RRgqSpv7uIfaS/Y4Zp1J2Pr7Nic7ZF/Luybt6qiTPFI/lx5TMpPgJVf3V nutanix@ntnx-10-0-4-120-a-pcvm"}], "redundancyFactor": 1, "clusterArch": "X86_64", "faultToleranceState": {"currentMaxFaultTolerance": 0, "desiredMaxFaultTolerance": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.FaultToleranceState", "domainAwarenessLevel": "NODE", "currentClusterFaultTolerance": "CFT_0N_AND_0D", "desiredClusterFaultTolerance": "CFT_0N_AND_0D"}, "pulseStatus": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PulseStatus", "isEnabled": false}}, "network": {"externalSubnet": "10.0.4.0/255.255.255.0", "internalSubnet": "10.0.4.0/255.255.255.0", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterNetworkReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "externalDataServiceIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "nameServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "127.0.0.1", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.201", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.202", "prefixLength": 32}}], "ntpServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.252", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.253", "prefixLength": 32}}], "backplane": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BackplaneNetworkParams", "isSegmentationEnabled": false}}, "pc_ip": "10.0.4.120"}'
+
+  ### NUTANIXPC-PRISMCENTRALS - CRITICAL / FAILURE ###
+  - name: nutanixpc-prismcentrals-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/clusters
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_prismCentrals
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Cluster", "extId": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "name": "CCHCI-PC", "nodes": {"numberOfNodes": 1, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeReference", "nodeList": [{"nodeUuid": "9126a468-46ed-4f3a-af0e-82de8185335c", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.NodeListItemReference", "controllerVmIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.120", "prefixLength": 32}}}]}, "config": {"incarnationId": 785974201913393490, "hypervisorTypes": ["$UNKNOWN"], "timezone": "America/Los_Angeles", "clusterSoftwareMap": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.SoftwareMapReference", "softwareType": "NCC", "version": "ncc-5.1.1"}, {"softwareType": "PRISM_CENTRAL", "version": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6"}], "isRemoteSupportEnabled": false, "isLts": false, "isAvailable": true, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterConfigReference", "buildInfo": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BuildReference", "buildType": "release", "version": "2024.3", "fullVersion": "el8.5-release-fraser-2024.3.1.1-stable-65c1d82b97162bf232e5453e933f1a84ed1db2f6", "commitId": "65c1d82b97162bf232e5453e933f1a84ed1db2f6", "shortCommitId": "65c1d8"}, "clusterFunction": ["PRISM_CENTRAL"], "authorizedPublicKeyList": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PublicKey", "name": "9126a468-46ed-4f3a-af0e-82de8185335c", "key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDQHooMhsOBQNcLXx8yP9u2RI2o35Lng+jIEquNio6aOoEo5erdKMck2rM/Z/t8NgH0uNrOd8oM+paEqjTWh/6v/AfETYbp8YZEEU6riQUh2glINczKQLp6I93LGcqF+JehgO9SkhFsGbIe6GibuwC1umwLcQj2aBt5swmiKCzNgT/aRGni6P9TR0/r/uH6RANTJTzZdcqozOXirK4yY/v7LCvt5Bm7Bz4VjOARak3VcGi21wwPTB5T577MlktCDe7SJZxqqINXWR6QGs7AprjAASz95H/RRgqSpv7uIfaS/Y4Zp1J2Pr7Nic7ZF/Luybt6qiTPFI/lx5TMpPgJVf3V nutanix@ntnx-10-0-4-120-a-pcvm"}], "redundancyFactor": 1, "clusterArch": "X86_64", "faultToleranceState": {"currentMaxFaultTolerance": 0, "desiredMaxFaultTolerance": 0, "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.FaultToleranceState", "domainAwarenessLevel": "NODE", "currentClusterFaultTolerance": "CFT_0N_AND_0D", "desiredClusterFaultTolerance": "CFT_0N_AND_0D"}, "pulseStatus": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.PulseStatus", "isEnabled": false}}, "network": {"externalSubnet": "10.0.4.0/255.255.255.0", "internalSubnet": "10.0.4.0/255.255.255.0", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterNetworkReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "externalDataServiceIp": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "nameServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "127.0.0.1", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.201", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.10.202", "prefixLength": 32}}], "ntpServerIpList": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddressOrFQDN", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.252", "prefixLength": 32}}, {"ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.0.253", "prefixLength": 32}}], "backplane": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.BackplaneNetworkParams", "isSegmentationEnabled": false}}, "pc_ip": "10.0.4.120"}'

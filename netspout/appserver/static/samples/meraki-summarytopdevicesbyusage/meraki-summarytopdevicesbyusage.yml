@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-SUMMARYTOPDEVICESBYUSAGE - HEALTHY BASELINE ###
+  - name: meraki-summarytopdevicesbyusage-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopdevicesbyusage
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "devices": [   {"serial": "Q2QN-TOR-MS250", "name": "MS250-Toronto-Core", "model": "MS250-48FP", "totalBytes": 2140000000},   {"serial": "Q2QN-TOR-MX100", "name": "MX100-Toronto-Hub", "model": "MX100", "totalBytes": 1980000000},   {"serial": "Q2JD-TOR-MR46", "name": "MR46-Toronto-Floor1", "model": "MR46", "totalBytes": 540000000}  ] }'
+
+  ### MERAKI-SUMMARYTOPDEVICESBYUSAGE - DEGRADED INCIDENT ###
+  - name: meraki-summarytopdevicesbyusage-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopdevicesbyusage
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "devices": [   {"serial": "Q2QN-TOR-MS250", "name": "MS250-Toronto-Core", "model": "MS250-48FP", "totalBytes": 9800000000, "retransmissionsPct": 18.5},   {"serial": "Q2QN-TOR-MX100", "name": "MX100-Toronto-Hub", "model": "MX100", "totalBytes": 3200000000}  ] }'

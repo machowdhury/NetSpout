@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-ORGANIZATIONSECURITY - HEALTHY BASELINE ###
+  - name: meraki-organizationsecurity-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:organizationsecurity
+        host: $HOST$
+        _raw: '{  "ts": "$ISO_TS$",  "event": "ids_alert",  "organizationId": "ORG_ACME_CANADA",  "networkName": "Toronto Hub",  "clientMac": "f0:18:98:3a:11:02",  "message": "Routine signature database check completed",  "action": "allow",  "priority": "low" }'
+
+  ### MERAKI-ORGANIZATIONSECURITY - DEGRADED INCIDENT ###
+  - name: meraki-organizationsecurity-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:organizationsecurity
+        host: $HOST$
+        _raw: '{  "ts": "$ISO_TS$",  "event": "ids_alert",  "organizationId": "ORG_ACME_CANADA",  "networkName": "Toronto Hub",  "clientMac": "00:50:56:88:21:4a",  "srcIp": "10.10.10.88",  "destIp": "198.51.100.44",  "message": "INDICATOR-COMPROMISE Suspicious TCP port scan detected",  "action": "blocked",  "priority": "high",  "signature": "1:28401" }'

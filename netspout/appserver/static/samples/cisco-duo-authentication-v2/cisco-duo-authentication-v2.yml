@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-AUTHENTICATION-V2 - HEALTHY BASELINE ###
+  - name: cisco-duo-authentication-v2-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication_v2
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "epkey": null, "flash_version": null, "hostname": null, "ip": "0.0.0.0", "is_encryption_enabled": "unknown", "is_firewall_enabled": "unknown", "is_password_set": "unknown", "java_version": null, "location": {"city": null, "country": null, "state": null}, "management_agents": [], "os": null, "os_version": null, "security_agents": []}, "adaptive_trust_assessments": {"more_secure_auth": {"detected_attack_detectors": null, "features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "preview_mode_enabled": true, "reason": "Normal level of trust; no detection of known attack pattern", "trust_level": "NORMAL"}, "remember_me": {"features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "reason": "Novel Access IP", "trust_level": "LOW"}}, "alias": "", "application": {"key": "DI2A8NH4BYXCVZDIA0FQ", "name": "Auth API"}, "auth_device": {"ip": "99.232.130.106", "key": "DPQUCMMDM8I0C0KMA8OL", "location": {"city": "Ajax", "country": "Canada", "state": "Ontario"}, "name": "416-571-0674", "serial": null, "type": null}, "email": "mahamudc@cisco.com", "event_type": "authentication", "factor": "duo_push", "isotimestamp": "$ISO_TIMESTAMP$", "ood_software": null, "rbfs_triggered_attacks": null, "reason": "user_approved", "result": "success", "timestamp": 1789751848, "trusted_endpoint_status": "unknown", "txid": "bdf8e568-f08a-4b4c-b96f-590480b30d78", "user": {"groups": ["maple-vpn-users (from AD sync \"AD MAPLE\")", "cisco_users (from AD sync \"AD MAPLE\")"], "key": "DUZ0V1OUJNM1Y4V7XEPA", "name": "mahamudc"}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication_v2"}'
+
+  ### CISCO-DUO-AUTHENTICATION-V2 - DEGRADED / WARNING ###
+  - name: cisco-duo-authentication-v2-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication_v2
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "epkey": null, "flash_version": null, "hostname": null, "ip": "0.0.0.0", "is_encryption_enabled": "unknown", "is_firewall_enabled": "unknown", "is_password_set": "unknown", "java_version": null, "location": {"city": null, "country": null, "state": null}, "management_agents": [], "os": null, "os_version": null, "security_agents": []}, "adaptive_trust_assessments": {"more_secure_auth": {"detected_attack_detectors": null, "features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "preview_mode_enabled": true, "reason": "Normal level of trust; no detection of known attack pattern", "trust_level": "NORMAL"}, "remember_me": {"features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "reason": "Novel Access IP", "trust_level": "LOW"}}, "alias": "", "application": {"key": "DI2A8NH4BYXCVZDIA0FQ", "name": "Auth API"}, "auth_device": {"ip": "99.232.130.106", "key": "DPQUCMMDM8I0C0KMA8OL", "location": {"city": "Ajax", "country": "Canada", "state": "Ontario"}, "name": "416-571-0674", "serial": null, "type": null}, "email": "mahamudc@cisco.com", "event_type": "authentication", "factor": "duo_push", "isotimestamp": "$ISO_TIMESTAMP$", "ood_software": null, "rbfs_triggered_attacks": null, "reason": "user_approved", "result": "success", "timestamp": 1789751848, "trusted_endpoint_status": "unknown", "txid": "bdf8e568-f08a-4b4c-b96f-590480b30d78", "user": {"groups": ["maple-vpn-users (from AD sync \"AD MAPLE\")", "cisco_users (from AD sync \"AD MAPLE\")"], "key": "DUZ0V1OUJNM1Y4V7XEPA", "name": "mahamudc"}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication_v2"}'
+
+  ### CISCO-DUO-AUTHENTICATION-V2 - CRITICAL / FAILURE ###
+  - name: cisco-duo-authentication-v2-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication_v2
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "epkey": null, "flash_version": null, "hostname": null, "ip": "0.0.0.0", "is_encryption_enabled": "unknown", "is_firewall_enabled": "unknown", "is_password_set": "unknown", "java_version": null, "location": {"city": null, "country": null, "state": null}, "management_agents": [], "os": null, "os_version": null, "security_agents": []}, "adaptive_trust_assessments": {"more_secure_auth": {"detected_attack_detectors": null, "features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "preview_mode_enabled": true, "reason": "Normal level of trust; no detection of known attack pattern", "trust_level": "NORMAL"}, "remember_me": {"features_version": "3.0", "model_version": "2022.07.19.001", "policy_enabled": false, "reason": "Novel Access IP", "trust_level": "LOW"}}, "alias": "", "application": {"key": "DI2A8NH4BYXCVZDIA0FQ", "name": "Auth API"}, "auth_device": {"ip": "99.232.130.106", "key": "DPQUCMMDM8I0C0KMA8OL", "location": {"city": "Ajax", "country": "Canada", "state": "Ontario"}, "name": "416-571-0674", "serial": null, "type": null}, "email": "mahamudc@cisco.com", "event_type": "authentication", "factor": "duo_push", "isotimestamp": "$ISO_TIMESTAMP$", "ood_software": null, "rbfs_triggered_attacks": null, "reason": "user_approved", "result": "success", "timestamp": 1789751848, "trusted_endpoint_status": "unknown", "txid": "bdf8e568-f08a-4b4c-b96f-590480b30d78", "user": {"groups": ["maple-vpn-users (from AD sync \"AD MAPLE\")", "cisco_users (from AD sync \"AD MAPLE\")"], "key": "DUZ0V1OUJNM1Y4V7XEPA", "name": "mahamudc"}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication_v2"}'

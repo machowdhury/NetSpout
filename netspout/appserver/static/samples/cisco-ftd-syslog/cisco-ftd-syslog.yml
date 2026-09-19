@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-FTD-SYSLOG - HEALTHY BASELINE ###
+  - name: cisco-ftd-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.11
+          - weight: 2
+            choice: 10.0.255.11-peer
+    lines:
+      - index: cisco_sfw_ftd_syslog
+        source: udp:5515
+        sourcetype: cisco:ftd:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ :$SYSLOG_TIMESTAMP$ UTC: %FTD--6-805002: TCP Flow is no longer offloaded for connection 35430004 from INTERNET:32.185.98.157/443 (32.185.98.157/443) to INSIDE:10.0.10.95/17229 (64.100.57.80/17229)'
+
+  ### CISCO-FTD-SYSLOG - DEGRADED / WARNING ###
+  - name: cisco-ftd-syslog-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.11
+    lines:
+      - index: cisco_sfw_ftd_syslog
+        source: udp:5515
+        sourcetype: cisco:ftd:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ :$SYSLOG_TIMESTAMP$ UTC: %FTD--6-805002: TCP Flow is no longer offloaded for connection 35430004 from INTERNET:32.185.98.157/443 (32.185.98.157/443) to INSIDE:10.0.10.95/17229 (64.100.57.80/17229)'
+
+  ### CISCO-FTD-SYSLOG - CRITICAL / FAILURE ###
+  - name: cisco-ftd-syslog-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.11
+    lines:
+      - index: cisco_sfw_ftd_syslog
+        source: udp:5515
+        sourcetype: cisco:ftd:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ :$SYSLOG_TIMESTAMP$ UTC: %FTD--6-805002: TCP Flow is no longer offloaded for connection 35430004 from INTERNET:32.185.98.157/443 (32.185.98.157/443) to INSIDE:10.0.10.95/17229 (64.100.57.80/17229)'

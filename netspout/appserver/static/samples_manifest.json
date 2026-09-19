@@ -1,0 +1,3502 @@
+{
+  "categories": [
+    {
+      "categoryName": "Cisco Catalyst",
+      "totalSamples": 23,
+      "samples": [
+        {
+          "id": "cisco-catalyst-client",
+          "name": "Cisco Catalyst Client",
+          "files": [
+            "cisco-catalyst-client.yml"
+          ],
+          "sampleFile": "cisco-catalyst-client.yml",
+          "detectedSourcetype": "cisco:catalyst:client",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"ClientID\": \"00:50:56:B7:10:E2\", \"ClientMACAddress\": \"00:50:56:B7:10:E2\", \"ClientType\": \"Wired\", \"ClientName\": \"sandbox-ise\", \"ClientUserID\": \"\", \"ClientUsername\": \"N/A\", \"ClientIPv4Address\": \"10.20.1.5\", \"ClientOSType\": \"Unclassified\", \"ClientDeviceType\": \"Unclassified\", \"ClientSiteHierarchy\": \"Global/Toronto_SDA/Toronto_BLD\", \"ClientLastUpdatedTime\": 1789749600000, \"ClientConnectionStatus\": \"co",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-clienthealth",
+          "name": "Cisco Catalyst Clienthealth",
+          "files": [
+            "cisco-catalyst-clienthealth.yml"
+          ],
+          "sampleFile": "cisco-catalyst-clienthealth.yml",
+          "detectedSourcetype": "cisco:catalyst:clienthealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"siteId\": \"global\", \"clientType\": \"ALL\", \"clientCount\": 0, \"clientUniqueCount\": 0, \"scoreValue\": -1, \"starttime\": 1789752526901, \"endtime\": 1789752826901, \"scoreType\": \"ALL\", \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-compliance",
+          "name": "Cisco Catalyst Compliance",
+          "files": [
+            "cisco-catalyst-compliance.yml"
+          ],
+          "sampleFile": "cisco-catalyst-compliance.yml",
+          "detectedSourcetype": "cisco:catalyst:compliance",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"ComplianceDeviceID\": \"4881747e-0e66-4275-8611-f9ec86746a7d\", \"ComplianceStatus\": \"NON_COMPLIANT\", \"ComplianceLastUpdateTime\": 1789732708220, \"DeviceName\": \"C9800.maple.ciscolabs.com\", \"IpAddress\": \"10.0.10.50\", \"DeviceFamily\": \"Wireless Controller\", \"Reachability\": \"Reachable\", \"ReachabilityFailureReason\": \"\", \"ManageErrors\": \"\", \"Manageability\": \"Managed\", \"MACAddress\": \"00:50:56:b7:74:4c\", \"De",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-devicehealth",
+          "name": "Cisco Catalyst Devicehealth",
+          "files": [
+            "cisco-catalyst-devicehealth.yml"
+          ],
+          "sampleFile": "cisco-catalyst-devicehealth.yml",
+          "detectedSourcetype": "cisco:catalyst:devicehealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"HasInterfaceStats\": \"True\", \"ID\": \"6aa89be5-2bfa-4647-a04e-919fc3e9be2c\", \"DeviceID\": \"0c379365-f5b4-4a3d-9a3d-1dc3e6689a18\", \"DeviceName\": \"TRN-SDA-C9500.maple.ciscolabs.com\", \"Name\": \"Vlan122\", \"RxRate\": \"\", \"TxRate\": \"\", \"Speed\": \"1000000\", \"RxUtilization\": \"\", \"TxUtilization\": \"\", \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-issue",
+          "name": "Cisco Catalyst Issue",
+          "files": [
+            "cisco-catalyst-issue.yml"
+          ],
+          "sampleFile": "cisco-catalyst-issue.yml",
+          "detectedSourcetype": "cisco:catalyst:issue",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"IssueID\": \"4746c82c-0eba-4182-88b9-d296c827cc13\", \"IssueSpecificCategory\": \"Availability\", \"IssueSpecificSource\": \"Cisco DNA\", \"IssueSpecificName\": \"switch_unreachable\", \"IssueSpecificDescription\": \"This network device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center. The device role is ACCESS.\", \"IssueSpecificEntity\": \"network_device\", \"IssueSpecificEntityValue\": \"86af9de8-d550-4",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-networkhealth",
+          "name": "Cisco Catalyst Networkhealth",
+          "files": [
+            "cisco-catalyst-networkhealth.yml"
+          ],
+          "sampleFile": "cisco-catalyst-networkhealth.yml",
+          "detectedSourcetype": "cisco:catalyst:networkhealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"category\": \"All\", \"healthScore\": 29, \"totalCount\": 24, \"goodCount\": 7, \"noHealthCount\": 17, \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-allowed",
+          "name": "Cisco Catalyst Rogue Allowed",
+          "files": [
+            "cisco-catalyst-rogue-allowed.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-allowed.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:allowed",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"success\", \"msg\": \"API returned empty list / no active data\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-counts",
+          "name": "Cisco Catalyst Rogue Counts",
+          "files": [
+            "cisco-catalyst-rogue-counts.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-counts.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:counts",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "26",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-threat-details",
+          "name": "Cisco Catalyst Rogue Threat Details",
+          "files": [
+            "cisco-catalyst-rogue-threat-details.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-threat-details.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:threat_details",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"macAddress\": \"C2:D6:76:6F:BA:30\", \"updatedTime\": $EPOCH_MS$, \"vendor\": \"UNKNOWN\", \"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"apName\": \"OTT-Lab-2802-AP\", \"detectingAPMac\": \"70:7D:B9:13:97:20\", \"siteId\": \"e2f0aaaa-896d-4ca3-8ed0-069c49b0be32\", \"rssi\": \"-55\", \"ssid\": \"internet\", \"containment\": \"Open\", \"state\": \"Active\", \"siteNameHierarchy\": \"Global/Ottawa/OTT02-Lab/OTT02-SDA\", \"totalClient",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-verbose",
+          "name": "Cisco Catalyst Rogue Verbose",
+          "files": [
+            "cisco-catalyst-rogue-verbose.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-verbose.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:verbose",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"macAddress\": \"C2:D6:66:6F:BA:30\", \"mldMacAddress\": \"NA\", \"updatedTime\": $EPOCH_MS$, \"createdTime\": $EPOCH_MS$, \"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"apName\": \"OTT-Lab-9117-AP\", \"detectingAPMac\": \"0C:D0:F8:95:5B:20\", \"ssid\": \"internet\", \"containment\": \"Open\", \"radioType\": \"8\", \"controllerIp\": \"10.0.10.50\", \"controllerName\": \"C9800.maple.ciscolabs.com\", \"channelNumber\": \"6\", \"siteNam",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-verbose-legacy",
+          "name": "Cisco Catalyst Rogue Verbose Legacy",
+          "files": [
+            "cisco-catalyst-rogue-verbose-legacy.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-verbose-legacy.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:verbose:legacy",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"no_active_data\", \"msg\": \"API returned 0 records\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-rogue-wired",
+          "name": "Cisco Catalyst Rogue Wired",
+          "files": [
+            "cisco-catalyst-rogue-wired.yml"
+          ],
+          "sampleFile": "cisco-catalyst-rogue-wired.yml",
+          "detectedSourcetype": "cisco:catalyst:rogue:wired",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"success\", \"msg\": \"No active data found\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-script-heartbeat",
+          "name": "Cisco Catalyst Script Heartbeat",
+          "files": [
+            "cisco-catalyst-script-heartbeat.yml"
+          ],
+          "sampleFile": "cisco-catalyst-script-heartbeat.yml",
+          "detectedSourcetype": "cisco:catalyst:script:heartbeat",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"polling_complete\", \"timestamp\": \"$GOTS$\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-security-awips-signatures",
+          "name": "Cisco Catalyst Security Awips Signatures",
+          "files": [
+            "cisco-catalyst-security-awips-signatures.yml"
+          ],
+          "sampleFile": "cisco-catalyst-security-awips-signatures.yml",
+          "detectedSourcetype": "cisco:catalyst:security:awips_signatures",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"success\", \"msg\": \"No active data found\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-security-events",
+          "name": "Cisco Catalyst Security Events",
+          "files": [
+            "cisco-catalyst-security-events.yml"
+          ],
+          "sampleFile": "cisco-catalyst-security-events.yml",
+          "detectedSourcetype": "cisco:catalyst:security:events",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"no_active_data\", \"msg\": \"No incidents in window\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-security-profile",
+          "name": "Cisco Catalyst Security Profile",
+          "files": [
+            "cisco-catalyst-security-profile.yml"
+          ],
+          "sampleFile": "cisco-catalyst-security-profile.yml",
+          "detectedSourcetype": "cisco:catalyst:security:profile",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"no_active_data\", \"msg\": \"No incidents in window\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-security-profile-signatures",
+          "name": "Cisco Catalyst Security Profile Signatures",
+          "files": [
+            "cisco-catalyst-security-profile-signatures.yml"
+          ],
+          "sampleFile": "cisco-catalyst-security-profile-signatures.yml",
+          "detectedSourcetype": "cisco:catalyst:security:profile_signatures",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"profileDetails\": {\"instanceUuid\": \"6fdbebc5-b9f9-45bd-a7a6-735de93e0c25\", \"name\": \"Dovetail-SSID\", \"ssidDetails\": [{\"name\": \"Ott02-LAB-SDA-CORP\", \"enableFabric\": false, \"flexConnect\": {\"enableFlexConnect\": false}, \"interfaceName\": \"management\", \"wlanProfileName\": \"Ott02-LAB-SDA-CORP_profile\", \"policyProfileName\": \"Ott02-LAB-SDA-CORP_profile\"}], \"sites\": [\"Global/Ottawa/OTT02-Lab\", \"Global/Ottawa",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-security-rules",
+          "name": "Cisco Catalyst Security Rules",
+          "files": [
+            "cisco-catalyst-security-rules.yml"
+          ],
+          "sampleFile": "cisco-catalyst-security-rules.yml",
+          "detectedSourcetype": "cisco:catalyst:security:rules",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"no_active_data\", \"msg\": \"No incidents in window\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-securityadvisory",
+          "name": "Cisco Catalyst Securityadvisory",
+          "files": [
+            "cisco-catalyst-securityadvisory.yml"
+          ],
+          "sampleFile": "cisco-catalyst-securityadvisory.yml",
+          "detectedSourcetype": "cisco:catalyst:securityadvisory",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"Summary\": \"True\", \"Category\": \"CRITICAL\", \"SubCategory\": \"TOTAL\", \"Amount\": 8, \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-threat-list",
+          "name": "Cisco Catalyst Threat List",
+          "files": [
+            "cisco-catalyst-threat-list.yml"
+          ],
+          "sampleFile": "cisco-catalyst-threat-list.yml",
+          "detectedSourcetype": "cisco:catalyst:threat:list",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"success\", \"msg\": \"API returned empty list / no active data\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-threat-signatures",
+          "name": "Cisco Catalyst Threat Signatures",
+          "files": [
+            "cisco-catalyst-threat-signatures.yml"
+          ],
+          "sampleFile": "cisco-catalyst-threat-signatures.yml",
+          "detectedSourcetype": "cisco:catalyst:threat:signatures",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"status\": \"success\", \"msg\": \"API returned empty list / no active data\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-threat-summary",
+          "name": "Cisco Catalyst Threat Summary",
+          "files": [
+            "cisco-catalyst-threat-summary.yml"
+          ],
+          "sampleFile": "cisco-catalyst-threat-summary.yml",
+          "detectedSourcetype": "cisco:catalyst:threat:summary",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 16, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 6, \"threatTypeInt\": \"18000\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 3, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"thre",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-catalyst-threat-summary-legacy",
+          "name": "Cisco Catalyst Threat Summary Legacy",
+          "files": [
+            "cisco-catalyst-threat-summary-legacy.yml"
+          ],
+          "sampleFile": "cisco-catalyst-threat-summary-legacy.yml",
+          "detectedSourcetype": "cisco:catalyst:threat:summary:legacy",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 17, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 3, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 2, \"threatTypeInt\": \"18000\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"thre",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco DC (ACI, Nexus)",
+      "totalSamples": 5,
+      "samples": [
+        {
+          "id": "cisco-dc-aci-bridge-domain",
+          "name": "Cisco Dc Aci Bridge Domain",
+          "files": [
+            "cisco-dc-aci-bridge-domain.yml"
+          ],
+          "sampleFile": "cisco-dc-aci-bridge-domain.yml",
+          "detectedSourcetype": "cisco:dc:aci:health",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"time\": \"$ISO_TS$\", \"dn\": \"uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health\", \"cur\": 100, \"prev\": 100, \"twScore\": 100, \"maxSev\": \"cleared\", \"descr\": \"Bridge Domain MAPLE_BD04_SPLUNK healthy\", \"apic_host\": \"$APIC_HOST$\", \"component\": \"fvBD\", \"tenant\": \"MAPLE\", \"bd\": \"MAPLE_BD04_SPLUNK\", \"operSt\": \"online\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dc-aci-class",
+          "name": "Cisco Dc Aci Class",
+          "files": [
+            "cisco-dc-aci-class.yml"
+          ],
+          "sampleFile": "cisco-dc-aci-class.yml",
+          "detectedSourcetype": "cisco:dc:aci:class",
+          "detectedIndex": "main",
+          "previewSnippet": "$GOTS$\tadminSt=in-service\tchildAction=\tclearDamp=0\tdampFilter=0\tdampHalfLife=15\tdampMaxSuppressTime=45\tdampReuse=750\tdampSuppress=2000\tdn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets\tl3extInstP_descr=\tl3extInstP_dn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets\tl3extInstP_name=All-Subnets\tl3extOut_descr=\tl3extOut_dn=uni/tn-common/out-L3Out-OSPF\tl3extOut_name=L3Out-OSPF\tmodTs=2025-08-17T01:00:51.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dc-aci-health",
+          "name": "Cisco Dc Aci Health",
+          "files": [
+            "cisco-dc-aci-health.yml"
+          ],
+          "sampleFile": "cisco-dc-aci-health.yml",
+          "detectedSourcetype": "cisco:dc:aci:health",
+          "detectedIndex": "main",
+          "previewSnippet": "$GOTS$\tchildClassName1=eqptLCSlot\tchildDn1=topology/pod-1/node-103/sys/ch/lcslot-1\tchng=3\tcriticalImpact=0\tcur=66\tdn=topology/pod-1/node-103/sys/ch/health\tmajorImpact=0\tmaxSev=cleared\tminorImpact=0\tprev=64\ttwScore=66\tupdTs=$GOTS$\twarnImpact=0\tdescr=Nexus C93180YC-FX chassis\tmodel=N9K-C93180YC-FX\toperSt=online\trole=leaf\tser=FDO223526K5\tapic_host=apic-inb.maple.ciscolabs.com\tcomponent=eqptCh",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dc-nexus9k",
+          "name": "Cisco Dc Nexus9K",
+          "files": [
+            "cisco-dc-nexus9k.yml"
+          ],
+          "sampleFile": "cisco-dc-nexus9k.yml",
+          "detectedSourcetype": "cisco:dc:nexus9k",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"timestamp\": \"$GOTS$\", \"component\": \"nxpower\", \"device\": \"10.0.0.253:443\", \"Row_info\": {\"voltage_level\": \"12\"}}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dc-nexus9k-syslog",
+          "name": "Cisco Dc Nexus9K Syslog",
+          "files": [
+            "cisco-dc-nexus9k-syslog.yml"
+          ],
+          "sampleFile": "cisco-dc-nexus9k-syslog.yml",
+          "detectedSourcetype": "cisco:dc:nexus9k:syslog",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ OTT-CORE01: 2026 $SYSLOG_TIMESTAMP$ EST: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19815]  fe80::232:17ff:fe3c:ac58 on Vlan506 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco DNAC",
+      "totalSamples": 9,
+      "samples": [
+        {
+          "id": "cisco-dnac-audit-logs",
+          "name": "Cisco Dnac Audit Logs",
+          "files": [
+            "cisco-dnac-audit-logs.yml"
+          ],
+          "sampleFile": "cisco-dnac-audit-logs.yml",
+          "detectedSourcetype": "cisco:dnac:audit:logs",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"version\": \"1.0.0\", \"clientId\": \"admin\", \"efInstanceId\": \"8bc79c1e-9614-4b90-94e2-b210740c85de\", \"instanceId\": \"f7924add-c576-4617-80d4-62da85174cb3\", \"eventId\": \"AUDIT_LOG_EVENT\", \"namespace\": \"AUDIT_LOG\", \"name\": \"AUDIT_LOG\", \"description\": \"Intent API \\\"Get Issue Enrichment Details\\\" Executed\", \"type\": \"AUDIT_LOG\", \"category\": \"INFO\", \"domain\": \"Programmability\", \"subDomain\": \"APIs and Integra",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-client",
+          "name": "Cisco Dnac Client",
+          "files": [
+            "cisco-dnac-client.yml"
+          ],
+          "sampleFile": "cisco-dnac-client.yml",
+          "detectedSourcetype": "cisco:dnac:client",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"id\": \"E8:BC:E4:74:07:FA\", \"macAddress\": \"E8:BC:E4:74:07:FA\", \"type\": \"Wired\", \"name\": \"SEPE8BCE47407FA\", \"userId\": null, \"username\": \"9Qx9CJ5O351+SFhFnaESDaKssazYM4bgml3GbE7MDQA=\", \"ipv4Address\": null, \"ipv6Addresses\": [\"fe80::eabc:e4ff:fe74:7fa\"], \"vendor\": \"Cisco Systems, Inc.\", \"osType\": \"unknown\", \"osVersion\": null, \"formFactor\": \"IP Phone\", \"trustScore\": 6.0, \"deviceType\": \"Cisco-IP-Phone 9",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-clienthealth",
+          "name": "Cisco Dnac Clienthealth",
+          "files": [
+            "cisco-dnac-clienthealth.yml"
+          ],
+          "sampleFile": "cisco-dnac-clienthealth.yml",
+          "detectedSourcetype": "cisco:dnac:clienthealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"siteId\": \"global\", \"clientType\": \"ALL\", \"clientCount\": 0, \"clientUniqueCount\": 0, \"scoreValue\": -1, \"starttime\": 1784258167916, \"endtime\": 1784258467916, \"scoreType\": \"ALL\", \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-compliance",
+          "name": "Cisco Dnac Compliance",
+          "files": [
+            "cisco-dnac-compliance.yml"
+          ],
+          "sampleFile": "cisco-dnac-compliance.yml",
+          "detectedSourcetype": "cisco:dnac:compliance",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"ComplianceDeviceID\": \"4881747e-0e66-4275-8611-f9ec86746a7d\", \"ComplianceStatus\": \"NON_COMPLIANT\", \"ComplianceLastUpdateTime\": 1784246310488, \"DeviceName\": \"C9800.maple.ciscolabs.com\", \"IpAddress\": \"10.0.10.50\", \"DeviceFamily\": \"Wireless Controller\", \"Reachability\": \"Reachable\", \"ReachabilityFailureReason\": \"\", \"ManageErrors\": \"\", \"Manageability\": \"Managed\", \"MACAddress\": \"00:50:56:b7:74:4c\", \"De",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-devicehealth",
+          "name": "Cisco Dnac Devicehealth",
+          "files": [
+            "cisco-dnac-devicehealth.yml"
+          ],
+          "sampleFile": "cisco-dnac-devicehealth.yml",
+          "detectedSourcetype": "cisco:dnac:devicehealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"DeviceName\": \"TRN-SDA-C9500.maple.ciscolabs.com\", \"IpAddress\": \"10.120.1.1\", \"DeviceFamily\": \"Switches and Hubs\", \"Reachability\": \"Unreachable\", \"ReachabilityFailureReason\": \"SNMP Connectivity Failed\", \"ManageErrors\": \"Partial Collection Failure\", \"Manageability\": \"Managed (With Errors)\", \"MACAddress\": \"74:ad:98:6c:9f:20\", \"DeviceRole\": \"DISTRIBUTION\", \"ImageVersion\": \"17.18.1\", \"Uptime\": \"13 da",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-issue",
+          "name": "Cisco Dnac Issue",
+          "files": [
+            "cisco-dnac-issue.yml"
+          ],
+          "sampleFile": "cisco-dnac-issue.yml",
+          "detectedSourcetype": "cisco:dnac:issue",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"IssueID\": \"72859f90-cafd-4980-a325-431f9ed9dd40\", \"IssueSpecificCategory\": \"Connected\", \"IssueSpecificSource\": \"Cisco DNA\", \"IssueSpecificName\": \"fabric_lisp_session_down_global_trigger\", \"IssueSpecificDescription\": \"LISP session on \\\"LOCAL\\\" Control Plane \\\"Kanata-FB2.ott04-lab.ca\\\" in Fabric site \\\"Global/Kanata_SDA\\\" is down.\", \"IssueSpecificEntity\": \"network_device\", \"IssueSpecificEntityValu",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-networkhealth",
+          "name": "Cisco Dnac Networkhealth",
+          "files": [
+            "cisco-dnac-networkhealth.yml"
+          ],
+          "sampleFile": "cisco-dnac-networkhealth.yml",
+          "detectedSourcetype": "cisco:dnac:networkhealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"category\": \"All\", \"healthScore\": 29, \"totalCount\": 24, \"goodCount\": 7, \"noHealthCount\": 17, \"time\": \"1784258468717\", \"cisco_catalyst_host\": \"https://dnac.maple.ciscolabs.com\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-securityadvisory",
+          "name": "Cisco Dnac Securityadvisory",
+          "files": [
+            "cisco-dnac-securityadvisory.yml"
+          ],
+          "sampleFile": "cisco-dnac-securityadvisory.yml",
+          "detectedSourcetype": "cisco:dnac:securityadvisory",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"Summary\": \"True\", \"Category\": \"CRITICAL\", \"SubCategory\": \"TOTAL\", \"Amount\": 3, \"cisco_catalyst_host\": \"https://10.20.1.16\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dnac-site-topology",
+          "name": "Cisco Dnac Site Topology",
+          "files": [
+            "cisco-dnac-site-topology.yml"
+          ],
+          "sampleFile": "cisco-dnac-site-topology.yml",
+          "detectedSourcetype": "cisco:dnac:site:topology",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"id\": \"9056977e-394b-4bb8-9618-d2c6b2a951d0\", \"siteHierarchyId\": \"6f6b2254-2c82-4df2-b4ef-df32aa8db97e/120f464d-4818-42dd-bb74-cc7c005cff7b/b785f984-870f-4487-a163-3c3700221fdc/9056977e-394b-4bb8-9618-d2c6b2a951d0\", \"parentId\": \"b785f984-870f-4487-a163-3c3700221fdc\", \"name\": \"Distribution\", \"nameHierarchy\": \"Global/Toronto/CLUS-26-DMZ1/Distribution\", \"type\": \"floor\", \"floorNumber\": 1, \"rfModel\": ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco Duo",
+      "totalSamples": 7,
+      "samples": [
+        {
+          "id": "cisco-duo-account",
+          "name": "Cisco Duo Account",
+          "files": [
+            "cisco-duo-account.yml"
+          ],
+          "sampleFile": "cisco-duo-account.yml",
+          "detectedSourcetype": "cisco:duo:account",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"account_id\": \"DAOSZ4YYK0VOGIA1JIYJ\", \"admin_count\": 5, \"edition\": \"Duo Premier\", \"integration_count\": 14, \"telephony_credits_remaining\": 0, \"user_count\": 68, \"user_pending_deletion_count\": 0, \"timestamp\": 1789752783, \"host\": \"api-dd716ff8.duosecurity.com\", \"extracted_eventtype\": \"account\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-activity",
+          "name": "Cisco Duo Activity",
+          "files": [
+            "cisco-duo-activity.yml"
+          ],
+          "sampleFile": "cisco-duo-activity.yml",
+          "detectedSourcetype": "cisco:duo:activity",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"access_device\": null, \"action\": {\"details\": \"{\\\"sync_ref_code\\\": \\\"951940ce7e0bcc4150b1fde70fd0988c\\\", \\\"duration\\\": \\\"0:00:07\\\", \\\"selected_groups\\\": [\\\"cn=lab_owners,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\\\", \\\"cn=subrosa_users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\\\", \\\"cn=maple-vpn-users,ou=maple_groups,dc=maple,dc=ciscolabs,dc=com\\\", \\\"cn=c",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-administrator",
+          "name": "Cisco Duo Administrator",
+          "files": [
+            "cisco-duo-administrator.yml"
+          ],
+          "sampleFile": "cisco-duo-administrator.yml",
+          "detectedSourcetype": "cisco:duo:administrator",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"action\": \"ad_sync_finish\", \"description\": \"{\\\"Duration\\\": \\\"0:00:07\\\", \\\"Users added\\\": 0, \\\"Users modified\\\": 0, \\\"Users seen\\\": 67, \\\"Users removed\\\": 0, \\\"authproxy_identifiers\\\": [\\\"PRF2XSHZBNKP9HO38BSN\\\"], \\\"Sync Ref. Code\\\": \\\"951940ce7e0bcc4150b1fde70fd0988c\\\"}\", \"isotimestamp\": \"$ISO_TIMESTAMP$\", \"object\": \"AD MAPLE\", \"timestamp\": 1789752192, \"user",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-authentication",
+          "name": "Cisco Duo Authentication",
+          "files": [
+            "cisco-duo-authentication.yml"
+          ],
+          "sampleFile": "cisco-duo-authentication.yml",
+          "detectedSourcetype": "cisco:duo:authentication",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"access_device\": {\"browser\": null, \"browser_version\": null, \"flash_version\": null, \"java_version\": null, \"os\": null, \"os_version\": null, \"trusted_endpoint_status\": \"unknown\"}, \"alias\": \"\", \"device\": \"416-571-0674\", \"email\": \"mahamudc@cisco.com\", \"factor\": \"Duo Push\", \"integration\": \"Auth API\", \"ip\": \"0.0.0.0\", \"isotimestamp\": \"$ISO_TIMESTAMP$\", \"location\": ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-authentication-v2",
+          "name": "Cisco Duo Authentication V2",
+          "files": [
+            "cisco-duo-authentication-v2.yml"
+          ],
+          "sampleFile": "cisco-duo-authentication-v2.yml",
+          "detectedSourcetype": "cisco:duo:authentication_v2",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"access_device\": {\"browser\": null, \"browser_version\": null, \"epkey\": null, \"flash_version\": null, \"hostname\": null, \"ip\": \"0.0.0.0\", \"is_encryption_enabled\": \"unknown\", \"is_firewall_enabled\": \"unknown\", \"is_password_set\": \"unknown\", \"java_version\": null, \"location\": {\"city\": null, \"country\": null, \"state\": null}, \"management_agents\": [], \"os\": null, \"os_ver",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-endpoint",
+          "name": "Cisco Duo Endpoint",
+          "files": [
+            "cisco-duo-endpoint.yml"
+          ],
+          "sampleFile": "cisco-duo-endpoint.yml",
+          "detectedSourcetype": "cisco:duo:endpoint",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Thu $SYSLOG_TIMESTAMP$ 2026\", \"alternative_ids\": [], \"browsers\": [], \"computer_sid\": \"\", \"cpu_id\": \"\", \"device_id\": \"\", \"device_identifier\": \"\", \"device_identifier_type\": \"\", \"device_name\": \"\", \"device_udid\": \"\", \"device_username\": \"\", \"device_username_type\": \"\", \"disk_encryption_status\": \"Unknown\", \"domain_sid\": \"\", \"email\": \"mrayani@cisco.com\", \"epkey\": \"EP2YU6L9NENSABJAIX1D\", \"firewa",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-duo-user",
+          "name": "Cisco Duo User",
+          "files": [
+            "cisco-duo-user.yml"
+          ],
+          "sampleFile": "cisco-duo-user.yml",
+          "detectedSourcetype": "cisco:duo:user",
+          "detectedIndex": "cisco_duo",
+          "previewSnippet": "{\"ctime\": \"Fri $SYSLOG_TIMESTAMP$ 2026\", \"alias1\": null, \"alias2\": null, \"alias3\": null, \"alias4\": null, \"aliases\": {}, \"created\": 1786110545, \"custom_attributes\": {}, \"date_of_birth\": null, \"desktop_authenticators\": [], \"desktoptokens\": [], \"directory_key\": \"DS2ACAGGQBNC95H3U4QS\", \"email\": \"glarivee@subrosa.ca\", \"enable_auto_prompt\": true, \"entra_federated_user_id\": null, \"external_id\": \"uj9hjKUH",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco Intersight",
+      "totalSamples": 11,
+      "samples": [
+        {
+          "id": "cisco-intersight-advisories",
+          "name": "Cisco Intersight Advisories",
+          "files": [
+            "cisco-intersight-advisories.yml"
+          ],
+          "sampleFile": "cisco-intersight-advisories.yml",
+          "detectedSourcetype": "cisco:intersight:advisories",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"5960901ca94eba000127e33a\", \"Actions\": [{\"AffectedObjectType\": \"equipment.Chassis\", \"AlertType\": \"eolAdvisory\", \"Identifiers\": [{\"Name\": \"Moid\", \"ObjectType\": \"tam.Identifiers\", \"Value\": \"ds1_Moid\"}], \"Name\": \"\", \"ObjectType\": \"tam.Action\", \"OperationType\": \"create\", \"Queries\": [{\"Name\": \"qds2\", \"ObjectType\": \"tam.QueryEntry\", \"Priority\": 1, \"Query\": \"SELECT * FROM ds1 where ( date",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-alarms",
+          "name": "Cisco Intersight Alarms",
+          "files": [
+            "cisco-intersight-alarms.yml"
+          ],
+          "sampleFile": "cisco-intersight-alarms.yml",
+          "detectedSourcetype": "cisco:intersight:alarms",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"Acknowledge\": \"None\", \"AcknowledgeBy\": \"\", \"AcknowledgeTime\": \"$ISO_TIMESTAMP$\", \"AffectedMo\": {\"ClassId\": \"mo.MoRef\", \"Moid\": \"68c9a917422d332d416876f6\", \"ObjectType\": \"ether.PhysicalPort\", \"link\": \"https://intersight.com/api/v1/ether/PhysicalPorts/68c9a917422d332d416876f6\"}, \"AffectedMoDisplayName\": \"MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36\", \"Affect",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-auditrecords",
+          "name": "Cisco Intersight Auditrecords",
+          "files": [
+            "cisco-intersight-auditrecords.yml"
+          ],
+          "sampleFile": "cisco-intersight-auditrecords.yml",
+          "detectedSourcetype": "cisco:intersight:auditrecords",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"AffectedObjectTypeLabel\": \"\", \"CreateTime\": \"$ISO_TIMESTAMP$\", \"Email\": \"dieherna@cisco.com\", \"Event\": \"Logout\", \"HttpOperation\": \" \", \"HttpResponseCode\": 0, \"HttpResponsePayload\": \"\", \"InstId\": \"6aab13f175646133016f9e74\", \"MoDisplayNames\": {\"Name\": [\"dieherna@cisco.com\"]}, \"MoType\": \"iam.User\", \"ModTime\": \"$ISO_TIMESTAMP$\", \"Moid\": \"6aab13f26972653301d",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-compute",
+          "name": "Cisco Intersight Compute",
+          "files": [
+            "cisco-intersight-compute.yml"
+          ],
+          "sampleFile": "cisco-intersight-compute.yml",
+          "detectedSourcetype": "cisco:intersight:compute",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"AlarmType\": \"minor\", \"Ancestors\": [{\"Moid\": \"69ea646f76752d340195f1c8\", \"ObjectType\": \"network.Element\", \"link\": \"https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8\"}], \"CreateTime\": \"$ISO_TIMESTAMP$\", \"DeviceMoId\": \"69ea646e6f7261350123bfde\", \"Dn\": \"switch-FDO2441072E/stor-part-mnt_pss\", \"DomainGroupMoid\": \"660de283756461330140",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-contracts",
+          "name": "Cisco Intersight Contracts",
+          "files": [
+            "cisco-intersight-contracts.yml"
+          ],
+          "sampleFile": "cisco-intersight-contracts.yml",
+          "detectedSourcetype": "cisco:intersight:contracts",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"ContractStatus\": \"Not Covered\", \"ContractStatusReason\": \"\", \"ContractUnavailableRetryCount\": 1, \"ContractUpdatedTime\": \"$ISO_TIMESTAMP$\", \"CoveredProductLineEndDate\": \"2023-10-13\", \"CreateTime\": \"$ISO_TIMESTAMP$\", \"DeviceId\": \"WZP263600LU\", \"DeviceType\": \"CiscoUcsServer\", \"DomainGroupMoid\": \"660de283756461330140b581\", \"IsValid\": true, \"ItemType\": \"CHASS",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-licenses",
+          "name": "Cisco Intersight Licenses",
+          "files": [
+            "cisco-intersight-licenses.yml"
+          ],
+          "sampleFile": "cisco-intersight-licenses.yml",
+          "detectedSourcetype": "cisco:intersight:licenses",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"Account\": {\"Moid\": \"660de283756461330140b580\", \"ObjectType\": \"iam.Account\", \"link\": \"https://intersight.com/api/v1/iam/Accounts/660de283756461330140b580\"}, \"AccountId\": \"660de283756461330140b580\", \"AccountMoid\": \"660de283756461330140b580\", \"AuthExpireTime\": \"2026-12-16 19:44:09\", \"AuthInitialTime\": \"2026-09-17 19:49:10\", \"AuthNextTime\": \"2026-09-18 07:49:10\", \"Category\": \"e\", \"CreateTime\": \"$ISO",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-metrics",
+          "name": "Cisco Intersight Metrics",
+          "files": [
+            "cisco-intersight-metrics.yml"
+          ],
+          "sampleFile": "cisco-intersight-metrics.yml",
+          "detectedSourcetype": "cisco:intersight:metrics",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"version\": \"v1\", \"timestamp\": \"$ISO_TIMESTAMP$\", \"event\": {\"entdfmx\": null, \"nura\": null, \"nirr\": null, \"nurc\": null, \"nrrmn\": null, \"nirs\": null, \"enlcmx\": null, \"entdfmn\": null, \"nrrmx\": null, \"enrdmx\": null, \"id\": \"/api/v1/fc/PhysicalPorts/69ea64737572792d41c44ae6\", \"enlcmn\": null, \"nprpppsum\": null, \"enrnbr\": null, \"nurmn\": null, \"enrnbs\": null, \"nurmx\": null, \"entjds\": null, \"nrrs\": null, \"n",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-intersight-networkelements",
+          "name": "Cisco Intersight Networkelements",
+          "files": [
+            "cisco-intersight-networkelements.yml"
+          ],
+          "sampleFile": "cisco-intersight-networkelements.yml",
+          "detectedSourcetype": "cisco:intersight:networkelements",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"AdminEvacState\": \"disabled\", \"AdminInbandInterfaceState\": \"disabled\", \"AlarmSummary\": {\"Critical\": 2, \"Health\": \"Critical\", \"Info\": 0, \"ObjectType\": \"compute.AlarmSummary\", \"Suppressed\": false, \"SuppressedCritical\": 0, \"SuppressedInfo\": 0, \"SuppressedWarning\": 0, \"Warning\": 0}, \"Ancestors\": [], \"AssignedLocation\": null, \"AvailableMemory\": \"\", \"Cards\": [",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-networkobjects",
+          "name": "Cisco Intersight Networkobjects",
+          "files": [
+            "cisco-intersight-networkobjects.yml"
+          ],
+          "sampleFile": "cisco-intersight-networkobjects.yml",
+          "detectedSourcetype": "cisco:intersight:networkobjects",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccessVlan\": \"\", \"AccountMoid\": \"660de283756461330140b580\", \"AcknowledgedPeerInterface\": null, \"AdminFec\": \"\", \"AdminSpeed\": \"\", \"AdminState\": \"Disabled\", \"AggregatePortId\": 0, \"AllowedVlans\": \"\", \"Ancestors\": [{\"Moid\": \"68c9a91876752d340185118d\", \"ObjectType\": \"port.Group\", \"link\": \"https://intersight.com/api/v1/port/Groups/68c9a91876752d340185118d\"}, {\"Moid\": \"68c9a915422d332d421b8ff6\", \"Objec",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-profiles",
+          "name": "Cisco Intersight Profiles",
+          "files": [
+            "cisco-intersight-profiles.yml"
+          ],
+          "sampleFile": "cisco-intersight-profiles.yml",
+          "detectedSourcetype": "cisco:intersight:profiles",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"Action\": \"No-op\", \"ActionParams\": [], \"Ancestors\": [], \"AssignedServer\": {\"Moid\": \"68c9aa8676752d340186a914\", \"Name\": \"MAPLE-FI-FAB-3-1-1\", \"ObjectType\": \"compute.Blade\"}, \"AssociatedServer\": {\"Moid\": \"68c9aa8676752d340186a914\", \"ObjectType\": \"compute.Blade\", \"link\": \"https://intersight.com/api/v1/compute/Blades/68c9aa8676752d340186a914\"}, \"ConfigChange",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-intersight-targets",
+          "name": "Cisco Intersight Targets",
+          "files": [
+            "cisco-intersight-targets.yml"
+          ],
+          "sampleFile": "cisco-intersight-targets.yml",
+          "detectedSourcetype": "cisco:intersight:targets",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"AccountMoid\": \"660de283756461330140b580\", \"AlarmSummary\": {\"Critical\": 0, \"Health\": \"Healthy\", \"Info\": 0, \"ObjectType\": \"asset.AlarmSummary\", \"SuppressedCritical\": 0, \"SuppressedInfo\": 0, \"SuppressedWarning\": 0, \"Warning\": 0}, \"AssignedLocation\": null, \"Assist\": null, \"ClaimedByUserName\": \"tiagosil@cisco.com\", \"ClaimedTime\": \"$ISO_TIMESTAMP$\", \"ConnectorVersion\": \"1.0.11-20260615170508583\", \"Cre",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco SD-WAN",
+      "totalSamples": 40,
+      "samples": [
+        {
+          "id": "cisco-sdwan-aaa-6-method-list-state",
+          "name": "Cisco Sdwan Aaa 6 Method List State",
+          "files": [
+            "cisco-sdwan-aaa-6-method-list-state.yml"
+          ],
+          "sampleFile": "cisco-sdwan-aaa-6-method-list-state.yml",
+          "detectedSourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.116 175: *$TS$:  %AAA-6-METHOD_LIST_STATE: authen mlist  pvt_authen_0 of DOT1X service is marked for notifyingstate and its current state is : DEAD",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client",
+          "name": "Cisco Sdwan Aaa 6 Notify Mlist State To Aaa Client",
+          "files": [
+            "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client.yml"
+          ],
+          "sampleFile": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client.yml",
+          "detectedSourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.116 179: *$TS$:  %AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: Notifying state of authentication method list  pvt_authen_0 of DOT1X service as DEAD",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-aaa-audit-message-6-method-list-state",
+          "name": "Cisco Sdwan Aaa Audit Message 6 Method List State",
+          "files": [
+            "cisco-sdwan-aaa-audit-message-6-method-list-state.yml"
+          ],
+          "sampleFile": "cisco-sdwan-aaa-audit-message-6-method-list-state.yml",
+          "detectedSourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.116 172: *$TS$:  %AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE: Switch 1 R0/0: sessmgrd: mlist default of 8021X service is marked for notifying  state and its current state is : ALIVE",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client",
+          "name": "Cisco Sdwan Aaa Audit Message 6 Notify Mlist State To Aaa Client",
+          "files": [
+            "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client.yml"
+          ],
+          "sampleFile": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client.yml",
+          "detectedSourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.116 171: *$TS$:  %AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: Switch 1 R0/0: sessmgrd: Notifying state of authentication method list default of 8021X service as ALIVE",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-bgp-5-adjchange",
+          "name": "Cisco Sdwan Bgp 5 Adjchange",
+          "files": [
+            "cisco-sdwan-bgp-5-adjchange.yml"
+          ],
+          "sampleFile": "cisco-sdwan-bgp-5-adjchange.yml",
+          "detectedSourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.120 3264: *$TS$:  %BGP-5-ADJCHANGE: neighbor 10.201.152.1 vpn vrf UBC_TENANT Down Neighbor deleted",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-bgp-5-nbr-reset",
+          "name": "Cisco Sdwan Bgp 5 Nbr Reset",
+          "files": [
+            "cisco-sdwan-bgp-5-nbr-reset.yml"
+          ],
+          "sampleFile": "cisco-sdwan-bgp-5-nbr-reset.yml",
+          "detectedSourcetype": "cisco:sdwan:BGP-5-NBR_RESET",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.121 3712: *$TS$:  %BGP-5-NBR_RESET: Neighbor 10.201.130.61 passive reset (Peer closed the session)",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-bgp-6-nexthop",
+          "name": "Cisco Sdwan Bgp 6 Nexthop",
+          "files": [
+            "cisco-sdwan-bgp-6-nexthop.yml"
+          ],
+          "sampleFile": "cisco-sdwan-bgp-6-nexthop.yml",
+          "detectedSourcetype": "cisco:sdwan:BGP-6-NEXTHOP",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.118 3181: *$TS$:  %BGP-6-NEXTHOP: Invalid next hop (0.0.0.0) received from 10.201.48.114: martian next hop",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-bgp-session-5-adjchange",
+          "name": "Cisco Sdwan Bgp Session 5 Adjchange",
+          "files": [
+            "cisco-sdwan-bgp-session-5-adjchange.yml"
+          ],
+          "sampleFile": "cisco-sdwan-bgp-session-5-adjchange.yml",
+          "detectedSourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.120 3263: *$TS$:  %BGP_SESSION-5-ADJCHANGE: neighbor 10.201.152.1 IPv4 Unicast vpn vrf UBC_TENANT topology base removed from session  Neighbor deleted",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-cdp-4-native-vlan-mismatch",
+          "name": "Cisco Sdwan Cdp 4 Native Vlan Mismatch",
+          "files": [
+            "cisco-sdwan-cdp-4-native-vlan-mismatch.yml"
+          ],
+          "sampleFile": "cisco-sdwan-cdp-4-native-vlan-mismatch.yml",
+          "detectedSourcetype": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.120 1044: *$TS$:  %CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on GigabitEthernet1/0/4 (1), with switch2 GigabitEthernet0/1 (201).",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-crypto-6-isakmp-on-off",
+          "name": "Cisco Sdwan Crypto 6 Isakmp On Off",
+          "files": [
+            "cisco-sdwan-crypto-6-isakmp-on-off.yml"
+          ],
+          "sampleFile": "cisco-sdwan-crypto-6-isakmp-on-off.yml",
+          "detectedSourcetype": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 14675: $SYSLOG_TIMESTAMP$.701: %CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is ON",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-cts-3-aaa-no-radius-server",
+          "name": "Cisco Sdwan Cts 3 Aaa No Radius Server",
+          "files": [
+            "cisco-sdwan-cts-3-aaa-no-radius-server.yml"
+          ],
+          "sampleFile": "cisco-sdwan-cts-3-aaa-no-radius-server.yml",
+          "detectedSourcetype": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.116 173: *$TS$:  %CTS-3-AAA_NO_RADIUS_SERVER: No RADIUS servers available for CTS AAA request for CTS env-data SM",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-auth-passed",
+          "name": "Cisco Sdwan Dmi 5 Auth Passed",
+          "files": [
+            "cisco-sdwan-dmi-5-auth-passed.yml"
+          ],
+          "sampleFile": "cisco-sdwan-dmi-5-auth-passed.yml",
+          "detectedSourcetype": "cisco:sdwan:DMI-5-AUTH_PASSED",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 91622: $SYSLOG_TIMESTAMP$.691: %DMI-5-AUTH_PASSED: R0/0: dmiauthd: User ''vmanage-admin'' authenticated successfully from 1.1.1.105:36298  for netconf over ssh. External groups:",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-config-i",
+          "name": "Cisco Sdwan Dmi 5 Config I",
+          "files": [
+            "cisco-sdwan-dmi-5-config-i.yml"
+          ],
+          "sampleFile": "cisco-sdwan-dmi-5-config-i.yml",
+          "detectedSourcetype": "cisco:sdwan:DMI-5-CONFIG_I",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 14666: *$SYSLOG_TIMESTAMP$.404: %DMI-5-CONFIG_I: R0/0: dmiauthd: Configured from NETCONF/RESTCONF by system-ompd-fwd, transaction-id 682279",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync-complete",
+          "name": "Cisco Sdwan Dmi 5 Sync Complete",
+          "files": [
+            "cisco-sdwan-dmi-5-sync-complete.yml"
+          ],
+          "sampleFile": "cisco-sdwan-dmi-5-sync-complete.yml",
+          "detectedSourcetype": "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 3103: *$TS$:  %DMI-5-SYNC_COMPLETE: Switch 1 R0/0: dmiauthd: The running configuration has been synchronized to the NETCONF running data store.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync-needed",
+          "name": "Cisco Sdwan Dmi 5 Sync Needed",
+          "files": [
+            "cisco-sdwan-dmi-5-sync-needed.yml"
+          ],
+          "sampleFile": "cisco-sdwan-dmi-5-sync-needed.yml",
+          "detectedSourcetype": "cisco:sdwan:DMI-5-SYNC_NEEDED",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 3101: *$TS$:  %DMI-5-SYNC_NEEDED: Switch 1 R0/0: dmiauthd: Configuration change requiring running configuration sync detected - ''no vrf forwarding ''. The running configuration will be synchronized  to the NETCONF running data store.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync-start",
+          "name": "Cisco Sdwan Dmi 5 Sync Start",
+          "files": [
+            "cisco-sdwan-dmi-5-sync-start.yml"
+          ],
+          "sampleFile": "cisco-sdwan-dmi-5-sync-start.yml",
+          "detectedSourcetype": "cisco:sdwan:DMI-5-SYNC_START",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 3102: *$TS$:  %DMI-5-SYNC_START: Switch 1 R0/0: dmiauthd: Synchronization of the running configuration to the NETCONF running data store has started.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-environmental-1-alert",
+          "name": "Cisco Sdwan Environmental 1 Alert",
+          "files": [
+            "cisco-sdwan-environmental-1-alert.yml"
+          ],
+          "sampleFile": "cisco-sdwan-environmental-1-alert.yml",
+          "detectedSourcetype": "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 27774: $SYSLOG_TIMESTAMP$.765: %ENVIRONMENTAL-1-ALERT: Temp: Inlet 1, Location: R0, State: Warning, Reading: 43 Celsius",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-eventlib-3-cpuhog",
+          "name": "Cisco Sdwan Eventlib 3 Cpuhog",
+          "files": [
+            "cisco-sdwan-eventlib-3-cpuhog.yml"
+          ],
+          "sampleFile": "cisco-sdwan-eventlib-3-cpuhog.yml",
+          "detectedSourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.121 3697: *$TS$:  %EVENTLIB-3-CPUHOG: Switch 1 R0/0: hman: undefined: 1026ms, Traceback=1#9c98bc34b8a46399248b88656ef73fd3  c:7F7229A64000+42630 c:7F7229A64000+FE9AD c:7F7229A64000+86F9E c:7F7229A64000+8804A c:7F7229A64000+65A4C c:7F7229A64000+58469 procmib_lib:7F722BC6A000+8309 :5B96778E7000+426F1 evlib:7F722D007000+9336 evlib:7F722D007000+9D70 orchestrator_lib:7F722BFB6000+12BE4",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-iosxe-3-platform",
+          "name": "Cisco Sdwan Iosxe 3 Platform",
+          "files": [
+            "cisco-sdwan-iosxe-3-platform.yml"
+          ],
+          "sampleFile": "cisco-sdwan-iosxe-3-platform.yml",
+          "detectedSourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 288: *$TS$:  %IOSXE-3-PLATFORM: Switch 1 R0/0: kernel: eth2: mtu greater than device maximum",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive",
+          "name": "Cisco Sdwan Iosxe Infra 4 No Punt Keepalive",
+          "files": [
+            "cisco-sdwan-iosxe-infra-4-no-punt-keepalive.yml"
+          ],
+          "sampleFile": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive.yml",
+          "detectedSourcetype": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.120 2870: *$TS$:  %IOSXE_INFRA-4-NO_PUNT_KEEPALIVE:  Keepalive not received for 20 seconds",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup",
+          "name": "Cisco Sdwan Iosxe Rp Pae Not 6 Pae Startup",
+          "files": [
+            "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup.yml"
+          ],
+          "sampleFile": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup.yml",
+          "detectedSourcetype": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 2135: *$TS$:  %IOSXE_RP_PAE_NOT-6-PAE_STARTUP: Product Analytics is Disabled",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-lineproto-5-updown",
+          "name": "Cisco Sdwan Lineproto 5 Updown",
+          "files": [
+            "cisco-sdwan-lineproto-5-updown.yml"
+          ],
+          "sampleFile": "cisco-sdwan-lineproto-5-updown.yml",
+          "detectedSourcetype": "cisco:sdwan:LINEPROTO-5-UPDOWN",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 3322: *$TS$:  %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1930, changed state to down",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-link-5-changed",
+          "name": "Cisco Sdwan Link 5 Changed",
+          "files": [
+            "cisco-sdwan-link-5-changed.yml"
+          ],
+          "sampleFile": "cisco-sdwan-link-5-changed.yml",
+          "detectedSourcetype": "cisco:sdwan:LINK-5-CHANGED",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 3442: *$TS$:  %LINK-5-CHANGED: Interface Vlan1930, changed state to administratively down",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-link-5-updown",
+          "name": "Cisco Sdwan Link 5 Updown",
+          "files": [
+            "cisco-sdwan-link-5-updown.yml"
+          ],
+          "sampleFile": "cisco-sdwan-link-5-updown.yml",
+          "detectedSourcetype": "cisco:sdwan:LINK-5-UPDOWN",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.115 287: *$TS$:  %LINK-5-UPDOWN: Interface GigabitEthernet1/0/2, changed state to up",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-linkhealth",
+          "name": "Cisco Sdwan Linkhealth",
+          "files": [
+            "cisco-sdwan-linkhealth.yml"
+          ],
+          "sampleFile": "cisco-sdwan-linkhealth.yml",
+          "detectedSourcetype": "cisco:sdwan:linkhealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"vdevice-name\": \"1.1.1.110\", \"rx-errors\": 0, \"tx-kbps\": 0, \"if-admin-status\": \"if-state-up\", \"ipv6-tcp-adjust-mss\": \"0\", \"tx-pps\": 0, \"tx-errors\": 0, \"ifname\": \"vmanage_system\", \"interface-type\": \"iana-iftype-sw-loopback\", \"rx-pps\": 0, \"if-oper-status\": \"if-oper-state-ready\", \"ifindex\": \"16\", \"num-flaps\": \"0\", \"ipv4-tcp-adjust-mss\": \"0\", \"rx-packets\": 0, \"bia-address\": \"00:00:00:00:00:00\", \"vpn-i",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-mdt-connection-6-state-changed",
+          "name": "Cisco Sdwan Mdt Connection 6 State Changed",
+          "files": [
+            "cisco-sdwan-mdt-connection-6-state-changed.yml"
+          ],
+          "sampleFile": "cisco-sdwan-mdt-connection-6-state-changed.yml",
+          "detectedSourcetype": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.120 3927: *$TS$:  %MDT_CONNECTION-6-STATE_CHANGED: Switch 1 R0/0: pubd: Connection state changed (id 6 - 10.20.1.16:25103:0:10.201.48.120): DOWN",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-sdwan-msdp-5-peer-updown",
+          "name": "Cisco Sdwan Msdp 5 Peer Updown",
+          "files": [
+            "cisco-sdwan-msdp-5-peer-updown.yml"
+          ],
+          "sampleFile": "cisco-sdwan-msdp-5-peer-updown.yml",
+          "detectedSourcetype": "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.119 4394: *$TS$:  %MSDP-5-PEER_UPDOWN: Session to peer 10.201.151.1 going down",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-ndbman-5-config-i",
+          "name": "Cisco Sdwan Ndbman 5 Config I",
+          "files": [
+            "cisco-sdwan-ndbman-5-config-i.yml"
+          ],
+          "sampleFile": "cisco-sdwan-ndbman-5-config-i.yml",
+          "detectedSourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.118 3269: *$TS$:  %NDBMAN-5-CONFIG_I: Switch 1 R0/0: ndbmand: Configured feature ''yang-mapping'' from 127.0.0.1:0 via INTERNAL-API user yang_mgmt_infra session 20, transaction-id 102",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-ospf-5-adjchg",
+          "name": "Cisco Sdwan Ospf 5 Adjchg",
+          "files": [
+            "cisco-sdwan-ospf-5-adjchg.yml"
+          ],
+          "sampleFile": "cisco-sdwan-ospf-5-adjchg.yml",
+          "detectedSourcetype": "cisco:sdwan:OSPF-5-ADJCHG",
+          "detectedIndex": "catalyst",
+          "previewSnippet": "$TS$ 10.201.48.119 4393: *$TS$:  %OSPF-5-ADJCHG: Process 1, Nbr 10.201.48.120 on GigabitEthernet1/0/5 from FULL to DOWN, Neighbor Down: Dead timer expired",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-pki-6-authoritative-clock",
+          "name": "Cisco Sdwan Pki 6 Authoritative Clock",
+          "files": [
+            "cisco-sdwan-pki-6-authoritative-clock.yml"
+          ],
+          "sampleFile": "cisco-sdwan-pki-6-authoritative-clock.yml",
+          "detectedSourcetype": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 11108: $SYSLOG_TIMESTAMP$.633: %PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-platform-4-element-warning",
+          "name": "Cisco Sdwan Platform 4 Element Warning",
+          "files": [
+            "cisco-sdwan-platform-4-element-warning.yml"
+          ],
+          "sampleFile": "cisco-sdwan-platform-4-element-warning.yml",
+          "detectedSourcetype": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 14767: $SYSLOG_TIMESTAMP$.919: %PLATFORM-4-ELEMENT_WARNING: R0/0: smand: RP/0: 5-Minute Load Average value 6.11 exceeds warning level 6.10.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-sitehealth",
+          "name": "Cisco Sdwan Sitehealth",
+          "files": [
+            "cisco-sdwan-sitehealth.yml"
+          ],
+          "sampleFile": "cisco-sdwan-sitehealth.yml",
+          "detectedSourcetype": "cisco:sdwan:sitehealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"site_id\": \"500\", \"site_name\": \"SITE_500\", \"latitude\": \"45.424721\", \"longitude\": \"-75.695\", \"fromGps\": \"false\", \"site_health\": \"good\", \"devices_health\": \"good\", \"tunnels_health\": \"no_data\", \"apps_health\": \"no_data\", \"devices_health_score\": 10.0, \"tunnels_health_score\": -1.0, \"apps_health_score\": -1.0, \"apps_usage\": 0.0, \"prev_apps_usage\": 0.0, \"region_list\": [], \"role\": [], \"device_type\": [], \"la",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-ssetunnels",
+          "name": "Cisco Sdwan Ssetunnels",
+          "files": [
+            "cisco-sdwan-ssetunnels.yml"
+          ],
+          "sampleFile": "cisco-sdwan-ssetunnels.yml",
+          "detectedSourcetype": "cisco:sdwan:ssetunnels",
+          "detectedIndex": "sdwan",
+          "previewSnippet": "{\"device-state\": \"Up\", \"tunnel-if-name\": \"Tunnel17000102\", \"vdevice-name\": \"172.80.1.10\", \"createTimeStamp\": $EPOCH_MS$, \"sse-tcsm\": \"-\", \"vdevice-host-name\": \"C1131X-site8000\", \"tunnelType\": \"SSE-Private access\", \"vdevice-dataKey\": \"172.80.1.10-Tunnel17000102--\", \"destination-data-center\": \"35.171.214.188\", \"vmanage-system-ip\": \"172.80.1.10\", \"tenantId\": \"default\", \"lastupdated\": $EPOCH_MS$, \"sig",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-sys-5-config-p",
+          "name": "Cisco Sdwan Sys 5 Config P",
+          "files": [
+            "cisco-sdwan-sys-5-config-p.yml"
+          ],
+          "sampleFile": "cisco-sdwan-sys-5-config-p.yml",
+          "detectedSourcetype": "cisco:sdwan:SYS-5-CONFIG_P",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 14667: *$SYSLOG_TIMESTAMP$.559: %SYS-5-CONFIG_P: Configured programmatically by process iosp_dmiauthd_conn_100001_vty_100001 from console as system-ompd-fwd on vty4294966494",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-syslog",
+          "name": "Cisco Sdwan Syslog",
+          "files": [
+            "cisco-sdwan-syslog.yml"
+          ],
+          "sampleFile": "cisco-sdwan-syslog.yml",
+          "detectedSourcetype": "cisco:sdwan:syslog",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 186746: $SYSLOG_TIMESTAMP$.730: %DMI-5-AUTH_PASSED: R0/0: dmiauthd: User ''vmanage-admin'' authenticated successfully from 1.1.1.105:54758  for netconf over ssh. External groups:",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-system-logs",
+          "name": "Cisco Sdwan System Logs",
+          "files": [
+            "cisco-sdwan-system-logs.yml"
+          ],
+          "sampleFile": "cisco-sdwan-system-logs.yml",
+          "detectedSourcetype": "cisco:sdwan:system:logs",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 162896: $SYSLOG_TIMESTAMP$.857: %SDWAN-5-FPMD : FLOW LOG device-vpn: 4099 tenant-vpn: 4099 src: 10.201.48.53/179 dst: 10.201.48.54/54097 proto: 6 tos: 192 direction: from-service, policy: data_service_CiscoLive_AAR_Policy-vpn_Service_VPN_Secure, sequence: 1, Result: accept Pkt count: 211900 bytes: 14305753 Ingress-Intf: GigabitEthernet0/0/2.3105 Egress-intf: Unknown Tenan",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-sytem-logs",
+          "name": "Cisco Sdwan Sytem Logs",
+          "files": [
+            "cisco-sdwan-sytem-logs.yml"
+          ],
+          "sampleFile": "cisco-sdwan-sytem-logs.yml",
+          "detectedSourcetype": "cisco:sdwan:sytem:logs",
+          "detectedIndex": "sdwan",
+          "previewSnippet": "$TS$ 192.168.128.1 1 1772323200.984001859 MX_67_Home ip_flow_end src=192.168.128.102 dst=23.220.93.204 protocol=tcp sport=52390 dport=443 translated_src_ip=192.168.1.66 translated_port=52390",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-tunnelhealth",
+          "name": "Cisco Sdwan Tunnelhealth",
+          "files": [
+            "cisco-sdwan-tunnelhealth.yml"
+          ],
+          "sampleFile": "cisco-sdwan-tunnelhealth.yml",
+          "detectedSourcetype": "cisco:sdwan:tunnelhealth",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"loss_percentage\": 0.0, \"latency\": 0.0, \"jitter\": 0.0, \"tx_octets\": 10411.0, \"rx_octets\": 67099.0, \"vqoe_score\": 10.0, \"name\": \"1.1.1.110:private2-1.1.1.100:private2\", \"remote_color\": \"private2\", \"remote_system_ip\": \"1.1.1.100\", \"remote-host-name\": \"SD-WAN_Edge-Kanata\", \"remote_site_id\": \"100\", \"remoteDeviceClass\": \"cisco-router\", \"remote_latitude\": \"45.3422\", \"remote_longitude\": \"-75.92656\", \"lo",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-utd-logs",
+          "name": "Cisco Sdwan Utd Logs",
+          "files": [
+            "cisco-sdwan-utd-logs.yml"
+          ],
+          "sampleFile": "cisco-sdwan-utd-logs.yml",
+          "detectedSourcetype": "cisco:sdwan:utd:logs",
+          "detectedIndex": "sdwan",
+          "previewSnippet": "$TS$ 192.168.128.132 2026/03/01-00:00:00.307403 UTC [**] [Hostname: c8kv-site-3000-gw1] [**] [System_IP: 172.100.1.5] [**] [Instance_ID: 1] [**] Drop [**] UTD WebFilter Category/Reputation [**] [URL: www.tekdefense.com/downloads/malware-samples/1.exe.zip] ** [Category: Malware Sites] ** [Reputation: 10] [POLICY: BR-TYPE2-AIP] {TCP} 10.33.35.101:55924 -> 198.185.159.160:80",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sdwan-utdhealth",
+          "name": "Cisco Sdwan Utdhealth",
+          "files": [
+            "cisco-sdwan-utdhealth.yml"
+          ],
+          "sampleFile": "cisco-sdwan-utdhealth.yml",
+          "detectedSourcetype": "cisco:sdwan:utdhealth",
+          "detectedIndex": "sdwan",
+          "previewSnippet": "{\"vdevice-dataKey\": \"172.100.1.5\", \"utd-engine-status-version\": \"1.1.0_SV3.3.5.0_XE17.18\", \"vdevice-name\": \"172.100.1.5\", \"utd-engine-status-memory-status\": \"utd-oper-status-green\", \"lastupdated\": $EPOCH_MS$, \"utd-engine-status-status\": \"utd-oper-status-green\", \"utd-engine-status-memory-usage\": \"44.9\", \"vdevice-host-name\": \"c8kv-site-3000-gw1\", \"utd-engine-status-profile\": \"Cloud-Low\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Meraki",
+      "totalSamples": 13,
+      "samples": [
+        {
+          "id": "meraki-accesspoints",
+          "name": "Meraki Accesspoints",
+          "files": [
+            "meraki-accesspoints.yml"
+          ],
+          "sampleFile": "meraki-accesspoints.yml",
+          "detectedSourcetype": "meraki:accesspoints",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2JD-TOR-MR46\",  \"name\": \"MR46-Toronto-Floor1\",  \"model\": \"MR46\",  \"networkId\": \"N_TORONTO_DC\",  \"status\": \"online\",  \"clientCount\": 28,  \"channel24\": 6,  \"channel5\": 36,  \"authFailures\": 0,  \"assocFailures\": 0,  \"dhcpFailures\": 0,  \"dnsFailures\": 0,  \"utilization24\": 18,  \"utilization5\": 14 }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-airmarshal",
+          "name": "Meraki Airmarshal",
+          "files": [
+            "meraki-airmarshal.yml"
+          ],
+          "sampleFile": "meraki-airmarshal.yml",
+          "detectedSourcetype": "meraki:airmarshal",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"networkId\": \"N_TORONTO_DC\",  \"networkName\": \"Toronto Hub\",  \"ssid\": \"Toronto-Corp-Secure\",  \"bssid\": \"0c:8d:db:6f:10:20\",  \"channels\": [1, 6, 11],  \"rogueDetected\": false,  \"wiredEvidence\": false,  \"status\": \"secure\" }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-appliancesdwanstatistics",
+          "name": "Meraki Appliancesdwanstatistics",
+          "files": [
+            "meraki-appliancesdwanstatistics.yml"
+          ],
+          "sampleFile": "meraki-appliancesdwanstatistics.yml",
+          "detectedSourcetype": "meraki:appliancesdwanstatistics",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2QN-TOR-MX100\",  \"networkName\": \"Toronto Hub\",  \"peerSerial\": \"Q2QN-EDM-MX64\",  \"peerName\": \"Edmonton Branch 1\",  \"latencyMs\": 24.5,  \"jitterMs\": 1.8,  \"lossPercentage\": 0.0,  \"sentKbps\": 8450,  \"receivedKbps\": 7920 }",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "meraki-appliancesdwanstatuses",
+          "name": "Meraki Appliancesdwanstatuses",
+          "files": [
+            "meraki-appliancesdwanstatuses.yml"
+          ],
+          "sampleFile": "meraki-appliancesdwanstatuses.yml",
+          "detectedSourcetype": "meraki:appliancesdwanstatuses",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2QN-TOR-MX100\",  \"networkName\": \"Toronto Hub\",  \"uplinks\": [   {    \"interface\": \"wan1\",    \"status\": \"active\",    \"ip\": \"198.51.100.2\",    \"gateway\": \"198.51.100.1\",    \"publicIp\": \"198.51.100.2\"   }  ],  \"vpnPeers\": [   {    \"peerNetworkId\": \"N_EDMONTON_B1\",    \"peerName\": \"Edmonton Branch 1\",    \"reachability\": \"reachable\",    \"mode\": \"spoke\"   },   {    \"peerNetworkId\": \"N_CALGA",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-assurancealerts",
+          "name": "Meraki Assurancealerts",
+          "files": [
+            "meraki-assurancealerts.yml"
+          ],
+          "sampleFile": "meraki-assurancealerts.yml",
+          "detectedSourcetype": "meraki:assurancealerts",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"id\": \"alert_tor_0000\",  \"networkId\": \"N_TORONTO_DC\",  \"scope\": \"network\",  \"severity\": \"info\",  \"category\": \"Connectivity\",  \"type\": \"NetworkStatusNormal\",  \"title\": \"All devices operating within expected assurance parameters\",  \"startedAt\": \"$ISO_TS$\",  \"resolvedAt\": \"$ISO_TS$\",  \"device\": {   \"serial\": \"Q2QN-TOR-MX100\",   \"name\": \"MX100-Toronto-Hub\"  } }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-devices",
+          "name": "Meraki Devices",
+          "files": [
+            "meraki-devices.yml"
+          ],
+          "sampleFile": "meraki-devices.yml",
+          "detectedSourcetype": "meraki:devices",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2QN-TOR-MS250\",  \"name\": \"MS250-Toronto-Core\",  \"mac\": \"0c:8d:db:6f:10:01\",  \"networkId\": \"N_TORONTO_DC\",  \"model\": \"MS250-48FP\",  \"address\": \"150 King St W, Toronto, ON M5H 1J9\",  \"lat\": 43.6487,  \"lng\": -79.3854,  \"notes\": \"Toronto Hub Core Switch\",  \"tags\": [\"hub\", \"datacenter\", \"core\"],  \"lanIp\": \"10.10.10.2\",  \"firmware\": \"MS 15.21.1\",  \"status\": \"online\",  \"productType\": \"swit",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-devices-availabilities",
+          "name": "Meraki Devices Availabilities",
+          "files": [
+            "meraki-devices-availabilities.yml"
+          ],
+          "sampleFile": "meraki-devices-availabilities.yml",
+          "detectedSourcetype": "meraki:devicesavailabilitieschangehistory",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"ts\": \"$ISO_TS$\",  \"device\": {   \"serial\": \"Q2QN-TOR-MX100\",   \"name\": \"MX100-Toronto-Hub\",   \"productType\": \"appliance\",   \"model\": \"MX100\"  },  \"network\": {   \"id\": \"N_TORONTO_DC\",   \"name\": \"Toronto Hub\"  },  \"oldStatus\": \"offline\",  \"newStatus\": \"online\",  \"duration\": 3600000 }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-organizationsecurity",
+          "name": "Meraki Organizationsecurity",
+          "files": [
+            "meraki-organizationsecurity.yml"
+          ],
+          "sampleFile": "meraki-organizationsecurity.yml",
+          "detectedSourcetype": "meraki:organizationsecurity",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"ts\": \"$ISO_TS$\",  \"event\": \"ids_alert\",  \"organizationId\": \"ORG_ACME_CANADA\",  \"networkName\": \"Toronto Hub\",  \"clientMac\": \"f0:18:98:3a:11:02\",  \"message\": \"Routine signature database check completed\",  \"action\": \"allow\",  \"priority\": \"low\" }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-summarytopappliancesbyutilization",
+          "name": "Meraki Summarytopappliancesbyutilization",
+          "files": [
+            "meraki-summarytopappliancesbyutilization.yml"
+          ],
+          "sampleFile": "meraki-summarytopappliancesbyutilization.yml",
+          "detectedSourcetype": "meraki:summarytopappliancesbyutilization",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2QN-TOR-MX100\",  \"name\": \"MX100-Toronto-Hub\",  \"model\": \"MX100\",  \"networkName\": \"Toronto Hub\",  \"utilizationPercentage\": 34.2,  \"memoryUsagePercentage\": 41.5,  \"cpuLoadPercentage\": 28.0,  \"status\": \"normal\" }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-summarytopclientsbyusage",
+          "name": "Meraki Summarytopclientsbyusage",
+          "files": [
+            "meraki-summarytopclientsbyusage.yml"
+          ],
+          "sampleFile": "meraki-summarytopclientsbyusage.yml",
+          "detectedSourcetype": "meraki:summarytopclientsbyusage",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"networkId\": \"N_TORONTO_DC\",  \"topClients\": [   {\"name\": \"tor-db-backup-01\", \"mac\": \"00:50:56:a1:b2:c3\", \"totalBytes\": 1250000000, \"sentBytes\": 850000000, \"recvBytes\": 400000000},   {\"name\": \"tor-app-srv-02\", \"mac\": \"00:50:56:d4:e5:f6\", \"totalBytes\": 890000000, \"sentBytes\": 490000000, \"recvBytes\": 400000000},   {\"name\": \"mrayani-laptop\", \"mac\": \"f0:18:98:77:22:11\", \"totalBytes\": 45000000, \"sent",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-summarytopdevicesbyusage",
+          "name": "Meraki Summarytopdevicesbyusage",
+          "files": [
+            "meraki-summarytopdevicesbyusage.yml"
+          ],
+          "sampleFile": "meraki-summarytopdevicesbyusage.yml",
+          "detectedSourcetype": "meraki:summarytopdevicesbyusage",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"networkId\": \"N_TORONTO_DC\",  \"devices\": [   {\"serial\": \"Q2QN-TOR-MS250\", \"name\": \"MS250-Toronto-Core\", \"model\": \"MS250-48FP\", \"totalBytes\": 2140000000},   {\"serial\": \"Q2QN-TOR-MX100\", \"name\": \"MX100-Toronto-Hub\", \"model\": \"MX100\", \"totalBytes\": 1980000000},   {\"serial\": \"Q2JD-TOR-MR46\", \"name\": \"MR46-Toronto-Floor1\", \"model\": \"MR46\", \"totalBytes\": 540000000}  ] }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-switchportsbyswitch",
+          "name": "Meraki Switchportsbyswitch",
+          "files": [
+            "meraki-switchportsbyswitch.yml"
+          ],
+          "sampleFile": "meraki-switchportsbyswitch.yml",
+          "detectedSourcetype": "meraki:switchportsbyswitch",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"serial\": \"Q2QN-TOR-MS250\",  \"switchName\": \"MS250-Toronto-Core\",  \"portId\": \"24\",  \"name\": \"Uplink to MX100 WAN\",  \"enabled\": true,  \"status\": \"Connected\",  \"speed\": \"1 Gbps\",  \"duplex\": \"full\",  \"vlan\": 1,  \"traffic\": {   \"totalBytes\": 145028090,   \"sentBytes\": 78201940,   \"recvBytes\": 66826150  },  \"errors\": {   \"crc\": 0,   \"runts\": 0,   \"giants\": 0,   \"fragments\": 0,   \"collisions\": 0,   \"ja",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        },
+        {
+          "id": "meraki-switchportsoverview",
+          "name": "Meraki Switchportsoverview",
+          "files": [
+            "meraki-switchportsoverview.yml"
+          ],
+          "sampleFile": "meraki-switchportsoverview.yml",
+          "detectedSourcetype": "meraki:switchportsoverview",
+          "detectedIndex": "main",
+          "previewSnippet": "{  \"networkId\": \"N_TORONTO_DC\",  \"totalPorts\": 48,  \"activePorts\": 36,  \"speeds\": {   \"10M\": 0,   \"100M\": 2,   \"1000M\": 32,   \"10000M\": 2  },  \"poeAllocatedWatts\": 185.4,  \"poeCapacityWatts\": 740.0 }",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco Meraki"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Nutanix PC",
+      "totalSamples": 14,
+      "samples": [
+        {
+          "id": "nutanixpc-alerts",
+          "name": "Nutanixpc Alerts",
+          "files": [
+            "nutanixpc-alerts.yml"
+          ],
+          "sampleFile": "nutanixpc-alerts.yml",
+          "detectedSourcetype": "nutanixpc_alerts",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"monitoring.v4.serviceability.Alert\", \"extId\": \"d711c281-18fe-4fcc-8937-333d41165889\", \"isAcknowledged\": true, \"acknowledgedTime\": \"$ISO_TIMESTAMP$\", \"isAutoResolved\": true, \"isResolved\": true, \"resolvedTime\": \"$ISO_TIMESTAMP$\", \"sourceEntity\": {\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"monitoring.v4.common.AlertEntityReference\", \"type\": \"node\", ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-cluster-performance",
+          "name": "Nutanixpc Cluster Performance",
+          "files": [
+            "nutanixpc-cluster-performance.yml"
+          ],
+          "sampleFile": "nutanixpc-cluster-performance.yml",
+          "detectedSourcetype": "nutanixpc_cluster_performance",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"timestamp\": \"$ISO_TIMESTAMP$\", \"extId\": \"00063ffb-2c0b-2e6c-7635-0025b500010e\", \"controllerAvgIoLatencyUsecs\": 2709, \"controllerAvgReadIoLatencyUsecs\": 806, \"controllerAvgWriteIoLatencyUsecs\": 2721, \"controllerNumIops\": 690, \"controllerNumReadIops\": 4, \"controllerNumWriteIops\": 686, \"ioBandwidthKbps\": 31861, \"controllerReadIoBandwidthKbps\": 153, \"controllerWriteIoBandwidthKbps\": 31708, \"hypervis",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "nutanixpc-clusters",
+          "name": "Nutanixpc Clusters",
+          "files": [
+            "nutanixpc-clusters.yml"
+          ],
+          "sampleFile": "nutanixpc-clusters.yml",
+          "detectedSourcetype": "nutanixpc_clusters",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.Cluster\", \"extId\": \"00063ffb-2c0b-2e6c-7635-0025b500010e\", \"vmCount\": 32, \"inefficientVmCount\": 0, \"backupEligibilityScore\": 4, \"name\": \"Fab1-CCHCI-AHV\", \"nodes\": {\"numberOfNodes\": 4, \"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.NodeReference\", \"nodeList\": [{\"nodeUuid\": \"aeae14aa-ba3d-438b-b88b-5c803e72b6",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-disk-performance",
+          "name": "Nutanixpc Disk Performance",
+          "files": [
+            "nutanixpc-disk-performance.yml"
+          ],
+          "sampleFile": "nutanixpc-disk-performance.yml",
+          "detectedSourcetype": "nutanixpc_disk_performance",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"timestamp\": \"$ISO_TIMESTAMP$\", \"extId\": \"ff26ab7c-0d68-4421-b6bc-6cc4abf18975\", \"diskUsagePpm\": 455057, \"diskCapacityBytes\": 0, \"diskNumIops\": 0, \"diskIoBandwidthkbps\": 0, \"diskAvgIoLatencyMicrosec\": 0, \"diskFreeBytes\": 0, \"diskUsageBytes\": 0, \"diskReadIops\": 0, \"diskWriteIops\": 0, \"diskReadIoBandwidthkbps\": 0, \"diskWriteIoBandwidthkbps\": 0, \"diskReadIoPpm\": 0, \"diskWriteIoPpm\": 0}",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "nutanixpc-disks",
+          "name": "Nutanixpc Disks",
+          "files": [
+            "nutanixpc-disks.yml"
+          ],
+          "sampleFile": "nutanixpc-disks.yml",
+          "detectedSourcetype": "nutanixPC_disks",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.Disk\", \"extId\": \"ff26ab7c-0d68-4421-b6bc-6cc4abf18975\", \"links\": [{\"$reserved\": {\"$fv\": \"v1.r0\"}, \"$objectType\": \"common.v1.response.ApiLink\", \"href\": \"$HOST$/ff26ab7c-0d68-4421-b6bc-6cc4abf18975\", \"rel\": \"disk\"}], \"clusterName\": \"Fab1-CCHCI-AHV\", \"clusterExtId\": \"00063ffb-2c0b-2e6c-7635-0025b500010e\", \"storagePoolExtId\": \"3d2e3",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-events",
+          "name": "Nutanixpc Events",
+          "files": [
+            "nutanixpc-events.yml"
+          ],
+          "sampleFile": "nutanixpc-events.yml",
+          "detectedSourcetype": "nutanixpc_events",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"monitoring.v4.serviceability.Event\", \"extId\": \"ee77555c-a7ef-4358-864f-43295cd62561\", \"eventType\": \"IAMAdministrationEventAudit\", \"classifications\": [\"UserAction\"], \"sourceClusterUUID\": \"8ae8575f-53ab-4152-a483-d6fc980bd4cc\", \"creationTime\": \"$ISO_TIMESTAMP$\", \"message\": \"User admin granted permission to [(''Health_Check_Remote_Connection'',)] on rem",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-host-performance",
+          "name": "Nutanixpc Host Performance",
+          "files": [
+            "nutanixpc-host-performance.yml"
+          ],
+          "sampleFile": "nutanixpc-host-performance.yml",
+          "detectedSourcetype": "nutanixpc_host_performance",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"timestamp\": \"$ISO_TIMESTAMP$\", \"extId\": \"dc8562d0-9e55-4b4e-8bba-9f2e123dc411\", \"controllerAvgIoLatencyUsecs\": 3891, \"controllerAvgReadIoLatencyUsecs\": 768, \"controllerAvgWriteIoLatencyUsecs\": 3892, \"controllerNumIops\": 173, \"controllerNumReadIops\": 0, \"controllerNumWriteIops\": 173, \"ioBandwidthKbps\": 18671, \"controllerReadIoBandwidthKbps\": 0, \"controllerWriteIoBandwidthKbps\": 18670, \"hypervisor",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "nutanixpc-hosts",
+          "name": "Nutanixpc Hosts",
+          "files": [
+            "nutanixpc-hosts.yml"
+          ],
+          "sampleFile": "nutanixpc-hosts.yml",
+          "detectedSourcetype": "nutanixpc_hosts",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.Host\", \"extId\": \"dc8562d0-9e55-4b4e-8bba-9f2e123dc411\", \"hostName\": \"CCHCI-AHV-04\", \"hostType\": \"HYPER_CONVERGED\", \"hypervisor\": {\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.HypervisorReference\", \"externalAddress\": {\"$reserved\": {\"$fv\": \"v1.r0\"}, \"$objectType\": \"common.v1.config.IPAddress\", \"ipv4\": {\"$re",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-prismcentrals",
+          "name": "Nutanixpc Prismcentrals",
+          "files": [
+            "nutanixpc-prismcentrals.yml"
+          ],
+          "sampleFile": "nutanixpc-prismcentrals.yml",
+          "detectedSourcetype": "nutanixpc_prismCentrals",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.Cluster\", \"extId\": \"8ae8575f-53ab-4152-a483-d6fc980bd4cc\", \"name\": \"CCHCI-PC\", \"nodes\": {\"numberOfNodes\": 1, \"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.NodeReference\", \"nodeList\": [{\"nodeUuid\": \"9126a468-46ed-4f3a-af0e-82de8185335c\", \"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.N",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-storage-containers",
+          "name": "Nutanixpc Storage Containers",
+          "files": [
+            "nutanixpc-storage-containers.yml"
+          ],
+          "sampleFile": "nutanixpc-storage-containers.yml",
+          "detectedSourcetype": "nutanixpc_storage_containers",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"clustermgmt.v4.config.StorageContainer\", \"links\": [{\"$reserved\": {\"$fv\": \"v1.r0\"}, \"$objectType\": \"common.v1.response.ApiLink\", \"href\": \"$HOST$/f8edb45b-13e1-4927-954c-b0c3f1c91a33\", \"rel\": \"storage-container\"}, {\"href\": \"https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/storage-containers/f8edb45b-13e1-4927-954c-b0c3f1c91a33\", \"rel\": \"storage-conta",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-syslog",
+          "name": "Nutanixpc Syslog",
+          "files": [
+            "nutanixpc-syslog.yml"
+          ],
+          "sampleFile": "nutanixpc-syslog.yml",
+          "detectedSourcetype": "nutanixpc_syslog",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ $ISO_TIMESTAMP$ CCHCI-AHV-01 Genesis_7: 2026-09-18 17:34:07 INFO ovs.py:103 - Finished running get_bridge_name_by_port_name, took 0.03659343719482422 seconds",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-vm-performance",
+          "name": "Nutanixpc Vm Performance",
+          "files": [
+            "nutanixpc-vm-performance.yml"
+          ],
+          "sampleFile": "nutanixpc-vm-performance.yml",
+          "detectedSourcetype": "nutanixpc_vm_performance",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"timestamp\": \"$ISO_TIMESTAMP$\", \"cluster\": \"00061768-f76f-4f95-3e5f-0025b500016f\", \"hypervisorType\": \"kVMware\", \"memoryReservedBytes\": \"\", \"extId\": \"ca90dbd8-ccdf-4525-8dd2-3c8c1c842262\", \"controllerAvgIoLatencyMicros\": 1941, \"controllerAvgReadIoLatencyMicros\": 0, \"controllerAvgReadIoSizeKb\": 0, \"controllerAvgWriteIoLatencyMicros\": 1941, \"controllerAvgWriteIoSizeKb\": 4, \"controllerIoBandwidthKbps",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "nutanixpc-vms",
+          "name": "Nutanixpc Vms",
+          "files": [
+            "nutanixpc-vms.yml"
+          ],
+          "sampleFile": "nutanixpc-vms.yml",
+          "detectedSourcetype": "nutanixpc_vms",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"vmm.v4.esxi.config.Vm\", \"extId\": \"ca90dbd8-ccdf-4525-8dd2-3c8c1c842262\", \"memorySizeBytes\": 137438953472, \"numCoresPerSocket\": 1, \"numCpus\": 32, \"guestOsName\": \"Ubuntu Linux (64-bit)\", \"virtualHardwareVersion\": 10, \"name\": \"vND-4.3-roberbur-2\", \"cluster\": {\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"vmm.v4.esxi.config.ClusterReference\", \"extId\": \"",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-volume-groups",
+          "name": "Nutanixpc Volume Groups",
+          "files": [
+            "nutanixpc-volume-groups.yml"
+          ],
+          "sampleFile": "nutanixpc-volume-groups.yml",
+          "detectedSourcetype": "nutanixpc_volume_groups",
+          "detectedIndex": "nutanixpc",
+          "previewSnippet": "{\"$reserved\": {\"$fv\": \"v4.r0\"}, \"$objectType\": \"volumes.v4.config.VolumeGroup\", \"extId\": \"a8589f1c-3418-4e4c-9c55-109eeb10c261\", \"links\": [{\"$reserved\": {\"$fv\": \"v1.r0\"}, \"$objectType\": \"common.v1.response.ApiLink\", \"href\": \"$HOST$/a8589f1c-3418-4e4c-9c55-109eeb10c261\", \"rel\": \"volume_group\"}], \"name\": \"pvc-8934bad9-c9ba-4490-81b3-04c4ee83d857\", \"description\": \"FS:ext4, PVC:anc-mysql-certs, NS:def",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Kubernetes Containers",
+      "totalSamples": 18,
+      "samples": [
+        {
+          "id": "kube-container-calico-kube-controllers",
+          "name": "Kube Container Calico Kube Controllers",
+          "files": [
+            "kube-container-calico-kube-controllers.yml"
+          ],
+          "sampleFile": "kube-container-calico-kube-controllers.yml",
+          "detectedSourcetype": "kube:container:calico-kube-controllers",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "2026-09-18 17:12:41.037 [INFO][1] kube-controllers/resources.go 350: Main client watcher loop",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-calico-node",
+          "name": "Kube Container Calico Node",
+          "files": [
+            "kube-container-calico-node.yml"
+          ],
+          "sampleFile": "kube-container-calico-node.yml",
+          "detectedSourcetype": "kube:container:calico-node",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "2026-09-18 17:33:47.664 [INFO][90] monitor-addresses/autodetection_methods.go 103: Using autodetected IPv4 address on interface ens33: 10.0.10.104/24",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-controller",
+          "name": "Kube Container Controller",
+          "files": [
+            "kube-container-controller.yml"
+          ],
+          "sampleFile": "kube-container-controller.yml",
+          "detectedSourcetype": "kube:container:controller",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "{\"level\":\"info\",\"ts\":\"$ISO_TIMESTAMP$\",\"logger\":\"cert-rotation\",\"msg\":\"Ensuring CA cert\",\"name\":\"bgppeers.metallb.io\",\"gvk\":\"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition\",\"name\":\"bgppeers.metallb.io\",\"gvk\":\"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition\",\"stacktrace\":\"github.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).ensureCerts\\n\\t/go/pkg/mod/github.com/ope",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-coredns",
+          "name": "Kube Container Coredns",
+          "files": [
+            "kube-container-coredns.yml"
+          ],
+          "sampleFile": "kube-container-coredns.yml",
+          "detectedSourcetype": "kube:container:coredns",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "[ERROR] plugin/errors: 2 api.segment.io. A: read udp 10.1.5.229:43377->10.0.10.23:53: i/o timeout",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-hostpath-provisioner",
+          "name": "Kube Container Hostpath Provisioner",
+          "files": [
+            "kube-container-hostpath-provisioner.yml"
+          ],
+          "sampleFile": "kube-container-hostpath-provisioner.yml",
+          "detectedSourcetype": "kube:container:hostpath-provisioner",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "W0918 17:34:45.319646       1 warnings.go:70] v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-install-cni",
+          "name": "Kube Container Install Cni",
+          "files": [
+            "kube-container-install-cni.yml"
+          ],
+          "sampleFile": "kube-container-install-cni.yml",
+          "detectedSourcetype": "kube:container:install-cni",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-metrics",
+          "name": "Kube Container Metrics",
+          "files": [
+            "kube-container-metrics.yml"
+          ],
+          "sampleFile": "kube-container-metrics.yml",
+          "detectedSourcetype": "kube:container:metrics",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "level=info ts=$ISO_TIMESTAMP$ caller=tls_config.go:316 msg=\"TLS is disabled.\" http2=false address=[::]:9216",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "kube-container-metrics-server",
+          "name": "Kube Container Metrics Server",
+          "files": [
+            "kube-container-metrics-server.yml"
+          ],
+          "sampleFile": "kube-container-metrics-server.yml",
+          "detectedSourcetype": "kube:container:metrics-server",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "I0902 10:13:22.800134       1 shared_informer.go:318] Caches are synced for RequestHeaderAuthRequestController",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "kube-container-mibserver",
+          "name": "Kube Container Mibserver",
+          "files": [
+            "kube-container-mibserver.yml"
+          ],
+          "sampleFile": "kube-container-mibserver.yml",
+          "detectedSourcetype": "kube:container:mibserver",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "10.0.10.104 - - [18/Sep/2026:17:34:40 +0000] \"GET / HTTP/1.1\" 200 112 \"-\" \"kube-probe/1.33\" \"-",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-mongodb",
+          "name": "Kube Container Mongodb",
+          "files": [
+            "kube-container-mongodb.yml"
+          ],
+          "sampleFile": "kube-container-mongodb.yml",
+          "detectedSourcetype": "kube:container:mongodb",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "{\"t\":{\"$date\":\"$ISO_TIMESTAMP$\"},\"s\":\"I\",  \"c\":\"NETWORK\",  \"id\":22944,   \"ctx\":\"conn1056316\",\"msg\":\"Connection ended\",\"attr\":{\"remote\":\"127.0.0.1:46412\",\"uuid\":{\"uuid\":{\"$uuid\":\"84987fc8-3103-4265-ad17-df1ea9c7e8f4\"}},\"connectionId\":1056316,\"connectionCount\":57}}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-redis",
+          "name": "Kube Container Redis",
+          "files": [
+            "kube-container-redis.yml"
+          ],
+          "sampleFile": "kube-container-redis.yml",
+          "detectedSourcetype": "kube:container:redis",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "1:M 02 $SYSLOG_TIMESTAMP$.400 * Ready to accept connections tcp",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-speaker",
+          "name": "Kube Container Speaker",
+          "files": [
+            "kube-container-speaker.yml"
+          ],
+          "sampleFile": "kube-container-speaker.yml",
+          "detectedSourcetype": "kube:container:speaker",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "{\"caller\":\"layer2_status_controller.go:111\",\"controller\":\"Layer2StatusReconciler\",\"end reconcile\":\"sc4snmp/snmp-splunk-connect-for-snmp-trap\",\"level\":\"info\",\"ts\":\"$ISO_TIMESTAMP$\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-traps",
+          "name": "Kube Container Splunk Connect For Snmp Traps",
+          "files": [
+            "kube-container-splunk-connect-for-snmp-traps.yml"
+          ],
+          "sampleFile": "kube-container-splunk-connect-for-snmp-traps.yml",
+          "detectedSourcetype": "kube:container:splunk-connect-for-snmp-traps",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "[2026-09-18 17:34:45,200: ERROR/splunk_connect_for_snmp.traps] Security Model failure for device (''10.201.48.101'', 49678): Unknown SNMP community name encountered",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-worker-sender",
+          "name": "Kube Container Splunk Connect For Snmp Worker Sender",
+          "files": [
+            "kube-container-splunk-connect-for-snmp-worker-sender.yml"
+          ],
+          "sampleFile": "kube-container-splunk-connect-for-snmp-worker-sender.yml",
+          "detectedSourcetype": "kube:container:splunk-connect-for-snmp-worker-sender",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "[2026-09-02 10:14:39,562: INFO/MainProcess] celery@snmp-splunk-connect-for-snmp-worker-sender-b446c488b-kmfqf ready.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-worker-trap",
+          "name": "Kube Container Splunk Connect For Snmp Worker Trap",
+          "files": [
+            "kube-container-splunk-connect-for-snmp-worker-trap.yml"
+          ],
+          "sampleFile": "kube-container-splunk-connect-for-snmp-worker-trap.yml",
+          "detectedSourcetype": "kube:container:splunk-connect-for-snmp-worker-trap",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "[2026-09-02 10:14:39,029: INFO/MainProcess] celery@snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk ready.",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-container-upgrade-ipam",
+          "name": "Kube Container Upgrade Ipam",
+          "files": [
+            "kube-container-upgrade-ipam.yml"
+          ],
+          "sampleFile": "kube-container-upgrade-ipam.yml",
+          "detectedSourcetype": "kube:container:upgrade-ipam",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "2026-09-02 10:13:21.421 [INFO][1] ipam/ipam_plugin.go 100: migration from host-local to calico-ipam complete node=\"maple-splunk-vm4-hf",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-events",
+          "name": "Kube Events",
+          "files": [
+            "kube-events.yml"
+          ],
+          "sampleFile": "kube-events.yml",
+          "detectedSourcetype": "kube:events",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "Service uses deprecated annotation metallb.universe.tf/loadBalancerIPs",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "kube-object-pods",
+          "name": "Kube Object Pods",
+          "files": [
+            "kube-object-pods.yml"
+          ],
+          "sampleFile": "kube-object-pods.yml",
+          "detectedSourcetype": "kube:object:pods",
+          "detectedIndex": "em_logs",
+          "previewSnippet": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{\"cni.projectcalico.org/containerID\":\"96bd3467252947d40fa4395800e49066dee4c94fc5c66d39080fdd7767725252\",\"cni.projectcalico.org/podIP\":\"10.1.5.238/32\",\"cni.projectcalico.org/podIPs\":\"10.1.5.238/32\"},\"creationTimestamp\":\"$ISO_TIMESTAMP$\",\"generateName\":\"snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-\",\"generation\":1,\"labels\":{\"app.kubern",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "stream-netflow",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "stream-netflow",
+          "name": "Stream Netflow",
+          "files": [
+            "stream-netflow.yml"
+          ],
+          "sampleFile": "stream-netflow.yml",
+          "detectedSourcetype": "stream:netflow",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"endtime\":\"$ISO_TIMESTAMP$\",\"timestamp\":\"$ISO_TIMESTAMP$\",\"app_tag\":\"USER-DEF : 009311\",\"event_name\":\"netFlowData\",\"exporter_ip\":\"10.201.51.68\",\"exporter_time\":\"2026-Sep-18 17:34:43\",\"exporter_uptime\":3046802704,\"flow_dir\":0,\"flow_end_time_milli\":1789752881000,\"flow_start_time_milli\":1789752866000,\"netflow_elements\":[\"UNKNOWN : ac190e02\",\"UNKNOWN : 0a14010a\",\"UNKNOWN : 147e\",\"UNKNOWN : 0000000000",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "vmware-esx-perf",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "vmware-esx-perf",
+          "name": "Vmware Esx Perf",
+          "files": [
+            "vmware-esx-perf.yml"
+          ],
+          "sampleFile": "vmware-esx-perf.yml",
+          "detectedSourcetype": "vmware:perf:cpu",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"timestamp\": \"$ISO_TS$\", \"epoch\": $EPOCH$, \"host\": \"esx-maple-compute-01.maple.ciscolabs.com\", \"vm_name\": \"web-srv-01\", \"cpu.usage.average\": $CPU_PCT$, \"cpu.usagemhz.average\": 480, \"status\": \"green\"}",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cisco Security & Telemetry",
+      "totalSamples": 20,
+      "samples": [
+        {
+          "id": "cisco-ftd-syslog",
+          "name": "Cisco Ftd Syslog",
+          "files": [
+            "cisco-ftd-syslog.yml"
+          ],
+          "sampleFile": "cisco-ftd-syslog.yml",
+          "detectedSourcetype": "cisco:ftd:syslog",
+          "detectedIndex": "cisco_sfw_ftd_syslog",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ :$SYSLOG_TIMESTAMP$ UTC: %FTD--6-805002: TCP Flow is no longer offloaded for connection 35430004 from INTERNET:32.185.98.157/443 (32.185.98.157/443) to INSIDE:10.0.10.95/17229 (64.100.57.80/17229)",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ASA"
+          }
+        },
+        {
+          "id": "cisco-ios",
+          "name": "Cisco Ios",
+          "files": [
+            "cisco-ios.yml"
+          ],
+          "sampleFile": "cisco-ios.yml",
+          "detectedSourcetype": "cisco:ios",
+          "detectedIndex": "main",
+          "previewSnippet": "$TS$ 10.0.0.253 : 2026 Feb 28 19:00:01 EST: %OSPF-4-DUPRID:  ospf-10 [32135] (default) Router 10.0.10.2 on interface Vlan810 is using our routerid, packet dropped",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-ise-radius-authz-policy",
+          "name": "Cisco Ise Radius Authz Policy",
+          "files": [
+            "cisco-ise-radius-authz-policy.yml"
+          ],
+          "sampleFile": "cisco-ise-radius-authz-policy.yml",
+          "detectedSourcetype": "cisco:ise:radius:authz:policy",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"rule\": {\"default\": true, \"id\": \"70c8186d-e2ef-4482-bd89-394cd9b723e4\", \"name\": \"Default\", \"hitCounts\": 0, \"rank\": 15, \"state\": \"enabled\", \"condition\": null}, \"profile\": [\"DenyAccess\"], \"securityGroup\": null, \"link\": {\"rel\": \"self\", \"href\": \"$HOST$/api/v1/policy/network-access/policy-set/f26b5958-d128-4f4b-9e17-d0338af2b891/authorization/70c8186d-e2ef-4482-bd89-394cd9b723e4\", \"type\": \"application",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ISE"
+          }
+        },
+        {
+          "id": "cisco-ise-radius-policyset",
+          "name": "Cisco Ise Radius Policyset",
+          "files": [
+            "cisco-ise-radius-policyset.yml"
+          ],
+          "sampleFile": "cisco-ise-radius-policyset.yml",
+          "detectedSourcetype": "cisco:ise:radius:policyset",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"default\": true, \"id\": \"f26b5958-d128-4f4b-9e17-d0338af2b891\", \"name\": \"Default\", \"description\": \"Default policy set\", \"hitCounts\": 238844, \"rank\": 0, \"state\": \"enabled\", \"condition\": null, \"serviceName\": \"Default Network Access\", \"isProxy\": false, \"link\": {\"rel\": \"self\", \"href\": \"$HOST$/api/v1/policy/network-access/policy-set/f26b5958-d128-4f4b-9e17-d0338af2b891\", \"type\": \"application/json\"}, \"l",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ISE"
+          }
+        },
+        {
+          "id": "cisco-ise-syslog",
+          "name": "Cisco Ise Syslog",
+          "files": [
+            "cisco-ise-syslog.yml"
+          ],
+          "sampleFile": "cisco-ise-syslog.yml",
+          "detectedSourcetype": "cisco:ise:syslog",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ $SYSLOG_TIMESTAMP$ maple-ise02 CISE_Failed_Attempts 0002840615 1 0 2026-09-18 17:34:43.705 +00:00 0056893972 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=101, Device IP Address=10.0.0.1, Device Port=18330, DestinationIPAddress=$HOST$, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=INVALID, Protocol=Radius, ExternalErrorCode=40008, Net",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ISE"
+          }
+        },
+        {
+          "id": "cisco-ise-tacacs-authz-policy",
+          "name": "Cisco Ise Tacacs Authz Policy",
+          "files": [
+            "cisco-ise-tacacs-authz-policy.yml"
+          ],
+          "sampleFile": "cisco-ise-tacacs-authz-policy.yml",
+          "detectedSourcetype": "cisco:ise:tacacs:authz:policy",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"rule\": {\"default\": true, \"id\": \"b47a6faa-f732-4007-b33f-04f0b8c884b3\", \"name\": \"Default\", \"hitCounts\": 0, \"rank\": 8, \"state\": \"enabled\", \"condition\": null}, \"commands\": [\"DenyAllCommands\"], \"profile\": \"Deny All Shell Profile\", \"link\": {\"rel\": \"self\", \"href\": \"$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1/authorization/b47a6faa-f732-4007-b33f-04f0b8c884b3\", \"ty",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ISE"
+          }
+        },
+        {
+          "id": "cisco-ise-tacacs-policyset",
+          "name": "Cisco Ise Tacacs Policyset",
+          "files": [
+            "cisco-ise-tacacs-policyset.yml"
+          ],
+          "sampleFile": "cisco-ise-tacacs-policyset.yml",
+          "detectedSourcetype": "cisco:ise:tacacs:policyset",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"default\": true, \"id\": \"56576c80-2c47-40bb-a344-b40ef71aa8f1\", \"name\": \"Default\", \"description\": \"Tacacs Default policy set\", \"hitCounts\": 22, \"rank\": 0, \"state\": \"enabled\", \"condition\": null, \"serviceName\": \"Default Device Admin\", \"isProxy\": false, \"link\": {\"rel\": \"self\", \"href\": \"$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1\", \"type\": \"application/json\"}, \"la",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Cisco ISE"
+          }
+        },
+        {
+          "id": "cisco-metrics-bgp-rib",
+          "name": "Cisco Metrics Bgp Rib",
+          "files": [
+            "cisco-metrics-bgp-rib.yml"
+          ],
+          "sampleFile": "cisco-metrics-bgp-rib.yml",
+          "detectedSourcetype": "httpevent",
+          "detectedIndex": "cisco_metrics",
+          "previewSnippet": "{\"time\": $EPOCH$, \"event\": \"metric\", \"source\": \"10.0.255.171\", \"sourcetype\": \"httpevent\", \"host\": \"34.236.151.135:8088\", \"index\": \"cisco_metrics\", \"fields\": {\"metric_name:bgp_status.peer_as\": 65013, \"metric_name:bgp_status.session_state\": 5, \"metric_name:Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted\": $PREFIXE",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-metrics-interface-counters",
+          "name": "Cisco Metrics Interface Counters",
+          "files": [
+            "cisco-metrics-interface-counters.yml"
+          ],
+          "sampleFile": "cisco-metrics-interface-counters.yml",
+          "detectedSourcetype": "httpevent",
+          "detectedIndex": "cisco_metrics",
+          "previewSnippet": "{\"time\": $EPOCH$, \"event\": \"metric\", \"source\": \"10.0.255.171\", \"sourcetype\": \"httpevent\", \"host\": \"34.236.151.135:8088\", \"index\": \"cisco_metrics\", \"fields\": {\"metric_name:interface_generic_counters.bandwidth\": 40000000, \"metric_name:interface_generic_counters.bytes_received\": $BYTES_RCVD$, \"metric_name:interface_generic_counters.bytes_sent\": $BYTES_SENT$, \"metric_name:interface_generic_counters.pa",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-metrics-isis",
+          "name": "Cisco Metrics Isis",
+          "files": [
+            "cisco-metrics-isis.yml"
+          ],
+          "sampleFile": "cisco-metrics-isis.yml",
+          "detectedSourcetype": "httpevent",
+          "detectedIndex": "cisco_metrics",
+          "previewSnippet": "{\"time\": $EPOCH$, \"event\": \"metric\", \"source\": \"R1\", \"sourcetype\": \"httpevent\", \"host\": \"34.236.151.135:8088\", \"index\": \"cisco_metrics\", \"fields\": {\"metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adjacency_uptime\": 26510, \"metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adj_ipv4bfd_retry_count\": ",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-metrics-splunk-otel",
+          "name": "Cisco Metrics Splunk Otel",
+          "files": [
+            "cisco-metrics-splunk-otel.yml"
+          ],
+          "sampleFile": "cisco-metrics-splunk-otel.yml",
+          "detectedSourcetype": "cisco:metrics",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "samples:\n  ### HEALTHY OTEL TELEMETRY (LOW CPU, STEADY BGP PEERS, ZERO PDU DROPS) ###\n  - name: splunk-otel-healthy\n    interval: 30\n    count: 5\n    randomizeEvents: true\n    tokens:\n      - name: EPOCH\n        format: template\n        type: epochtimestamp\n      - name: NODE\n        format: template\n",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-metrics-system-monitoring",
+          "name": "Cisco Metrics System Monitoring",
+          "files": [
+            "cisco-metrics-system-monitoring.yml"
+          ],
+          "sampleFile": "cisco-metrics-system-monitoring.yml",
+          "detectedSourcetype": "httpevent",
+          "detectedIndex": "cisco_metrics",
+          "previewSnippet": "{\"time\": $EPOCH$, \"event\": \"metric\", \"source\": \"R1\", \"sourcetype\": \"httpevent\", \"host\": \"34.236.151.135:8088\", \"index\": \"cisco_metrics\", \"fields\": {\"metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute\": $CPU_UTIL$, \"metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute\": $CPU_UTIL$, \"metric_name:Cisco-IOS-XR-n",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-nvm-flowdata",
+          "name": "Cisco Nvm Flowdata",
+          "files": [
+            "cisco-nvm-flowdata.yml"
+          ],
+          "sampleFile": "cisco-nvm-flowdata.yml",
+          "detectedSourcetype": "cisco:nvm:flowdata",
+          "detectedIndex": "main",
+          "previewSnippet": "8\\xE7_\\x84v\\x80H",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-se",
+          "name": "Cisco Se",
+          "files": [
+            "cisco-se.yml"
+          ],
+          "sampleFile": "cisco-se.yml",
+          "detectedSourcetype": "cisco:se",
+          "detectedIndex": "cisco_se",
+          "previewSnippet": "{\"id\": 1789751173971923653, \"timestamp\": 1789751173, \"timestamp_nanoseconds\": 971923000, \"date\": \"$ISO_TIMESTAMP$\", \"event_type\": \"Fault Cleared\", \"event_type_id\": 553648196, \"connector_guid\": \"519f89fd-a1db-458b-b551-5bb7ec1f8474\", \"group_guids\": [\"fa567a34-1239-4be4-9a2d-30d2a9d05d16\"], \"computer\": {\"connector_guid\": \"519f89fd-a1db-458b-b551-5bb7ec1f8474\", \"hostname\": \"fileserver01\", \"external_i",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sfw-estreamer",
+          "name": "Cisco Sfw Estreamer",
+          "files": [
+            "cisco-sfw-estreamer.yml"
+          ],
+          "sampleFile": "cisco-sfw-estreamer.yml",
+          "detectedSourcetype": "cisco:sfw:estreamer",
+          "detectedIndex": "cisco_secure_fw",
+          "previewSnippet": "{\"EventType\": \"ConnectionEvent\", \"FirstPacketSecond\": 1789752808, \"DeviceUUID\": \"84663f36-6213-11ec-943b-b10f15a5650d\", \"InstanceID\": 16, \"ConnectionID\": 61483, \"AC_RuleAction\": \"Allow\", \"InitiatorIP\": \"10.100.1.105\", \"ResponderIP\": \"208.67.222.222\", \"InitiatorPort\": 36665, \"ResponderPort\": 53, \"Protocol\": \"udp\", \"IngressInterface\": \"INSIDE.800\", \"EgressInterface\": \"INTERNET\", \"IngressZone\": \"INSI",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-sfw-policy",
+          "name": "Cisco Sfw Policy",
+          "files": [
+            "cisco-sfw-policy.yml"
+          ],
+          "sampleFile": "cisco-sfw-policy.yml",
+          "detectedSourcetype": "cisco:sfw:policy",
+          "detectedIndex": "cisco_sfw_api",
+          "previewSnippet": "{\"name\": \"AMP_Policy\", \"id\": \"fb73018e-682d-11ec-bf59-9b66d79cfdcf\", \"type\": \"FilePolicy\", \"archiveDepth\": 2, \"archiveDepthAction\": true, \"blockEncryptedArchives\": false, \"cleanList\": true, \"customDetectionList\": true, \"firstTimeFileAnalysis\": true, \"inspectArchives\": false, \"threatScore\": \"DISABLED\", \"links\": {\"self\": \"https://fmc.maple.ciscolabs.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-81",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-syslog",
+          "name": "Cisco Syslog",
+          "files": [
+            "cisco-syslog.yml"
+          ],
+          "sampleFile": "cisco-syslog.yml",
+          "detectedSourcetype": "cisco_syslog",
+          "detectedIndex": "main",
+          "previewSnippet": "$SYSLOG_TIMESTAMP$ $HOST$ 1 $ISO_TIMESTAMP$ R03 ifmgr 202 - - 1430004: LC/0/0/CPU0:ifmgr[202]: %PKT_INFRA-LINEPROTO-5-UPDOWN : Line protocol on Interface HundredGigE0/0/1/2, changed state to Up ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-thousandeyes-event",
+          "name": "Cisco Thousandeyes Event",
+          "files": [
+            "cisco-thousandeyes-event.yml"
+          ],
+          "sampleFile": "cisco-thousandeyes-event.yml",
+          "detectedSourcetype": "cisco:thousandeyes:event",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"id\": \"a78ef292-6962-333c-b97d-a74ec8fad6d9\", \"type\": \"target\", \"agentType\": \"cloud-enterprise-agent\", \"typeName\": \"Network Outage\", \"title\": \"targets 64.100.2.10 +6\", \"state\": \"active\", \"startDate\": \"$ISO_TIMESTAMP$\", \"endDate\": null, \"severity\": \"low\", \"affectedTests\": {\"total\": 7, \"inAccountGroup\": 1}, \"affectedTargets\": {\"total\": 7, \"inAccountGroup\": 1}, \"affectedAgents\": {\"total\": 6, \"inAcco",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-thousandeyes-metric",
+          "name": "Cisco Thousandeyes Metric",
+          "files": [
+            "cisco-thousandeyes-metric.yml"
+          ],
+          "sampleFile": "cisco-thousandeyes-metric.yml",
+          "detectedSourcetype": "cisco:thousandeyes:metric",
+          "detectedIndex": "main",
+          "previewSnippet": "metric",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        },
+        {
+          "id": "cisco-thousandeyes-path-vis",
+          "name": "Cisco Thousandeyes Path Vis",
+          "files": [
+            "cisco-thousandeyes-path-vis.yml"
+          ],
+          "sampleFile": "cisco-thousandeyes-path-vis.yml",
+          "detectedSourcetype": "cisco:thousandeyes:path-vis",
+          "detectedIndex": "main",
+          "previewSnippet": "{\"agentId\": \"bac16802-df59-4327-8b7e-33a29e86cde7\", \"aid\": \"230661\", \"testId\": \"414718\", \"roundId\": 1789748220, \"serverIp\": \"144.196.36.211\", \"systemMetrics\": {\"startTimeMs\": 1789748234758, \"endTimeMs\": 1789748246768, \"cpuUtilization\": {\"min\": 0.1530758226037196, \"max\": 0.27266187050359714, \"mean\": 0.21063021312772753, \"median\": 0.19385182153090463, \"stdDev\": 0.044302459250538766, \"count\": 12}, \"p",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Sophos Central",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "sophos-central-cef",
+          "name": "Sophos Central Cef",
+          "files": [
+            "sophos-central-cef.yml"
+          ],
+          "sampleFile": "sophos-central-cef.yml",
+          "detectedSourcetype": "sophos:central:cef",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:15:20 sophos-ep-01 CEF:0|Sophos|Central|1.0|Threat|Malware Blocked|7|src=10.10.40.55 msg=Malware detected and cleaned dhost=workstation-09.acme.local dvchost=workstation-09 rt=2026-09-18T21:15:20.000Z deviceType=Endpoint externalId=THREAT-99412 suid=S-1-5-21-39281 suser=m.smith category=Malware",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Sophos Central Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Arista Networks Telemetry",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "arista-eos-syslog",
+          "name": "Arista Eos Syslog",
+          "files": [
+            "arista-eos-syslog.yml"
+          ],
+          "sampleFile": "arista-eos-syslog.yml",
+          "detectedSourcetype": "arista:eos:syslog",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "<189>1 2026-09-18T21:15:22.000Z switch-leaf-01.acme.local BGP 1420 - %BGP-5-ADJCHANGE: neighbor 10.255.0.2 Gateway Down - peer closed BGP session (remote AS 65001)",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Arista Networks Telemetry for Splunk"
+          }
+        },
+        {
+          "id": "arista-metrics-telemetry",
+          "name": "Arista Metrics Telemetry",
+          "files": [
+            "arista-metrics-telemetry.yml"
+          ],
+          "sampleFile": "arista-metrics-telemetry.yml",
+          "detectedSourcetype": "arista:telemetry:json",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "{\"time\": 1789761320, \"event\": \"metric\", \"source\": \"switch-leaf-01\", \"sourcetype\": \"arista:telemetry:json\", \"host\": \"switch-leaf-01.acme.local\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:arista_interface_in_octets\": 984120394, \"metric_name:arista_interface_out_octets\": 1284910283, \"metric_name:arista_interface_in_errors\": 0, \"metric_name:arista_queue_depth_bytes\": 14200, \"interface\": \"E",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Arista Networks Telemetry for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Aruba Networks",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "aruba-syslog",
+          "name": "Aruba Syslog",
+          "files": [
+            "aruba-syslog.yml"
+          ],
+          "sampleFile": "aruba-syslog.yml",
+          "detectedSourcetype": "aruba:syslog",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:15:25 aruba-wlc-01 authmgr[1842]: <522008> <INFO> client_mac=00:1a:1e:2b:4c:5d username=jdoe@acme.corp bssid=20:a6:cd:44:11:00 ap_name=AP-Campus-Fl2-West radio_channel=36 rssi=42 snr=38 auth_status=SUCCESS vlan=104 reason=\"Client authentication succeeded",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Aruba Networks Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Check Point",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "checkpoint-cef",
+          "name": "Checkpoint Cef",
+          "files": [
+            "checkpoint-cef.yml"
+          ],
+          "sampleFile": "checkpoint-cef.yml",
+          "detectedSourcetype": "checkpoint:cef",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "time=1789761330|hostname=cp-gw-perimeter-01|product=Firewall|action=drop|src=198.51.100.44|dst=10.0.10.22|proto=tcp|src_port=49210|dst_port=445|service=smb|client_outbound_interface=eth1|dest_interface=eth2|rule=104|rule_name=\"Block_Inbound_SMB\"|policy=Standard_Perimeter|severity=High|severity_id=3|inzone=External|outzone=DMZ|reason=\"Drop by security policy rule",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "CCX Unified Splunk Add-on for Check Point"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Cloudflare Core & R2",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "cloudflare-json",
+          "name": "Cloudflare Json",
+          "files": [
+            "cloudflare-json.yml"
+          ],
+          "sampleFile": "cloudflare-json.yml",
+          "detectedSourcetype": "cloudflare:json",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "{\"EdgeStartTimestamp\": \"2026-09-18T21:15:35Z\", \"ClientIP\": \"203.0.113.89\", \"ClientRequestHost\": \"api.acme.com\", \"ClientRequestMethod\": \"POST\", \"ClientRequestPath\": \"/v1/auth/token\", \"ClientRequestUserAgent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\", \"EdgeResponseStatus\": 403, \"OriginIP\": \"10.100.2.14\", \"ClientRequestBytes\": 1420, \"EdgeResponseBytes\": 428, \"EdgeRateLimitAction\": \"block\", \"WAFAct",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Cloudflare App for Splunk"
+          }
+        },
+        {
+          "id": "cloudflare-r2-metrics",
+          "name": "Cloudflare R2 Metrics",
+          "files": [
+            "cloudflare-r2-metrics.yml"
+          ],
+          "sampleFile": "cloudflare-r2-metrics.yml",
+          "detectedSourcetype": "cloudflare:r2:json",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "{\"time\": 1789761340, \"event\": \"metric\", \"source\": \"cloudflare:r2\", \"sourcetype\": \"cloudflare:r2:json\", \"host\": \"cloudflare.r2.acme\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:r2_operation_count\": 1, \"metric_name:r2_bytes_uploaded\": 2097152, \"metric_name:r2_latency_ms\": 14.8, \"account_id\": \"acme-cf-r2-prod\", \"bucket_name\": \"acme-telemetry-archive\", \"operation\": \"PutObject\", \"status_code",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "ExtraHop Performance Detection",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "extrahop-eda-alert",
+          "name": "Extrahop Eda Alert",
+          "files": [
+            "extrahop-eda-alert.yml"
+          ],
+          "sampleFile": "extrahop-eda-alert.yml",
+          "detectedSourcetype": "extrahop:eda:alert",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "{\"update_time\": \"Sep 18 2026 17:15:45 +0000\", \"detection_type\": \"protocol_anomaly\", \"title\": \"Abnormal TLS Handshake Rate\", \"risk_score\": 85, \"device_id\": \"extrahop-eda-sensor-01\", \"src_ip\": \"10.10.50.21\", \"dest_ip\": \"198.51.100.12\", \"app\": \"HTTPS\", \"description\": \"High rate of SSL/TLS handshake failures indicating potential cipher renegotiation flood\"}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "ExtraHop Add-on for Splunk"
+          }
+        },
+        {
+          "id": "extrahop-metrics-performance",
+          "name": "Extrahop Metrics Performance",
+          "files": [
+            "extrahop-metrics-performance.yml"
+          ],
+          "sampleFile": "extrahop-metrics-performance.yml",
+          "detectedSourcetype": "extrahop:eda:metrics",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "{\"time\": 1789761345, \"event\": \"metric\", \"source\": \"extrahop:eda\", \"sourcetype\": \"extrahop:eda:metrics\", \"host\": \"core-switch-01\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:extrahop_turnaround_time_ms\": 4.2, \"metric_name:extrahop_tcp_zero_window\": 0, \"metric_name:extrahop_rtt_ms\": 1.4, \"metric_name:extrahop_dns_error_count\": 0, \"device_oid\": \"1.3.6.1.4.1.3814.1.1.9281\", \"object_type\": \"",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to Metrics Index (e.g., cisco_mdt_metrics). Required TA: Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry).",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "ExtraHop Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Fortinet FortiGate",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "fortinet-fortigate-sdwan-alert",
+          "name": "Fortinet Fortigate Sdwan Alert",
+          "files": [
+            "fortinet-fortigate-sdwan-alert.yml"
+          ],
+          "sampleFile": "fortinet-fortigate-sdwan-alert.yml",
+          "detectedSourcetype": "fgt_event",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "date=2026-09-18 time=17:15:51 devname=\"FGT-Edge-01\" devid=\"FGT60E4Q16000001\" vd=\"root\" type=\"event\" subtype=\"sdwan\" level=\"warning\" logid=\"0100022923\" msg=\"SD-WAN SLA path quality degradation alert\" sla_rule=\"SLA_Voice_HighPri\" interface=\"wan2\" latency=142.5 jitter=28.4 packet_loss=6.8 link_status=\"degraded\" action=\"failover",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Fortinet FortiGate Add-on for Splunk"
+          }
+        },
+        {
+          "id": "fortinet-fortigate-traffic",
+          "name": "Fortinet Fortigate Traffic",
+          "files": [
+            "fortinet-fortigate-traffic.yml"
+          ],
+          "sampleFile": "fortinet-fortigate-traffic.yml",
+          "detectedSourcetype": "fgt_traffic",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "date=2026-09-18 time=17:15:50 devname=\"FGT-Edge-01\" devid=\"FGT60E4Q16000001\" vd=\"root\" type=\"traffic\" subtype=\"forward\" level=\"notice\" srcip=10.10.30.12 srcport=54122 srcintf=\"port1\" dstip=198.51.100.80 dstport=443 dstintf=\"wan1\" polid=1 sessionid=19842 proto=6 action=\"accept\" policyid=1 app=\"HTTPS\" duration=45 sentbyte=3412 rcvdbyte=8910",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Fortinet FortiGate Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "NetScout Omnis Core",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "netscout-omnis-alert",
+          "name": "Netscout Omnis Alert",
+          "files": [
+            "netscout-omnis-alert.yml"
+          ],
+          "sampleFile": "netscout-omnis-alert.yml",
+          "detectedSourcetype": "netscout:omnis:alert",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "{\"timestamp\": \"2026-09-18T21:15:55Z\", \"analyzer\": \"NetScout Omnis Cyber Intelligence\", \"alert_type\": \"DDoS_Flood_Vector\", \"vector\": \"SYN_Flood\", \"dpi_signature\": \"TCP_SYN_ACK_MISMATCH\", \"src_ip_count\": 4820, \"target_ip\": \"198.51.100.25\", \"target_port\": 443, \"flood_volume_pps\": 850000, \"flood_volume_mbps\": 4200, \"drop_action\": \"mitigated\", \"threat_score\": 98}",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "NetScout Omnis Cyber Intelligence Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Netskope SSE Framework",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "netskope-json",
+          "name": "Netskope Json",
+          "files": [
+            "netskope-json.yml"
+          ],
+          "sampleFile": "netskope-json.yml",
+          "detectedSourcetype": "netskope:json",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "{\"timestamp\": 1789761360, \"vendor_product\": \"Netskope\", \"event_type\": \"dlp_violation\", \"user\": \"m.smith@acme.corp\", \"user_department\": \"Finance\", \"app\": \"Microsoft OneDrive\", \"activity\": \"Upload\", \"file_name\": \"Q3_Customer_PII_Export.xlsx\", \"file_size\": 248102, \"dlp_rule\": \"PCI_SSN_Strict_Rule\", \"dlp_incident_id\": \"DLP-2026-8812\", \"action\": \"block\", \"c_ip\": \"10.20.10.45\", \"s_ip\": \"13.107.136.9\", \"",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Netskope Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Radware CSMS & CWAF",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "radware-csms-ddos",
+          "name": "Radware Csms Ddos",
+          "files": [
+            "radware-csms-ddos.yml"
+          ],
+          "sampleFile": "radware-csms-ddos.yml",
+          "detectedSourcetype": "radware:ddos",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:05 radware-defensepro CSMS-DDOS,timestamp=\"2026-09-18 17:16:05\",device_name=\"DP-01-Border\",attack_name=\"Volumetric UDP Flood\",policy=\"Perimeter-Shield\",dest_ip=\"198.51.100.10\",dest_port=53,threshold_pps=250000,actual_pps=890000,packet_volume_drop=640000,action=\"Drop\",severity=\"Critical",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Radware CSMS & CWAF Event Collector"
+          }
+        },
+        {
+          "id": "radware-cwaf-waf",
+          "name": "Radware Cwaf Waf",
+          "files": [
+            "radware-cwaf-waf.yml"
+          ],
+          "sampleFile": "radware-cwaf-waf.yml",
+          "detectedSourcetype": "radware:waf",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:10 radware-cwaf AppWall-WAF: timestamp=\"2026-09-18 17:16:10\",vip_name=\"VIP_Portal_Prod\",vip_ip=\"198.51.100.50\",vip_port=443,client_ip=\"203.0.113.112\",rule_id=\"WAF-L7-SQLi-004\",violation_type=\"SQL Injection in URI parameter\",malicious_payload=\"UNION SELECT password FROM users--\",action=\"Blocked\",latency_delay_ms=18.4,http_status=403",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Radware CSMS & CWAF Event Collector"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "F5 BIG-IP",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "f5-bigip-syslog",
+          "name": "F5 Bigip Syslog",
+          "files": [
+            "f5-bigip-syslog.yml"
+          ],
+          "sampleFile": "f5-bigip-syslog.yml",
+          "detectedSourcetype": "f5:bigip:syslog",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:15 f5-bigip-01.acme.local notice mcpd[8142]: 01070638:5: Pool /Common/pool_app_backend member /Common/10.0.10.51:8080 monitor status down. [ was up for 48hrs ]",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for F5 BIG-IP"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Juniper Networks",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "juniper-syslog",
+          "name": "Juniper Syslog",
+          "files": [
+            "juniper-syslog.yml"
+          ],
+          "sampleFile": "juniper-syslog.yml",
+          "detectedSourcetype": "juniper:syslog",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:20 juniper-mx960-core-01 rpd[1422]: RPD_BGP_NEIGHBOR_STATE_CHANGED: BGP neighbor 10.255.10.1 (Internal AS 65000) changed state from Established to Idle (BGP notification sent: cease)",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Juniper"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Palo Alto Networks",
+      "totalSamples": 3,
+      "samples": [
+        {
+          "id": "pan-system",
+          "name": "Pan System",
+          "files": [
+            "pan-system.yml"
+          ],
+          "sampleFile": "pan-system.yml",
+          "detectedSourcetype": "pan:system",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "1,2026/09/18 17:16:27,001801000001,SYSTEM,globalprotect,2304,2026/09/18 17:16:27,,globalprotect-gateway,gateway-agent,0,0,general,informational,\"GlobalProtect gateway client connection established: User jdoe, Client IP 10.200.1.5, OS Windows 11\",10982,0x0",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Palo Alto Networks"
+          }
+        },
+        {
+          "id": "pan-threat",
+          "name": "Pan Threat",
+          "files": [
+            "pan-threat.yml"
+          ],
+          "sampleFile": "pan-threat.yml",
+          "detectedSourcetype": "pan:threat",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "1,2026/09/18 17:16:26,001801000001,THREAT,vulnerability,2304,2026/09/18 17:16:26,203.0.113.88,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Inspection,attacker,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/09/18 17:16:26,98425,1,49182,80,0,0,0x0,tcp,reset-both,\"Apache Log4j Remote Code Execution(30845)\",any,critical,client-to-server,92841,0x0,10.0.0.0-10.255.255.255,US,0,,0,,",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Palo Alto Networks"
+          }
+        },
+        {
+          "id": "pan-traffic",
+          "name": "Pan Traffic",
+          "files": [
+            "pan-traffic.yml"
+          ],
+          "sampleFile": "pan-traffic.yml",
+          "detectedSourcetype": "pan:traffic",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "1,2026/09/18 17:16:25,001801000001,TRAFFIC,drop,2304,2026/09/18 17:16:25,198.51.100.150,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,jdoe,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/09/18 17:16:25,98421,1,58210,80,0,0,0x0,tcp,deny,1420,0,1420,1,2026/09/18 17:16:25,0,any,0,12345678,0x0,10.0.0.0-10.255.255.255,US,0,1,0,policy-deny,0,0,0,0,,PA-5250,from-policy",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Palo Alto Networks"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Zscaler SSE Infrastructure",
+      "totalSamples": 2,
+      "samples": [
+        {
+          "id": "zscaler-sse-tunnel",
+          "name": "Zscaler Sse Tunnel",
+          "files": [
+            "zscaler-sse-tunnel.yml"
+          ],
+          "sampleFile": "zscaler-sse-tunnel.yml",
+          "detectedSourcetype": "zscaler:tunnel",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:31 zscaler-nss zscalernss-tunnel: datetime=Fri Sep 18 17:16:31 2026,tunnel_name=\"Zscaler-GRE-Toronto-Primary\",tunnel_status=\"DOWN\",remote_ip=198.51.100.200,local_ip=10.0.255.50,drop_reason=\"Keepalive timeout exceeded\",downtime_sec=45",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Zscaler Technical Add-on for Splunk"
+          }
+        },
+        {
+          "id": "zscaler-sse-web",
+          "name": "Zscaler Sse Web",
+          "files": [
+            "zscaler-sse-web.yml"
+          ],
+          "sampleFile": "zscaler-sse-web.yml",
+          "detectedSourcetype": "zscaler:web",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "Sep 18 17:16:30 zscaler-nss zscalernss-web: datetime=Fri Sep 18 17:16:30 2026,user=alice.johnson@acme.corp,department=Engineering,location=Toronto-Branch,reqaction=Blocked,urlcategory=Malware_Sites,hostname=bad-download.compromised.com,clientip=10.10.40.12,serverip=198.51.100.99,reqmethod=GET,respcode=403,threatname=Trojan.Generic.KD,tunnel_id=TUN-TO-8891,policy_action=Block",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Zscaler Technical Add-on for Splunk"
+          }
+        }
+      ]
+    },
+    {
+      "categoryName": "Other",
+      "totalSamples": 1,
+      "samples": [
+        {
+          "id": "geo_tokens",
+          "name": "Geo_Tokens",
+          "files": [
+            "hosts_core.sample",
+            "hosts_sdwan.sample",
+            "hosts_campus.sample",
+            "geos_canada.sample",
+            "geos_global.sample",
+            "hosts_wireless.sample"
+          ],
+          "sampleFile": "hosts_core.sample",
+          "detectedSourcetype": "geo_tokens:generic",
+          "detectedIndex": "netops_logs",
+          "previewSnippet": "R1\nR2\nR7\nR8\nR9\nR10\n10.0.255.171\n10.0.255.172\nOTT-CORE01.maple.ciscolabs.com\nOTT-CORE02.maple.ciscolabs.com\n",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to standard Event Index (e.g., netops_logs).",
+            "recommendedIndex": "netops_logs",
+            "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        }
+      ]
+    }
+  ],
+  "totalSamples": 185
+}

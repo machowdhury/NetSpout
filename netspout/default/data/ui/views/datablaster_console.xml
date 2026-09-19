@@ -1,0 +1,287 @@
+<dashboard version="1.1" theme="dark" script="datablaster_console.js">
+  <label>Data Blaster Console</label>
+  <description>Executive mission-control console for high-rate network telemetry simulation, live scenario execution dispatch, and infrastructure ingestion metrics.</description>
+
+  <!-- KPI Metric Row -->
+  <row>
+    <panel>
+      <single>
+        <title>Total Telemetry Events Ingested</title>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs) earliest=-24h | stats count</query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+          <refresh>10s</refresh>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x1e293b","0x15803d"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="underLabel">Across All Target Indexes</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Active Scenario Blueprints</title>
+        <search>
+          <query>| makeresults | eval count=8 | table count</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x0284c7","0x0284c7"]</option>
+        <option name="underLabel">Multi-Vendor Scenarios Ready</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Target Ingestion Rate</title>
+        <search>
+          <query>| makeresults | eval rate="1,000 EPS" | table rate</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x1e293b","0x1e293b"]</option>
+        <option name="underLabel">Configured Generator Throughput</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Splunk HEC Pipeline</title>
+        <search>
+          <query>| makeresults | eval status="ONLINE (200)" | table status</query>
+          <earliest>-15m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x15803d","0x15803d"]</option>
+        <option name="underLabel">Port 8888 /services/collector</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- Scenario Launcher Grid & Live Execution Terminal -->
+  <row>
+    <panel>
+      <html>
+        <div style="padding: 10px 0;">
+          
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 14px;">
+              <div>
+                <b style="color: #f8fafc; font-size: 14px;">Multi-Vendor Telemetry Scenarios</b>
+                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Click 'Stream Telemetry' to launch generation pipeline</span>
+              </div>
+              <span style="font-size: 11px; color: #38bdf8;">8 Pre-configured Architectures</span>
+            </div>
+
+            <!-- 8 Scenario Cards Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+
+              <!-- Card 1 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-ENT-001</span>
+                    <span style="font-size: 10px; color: #94a3b8;">5-Tier Backbone</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Enterprise 5-Tier Operations</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    End-to-end multi-vendor corridor: Zscaler SSE, Palo Alto NGFW, Fortinet SD-WAN, Juniper MX960, Arista EOS.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_custom_multivendor_enterprise_stack.yml" data-name="Enterprise 5-Tier Operations" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_multivendor_enterprise" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-002</span>
+                    <span style="font-size: 10px; color: #94a3b8;">AI DC Fabric</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">AI Fabric &amp; RoCE v2 Congestion</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Arista EOS telemetry tracking PFC pause frames, ECN marking, and buffer occupancy during all-reduce bursts.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_002_roce_ai_fabric.yml" data-name="AI Fabric RoCE v2" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_roce_ai_fabric" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #f59e0b; background: rgba(245, 158, 11, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-006</span>
+                    <span style="font-size: 10px; color: #94a3b8;">BGP Peering</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Core BGP Instability &amp; Flapping</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Carrier eBGP hold-timer expiry, route dampening, and convergence telemetry between Juniper Junos and Cisco IOS-XR.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_006_bgp_route_flap.yml" data-name="Core BGP Flapping" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_bgp_route_flap" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-008</span>
+                    <span style="font-size: 10px; color: #94a3b8;">SD-WAN SLA</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">SD-WAN Branch Path Failover</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    BFD tunnel jitter degradation triggering policy failover from MPLS to broadband Internet across Cisco and Fortinet.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_008_sdwan_branch.yml" data-name="SD-WAN Branch Failover" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_sdwan_branch" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 5 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #06b6d4; background: rgba(6, 182, 212, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-011</span>
+                    <span style="font-size: 10px; color: #94a3b8;">100G Optical</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Optical 100G Degradation &amp; TI-LFA</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Nokia 7750 SR DWDM transceiver power drop (-26.4 dBm) and pre-FEC BER escalation triggering sub-50ms TI-LFA fast reroute.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_011_core_lsp_optical.yml" data-name="Optical 100G Degradation" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_core_lsp_optical" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 6 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-014</span>
+                    <span style="font-size: 10px; color: #94a3b8;">Perimeter Security</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Firewall Capacity Saturation</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Palo Alto PA-5450 session table exhaustion, CPS thresholds, and SYN flood defense logs during ingress volumetric spikes.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_014_firewall_capacity.yml" data-name="Firewall Capacity Saturation" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_firewall_capacity" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 7 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #0284c7; background: rgba(2, 132, 199, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">MV-016</span>
+                    <span style="font-size: 10px; color: #94a3b8;">Cross-Domain Triage</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Cross-Domain Slowness Triage</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Correlated multi-tier triage matrix tracing user slowness through DNS, SASE, Perimeter FW, Core Routing, and App DB.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_mv_016_cross_domain_slowness.yml" data-name="Cross-Domain Slowness Triage" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/studio_cross_domain_triage" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Studio Dashboard &#x2192;
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 8 -->
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span style="font-size: 10px; font-weight: 700; color: #14b8a6; background: rgba(20, 184, 166, 0.15); padding: 2px 6px; border-radius: 3px; font-family: monospace;">ACME-FULL</span>
+                    <span style="font-size: 10px; color: #94a3b8;">Full Enterprise</span>
+                  </div>
+                  <b style="color: #f8fafc; font-size: 12px; display: block; margin-bottom: 4px;">Full Enterprise Topology</b>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 10px 0; line-height: 1.4;">
+                    Complete multi-vendor enterprise infrastructure spanning Cisco, Arista, Juniper, Palo Alto, and Zscaler simultaneously.
+                  </p>
+                </div>
+                <div>
+                  <button type="button" class="btn-launch-scenario" data-scenario="scenario_acme_full_network_topology.yml" data-name="Full Enterprise Topology" style="width: 100%; background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 6px; font-size: 11px; font-weight: 600; cursor: pointer; margin-bottom: 6px;">
+                    Stream Telemetry
+                  </button>
+                  <a href="/en-US/app/TA-network-data-blaster/scenario_builder" style="display: block; text-align: center; color: #38bdf8; font-size: 11px; text-decoration: none;">
+                    Open Scenario Builder &#x2192;
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Section: Live Execution Terminal Output -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #16a34a;"></span>
+                <b style="color: #f8fafc; font-size: 12px;">Ingestion Pipeline Execution Console</b>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" id="btn-stop-all-console" style="background: #dc2626; border: none; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 3px; cursor: pointer;">
+                  Stop Ingestion
+                </button>
+                <button type="button" id="btn-clear-console" style="background: #1e293b; border: 1px solid #334155; color: #94a3b8; font-size: 11px; padding: 4px 10px; border-radius: 3px; cursor: pointer;">
+                  Clear Output
+                </button>
+              </div>
+            </div>
+            <div id="console-log-output" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 10px 12px; font-family: monospace; font-size: 11px; color: #38bdf8; min-height: 120px; max-height: 220px; overflow-y: auto; line-height: 1.5;">
+              <div>[SYSTEM READY] Data Blaster Console initialized. All multi-vendor engines online.</div>
+              <div>[PIPELINE] Target HEC: https://127.0.0.1:8888/services/collector (Auto-fallback to :8088 enabled)</div>
+              <div>[INDEXES] idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics verified.</div>
+            </div>
+          </div>
+
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,44 @@
+samples:
+  ### HEALTHY IS-IS ADJACENCY ###
+  - name: cisco-metrics-isis-healthy
+    interval: 60
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adjacency_uptime": 26510, "metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adj_ipv4bfd_retry_count": 0, "metric_name:isis_neighbors.neighbor/neighbor_uptime": 26510, "metric_name:isis_neighbors.neighbor/neighbor_holdtime": 30, "interface_name": "FortyGigE0/0/1/1", "instance_name": "DEFAULT"}}'
+
+  ### FLAPPING IS-IS ADJACENCY ###
+  - name: cisco-metrics-isis-flapping
+    interval: 60
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: FLAP_UPTIME
+        format: template
+        type: random
+        replacement: int
+        lower: 5
+        upper: 45
+      - name: RETRY_COUNT
+        format: template
+        type: random
+        replacement: int
+        lower: 6
+        upper: 15
+    lines:
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adjacency_uptime": $FLAP_UPTIME$, "metric_name:Cisco-IOS-XR-clns-isis-oper:isis/instances/instance/levels/level/adjacencies/adjacency.adj_ipv4bfd_retry_count": $RETRY_COUNT$, "metric_name:isis_neighbors.neighbor/neighbor_uptime": $FLAP_UPTIME$, "metric_name:isis_neighbors.neighbor/neighbor_holdtime": 3, "interface_name": "FortyGigE0/0/1/1", "instance_name": "DEFAULT"}}'

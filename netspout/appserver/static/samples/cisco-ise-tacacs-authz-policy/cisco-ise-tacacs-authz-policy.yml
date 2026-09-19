@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-ISE-TACACS-AUTHZ-POLICY - HEALTHY BASELINE ###
+  - name: cisco-ise-tacacs-authz-policy-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+          - weight: 2
+            choice: https://10.0.10.34-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:DEVICE_POLICY:ISE02
+        sourcetype: cisco:ise:tacacs:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "b47a6faa-f732-4007-b33f-04f0b8c884b3", "name": "Default", "hitCounts": 0, "rank": 8, "state": "enabled", "condition": null}, "commands": ["DenyAllCommands"], "profile": "Deny All Shell Profile", "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1/authorization/b47a6faa-f732-4007-b33f-04f0b8c884b3", "type": "application/json"}, "policy_id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "lastUpdated": 1784258516494}'
+
+  ### CISCO-ISE-TACACS-AUTHZ-POLICY - DEGRADED / WARNING ###
+  - name: cisco-ise-tacacs-authz-policy-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:DEVICE_POLICY:ISE02
+        sourcetype: cisco:ise:tacacs:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "b47a6faa-f732-4007-b33f-04f0b8c884b3", "name": "Default", "hitCounts": 0, "rank": 8, "state": "enabled", "condition": null}, "commands": ["DenyAllCommands"], "profile": "Deny All Shell Profile", "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1/authorization/b47a6faa-f732-4007-b33f-04f0b8c884b3", "type": "application/json"}, "policy_id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "lastUpdated": 1784258516494}'
+
+  ### CISCO-ISE-TACACS-AUTHZ-POLICY - CRITICAL / FAILURE ###
+  - name: cisco-ise-tacacs-authz-policy-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:DEVICE_POLICY:ISE02
+        sourcetype: cisco:ise:tacacs:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "b47a6faa-f732-4007-b33f-04f0b8c884b3", "name": "Default", "hitCounts": 0, "rank": 8, "state": "enabled", "condition": null}, "commands": ["DenyAllCommands"], "profile": "Deny All Shell Profile", "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1/authorization/b47a6faa-f732-4007-b33f-04f0b8c884b3", "type": "application/json"}, "policy_id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "lastUpdated": 1784258516494}'

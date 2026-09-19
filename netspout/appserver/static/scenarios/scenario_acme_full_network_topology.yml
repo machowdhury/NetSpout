@@ -1,0 +1,397 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: FULL ACME NETWORK TOPOLOGY - HEALTHY OPERATIONAL BASELINE        ###
+  ### Continuous green status across all topology entities & domains            ###
+  ### ========================================================================= ###
+  - name: acme-topology-stage1-healthy
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+      - name: LATENCY_MS
+        format: template
+        type: random
+        replacement: int
+        lower: 12
+        upper: 24
+      - name: CORE_UTIL_PCT
+        format: template
+        type: random
+        replacement: int
+        lower: 28
+        upper: 42
+    lines:
+      # --- 1. MAPLE DATA CENTER (ACI FABRIC & BRIDGE DOMAINS) ---
+      # BD - MAPLE BD01 (EPG: MGMT)
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD01/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD01 healthy", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD01", "epg": "MGMT", "operSt": "online", "advertised_subnets": ["10.20.101.0/24"]}'
+
+      # BD - MAPLE BD02_IPv6 (EPG: MGMT_IPV6)
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD02_IPv6/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD02_IPv6 healthy", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD02_IPv6", "epg": "MGMT_IPV6", "operSt": "online", "advertised_subnets": ["2001:db8:102::/64"]}'
+
+      # BD - MAPLE BD03_DS (EPG: MGMT_DS)
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD03_DS/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD03_DS healthy", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD03_DS", "epg": "MGMT_DS", "operSt": "online", "advertised_subnets": ["10.20.103.0/24"]}'
+
+      # BD - MAPLE BD04_SPLUNK (EPGs: SPLUNK, WEB) - 10.20.104.200/24
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD04_SPLUNK healthy", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "epgs": ["SPLUNK", "WEB"], "operSt": "online", "advertised_subnets": ["10.20.104.200/24"]}'
+
+      # Maple DC Border Leaf to Core R1/PE1 Peering (AS 65101 to Core AS 65000, Link 10.30.4.136/30)
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 4, "neighbor_address": "10.30.4.137", "local_address": "10.30.4.138", "af_name": "ipv4-unicast", "session_state": "ESTABLISHED", "remote_as": 65101, "local_as": 65000, "vrf_name": "default", "link_subnet": "10.30.4.136/30", "peer_name": "MAPLE-BORDER-LEAF01"}}'
+
+      # ThousandEyes Synthetic Test to Maple Web Service
+      - index: main
+        source: cisco:thousandeyes:metric
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto-dc1
+        _raw: '{"timestamp": "$ISO_TS$", "test_name": "ACME_Web_Production_Portal", "test_type": "http-server", "target_url": "https://web.acme.maple.ciscolabs.com:8443", "metric_name:http.server.request.availability": 100, "metric_name:network.loss": 0.0, "metric_name:http.client.request.duration": $LATENCY_MS$, "response_code": 200, "status": "AVAILABLE"}'
+
+      # VMware ESXi Virtual Compute in Maple DC
+      - index: main
+        source: vmware:perf
+        sourcetype: vmware:perf:cpu
+        host: esx-maple-compute-01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "epoch": $EPOCH$, "host": "esx-maple-compute-01.maple.ciscolabs.com", "vcenter": "vc-maple.corp.acme.com", "vm_name": "web-srv-01", "cpu.usage.average": 14, "cpu.usagemhz.average": 512, "mem.usage.average": 31, "status": "green"}'
+
+      # --- 2. CORE / BACKBONE NETWORK (SRv6 FABRIC & MPLS CORE) ---
+      # Core Control Plane: PCE, RR, RRv6
+      - index: cisco_metrics
+        source: PCE
+        sourcetype: httpevent
+        host: "PCE"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "PCE", "sourcetype": "httpevent", "host": "PCE", "index": "cisco_metrics", "fields": {"metric_name:pce_computed_paths": 142, "metric_name:pce_delegated_lsps": 86, "metric_name:pce_sync_status": 1, "status": "In-Sync", "role": "Path-Computation-Engine"}}'
+
+      - index: cisco_metrics
+        source: RR
+        sourcetype: httpevent
+        host: "RR"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "RR", "sourcetype": "httpevent", "host": "RR", "index": "cisco_metrics", "fields": {"metric_name:bgp_sessions_active": 10, "metric_name:routes_reflected": 18450, "role": "IPv4-Route-Reflector", "status": "Established"}}'
+
+      - index: cisco_metrics
+        source: RRv6
+        sourcetype: httpevent
+        host: "RRv6"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "RRv6", "sourcetype": "httpevent", "host": "RRv6", "index": "cisco_metrics", "fields": {"metric_name:bgp_srv6_routes_reflected": 8920, "metric_name:srv6_vpn_v6_sessions": 10, "role": "IPv6-SRv6-Route-Reflector", "status": "Established"}}'
+
+      # Upper Tier Routers (R1/PE1, R3/PE1, R5/PE1, R7/PE1)
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 9, "metric_name:memory_utilization_pct": $CORE_UTIL_PCT$, "metric_name:srv6_sids_active": 3950, "node_role": "PE1", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R3
+        sourcetype: httpevent
+        host: "R3/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R3", "sourcetype": "httpevent", "host": "R3/PE1", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 8, "metric_name:memory_utilization_pct": 34, "metric_name:srv6_sids_active": 4120, "node_role": "PE1", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R5
+        sourcetype: httpevent
+        host: "R5/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R5", "sourcetype": "httpevent", "host": "R5/PE1", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 10, "metric_name:memory_utilization_pct": 38, "metric_name:srv6_sids_active": 4500, "node_role": "PE1", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R7
+        sourcetype: httpevent
+        host: "R7/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R7", "sourcetype": "httpevent", "host": "R7/PE1", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 8, "metric_name:memory_utilization_pct": 35, "metric_name:srv6_sids_active": 3890, "node_role": "PE1", "branch3_peering_state": "ESTABLISHED", "status": "Normal"}}'
+
+      # Lower Tier Routers (R2/PE2, R4/PE2, R6/PE2, R8/PE2)
+      - index: cisco_metrics
+        source: R2
+        sourcetype: httpevent
+        host: "R2/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R2", "sourcetype": "httpevent", "host": "R2/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 11, "metric_name:memory_utilization_pct": 37, "branch1_peering": "ESTABLISHED", "branch2_peering": "ESTABLISHED", "node_role": "PE2", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R4
+        sourcetype: httpevent
+        host: "R4/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R4", "sourcetype": "httpevent", "host": "R4/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 9, "metric_name:memory_utilization_pct": 33, "node_role": "PE2", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 7, "metric_name:memory_utilization_pct": 36, "metric_name:pre_fec_ber": 0.000000001, "metric_name:ti_lfa_protection_pct": 100.0, "locator_algo128_sids": 4820, "locator_algo0_sids": 3950, "node_role": "PE2", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R8
+        sourcetype: httpevent
+        host: "R8/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R8", "sourcetype": "httpevent", "host": "R8/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 10, "metric_name:memory_utilization_pct": 39, "campus_uplink_state": "UP", "branch3_backup_uplink": "UP", "node_role": "PE2", "status": "Normal"}}'
+
+      # Interworking Routers: R9/ASBR1 and R10/ASBR2 connecting to MPLS / CORE
+      - index: cisco_metrics
+        source: R9
+        sourcetype: httpevent
+        host: "R9/ASBR1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R9", "sourcetype": "httpevent", "host": "R9/ASBR1", "index": "cisco_metrics", "fields": {"metric_name:mpls_srv6_interworking_state": 1, "metric_name:ldp_mpls_labels": 12400, "metric_name:srv6_sids_mapped": 4200, "node_role": "ASBR1", "peer_cloud": "MPLS/CORE", "status": "Normal"}}'
+
+      - index: cisco_metrics
+        source: R10
+        sourcetype: httpevent
+        host: "R10/ASBR2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R10", "sourcetype": "httpevent", "host": "R10/ASBR2", "index": "cisco_metrics", "fields": {"metric_name:mpls_srv6_interworking_state": 1, "metric_name:ldp_mpls_labels": 12380, "metric_name:srv6_sids_mapped": 4195, "node_role": "ASBR2", "peer_cloud": "MPLS/CORE", "status": "Normal"}}'
+
+      # --- 3. BRANCH 1 (SITE 325) - AS 65526 ---
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: C8K-SDWAN-Site325-01
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "325", "site_name": "Branch 1 (Site 325)", "as_number": 65526, "edge_device": "C8K-SDWAN-Site325-01", "switch": "Site325-SW01", "server": "Site325-SRV01", "server_ip": "10.32.5.10", "core_uplink": "R2/PE2", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "loss_percentage": 0.0, "latency": 15.2, "status": "connected", "lastUpdated": $EPOCH_MS$}'
+
+      # --- 4. BRANCH 2 (SITE 326) - AS 65526 ---
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: C8K-SDWAN-Site326-01
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "326", "site_name": "Branch 2 (Site 326)", "as_number": 65526, "edge_device": "C8K-SDWAN-Site326-01", "switch": "Site326-SW01", "server": "Site326-SRV01", "server_ip": "10.32.6.10", "core_uplink": "R2/PE2", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "loss_percentage": 0.0, "latency": 18.4, "status": "connected", "lastUpdated": $EPOCH_MS$}'
+
+      # --- 5. BRANCH 3 (SITE 327) - AS 65528 ---
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: C8K-SDWAN-Site327-01
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "327", "site_name": "Branch 3 (Site 327)", "as_number": 65528, "edge_device": "C8K-SDWAN-Site327-01", "switch": "Site327-SW01", "server": "Site327-SRV01", "server_ip": "10.32.7.10", "core_primary_uplink": "R7/PE1", "core_backup_uplink": "R8/PE2", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "loss_percentage": 0.0, "latency": 22.1, "status": "connected", "lastUpdated": $EPOCH_MS$}'
+
+      # --- 6. CAMPUS INFRASTRUCTURE (OTTAWA & MAPLE) ---
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"category": "Campus", "siteHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "siteId": "OTT02-SDA", "associatedHierarchies": ["Global/Ottawa/OTT02-Lab", "Global/Ottawa/TRN01", "Global/Maple"], "core_router_uplink": "R8/PE2", "healthScore": 100, "overallHealth": 100, "wiredHealth": 100, "wirelessHealth": 100, "totalDeviceCount": 32, "goodCount": 32, "badCount": 0, "time": "$EPOCH_MS$"}'
+
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "IpAddress": "10.120.20.11", "DeviceFamily": "Switches and Hubs", "Platform": "C9300-48UXM", "DeviceRole": "ACCESS", "Reachability": "Reachable", "OverallHealth": 100, "HealthScore": 100, "InterfaceLinkErrHealth": 100, "interfaceName": "GigabitEthernet1/0/12", "rx-errors": 0, "tx-errors": 0, "rx-crc": 0, "num-flaps": 0, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "coreUplinkRouter": "R8/PE2", "LastUpdateTime": $EPOCH_MS$}'
+
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "AP-OTT02-Bld1-Fl2", "IpAddress": "10.120.20.55", "DeviceFamily": "Unified AP", "Platform": "C9130AXI-B", "DeviceRole": "ACCESS_POINT", "Reachability": "Reachable", "OverallHealth": 100, "RadioUtilizationGhz50": 22, "RadioUtilizationGhz24": 19, "ClientCountGhz50": 16, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectedSwitch": "OTT02-ACC-SW01.ottawa.acme.com", "connectedPort": "GigabitEthernet1/0/12", "LastUpdateTime": $EPOCH_MS$}'
+
+      # --- 7. SD-WAN CONTROL COMPONENTS (VMs ON UCS-C BARE METAL SERVER) ---
+      # Control Plane Cluster: Manager (vManage), Validator (vBond), Controller (vSmart)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_system:control:NetOps_SDWAN
+        sourcetype: cisco:sdwan:system:logs
+        host: vmanage-acme-prod
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ vmanage-acme-prod %VMANAGE-6-CONTROL_SUMMARY: Total control connections: 50 (vSmart: 16, vBond: 4, Edge devices: 30), Components: [Manager: vmanage-acme-prod, Validator: vbond-acme-prod, Controller: vsmart-acme-prod], Host: UCS-C-Rack-Mount-Server (ESXi + Virtual Network), Status: All established'
+
+      # UCS-C Rack Mount Server & VMware ESXi / Virtual Network Host
+      - index: main
+        source: ucs:rack:perf
+        sourcetype: cisco:ucs:server
+        host: ucs-c-rack-srv01.corp.acme.com
+        _raw: '{"timestamp": "$ISO_TS$", "server_model": "UCS-C240-M6SX", "serial": "FCH2418V01A", "hostname": "ucs-c-rack-srv01", "virtualization": "vCenter + ESXi", "vms_hosted": ["vmanage-acme-prod", "vbond-acme-prod", "vsmart-acme-prod"], "cpu_utilization_pct": 22.4, "memory_utilization_pct": 41.8, "power_state": "online", "thermal_status": "optimal", "status": "healthy"}'
+
+      # Firewall & DMZ: FTD-Dovetail-01, DMZ 10.0.254.0/24, Jumpbox 10.0.10.26
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: FTD-Dovetail-01
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "CONNECTION_STATISTICS", "action": "ALLOW", "rule_name": "ACME-MGMT-ACCESS", "src_ip": "10.0.10.26", "src_host": "Jumpbox", "dest_ip": "10.0.254.10", "dest_host": "vmanage-acme-prod", "dest_port": 443, "protocol": "TCP", "ingress_interface": "Inside", "egress_interface": "DMZ_10.0.254.0/24", "status": "SESSION_ACTIVE"}'
+
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: FTD-Dovetail-01
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "CONNECTION_STATISTICS", "action": "ALLOW", "rule_name": "INTERNET-BREAKOUT", "src_ip": "10.0.254.11", "src_host": "vbond-acme-prod", "dest_ip": "198.51.100.25", "dest_port": 12346, "protocol": "UDP", "ingress_interface": "DMZ_10.0.254.0/24", "egress_interface": "Internet", "status": "OUTSIDE_TRANSPORT_UP"}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: MULTI-DOMAIN ANOMALY & FAILURE MODES                             ###
+  ### 1. Maple DC: BD04 Subnet Withdrawn (Bridge call scenario)                 ###
+  ### 2. Branch 1: Site 325 SLA Breach & BFD loss                               ###
+  ### 3. Core: R6/PE2 Pre-FEC Optical Decay & Fast Reroute (FRR)                ###
+  ### 4. SRv6: Flex-Algo 128 compliance leak & SID capacity alarm               ###
+  ### 5. Campus: OTT02 Switch Gi1/0/12 CRC surge -> AP Radio Util Spike         ###
+  ### ========================================================================= ###
+  - name: acme-topology-stage2-multi-anomaly
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+      - name: HIGH_LATENCY_MS
+        format: template
+        type: random
+        replacement: int
+        lower: 380
+        upper: 750
+      - name: HIGH_CRC
+        format: template
+        type: random
+        replacement: int
+        lower: 420
+        upper: 890
+    lines:
+      # Anomaly 1: ACI BD04 Subnet 10.20.104.200/24 Withdrawn from BGP
+      - index: main
+        source: cisco:dc:aci:events
+        sourcetype: cisco:dc:aci:events
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "code": "E4208451", "type": "config-change", "severity": "major", "affected": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "descr": "Subnet 10.20.104.200/24 scope modified: unlinked from L3Out out-L3Out-OSPF. Route withdrawn from BGP neighbor 10.30.4.137", "user": "admin_ops", "cause": "route-withdrawn", "apic_host": "apic-inb.maple.ciscolabs.com"}'
+
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 3, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast", "remote_as": 65101, "vrf_name": "default", "alert": "PREFIX_DROPPED_BD04_MISSING"}}'
+
+      - index: main
+        source: cisco:thousandeyes:metric
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto-dc1
+        _raw: '{"timestamp": "$ISO_TS$", "test_name": "ACME_Web_Production_Portal", "test_type": "http-server", "target_url": "https://web.acme.maple.ciscolabs.com:8443", "metric_name:http.server.request.availability": 0, "metric_name:network.loss": 100.0, "metric_name:http.client.request.duration": 0, "response_code": 0, "error_type": "Connect Error - No Route to Host", "status": "CRITICAL"}'
+
+      # Anomaly 2: Branch 1 (Site 325) SD-WAN INET Tunnel SLA breach & BFD timeout
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: C8K-SDWAN-Site325-01
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "325", "site_name": "Branch 1 (Site 325)", "as_number": 65526, "edge_device": "C8K-SDWAN-Site325-01", "site_health": "poor", "site_health_score": 6.0, "devices_health_score": 8.0, "tunnels_health_score": 5.0, "loss_percentage": 14.8, "latency": $HIGH_LATENCY_MS$, "sla_status": "VIOLATED", "reason": "BFD session timeout over INET transport to R2/PE2", "lastUpdated": $EPOCH_MS$}'
+
+      # Anomaly 3: Core Router R6/PE2 Pre-FEC Optical Decay & FRR Fast Failover
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:pre_fec_ber": 0.0034, "metric_name:uncorrected_ber": 0.00012, "metric_name:snr_lane1": 13.1, "metric_name:rx_power_dbm": -18.2, "controller_name": "Optics0/0/0/1", "status": "Critical_Degraded", "alarm": "OPTICAL_POWER_DROOP_PRE_FEC_THRESHOLD_EXCEEDED"}}'
+
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:frr_protection_active": 1, "metric_name:switchover_time_ms": 38.4, "metric_name:active_path": "TI-LFA-Backup-via-R4", "failed_link": "R6-to-R5-HundredGigE0/0/0/1", "convergence_sla_met": 1}}'
+
+      # Anomaly 4: SRv6 Flex-Algo Compliance Leak & SID Allocation Spike
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 15890, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 128, "Usage_Pct": 99.3, "status": "NPU_OOR_TRAP", "hardware_limit": 16000, "alarm": "SRV6_SID_ALLOC_THRESHOLD_95_EXCEEDED"}}'
+
+      # Anomaly 5: Campus Switch Gi1/0/12 Physical CRC Flaps -> AP Radio Contention
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "OTT02-ACC-SW01.ottawa.acme.com", "IpAddress": "10.120.20.11", "DeviceFamily": "Switches and Hubs", "Platform": "C9300-48UXM", "DeviceRole": "ACCESS", "Reachability": "Reachable", "OverallHealth": 40, "HealthScore": 40, "InterfaceLinkErrHealth": 20, "interfaceName": "GigabitEthernet1/0/12", "rx-errors": $HIGH_CRC$, "rx-crc": $HIGH_CRC$, "num-flaps": 8, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "LastUpdateTime": $EPOCH_MS$}'
+
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac-ottawa.corp.acme.com
+        _raw: '{"DeviceName": "AP-OTT02-Bld1-Fl2", "IpAddress": "10.120.20.55", "DeviceFamily": "Unified AP", "Platform": "C9130AXI-B", "DeviceRole": "ACCESS_POINT", "Reachability": "Reachable", "OverallHealth": 35, "RadioUtilizationGhz50": 93, "RadioUtilizationGhz24": 89, "ClientCountGhz50": 4, "Site": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "connectedSwitch": "OTT02-ACC-SW01.ottawa.acme.com", "connectedPort": "GigabitEthernet1/0/12", "alarm": "CLIENT_DROP_RADIO_STARVATION", "LastUpdateTime": $EPOCH_MS$}'
+
+  ### ========================================================================= ###
+  ### STAGE 3: SELF-HEALING & RESOLUTION                                        ###
+  ### Subnets restored, optical bypass active, TI-LFA convergence verified       ###
+  ### ========================================================================= ###
+  - name: acme-topology-stage3-remediated
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # Resolution 1: ACI Subnet 10.20.104.200/24 Re-associated with L3Out
+      - index: main
+        source: cisco:dc:aci:events
+        sourcetype: cisco:dc:aci:events
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "code": "E4208452", "type": "config-change", "severity": "info", "affected": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "descr": "Subnet 10.20.104.200/24 scope restored: re-associated with L3Out out-L3Out-OSPF. Route re-advertised to BGP neighbor 10.30.4.137", "user": "admin_ops", "cause": "route-restored", "apic_host": "apic-inb.maple.ciscolabs.com"}'
+
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 4, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast", "remote_as": 65101, "vrf_name": "default", "status": "ALL_4_BDS_RESTORED"}}'
+
+      # Resolution 2: Branch 1 SD-WAN Path Failover to MPLS / Core Transport
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: C8K-SDWAN-Site325-01
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "325", "site_name": "Branch 1 (Site 325)", "as_number": 65526, "edge_device": "C8K-SDWAN-Site325-01", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "loss_percentage": 0.0, "latency": 16.4, "remediation": "Auto-failover to MPLS Core transport link established", "status": "connected", "lastUpdated": $EPOCH_MS$}'
+
+      # Resolution 3: SRv6 Zombie SIDs Purged & Hardware Allocation Back to Normal
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.sids_count": 4820, "metric_name:Cisco-IOS-XR-segment-routing-srv6-oper:srv6/active/locators/locator/info.algorithm_id": 128, "Usage_Pct": 30.1, "status": "Operational", "remediation": "Stale locator entries flushed, NPU OOR cleared"}}'

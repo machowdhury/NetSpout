@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-DEVICES-AVAILABILITIES - HEALTHY BASELINE ###
+  - name: meraki-devices-availabilities-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devicesavailabilitieschangehistory
+        host: $HOST$
+        _raw: '{  "ts": "$ISO_TS$",  "device": {   "serial": "Q2QN-TOR-MX100",   "name": "MX100-Toronto-Hub",   "productType": "appliance",   "model": "MX100"  },  "network": {   "id": "N_TORONTO_DC",   "name": "Toronto Hub"  },  "oldStatus": "offline",  "newStatus": "online",  "duration": 3600000 }'
+
+  ### MERAKI-DEVICES-AVAILABILITIES - DEGRADED INCIDENT ###
+  - name: meraki-devices-availabilities-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devicesavailabilitieschangehistory
+        host: $HOST$
+        _raw: '{  "ts": "$ISO_TS$",  "device": {   "serial": "Q2QN-TOR-MX100",   "name": "MX100-Toronto-Hub",   "productType": "appliance",   "model": "MX100"  },  "network": {   "id": "N_TORONTO_DC",   "name": "Toronto Hub"  },  "oldStatus": "online",  "newStatus": "alerting",  "reason": "packet_loss_threshold_exceeded" }'

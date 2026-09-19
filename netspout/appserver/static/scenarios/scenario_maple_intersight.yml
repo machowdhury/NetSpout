@@ -1,0 +1,86 @@
+samples:
+  ### INTERSIGHT NORMAL TELEMETRY ###
+  - name: intersight-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: Mercury
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "none", "ModTime": "$ISO_TS$", "Moid": "69ea64717572792d41c44add", "Name": "ComputeBlade-1", "ObjectType": "compute.Blade", "OperState": "operable", "RegisteredDevice": {"ConnectionStatus": "Connected", "DeviceHostname": ["Mercury"]}, "account_name": "MAPLE"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:networkobjects
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "ModTime": "$ISO_TS$", "ObjectType": "network.Element", "OperState": "up", "AdminState": "enabled", "account_name": "MAPLE"}'
+
+  ### INTERSIGHT DEGRADED HARDWARE ###
+  - name: intersight-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:alarms
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Severity": "warning", "Code": "thermal-threshold-exceeded", "Description": "DIMM Thermal Sensor A1 exceeding optimal operating threshold", "ModTime": "$ISO_TS$", "ObjectType": "cond.Alarm", "account_name": "MAPLE"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "warning", "ModTime": "$ISO_TS$", "Name": "ComputeBlade-1", "ObjectType": "compute.Blade", "OperState": "degraded", "RegisteredDevice": {"ConnectionStatus": "Connected", "DeviceHostname": ["Mercury"]}, "account_name": "MAPLE"}'
+
+  ### INTERSIGHT CRITICAL BLADE FAILURE ###
+  - name: intersight-failure
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:alarms
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Severity": "critical", "Code": "blade-power-supply-lost", "Description": "Redundant Power Supply 2 Lost on Chassis 1 Blade 1", "ModTime": "$ISO_TS$", "ObjectType": "cond.Alarm", "account_name": "MAPLE"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "critical", "ModTime": "$ISO_TS$", "Name": "ComputeBlade-1", "ObjectType": "compute.Blade", "OperState": "inoperable", "RegisteredDevice": {"ConnectionStatus": "Unreachable", "DeviceHostname": ["Mercury"]}, "account_name": "MAPLE"}'

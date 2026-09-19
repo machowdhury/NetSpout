@@ -1,0 +1,126 @@
+scenario_id: "MV-ENT-001"
+name: "Multi-Tier Multi-Vendor Enterprise Topology Stack"
+description: "Hierarchical end-to-end enterprise network simulation spanning Cloud SASE (Zscaler/Netskope), Security Edge (Palo Alto), WAN Interconnect (Fortinet), Provider Core (Juniper/Nokia), DC AI Fabric (Arista/NVIDIA/F5), and Campus Core (Aruba/Mist)."
+
+# The Independent Truth Test Oracle (Hidden verification targets)
+test_oracle:
+  expected_root_cause: "Provider Core eBGP Route Flap & AI Fabric RoCE Buffer Congestion"
+  symptomatic_systems: ["SASE Cloud Gateways", "Palo Alto IPsec Corridors", "Campus Mist APs"]
+  independent_verifier: "ThousandEyes Synthetic Network Path Probes & Arista Telemetry"
+
+general:
+  workerThreads: 8
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8088/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  # =========================================================================
+  # STAGE 1: ENTERPRISE TOPOLOGY BASELINE
+  # =========================================================================
+  - name: mv-ent-stage1-baseline
+    interval: 5
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: LATENCY_MS
+        format: template
+        type: random
+        replacement: int
+        lower: 12
+        upper: 35
+      - name: BUFFER_USED
+        format: template
+        type: random
+        replacement: int
+        lower: 15
+        upper: 45
+    lines:
+      # TIER 1: CLOUD / SASE (Zscaler LSS & Netskope)
+      - index: idx_security_fw
+        source: zscaler:lss
+        sourcetype: zscaler:lss
+        host: zscaler-cloud-connector01
+        _raw: '{"_time":"$ISO_TS$","vendor":"zscaler","product":"zia","sourcetype":"zscaler:lss","client_ip":"10.220.14.88","user":"developer@enterprise.internal","cloud_app":"Github Enterprise","action":"Allowed","latency_ms":$LATENCY_MS$,"tunnel_type":"IPsec-Primary-East"}'
+
+      - index: idx_security_fw
+        source: netskope:events
+        sourcetype: netskope:events
+        host: netskope-gateway-tenant01
+        _raw: '{"_time":"$ISO_TS$","type":"nss-connection","action":"allow","user":"developer@enterprise.internal","app":"Salesforce","bytes_in":4120,"bytes_out":1024,"pop":"iad1","status":"healthy"}'
+
+      # TIER 2: SECURITY EDGE CORRIDOR (Palo Alto Networks Next-Gen FW)
+      - index: idx_security_fw
+        source: pan:firewall
+        sourcetype: pan:traffic
+        host: pa-fw-edge-01.corp.internal
+        _raw: '1,2026/09/18 17:30:00,001801000001,TRAFFIC,allow,2304,2026/09/18 17:30:00,10.220.14.88,198.51.100.22,0.0.0.0,0.0.0.0,Rule-Edge-SASE,developer@enterprise.internal,,ssl,vsys1,trust-edge,untrust-wan,tunnel.1,,44210,1,443,443,0,0,0x0,tcp,allow,4096,1420,5516,1,2026/09/18 17:30:00,0,any,0,1663520000,0x0,US,10.0.0.0-10.255.255.255,0,1,0,active,0,0,0,0,,pa-fw-edge-01,from-policy'
+
+      # TIER 3: WAN INTERCONNECT (Fortinet Secure SD-WAN)
+      - index: idx_security_fw
+        source: fortigate:traffic
+        sourcetype: fgt_traffic
+        host: fgt-sdwan-hub01
+        _raw: 'date=2026-09-18 time=17:30:00 devname="fgt-sdwan-hub01" devid="FG200ETK18000000" eventtime=1789760000000000000 tz="-0400" logid="0000000013" type="traffic" subtype="forward" level="notice" vd="root" srcip=10.220.14.88 srcport=54321 srcintf="port1" dstip=198.51.100.22 dstport=443 dstintf="sdwan_inet" sessionid=44280 proto=6 action="accept" policyid=12 policytype="policy" appcat="unscanned" duration=12 sentbyte=4096 rcvdbyte=8192 sla_status="PASS" latency_ms=$LATENCY_MS$ jitt_ms=2 loss_pct=0'
+
+      # TIER 4: PROVIDER WAN CORE (Juniper MX / Nokia SR OS Core)
+      - index: idx_network_ops
+        source: juniper:junos:syslog
+        sourcetype: juniper:junos:syslog
+        host: jnpr-mx960-pe01.carrier.net
+        _raw: '$SYSLOG_TS$ jnpr-mx960-pe01 rpd[1422]: BGP_PREFIX_THRESH: Peer 198.51.100.1 (AS 64512) prefix count normal: received 458000 prefixes, state Established'
+
+      # TIER 5 BRANCH A: DATA CENTER UNDERLAY & AI FABRIC
+      - index: idx_network_ops
+        source: arista:eos:syslog
+        sourcetype: arista:eos:syslog
+        host: dc1-spine01.dc.corp
+        _raw: '$SYSLOG_TS$ dc1-spine01 Ebra: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1 (EVPN-VXLAN VTEP-Peer dc1-leaf01), changed state to up'
+
+      - index: idx_performance_metrics
+        source: arista:telemetry
+        sourcetype: arista:telemetry:json
+        host: dc1-spine01.dc.corp
+        _raw: '{"_time":"$ISO_TS$","sourcetype":"arista:telemetry:json","index":"idx_performance_metrics","device":"dc1-spine01","metric_name":"buffer_pool.shared_bytes_used_pct","metric_value":$BUFFER_USED$,"unit":"percent","ai_fabric_tier":"spine"}'
+
+      - index: idx_network_ops
+        source: f5:bigip:syslog
+        sourcetype: f5:bigip:syslog
+        host: f5-adc01.prod.dc
+        _raw: '$SYSLOG_TS$ f5-adc01.prod.dc notice tmm[10142]: 01010029:5: Clock advanced by 142 ticks, active_connections=1250, VIP=/Common/vs_k8s_ai_inference'
+
+      - index: idx_performance_metrics
+        source: nvidia:spectrum:roce
+        sourcetype: arista:telemetry:json
+        host: nvidia-spectrum-sn4600
+        _raw: '{"_time":"$ISO_TS$","sourcetype":"arista:telemetry:json","index":"idx_performance_metrics","switch":"nvidia-spectrum-sn4600","interface":"RoCE-Port-1/4","metric_name":"roce.pfc_rx_frames","metric_value":0,"cnp_sent":0,"gpu_cluster_node":"gpu-dgx-h100-node04"}'
+
+      # TIER 5 BRANCH B: CAMPUS CORE SPINE & ACCESS
+      - index: idx_network_ops
+        source: aruba:syslog
+        sourcetype: aruba:syslog
+        host: aruba-core-cx8320
+        _raw: '{"_time":"$ISO_TS$","sourcetype":"aruba:syslog","index":"idx_network_ops","host":"aruba-core-cx8320","event":"PORT_STATS","port":"1/1/24","vlan":120,"crc_align_err":0,"poe_watts_delivered":480,"uplink_status":"forwarding"}'
+
+      - index: idx_wireless_ops
+        source: juniper:mist:ap
+        sourcetype: aruba:rap:syslog
+        host: mist-ap43-bld1-fl2
+        _raw: '$SYSLOG_TS$ mist-ap43-bld1-fl2 syslog[810]: AP_TELEMETRY: site="Corp-HQ" bssid="5c:5b:35:12:34:56" ssid="Corp-Secure-WiFi" band="5GHz" channel=36 clients=24 chan_util_pct=31 rssi_avg=-62 snr=28 noise_floor=-90'

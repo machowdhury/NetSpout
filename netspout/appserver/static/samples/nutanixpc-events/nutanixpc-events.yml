@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-EVENTS - HEALTHY BASELINE ###
+  - name: nutanixpc-events-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/events
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/events-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_events
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Event", "extId": "ee77555c-a7ef-4358-864f-43295cd62561", "eventType": "IAMAdministrationEventAudit", "classifications": ["UserAction"], "sourceClusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "creationTime": "$ISO_TIMESTAMP$", "message": "User admin granted permission to [(''Health_Check_Remote_Connection'',)] on remote_connection with attributes {''type'': ''remote_connection''} from ", "clusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue"}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "admin"}, "paramName": "audit_user"}]}'
+
+  ### NUTANIXPC-EVENTS - DEGRADED / WARNING ###
+  - name: nutanixpc-events-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/events
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_events
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Event", "extId": "ee77555c-a7ef-4358-864f-43295cd62561", "eventType": "IAMAdministrationEventAudit", "classifications": ["UserAction"], "sourceClusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "creationTime": "$ISO_TIMESTAMP$", "message": "User admin granted permission to [(''Health_Check_Remote_Connection'',)] on remote_connection with attributes {''type'': ''remote_connection''} from ", "clusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue"}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "admin"}, "paramName": "audit_user"}]}'
+
+  ### NUTANIXPC-EVENTS - CRITICAL / FAILURE ###
+  - name: nutanixpc-events-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/events
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_events
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Event", "extId": "ee77555c-a7ef-4358-864f-43295cd62561", "eventType": "IAMAdministrationEventAudit", "classifications": ["UserAction"], "sourceClusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "creationTime": "$ISO_TIMESTAMP$", "message": "User admin granted permission to [(''Health_Check_Remote_Connection'',)] on remote_connection with attributes {''type'': ''remote_connection''} from ", "clusterUUID": "8ae8575f-53ab-4152-a483-d6fc980bd4cc", "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue"}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "admin"}, "paramName": "audit_user"}]}'

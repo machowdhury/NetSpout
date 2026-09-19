@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-COMPUTE - HEALTHY BASELINE ###
+  - name: cisco-intersight-compute-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "minor", "Ancestors": [{"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}], "CreateTime": "$ISO_TIMESTAMP$", "DeviceMoId": "69ea646e6f7261350123bfde", "Dn": "switch-FDO2441072E/stor-part-mnt_pss", "DomainGroupMoid": "660de283756461330140b581", "InventoryDeviceInfo": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "69ea64717572792d41c44add", "Name": "mnt_pss", "NetworkElement": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "ObjectType": "storage.Item", "OperState": "mounted", "Owners": ["660de283756461330140b580", "69ea646e6f7261350123bfde"], "Parent": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://www.intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ConnectionStatus": "Connected", "DeviceHostname": ["Mercury"], "Moid": "69ea646e6f7261350123bfde", "ObjectType": "asset.DeviceRegistration"}, "Rn": "", "SharedScope": "", "Size": "119", "StorageControllerDrive": null, "StorageFiles": [], "Tags": [], "Used": "6", "UsedVal": 6, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-COMPUTE - DEGRADED / WARNING ###
+  - name: cisco-intersight-compute-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "minor", "Ancestors": [{"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}], "CreateTime": "$ISO_TIMESTAMP$", "DeviceMoId": "69ea646e6f7261350123bfde", "Dn": "switch-FDO2441072E/stor-part-mnt_pss", "DomainGroupMoid": "660de283756461330140b581", "InventoryDeviceInfo": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "69ea64717572792d41c44add", "Name": "mnt_pss", "NetworkElement": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "ObjectType": "storage.Item", "OperState": "mounted", "Owners": ["660de283756461330140b580", "69ea646e6f7261350123bfde"], "Parent": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://www.intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ConnectionStatus": "degraded", "DeviceHostname": ["Mercury"], "Moid": "69ea646e6f7261350123bfde", "ObjectType": "asset.DeviceRegistration"}, "Rn": "", "SharedScope": "", "Size": "119", "StorageControllerDrive": null, "StorageFiles": [], "Tags": [], "Used": "6", "UsedVal": 6, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-COMPUTE - CRITICAL / FAILURE ###
+  - name: cisco-intersight-compute-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "minor", "Ancestors": [{"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}], "CreateTime": "$ISO_TIMESTAMP$", "DeviceMoId": "69ea646e6f7261350123bfde", "Dn": "switch-FDO2441072E/stor-part-mnt_pss", "DomainGroupMoid": "660de283756461330140b581", "InventoryDeviceInfo": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "69ea64717572792d41c44add", "Name": "mnt_pss", "NetworkElement": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "ObjectType": "storage.Item", "OperState": "mounted", "Owners": ["660de283756461330140b580", "69ea646e6f7261350123bfde"], "Parent": {"Moid": "69ea646f76752d340195f1c8", "ObjectType": "network.Element", "link": "https://www.intersight.com/api/v1/network/Elements/69ea646f76752d340195f1c8"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://www.intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ConnectionStatus": "down", "DeviceHostname": ["Mercury"], "Moid": "69ea646e6f7261350123bfde", "ObjectType": "asset.DeviceRegistration"}, "Rn": "", "SharedScope": "", "Size": "119", "StorageControllerDrive": null, "StorageFiles": [], "Tags": [], "Used": "6", "UsedVal": 6, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'

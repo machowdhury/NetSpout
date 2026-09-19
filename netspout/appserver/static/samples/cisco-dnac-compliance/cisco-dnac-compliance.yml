@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-COMPLIANCE - HEALTHY BASELINE ###
+  - name: cisco-dnac-compliance-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_compliance://DNAC01_Compliance
+        sourcetype: cisco:dnac:compliance
+        host: $HOST$
+        _raw: '{"ComplianceDeviceID": "4881747e-0e66-4275-8611-f9ec86746a7d", "ComplianceStatus": "NON_COMPLIANT", "ComplianceLastUpdateTime": 1784246310488, "DeviceName": "C9800.maple.ciscolabs.com", "IpAddress": "10.0.10.50", "DeviceFamily": "Wireless Controller", "Reachability": "Reachable", "ReachabilityFailureReason": "", "ManageErrors": "", "Manageability": "Managed", "MACAddress": "00:50:56:b7:74:4c", "DeviceRole": "UNKNOWN", "ImageVersion": "17.12.3", "Uptime": "21 days, 6:15:29.40", "UptimeSeconds": 1845569, "LastUpdated": "2026-07-17 00:56:40", "LastUpdateTime": 1784249800208, "SerialNumber": "93LQHUBXAAL", "DeviceSeries": "Cisco Catalyst 9800 Wireless Controllers for Cloud", "Platform": "C9800-CL-K9", "SupportType": "Supported", "AssociatedWLCIP": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com", "ComplianceDetail": "False", "ComplianceCount": "False"}'
+
+  ### CISCO-DNAC-COMPLIANCE - DEGRADED / WARNING ###
+  - name: cisco-dnac-compliance-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_compliance://DNAC01_Compliance
+        sourcetype: cisco:dnac:compliance
+        host: $HOST$
+        _raw: '{"ComplianceDeviceID": "4881747e-0e66-4275-8611-f9ec86746a7d", "ComplianceStatus": "NON_COMPLIANT", "ComplianceLastUpdateTime": 1784246310488, "DeviceName": "C9800.maple.ciscolabs.com", "IpAddress": "10.0.10.50", "DeviceFamily": "Wireless Controller", "Reachability": "Reachable", "ReachabilityFailureReason": "", "ManageErrors": "", "Manageability": "Managed", "MACAddress": "00:50:56:b7:74:4c", "DeviceRole": "UNKNOWN", "ImageVersion": "17.12.3", "Uptime": "21 days, 6:15:29.40", "UptimeSeconds": 1845569, "LastUpdated": "2026-07-17 00:56:40", "LastUpdateTime": 1784249800208, "SerialNumber": "93LQHUBXAAL", "DeviceSeries": "Cisco Catalyst 9800 Wireless Controllers for Cloud", "Platform": "C9800-CL-K9", "SupportType": "Supported", "AssociatedWLCIP": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com", "ComplianceDetail": "False", "ComplianceCount": "False"}'
+
+  ### CISCO-DNAC-COMPLIANCE - CRITICAL / FAILURE ###
+  - name: cisco-dnac-compliance-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_compliance://DNAC01_Compliance
+        sourcetype: cisco:dnac:compliance
+        host: $HOST$
+        _raw: '{"ComplianceDeviceID": "4881747e-0e66-4275-8611-f9ec86746a7d", "ComplianceStatus": "NON_COMPLIANT", "ComplianceLastUpdateTime": 1784246310488, "DeviceName": "C9800.maple.ciscolabs.com", "IpAddress": "10.0.10.50", "DeviceFamily": "Wireless Controller", "Reachability": "Reachable", "ReachabilityFailureReason": "", "ManageErrors": "", "Manageability": "Managed", "MACAddress": "00:50:56:b7:74:4c", "DeviceRole": "UNKNOWN", "ImageVersion": "17.12.3", "Uptime": "21 days, 6:15:29.40", "UptimeSeconds": 1845569, "LastUpdated": "2026-07-17 00:56:40", "LastUpdateTime": 1784249800208, "SerialNumber": "93LQHUBXAAL", "DeviceSeries": "Cisco Catalyst 9800 Wireless Controllers for Cloud", "Platform": "C9800-CL-K9", "SupportType": "Supported", "AssociatedWLCIP": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com", "ComplianceDetail": "False", "ComplianceCount": "False"}'

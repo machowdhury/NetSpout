@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-HOSTS - HEALTHY BASELINE ###
+  - name: nutanixpc-hosts-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/hosts
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/hosts-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_hosts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Host", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "hostName": "CCHCI-AHV-04", "hostType": "HYPER_CONVERGED", "hypervisor": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.HypervisorReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.116", "prefixLength": 32}}, "userName": "root", "fullName": "Nutanix 20230302.103053", "type": "AHV", "numberOfVms": 5, "state": "ACROPOLIS_NORMAL", "acropolisConnectionState": "CONNECTED"}, "cluster": {"name": "Fab1-CCHCI-AHV", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterReference", "uuid": "00063ffb-2c0b-2e6c-7635-0025b500010e"}, "controllerVm": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ControllerVmReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}, "backplaneAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}}, "disk": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskReference", "uuid": "605e3e96-6b22-49c5-8dd2-6d7c68571272", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901950", "sizeInBytes": 3535141351649, "serialId": "S5MPNA0N901950", "storageTier": "SATA_SSD"}, {"uuid": "a1695dac-ab6f-4918-9383-eb6672d8e4de", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901920", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901920", "storageTier": "SATA_SSD"}, {"uuid": "01c04f9e-d3ac-4829-b112-a096edd28afd", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901919", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901919", "storageTier": "SATA_SSD"}], "isSecureBooted": false, "isHardwareVirtualized": false, "hasCsr": false, "numberOfCpuCores": 16, "numberOfCpuThreads": 32, "numberOfCpuSockets": 1, "cpuFrequencyHz": 2900000000, "cpuModel": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz", "bootTimeUsecs": 1782412221171302, "memorySizeBytes": 403605291008, "blockSerial": "WMP244201AR", "blockModel": "Cisco Demo C220-M5SX", "maintenanceState": "normal", "nodeStatus": "NORMAL", "ipmi": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.IpmiReference", "ip": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "username": "ADMIN"}, "rackableUnitUuid": "67b5323a-ce1c-468a-b3b0-828b0d557d27"}'
+
+  ### NUTANIXPC-HOSTS - DEGRADED / WARNING ###
+  - name: nutanixpc-hosts-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/hosts
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_hosts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Host", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "hostName": "CCHCI-AHV-04", "hostType": "HYPER_CONVERGED", "hypervisor": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.HypervisorReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.116", "prefixLength": 32}}, "userName": "root", "fullName": "Nutanix 20230302.103053", "type": "AHV", "numberOfVms": 5, "state": "ACROPOLIS_NORMAL", "acropolisConnectionState": "CONNECTED"}, "cluster": {"name": "Fab1-CCHCI-AHV", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterReference", "uuid": "00063ffb-2c0b-2e6c-7635-0025b500010e"}, "controllerVm": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ControllerVmReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}, "backplaneAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}}, "disk": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskReference", "uuid": "605e3e96-6b22-49c5-8dd2-6d7c68571272", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901950", "sizeInBytes": 3535141351649, "serialId": "S5MPNA0N901950", "storageTier": "SATA_SSD"}, {"uuid": "a1695dac-ab6f-4918-9383-eb6672d8e4de", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901920", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901920", "storageTier": "SATA_SSD"}, {"uuid": "01c04f9e-d3ac-4829-b112-a096edd28afd", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901919", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901919", "storageTier": "SATA_SSD"}], "isSecureBooted": false, "isHardwareVirtualized": false, "hasCsr": false, "numberOfCpuCores": 16, "numberOfCpuThreads": 32, "numberOfCpuSockets": 1, "cpuFrequencyHz": 2900000000, "cpuModel": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz", "bootTimeUsecs": 1782412221171302, "memorySizeBytes": 403605291008, "blockSerial": "WMP244201AR", "blockModel": "Cisco Demo C220-M5SX", "maintenanceState": "normal", "nodeStatus": "NORMAL", "ipmi": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.IpmiReference", "ip": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "username": "ADMIN"}, "rackableUnitUuid": "67b5323a-ce1c-468a-b3b0-828b0d557d27"}'
+
+  ### NUTANIXPC-HOSTS - CRITICAL / FAILURE ###
+  - name: nutanixpc-hosts-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/hosts
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_hosts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.Host", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "hostName": "CCHCI-AHV-04", "hostType": "HYPER_CONVERGED", "hypervisor": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.HypervisorReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.116", "prefixLength": 32}}, "userName": "root", "fullName": "Nutanix 20230302.103053", "type": "AHV", "numberOfVms": 5, "state": "ACROPOLIS_NORMAL", "acropolisConnectionState": "CONNECTED"}, "cluster": {"name": "Fab1-CCHCI-AHV", "$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ClusterReference", "uuid": "00063ffb-2c0b-2e6c-7635-0025b500010e"}, "controllerVm": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.ControllerVmReference", "externalAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}, "backplaneAddress": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress", "ipv4": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPv4Address", "value": "10.0.4.126", "prefixLength": 32}}}, "disk": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.DiskReference", "uuid": "605e3e96-6b22-49c5-8dd2-6d7c68571272", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901950", "sizeInBytes": 3535141351649, "serialId": "S5MPNA0N901950", "storageTier": "SATA_SSD"}, {"uuid": "a1695dac-ab6f-4918-9383-eb6672d8e4de", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901920", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901920", "storageTier": "SATA_SSD"}, {"uuid": "01c04f9e-d3ac-4829-b112-a096edd28afd", "mountPath": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901919", "sizeInBytes": 3395907976839, "serialId": "S5MPNA0N901919", "storageTier": "SATA_SSD"}], "isSecureBooted": false, "isHardwareVirtualized": false, "hasCsr": false, "numberOfCpuCores": 16, "numberOfCpuThreads": 32, "numberOfCpuSockets": 1, "cpuFrequencyHz": 2900000000, "cpuModel": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz", "bootTimeUsecs": 1782412221171302, "memorySizeBytes": 403605291008, "blockSerial": "WMP244201AR", "blockModel": "Cisco Demo C220-M5SX", "maintenanceState": "normal", "nodeStatus": "NORMAL", "ipmi": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.IpmiReference", "ip": {"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.config.IPAddress"}, "username": "ADMIN"}, "rackableUnitUuid": "67b5323a-ce1c-468a-b3b0-828b0d557d27"}'

@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-USER - HEALTHY BASELINE ###
+  - name: cisco-duo-user-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:user
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "alias1": null, "alias2": null, "alias3": null, "alias4": null, "aliases": {}, "created": 1786110545, "custom_attributes": {}, "date_of_birth": null, "desktop_authenticators": [], "desktoptokens": [], "directory_key": "DS2ACAGGQBNC95H3U4QS", "email": "glarivee@subrosa.ca", "enable_auto_prompt": true, "entra_federated_user_id": null, "external_id": "uj9hjKUHJUOVFzqbmf+2Sw==", "firstname": "", "groups": [{"desc": "", "group_id": "DGUEDKSHAFCXU8OZPN4N", "mobile_otp_enabled": false, "name": "cisco_rdp_dng (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGBGJDR8XC8A9ZXF7XIV", "mobile_otp_enabled": false, "name": "maple-vpn-users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGOHQ8URA3WD7P74K190", "mobile_otp_enabled": false, "name": "subrosa_users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}], "has_password": false, "is_enrolled": true, "last_directory_sync": 1789750359, "last_login": null, "lastname": "", "lockout_reason": null, "notes": "", "password_last_updated": null, "phones": [{"activated": true, "app_version": "4.120.0", "capabilities": ["auto", "push", "mobile_otp"], "creation_date": "", "encrypted": "Encrypted", "extension": "", "fingerprint": "Configured", "last_activated_date": "", "last_seen": "$ISO_TIMESTAMP$", "model": "Samsung SM-S906W", "name": "", "number": "+16132863862", "os_version": "16", "phone_id": "DPDE7W8M416P6810I0QZ", "platform": "Google Android", "postdelay": "", "predelay": "", "quarantined": false, "screenlock": "Locked", "sms_passcodes_sent": false, "tampered": "Not tampered", "type": "Mobile"}], "realname": "Gilles Larivee", "status": "active", "tokens": [], "u2ftokens": [], "user_id": "DUZ0G4XDSFL9O7D5OFSD", "username": "glarivee", "webauthncredentials": [], "timestamp": 1789751322, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "user"}'
+
+  ### CISCO-DUO-USER - DEGRADED / WARNING ###
+  - name: cisco-duo-user-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:user
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "alias1": null, "alias2": null, "alias3": null, "alias4": null, "aliases": {}, "created": 1786110545, "custom_attributes": {}, "date_of_birth": null, "desktop_authenticators": [], "desktoptokens": [], "directory_key": "DS2ACAGGQBNC95H3U4QS", "email": "glarivee@subrosa.ca", "enable_auto_prompt": true, "entra_federated_user_id": null, "external_id": "uj9hjKUHJUOVFzqbmf+2Sw==", "firstname": "", "groups": [{"desc": "", "group_id": "DGUEDKSHAFCXU8OZPN4N", "mobile_otp_enabled": false, "name": "cisco_rdp_dng (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGBGJDR8XC8A9ZXF7XIV", "mobile_otp_enabled": false, "name": "maple-vpn-users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGOHQ8URA3WD7P74K190", "mobile_otp_enabled": false, "name": "subrosa_users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}], "has_password": false, "is_enrolled": true, "last_directory_sync": 1789750359, "last_login": null, "lastname": "", "lockout_reason": null, "notes": "", "password_last_updated": null, "phones": [{"activated": true, "app_version": "4.120.0", "capabilities": ["auto", "push", "mobile_otp"], "creation_date": "", "encrypted": "Encrypted", "extension": "", "fingerprint": "Configured", "last_activated_date": "", "last_seen": "$ISO_TIMESTAMP$", "model": "Samsung SM-S906W", "name": "", "number": "+16132863862", "os_version": "16", "phone_id": "DPDE7W8M416P6810I0QZ", "platform": "Google Android", "postdelay": "", "predelay": "", "quarantined": false, "screenlock": "Locked", "sms_passcodes_sent": false, "tampered": "Not tampered", "type": "Mobile"}], "realname": "Gilles Larivee", "status": "degraded", "tokens": [], "u2ftokens": [], "user_id": "DUZ0G4XDSFL9O7D5OFSD", "username": "glarivee", "webauthncredentials": [], "timestamp": 1789751322, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "user"}'
+
+  ### CISCO-DUO-USER - CRITICAL / FAILURE ###
+  - name: cisco-duo-user-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:user
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "alias1": null, "alias2": null, "alias3": null, "alias4": null, "aliases": {}, "created": 1786110545, "custom_attributes": {}, "date_of_birth": null, "desktop_authenticators": [], "desktoptokens": [], "directory_key": "DS2ACAGGQBNC95H3U4QS", "email": "glarivee@subrosa.ca", "enable_auto_prompt": true, "entra_federated_user_id": null, "external_id": "uj9hjKUHJUOVFzqbmf+2Sw==", "firstname": "", "groups": [{"desc": "", "group_id": "DGUEDKSHAFCXU8OZPN4N", "mobile_otp_enabled": false, "name": "cisco_rdp_dng (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGBGJDR8XC8A9ZXF7XIV", "mobile_otp_enabled": false, "name": "maple-vpn-users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}, {"desc": "", "group_id": "DGOHQ8URA3WD7P74K190", "mobile_otp_enabled": false, "name": "subrosa_users (from AD sync \"AD MAPLE\")", "push_enabled": false, "sms_enabled": false, "status": "Active", "voice_enabled": false}], "has_password": false, "is_enrolled": true, "last_directory_sync": 1789750359, "last_login": null, "lastname": "", "lockout_reason": null, "notes": "", "password_last_updated": null, "phones": [{"activated": true, "app_version": "4.120.0", "capabilities": ["auto", "push", "mobile_otp"], "creation_date": "", "encrypted": "Encrypted", "extension": "", "fingerprint": "Configured", "last_activated_date": "", "last_seen": "$ISO_TIMESTAMP$", "model": "Samsung SM-S906W", "name": "", "number": "+16132863862", "os_version": "16", "phone_id": "DPDE7W8M416P6810I0QZ", "platform": "Google Android", "postdelay": "", "predelay": "", "quarantined": false, "screenlock": "Locked", "sms_passcodes_sent": false, "tampered": "Not tampered", "type": "Mobile"}], "realname": "Gilles Larivee", "status": "down", "tokens": [], "u2ftokens": [], "user_id": "DUZ0G4XDSFL9O7D5OFSD", "username": "glarivee", "webauthncredentials": [], "timestamp": 1789751322, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "user"}'

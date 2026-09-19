@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-bgp-5-adjchange
+  description: Real Network Assurance replay for cisco:sdwan:BGP-5-ADJCHANGE (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 3264: *$TS$:  %BGP-5-ADJCHANGE: neighbor 10.201.152.1 vpn vrf UBC_TENANT Down Neighbor deleted'
+    - index: catalyst
+      sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.121 898: *$TS$:  %BGP-5-ADJCHANGE: neighbor 10.201.48.118 Up '

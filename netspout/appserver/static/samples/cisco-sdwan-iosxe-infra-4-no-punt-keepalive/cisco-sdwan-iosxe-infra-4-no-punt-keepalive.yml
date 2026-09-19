@@ -1,0 +1,28 @@
+samples:
+- name: cisco-sdwan-iosxe-infra-4-no-punt-keepalive
+  description: Real Network Assurance replay for cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE (catalyst index)
+  interval: 60
+  count: 1
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE
+      source: udp:5514
+      host: 10.201.48.120
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 2870: *$TS$:  %IOSXE_INFRA-4-NO_PUNT_KEEPALIVE:  Keepalive not received for 20 seconds'

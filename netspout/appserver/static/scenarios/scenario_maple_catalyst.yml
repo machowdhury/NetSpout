@@ -1,0 +1,86 @@
+samples:
+  ### CATALYST CENTER NORMAL NETWORK HEALTH ###
+  - name: catalyst-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: cat9k-maple-core-01
+          - weight: 2
+            choice: cat9k-maple-access-01
+    lines:
+      - index: main
+        source: catalyst:devicehealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "health_score": 100, "cpu_utilization": 12, "memory_utilization": 24, "status": "GOOD", "overall_health": "POOR_NONE"}'
+      - index: main
+        source: catalyst:clienthealth
+        sourcetype: cisco:catalyst:clienthealth
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "client_mac": "00:50:56:a1:b2:c3", "health_score": 100, "rssi": -55, "snr": 38, "status": "GOOD"}'
+
+  ### CATALYST CENTER CONGESTION & CLIENT HEALTH DEGRADATION ###
+  - name: catalyst-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: cat9k-maple-core-01
+    lines:
+      - index: main
+        source: catalyst:devicehealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "health_score": 65, "cpu_utilization": 78, "memory_utilization": 82, "status": "FAIR", "overall_health": "WARNING"}'
+      - index: main
+        source: catalyst:issue
+        sourcetype: cisco:catalyst:issue
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "issue_name": "High Interface Drop Rate", "severity": "WARNING", "priority": "P2", "description": "Interface GigabitEthernet1/0/24 dropping packets exceeding 5% threshold"}'
+
+  ### CATALYST CENTER CRITICAL OUTAGE ###
+  - name: catalyst-failure
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: cat9k-maple-core-01
+    lines:
+      - index: main
+        source: catalyst:devicehealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "health_score": 10, "cpu_utilization": 99, "memory_utilization": 96, "status": "CRITICAL", "overall_health": "CRITICAL"}'
+      - index: main
+        source: catalyst:issue
+        sourcetype: cisco:catalyst:issue
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "issue_name": "Device Unreachable / Uplink Flap", "severity": "CRITICAL", "priority": "P1", "description": "Core switch uplink down, peer BFD session collapsed"}'

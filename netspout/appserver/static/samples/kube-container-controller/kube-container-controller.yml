@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-CONTROLLER - HEALTHY BASELINE ###
+  - name: kube-container-controller-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_controller-bb5f47665-bqgvj_c50b3a65-1721-4604-9446-4d22ab3e49c8/controller/228.log
+        sourcetype: kube:container:controller
+        host: $HOST$
+        _raw: '{"level":"info","ts":"$ISO_TIMESTAMP$","logger":"cert-rotation","msg":"Ensuring CA cert","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","stacktrace":"github.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).ensureCerts\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:827\ngithub.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).Reconcile\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:784\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:116\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:303\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:263\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:224"}'
+
+  ### KUBE-CONTAINER-CONTROLLER - DEGRADED / WARNING ###
+  - name: kube-container-controller-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_controller-bb5f47665-bqgvj_c50b3a65-1721-4604-9446-4d22ab3e49c8/controller/228.log
+        sourcetype: kube:container:controller
+        host: $HOST$
+        _raw: '{"level":"info","ts":"$ISO_TIMESTAMP$","logger":"cert-rotation","msg":"Ensuring CA cert","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","stacktrace":"github.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).ensureCerts\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:827\ngithub.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).Reconcile\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:784\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:116\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:303\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:263\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:224"}'
+
+  ### KUBE-CONTAINER-CONTROLLER - CRITICAL / FAILURE ###
+  - name: kube-container-controller-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/metallb-system_controller-bb5f47665-bqgvj_c50b3a65-1721-4604-9446-4d22ab3e49c8/controller/228.log
+        sourcetype: kube:container:controller
+        host: $HOST$
+        _raw: '{"level":"info","ts":"$ISO_TIMESTAMP$","logger":"cert-rotation","msg":"Ensuring CA cert","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","name":"bgppeers.metallb.io","gvk":"apiextensions.k8s.io/v1, Kind=CustomResourceDefinition","stacktrace":"github.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).ensureCerts\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:827\ngithub.com/open-policy-agent/cert-controller/pkg/rotator.(*ReconcileWH).Reconcile\n\t/go/pkg/mod/github.com/open-policy-agent/cert-controller@v0.10.2-0.20240531181455-2649f121ab97/pkg/rotator/rotator.go:784\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Reconcile\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:116\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).reconcileHandler\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:303\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).processNextWorkItem\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:263\nsigs.k8s.io/controller-runtime/pkg/internal/controller.(*Controller[...]).Start.func2.2\n\t/go/pkg/mod/sigs.k8s.io/controller-runtime@v0.19.3/pkg/internal/controller/controller.go:224"}'

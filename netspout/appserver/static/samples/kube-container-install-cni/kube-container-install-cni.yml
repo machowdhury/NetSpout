@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-INSTALL-CNI - HEALTHY BASELINE ###
+  - name: kube-container-install-cni-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/install-cni/55.log
+        sourcetype: kube:container:install-cni
+        host: $HOST$
+        _raw: '}'
+
+  ### KUBE-CONTAINER-INSTALL-CNI - DEGRADED / WARNING ###
+  - name: kube-container-install-cni-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/install-cni/55.log
+        sourcetype: kube:container:install-cni
+        host: $HOST$
+        _raw: '}'
+
+  ### KUBE-CONTAINER-INSTALL-CNI - CRITICAL / FAILURE ###
+  - name: kube-container-install-cni-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/install-cni/55.log
+        sourcetype: kube:container:install-cni
+        host: $HOST$
+        _raw: '}'

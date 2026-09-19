@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-METRICS-SERVER - HEALTHY BASELINE ###
+  - name: kube-container-metrics-server-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_metrics-server-64fc948c75-djtx5_4206aa61-eb32-48f8-8298-d0c7a2d4bf2b/metrics-server/229.log
+        sourcetype: kube:container:metrics-server
+        host: $HOST$
+        _raw: 'I0902 10:13:22.800134       1 shared_informer.go:318] Caches are synced for RequestHeaderAuthRequestController'
+
+  ### KUBE-CONTAINER-METRICS-SERVER - DEGRADED / WARNING ###
+  - name: kube-container-metrics-server-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_metrics-server-64fc948c75-djtx5_4206aa61-eb32-48f8-8298-d0c7a2d4bf2b/metrics-server/229.log
+        sourcetype: kube:container:metrics-server
+        host: $HOST$
+        _raw: 'I0902 10:13:22.800134       1 shared_informer.go:318] Caches are synced for RequestHeaderAuthRequestController'
+
+  ### KUBE-CONTAINER-METRICS-SERVER - CRITICAL / FAILURE ###
+  - name: kube-container-metrics-server-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_metrics-server-64fc948c75-djtx5_4206aa61-eb32-48f8-8298-d0c7a2d4bf2b/metrics-server/229.log
+        sourcetype: kube:container:metrics-server
+        host: $HOST$
+        _raw: 'I0902 10:13:22.800134       1 shared_informer.go:318] Caches are synced for RequestHeaderAuthRequestController'

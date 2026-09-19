@@ -1,0 +1,370 @@
+<dashboard version="1.1" theme="dark" script="configuration.js">
+  <label>App Configuration &amp; Setup</label>
+  <description>Configure destination Splunk HEC endpoints, security tokens, SSL certificate validation modes, default index targets, and run real-time 5-point preflight environment validation checks.</description>
+
+  <row>
+    <panel>
+      <html>
+        <div style="padding: 10px 0;">
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 20px;">
+            <div>
+              <h2 style="color: #f8fafc; margin: 0; font-size: 18px; font-weight: 600;">
+                Environment &amp; Ingestion Target Configuration
+              </h2>
+              <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 12px;">
+                Configure destination Splunk instance parameters. All generator scenarios, single-device blasts, and continuous telemetry pipelines use these settings.
+              </p>
+            </div>
+            <div id="cfg-status-badge" style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #1e293b; color: #94a3b8; border: 1px solid #334155;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; display: inline-block;"></span>
+              <span>Status: Initializing...</span>
+            </div>
+          </div>
+
+          <!-- Alert Notification Box -->
+          <div id="cfg-alert-box" style="display: none; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; font-size: 12px;"></div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
+            
+            <!-- Left: HEC and Index Settings -->
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 20px;">
+              <h3 style="color: #e2e8f0; font-size: 13px; font-weight: 600; margin-top: 0; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                HTTP Event Collector (HEC) &amp; Security Settings
+              </h3>
+              
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                  HEC Target URL <span style="color: #ef4444;">*</span>
+                </label>
+                <input type="text" id="cfg-hec-url" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="https://127.0.0.1:8888/services/collector" />
+                <p style="color: #64748b; font-size: 11px; margin: 3px 0 0 0;">
+                  Default container mapping: <code>https://127.0.0.1:8888/services/collector</code> (auto-resolves to <code>:8088</code> inside container).
+                </p>
+              </div>
+
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                  HEC Authorization Token <span style="color: #ef4444;">*</span>
+                </label>
+                <div style="display: flex; gap: 6px;">
+                  <input type="password" id="cfg-hec-token" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="00000000-0000-0000-0000-000000000000" />
+                  <button type="button" id="btn-toggle-token" style="background: #334155; border: 1px solid #475569; color: #cbd5e1; border-radius: 4px; padding: 0 12px; font-size: 11px; cursor: pointer;">
+                    Show
+                  </button>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                  SSL Certificate Verification (<code>ssl_verify</code>)
+                </label>
+                <select id="cfg-ssl-verify" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-size: 12px; box-sizing: border-box;">
+                  <option value="false">false - Disabled (Recommended: Self-Signed Certs / Local Docker / Development)</option>
+                  <option value="true">true - Enabled (Strict CA Validation for Splunk Cloud / Signed Enterprise Certs)</option>
+                </select>
+                <p style="color: #64748b; font-size: 11px; margin: 3px 0 0 0;">
+                  Set to <code>false</code> when using self-signed development certificates to prevent SSL validation errors.
+                </p>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Target Ingestion Rate (EPS)
+                  </label>
+                  <input type="number" id="cfg-target-eps" min="50" max="50000" step="50" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="1000" />
+                </div>
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Default Baseline Scenario
+                  </label>
+                  <select id="cfg-default-scenario" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-size: 12px; box-sizing: border-box;">
+                    <option value="scenario_custom_multivendor_enterprise_stack.yml">MV-ENT-001: Enterprise 5-Tier Operations</option>
+                    <option value="scenario_mv_002_roce_ai_fabric.yml">MV-002: DC AI Fabric &amp; RoCE v2 Congestion</option>
+                    <option value="scenario_mv_016_cross_domain_slowness.yml">MV-016: Cross-Domain Slowness Triage Matrix</option>
+                    <option value="scenario_mv_006_bgp_route_flap.yml">MV-006: Core BGP Instability &amp; Flapping</option>
+                    <option value="scenario_mv_011_core_lsp_optical.yml">MV-011: Core 100G Optical Degradation &amp; TI-LFA</option>
+                    <option value="scenario_mv_014_firewall_capacity.yml">MV-014: Firewall Capacity Saturation</option>
+                    <option value="scenario_mv_008_sdwan_branch.yml">MV-008: SD-WAN Dynamic Path Failover</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 style="color: #e2e8f0; font-size: 13px; font-weight: 600; margin-top: 18px; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                Target Index Routing
+              </h3>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;">
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 3px;">
+                    Network Operations Index
+                  </label>
+                  <input type="text" id="cfg-idx-network" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" value="idx_network_ops" />
+                </div>
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 3px;">
+                    Security Firewall Index
+                  </label>
+                  <input type="text" id="cfg-idx-security" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" value="idx_security_fw" />
+                </div>
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 3px;">
+                    Wireless &amp; Access Index
+                  </label>
+                  <input type="text" id="cfg-idx-wireless" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" value="idx_wireless_ops" />
+                </div>
+                <div>
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 3px;">
+                    Performance Telemetry Index
+                  </label>
+                  <input type="text" id="cfg-idx-perf" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" value="idx_performance_metrics" />
+                </div>
+              </div>
+
+              <!-- Form Buttons -->
+              <div style="display: flex; gap: 10px;">
+                <button type="button" id="btn-save-config" style="background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 18px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Save Configuration
+                </button>
+                <button type="button" id="btn-test-hec" style="background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Quick Probe HEC
+                </button>
+                <button type="button" id="btn-reset-config" style="background: #334155; border: none; color: #cbd5e1; border-radius: 4px; padding: 8px 14px; font-size: 12px; cursor: pointer;">
+                  Reset Defaults
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Diagnostics & Quick Info -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+                <h3 style="color: #e2e8f0; font-size: 12px; font-weight: 600; margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                  Active Endpoint Diagnostics
+                </h3>
+                <table style="width: 100%; font-size: 11px; border-collapse: collapse;">
+                  <tr>
+                    <td style="color: #64748b; padding: 4px 0;">Target:</td>
+                    <td id="diag-target" style="color: #f8fafc; font-family: monospace; text-align: right;">--</td>
+                  </tr>
+                  <tr>
+                    <td style="color: #64748b; padding: 4px 0;">Latency:</td>
+                    <td id="diag-latency" style="color: #f8fafc; font-family: monospace; text-align: right;">--</td>
+                  </tr>
+                  <tr>
+                    <td style="color: #64748b; padding: 4px 0;">SSL Validation:</td>
+                    <td id="diag-ssl" style="color: #f8fafc; font-family: monospace; text-align: right;">ssl_verify=false</td>
+                  </tr>
+                  <tr>
+                    <td style="color: #64748b; padding: 4px 0;">Auth Status:</td>
+                    <td id="diag-auth" style="color: #f8fafc; font-family: monospace; text-align: right;">--</td>
+                  </tr>
+                </table>
+                <div id="diag-msg" style="margin-top: 10px; padding: 8px; background: #020617; border-radius: 4px; font-family: monospace; font-size: 10px; color: #94a3b8; word-break: break-all;">
+                  Ready to test.
+                </div>
+              </div>
+
+              <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+                <h3 style="color: #e2e8f0; font-size: 12px; font-weight: 600; margin-top: 0; margin-bottom: 8px;">
+                  Quick Deployment Guide
+                </h3>
+                <ul style="color: #94a3b8; font-size: 11px; padding-left: 18px; margin: 0; line-height: 1.6;">
+                  <li>Local Docker container listens on <b>8800</b> (Web) and <b>8888</b> (HEC).</li>
+                  <li>Use <code>ssl_verify = false</code> for development self-signed certs.</li>
+                  <li>Technical Add-on CIM field extractors are pre-installed.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Section: 5-Point Preflight Environment Validation Suite -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+              <div>
+                <b style="color: #f8fafc; font-size: 13px;">
+                  Preflight Environment &amp; Prerequisites Validation Suite
+                </b>
+                <p style="color: #94a3b8; font-size: 11px; margin: 3px 0 0 0;">
+                  Automated 5-point diagnostic check across target indexes, CIM technical add-ons, tokens, SSL certificate health, and ingestion latency.
+                </p>
+              </div>
+              <button type="button" id="btn-run-preflight" style="background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                Run All 5 Validation Checks
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+              
+              <!-- Check 1 -->
+              <div id="card-check-indexes" style="background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <b style="color: #e2e8f0; font-size: 11px;">1. Target Indexes</b>
+                  <span id="badge-check-indexes" style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">PENDING</span>
+                </div>
+                <div id="desc-check-indexes" style="color: #94a3b8; font-size: 11px; line-height: 1.4;">
+                  Verifies availability of 6 target indexes.
+                </div>
+              </div>
+
+              <!-- Check 2 -->
+              <div id="card-check-tas" style="background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <b style="color: #e2e8f0; font-size: 11px;">2. Add-ons &amp; CIM</b>
+                  <span id="badge-check-tas" style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">PENDING</span>
+                </div>
+                <div id="desc-check-tas" style="color: #94a3b8; font-size: 11px; line-height: 1.4;">
+                  Verifies multi-vendor CIM parser status.
+                </div>
+              </div>
+
+              <!-- Check 3 -->
+              <div id="card-check-token" style="background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <b style="color: #e2e8f0; font-size: 11px;">3. HEC Token</b>
+                  <span id="badge-check-token" style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">PENDING</span>
+                </div>
+                <div id="desc-check-token" style="color: #94a3b8; font-size: 11px; line-height: 1.4;">
+                  Validates HEC token authentication and index permissions.
+                </div>
+              </div>
+
+              <!-- Check 4 -->
+              <div id="card-check-ssl" style="background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <b style="color: #e2e8f0; font-size: 11px;">4. SSL Verification</b>
+                  <span id="badge-check-ssl" style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">PENDING</span>
+                </div>
+                <div id="desc-check-ssl" style="color: #94a3b8; font-size: 11px; line-height: 1.4;">
+                  Checks certificate validation mode.
+                </div>
+              </div>
+
+              <!-- Check 5 -->
+              <div id="card-check-latency" style="background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <b style="color: #e2e8f0; font-size: 11px;">5. Pipeline Latency</b>
+                  <span id="badge-check-latency" style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">PENDING</span>
+                </div>
+                <div id="desc-check-latency" style="color: #94a3b8; font-size: 11px; line-height: 1.4;">
+                  Measures round-trip HEC response time.
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Onboard Net-New Sample Data Section -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 20px; margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+              <h3 style="color: #a855f7; font-size: 14px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px;">
+                <span>🚀</span> Onboard Net-New Sample Data &amp; Custom Sourcetype
+              </h3>
+              <span style="font-size: 11px; color: #94a3b8;">Dynamic File Upload, Custom Index Provisioning &amp; HEC Ingestion</span>
+            </div>
+            <p style="color: #cbd5e1; font-size: 12px; margin-top: 0; margin-bottom: 14px;">
+              Upload raw log files (drag &amp; drop or browse) or paste event text below. Define your target sourcetype and index (or provision a new custom index on the fly).
+            </p>
+
+            <!-- Custom Index Creation Modal/Drawer (Inline) -->
+            <div id="modal-custom-index" style="display: none; background: #020617; border: 1px solid #0284c7; border-radius: 6px; padding: 16px; margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                <b style="color: #38bdf8; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                  <span>⚙</span> Provision New Splunk Index (Custom Storage Tier)
+                </b>
+                <button type="button" id="btn-close-custom-index-modal" style="background: transparent; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; line-height: 1;">&#215;</button>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px;">
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Index Identifier *</label>
+                  <input type="text" id="modal-index-name" placeholder="e.g. idx_datacenter_telemetry" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" />
+                </div>
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Data Type *</label>
+                  <select id="modal-index-datatype" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 12px; box-sizing: border-box;">
+                    <option value="event" selected="selected">Event Index (Logs, Syslog, JSON, CSV)</option>
+                    <option value="metric">Metric Index (Streaming MDT, Counters, Gauges)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Max Size (MB)</label>
+                  <input type="number" id="modal-index-maxsize" value="51200" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 12px; box-sizing: border-box;" />
+                </div>
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Retention Period (Days)</label>
+                  <input type="number" id="modal-index-retention" value="90" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 12px; box-sizing: border-box;" />
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button type="button" id="btn-create-custom-index" style="background: #0284c7; color: #ffffff; border: none; border-radius: 4px; padding: 7px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Provision &amp; Save Index
+                </button>
+                <button type="button" id="btn-cancel-custom-index" style="background: #334155; color: #cbd5e1; border: none; border-radius: 4px; padding: 7px 14px; font-size: 12px; cursor: pointer;">
+                  Cancel
+                </button>
+                <div id="modal-index-status" style="font-size: 11px; font-family: monospace; color: #38bdf8;"></div>
+              </div>
+            </div>
+
+            <!-- Drag & Drop File Upload Area -->
+            <div id="onboard-dropzone" style="border: 2px dashed #475569; border-radius: 6px; padding: 18px 14px; text-align: center; background: #020617; margin-bottom: 14px; cursor: pointer; transition: all 0.2s ease;">
+              <input type="file" id="onboard-file-input" accept=".log,.txt,.json,.csv,.raw" style="display: none;" />
+              <div style="font-size: 24px; margin-bottom: 6px;">📂</div>
+              <div style="color: #38bdf8; font-size: 13px; font-weight: 600;">
+                Drag &amp; Drop Log File Here (.log, .txt, .json, .csv, .raw)
+              </div>
+              <div style="color: #94a3b8; font-size: 11px; margin-top: 4px;">
+                or <span style="text-decoration: underline; color: #a855f7;">browse local files</span> from your computer. Files are parsed instantly client-side.
+              </div>
+              <div id="onboard-file-info" style="display: none; margin-top: 8px; font-size: 11px; font-family: monospace; color: #4ade80; background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 4px; padding: 4px 8px; display: inline-block;"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div>
+                <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                  Custom Sourcetype Name <span style="color: #ef4444;">*</span>
+                </label>
+                <input type="text" id="onboard-sourcetype" placeholder="e.g. cisco:custom:waf, pan:threat:custom" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="cisco:custom:waf" />
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label style="color: #cbd5e1; font-size: 11px; font-weight: 600; margin: 0;">
+                    Target Splunk Index <span style="color: #ef4444;">*</span>
+                  </label>
+                  <button type="button" id="btn-open-custom-index-modal" style="background: #0284c7; border: none; color: #ffffff; border-radius: 3px; padding: 2px 8px; font-size: 10px; font-weight: 600; cursor: pointer;">
+                    + Build Custom Index
+                  </button>
+                </div>
+                <select id="onboard-index" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;">
+                  <option value="idx_network_ops">idx_network_ops</option>
+                  <option value="idx_security_fw" selected="selected">idx_security_fw</option>
+                  <option value="idx_performance_metrics">idx_performance_metrics</option>
+                  <option value="idx_wireless_ops">idx_wireless_ops</option>
+                  <option value="cisco_mdt_metrics">cisco_mdt_metrics</option>
+                  <option value="main">main</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                Raw Log Sample Lines (1 or more lines) <span style="color: #ef4444;">*</span>
+              </label>
+              <textarea id="onboard-content" rows="4" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 10px; color: #38bdf8; font-family: monospace; font-size: 12px; box-sizing: border-box; resize: vertical;" placeholder="Paste raw event lines here or drop a log file above...">%ASA-4-106023: Deny tcp src outside:198.51.100.77/44321 dst inside:10.0.1.50/80 by access-group "OUTSIDE_IN" [0x0, 0x0]
+%ASA-4-106023: Deny tcp src outside:198.51.100.88/44322 dst inside:10.0.1.50/80 by access-group "OUTSIDE_IN" [0x0, 0x0]</textarea>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button type="button" id="btn-onboard-blast" style="background: #a855f7; color: #ffffff; border: none; border-radius: 4px; padding: 8px 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                <span>🚀</span> Onboard &amp; Ingest Net-New Sample Data
+              </button>
+              <div id="onboard-status-msg" style="font-size: 12px; font-family: monospace; color: #94a3b8;"></div>
+            </div>
+          </div>
+
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

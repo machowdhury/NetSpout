@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-ENVIRONMENTAL-1-ALERT - HEALTHY BASELINE ###
+  - name: cisco-sdwan-environmental-1-alert-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+          - weight: 2
+            choice: 10.201.50.4-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:ENVIRONMENTAL-1-ALERT
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 27774: $SYSLOG_TIMESTAMP$.765: %ENVIRONMENTAL-1-ALERT: Temp: Inlet 1, Location: R0, State: Warning, Reading: 43 Celsius'
+
+  ### CISCO-SDWAN-ENVIRONMENTAL-1-ALERT - DEGRADED / WARNING ###
+  - name: cisco-sdwan-environmental-1-alert-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:ENVIRONMENTAL-1-ALERT
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 27774: $SYSLOG_TIMESTAMP$.765: %ENVIRONMENTAL-1-ALERT: Temp: Inlet 1, Location: R0, State: Warning, Reading: 43 Celsius'
+
+  ### CISCO-SDWAN-ENVIRONMENTAL-1-ALERT - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-environmental-1-alert-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:ENVIRONMENTAL-1-ALERT
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 27774: $SYSLOG_TIMESTAMP$.765: %ENVIRONMENTAL-1-ALERT: Temp: Inlet 1, Location: R0, State: Warning, Reading: 43 Celsius'

@@ -1,0 +1,24 @@
+samples:
+  - name: pan-traffic
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:traffic
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:25,001801000001,TRAFFIC,drop,2304,2026/09/18 17:16:25,198.51.100.150,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Drop-Rule,jdoe,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/09/18 17:16:25,98421,1,58210,80,0,0,0x0,tcp,deny,1420,0,1420,1,2026/09/18 17:16:25,0,any,0,12345678,0x0,10.0.0.0-10.255.255.255,US,0,1,0,policy-deny,0,0,0,0,,PA-5250,from-policy'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:traffic
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:26,001801000001,TRAFFIC,allow,2304,2026/09/18 17:16:26,10.0.10.55,198.51.100.80,0.0.0.0,0.0.0.0,Outbound-Web-Rule,jdoe,,ssl,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,2026/09/18 17:16:26,98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,2026/09/18 17:16:26,12,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,aged-out,0,0,0,0,,PA-5250,from-policy'

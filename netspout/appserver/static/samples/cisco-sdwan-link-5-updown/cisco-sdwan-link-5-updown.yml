@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-link-5-updown
+  description: Real Network Assurance replay for cisco:sdwan:LINK-5-UPDOWN (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINK-5-UPDOWN
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 287: *$TS$:  %LINK-5-UPDOWN: Interface GigabitEthernet1/0/2, changed state to up'
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINK-5-UPDOWN
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 675: *$TS$:  %LINK-5-UPDOWN: Interface GigabitEthernet1/0/3, changed state to up'

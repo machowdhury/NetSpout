@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-eventlib-3-cpuhog
+  description: Real Network Assurance replay for cisco:sdwan:EVENTLIB-3-CPUHOG (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:EVENTLIB-3-CPUHOG
+      source: udp:5514
+      host: 10.201.48.116
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.121 3697: *$TS$:  %EVENTLIB-3-CPUHOG: Switch 1 R0/0: hman: undefined: 1026ms, Traceback=1#9c98bc34b8a46399248b88656ef73fd3  c:7F7229A64000+42630 c:7F7229A64000+FE9AD c:7F7229A64000+86F9E c:7F7229A64000+8804A c:7F7229A64000+65A4C c:7F7229A64000+58469 procmib_lib:7F722BC6A000+8309 :5B96778E7000+426F1 evlib:7F722D007000+9336 evlib:7F722D007000+9D70 orchestrator_lib:7F722BFB6000+12BE4'
+    - index: catalyst
+      sourcetype: cisco:sdwan:EVENTLIB-3-CPUHOG
+      source: udp:5514
+      host: 10.201.48.116
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.119 3459: *$TS$:  %EVENTLIB-3-CPUHOG: Switch 1 R0/0: hman: undefined: 1262ms, Traceback=1#9c98bc34b8a46399248b88656ef73fd3  c:77FDE02A3000+42630 c:77FDE02A3000+FE9AD c:77FDE02A3000+86F9E c:77FDE02A3000+8804A c:77FDE02A3000+65A4C c:77FDE02A3000+58469 procmib_lib:77FDE24A9000+8309 :5B4990CB0000+426F1 evlib:77FDE3846000+9336 evlib:77FDE3846000+9D70 orchestrator_lib:77FDE27F5000+12BE4'

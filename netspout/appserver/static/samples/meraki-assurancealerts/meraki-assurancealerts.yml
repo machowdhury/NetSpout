@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-ASSURANCEALERTS - HEALTHY BASELINE ###
+  - name: meraki-assurancealerts-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:assurancealerts
+        host: $HOST$
+        _raw: '{  "id": "alert_tor_0000",  "networkId": "N_TORONTO_DC",  "scope": "network",  "severity": "info",  "category": "Connectivity",  "type": "NetworkStatusNormal",  "title": "All devices operating within expected assurance parameters",  "startedAt": "$ISO_TS$",  "resolvedAt": "$ISO_TS$",  "device": {   "serial": "Q2QN-TOR-MX100",   "name": "MX100-Toronto-Hub"  } }'
+
+  ### MERAKI-ASSURANCEALERTS - DEGRADED INCIDENT ###
+  - name: meraki-assurancealerts-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:assurancealerts
+        host: $HOST$
+        _raw: '{  "id": "alert_tor_8942",  "networkId": "N_TORONTO_DC",  "scope": "device",  "severity": "critical",  "category": "Switching",  "type": "HighCrcErrorRate",  "title": "Severe Frame Check Sequence (CRC) error rate detected on MS250-Toronto-Core Port 24",  "description": "Port 24 (Uplink to MX100 WAN) is experiencing an escalating CRC error rate of >150 errors/min. Physical layer degradation (bad cable/SFP) suspected.",  "startedAt": "$ISO_TS$",  "device": {   "serial": "Q2QN-TOR-MS250",   "name": "MS250-Toronto-Core"  } }'

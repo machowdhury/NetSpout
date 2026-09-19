@@ -1,0 +1,230 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: MPLS BACKBONE HEALTHY BASELINE (CORE HEALTH: 100)                 ###
+  ### All 10 routers (R1-R10) nominal, low CPU, clean 100G optics, 100% FRR     ###
+  ### ========================================================================= ###
+  - name: mpls-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. System Resources Telemetry (R1 & R6 CPU, Memory, Uptime matching Dashboard)
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "R1/PE1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "R1/PE1", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 8, "metric_name:total_cpu_one_minute": 8, "metric_name:memory_utilization_pct": 39, "metric_name:free_physical_memory": 3932160000, "metric_name:system_uptime_days": 56, "metric_name:harddisk_utilization": 0.02, "source_nodename": "R1-0/RP0/CPU0", "status": "Normal", "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring"}}'
+
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 7, "metric_name:total_cpu_one_minute": 7, "metric_name:memory_utilization_pct": 36, "metric_name:free_physical_memory": 4128768000, "metric_name:system_uptime_days": 32, "metric_name:harddisk_utilization": 0.10, "source_nodename": "R6-0/RP0/CPU0", "status": "Normal", "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring"}}'
+
+      - index: cisco_metrics
+        source: R10
+        sourcetype: httpevent
+        host: "R10/ASBR2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R10", "sourcetype": "httpevent", "host": "R10/ASBR2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 11, "metric_name:total_cpu_one_minute": 11, "metric_name:memory_utilization_pct": 38, "metric_name:free_physical_memory": 3998720000, "metric_name:system_uptime_days": 241, "metric_name:harddisk_utilization": 0.34, "source_nodename": "R10-0/RP0/CPU0", "status": "Normal", "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring"}}'
+
+      # 2. Interface Telemetry: Clean 100G Backbone Trunk (R6 to R5 HundredGigE0/0/0/1)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:input_errors": 0, "metric_name:output_errors": 0, "metric_name:input_drops": 0, "metric_name:output_drops": 0, "metric_name:bandwidth_bps": 100000000000, "metric_name:data_rate_in_bps": 42500000000, "metric_name:data_rate_out_bps": 39800000000, "interface_name": "HundredGigE0/0/0/1", "path": "Cisco-IOS-XR-infra-statsd-oper:infra-statistics"}}'
+
+      # 3. Optics Physical Telemetry: Clean Pre-FEC BER and High Optical SNR
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:pre_fec_ber": 0.0000000012, "metric_name:uncorrected_ber": 0, "metric_name:snr_lane1": 28.5, "metric_name:snr_lane2": 28.7, "metric_name:tx_power_dbm": 1.2, "metric_name:rx_power_dbm": -4.8, "controller_name": "Optics0/0/0/1", "status": "Optimal", "path": "Cisco-IOS-XR-controller-optics-oper:optics-ports"}}'
+
+      # 4. BGP Routing Telemetry: All Sessions Established (State: 5), All Prefixes Accepted
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:session_state": 5, "metric_name:prefixes_accepted": 18, "metric_name:restart_count": 0, "metric_name:rib_connection_down_count": 0, "neighbor_address": "10.0.255.175", "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp-neighbors"}}'
+
+      # 5. IS-IS Link-State Telemetry: Stable Adjacency Uptime, Zero Hello Drops
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:adjacency_uptime": 2764800, "metric_name:pdu_dropped_count": 0, "metric_name:spf_calculation_count": 14, "interface_name": "HundredGigE0/0/0/1", "level": 2, "path": "Cisco-IOS-XR-clns-isis-oper:isis-adjacencies"}}'
+
+      # 6. MPLS-TE Fast Reroute (FRR) & Convergence: 100% Protected, Sub-50ms SLA
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:up_p2p_head_tunnels": 24, "metric_name:frr_p2p_head_tunnels": 24, "metric_name:frr_coverage_pct": 100.0, "metric_name:tunnel_total_convergence_complete_time": 24.2, "status": "Protected", "path": "Cisco-IOS-XR-mpls-te-oper:mpls-te-summary"}}'
+
+      # 7. RIB Route Age & FIB Forwarding Hardware Tables: Synchronized, Zero Churn
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:route_age_seconds": 2764800, "metric_name:route_churn_count": 0, "metric_name:fib_routes_programmed": 4820, "path": "Cisco-IOS-XR-ip-rib-ipv4-oper:rib-fib-sync"}}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: OPTICAL DECAY & FRR CONVERGENCE INCIDENT (CORE HEALTH: 70)       ###
+  ### Pre-FEC BER Surge on R6 HundredGigE0/0/0/1 -> BFD Drop -> 38ms FRR Reroute ###
+  ### IS-IS SPF Burst -> CPU Spikes to 78% -> Splunk AI Toolkit Anomaly Fired   ###
+  ### ========================================================================= ###
+  - name: mpls-stage2-optical-decay-frr-incident
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. Optical Gray Failure: Pre-FEC BER Surges to 3.8e-4, SNR Drops to 14.2 dB
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:pre_fec_ber": 0.000382, "metric_name:uncorrected_ber": 142, "metric_name:snr_lane1": 14.2, "metric_name:snr_lane2": 14.8, "metric_name:tx_power_dbm": 1.1, "metric_name:rx_power_dbm": -18.4, "controller_name": "Optics0/0/0/1", "status": "Degraded", "anomaly_score": 94.2, "path": "Cisco-IOS-XR-controller-optics-oper:optics-ports"}}'
+
+      # 2. Physical Interface Degradation: 4,820 Input Errors, 1,240 Drops
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:input_errors": 4820, "metric_name:output_errors": 120, "metric_name:input_drops": 1240, "metric_name:output_drops": 380, "metric_name:bandwidth_bps": 100000000000, "metric_name:data_rate_in_bps": 12100000000, "metric_name:data_rate_out_bps": 14500000000, "interface_name": "HundredGigE0/0/0/1", "path": "Cisco-IOS-XR-infra-statsd-oper:infra-statistics"}}'
+
+      # 3. Control Plane CPU Spikes to 78% on R6 RP0 due to Micro-SPF & FIB Reprogram
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 78, "metric_name:total_cpu_one_minute": 84, "metric_name:memory_utilization_pct": 52, "metric_name:free_physical_memory": 3092480000, "metric_name:system_uptime_days": 32, "metric_name:harddisk_utilization": 0.10, "source_nodename": "R6-0/RP0/CPU0", "status": "Warning", "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring"}}'
+
+      # 4. IS-IS PDU Drops & Micro-Flap
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:adjacency_uptime": 18, "metric_name:pdu_dropped_count": 48, "metric_name:spf_calculation_count": 184, "interface_name": "HundredGigE0/0/0/1", "level": 2, "path": "Cisco-IOS-XR-clns-isis-oper:isis-adjacencies"}}'
+
+      # 5. MPLS-TE Fast Reroute (FRR) Engaged: Sub-50ms SLA Met (38.4ms Convergence)
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:up_p2p_head_tunnels": 24, "metric_name:frr_p2p_head_tunnels": 24, "metric_name:frr_coverage_pct": 100.0, "metric_name:tunnel_total_convergence_complete_time": 38.4, "status": "FRR_Active_Rerouted", "path": "Cisco-IOS-XR-mpls-te-oper:mpls-te-summary"}}'
+
+      # 6. BGP Session State Telemetry: Temporary Session Flap (State: 2 - Active) before FRR Restabilization
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:session_state": 2, "metric_name:prefixes_accepted": 12, "metric_name:restart_count": 1, "metric_name:rib_connection_down_count": 1, "neighbor_address": "10.0.255.175", "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp-neighbors"}}'
+
+      # 7. RIB & FIB Telemetry: Route Churn Surge during FRR FIB Re-programming
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:route_age_seconds": 18, "metric_name:route_churn_count": 480, "metric_name:fib_routes_programmed": 4820, "path": "Cisco-IOS-XR-ip-rib-ipv4-oper:rib-fib-sync"}}'
+
+      # 8. Event Syslog: Real-Time Telemetry & Alert Notification
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %OPTICS-4-PRE_FEC_BER_ALARM: Optics0/0/0/1 pre-FEC BER (3.82e-04) exceeded threshold (1.00e-04). Signal quality severely degraded'
+
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %ROUTING-MPLS_TE-5-FRR_IN_USE: Tunnel Head TE-Tunnel201 invoked Fast Reroute protection via HundredGigE0/0/0/2. Convergence time: 38.4ms'
+
+  ### ========================================================================= ###
+  ### STAGE 3: REMEDIATION & AUTO-RECOVERY (CORE HEALTH: 100)                    ###
+  ### Transceiver Swapped -> Pre-FEC BER Clean -> Primary TE Path Restored       ###
+  ### CPU Returns to 8% -> BGP Re-established -> All Systems Normal              ###
+  ### ========================================================================= ###
+  - name: mpls-stage3-remediated
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. Optics Restored to Pristine Condition: Pre-FEC BER 1.0e-9, SNR 29.0 dB
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:pre_fec_ber": 0.0000000010, "metric_name:uncorrected_ber": 0, "metric_name:snr_lane1": 29.0, "metric_name:snr_lane2": 29.2, "metric_name:tx_power_dbm": 1.2, "metric_name:rx_power_dbm": -4.2, "controller_name": "Optics0/0/0/1", "status": "Optimal", "anomaly_score": 2.1, "path": "Cisco-IOS-XR-controller-optics-oper:optics-ports"}}'
+
+      # 2. Interface Errors and Drops Ceased
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:input_errors": 0, "metric_name:output_errors": 0, "metric_name:input_drops": 0, "metric_name:output_drops": 0, "metric_name:bandwidth_bps": 100000000000, "metric_name:data_rate_in_bps": 41200000000, "metric_name:data_rate_out_bps": 38900000000, "interface_name": "HundredGigE0/0/0/1", "path": "Cisco-IOS-XR-infra-statsd-oper:infra-statistics"}}'
+
+      # 3. CPU Normalizes Back to 8%
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:total_cpu_five_minute": 8, "metric_name:total_cpu_one_minute": 8, "metric_name:memory_utilization_pct": 36, "metric_name:free_physical_memory": 4128768000, "metric_name:system_uptime_days": 32, "metric_name:harddisk_utilization": 0.10, "source_nodename": "R6-0/RP0/CPU0", "status": "Normal", "path": "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring"}}'
+
+      # 4. BGP Session Re-Established (State: 5), Full Prefixes Accepted
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:session_state": 5, "metric_name:prefixes_accepted": 18, "metric_name:restart_count": 0, "metric_name:rib_connection_down_count": 0, "neighbor_address": "10.0.255.175", "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp-neighbors"}}'
+
+      # 5. MPLS-TE Restored to Primary Optimum Path
+      - index: cisco_metrics
+        source: R6
+        sourcetype: httpevent
+        host: "R6/PE2"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R6", "sourcetype": "httpevent", "host": "R6/PE2", "index": "cisco_metrics", "fields": {"metric_name:up_p2p_head_tunnels": 24, "metric_name:frr_p2p_head_tunnels": 24, "metric_name:frr_coverage_pct": 100.0, "metric_name:tunnel_total_convergence_complete_time": 23.8, "status": "Protected", "path": "Cisco-IOS-XR-mpls-te-oper:mpls-te-summary"}}'
+
+      # 6. Syslog Normalization
+      - index: main
+        source: cisco:ios:xr:syslog
+        sourcetype: cisco:ios:xr:syslog
+        host: R6
+        _raw: '$SYSLOG_TS$ R6 %OPTICS-6-PRE_FEC_BER_NORMAL: Optics0/0/0/1 pre-FEC BER restored to 1.00e-09. Link operating at nominal capacity'

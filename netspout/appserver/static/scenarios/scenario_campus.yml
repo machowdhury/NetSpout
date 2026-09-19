@@ -1,0 +1,137 @@
+samples:
+  ### STAGE 1: CAMPUS NORMAL OPERATIONS ###
+  - name: campus-healthy-baseline
+    interval: 60
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: Cat9k-Core-01
+          - weight: 3
+            choice: Cat9k-Core-02
+          - weight: 2
+            choice: C9300-Access-01
+          - weight: 2
+            choice: C9300-Access-02
+          - weight: 2
+            choice: C9500-Border-01
+      - name: SITE_NAME
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: Ottawa_DC1
+          - weight: 3
+            choice: Toronto_DC1
+          - weight: 2
+            choice: Montreal
+          - weight: 2
+            choice: Vancouver
+    lines:
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "$HOST$", "deviceFamily": "Switches and Hubs", "deviceHealthScore": 100, "reachabilityStatus": "reachable", "cpuHealth": 100, "memoryHealth": 100, "site": "$SITE_NAME$"}'
+      - index: catalyst
+        source: cisco:dnac:networkhealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac.corp.local
+        _raw: '{"overallGoodPercentage": 98.5, "switchesGoodPercentage": 100.0, "routersGoodPercentage": 100.0, "accessGoodPercentage": 97.8, "site": "$SITE_NAME$"}'
+
+  ### STAGE 2: HARDWARE WARNING - POE EXHAUSTION & PSU ANOMALY ###
+  - name: campus-poe-psu-warning
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: syslog
+        sourcetype: cisco:ios
+        host: C9300-Access-01
+        _raw: '$TS$: %PLATFORM_ENV-1-PWR_FAILED: Power supply 2 in slot Switch 1 failed or disconnected'
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P3", "title": "Redundant Power Supply Failure on C9300-Access-01", "status": "active", "category": "Hardware", "impactedEntities": ["C9300-Access-01"], "site": "Ottawa_DC1"}'
+
+  ### STAGE 3: CORE SWITCH CRASH - P1 INCIDENT (SWITCH UNREACHABLE) ###
+  - name: campus-core-switch-crash
+    interval: 15
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P1", "title": "Switch Unreachable: Cat9k-Core-01", "status": "active", "category": "Availability", "impactedEntities": ["Cat9k-Core-01"], "site": "Ottawa_DC1", "description": "Device failed ICMP and SNMP health check polls. Downstream switches and 450 endpoints experiencing connectivity disruption."}'
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "Cat9k-Core-01", "deviceFamily": "Switches and Hubs", "deviceHealthScore": 10, "reachabilityStatus": "unreachable", "cpuHealth": 0, "memoryHealth": 0, "site": "Ottawa_DC1"}'
+      - index: catalyst
+        source: cisco:dnac:networkhealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac.corp.local
+        _raw: '{"overallGoodPercentage": 46.2, "switchesGoodPercentage": 52.0, "routersGoodPercentage": 75.0, "accessGoodPercentage": 38.4, "site": "Ottawa_DC1"}'
+      - index: catalyst
+        source: syslog
+        sourcetype: cisco:ios
+        host: Cat9k-Dist-01
+        _raw: '$TS$: %SPANTREE-2-ROOT_DISPUTE: Dispute on port Te1/0/1 with Cat9k-Core-01. Transitioning to Blocking'
+
+  ### STAGE 4: DUAL-CORE FAILOVER & RESTORATION ###
+  - name: campus-failover-recovery
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "Cat9k-Core-02", "deviceFamily": "Switches and Hubs", "deviceHealthScore": 98, "reachabilityStatus": "reachable", "cpuHealth": 95, "memoryHealth": 95, "site": "Ottawa_DC1", "role": "Active Root Core"}'
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P1", "title": "Switch Unreachable: Cat9k-Core-01", "status": "resolved", "category": "Availability", "impactedEntities": ["Cat9k-Core-01"], "resolution": "Cat9k-Core-02 assumed active forwarding role. Redundant uplinks operational."}'
+      - index: catalyst
+        source: cisco:dnac:networkhealth
+        sourcetype: cisco:dnac:networkhealth
+        host: dnac.corp.local
+        _raw: '{"overallGoodPercentage": 96.0, "switchesGoodPercentage": 97.5, "routersGoodPercentage": 100.0, "accessGoodPercentage": 95.0, "site": "Ottawa_DC1"}'

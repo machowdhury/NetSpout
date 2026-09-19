@@ -1,0 +1,119 @@
+<dashboard version="1.1" theme="dark">
+  <label>SD-WAN Branch Brownout &amp; Dynamic SLA (MV-008)</label>
+  <description>BFD probe jitter, packet loss metrics, and automatic application steering across redundant WAN overlays.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-008)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-008</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Branch -->
+  <rect x="80" y="65" width="200" height="70" rx="4" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <text x="180" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">branch-toronto-edge01</text>
+  <text x="180" y="105" fill="#22c55e" font-size="9" text-anchor="middle">Cisco Catalyst SD-WAN / FortiGate</text>
+  <text x="180" y="122" fill="#94a3b8" font-size="8" text-anchor="middle">Branch Subnet: 10.40.0.0/16</text>
+  <!-- Tunnel 1 (MPLS - Degraded) -->
+  <path d="M 280 85 Q 500 30 720 85" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4,4"/>
+  <text x="500" y="45" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">Tunnel 1: biz-mpls [SLA VIOLATED: Loss 4.8%, Jitter 28ms]</text>
+  <!-- Tunnel 2 (Internet - Active) -->
+  <path d="M 280 115 Q 500 170 720 115" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="500" y="165" fill="#22c55e" font-size="9" font-weight="bold" text-anchor="middle">Tunnel 2: public-internet [ACTIVE: In-SLA, 14.2ms Latency]</text>
+  <!-- Headend Core -->
+  <rect x="720" y="65" width="200" height="70" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="2"/>
+  <text x="820" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">dc-headend-gateway</text>
+  <text x="820" y="105" fill="#0284c7" font-size="9" text-anchor="middle">Enterprise DC Hub</text>
+  <text x="820" y="122" fill="#94a3b8" font-size="8" text-anchor="middle">DC Subnet: 10.100.0.0/16</text>
+  <!-- Callout -->
+  <rect x="960" y="55" width="360" height="90" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="975" y="78" fill="#6ee7b7" font-size="10" font-weight="bold">INCIDENT FOCUS: Dynamic Path Brownout</text>
+  <text x="975" y="98" fill="#cbd5e1" font-size="9">BFD telemetry registers jitter violation on MPLS.</text>
+  <text x="975" y="116" fill="#cbd5e1" font-size="9">Automatic SLA failover redirects voice &amp; video.</text>
+  <text x="975" y="134" fill="#6ee7b7" font-size="9">Failover latency &lt; 350ms with zero drops.</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Primary MPLS Link Jitter</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops sourcetype="cisco:sdwan:linkhealth" | spath jitter_ms | stats max(jitter_ms) as j | eval j=if(isnull(j), 28.4, j)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[10,20]</option>
+        <option name="useColors">1</option>
+        <option name="unit">ms</option>
+        <option name="underLabel">PRIMARY MPLS LINK JITTER</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Primary MPLS Packet Loss</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops sourcetype="cisco:sdwan:linkhealth" | spath loss_percentage | stats max(loss_percentage) as l | eval l=if(isnull(l), 4.8, l)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[1,3]</option>
+        <option name="useColors">1</option>
+        <option name="unit">%</option>
+        <option name="underLabel">PRIMARY MPLS PACKET LOSS</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-APPLIANCESDWANSTATUSES - HEALTHY BASELINE ###
+  - name: meraki-appliancesdwanstatuses-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatuses
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "networkName": "Toronto Hub",  "uplinks": [   {    "interface": "wan1",    "status": "active",    "ip": "198.51.100.2",    "gateway": "198.51.100.1",    "publicIp": "198.51.100.2"   }  ],  "vpnPeers": [   {    "peerNetworkId": "N_EDMONTON_B1",    "peerName": "Edmonton Branch 1",    "reachability": "reachable",    "mode": "spoke"   },   {    "peerNetworkId": "N_CALGARY_B2",    "peerName": "Calgary Branch 2",    "reachability": "reachable",    "mode": "spoke"   }  ] }'
+
+  ### MERAKI-APPLIANCESDWANSTATUSES - DEGRADED INCIDENT ###
+  - name: meraki-appliancesdwanstatuses-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatuses
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "networkName": "Toronto Hub",  "uplinks": [   {    "interface": "wan1",    "status": "active",    "ip": "198.51.100.2",    "gateway": "198.51.100.1"   }  ],  "vpnPeers": [   {    "peerNetworkId": "N_EDMONTON_B1",    "peerName": "Edmonton Branch 1",    "reachability": "reachable",    "mode": "spoke",    "packetLossPercent": 14.2   },   {    "peerNetworkId": "N_CALGARY_B2",    "peerName": "Calgary Branch 2",    "reachability": "reachable",    "mode": "spoke",    "packetLossPercent": 11.8   }  ] }'

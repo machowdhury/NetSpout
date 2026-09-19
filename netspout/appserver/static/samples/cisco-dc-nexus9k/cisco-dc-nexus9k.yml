@@ -1,0 +1,34 @@
+samples:
+- name: cisco-dc-nexus9k
+  description: Real Network Assurance replay for cisco:dc:nexus9k (main index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: main
+      sourcetype: cisco:dc:nexus9k
+      source: cisco_nexus_9k://nxpower
+      host: maple-splunk-fwd01
+      _time: "$EPOCH$"
+      _raw: '{"timestamp": "$GOTS$", "component": "nxpower", "device": "10.0.0.253:443", "Row_info": {"voltage_level": "12"}}'
+    - index: main
+      sourcetype: cisco:dc:nexus9k
+      source: cisco_nexus_9k://nxpower
+      host: maple-splunk-fwd01
+      _time: "$EPOCH$"
+      _raw: '{"timestamp": "$GOTS$", "component": "nxversion", "device": "10.0.0.253:443", "Row_info": {"package_id": null}}'

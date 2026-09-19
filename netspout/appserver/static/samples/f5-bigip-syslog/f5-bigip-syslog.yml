@@ -1,0 +1,29 @@
+samples:
+  - name: f5-bigip-syslog
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: f5:bigip:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:15 f5-bigip-01.acme.local notice mcpd[8142]: 01070638:5: Pool /Common/pool_app_backend member /Common/10.0.10.51:8080 monitor status down. [ was up for 48hrs ]'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: f5:bigip:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:16 f5-bigip-01.acme.local err tmm[10294]: 01010028:3: No members available for pool /Common/pool_app_backend'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: f5:bigip:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:17 f5-bigip-01.acme.local notice mcpd[8142]: 0107167d:5: Virtual Server /Common/vs_app_https changed status from GREEN to RED'

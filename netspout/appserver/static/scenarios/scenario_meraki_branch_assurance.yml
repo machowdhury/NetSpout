@@ -1,0 +1,166 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: ALL SITES HEALTHY BASELINE (TORONTO: 100%, EDM: 100%, CAL: 100%) ###
+  ### Clean switch ports, zero CRC errors, low latency Auto VPN tunnels         ###
+  ### ========================================================================= ###
+  - name: meraki-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. Toronto Hub Switch Port 24: 0 CRC errors, Clean 1Gbps Link
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsbyswitch
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MS250", "switchName": "MS250-Toronto-Core", "portId": "24", "name": "Uplink to MX100 WAN", "status": "Connected", "speed": "1 Gbps", "duplex": "full", "errors": {"crc": 0, "runts": 0, "collisions": 0}, "discards": {"input": 0, "output": 0}, "site_health_score": 100, "networkName": "Toronto Hub", "site": "Toronto"}'
+
+      # 2. Toronto Hub Device Status & Auto VPN: Reachable, 0% Loss
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatistics
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MX100", "networkName": "Toronto Hub", "site": "Toronto", "peerName": "Edmonton Branch 1", "latencyMs": 22.4, "lossPercentage": 0.0, "sentKbps": 8920, "receivedKbps": 8100, "status": "optimal"}'
+
+      # 3. Edmonton Branch 1 (MX-64): 100% Site Health
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-EDM-MX64", "name": "MX64-Edmonton-B1", "networkName": "Edmonton Branch 1", "site": "Edmonton", "model": "MX64", "status": "online", "site_health_score": 100, "vpn_status": "connected"}'
+
+      # 4. Calgary Branch 2 (MX-67): 100% Site Health
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-CAL-MX67", "name": "MX67-Calgary-B2", "networkName": "Calgary Branch 2", "site": "Calgary", "model": "MX67", "status": "online", "site_health_score": 100, "vpn_status": "connected"}'
+
+      # 5. Assurance Alerts: Clean
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:assurancealerts
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "networkName": "Toronto Hub", "site": "Toronto", "severity": "info", "category": "Switching", "title": "Port telemetry normal", "status": "cleared"}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: TORONTO HUB CRC DEGRADATION (TORONTO: 70%, EDM: 90%, CAL: 92%)   ###
+  ### Port 24 CRC error surge -> Hub degraded to 70% -> Spokes impacted to ~90%  ###
+  ### ========================================================================= ###
+  - name: meraki-stage2-toronto-crc-degraded
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: CRC_COUNT
+        format: template
+        type: random
+        replacement: int
+        lower: 4200
+        upper: 7800
+      - name: DISCARD_COUNT
+        format: template
+        type: random
+        replacement: int
+        lower: 1100
+        upper: 2400
+    lines:
+      # 1. THE ROOT CAUSE: Severe CRC Error Surge on Toronto Core Port 24
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsbyswitch
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MS250", "switchName": "MS250-Toronto-Core", "portId": "24", "name": "Uplink to MX100 WAN", "status": "Connected", "speed": "1 Gbps", "duplex": "full", "errors": {"crc": $CRC_COUNT$, "runts": 182, "collisions": 0}, "discards": {"input": $DISCARD_COUNT$, "output": 450}, "site_health_score": 70, "networkName": "Toronto Hub", "site": "Toronto", "health_degradation_reason": "Physical Layer Frame Corruption (CRC)"}'
+
+      # 2. Meraki Assurance Alert Fired on Toronto Hub
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:assurancealerts
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "networkName": "Toronto Hub", "site": "Toronto", "device": {"serial": "Q2QN-TOR-MS250", "name": "MS250-Toronto-Core"}, "severity": "critical", "category": "Switching", "type": "HighCrcErrorRate", "title": "Severe Cyclic Redundancy Check (CRC) error rate on Port 24", "description": "Port 24 (Uplink to MX100 WAN) corrupted over $CRC_COUNT$ frames. Physical SFP/cable degradation detected.", "impact": "Hub WAN degradation - Site health dropped to 70%"}'
+
+      # 3. Auto VPN Telemetry: Packet Loss & Retransmission to Spokes
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatistics
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MX100", "networkName": "Toronto Hub", "site": "Toronto", "peerName": "Edmonton Branch 1", "latencyMs": 86.4, "jitterMs": 24.1, "lossPercentage": 14.8, "sentKbps": 2100, "receivedKbps": 1950, "status": "degraded"}'
+
+      # 4. Edmonton Branch 1 (MX-64): Dips to 90% Health (Impacted by Hub Transit Loss)
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-EDM-MX64", "name": "MX64-Edmonton-B1", "networkName": "Edmonton Branch 1", "site": "Edmonton", "model": "MX64", "status": "alerting", "site_health_score": 90, "vpn_loss_pct": 14.8, "notes": "Local LAN green; Auto VPN path degraded due to Toronto Hub CRC drops"}'
+
+      # 5. Calgary Branch 2 (MX-67): Dips to 92% Health (Impacted by Hub Transit Loss)
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-CAL-MX67", "name": "MX67-Calgary-B2", "networkName": "Calgary Branch 2", "site": "Calgary", "model": "MX67", "status": "alerting", "site_health_score": 92, "vpn_loss_pct": 11.5, "notes": "Local LAN green; Auto VPN path degraded due to Toronto Hub CRC drops"}'
+
+  ### ========================================================================= ###
+  ### STAGE 3: REMEDIATION & RECOVERY (TORONTO: 100%, ALL SITES RESTORED)       ###
+  ### SFP Replaced on Port 24 -> CRC rate = 0 -> All Hub & Spoke health = 100% ###
+  ### ========================================================================= ###
+  - name: meraki-stage3-remediated
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. Port 24 Restored: 0 CRC errors, Full Duplex
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsbyswitch
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MS250", "switchName": "MS250-Toronto-Core", "portId": "24", "name": "Uplink to MX100 WAN", "status": "Connected", "speed": "1 Gbps", "duplex": "full", "errors": {"crc": 0, "runts": 0, "collisions": 0}, "discards": {"input": 0, "output": 0}, "site_health_score": 100, "networkName": "Toronto Hub", "site": "Toronto"}'
+
+      # 2. Assurance Alert Auto-Cleared
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:assurancealerts
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "networkName": "Toronto Hub", "site": "Toronto", "severity": "info", "category": "Switching", "type": "HighCrcErrorRate", "title": "CRC error condition resolved on MS250-Toronto-Core Port 24", "status": "cleared"}'
+
+      # 3. Auto VPN Latency and Loss Return to Normal
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatistics
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-TOR-MX100", "networkName": "Toronto Hub", "site": "Toronto", "peerName": "Edmonton Branch 1", "latencyMs": 23.1, "jitterMs": 1.9, "lossPercentage": 0.0, "sentKbps": 8800, "receivedKbps": 8050, "status": "optimal"}'
+
+      # 4. Edmonton & Calgary Restored to 100%
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-EDM-MX64", "name": "MX64-Edmonton-B1", "networkName": "Edmonton Branch 1", "site": "Edmonton", "status": "online", "site_health_score": 100, "vpn_loss_pct": 0.0}'
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: meraki.api.cisco.com
+        _raw: '{"ts": "$ISO_TS$", "serial": "Q2QN-CAL-MX67", "name": "MX67-Calgary-B2", "networkName": "Calgary Branch 2", "site": "Calgary", "status": "online", "site_health_score": 100, "vpn_loss_pct": 0.0}'

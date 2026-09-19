@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-ALERTS - HEALTHY BASELINE ###
+  - name: nutanixpc-alerts-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/alerts
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/alerts-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_alerts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Alert", "extId": "d711c281-18fe-4fcc-8937-333d41165889", "isAcknowledged": true, "acknowledgedTime": "$ISO_TIMESTAMP$", "isAutoResolved": true, "isResolved": true, "resolvedTime": "$ISO_TIMESTAMP$", "sourceEntity": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.AlertEntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "affectedEntities": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.EntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}], "severityTrails": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.SeverityTrail", "severity": "CRITICAL", "severityChangeTime": "$ISO_TIMESTAMP$"}], "title": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on CVM 10.0.4.127 Failed/Marked offline", "alertType": "A1044", "classifications": ["Hardware", "Storage"], "clusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "creationTime": "$ISO_TIMESTAMP$", "impactTypes": ["SYSTEM_INDICATOR"], "lastUpdatedTime": "$ISO_TIMESTAMP$", "message": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on node 10.0.4.127 with ID 159094719 has been marked offline.", "originatingClusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "severity": "CRITICAL", "isUserDefined": false, "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.BoolValue", "boolValue": true}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "alert_log_collect"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "disk_failure"}, "paramName": "alert_log_tag_list"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "-4h"}, "paramName": "alert_log_duration"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}, "paramName": "mount_path"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "10.0.4.127"}, "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "service_vm_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "arithmos_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "5.1.1-16f10d0e"}, "paramName": "ncc_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "6.10"}, "paramName": "nos_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "paramName": "node_uuid"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "node_serial"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "block_serial"}], "rootCauseAnalysis": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.RootCauseAnalysis", "cause": "A drive on the node was marked offline.", "resolution": "Investigate disk health. Please refer to KB 8453"}]}'
+
+  ### NUTANIXPC-ALERTS - DEGRADED / WARNING ###
+  - name: nutanixpc-alerts-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/alerts
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_alerts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Alert", "extId": "d711c281-18fe-4fcc-8937-333d41165889", "isAcknowledged": true, "acknowledgedTime": "$ISO_TIMESTAMP$", "isAutoResolved": true, "isResolved": true, "resolvedTime": "$ISO_TIMESTAMP$", "sourceEntity": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.AlertEntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "affectedEntities": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.EntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}], "severityTrails": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.SeverityTrail", "severity": "CRITICAL", "severityChangeTime": "$ISO_TIMESTAMP$"}], "title": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on CVM 10.0.4.127 Failed/Marked offline", "alertType": "A1044", "classifications": ["Hardware", "Storage"], "clusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "creationTime": "$ISO_TIMESTAMP$", "impactTypes": ["SYSTEM_INDICATOR"], "lastUpdatedTime": "$ISO_TIMESTAMP$", "message": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on node 10.0.4.127 with ID 159094719 has been marked offline.", "originatingClusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "severity": "CRITICAL", "isUserDefined": false, "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.BoolValue", "boolValue": true}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "alert_log_collect"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "disk_failure"}, "paramName": "alert_log_tag_list"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "-4h"}, "paramName": "alert_log_duration"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}, "paramName": "mount_path"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "10.0.4.127"}, "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "service_vm_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "arithmos_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "5.1.1-16f10d0e"}, "paramName": "ncc_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "6.10"}, "paramName": "nos_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "paramName": "node_uuid"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "node_serial"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "block_serial"}], "rootCauseAnalysis": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.RootCauseAnalysis", "cause": "A drive on the node was marked offline.", "resolution": "Investigate disk health. Please refer to KB 8453"}]}'
+
+  ### NUTANIXPC-ALERTS - CRITICAL / FAILURE ###
+  - name: nutanixpc-alerts-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/monitoring/v4.0/serviceability/alerts
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_alerts
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.Alert", "extId": "d711c281-18fe-4fcc-8937-333d41165889", "isAcknowledged": true, "acknowledgedTime": "$ISO_TIMESTAMP$", "isAutoResolved": true, "isResolved": true, "resolvedTime": "$ISO_TIMESTAMP$", "sourceEntity": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.AlertEntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "affectedEntities": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.EntityReference", "type": "node", "name": "CCHCI-07.maple.ciscolabs.com", "extId": "64f966f6-49ef-40ba-ae85-987ad33edc34"}], "severityTrails": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.SeverityTrail", "severity": "CRITICAL", "severityChangeTime": "$ISO_TIMESTAMP$"}], "title": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on CVM 10.0.4.127 Failed/Marked offline", "alertType": "A1044", "classifications": ["Hardware", "Storage"], "clusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "creationTime": "$ISO_TIMESTAMP$", "impactTypes": ["SYSTEM_INDICATOR"], "lastUpdatedTime": "$ISO_TIMESTAMP$", "message": "Disk mounted at /home/nutanix/data/stargate-storage/disks/S5MPNA0N901932 on node 10.0.4.127 with ID 159094719 has been marked offline.", "originatingClusterUUID": "00061768-f76f-4f95-3e5f-0025b500016f", "severity": "CRITICAL", "isUserDefined": false, "parameters": [{"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.BoolValue", "boolValue": true}, "$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.Parameter", "paramName": "alert_log_collect"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "disk_failure"}, "paramName": "alert_log_tag_list"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "-4h"}, "paramName": "alert_log_duration"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}, "paramName": "mount_path"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "/home/nutanix/data/stargate-storage/disks/S5MPNA0N901932"}}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "10.0.4.127"}, "paramName": "ip_address"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "service_vm_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.IntValue", "intValue": 159094719}, "paramName": "arithmos_id"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "5.1.1-16f10d0e"}, "paramName": "ncc_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "6.10"}, "paramName": "nos_version"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "64f966f6-49ef-40ba-ae85-987ad33edc34"}, "paramName": "node_uuid"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "node_serial"}, {"paramValue": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.common.StringValue", "stringValue": "WMP245000FS"}, "paramName": "block_serial"}], "rootCauseAnalysis": [{"$reserved": {"$fv": "v4.r0"}, "$objectType": "monitoring.v4.serviceability.RootCauseAnalysis", "cause": "A drive on the node was marked offline.", "resolution": "Investigate disk health. Please refer to KB 8453"}]}'

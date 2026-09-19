@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-NVM-FLOWDATA - HEALTHY BASELINE ###
+  - name: cisco-nvm-flowdata-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 200.164.247.230
+          - weight: 2
+            choice: 200.164.247.230-peer
+    lines:
+      - index: main
+        source: udp:20519
+        sourcetype: cisco:nvm:flowdata
+        host: $HOST$
+        _raw: '8\xE7_\x84v\x80H'
+
+  ### CISCO-NVM-FLOWDATA - DEGRADED / WARNING ###
+  - name: cisco-nvm-flowdata-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 200.164.247.230
+    lines:
+      - index: main
+        source: udp:20519
+        sourcetype: cisco:nvm:flowdata
+        host: $HOST$
+        _raw: '8\xE7_\x84v\x80H'
+
+  ### CISCO-NVM-FLOWDATA - CRITICAL / FAILURE ###
+  - name: cisco-nvm-flowdata-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 200.164.247.230
+    lines:
+      - index: main
+        source: udp:20519
+        sourcetype: cisco:nvm:flowdata
+        host: $HOST$
+        _raw: '8\xE7_\x84v\x80H'

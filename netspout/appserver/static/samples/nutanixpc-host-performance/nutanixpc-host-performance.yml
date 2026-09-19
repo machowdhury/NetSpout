@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-HOST-PERFORMANCE - HEALTHY BASELINE ###
+  - name: nutanixpc-host-performance-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/clusters/00063ffb-2c0b-2e6c-7635-0025b500010e/hosts/dc8562d0-9e55-4b4e-8bba-9f2e123dc411
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/clusters/00063ffb-2c0b-2e6c-7635-0025b500010e/hosts/dc8562d0-9e55-4b4e-8bba-9f2e123dc411-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_host_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "controllerAvgIoLatencyUsecs": 3891, "controllerAvgReadIoLatencyUsecs": 768, "controllerAvgWriteIoLatencyUsecs": 3892, "controllerNumIops": 173, "controllerNumReadIops": 0, "controllerNumWriteIops": 173, "ioBandwidthKbps": 18671, "controllerReadIoBandwidthKbps": 0, "controllerWriteIoBandwidthKbps": 18670, "hypervisorCpuUsagePpm": 929754, "aggregateHypervisorMemoryUsagePpm": 872223, "storageUsageBytes": 2484247200782, "storageCapacityBytes": 10326957305327, "freePhysicalStorageBytes": 7842710104545, "memoryCapacityBytes": 0, "cpuCapacityHz": 0, "overollMemoryUsagePpm": 0}'
+
+  ### NUTANIXPC-HOST-PERFORMANCE - DEGRADED / WARNING ###
+  - name: nutanixpc-host-performance-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/clusters/00063ffb-2c0b-2e6c-7635-0025b500010e/hosts/dc8562d0-9e55-4b4e-8bba-9f2e123dc411
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_host_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "controllerAvgIoLatencyUsecs": 3891, "controllerAvgReadIoLatencyUsecs": 768, "controllerAvgWriteIoLatencyUsecs": 3892, "controllerNumIops": 173, "controllerNumReadIops": 0, "controllerNumWriteIops": 173, "ioBandwidthKbps": 18671, "controllerReadIoBandwidthKbps": 0, "controllerWriteIoBandwidthKbps": 18670, "hypervisorCpuUsagePpm": 929754, "aggregateHypervisorMemoryUsagePpm": 872223, "storageUsageBytes": 2484247200782, "storageCapacityBytes": 10326957305327, "freePhysicalStorageBytes": 7842710104545, "memoryCapacityBytes": 0, "cpuCapacityHz": 0, "overollMemoryUsagePpm": 0}'
+
+  ### NUTANIXPC-HOST-PERFORMANCE - CRITICAL / FAILURE ###
+  - name: nutanixpc-host-performance-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/clusters/00063ffb-2c0b-2e6c-7635-0025b500010e/hosts/dc8562d0-9e55-4b4e-8bba-9f2e123dc411
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_host_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "dc8562d0-9e55-4b4e-8bba-9f2e123dc411", "controllerAvgIoLatencyUsecs": 3891, "controllerAvgReadIoLatencyUsecs": 768, "controllerAvgWriteIoLatencyUsecs": 3892, "controllerNumIops": 173, "controllerNumReadIops": 0, "controllerNumWriteIops": 173, "ioBandwidthKbps": 18671, "controllerReadIoBandwidthKbps": 0, "controllerWriteIoBandwidthKbps": 18670, "hypervisorCpuUsagePpm": 929754, "aggregateHypervisorMemoryUsagePpm": 872223, "storageUsageBytes": 2484247200782, "storageCapacityBytes": 10326957305327, "freePhysicalStorageBytes": 7842710104545, "memoryCapacityBytes": 0, "cpuCapacityHz": 0, "overollMemoryUsagePpm": 0}'

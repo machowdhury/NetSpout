@@ -1,0 +1,84 @@
+samples:
+  ### NUTANIX PRISM CENTRAL HEALTHY PERFORMANCE ###
+  - name: nutanix-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: nutanix-pc-cluster-01
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:vm
+        sourcetype: nutanixpc_vm_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "vm_name": "maple-app-worker-01", "cpu_usage_ppm": 150000, "memory_usage_ppm": 320000, "hypervisor_io_bandwidth_kBps": 4200, "controller_avg_io_latency_uSecs": 850, "status": "OK"}'
+      - index: nutanixpc
+        source: nutanixpc:disk
+        sourcetype: nutanixpc_disk_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "disk_uuid": "e819b1b4-4b5c-4231-897b-3b3b4f65011a", "disk_io_latency_uSecs": 620, "disk_status": "NORMAL"}'
+
+  ### NUTANIX PRISM CENTRAL IO CONGESTION ###
+  - name: nutanix-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: nutanix-pc-cluster-01
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:vm
+        sourcetype: nutanixpc_vm_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "vm_name": "maple-app-worker-01", "cpu_usage_ppm": 850000, "memory_usage_ppm": 890000, "hypervisor_io_bandwidth_kBps": 28400, "controller_avg_io_latency_uSecs": 14500, "status": "WARNING"}'
+      - index: nutanixpc
+        source: nutanixpc:alerts
+        sourcetype: nutanixpc_alerts
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "alert_type": "VM_IO_LATENCY_HIGH", "severity": "WARNING", "impact": "Performance Degraded", "message": "Storage controller IO latency exceeded 10ms threshold"}'
+
+  ### NUTANIX PRISM CENTRAL STORAGE DISK DEGRADATION ###
+  - name: nutanix-failure
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: nutanix-pc-cluster-01
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:disk
+        sourcetype: nutanixpc_disk_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "disk_uuid": "e819b1b4-4b5c-4231-897b-3b3b4f65011a", "disk_io_latency_uSecs": 125000, "disk_status": "OFFLINE_UNRESPONSIVE"}'
+      - index: nutanixpc
+        source: nutanixpc:alerts
+        sourcetype: nutanixpc_alerts
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "alert_type": "DISK_FAILURE", "severity": "CRITICAL", "impact": "Data Availability at Risk", "message": "Physical disk dropped from storage tier. CVM re-replicating metadata blocks."}'

@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-ndbman-5-config-i
+  description: Real Network Assurance replay for cisco:sdwan:NDBMAN-5-CONFIG_I (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:NDBMAN-5-CONFIG_I
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.118 3269: *$TS$:  %NDBMAN-5-CONFIG_I: Switch 1 R0/0: ndbmand: Configured feature ''yang-mapping'' from 127.0.0.1:0 via INTERNAL-API user yang_mgmt_infra session 20, transaction-id 102'
+    - index: catalyst
+      sourcetype: cisco:sdwan:NDBMAN-5-CONFIG_I
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.117 766: *$TS$:  %NDBMAN-5-CONFIG_I: Switch 1 R0/0: ndbmand: Configured feature ''yang-mapping'' from 127.0.0.1:0 via INTERNAL-API user yang_mgmt_infra session 20, transaction-id 166'

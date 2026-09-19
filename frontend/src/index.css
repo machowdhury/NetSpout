@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --noc-bg: #0B0F19;
+    --noc-panel: #1F2937;
+    --noc-border: #374151;
+    --noc-crimson: #EF4444;
+    --noc-amber: #F59E0B;
+    --noc-emerald: #10B981;
+    --noc-violet: #8B5CF6;
+  }
+
+  body {
+    background-color: #0B0F19;
+    color: #f3f4f6;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+  }
+}
+
+/* Custom scrollbar for NOC/SOC logs */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1F2937;
+  border-radius: 3px;
+  border: 1px solid #374151;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+.noc-grid {
+  background-color: #0B0F19;
+  background-image: radial-gradient(#1E293B 1.25px, transparent 1.25px);
+}

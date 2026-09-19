@@ -1,0 +1,24 @@
+samples:
+  - name: pan-threat
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:threat
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:26,001801000001,THREAT,vulnerability,2304,2026/09/18 17:16:26,203.0.113.88,10.0.10.80,0.0.0.0,0.0.0.0,Perimeter-Inspection,attacker,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,log-forwarder,2026/09/18 17:16:26,98425,1,49182,80,0,0,0x0,tcp,reset-both,"Apache Log4j Remote Code Execution(30845)",any,critical,client-to-server,92841,0x0,10.0.0.0-10.255.255.255,US,0,,0,,,PA-5250'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:threat
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:28,001801000001,THREAT,spyware,2304,2026/09/18 17:16:28,10.0.10.99,198.51.100.244,0.0.0.0,0.0.0.0,Outbound-C2-Block,victim,,dns,vsys1,trust,untrust,ethernet1/2,ethernet1/1,log-forwarder,2026/09/18 17:16:28,98428,1,54921,53,0,0,0x0,udp,sinkhole,"Command and Control Traffic Detected(10042)",any,high,client-to-server,92842,0x0,US,10.0.0.0-10.255.255.255,0,,0,,,PA-5250'

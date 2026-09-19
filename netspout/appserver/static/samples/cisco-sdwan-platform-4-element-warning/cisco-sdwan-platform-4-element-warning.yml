@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-PLATFORM-4-ELEMENT-WARNING - HEALTHY BASELINE ###
+  - name: cisco-sdwan-platform-4-element-warning-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+          - weight: 2
+            choice: 10.201.50.12-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PLATFORM-4-ELEMENT_WARNING
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14767: $SYSLOG_TIMESTAMP$.919: %PLATFORM-4-ELEMENT_WARNING: R0/0: smand: RP/0: 5-Minute Load Average value 6.11 exceeds warning level 6.10.'
+
+  ### CISCO-SDWAN-PLATFORM-4-ELEMENT-WARNING - DEGRADED / WARNING ###
+  - name: cisco-sdwan-platform-4-element-warning-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PLATFORM-4-ELEMENT_WARNING
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14767: $SYSLOG_TIMESTAMP$.919: %PLATFORM-4-ELEMENT_WARNING: R0/0: smand: RP/0: 5-Minute Load Average value 6.11 exceeds warning level 6.10.'
+
+  ### CISCO-SDWAN-PLATFORM-4-ELEMENT-WARNING - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-platform-4-element-warning-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PLATFORM-4-ELEMENT_WARNING
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14767: $SYSLOG_TIMESTAMP$.919: %PLATFORM-4-ELEMENT_WARNING: R0/0: smand: RP/0: 5-Minute Load Average value 6.11 exceeds warning level 6.10.'

@@ -1,0 +1,189 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: ACME WEB SERVICE - HEALTHY OPERATIONAL BASELINE                  ###
+  ### All systems green across ThousandEyes, BGP, ACI, VMware ESX, & Firewall   ###
+  ### ========================================================================= ###
+  - name: acme-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: LATENCY_MS
+        format: template
+        type: random
+        replacement: int
+        lower: 32
+        upper: 42
+    lines:
+      # 1. ThousandEyes Synthetic Test: 100% Availability, 0% Loss
+      - index: main
+        source: cisco:thousandeyes:metric
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto-dc1
+        _raw: '{"timestamp": "$ISO_TS$", "test_name": "ACME_Web_Production_Portal", "test_type": "http-server", "target_url": "https://web.acme.maple.ciscolabs.com:8443", "metric_name:http.server.request.availability": 100, "metric_name:network.loss": 0.0, "metric_name:http.client.request.duration": $LATENCY_MS$, "response_code": 200, "agent_name": "Toronto_Branch_Agent", "status": "AVAILABLE"}'
+
+      # 2. BGP Telemetry (Core Router R1 to Maple DC 10.30.4.137): 4 Prefixes Accepted (ALL 4 BDs ACTIVE)
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 4, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast", "session_state": "ESTABLISHED", "remote_as": 65101, "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted"}}'
+
+      # 3. Cisco ACI APIC: Bridge Domain MAPLE_BD04_SPLUNK Healthy (Subnet 10.20.104.200/24 Advertised)
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD04_SPLUNK healthy", "apic_host": "apic-inb.maple.ciscolabs.com", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "operSt": "online", "advertised_subnets": ["10.20.104.200/24"]}'
+
+      # 4. VMware ESX Host & Web VM: CPU/Memory Normal, Zero Drops
+      - index: main
+        source: vmware:perf
+        sourcetype: vmware:perf:cpu
+        host: esx-maple-compute-01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "epoch": $EPOCH$, "host": "esx-maple-compute-01.maple.ciscolabs.com", "vm_name": "web-srv-01", "cpu.usage.average": 12, "cpu.usagemhz.average": 480, "mem.usage.average": 28, "status": "green"}'
+
+      # 5. Cisco Secure Firewall (FTD-Dovetail-01): Allowing Web Traffic
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: FTD-Dovetail-01
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "CONNECTION_STATISTICS", "action": "ALLOW", "rule_name": "ACME-WEB-ACCESS", "src_ip": "10.0.10.26", "dest_ip": "10.20.104.200", "dest_port": 8443, "protocol": "TCP", "ingress_interface": "Inside", "egress_interface": "DMZ", "status": "SESSION_ACTIVE"}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: THE BRIDGE CALL - "NOT US" (ROOT CAUSE: ACI BD WITHDRAWAL)       ###
+  ### ThousandEyes Alarms -> Net/Sec/Virt Teams report green -> Subnet Withdrawn ###
+  ### ========================================================================= ###
+  - name: acme-stage2-bridge-call-outage
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # 1. ThousandEyes (USER SYMPTOM): 0% Availability, 100% Packet Loss
+      - index: main
+        source: cisco:thousandeyes:metric
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto-dc1
+        _raw: '{"timestamp": "$ISO_TS$", "test_name": "ACME_Web_Production_Portal", "test_type": "http-server", "target_url": "https://web.acme.maple.ciscolabs.com:8443", "metric_name:http.server.request.availability": 0, "metric_name:network.loss": 100.0, "metric_name:http.client.request.duration": 0, "response_code": 0, "error_type": "CONNECT_TIMEOUT", "agent_name": "Toronto_Branch_Agent", "status": "CRITICAL_OUTAGE"}'
+
+      # 2. BGP Telemetry (NETWORKING SAYS: "Not Us - BGP Session is Up!")
+      # BUT: prefixes_accepted dropped from 4 to 3! (BD04 withdrawn!)
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 3, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast", "session_state": "ESTABLISHED", "remote_as": 65101, "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted"}}'
+
+      # 3. ACI APIC (THE STEALTH ROOT CAUSE): Subnet unadvertised from L3Out!
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 52, "prev": 100, "twScore": 52, "maxSev": "major", "descr": "Bridge Domain MAPLE_BD04_SPLUNK subnet 10.20.104.200/24 unadvertised from L3Out", "apic_host": "apic-inb.maple.ciscolabs.com", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "operSt": "degraded"}'
+      - index: main
+        source: cisco:dc:aci:events
+        sourcetype: cisco:dc:aci:events
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "code": "E4208451", "type": "config-change", "severity": "major", "affected": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "descr": "Subnet 10.20.104.200/24 scope altered: removed from L3Out out-L3Out-OSPF. Route withdrawn from external BGP peer 10.30.4.137", "user": "admin_ops", "cause": "route-withdrawn", "apic_host": "apic-inb.maple.ciscolabs.com"}'
+
+      # 4. VMware ESX Host (VIRTUALIZATION SAYS: "Not Us - VM is 100% Green!")
+      - index: main
+        source: vmware:perf
+        sourcetype: vmware:perf:cpu
+        host: esx-maple-compute-01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "epoch": $EPOCH$, "host": "esx-maple-compute-01.maple.ciscolabs.com", "vm_name": "web-srv-01", "cpu.usage.average": 14, "cpu.usagemhz.average": 510, "mem.usage.average": 29, "status": "green", "notes": "Guest OS active, httpd process running"}'
+
+      # 5. Cisco Secure Firewall (SECURITY SAYS: "Not Us - Firewall is Allowing!")
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: FTD-Dovetail-01
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "ACCESS_CONTROL_RULE_EVAL", "action": "ALLOW", "rule_name": "ACME-WEB-ACCESS", "src_ip": "10.0.10.26", "dest_ip": "10.20.104.200", "dest_port": 8443, "protocol": "TCP", "drop_count": 0, "status": "NO_FIREWALL_BLOCK"}'
+
+  ### ========================================================================= ###
+  ### STAGE 3: RESOLUTION & SERVICE RECOVERY                                    ###
+  ### Bridge Domain Subnet Re-advertised -> BGP 4 Prefixes -> 100% Restored     ###
+  ### ========================================================================= ###
+  - name: acme-stage3-resolved
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: LATENCY_MS
+        format: template
+        type: random
+        replacement: int
+        lower: 33
+        upper: 39
+    lines:
+      # 1. ACI APIC: Subnet Re-advertised to L3Out
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 100, "prev": 52, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD04_SPLUNK healthy", "apic_host": "apic-inb.maple.ciscolabs.com", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "operSt": "online"}'
+      - index: main
+        source: cisco:dc:aci:events
+        sourcetype: cisco:dc:aci:events
+        host: apic-inb.maple.ciscolabs.com
+        _raw: '{"time": "$ISO_TS$", "code": "E4208452", "type": "config-change", "severity": "info", "affected": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "descr": "Subnet 10.20.104.200/24 scope restored: re-associated with L3Out out-L3Out-OSPF. Route re-advertised to BGP neighbor 10.30.4.137", "user": "admin_ops", "cause": "route-restored", "apic_host": "apic-inb.maple.ciscolabs.com"}'
+
+      # 2. BGP Telemetry: prefixes_accepted returns to 4!
+      - index: cisco_metrics
+        source: "10.0.255.171"
+        sourcetype: httpevent
+        host: "R1"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "R1", "index": "cisco_metrics", "fields": {"metric_name:prefixes_accepted": 4, "neighbor_address": "10.30.4.137", "af_name": "ipv4-unicast", "session_state": "ESTABLISHED", "remote_as": 65101, "vrf_name": "default", "path": "Cisco-IOS-XR-ipv4-bgp-oper:bgp/instances/instance/instance-active/vrfs/vrf/afs/af/neighbor-af-table/neighbor.af_data/prefixes_accepted"}}'
+
+      # 3. ThousandEyes: 100% Availability, 0% Loss, Healthy Latency Restored
+      - index: main
+        source: cisco:thousandeyes:metric
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto-dc1
+        _raw: '{"timestamp": "$ISO_TS$", "test_name": "ACME_Web_Production_Portal", "test_type": "http-server", "target_url": "https://web.acme.maple.ciscolabs.com:8443", "metric_name:http.server.request.availability": 100, "metric_name:network.loss": 0.0, "metric_name:http.client.request.duration": $LATENCY_MS$, "response_code": 200, "agent_name": "Toronto_Branch_Agent", "status": "AVAILABLE"}'

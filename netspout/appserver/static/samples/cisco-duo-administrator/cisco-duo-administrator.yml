@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DUO-ADMINISTRATOR - HEALTHY BASELINE ###
+  - name: cisco-duo-administrator-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:administrator
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
+
+  ### CISCO-DUO-ADMINISTRATOR - DEGRADED / WARNING ###
+  - name: cisco-duo-administrator-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:administrator
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'
+
+  ### CISCO-DUO-ADMINISTRATOR - CRITICAL / FAILURE ###
+  - name: cisco-duo-administrator-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:administrator
+        host: $HOST$
+        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "action": "ad_sync_finish", "description": "{\"Duration\": \"0:00:07\", \"Users added\": 0, \"Users modified\": 0, \"Users seen\": 67, \"Users removed\": 0, \"authproxy_identifiers\": [\"PRF2XSHZBNKP9HO38BSN\"], \"Sync Ref. Code\": \"951940ce7e0bcc4150b1fde70fd0988c\"}", "isotimestamp": "$ISO_TIMESTAMP$", "object": "AD MAPLE", "timestamp": 1789752192, "username": "Active Directory User Sync: AD MAPLE", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "administrator", "actionlabel": "AD Sync completed"}'

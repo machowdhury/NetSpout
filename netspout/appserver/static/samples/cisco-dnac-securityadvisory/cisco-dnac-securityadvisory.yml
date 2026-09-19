@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-SECURITYADVISORY - HEALTHY BASELINE ###
+  - name: cisco-dnac-securityadvisory-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_securityadvisory://DNAC02_SecurityAdvisory
+        sourcetype: cisco:dnac:securityadvisory
+        host: $HOST$
+        _raw: '{"Summary": "True", "Category": "CRITICAL", "SubCategory": "TOTAL", "Amount": 3, "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-DNAC-SECURITYADVISORY - DEGRADED / WARNING ###
+  - name: cisco-dnac-securityadvisory-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_securityadvisory://DNAC02_SecurityAdvisory
+        sourcetype: cisco:dnac:securityadvisory
+        host: $HOST$
+        _raw: '{"Summary": "True", "Category": "CRITICAL", "SubCategory": "TOTAL", "Amount": 3, "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-DNAC-SECURITYADVISORY - CRITICAL / FAILURE ###
+  - name: cisco-dnac-securityadvisory-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_securityadvisory://DNAC02_SecurityAdvisory
+        sourcetype: cisco:dnac:securityadvisory
+        host: $HOST$
+        _raw: '{"Summary": "True", "Category": "CRITICAL", "SubCategory": "TOTAL", "Amount": 3, "cisco_catalyst_host": "https://10.20.1.16"}'

@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-CATALYST-CLIENTHEALTH - HEALTHY BASELINE ###
+  - name: cisco-catalyst-clienthealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_clienthealth://DNAC_ClientHealth
+        sourcetype: cisco:catalyst:clienthealth
+        host: $HOST$
+        _raw: '{"siteId": "global", "clientType": "ALL", "clientCount": 0, "clientUniqueCount": 0, "scoreValue": -1, "starttime": 1789752526901, "endtime": 1789752826901, "scoreType": "ALL", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-CLIENTHEALTH - DEGRADED / WARNING ###
+  - name: cisco-catalyst-clienthealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_clienthealth://DNAC_ClientHealth
+        sourcetype: cisco:catalyst:clienthealth
+        host: $HOST$
+        _raw: '{"siteId": "global", "clientType": "ALL", "clientCount": 0, "clientUniqueCount": 0, "scoreValue": -1, "starttime": 1789752526901, "endtime": 1789752826901, "scoreType": "ALL", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-CLIENTHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-catalyst-clienthealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_clienthealth://DNAC_ClientHealth
+        sourcetype: cisco:catalyst:clienthealth
+        host: $HOST$
+        _raw: '{"siteId": "global", "clientType": "ALL", "clientCount": 0, "clientUniqueCount": 0, "scoreValue": -1, "starttime": 1789752526901, "endtime": 1789752826901, "scoreType": "ALL", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'

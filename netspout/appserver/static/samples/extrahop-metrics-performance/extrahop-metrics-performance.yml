@@ -1,0 +1,24 @@
+samples:
+  - name: extrahop-metrics-performance
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: cisco_mdt_metrics
+        source: api:extrahop:metrics
+        sourcetype: extrahop:eda:metrics
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761345, "event": "metric", "source": "extrahop:eda", "sourcetype": "extrahop:eda:metrics", "host": "core-switch-01", "index": "cisco_mdt_metrics", "fields": {"metric_name:extrahop_turnaround_time_ms": 4.2, "metric_name:extrahop_tcp_zero_window": 0, "metric_name:extrahop_rtt_ms": 1.4, "metric_name:extrahop_dns_error_count": 0, "device_oid": "1.3.6.1.4.1.3814.1.1.9281", "object_type": "network_device", "display_name": "Core-Spine-01", "macaddr": "00:22:bd:f8:11:00", "ipaddr4": "10.0.0.1"}}'
+      - index: cisco_mdt_metrics
+        source: api:extrahop:metrics
+        sourcetype: extrahop:eda:metrics
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761350, "event": "metric", "source": "extrahop:eda", "sourcetype": "extrahop:eda:metrics", "host": "dc-leaf-02", "index": "cisco_mdt_metrics", "fields": {"metric_name:extrahop_turnaround_time_ms": 8.9, "metric_name:extrahop_tcp_zero_window": 4, "metric_name:extrahop_rtt_ms": 3.8, "metric_name:extrahop_dns_error_count": 1, "device_oid": "1.3.6.1.4.1.3814.1.1.9282", "object_type": "network_device", "display_name": "DC-Leaf-02", "macaddr": "00:22:bd:f8:11:02", "ipaddr4": "10.0.0.2"}}'

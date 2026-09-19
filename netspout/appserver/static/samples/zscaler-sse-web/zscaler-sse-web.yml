@@ -1,0 +1,24 @@
+samples:
+  - name: zscaler-sse-web
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:zscaler:nss
+        sourcetype: zscaler:web
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:30 zscaler-nss zscalernss-web: datetime=Fri Sep 18 17:16:30 2026,user=alice.johnson@acme.corp,department=Engineering,location=Toronto-Branch,reqaction=Blocked,urlcategory=Malware_Sites,hostname=bad-download.compromised.com,clientip=10.10.40.12,serverip=198.51.100.99,reqmethod=GET,respcode=403,threatname=Trojan.Generic.KD,tunnel_id=TUN-TO-8891,policy_action=Block'
+      - index: netops_logs
+        source: api:zscaler:nss
+        sourcetype: zscaler:web
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:32 zscaler-nss zscalernss-web: datetime=Fri Sep 18 17:16:32 2026,user=b.wilson@acme.corp,department=Sales,location=NewYork-HQ,reqaction=Allowed,urlcategory=Business_and_Economy,hostname=portal.salesforce.com,clientip=10.20.10.44,serverip=13.107.4.50,reqmethod=POST,respcode=200,threatname=None,tunnel_id=TUN-NY-1024,policy_action=Allow'

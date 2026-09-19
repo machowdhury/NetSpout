@@ -1,0 +1,56 @@
+samples:
+  ### ACI BRIDGE DOMAIN HEALTHY BASELINE ###
+  - name: cisco-dc-aci-bridge-domain-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: APIC_HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: apic-inb.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: $APIC_HOST$
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 100, "prev": 100, "twScore": 100, "maxSev": "cleared", "descr": "Bridge Domain MAPLE_BD04_SPLUNK healthy", "apic_host": "$APIC_HOST$", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "operSt": "online"}'
+      - index: main
+        source: cisco:dc:aci:class
+        sourcetype: cisco:dc:aci:class
+        host: $APIC_HOST$
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "ip": "10.20.104.200/24", "scope": "public,shared", "ctrl": "unspecified", "name": "web-subnet", "parentDn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK", "apic_host": "$APIC_HOST$", "component": "fvSubnet", "l3out_associated": "out-L3Out-OSPF"}'
+
+  ### ACI BRIDGE DOMAIN WITHDRAWAL / DEGRADATION ###
+  - name: cisco-dc-aci-bridge-domain-withdrawn
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: APIC_HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: apic-inb.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco:dc:aci:health
+        sourcetype: cisco:dc:aci:health
+        host: $APIC_HOST$
+        _raw: '{"time": "$ISO_TS$", "dn": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/health", "cur": 52, "prev": 100, "twScore": 52, "maxSev": "major", "descr": "Bridge Domain MAPLE_BD04_SPLUNK subnet withdrawn from L3Out", "apic_host": "$APIC_HOST$", "component": "fvBD", "tenant": "MAPLE", "bd": "MAPLE_BD04_SPLUNK", "operSt": "degraded"}'
+      - index: main
+        source: cisco:dc:aci:events
+        sourcetype: cisco:dc:aci:events
+        host: $APIC_HOST$
+        _raw: '{"time": "$ISO_TS$", "code": "E4208451", "type": "config-change", "severity": "major", "affected": "uni/tn-MAPLE/BD-MAPLE_BD04_SPLUNK/subnet-[10.20.104.200/24]", "descr": "Subnet 10.20.104.200/24 unadvertised from L3Out out-L3Out-OSPF (route withdrawn from BGP/OSPF core)", "user": "admin_ops", "cause": "route-withdrawn", "apic_host": "$APIC_HOST$"}'

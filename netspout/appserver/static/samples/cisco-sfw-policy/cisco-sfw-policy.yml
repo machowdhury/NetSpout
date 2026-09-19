@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SFW-POLICY - HEALTHY BASELINE ###
+  - name: cisco-sfw-policy-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_sfw_api
+        source: sbg_sfw_api_input://MAPLE_FMC_API
+        sourcetype: cisco:sfw:policy
+        host: $HOST$
+        _raw: '{"name": "AMP_Policy", "id": "fb73018e-682d-11ec-bf59-9b66d79cfdcf", "type": "FilePolicy", "archiveDepth": 2, "archiveDepthAction": true, "blockEncryptedArchives": false, "cleanList": true, "customDetectionList": true, "firstTimeFileAnalysis": true, "inspectArchives": false, "threatScore": "DISABLED", "links": {"self": "https://fmc.maple.ciscolabs.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/filepolicies/fb73018e-682d-11ec-bf59-9b66d79cfdcf"}, "metadata": {"readOnly": {"state": false}, "timestamp": 1715113568, "lastUser": {"name": "admin", "id": "68d03c42-d9bd-11dc-89f2-b7961d42c462", "type": "user"}, "domain": {"name": "Global", "id": "e276abec-e0f2-11e3-8169-6d9ed49b625f", "type": "Domain"}}}'
+
+  ### CISCO-SFW-POLICY - DEGRADED / WARNING ###
+  - name: cisco-sfw-policy-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_sfw_api
+        source: sbg_sfw_api_input://MAPLE_FMC_API
+        sourcetype: cisco:sfw:policy
+        host: $HOST$
+        _raw: '{"name": "AMP_Policy", "id": "fb73018e-682d-11ec-bf59-9b66d79cfdcf", "type": "FilePolicy", "archiveDepth": 2, "archiveDepthAction": true, "blockEncryptedArchives": false, "cleanList": true, "customDetectionList": true, "firstTimeFileAnalysis": true, "inspectArchives": false, "threatScore": "DISABLED", "links": {"self": "https://fmc.maple.ciscolabs.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/filepolicies/fb73018e-682d-11ec-bf59-9b66d79cfdcf"}, "metadata": {"readOnly": {"state": false}, "timestamp": 1715113568, "lastUser": {"name": "admin", "id": "68d03c42-d9bd-11dc-89f2-b7961d42c462", "type": "user"}, "domain": {"name": "Global", "id": "e276abec-e0f2-11e3-8169-6d9ed49b625f", "type": "Domain"}}}'
+
+  ### CISCO-SFW-POLICY - CRITICAL / FAILURE ###
+  - name: cisco-sfw-policy-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_sfw_api
+        source: sbg_sfw_api_input://MAPLE_FMC_API
+        sourcetype: cisco:sfw:policy
+        host: $HOST$
+        _raw: '{"name": "AMP_Policy", "id": "fb73018e-682d-11ec-bf59-9b66d79cfdcf", "type": "FilePolicy", "archiveDepth": 2, "archiveDepthAction": true, "blockEncryptedArchives": false, "cleanList": true, "customDetectionList": true, "firstTimeFileAnalysis": true, "inspectArchives": false, "threatScore": "DISABLED", "links": {"self": "https://fmc.maple.ciscolabs.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/filepolicies/fb73018e-682d-11ec-bf59-9b66d79cfdcf"}, "metadata": {"readOnly": {"state": false}, "timestamp": 1715113568, "lastUser": {"name": "admin", "id": "68d03c42-d9bd-11dc-89f2-b7961d42c462", "type": "user"}, "domain": {"name": "Global", "id": "e276abec-e0f2-11e3-8169-6d9ed49b625f", "type": "Domain"}}}'

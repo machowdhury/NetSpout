@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Data Blaster Console - Splunk App TA-network-data-blaster</title>
+  <!-- Local Offline Bundled Tailwind CSS -->
+  <script src="vendor/tailwind.min.js"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#ecfeff',
+                500: '#06b6d4',
+                600: '#0891b2',
+                900: '#164e63'
+              }
+            }
+          }
+        }
+      };
+    }
+  </script>
+  <!-- Local Offline Bundled React 18 & ReactDOM -->
+  <script src="vendor/react.production.min.js"></script>
+  <script src="vendor/react-dom.production.min.js"></script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #020617;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div id="datablaster-app-root">
+    <!-- Initial Loading State -->
+    <div class="flex items-center justify-center min-h-screen text-slate-400 font-mono text-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+        <span>Initializing TA-network-data-blaster React Console...</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="datablaster_react_app.js"></script>
+</body>
+</html>

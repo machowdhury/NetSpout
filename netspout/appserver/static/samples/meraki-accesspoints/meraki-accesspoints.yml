@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-ACCESSPOINTS - HEALTHY BASELINE ###
+  - name: meraki-accesspoints-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:accesspoints
+        host: $HOST$
+        _raw: '{  "serial": "Q2JD-TOR-MR46",  "name": "MR46-Toronto-Floor1",  "model": "MR46",  "networkId": "N_TORONTO_DC",  "status": "online",  "clientCount": 28,  "channel24": 6,  "channel5": 36,  "authFailures": 0,  "assocFailures": 0,  "dhcpFailures": 0,  "dnsFailures": 0,  "utilization24": 18,  "utilization5": 14 }'
+
+  ### MERAKI-ACCESSPOINTS - DEGRADED INCIDENT ###
+  - name: meraki-accesspoints-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:accesspoints
+        host: $HOST$
+        _raw: '{  "serial": "Q2JD-TOR-MR46",  "name": "MR46-Toronto-Floor1",  "model": "MR46",  "networkId": "N_TORONTO_DC",  "status": "online",  "clientCount": 28,  "channel24": 6,  "channel5": 36,  "authFailures": 4,  "assocFailures": 2,  "dhcpFailures": 5,  "dnsFailures": 3,  "utilization24": 45,  "utilization5": 38 }'

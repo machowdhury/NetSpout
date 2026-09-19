@@ -1,0 +1,141 @@
+samples:
+  ### STAGE 1: WIRELESS HEALTHY BASELINE ###
+  - name: wireless-healthy-baseline
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: AP_HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: AP-Floor1-West
+          - weight: 3
+            choice: AP-Floor1-East
+          - weight: 2
+            choice: AP-Floor2-West
+          - weight: 2
+            choice: Meraki-MR56-01
+          - weight: 1
+            choice: AP-HQ-Exec
+      - name: LOCATION
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: "Location#All Locations#Ottawa_DC1#Floor1"
+          - weight: 3
+            choice: "Location#All Locations#Toronto_DC1#BuildingA"
+          - weight: 2
+            choice: "Location#All Locations#Montreal#ExecWing"
+          - weight: 2
+            choice: "Location#All Locations#Vancouver#Campus"
+    lines:
+      - index: catalyst
+        source: cisco:dnac:clienthealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac.corp.local
+        _raw: '{"clientId": "c4:b3:01:8a:22:10", "clientHealthScore": 100, "rssi": -54, "snr": 36, "dataRate": 450, "apName": "$AP_HOST$", "location": "$LOCATION$", "timestamp": "$GOTS$"}'
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "$AP_HOST$", "deviceFamily": "Unified AP", "deviceHealthScore": 100, "reachabilityStatus": "reachable", "cpuHealth": 100, "memoryHealth": 100, "interferenceHealth": 100, "noiseHealth": 100, "location": "$LOCATION$"}'
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: ise-node01.corp.local
+        _raw: '$GOTS$ ise-node01 CISE_Passed_Authentications 0001234567 1 0 2026-03-17 14:00:00.000 +00:00 0001234567 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=jdoe, MAC=c4:b3:01:8a:22:10, Location=$LOCATION$, EAP-Type=PEAP-MSCHAPv2'
+
+  ### STAGE 2: RF INTERFERENCE & CLIENT SNR COLLAPSE ###
+  - name: wireless-rf-degradation
+    interval: 20
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: LOW_SNR
+        format: template
+        type: random
+        replacement: int
+        lower: 6
+        upper: 14
+      - name: POOR_RSSI
+        format: template
+        type: random
+        replacement: int
+        lower: -89
+        upper: -82
+    lines:
+      - index: catalyst
+        source: cisco:dnac:clienthealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac.corp.local
+        _raw: '{"clientId": "c4:b3:01:8a:22:10", "clientHealthScore": 28, "rssi": $POOR_RSSI$, "snr": $LOW_SNR$, "dataRate": 18, "apName": "AP-Floor1-West", "location": "Location#All Locations#Ottawa_DC1#Floor1", "timestamp": "$GOTS$"}'
+      - index: catalyst
+        source: cisco:dnac:devicehealth
+        sourcetype: cisco:dnac:devicehealth
+        host: dnac.corp.local
+        _raw: '{"name": "AP-Floor1-West", "deviceFamily": "Unified AP", "deviceHealthScore": 35, "reachabilityStatus": "reachable", "cpuHealth": 85, "memoryHealth": 90, "interferenceHealth": 20, "noiseHealth": 25, "location": "Location#All Locations#Ottawa_DC1#Floor1"}'
+
+  ### STAGE 3: ROGUE AP, AWIPS ATTACK & 802.1X AUTHENTICATION STORM ###
+  - name: wireless-rogue-attack-auth-failure
+    interval: 15
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: cisco:catalyst:rogue:threat:details
+        sourcetype: cisco:catalyst:rogue:threat:details
+        host: dnac.corp.local
+        _raw: '{"threatType": "Rogue AP on wire", "macAddress": "00:1A:2B:3C:4D:5E", "ssid": "Corp-Guest-Spoof", "threatLevel": "High", "detectingAp": "AP-Floor1-West", "radioType": "802.11ax - 5GHz", "status": "Active", "containedStatus": "Contained"}'
+      - index: catalyst
+        source: cisco:catalyst:security:awips:signatures
+        sourcetype: cisco:catalyst:security:awips:signatures
+        host: dnac.corp.local
+        _raw: '{"signatureName": "802.11 Deauthentication Broadcast Attack", "alarmSeverity": "Critical", "attackerMac": "00:1A:2B:3C:4D:5E", "victimMac": "Broadcast", "detectingAp": "AP-Floor1-West", "channel": 36, "timestamp": "$GOTS$"}'
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: ise-node01.corp.local
+        _raw: '$GOTS$ ise-node01 CISE_Failed_Authentications 0001234599 1 0 2026-03-17 14:15:00.000 +00:00 0001234599 5400 ERROR Failed-Attempt: 802.1X authentication failed, User-Name=jdoe, MAC=c4:b3:01:8a:22:10, FailureReason=Supplicant stopped responding to ISE during 802.1X transaction, Location=Location#All Locations#Ottawa_DC1#Floor1'
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P2", "title": "Client Connection Failure: Supplicant Timeout on Ottawa_DC1 Floor1", "status": "active", "category": "Onboarding", "impactedEntities": ["AP-Floor1-West", "c4:b3:01:8a:22:10"], "suggestedActions": "Investigate RF jamming or rogue deauth flooding near AP-Floor1-West"}'
+
+  ### STAGE 4: ROGUE CONTAINMENT & RF AUTO-CHANNEL RECOVERY ###
+  - name: wireless-containment-recovery
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: cisco:dnac:clienthealth
+        sourcetype: cisco:dnac:clienthealth
+        host: dnac.corp.local
+        _raw: '{"clientId": "c4:b3:01:8a:22:10", "clientHealthScore": 95, "rssi": -56, "snr": 34, "dataRate": 420, "apName": "AP-Floor1-East", "location": "Location#All Locations#Ottawa_DC1#Floor1", "timestamp": "$GOTS$"}'
+      - index: catalyst
+        source: cisco:dnac:issue
+        sourcetype: cisco:dnac:issue
+        host: dnac.corp.local
+        _raw: '{"priority": "P2", "title": "Client Connection Failure: Supplicant Timeout on Ottawa_DC1 Floor1", "status": "resolved", "category": "Onboarding", "impactedEntities": ["AP-Floor1-West"], "resolution": "Rogue contained and RRM dynamically switched channel to clean spectrum"}'

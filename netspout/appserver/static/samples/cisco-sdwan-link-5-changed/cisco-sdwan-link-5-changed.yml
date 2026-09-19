@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-link-5-changed
+  description: Real Network Assurance replay for cisco:sdwan:LINK-5-CHANGED (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINK-5-CHANGED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 3442: *$TS$:  %LINK-5-CHANGED: Interface Vlan1930, changed state to administratively down'
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINK-5-CHANGED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 888: *$TS$:  %LINK-5-CHANGED: Interface Loopback2, changed state to administratively down'

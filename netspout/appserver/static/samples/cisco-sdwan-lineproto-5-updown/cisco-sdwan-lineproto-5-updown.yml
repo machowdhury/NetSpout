@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-lineproto-5-updown
+  description: Real Network Assurance replay for cisco:sdwan:LINEPROTO-5-UPDOWN (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINEPROTO-5-UPDOWN
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 3322: *$TS$:  %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1930, changed state to down'
+    - index: catalyst
+      sourcetype: cisco:sdwan:LINEPROTO-5-UPDOWN
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 1110: *$TS$:  %LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel4, changed state to up'

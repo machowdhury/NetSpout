@@ -1,0 +1,24 @@
+samples:
+  - name: sophos-central-cef
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: sophos:central:cef
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:15:20 sophos-ep-01 CEF:0|Sophos|Central|1.0|Threat|Malware Blocked|7|src=10.10.40.55 msg=Malware detected and cleaned dhost=workstation-09.acme.local dvchost=workstation-09 rt=2026-09-18T21:15:20.000Z deviceType=Endpoint externalId=THREAT-99412 suid=S-1-5-21-39281 suser=m.smith category=Malware'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: sophos:central:cef
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:15:22 sophos-ep-02 CEF:0|Sophos|Central|1.0|Investigation|Suspicious PowerShell Execution|5|src=10.10.40.88 msg=Encoded PowerShell command intercepted dhost=srv-app-02.acme.local dvchost=srv-app-02 rt=2026-09-18T21:15:22.000Z deviceType=Server externalId=INV-81920 suid=S-1-5-21-88910 suser=svc_backup category=Investigation'

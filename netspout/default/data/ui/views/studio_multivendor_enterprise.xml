@@ -1,0 +1,166 @@
+<dashboard version="1.1" theme="dark">
+  <label>Enterprise 5-Tier Operations (MV-ENT-001)</label>
+  <description>Cross-domain telemetry tracking traffic flows from Cloud SASE to Perimeter Firewall, Core WAN, and DC Fabric.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-ENT-001)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-ENT-001</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Links -->
+  <line x1="140" y1="100" x2="380" y2="100" stroke="#334155" stroke-width="2" stroke-dasharray="4,4"/>
+  <line x1="380" y1="100" x2="620" y2="100" stroke="#334155" stroke-width="2" stroke-dasharray="4,4"/>
+  <line x1="620" y1="100" x2="860" y2="100" stroke="#334155" stroke-width="2" stroke-dasharray="4,4"/>
+  <line x1="860" y1="100" x2="1100" y2="100" stroke="#334155" stroke-width="2" stroke-dasharray="4,4"/>
+  <!-- Link Labels -->
+  <text x="260" y="90" fill="#64748b" font-size="9" text-anchor="middle">IPsec Tunnel</text>
+  <text x="500" y="90" fill="#64748b" font-size="9" text-anchor="middle">100G Trunk</text>
+  <text x="740" y="90" fill="#64748b" font-size="9" text-anchor="middle">BGP AS 65001</text>
+  <text x="980" y="90" fill="#64748b" font-size="9" text-anchor="middle">RoCE v2 / 802.1Q</text>
+  <!-- Tier 1 -->
+  <rect x="50" y="65" width="180" height="70" rx="4" fill="#0f172a" stroke="#0ea5e9" stroke-width="2"/>
+  <text x="140" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Tier 1: Cloud SASE</text>
+  <text x="140" y="105" fill="#0ea5e9" font-size="9" text-anchor="middle">Zscaler / Netskope</text>
+  <text x="140" y="122" fill="#64748b" font-size="8" text-anchor="middle">165.225.1.1 (ZIA / SSE)</text>
+  <!-- Tier 2 -->
+  <rect x="290" y="65" width="180" height="70" rx="4" fill="#0f172a" stroke="#f97316" stroke-width="2"/>
+  <text x="380" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Tier 2: Perimeter NGFW</text>
+  <text x="380" y="105" fill="#f97316" font-size="9" text-anchor="middle">Palo Alto PA-5450</text>
+  <text x="380" y="122" fill="#64748b" font-size="8" text-anchor="middle">10.254.1.1 (pan:traffic)</text>
+  <!-- Tier 3 -->
+  <rect x="530" y="65" width="180" height="70" rx="4" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <text x="620" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Tier 3: SD-WAN Hub</text>
+  <text x="620" y="105" fill="#22c55e" font-size="9" text-anchor="middle">Fortinet FortiGate 3700D</text>
+  <text x="620" y="122" fill="#64748b" font-size="8" text-anchor="middle">10.254.2.1 (fortigate)</text>
+  <!-- Tier 4 -->
+  <rect x="770" y="65" width="180" height="70" rx="4" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <text x="860" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Tier 4: Core WAN / MPLS</text>
+  <text x="860" y="105" fill="#3b82f6" font-size="9" text-anchor="middle">Juniper MX960 &amp; Nokia 7750</text>
+  <text x="860" y="122" fill="#64748b" font-size="8" text-anchor="middle">10.254.3.1 (junos:sros)</text>
+  <!-- Tier 5 -->
+  <rect x="1010" y="65" width="180" height="70" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+  <text x="1100" y="88" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Tier 5: DC AI &amp; Campus</text>
+  <text x="1100" y="105" fill="#a855f7" font-size="9" text-anchor="middle">Arista 7060X6 &amp; Cisco 9300</text>
+  <text x="1100" y="122" fill="#64748b" font-size="8" text-anchor="middle">10.254.5.1 (arista:cisco)</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Tier 1: SASE Ingress (Zscaler/Netskope)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_security_fw sourcetype IN ("zscaler:zia", "netskope:sse") earliest=-24h | stats count]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x3b82f6","0x10b981","0x10b981"]</option>
+        <option name="rangeValues">[100,1000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">logs</option>
+        <option name="underLabel">TIER 1: SASE INGRESS (ZSCALER/NETSKOPE)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Tier 2: Perimeter FW (Palo Alto)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_security_fw sourcetype="pan:traffic" earliest=-24h | stats count]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x3b82f6","0x10b981","0x10b981"]</option>
+        <option name="rangeValues">[100,1000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">sessions</option>
+        <option name="underLabel">TIER 2: PERIMETER FW (PALO ALTO)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Tier 3: SD-WAN Hub (Fortinet)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_security_fw sourcetype="fortinet:fortigate" earliest=-24h | stats count]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x3b82f6","0x10b981","0x10b981"]</option>
+        <option name="rangeValues">[100,1000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">packets</option>
+        <option name="underLabel">TIER 3: SD-WAN HUB (FORTINET)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Tier 4 &amp; 5: Core / Fabric (Juniper/Nokia/Cisco)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops sourcetype IN ("juniper:junos", "nokia:sros", "cisco:ios") earliest=-24h | stats count]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x3b82f6","0x10b981","0x10b981"]</option>
+        <option name="rangeValues">[100,1000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">events</option>
+        <option name="underLabel">TIER 4 &amp; 5: CORE / FABRIC (JUNIPER/NOKIA/CISCO)</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-DEVICEHEALTH - HEALTHY BASELINE ###
+  - name: cisco-dnac-devicehealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: $HOST$
+        _raw: '{"DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "IpAddress": "10.120.1.1", "DeviceFamily": "Switches and Hubs", "Reachability": "Unreachable", "ReachabilityFailureReason": "SNMP Connectivity Failed", "ManageErrors": "Partial Collection Failure", "Manageability": "Managed (With Errors)", "MACAddress": "74:ad:98:6c:9f:20", "DeviceRole": "DISTRIBUTION", "ImageVersion": "17.18.1", "Uptime": "13 days, 0:18:47.17", "UptimeSeconds": 1155260, "LastUpdated": "2026-07-16 18:44:48", "LastUpdateTime": 1784227488350, "SerialNumber": "FDO25250L53", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "Platform": "C9500-48Y4C", "SupportType": "Supported", "AssociatedWLCIP": "", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceDescription": "Cisco IOS Software [IOSXE], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.18.1, RELEASE SOFTWARE (fc2) Technical Support: http://www.cisco.com/techsupport Copyright (c) 1986-2025 by Cisco Systems, Inc. Compiled Wed 06-Aug-25 03:56 by mcpre", "DeviceType": "Cisco Catalyst C9500-48Y4C Switch", "HasHealthReport": "True", "OverallHealth": -2, "HealthScore": -2, "IssueCount": 0, "Site": "Global/Toronto/TRN01-LAb", "Location": "Global/Toronto/TRN01-LAb", "InterfaceLinkErrHealth": -1, "CPUUtilization": 0, "CPUHealth": -1, "MemoryUtilizationHealth": -1.0, "MemoryUtilization": 0, "InterDeviceLinkAvailHealth": 0, "HasClientCount": "False", "ClientCountRadio0": 0, "ClientCountRadio1": 0, "ClientCountGhz24": 0, "ClientCountGhz50": 0, "HasInterferenceHealth": "False", "InterferenceHealthRadio0": 0, "InterferenceHealthRadio1": 0, "InterferenceHealthGhz24": 0, "InterferenceHealthGhz50": 0, "HasNoiseHealth": "False", "NoiseHealthRadio1": 0, "NoiseHealthGhz50": 0, "NoiseHealthRadio0": 0, "NoiseHealthGhz24": 0, "HasAirQualityHealth": "False", "AirQualityHealthRadio0": 0, "AirQualityHealthRadio1": 0, "AirQualityHealthGhz24": 0, "AirQualityHealthGhz50": 0, "HasUtilization": "False", "UtilizationRadio0": 0, "UtilizationRadio1": 0, "UtilizationGhz24": 0, "UtilizationGhz50": 0, "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-DNAC-DEVICEHEALTH - DEGRADED / WARNING ###
+  - name: cisco-dnac-devicehealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: $HOST$
+        _raw: '{"DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "IpAddress": "10.120.1.1", "DeviceFamily": "Switches and Hubs", "Reachability": "Unreachable", "ReachabilityFailureReason": "SNMP Connectivity Failed", "ManageErrors": "Partial Collection Failure", "Manageability": "Managed (With Errors)", "MACAddress": "74:ad:98:6c:9f:20", "DeviceRole": "DISTRIBUTION", "ImageVersion": "17.18.1", "Uptime": "13 days, 0:18:47.17", "UptimeSeconds": 1155260, "LastUpdated": "2026-07-16 18:44:48", "LastUpdateTime": 1784227488350, "SerialNumber": "FDO25250L53", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "Platform": "C9500-48Y4C", "SupportType": "Supported", "AssociatedWLCIP": "", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceDescription": "Cisco IOS Software [IOSXE], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.18.1, RELEASE SOFTWARE (fc2) Technical Support: http://www.cisco.com/techsupport Copyright (c) 1986-2025 by Cisco Systems, Inc. Compiled Wed 06-Aug-25 03:56 by mcpre", "DeviceType": "Cisco Catalyst C9500-48Y4C Switch", "HasHealthReport": "True", "OverallHealth": -2, "HealthScore": -2, "IssueCount": 0, "Site": "Global/Toronto/TRN01-LAb", "Location": "Global/Toronto/TRN01-LAb", "InterfaceLinkErrHealth": -1, "CPUUtilization": 0, "CPUHealth": -1, "MemoryUtilizationHealth": -1.0, "MemoryUtilization": 0, "InterDeviceLinkAvailHealth": 0, "HasClientCount": "False", "ClientCountRadio0": 0, "ClientCountRadio1": 0, "ClientCountGhz24": 0, "ClientCountGhz50": 0, "HasInterferenceHealth": "False", "InterferenceHealthRadio0": 0, "InterferenceHealthRadio1": 0, "InterferenceHealthGhz24": 0, "InterferenceHealthGhz50": 0, "HasNoiseHealth": "False", "NoiseHealthRadio1": 0, "NoiseHealthGhz50": 0, "NoiseHealthRadio0": 0, "NoiseHealthGhz24": 0, "HasAirQualityHealth": "False", "AirQualityHealthRadio0": 0, "AirQualityHealthRadio1": 0, "AirQualityHealthGhz24": 0, "AirQualityHealthGhz50": 0, "HasUtilization": "False", "UtilizationRadio0": 0, "UtilizationRadio1": 0, "UtilizationGhz24": 0, "UtilizationGhz50": 0, "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-DNAC-DEVICEHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-dnac-devicehealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_devicehealth://DNAC01_DeviceHealth
+        sourcetype: cisco:dnac:devicehealth
+        host: $HOST$
+        _raw: '{"DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "IpAddress": "10.120.1.1", "DeviceFamily": "Switches and Hubs", "Reachability": "Unreachable", "ReachabilityFailureReason": "SNMP Connectivity Failed", "ManageErrors": "Partial Collection Failure", "Manageability": "Managed (With Errors)", "MACAddress": "74:ad:98:6c:9f:20", "DeviceRole": "DISTRIBUTION", "ImageVersion": "17.18.1", "Uptime": "13 days, 0:18:47.17", "UptimeSeconds": 1155260, "LastUpdated": "2026-07-16 18:44:48", "LastUpdateTime": 1784227488350, "SerialNumber": "FDO25250L53", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "Platform": "C9500-48Y4C", "SupportType": "Supported", "AssociatedWLCIP": "", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceDescription": "Cisco IOS Software [IOSXE], Catalyst L3 Switch Software (CAT9K_IOSXE), Version 17.18.1, RELEASE SOFTWARE (fc2) Technical Support: http://www.cisco.com/techsupport Copyright (c) 1986-2025 by Cisco Systems, Inc. Compiled Wed 06-Aug-25 03:56 by mcpre", "DeviceType": "Cisco Catalyst C9500-48Y4C Switch", "HasHealthReport": "True", "OverallHealth": -2, "HealthScore": -2, "IssueCount": 0, "Site": "Global/Toronto/TRN01-LAb", "Location": "Global/Toronto/TRN01-LAb", "InterfaceLinkErrHealth": -1, "CPUUtilization": 0, "CPUHealth": -1, "MemoryUtilizationHealth": -1.0, "MemoryUtilization": 0, "InterDeviceLinkAvailHealth": 0, "HasClientCount": "False", "ClientCountRadio0": 0, "ClientCountRadio1": 0, "ClientCountGhz24": 0, "ClientCountGhz50": 0, "HasInterferenceHealth": "False", "InterferenceHealthRadio0": 0, "InterferenceHealthRadio1": 0, "InterferenceHealthGhz24": 0, "InterferenceHealthGhz50": 0, "HasNoiseHealth": "False", "NoiseHealthRadio1": 0, "NoiseHealthGhz50": 0, "NoiseHealthRadio0": 0, "NoiseHealthGhz24": 0, "HasAirQualityHealth": "False", "AirQualityHealthRadio0": 0, "AirQualityHealthRadio1": 0, "AirQualityHealthGhz24": 0, "AirQualityHealthGhz50": 0, "HasUtilization": "False", "UtilizationRadio0": 0, "UtilizationRadio1": 0, "UtilizationGhz24": 0, "UtilizationGhz50": 0, "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'

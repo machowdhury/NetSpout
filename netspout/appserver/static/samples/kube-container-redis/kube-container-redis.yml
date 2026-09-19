@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-REDIS - HEALTHY BASELINE ###
+  - name: kube-container-redis-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-redis-master-0_681fd932-902b-4f86-b02b-f184f6d0f9e2/redis/12.log
+        sourcetype: kube:container:redis
+        host: $HOST$
+        _raw: '1:M 02 $SYSLOG_TIMESTAMP$.400 * Ready to accept connections tcp'
+
+  ### KUBE-CONTAINER-REDIS - DEGRADED / WARNING ###
+  - name: kube-container-redis-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-redis-master-0_681fd932-902b-4f86-b02b-f184f6d0f9e2/redis/12.log
+        sourcetype: kube:container:redis
+        host: $HOST$
+        _raw: '1:M 02 $SYSLOG_TIMESTAMP$.400 * Ready to accept connections tcp'
+
+  ### KUBE-CONTAINER-REDIS - CRITICAL / FAILURE ###
+  - name: kube-container-redis-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-redis-master-0_681fd932-902b-4f86-b02b-f184f6d0f9e2/redis/12.log
+        sourcetype: kube:container:redis
+        host: $HOST$
+        _raw: '1:M 02 $SYSLOG_TIMESTAMP$.400 * Ready to accept connections tcp'

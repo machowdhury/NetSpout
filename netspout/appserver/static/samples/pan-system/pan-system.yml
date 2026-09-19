@@ -1,0 +1,24 @@
+samples:
+  - name: pan-system
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:system
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:27,001801000001,SYSTEM,globalprotect,2304,2026/09/18 17:16:27,,globalprotect-gateway,gateway-agent,0,0,general,informational,"GlobalProtect gateway client connection established: User jdoe, Client IP 10.200.1.5, OS Windows 11",10982,0x0'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: pan:system
+        host: "sensor-01.acme.corp"
+        _raw: '1,2026/09/18 17:16:29,001801000001,SYSTEM,vpn,2304,2026/09/18 17:16:29,,vpn-tunnel,tunnel-status,0,0,general,critical,"IPSec tunnel Tunnel-DC-East down, peer 198.51.100.20 unreachable",10984,0x0'

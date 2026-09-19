@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.0.0",
+  "info": {
+    "title": "NetSpout",
+    "id": {
+      "group": null,
+      "name": "netspout",
+      "version": "2.0.0"
+    },
+    "author": [
+      {
+        "name": "Mahamud Chowdhury",
+        "email": "mchowdhury@splunk.com",
+        "company": "Splunk"
+      }
+    ],
+    "releaseDate": null,
+    "description": "NetSpout: Native Splunk Network Telemetry Simulator, OpenConfig MDT Engine, and Dynamic Failure Orchestrator",
+    "classification": {
+      "intendedAudience": "IT Operations, Network Engineering, SecOps, SRE",
+      "categories": ["IT Operations", "Security, Fraud & Compliance", "Utilities"],
+      "developmentStatus": "Production/Stable"
+    },
+    "commonInformationModels": null,
+    "license": {
+      "name": "Apache-2.0",
+      "text": null,
+      "uri": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "privacyPolicy": {
+      "name": null,
+      "text": null,
+      "uri": null
+    },
+    "releaseNotes": {
+      "name": "README",
+      "text": "README.md",
+      "uri": "https://github.com/machowdhury/NetSpout"
+    }
+  },
+  "dependencies": null,
+  "tasks": null,
+  "inputGroups": null,
+  "incompatibleApps": null,
+  "platformRequirements": {
+    "splunk": {
+      "Enterprise": ">=9.0.0"
+    }
+  },
+  "supportedDeployments": [
+    "_standalone",
+    "_distributed",
+    "_search_head_clustering"
+  ],
+  "targetWorkloads": [
+    "_search_heads"
+  ]
+}

@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-sytem-logs
+  description: Real Network Assurance replay for cisco:sdwan:sytem:logs (sdwan index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: sdwan
+      sourcetype: cisco:sdwan:sytem:logs
+      source: udp:514
+      host: 192.168.100.101
+      _time: "$EPOCH$"
+      _raw: '$TS$ 192.168.128.1 1 1772323200.984001859 MX_67_Home ip_flow_end src=192.168.128.102 dst=23.220.93.204 protocol=tcp sport=52390 dport=443 translated_src_ip=192.168.1.66 translated_port=52390'
+    - index: sdwan
+      sourcetype: cisco:sdwan:sytem:logs
+      source: udp:514
+      host: 192.168.100.101
+      _time: "$EPOCH$"
+      _raw: '$TS$ 192.168.128.1 1 1774543277.919596960 MX_67_Home ip_flow_start src=192.168.128.70 dst=10.80.80.2 protocol=tcp sport=55599 dport=443 translated_src_ip=192.168.1.66 translated_port=55599'

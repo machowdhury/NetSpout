@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-CLIENT - HEALTHY BASELINE ###
+  - name: cisco-dnac-client-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.16
+          - weight: 2
+            choice: https://10.20.1.16-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC02_Client
+        sourcetype: cisco:dnac:client
+        host: $HOST$
+        _raw: '{"id": "E8:BC:E4:74:07:FA", "macAddress": "E8:BC:E4:74:07:FA", "type": "Wired", "name": "SEPE8BCE47407FA", "userId": null, "username": "9Qx9CJ5O351+SFhFnaESDaKssazYM4bgml3GbE7MDQA=", "ipv4Address": null, "ipv6Addresses": ["fe80::eabc:e4ff:fe74:7fa"], "vendor": "Cisco Systems, Inc.", "osType": "unknown", "osVersion": null, "formFactor": "IP Phone", "trustScore": 6.0, "deviceType": "Cisco-IP-Phone 9841", "siteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "siteHierarchyId": "/34a9c832-12d0-4d71-90c2-f538a791012d/9ce279dd-e59c-426b-9b0e-de29a0954cff/8b6f4e1f-7f5c-4996-a871-75ca6c832493/", "siteId": "8b6f4e1f-7f5c-4996-a871-75ca6c832493", "lastUpdatedTime": 1784258040000, "connectionStatus": "connected", "tracked": "No", "isPrivateMacAddress": false, "health": {"overallScore": 1, "onboardingScore": 1, "connectedScore": 0, "linkErrorPercentageThreshold": 1.0, "isLinkErrorIncluded": true, "discardsThreshold": 10.0, "isDiscardsIncluded": false, "utilizationThreshold": 90.0, "isUtilizationIncluded": false, "rssiThreshold": -72, "snrThreshold": 9, "dataRateThreshold": -1, "retriesThreshold": 50, "isRssiIncluded": true, "isSnrIncluded": true, "isDataRateIncluded": false, "isRetriesIncluded": false}, "traffic": {"txBytes": 7524, "rxBytes": 20949, "usage": 28473, "rxPackets": 0, "txPackets": 0, "rxRate": 558.0, "txRate": 200.0, "rxLinkErrorPercentage": 0.0, "txLinkErrorPercentage": 0.0, "inDiscards": 0.0, "outDiscards": 0.0, "inUtilization": 0.0, "outUtilization": 0.0, "rxRetries": 0, "rxRetryPercentage": 0.0, "txDrops": 0, "txDropPercentage": null, "dnsRequestCount": 0, "dnsResponseCount": 0}, "connectedNetworkDevice": {"connectedNetworkDeviceId": "8f4a9102-0208-4790-96ec-ffc35cd5b844", "connectedNetworkDeviceName": "TOR-FIAB.ott04-lab.ca", "connectedNetworkDeviceManagementIp": "10.201.48.105", "connectedNetworkDeviceMac": null, "connectedNetworkDeviceType": "Switch", "interfaceName": "TenGigabitEthernet1/0/2", "interfaceSpeed": 1000000000, "duplexMode": "Full Duplex"}, "connection": {"vlanId": "2046", "sessionDuration": -1, "vnId": null, "l2Vn": null, "l3Vn": null, "securityGroupTag": "0.0", "linkSpeed": 1000000000, "bridgeVMMode": "0.0", "band": null, "ssid": null, "authType": null, "wlcName": null, "wlcId": null, "apMac": null, "apEthernetMac": "-1", "apMode": "Unknown", "radioId": 0, "channel": "0", "channelWidth": null, "protocol": "Unclassified", "protocolCapability": "Unclassified", "upnId": null, "upnName": null, "upnOwner": null, "upnDuid": null, "rssi": 0, "snr": 0, "dataRate": 0, "isIosAnalyticsCapable": false, "isFabricClient": true}, "onboarding": {"avgRunDuration": 0, "maxRunDuration": 0, "avgAssocDuration": 0, "maxAssocDuration": 0, "avgAuthDuration": 0, "maxAuthDuration": 0, "avgDhcpDuration": 0, "maxDhcpDuration": 0, "maxRoamingDuration": null, "aaaServerIp": null, "dhcpServerIp": null, "onboardingTime": 0, "authDoneTime": 0, "assocDoneTime": 0, "dhcpDoneTime": 0, "roamingTime": 0, "failedRoamingCount": 0, "successfulRoamingCount": 0, "totalRoamingAttempts": 0, "assocFailureReason": null, "aaaFailureReason": "SUCCESS", "dhcpFailureReason": "dhcpRootCause", "otherFailureReason": null, "latestFailureReason": "dhcpRootCause"}, "latency": {"video": null, "voice": null, "bestEffort": null, "background": null}, "cisco_catalyst_host": "$HOST$"}'
+
+  ### CISCO-DNAC-CLIENT - DEGRADED / WARNING ###
+  - name: cisco-dnac-client-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.16
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC02_Client
+        sourcetype: cisco:dnac:client
+        host: $HOST$
+        _raw: '{"id": "E8:BC:E4:74:07:FA", "macAddress": "E8:BC:E4:74:07:FA", "type": "Wired", "name": "SEPE8BCE47407FA", "userId": null, "username": "9Qx9CJ5O351+SFhFnaESDaKssazYM4bgml3GbE7MDQA=", "ipv4Address": null, "ipv6Addresses": ["fe80::eabc:e4ff:fe74:7fa"], "vendor": "Cisco Systems, Inc.", "osType": "unknown", "osVersion": null, "formFactor": "IP Phone", "trustScore": 6.0, "deviceType": "Cisco-IP-Phone 9841", "siteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "siteHierarchyId": "/34a9c832-12d0-4d71-90c2-f538a791012d/9ce279dd-e59c-426b-9b0e-de29a0954cff/8b6f4e1f-7f5c-4996-a871-75ca6c832493/", "siteId": "8b6f4e1f-7f5c-4996-a871-75ca6c832493", "lastUpdatedTime": 1784258040000, "connectionStatus": "connected", "tracked": "No", "isPrivateMacAddress": false, "health": {"overallScore": 1, "onboardingScore": 1, "connectedScore": 0, "linkErrorPercentageThreshold": 1.0, "isLinkErrorIncluded": true, "discardsThreshold": 10.0, "isDiscardsIncluded": false, "utilizationThreshold": 90.0, "isUtilizationIncluded": false, "rssiThreshold": -72, "snrThreshold": 9, "dataRateThreshold": -1, "retriesThreshold": 50, "isRssiIncluded": true, "isSnrIncluded": true, "isDataRateIncluded": false, "isRetriesIncluded": false}, "traffic": {"txBytes": 7524, "rxBytes": 20949, "usage": 28473, "rxPackets": 0, "txPackets": 0, "rxRate": 558.0, "txRate": 200.0, "rxLinkErrorPercentage": 0.0, "txLinkErrorPercentage": 0.0, "inDiscards": 0.0, "outDiscards": 0.0, "inUtilization": 0.0, "outUtilization": 0.0, "rxRetries": 0, "rxRetryPercentage": 0.0, "txDrops": 0, "txDropPercentage": null, "dnsRequestCount": 0, "dnsResponseCount": 0}, "connectedNetworkDevice": {"connectedNetworkDeviceId": "8f4a9102-0208-4790-96ec-ffc35cd5b844", "connectedNetworkDeviceName": "TOR-FIAB.ott04-lab.ca", "connectedNetworkDeviceManagementIp": "10.201.48.105", "connectedNetworkDeviceMac": null, "connectedNetworkDeviceType": "Switch", "interfaceName": "TenGigabitEthernet1/0/2", "interfaceSpeed": 1000000000, "duplexMode": "Full Duplex"}, "connection": {"vlanId": "2046", "sessionDuration": -1, "vnId": null, "l2Vn": null, "l3Vn": null, "securityGroupTag": "0.0", "linkSpeed": 1000000000, "bridgeVMMode": "0.0", "band": null, "ssid": null, "authType": null, "wlcName": null, "wlcId": null, "apMac": null, "apEthernetMac": "-1", "apMode": "Unknown", "radioId": 0, "channel": "0", "channelWidth": null, "protocol": "Unclassified", "protocolCapability": "Unclassified", "upnId": null, "upnName": null, "upnOwner": null, "upnDuid": null, "rssi": 0, "snr": 0, "dataRate": 0, "isIosAnalyticsCapable": false, "isFabricClient": true}, "onboarding": {"avgRunDuration": 0, "maxRunDuration": 0, "avgAssocDuration": 0, "maxAssocDuration": 0, "avgAuthDuration": 0, "maxAuthDuration": 0, "avgDhcpDuration": 0, "maxDhcpDuration": 0, "maxRoamingDuration": null, "aaaServerIp": null, "dhcpServerIp": null, "onboardingTime": 0, "authDoneTime": 0, "assocDoneTime": 0, "dhcpDoneTime": 0, "roamingTime": 0, "failedRoamingCount": 0, "successfulRoamingCount": 0, "totalRoamingAttempts": 0, "assocFailureReason": null, "aaaFailureReason": "SUCCESS", "dhcpFailureReason": "dhcpRootCause", "otherFailureReason": null, "latestFailureReason": "dhcpRootCause"}, "latency": {"video": null, "voice": null, "bestEffort": null, "background": null}, "cisco_catalyst_host": "$HOST$"}'
+
+  ### CISCO-DNAC-CLIENT - CRITICAL / FAILURE ###
+  - name: cisco-dnac-client-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.16
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_client://DNAC02_Client
+        sourcetype: cisco:dnac:client
+        host: $HOST$
+        _raw: '{"id": "E8:BC:E4:74:07:FA", "macAddress": "E8:BC:E4:74:07:FA", "type": "Wired", "name": "SEPE8BCE47407FA", "userId": null, "username": "9Qx9CJ5O351+SFhFnaESDaKssazYM4bgml3GbE7MDQA=", "ipv4Address": null, "ipv6Addresses": ["fe80::eabc:e4ff:fe74:7fa"], "vendor": "Cisco Systems, Inc.", "osType": "unknown", "osVersion": null, "formFactor": "IP Phone", "trustScore": 6.0, "deviceType": "Cisco-IP-Phone 9841", "siteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "siteHierarchyId": "/34a9c832-12d0-4d71-90c2-f538a791012d/9ce279dd-e59c-426b-9b0e-de29a0954cff/8b6f4e1f-7f5c-4996-a871-75ca6c832493/", "siteId": "8b6f4e1f-7f5c-4996-a871-75ca6c832493", "lastUpdatedTime": 1784258040000, "connectionStatus": "connected", "tracked": "No", "isPrivateMacAddress": false, "health": {"overallScore": 1, "onboardingScore": 1, "connectedScore": 0, "linkErrorPercentageThreshold": 1.0, "isLinkErrorIncluded": true, "discardsThreshold": 10.0, "isDiscardsIncluded": false, "utilizationThreshold": 90.0, "isUtilizationIncluded": false, "rssiThreshold": -72, "snrThreshold": 9, "dataRateThreshold": -1, "retriesThreshold": 50, "isRssiIncluded": true, "isSnrIncluded": true, "isDataRateIncluded": false, "isRetriesIncluded": false}, "traffic": {"txBytes": 7524, "rxBytes": 20949, "usage": 28473, "rxPackets": 0, "txPackets": 0, "rxRate": 558.0, "txRate": 200.0, "rxLinkErrorPercentage": 0.0, "txLinkErrorPercentage": 0.0, "inDiscards": 0.0, "outDiscards": 0.0, "inUtilization": 0.0, "outUtilization": 0.0, "rxRetries": 0, "rxRetryPercentage": 0.0, "txDrops": 0, "txDropPercentage": null, "dnsRequestCount": 0, "dnsResponseCount": 0}, "connectedNetworkDevice": {"connectedNetworkDeviceId": "8f4a9102-0208-4790-96ec-ffc35cd5b844", "connectedNetworkDeviceName": "TOR-FIAB.ott04-lab.ca", "connectedNetworkDeviceManagementIp": "10.201.48.105", "connectedNetworkDeviceMac": null, "connectedNetworkDeviceType": "Switch", "interfaceName": "TenGigabitEthernet1/0/2", "interfaceSpeed": 1000000000, "duplexMode": "Full Duplex"}, "connection": {"vlanId": "2046", "sessionDuration": -1, "vnId": null, "l2Vn": null, "l3Vn": null, "securityGroupTag": "0.0", "linkSpeed": 1000000000, "bridgeVMMode": "0.0", "band": null, "ssid": null, "authType": null, "wlcName": null, "wlcId": null, "apMac": null, "apEthernetMac": "-1", "apMode": "Unknown", "radioId": 0, "channel": "0", "channelWidth": null, "protocol": "Unclassified", "protocolCapability": "Unclassified", "upnId": null, "upnName": null, "upnOwner": null, "upnDuid": null, "rssi": 0, "snr": 0, "dataRate": 0, "isIosAnalyticsCapable": false, "isFabricClient": true}, "onboarding": {"avgRunDuration": 0, "maxRunDuration": 0, "avgAssocDuration": 0, "maxAssocDuration": 0, "avgAuthDuration": 0, "maxAuthDuration": 0, "avgDhcpDuration": 0, "maxDhcpDuration": 0, "maxRoamingDuration": null, "aaaServerIp": null, "dhcpServerIp": null, "onboardingTime": 0, "authDoneTime": 0, "assocDoneTime": 0, "dhcpDoneTime": 0, "roamingTime": 0, "failedRoamingCount": 0, "successfulRoamingCount": 0, "totalRoamingAttempts": 0, "assocFailureReason": null, "aaaFailureReason": "SUCCESS", "dhcpFailureReason": "dhcpRootCause", "otherFailureReason": null, "latestFailureReason": "dhcpRootCause"}, "latency": {"video": null, "voice": null, "bestEffort": null, "background": null}, "cisco_catalyst_host": "$HOST$"}'

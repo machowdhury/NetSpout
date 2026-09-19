@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-ISE-SYSLOG - HEALTHY BASELINE ###
+  - name: cisco-ise-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.10.34
+          - weight: 2
+            choice: 10.0.10.34-peer
+    lines:
+      - index: main
+        source: udp:5516
+        sourcetype: cisco:ise:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $SYSLOG_TIMESTAMP$ maple-ise02 CISE_Failed_Attempts 0002840615 1 0 2026-09-18 17:34:43.705 +00:00 0056893972 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=101, Device IP Address=10.0.0.1, Device Port=18330, DestinationIPAddress=$HOST$, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=INVALID, Protocol=Radius, ExternalErrorCode=40008, NetworkDeviceName=FTD-DOVETAIL01, User-Name=INVALID, NAS-IP-Address=10.0.0.1, NAS-Port=2241802240, Called-Station-ID=64.100.57.98, Calling-Station-ID=45.149.145.155, NAS-Port-Type=Virtual, Tunnel-Client-Endpoint=(tag=0) 45.149.145.155, cisco-av-pair=audit-session-id=0a000001859f30006aad7633, cisco-av-pair=ip:source-ip=45.149.145.155, cisco-av-pair=coa-push=true, MS-CHAP-Challenge=a5:2c:00:e6:1e:b1:3e:06:ea:18:f1:5e:4d:48:f7:48, MS-CHAP2-Response=00:00:b3:0d:ac:89:95:df:35:12:71:17:6c:aa:62:fd:98:e4:00:00:00:00:00:00:00:00:e3:31:02:ea:9f:15:85:52:f9:e3:76:d8:d5:6c:56:2a:f8:25:ea:a8:0e:e5:af:58, CVPN3000/ASA/PIX7x-Tunnel-Group-Name=MAPLE-NON_DUO, NetworkDeviceProfileName=Cisco, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, IsThirdPartyDeviceFlow=false, SSID=64.100.57.98, CVPN3000/ASA/PIX7x-Client-Type=2, AcsSessionID=maple-ise02/571877645/2000730, AuthenticationMethod=MSCHAPV2, SelectedAccessService=Default Network Access, RequestLatency=8, FailureReason=22056 Subject not found in the applicable identity store(s), Step=11001, Step=11017, Step=15049, Step=15008, Step=15041, Step=15048, Step=15048, Step=15048, Step=15048, Step=15048, Step=22072, Step=15013, Step=24210, Step=24216, Step=15013, Step=24430, Step=24325, Step=24313, Step=24318, Step=24322, Step=24352, Step=24412, Step=15013, Step=24631, Step=24633, Step=22016, Step=22056, Step=22058, Step=22061, Step=11003, SelectedAuthenticationIdentityStores=Internal Users, SelectedAuthenticationIdentityStores=All_AD_Join_Points, SelectedAuthenticationIdentityStores=Guest Users, NetworkDeviceGroups=Location#All Locations#OTT02-Kanata, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, NetworkDeviceGroups=DNAC#DNAC Devices, NetworkDeviceGroups=Device Type#All Device Types, IdentityPolicyMatchedRule=Default, CPMSessionID=0a000001859f30006aad7633, ISEPolicySetName=Default, IdentitySelectionMatchedRule=Default, StepLatency=1=0\;2=1\;3=0\;4=0\;5=1\;6=0\;7=0\;8=0\;9=0\;10=0\;11=0\;12=0\;13=2\;14=0\;15=0\;16=2\;17=0\;18=0\;19=0\;20=0\;21=0\;22=0\;23=0\;24=2\;25=0\;26=0\;27=0\;28=0\;29=0, StepData=5= Network Access.EapAuthentication, StepData=6= Normalised Radius.RadiusFlowType, StepData=7= Normalised Radius.RadiusFlowType, StepData=8= Normalised Radius.RadiusFlowType, StepData=9= Normalised Radius.RadiusFlowType, StepData=10=All_User_ID_Stores, StepData=11=Internal Users, StepData=14=All_AD_Join_Points, StepData=15=All_AD_Join_Points, StepData=16=INVALID, StepData=17=maple.ciscolabs.com, StepData=18=maple.ciscolabs.com, StepData=20=ERROR_NO_SUCH_USER, StepData=21=All_AD_Join_Points, StepData=22=Guest Users, TotalAuthenLatency=8, ClientLatency=0, IsMachineIdentity=false, DTLSSupport=Unknown, EndPointIPAddress=45.149.145.155, DNAC=DNAC#DNAC Devices, Network Device Profile=Cisco, Location=Location#All Locations#OTT02-Kanata, Device Type=Device Type#All Device Types, IPSEC=IPSEC#Is IPSEC Device#No, Response={RadiusPacketType=AccessReject; AuthenticationResult=UnknownUser; MS-CHAP-Error='
+
+  ### CISCO-ISE-SYSLOG - DEGRADED / WARNING ###
+  - name: cisco-ise-syslog-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.10.34
+    lines:
+      - index: main
+        source: udp:5516
+        sourcetype: cisco:ise:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $SYSLOG_TIMESTAMP$ maple-ise02 CISE_Failed_Attempts 0002840615 1 0 2026-09-18 17:34:43.705 +00:00 0056893972 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=101, Device IP Address=10.0.0.1, Device Port=18330, DestinationIPAddress=$HOST$, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=INVALID, Protocol=Radius, ExternalErrorCode=40008, NetworkDeviceName=FTD-DOVETAIL01, User-Name=INVALID, NAS-IP-Address=10.0.0.1, NAS-Port=2241802240, Called-Station-ID=64.100.57.98, Calling-Station-ID=45.149.145.155, NAS-Port-Type=Virtual, Tunnel-Client-Endpoint=(tag=0) 45.149.145.155, cisco-av-pair=audit-session-id=0a000001859f30006aad7633, cisco-av-pair=ip:source-ip=45.149.145.155, cisco-av-pair=coa-push=true, MS-CHAP-Challenge=a5:2c:00:e6:1e:b1:3e:06:ea:18:f1:5e:4d:48:f7:48, MS-CHAP2-Response=00:00:b3:0d:ac:89:95:df:35:12:71:17:6c:aa:62:fd:98:e4:00:00:00:00:00:00:00:00:e3:31:02:ea:9f:15:85:52:f9:e3:76:d8:d5:6c:56:2a:f8:25:ea:a8:0e:e5:af:58, CVPN3000/ASA/PIX7x-Tunnel-Group-Name=MAPLE-NON_DUO, NetworkDeviceProfileName=Cisco, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, IsThirdPartyDeviceFlow=false, SSID=64.100.57.98, CVPN3000/ASA/PIX7x-Client-Type=2, AcsSessionID=maple-ise02/571877645/2000730, AuthenticationMethod=MSCHAPV2, SelectedAccessService=Default Network Access, RequestLatency=8, FailureReason=22056 Subject not found in the applicable identity store(s), Step=11001, Step=11017, Step=15049, Step=15008, Step=15041, Step=15048, Step=15048, Step=15048, Step=15048, Step=15048, Step=22072, Step=15013, Step=24210, Step=24216, Step=15013, Step=24430, Step=24325, Step=24313, Step=24318, Step=24322, Step=24352, Step=24412, Step=15013, Step=24631, Step=24633, Step=22016, Step=22056, Step=22058, Step=22061, Step=11003, SelectedAuthenticationIdentityStores=Internal Users, SelectedAuthenticationIdentityStores=All_AD_Join_Points, SelectedAuthenticationIdentityStores=Guest Users, NetworkDeviceGroups=Location#All Locations#OTT02-Kanata, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, NetworkDeviceGroups=DNAC#DNAC Devices, NetworkDeviceGroups=Device Type#All Device Types, IdentityPolicyMatchedRule=Default, CPMSessionID=0a000001859f30006aad7633, ISEPolicySetName=Default, IdentitySelectionMatchedRule=Default, StepLatency=1=0\;2=1\;3=0\;4=0\;5=1\;6=0\;7=0\;8=0\;9=0\;10=0\;11=0\;12=0\;13=2\;14=0\;15=0\;16=2\;17=0\;18=0\;19=0\;20=0\;21=0\;22=0\;23=0\;24=2\;25=0\;26=0\;27=0\;28=0\;29=0, StepData=5= Network Access.EapAuthentication, StepData=6= Normalised Radius.RadiusFlowType, StepData=7= Normalised Radius.RadiusFlowType, StepData=8= Normalised Radius.RadiusFlowType, StepData=9= Normalised Radius.RadiusFlowType, StepData=10=All_User_ID_Stores, StepData=11=Internal Users, StepData=14=All_AD_Join_Points, StepData=15=All_AD_Join_Points, StepData=16=INVALID, StepData=17=maple.ciscolabs.com, StepData=18=maple.ciscolabs.com, StepData=20=ERROR_NO_SUCH_USER, StepData=21=All_AD_Join_Points, StepData=22=Guest Users, TotalAuthenLatency=8, ClientLatency=0, IsMachineIdentity=false, DTLSSupport=Unknown, EndPointIPAddress=45.149.145.155, DNAC=DNAC#DNAC Devices, Network Device Profile=Cisco, Location=Location#All Locations#OTT02-Kanata, Device Type=Device Type#All Device Types, IPSEC=IPSEC#Is IPSEC Device#No, Response={RadiusPacketType=AccessReject; AuthenticationResult=UnknownUser; MS-CHAP-Error='
+
+  ### CISCO-ISE-SYSLOG - CRITICAL / FAILURE ###
+  - name: cisco-ise-syslog-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.10.34
+    lines:
+      - index: main
+        source: udp:5516
+        sourcetype: cisco:ise:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ $SYSLOG_TIMESTAMP$ maple-ise02 CISE_Failed_Attempts 0002840615 1 0 2026-09-18 17:34:43.705 +00:00 0056893972 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=101, Device IP Address=10.0.0.1, Device Port=18330, DestinationIPAddress=$HOST$, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=INVALID, Protocol=Radius, ExternalErrorCode=40008, NetworkDeviceName=FTD-DOVETAIL01, User-Name=INVALID, NAS-IP-Address=10.0.0.1, NAS-Port=2241802240, Called-Station-ID=64.100.57.98, Calling-Station-ID=45.149.145.155, NAS-Port-Type=Virtual, Tunnel-Client-Endpoint=(tag=0) 45.149.145.155, cisco-av-pair=audit-session-id=0a000001859f30006aad7633, cisco-av-pair=ip:source-ip=45.149.145.155, cisco-av-pair=coa-push=true, MS-CHAP-Challenge=a5:2c:00:e6:1e:b1:3e:06:ea:18:f1:5e:4d:48:f7:48, MS-CHAP2-Response=00:00:b3:0d:ac:89:95:df:35:12:71:17:6c:aa:62:fd:98:e4:00:00:00:00:00:00:00:00:e3:31:02:ea:9f:15:85:52:f9:e3:76:d8:d5:6c:56:2a:f8:25:ea:a8:0e:e5:af:58, CVPN3000/ASA/PIX7x-Tunnel-Group-Name=MAPLE-NON_DUO, NetworkDeviceProfileName=Cisco, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, IsThirdPartyDeviceFlow=false, SSID=64.100.57.98, CVPN3000/ASA/PIX7x-Client-Type=2, AcsSessionID=maple-ise02/571877645/2000730, AuthenticationMethod=MSCHAPV2, SelectedAccessService=Default Network Access, RequestLatency=8, FailureReason=22056 Subject not found in the applicable identity store(s), Step=11001, Step=11017, Step=15049, Step=15008, Step=15041, Step=15048, Step=15048, Step=15048, Step=15048, Step=15048, Step=22072, Step=15013, Step=24210, Step=24216, Step=15013, Step=24430, Step=24325, Step=24313, Step=24318, Step=24322, Step=24352, Step=24412, Step=15013, Step=24631, Step=24633, Step=22016, Step=22056, Step=22058, Step=22061, Step=11003, SelectedAuthenticationIdentityStores=Internal Users, SelectedAuthenticationIdentityStores=All_AD_Join_Points, SelectedAuthenticationIdentityStores=Guest Users, NetworkDeviceGroups=Location#All Locations#OTT02-Kanata, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, NetworkDeviceGroups=DNAC#DNAC Devices, NetworkDeviceGroups=Device Type#All Device Types, IdentityPolicyMatchedRule=Default, CPMSessionID=0a000001859f30006aad7633, ISEPolicySetName=Default, IdentitySelectionMatchedRule=Default, StepLatency=1=0\;2=1\;3=0\;4=0\;5=1\;6=0\;7=0\;8=0\;9=0\;10=0\;11=0\;12=0\;13=2\;14=0\;15=0\;16=2\;17=0\;18=0\;19=0\;20=0\;21=0\;22=0\;23=0\;24=2\;25=0\;26=0\;27=0\;28=0\;29=0, StepData=5= Network Access.EapAuthentication, StepData=6= Normalised Radius.RadiusFlowType, StepData=7= Normalised Radius.RadiusFlowType, StepData=8= Normalised Radius.RadiusFlowType, StepData=9= Normalised Radius.RadiusFlowType, StepData=10=All_User_ID_Stores, StepData=11=Internal Users, StepData=14=All_AD_Join_Points, StepData=15=All_AD_Join_Points, StepData=16=INVALID, StepData=17=maple.ciscolabs.com, StepData=18=maple.ciscolabs.com, StepData=20=ERROR_NO_SUCH_USER, StepData=21=All_AD_Join_Points, StepData=22=Guest Users, TotalAuthenLatency=8, ClientLatency=0, IsMachineIdentity=false, DTLSSupport=Unknown, EndPointIPAddress=45.149.145.155, DNAC=DNAC#DNAC Devices, Network Device Profile=Cisco, Location=Location#All Locations#OTT02-Kanata, Device Type=Device Type#All Device Types, IPSEC=IPSEC#Is IPSEC Device#No, Response={RadiusPacketType=AccessReject; AuthenticationResult=UnknownUser; MS-CHAP-Error='

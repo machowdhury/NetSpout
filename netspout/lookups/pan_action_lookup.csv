@@ -1,0 +1,7 @@
+action,status
+allow,allowed
+drop,blocked
+deny,blocked
+reset-client,blocked
+reset-server,blocked
+reset-both,blocked

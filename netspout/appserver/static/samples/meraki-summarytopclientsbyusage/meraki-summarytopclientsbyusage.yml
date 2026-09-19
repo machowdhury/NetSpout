@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-SUMMARYTOPCLIENTSBYUSAGE - HEALTHY BASELINE ###
+  - name: meraki-summarytopclientsbyusage-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopclientsbyusage
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "topClients": [   {"name": "tor-db-backup-01", "mac": "00:50:56:a1:b2:c3", "totalBytes": 1250000000, "sentBytes": 850000000, "recvBytes": 400000000},   {"name": "tor-app-srv-02", "mac": "00:50:56:d4:e5:f6", "totalBytes": 890000000, "sentBytes": 490000000, "recvBytes": 400000000},   {"name": "mrayani-laptop", "mac": "f0:18:98:77:22:11", "totalBytes": 45000000, "sentBytes": 12000000, "recvBytes": 33000000}  ] }'
+
+  ### MERAKI-SUMMARYTOPCLIENTSBYUSAGE - DEGRADED INCIDENT ###
+  - name: meraki-summarytopclientsbyusage-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopclientsbyusage
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "topClients": [   {"name": "tor-db-backup-01", "mac": "00:50:56:a1:b2:c3", "totalBytes": 8400000000, "sentBytes": 6100000000, "recvBytes": 2300000000, "bandwidthExceeded": true},   {"name": "tor-app-srv-02", "mac": "00:50:56:d4:e5:f6", "totalBytes": 890000000, "sentBytes": 490000000, "recvBytes": 400000000}  ] }'

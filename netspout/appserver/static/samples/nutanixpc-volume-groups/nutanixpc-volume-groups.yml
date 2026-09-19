@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-VOLUME-GROUPS - HEALTHY BASELINE ###
+  - name: nutanixpc-volume-groups-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/volumes/v4.0/config/volume-groups
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/volumes/v4.0/config/volume-groups-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_volume_groups
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.VolumeGroup", "extId": "a8589f1c-3418-4e4c-9c55-109eeb10c261", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/a8589f1c-3418-4e4c-9c55-109eeb10c261", "rel": "volume_group"}], "name": "pvc-8934bad9-c9ba-4490-81b3-04c4ee83d857", "description": "FS:ext4, PVC:anc-mysql-certs, NS:default, POD:anc-mysql-0, SA:default", "shouldLoadBalanceVmAttachments": false, "sharingStatus": "SHARED", "targetName": "ntnx-k8s-a8589f1c-3418-4e4c-9c55-109eeb10c261", "clusterReference": "00061768-f76f-4f95-3e5f-0025b500016f", "storageFeatures": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.StorageFeatures", "flashMode": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.FlashMode", "isEnabled": false}}, "usageType": "INTERNAL", "isHidden": true}'
+
+  ### NUTANIXPC-VOLUME-GROUPS - DEGRADED / WARNING ###
+  - name: nutanixpc-volume-groups-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/volumes/v4.0/config/volume-groups
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_volume_groups
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.VolumeGroup", "extId": "a8589f1c-3418-4e4c-9c55-109eeb10c261", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/a8589f1c-3418-4e4c-9c55-109eeb10c261", "rel": "volume_group"}], "name": "pvc-8934bad9-c9ba-4490-81b3-04c4ee83d857", "description": "FS:ext4, PVC:anc-mysql-certs, NS:default, POD:anc-mysql-0, SA:default", "shouldLoadBalanceVmAttachments": false, "sharingStatus": "SHARED", "targetName": "ntnx-k8s-a8589f1c-3418-4e4c-9c55-109eeb10c261", "clusterReference": "00061768-f76f-4f95-3e5f-0025b500016f", "storageFeatures": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.StorageFeatures", "flashMode": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.FlashMode", "isEnabled": false}}, "usageType": "INTERNAL", "isHidden": true}'
+
+  ### NUTANIXPC-VOLUME-GROUPS - CRITICAL / FAILURE ###
+  - name: nutanixpc-volume-groups-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/volumes/v4.0/config/volume-groups
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_volume_groups
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.VolumeGroup", "extId": "a8589f1c-3418-4e4c-9c55-109eeb10c261", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/a8589f1c-3418-4e4c-9c55-109eeb10c261", "rel": "volume_group"}], "name": "pvc-8934bad9-c9ba-4490-81b3-04c4ee83d857", "description": "FS:ext4, PVC:anc-mysql-certs, NS:default, POD:anc-mysql-0, SA:default", "shouldLoadBalanceVmAttachments": false, "sharingStatus": "SHARED", "targetName": "ntnx-k8s-a8589f1c-3418-4e4c-9c55-109eeb10c261", "clusterReference": "00061768-f76f-4f95-3e5f-0025b500016f", "storageFeatures": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.StorageFeatures", "flashMode": {"$reserved": {"$fv": "v4.r0"}, "$objectType": "volumes.v4.config.FlashMode", "isEnabled": false}}, "usageType": "INTERNAL", "isHidden": true}'

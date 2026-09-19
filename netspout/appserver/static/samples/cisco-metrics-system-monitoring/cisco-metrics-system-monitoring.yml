@@ -1,0 +1,61 @@
+samples:
+  ### HEALTHY CPU & SYSTEM HEALTH ###
+  - name: cisco-metrics-system-monitoring-healthy
+    interval: 60
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: CPU_UTIL
+        format: template
+        type: random
+        replacement: int
+        lower: 1
+        upper: 4
+      - name: FREE_MEM
+        format: template
+        type: random
+        replacement: int
+        lower: 5000000000
+        upper: 5300000000
+    lines:
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": $CPU_UTIL$, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute": $CPU_UTIL$, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.system_ram_memory": 6442450944, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.free_physical_memory": $FREE_MEM$, "metric_name:Cisco-IOS-XR-shellutil-oper:system-time/uptime.uptime": 720057, "node_name": "0/RP0/CPU0"}}'
+      - index: cisco_metrics
+        source: R2
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R2", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": $CPU_UTIL$, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute": $CPU_UTIL$, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.system_ram_memory": 6442450944, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.free_physical_memory": $FREE_MEM$, "metric_name:Cisco-IOS-XR-shellutil-oper:system-time/uptime.uptime": 720080, "node_name": "0/RP0/CPU0"}}'
+
+  ### CRITICAL CPU SPIKE & MEMORY PRESSURE ###
+  - name: cisco-metrics-system-monitoring-failure
+    interval: 60
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HIGH_CPU
+        format: template
+        type: random
+        replacement: int
+        lower: 91
+        upper: 99
+      - name: LOW_MEM
+        format: template
+        type: random
+        replacement: int
+        lower: 250000000
+        upper: 450000000
+    lines:
+      - index: cisco_metrics
+        source: R1
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "R1", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_five_minute": $HIGH_CPU$, "metric_name:Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute": $HIGH_CPU$, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.system_ram_memory": 6442450944, "metric_name:Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.free_physical_memory": $LOW_MEM$, "metric_name:Cisco-IOS-XR-shellutil-oper:system-time/uptime.uptime": 720057, "node_name": "0/RP0/CPU0"}}'

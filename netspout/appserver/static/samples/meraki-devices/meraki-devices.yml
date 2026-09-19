@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-DEVICES - HEALTHY BASELINE ###
+  - name: meraki-devices-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MS250",  "name": "MS250-Toronto-Core",  "mac": "0c:8d:db:6f:10:01",  "networkId": "N_TORONTO_DC",  "model": "MS250-48FP",  "address": "150 King St W, Toronto, ON M5H 1J9",  "lat": 43.6487,  "lng": -79.3854,  "notes": "Toronto Hub Core Switch",  "tags": ["hub", "datacenter", "core"],  "lanIp": "10.10.10.2",  "firmware": "MS 15.21.1",  "status": "online",  "productType": "switch" }'
+
+  ### MERAKI-DEVICES - DEGRADED INCIDENT ###
+  - name: meraki-devices-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:devices
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MS250",  "name": "MS250-Toronto-Core",  "mac": "0c:8d:db:6f:10:01",  "networkId": "N_TORONTO_DC",  "model": "MS250-48FP",  "address": "150 King St W, Toronto, ON M5H 1J9",  "tags": ["hub", "datacenter", "core"],  "lanIp": "10.10.10.2",  "firmware": "MS 15.21.1",  "status": "alerting",  "alertCount": 3,  "productType": "switch" }'

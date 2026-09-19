@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-iosxe-rp-pae-not-6-pae-startup
+  description: Real Network Assurance replay for cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 2135: *$TS$:  %IOSXE_RP_PAE_NOT-6-PAE_STARTUP: Product Analytics is Disabled'
+    - index: catalyst
+      sourcetype: cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.121 2309: *$TS$:  %IOSXE_RP_PAE_NOT-6-PAE_STARTUP: Product Analytics is Disabled'

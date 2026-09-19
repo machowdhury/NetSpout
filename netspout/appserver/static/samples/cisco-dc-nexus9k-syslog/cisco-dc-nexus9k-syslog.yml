@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DC-NEXUS9K-SYSLOG - HEALTHY BASELINE ###
+  - name: cisco-dc-nexus9k-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.0.252
+          - weight: 2
+            choice: 10.0.0.252-peer
+    lines:
+      - index: main
+        source: udp:5514
+        sourcetype: cisco:dc:nexus9k:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ OTT-CORE01: 2026 $SYSLOG_TIMESTAMP$ EST: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19815]  fe80::232:17ff:fe3c:ac58 on Vlan506 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 '
+
+  ### CISCO-DC-NEXUS9K-SYSLOG - DEGRADED / WARNING ###
+  - name: cisco-dc-nexus9k-syslog-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.0.252
+    lines:
+      - index: main
+        source: udp:5514
+        sourcetype: cisco:dc:nexus9k:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ OTT-CORE01: 2026 $SYSLOG_TIMESTAMP$ EST: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19815]  fe80::232:17ff:fe3c:ac58 on Vlan506 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 '
+
+  ### CISCO-DC-NEXUS9K-SYSLOG - CRITICAL / FAILURE ###
+  - name: cisco-dc-nexus9k-syslog-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.0.252
+    lines:
+      - index: main
+        source: udp:5514
+        sourcetype: cisco:dc:nexus9k:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ OTT-CORE01: 2026 $SYSLOG_TIMESTAMP$ EST: %ICMPV6-3-ND_RA_LOG:  icmpv6 [19815]  fe80::232:17ff:fe3c:ac58 on Vlan506 Current-hop-limit:64, m-bit:0, o-bit:0, rtr-lifetime:1800, reachable-time:0, retrans-timer:0 '

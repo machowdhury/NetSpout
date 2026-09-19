@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-AUDIT-LOGS - HEALTHY BASELINE ###
+  - name: cisco-dnac-audit-logs-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+          - weight: 2
+            choice: https://dnac.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_audit_logs://DNAC01_AuditLogs
+        sourcetype: cisco:dnac:audit:logs
+        host: $HOST$
+        _raw: '{"version": "1.0.0", "clientId": "admin", "efInstanceId": "8bc79c1e-9614-4b90-94e2-b210740c85de", "instanceId": "f7924add-c576-4617-80d4-62da85174cb3", "eventId": "AUDIT_LOG_EVENT", "namespace": "AUDIT_LOG", "name": "AUDIT_LOG", "description": "Intent API \"Get Issue Enrichment Details\" Executed", "type": "AUDIT_LOG", "category": "INFO", "domain": "Programmability", "subDomain": "APIs and Integrations", "severity": 1, "timestamp": 1784258442784, "details": {"requestPayload": "The request to execute BAPI with technical name \"issue-enrichment-details\" and rest method \"GET\" was received"}, "ciscoDnaEventLink": "", "note": null, "productId": "Cisco Catalyst Center", "tntId": "631807903ddfd1674bd7ce02", "context": null, "userId": "admin", "i18n": null, "eventHierarchy": null, "message": null, "messageParams": null, "additionalDetails": {"eventMetadata": {"auditLogMetadata": {"type": "API", "version": "1.0.0"}}}, "parentInstanceId": null, "network": null, "isSimulated": false, "startTime": 1784258442786, "isPrivateEvent": true, "dnacIP": "10.0.10.86", "payloadSize": 1815, "eventSize": 1949, "userName": "admin", "childCount": 0, "isACKnowledgeable": false, "isAlert": false, "isDeprecated": false, "resourceDomain": {"name": "SUPER-ADMIN_GLOBAL", "resourceGroups": [{"srcResourceId": "*", "type": "site", "name": "Global"}], "_id": "9801e2fd865464c18b469cd5d18c1fd6a1147ebf"}, "tenantId": "SYS0", "src": "10.0.10.86"}'
+
+  ### CISCO-DNAC-AUDIT-LOGS - DEGRADED / WARNING ###
+  - name: cisco-dnac-audit-logs-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_audit_logs://DNAC01_AuditLogs
+        sourcetype: cisco:dnac:audit:logs
+        host: $HOST$
+        _raw: '{"version": "1.0.0", "clientId": "admin", "efInstanceId": "8bc79c1e-9614-4b90-94e2-b210740c85de", "instanceId": "f7924add-c576-4617-80d4-62da85174cb3", "eventId": "AUDIT_LOG_EVENT", "namespace": "AUDIT_LOG", "name": "AUDIT_LOG", "description": "Intent API \"Get Issue Enrichment Details\" Executed", "type": "AUDIT_LOG", "category": "INFO", "domain": "Programmability", "subDomain": "APIs and Integrations", "severity": 1, "timestamp": 1784258442784, "details": {"requestPayload": "The request to execute BAPI with technical name \"issue-enrichment-details\" and rest method \"GET\" was received"}, "ciscoDnaEventLink": "", "note": null, "productId": "Cisco Catalyst Center", "tntId": "631807903ddfd1674bd7ce02", "context": null, "userId": "admin", "i18n": null, "eventHierarchy": null, "message": null, "messageParams": null, "additionalDetails": {"eventMetadata": {"auditLogMetadata": {"type": "API", "version": "1.0.0"}}}, "parentInstanceId": null, "network": null, "isSimulated": false, "startTime": 1784258442786, "isPrivateEvent": true, "dnacIP": "10.0.10.86", "payloadSize": 1815, "eventSize": 1949, "userName": "admin", "childCount": 0, "isACKnowledgeable": false, "isAlert": false, "isDeprecated": false, "resourceDomain": {"name": "SUPER-ADMIN_GLOBAL", "resourceGroups": [{"srcResourceId": "*", "type": "site", "name": "Global"}], "_id": "9801e2fd865464c18b469cd5d18c1fd6a1147ebf"}, "tenantId": "SYS0", "src": "10.0.10.86"}'
+
+  ### CISCO-DNAC-AUDIT-LOGS - CRITICAL / FAILURE ###
+  - name: cisco-dnac-audit-logs-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_audit_logs://DNAC01_AuditLogs
+        sourcetype: cisco:dnac:audit:logs
+        host: $HOST$
+        _raw: '{"version": "1.0.0", "clientId": "admin", "efInstanceId": "8bc79c1e-9614-4b90-94e2-b210740c85de", "instanceId": "f7924add-c576-4617-80d4-62da85174cb3", "eventId": "AUDIT_LOG_EVENT", "namespace": "AUDIT_LOG", "name": "AUDIT_LOG", "description": "Intent API \"Get Issue Enrichment Details\" Executed", "type": "AUDIT_LOG", "category": "INFO", "domain": "Programmability", "subDomain": "APIs and Integrations", "severity": 1, "timestamp": 1784258442784, "details": {"requestPayload": "The request to execute BAPI with technical name \"issue-enrichment-details\" and rest method \"GET\" was received"}, "ciscoDnaEventLink": "", "note": null, "productId": "Cisco Catalyst Center", "tntId": "631807903ddfd1674bd7ce02", "context": null, "userId": "admin", "i18n": null, "eventHierarchy": null, "message": null, "messageParams": null, "additionalDetails": {"eventMetadata": {"auditLogMetadata": {"type": "API", "version": "1.0.0"}}}, "parentInstanceId": null, "network": null, "isSimulated": false, "startTime": 1784258442786, "isPrivateEvent": true, "dnacIP": "10.0.10.86", "payloadSize": 1815, "eventSize": 1949, "userName": "admin", "childCount": 0, "isACKnowledgeable": false, "isAlert": false, "isDeprecated": false, "resourceDomain": {"name": "SUPER-ADMIN_GLOBAL", "resourceGroups": [{"srcResourceId": "*", "type": "site", "name": "Global"}], "_id": "9801e2fd865464c18b469cd5d18c1fd6a1147ebf"}, "tenantId": "SYS0", "src": "10.0.10.86"}'

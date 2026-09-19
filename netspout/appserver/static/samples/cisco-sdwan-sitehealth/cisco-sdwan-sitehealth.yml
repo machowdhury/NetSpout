@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-SITEHEALTH - HEALTHY BASELINE ###
+  - name: cisco-sdwan-sitehealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+          - weight: 2
+            choice: https://10.20.1.105-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: $HOST$
+        _raw: '{"site_id": "500", "site_name": "SITE_500", "latitude": "45.424721", "longitude": "-75.695", "fromGps": "false", "site_health": "good", "devices_health": "good", "tunnels_health": "no_data", "apps_health": "no_data", "devices_health_score": 10.0, "tunnels_health_score": -1.0, "apps_health_score": -1.0, "apps_usage": 0.0, "prev_apps_usage": 0.0, "region_list": [], "role": [], "device_type": [], "lastUpdated": 1784258195806}'
+
+  ### CISCO-SDWAN-SITEHEALTH - DEGRADED / WARNING ###
+  - name: cisco-sdwan-sitehealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: $HOST$
+        _raw: '{"site_id": "500", "site_name": "SITE_500", "latitude": "45.424721", "longitude": "-75.695", "fromGps": "false", "site_health": "good", "devices_health": "good", "tunnels_health": "no_data", "apps_health": "no_data", "devices_health_score": 10.0, "tunnels_health_score": -1.0, "apps_health_score": -1.0, "apps_usage": 0.0, "prev_apps_usage": 0.0, "region_list": [], "role": [], "device_type": [], "lastUpdated": 1784258195806}'
+
+  ### CISCO-SDWAN-SITEHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-sitehealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: $HOST$
+        _raw: '{"site_id": "500", "site_name": "SITE_500", "latitude": "45.424721", "longitude": "-75.695", "fromGps": "false", "site_health": "good", "devices_health": "good", "tunnels_health": "no_data", "apps_health": "no_data", "devices_health_score": 10.0, "tunnels_health_score": -1.0, "apps_health_score": -1.0, "apps_usage": 0.0, "prev_apps_usage": 0.0, "region_list": [], "role": [], "device_type": [], "lastUpdated": 1784258195806}'

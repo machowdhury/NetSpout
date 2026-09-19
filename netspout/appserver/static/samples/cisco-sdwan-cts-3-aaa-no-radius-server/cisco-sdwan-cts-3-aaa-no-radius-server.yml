@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-cts-3-aaa-no-radius-server
+  description: Real Network Assurance replay for cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER
+      source: udp:5514
+      host: 10.201.48.116
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.116 173: *$TS$:  %CTS-3-AAA_NO_RADIUS_SERVER: No RADIUS servers available for CTS AAA request for CTS env-data SM'
+    - index: catalyst
+      sourcetype: cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER
+      source: udp:5514
+      host: 10.201.48.116
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 166: *$TS$:  %CTS-3-AAA_NO_RADIUS_SERVER: No RADIUS servers available for CTS AAA request for CTS env-data SM'

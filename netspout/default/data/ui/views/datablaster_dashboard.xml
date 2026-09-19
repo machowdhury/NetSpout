@@ -1,0 +1,207 @@
+<dashboard version="1.1" theme="dark">
+  <label>Network Data Blaster - Analytics Overview &amp; Ingestion Telemetry</label>
+  <description>Real-time analytics overview tracking multi-vendor log and metric streams ingested across enterprise network, security, wireless, and fabric tiers.</description>
+  
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="time_range" searchWhenChanged="true">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+
+    <input type="dropdown" token="selected_index" searchWhenChanged="true">
+      <label>Filter by Target Index</label>
+      <choice value="*">All App Indexes (*)</choice>
+      <choice value="idx_network_ops">idx_network_ops (Core Routing &amp; DC)</choice>
+      <choice value="idx_security_fw">idx_security_fw (Firewalls &amp; SASE)</choice>
+      <choice value="idx_wireless_ops">idx_wireless_ops (Campus WiFi &amp; SD-WAN)</choice>
+      <choice value="idx_performance_metrics">idx_performance_metrics (RoCE &amp; Telemetry)</choice>
+      <choice value="netops_logs">netops_logs (General NetOps)</choice>
+      <default>*</default>
+    </input>
+  </fieldset>
+
+  <!-- KPI Single Values Row -->
+  <row>
+    <panel>
+      <single>
+        <title>Total Telemetry Events Ingested</title>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats count</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["#1e293b","#0284c7"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Active Ingesting Indexes</title>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(index) as count</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["#1e293b","#10b981"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Active Sourcetypes Discovered</title>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(sourcetype) as count</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["#1e293b","#8b5cf6"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Reporting Network Hosts</title>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(host) as count</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">none</option>
+        <option name="rangeColors">["#1e293b","#f59e0b"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- Architectural Index Routing Info Banner -->
+  <row>
+    <panel>
+      <html>
+        <div style="display: flex; gap: 20px; align-items: stretch;">
+          <div style="flex: 1; background: #1a2233; border-left: 4px solid #00d084; padding: 14px 18px; border-radius: 4px;">
+            <h4 style="color: #00d084; margin-top: 0; margin-bottom: 6px; font-size: 14px;">&#x2714; Events Index Routing (Syslog &amp; Operational Logs)</h4>
+            <p style="color: #cfd8dc; font-size: 12px; margin: 0 0 6px 0;">Standard log streams routed to <code>idx_network_ops</code>, <code>idx_security_fw</code>, <code>idx_wireless_ops</code>.</p>
+            <div style="color: #90a4ae; font-size: 11px;">
+              Supported Vendors: Palo Alto Networks, Fortinet FortiGate, Juniper Junos, Nokia SR OS, Zscaler, Netskope, Cisco Meraki/FTD, F5 BIG-IP.
+            </div>
+          </div>
+          <div style="flex: 1; background: #1a2233; border-left: 4px solid #0693e3; padding: 14px 18px; border-radius: 4px;">
+            <h4 style="color: #0693e3; margin-top: 0; margin-bottom: 6px; font-size: 14px;">&#x26A1; High-Frequency Telemetry &amp; Metrics Routing</h4>
+            <p style="color: #cfd8dc; font-size: 12px; margin: 0 0 6px 0;">Time-series telemetry routed to <code>idx_performance_metrics</code> and <code>cisco_mdt_metrics</code>.</p>
+            <div style="color: #90a4ae; font-size: 11px;">
+              Supported Fabric: NVIDIA Spectrum RoCE v2 PFC/CNP, Arista 7280 Shared Buffer Pools, Cisco IOS XR Model-Driven Telemetry (MDT).
+            </div>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <!-- Ingestion Timechart & Breakdown -->
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Velocity Across Indexes</title>
+      <chart>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+| timechart span=10m count by index</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Ingested Volume by Sourcetype &amp; Vendor TA Normalization</title>
+      <table>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+| stats count as "Event Count", dc(host) as "Host Count", latest(_time) as "Last Ingested" by index, sourcetype
+| eval "Target Index Class" = if(index=="idx_performance_metrics" OR index=="cisco_mdt_metrics" OR index=="cisco_metrics", "Metrics / Telemetry", "Standard Events")
+| eval "Installed Technical Add-on" = case(
+    like(sourcetype, "%pan:%") OR like(sourcetype, "%paloalto%"), "Palo Alto Networks (Splunk_TA_paloalto_networks)",
+    like(sourcetype, "%fortinet%") OR like(sourcetype, "%fortigate%"), "Fortinet FortiGate (Splunk_TA_fortinet_fortigate)",
+    like(sourcetype, "%juniper%") OR like(sourcetype, "%junos%"), "Juniper Networks (Splunk_TA_juniper)",
+    like(sourcetype, "%arista%"), "Arista EOS Telemetry (aristanetworks)",
+    like(sourcetype, "%nokia%") OR like(sourcetype, "%sros%"), "Nokia SR OS Architecture Profile",
+    like(sourcetype, "%zscaler%"), "Zscaler Cloud SASE (TA-Zscaler_CIM)",
+    like(sourcetype, "%netskope%"), "Netskope Security Cloud (TA-NetSkopeAppForSplunk)",
+    like(sourcetype, "%aruba%"), "Aruba Networks Wireless (TA-aruba_networks)",
+    like(sourcetype, "%f5%") OR like(sourcetype, "%bigip%"), "F5 BIG-IP ADC (Splunk_TA_f5-bigip)",
+    like(sourcetype, "%meraki%"), "Cisco Meraki Dashboard (Splunk_TA_cisco_meraki)",
+    like(sourcetype, "%sdwan%"), "Cisco SD-WAN (TA-cisco_sdwan)",
+    like(sourcetype, "%cisco%"), "Cisco Enterprise (TA-cisco / Cisco MDT)",
+    1=1, "Generic Multi-Vendor Ingestion"
+  )
+| fieldformat "Last Ingested" = strftime('Last Ingested', "%Y-%m-%d %H:%M:%S")
+| sort -"Event Count"</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+
+  <!-- Live Telemetry Stream Sample -->
+  <row>
+    <panel>
+      <title>Live Telemetry Event Feed (Latest 20 Ingested Records)</title>
+      <table>
+        <search>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+| table _time, index, host, sourcetype, _raw
+| head 20</query>
+          <earliest>$time_range.earliest$</earliest>
+          <latest>$time_range.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="wrap">false</option>
+      </table>
+    </panel>
+  <!-- Cisco Model-Driven Telemetry (MDT) Metrics Panel -->
+  <row>
+    <panel>
+      <title>Cisco Model-Driven Telemetry (MDT) Real-Time Metrics (index=cisco_mdt_metrics)</title>
+      <chart>
+        <search>
+          <query>| mstats avg(_value) WHERE index=cisco_mdt_metrics metric_name=* BY metric_name span=1m</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>MDT Metric Catalog &amp; Series Discovery</title>
+      <table>
+        <search>
+          <query>| mcatalog values(metric_name) as "Metric Names", dc(host) as "Reporting Hosts" WHERE index=cisco_mdt_metrics</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

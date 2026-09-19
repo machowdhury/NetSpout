@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SYSLOG - HEALTHY BASELINE ###
+  - name: cisco-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.173
+          - weight: 2
+            choice: 10.0.255.173-peer
+    lines:
+      - index: main
+        source: udp:5515
+        sourcetype: cisco_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 1 $ISO_TIMESTAMP$ R03 ifmgr 202 - - 1430004: LC/0/0/CPU0:ifmgr[202]: %PKT_INFRA-LINEPROTO-5-UPDOWN : Line protocol on Interface HundredGigE0/0/1/2, changed state to Up '
+
+  ### CISCO-SYSLOG - DEGRADED / WARNING ###
+  - name: cisco-syslog-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.173
+    lines:
+      - index: main
+        source: udp:5515
+        sourcetype: cisco_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 1 $ISO_TIMESTAMP$ R03 ifmgr 202 - - 1430004: LC/0/0/CPU0:ifmgr[202]: %PKT_INFRA-LINEPROTO-5-UPDOWN : Line protocol on Interface HundredGigE0/0/1/2, changed state to Up '
+
+  ### CISCO-SYSLOG - CRITICAL / FAILURE ###
+  - name: cisco-syslog-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.0.255.173
+    lines:
+      - index: main
+        source: udp:5515
+        sourcetype: cisco_syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 1 $ISO_TIMESTAMP$ R03 ifmgr 202 - - 1430004: LC/0/0/CPU0:ifmgr[202]: %PKT_INFRA-LINEPROTO-5-UPDOWN : Line protocol on Interface HundredGigE0/0/1/2, changed state to Up '

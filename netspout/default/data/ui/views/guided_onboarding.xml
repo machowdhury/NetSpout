@@ -1,0 +1,475 @@
+<dashboard version="1.1" theme="dark" script="guided_onboarding.js">
+  <label>Data Onboarding Wizard</label>
+  <description>Guided 4-step wizard for single sourcetypes, multi-vendor batch telemetry, or operational scenarios with custom index provisioning and immediate Splunk search validation.</description>
+
+  <row>
+    <panel>
+      <html>
+        <div style="padding: 10px 0;">
+
+          <!-- Wizard Stepper Navigation Header -->
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px 20px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 22px;">🧙</span>
+              <div>
+                <h2 style="color: #f8fafc; margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em;">
+                  Guided Telemetry Onboarding Wizard
+                </h2>
+                <p style="color: #94a3b8; margin: 2px 0 0 0; font-size: 11px;">
+                  Configure ingestion mode, target index storage, test preflight readiness, and blast events into Splunk.
+                </p>
+              </div>
+            </div>
+
+            <!-- Stepper Progress Tracker -->
+            <div style="display: flex; align-items: center; gap: 8px;" id="wizard-stepper">
+              <div class="step-badge" id="badge-step-1" style="display: flex; align-items: center; gap: 6px; background: #0284c7; color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                <span>1</span> Ingestion Mode
+              </div>
+              <span style="color: #475569; font-size: 12px;">&gt;</span>
+              <div class="step-badge" id="badge-step-2" style="display: flex; align-items: center; gap: 6px; background: #1e293b; color: #94a3b8; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                <span>2</span> Target Index
+              </div>
+              <span style="color: #475569; font-size: 12px;">&gt;</span>
+              <div class="step-badge" id="badge-step-3" style="display: flex; align-items: center; gap: 6px; background: #1e293b; color: #94a3b8; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                <span>3</span> Volume &amp; Preflight
+              </div>
+              <span style="color: #475569; font-size: 12px;">&gt;</span>
+              <div class="step-badge" id="badge-step-4" style="display: flex; align-items: center; gap: 6px; background: #1e293b; color: #94a3b8; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                <span>4</span> Blast &amp; Verify
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 1 CONTAINER: INGESTION MODE -->
+          <div id="container-step-1" class="wizard-step-container">
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 20px;">
+              <h3 style="color: #38bdf8; font-size: 15px; font-weight: 600; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                <span>Step 1:</span> Choose Onboarding Methodology
+              </h3>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 20px 0;">
+                Select how you wish to introduce data into Splunk. You can ingest an individual sourcetype, batch multiple vendors simultaneously, or stream complete architecture failure scenarios.
+              </p>
+
+              <!-- 3 Mode Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                
+                <!-- Card 1: Single Sourcetype -->
+                <div id="card-mode-single" class="mode-selection-card" style="background: #020617; border: 2px solid #0284c7; border-radius: 8px; padding: 18px; cursor: pointer; transition: all 0.2s ease;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <b style="color: #f8fafc; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                      <span>🎯</span> Single Sourcetype Mode
+                    </b>
+                    <input type="radio" name="wizard_mode" value="single" checked="checked" style="accent-color: #0284c7;" />
+                  </div>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+                    Select an individual vendor sourcetype from the catalog, upload a sample file (.log, .json, .csv), or paste raw event data.
+                  </p>
+                </div>
+
+                <!-- Card 2: Multiple Sourcetypes -->
+                <div id="card-mode-multi" class="mode-selection-card" style="background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 18px; cursor: pointer; transition: all 0.2s ease;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <b style="color: #f8fafc; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                      <span>⚡</span> Multi-Sourcetype Batch Mode
+                    </b>
+                    <input type="radio" name="wizard_mode" value="multi" style="accent-color: #0284c7;" />
+                  </div>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+                    Select and emit multiple sourcetypes in a single batch across firewalls, core routing, wireless APs, and cloud proxies.
+                  </p>
+                </div>
+
+                <!-- Card 3: Scenario Mode -->
+                <div id="card-mode-scenario" class="mode-selection-card" style="background: #020617; border: 1px solid #334155; border-radius: 8px; padding: 18px; cursor: pointer; transition: all 0.2s ease;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <b style="color: #f8fafc; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                      <span>🌐</span> Architectural Scenario Mode
+                    </b>
+                    <input type="radio" name="wizard_mode" value="scenario" style="accent-color: #0284c7;" />
+                  </div>
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">
+                    Launch end-to-end multi-vendor operational scenarios with correlated route flapping, firewall saturation, or optical shift.
+                  </p>
+                </div>
+
+              </div>
+
+              <!-- Sub-panel: Single Mode Details -->
+              <div id="subpanel-single" style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+                <div style="margin-bottom: 14px;">
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 6px;">
+                    Choose Sourcetype Source:
+                  </label>
+                  <div style="display: flex; gap: 16px; margin-bottom: 14px;">
+                    <label style="color: #f8fafc; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                      <input type="radio" name="single_source_type" value="catalog" checked="checked" />
+                      Select from Pre-Built Catalog (30+ Vendor Sourcetypes)
+                    </label>
+                    <label style="color: #f8fafc; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                      <input type="radio" name="single_source_type" value="upload" />
+                      Upload File / Paste Raw Events (.log, .json, .csv)
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Catalog Selector -->
+                <div id="single-catalog-container">
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Select Target Sourcetype:
+                  </label>
+                  <select id="wizard-single-sourcetype-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;">
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+
+                <!-- File Upload / Paste Area (Hidden by default) -->
+                <div id="single-upload-container" style="display: none; margin-top: 14px;">
+                  <div id="wizard-dropzone" style="border: 2px dashed #475569; border-radius: 6px; padding: 16px; text-align: center; background: #0f172a; margin-bottom: 12px; cursor: pointer;">
+                    <input type="file" id="wizard-file-input" accept=".log,.txt,.json,.csv,.raw" style="display: none;" />
+                    <div style="font-size: 20px; margin-bottom: 4px;">📂</div>
+                    <div style="color: #38bdf8; font-size: 12px; font-weight: 600;">
+                      Drag &amp; drop sample file here or click to browse
+                    </div>
+                    <div id="wizard-file-badge" style="display: none; margin-top: 6px; font-size: 11px; font-family: monospace; color: #4ade80;"></div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Custom Sourcetype Name *</label>
+                      <input type="text" id="wizard-custom-sourcetype-name" placeholder="e.g. cisco:custom:waf, myapp:json" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="custom:network:log" />
+                    </div>
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Raw Sample Event Lines *</label>
+                      <textarea id="wizard-custom-content" rows="3" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box; resize: vertical;" placeholder="Paste raw event lines here...">%ASA-4-106023: Deny tcp src outside:198.51.100.77/44321 dst inside:10.0.1.50/80 by access-group "OUTSIDE_IN" [0x0, 0x0]</textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Event Preview Box -->
+                <div style="margin-top: 14px;">
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Sample Payload Preview:
+                  </label>
+                  <pre id="wizard-single-preview" style="background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 10px; color: #38bdf8; font-family: monospace; font-size: 11px; margin: 0; white-space: pre-wrap; word-break: break-all; max-height: 120px; overflow-y: auto;">Select a sourcetype above to preview payload...</pre>
+                </div>
+              </div>
+
+              <!-- Sub-panel: Multi Mode Details -->
+              <div id="subpanel-multi" style="display: none; background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                  <div style="display: flex; gap: 6px;" id="multi-filter-buttons">
+                    <button type="button" class="vendor-filter-btn" data-vendor="all" style="background: #0284c7; color: #fff; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">All Vendors</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="cisco" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Cisco</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="paloalto" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Palo Alto / Fortinet</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="arista" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Arista / Juniper / Nokia</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="cloud" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Cloud / SASE</button>
+                  </div>
+                  <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="button" id="btn-multi-select-all" style="background: #1e293b; color: #38bdf8; border: 1px solid #0284c7; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Select All</button>
+                    <button type="button" id="btn-multi-clear-all" style="background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Clear</button>
+                    <span id="multi-selected-count-badge" style="background: #0284c7; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px;">0 Selected</span>
+                  </div>
+                </div>
+
+                <!-- Multi Grid -->
+                <div id="multi-sourcetype-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; max-height: 280px; overflow-y: auto; padding: 4px;">
+                  <!-- Dynamically populated checkboxes -->
+                </div>
+              </div>
+
+              <!-- Sub-panel: Scenario Mode Details -->
+              <div id="subpanel-scenario" style="display: none; background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+                <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 8px;">
+                  Choose Correlated Network Operational Scenario:
+                </label>
+                <div id="scenario-cards-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+                  <!-- Scenario cards populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Step 1 Navigation Bar -->
+              <div style="display: flex; justify-content: flex-end; align-items: center; border-top: 1px solid #1e293b; padding-top: 14px;">
+                <button type="button" id="btn-next-step-1" style="background: #0284c7; color: #ffffff; border: none; border-radius: 4px; padding: 8px 22px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  Next: Destination Storage &amp; Index &gt;
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- STEP 2 CONTAINER: DESTINATION INDEX -->
+          <div id="container-step-2" class="wizard-step-container" style="display: none;">
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 20px;">
+              <h3 style="color: #38bdf8; font-size: 15px; font-weight: 600; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                <span>Step 2:</span> Destination Index &amp; Storage Provisioning
+              </h3>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 20px 0;">
+                Select where the ingested events will be routed and indexed, or provision a new custom index directly from this screen.
+              </p>
+
+              <!-- Index Selector Row -->
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <label style="color: #f8fafc; font-size: 12px; font-weight: 600; margin: 0;">
+                    Target Splunk Index:
+                  </label>
+                  <button type="button" id="btn-wizard-open-custom-index" style="background: #059669; color: #ffffff; border: none; border-radius: 4px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                    <span>+</span> Build New Custom Index
+                  </button>
+                </div>
+
+                <select id="wizard-target-index-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px 12px; color: #f8fafc; font-family: monospace; font-size: 13px; box-sizing: border-box; margin-bottom: 12px;">
+                  <option value="idx_network_ops">idx_network_ops (Core Routing, Switching, Cisco/Arista/Juniper)</option>
+                  <option value="idx_security_fw" selected="selected">idx_security_fw (Firewalls, NGFW, Palo Alto, Fortinet, SASE)</option>
+                  <option value="idx_wireless_ops">idx_wireless_ops (Campus WiFi, Catalyst 9800, Aruba, Meraki)</option>
+                  <option value="idx_performance_metrics">idx_performance_metrics (Telemetry, Flow, DC Fabric)</option>
+                  <option value="cisco_mdt_metrics">cisco_mdt_metrics (Model-Driven Streaming Telemetry)</option>
+                  <option value="main">main (Default Splunk Index)</option>
+                </select>
+
+                <!-- Custom Index Builder Modal/Inline Drawer -->
+                <div id="wizard-custom-index-drawer" style="display: none; background: #090d16; border: 1px solid #059669; border-radius: 6px; padding: 16px; margin-top: 14px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
+                    <b style="color: #34d399; font-size: 12px;">Provision Custom Splunk Index</b>
+                    <button type="button" id="btn-wizard-close-custom-index" style="background: transparent; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">&#215;</button>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Index Name *</label>
+                      <input type="text" id="wizard-custom-index-name" placeholder="e.g. idx_branch_office" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                    </div>
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Data Type *</label>
+                      <select id="wizard-custom-index-datatype" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;">
+                        <option value="event" selected="selected">Event Index</option>
+                        <option value="metric">Metric Index</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Max Size (MB)</label>
+                      <input type="number" id="wizard-custom-index-maxsize" value="51200" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;" />
+                    </div>
+                    <div>
+                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Retention (Days)</label>
+                      <input type="number" id="wizard-custom-index-retention" value="90" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;" />
+                    </div>
+                  </div>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" id="btn-wizard-submit-custom-index" style="background: #059669; color: #ffffff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                      Create &amp; Select Index
+                    </button>
+                    <div id="wizard-custom-index-msg" style="font-size: 11px; font-family: monospace; color: #34d399;"></div>
+                  </div>
+                </div>
+
+                <!-- Index Details Card -->
+                <div id="index-details-card" style="background: #0f172a; border: 1px solid #1e293b; border-radius: 4px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <span style="color: #94a3b8; font-size: 11px;">Active Index:</span>
+                    <b id="active-index-label" style="color: #38bdf8; font-family: monospace; font-size: 12px; margin-left: 6px;">idx_security_fw</b>
+                  </div>
+                  <span id="active-index-tier-badge" style="background: #14532d; color: #4ade80; font-size: 10px; padding: 2px 8px; border-radius: 3px; font-weight: 600;">
+                    STATUS: READY FOR INGESTION
+                  </span>
+                </div>
+
+              </div>
+
+              <!-- Step 2 Navigation Bar -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e293b; padding-top: 14px;">
+                <button type="button" id="btn-back-step-2" style="background: #334155; color: #cbd5e1; border: none; border-radius: 4px; padding: 8px 18px; font-size: 12px; cursor: pointer;">
+                  &lt; Back: Ingestion Mode
+                </button>
+                <button type="button" id="btn-next-step-2" style="background: #0284c7; color: #ffffff; border: none; border-radius: 4px; padding: 8px 22px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Next: Volume &amp; Preflight &gt;
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- STEP 3 CONTAINER: VOLUME & PREFLIGHT -->
+          <div id="container-step-3" class="wizard-step-container" style="display: none;">
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 20px;">
+              <h3 style="color: #38bdf8; font-size: 15px; font-weight: 600; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                <span>Step 3:</span> Ingestion Volume &amp; Preflight Diagnostics
+              </h3>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 20px 0;">
+                Select your blast volume and verify that Splunk HEC, credentials, SSL, and storage are reachable.
+              </p>
+
+              <!-- Volume Selector -->
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+                <label style="display: block; color: #f8fafc; font-size: 12px; font-weight: 600; margin-bottom: 10px;">
+                  Select Emission Volume:
+                </label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                  <div class="volume-card" data-volume="1" style="background: #0f172a; border: 2px solid #0284c7; border-radius: 6px; padding: 14px; cursor: pointer; text-align: center;">
+                    <b style="color: #f8fafc; font-size: 14px; display: block;">1 Event</b>
+                    <span style="color: #38bdf8; font-size: 11px;">Single Probe / Verification</span>
+                  </div>
+                  <div class="volume-card" data-volume="50" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 14px; cursor: pointer; text-align: center;">
+                    <b style="color: #f8fafc; font-size: 14px; display: block;">50 Events</b>
+                    <span style="color: #94a3b8; font-size: 11px;">Standard Baseline Flow</span>
+                  </div>
+                  <div class="volume-card" data-volume="500" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 14px; cursor: pointer; text-align: center;">
+                    <b style="color: #f8fafc; font-size: 14px; display: block;">500 Events</b>
+                    <span style="color: #94a3b8; font-size: 11px;">Production Stress Burst</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preflight Diagnostics -->
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <div>
+                    <b style="color: #f8fafc; font-size: 12px;">Preflight Connectivity &amp; Permission Checks</b>
+                    <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Validates HEC token, SSL, and index writability</span>
+                  </div>
+                  <button type="button" id="btn-wizard-run-preflight" style="background: #0284c7; color: #fff; border: none; border-radius: 4px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                    Run Preflight Test
+                  </button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                  <div id="wizard-check-hec" style="background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="color: #cbd5e1; font-size: 11px; font-weight: 600;">HEC Endpoint</span>
+                      <span id="wizard-badge-hec" style="font-size: 10px; background: #334155; color: #94a3b8; padding: 1px 6px; border-radius: 2px;">READY</span>
+                    </div>
+                    <span style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">Port 8888 Collector</span>
+                  </div>
+
+                  <div id="wizard-check-token" style="background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="color: #cbd5e1; font-size: 11px; font-weight: 600;">Token Auth</span>
+                      <span id="wizard-badge-token" style="font-size: 10px; background: #334155; color: #94a3b8; padding: 1px 6px; border-radius: 2px;">READY</span>
+                    </div>
+                    <span style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">Splunk HEC Token</span>
+                  </div>
+
+                  <div id="wizard-check-ssl" style="background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="color: #cbd5e1; font-size: 11px; font-weight: 600;">SSL Verification</span>
+                      <span id="wizard-badge-ssl" style="font-size: 10px; background: #14532d; color: #4ade80; padding: 1px 6px; border-radius: 2px;">BYPASS (DEV)</span>
+                    </div>
+                    <span style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">Self-Signed Allowed</span>
+                  </div>
+
+                  <div id="wizard-check-index" style="background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <span style="color: #cbd5e1; font-size: 11px; font-weight: 600;">Target Index</span>
+                      <span id="wizard-badge-index" style="font-size: 10px; background: #14532d; color: #4ade80; padding: 1px 6px; border-radius: 2px;">ONLINE</span>
+                    </div>
+                    <span id="wizard-desc-index" style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">idx_security_fw</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3 Navigation Bar -->
+              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e293b; padding-top: 14px;">
+                <button type="button" id="btn-back-step-3" style="background: #334155; color: #cbd5e1; border: none; border-radius: 4px; padding: 8px 18px; font-size: 12px; cursor: pointer;">
+                  &lt; Back: Target Index
+                </button>
+                <button type="button" id="btn-next-step-3" style="background: #0284c7; color: #ffffff; border: none; border-radius: 4px; padding: 8px 22px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Next: Review &amp; Blast &gt;
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- STEP 4 CONTAINER: BLAST & VERIFY -->
+          <div id="container-step-4" class="wizard-step-container" style="display: none;">
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 20px;">
+              <h3 style="color: #38bdf8; font-size: 15px; font-weight: 600; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
+                <span>Step 4:</span> Review, Blast Telemetry &amp; Verify Search
+              </h3>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 20px 0;">
+                Review configuration below and execute telemetry emission. Once complete, click the generated Splunk search link to verify indexed events immediately.
+              </p>
+
+              <!-- Review Summary Table -->
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                  <div>
+                    <span style="color: #94a3b8; font-size: 11px; display: block;">Onboarding Mode:</span>
+                    <b id="summary-mode" style="color: #f8fafc; font-size: 13px;">Single Sourcetype</b>
+                  </div>
+                  <div>
+                    <span style="color: #94a3b8; font-size: 11px; display: block;">Sourcetype(s):</span>
+                    <b id="summary-sourcetypes" style="color: #38bdf8; font-family: monospace; font-size: 12px;">cisco:ios</b>
+                  </div>
+                  <div>
+                    <span style="color: #94a3b8; font-size: 11px; display: block;">Destination Index:</span>
+                    <b id="summary-index" style="color: #a855f7; font-family: monospace; font-size: 12px;">idx_security_fw</b>
+                  </div>
+                  <div>
+                    <span style="color: #94a3b8; font-size: 11px; display: block;">Emission Volume:</span>
+                    <b id="summary-volume" style="color: #4ade80; font-size: 13px;">1 Event</b>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Controls -->
+              <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 20px;">
+                <button type="button" id="btn-wizard-blast-now" style="background: #a855f7; color: #ffffff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);">
+                  <span>🚀</span> Blast Telemetry to Splunk Now
+                </button>
+                <div id="wizard-blast-spinner" style="display: none; color: #38bdf8; font-size: 12px; font-weight: 600;">
+                  ⏳ Ingesting events...
+                </div>
+              </div>
+
+              <!-- Real-time Live Log Terminal -->
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <b style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">Execution Terminal Output</b>
+                  <button type="button" onclick="document.getElementById('wizard-console-output').innerHTML=''" style="background: transparent; border: 1px solid #334155; color: #94a3b8; font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer;">Clear</button>
+                </div>
+                <div id="wizard-console-output" style="height: 140px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #cbd5e1; line-height: 1.5; background: #090d16; padding: 10px; border-radius: 4px;">
+                  <span style="color: #64748b;">Ready. Click "Blast Telemetry to Splunk Now" to execute.</span>
+                </div>
+              </div>
+
+              <!-- Verification Links (Initially Hidden) -->
+              <div id="wizard-verification-container" style="display: none; background: rgba(34, 197, 94, 0.08); border: 1px solid #16a34a; border-radius: 6px; padding: 18px; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                  <div>
+                    <b style="color: #4ade80; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                      <span>✔</span> Ingestion Completed Successfully!
+                    </b>
+                    <p style="color: #cbd5e1; font-size: 11px; margin: 4px 0 0 0;">
+                      Events have been parsed and committed into the target index. Validate using the pre-built search query below:
+                    </p>
+                  </div>
+                  <div style="display: flex; gap: 10px;">
+                    <a id="link-splunk-search" href="#" target="_blank" style="background: #0284c7; color: #ffffff; text-decoration: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                      <span>🔍</span> Open in Splunk Search
+                    </a>
+                    <button type="button" id="btn-wizard-restart" style="background: #334155; color: #cbd5e1; border: none; border-radius: 4px; padding: 8px 16px; font-size: 12px; cursor: pointer;">
+                      Restart Wizard
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 4 Navigation Bar -->
+              <div style="display: flex; justify-content: flex-start; align-items: center; border-top: 1px solid #1e293b; padding-top: 14px;">
+                <button type="button" id="btn-back-step-4" style="background: #334155; color: #cbd5e1; border: none; border-radius: 4px; padding: 8px 18px; font-size: 12px; cursor: pointer;">
+                  &lt; Back: Volume &amp; Preflight
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

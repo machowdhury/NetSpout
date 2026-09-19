@@ -1,0 +1,24 @@
+samples:
+  - name: radware-cwaf-waf
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: radware:waf
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:10 radware-cwaf AppWall-WAF: timestamp="2026-09-18 17:16:10",vip_name="VIP_Portal_Prod",vip_ip="198.51.100.50",vip_port=443,client_ip="203.0.113.112",rule_id="WAF-L7-SQLi-004",violation_type="SQL Injection in URI parameter",malicious_payload="UNION SELECT password FROM users--",action="Blocked",latency_delay_ms=18.4,http_status=403'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: radware:waf
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:12 radware-cwaf AppWall-WAF: timestamp="2026-09-18 17:16:12",vip_name="VIP_API_Prod",vip_ip="198.51.100.51",vip_port=443,client_ip="198.51.100.201",rule_id="WAF-L7-XSS-002",violation_type="Cross-Site Scripting attempt in POST body",malicious_payload="<script>alert(document.cookie)</script>",action="Blocked",latency_delay_ms=12.1,http_status=403'

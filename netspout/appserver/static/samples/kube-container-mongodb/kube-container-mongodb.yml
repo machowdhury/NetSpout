@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-MONGODB - HEALTHY BASELINE ###
+  - name: kube-container-mongodb-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mongodb-86684c54d5-6zn2p_8dd64216-3abd-4f6a-a4ed-a7ad1135c723/mongodb/12.log
+        sourcetype: kube:container:mongodb
+        host: $HOST$
+        _raw: '{"t":{"$date":"$ISO_TIMESTAMP$"},"s":"I",  "c":"NETWORK",  "id":22944,   "ctx":"conn1056316","msg":"Connection ended","attr":{"remote":"127.0.0.1:46412","uuid":{"uuid":{"$uuid":"84987fc8-3103-4265-ad17-df1ea9c7e8f4"}},"connectionId":1056316,"connectionCount":57}}'
+
+  ### KUBE-CONTAINER-MONGODB - DEGRADED / WARNING ###
+  - name: kube-container-mongodb-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mongodb-86684c54d5-6zn2p_8dd64216-3abd-4f6a-a4ed-a7ad1135c723/mongodb/12.log
+        sourcetype: kube:container:mongodb
+        host: $HOST$
+        _raw: '{"t":{"$date":"$ISO_TIMESTAMP$"},"s":"I",  "c":"NETWORK",  "id":22944,   "ctx":"conn1056316","msg":"Connection ended","attr":{"remote":"127.0.0.1:46412","uuid":{"uuid":{"$uuid":"84987fc8-3103-4265-ad17-df1ea9c7e8f4"}},"connectionId":1056316,"connectionCount":57}}'
+
+  ### KUBE-CONTAINER-MONGODB - CRITICAL / FAILURE ###
+  - name: kube-container-mongodb-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-mongodb-86684c54d5-6zn2p_8dd64216-3abd-4f6a-a4ed-a7ad1135c723/mongodb/12.log
+        sourcetype: kube:container:mongodb
+        host: $HOST$
+        _raw: '{"t":{"$date":"$ISO_TIMESTAMP$"},"s":"I",  "c":"NETWORK",  "id":22944,   "ctx":"conn1056316","msg":"Connection ended","attr":{"remote":"127.0.0.1:46412","uuid":{"uuid":{"$uuid":"84987fc8-3103-4265-ad17-df1ea9c7e8f4"}},"connectionId":1056316,"connectionCount":57}}'

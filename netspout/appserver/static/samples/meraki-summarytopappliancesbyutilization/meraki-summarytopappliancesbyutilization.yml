@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-SUMMARYTOPAPPLIANCESBYUTILIZATION - HEALTHY BASELINE ###
+  - name: meraki-summarytopappliancesbyutilization-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopappliancesbyutilization
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "name": "MX100-Toronto-Hub",  "model": "MX100",  "networkName": "Toronto Hub",  "utilizationPercentage": 34.2,  "memoryUsagePercentage": 41.5,  "cpuLoadPercentage": 28.0,  "status": "normal" }'
+
+  ### MERAKI-SUMMARYTOPAPPLIANCESBYUTILIZATION - DEGRADED INCIDENT ###
+  - name: meraki-summarytopappliancesbyutilization-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:summarytopappliancesbyutilization
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "name": "MX100-Toronto-Hub",  "model": "MX100",  "networkName": "Toronto Hub",  "utilizationPercentage": 86.4,  "memoryUsagePercentage": 78.9,  "cpuLoadPercentage": 89.2,  "status": "high_utilization_warning" }'

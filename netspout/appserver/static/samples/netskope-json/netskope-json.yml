@@ -1,0 +1,24 @@
+samples:
+  - name: netskope-json
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:netskope:events
+        sourcetype: netskope:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"timestamp": 1789761360, "vendor_product": "Netskope", "event_type": "dlp_violation", "user": "m.smith@acme.corp", "user_department": "Finance", "app": "Microsoft OneDrive", "activity": "Upload", "file_name": "Q3_Customer_PII_Export.xlsx", "file_size": 248102, "dlp_rule": "PCI_SSN_Strict_Rule", "dlp_incident_id": "DLP-2026-8812", "action": "block", "c_ip": "10.20.10.45", "s_ip": "13.107.136.9", "policy_name": "Corporate_DLP_CloudStorage_Enforcement"}'
+      - index: netops_logs
+        source: api:netskope:events
+        sourcetype: netskope:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"timestamp": 1789761365, "vendor_product": "Netskope", "event_type": "web_transaction", "user": "r.chen@acme.corp", "user_department": "Engineering", "app": "GitHub", "activity": "Git Pull", "file_name": "backend_repo.tar.gz", "file_size": 1890204, "dlp_rule": "none", "dlp_incident_id": "none", "action": "allow", "c_ip": "10.20.10.88", "s_ip": "140.82.112.4", "policy_name": "Standard_Dev_Allow_Policy"}'

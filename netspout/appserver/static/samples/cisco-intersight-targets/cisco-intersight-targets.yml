@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-TARGETS - HEALTHY BASELINE ###
+  - name: cisco-intersight-targets-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: assetTarget
+        sourcetype: cisco:intersight:targets
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmSummary": {"Critical": 0, "Health": "Healthy", "Info": 0, "ObjectType": "asset.AlarmSummary", "SuppressedCritical": 0, "SuppressedInfo": 0, "SuppressedWarning": 0, "Warning": 0}, "AssignedLocation": null, "Assist": null, "ClaimedByUserName": "tiagosil@cisco.com", "ClaimedTime": "$ISO_TIMESTAMP$", "ConnectorVersion": "1.0.11-20260615170508583", "CreateTime": "$ISO_TIMESTAMP$", "CustomPermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ExternalIpAddress": "64.100.57.80", "IpAddress": ["fd0a:9b09:1f7:8080:e64e:2dff:fe55:a6d0", "10.0.255.72"], "ManagementLocation": "DeviceConnector", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6a2c11056f726135012187e6", "Name": "DNAC-MAPLE-CIMC", "ObjectType": "asset.Target", "Owners": ["660de283756461330140b580"], "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ProductId": ["DN2-HW-APL-U"], "ReadOnly": false, "RegisteredDevice": {"ConnectionStatus": "Connected", "Moid": "6a2c11056f726135012187e2", "ObjectType": "asset.DeviceRegistration"}, "Reservation": null, "Services": [], "Status": "Connected", "StatusErrorReason": "", "Tags": [], "TargetId": ["WMP254600GS"], "TargetType": "IMCM5", "TrustPoint": null, "Vendor": "Cisco Systems, Inc.", "WorkflowInfo": null, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-TARGETS - DEGRADED / WARNING ###
+  - name: cisco-intersight-targets-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: assetTarget
+        sourcetype: cisco:intersight:targets
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmSummary": {"Critical": 0, "Health": "Healthy", "Info": 0, "ObjectType": "asset.AlarmSummary", "SuppressedCritical": 0, "SuppressedInfo": 0, "SuppressedWarning": 0, "Warning": 0}, "AssignedLocation": null, "Assist": null, "ClaimedByUserName": "tiagosil@cisco.com", "ClaimedTime": "$ISO_TIMESTAMP$", "ConnectorVersion": "1.0.11-20260615170508583", "CreateTime": "$ISO_TIMESTAMP$", "CustomPermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ExternalIpAddress": "64.100.57.80", "IpAddress": ["fd0a:9b09:1f7:8080:e64e:2dff:fe55:a6d0", "10.0.255.72"], "ManagementLocation": "DeviceConnector", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6a2c11056f726135012187e6", "Name": "DNAC-MAPLE-CIMC", "ObjectType": "asset.Target", "Owners": ["660de283756461330140b580"], "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ProductId": ["DN2-HW-APL-U"], "ReadOnly": false, "RegisteredDevice": {"ConnectionStatus": "Connected", "Moid": "6a2c11056f726135012187e2", "ObjectType": "asset.DeviceRegistration"}, "Reservation": null, "Services": [], "Status": "Connected", "StatusErrorReason": "", "Tags": [], "TargetId": ["WMP254600GS"], "TargetType": "IMCM5", "TrustPoint": null, "Vendor": "Cisco Systems, Inc.", "WorkflowInfo": null, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-TARGETS - CRITICAL / FAILURE ###
+  - name: cisco-intersight-targets-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: assetTarget
+        sourcetype: cisco:intersight:targets
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmSummary": {"Critical": 0, "Health": "Healthy", "Info": 0, "ObjectType": "asset.AlarmSummary", "SuppressedCritical": 0, "SuppressedInfo": 0, "SuppressedWarning": 0, "Warning": 0}, "AssignedLocation": null, "Assist": null, "ClaimedByUserName": "tiagosil@cisco.com", "ClaimedTime": "$ISO_TIMESTAMP$", "ConnectorVersion": "1.0.11-20260615170508583", "CreateTime": "$ISO_TIMESTAMP$", "CustomPermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ExternalIpAddress": "64.100.57.80", "IpAddress": ["fd0a:9b09:1f7:8080:e64e:2dff:fe55:a6d0", "10.0.255.72"], "ManagementLocation": "DeviceConnector", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6a2c11056f726135012187e6", "Name": "DNAC-MAPLE-CIMC", "ObjectType": "asset.Target", "Owners": ["660de283756461330140b580"], "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "ProductId": ["DN2-HW-APL-U"], "ReadOnly": false, "RegisteredDevice": {"ConnectionStatus": "Connected", "Moid": "6a2c11056f726135012187e2", "ObjectType": "asset.DeviceRegistration"}, "Reservation": null, "Services": [], "Status": "Connected", "StatusErrorReason": "", "Tags": [], "TargetId": ["WMP254600GS"], "TargetType": "IMCM5", "TrustPoint": null, "Vendor": "Cisco Systems, Inc.", "WorkflowInfo": null, "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'

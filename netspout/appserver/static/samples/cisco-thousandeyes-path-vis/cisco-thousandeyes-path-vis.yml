@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-THOUSANDEYES-PATH-VIS - HEALTHY BASELINE ###
+  - name: cisco-thousandeyes-path-vis-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: test_metrics_stream://Maple_Test_Stream_Metrics
+        sourcetype: cisco:thousandeyes:path-vis
+        host: $HOST$
+        _raw: '{"agentId": "bac16802-df59-4327-8b7e-33a29e86cde7", "aid": "230661", "testId": "414718", "roundId": 1789748220, "serverIp": "144.196.36.211", "systemMetrics": {"startTimeMs": 1789748234758, "endTimeMs": 1789748246768, "cpuUtilization": {"min": 0.1530758226037196, "max": 0.27266187050359714, "mean": 0.21063021312772753, "median": 0.19385182153090463, "stdDev": 0.044302459250538766, "count": 12}, "physicalMemoryTotalBytes": 25769803776, "physicalMemoryUsedBytes": {"min": 21357887488.0, "max": 21650030592.0, "mean": 21553431788.307693, "median": 21596995584.0, "stdDev": 97787243.79763554, "count": 13}}, "networkProfile": {"gateway": "192.168.2.1", "wirelessProfile": {"bssid": "ae:17:d8:c9:0f:e5", "channel": 153, "noise": -95, "phyMode": "802.11ac", "quality": 100, "rssi": -37, "snr": 58, "ssid": "BeerNTalk", "txRate": 866, "vendor": "CiscoMer"}, "ipAddress": "192.168.2.103", "subnetMask": "255.255.255.0", "publicIpAddress": "70.54.105.178", "localPrefix": "192.168.2.0", "publicIpRange": "70.54.96.0-70.54.127.255", "dnsServers": ["192.168.2.1", "207.164.234.193"], "hardwareType": "wireless", "interfaceName": "en0"}, "platform": "mac", "application": "webex", "server": "webex.native-app-monitoring.thousandeyes.com:80", "sourceIp": "192.168.2.103", "sourcePrefix": "70.54.96.0/19", "asnDetails": {"asNumber": 577, "asName": "Bell Canada"}, "location": "Ottawa, Canada", "pathTraces": [{"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511216", "numberOfHops": 17, "responseTime": 53, "ipAddress": "144.196.36.211"}, {"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511217", "numberOfHops": 17, "responseTime": 51, "ipAddress": "144.196.36.211"}]}'
+
+  ### CISCO-THOUSANDEYES-PATH-VIS - DEGRADED / WARNING ###
+  - name: cisco-thousandeyes-path-vis-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: test_metrics_stream://Maple_Test_Stream_Metrics
+        sourcetype: cisco:thousandeyes:path-vis
+        host: $HOST$
+        _raw: '{"agentId": "bac16802-df59-4327-8b7e-33a29e86cde7", "aid": "230661", "testId": "414718", "roundId": 1789748220, "serverIp": "144.196.36.211", "systemMetrics": {"startTimeMs": 1789748234758, "endTimeMs": 1789748246768, "cpuUtilization": {"min": 0.1530758226037196, "max": 0.27266187050359714, "mean": 0.21063021312772753, "median": 0.19385182153090463, "stdDev": 0.044302459250538766, "count": 12}, "physicalMemoryTotalBytes": 25769803776, "physicalMemoryUsedBytes": {"min": 21357887488.0, "max": 21650030592.0, "mean": 21553431788.307693, "median": 21596995584.0, "stdDev": 97787243.79763554, "count": 13}}, "networkProfile": {"gateway": "192.168.2.1", "wirelessProfile": {"bssid": "ae:17:d8:c9:0f:e5", "channel": 153, "noise": -95, "phyMode": "802.11ac", "quality": 100, "rssi": -37, "snr": 58, "ssid": "BeerNTalk", "txRate": 866, "vendor": "CiscoMer"}, "ipAddress": "192.168.2.103", "subnetMask": "255.255.255.0", "publicIpAddress": "70.54.105.178", "localPrefix": "192.168.2.0", "publicIpRange": "70.54.96.0-70.54.127.255", "dnsServers": ["192.168.2.1", "207.164.234.193"], "hardwareType": "wireless", "interfaceName": "en0"}, "platform": "mac", "application": "webex", "server": "webex.native-app-monitoring.thousandeyes.com:80", "sourceIp": "192.168.2.103", "sourcePrefix": "70.54.96.0/19", "asnDetails": {"asNumber": 577, "asName": "Bell Canada"}, "location": "Ottawa, Canada", "pathTraces": [{"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511216", "numberOfHops": 17, "responseTime": 53, "ipAddress": "144.196.36.211"}, {"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511217", "numberOfHops": 17, "responseTime": 51, "ipAddress": "144.196.36.211"}]}'
+
+  ### CISCO-THOUSANDEYES-PATH-VIS - CRITICAL / FAILURE ###
+  - name: cisco-thousandeyes-path-vis-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: test_metrics_stream://Maple_Test_Stream_Metrics
+        sourcetype: cisco:thousandeyes:path-vis
+        host: $HOST$
+        _raw: '{"agentId": "bac16802-df59-4327-8b7e-33a29e86cde7", "aid": "230661", "testId": "414718", "roundId": 1789748220, "serverIp": "144.196.36.211", "systemMetrics": {"startTimeMs": 1789748234758, "endTimeMs": 1789748246768, "cpuUtilization": {"min": 0.1530758226037196, "max": 0.27266187050359714, "mean": 0.21063021312772753, "median": 0.19385182153090463, "stdDev": 0.044302459250538766, "count": 12}, "physicalMemoryTotalBytes": 25769803776, "physicalMemoryUsedBytes": {"min": 21357887488.0, "max": 21650030592.0, "mean": 21553431788.307693, "median": 21596995584.0, "stdDev": 97787243.79763554, "count": 13}}, "networkProfile": {"gateway": "192.168.2.1", "wirelessProfile": {"bssid": "ae:17:d8:c9:0f:e5", "channel": 153, "noise": -95, "phyMode": "802.11ac", "quality": 100, "rssi": -37, "snr": 58, "ssid": "BeerNTalk", "txRate": 866, "vendor": "CiscoMer"}, "ipAddress": "192.168.2.103", "subnetMask": "255.255.255.0", "publicIpAddress": "70.54.105.178", "localPrefix": "192.168.2.0", "publicIpRange": "70.54.96.0-70.54.127.255", "dnsServers": ["192.168.2.1", "207.164.234.193"], "hardwareType": "wireless", "interfaceName": "en0"}, "platform": "mac", "application": "webex", "server": "webex.native-app-monitoring.thousandeyes.com:80", "sourceIp": "192.168.2.103", "sourcePrefix": "70.54.96.0/19", "asnDetails": {"asNumber": 577, "asName": "Bell Canada"}, "location": "Ottawa, Canada", "pathTraces": [{"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511216", "numberOfHops": 17, "responseTime": 53, "ipAddress": "144.196.36.211"}, {"protocol": "udp", "udpPathTraceMode": "stun-pcap", "pathId": "148184821266924280465351411352952237694001384979247714593828443550044609810682605093870579857362855299935263900333220402789324365511217", "numberOfHops": 17, "responseTime": 51, "ipAddress": "144.196.36.211"}]}'

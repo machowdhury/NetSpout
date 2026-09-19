@@ -1,0 +1,24 @@
+samples:
+  - name: fortinet-fortigate-traffic
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: fgt_traffic
+        host: "sensor-01.acme.corp"
+        _raw: 'date=2026-09-18 time=17:15:50 devname="FGT-Edge-01" devid="FGT60E4Q16000001" vd="root" type="traffic" subtype="forward" level="notice" srcip=10.10.30.12 srcport=54122 srcintf="port1" dstip=198.51.100.80 dstport=443 dstintf="wan1" polid=1 sessionid=19842 proto=6 action="accept" policyid=1 app="HTTPS" duration=45 sentbyte=3412 rcvdbyte=8910'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: fgt_traffic
+        host: "sensor-01.acme.corp"
+        _raw: 'date=2026-09-18 time=17:15:52 devname="FGT-Edge-01" devid="FGT60E4Q16000001" vd="root" type="traffic" subtype="forward" level="warning" srcip=198.51.100.222 srcport=41902 srcintf="wan1" dstip=10.10.10.5 dstport=22 dstintf="port2" polid=4 sessionid=19845 proto=6 action="deny" policyid=4 app="SSH" duration=0 sentbyte=0 rcvdbyte=0'

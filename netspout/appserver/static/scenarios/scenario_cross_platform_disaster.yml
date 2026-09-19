@@ -1,0 +1,137 @@
+samples:
+  ### STAGE 1: HEALTHY CROSS-PLATFORM BASELINE ###
+  - name: disaster-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: R1
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "R1", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": 4, "metric_name:cisco.temperature": 32, "metric_name:cisco.vrf.established-neighbors-count": 2, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": 0, "cisco.node_id": "R1", "vrf-name": "default"}}'
+      - index: main
+        source: catalyst:devicehealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: cat9k-maple-core-01
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "health_score": 100, "cpu_utilization": 14, "status": "GOOD", "overall_health": "POOR_NONE"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: splunkhf.maple.ciscolabs.com
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "none", "ModTime": "$ISO_TS$", "Name": "ComputeBlade-1", "ObjectType": "compute.Blade", "OperState": "operable", "account_name": "MAPLE"}'
+      - index: nutanixpc
+        source: nutanixpc:vm
+        sourcetype: nutanixpc_vm_performance
+        host: nutanix-pc-cluster-01
+        _raw: '{"timestamp": "$ISO_TS$", "vm_name": "maple-app-worker-01", "cpu_usage_ppm": 120000, "controller_avg_io_latency_uSecs": 820, "status": "OK"}'
+      - index: cisco_duo
+        source: cisco:duo:authentication
+        sourcetype: cisco:duo:authentication
+        host: duo.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "user": {"name": "admin_ops"}, "factor": "duo_push", "result": "SUCCESS", "ip": "198.51.100.44"}'
+
+  ### STAGE 2: INITIAL FIBER DEGRADATION & ANOMALOUS ACCESS ###
+  - name: disaster-stage2-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: R1
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "R1", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": 82, "metric_name:cisco.temperature": 68, "metric_name:cisco.vrf.established-neighbors-count": 2, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": 380, "cisco.node_id": "R1", "vrf-name": "default"}}'
+      - index: main
+        source: catalyst:issue
+        sourcetype: cisco:catalyst:issue
+        host: cat9k-maple-core-01
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "issue_name": "High Interface Packet Drops on WAN Uplink", "severity": "WARNING", "priority": "P2"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:alarms
+        host: splunkhf.maple.ciscolabs.com
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Severity": "warning", "Code": "thermal-sensor-warning", "Description": "Chassis 1 Thermal warning on CPU node", "ModTime": "$ISO_TS$", "account_name": "MAPLE"}'
+      - index: nutanixpc
+        source: nutanixpc:alerts
+        sourcetype: nutanixpc_alerts
+        host: nutanix-pc-cluster-01
+        _raw: '{"timestamp": "$ISO_TS$", "alert_type": "VM_IO_LATENCY_HIGH", "severity": "WARNING", "message": "Storage controller IO latency exceeded 12ms threshold"}'
+      - index: cisco_duo
+        source: cisco:duo:authentication
+        sourcetype: cisco:duo:authentication
+        host: duo.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "user": {"name": "admin_ops"}, "factor": "duo_push", "result": "FRAUD", "reason": "user_marked_fraud", "ip": "203.0.113.88"}'
+
+  ### STAGE 3: CASCADING CORE OUTAGE & INTRUSION ESCALATION ###
+  - name: disaster-stage3-critical
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: R1
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "R1", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": 99, "metric_name:cisco.temperature": 88, "metric_name:cisco.vrf.established-neighbors-count": 0, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": 12800, "metric_name:system.network.dropped": 9400, "cisco.node_id": "R1", "vrf-name": "default"}}'
+      - index: main
+        source: cisco:ios
+        sourcetype: cisco:ios
+        host: R1
+        _raw: '$SYSLOG_TS$ R1 %BGP-5-ADJCHANGE: neighbor 10.30.4.137 Down - BFD session down'
+      - index: main
+        source: catalyst:issue
+        sourcetype: cisco:catalyst:issue
+        host: cat9k-maple-core-01
+        _raw: '{"timestamp": "$ISO_TS$", "device_id": "cat9k-maple-core-01", "issue_name": "Device Unreachable / Core BGP Peering Down", "severity": "CRITICAL", "priority": "P1"}'
+      - index: main
+        source: inventoryObjects
+        sourcetype: cisco:intersight:compute
+        host: splunkhf.maple.ciscolabs.com
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AlarmType": "critical", "ModTime": "$ISO_TS$", "Name": "ComputeBlade-1", "ObjectType": "compute.Blade", "OperState": "inoperable", "account_name": "MAPLE"}'
+      - index: nutanixpc
+        source: nutanixpc:disk
+        sourcetype: nutanixpc_disk_performance
+        host: nutanix-pc-cluster-01
+        _raw: '{"timestamp": "$ISO_TS$", "disk_uuid": "e819b1b4-4b5c-4231-897b-3b3b4f65011a", "disk_io_latency_uSecs": 150000, "disk_status": "OFFLINE_UNRESPONSIVE"}'
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: maple-ftd-gw01.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "INTRUSION_ALERT", "priority": 1, "signature_id": "1:32441", "signature_name": "INDICATOR-COMPROMISE Lateral Movement Privilege Escalation", "src_ip": "203.0.113.88", "action": "BLOCK"}'

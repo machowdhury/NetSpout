@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-CATALYST-CLIENT - HEALTHY BASELINE ###
+  - name: cisco-catalyst-client-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_client://DNAC02_Client
+        sourcetype: cisco:catalyst:client
+        host: $HOST$
+        _raw: '{"ClientID": "00:50:56:B7:10:E2", "ClientMACAddress": "00:50:56:B7:10:E2", "ClientType": "Wired", "ClientName": "sandbox-ise", "ClientUserID": "", "ClientUsername": "N/A", "ClientIPv4Address": "10.20.1.5", "ClientOSType": "Unclassified", "ClientDeviceType": "Unclassified", "ClientSiteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "ClientLastUpdatedTime": 1789749600000, "ClientConnectionStatus": "connected", "ClientTrafficTXBytes": 1619129685, "ClientTrafficRXBytes": 1276507, "ClientTrafficUsage": 1620406192, "ClientTrafficRXPackets": 0, "ClientTrafficTXPackets": 0, "ClientTrafficRXRate": 34040.0, "ClientTrafficTXRate": 43177511, "ClientTrafficRXLinkErrorPercentage": 0, "ClientTrafficTXLinkErrorPercentage": 0, "ClientTrafficRXRetries": 0, "ClientTrafficRXRetryPercentage": 0, "ClientTrafficTXDrops": 0, "ClientTrafficTXDropPercentage": 0, "ClientTrafficDNSRequestCount": 0, "ClientTrafficDNSResponseCount": 0, "ClientConnectedNetworkDeviceID": "e3653cdd-e7af-4c7e-ad3f-b5bc15cd56ee", "ClientConnectedNetworkDeviceName": "Toronto_WLC.ott04-lab.ca", "ClientConnectedNetworkDeviceManagementIP": "10.20.1.8", "ClientConnectedNetworkDeviceMAC": "", "ClientConnectedNetworkDeviceType": "Switch", "ClientConnectionVLANID": "1", "ClientConnectionSessionDuration": -1, "ClientConnectionVNID": "", "ClientConnectionSecurityGroupTag": "0.0", "ClientConnectionLinkSpeed": 1000000000, "ClientConnectionBand": "Unclassified", "ClientConnectionSSID": "", "ClientConnectionAuthType": "", "ClientConnectionAPMAC": "", "ClientConnectionAPEthernetMAC": "-1", "ClientConnectionChannel": "0", "ClientConnectionChannelWidth": "", "ClientConnectionProtocol": "Unclassified", "ClientConnectionRSSI": 0, "ClientConnectionSNR": 0, "ClientConnectionDataRate": 0, "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-CATALYST-CLIENT - DEGRADED / WARNING ###
+  - name: cisco-catalyst-client-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_client://DNAC02_Client
+        sourcetype: cisco:catalyst:client
+        host: $HOST$
+        _raw: '{"ClientID": "00:50:56:B7:10:E2", "ClientMACAddress": "00:50:56:B7:10:E2", "ClientType": "Wired", "ClientName": "sandbox-ise", "ClientUserID": "", "ClientUsername": "N/A", "ClientIPv4Address": "10.20.1.5", "ClientOSType": "Unclassified", "ClientDeviceType": "Unclassified", "ClientSiteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "ClientLastUpdatedTime": 1789749600000, "ClientConnectionStatus": "degraded", "ClientTrafficTXBytes": 1619129685, "ClientTrafficRXBytes": 1276507, "ClientTrafficUsage": 1620406192, "ClientTrafficRXPackets": 0, "ClientTrafficTXPackets": 0, "ClientTrafficRXRate": 34040.0, "ClientTrafficTXRate": 43177511, "ClientTrafficRXLinkErrorPercentage": 0, "ClientTrafficTXLinkErrorPercentage": 0, "ClientTrafficRXRetries": 0, "ClientTrafficRXRetryPercentage": 0, "ClientTrafficTXDrops": 0, "ClientTrafficTXDropPercentage": 0, "ClientTrafficDNSRequestCount": 0, "ClientTrafficDNSResponseCount": 0, "ClientConnectedNetworkDeviceID": "e3653cdd-e7af-4c7e-ad3f-b5bc15cd56ee", "ClientConnectedNetworkDeviceName": "Toronto_WLC.ott04-lab.ca", "ClientConnectedNetworkDeviceManagementIP": "10.20.1.8", "ClientConnectedNetworkDeviceMAC": "", "ClientConnectedNetworkDeviceType": "Switch", "ClientConnectionVLANID": "1", "ClientConnectionSessionDuration": -1, "ClientConnectionVNID": "", "ClientConnectionSecurityGroupTag": "0.0", "ClientConnectionLinkSpeed": 1000000000, "ClientConnectionBand": "Unclassified", "ClientConnectionSSID": "", "ClientConnectionAuthType": "", "ClientConnectionAPMAC": "", "ClientConnectionAPEthernetMAC": "-1", "ClientConnectionChannel": "0", "ClientConnectionChannelWidth": "", "ClientConnectionProtocol": "Unclassified", "ClientConnectionRSSI": 0, "ClientConnectionSNR": 0, "ClientConnectionDataRate": 0, "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-CATALYST-CLIENT - CRITICAL / FAILURE ###
+  - name: cisco-catalyst-client-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_client://DNAC02_Client
+        sourcetype: cisco:catalyst:client
+        host: $HOST$
+        _raw: '{"ClientID": "00:50:56:B7:10:E2", "ClientMACAddress": "00:50:56:B7:10:E2", "ClientType": "Wired", "ClientName": "sandbox-ise", "ClientUserID": "", "ClientUsername": "N/A", "ClientIPv4Address": "10.20.1.5", "ClientOSType": "Unclassified", "ClientDeviceType": "Unclassified", "ClientSiteHierarchy": "Global/Toronto_SDA/Toronto_BLD", "ClientLastUpdatedTime": 1789749600000, "ClientConnectionStatus": "down", "ClientTrafficTXBytes": 1619129685, "ClientTrafficRXBytes": 1276507, "ClientTrafficUsage": 1620406192, "ClientTrafficRXPackets": 0, "ClientTrafficTXPackets": 0, "ClientTrafficRXRate": 34040.0, "ClientTrafficTXRate": 43177511, "ClientTrafficRXLinkErrorPercentage": 0, "ClientTrafficTXLinkErrorPercentage": 0, "ClientTrafficRXRetries": 0, "ClientTrafficRXRetryPercentage": 0, "ClientTrafficTXDrops": 0, "ClientTrafficTXDropPercentage": 0, "ClientTrafficDNSRequestCount": 0, "ClientTrafficDNSResponseCount": 0, "ClientConnectedNetworkDeviceID": "e3653cdd-e7af-4c7e-ad3f-b5bc15cd56ee", "ClientConnectedNetworkDeviceName": "Toronto_WLC.ott04-lab.ca", "ClientConnectedNetworkDeviceManagementIP": "10.20.1.8", "ClientConnectedNetworkDeviceMAC": "", "ClientConnectedNetworkDeviceType": "Switch", "ClientConnectionVLANID": "1", "ClientConnectionSessionDuration": -1, "ClientConnectionVNID": "", "ClientConnectionSecurityGroupTag": "0.0", "ClientConnectionLinkSpeed": 1000000000, "ClientConnectionBand": "Unclassified", "ClientConnectionSSID": "", "ClientConnectionAuthType": "", "ClientConnectionAPMAC": "", "ClientConnectionAPEthernetMAC": "-1", "ClientConnectionChannel": "0", "ClientConnectionChannelWidth": "", "ClientConnectionProtocol": "Unclassified", "ClientConnectionRSSI": 0, "ClientConnectionSNR": 0, "ClientConnectionDataRate": 0, "cisco_catalyst_host": "https://10.20.1.16"}'

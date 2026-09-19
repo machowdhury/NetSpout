@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-SYSTEM-LOGS - HEALTHY BASELINE ###
+  - name: cisco-sdwan-system-logs-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+          - weight: 2
+            choice: 10.201.50.4-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 162896: $SYSLOG_TIMESTAMP$.857: %SDWAN-5-FPMD : FLOW LOG device-vpn: 4099 tenant-vpn: 4099 src: 10.201.48.53/179 dst: 10.201.48.54/54097 proto: 6 tos: 192 direction: from-service, policy: data_service_CiscoLive_AAR_Policy-vpn_Service_VPN_Secure, sequence: 1, Result: accept Pkt count: 211900 bytes: 14305753 Ingress-Intf: GigabitEthernet0/0/2.3105 Egress-intf: Unknown Tenant: Not-Applicable'
+
+  ### CISCO-SDWAN-SYSTEM-LOGS - DEGRADED / WARNING ###
+  - name: cisco-sdwan-system-logs-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 162896: $SYSLOG_TIMESTAMP$.857: %SDWAN-5-FPMD : FLOW LOG device-vpn: 4099 tenant-vpn: 4099 src: 10.201.48.53/179 dst: 10.201.48.54/54097 proto: 6 tos: 192 direction: from-service, policy: data_service_CiscoLive_AAR_Policy-vpn_Service_VPN_Secure, sequence: 1, Result: accept Pkt count: 211900 bytes: 14305753 Ingress-Intf: GigabitEthernet0/0/2.3105 Egress-intf: Unknown Tenant: Not-Applicable'
+
+  ### CISCO-SDWAN-SYSTEM-LOGS - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-system-logs-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 162896: $SYSLOG_TIMESTAMP$.857: %SDWAN-5-FPMD : FLOW LOG device-vpn: 4099 tenant-vpn: 4099 src: 10.201.48.53/179 dst: 10.201.48.54/54097 proto: 6 tos: 192 direction: from-service, policy: data_service_CiscoLive_AAR_Policy-vpn_Service_VPN_Secure, sequence: 1, Result: accept Pkt count: 211900 bytes: 14305753 Ingress-Intf: GigabitEthernet0/0/2.3105 Egress-intf: Unknown Tenant: Not-Applicable'

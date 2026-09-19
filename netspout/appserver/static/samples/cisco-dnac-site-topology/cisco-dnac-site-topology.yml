@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-SITE-TOPOLOGY - HEALTHY BASELINE ###
+  - name: cisco-dnac-site-topology-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+          - weight: 2
+            choice: https://dnac.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_site_topology://DNAC01_SiteTopology
+        sourcetype: cisco:dnac:site:topology
+        host: $HOST$
+        _raw: '{"id": "9056977e-394b-4bb8-9618-d2c6b2a951d0", "siteHierarchyId": "6f6b2254-2c82-4df2-b4ef-df32aa8db97e/120f464d-4818-42dd-bb74-cc7c005cff7b/b785f984-870f-4487-a163-3c3700221fdc/9056977e-394b-4bb8-9618-d2c6b2a951d0", "parentId": "b785f984-870f-4487-a163-3c3700221fdc", "name": "Distribution", "nameHierarchy": "Global/Toronto/CLUS-26-DMZ1/Distribution", "type": "floor", "floorNumber": 1, "rfModel": "Cubes And Walled Offices", "width": 100.0, "length": 100.0, "height": 10.0, "unitsOfMeasure": "feet", "cisco_catalyst_host": "$HOST$"}'
+
+  ### CISCO-DNAC-SITE-TOPOLOGY - DEGRADED / WARNING ###
+  - name: cisco-dnac-site-topology-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_site_topology://DNAC01_SiteTopology
+        sourcetype: cisco:dnac:site:topology
+        host: $HOST$
+        _raw: '{"id": "9056977e-394b-4bb8-9618-d2c6b2a951d0", "siteHierarchyId": "6f6b2254-2c82-4df2-b4ef-df32aa8db97e/120f464d-4818-42dd-bb74-cc7c005cff7b/b785f984-870f-4487-a163-3c3700221fdc/9056977e-394b-4bb8-9618-d2c6b2a951d0", "parentId": "b785f984-870f-4487-a163-3c3700221fdc", "name": "Distribution", "nameHierarchy": "Global/Toronto/CLUS-26-DMZ1/Distribution", "type": "floor", "floorNumber": 1, "rfModel": "Cubes And Walled Offices", "width": 100.0, "length": 100.0, "height": 10.0, "unitsOfMeasure": "feet", "cisco_catalyst_host": "$HOST$"}'
+
+  ### CISCO-DNAC-SITE-TOPOLOGY - CRITICAL / FAILURE ###
+  - name: cisco-dnac-site-topology-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://dnac.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_site_topology://DNAC01_SiteTopology
+        sourcetype: cisco:dnac:site:topology
+        host: $HOST$
+        _raw: '{"id": "9056977e-394b-4bb8-9618-d2c6b2a951d0", "siteHierarchyId": "6f6b2254-2c82-4df2-b4ef-df32aa8db97e/120f464d-4818-42dd-bb74-cc7c005cff7b/b785f984-870f-4487-a163-3c3700221fdc/9056977e-394b-4bb8-9618-d2c6b2a951d0", "parentId": "b785f984-870f-4487-a163-3c3700221fdc", "name": "Distribution", "nameHierarchy": "Global/Toronto/CLUS-26-DMZ1/Distribution", "type": "floor", "floorNumber": 1, "rfModel": "Cubes And Walled Offices", "width": 100.0, "length": 100.0, "height": 10.0, "unitsOfMeasure": "feet", "cisco_catalyst_host": "$HOST$"}'

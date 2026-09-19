@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-dmi-5-sync-needed
+  description: Real Network Assurance replay for cisco:sdwan:DMI-5-SYNC_NEEDED (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:DMI-5-SYNC_NEEDED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 3101: *$TS$:  %DMI-5-SYNC_NEEDED: Switch 1 R0/0: dmiauthd: Configuration change requiring running configuration sync detected - ''no vrf forwarding ''. The running configuration will be synchronized  to the NETCONF running data store.'
+    - index: catalyst
+      sourcetype: cisco:sdwan:DMI-5-SYNC_NEEDED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 1081: *$TS$:  %DMI-5-SYNC_NEEDED: Switch 1 R0/0: dmiauthd: Configuration change requiring running configuration sync detected - ''switchport trunk allowed vlan 2052''. The running configuration will be synchronized  to the NETCONF running data store.'

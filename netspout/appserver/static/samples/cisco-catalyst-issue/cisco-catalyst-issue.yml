@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-CATALYST-ISSUE - HEALTHY BASELINE ###
+  - name: cisco-catalyst-issue-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_issue://DNAC_Issue
+        sourcetype: cisco:catalyst:issue
+        host: $HOST$
+        _raw: '{"IssueID": "4746c82c-0eba-4182-88b9-d296c827cc13", "IssueSpecificCategory": "Availability", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "switch_unreachable", "IssueSpecificDescription": "This network device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center. The device role is ACCESS.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "86af9de8-d550-4478-b4b1-d0168800ff47", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueSpecificTimestamp": 1789421432804, "IssueName": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "active", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "86af9de8-d550-4478-b4b1-d0168800ff47", "DeviceName": "dmz1.dcloud.cisco.com", "DeviceIpAddress": "10.0.1.107", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "52:54:00:bb:3d:25", "DeviceRole": "ACCESS", "DeviceImageVersion": "17.18.2", "DeviceUptime": "24 days, 20:32:13.00", "DeviceUptimeSeconds": 2229687, "DeviceLastUpdated": "2026-09-17 18:44:31", "DeviceLastUpdateTime": 1789670671698, "DeviceSerialNumber": "CML12107UAD", "DeviceSeries": "Cisco Catalyst 9000 Series Virtual Switches", "DevicePlatform": "C9KV-UADP-8P", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-ISSUE - DEGRADED / WARNING ###
+  - name: cisco-catalyst-issue-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_issue://DNAC_Issue
+        sourcetype: cisco:catalyst:issue
+        host: $HOST$
+        _raw: '{"IssueID": "4746c82c-0eba-4182-88b9-d296c827cc13", "IssueSpecificCategory": "Availability", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "switch_unreachable", "IssueSpecificDescription": "This network device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center. The device role is ACCESS.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "86af9de8-d550-4478-b4b1-d0168800ff47", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueSpecificTimestamp": 1789421432804, "IssueName": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "degraded", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "86af9de8-d550-4478-b4b1-d0168800ff47", "DeviceName": "dmz1.dcloud.cisco.com", "DeviceIpAddress": "10.0.1.107", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "52:54:00:bb:3d:25", "DeviceRole": "ACCESS", "DeviceImageVersion": "17.18.2", "DeviceUptime": "24 days, 20:32:13.00", "DeviceUptimeSeconds": 2229687, "DeviceLastUpdated": "2026-09-17 18:44:31", "DeviceLastUpdateTime": 1789670671698, "DeviceSerialNumber": "CML12107UAD", "DeviceSeries": "Cisco Catalyst 9000 Series Virtual Switches", "DevicePlatform": "C9KV-UADP-8P", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-ISSUE - CRITICAL / FAILURE ###
+  - name: cisco-catalyst-issue-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_issue://DNAC_Issue
+        sourcetype: cisco:catalyst:issue
+        host: $HOST$
+        _raw: '{"IssueID": "4746c82c-0eba-4182-88b9-d296c827cc13", "IssueSpecificCategory": "Availability", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "switch_unreachable", "IssueSpecificDescription": "This network device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center. The device role is ACCESS.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "86af9de8-d550-4478-b4b1-d0168800ff47", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueSpecificTimestamp": 1789421432804, "IssueName": "Network Device dmz1.dcloud.cisco.com is unreachable from Cisco Catalyst Center", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "down", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "86af9de8-d550-4478-b4b1-d0168800ff47", "DeviceName": "dmz1.dcloud.cisco.com", "DeviceIpAddress": "10.0.1.107", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "52:54:00:bb:3d:25", "DeviceRole": "ACCESS", "DeviceImageVersion": "17.18.2", "DeviceUptime": "24 days, 20:32:13.00", "DeviceUptimeSeconds": 2229687, "DeviceLastUpdated": "2026-09-17 18:44:31", "DeviceLastUpdateTime": 1789670671698, "DeviceSerialNumber": "CML12107UAD", "DeviceSeries": "Cisco Catalyst 9000 Series Virtual Switches", "DevicePlatform": "C9KV-UADP-8P", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'

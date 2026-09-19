@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-ISE-TACACS-POLICYSET - HEALTHY BASELINE ###
+  - name: cisco-ise-tacacs-policyset-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+          - weight: 2
+            choice: https://10.0.10.34-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:ise_tacacs_rule_hit:ISE02
+        sourcetype: cisco:ise:tacacs:policyset
+        host: $HOST$
+        _raw: '{"default": true, "id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "name": "Default", "description": "Tacacs Default policy set", "hitCounts": 22, "rank": 0, "state": "enabled", "condition": null, "serviceName": "Default Device Admin", "isProxy": false, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1", "type": "application/json"}, "lastUpdated": 1784258516494}'
+
+  ### CISCO-ISE-TACACS-POLICYSET - DEGRADED / WARNING ###
+  - name: cisco-ise-tacacs-policyset-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:ise_tacacs_rule_hit:ISE02
+        sourcetype: cisco:ise:tacacs:policyset
+        host: $HOST$
+        _raw: '{"default": true, "id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "name": "Default", "description": "Tacacs Default policy set", "hitCounts": 22, "rank": 0, "state": "enabled", "condition": null, "serviceName": "Default Device Admin", "isProxy": false, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1", "type": "application/json"}, "lastUpdated": 1784258516494}'
+
+  ### CISCO-ISE-TACACS-POLICYSET - CRITICAL / FAILURE ###
+  - name: cisco-ise-tacacs-policyset-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:ise_tacacs_rule_hit:ISE02
+        sourcetype: cisco:ise:tacacs:policyset
+        host: $HOST$
+        _raw: '{"default": true, "id": "56576c80-2c47-40bb-a344-b40ef71aa8f1", "name": "Default", "description": "Tacacs Default policy set", "hitCounts": 22, "rank": 0, "state": "enabled", "condition": null, "serviceName": "Default Device Admin", "isProxy": false, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/device-admin/policy-set/56576c80-2c47-40bb-a344-b40ef71aa8f1", "type": "application/json"}, "lastUpdated": 1784258516494}'

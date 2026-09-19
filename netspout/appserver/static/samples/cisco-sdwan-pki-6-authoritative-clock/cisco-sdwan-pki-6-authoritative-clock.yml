@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-PKI-6-AUTHORITATIVE-CLOCK - HEALTHY BASELINE ###
+  - name: cisco-sdwan-pki-6-authoritative-clock-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+          - weight: 2
+            choice: 10.201.50.4-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 11108: $SYSLOG_TIMESTAMP$.633: %PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.'
+
+  ### CISCO-SDWAN-PKI-6-AUTHORITATIVE-CLOCK - DEGRADED / WARNING ###
+  - name: cisco-sdwan-pki-6-authoritative-clock-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 11108: $SYSLOG_TIMESTAMP$.633: %PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.'
+
+  ### CISCO-SDWAN-PKI-6-AUTHORITATIVE-CLOCK - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-pki-6-authoritative-clock-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.4
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 11108: $SYSLOG_TIMESTAMP$.633: %PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.'

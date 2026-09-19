@@ -1,0 +1,292 @@
+scenario_id: "MV-016"
+name: "Cross-Domain Multi-Vendor Enterprise Application Slowness"
+description: "Simulates a corporate-wide application degradation event tracing from a wired infrastructure link degradation up to wireless client symptoms."
+
+# The Independent Truth Test Oracle (Hidden from standard logs)
+test_oracle:
+  expected_root_cause: "Cisco Catalyst Gateway Interface Physical Alignment Errors (CRC Spiking)"
+  symptomatic_systems: ["Meraki Wi-Fi Access Points", "Palo Alto SD-WAN Tunnel SLA Breaches"]
+  independent_verifier: "Cisco ThousandEyes Synthetic Network Path Probes"
+
+timeline_lifecycle:
+  - stage: "BASELINE"
+    duration_seconds: 300
+    description: "All infrastructure nodes performing within optimal parameters."
+    telemetry_generation:
+      - vendor: "cisco"
+        sourcetype: "cisco:ios"
+        target_index: "idx_network_ops"
+        payload_template: "cisco-catalyst-devicehealth"
+        metrics: { crc_errors: 0, input_errors: 0, interface_status: "up" }
+      - vendor: "paloalto"
+        sourcetype: "pan:traffic"
+        target_index: "idx_security_fw"
+        payload_template: "pan_traffic_normal"
+        metrics: { tunnel_latency_ms: 22, active_sessions: 14200, tunnel_status: "active" }
+      - vendor: "meraki"
+        sourcetype: "meraki:alert"
+        target_index: "idx_wireless_ops"
+        payload_template: "meraki-assurancealerts"
+        metrics: { channel_utilization_pct: 28, client_retry_rate_pct: 1.5 }
+      - vendor: "thousandeyes"
+        sourcetype: "cisco:thousandeyes:metric"
+        target_index: "idx_performance_metrics"
+        index_type: "METRIC"
+        metrics: { path_completion_rate_pct: 100.0, network_jitter_ms: 2.1 }
+
+  - stage: "PRECURSOR"
+    duration_seconds: 150
+    description: "Wired link degradation begins on physical gateway handoff."
+    telemetry_generation:
+      - vendor: "cisco"
+        sourcetype: "cisco:ios"
+        target_index: "idx_network_ops"
+        metrics: { crc_errors: "trend(0, 450)", input_errors: "trend(0, 1200)" }
+      - vendor: "thousandeyes"
+        sourcetype: "cisco:thousandeyes:metric"
+        target_index: "idx_performance_metrics"
+        index_type: "METRIC"
+        metrics: { path_completion_rate_pct: 98.5, network_jitter_ms: 18.4 }
+
+  - stage: "DEGRADATION"
+    duration_seconds: 270
+    description: "Cascading impact forces SD-WAN paths to break strict corporate SLA metrics."
+    telemetry_generation:
+      - vendor: "paloalto"
+        sourcetype: "pan:system"
+        target_index: "idx_security_fw"
+        payload_template: "pan_system_sla_breach"
+        text: "SD-WAN Tunnel interface 'tun.100' link quality degraded down primary ISP path. Latency reached 260ms. SLA threshold (50ms) violated."
+      - vendor: "thousandeyes"
+        sourcetype: "cisco:thousandeyes:event"
+        target_index: "idx_performance_metrics"
+        index_type: "EVENT"
+        text: "ThousandEyes HTTP application probe target 'https://acme.internal' failed. Connection timeout during syn-ack sequence on gateway hop 10.50.2.1."
+
+  - stage: "INCIDENT_IMPACT"
+    duration_seconds: 480
+    description: "Failover conditions yield session pressure. End-users experience Wi-Fi drops."
+    telemetry_generation:
+      - vendor: "paloalto"
+        sourcetype: "pan:threat"
+        target_index: "idx_security_fw"
+        text: "1,2026/09/18 17:22:10,001201000456,THREAT,system,2560,10.50.2.1,0.0.0.0,, rule_gateway_failover,, session-exhaustion-warning, critical"
+      - vendor: "meraki"
+        sourcetype: "meraki:alert"
+        target_index: "idx_wireless_ops"
+        text: '{"type":"MEMBER_DISCONNECT","occurAt":"2026-09-18T17:23:01Z","deviceMac":"00:11:22:AA:BB:CC","msg":"High client retry rates (>45%) and association timeouts detected on AP-Floor2. Wireless service impact high due to unresponsive gateway backhaul node."}'
+
+  - stage: "RECOVERY"
+    duration_seconds: 300
+    description: "Impairment clears. Telemetry metrics stabilize back to baseline parameters."
+    telemetry_generation:
+      - vendor: "cisco"
+        sourcetype: "cisco:ios"
+        target_index: "idx_network_ops"
+        metrics: { crc_errors: 0, input_errors: 0 }
+      - vendor: "meraki"
+        sourcetype: "meraki:alert"
+        target_index: "idx_wireless_ops"
+        metrics: { client_retry_rate_pct: 1.2, channel_utilization_pct: 28 }
+      - vendor: "paloalto"
+        sourcetype: "pan:traffic"
+        target_index: "idx_security_fw"
+        metrics: { tunnel_latency_ms: 21, tunnel_status: "active" }
+
+# DataBlaster Native Engine Runtime Execution Configuration
+global:
+  generatorWorkers: 15
+  outputWorkers: 15
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8088/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  ### STAGE 1: BASELINE HEALTHY TELEMETRY ###
+  - name: mv016-stage1-baseline
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      # Cisco Catalyst 9k Gateway Health
+      - index: idx_network_ops
+        source: catalyst:devicehealth
+        sourcetype: cisco:ios
+        host: cat9k-gw-01.acme.corp
+        _raw: '$SYSLOG_TS$ cat9k-gw-01 %HARDWARE-6-HEALTH: Interface Te1/0/1 status UP, speed 10000Mb/s, crc_errors=0, input_errors=0, output_errors=0, duplex=full'
+
+      # Palo Alto SD-WAN Session & Tunnel Baseline
+      - index: idx_security_fw
+        source: pan:firewall
+        sourcetype: pan:traffic
+        host: pa5250-edge-01.acme.corp
+        _raw: '1,2026/09/18 17:22:00,001801000001,TRAFFIC,allow,2304,2026/09/18 17:22:00,10.50.2.1,198.51.100.80,0.0.0.0,0.0.0.0,SDWAN-Branch-Rule,jdoe,,ssl,vsys1,trust,untrust,tun.100,ethernet1/1,log-forwarder,2026/09/18 17:22:00,98422,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,2026/09/18 17:22:00,22,any,0,12345679,0x0,US,10.0.0.0-10.255.255.255,0,8,0,active,0,0,0,0,,PA-5250,from-policy'
+
+      # Meraki Wi-Fi Baseline Health
+      - index: idx_wireless_ops
+        source: meraki:cloud
+        sourcetype: meraki:alert
+        host: meraki-dashboard.acme.corp
+        _raw: '{"type":"HEALTH_CHECK","occurAt":"$ISO_TS$","deviceMac":"00:11:22:AA:BB:CC","networkId":"N_1420","apName":"AP-Floor2","channel_utilization_pct":28,"client_retry_rate_pct":1.5,"status":"healthy"}'
+
+      # ThousandEyes Metric Stream
+      - index: idx_performance_metrics
+        source: thousandeyes:synthetics
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto.acme.corp
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "te-agent-toronto", "sourcetype": "cisco:thousandeyes:metric", "host": "te-agent-toronto.acme.corp", "index": "idx_performance_metrics", "fields": {"metric_name:path_completion_rate_pct": 100.0, "metric_name:network_jitter_ms": 2.1, "target": "https://acme.internal", "hop_count": 4}}'
+
+  ### STAGE 2: PRECURSOR LINK DEGRADATION (CRC ERRORS BEGIN) ###
+  - name: mv016-stage2-precursor
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: CRC_COUNT
+        format: template
+        type: random
+        replacement: int
+        lower: 120
+        upper: 450
+      - name: IN_ERR_COUNT
+        format: template
+        type: random
+        replacement: int
+        lower: 400
+        upper: 1200
+    lines:
+      - index: idx_network_ops
+        source: catalyst:devicehealth
+        sourcetype: cisco:ios
+        host: cat9k-gw-01.acme.corp
+        _raw: '$SYSLOG_TS$ cat9k-gw-01 %HARDWARE-4-PHY_ALIGN: Interface Te1/0/1 alignment warning, physical link degraded, crc_errors=$CRC_COUNT$, input_errors=$IN_ERR_COUNT$, duplex=full'
+
+      - index: idx_performance_metrics
+        source: thousandeyes:synthetics
+        sourcetype: cisco:thousandeyes:metric
+        host: te-agent-toronto.acme.corp
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "te-agent-toronto", "sourcetype": "cisco:thousandeyes:metric", "host": "te-agent-toronto.acme.corp", "index": "idx_performance_metrics", "fields": {"metric_name:path_completion_rate_pct": 98.5, "metric_name:network_jitter_ms": 18.4, "target": "https://acme.internal", "hop_count": 4}}'
+
+  ### STAGE 3: DEGRADATION (SD-WAN SLA BREACH & PROBE TIMEOUT) ###
+  - name: mv016-stage3-degradation
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_security_fw
+        source: pan:system
+        sourcetype: pan:system
+        host: pa5250-edge-01.acme.corp
+        _raw: '1,2026/09/18 17:22:05,001801000001,SYSTEM,sdwan,2304,2026/09/18 17:22:05,,sdwan-probe,sla-violation,0,0,general,critical,"SD-WAN Tunnel interface tun.100 link quality degraded down primary ISP path. Latency reached 260ms. SLA threshold (50ms) violated.",10992,0x0'
+
+      - index: idx_performance_metrics
+        source: thousandeyes:synthetics
+        sourcetype: cisco:thousandeyes:event
+        host: te-agent-toronto.acme.corp
+        _raw: '{"timestamp":"$ISO_TS$","event_type":"PROBE_TIMEOUT","target":"https://acme.internal","message":"ThousandEyes HTTP application probe target https://acme.internal failed. Connection timeout during syn-ack sequence on gateway hop 10.50.2.1.","loss_pct":68.4,"rtt_ms":264.1}'
+
+  ### STAGE 4: INCIDENT IMPACT (SESSION EXHAUSTION & WI-FI DROPS) ###
+  - name: mv016-stage4-incident
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_security_fw
+        source: pan:threat
+        sourcetype: pan:threat
+        host: pa5250-edge-01.acme.corp
+        _raw: '1,2026/09/18 17:22:10,001201000456,THREAT,system,2560,10.50.2.1,0.0.0.0,, rule_gateway_failover,, session-exhaustion-warning, critical'
+
+      - index: idx_wireless_ops
+        source: meraki:cloud
+        sourcetype: meraki:alert
+        host: meraki-dashboard.acme.corp
+        _raw: '{"type":"MEMBER_DISCONNECT","occurAt":"$ISO_TS$","deviceMac":"00:11:22:AA:BB:CC","msg":"High client retry rates (>45%) and association timeouts detected on AP-Floor2. Wireless service impact high due to unresponsive gateway backhaul node."}'
+
+  ### STAGE 5: RECOVERY (PARAMETERS NORMALIZE) ###
+  - name: mv016-stage5-recovery
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_network_ops
+        source: catalyst:devicehealth
+        sourcetype: cisco:ios
+        host: cat9k-gw-01.acme.corp
+        _raw: '$SYSLOG_TS$ cat9k-gw-01 %HARDWARE-6-LINK_RESTORE: Interface Te1/0/1 physical alignment restored, crc_errors=0, input_errors=0, state=OPTIMAL'
+
+      - index: idx_wireless_ops
+        source: meraki:cloud
+        sourcetype: meraki:alert
+        host: meraki-dashboard.acme.corp
+        _raw: '{"type":"SERVICE_RESTORED","occurAt":"$ISO_TS$","deviceMac":"00:11:22:AA:BB:CC","msg":"Client retry rates normalized to 1.2%. Association latencies stable. Backhaul gateway 10.50.2.1 responding."}'
+
+      - index: idx_security_fw
+        source: pan:firewall
+        sourcetype: pan:traffic
+        host: pa5250-edge-01.acme.corp
+        _raw: '1,2026/09/18 17:23:15,001801000001,TRAFFIC,allow,2304,2026/09/18 17:23:15,10.50.2.1,198.51.100.80,0.0.0.0,0.0.0.0,SDWAN-Branch-Rule,jdoe,,ssl,vsys1,trust,untrust,tun.100,ethernet1/1,log-forwarder,2026/09/18 17:23:15,98440,1,49182,443,0,0,0x0,tcp,allow,2480,1820,4300,8,2026/09/18 17:23:15,21,any,0,12345685,0x0,US,10.0.0.0-10.255.255.255,0,8,0,active,0,0,0,0,,PA-5250,from-policy'

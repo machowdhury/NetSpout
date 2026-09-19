@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-STORAGE-CONTAINERS - HEALTHY BASELINE ###
+  - name: nutanixpc-storage-containers-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/storage-containers
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/storage-containers-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_storage_containers
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.StorageContainer", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container"}, {"href": "https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/storage-containers/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container-stats"}], "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "isMarkedForRemoval": false, "markedForRemoval": false, "maxCapacityBytes": 25636192153091, "logicalImplicitReservedCapacityBytes": 0, "isNfsWhitelistInherited": true, "clusterName": "Fab1-CCHCI-AHV", "containerExtId": "f8edb45b-13e1-4927-954c-b0c3f1c91a33", "ownerExtId": "00000000-0000-0000-0000-000000000000", "name": "default-container-62746583239497", "logicalExplicitReservedCapacityBytes": 0, "replicationFactor": 2, "erasureCode": "OFF", "isInlineEcEnabled": false, "hasHigherEcFaultDomainPreference": true, "cacheDeduplication": "OFF", "onDiskDedup": "POST_PROCESS", "isCompressionEnabled": true, "compressionDelaySecs": 3600, "isInternal": false, "isSoftwareEncryptionEnabled": false}'
+
+  ### NUTANIXPC-STORAGE-CONTAINERS - DEGRADED / WARNING ###
+  - name: nutanixpc-storage-containers-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/storage-containers
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_storage_containers
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.StorageContainer", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container"}, {"href": "https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/storage-containers/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container-stats"}], "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "isMarkedForRemoval": false, "markedForRemoval": false, "maxCapacityBytes": 25636192153091, "logicalImplicitReservedCapacityBytes": 0, "isNfsWhitelistInherited": true, "clusterName": "Fab1-CCHCI-AHV", "containerExtId": "f8edb45b-13e1-4927-954c-b0c3f1c91a33", "ownerExtId": "00000000-0000-0000-0000-000000000000", "name": "default-container-62746583239497", "logicalExplicitReservedCapacityBytes": 0, "replicationFactor": 2, "erasureCode": "OFF", "isInlineEcEnabled": false, "hasHigherEcFaultDomainPreference": true, "cacheDeduplication": "OFF", "onDiskDedup": "POST_PROCESS", "isCompressionEnabled": true, "compressionDelaySecs": 3600, "isInternal": false, "isSoftwareEncryptionEnabled": false}'
+
+  ### NUTANIXPC-STORAGE-CONTAINERS - CRITICAL / FAILURE ###
+  - name: nutanixpc-storage-containers-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/config/storage-containers
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcdiscovery
+        sourcetype: nutanixpc_storage_containers
+        host: $HOST$
+        _raw: '{"$reserved": {"$fv": "v4.r0"}, "$objectType": "clustermgmt.v4.config.StorageContainer", "links": [{"$reserved": {"$fv": "v1.r0"}, "$objectType": "common.v1.response.ApiLink", "href": "$HOST$/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container"}, {"href": "https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/storage-containers/f8edb45b-13e1-4927-954c-b0c3f1c91a33", "rel": "storage-container-stats"}], "clusterExtId": "00063ffb-2c0b-2e6c-7635-0025b500010e", "storagePoolExtId": "3d2e376e-5978-474c-b4f4-a11dd814a4f8", "isMarkedForRemoval": false, "markedForRemoval": false, "maxCapacityBytes": 25636192153091, "logicalImplicitReservedCapacityBytes": 0, "isNfsWhitelistInherited": true, "clusterName": "Fab1-CCHCI-AHV", "containerExtId": "f8edb45b-13e1-4927-954c-b0c3f1c91a33", "ownerExtId": "00000000-0000-0000-0000-000000000000", "name": "default-container-62746583239497", "logicalExplicitReservedCapacityBytes": 0, "replicationFactor": 2, "erasureCode": "OFF", "isInlineEcEnabled": false, "hasHigherEcFaultDomainPreference": true, "cacheDeduplication": "OFF", "onDiskDedup": "POST_PROCESS", "isCompressionEnabled": true, "compressionDelaySecs": 3600, "isInternal": false, "isSoftwareEncryptionEnabled": false}'

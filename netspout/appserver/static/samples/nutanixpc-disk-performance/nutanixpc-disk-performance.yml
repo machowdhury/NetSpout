@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-DISK-PERFORMANCE - HEALTHY BASELINE ###
+  - name: nutanixpc-disk-performance-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/disks/ff26ab7c-0d68-4421-b6bc-6cc4abf18975
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/disks/ff26ab7c-0d68-4421-b6bc-6cc4abf18975-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_disk_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "diskUsagePpm": 455057, "diskCapacityBytes": 0, "diskNumIops": 0, "diskIoBandwidthkbps": 0, "diskAvgIoLatencyMicrosec": 0, "diskFreeBytes": 0, "diskUsageBytes": 0, "diskReadIops": 0, "diskWriteIops": 0, "diskReadIoBandwidthkbps": 0, "diskWriteIoBandwidthkbps": 0, "diskReadIoPpm": 0, "diskWriteIoPpm": 0}'
+
+  ### NUTANIXPC-DISK-PERFORMANCE - DEGRADED / WARNING ###
+  - name: nutanixpc-disk-performance-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/disks/ff26ab7c-0d68-4421-b6bc-6cc4abf18975
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_disk_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "diskUsagePpm": 455057, "diskCapacityBytes": 0, "diskNumIops": 0, "diskIoBandwidthkbps": 0, "diskAvgIoLatencyMicrosec": 0, "diskFreeBytes": 0, "diskUsageBytes": 0, "diskReadIops": 0, "diskWriteIops": 0, "diskReadIoBandwidthkbps": 0, "diskWriteIoBandwidthkbps": 0, "diskReadIoPpm": 0, "diskWriteIoPpm": 0}'
+
+  ### NUTANIXPC-DISK-PERFORMANCE - CRITICAL / FAILURE ###
+  - name: nutanixpc-disk-performance-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/clustermgmt/v4.0/stats/disks/ff26ab7c-0d68-4421-b6bc-6cc4abf18975
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_disk_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "extId": "ff26ab7c-0d68-4421-b6bc-6cc4abf18975", "diskUsagePpm": 455057, "diskCapacityBytes": 0, "diskNumIops": 0, "diskIoBandwidthkbps": 0, "diskAvgIoLatencyMicrosec": 0, "diskFreeBytes": 0, "diskUsageBytes": 0, "diskReadIops": 0, "diskWriteIops": 0, "diskReadIoBandwidthkbps": 0, "diskWriteIoBandwidthkbps": 0, "diskReadIoPpm": 0, "diskWriteIoPpm": 0}'

@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-SWITCHPORTSBYSWITCH - HEALTHY BASELINE ###
+  - name: meraki-switchportsbyswitch-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsbyswitch
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MS250",  "switchName": "MS250-Toronto-Core",  "portId": "24",  "name": "Uplink to MX100 WAN",  "enabled": true,  "status": "Connected",  "speed": "1 Gbps",  "duplex": "full",  "vlan": 1,  "traffic": {   "totalBytes": 145028090,   "sentBytes": 78201940,   "recvBytes": 66826150  },  "errors": {   "crc": 0,   "runts": 0,   "giants": 0,   "fragments": 0,   "collisions": 0,   "jabbers": 0  },  "discards": {   "input": 0,   "output": 0  } }'
+
+  ### MERAKI-SWITCHPORTSBYSWITCH - DEGRADED INCIDENT ###
+  - name: meraki-switchportsbyswitch-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsbyswitch
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MS250",  "switchName": "MS250-Toronto-Core",  "portId": "24",  "name": "Uplink to MX100 WAN",  "enabled": true,  "status": "Connected",  "speed": "1 Gbps",  "duplex": "full",  "vlan": 1,  "traffic": {   "totalBytes": 89402100,   "sentBytes": 42100500,   "recvBytes": 47301600  },  "errors": {   "crc": 4820,   "runts": 142,   "giants": 0,   "fragments": 89,   "collisions": 0,   "jabbers": 0  },  "discards": {   "input": 1280,   "output": 450  } }'

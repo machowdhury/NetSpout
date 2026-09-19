@@ -1,0 +1,247 @@
+<dashboard version="1.1" theme="dark" script="scenario_builder.js">
+  <label>Scenario Builder &amp; Path Emitter</label>
+  <description>Network path flow topology canvas, direct sourcetype streaming without scenarios, and dynamic device class filtering across all major networking vendors.</description>
+
+  <row>
+    <panel>
+      <html>
+        <div style="padding: 10px 0;">
+          
+          <!-- Control Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 20px;">
+            <div>
+              <h2 style="color: #f8fafc; margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.01em;">
+                Network Path Flow Canvas &amp; Direct Telemetry Emitter
+              </h2>
+              <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 12px;">
+                Select any network device on the topology canvas or directory grid. Filter by device class, stream from single or multiple sourcetypes, or stream end-to-end corridor packets.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="button" id="btn-stream-path" style="background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                Stream Entire Path Telemetry
+              </button>
+              <button type="button" id="btn-stop-path" style="background: #dc2626; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: none;">
+                Stop Path Stream
+              </button>
+            </div>
+          </div>
+
+          <!-- Section: Direct Telemetry Streaming (Without Scenarios) -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+              <div>
+                <b style="color: #f8fafc; font-size: 13px;">Direct Telemetry Streamer (No Scenario Required)</b>
+                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Continuous live streaming from single or multiple sourcetypes directly to Splunk HEC</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span id="continuous-status-badge" style="background: #334155; color: #94a3b8; font-size: 11px; font-family: monospace; padding: 3px 10px; border-radius: 3px; font-weight: 600;">
+                  STREAM IDLE
+                </span>
+                <span style="color: #94a3b8; font-size: 11px;">Total Ingested: <b id="live-total-counter" style="color: #38bdf8; font-family: monospace;">0</b></span>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 16px; align-items: center;">
+              <div>
+                <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 6px;">
+                  Streaming Mode &amp; Target Sourcetype(s)
+                </label>
+                <div style="display: flex; gap: 16px; align-items: center;">
+                  <label style="color: #f8fafc; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="radio" name="sourcetype_mode" value="single" checked="checked" style="margin: 0;" />
+                    Single Sourcetype Mode
+                  </label>
+                  <label style="color: #f8fafc; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="radio" name="sourcetype_mode" value="all" style="margin: 0;" />
+                    Multi-Sourcetype Mode (All Checked)
+                  </label>
+                </div>
+                <div id="container-single-sourcetype" style="margin-top: 8px;">
+                  <select id="select-single-sourcetype" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-family: monospace; font-size: 12px;">
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 6px;">
+                  Target Emission Rate
+                </label>
+                <select id="continuous-rate-select" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 12px;">
+                  <option value="1">1 Event / Second (Diagnostic Probe)</option>
+                  <option value="10">10 Events / Second (Light Traffic)</option>
+                  <option value="50" selected="selected">50 Events / Second (Baseline Flow)</option>
+                  <option value="100">100 Events / Second (Standard Production)</option>
+                  <option value="500">500 Events / Second (Stress Load)</option>
+                </select>
+              </div>
+
+              <div style="display: flex; gap: 8px; justify-content: flex-end; align-items: flex-end;">
+                <button type="button" id="btn-start-continuous" style="background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Start Continuous Stream
+                </button>
+                <button type="button" id="btn-stop-continuous" style="background: #dc2626; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: none;">
+                  Stop Stream
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Two-Column Layout -->
+          <div style="display: grid; grid-template-columns: 1.4fr 1.1fr; gap: 20px; margin-bottom: 20px;">
+            
+            <!-- Left: Topology Canvas -->
+            <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; display: flex; flex-direction: column;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <b style="color: #e2e8f0; font-size: 13px;">
+                  Network Path Flow (Click Node on Canvas or Grid Below)
+                </b>
+                <span style="color: #38bdf8; font-size: 11px; background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 3px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  10 Active Nodes in Path
+                </span>
+              </div>
+
+              <!-- SVG Canvas -->
+              <div id="canvas-container" style="position: relative; height: 430px; background: #0b0f17; border: 1px solid #1e293b; border-radius: 4px; overflow: hidden;">
+                <svg id="canvas-svg" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                  <!-- Populated dynamically via JS -->
+                </svg>
+              </div>
+
+              <!-- Canvas Selection Bar -->
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; background: #0f172a; padding: 10px 14px; border-radius: 4px; border: 1px solid #1e293b;">
+                <div style="font-size: 12px; color: #cbd5e1;">
+                  Selected Node: <b id="canvas-selected-name" style="color: #38bdf8; font-family: monospace;">pa-5450-perimeter</b> (<span id="canvas-selected-vendor">Palo Alto</span>)
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" id="btn-blast-selected-1" style="background: #16a34a; border: none; color: #ffffff; border-radius: 3px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                    Emit 1 Event
+                  </button>
+                  <button type="button" id="btn-blast-selected-50" style="background: #d97706; border: none; color: #ffffff; border-radius: 3px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">
+                    Burst 50 Events
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Device Telemetry Emitter Inspector -->
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; display: flex; flex-direction: column;">
+              <h3 style="color: #e2e8f0; font-size: 13px; font-weight: 600; margin: 0 0 12px 0; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+                Device Telemetry Parameters &amp; Sourcetype Selector
+              </h3>
+
+              <!-- Device Class & Vendor Filter Dropdowns -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    1. Device Class (Filters Platforms)
+                  </label>
+                  <select id="emit-class" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
+                    <option value="firewall">Next-Gen Firewall (Security Edge)</option>
+                    <option value="router">Core &amp; WAN Router (MPLS / BGP)</option>
+                    <option value="switch_dc">Data Center Switch (AI / EVPN-VXLAN)</option>
+                    <option value="switch_campus">Campus Switch (Access / Distribution)</option>
+                    <option value="loadbalancer">Application Delivery &amp; Load Balancer</option>
+                    <option value="sase">Cloud SASE &amp; SSE Security Ingress</option>
+                    <option value="wireless">Campus &amp; Branch Wireless (WiFi 6E)</option>
+                    <option value="optical">100G Coherent Optical (DWDM / TI-LFA)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    2. Vendor &amp; Platform (Filtered)
+                  </label>
+                  <select id="emit-vendor" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
+                    <!-- Populated dynamically via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Target Index & Hostname -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Target Index</label>
+                  <input type="text" id="emit-index" value="idx_security_fw" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                </div>
+                <div>
+                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Device Hostname &amp; IP</label>
+                  <div style="display: flex; gap: 6px;">
+                    <input type="text" id="emit-host" value="pa-5450-fw01.corp.internal" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                    <input type="text" id="emit-ip" value="10.254.1.1" style="width: 85px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Multi-Sourcetype Checkboxes -->
+              <div id="container-multi-sourcetype" style="margin-bottom: 10px; background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 10px 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <label style="color: #cbd5e1; font-size: 11px; font-weight: 600;">
+                    3. Select Sourcetypes to Ingest
+                  </label>
+                  <button type="button" id="btn-select-all-st" style="background: #1e293b; border: 1px solid #334155; color: #38bdf8; font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer;">
+                    Select All / Clear
+                  </button>
+                </div>
+                <div id="sourcetype-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 75px; overflow-y: auto; padding: 2px 0;">
+                  <!-- Populated dynamically via JS -->
+                </div>
+              </div>
+
+              <!-- Payload Editor -->
+              <div style="margin-bottom: 10px; flex: 1; display: flex; flex-direction: column;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label style="color: #94a3b8; font-size: 11px; font-weight: 600;">Sample Event Payload</label>
+                  <span id="btn-reset-template" style="color: #38bdf8; font-size: 10px; cursor: pointer;">Reset Template</span>
+                </div>
+                <textarea id="emit-payload" rows="3" style="width: 100%; background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #38bdf8; font-family: monospace; font-size: 11px; resize: vertical; box-sizing: border-box; flex: 1;"></textarea>
+              </div>
+
+              <!-- Action Emit Buttons -->
+              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+                <button type="button" id="btn-emit-single-st" style="flex: 1; background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Emit Single Sourcetype
+                </button>
+                <button type="button" id="btn-emit-selected" style="flex: 1; background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Emit All Selected
+                </button>
+                <button type="button" id="btn-burst-50" style="background: #475569; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Burst 50
+                </button>
+                <button type="button" id="btn-burst-100" style="background: #334155; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                  Burst 100
+                </button>
+              </div>
+
+              <!-- Execution Log Console -->
+              <div id="emit-log-console" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 12px; font-family: monospace; font-size: 11px; color: #94a3b8; max-height: 85px; overflow-y: auto; line-height: 1.5;">
+                [READY] Select a device from canvas or directory to inspect and emit telemetry.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom: 10-Device Network Flow Path Directory Grid -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+              <div>
+                <b style="color: #f8fafc; font-size: 13px;">
+                  Network Flow Path Directory (10 Corridor Devices)
+                </b>
+                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Click any card to select device and bind parameters</span>
+              </div>
+              <span id="grid-selection-label" style="font-size: 12px; color: #38bdf8; font-family: monospace;">
+                Active Node: pa-5450-perimeter
+              </span>
+            </div>
+
+            <div id="device-path-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px;">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

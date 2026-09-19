@@ -1,0 +1,24 @@
+samples:
+  - name: arista-eos-syslog
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: arista:eos:syslog
+        host: "sensor-01.acme.corp"
+        _raw: '<189>1 2026-09-18T21:15:22.000Z switch-leaf-01.acme.local BGP 1420 - %BGP-5-ADJCHANGE: neighbor 10.255.0.2 Gateway Down - peer closed BGP session (remote AS 65001)'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: arista:eos:syslog
+        host: "sensor-01.acme.corp"
+        _raw: '<187>1 2026-09-18T21:15:23.000Z switch-spine-02.acme.local OSPF 1421 - %OSPF-5-ADJCHG: Process 1, Nbr 10.255.0.1 on Ethernet2/1 from FULL to DOWN, Neighbor Down: Dead timer expired'

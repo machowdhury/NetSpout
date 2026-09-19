@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-HOSTPATH-PROVISIONER - HEALTHY BASELINE ###
+  - name: kube-container-hostpath-provisioner-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_hostpath-provisioner-c778b7559-mbs4d_625b4592-754b-45ca-bebb-a776f44d2ca7/hostpath-provisioner/39.log
+        sourcetype: kube:container:hostpath-provisioner
+        host: $HOST$
+        _raw: 'W0918 17:34:45.319646       1 warnings.go:70] v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice'
+
+  ### KUBE-CONTAINER-HOSTPATH-PROVISIONER - DEGRADED / WARNING ###
+  - name: kube-container-hostpath-provisioner-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_hostpath-provisioner-c778b7559-mbs4d_625b4592-754b-45ca-bebb-a776f44d2ca7/hostpath-provisioner/39.log
+        sourcetype: kube:container:hostpath-provisioner
+        host: $HOST$
+        _raw: 'W0918 17:34:45.319646       1 warnings.go:70] v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice'
+
+  ### KUBE-CONTAINER-HOSTPATH-PROVISIONER - CRITICAL / FAILURE ###
+  - name: kube-container-hostpath-provisioner-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_hostpath-provisioner-c778b7559-mbs4d_625b4592-754b-45ca-bebb-a776f44d2ca7/hostpath-provisioner/39.log
+        sourcetype: kube:container:hostpath-provisioner
+        host: $HOST$
+        _raw: 'W0918 17:34:45.319646       1 warnings.go:70] v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice'

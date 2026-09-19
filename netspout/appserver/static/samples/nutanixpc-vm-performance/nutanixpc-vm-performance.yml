@@ -1,0 +1,92 @@
+samples:
+  ### NUTANIXPC-VM-PERFORMANCE - HEALTHY BASELINE ###
+  - name: nutanixpc-vm-performance-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/stats/vms/ca90dbd8-ccdf-4525-8dd2-3c8c1c842262
+          - weight: 2
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/stats/vms/ca90dbd8-ccdf-4525-8dd2-3c8c1c842262-peer
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_vm_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "cluster": "00061768-f76f-4f95-3e5f-0025b500016f", "hypervisorType": "kVMware", "memoryReservedBytes": "", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "controllerAvgIoLatencyMicros": 1941, "controllerAvgReadIoLatencyMicros": 0, "controllerAvgReadIoSizeKb": 0, "controllerAvgWriteIoLatencyMicros": 1941, "controllerAvgWriteIoSizeKb": 4, "controllerIoBandwidthKbps": 42, "controllerNumIo": 176, "controllerNumIops": 8, "controllerNumReadIo": 0, "controllerNumReadIops": 0, "controllerNumWriteIo": 176, "controllerNumWriteIops": 8, "controllerOplogDrainDestHddBytes": 0, "controllerOplogDrainDestSsdBytes": 0, "controllerReadIoBandwidthKbps": 0, "controllerReadIoPpm": 0, "controllerReadSourceEstoreHddLocalBytes": 0, "controllerReadSourceEstoreSsdLocalBytes": 0, "controllerReadSourceEstoreHddRemoteBytes": 0, "controllerReadSourceEstoreSsdRemoteBytes": 0, "controllerReadSourceOplogBytes": 0, "controllerSharedUsageBytes": 0, "controllerSnapshotUsageBytes": 0, "controllerStorageTierSsdUsageBytes": 122976747520, "controllerTimespanMicros": 20000000, "controllerTotalIoSizeKb": 852, "controllerTotalIoTimeMicros": 341638, "controllerTotalReadIoSizeKb": 0, "controllerTotalReadIoTimeMicros": 0, "controllerTotalTransformedUsageBytes": 0, "controllerUserBytes": 29835442176, "controllerWriteDestEstoreSsdBytes": 0, "controllerWriteDestEstoreHddBytes": 0, "controllerWriteIoBandwidthKbps": 42, "controllerWriteIoPpm": 1000000, "controllerWss120SecondUnionMb": 0, "controllerWss120SecondReadMb": 0, "controllerWss120SecondWriteMb": 0, "controllerWss3600SecondUnionMb": 0, "controllerWss3600SecondReadMb": 0, "controllerWss3600SecondWriteMb": 0, "guestMemoryUsagePpm": 0, "hypervisorAvgIoLatencyMicros": 3000, "hypervisorCpuReadyTimePpm": 118, "hypervisorCpuUsagePpm": 800, "hypervisorIoBandwidthKbps": 65, "hypervisorMemoryUsagePpm": 9900, "hypervisorNumIo": 360, "hypervisorNumIops": 12, "hypervisorNumReadIops": 0, "hypervisorNumReadIo": 0, "hypervisorNumReceivedBytes": 0, "hypervisorNumReceivePacketsDropped": 0, "hypervisorNumTransmittedBytes": 0, "hypervisorNumTransmitPacketsDropped": 0, "hypervisorNumWriteIo": 360, "hypervisorNumWriteIops": 12, "hypervisorReadIoBandwidthKbps": 0, "hypervisorTimespanMicros": 30000000, "hypervisorTotalIoSizeKb": 1950, "hypervisorTotalIoTimeMicros": 1080000, "hypervisorTotalReadIoSizeKb": 0, "hypervisorVmRunningTimeUsecs": 0, "hypervisorWriteIoBandwidthKbps": 65, "memoryUsagePpm": 9900, "numVcpusUsedPpm": 0, "diskUsagePpm": 0, "diskCapacityBytes": 0}'
+
+  ### NUTANIXPC-VM-PERFORMANCE - DEGRADED / WARNING ###
+  - name: nutanixpc-vm-performance-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/stats/vms/ca90dbd8-ccdf-4525-8dd2-3c8c1c842262
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_vm_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "cluster": "00061768-f76f-4f95-3e5f-0025b500016f", "hypervisorType": "kVMware", "memoryReservedBytes": "", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "controllerAvgIoLatencyMicros": 1941, "controllerAvgReadIoLatencyMicros": 0, "controllerAvgReadIoSizeKb": 0, "controllerAvgWriteIoLatencyMicros": 1941, "controllerAvgWriteIoSizeKb": 4, "controllerIoBandwidthKbps": 42, "controllerNumIo": 176, "controllerNumIops": 8, "controllerNumReadIo": 0, "controllerNumReadIops": 0, "controllerNumWriteIo": 176, "controllerNumWriteIops": 8, "controllerOplogDrainDestHddBytes": 0, "controllerOplogDrainDestSsdBytes": 0, "controllerReadIoBandwidthKbps": 0, "controllerReadIoPpm": 0, "controllerReadSourceEstoreHddLocalBytes": 0, "controllerReadSourceEstoreSsdLocalBytes": 0, "controllerReadSourceEstoreHddRemoteBytes": 0, "controllerReadSourceEstoreSsdRemoteBytes": 0, "controllerReadSourceOplogBytes": 0, "controllerSharedUsageBytes": 0, "controllerSnapshotUsageBytes": 0, "controllerStorageTierSsdUsageBytes": 122976747520, "controllerTimespanMicros": 20000000, "controllerTotalIoSizeKb": 852, "controllerTotalIoTimeMicros": 341638, "controllerTotalReadIoSizeKb": 0, "controllerTotalReadIoTimeMicros": 0, "controllerTotalTransformedUsageBytes": 0, "controllerUserBytes": 29835442176, "controllerWriteDestEstoreSsdBytes": 0, "controllerWriteDestEstoreHddBytes": 0, "controllerWriteIoBandwidthKbps": 42, "controllerWriteIoPpm": 1000000, "controllerWss120SecondUnionMb": 0, "controllerWss120SecondReadMb": 0, "controllerWss120SecondWriteMb": 0, "controllerWss3600SecondUnionMb": 0, "controllerWss3600SecondReadMb": 0, "controllerWss3600SecondWriteMb": 0, "guestMemoryUsagePpm": 0, "hypervisorAvgIoLatencyMicros": 3000, "hypervisorCpuReadyTimePpm": 118, "hypervisorCpuUsagePpm": 800, "hypervisorIoBandwidthKbps": 65, "hypervisorMemoryUsagePpm": 9900, "hypervisorNumIo": 360, "hypervisorNumIops": 12, "hypervisorNumReadIops": 0, "hypervisorNumReadIo": 0, "hypervisorNumReceivedBytes": 0, "hypervisorNumReceivePacketsDropped": 0, "hypervisorNumTransmittedBytes": 0, "hypervisorNumTransmitPacketsDropped": 0, "hypervisorNumWriteIo": 360, "hypervisorNumWriteIops": 12, "hypervisorReadIoBandwidthKbps": 0, "hypervisorTimespanMicros": 30000000, "hypervisorTotalIoSizeKb": 1950, "hypervisorTotalIoTimeMicros": 1080000, "hypervisorTotalReadIoSizeKb": 0, "hypervisorVmRunningTimeUsecs": 0, "hypervisorWriteIoBandwidthKbps": 65, "memoryUsagePpm": 9900, "numVcpusUsedPpm": 0, "diskUsagePpm": 0, "diskCapacityBytes": 0}'
+
+  ### NUTANIXPC-VM-PERFORMANCE - CRITICAL / FAILURE ###
+  - name: nutanixpc-vm-performance-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.4.120:9440/api/vmm/v4.0/esxi/stats/vms/ca90dbd8-ccdf-4525-8dd2-3c8c1c842262
+    lines:
+      - index: nutanixpc
+        source: nutanixpc:pcperformance
+        sourcetype: nutanixpc_vm_performance
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TIMESTAMP$", "cluster": "00061768-f76f-4f95-3e5f-0025b500016f", "hypervisorType": "kVMware", "memoryReservedBytes": "", "extId": "ca90dbd8-ccdf-4525-8dd2-3c8c1c842262", "controllerAvgIoLatencyMicros": 1941, "controllerAvgReadIoLatencyMicros": 0, "controllerAvgReadIoSizeKb": 0, "controllerAvgWriteIoLatencyMicros": 1941, "controllerAvgWriteIoSizeKb": 4, "controllerIoBandwidthKbps": 42, "controllerNumIo": 176, "controllerNumIops": 8, "controllerNumReadIo": 0, "controllerNumReadIops": 0, "controllerNumWriteIo": 176, "controllerNumWriteIops": 8, "controllerOplogDrainDestHddBytes": 0, "controllerOplogDrainDestSsdBytes": 0, "controllerReadIoBandwidthKbps": 0, "controllerReadIoPpm": 0, "controllerReadSourceEstoreHddLocalBytes": 0, "controllerReadSourceEstoreSsdLocalBytes": 0, "controllerReadSourceEstoreHddRemoteBytes": 0, "controllerReadSourceEstoreSsdRemoteBytes": 0, "controllerReadSourceOplogBytes": 0, "controllerSharedUsageBytes": 0, "controllerSnapshotUsageBytes": 0, "controllerStorageTierSsdUsageBytes": 122976747520, "controllerTimespanMicros": 20000000, "controllerTotalIoSizeKb": 852, "controllerTotalIoTimeMicros": 341638, "controllerTotalReadIoSizeKb": 0, "controllerTotalReadIoTimeMicros": 0, "controllerTotalTransformedUsageBytes": 0, "controllerUserBytes": 29835442176, "controllerWriteDestEstoreSsdBytes": 0, "controllerWriteDestEstoreHddBytes": 0, "controllerWriteIoBandwidthKbps": 42, "controllerWriteIoPpm": 1000000, "controllerWss120SecondUnionMb": 0, "controllerWss120SecondReadMb": 0, "controllerWss120SecondWriteMb": 0, "controllerWss3600SecondUnionMb": 0, "controllerWss3600SecondReadMb": 0, "controllerWss3600SecondWriteMb": 0, "guestMemoryUsagePpm": 0, "hypervisorAvgIoLatencyMicros": 3000, "hypervisorCpuReadyTimePpm": 118, "hypervisorCpuUsagePpm": 800, "hypervisorIoBandwidthKbps": 65, "hypervisorMemoryUsagePpm": 9900, "hypervisorNumIo": 360, "hypervisorNumIops": 12, "hypervisorNumReadIops": 0, "hypervisorNumReadIo": 0, "hypervisorNumReceivedBytes": 0, "hypervisorNumReceivePacketsDropped": 0, "hypervisorNumTransmittedBytes": 0, "hypervisorNumTransmitPacketsDropped": 0, "hypervisorNumWriteIo": 360, "hypervisorNumWriteIops": 12, "hypervisorReadIoBandwidthKbps": 0, "hypervisorTimespanMicros": 30000000, "hypervisorTotalIoSizeKb": 1950, "hypervisorTotalIoTimeMicros": 1080000, "hypervisorTotalReadIoSizeKb": 0, "hypervisorVmRunningTimeUsecs": 0, "hypervisorWriteIoBandwidthKbps": 65, "memoryUsagePpm": 9900, "numVcpusUsedPpm": 0, "diskUsagePpm": 0, "diskCapacityBytes": 0}'

@@ -1,0 +1,24 @@
+samples:
+  - name: arista-metrics-telemetry
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: cisco_mdt_metrics
+        source: telemetry:grpc:8088
+        sourcetype: arista:telemetry:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761320, "event": "metric", "source": "switch-leaf-01", "sourcetype": "arista:telemetry:json", "host": "switch-leaf-01.acme.local", "index": "cisco_mdt_metrics", "fields": {"metric_name:arista_interface_in_octets": 984120394, "metric_name:arista_interface_out_octets": 1284910283, "metric_name:arista_interface_in_errors": 0, "metric_name:arista_queue_depth_bytes": 14200, "interface": "Ethernet1/1", "speed": 100000000000}}'
+      - index: cisco_mdt_metrics
+        source: telemetry:grpc:8088
+        sourcetype: arista:telemetry:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761325, "event": "metric", "source": "switch-leaf-01", "sourcetype": "arista:telemetry:json", "host": "switch-leaf-01.acme.local", "index": "cisco_mdt_metrics", "fields": {"metric_name:arista_interface_in_octets": 992410881, "metric_name:arista_interface_out_octets": 1293021490, "metric_name:arista_interface_in_errors": 2, "metric_name:arista_queue_depth_bytes": 18900, "interface": "Ethernet1/2", "speed": 100000000000}}'

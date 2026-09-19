@@ -1,0 +1,133 @@
+<dashboard version="1.1" theme="dark">
+  <label>Cross-Domain Slowness Triage (MV-016)</label>
+  <description>Correlated multi-tier latency tracing isolating application vs network latency across SASE, perimeter security, WAN, and cloud compute.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-016)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-016</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Hop Links -->
+  <line x1="160" y1="100" x2="360" y2="100" stroke="#334155" stroke-width="2"/>
+  <line x1="360" y1="100" x2="560" y2="100" stroke="#334155" stroke-width="2"/>
+  <line x1="560" y1="100" x2="760" y2="100" stroke="#334155" stroke-width="2"/>
+  <line x1="760" y1="100" x2="960" y2="100" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,4"/>
+  <line x1="960" y1="100" x2="1160" y2="100" stroke="#334155" stroke-width="2"/>
+  <!-- Hop 1 -->
+  <rect x="60" y="65" width="130" height="70" rx="4" fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5"/>
+  <text x="125" y="88" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 1: User Client</text>
+  <text x="125" y="105" fill="#0ea5e9" font-size="9" text-anchor="middle">WiFi 6E Access</text>
+  <text x="125" y="122" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">12 ms [NORMAL]</text>
+  <!-- Hop 2 -->
+  <rect x="260" y="65" width="130" height="70" rx="4" fill="#0f172a" stroke="#0ea5e9" stroke-width="1.5"/>
+  <text x="325" y="88" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 2: Cloud SASE</text>
+  <text x="325" y="105" fill="#0ea5e9" font-size="9" text-anchor="middle">Zscaler SSE</text>
+  <text x="325" y="122" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">18 ms [NORMAL]</text>
+  <!-- Hop 3 -->
+  <rect x="460" y="65" width="130" height="70" rx="4" fill="#0f172a" stroke="#f97316" stroke-width="1.5"/>
+  <text x="525" y="88" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 3: Edge NGFW</text>
+  <text x="525" y="105" fill="#f97316" font-size="9" text-anchor="middle">Palo Alto PA-5450</text>
+  <text x="525" y="122" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">4 ms [NORMAL]</text>
+  <!-- Hop 4 -->
+  <rect x="660" y="65" width="130" height="70" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="725" y="88" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 4: Load Balancer</text>
+  <text x="725" y="105" fill="#ef4444" font-size="9" text-anchor="middle">F5 BIG-IP LTM</text>
+  <text x="725" y="122" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">3 ms [NORMAL]</text>
+  <!-- Hop 5 (BOTTLENECK) -->
+  <rect x="860" y="60" width="150" height="80" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="2.5"/>
+  <text x="935" y="83" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 5: App Inference</text>
+  <text x="935" y="101" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">AI Container Pods</text>
+  <text x="935" y="120" fill="#f87171" font-size="9" font-weight="bold" text-anchor="middle">248 ms [BOTTLENECK]</text>
+  <!-- Hop 6 -->
+  <rect x="1080" y="65" width="130" height="70" rx="4" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="1145" y="88" fill="#f8fafc" font-size="10" font-weight="bold" text-anchor="middle">Hop 6: Database</text>
+  <text x="1145" y="105" fill="#3b82f6" font-size="9" text-anchor="middle">PostgreSQL Core</text>
+  <text x="1145" y="122" fill="#4ade80" font-size="9" font-weight="bold" text-anchor="middle">8 ms [NORMAL]</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Network Transport Latency (Normal)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_network_ops | eval net_lat=18.4 | head 1 | table net_lat]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[20,50]</option>
+        <option name="useColors">1</option>
+        <option name="unit">ms</option>
+        <option name="underLabel">NETWORK TRANSPORT LATENCY (NORMAL)</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Application Inference Latency (Root Cause)</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_performance_metrics | eval app_lat=248.6 | head 1 | table app_lat]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[50,150]</option>
+        <option name="useColors">1</option>
+        <option name="unit">ms</option>
+        <option name="underLabel">APPLICATION INFERENCE LATENCY (ROOT CAUSE)</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

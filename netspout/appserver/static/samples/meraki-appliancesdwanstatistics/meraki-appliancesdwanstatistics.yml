@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-APPLIANCESDWANSTATISTICS - HEALTHY BASELINE ###
+  - name: meraki-appliancesdwanstatistics-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatistics
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "networkName": "Toronto Hub",  "peerSerial": "Q2QN-EDM-MX64",  "peerName": "Edmonton Branch 1",  "latencyMs": 24.5,  "jitterMs": 1.8,  "lossPercentage": 0.0,  "sentKbps": 8450,  "receivedKbps": 7920 }'
+
+  ### MERAKI-APPLIANCESDWANSTATISTICS - DEGRADED INCIDENT ###
+  - name: meraki-appliancesdwanstatistics-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:appliancesdwanstatistics
+        host: $HOST$
+        _raw: '{  "serial": "Q2QN-TOR-MX100",  "networkName": "Toronto Hub",  "peerSerial": "Q2QN-EDM-MX64",  "peerName": "Edmonton Branch 1",  "latencyMs": 88.2,  "jitterMs": 22.4,  "lossPercentage": 14.5,  "sentKbps": 2100,  "receivedKbps": 1850 }'

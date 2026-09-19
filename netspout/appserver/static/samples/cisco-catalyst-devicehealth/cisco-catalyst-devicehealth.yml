@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-CATALYST-DEVICEHEALTH - HEALTHY BASELINE ###
+  - name: cisco-catalyst-devicehealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_devicehealth://DNAC_DeviceHealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"HasInterfaceStats": "True", "ID": "6aa89be5-2bfa-4647-a04e-919fc3e9be2c", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "Name": "Vlan122", "RxRate": "", "TxRate": "", "Speed": "1000000", "RxUtilization": "", "TxUtilization": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-DEVICEHEALTH - DEGRADED / WARNING ###
+  - name: cisco-catalyst-devicehealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_devicehealth://DNAC_DeviceHealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"HasInterfaceStats": "True", "ID": "6aa89be5-2bfa-4647-a04e-919fc3e9be2c", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "Name": "Vlan122", "RxRate": "", "TxRate": "", "Speed": "1000000", "RxUtilization": "", "TxUtilization": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-CATALYST-DEVICEHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-catalyst-devicehealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_devicehealth://DNAC_DeviceHealth
+        sourcetype: cisco:catalyst:devicehealth
+        host: $HOST$
+        _raw: '{"HasInterfaceStats": "True", "ID": "6aa89be5-2bfa-4647-a04e-919fc3e9be2c", "DeviceID": "0c379365-f5b4-4a3d-9a3d-1dc3e6689a18", "DeviceName": "TRN-SDA-C9500.maple.ciscolabs.com", "Name": "Vlan122", "RxRate": "", "TxRate": "", "Speed": "1000000", "RxUtilization": "", "TxUtilization": "", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'

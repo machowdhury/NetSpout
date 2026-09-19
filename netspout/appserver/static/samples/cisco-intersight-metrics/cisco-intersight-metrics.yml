@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-METRICS - HEALTHY BASELINE ###
+  - name: cisco-intersight-metrics-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: network
+        sourcetype: cisco:intersight:metrics
+        host: $HOST$
+        _raw: '{"version": "v1", "timestamp": "$ISO_TIMESTAMP$", "event": {"entdfmx": null, "nura": null, "nirr": null, "nurc": null, "nrrmn": null, "nirs": null, "enlcmx": null, "entdfmn": null, "nrrmx": null, "enrdmx": null, "id": "/api/v1/fc/PhysicalPorts/69ea64737572792d41c44ae6", "enlcmn": null, "nprpppsum": null, "enrnbr": null, "nurmn": null, "enrnbs": null, "nurmx": null, "entjds": null, "nrrs": null, "nrrr": null, "nirmx": null, "ntpds": null, "ncrcc": null, "nprpppmn": null, "nutc": null, "nitmn": null, "nuta": null, "nits": null, "nprpppmx": null, "nitr": null, "enlcr": null, "hw.network.port.role": "unconfigured", "enlcs": null, "nptppps": null, "nitds": null, "entjmx": null, "nptpppr": null, "nitspa": null, "ntac": null, "host.id": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "entjmn": null, "nptpppsag": null, "serial_number": "FDO2441072E", "nprpppds": null, "nprppps": null, "model_generation": "6400 Series", "nprpppr": null, "encss": null, "entds": null, "ntps": null, "entdr": null, "nurs": null, "ntpr": null, "encsr": null, "nrrds": null, "nptpppds": null, "enrtlmn": null, "enrtlmx": null, "nrpmn": null, "nitsag": null, "nptpppmn": null, "nrpmx": null, "host.name": "Mercury FI-A", "nirspa": null, "nptpppmx": null, "entdmn": null, "enrnbds": null, "nutmn": null, "encsmn": null, "enrtsds": null, "entjr": null, "nuts": null, "entdds": null, "nprpppsag": null, "entjs": null, "enrnbmn": null, "nitmx": null, "nutmx": null, "model_family": "Fabric Interconnect", "encsds": null, "nirmn": null, "ncrccr": null, "ncrccs": null, "enrnbmx": null, "enrtsmn": null, "ntpmn": null, "nirsag": null, "ntpmx": null, "encsmx": null, "enrtsmx": null, "nrac": null, "enrtss": null, "enrtsr": null, "nirds": null, "entdmx": null, "enrdmn": null, "entdfds": null, "enrtlr": null, "enrtls": null, "nrps": null, "enlcds": null, "nrpr": null, "enrdr": null, "enrdds": null, "nptpppsum": null, "nrpds": null, "entdfr": null, "enrds": null, "entdfs": null, "enrtld": null, "DomainName": "Mercury", "AccountMoid": "660de283756461330140b580", "hwNetworkPortAggregate_port": 0, "hwChassis": null, "hwChassisNumber": null, "hwNetworkState": "failed", "ParentId": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "hwNetworkPeerId": null, "physical_address": null, "hwNetworkPortPort_channel": "0", "Name": "fc1/4", "hwNetworkPortNumber": "4", "hwNetworkPortType": "fibre_channel", "DomainId": "/api/v1/asset/DeviceRegistrations/69ea646e6f7261350123bfde", "hwtype": "network", "hwNetworkPortSlot": "1", "hwServerId": null, "HostName": "Mercury FI-A", "HostType": "network.Element", "Model": "UCS-FI-6454", "assetDrMoid": "69ea646e6f7261350123bfde", "vendor": "Cisco Systems, Inc.", "ParentName": "Mercury FI-A", "host.tags": []}, "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-METRICS - DEGRADED / WARNING ###
+  - name: cisco-intersight-metrics-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: network
+        sourcetype: cisco:intersight:metrics
+        host: $HOST$
+        _raw: '{"version": "v1", "timestamp": "$ISO_TIMESTAMP$", "event": {"entdfmx": null, "nura": null, "nirr": null, "nurc": null, "nrrmn": null, "nirs": null, "enlcmx": null, "entdfmn": null, "nrrmx": null, "enrdmx": null, "id": "/api/v1/fc/PhysicalPorts/69ea64737572792d41c44ae6", "enlcmn": null, "nprpppsum": null, "enrnbr": null, "nurmn": null, "enrnbs": null, "nurmx": null, "entjds": null, "nrrs": null, "nrrr": null, "nirmx": null, "ntpds": null, "ncrcc": null, "nprpppmn": null, "nutc": null, "nitmn": null, "nuta": null, "nits": null, "nprpppmx": null, "nitr": null, "enlcr": null, "hw.network.port.role": "unconfigured", "enlcs": null, "nptppps": null, "nitds": null, "entjmx": null, "nptpppr": null, "nitspa": null, "ntac": null, "host.id": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "entjmn": null, "nptpppsag": null, "serial_number": "FDO2441072E", "nprpppds": null, "nprppps": null, "model_generation": "6400 Series", "nprpppr": null, "encss": null, "entds": null, "ntps": null, "entdr": null, "nurs": null, "ntpr": null, "encsr": null, "nrrds": null, "nptpppds": null, "enrtlmn": null, "enrtlmx": null, "nrpmn": null, "nitsag": null, "nptpppmn": null, "nrpmx": null, "host.name": "Mercury FI-A", "nirspa": null, "nptpppmx": null, "entdmn": null, "enrnbds": null, "nutmn": null, "encsmn": null, "enrtsds": null, "entjr": null, "nuts": null, "entdds": null, "nprpppsag": null, "entjs": null, "enrnbmn": null, "nitmx": null, "nutmx": null, "model_family": "Fabric Interconnect", "encsds": null, "nirmn": null, "ncrccr": null, "ncrccs": null, "enrnbmx": null, "enrtsmn": null, "ntpmn": null, "nirsag": null, "ntpmx": null, "encsmx": null, "enrtsmx": null, "nrac": null, "enrtss": null, "enrtsr": null, "nirds": null, "entdmx": null, "enrdmn": null, "entdfds": null, "enrtlr": null, "enrtls": null, "nrps": null, "enlcds": null, "nrpr": null, "enrdr": null, "enrdds": null, "nptpppsum": null, "nrpds": null, "entdfr": null, "enrds": null, "entdfs": null, "enrtld": null, "DomainName": "Mercury", "AccountMoid": "660de283756461330140b580", "hwNetworkPortAggregate_port": 0, "hwChassis": null, "hwChassisNumber": null, "hwNetworkState": "failed", "ParentId": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "hwNetworkPeerId": null, "physical_address": null, "hwNetworkPortPort_channel": "0", "Name": "fc1/4", "hwNetworkPortNumber": "4", "hwNetworkPortType": "fibre_channel", "DomainId": "/api/v1/asset/DeviceRegistrations/69ea646e6f7261350123bfde", "hwtype": "network", "hwNetworkPortSlot": "1", "hwServerId": null, "HostName": "Mercury FI-A", "HostType": "network.Element", "Model": "UCS-FI-6454", "assetDrMoid": "69ea646e6f7261350123bfde", "vendor": "Cisco Systems, Inc.", "ParentName": "Mercury FI-A", "host.tags": []}, "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-METRICS - CRITICAL / FAILURE ###
+  - name: cisco-intersight-metrics-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: network
+        sourcetype: cisco:intersight:metrics
+        host: $HOST$
+        _raw: '{"version": "v1", "timestamp": "$ISO_TIMESTAMP$", "event": {"entdfmx": null, "nura": null, "nirr": null, "nurc": null, "nrrmn": null, "nirs": null, "enlcmx": null, "entdfmn": null, "nrrmx": null, "enrdmx": null, "id": "/api/v1/fc/PhysicalPorts/69ea64737572792d41c44ae6", "enlcmn": null, "nprpppsum": null, "enrnbr": null, "nurmn": null, "enrnbs": null, "nurmx": null, "entjds": null, "nrrs": null, "nrrr": null, "nirmx": null, "ntpds": null, "ncrcc": null, "nprpppmn": null, "nutc": null, "nitmn": null, "nuta": null, "nits": null, "nprpppmx": null, "nitr": null, "enlcr": null, "hw.network.port.role": "unconfigured", "enlcs": null, "nptppps": null, "nitds": null, "entjmx": null, "nptpppr": null, "nitspa": null, "ntac": null, "host.id": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "entjmn": null, "nptpppsag": null, "serial_number": "FDO2441072E", "nprpppds": null, "nprppps": null, "model_generation": "6400 Series", "nprpppr": null, "encss": null, "entds": null, "ntps": null, "entdr": null, "nurs": null, "ntpr": null, "encsr": null, "nrrds": null, "nptpppds": null, "enrtlmn": null, "enrtlmx": null, "nrpmn": null, "nitsag": null, "nptpppmn": null, "nrpmx": null, "host.name": "Mercury FI-A", "nirspa": null, "nptpppmx": null, "entdmn": null, "enrnbds": null, "nutmn": null, "encsmn": null, "enrtsds": null, "entjr": null, "nuts": null, "entdds": null, "nprpppsag": null, "entjs": null, "enrnbmn": null, "nitmx": null, "nutmx": null, "model_family": "Fabric Interconnect", "encsds": null, "nirmn": null, "ncrccr": null, "ncrccs": null, "enrnbmx": null, "enrtsmn": null, "ntpmn": null, "nirsag": null, "ntpmx": null, "encsmx": null, "enrtsmx": null, "nrac": null, "enrtss": null, "enrtsr": null, "nirds": null, "entdmx": null, "enrdmn": null, "entdfds": null, "enrtlr": null, "enrtls": null, "nrps": null, "enlcds": null, "nrpr": null, "enrdr": null, "enrdds": null, "nptpppsum": null, "nrpds": null, "entdfr": null, "enrds": null, "entdfs": null, "enrtld": null, "DomainName": "Mercury", "AccountMoid": "660de283756461330140b580", "hwNetworkPortAggregate_port": 0, "hwChassis": null, "hwChassisNumber": null, "hwNetworkState": "failed", "ParentId": "/api/v1/network/Elements/69ea646f76752d340195f1c8", "hwNetworkPeerId": null, "physical_address": null, "hwNetworkPortPort_channel": "0", "Name": "fc1/4", "hwNetworkPortNumber": "4", "hwNetworkPortType": "fibre_channel", "DomainId": "/api/v1/asset/DeviceRegistrations/69ea646e6f7261350123bfde", "hwtype": "network", "hwNetworkPortSlot": "1", "hwServerId": null, "HostName": "Mercury FI-A", "HostType": "network.Element", "Model": "UCS-FI-6454", "assetDrMoid": "69ea646e6f7261350123bfde", "vendor": "Cisco Systems, Inc.", "ParentName": "Mercury FI-A", "host.tags": []}, "account_name": "MAPLE"}'

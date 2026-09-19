@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-SWITCHPORTSOVERVIEW - HEALTHY BASELINE ###
+  - name: meraki-switchportsoverview-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsoverview
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "totalPorts": 48,  "activePorts": 36,  "speeds": {   "10M": 0,   "100M": 2,   "1000M": 32,   "10000M": 2  },  "poeAllocatedWatts": 185.4,  "poeCapacityWatts": 740.0 }'
+
+  ### MERAKI-SWITCHPORTSOVERVIEW - DEGRADED INCIDENT ###
+  - name: meraki-switchportsoverview-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:switchportsoverview
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "totalPorts": 48,  "activePorts": 36,  "speeds": {   "10M": 0,   "100M": 8,   "1000M": 26,   "10000M": 2  },  "speedMismatchDetected": true,  "poeAllocatedWatts": 195.0,  "poeCapacityWatts": 740.0 }'

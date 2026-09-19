@@ -1,0 +1,24 @@
+samples:
+  - name: netscout-omnis-alert
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:netscout:omnis
+        sourcetype: netscout:omnis:alert
+        host: "sensor-01.acme.corp"
+        _raw: '{"timestamp": "2026-09-18T21:15:55Z", "analyzer": "NetScout Omnis Cyber Intelligence", "alert_type": "DDoS_Flood_Vector", "vector": "SYN_Flood", "dpi_signature": "TCP_SYN_ACK_MISMATCH", "src_ip_count": 4820, "target_ip": "198.51.100.25", "target_port": 443, "flood_volume_pps": 850000, "flood_volume_mbps": 4200, "drop_action": "mitigated", "threat_score": 98}'
+      - index: netops_logs
+        source: api:netscout:omnis
+        sourcetype: netscout:omnis:alert
+        host: "sensor-01.acme.corp"
+        _raw: '{"timestamp": "2026-09-18T21:15:58Z", "analyzer": "NetScout Omnis Cyber Intelligence", "alert_type": "DNS_Amplification_Attack", "vector": "UDP_DNS_Reflection", "dpi_signature": "ANY_QUERY_FLOOD", "src_ip_count": 9120, "target_ip": "198.51.100.10", "target_port": 53, "flood_volume_pps": 1200000, "flood_volume_mbps": 6800, "drop_action": "mitigated", "threat_score": 99}'

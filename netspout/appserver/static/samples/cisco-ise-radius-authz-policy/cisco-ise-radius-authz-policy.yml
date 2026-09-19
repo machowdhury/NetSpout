@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-ISE-RADIUS-AUTHZ-POLICY - HEALTHY BASELINE ###
+  - name: cisco-ise-radius-authz-policy-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+          - weight: 2
+            choice: https://10.0.10.34-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:AUTH_POLICY:ISE02
+        sourcetype: cisco:ise:radius:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "70c8186d-e2ef-4482-bd89-394cd9b723e4", "name": "Default", "hitCounts": 0, "rank": 15, "state": "enabled", "condition": null}, "profile": ["DenyAccess"], "securityGroup": null, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/network-access/policy-set/f26b5958-d128-4f4b-9e17-d0338af2b891/authorization/70c8186d-e2ef-4482-bd89-394cd9b723e4", "type": "application/json"}, "policy_id": "f26b5958-d128-4f4b-9e17-d0338af2b891", "lastUpdated": 1784258516483}'
+
+  ### CISCO-ISE-RADIUS-AUTHZ-POLICY - DEGRADED / WARNING ###
+  - name: cisco-ise-radius-authz-policy-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:AUTH_POLICY:ISE02
+        sourcetype: cisco:ise:radius:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "70c8186d-e2ef-4482-bd89-394cd9b723e4", "name": "Default", "hitCounts": 0, "rank": 15, "state": "enabled", "condition": null}, "profile": ["DenyAccess"], "securityGroup": null, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/network-access/policy-set/f26b5958-d128-4f4b-9e17-d0338af2b891/authorization/70c8186d-e2ef-4482-bd89-394cd9b723e4", "type": "application/json"}, "policy_id": "f26b5958-d128-4f4b-9e17-d0338af2b891", "lastUpdated": 1784258516483}'
+
+  ### CISCO-ISE-RADIUS-AUTHZ-POLICY - CRITICAL / FAILURE ###
+  - name: cisco-ise-radius-authz-policy-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.0.10.34
+    lines:
+      - index: main
+        source: cisco_catalyst_ise_administrative_input:AUTH_POLICY:ISE02
+        sourcetype: cisco:ise:radius:authz:policy
+        host: $HOST$
+        _raw: '{"rule": {"default": true, "id": "70c8186d-e2ef-4482-bd89-394cd9b723e4", "name": "Default", "hitCounts": 0, "rank": 15, "state": "enabled", "condition": null}, "profile": ["DenyAccess"], "securityGroup": null, "link": {"rel": "self", "href": "$HOST$/api/v1/policy/network-access/policy-set/f26b5958-d128-4f4b-9e17-d0338af2b891/authorization/70c8186d-e2ef-4482-bd89-394cd9b723e4", "type": "application/json"}, "policy_id": "f26b5958-d128-4f4b-9e17-d0338af2b891", "lastUpdated": 1784258516483}'

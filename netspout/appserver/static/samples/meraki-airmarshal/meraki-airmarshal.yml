@@ -1,0 +1,52 @@
+samples:
+  ### MERAKI-AIRMARSHAL - HEALTHY BASELINE ###
+  - name: meraki-airmarshal-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:airmarshal
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "networkName": "Toronto Hub",  "ssid": "Toronto-Corp-Secure",  "bssid": "0c:8d:db:6f:10:20",  "channels": [1, 6, 11],  "rogueDetected": false,  "wiredEvidence": false,  "status": "secure" }'
+
+  ### MERAKI-AIRMARSHAL - DEGRADED INCIDENT ###
+  - name: meraki-airmarshal-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: meraki.api.cisco.com
+    lines:
+      - index: main
+        source: meraki:api
+        sourcetype: meraki:airmarshal
+        host: $HOST$
+        _raw: '{  "networkId": "N_TORONTO_DC",  "networkName": "Toronto Hub",  "ssid": "Free-Corporate-Guest",  "bssid": "ac:17:c8:92:44:11",  "channels": [6],  "rogueDetected": true,  "wiredEvidence": true,  "wiredMac": "ac:17:c8:92:44:11",  "status": "contained",  "threatType": "rogue_ap_with_wired_connection" }'

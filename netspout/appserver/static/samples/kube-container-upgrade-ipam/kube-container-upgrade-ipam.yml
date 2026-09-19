@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-UPGRADE-IPAM - HEALTHY BASELINE ###
+  - name: kube-container-upgrade-ipam-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/upgrade-ipam/4.log
+        sourcetype: kube:container:upgrade-ipam
+        host: $HOST$
+        _raw: '2026-09-02 10:13:21.421 [INFO][1] ipam/ipam_plugin.go 100: migration from host-local to calico-ipam complete node="maple-splunk-vm4-hf"'
+
+  ### KUBE-CONTAINER-UPGRADE-IPAM - DEGRADED / WARNING ###
+  - name: kube-container-upgrade-ipam-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/upgrade-ipam/4.log
+        sourcetype: kube:container:upgrade-ipam
+        host: $HOST$
+        _raw: '2026-09-02 10:13:21.421 [INFO][1] ipam/ipam_plugin.go 100: migration from host-local to calico-ipam complete node="maple-splunk-vm4-hf"'
+
+  ### KUBE-CONTAINER-UPGRADE-IPAM - CRITICAL / FAILURE ###
+  - name: kube-container-upgrade-ipam-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/kube-system_calico-node-sfjbg_e49e1d12-2245-4aef-94a0-9e114e5289e5/upgrade-ipam/4.log
+        sourcetype: kube:container:upgrade-ipam
+        host: $HOST$
+        _raw: '2026-09-02 10:13:21.421 [INFO][1] ipam/ipam_plugin.go 100: migration from host-local to calico-ipam complete node="maple-splunk-vm4-hf"'

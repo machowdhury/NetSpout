@@ -1,0 +1,313 @@
+[
+  {
+    "id": "acme_bridge_domain",
+    "filename": "scenario_acme_bridge_domain_withdrawal.yml",
+    "name": "ACME Bridge Domain Withdrawal (ACI Leaf Outage)",
+    "group": "ACME Enterprise",
+    "description": "ACME Bridge Domain Withdrawal (ACI Leaf Outage) - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dc:aci:events",
+      "cisco:dc:aci:health",
+      "cisco:sfw:estreamer",
+      "cisco:thousandeyes:metric",
+      "httpevent",
+      "vmware:perf:cpu"
+    ],
+    "totalSourcetypes": 6
+  },
+  {
+    "id": "campus_cross_domain",
+    "filename": "scenario_acme_campus_cross_domain_visibility.yml",
+    "name": "ACME Campus Cross-Domain Visibility (Cat9k + ISE)",
+    "group": "ACME Enterprise",
+    "description": "ACME Campus Cross-Domain Visibility (Cat9k + ISE) - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dnac:client",
+      "cisco:dnac:clienthealth",
+      "cisco:dnac:compliance",
+      "cisco:dnac:devicehealth",
+      "cisco:dnac:event",
+      "cisco:dnac:issue",
+      "cisco:dnac:networkhealth",
+      "cisco:dnac:securityadvisory"
+    ],
+    "totalSourcetypes": 8
+  },
+  {
+    "id": "full_network_topology",
+    "filename": "scenario_acme_full_network_topology.yml",
+    "name": "ACME Full Enterprise Network Topology (All Domains)",
+    "group": "ACME Enterprise",
+    "description": "ACME Full Enterprise Network Topology (All Domains) - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dc:aci:events",
+      "cisco:dc:aci:health",
+      "cisco:dnac:devicehealth",
+      "cisco:dnac:networkhealth",
+      "cisco:sdwan:sitehealth",
+      "cisco:sdwan:system:logs",
+      "cisco:sfw:estreamer",
+      "cisco:thousandeyes:metric"
+    ],
+    "totalSourcetypes": 11
+  },
+  {
+    "id": "mpls_backbone",
+    "filename": "scenario_acme_mpls_backbone_realtime.yml",
+    "name": "ACME MPLS Backbone Real-Time Assurance (Carrier P/PE)",
+    "group": "ACME Enterprise",
+    "description": "ACME MPLS Backbone Real-Time Assurance (Carrier P/PE) - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:ios:xr:syslog",
+      "httpevent"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "mpls_to_srv6",
+    "filename": "scenario_acme_mpls_to_srv6_transition.yml",
+    "name": "ACME MPLS-to-SRv6 Transition Assurance",
+    "group": "ACME Enterprise",
+    "description": "ACME MPLS-to-SRv6 Transition Assurance - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:ios:xr:syslog",
+      "httpevent"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "sdwan_toronto",
+    "filename": "scenario_acme_sdwan_toronto_degradation.yml",
+    "name": "ACME SD-WAN Toronto Hub Brownout & Failover",
+    "group": "ACME Enterprise",
+    "description": "ACME SD-WAN Toronto Hub Brownout & Failover - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:sdwan:linkhealth",
+      "cisco:sdwan:sitehealth",
+      "cisco:sdwan:ssetunnels",
+      "cisco:sdwan:system:logs",
+      "cisco:sdwan:tunnelhealth",
+      "cisco:sdwan:utd:logs",
+      "stream:netflow"
+    ],
+    "totalSourcetypes": 7
+  },
+  {
+    "id": "maple_catalyst",
+    "filename": "scenario_maple_catalyst.yml",
+    "name": "Maple Catalyst Core & Access Assurance",
+    "group": "Maple Multi-Cloud",
+    "description": "Maple Catalyst Core & Access Assurance - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:catalyst:clienthealth",
+      "cisco:catalyst:devicehealth",
+      "cisco:catalyst:issue"
+    ],
+    "totalSourcetypes": 3
+  },
+  {
+    "id": "maple_intersight",
+    "filename": "scenario_maple_intersight.yml",
+    "name": "Maple Intersight Compute & UCS Ingestion",
+    "group": "Maple Multi-Cloud",
+    "description": "Maple Intersight Compute & UCS Ingestion - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:intersight:alarms",
+      "cisco:intersight:compute",
+      "cisco:intersight:networkobjects"
+    ],
+    "totalSourcetypes": 3
+  },
+  {
+    "id": "maple_nutanix",
+    "filename": "scenario_maple_nutanix.yml",
+    "name": "Maple Nutanix Enterprise Cloud Telemetry",
+    "group": "Maple Multi-Cloud",
+    "description": "Maple Nutanix Enterprise Cloud Telemetry - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "nutanixpc_alerts",
+      "nutanixpc_disk_performance",
+      "nutanixpc_vm_performance"
+    ],
+    "totalSourcetypes": 3
+  },
+  {
+    "id": "maple_security",
+    "filename": "scenario_maple_security.yml",
+    "name": "Maple Multi-Layer Security Operations",
+    "group": "Maple Multi-Cloud",
+    "description": "Maple Multi-Layer Security Operations - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:duo:authentication",
+      "cisco:ise:syslog",
+      "cisco:sfw:estreamer"
+    ],
+    "totalSourcetypes": 3
+  },
+  {
+    "id": "campus",
+    "filename": "scenario_campus.yml",
+    "name": "Core Campus Switched Fabric Baseline",
+    "group": "Core Domains",
+    "description": "Core Campus Switched Fabric Baseline - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dnac:devicehealth",
+      "cisco:dnac:issue",
+      "cisco:dnac:networkhealth",
+      "cisco:ios"
+    ],
+    "totalSourcetypes": 4
+  },
+  {
+    "id": "core",
+    "filename": "scenario_core.yml",
+    "name": "Datacenter Core Backbone Ingestion",
+    "group": "Core Domains",
+    "description": "Datacenter Core Backbone Ingestion - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dc:aci:health",
+      "httpevent"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "cross_platform_disaster",
+    "filename": "scenario_cross_platform_disaster.yml",
+    "name": "Cross-Platform Disaster Recovery Drill",
+    "group": "Core Domains",
+    "description": "Cross-Platform Disaster Recovery Drill - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:catalyst:devicehealth",
+      "cisco:catalyst:issue",
+      "cisco:duo:authentication",
+      "cisco:intersight:alarms",
+      "cisco:intersight:compute",
+      "cisco:ios",
+      "cisco:sfw:estreamer",
+      "httpevent"
+    ],
+    "totalSourcetypes": 11
+  },
+  {
+    "id": "meraki_branch",
+    "filename": "scenario_meraki_branch_assurance.yml",
+    "name": "Meraki Cloud-Managed Branch Assurance",
+    "group": "Core Domains",
+    "description": "Meraki Cloud-Managed Branch Assurance - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "meraki:appliancesdwanstatistics",
+      "meraki:assurancealerts",
+      "meraki:devices",
+      "meraki:switchportsbyswitch"
+    ],
+    "totalSourcetypes": 4
+  },
+  {
+    "id": "sdwan",
+    "filename": "scenario_sdwan.yml",
+    "name": "Enterprise SD-WAN Edge Ingestion",
+    "group": "Core Domains",
+    "description": "Enterprise SD-WAN Edge Ingestion - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:sdwan:BGP-5-ADJCHANGE",
+      "cisco:sdwan:LINEPROTO-5-UPDOWN",
+      "cisco:sdwan:LINK-5-CHANGED",
+      "cisco:sdwan:linkhealth",
+      "cisco:sdwan:sitehealth",
+      "cisco:sdwan:ssetunnels",
+      "cisco:sdwan:sytem:logs",
+      "cisco:sdwan:tunnelhealth"
+    ],
+    "totalSourcetypes": 8
+  },
+  {
+    "id": "wireless",
+    "filename": "scenario_wireless.yml",
+    "name": "Wireless LAN Controller & Access Points",
+    "group": "Core Domains",
+    "description": "Wireless LAN Controller & Access Points - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:catalyst:rogue:threat:details",
+      "cisco:catalyst:security:awips:signatures",
+      "cisco:dnac:clienthealth",
+      "cisco:dnac:devicehealth",
+      "cisco:dnac:issue",
+      "cisco:ise:syslog"
+    ],
+    "totalSourcetypes": 6
+  },
+  {
+    "id": "mix",
+    "filename": "scenario_mix.yml",
+    "name": "Mixed Multi-Domain Synthetic Ingestion",
+    "group": "Core Domains",
+    "description": "Mixed Multi-Domain Synthetic Ingestion - high fidelity simulation scenario",
+    "defaultWorkers": 10,
+    "sourcetypes": [
+      "cisco:dc:aci:health",
+      "cisco:dnac:clienthealth",
+      "cisco:dnac:devicehealth",
+      "cisco:dnac:issue",
+      "cisco:ise:syslog",
+      "cisco:sdwan:BGP-5-ADJCHANGE",
+      "cisco:sdwan:sitehealth",
+      "cisco:sdwan:tunnelhealth"
+    ],
+    "totalSourcetypes": 9
+  },
+  {
+    "id": "scenario_mv_016_cross_domain_slowness",
+    "filename": "scenario_mv_016_cross_domain_slowness.yml",
+    "name": "MV-016: Cross-Domain Multi-Vendor Application Slowness (Cat9k + PAN + Meraki + ThousandEyes)",
+    "group": "Multi-Vendor Incident Playbooks",
+    "description": "Simulates a corporate-wide application degradation event tracing from a wired infrastructure link degradation up to wireless client symptoms.",
+    "defaultWorkers": 15,
+    "sourcetypes": [
+      "cisco:ios",
+      "pan:traffic",
+      "pan:system",
+      "pan:threat",
+      "meraki:alert",
+      "cisco:thousandeyes:metric",
+      "cisco:thousandeyes:event"
+    ],
+    "totalSourcetypes": 7
+  },
+  {
+    "id": "scenario_custom_multivendor_enterprise_stack",
+    "filename": "scenario_custom_multivendor_enterprise_stack.yml",
+    "name": "MV-ENT-001: Multi-Tier Enterprise Stack (Cloud SASE to DC/AI & Campus Core)",
+    "group": "Multi-Vendor Incident Playbooks",
+    "description": "Hierarchical end-to-end enterprise network simulation spanning Cloud SASE (Zscaler/Netskope), Security Edge (Palo Alto), WAN Interconnect (Fortinet), Provider Core (Juniper/Nokia), DC AI Fabric (Arista/NVIDIA/F5), and Campus Core (Aruba/Mist).",
+    "defaultWorkers": 12,
+    "sourcetypes": [
+      "zscaler:lss",
+      "netskope:events",
+      "pan:traffic",
+      "fgt_traffic",
+      "juniper:junos:syslog",
+      "arista:eos:syslog",
+      "arista:telemetry:json",
+      "f5:bigip:syslog",
+      "aruba:syslog",
+      "aruba:rap:syslog"
+    ],
+    "totalSourcetypes": 10
+  }
+]

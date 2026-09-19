@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-aaa-audit-message-6-method-list-state
+  description: Real Network Assurance replay for cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.116 172: *$TS$:  %AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE: Switch 1 R0/0: sessmgrd: mlist default of 8021X service is marked for notifying  state and its current state is : ALIVE'
+    - index: catalyst
+      sourcetype: cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 172: *$TS$:  %AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE: Switch 1 R0/0: sessmgrd: mlist default of 8021X service is marked for notifying  state and its current state is : ALIVE'

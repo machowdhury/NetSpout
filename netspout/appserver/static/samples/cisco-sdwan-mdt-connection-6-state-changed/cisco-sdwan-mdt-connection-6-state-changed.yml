@@ -1,0 +1,34 @@
+samples:
+- name: cisco-sdwan-mdt-connection-6-state-changed
+  description: Real Network Assurance replay for cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.120 3927: *$TS$:  %MDT_CONNECTION-6-STATE_CHANGED: Switch 1 R0/0: pubd: Connection state changed (id 6 - 10.20.1.16:25103:0:10.201.48.120): DOWN'
+    - index: catalyst
+      sourcetype: cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED
+      source: udp:5514
+      host: 10.201.48.115
+      _time: "$EPOCH$"
+      _raw: '$TS$ 10.201.48.115 2780: *$TS$:  %MDT_CONNECTION-6-STATE_CHANGED: Switch 1 R0/0: pubd: Connection state changed (id 1034 - 10.20.1.16:25103:0:10.201.48.115): UP'

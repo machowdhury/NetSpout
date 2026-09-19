@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-TRAPS - HEALTHY BASELINE ###
+  - name: kube-container-splunk-connect-for-snmp-traps-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-trap-6c4598b4f-cgqtm_bfecd65e-9afd-408e-81e8-da0ae8d4295c/splunk-connect-for-snmp-traps/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-traps
+        host: $HOST$
+        _raw: '[2026-09-18 17:34:45,200: ERROR/splunk_connect_for_snmp.traps] Security Model failure for device (''10.201.48.101'', 49678): Unknown SNMP community name encountered'
+
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-TRAPS - DEGRADED / WARNING ###
+  - name: kube-container-splunk-connect-for-snmp-traps-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-trap-6c4598b4f-cgqtm_bfecd65e-9afd-408e-81e8-da0ae8d4295c/splunk-connect-for-snmp-traps/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-traps
+        host: $HOST$
+        _raw: '[2026-09-18 17:34:45,200: ERROR/splunk_connect_for_snmp.traps] Security Model failure for device (''10.201.48.101'', 49678): Unknown SNMP community name encountered'
+
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-TRAPS - CRITICAL / FAILURE ###
+  - name: kube-container-splunk-connect-for-snmp-traps-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-trap-6c4598b4f-cgqtm_bfecd65e-9afd-408e-81e8-da0ae8d4295c/splunk-connect-for-snmp-traps/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-traps
+        host: $HOST$
+        _raw: '[2026-09-18 17:34:45,200: ERROR/splunk_connect_for_snmp.traps] Security Model failure for device (''10.201.48.101'', 49678): Unknown SNMP community name encountered'

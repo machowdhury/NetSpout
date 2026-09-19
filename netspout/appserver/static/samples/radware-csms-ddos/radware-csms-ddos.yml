@@ -1,0 +1,24 @@
+samples:
+  - name: radware-csms-ddos
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: radware:ddos
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:05 radware-defensepro CSMS-DDOS,timestamp="2026-09-18 17:16:05",device_name="DP-01-Border",attack_name="Volumetric UDP Flood",policy="Perimeter-Shield",dest_ip="198.51.100.10",dest_port=53,threshold_pps=250000,actual_pps=890000,packet_volume_drop=640000,action="Drop",severity="Critical"'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: radware:ddos
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:08 radware-defensepro CSMS-DDOS,timestamp="2026-09-18 17:16:08",device_name="DP-01-Border",attack_name="TCP Out-of-State SYN Flood",policy="Perimeter-Shield",dest_ip="198.51.100.80",dest_port=443,threshold_pps=150000,actual_pps=420000,packet_volume_drop=270000,action="Drop",severity="Major"'

@@ -1,0 +1,96 @@
+samples:
+  ### CISCO ISE & DUO HEALTHY AUTHENTICATION ###
+  - name: security-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-ise-pan-01.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TS$ $HOST$ CISE_Passed_Authentications 0005423891 1 0 2026-09-18 13:30:00.123 -04:00 0012345678 NOTICE Passed-Authentication: Authentication succeeded, ConfigVersionId=125, Device IP Address=10.10.20.1, DestinationPort=1812, UserName=admin_ops, Protocol=Radius, Response={AuthenticationResult=SUCCESS;}'
+      - index: cisco_duo
+        source: cisco:duo:authentication
+        sourcetype: cisco:duo:authentication
+        host: duo.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "user": {"name": "admin_ops"}, "factor": "duo_push", "result": "SUCCESS", "reason": "user_approved", "ip": "198.51.100.44", "event_type": "authentication"}'
+
+  ### CISCO ISE & DUO SUSPICIOUS MFA / BRUTE FORCE ###
+  - name: security-degraded
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-ise-pan-01.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: $HOST$
+        _raw: '$SYSLOG_TS$ $HOST$ CISE_Failed_Attempts 0005423892 1 0 2026-09-18 13:30:05.123 -04:00 0012345679 WARN Failed-Attempt: Authentication failed, UserName=admin_ops, FailureReason=22040 Wrong password entered, Protocol=Radius'
+      - index: cisco_duo
+        source: cisco:duo:authentication
+        sourcetype: cisco:duo:authentication
+        host: duo.maple.ciscolabs.com
+        _raw: '{"timestamp": "$ISO_TS$", "user": {"name": "admin_ops"}, "factor": "duo_push", "result": "FRAUD", "reason": "user_marked_fraud", "ip": "203.0.113.88", "event_type": "authentication"}'
+
+  ### CISCO SECURE FIREWALL & ISE PRIVILEGE BREACH ESCALATION ###
+  - name: security-failure
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-ftd-gw01.maple.ciscolabs.com
+    lines:
+      - index: cisco_secure_fw
+        source: cisco:sfw:estreamer
+        sourcetype: cisco:sfw:estreamer
+        host: $HOST$
+        _raw: '{"timestamp": "$ISO_TS$", "event_type": "INTRUSION_ALERT", "priority": 1, "signature_id": "1:32441", "signature_name": "INDICATOR-COMPROMISE Lateral Movement Remote Service Creation", "src_ip": "203.0.113.88", "dest_ip": "10.0.10.101", "action": "BLOCK"}'
+      - index: main
+        source: cisco:ise:syslog
+        sourcetype: cisco:ise:syslog
+        host: maple-ise-pan-01.maple.ciscolabs.com
+        _raw: '$SYSLOG_TS$ maple-ise-pan-01 CISE_Administrative_and_Operational_Audit 0005423899 1 0 2026-09-18 13:30:10.123 -04:00 0012345688 ERROR Administrator lock-out due to successive compromised auth tokens: admin_ops'

@@ -1,0 +1,92 @@
+samples:
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-WORKER-TRAP - HEALTHY BASELINE ###
+  - name: kube-container-splunk-connect-for-snmp-worker-trap-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+          - weight: 2
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com-peer
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk_1654efb9-9e12-4b62-87c2-1e6f0f47ec34/splunk-connect-for-snmp-worker-trap/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-worker-trap
+        host: $HOST$
+        _raw: '[2026-09-02 10:14:39,029: INFO/MainProcess] celery@snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk ready.'
+
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-WORKER-TRAP - DEGRADED / WARNING ###
+  - name: kube-container-splunk-connect-for-snmp-worker-trap-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk_1654efb9-9e12-4b62-87c2-1e6f0f47ec34/splunk-connect-for-snmp-worker-trap/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-worker-trap
+        host: $HOST$
+        _raw: '[2026-09-02 10:14:39,029: INFO/MainProcess] celery@snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk ready.'
+
+  ### KUBE-CONTAINER-SPLUNK-CONNECT-FOR-SNMP-WORKER-TRAP - CRITICAL / FAILURE ###
+  - name: kube-container-splunk-connect-for-snmp-worker-trap-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: maple-splunk-vm4-hf.maple.ciscolabs.com
+    lines:
+      - index: em_logs
+        source: /var/log/pods/sc4snmp_snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk_1654efb9-9e12-4b62-87c2-1e6f0f47ec34/splunk-connect-for-snmp-worker-trap/12.log
+        sourcetype: kube:container:splunk-connect-for-snmp-worker-trap
+        host: $HOST$
+        _raw: '[2026-09-02 10:14:39,029: INFO/MainProcess] celery@snmp-splunk-connect-for-snmp-worker-trap-56dd75bf88-49dkk ready.'

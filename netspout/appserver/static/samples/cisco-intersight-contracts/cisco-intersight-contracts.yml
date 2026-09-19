@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-CONTRACTS - HEALTHY BASELINE ###
+  - name: cisco-intersight-contracts-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: assetDeviceContractInformation
+        sourcetype: cisco:intersight:contracts
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "ContractStatus": "Not Covered", "ContractStatusReason": "", "ContractUnavailableRetryCount": 1, "ContractUpdatedTime": "$ISO_TIMESTAMP$", "CoveredProductLineEndDate": "2023-10-13", "CreateTime": "$ISO_TIMESTAMP$", "DeviceId": "WZP263600LU", "DeviceType": "CiscoUcsServer", "DomainGroupMoid": "660de283756461330140b581", "IsValid": true, "ItemType": "CHASSIS", "LastDateOfSupport": "$ISO_TIMESTAMP$", "MaintenancePurchaseOrderNumber": "", "MaintenanceSalesOrderNumber": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6758d747626572320164d9cf", "ObjectType": "asset.DeviceContractInformation", "Owners": ["660de283756461330140b580", "6758d7476f72613501ed5d4d"], "Parent": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "PlatformType": "IMCRack", "PurchaseOrderNumber": "SCM-PO-053434", "RegisteredDevice": {"DeviceHostname": ["Galaxy1"], "Moid": "6758d7476f72613501ed5d4d", "ObjectType": "asset.DeviceRegistration"}, "SalesOrderNumber": "114744016", "ServiceDescription": "", "ServiceEndDate": "$ISO_TIMESTAMP$", "ServiceLevel": "", "ServiceSku": "", "ServiceStartDate": "$ISO_TIMESTAMP$", "Source": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "StateContract": "OK", "Tags": [], "WarrantyEndDate": "$ISO_TIMESTAMP$", "WarrantyType": "WARR-3YR-HW-90D-SW", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-CONTRACTS - DEGRADED / WARNING ###
+  - name: cisco-intersight-contracts-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: assetDeviceContractInformation
+        sourcetype: cisco:intersight:contracts
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "ContractStatus": "Not Covered", "ContractStatusReason": "", "ContractUnavailableRetryCount": 1, "ContractUpdatedTime": "$ISO_TIMESTAMP$", "CoveredProductLineEndDate": "2023-10-13", "CreateTime": "$ISO_TIMESTAMP$", "DeviceId": "WZP263600LU", "DeviceType": "CiscoUcsServer", "DomainGroupMoid": "660de283756461330140b581", "IsValid": true, "ItemType": "CHASSIS", "LastDateOfSupport": "$ISO_TIMESTAMP$", "MaintenancePurchaseOrderNumber": "", "MaintenanceSalesOrderNumber": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6758d747626572320164d9cf", "ObjectType": "asset.DeviceContractInformation", "Owners": ["660de283756461330140b580", "6758d7476f72613501ed5d4d"], "Parent": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "PlatformType": "IMCRack", "PurchaseOrderNumber": "SCM-PO-053434", "RegisteredDevice": {"DeviceHostname": ["Galaxy1"], "Moid": "6758d7476f72613501ed5d4d", "ObjectType": "asset.DeviceRegistration"}, "SalesOrderNumber": "114744016", "ServiceDescription": "", "ServiceEndDate": "$ISO_TIMESTAMP$", "ServiceLevel": "", "ServiceSku": "", "ServiceStartDate": "$ISO_TIMESTAMP$", "Source": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "StateContract": "OK", "Tags": [], "WarrantyEndDate": "$ISO_TIMESTAMP$", "WarrantyType": "WARR-3YR-HW-90D-SW", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'
+
+  ### CISCO-INTERSIGHT-CONTRACTS - CRITICAL / FAILURE ###
+  - name: cisco-intersight-contracts-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: assetDeviceContractInformation
+        sourcetype: cisco:intersight:contracts
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "ContractStatus": "Not Covered", "ContractStatusReason": "", "ContractUnavailableRetryCount": 1, "ContractUpdatedTime": "$ISO_TIMESTAMP$", "CoveredProductLineEndDate": "2023-10-13", "CreateTime": "$ISO_TIMESTAMP$", "DeviceId": "WZP263600LU", "DeviceType": "CiscoUcsServer", "DomainGroupMoid": "660de283756461330140b581", "IsValid": true, "ItemType": "CHASSIS", "LastDateOfSupport": "$ISO_TIMESTAMP$", "MaintenancePurchaseOrderNumber": "", "MaintenanceSalesOrderNumber": "", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6758d747626572320164d9cf", "ObjectType": "asset.DeviceContractInformation", "Owners": ["660de283756461330140b580", "6758d7476f72613501ed5d4d"], "Parent": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "PermissionResources": [{"Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "PlatformType": "IMCRack", "PurchaseOrderNumber": "SCM-PO-053434", "RegisteredDevice": {"DeviceHostname": ["Galaxy1"], "Moid": "6758d7476f72613501ed5d4d", "ObjectType": "asset.DeviceRegistration"}, "SalesOrderNumber": "114744016", "ServiceDescription": "", "ServiceEndDate": "$ISO_TIMESTAMP$", "ServiceLevel": "", "ServiceSku": "", "ServiceStartDate": "$ISO_TIMESTAMP$", "Source": {"Moid": "6758d7bd76752d310168a1c2", "ObjectType": "compute.RackUnit", "link": "https://intersight.com/api/v1/compute/RackUnits/6758d7bd76752d310168a1c2"}, "StateContract": "OK", "Tags": [], "WarrantyEndDate": "$ISO_TIMESTAMP$", "WarrantyType": "WARR-3YR-HW-90D-SW", "account_name": "MAPLE", "updated_at": "$ISO_TIMESTAMP$"}'

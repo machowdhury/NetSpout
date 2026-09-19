@@ -1,0 +1,24 @@
+samples:
+  - name: cloudflare-json
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:cloudflare:logpush
+        sourcetype: cloudflare:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"EdgeStartTimestamp": "2026-09-18T21:15:35Z", "ClientIP": "203.0.113.89", "ClientRequestHost": "api.acme.com", "ClientRequestMethod": "POST", "ClientRequestPath": "/v1/auth/token", "ClientRequestUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)", "EdgeResponseStatus": 403, "OriginIP": "10.100.2.14", "ClientRequestBytes": 1420, "EdgeResponseBytes": 428, "EdgeRateLimitAction": "block", "WAFAction": "block", "WAFAttackScore": 92, "EdgePath": "/us-east/edge-ingress-04"}'
+      - index: netops_logs
+        source: api:cloudflare:logpush
+        sourcetype: cloudflare:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"EdgeStartTimestamp": "2026-09-18T21:15:38Z", "ClientIP": "198.51.100.120", "ClientRequestHost": "www.acme.com", "ClientRequestMethod": "GET", "ClientRequestPath": "/login", "ClientRequestUserAgent": "Python-urllib/3.10", "EdgeResponseStatus": 429, "OriginIP": "10.100.2.15", "ClientRequestBytes": 412, "EdgeResponseBytes": 204, "EdgeRateLimitAction": "challenge", "WAFAction": "challenge", "WAFAttackScore": 74, "EdgePath": "/us-central/edge-ingress-02"}'

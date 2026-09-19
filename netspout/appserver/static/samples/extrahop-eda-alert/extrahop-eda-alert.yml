@@ -1,0 +1,24 @@
+samples:
+  - name: extrahop-eda-alert
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: api:extrahop:eda
+        sourcetype: extrahop:eda:alert
+        host: "sensor-01.acme.corp"
+        _raw: '{"update_time": "Sep 18 2026 17:15:45 +0000", "detection_type": "protocol_anomaly", "title": "Abnormal TLS Handshake Rate", "risk_score": 85, "device_id": "extrahop-eda-sensor-01", "src_ip": "10.10.50.21", "dest_ip": "198.51.100.12", "app": "HTTPS", "description": "High rate of SSL/TLS handshake failures indicating potential cipher renegotiation flood"}'
+      - index: netops_logs
+        source: api:extrahop:eda
+        sourcetype: extrahop:eda:alert
+        host: "sensor-01.acme.corp"
+        _raw: '{"update_time": "Sep 18 2026 17:15:48 +0000", "detection_type": "lateral_movement", "title": "Suspected Kerberos Ticket Roasting", "risk_score": 92, "device_id": "extrahop-eda-sensor-01", "src_ip": "10.10.40.105", "dest_ip": "10.0.1.10", "app": "Kerberos", "description": "Multiple RC4-HMAC ticket requests from single endpoint targeting enterprise domain controllers"}'

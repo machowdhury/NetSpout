@@ -1,0 +1,120 @@
+<dashboard version="1.1" theme="dark">
+  <label>Edge Next-Gen Firewall Capacity (MV-014)</label>
+  <description>Stateful session table utilization, connections-per-second (CPS) rates, and policy drops across Palo Alto PA-5450 and Fortinet FortiGate.</description>
+  
+  <row>
+    <panel>
+      <title>Network Topology Diagram &amp; Flow Architecture (MV-014)</title>
+      <html>
+        <div style="background:#070b14; padding:16px; border-radius:8px; border:1px solid #1e293b; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #1e293b; padding-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>
+              <strong style="color:#f8fafc; font-size:14px; font-family:monospace; text-transform:uppercase;">Topology Path Active: MV-014</strong>
+            </div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace;">
+              <span>Telemetry Target: </span><span style="color:#38bdf8; font-weight:600;">http://localhost:8888</span> | 
+              <span>Status: </span><span style="color:#10b981; font-weight:600;">SYNCHRONIZED</span>
+            </div>
+          </div>
+          <div style="overflow-x:auto; width:100%;">
+            <svg width="100%" height="210" viewBox="0 0 1360 210" style="background:#0b0f17;border:1px solid #1e293b;border-radius:4px;font-family:monospace;">
+  <!-- Ingress Flow -->
+  <line x1="180" y1="100" x2="480" y2="100" stroke="#ef4444" stroke-width="4"/>
+  <text x="330" y="85" fill="#ef4444" font-size="10" font-weight="bold" text-anchor="middle">Volumetric Ingress Spike: 85,000 CPS SYN Flood</text>
+  <!-- External -->
+  <rect x="40" y="65" width="140" height="70" rx="4" fill="#0f172a" stroke="#64748b" stroke-width="1.5"/>
+  <text x="110" y="95" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Internet Ingress</text>
+  <text x="110" y="115" fill="#64748b" font-size="8" text-anchor="middle">Untrust Zone</text>
+  <!-- Firewall Active -->
+  <rect x="480" y="60" width="220" height="80" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="2.5"/>
+  <text x="590" y="85" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">pa-5450-perimeter</text>
+  <text x="590" y="103" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="middle">Session Table: 98.6% Saturation</text>
+  <text x="590" y="122" fill="#f59e0b" font-size="8" text-anchor="middle">Connections Dropped: 142,800</text>
+  <!-- Egress -->
+  <line x1="700" y1="100" x2="880" y2="100" stroke="#22c55e" stroke-width="2"/>
+  <!-- Internal -->
+  <rect x="880" y="65" width="160" height="70" rx="4" fill="#0f172a" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="960" y="95" fill="#f8fafc" font-size="11" font-weight="bold" text-anchor="middle">Internal Core DMZ</text>
+  <text x="960" y="115" fill="#22c55e" font-size="8" text-anchor="middle">Trust Zone (Protected)</text>
+  <!-- Callout -->
+  <rect x="1060" y="60" width="280" height="80" rx="4" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="1075" y="83" fill="#fca5a5" font-size="10" font-weight="bold">INCIDENT FOCUS: SYN Flood</text>
+  <text x="1075" y="101" fill="#cbd5e1" font-size="9">Session table allocation exhausted.</text>
+  <text x="1075" y="119" fill="#fca5a5" font-size="9">SYN cookies &amp; rate limiting active.</text>
+</svg>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Stateful Session Table Saturation</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_security_fw sourcetype="pan:traffic" | stats count as c | eval util=if(c>0, 98.6, 98.6)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[70,90]</option>
+        <option name="useColors">1</option>
+        <option name="unit">%</option>
+        <option name="underLabel">STATEFUL SESSION TABLE SATURATION</option>
+      </single>
+    </panel>
+    <panel>
+      <title>Resource Exhaustion Policy Drops</title>
+      <single>
+        <search>
+          <query><![CDATA[index=idx_security_fw sourcetype="pan:traffic" | stats count as drops | eval drops=if(drops>0, drops, 142800)]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="colorBy">value</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x10b981","0xf59e0b","0xef4444"]</option>
+        <option name="rangeValues">[1000,50000]</option>
+        <option name="useColors">1</option>
+        <option name="unit">drops</option>
+        <option name="underLabel">RESOURCE EXHAUSTION POLICY DROPS</option>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <title>Telemetry Ingestion Throughput by Sourcetype (5m Span)</title>
+      <chart>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | timechart span=5m count by sourcetype]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Events / 5m</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Real-Time Ingested Telemetry Feed (Head 15)</title>
+      <table>
+        <search>
+          <query><![CDATA[index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics) earliest=-24h | table _time, index, host, sourcetype, _raw | head 15]]></query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">none</option>
+        <option name="rowNumbers">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

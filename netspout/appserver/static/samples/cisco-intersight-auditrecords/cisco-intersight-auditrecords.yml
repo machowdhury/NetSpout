@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-AUDITRECORDS - HEALTHY BASELINE ###
+  - name: cisco-intersight-auditrecords-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: aaaAuditRecord
+        sourcetype: cisco:intersight:auditrecords
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AffectedObjectTypeLabel": "", "CreateTime": "$ISO_TIMESTAMP$", "Email": "dieherna@cisco.com", "Event": "Logout", "HttpOperation": " ", "HttpResponseCode": 0, "HttpResponsePayload": "", "InstId": "6aab13f175646133016f9e74", "MoDisplayNames": {"Name": ["dieherna@cisco.com"]}, "MoType": "iam.User", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aab13f26972653301d8bc4a", "ObjectMoid": "6904eb1775646132011532fb", "ObjectType": "aaa.AuditRecord", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "Request": {}, "SessionId": "6aaaed1d75646133016c3ae4", "SourceIp": "", "Tags": [], "Timestamp": "$ISO_TIMESTAMP$", "TraceId": "BOpaqDwdwAOnAmLtv3am2LSscZuDxlvKUIr03XoPgds2-LJucFNE3A==", "UserAgent": {"ClassId": "aaa.UserAgent", "ObjectType": "aaa.UserAgent", "OsFamily": "", "OsVersion": "", "SoftwareFamily": "", "SoftwareSubtype": "", "SoftwareType": "", "SoftwareVersion": ""}, "UserAgentString": "", "UserIdOrEmail": "dieherna@cisco.com", "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-AUDITRECORDS - DEGRADED / WARNING ###
+  - name: cisco-intersight-auditrecords-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: aaaAuditRecord
+        sourcetype: cisco:intersight:auditrecords
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AffectedObjectTypeLabel": "", "CreateTime": "$ISO_TIMESTAMP$", "Email": "dieherna@cisco.com", "Event": "Logout", "HttpOperation": " ", "HttpResponseCode": 0, "HttpResponsePayload": "", "InstId": "6aab13f175646133016f9e74", "MoDisplayNames": {"Name": ["dieherna@cisco.com"]}, "MoType": "iam.User", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aab13f26972653301d8bc4a", "ObjectMoid": "6904eb1775646132011532fb", "ObjectType": "aaa.AuditRecord", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "Request": {}, "SessionId": "6aaaed1d75646133016c3ae4", "SourceIp": "", "Tags": [], "Timestamp": "$ISO_TIMESTAMP$", "TraceId": "BOpaqDwdwAOnAmLtv3am2LSscZuDxlvKUIr03XoPgds2-LJucFNE3A==", "UserAgent": {"ClassId": "aaa.UserAgent", "ObjectType": "aaa.UserAgent", "OsFamily": "", "OsVersion": "", "SoftwareFamily": "", "SoftwareSubtype": "", "SoftwareType": "", "SoftwareVersion": ""}, "UserAgentString": "", "UserIdOrEmail": "dieherna@cisco.com", "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-AUDITRECORDS - CRITICAL / FAILURE ###
+  - name: cisco-intersight-auditrecords-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: aaaAuditRecord
+        sourcetype: cisco:intersight:auditrecords
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "AffectedObjectTypeLabel": "", "CreateTime": "$ISO_TIMESTAMP$", "Email": "dieherna@cisco.com", "Event": "Logout", "HttpOperation": " ", "HttpResponseCode": 0, "HttpResponsePayload": "", "InstId": "6aab13f175646133016f9e74", "MoDisplayNames": {"Name": ["dieherna@cisco.com"]}, "MoType": "iam.User", "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aab13f26972653301d8bc4a", "ObjectMoid": "6904eb1775646132011532fb", "ObjectType": "aaa.AuditRecord", "Owners": ["660de283756461330140b580"], "PermissionResources": [], "Request": {}, "SessionId": "6aaaed1d75646133016c3ae4", "SourceIp": "", "Tags": [], "Timestamp": "$ISO_TIMESTAMP$", "TraceId": "BOpaqDwdwAOnAmLtv3am2LSscZuDxlvKUIr03XoPgds2-LJucFNE3A==", "UserAgent": {"ClassId": "aaa.UserAgent", "ObjectType": "aaa.UserAgent", "OsFamily": "", "OsVersion": "", "SoftwareFamily": "", "SoftwareSubtype": "", "SoftwareType": "", "SoftwareVersion": ""}, "UserAgentString": "", "UserIdOrEmail": "dieherna@cisco.com", "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'

@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-INTERSIGHT-ALARMS - HEALTHY BASELINE ###
+  - name: cisco-intersight-alarms-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: condAlarm
+        sourcetype: cisco:intersight:alarms
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Acknowledge": "None", "AcknowledgeBy": "", "AcknowledgeTime": "$ISO_TIMESTAMP$", "AffectedMo": {"ClassId": "mo.MoRef", "Moid": "68c9a917422d332d416876f6", "ObjectType": "ether.PhysicalPort", "link": "https://intersight.com/api/v1/ether/PhysicalPorts/68c9a917422d332d416876f6"}, "AffectedMoDisplayName": "MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36", "AffectedMoId": "", "AffectedMoType": "", "AffectedObject": "", "AlarmSummaryAggregators": [{"ClassId": "mo.MoRef", "Moid": "68c9a91576752d3401850f31", "ObjectType": "network.Element", "link": "https://intersight.com/api/v1/network/Elements/68c9a91576752d3401850f31"}], "AncestorMoId": "68c9a91576752d3401850f31", "AncestorMoType": "network.Element", "Ancestors": [], "Code": "EtherPortLinkDown", "CreateTime": "$ISO_TIMESTAMP$", "CreationTime": "$ISO_TIMESTAMP$", "Definition": {"ClassId": "mo.MoRef", "Moid": "601cb9466c65722d37c54729", "ObjectType": "cond.AlarmDefinition", "link": "https://intersight.com/api/v1/cond/AlarmDefinitions/601cb9466c65722d37c54729"}, "Description": "Port MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36 is link-down", "Flapping": "NotFlapping", "FlappingCount": 0, "FlappingStartTime": "$ISO_TIMESTAMP$", "LastTransitionTime": "$ISO_TIMESTAMP$", "LocationDetails": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aaabfec65696e34013db1eb", "MsAffectedObject": "", "Name": "EtherPortLinkDown", "ObjectType": "cond.Alarm", "OrigSeverity": "Warning", "Owners": ["660de283756461330140b580", "68c9a9116f72613501b9a069"], "PermissionResources": [{"ClassId": "mo.MoRef", "Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ClassId": "mo.MoRef", "Moid": "68c9a9116f72613501b9a069", "ObjectType": "asset.DeviceRegistration", "link": "https://intersight.com/api/v1/asset/DeviceRegistrations/68c9a9116f72613501b9a069"}, "Severity": "Cleared", "Suppressed": false, "SuppressedTime": "$ISO_TIMESTAMP$", "SuppressionRules": [], "Tags": [{"Key": "cisco.meta.AlarmSource", "Propagated": false, "SysTag": true, "Type": "KeyValue", "Value": "Intersight"}], "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-ALARMS - DEGRADED / WARNING ###
+  - name: cisco-intersight-alarms-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: condAlarm
+        sourcetype: cisco:intersight:alarms
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Acknowledge": "None", "AcknowledgeBy": "", "AcknowledgeTime": "$ISO_TIMESTAMP$", "AffectedMo": {"ClassId": "mo.MoRef", "Moid": "68c9a917422d332d416876f6", "ObjectType": "ether.PhysicalPort", "link": "https://intersight.com/api/v1/ether/PhysicalPorts/68c9a917422d332d416876f6"}, "AffectedMoDisplayName": "MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36", "AffectedMoId": "", "AffectedMoType": "", "AffectedObject": "", "AlarmSummaryAggregators": [{"ClassId": "mo.MoRef", "Moid": "68c9a91576752d3401850f31", "ObjectType": "network.Element", "link": "https://intersight.com/api/v1/network/Elements/68c9a91576752d3401850f31"}], "AncestorMoId": "68c9a91576752d3401850f31", "AncestorMoType": "network.Element", "Ancestors": [], "Code": "EtherPortLinkDown", "CreateTime": "$ISO_TIMESTAMP$", "CreationTime": "$ISO_TIMESTAMP$", "Definition": {"ClassId": "mo.MoRef", "Moid": "601cb9466c65722d37c54729", "ObjectType": "cond.AlarmDefinition", "link": "https://intersight.com/api/v1/cond/AlarmDefinitions/601cb9466c65722d37c54729"}, "Description": "Port MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36 is link-down", "Flapping": "NotFlapping", "FlappingCount": 0, "FlappingStartTime": "$ISO_TIMESTAMP$", "LastTransitionTime": "$ISO_TIMESTAMP$", "LocationDetails": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aaabfec65696e34013db1eb", "MsAffectedObject": "", "Name": "EtherPortLinkDown", "ObjectType": "cond.Alarm", "OrigSeverity": "Warning", "Owners": ["660de283756461330140b580", "68c9a9116f72613501b9a069"], "PermissionResources": [{"ClassId": "mo.MoRef", "Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ClassId": "mo.MoRef", "Moid": "68c9a9116f72613501b9a069", "ObjectType": "asset.DeviceRegistration", "link": "https://intersight.com/api/v1/asset/DeviceRegistrations/68c9a9116f72613501b9a069"}, "Severity": "Cleared", "Suppressed": false, "SuppressedTime": "$ISO_TIMESTAMP$", "SuppressionRules": [], "Tags": [{"Key": "cisco.meta.AlarmSource", "Propagated": false, "SysTag": true, "Type": "KeyValue", "Value": "Intersight"}], "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'
+
+  ### CISCO-INTERSIGHT-ALARMS - CRITICAL / FAILURE ###
+  - name: cisco-intersight-alarms-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: condAlarm
+        sourcetype: cisco:intersight:alarms
+        host: $HOST$
+        _raw: '{"AccountMoid": "660de283756461330140b580", "Acknowledge": "None", "AcknowledgeBy": "", "AcknowledgeTime": "$ISO_TIMESTAMP$", "AffectedMo": {"ClassId": "mo.MoRef", "Moid": "68c9a917422d332d416876f6", "ObjectType": "ether.PhysicalPort", "link": "https://intersight.com/api/v1/ether/PhysicalPorts/68c9a917422d332d416876f6"}, "AffectedMoDisplayName": "MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36", "AffectedMoId": "", "AffectedMoType": "", "AffectedObject": "", "AlarmSummaryAggregators": [{"ClassId": "mo.MoRef", "Moid": "68c9a91576752d3401850f31", "ObjectType": "network.Element", "link": "https://intersight.com/api/v1/network/Elements/68c9a91576752d3401850f31"}], "AncestorMoId": "68c9a91576752d3401850f31", "AncestorMoType": "network.Element", "Ancestors": [], "Code": "EtherPortLinkDown", "CreateTime": "$ISO_TIMESTAMP$", "CreationTime": "$ISO_TIMESTAMP$", "Definition": {"ClassId": "mo.MoRef", "Moid": "601cb9466c65722d37c54729", "ObjectType": "cond.AlarmDefinition", "link": "https://intersight.com/api/v1/cond/AlarmDefinitions/601cb9466c65722d37c54729"}, "Description": "Port MAPLE-FI-FAB-3/switch-A/slot-1/ethport-36 is link-down", "Flapping": "NotFlapping", "FlappingCount": 0, "FlappingStartTime": "$ISO_TIMESTAMP$", "LastTransitionTime": "$ISO_TIMESTAMP$", "LocationDetails": null, "ModTime": "$ISO_TIMESTAMP$", "Moid": "6aaabfec65696e34013db1eb", "MsAffectedObject": "", "Name": "EtherPortLinkDown", "ObjectType": "cond.Alarm", "OrigSeverity": "Warning", "Owners": ["660de283756461330140b580", "68c9a9116f72613501b9a069"], "PermissionResources": [{"ClassId": "mo.MoRef", "Moid": "660de2876972653301d369bd", "ObjectType": "organization.Organization", "link": "https://intersight.com/api/v1/organization/Organizations/660de2876972653301d369bd"}], "RegisteredDevice": {"ClassId": "mo.MoRef", "Moid": "68c9a9116f72613501b9a069", "ObjectType": "asset.DeviceRegistration", "link": "https://intersight.com/api/v1/asset/DeviceRegistrations/68c9a9116f72613501b9a069"}, "Severity": "Cleared", "Suppressed": false, "SuppressedTime": "$ISO_TIMESTAMP$", "SuppressionRules": [], "Tags": [{"Key": "cisco.meta.AlarmSource", "Propagated": false, "SysTag": true, "Type": "KeyValue", "Value": "Intersight"}], "updated_at": "$ISO_TIMESTAMP$", "account_name": "MAPLE"}'

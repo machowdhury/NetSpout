@@ -1,0 +1,24 @@
+samples:
+  - name: checkpoint-cef
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: checkpoint:cef
+        host: "sensor-01.acme.corp"
+        _raw: 'time=1789761330|hostname=cp-gw-perimeter-01|product=Firewall|action=drop|src=198.51.100.44|dst=10.0.10.22|proto=tcp|src_port=49210|dst_port=445|service=smb|client_outbound_interface=eth1|dest_interface=eth2|rule=104|rule_name="Block_Inbound_SMB"|policy=Standard_Perimeter|severity=High|severity_id=3|inzone=External|outzone=DMZ|reason="Drop by security policy rule"'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: checkpoint:cef
+        host: "sensor-01.acme.corp"
+        _raw: 'time=1789761332|hostname=cp-gw-perimeter-01|product=Firewall|action=accept|src=10.0.10.99|dst=198.51.100.80|proto=tcp|src_port=51204|dst_port=443|service=https|client_outbound_interface=eth2|dest_interface=eth1|rule=201|rule_name="Allow_Outbound_Web"|policy=Standard_Perimeter|severity=Informational|severity_id=0|inzone=DMZ|outzone=External'

@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-LINKHEALTH - HEALTHY BASELINE ###
+  - name: cisco-sdwan-linkhealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+          - weight: 2
+            choice: https://10.20.1.105-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: $HOST$
+        _raw: '{"vdevice-name": "1.1.1.110", "rx-errors": 0, "tx-kbps": 0, "if-admin-status": "if-state-up", "ipv6-tcp-adjust-mss": "0", "tx-pps": 0, "tx-errors": 0, "ifname": "vmanage_system", "interface-type": "iana-iftype-sw-loopback", "rx-pps": 0, "if-oper-status": "if-oper-state-ready", "ifindex": "16", "num-flaps": "0", "ipv4-tcp-adjust-mss": "0", "rx-packets": 0, "bia-address": "00:00:00:00:00:00", "vpn-id": "0", "vdevice-host-name": "SD-WANEdge-TOR", "ipv4-subnet-mask": "255.255.255.255", "mtu": "0", "rx-drops": 0, "tx-drops": 0, "hwaddr": "00:d6:fe:c4:26:40", "ip-address": "0.0.0.0", "speed-mbps": 10000, "auto-downstream-bandwidth": "N/A", "vdevice-dataKey": "1.1.1.110-0-vmanage_system-0.0.0.0-00:d6:fe:c4:26:40", "tx-octets": 0, "auto-upstream-bandwidth": "N/A", "tx-packets": 0, "rx-kbps": 0, "rx-octets": 0, "lastupdated": 1784258219839}'
+
+  ### CISCO-SDWAN-LINKHEALTH - DEGRADED / WARNING ###
+  - name: cisco-sdwan-linkhealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: $HOST$
+        _raw: '{"vdevice-name": "1.1.1.110", "rx-errors": 0, "tx-kbps": 0, "if-admin-status": "if-state-degraded", "ipv6-tcp-adjust-mss": "0", "tx-pps": 0, "tx-errors": 0, "ifname": "vmanage_system", "interface-type": "iana-iftype-sw-loopback", "rx-pps": 0, "if-oper-status": "if-oper-state-ready", "ifindex": "16", "num-flaps": "0", "ipv4-tcp-adjust-mss": "0", "rx-packets": 0, "bia-address": "00:00:00:00:00:00", "vpn-id": "0", "vdevice-host-name": "SD-WANEdge-TOR", "ipv4-subnet-mask": "255.255.255.255", "mtu": "0", "rx-drops": 0, "tx-drops": 0, "hwaddr": "00:d6:fe:c4:26:40", "ip-address": "0.0.0.0", "speed-mbps": 10000, "auto-downstream-bandwidth": "N/A", "vdevice-dataKey": "1.1.1.110-0-vmanage_system-0.0.0.0-00:d6:fe:c4:26:40", "tx-octets": 0, "auto-upstream-bandwidth": "N/A", "tx-packets": 0, "rx-kbps": 0, "rx-octets": 0, "lastupdated": 1784258219839}'
+
+  ### CISCO-SDWAN-LINKHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-linkhealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: https://10.20.1.105
+    lines:
+      - index: main
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: $HOST$
+        _raw: '{"vdevice-name": "1.1.1.110", "rx-errors": 0, "tx-kbps": 0, "if-admin-status": "if-state-down", "ipv6-tcp-adjust-mss": "0", "tx-pps": 0, "tx-errors": 0, "ifname": "vmanage_system", "interface-type": "iana-iftype-sw-loopback", "rx-pps": 0, "if-oper-status": "if-oper-state-ready", "ifindex": "16", "num-flaps": "0", "ipv4-tcp-adjust-mss": "0", "rx-packets": 0, "bia-address": "00:00:00:00:00:00", "vpn-id": "0", "vdevice-host-name": "SD-WANEdge-TOR", "ipv4-subnet-mask": "255.255.255.255", "mtu": "0", "rx-drops": 0, "tx-drops": 0, "hwaddr": "00:d6:fe:c4:26:40", "ip-address": "0.0.0.0", "speed-mbps": 10000, "auto-downstream-bandwidth": "N/A", "vdevice-dataKey": "1.1.1.110-0-vmanage_system-0.0.0.0-00:d6:fe:c4:26:40", "tx-octets": 0, "auto-upstream-bandwidth": "N/A", "tx-packets": 0, "rx-kbps": 0, "rx-octets": 0, "lastupdated": 1784258219839}'

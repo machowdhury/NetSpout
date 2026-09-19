@@ -1,0 +1,118 @@
+samples:
+  ### HEALTHY BASELINE INTERFACE METRICS ###
+  - name: cisco-metrics-interface-counters-healthy
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: BYTES_RCVD
+        format: template
+        type: random
+        replacement: int
+        lower: 8000000
+        upper: 22000000
+      - name: BYTES_SENT
+        format: template
+        type: random
+        replacement: int
+        lower: 7500000
+        upper: 19500000
+      - name: PACKETS_RCVD
+        format: template
+        type: random
+        replacement: int
+        lower: 12000
+        upper: 35000
+      - name: PACKETS_SENT
+        format: template
+        type: random
+        replacement: int
+        lower: 11000
+        upper: 32000
+    lines:
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 40000000, "metric_name:interface_generic_counters.bytes_received": $BYTES_RCVD$, "metric_name:interface_generic_counters.bytes_sent": $BYTES_SENT$, "metric_name:interface_generic_counters.packets_received": $PACKETS_RCVD$, "metric_name:interface_generic_counters.packets_sent": $PACKETS_SENT$, "metric_name:interface_generic_counters.input_drops": 0, "metric_name:interface_generic_counters.output_drops": 0, "metric_name:interface_generic_counters.input_errors": 0, "metric_name:interface_generic_counters.output_errors": 0, "metric_name:interface_generic_counters.input_load": 42, "metric_name:interface_generic_counters.output_load": 38, "interface_name": "FortyGigE0/0/1/1", "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"}}'
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 10000000, "metric_name:interface_generic_counters.bytes_received": $BYTES_RCVD$, "metric_name:interface_generic_counters.bytes_sent": $BYTES_SENT$, "metric_name:interface_generic_counters.packets_received": $PACKETS_RCVD$, "metric_name:interface_generic_counters.packets_sent": $PACKETS_SENT$, "metric_name:interface_generic_counters.input_drops": 0, "metric_name:interface_generic_counters.output_drops": 0, "metric_name:interface_generic_counters.input_errors": 0, "metric_name:interface_generic_counters.output_errors": 0, "metric_name:interface_generic_counters.input_load": 28, "metric_name:interface_generic_counters.output_load": 25, "interface_name": "TenGigE0/0/0/13", "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"}}'
+      - index: cisco_metrics
+        source: 10.0.255.172
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.172", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 1000000, "metric_name:interface_generic_counters.bytes_received": 4022220348, "metric_name:interface_generic_counters.bytes_sent": 3826906984, "metric_name:interface_generic_counters.packets_received": 14500, "metric_name:interface_generic_counters.packets_sent": 13800, "metric_name:interface_generic_counters.input_drops": 0, "metric_name:interface_generic_counters.output_drops": 0, "metric_name:interface_generic_counters.input_errors": 0, "metric_name:interface_generic_counters.output_errors": 0, "metric_name:interface_generic_counters.input_load": 18, "metric_name:interface_generic_counters.output_load": 15, "interface_name": "GigabitEthernet0/0/0/28", "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"}}'
+
+  ### DEGRADED INTERFACE METRICS (OPTICAL CONGESTION & PACKET DROPS) ###
+  - name: cisco-metrics-interface-counters-degraded
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HIGH_INPUT_DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 1200
+        upper: 3800
+      - name: HIGH_OUTPUT_DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 950
+        upper: 2900
+      - name: INPUT_ERRORS
+        format: template
+        type: random
+        replacement: int
+        lower: 150
+        upper: 450
+      - name: CRC_ERRORS
+        format: template
+        type: random
+        replacement: int
+        lower: 80
+        upper: 220
+      - name: THROTTLED_BYTES
+        format: template
+        type: random
+        replacement: int
+        lower: 1200000
+        upper: 3100000
+    lines:
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 40000000, "metric_name:interface_generic_counters.bytes_received": $THROTTLED_BYTES$, "metric_name:interface_generic_counters.bytes_sent": $THROTTLED_BYTES$, "metric_name:interface_generic_counters.packets_received": 4200, "metric_name:interface_generic_counters.packets_sent": 3900, "metric_name:interface_generic_counters.input_drops": $HIGH_INPUT_DROPS$, "metric_name:interface_generic_counters.output_drops": $HIGH_OUTPUT_DROPS$, "metric_name:interface_generic_counters.input_errors": $INPUT_ERRORS$, "metric_name:interface_generic_counters.output_errors": $CRC_ERRORS$, "metric_name:interface_generic_counters.input_load": 210, "metric_name:interface_generic_counters.output_load": 225, "interface_name": "FortyGigE0/0/1/1", "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"}}'
+
+  ### CRITICAL LINK DOWN METRICS (COLLAPSED THROUGHPUT & SURGE DROPS) ###
+  - name: cisco-metrics-interface-counters-failure
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: SURGE_DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 9000
+        upper: 16500
+    lines:
+      - index: cisco_metrics
+        source: 10.0.255.171
+        sourcetype: httpevent
+        host: "34.236.151.135:8088"
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "10.0.255.171", "sourcetype": "httpevent", "host": "34.236.151.135:8088", "index": "cisco_metrics", "fields": {"metric_name:interface_generic_counters.bandwidth": 40000000, "metric_name:interface_generic_counters.bytes_received": 0, "metric_name:interface_generic_counters.bytes_sent": 0, "metric_name:interface_generic_counters.packets_received": 0, "metric_name:interface_generic_counters.packets_sent": 0, "metric_name:interface_generic_counters.input_drops": $SURGE_DROPS$, "metric_name:interface_generic_counters.output_drops": $SURGE_DROPS$, "metric_name:interface_generic_counters.input_errors": 850, "metric_name:interface_generic_counters.output_errors": 420, "metric_name:interface_generic_counters.input_load": 0, "metric_name:interface_generic_counters.output_load": 0, "interface_name": "FortyGigE0/0/1/1", "path": "Cisco-IOS-XR-infra-statsd-oper:/infra-statistics/interfaces/interface/generic-counters"}}'

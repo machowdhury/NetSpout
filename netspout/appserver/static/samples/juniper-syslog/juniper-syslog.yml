@@ -1,0 +1,24 @@
+samples:
+  - name: juniper-syslog
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: juniper:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:20 juniper-mx960-core-01 rpd[1422]: RPD_BGP_NEIGHBOR_STATE_CHANGED: BGP neighbor 10.255.10.1 (Internal AS 65000) changed state from Established to Idle (BGP notification sent: cease)'
+      - index: netops_logs
+        source: syslog:udp:514
+        sourcetype: juniper:syslog
+        host: "sensor-01.acme.corp"
+        _raw: 'Sep 18 17:16:22 juniper-mx960-core-01 fpc3 PFE_FABRIC_LINK_ERROR: FPC 3, PIC 0, Link 2: Packet Forwarding Engine CRC error threshold reached on fabric interface'

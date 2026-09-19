@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SFW-ESTREAMER - HEALTHY BASELINE ###
+  - name: cisco-sfw-estreamer-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: fmc.maple.ciscolabs.com
+          - weight: 2
+            choice: fmc.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_secure_fw
+        source: sbg_fw_estreamer_input://MAPLE_FMC_ESTREAMER
+        sourcetype: cisco:sfw:estreamer
+        host: $HOST$
+        _raw: '{"EventType": "ConnectionEvent", "FirstPacketSecond": 1789752808, "DeviceUUID": "84663f36-6213-11ec-943b-b10f15a5650d", "InstanceID": 16, "ConnectionID": 61483, "AC_RuleAction": "Allow", "InitiatorIP": "10.100.1.105", "ResponderIP": "208.67.222.222", "InitiatorPort": 36665, "ResponderPort": 53, "Protocol": "udp", "IngressInterface": "INSIDE.800", "EgressInterface": "INTERNET", "IngressZone": "INSIDE", "EgressZone": "INTERNET", "IngressVRF": "Global", "EgressVRF": "Global", "FirewallPolicy": "FTD-DOVETAIL01", "FirewallRule": "ALLOW_ALL", "PrefilterPolicy": "Default Prefilter Policy", "ClientApplication": "DNS", "Application": "DNS", "InitiatorPackets": 1, "ResponderPackets": 0, "InitiatorBytes": 94, "ResponderBytes": 0, "NAP_Policy": "Balanced Security and Connectivity", "DNS_Query": "us02.analytics.sdwan.cisco.com", "DNS_RecordDescription": "a host address", "DNS_ResponseType": "No Error", "ReferencedHost": "us02.analytics.sdwan.cisco.com", "NAT_InitiatorPort": 36665, "NAT_ResponderPort": 53, "NAT_InitiatorIP": "64.100.57.80", "NAT_ResponderIP": "208.67.222.222", "ClientAppDetector": "AppID", "Device": "FTD-DOVETAIL01", "DeviceIP": "10.0.255.11,", "DeviceSerialNumber": "FCH19057MC9", "SourceHost": "$HOST$"}'
+
+  ### CISCO-SFW-ESTREAMER - DEGRADED / WARNING ###
+  - name: cisco-sfw-estreamer-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: fmc.maple.ciscolabs.com
+    lines:
+      - index: cisco_secure_fw
+        source: sbg_fw_estreamer_input://MAPLE_FMC_ESTREAMER
+        sourcetype: cisco:sfw:estreamer
+        host: $HOST$
+        _raw: '{"EventType": "ConnectionEvent", "FirstPacketSecond": 1789752808, "DeviceUUID": "84663f36-6213-11ec-943b-b10f15a5650d", "InstanceID": 16, "ConnectionID": 61483, "AC_RuleAction": "Allow", "InitiatorIP": "10.100.1.105", "ResponderIP": "208.67.222.222", "InitiatorPort": 36665, "ResponderPort": 53, "Protocol": "udp", "IngressInterface": "INSIDE.800", "EgressInterface": "INTERNET", "IngressZone": "INSIDE", "EgressZone": "INTERNET", "IngressVRF": "Global", "EgressVRF": "Global", "FirewallPolicy": "FTD-DOVETAIL01", "FirewallRule": "ALLOW_ALL", "PrefilterPolicy": "Default Prefilter Policy", "ClientApplication": "DNS", "Application": "DNS", "InitiatorPackets": 1, "ResponderPackets": 0, "InitiatorBytes": 94, "ResponderBytes": 0, "NAP_Policy": "Balanced Security and Connectivity", "DNS_Query": "us02.analytics.sdwan.cisco.com", "DNS_RecordDescription": "a host address", "DNS_ResponseType": "No Error", "ReferencedHost": "us02.analytics.sdwan.cisco.com", "NAT_InitiatorPort": 36665, "NAT_ResponderPort": 53, "NAT_InitiatorIP": "64.100.57.80", "NAT_ResponderIP": "208.67.222.222", "ClientAppDetector": "AppID", "Device": "FTD-DOVETAIL01", "DeviceIP": "10.0.255.11,", "DeviceSerialNumber": "FCH19057MC9", "SourceHost": "$HOST$"}'
+
+  ### CISCO-SFW-ESTREAMER - CRITICAL / FAILURE ###
+  - name: cisco-sfw-estreamer-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: fmc.maple.ciscolabs.com
+    lines:
+      - index: cisco_secure_fw
+        source: sbg_fw_estreamer_input://MAPLE_FMC_ESTREAMER
+        sourcetype: cisco:sfw:estreamer
+        host: $HOST$
+        _raw: '{"EventType": "ConnectionEvent", "FirstPacketSecond": 1789752808, "DeviceUUID": "84663f36-6213-11ec-943b-b10f15a5650d", "InstanceID": 16, "ConnectionID": 61483, "AC_RuleAction": "Allow", "InitiatorIP": "10.100.1.105", "ResponderIP": "208.67.222.222", "InitiatorPort": 36665, "ResponderPort": 53, "Protocol": "udp", "IngressInterface": "INSIDE.800", "EgressInterface": "INTERNET", "IngressZone": "INSIDE", "EgressZone": "INTERNET", "IngressVRF": "Global", "EgressVRF": "Global", "FirewallPolicy": "FTD-DOVETAIL01", "FirewallRule": "ALLOW_ALL", "PrefilterPolicy": "Default Prefilter Policy", "ClientApplication": "DNS", "Application": "DNS", "InitiatorPackets": 1, "ResponderPackets": 0, "InitiatorBytes": 94, "ResponderBytes": 0, "NAP_Policy": "Balanced Security and Connectivity", "DNS_Query": "us02.analytics.sdwan.cisco.com", "DNS_RecordDescription": "a host address", "DNS_ResponseType": "No Error", "ReferencedHost": "us02.analytics.sdwan.cisco.com", "NAT_InitiatorPort": 36665, "NAT_ResponderPort": 53, "NAT_InitiatorIP": "64.100.57.80", "NAT_ResponderIP": "208.67.222.222", "ClientAppDetector": "AppID", "Device": "FTD-DOVETAIL01", "DeviceIP": "10.0.255.11,", "DeviceSerialNumber": "FCH19057MC9", "SourceHost": "$HOST$"}'

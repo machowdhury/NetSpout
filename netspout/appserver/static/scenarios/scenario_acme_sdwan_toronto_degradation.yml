@@ -1,0 +1,330 @@
+samples:
+  ### ========================================================================= ###
+  ### STAGE 1: ACME SD-WAN HEALTHY BASELINE (ALL SITES HEALTH: 8, CONTROL: 50)  ###
+  ### Ottawa: 8, Toronto: 8, All Spokes: 8, Control Connections: 50             ###
+  ### Clean WAN links, SLA compliant tunnels on INET1 & INET2, OMP stable       ###
+  ### ========================================================================= ###
+  - name: sdwan-stage1-healthy
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Control Plane Cluster: vManage, vSmart (x2), vBond (x2) - 50 Active Control Connections
+      - index: sdwan
+        source: cisco_catalyst_sdwan_system:control:NetOps_SDWAN
+        sourcetype: cisco:sdwan:system:logs
+        host: vmanage-acme-prod
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ vmanage-acme-prod %VMANAGE-6-CONTROL_SUMMARY: Total control connections: 50 (vSmart: 16, vBond: 4, Edge devices: 30), State: All peers established, Fabric: Optimal'
+
+      # 2. Toronto Hub (Site 200) - Baseline Health: 8 (Green)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "200", "site_name": "Toronto", "latitude": "43.6532", "longitude": "-79.3832", "site_health": "good", "devices_health": "good", "tunnels_health": "good", "apps_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "control_connections": 50, "lastUpdated": $EPOCH_MS$}'
+
+      # 3. Ottawa Hub (Site 100) - Baseline Health: 8 (Green)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-ott-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "100", "site_name": "Ottawa", "latitude": "45.4215", "longitude": "-75.6972", "site_health": "good", "devices_health": "good", "tunnels_health": "good", "apps_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "control_connections": 50, "lastUpdated": $EPOCH_MS$}'
+
+      # 4. Spoke Sites (Vancouver, Edmonton, Calgary, Regina, Winnipeg, Yellowknife, Iqaluit, Montreal) - All Health: 8
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yvr-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "301", "site_name": "Vancouver", "latitude": "49.2827", "longitude": "-123.1207", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-edm-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "302", "site_name": "Edmonton", "latitude": "53.5461", "longitude": "-113.4938", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-cal-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "303", "site_name": "Calgary", "latitude": "51.0447", "longitude": "-114.0719", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-reg-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "304", "site_name": "Regina", "latitude": "50.4547", "longitude": "-104.6067", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-wpg-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "305", "site_name": "Winnipeg", "latitude": "49.8951", "longitude": "-97.1384", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yzk-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "306", "site_name": "Yellowknife", "latitude": "62.4540", "longitude": "-114.3718", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yfb-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "307", "site_name": "Iqaluit", "latitude": "63.7467", "longitude": "-68.5170", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yul-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "308", "site_name": "Montreal", "latitude": "45.5017", "longitude": "-73.5673", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      # 5. Toronto Hub Tunnel Health: Clean SLA on INET1 & INET2 (Loss: 0%, Latency: 18ms, Jitter: 1.5ms)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"name": "10.200.1.1:biz-internet-10.301.1.1:biz-internet", "local_system_ip": "10.200.1.1", "remote_system_ip": "10.301.1.1", "local_color": "biz-internet", "remote_color": "biz-internet", "remote-host-name": "sdwan-yvr-vedge1", "remote_site_id": "301", "loss_percentage": 0.0, "latency": 48.2, "jitter": 1.6, "vqoe_score": 10.0, "health": "green", "state": "Up", "transport": "INET1", "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"name": "10.200.1.2:public-internet-10.301.1.2:public-internet", "local_system_ip": "10.200.1.2", "remote_system_ip": "10.301.1.2", "local_color": "public-internet", "remote_color": "public-internet", "remote-host-name": "sdwan-yvr-vedge1", "remote_site_id": "301", "loss_percentage": 0.0, "latency": 49.1, "jitter": 1.8, "vqoe_score": 10.0, "health": "green", "state": "Up", "transport": "INET2", "lastUpdated": $EPOCH_MS$}'
+
+      # 6. Toronto Hub WAN Interface Status (INET1 Edge 1 & INET2 Edge 2): 0 Errors
+      - index: sdwan
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"vdevice-host-name": "SD-WANEdge-TOR-INET1", "vdevice-name": "10.200.1.1", "ifname": "GigabitEthernet0/0/1", "if-oper-status": "if-oper-state-ready", "if-admin-status": "if-state-up", "speed-mbps": 10000, "rx-errors": 0, "tx-errors": 0, "rx-drops": 0, "tx-drops": 0, "num-flaps": 0, "rx-kbps": 425000, "tx-kbps": 380000, "lastupdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"vdevice-host-name": "SD-WANEdge-TOR-INET2", "vdevice-name": "10.200.1.2", "ifname": "GigabitEthernet0/0/2", "if-oper-status": "if-oper-state-ready", "if-admin-status": "if-state-up", "speed-mbps": 10000, "rx-errors": 0, "tx-errors": 0, "rx-drops": 0, "tx-drops": 0, "num-flaps": 0, "rx-kbps": 390000, "tx-kbps": 340000, "lastupdated": $EPOCH_MS$}'
+
+      # 7. SSE Security Tunnels: Up & Connected to Cisco Secure Access
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sse_tunnels:netops
+        sourcetype: cisco:sdwan:ssetunnels
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"device-state": "Up", "tunnel-if-name": "Tunnel2001", "vdevice-host-name": "SD-WANEdge-TOR", "site-name": "Toronto", "site-id": "200", "provider": "Cisco Secure Access", "sig-state": "Up", "tunnelType": "SSE-Private access", "destination-data-center": "35.171.214.188", "lastupdated": $EPOCH_MS$}'
+
+      # 8. UTD Security Telemetry: Active inspection & policy enforcement
+      - index: sdwan
+        source: udp:514
+        sourcetype: cisco:sdwan:utd:logs
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ sdwan-tor-vedge1 2026/03/18-12:00:00.000 UTC [**] [Hostname: SD-WANEdge-TOR] [**] [Instance_ID: 1] [**] Allow [**] [POLICY: ACME-ENTERPRISE-AAR] {TCP} 10.200.10.45:49210 -> 10.301.10.20:443'
+
+      # 9. Stream NetFlow: Normal Application Traffic Flow
+      - index: main
+        source: stream:MAPLE_NETFLOW
+        sourcetype: stream:netflow
+        host: sdwan-tor-vedge1
+        _raw: '{"timestamp":"$ISO_TS$","exporter_ip":"10.200.1.1","app_tag":"VOIP-SIP","protoid":17,"src_ip":"10.200.10.45","dest_ip":"10.301.10.20","tos":184,"bytes":24500,"packets":120,"transport":"INET1","status":"optimal"}'
+
+  ### ========================================================================= ###
+  ### STAGE 2: TORONTO HUB DEGRADATION INCIDENT (TORONTO: 6, OTTAWA: 8, SPOKES: 8) ###
+  ### Root Cause: Transport SLA Crossing on INET2 (Loss: 14.8%, Jitter: 38.5ms) ###
+  ### BFD Session Timeout, OMP Route Withdrawal, AAR Fallback to INET1          ###
+  ### ========================================================================= ###
+  - name: sdwan-stage2-toronto-hub-degraded
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Control Plane Cluster: 50 Control Connections Intact (Demonstrating Data Plane Underlay Issue)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_system:control:NetOps_SDWAN
+        sourcetype: cisco:sdwan:system:logs
+        host: vmanage-acme-prod
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ vmanage-acme-prod %VMANAGE-6-CONTROL_SUMMARY: Total control connections: 50 (vSmart: 16, vBond: 4, Edge devices: 30), Control plane healthy. Data-plane SLA violation reported on Site 200 (Toronto)'
+
+      # 2. Toronto Hub (Site 200) - DEGRADED HEALTH SCORE: 6 (Amber/Yellow on ITSI Glass Table)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "200", "site_name": "Toronto", "latitude": "43.6532", "longitude": "-79.3832", "site_health": "fair", "devices_health": "good", "tunnels_health": "poor", "apps_health": "fair", "site_health_score": 6.0, "devices_health_score": 8.0, "tunnels_health_score": 4.5, "apps_health_score": 5.5, "control_connections": 50, "reason": "Transport SLA threshold breach on INET2 uplink, BFD flapping", "lastUpdated": $EPOCH_MS$}'
+
+      # 3. Ottawa Hub (Site 100) - Remains Healthy: 8 (Green)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-ott-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "100", "site_name": "Ottawa", "latitude": "45.4215", "longitude": "-75.6972", "site_health": "good", "devices_health": "good", "tunnels_health": "good", "apps_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "control_connections": 50, "lastUpdated": $EPOCH_MS$}'
+
+      # 4. Spoke Sites (Vancouver, Edmonton, Calgary, Regina, Winnipeg, Yellowknife, Iqaluit, Montreal) - Remain at 8
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yvr-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "301", "site_name": "Vancouver", "latitude": "49.2827", "longitude": "-123.1207", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-edm-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "302", "site_name": "Edmonton", "latitude": "53.5461", "longitude": "-113.4938", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-yul-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "308", "site_name": "Montreal", "latitude": "45.5017", "longitude": "-73.5673", "site_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "lastUpdated": $EPOCH_MS$}'
+
+      # 5. Root Cause Telemetry: Toronto INET2 Tunnel SLA Breach (Packet Loss: 14.8%, Latency: 146.2ms, Jitter: 38.5ms)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"name": "10.200.1.2:public-internet-10.301.1.2:public-internet", "local_system_ip": "10.200.1.2", "remote_system_ip": "10.301.1.2", "local_color": "public-internet", "remote_color": "public-internet", "remote-host-name": "sdwan-yvr-vedge1", "remote_site_id": "301", "loss_percentage": 14.8, "latency": 146.2, "jitter": 38.5, "vqoe_score": 5.1, "health": "yellow", "state": "Up", "transport": "INET2", "sla_violation": true, "sla_class": "VoIP-Critical", "lastUpdated": $EPOCH_MS$}'
+
+      # 6. Link Health Degradation: Surge in Errors & Flaps on Toronto Edge 2 (INET2 Uplink)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_health:linkhealth:SecOps_SDWAN
+        sourcetype: cisco:sdwan:linkhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"vdevice-host-name": "SD-WANEdge-TOR-INET2", "vdevice-name": "10.200.1.2", "ifname": "GigabitEthernet0/0/2", "if-oper-status": "if-oper-state-ready", "if-admin-status": "if-state-up", "speed-mbps": 10000, "rx-errors": 12480, "tx-errors": 420, "rx-drops": 3850, "tx-drops": 1240, "num-flaps": 5, "rx-kbps": 98000, "tx-kbps": 82000, "lastupdated": $EPOCH_MS$}'
+
+      # 7. System & Protocol Alarms: BFD Session Timeout & OMP Route Withdrawal on Toronto Hub
+      - index: sdwan
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ sdwan-tor-vedge1 184920: %CP-4-BFD_STATE_CHANGE: BFD session on GigabitEthernet0/0/2 (color: public-internet) to 198.51.100.2 changed state from UP to DOWN (Timeout: 3 consecutive keepalives missed)'
+
+      - index: sdwan
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ sdwan-tor-vedge1 184921: %SDWAN-4-SLA_VIOLATION: SLA violation detected on tunnel SD-WANEdge-TOR-INET2: Loss 14.8% exceeds threshold 1.0%, Jitter 38.5ms exceeds threshold 10.0ms. Degrading site health score to 6'
+
+      - index: sdwan
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: vmanage-acme-prod
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ vmanage-acme-prod 184922: %VMANAGE-3-OMP_ROUTE_DOWN: OMP peer 10.200.1.2 (Toronto Hub) withdrew primary routing path for VPN 10 (Corp-Data) via public-internet; AAR policy failover redirecting flows to biz-internet (INET1)'
+
+      # 8. NetFlow Application Impact: High Retransmission & Packet Drop on VoIP/ERP prior to AAR failover
+      - index: main
+        source: stream:MAPLE_NETFLOW
+        sourcetype: stream:netflow
+        host: sdwan-tor-vedge1
+        _raw: '{"timestamp":"$ISO_TS$","exporter_ip":"10.200.1.2","app_tag":"VOIP-SIP","protoid":17,"src_ip":"10.200.10.45","dest_ip":"10.301.10.20","tos":184,"bytes":12400,"packets":85,"transport":"INET2","status":"degraded","jitter_ms":38.5,"packet_loss_pct":14.8}'
+
+  ### ========================================================================= ###
+  ### STAGE 3: AUTOMATED RECOVERY & REMEDIATION (TORONTO: 8, ALL SITES: 8)      ###
+  ### ISP Fiber Flap Stabilized, BFD Re-established, OMP Re-advertised          ###
+  ### ========================================================================= ###
+  - name: sdwan-stage3-remediated
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: EPOCH_MS
+        format: template
+        type: javatimestamp
+    lines:
+      # 1. Toronto Hub (Site 200) - Health Score RESTORED TO 8.0 (Green)
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:sitehealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:sitehealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"site_id": "200", "site_name": "Toronto", "latitude": "43.6532", "longitude": "-79.3832", "site_health": "good", "devices_health": "good", "tunnels_health": "good", "apps_health": "good", "site_health_score": 8.0, "devices_health_score": 8.0, "tunnels_health_score": 8.0, "control_connections": 50, "reason": "SLA restored, BFD session established", "lastUpdated": $EPOCH_MS$}'
+
+      # 2. Toronto Hub INET2 Tunnel SLA Normalized
+      - index: sdwan
+        source: cisco_catalyst_sdwan_site_and_tunnel_health:tunnelhealth:NetOps_SDWAN
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '{"name": "10.200.1.2:public-internet-10.301.1.2:public-internet", "local_system_ip": "10.200.1.2", "remote_system_ip": "10.301.1.2", "local_color": "public-internet", "remote_color": "public-internet", "remote-host-name": "sdwan-yvr-vedge1", "remote_site_id": "301", "loss_percentage": 0.0, "latency": 48.8, "jitter": 1.7, "vqoe_score": 10.0, "health": "green", "state": "Up", "transport": "INET2", "sla_violation": false, "lastUpdated": $EPOCH_MS$}'
+
+      # 3. System Logs: BFD Restored & OMP Routes Re-advertised
+      - index: sdwan
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: sdwan-tor-vedge1
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ sdwan-tor-vedge1 185100: %CP-5-BFD_STATE_CHANGE: BFD session on GigabitEthernet0/0/2 (color: public-internet) changed state from DOWN to UP'
+
+      - index: sdwan
+        source: udp:5523
+        sourcetype: cisco:sdwan:system:logs
+        host: vmanage-acme-prod
+        _time: "$EPOCH$"
+        _raw: '$SYSLOG_TS$ vmanage-acme-prod 185101: %VMANAGE-5-OMP_ROUTE_UP: OMP peer 10.200.1.2 re-advertised routes for VPN 10 via public-internet; SLA compliance restored'

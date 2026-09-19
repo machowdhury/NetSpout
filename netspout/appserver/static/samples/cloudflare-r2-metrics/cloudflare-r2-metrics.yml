@@ -1,0 +1,24 @@
+samples:
+  - name: cloudflare-r2-metrics
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%3NZ"
+    lines:
+      - index: cisco_mdt_metrics
+        source: api:cloudflare:r2
+        sourcetype: cloudflare:r2:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761340, "event": "metric", "source": "cloudflare:r2", "sourcetype": "cloudflare:r2:json", "host": "cloudflare.r2.acme", "index": "cisco_mdt_metrics", "fields": {"metric_name:r2_operation_count": 1, "metric_name:r2_bytes_uploaded": 2097152, "metric_name:r2_latency_ms": 14.8, "account_id": "acme-cf-r2-prod", "bucket_name": "acme-telemetry-archive", "operation": "PutObject", "status_code": 200}}'
+      - index: cisco_mdt_metrics
+        source: api:cloudflare:r2
+        sourcetype: cloudflare:r2:json
+        host: "sensor-01.acme.corp"
+        _raw: '{"time": 1789761342, "event": "metric", "source": "cloudflare:r2", "sourcetype": "cloudflare:r2:json", "host": "cloudflare.r2.acme", "index": "cisco_mdt_metrics", "fields": {"metric_name:r2_operation_count": 1, "metric_name:r2_bytes_downloaded": 524288, "metric_name:r2_latency_ms": 9.2, "account_id": "acme-cf-r2-prod", "bucket_name": "acme-telemetry-archive", "operation": "GetObject", "status_code": 200}}'

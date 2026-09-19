@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-DMI-5-AUTH-PASSED - HEALTHY BASELINE ###
+  - name: cisco-sdwan-dmi-5-auth-passed-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+          - weight: 2
+            choice: 10.201.50.12-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-AUTH_PASSED
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 91622: $SYSLOG_TIMESTAMP$.691: %DMI-5-AUTH_PASSED: R0/0: dmiauthd: User ''vmanage-admin'' authenticated successfully from 1.1.1.105:36298  for netconf over ssh. External groups:'
+
+  ### CISCO-SDWAN-DMI-5-AUTH-PASSED - DEGRADED / WARNING ###
+  - name: cisco-sdwan-dmi-5-auth-passed-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-AUTH_PASSED
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 91622: $SYSLOG_TIMESTAMP$.691: %DMI-5-AUTH_PASSED: R0/0: dmiauthd: User ''vmanage-admin'' authenticated successfully from 1.1.1.105:36298  for netconf over ssh. External groups:'
+
+  ### CISCO-SDWAN-DMI-5-AUTH-PASSED - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-dmi-5-auth-passed-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-AUTH_PASSED
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 91622: $SYSLOG_TIMESTAMP$.691: %DMI-5-AUTH_PASSED: R0/0: dmiauthd: User ''vmanage-admin'' authenticated successfully from 1.1.1.105:36298  for netconf over ssh. External groups:'

@@ -1,0 +1,28 @@
+samples:
+- name: cisco-catalyst-security-profile-signatures
+  description: Real Network Assurance replay for cisco:catalyst:security:profile_signatures (catalyst index)
+  interval: 60
+  count: 1
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:catalyst:security:profile_signatures
+      source: http:rougue
+      host: 3.128.0.44:8088
+      _time: "$EPOCH$"
+      _raw: '{"profileDetails": {"instanceUuid": "6fdbebc5-b9f9-45bd-a7a6-735de93e0c25", "name": "Dovetail-SSID", "ssidDetails": [{"name": "Ott02-LAB-SDA-CORP", "enableFabric": false, "flexConnect": {"enableFlexConnect": false}, "interfaceName": "management", "wlanProfileName": "Ott02-LAB-SDA-CORP_profile", "policyProfileName": "Ott02-LAB-SDA-CORP_profile"}], "sites": ["Global/Ottawa/OTT02-Lab", "Global/Ottawa/OTT02-Lab/OTT02-SDA"]}}'

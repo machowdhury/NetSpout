@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SDWAN-DMI-5-CONFIG-I - HEALTHY BASELINE ###
+  - name: cisco-sdwan-dmi-5-config-i-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+          - weight: 2
+            choice: 10.201.50.12-peer
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-CONFIG_I
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14666: *$SYSLOG_TIMESTAMP$.404: %DMI-5-CONFIG_I: R0/0: dmiauthd: Configured from NETCONF/RESTCONF by system-ompd-fwd, transaction-id 682279'
+
+  ### CISCO-SDWAN-DMI-5-CONFIG-I - DEGRADED / WARNING ###
+  - name: cisco-sdwan-dmi-5-config-i-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-CONFIG_I
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14666: *$SYSLOG_TIMESTAMP$.404: %DMI-5-CONFIG_I: R0/0: dmiauthd: Configured from NETCONF/RESTCONF by system-ompd-fwd, transaction-id 682279'
+
+  ### CISCO-SDWAN-DMI-5-CONFIG-I - CRITICAL / FAILURE ###
+  - name: cisco-sdwan-dmi-5-config-i-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: 10.201.50.12
+    lines:
+      - index: main
+        source: udp:5523
+        sourcetype: cisco:sdwan:DMI-5-CONFIG_I
+        host: $HOST$
+        _raw: '$SYSLOG_TIMESTAMP$ $HOST$ 14666: *$SYSLOG_TIMESTAMP$.404: %DMI-5-CONFIG_I: R0/0: dmiauthd: Configured from NETCONF/RESTCONF by system-ompd-fwd, transaction-id 682279'

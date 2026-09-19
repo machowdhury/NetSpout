@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-NETWORKHEALTH - HEALTHY BASELINE ###
+  - name: cisco-dnac-networkhealth-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: $HOST$
+        _raw: '{"category": "All", "healthScore": 29, "totalCount": 24, "goodCount": 7, "noHealthCount": 17, "time": "1784258468717", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-DNAC-NETWORKHEALTH - DEGRADED / WARNING ###
+  - name: cisco-dnac-networkhealth-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: $HOST$
+        _raw: '{"category": "All", "healthScore": 29, "totalCount": 24, "goodCount": 7, "noHealthCount": 17, "time": "1784258468717", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'
+
+  ### CISCO-DNAC-NETWORKHEALTH - CRITICAL / FAILURE ###
+  - name: cisco-dnac-networkhealth-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_networkhealth://DNAC01_NetworkHealth
+        sourcetype: cisco:dnac:networkhealth
+        host: $HOST$
+        _raw: '{"category": "All", "healthScore": 29, "totalCount": 24, "goodCount": 7, "noHealthCount": 17, "time": "1784258468717", "cisco_catalyst_host": "https://dnac.maple.ciscolabs.com"}'

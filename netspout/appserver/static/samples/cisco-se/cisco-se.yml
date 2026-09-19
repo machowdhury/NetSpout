@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-SE - HEALTHY BASELINE ###
+  - name: cisco-se-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: cisco_se
+        source: sbg_se_input://MAPLE_AMP
+        sourcetype: cisco:se
+        host: $HOST$
+        _raw: '{"id": 1789751173971923653, "timestamp": 1789751173, "timestamp_nanoseconds": 971923000, "date": "$ISO_TIMESTAMP$", "event_type": "Fault Cleared", "event_type_id": 553648196, "connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "group_guids": ["fa567a34-1239-4be4-9a2d-30d2a9d05d16"], "computer": {"connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "hostname": "fileserver01", "external_ip": "64.100.57.80", "active": true, "network_addresses": [{"ip": "10.0.10.14", "mac": "00:50:56:83:9e:a5"}, {"ip": "172.17.0.1", "mac": "9a:1f:01:44:2a:40"}], "links": {"computer": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474", "trajectory": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474/trajectory", "group": "https://api.amp.cisco.com/v1/groups/fa567a34-1239-4be4-9a2d-30d2a9d05d16"}}, "fault_event_title": "Connector event monitoring is overloaded", "EndpointDataType": "events", "groups": [{"guid": "fa567a34-1239-4be4-9a2d-30d2a9d05d16", "name": "MAPLE-PROTECT"}]}'
+
+  ### CISCO-SE - DEGRADED / WARNING ###
+  - name: cisco-se-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_se
+        source: sbg_se_input://MAPLE_AMP
+        sourcetype: cisco:se
+        host: $HOST$
+        _raw: '{"id": 1789751173971923653, "timestamp": 1789751173, "timestamp_nanoseconds": 971923000, "date": "$ISO_TIMESTAMP$", "event_type": "Fault Cleared", "event_type_id": 553648196, "connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "group_guids": ["fa567a34-1239-4be4-9a2d-30d2a9d05d16"], "computer": {"connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "hostname": "fileserver01", "external_ip": "64.100.57.80", "active": true, "network_addresses": [{"ip": "10.0.10.14", "mac": "00:50:56:83:9e:a5"}, {"ip": "172.17.0.1", "mac": "9a:1f:01:44:2a:40"}], "links": {"computer": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474", "trajectory": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474/trajectory", "group": "https://api.amp.cisco.com/v1/groups/fa567a34-1239-4be4-9a2d-30d2a9d05d16"}}, "fault_event_title": "Connector event monitoring is overloaded", "EndpointDataType": "events", "groups": [{"guid": "fa567a34-1239-4be4-9a2d-30d2a9d05d16", "name": "MAPLE-PROTECT"}]}'
+
+  ### CISCO-SE - CRITICAL / FAILURE ###
+  - name: cisco-se-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: cisco_se
+        source: sbg_se_input://MAPLE_AMP
+        sourcetype: cisco:se
+        host: $HOST$
+        _raw: '{"id": 1789751173971923653, "timestamp": 1789751173, "timestamp_nanoseconds": 971923000, "date": "$ISO_TIMESTAMP$", "event_type": "Fault Cleared", "event_type_id": 553648196, "connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "group_guids": ["fa567a34-1239-4be4-9a2d-30d2a9d05d16"], "computer": {"connector_guid": "519f89fd-a1db-458b-b551-5bb7ec1f8474", "hostname": "fileserver01", "external_ip": "64.100.57.80", "active": true, "network_addresses": [{"ip": "10.0.10.14", "mac": "00:50:56:83:9e:a5"}, {"ip": "172.17.0.1", "mac": "9a:1f:01:44:2a:40"}], "links": {"computer": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474", "trajectory": "https://api.amp.cisco.com/v1/computers/519f89fd-a1db-458b-b551-5bb7ec1f8474/trajectory", "group": "https://api.amp.cisco.com/v1/groups/fa567a34-1239-4be4-9a2d-30d2a9d05d16"}}, "fault_event_title": "Connector event monitoring is overloaded", "EndpointDataType": "events", "groups": [{"guid": "fa567a34-1239-4be4-9a2d-30d2a9d05d16", "name": "MAPLE-PROTECT"}]}'

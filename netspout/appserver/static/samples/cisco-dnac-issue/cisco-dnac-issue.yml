@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-DNAC-ISSUE - HEALTHY BASELINE ###
+  - name: cisco-dnac-issue-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC02_Issue
+        sourcetype: cisco:dnac:issue
+        host: $HOST$
+        _raw: '{"IssueID": "72859f90-cafd-4980-a325-431f9ed9dd40", "IssueSpecificCategory": "Connected", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "fabric_lisp_session_down_global_trigger", "IssueSpecificDescription": "LISP session on \"LOCAL\" Control Plane \"Kanata-FB2.ott04-lab.ca\" in Fabric site \"Global/Kanata_SDA\" is down.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "0ea585c1-6b35-48a5-807e-1547cc84976e", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueSpecificTimestamp": 1784258274901, "IssueName": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "active", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "0ea585c1-6b35-48a5-807e-1547cc84976e", "DeviceName": "Kanata-FB2.ott04-lab.ca", "DeviceIpAddress": "10.201.48.102", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "70:c9:c6:4c:49:80", "DeviceRole": "DISTRIBUTION", "DeviceImageVersion": "17.12.2", "DeviceUptime": "21 days, 0:27:09.37", "DeviceUptimeSeconds": 1847146, "DeviceLastUpdated": "2026-07-16 18:42:25", "DeviceLastUpdateTime": 1784227345860, "DeviceSerialNumber": "FCW2247F0YN", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "DevicePlatform": "C9500-40X", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-DNAC-ISSUE - DEGRADED / WARNING ###
+  - name: cisco-dnac-issue-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC02_Issue
+        sourcetype: cisco:dnac:issue
+        host: $HOST$
+        _raw: '{"IssueID": "72859f90-cafd-4980-a325-431f9ed9dd40", "IssueSpecificCategory": "degraded", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "fabric_lisp_session_down_global_trigger", "IssueSpecificDescription": "LISP session on \"LOCAL\" Control Plane \"Kanata-FB2.ott04-lab.ca\" in Fabric site \"Global/Kanata_SDA\" is down.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "0ea585c1-6b35-48a5-807e-1547cc84976e", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueSpecificTimestamp": 1784258274901, "IssueName": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "degraded", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "0ea585c1-6b35-48a5-807e-1547cc84976e", "DeviceName": "Kanata-FB2.ott04-lab.ca", "DeviceIpAddress": "10.201.48.102", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "70:c9:c6:4c:49:80", "DeviceRole": "DISTRIBUTION", "DeviceImageVersion": "17.12.2", "DeviceUptime": "21 days, 0:27:09.37", "DeviceUptimeSeconds": 1847146, "DeviceLastUpdated": "2026-07-16 18:42:25", "DeviceLastUpdateTime": 1784227345860, "DeviceSerialNumber": "FCW2247F0YN", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "DevicePlatform": "C9500-40X", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://10.20.1.16"}'
+
+  ### CISCO-DNAC-ISSUE - CRITICAL / FAILURE ###
+  - name: cisco-dnac-issue-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: cisco_catalyst_dnac_issue://DNAC02_Issue
+        sourcetype: cisco:dnac:issue
+        host: $HOST$
+        _raw: '{"IssueID": "72859f90-cafd-4980-a325-431f9ed9dd40", "IssueSpecificCategory": "down", "IssueSpecificSource": "Cisco DNA", "IssueSpecificName": "fabric_lisp_session_down_global_trigger", "IssueSpecificDescription": "LISP session on \"LOCAL\" Control Plane \"Kanata-FB2.ott04-lab.ca\" in Fabric site \"Global/Kanata_SDA\" is down.", "IssueSpecificEntity": "network_device", "IssueSpecificEntityValue": "0ea585c1-6b35-48a5-807e-1547cc84976e", "IssueSpecificSeverity": "HIGH", "IssueSpecificPriority": "P1", "IssueSpecificSummary": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueSpecificTimestamp": 1784258274901, "IssueName": "LISP session on LOCAL Control Plane ''Kanata-FB2.ott04-lab.ca in Fabric site ''Global/Kanata_SDA'' is down", "IssueDeviceRole": "", "IssueAiDriven": "No", "IssueClientMac": "", "IssueCount": 1, "IssueStatus": "down", "IssuePriority": "P1", "IssueCategory": "", "DeviceID": "0ea585c1-6b35-48a5-807e-1547cc84976e", "DeviceName": "Kanata-FB2.ott04-lab.ca", "DeviceIpAddress": "10.201.48.102", "DeviceFamily": "Switches and Hubs", "DeviceMACAddress": "70:c9:c6:4c:49:80", "DeviceRole": "DISTRIBUTION", "DeviceImageVersion": "17.12.2", "DeviceUptime": "21 days, 0:27:09.37", "DeviceUptimeSeconds": 1847146, "DeviceLastUpdated": "2026-07-16 18:42:25", "DeviceLastUpdateTime": 1784227345860, "DeviceSerialNumber": "FCW2247F0YN", "DeviceSeries": "Cisco Catalyst 9500 Series Switches", "DevicePlatform": "C9500-40X", "DeviceSupportType": "Supported", "cisco_catalyst_host": "https://10.20.1.16"}'

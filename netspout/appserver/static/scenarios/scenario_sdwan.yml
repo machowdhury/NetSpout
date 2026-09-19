@@ -1,0 +1,202 @@
+samples:
+  ### STAGE 1: SD-WAN HEALTHY BASELINE ###
+  - name: sdwan-healthy-baseline
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: SITE_NAME
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: Toronto_DC1
+          - weight: 3
+            choice: Ottawa_DC1
+          - weight: 2
+            choice: Vancouver
+          - weight: 2
+            choice: Montreal
+          - weight: 1
+            choice: Calgary
+          - weight: 1
+            choice: Regina
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: c8kv-dc-tor-gw1
+          - weight: 3
+            choice: RS100_cEdge2
+          - weight: 2
+            choice: c8kv-site2000
+          - weight: 2
+            choice: C1111-site4000
+    lines:
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: $HOST$
+        _raw: '{"name": "tunnel_$HOST$_to_$SITE_NAME$", "state": "Up", "health": "green", "loss_percentage": 0.0, "latency": 14.8, "jitter": 1.9, "local_color": "biz-internet", "remote_color": "biz-internet", "site_name": "$SITE_NAME$", "timestamp": "$GOTS$"}'
+      - index: sdwan
+        source: cisco:sdwan:linkhealth
+        sourcetype: cisco:sdwan:linkhealth
+        host: $HOST$
+        _raw: '{"vdevice-name": "$HOST$", "ifname": "GigabitEthernet0/0/1", "if-oper-status": "Up", "if-admin-status": "Up", "speed-mbps": 1000, "rx-kbps": 46200, "tx-kbps": 39800, "vpn-id": 1, "ip-address": "10.201.48.120"}'
+      - index: sdwan
+        source: cisco:sdwan:sitehealth
+        sourcetype: cisco:sdwan:sitehealth
+        host: $HOST$
+        _raw: '{"site_name": "$SITE_NAME$", "site_health": "good", "overall_score": 9.8, "tunnels_health": "good", "devices_health": "good", "apps_health": "good", "tunnels_health_score": 10, "devices_health_score": 10, "apps_health_score": 9.5}'
+      - index: sdwan
+        source: cisco:sdwan:ssetunnels
+        sourcetype: cisco:sdwan:ssetunnels
+        host: $HOST$
+        _raw: '{"vdevice-name": "$HOST$", "device-state": "Up", "destination-data-center": "$SITE_NAME$", "latency": 12.4, "packet-loss": 0.0}'
+
+  ### STAGE 2: SD-WAN TUNNEL SLA DEGRADATION & JITTER SPIKE ###
+  - name: sdwan-tunnel-sla-breach
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+      - name: HIGH_LOSS
+        format: template
+        type: random
+        replacement: float
+        precision: 2
+        lower: 3.5
+        upper: 8.9
+      - name: HIGH_LATENCY
+        format: template
+        type: random
+        replacement: float
+        precision: 1
+        lower: 185.0
+        upper: 320.0
+      - name: HIGH_JITTER
+        format: template
+        type: random
+        replacement: float
+        precision: 1
+        lower: 35.0
+        upper: 75.0
+    lines:
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1", "state": "Up", "health": "yellow", "loss_percentage": $HIGH_LOSS$, "latency": $HIGH_LATENCY$, "jitter": $HIGH_JITTER$, "local_color": "biz-internet", "remote_color": "public-internet", "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      - index: sdwan
+        source: cisco:sdwan:sitehealth
+        sourcetype: cisco:sdwan:sitehealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"site_name": "Toronto_DC1", "site_health": "degraded", "overall_score": 4.8, "tunnels_health": "warning", "devices_health": "good", "apps_health": "warning", "tunnels_health_score": 4, "devices_health_score": 9, "apps_health_score": 5}'
+
+  ### STAGE 3: CRITICAL OUTAGE - LINK DOWN & BGP / OMP PEER TEARDOWN ###
+  - name: sdwan-critical-link-down
+    interval: 15
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3264: *$TS$: %BGP-5-ADJCHANGE: neighbor 10.201.152.1 vpn vrf UBC_TENANT Down Neighbor deleted'
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:LINK-5-CHANGED
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3265: *$TS$: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to down'
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:LINEPROTO-5-UPDOWN
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3266: *$TS$: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to down'
+      - index: sdwan
+        source: udp:5514
+        sourcetype: cisco:sdwan:sytem:logs
+        host: c8kv-dc-tor-gw1
+        _raw: '$TS$ c8kv-dc-tor-gw1 %OMP-3-PEER_DOWN: OMP peer 172.18.1.3 in vpn 0 down'
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1", "state": "Down", "health": "red", "loss_percentage": 100.0, "latency": 0.0, "jitter": 0.0, "local_color": "biz-internet", "remote_color": "public-internet", "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      - index: sdwan
+        source: cisco:sdwan:linkhealth
+        sourcetype: cisco:sdwan:linkhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"vdevice-name": "c8kv-dc-tor-gw1", "ifname": "GigabitEthernet0/0/1", "if-oper-status": "Down", "if-admin-status": "Up", "speed-mbps": 1000, "rx-kbps": 0, "tx-kbps": 0, "vpn-id": 1, "ip-address": "10.201.48.120"}'
+      - index: sdwan
+        source: cisco:sdwan:sitehealth
+        sourcetype: cisco:sdwan:sitehealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"site_name": "Toronto_DC1", "site_health": "critical", "overall_score": 1.2, "tunnels_health": "bad", "devices_health": "warning", "apps_health": "bad", "tunnels_health_score": 1, "devices_health_score": 4, "apps_health_score": 1}'
+      - index: sdwan
+        source: cisco:sdwan:ssetunnels
+        sourcetype: cisco:sdwan:ssetunnels
+        host: c8kv-dc-tor-gw1
+        _raw: '{"vdevice-name": "c8kv-dc-tor-gw1", "device-state": "Down", "destination-data-center": "Toronto_DC1", "latency": 0.0, "packet-loss": 100.0}'
+
+  ### STAGE 4: FAILOVER TO BACKUP TRANSPORT & RESTORATION ###
+  - name: sdwan-failover-recovery
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    tokens:
+      - name: TS
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: GOTS
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%d %H:%M:%S"
+    lines:
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:BGP-5-ADJCHANGE
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3270: *$TS$: %BGP-5-ADJCHANGE: neighbor 10.201.152.2 vpn vrf UBC_TENANT Up'
+      - index: catalyst
+        source: udp:5514
+        sourcetype: cisco:sdwan:LINEPROTO-5-UPDOWN
+        host: 10.201.48.115
+        _raw: '$TS$ 10.201.48.120 3271: *$TS$: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/2, changed state to up'
+      - index: sdwan
+        source: cisco:sdwan:tunnelhealth
+        sourcetype: cisco:sdwan:tunnelhealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"name": "tunnel_c8kv-dc-tor-gw1_to_Toronto_DC1_backup", "state": "Up", "health": "green", "loss_percentage": 0.0, "latency": 16.5, "jitter": 2.3, "local_color": "lte", "remote_color": "lte", "site_name": "Toronto_DC1", "timestamp": "$GOTS$"}'
+      - index: sdwan
+        source: cisco:sdwan:sitehealth
+        sourcetype: cisco:sdwan:sitehealth
+        host: c8kv-dc-tor-gw1
+        _raw: '{"site_name": "Toronto_DC1", "site_health": "good", "overall_score": 8.9, "tunnels_health": "good", "devices_health": "good", "apps_health": "good", "tunnels_health_score": 9, "devices_health_score": 9, "apps_health_score": 8.8}'

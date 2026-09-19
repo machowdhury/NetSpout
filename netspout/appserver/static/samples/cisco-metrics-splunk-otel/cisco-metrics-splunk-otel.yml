@@ -1,0 +1,156 @@
+samples:
+  ### HEALTHY OTEL TELEMETRY (LOW CPU, STEADY BGP PEERS, ZERO PDU DROPS) ###
+  - name: splunk-otel-healthy
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: NODE
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: R1
+          - weight: 2
+            choice: R2
+          - weight: 2
+            choice: R3
+          - weight: 2
+            choice: R4
+          - weight: 2
+            choice: R5
+          - weight: 2
+            choice: R6
+          - weight: 2
+            choice: R7
+          - weight: 2
+            choice: R8
+          - weight: 2
+            choice: R9
+          - weight: 2
+            choice: R10
+      - name: CPU_1M
+        format: template
+        type: random
+        replacement: int
+        lower: 1
+        upper: 8
+      - name: CPU_5M
+        format: template
+        type: random
+        replacement: int
+        lower: 2
+        upper: 10
+      - name: TEMP
+        format: template
+        type: random
+        replacement: int
+        lower: 31
+        upper: 36
+      - name: MEM_USAGE
+        format: template
+        type: random
+        replacement: int
+        lower: 1800000000
+        upper: 2400000000
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: $NODE$
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "$NODE$", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": $CPU_1M$, "metric_name:cisco.total-cpu-five-minute": $CPU_5M$, "metric_name:cisco.total-cpu-fifteen-minute": $CPU_5M$, "metric_name:cisco.temperature": $TEMP$, "metric_name:cisco.voltage": 12, "metric_name:cisco.vrf.established-neighbors-count": 2, "metric_name:cisco.vrf.neighbors-count": 2, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": 0, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-receive-count": 4820, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-send-count": 4790, "metric_name:system.memory.usage": $MEM_USAGE$, "cisco.node_id": "$NODE$", "vrf-name": "default"}}'
+
+  ### DEGRADED OTEL TELEMETRY (HIGH CPU, RISING TEMPERATURE, PROTOCOL PDU DELAYS) ###
+  - name: splunk-otel-degraded
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: NODE
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 4
+            choice: R1
+          - weight: 4
+            choice: R2
+          - weight: 1
+            choice: R4
+      - name: HIGH_CPU_1M
+        format: template
+        type: random
+        replacement: int
+        lower: 74
+        upper: 89
+      - name: HIGH_CPU_5M
+        format: template
+        type: random
+        replacement: int
+        lower: 68
+        upper: 82
+      - name: ELEVATED_TEMP
+        format: template
+        type: random
+        replacement: int
+        lower: 58
+        upper: 72
+      - name: PDU_DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 120
+        upper: 480
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: $NODE$
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "$NODE$", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": $HIGH_CPU_1M$, "metric_name:cisco.total-cpu-five-minute": $HIGH_CPU_5M$, "metric_name:cisco.total-cpu-fifteen-minute": $HIGH_CPU_5M$, "metric_name:cisco.temperature": $ELEVATED_TEMP$, "metric_name:cisco.voltage": 12, "metric_name:cisco.vrf.established-neighbors-count": 2, "metric_name:cisco.vrf.neighbors-count": 2, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": $PDU_DROPS$, "metric_name:cisco.statistics.update-input-queue.total-counts.pd-us-dropped": $PDU_DROPS$, "metric_name:system.network.dropped": $PDU_DROPS$, "cisco.node_id": "$NODE$", "vrf-name": "default"}}'
+
+  ### CRITICAL OTEL TELEMETRY (CPU EXHAUSTION 99%, THERMAL ALARM, BGP SESSION COLLAPSE) ###
+  - name: splunk-otel-failure
+    interval: 30
+    count: 5
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: NODE
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 5
+            choice: R1
+          - weight: 5
+            choice: R2
+      - name: PEAK_CPU
+        format: template
+        type: random
+        replacement: int
+        lower: 97
+        upper: 100
+      - name: CRITICAL_TEMP
+        format: template
+        type: random
+        replacement: int
+        lower: 82
+        upper: 91
+      - name: MASSIVE_DROPS
+        format: template
+        type: random
+        replacement: int
+        lower: 4500
+        upper: 14200
+    lines:
+      - index: splunk_otel
+        source: otel:cisco:xr
+        sourcetype: httpevent
+        host: $NODE$
+        _raw: '{"time": $EPOCH$, "event": "metric", "source": "otel:cisco:xr", "sourcetype": "httpevent", "host": "$NODE$", "index": "splunk_otel", "fields": {"metric_name:cisco.total-cpu-one-minute": $PEAK_CPU$, "metric_name:cisco.total-cpu-five-minute": 98, "metric_name:cisco.total-cpu-fifteen-minute": 95, "metric_name:cisco.temperature": $CRITICAL_TEMP$, "metric_name:cisco.voltage": 11, "metric_name:cisco.vrf.established-neighbors-count": 0, "metric_name:cisco.vrf.neighbors-count": 2, "metric_name:cisco.statistics.pspn-stats.pdu-counters.pdu-dropped-count": $MASSIVE_DROPS$, "metric_name:cisco.statistics.update-input-queue.total-counts.pd-us-dropped": $MASSIVE_DROPS$, "metric_name:system.network.dropped": $MASSIVE_DROPS$, "metric_name:system.network.errors": 1820, "cisco.node_id": "$NODE$", "vrf-name": "default"}}'

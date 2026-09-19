@@ -1,0 +1,92 @@
+samples:
+  ### CISCO-THOUSANDEYES-EVENT - HEALTHY BASELINE ###
+  - name: cisco-thousandeyes-event-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: event://Maple_Events
+        sourcetype: cisco:thousandeyes:event
+        host: $HOST$
+        _raw: '{"id": "a78ef292-6962-333c-b97d-a74ec8fad6d9", "type": "target", "agentType": "cloud-enterprise-agent", "typeName": "Network Outage", "title": "targets 64.100.2.10 +6", "state": "active", "startDate": "$ISO_TIMESTAMP$", "endDate": null, "severity": "low", "affectedTests": {"total": 7, "inAccountGroup": 1}, "affectedTargets": {"total": 7, "inAccountGroup": 1}, "affectedAgents": {"total": 6, "inAccountGroup": 1}, "_links": {"self": {"href": "https://api.thousandeyes.com/v7/events/a78ef292-6962-333c-b97d-a74ec8fad6d9"}}, "aid": "230661"}'
+
+  ### CISCO-THOUSANDEYES-EVENT - DEGRADED / WARNING ###
+  - name: cisco-thousandeyes-event-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: event://Maple_Events
+        sourcetype: cisco:thousandeyes:event
+        host: $HOST$
+        _raw: '{"id": "a78ef292-6962-333c-b97d-a74ec8fad6d9", "type": "target", "agentType": "cloud-enterprise-agent", "typeName": "Network Outage", "title": "targets 64.100.2.10 +6", "state": "degraded", "startDate": "$ISO_TIMESTAMP$", "endDate": null, "severity": "low", "affectedTests": {"total": 7, "inAccountGroup": 1}, "affectedTargets": {"total": 7, "inAccountGroup": 1}, "affectedAgents": {"total": 6, "inAccountGroup": 1}, "_links": {"self": {"href": "https://api.thousandeyes.com/v7/events/a78ef292-6962-333c-b97d-a74ec8fad6d9"}}, "aid": "230661"}'
+
+  ### CISCO-THOUSANDEYES-EVENT - CRITICAL / FAILURE ###
+  - name: cisco-thousandeyes-event-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: event://Maple_Events
+        sourcetype: cisco:thousandeyes:event
+        host: $HOST$
+        _raw: '{"id": "a78ef292-6962-333c-b97d-a74ec8fad6d9", "type": "target", "agentType": "cloud-enterprise-agent", "typeName": "Network Outage", "title": "targets 64.100.2.10 +6", "state": "down", "startDate": "$ISO_TIMESTAMP$", "endDate": null, "severity": "low", "affectedTests": {"total": 7, "inAccountGroup": 1}, "affectedTargets": {"total": 7, "inAccountGroup": 1}, "affectedAgents": {"total": 6, "inAccountGroup": 1}, "_links": {"self": {"href": "https://api.thousandeyes.com/v7/events/a78ef292-6962-333c-b97d-a74ec8fad6d9"}}, "aid": "230661"}'

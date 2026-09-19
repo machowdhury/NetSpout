@@ -1,0 +1,92 @@
+samples:
+  ### STREAM-NETFLOW - HEALTHY BASELINE ###
+  - name: stream-netflow-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+          - weight: 2
+            choice: splunkhf.maple.ciscolabs.com-peer
+    lines:
+      - index: main
+        source: stream:MAPLE_NETFLOW
+        sourcetype: stream:netflow
+        host: $HOST$
+        _raw: '{"endtime":"$ISO_TIMESTAMP$","timestamp":"$ISO_TIMESTAMP$","app_tag":"USER-DEF : 009311","event_name":"netFlowData","exporter_ip":"10.201.51.68","exporter_time":"2026-Sep-18 17:34:43","exporter_uptime":3046802704,"flow_dir":0,"flow_end_time_milli":1789752881000,"flow_start_time_milli":1789752866000,"netflow_elements":["UNKNOWN : ac190e02","UNKNOWN : 0a14010a","UNKNOWN : 147e","UNKNOWN : 0000000000000000","UNKNOWN : 0000000000000598"],"netflow_version":9,"observation_domain_id":16777217,"observation_point_id":4294967314,"protoid":17,"seqnumber":722423,"src_mac":"70:69:5a:76:54:58","version":4}'
+
+  ### STREAM-NETFLOW - DEGRADED / WARNING ###
+  - name: stream-netflow-degraded
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: stream:MAPLE_NETFLOW
+        sourcetype: stream:netflow
+        host: $HOST$
+        _raw: '{"endtime":"$ISO_TIMESTAMP$","timestamp":"$ISO_TIMESTAMP$","app_tag":"USER-DEF : 009311","event_name":"netFlowData","exporter_ip":"10.201.51.68","exporter_time":"2026-Sep-18 17:34:43","exporter_uptime":3046802704,"flow_dir":0,"flow_end_time_milli":1789752881000,"flow_start_time_milli":1789752866000,"netflow_elements":["UNKNOWN : ac190e02","UNKNOWN : 0a14010a","UNKNOWN : 147e","UNKNOWN : 0000000000000000","UNKNOWN : 0000000000000598"],"netflow_version":9,"observation_domain_id":16777217,"observation_point_id":4294967314,"protoid":17,"seqnumber":722423,"src_mac":"70:69:5a:76:54:58","version":4}'
+
+  ### STREAM-NETFLOW - CRITICAL / FAILURE ###
+  - name: stream-netflow-failure
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 3
+            choice: splunkhf.maple.ciscolabs.com
+    lines:
+      - index: main
+        source: stream:MAPLE_NETFLOW
+        sourcetype: stream:netflow
+        host: $HOST$
+        _raw: '{"endtime":"$ISO_TIMESTAMP$","timestamp":"$ISO_TIMESTAMP$","app_tag":"USER-DEF : 009311","event_name":"netFlowData","exporter_ip":"10.201.51.68","exporter_time":"2026-Sep-18 17:34:43","exporter_uptime":3046802704,"flow_dir":0,"flow_end_time_milli":1789752881000,"flow_start_time_milli":1789752866000,"netflow_elements":["UNKNOWN : ac190e02","UNKNOWN : 0a14010a","UNKNOWN : 147e","UNKNOWN : 0000000000000000","UNKNOWN : 0000000000000598"],"netflow_version":9,"observation_domain_id":16777217,"observation_point_id":4294967314,"protoid":17,"seqnumber":722423,"src_mac":"70:69:5a:76:54:58","version":4}'

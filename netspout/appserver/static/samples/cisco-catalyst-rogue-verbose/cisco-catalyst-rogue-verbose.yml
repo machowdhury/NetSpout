@@ -1,0 +1,34 @@
+samples:
+- name: cisco-catalyst-rogue-verbose
+  description: Real Network Assurance replay for cisco:catalyst:rogue:verbose (catalyst index)
+  interval: 60
+  count: 2
+  randomizeEvents: false
+  tokens:
+    - name: TS
+      format: template
+      type: gotimestamp
+      replacement: "Jan 02 15:04:05"
+    - name: GOTS
+      format: template
+      type: gotimestamp
+      replacement: "2006-01-02T15:04:05Z"
+    - name: EPOCH
+      format: template
+      type: epochtimestamp
+    - name: EPOCH_MS
+      format: template
+      type: javatimestamp
+  lines:
+    - index: catalyst
+      sourcetype: cisco:catalyst:rogue:verbose
+      source: dnac_rogue_poller
+      host: 3.128.0.44:8088
+      _time: "$EPOCH$"
+      _raw: '{"macAddress": "C2:D6:66:6F:BA:30", "mldMacAddress": "NA", "updatedTime": $EPOCH_MS$, "createdTime": $EPOCH_MS$, "threatType": "mapleRule2", "threatLevel": "High", "apName": "OTT-Lab-9117-AP", "detectingAPMac": "0C:D0:F8:95:5B:20", "ssid": "internet", "containment": "Open", "radioType": "8", "controllerIp": "10.0.10.50", "controllerName": "C9800.maple.ciscolabs.com", "channelNumber": "6", "siteNameHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "encryption": "Open", "switchIp": "-", "switchName": "-", "portDescription": "-"}'
+    - index: catalyst
+      sourcetype: cisco:catalyst:rogue:verbose
+      source: dnac_rogue_poller
+      host: 3.128.0.44:8088
+      _time: "$EPOCH$"
+      _raw: '{"macAddress": "C6:D6:76:70:F1:20", "mldMacAddress": "NA", "updatedTime": $EPOCH_MS$, "createdTime": $EPOCH_MS$, "threatType": "Neighbor", "threatLevel": "Informational", "apName": "OTT-Lab-2802-AP", "detectingAPMac": "70:7D:B9:13:97:20", "ssid": "blizzard", "containment": "Open", "radioType": "5", "controllerIp": "NA", "controllerName": "NA", "channelNumber": "112", "siteNameHierarchy": "Global/Ottawa/OTT02-Lab/OTT02-SDA", "encryption": "Encrypted", "switchIp": "-", "switchName": "-", "portDescription": "-"}'

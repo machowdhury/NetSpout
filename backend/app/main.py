@@ -728,6 +728,18 @@ async def export_openconfig_rfc7951(node_id: str):
     )
 
 
+# Vendor Catalog Endpoint
+@app.get("/api/vendors/catalog")
+def get_vendor_catalog(id: Optional[str] = None):
+    from app.vendor_catalog import list_all_vendors, get_vendor_by_id
+    if id:
+        v = get_vendor_by_id(id)
+        if not v:
+            raise HTTPException(status_code=404, detail="Vendor not found")
+        return {"vendor": v}
+    return {"vendors": list_all_vendors(), "count": len(list_all_vendors())}
+
+
 # WebSocket Endpoint
 @app.websocket("/ws/logs")
 async def websocket_logs_endpoint(websocket: WebSocket):

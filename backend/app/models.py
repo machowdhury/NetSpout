@@ -8,7 +8,40 @@ Includes full support for:
 
 from enum import Enum
 from typing import List, Dict, Optional, Any
-from pydantic import BaseModel, Field
+
+try:
+    from pydantic import BaseModel, Field
+except ImportError:
+    class _FieldDefault:
+        def __init__(self, default=None, default_factory=None):
+            self.default = default
+            self.default_factory = default_factory
+        def get_value(self):
+            if self.default_factory is not None:
+                return self.default_factory()
+            return self.default
+
+    def Field(default=None, *, default_factory=None, **kwargs):
+        return _FieldDefault(default=default, default_factory=default_factory)
+
+    class BaseModel:
+        def __init__(self, **kwargs):
+            for cls in reversed(self.__class__.__mro__):
+                for k, v in getattr(cls, "__dict__", {}).items():
+                    if k.startswith("_"):
+                        continue
+                    if isinstance(v, _FieldDefault):
+                        setattr(self, k, v.get_value())
+                    elif not callable(v):
+                        setattr(self, k, v)
+            for k, v in kwargs.items():
+                setattr(self, k, v)
+
+        def dict(self, *args, **kwargs):
+            return {k: (v.dict() if hasattr(v, "dict") else v) for k, v in self.__dict__.items() if not k.startswith("_")}
+
+        def model_dump(self, *args, **kwargs):
+            return self.dict(*args, **kwargs)
 
 
 class EcosystemMode(str, Enum):

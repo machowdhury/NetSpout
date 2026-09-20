@@ -307,10 +307,79 @@ delegated_listeners = ("$(document).on('click'" in ob_js_content or '$(document)
 record_test("Suite 12", "Delegated Event Handling Across SimpleXML", delegated_listeners, "Robust against SimpleXML DOM lifecycle re-renders")
 
 # -----------------------------------------------------------------------------
-# SUITE 13: netspout.spl Production Release Package Integrity
+# SUITE 13: Vendor Discovery, Official Doc Audit & Modular Input Streamer
 # -----------------------------------------------------------------------------
-print("\n>> Suite 13: netspout.spl Production Archive Validation")
-record_test("Suite 13", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
+print("\n>> Suite 13: Splunkbase Vendor Discovery, Official Doc Audit & Modular Input Streamer")
+sys.path.insert(0, os.path.join(NETSPOUT_DIR, "bin"))
+try:
+    from vendor_catalog import VENDOR_CATALOG
+    vendor_cat_loaded = True
+except Exception as e:
+    vendor_cat_loaded = False
+    record_test("Suite 13", "Vendor Catalog Module Load", False, str(e))
+
+if vendor_cat_loaded:
+    record_test("Suite 13", "15+ Audited Technology Add-on Catalog", len(VENDOR_CATALOG) >= 15, f"Catalog contains {len(VENDOR_CATALOG)} vendor definitions")
+    
+    # Check completeness of all vendor records
+    all_fields_ok = all(
+        all(k in v for k in ["id", "vendor", "splunkbase_id", "splunkbase_url", "doc_url", "sourcetypes", "delimiter", "cim_models", "field_mappings", "sample_events"])
+        for v in VENDOR_CATALOG
+    )
+    record_test("Suite 13", "Official Vendor TA Specifications Audit", all_fields_ok, "Splunkbase ID, Doc URL, Delimiters, CIM Models, Field Mappings, Sample Events")
+
+# Check static JSON mirror for frontend and standalone deployment
+vendor_json_path = os.path.join(NETSPOUT_DIR, "appserver/static/vendor_catalog.json")
+json_exists = os.path.exists(vendor_json_path)
+if json_exists:
+    with open(vendor_json_path) as jf:
+        j_data = json.load(jf)
+        v_list = j_data.get("vendors", j_data) if isinstance(j_data, dict) else j_data
+        record_test("Suite 13", "Static Vendor Catalog JSON Mirror", len(v_list) >= 15, f"Mirrored {len(v_list)} vendor definitions to appserver/static/vendor_catalog.json")
+else:
+    record_test("Suite 13", "Static Vendor Catalog JSON Mirror", False, f"Missing {vendor_json_path}")
+
+# Test modular input netspout_streamer.py
+streamer_py = os.path.join(NETSPOUT_DIR, "bin/netspout_streamer.py")
+scheme_res = subprocess.run([sys.executable, streamer_py, "--scheme"], capture_output=True, text=True)
+test_res = subprocess.run([sys.executable, streamer_py, "--test"], capture_output=True, text=True)
+
+scheme_ok = scheme_res.returncode == 0 and "<scheme>" in scheme_res.stdout and "<streaming_mode>xml</streaming_mode>" in scheme_res.stdout
+record_test("Suite 13", "Modular Input --scheme XML Endpoint", scheme_ok, "Valid modular input XML scheme with parameters")
+
+stream_ok = test_res.returncode == 0 and "<stream>" in test_res.stdout and '<event unbroken="1">' in test_res.stdout and "cisco:ios:syslog" in test_res.stdout and "pan:traffic" in test_res.stdout
+record_test("Suite 13", "Modular Input Real-Time XML Streamer (--test)", stream_ok, "Native XML <event> stream to Splunk index pipeline")
+
+# Test multi-vendor cascading fault injection
+try:
+    from fault_injection_engine import FaultInjectionEngine
+    from models import TopologyState, Node, Edge, NodeType, FaultScenarioType, FaultInjectionRequest
+    f_engine = FaultInjectionEngine()
+    test_top = TopologyState(
+        nodes=[
+            Node(id="fw-pa", name="iad-edge-fw01", type=NodeType.FIREWALL, vendor="palo_alto", ip_address="198.51.100.1"),
+            Node(id="rtr-jnx", name="jnx-border-gw01", type=NodeType.ROUTER, vendor="juniper_junos", ip_address="198.51.100.2")
+        ],
+        edges=[
+            Edge(id="link-test", source="fw-pa", target="rtr-jnx", source_port="ethernet1/1", target_port="ge-0/0/0")
+        ]
+    )
+    rec, f_logs, f_metrics, f_traps = f_engine.inject_fault(
+        test_top,
+        FaultInjectionRequest(scenario_type=FaultScenarioType.LINK_CUT, target_edge_id="link-test")
+    )
+    pa_log = next((l for l in f_logs if l.vendor == "palo_alto"), None)
+    jnx_log = next((l for l in f_logs if l.vendor == "juniper_junos"), None)
+    mv_cascade_ok = pa_log is not None and "pan:system" in pa_log.sourcetype and jnx_log is not None and "juniper:junos:syslog" in jnx_log.sourcetype
+    record_test("Suite 13", "Multi-Vendor Cascading Fault Engine", mv_cascade_ok, "Accurate Palo Alto & Juniper carrier loss events emitted")
+except Exception as e:
+    record_test("Suite 13", "Multi-Vendor Cascading Fault Engine", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 14: netspout.spl Production Release Package Integrity
+# -----------------------------------------------------------------------------
+print("\n>> Suite 14: netspout.spl Production Archive Validation")
+record_test("Suite 14", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
 
 archive_valid = False
 archive_size = 0
@@ -328,8 +397,8 @@ if os.path.exists(SPL_ARCHIVE):
     except Exception as e:
         archive_valid = False
 
-record_test("Suite 13", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
-record_test("Suite 13", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
+record_test("Suite 14", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
+record_test("Suite 14", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
 
 # -----------------------------------------------------------------------------
 # FINAL SUMMARY REPORT

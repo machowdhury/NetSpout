@@ -98,6 +98,15 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
             elif "pipelines/config" in path or subpath == "config":
                 return self._handle_pipeline_config(method, payload)
 
+            # 6. Splunkbase Vendor Directory & Official Documentation Audit
+            elif "vendor_catalog" in path or subpath == "vendors":
+                from vendor_catalog import list_all_vendors, get_vendor_by_id
+                vendor_id = query.get("id")
+                if vendor_id:
+                    v = get_vendor_by_id(vendor_id)
+                    return self._response(200, {"vendor": v} if v else {"error": "Vendor not found"})
+                return self._response(200, {"vendors": list_all_vendors(), "count": len(list_all_vendors())})
+
             # Default /status
             return self._response(200, {
                 "status": "online",

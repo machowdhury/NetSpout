@@ -1,5 +1,5 @@
 samples:
-  ### CISCO-DUO-AUTHENTICATION - HEALTHY BASELINE ###
+  ### CISCO-DUO-AUTHENTICATION - HEALTHY BASELINE (SUCCESS) ###
   - name: cisco-duo-authentication-baseline
     interval: 30
     count: 3
@@ -28,11 +28,11 @@ samples:
       - index: cisco_duo
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:authentication
-        host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+        host: MAHAMUDC-M-XW40$
+        _raw: '{"timestamp": $, "isotimestamp": "$", "username": "mchowdhury@splunk.com", "user": {"key": "DU19284101", "name": "mchowdhury@splunk.com"}, "factor": "Duo Push", "result": "SUCCESS", "reason": "User approved", "integration": "Cisco AnyConnect SSL-VPN", "ip": "198.51.100.42", "location": {"city": "San Jose", "state": "California", "country": "US"}, "access_device": {"ip": "198.51.100.42", "location": {"city": "San Jose", "state": "California", "country": "US"}, "browser": "Safari", "browser_version": "17.4", "os": "macOS", "os_version": "14.4", "trusted_endpoint_status": "trusted"}, "auth_device": {"name": "iPhone 15 Pro", "ip": "198.51.100.42", "location": {"city": "San Jose", "state": "California", "country": "US"}}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
 
-  ### CISCO-DUO-AUTHENTICATION - DEGRADED / WARNING ###
-  - name: cisco-duo-authentication-degraded
+  ### CISCO-DUO-AUTHENTICATION - FRAUD ALERT (USER REPORTED) ###
+  - name: cisco-duo-authentication-fraud
     interval: 30
     count: 2
     randomizeEvents: true
@@ -58,11 +58,11 @@ samples:
       - index: cisco_duo
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:authentication
-        host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+        host: MAHAMUDC-M-XW40$
+        _raw: '{"timestamp": $, "isotimestamp": "$", "username": "alex.turner@corp.internal", "user": {"key": "DU19284102", "name": "alex.turner@corp.internal"}, "factor": "Duo Push", "result": "FRAUD", "reason": "User reported fraud during push prompt", "integration": "Cisco AnyConnect SSL-VPN", "ip": "194.28.172.5", "location": {"city": "Kyiv", "state": "Kyiv City", "country": "UA"}, "access_device": {"ip": "194.28.172.5", "location": {"city": "Kyiv", "state": "Kyiv City", "country": "UA"}, "browser": "Chrome", "browser_version": "128.0", "os": "Android", "os_version": "14", "trusted_endpoint_status": "untrusted"}, "auth_device": {"name": "iPhone 15 Pro", "ip": "198.51.100.88", "location": {"city": "Austin", "state": "Texas", "country": "US"}}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
 
-  ### CISCO-DUO-AUTHENTICATION - CRITICAL / FAILURE ###
-  - name: cisco-duo-authentication-failure
+  ### CISCO-DUO-AUTHENTICATION - POLICY DENIAL & IMPOSSIBLE TRAVEL ###
+  - name: cisco-duo-authentication-denied
     interval: 30
     count: 2
     randomizeEvents: true
@@ -88,5 +88,10 @@ samples:
       - index: cisco_duo
         source: sbg_duo_input://MAPLE_DUO
         sourcetype: cisco:duo:authentication
-        host: $HOST$
-        _raw: '{"ctime": "Fri $SYSLOG_TIMESTAMP$ 2026", "access_device": {"browser": null, "browser_version": null, "flash_version": null, "java_version": null, "os": null, "os_version": null, "trusted_endpoint_status": "unknown"}, "alias": "", "device": "416-571-0674", "email": "mahamudc@cisco.com", "factor": "Duo Push", "integration": "Auth API", "ip": "0.0.0.0", "isotimestamp": "$ISO_TIMESTAMP$", "location": {"city": "", "country": "", "state": ""}, "new_enrollment": false, "ood_software": null, "reason": "User approved", "result": "SUCCESS", "timestamp": 1789751848, "username": "mahamudc", "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+        host: MAHAMUDC-M-XW40$
+        _raw: '{"timestamp": $, "isotimestamp": "$", "username": "alex.turner@corp.internal", "user": {"key": "DU19284102", "name": "alex.turner@corp.internal"}, "factor": "Duo Push", "result": "DENIED", "reason": "Impossible travel velocity anomaly: Austin (US) to Moscow (RU) in 8 minutes", "integration": "Splunk Production Enterprise NOC", "ip": "185.220.101.4", "location": {"city": "Moscow", "state": "Moscow", "country": "RU"}, "access_device": {"ip": "185.220.101.4", "location": {"city": "Moscow", "state": "Moscow", "country": "RU"}, "browser": "Firefox", "browser_version": "129.0", "os": "Linux", "os_version": "Ubuntu 22.04", "trusted_endpoint_status": "untrusted"}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'
+      - index: cisco_duo
+        source: sbg_duo_input://MAPLE_DUO
+        sourcetype: cisco:duo:authentication
+        host: MAHAMUDC-M-XW40$
+        _raw: '{"timestamp": $, "isotimestamp": "$", "username": "guest.contractor@corp.internal", "user": {"key": "DU19284109", "name": "guest.contractor@corp.internal"}, "factor": "Passcode", "result": "FAILURE", "reason": "Invalid passcode / user locked out after 3 failed attempts", "integration": "Office 365 SAML SSO", "ip": "203.0.113.19", "location": {"city": "Frankfurt", "state": "Hesse", "country": "DE"}, "access_device": {"ip": "203.0.113.19", "location": {"city": "Frankfurt", "state": "Hesse", "country": "DE"}, "browser": "Edge", "browser_version": "127.0", "os": "Windows", "os_version": "11", "trusted_endpoint_status": "unknown"}, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "authentication"}'

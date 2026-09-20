@@ -26,3 +26,14 @@ samples:
         sourcetype: cisco:duo:push:prompt
         host: duo-api.corp.internal
         _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"authentication\",\"factor\":\"duo_push\",\"result\":\"FAILURE\",\"reason\":\"user_denied\",\"user\":{\"name\":\"m.chowdhury@corp.internal\"},\"application\":{\"name\":\"Cisco Catalyst Center WebUI\"},\"auth_device\":{\"ip\":\"203.0.113.88\",\"location\":{\"city\":\"Moscow\",\"country\":\"RU\"}},\"fraud_reported\":true,\"txid\":\"duo-tx-9948202\"}"
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:push:prompt
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"authentication\",\"factor\":\"duo_push\",\"result\":\"FRAUD\",\"reason\":\"fraud_reported_by_user\",\"user\":{\"name\":\"alex.turner@corp.internal\"},\"application\":{\"name\":\"Corporate VPN Gateway\"},\"auth_device\":{\"ip\":\"194.28.172.5\",\"location\":{\"city\":\"Kyiv\",\"country\":\"UA\"}},\"fraud_reported\":true,\"txid\":\"duo-tx-9948203\"}"
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:push:prompt
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"authentication\",\"factor\":\"duo_push\",\"result\":\"DENIED\",\"reason\":\"policy_violation_impossible_travel\",\"user\":{\"name\":\"sarah.connor@corp.internal\"},\"application\":{\"name\":\"AWS Production IAM\"},\"auth_device\":{\"ip\":\"185.220.101.4\",\"location\":{\"city\":\"Frankfurt\",\"country\":\"DE\"}},\"fraud_reported\":false,\"txid\":\"duo-tx-9948204\"}"
+

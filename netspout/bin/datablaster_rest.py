@@ -601,7 +601,25 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "blast_hec":
         raw_events = params.get("events")
         if not raw_events or not isinstance(raw_events, list):
-            raise ValueError("Parameter 'events' must be a non-empty list of event objects")
+            st = str(params.get("sourcetype", "")).strip()
+            idx = str(params.get("index", "main")).strip()
+            try:
+                vol = int(params.get("volume", 5))
+            except (ValueError, TypeError):
+                vol = 5
+            if st:
+                raw_events = []
+                for i in range(vol):
+                    raw_events.append({
+                        "time": time.time(),
+                        "event": f"%NETSPOUT-5-TELEMETRY: Sample telemetry record {i+1}/{vol} for {st}",
+                        "sourcetype": st,
+                        "index": idx,
+                        "source": "netspout:blast_hec",
+                        "host": "core-gw01.net.internal"
+                    })
+            else:
+                raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
         stored_cfg = get_stored_config()
         hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8888/services/collector")).strip()
         token = str(params.get("token") or stored_cfg.get("hec_token", "00000000-0000-0000-0000-000000000000")).strip()
@@ -615,6 +633,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             "events": raw_events,
             "session_key": session_key
         }
+
 
     if action == "list_indexes":
         return {

@@ -3,26 +3,27 @@
  * Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
  *
  * Interactive SPL workspace with 30+ pre-canned multi-vendor queries,
- * instant client-side execution engine, Splunkd REST integration,
- * dynamic charting, and direct Splunk search dispatch.
+ * live Splunkd REST search execution, dynamic table/raw/chart rendering,
+ * and automated single-click sample telemetry ingestion.
  */
 
 require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($, mvc) {
   'use strict';
 
-  // --- Pre-canned Query Catalog ---
+  // --- Pre-Canned Query Library (30+ Multi-Vendor Queries) ---
   var PRE_CANNED_QUERIES = [
-    // CISCO
+    // CISCO SYSTEMS
     {
       id: 'cisco-crc-flaps',
       category: 'cisco',
       vendor: 'Cisco Systems',
+      sourcetype: 'cisco:ios:syslog',
+      default_index: 'idx_network_ops',
       title: 'IOS-XE / Catalyst: Interface Errors & Flaps',
-      target_index: '*',
-      spl: 'index=* sourcetype="cisco:ios:syslog" ("line protocol" OR "LINK-3-UPDOWN" OR "CRC")\n| rex field=_raw "interface (?<interface>\\S+)"\n| stats count, latest(_time) as last_seen by host, interface\n| where count > 0\n| sort -count',
-      description: 'Detects recurring physical layer faults, carrier loss, and CRC frame corruption across Catalyst campus access switches.',
-      mockCols: ['host', 'interface', 'count', 'last_seen'],
-      mockRows: [
+      spl: 'index=* (sourcetype="cisco:ios:syslog" OR sourcetype="cisco:ios") ("line protocol" OR "LINK-3-UPDOWN" OR "CRC")\n| rex field=_raw "interface (?<interface>\\S+)"\n| stats count, latest(_time) as last_seen by host, interface\n| where count > 0\n| sort -count',
+      description: 'Detects physical layer faults, carrier loss, and CRC frame corruption across Catalyst switches.',
+      simCols: ['host', 'interface', 'count', 'last_seen'],
+      simRows: [
         ['cat9300-access-01', 'GigabitEthernet1/0/24', 42, '2026-09-20 14:35:12'],
         ['cat9300-access-02', 'TenGigabitEthernet1/1/1', 19, '2026-09-20 14:32:05'],
         ['cat9500-core-01', 'FortyGigabitEthernet1/0/1', 8, '2026-09-20 14:18:44'],
@@ -33,28 +34,30 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
       id: 'cisco-sdwan-sla',
       category: 'cisco',
       vendor: 'Cisco Catalyst SD-WAN',
+      sourcetype: 'cisco:sdwan:linkhealth',
+      default_index: 'idx_network_ops',
       title: 'SD-WAN: BFD Path Loss & SLA Brownouts',
-      target_index: 'cisco_mdt_metrics',
-      spl: 'index=* sourcetype="cisco:sdwan:linkhealth" (loss_pct > 5 OR latency_ms > 120)\n| stats avg(loss_pct) as avg_loss, max(latency_ms) as max_lat, count by host, local_color, remote_color, sla_state\n| sort -avg_loss',
+      spl: 'index=* sourcetype="cisco:sdwan:linkhealth"\n| stats avg(loss_percentage) as avg_loss_pct, max(latency) as max_latency_ms, max(jitter) as max_jitter_ms, count by site_id, site_name, local_color\n| eval avg_loss_pct=round(avg_loss_pct, 2), max_latency_ms=round(max_latency_ms, 1)\n| sort -avg_loss_pct',
       description: 'Surfaces transport circuits breaching enterprise SLA thresholds across MPLS, Internet, and LTE underlay paths.',
-      mockCols: ['host', 'local_color', 'remote_color', 'sla_state', 'avg_loss', 'max_lat', 'count'],
-      mockRows: [
-        ['vedge-branch-102', 'biz-internet', 'biz-internet', 'VIOLATED', 14.8, 184.2, 128],
-        ['vedge-branch-105', 'lte', 'public-internet', 'VIOLATED', 11.2, 215.0, 94],
-        ['vedge-branch-201', 'mpls', 'mpls', 'DEGRADED', 6.4, 132.8, 45],
-        ['vedge-dc-hub-01', 'biz-internet', 'biz-internet', 'NORMAL', 1.2, 42.1, 12]
+      simCols: ['site_id', 'site_name', 'local_color', 'avg_loss_pct', 'max_latency_ms', 'max_jitter_ms', 'count'],
+      simRows: [
+        ['102', 'Austin-Branch', 'biz-internet', 14.8, 184.2, 22.4, 128],
+        ['105', 'Dallas-DC', 'lte', 11.2, 215.0, 31.8, 94],
+        ['201', 'Seattle-Branch', 'mpls', 6.4, 132.8, 12.1, 45],
+        ['001', 'HQ-Hub', 'biz-internet', 1.2, 42.1, 3.5, 12]
       ]
     },
     {
       id: 'cisco-sdwan-dpi',
       category: 'cisco',
       vendor: 'Cisco Catalyst SD-WAN',
+      sourcetype: 'cisco:sdwan:dpi',
+      default_index: 'idx_network_ops',
       title: 'SD-WAN: DPI Application Top Talkers',
-      target_index: '*',
       spl: 'index=* sourcetype="cisco:sdwan:dpi"\n| stats sum(bytes_sent) as tx_bytes, sum(bytes_recv) as rx_bytes, dc(src_ip) as active_clients by app_name, vpn_id\n| eval total_mb = round((tx_bytes+rx_bytes)/(1024*1024), 2)\n| sort -total_mb\n| head 10',
       description: 'Aggregates application bandwidth consumption across enterprise VPN segments to isolate bandwidth hogs.',
-      mockCols: ['app_name', 'vpn_id', 'total_mb', 'active_clients'],
-      mockRows: [
+      simCols: ['app_name', 'vpn_id', 'total_mb', 'active_clients'],
+      simRows: [
         ['microsoft-teams', '10', 4820.4, 215],
         ['zoom-meetings', '10', 3640.1, 148],
         ['salesforce', '10', 1820.9, 96],
@@ -66,459 +69,477 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
       id: 'cisco-mdt-optical',
       category: 'cisco',
       vendor: 'Cisco MDT gNMI',
+      sourcetype: 'cisco:mdt:telemetry',
+      default_index: 'cisco_mdt_metrics',
       title: 'OpenConfig MDT: Optical RX Power & Laser Triage',
-      target_index: 'cisco_mdt_metrics',
-      spl: 'index=* sourcetype="cisco:mdt:telemetry"\n| eval rx_power=coalesce(\'openconfig-interfaces:interfaces/interface/state/optical-rx-power\', rx_power_dbm)\n| where rx_power < -18\n| stats min(rx_power) as min_rx_dbm, avg(rx_power) as avg_rx_dbm, count by device_id, interface\n| sort min_rx_dbm',
-      description: 'Monitors pluggable transceiver optical power margins to predict laser degradation before link failure.',
-      mockCols: ['device_id', 'interface', 'min_rx_dbm', 'avg_rx_dbm', 'count'],
-      mockRows: [
-        ['core-asr9k-01', 'HundredGigE0/0/0/1', -24.8, -23.9, 86],
-        ['core-asr9k-02', 'HundredGigE0/1/0/0', -21.4, -20.6, 54],
-        ['spine-nexus9k-03', 'Eth1/49', -19.5, -18.8, 32]
+      spl: '| mstats avg(_value) as avg_rx_power min(_value) as min_rx_power where index=cisco_mdt_metrics metric_name="*optical-rx-power*" span=1m by device, interface\n| where min_rx_power < -18\n| sort min_rx_power',
+      description: 'Monitors pluggable transceiver optical power margins via Model-Driven Telemetry to predict laser degradation.',
+      simCols: ['device', 'interface', 'avg_rx_power', 'min_rx_power'],
+      simRows: [
+        ['core-asr9k-01', 'HundredGigE0/0/0/1', -23.9, -24.8],
+        ['core-asr9k-02', 'HundredGigE0/1/0/0', -20.6, -21.4],
+        ['spine-nexus9k-03', 'Eth1/49', -18.8, -19.5]
       ]
     },
     {
       id: 'cisco-ise-nac',
       category: 'cisco',
       vendor: 'Cisco ISE',
+      sourcetype: 'cisco:ise:nac:8021x',
+      default_index: 'idx_network_ops',
       title: 'ISE: 802.1X NAC Authentication Triage',
-      target_index: '*',
-      spl: 'index=* sourcetype="cisco:ise:nac:8021x" OR sourcetype="cisco:ise:syslog"\n| stats count(eval(Response="Failed" OR match(_raw, "Failed|Reject"))) as failed_auths, count(eval(Response="Passed")) as passed_auths by User-Name, Calling-Station-Id, host\n| eval fail_rate = round(failed_auths*100/(failed_auths+passed_auths+0.001), 1)\n| sort -failed_auths\n| head 10',
+      spl: 'index=* (sourcetype="cisco:ise:nac:8021x" OR sourcetype="cisco:ise:syslog")\n| stats count(eval(match(_raw, "Failed|Reject"))) as failed_auths, count(eval(match(_raw, "Passed|Success"))) as passed_auths by host\n| eval fail_rate = round(failed_auths*100/(failed_auths+passed_auths+0.001), 1)\n| sort -failed_auths\n| head 10',
       description: 'Identifies clients failing 802.1X certificate checks, EAP-TLS handshake drops, and unauthorized endpoint probing.',
-      mockCols: ['User-Name', 'Calling-Station-Id', 'host', 'failed_auths', 'passed_auths', 'fail_rate'],
-      mockRows: [
-        ['marcus.vance@corp', '70-69-79-4C-11-02', 'ise-node-01', 34, 1, 97.1],
-        ['svc-scanner@corp', '00-50-56-A1-22-33', 'ise-node-02', 28, 0, 100.0],
-        ['guest-contractor', 'B4-2E-99-1F-8C-44', 'ise-node-01', 12, 4, 75.0]
+      simCols: ['host', 'failed_auths', 'passed_auths', 'fail_rate'],
+      simRows: [
+        ['ise-node-01', 34, 1, 97.1],
+        ['ise-node-02', 28, 0, 100.0],
+        ['ise-node-03', 12, 4, 75.0]
       ]
     },
     {
       id: 'cisco-duo-mfa',
       category: 'cisco',
       vendor: 'Cisco Duo',
+      sourcetype: 'cisco:duo:authentication',
+      default_index: 'cisco_duo',
       title: 'Duo MFA: Fraud Denials & Impossible Travel',
-      target_index: '*',
-      spl: 'index=* (sourcetype="cisco:duo:push:prompt" OR sourcetype="cisco:duo:authentication")\n| search result="FRAUD" OR result="DENIED" OR result="FAILURE"\n| stats count, values(location) as locations, dc(location) as distinct_cities by user\n| where count > 0\n| sort -count',
+      spl: 'index=* (sourcetype="cisco:duo:authentication" OR sourcetype="cisco:duo:push:prompt" OR sourcetype="cisco:duo:authentication_v2")\n| search result="FRAUD" OR result="DENIED" OR result="FAILURE" OR result="fraud" OR result="denied"\n| eval user=coalesce(username, \'user.name\', \'user\'), city=coalesce(\'location.city\', location, "Unknown")\n| stats count, values(city) as cities, dc(city) as distinct_cities by user\n| where count > 0\n| sort -count',
       description: 'Audits Duo Mobile push fraud alerts, passcode brute-force attempts, and rapid geo-location anomalies.',
-      mockCols: ['user', 'count', 'locations', 'distinct_cities'],
-      mockRows: [
-        ['alex.turner@corp', 14, 'Kyiv, Ukraine | Austin, TX, US', 2],
-        ['sarah.connor@corp', 6, 'Moscow, RU | San Jose, CA, US', 2],
-        ['admin.svc@corp', 4, 'Frankfurt, DE', 1]
+      simCols: ['user', 'count', 'cities', 'distinct_cities'],
+      simRows: [
+        ['alex.turner@corp.internal', 14, 'Kyiv, Austin', 2],
+        ['sarah.connor@corp.internal', 6, 'Moscow, San Jose', 2],
+        ['guest.contractor@corp.internal', 4, 'Frankfurt', 1]
       ]
     },
     {
       id: 'cisco-meraki-wifi',
       category: 'cisco',
       vendor: 'Cisco Meraki',
-      title: 'Meraki: Wi-Fi Channel Congestion & Client Density',
-      target_index: '*',
-      spl: 'index=* sourcetype="meraki:accesspoints"\n| stats avg(channel_utilization_5ghz) as avg_5g_util, max(client_count) as peak_clients, sum(rx_packets) as total_rx by name, network_id\n| where avg_5g_util > 50\n| sort -avg_5g_util',
-      description: 'Tracks RF channel utilization, co-channel interference, and roaming client saturation across MR access points.',
-      mockCols: ['name', 'network_id', 'avg_5g_util', 'peak_clients', 'total_rx'],
-      mockRows: [
-        ['MR56-Conf-Center-A', 'N_88192031', 78.4, 84, 18492000],
-        ['MR46-All-Hands-Hall', 'N_88192031', 68.2, 112, 24810000],
-        ['MR56-Exec-Suite-4F', 'N_88192031', 54.1, 38, 9420000]
+      sourcetype: 'meraki:devices',
+      default_index: 'idx_wireless_ops',
+      title: 'Meraki: Wi-Fi Access Points & Connectivity State',
+      spl: 'index=* (sourcetype="meraki:devices" OR sourcetype="meraki:accesspoints")\n| stats count, latest(status) as status by name, serial, productType\n| sort -count',
+      description: 'Tracks AP health status, hardware serials, and operating state across enterprise wireless networks.',
+      simCols: ['name', 'serial', 'productType', 'status', 'count'],
+      simRows: [
+        ['MR56-Conf-Center-A', 'Q2QN-TOR-MR56', 'wireless', 'online', 84],
+        ['MR46-All-Hands-Hall', 'Q2QN-TOR-MR46', 'wireless', 'online', 112],
+        ['MS250-Toronto-Core', 'Q2QN-TOR-MS250', 'switch', 'online', 38]
       ]
     },
     {
       id: 'cisco-mds-san',
       category: 'cisco',
       vendor: 'Cisco MDS SAN',
+      sourcetype: 'cisco:mds:san:fc',
+      default_index: 'idx_network_ops',
       title: 'Cisco MDS: Fibre Channel B2B Credit Starvation',
-      target_index: '*',
-      spl: 'index=* sourcetype="cisco:mds:san:fc"\n| stats sum(b2b_credit_drops) as credit_drops, sum(crc_errors) as total_crc, avg(throughput_gbps) as avg_gbps by switch, fc_port, vsan\n| where credit_drops > 0 OR total_crc > 0\n| sort -credit_drops',
+      spl: 'index=* sourcetype="cisco:mds:san:fc"\n| rex field=_raw "Interface (?<fc_port>\\S+) Tx credit loss"\n| stats count, latest(_raw) as latest_event by host, fc_port\n| sort -count',
       description: 'Identifies slow-drain storage devices causing Buffer-to-Buffer credit starvation across high-speed SAN fabrics.',
-      mockCols: ['switch', 'fc_port', 'vsan', 'credit_drops', 'total_crc', 'avg_gbps'],
-      mockRows: [
-        ['mds9710-core-a', 'fc1/14', '100', 4820, 12, 48.5],
-        ['mds9710-core-a', 'fc1/15', '100', 1420, 4, 52.1],
-        ['mds9710-core-b', 'fc2/8', '200', 890, 0, 61.2]
+      simCols: ['host', 'fc_port', 'count', 'latest_event'],
+      simRows: [
+        ['mds9710-core-a', 'fc1/14', 48, '%PORT-3-CREDIT_LOSS: Interface fc1/14 Tx credit loss detected.'],
+        ['mds9710-core-a', 'fc1/15', 14, '%PORT-3-CREDIT_LOSS: Interface fc1/15 Tx credit loss detected.'],
+        ['mds9710-core-b', 'fc2/8', 8, '%PORT-3-CREDIT_LOSS: Interface fc2/8 Tx credit loss detected.']
       ]
     },
 
-    // PALO ALTO
+    // PALO ALTO NETWORKS
     {
       id: 'pan-top-dropped',
       category: 'paloalto',
       vendor: 'Palo Alto Networks',
+      sourcetype: 'pan:traffic',
+      default_index: 'idx_security_fw',
       title: 'PAN-OS: Top Denied Applications & Attacker IPs',
-      target_index: '*',
-      spl: 'index=* sourcetype="pan:traffic" (action="deny" OR action="drop")\n| stats count as dropped_sessions, sum(bytes) as total_bytes by src, app, dest_port\n| sort -dropped_sessions\n| head 15',
-      description: 'Evaluates perimeter firewall drops to identify unauthorized scans, port sweeps, and non-standard application tunnels.',
-      mockCols: ['src', 'app', 'dest_port', 'dropped_sessions', 'total_bytes'],
-      mockRows: [
-        ['198.51.100.44', 'ms-rdp', '3389', 2480, 124000],
-        ['203.0.113.88', 'ssh', '22', 1840, 92000],
-        ['192.0.2.14', 'web-browsing', '8080', 1120, 448000],
-        ['198.51.100.99', 'unknown-tcp', '4444', 980, 49000]
+      spl: 'index=* sourcetype="pan:traffic" (action="deny" OR action="drop" OR action="reset-both")\n| stats count as dropped_sessions, sum(bytes) as total_bytes by src, app, dest_port\n| sort -dropped_sessions\n| head 15',
+      description: 'Isolates firewall policy violations, blocked reconnaissance attempts, and targeted exploit traffic.',
+      simCols: ['src', 'app', 'dest_port', 'dropped_sessions', 'total_bytes'],
+      simRows: [
+        ['198.51.100.44', 'ms-rdp', '3389', 2410, 194820],
+        ['203.0.113.88', 'ssh', '22', 1890, 84200],
+        ['198.51.100.12', 'smb', '445', 1420, 218400],
+        ['192.0.2.77', 'telnet', '23', 890, 24100]
       ]
     },
     {
-      id: 'pan-threat-signatures',
+      id: 'pan-threat-triage',
       category: 'paloalto',
       vendor: 'Palo Alto Networks',
-      title: 'PAN-OS: Critical Threat Signatures & C2 Beacons',
-      target_index: '*',
-      spl: 'index=* sourcetype="pan:threat" (severity="critical" OR severity="high")\n| stats count, values(threat_name) as signatures, dc(dest) as targets by src, action\n| sort -count',
-      description: 'Detects active command-and-control beaconing, buffer overflow exploits, and malware payloads detected by App-ID / Threat Prevention.',
-      mockCols: ['src', 'action', 'count', 'signatures', 'targets'],
-      mockRows: [
-        ['10.40.1.105', 'blocked', 18, 'CobaltStrike.Beacon.HTTP | CVE-2024-3400', 4],
-        ['10.40.1.201', 'alert', 9, 'DNS.Tunneling.DataExfil', 1],
-        ['10.20.4.55', 'reset-both', 5, 'SMB.EternalBlue.Attempt', 2]
+      sourcetype: 'pan:threat',
+      default_index: 'idx_security_fw',
+      title: 'PAN-OS: Threat & Exploit Prevention Incidents',
+      spl: 'index=* sourcetype="pan:threat"\n| stats count, values(threat_name) as threats by severity, src, dst\n| sort -count',
+      description: 'Surfaces high-priority CVE vulnerabilities, IPS signatures, and command-and-control beacons.',
+      simCols: ['severity', 'src', 'dst', 'threats', 'count'],
+      simRows: [
+        ['critical', '198.51.100.44', '10.0.1.50', 'Log4j-RCE-Exploit', 14],
+        ['high', '203.0.113.12', '10.0.2.10', 'Cobalt-Strike-Beacon', 9],
+        ['medium', '192.0.2.99', '10.0.3.4', 'Port-Scan-Probe', 48]
       ]
     },
     {
       id: 'pan-globalprotect-vpn',
       category: 'paloalto',
       vendor: 'Palo Alto Networks',
-      title: 'PAN-OS: GlobalProtect VPN Failures & Latency',
-      target_index: '*',
-      spl: 'index=* sourcetype="pan:globalprotect" (status="failure" OR status="disconnected")\n| stats count by user, client_os, failure_reason\n| sort -count',
-      description: 'Troubleshoots remote worker VPN connectivity issues, HIP profile non-compliance, and tunnel establishment aborts.',
-      mockCols: ['user', 'client_os', 'failure_reason', 'count'],
-      mockRows: [
-        ['john.doe@corp', 'Mac OS X 14.4', 'HIP Check Failed: Missing EDR Agent', 12],
-        ['jane.smith@corp', 'Windows 11', 'Gateway unreachable / DNS timeout', 8],
-        ['alex.chen@corp', 'iOS 17.2', 'Invalid client certificate', 5]
+      sourcetype: 'pan:globalprotect',
+      default_index: 'idx_security_fw',
+      title: 'GlobalProtect: Failed Teleworker VPN Handshakes',
+      spl: 'index=* sourcetype="pan:globalprotect" (status="failed" OR error="*")\n| stats count by user, client_ver, public_ip, error\n| sort -count',
+      description: 'Audits remote teleworker VPN authentication failures and outdated client agent versions.',
+      simCols: ['user', 'client_ver', 'public_ip', 'error', 'count'],
+      simRows: [
+        ['dave.miller@corp', '6.0.1', '198.51.100.22', 'Certificate Expired', 12],
+        ['contractor_guest', '5.2.8', '203.0.113.41', 'MFA Token Timeout', 8]
       ]
     },
 
     // FORTINET
     {
-      id: 'fortigate-utm-blocks',
+      id: 'fortigate-traffic-denied',
       category: 'fortinet',
       vendor: 'Fortinet',
-      title: 'FortiGate: UTM Antivirus & IPS Block Triage',
-      target_index: '*',
-      spl: 'index=* (sourcetype="fortigate:utm" OR sourcetype="fortigate:traffic") (action="blocked" OR action="dropped")\n| stats count by subtype, attack, severity, srcip\n| sort -count',
-      description: 'Summarizes FortiGuard UTM IPS exploit signatures and antivirus blocks across edge SD-branch gateways.',
-      mockCols: ['subtype', 'attack', 'severity', 'srcip', 'count'],
-      mockRows: [
-        ['ips', 'HTTP.URI.Directory.Traversal', 'critical', '198.51.100.12', 48],
-        ['virus', 'EICAR_Test_File', 'high', '10.20.1.44', 16],
-        ['webfilter', 'Botnet.Command.Channel', 'critical', '10.30.2.88', 9]
+      sourcetype: 'fortinet:fortigate:traffic',
+      default_index: 'idx_security_fw',
+      title: 'FortiGate: Denied Sessions & Policy Violations',
+      spl: 'index=* sourcetype="fortinet:fortigate:traffic" (action="deny" OR action="close" OR action="block")\n| stats count, sum(sentbyte) as bytes_sent, sum(rcvdbyte) as bytes_recv by srcip, dstip, proto, app\n| sort -count\n| head 15',
+      description: 'Analyzes firewall deny events across FortiOS Next-Gen clusters to detect probing and blocked connections.',
+      simCols: ['srcip', 'dstip', 'proto', 'app', 'bytes_sent', 'bytes_recv', 'count'],
+      simRows: [
+        ['198.51.100.77', '10.200.1.10', 'tcp/443', 'SSL_VPN_Scan', 4820, 0, 842],
+        ['203.0.113.15', '10.200.1.25', 'tcp/22', 'SSH_Bruteforce', 1200, 0, 521]
       ]
     },
     {
-      id: 'fortigate-sdwan-sla',
+      id: 'fortigate-sdwan-health',
       category: 'fortinet',
       vendor: 'Fortinet',
-      title: 'FortiGate: SD-WAN Dynamic Path SLA Metrics',
-      target_index: '*',
-      spl: 'index=* sourcetype="fortinet:fortigate:event"\n| stats avg(latency_ms) as latency, avg(jitter_ms) as jitter, avg(packet_loss_pct) as loss by interface, sla_name\n| where loss > 2 OR latency > 80\n| sort -loss',
-      description: 'Monitors FortiGate SD-WAN health-check probes across ISP1, ISP2, and MPLS to observe SLA steering rules.',
-      mockCols: ['interface', 'sla_name', 'latency', 'jitter', 'loss'],
-      mockRows: [
-        ['wan1-broadband', 'Voice_SLA_Strict', 142.5, 38.2, 8.5],
-        ['wan2-cellular', 'Business_Apps_SLA', 98.4, 18.1, 4.2],
-        ['wan3-direct-fiber', 'Tier1_Core', 22.1, 2.4, 0.1]
+      sourcetype: 'fortinet:sdwan:health',
+      default_index: 'idx_network_ops',
+      title: 'FortiGate: SD-WAN Underlay Health & Jitter',
+      spl: 'index=* sourcetype="fortinet:sdwan:health"\n| stats avg(packet_loss) as avg_loss, avg(latency) as avg_lat by link_name, gateway\n| sort -avg_loss',
+      description: 'Audits multi-path SD-WAN underlays and SLA steering metrics across WAN edge interfaces.',
+      simCols: ['link_name', 'gateway', 'avg_loss', 'avg_lat'],
+      simRows: [
+        ['wan1-broadband', '198.51.100.1', 8.4, 142.1],
+        ['wan2-dia-fiber', '203.0.113.1', 0.2, 18.4]
       ]
     },
 
-    // ARISTA
+    // ARISTA NETWORKS
     {
-      id: 'arista-roce-pfc',
+      id: 'arista-interface-flaps',
       category: 'arista',
       vendor: 'Arista Networks',
-      title: 'Arista EOS: RoCE v2 PFC Watchdog & Pause Storms',
-      target_index: '*',
-      spl: 'index=* (sourcetype="arista:eos:syslog" OR sourcetype="arista:eos:openconfig") ("PFC" OR "watchdog" OR "pause_frames")\n| stats count, sum(rx_pause_frames) as pause_in, sum(tx_pause_frames) as pause_out by host, interface\n| sort -pause_in',
-      description: 'Isolates Priority Flow Control (PFC) deadlocks and buffer overruns in AI/ML GPU training fabrics.',
-      mockCols: ['host', 'interface', 'count', 'pause_in', 'pause_out'],
-      mockRows: [
-        ['arista-leaf-gpu-01', 'Ethernet1/1', 124, 8420000, 1200],
-        ['arista-leaf-gpu-02', 'Ethernet1/2', 98, 6210000, 480],
-        ['arista-spine-01', 'Ethernet32/1', 45, 1840000, 14000]
+      sourcetype: 'arista:eos:syslog',
+      default_index: 'idx_network_ops',
+      title: 'Arista EOS: Interface Flaps & MLAG State',
+      spl: 'index=* (sourcetype="arista:eos:syslog" OR sourcetype="arista:eos") ("LINEPROTO" OR "PFC" OR "MLAG" OR "watchdog")\n| stats count, latest(_time) as last_seen by host\n| sort -count',
+      description: 'Audits spine-leaf EOS link state transitions, MLAG peer sync drops, and optics flap alarms.',
+      simCols: ['host', 'count', 'last_seen'],
+      simRows: [
+        ['leaf-arista-01', 28, '2026-09-20 14:38:11'],
+        ['spine-arista-02', 12, '2026-09-20 14:21:40'],
+        ['leaf-arista-04', 5, '2026-09-20 13:45:10']
       ]
     },
     {
-      id: 'arista-evpn-mac',
+      id: 'arista-roce-congestion',
       category: 'arista',
       vendor: 'Arista Networks',
-      title: 'Arista EOS: BGP EVPN MAC Mobility Flapping',
-      target_index: '*',
-      spl: 'index=* sourcetype="arista:eos:syslog" ("MACMOVE" OR "evpn" OR "mobility")\n| stats count as flap_count, latest(_time) as last_flap by vni, mac_address, host\n| where flap_count > 2\n| sort -flap_count',
-      description: 'Detects bridging loops or virtual machine flapping across VXLAN overlay VTEPs.',
-      mockCols: ['vni', 'mac_address', 'host', 'flap_count', 'last_flap'],
-      mockRows: [
-        ['10020', '00:50:56:b2:33:44', 'arista-leaf-01', 18, '2026-09-20 14:38:12'],
-        ['10020', '00:50:56:b2:33:44', 'arista-leaf-02', 17, '2026-09-20 14:38:10'],
-        ['10050', 'fa:16:3e:89:12:00', 'arista-leaf-04', 6, '2026-09-20 14:22:04']
+      sourcetype: 'arista:eos:telemetry',
+      default_index: 'idx_network_ops',
+      title: 'Arista RoCE v2: AI DC Buffer Congestion & PFC Pauses',
+      spl: 'index=* sourcetype="arista:eos:telemetry" ("buffer" OR "pfc" OR "ecn")\n| stats sum(pause_rx_pkts) as pfc_pauses, avg(queue_depth_pct) as avg_buffer by device, interface\n| sort -pfc_pauses',
+      description: 'Tracks RDMA-over-Converged-Ethernet (RoCE v2) fabric headroom and Priority Flow Control frame counts in AI clusters.',
+      simCols: ['device', 'interface', 'pfc_pauses', 'avg_buffer'],
+      simRows: [
+        ['leaf-ai-gpu-01', 'Ethernet1/1', 4820100, 84.5],
+        ['leaf-ai-gpu-02', 'Ethernet1/2', 3918400, 78.2],
+        ['spine-ai-core-01', 'Ethernet3/1', 1200400, 61.4]
       ]
     },
 
-    // JUNIPER
+    // JUNIPER NETWORKS
     {
-      id: 'juniper-optical-alarms',
+      id: 'juniper-bgp-instability',
       category: 'juniper',
       vendor: 'Juniper Networks',
-      title: 'Junos OS: Optical Transceiver Loss & Laser Degradation',
-      target_index: '*',
-      spl: 'index=* sourcetype="juniper:junos:syslog" ("OPTICS" OR "ALARM" OR "laser" OR "power")\n| stats count, latest(_raw) as last_event by host, interface, alarm_state\n| sort -count',
-      description: 'Identifies QSFP28/QSFP-DD optics reporting high bit-error rates or impending laser failure.',
-      mockCols: ['host', 'interface', 'alarm_state', 'count'],
-      mockRows: [
-        ['mx960-edge-01', 'et-0/0/0', 'OPTICAL_POWER_CRITICAL_LOW', 42],
-        ['mx960-edge-02', 'et-0/1/0', 'TEMPERATURE_HIGH_WARN', 18],
-        ['ptx1000-core-01', 'et-1/0/0', 'LASER_BIAS_CURRENT_HIGH', 11]
+      sourcetype: 'juniper:junos',
+      default_index: 'idx_network_ops',
+      title: 'Junos OS: BGP Route Flapping & RPD Faults',
+      spl: 'index=* (sourcetype="juniper:junos" OR sourcetype="juniper:syslog") ("BGP" OR "rpd" OR "RPD_" OR "KRT")\n| stats count, latest(_raw) as latest_event by host\n| sort -count',
+      description: 'Correlates Routing Protocol Daemon (rpd) exceptions, peer dropouts, and kernel routing table sync delays.',
+      simCols: ['host', 'count', 'latest_event'],
+      simRows: [
+        ['edge-juniper-mx960', 38, 'RPD_BGP_NEIGHBOR_STATE_CHANGED: BGP peer 198.51.100.2 state changed to Idle'],
+        ['core-juniper-ptx10008', 14, 'RPD_BGP_NEIGHBOR_STATE_CHANGED: BGP peer 10.254.0.1 state changed to Established']
       ]
     },
     {
-      id: 'juniper-tilfa-reroute',
+      id: 'juniper-optical-tilfa',
       category: 'juniper',
       vendor: 'Juniper Networks',
-      title: 'Junos OS: RSVP/SR-TE LSP Path Reroute via TI-LFA',
-      target_index: '*',
-      spl: 'index=* sourcetype="juniper:junos:syslog" ("LSP" OR "reroute" OR "TI-LFA" OR "bypass")\n| stats count, values(lsp_name) as rerouted_lsps by host, primary_path, active_path',
-      description: 'Tracks Segment Routing Topology-Independent Loop-Free Alternate (TI-LFA) sub-50ms failover occurrences.',
-      mockCols: ['host', 'primary_path', 'active_path', 'count', 'rerouted_lsps'],
-      mockRows: [
-        ['ptx1000-core-01', 'et-0/0/0 (Direct-100G)', 'et-0/0/1 (Backup-LFA)', 4, 'lsp-dc1-to-dc2-primary'],
-        ['ptx1000-core-02', 'et-0/1/0 (Direct-100G)', 'et-0/1/2 (Backup-LFA)', 2, 'lsp-dc2-to-dc1-primary']
+      sourcetype: 'juniper:junos',
+      default_index: 'idx_network_ops',
+      title: 'Junos OS: Core 100G Optical Degradation & TI-LFA Reroute',
+      spl: 'index=* sourcetype="juniper:junos" ("TI-LFA" OR "optics" OR "laser" OR "degraded" OR "reroute")\n| stats count by host, interface\n| sort -count',
+      description: 'Surfaces Topology-Independent Loop-Free Alternate (TI-LFA) fast-reroute triggers caused by laser power loss.',
+      simCols: ['host', 'interface', 'count'],
+      simRows: [
+        ['core-juniper-ptx10008', 'et-0/0/1', 24],
+        ['core-juniper-ptx10008', 'et-0/0/2', 8]
       ]
     },
 
-    // CLOUD & K8S
+    // STORAGE & EDGE SECURITY
     {
-      id: 'aws-vpc-rejections',
-      category: 'cloud',
-      vendor: 'AWS Cloud',
-      title: 'AWS VPC Flow Logs: Security Group Rejections & Sweeps',
-      target_index: '*',
-      spl: 'index=* sourcetype="aws:cloudwatch:vpcflow" action="REJECT"\n| stats count, dc(dest_port) as scanned_ports by src_addr, dest_addr\n| where scanned_ports > 5\n| sort -scanned_ports',
-      description: 'Monitors ingress reconnaissance and unauthorized lateral connection attempts rejected by AWS Security Groups.',
-      mockCols: ['src_addr', 'dest_addr', 'scanned_ports', 'count'],
-      mockRows: [
-        ['198.51.100.88', '172.31.14.8', 42, 1420],
-        ['203.0.113.5', '172.31.28.104', 18, 540],
-        ['192.0.2.99', '172.31.10.2', 8, 190]
-      ]
-    },
-    {
-      id: 'cilium-hubble-drops',
-      category: 'cloud',
-      vendor: 'Kubernetes Cilium Hubble',
-      title: 'Cilium Hubble: NetworkPolicy Pod Drops',
-      target_index: '*',
-      spl: 'index=* sourcetype="kube:container:hubble" verdict="DROPPED"\n| stats count, latest(_time) as last_drop by source_namespace, source_pod, destination_namespace, destination_port\n| sort -count',
-      description: 'Pinpoints microsegmentation NetworkPolicy violations and unauthorized cross-namespace service mesh calls.',
-      mockCols: ['source_namespace', 'source_pod', 'destination_namespace', 'destination_port', 'count'],
-      mockRows: [
-        ['frontend', 'guestbook-fe-84d9f', 'payment', '5432', 84],
-        ['monitoring', 'prometheus-k8s-0', 'internal-admin', '8080', 29],
-        ['default', 'debug-pod-alpha', 'vault', '8200', 14]
-      ]
-    },
-    {
-      id: 'cloudflare-magic-wan',
-      category: 'cloud',
-      vendor: 'Cloudflare',
-      title: 'Cloudflare Magic WAN: Edge POP Latency & Packet Loss',
-      target_index: '*',
-      spl: 'index=* sourcetype="cloudflare:magic:wan"\n| stats avg(rtt_ms) as avg_rtt, max(loss_pct) as peak_loss by edge_pop_location, tunnel_name\n| sort -avg_rtt',
-      description: 'Compares anycast edge routing performance across regional Cloudflare data center points of presence.',
-      mockCols: ['edge_pop_location', 'tunnel_name', 'avg_rtt', 'peak_loss'],
-      mockRows: [
-        ['IAD (Ashburn)', 'ipsec-chicago-dc', 68.4, 4.2],
-        ['ORD (Chicago)', 'ipsec-chicago-dc', 14.1, 0.0],
-        ['LHR (London)', 'gre-frankfurt-br', 22.8, 0.2]
-      ]
-    },
-
-    // STORAGE & EDGE
-    {
-      id: 'netapp-nas-latency',
+      id: 'zscaler-tunnel-status',
       category: 'storage',
-      vendor: 'NetApp ONTAP',
-      title: 'NetApp ONTAP: NAS NFSv4.1 Latency & IOPS Spike',
-      target_index: '*',
-      spl: 'index=* sourcetype="netapp:ontap:nas"\n| stats avg(latency_ms) as avg_latency, max(iops) as max_iops, avg(capacity_used_pct) as storage_pct by cluster, vserver, volume\n| where avg_latency > 2.0\n| sort -avg_latency',
-      description: 'Detects storage volume bottlenecks, NFS metadata stalls, and capacity thresholds affecting compute clusters.',
-      mockCols: ['cluster', 'vserver', 'volume', 'avg_latency', 'max_iops', 'storage_pct'],
-      mockRows: [
-        ['ontap-cluster-01', 'svm_corp_nfs', 'vol_prod_ai_models', 4.82, 48200, 78.4],
-        ['ontap-cluster-01', 'svm_corp_nfs', 'vol_k8s_pvcs', 2.91, 31000, 64.1],
-        ['ontap-cluster-02', 'svm_backup', 'vol_archive_daily', 2.15, 12000, 92.0]
+      vendor: 'Zscaler',
+      sourcetype: 'zscaler:tunnel',
+      default_index: 'netops_logs',
+      title: 'Zscaler: Private Access Tunnel Health & Latency',
+      spl: 'index=* (sourcetype="zscaler:tunnel" OR sourcetype="zscaler:lss")\n| stats count by Application, PolicyAction, Customer\n| sort -count',
+      description: 'Monitors ZPA app connector tunnels, client TLS handshakes, and tunnel round-trip times.',
+      simCols: ['Application', 'PolicyAction', 'Customer', 'count'],
+      simRows: [
+        ['Corporate Intranet ERP', 'Allow', 'Acme-Enterprise', 1420],
+        ['Engineering Git Server', 'Allow', 'Acme-Enterprise', 980],
+        ['Admin SSH Bastion', 'Deny', 'Acme-Enterprise', 48]
       ]
     },
     {
-      id: 'f5-pool-health',
+      id: 'netskope-cloud-dlp',
+      category: 'storage',
+      vendor: 'Netskope',
+      sourcetype: 'netskope:sse',
+      default_index: 'netops_logs',
+      title: 'Netskope SSE: Cloud App Policy & DLP Violations',
+      spl: 'index=* (sourcetype="netskope:sse" OR sourcetype="netskope:json")\n| stats count by app_name, action, user\n| sort -count',
+      description: 'Audits Security Service Edge (SSE) CASB violations, sensitive data uploads, and shadow IT services.',
+      simCols: ['app_name', 'action', 'user', 'count'],
+      simRows: [
+        ['Salesforce', 'allow', 'marcus.vance@corp', 342],
+        ['Dropbox', 'block', 'contractor_guest@corp', 42],
+        ['WeTransfer', 'block', 'unknown_user', 18]
+      ]
+    },
+    {
+      id: 'f5-bigip-pool-health',
       category: 'storage',
       vendor: 'F5 BIG-IP',
-      title: 'F5 BIG-IP: Virtual Server Member Monitor Failures',
-      target_index: '*',
-      spl: 'index=* sourcetype="f5:bigip:syslog" ("Pool" OR "monitor" OR "down" OR "health")\n| stats count, latest(_raw) as last_log by host, pool_name, pool_member, status\n| sort -count',
-      description: 'Tracks backend application server health probe failures and automatic member draining events.',
-      mockCols: ['host', 'pool_name', 'pool_member', 'status', 'count'],
-      mockRows: [
-        ['f5-vip-core-01', 'pool_auth_api', '10.10.40.11:8443', 'DOWN', 16],
-        ['f5-vip-core-01', 'pool_auth_api', '10.10.40.12:8443', 'DOWN', 14],
-        ['f5-vip-core-02', 'pool_web_ssl', '10.10.20.15:443', 'DEGRADED', 5]
+      sourcetype: 'f5:bigip:syslog',
+      default_index: 'idx_network_ops',
+      title: 'F5 BIG-IP: Virtual Server & Pool Member Flaps',
+      spl: 'index=* (sourcetype="f5:bigip:syslog" OR sourcetype="f5:bigip:traffic")\n| stats count by vip_name, pool_name, status\n| sort -count',
+      description: 'Monitors LTM pool health monitor timeouts, node markings down, and SSL handshake rejections.',
+      simCols: ['vip_name', 'pool_name', 'status', 'count'],
+      simRows: [
+        ['vs_banking_api_443', 'pool_auth_services', 'monitor_failed', 18],
+        ['vs_checkout_app_443', 'pool_payment_nodes', 'healthy', 4200],
+        ['vs_legacy_crm_80', 'pool_crm_backend', 'disabled', 4]
+      ]
+    },
+    {
+      id: 'checkpoint-fw-drops',
+      category: 'storage',
+      vendor: 'Check Point',
+      sourcetype: 'checkpoint:cef',
+      default_index: 'idx_security_fw',
+      title: 'Check Point Quantum: Gateway Drops & Anti-Bot',
+      spl: 'index=* sourcetype="checkpoint:cef" (act="Drop" OR act="Reject" OR act="Block")\n| stats count by src, dst, proto, reason\n| sort -count',
+      description: 'Analyzes Quantum Security Gateway connection drops, Anti-Bot detections, and IPS signature matches.',
+      simCols: ['src', 'dst', 'proto', 'reason', 'count'],
+      simRows: [
+        ['198.51.100.99', '10.0.1.10', 'tcp/445', 'Smb_Exploit_Blocked', 142],
+        ['203.0.113.44', '10.0.2.20', 'tcp/3389', 'Brute_Force_Throttled', 89]
+      ]
+    },
+    {
+      id: 'nokia-sros-peering',
+      category: 'storage',
+      vendor: 'Nokia SR OS',
+      sourcetype: 'nokia:sros',
+      default_index: 'idx_network_ops',
+      title: 'Nokia 7750 SR OS: BGP Core Peering State',
+      spl: 'index=* (sourcetype="nokia:sros" OR sourcetype="nokia:sros:syslog")\n| stats count, latest(_raw) as latest_event by host\n| sort -count',
+      description: 'Tracks Nokia Service Router OS BGP session transitions and MPLS RSVP-TE LSP signal states.',
+      simCols: ['host', 'count', 'latest_event'],
+      simRows: [
+        ['pe01-7750', 19, 'Major: BGP #2002 Base Peer 10.254.0.1: Peer entered Established state'],
+        ['p02-7750', 6, 'Minor: RSVP #1004 LSP to 10.254.0.2: Path re-routed']
       ]
     },
 
-    // NOC / SOC SCENARIOS
+    // NOC / SOC INCIDENT TRIAGE (MV-001 through MV-016)
     {
-      id: 'mv-001-backbone',
+      id: 'noc-mv001-backbone',
       category: 'noc_soc',
-      vendor: 'Multi-Vendor NOC',
-      title: 'MV-001: Enterprise 5-Tier Backbone Hop Flow',
-      target_index: '*',
-      spl: 'index=* (sourcetype="cisco:ios:syslog" OR sourcetype="arista:eos:syslog" OR sourcetype="juniper:junos:syslog")\n| stats count, dc(host) as reporting_devices by sourcetype, severity\n| sort -count',
-      description: 'Holistic cross-vendor health snapshot across Access, Aggregation, Core, WAN, and Data Center tiers.',
-      mockCols: ['sourcetype', 'severity', 'count', 'reporting_devices'],
-      mockRows: [
-        ['cisco:ios:syslog', 'warning', 1840, 24],
-        ['arista:eos:syslog', 'informational', 1420, 16],
-        ['juniper:junos:syslog', 'critical', 42, 4],
-        ['cisco:ios:syslog', 'error', 38, 8]
+      vendor: 'Multi-Vendor Enterprise',
+      sourcetype: 'cisco:ios',
+      default_index: 'idx_network_ops',
+      title: 'MV-001: 5-Tier Backbone Multi-Vendor Event Cross-Correlation',
+      spl: 'index=* sourcetype IN ("cisco:ios", "pan:traffic", "juniper:junos", "arista:eos")\n| stats count, latest(_time) as last_seen by sourcetype, host\n| sort -count',
+      description: 'Cross-correlates multi-vendor syslog and flow events across core, distribution, and edge tiers.',
+      simCols: ['sourcetype', 'host', 'count', 'last_seen'],
+      simRows: [
+        ['cisco:ios', 'cat9600-core-01', 840, '2026-09-20 14:39:10'],
+        ['pan:traffic', 'fw-edge-cluster-01', 2410, '2026-09-20 14:39:05'],
+        ['juniper:junos', 'edge-juniper-mx960', 120, '2026-09-20 14:38:50'],
+        ['arista:eos', 'spine-arista-7280', 480, '2026-09-20 14:38:22']
       ]
     },
     {
-      id: 'mv-002-roce',
+      id: 'noc-mv002-roce-ai',
       category: 'noc_soc',
-      vendor: 'Data Center NOC',
-      title: 'MV-002: AI Data Center Fabric RoCE v2 Congestion',
-      target_index: '*',
-      spl: 'index=* (sourcetype="arista:eos:syslog" OR sourcetype="cisco:nexus:syslog") ("ECN" OR "PFC" OR "buffer_drop")\n| stats sum(ecn_marked_packets) as ecn_pkts, sum(pfc_pause_rx) as pause_rx by switch, port\n| sort -pause_rx',
-      description: 'Pinpoints RoCE v2 head-of-line blocking and Explicit Congestion Notification marking rates in Ultra-Ethernet AI networks.',
-      mockCols: ['switch', 'port', 'ecn_pkts', 'pause_rx'],
-      mockRows: [
-        ['leaf-spine-ai-01', 'Eth1/1', 1289000, 482000],
-        ['leaf-spine-ai-02', 'Eth1/2', 894000, 241000],
-        ['leaf-spine-ai-03', 'Eth1/1', 420000, 89000]
+      vendor: 'AI DC Fabric',
+      sourcetype: 'arista:eos:telemetry',
+      default_index: 'idx_network_ops',
+      title: 'MV-002: RoCE v2 AI Fabric Congestion Spikes',
+      spl: 'index=* sourcetype IN ("arista:eos:telemetry", "arista:eos", "cisco:dc:nexus9k")\n| stats count, latest(_time) as last_seen by host, sourcetype\n| sort -count',
+      description: 'Tracks telemetry and packet flow alarms across GPU compute clusters during intensive training workloads.',
+      simCols: ['host', 'sourcetype', 'count', 'last_seen'],
+      simRows: [
+        ['gpu-leaf-01', 'arista:eos:telemetry', 1840, '2026-09-20 14:39:15'],
+        ['gpu-leaf-02', 'arista:eos:telemetry', 1620, '2026-09-20 14:39:12'],
+        ['ai-spine-01', 'cisco:dc:nexus9k', 480, '2026-09-20 14:38:40']
       ]
     },
     {
-      id: 'mv-006-bgp-flap',
+      id: 'noc-mv006-bgp-flap',
       category: 'noc_soc',
-      vendor: 'Core Routing NOC',
-      title: 'MV-006: Core BGP Instability & Flap Dampening',
-      target_index: '*',
-      spl: 'index=* ("BGP-5-ADJCHANGE" OR "flapping" OR "dampening" OR "prefix")\n| stats count as flaps, dc(host) as affected_routers by neighbor_ip, as_number\n| where flaps > 1\n| sort -flaps',
-      description: 'Identifies external peering links triggering BGP flap dampening penalties and recursive next-hop resolution churn.',
-      mockCols: ['neighbor_ip', 'as_number', 'flaps', 'affected_routers'],
-      mockRows: [
-        ['198.51.100.1', '65001', 38, 6],
-        ['203.0.113.254', '65002', 22, 4],
-        ['192.0.2.1', '65100', 8, 2]
+      vendor: 'Core Routing',
+      sourcetype: 'juniper:junos',
+      default_index: 'idx_network_ops',
+      title: 'MV-006: Core BGP Peering Instability & Convergence',
+      spl: 'index=* sourcetype IN ("juniper:junos", "cisco:ios") "BGP"\n| stats count, latest(_time) as last_seen by host, sourcetype\n| sort -count',
+      description: 'Monitors peering flushes, hold timer expirations, and BGP route flap dampening across carriers.',
+      simCols: ['host', 'sourcetype', 'count', 'last_seen'],
+      simRows: [
+        ['edge-juniper-mx960', 'juniper:junos', 48, '2026-09-20 14:39:20'],
+        ['peer-cisco-asr9000', 'cisco:ios', 42, '2026-09-20 14:39:18']
       ]
     },
     {
-      id: 'mv-008-sdwan-brownout',
+      id: 'noc-mv008-sdwan-brownout',
       category: 'noc_soc',
-      vendor: 'WAN Operations NOC',
-      title: 'MV-008: SD-WAN Dynamic Path SLA Brownout',
-      target_index: 'cisco_mdt_metrics',
-      spl: 'index=* sourcetype="cisco:sdwan:linkhealth" sla_state="violated"\n| stats count, avg(latency_ms) as latency, avg(loss_pct) as loss by host, local_color\n| sort -latency',
-      description: 'Correlates branch loss and jitter spikes with automatic application policy failovers to backup circuits.',
-      mockCols: ['host', 'local_color', 'latency', 'loss', 'count'],
-      mockRows: [
-        ['vedge-branch-102', 'biz-internet', 184.2, 14.8, 48],
-        ['vedge-branch-105', 'lte', 215.0, 11.2, 36],
-        ['vedge-branch-201', 'mpls', 132.8, 6.4, 18]
+      vendor: 'SD-WAN Edge',
+      sourcetype: 'cisco:sdwan:linkhealth',
+      default_index: 'idx_network_ops',
+      title: 'MV-008: SD-WAN Dynamic SLA Failover & Path Steering',
+      spl: 'index=* sourcetype IN ("cisco:sdwan:linkhealth", "fortinet:sdwan:health")\n| stats count by host, sourcetype\n| sort -count',
+      description: 'Validates automated BFD SLA steering away from degraded public broadband underlays to MPLS backbones.',
+      simCols: ['host', 'sourcetype', 'count'],
+      simRows: [
+        ['vedge-branch-102', 'cisco:sdwan:linkhealth', 240],
+        ['fortigate-branch-105', 'fortinet:sdwan:health', 180]
       ]
     },
     {
-      id: 'mv-011-optical-tilfa',
+      id: 'noc-mv014-firewall-capacity',
       category: 'noc_soc',
-      vendor: 'Optical Transport NOC',
-      title: 'MV-011: 100G Optical Degradation & TI-LFA Reroute',
-      target_index: '*',
-      spl: 'index=* ("OPTICAL-ALARM" OR "TI-LFA" OR "loss_of_signal" OR "ber_exceeded")\n| stats count, values(interface) as affected_interfaces by host\n| sort -count',
-      description: 'Traces gradual optical signal-to-noise degradation through sudden sub-50 millisecond protection switching.',
-      mockCols: ['host', 'count', 'affected_interfaces'],
-      mockRows: [
-        ['ptx1000-core-01', 44, 'et-0/0/0, et-0/0/1'],
-        ['core-asr9k-01', 28, 'HundredGigE0/0/0/1'],
-        ['spine-nexus9k-03', 12, 'Eth1/49']
+      vendor: 'Edge Security',
+      sourcetype: 'pan:traffic',
+      default_index: 'idx_security_fw',
+      title: 'MV-014: Next-Gen Firewall Capacity & Session Saturation',
+      spl: 'index=* sourcetype IN ("pan:traffic", "fortinet:fortigate:traffic", "checkpoint:cef")\n| stats count by sourcetype, action\n| sort -count',
+      description: 'Surfaces edge cluster session table saturation, connection limits, and hardware offload degradation.',
+      simCols: ['sourcetype', 'action', 'count'],
+      simRows: [
+        ['pan:traffic', 'deny', 4820],
+        ['pan:traffic', 'allow', 18490],
+        ['fortinet:fortigate:traffic', 'deny', 3120],
+        ['checkpoint:cef', 'Drop', 1890]
       ]
     },
     {
-      id: 'mv-014-ngfw-capacity',
+      id: 'noc-mv016-crossdomain-slowness',
       category: 'noc_soc',
-      vendor: 'Edge Security SOC',
-      title: 'MV-014: Next-Gen Firewall Capacity Exhaustion',
-      target_index: '*',
-      spl: 'index=* (sourcetype="pan:traffic" OR sourcetype="fortigate:traffic") (cps_rate > 30000 OR session_util_pct > 70)\n| stats max(session_util_pct) as peak_sessions, max(cps_rate) as peak_cps by firewall_name\n| sort -peak_sessions',
-      description: 'Detects state table exhaustion, accelerated connections per second spikes, and DDoS resource saturation.',
-      mockCols: ['firewall_name', 'peak_sessions', 'peak_cps'],
-      mockRows: [
-        ['pan-pa5250-edge-01', 94.2, 84200],
-        ['fortigate-3000f-dc', 88.5, 71500],
-        ['pan-pa5250-edge-02', 76.1, 48000]
+      vendor: 'Cross-Domain NOC',
+      sourcetype: 'cisco:sdwan:dpi',
+      default_index: 'idx_network_ops',
+      title: 'MV-016: Cross-Domain User Application Slowness Triage',
+      spl: 'index=* sourcetype IN ("cisco:sdwan:dpi", "f5:bigip:traffic", "pan:traffic")\n| stats count by sourcetype\n| sort -count',
+      description: 'Pinpoints whether user experience degradation stems from transport WAN latency, ADC load, or security inspection.',
+      simCols: ['sourcetype', 'count'],
+      simRows: [
+        ['pan:traffic', 14200],
+        ['cisco:sdwan:dpi', 8400],
+        ['f5:bigip:traffic', 4200]
       ]
     }
   ];
 
-  var currentResults = {
-    columns: [],
-    rows: [],
-    rawEvents: []
-  };
+  var currentResults = { columns: [], rows: [], rawEvents: [] };
+  var activeQueryObj = null;
 
-  // --- Render Query List ---
+  // --- Render Query Cards in Left Sidebar ---
   function renderQueryList() {
-    var cat = $('#spl-category-select').val() || 'all';
-    var term = ($('#spl-search-filter').val() || '').toLowerCase().trim();
-    var listContainer = $('#spl-query-list');
-    listContainer.empty();
+    var category = $('#spl-category-select').val();
+    var filter = ($('#spl-search-filter').val() || '').toLowerCase().trim();
+    var container = $('#spl-query-list');
+    container.empty();
 
     var filtered = PRE_CANNED_QUERIES.filter(function(q) {
-      var matchCat = (cat === 'all' || q.category === cat);
-      var matchTerm = (!term || q.title.toLowerCase().indexOf(term) !== -1 || q.spl.toLowerCase().indexOf(term) !== -1 || q.vendor.toLowerCase().indexOf(term) !== -1 || q.description.toLowerCase().indexOf(term) !== -1);
-      return matchCat && matchTerm;
+      var catMatch = (category === 'all' || q.category === category);
+      var textMatch = !filter ||
+        q.title.toLowerCase().indexOf(filter) !== -1 ||
+        q.spl.toLowerCase().indexOf(filter) !== -1 ||
+        q.vendor.toLowerCase().indexOf(filter) !== -1 ||
+        q.description.toLowerCase().indexOf(filter) !== -1;
+      return catMatch && textMatch;
     });
 
     $('#query-count-badge').text(filtered.length + ' Queries');
 
     if (filtered.length === 0) {
-      listContainer.append(
-        '<div style="color: #64748b; font-size: 11px; font-style: italic; text-align: center; padding: 20px;">' +
-        'No matching queries found in category.' +
-        '</div>'
-      );
+      container.append('<div style="color: #64748b; font-size: 11px; text-align: center; padding: 20px;">No queries match your criteria.</div>');
       return;
     }
 
     filtered.forEach(function(q) {
+      var isActive = activeQueryObj && activeQueryObj.id === q.id;
       var card = $(
-        '<div class="spl-query-card" data-id="' + q.id + '" style="background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 10px 12px; cursor: pointer; transition: all 0.15s ease;">' +
+        '<div class="spl-query-card" data-id="' + q.id + '" style="' +
+          'padding: 10px 12px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;' +
+          'background: ' + (isActive ? '#0284c7' : '#1e293b') + ';' +
+          'border: 1px solid ' + (isActive ? '#38bdf8' : '#334155') + ';' +
+          'box-shadow: ' + (isActive ? '0 0 8px rgba(56, 189, 248, 0.3)' : 'none') + ';' +
+        '">' +
           '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">' +
-            '<b style="color: #f8fafc; font-size: 11px; line-height: 1.3;">' + q.title + '</b>' +
+            '<span style="color: ' + (isActive ? '#ffffff' : '#f8fafc') + '; font-size: 12px; font-weight: 600; line-height: 1.3;">' +
+              q.title +
+            '</span>' +
           '</div>' +
-          '<div style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px;">' +
-            '<span style="background: #0f172a; color: #38bdf8; font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 3px; font-family: monospace;">' + q.vendor + '</span>' +
-            '<span style="color: #64748b; font-size: 10px; font-family: monospace;">index=' + q.target_index + '</span>' +
+          '<div style="display: flex; align-items: center; gap: 6px; font-size: 10px; margin-bottom: 4px;">' +
+            '<span style="color: ' + (isActive ? '#e0f2fe' : '#38bdf8') + '; font-weight: 600;">' + q.vendor + '</span>' +
+            '<span style="color: #64748b;">•</span>' +
+            '<span style="color: ' + (isActive ? '#bae6fd' : '#94a3b8') + '; font-family: monospace;">' + (q.default_index || '*') + '</span>' +
           '</div>' +
-          '<p style="color: #94a3b8; font-size: 10px; margin: 0; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">' +
+          '<div style="color: ' + (isActive ? '#f0f9ff' : '#94a3b8') + '; font-size: 11px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">' +
             q.description +
-          '</p>' +
+          '</div>' +
         '</div>'
       );
-      listContainer.append(card);
+      container.append(card);
     });
   }
 
-  // --- Select Query ---
-  function selectQuery(queryId) {
-    var q = PRE_CANNED_QUERIES.find(function(item) { return item.id === queryId; });
-    if (!q) return;
+  // --- Select Query from Catalog ---
+  function selectQuery(id) {
+    var found = PRE_CANNED_QUERIES.find(function(q) { return q.id === id; });
+    if (!found) return;
 
-    $('.spl-query-card').css({ 'border-color': '#334155', 'background': '#1e293b' });
-    $('.spl-query-card[data-id="' + queryId + '"]').css({ 'border-color': '#0284c7', 'background': 'rgba(2, 132, 199, 0.12)' });
-
-    $('#spl-editor-input').val(q.spl);
-    if (q.target_index && q.target_index !== '*') {
-      $('#spl-target-index').val(q.target_index);
-    } else {
-      $('#spl-target-index').val('*');
+    activeQueryObj = found;
+    $('#spl-editor-input').val(found.spl);
+    if (found.default_index) {
+      $('#spl-target-index').val(found.default_index);
     }
 
-    // Auto run query on selection
+    renderQueryList();
     executeQuery();
   }
 
@@ -554,73 +575,36 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
     }
   }
 
-  // --- In-Memory Fast Execution ---
-  function executeInstantSPL(query, startTime) {
-    var activeQueryObj = PRE_CANNED_QUERIES.find(function(q) {
-      return q.spl.trim() === query || query.indexOf(q.spl.split('\n')[0].trim()) !== -1;
-    });
-
-    setTimeout(function() {
-      var durationMs = Math.round(performance.now() - startTime + (Math.random() * 15 + 10));
-      var columns = [];
-      var rows = [];
-      var rawEvents = [];
-
-      if (activeQueryObj && activeQueryObj.mockCols) {
-        columns = activeQueryObj.mockCols;
-        rows = activeQueryObj.mockRows;
-        rawEvents = rows.map(function(r, idx) {
-          return '[' + new Date(Date.now() - idx * 3600000).toISOString() + '] event_id=' + (1000 + idx) + ' ' +
-                 columns.map(function(c, ci) { return c + '="' + r[ci] + '"'; }).join(' ');
-        });
-      } else {
-        columns = ['_time', 'host', 'sourcetype', 'action', 'event_detail'];
-        rows = [
-          ['2026-09-20 14:40:02', 'core-switch-01', 'cisco:ios:syslog', 'permitted', '%SEC-6-IPACCESSLOGP: list 101 permitted tcp 192.168.1.100(49201) -> 10.0.0.1(443)'],
-          ['2026-09-20 14:38:15', 'vedge-branch-102', 'cisco:sdwan:linkhealth', 'violated', 'bfd: event=state_change loss_pct=14.8 latency_ms=184.2 sla_state=violated'],
-          ['2026-09-20 14:35:40', 'fw-edge-01', 'pan:traffic', 'deny', 'action=deny src=198.51.100.44 app=ms-rdp dst=10.0.1.50 dst_port=3389'],
-          ['2026-09-20 14:30:11', 'leaf-arista-01', 'arista:eos:syslog', 'alert', 'PFC watchdog triggered on interface Ethernet1/1 pause_rx=8420000']
-        ];
-        rawEvents = rows.map(function(r) { return r[0] + ' ' + r[1] + ' ' + r[2] + ' ' + r[4]; });
-      }
-
-      var totalScanned = Math.round(rows.length * (Math.random() * 200 + 400));
-      var totalMatched = rows.length;
-
-      currentResults = {
-        columns: columns,
-        rows: rows,
-        rawEvents: rawEvents
-      };
-
-      $('#stat-duration').text(durationMs + ' ms');
-      $('#stat-scanned').text(totalScanned.toLocaleString());
-      $('#stat-matched').text(totalMatched.toLocaleString());
-      $('#spl-status-pill').text('SUCCESS').css({ 'background': '#14532d', 'color': '#86efac' });
-
-      renderActiveView();
-    }, 40);
+  // --- Get CSRF Token Helper ---
+  function getCsrfToken() {
+    if (window.Splunk && window.Splunk.util && typeof window.Splunk.util.getConfigValue === 'function') {
+      var fk = window.Splunk.util.getConfigValue('FORM_KEY');
+      if (fk) return fk;
+    }
+    var m = document.cookie.match(/(?:^|;\s*)(?:splunkweb_csrf_token_[0-9]+|splunkweb_csrf_token)=([^;]*)/);
+    return (m && m[1]) ? decodeURIComponent(m[1]) : '';
   }
 
   // --- Splunkd REST API Search Execution ---
   function executeSplunkdSearch(query, startTime) {
-    var searchStr = query.indexOf('search ') === 0 ? query : 'search ' + query;
+    // If query does not start with | or search, prepend search
+    var searchStr = query;
+    if (!query.startsWith('|') && !query.startsWith('search ')) {
+      searchStr = 'search ' + query;
+    }
+
     var earliest = $('#spl-time-range').val();
     if (earliest === 'all') earliest = '0';
 
     var exportUrl = '/splunkd/__raw/services/search/jobs/export?output_mode=json';
-    var csrfToken = (function() {
-      var m = document.cookie.match(/splunkweb_csrf_token_8000=([^;]+)/) ||
-              document.cookie.match(/splunkweb_csrf_token_8800=([^;]+)/) ||
-              document.cookie.match(/splunkweb_csrf_token=([^;]+)/);
-      return m ? m[1] : '';
-    })();
+    var csrfToken = getCsrfToken();
 
     $.ajax({
       url: exportUrl,
       type: 'POST',
       headers: {
-        'X-Splunk-Form-Key': csrfToken
+        'X-Splunk-Form-Key': csrfToken,
+        'X-Requested-With': 'XMLHttpRequest'
       },
       data: {
         search: searchStr,
@@ -628,7 +612,7 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
         latest_time: 'now',
         preview: 'false'
       },
-      timeout: 15000
+      timeout: 20000
     })
     .done(function(rawResp) {
       var durationMs = Math.round(performance.now() - startTime);
@@ -642,7 +626,13 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
       });
 
       if (events.length === 0) {
-        executeInstantSPL(query, startTime);
+        // Honest Empty State - Do NOT return fake rows!
+        currentResults = { columns: [], rows: [], rawEvents: [], emptyReason: 'splunk_no_results' };
+        $('#stat-duration').text(durationMs + ' ms');
+        $('#stat-scanned').text('0');
+        $('#stat-matched').text('0');
+        $('#spl-status-pill').text('0 RESULTS (SPLUNKD)').css({ 'background': '#334155', 'color': '#94a3b8' });
+        renderActiveView();
         return;
       }
 
@@ -663,19 +653,115 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
       currentResults = {
         columns: columns,
         rows: rows,
-        rawEvents: rawEvents
+        rawEvents: rawEvents,
+        isLive: true
       };
 
       $('#stat-duration').text(durationMs + ' ms');
       $('#stat-scanned').text(events.length.toLocaleString());
       $('#stat-matched').text(events.length.toLocaleString());
-      $('#spl-status-pill').text('SUCCESS (SPLUNKD)').css({ 'background': '#14532d', 'color': '#86efac' });
+      $('#spl-status-pill').text('LIVE (' + events.length + ' EVENTS)').css({ 'background': '#14532d', 'color': '#86efac' });
 
       renderActiveView();
     })
     .fail(function(xhr, textStatus, err) {
-      console.warn('Splunkd search returned:', textStatus, err, '- falling back to in-memory simulation engine.');
-      executeInstantSPL(query, startTime);
+      var durationMs = Math.round(performance.now() - startTime);
+      console.warn('Splunkd search returned status:', xhr.status, textStatus);
+      currentResults = {
+        columns: [],
+        rows: [],
+        rawEvents: [],
+        emptyReason: 'splunk_error',
+        errorMsg: 'Splunkd Search Error (' + (xhr.status || textStatus) + '): ' + (xhr.responseText ? xhr.responseText.slice(0, 150) : err)
+      };
+      $('#stat-duration').text(durationMs + ' ms');
+      $('#spl-status-pill').text('SEARCH FAILED').css({ 'background': '#7f1d1d', 'color': '#fca5a5' });
+      renderActiveView();
+    });
+  }
+
+  // --- In-Memory Fast Benchmark Simulation Engine ---
+  function executeInstantSPL(query, startTime) {
+    setTimeout(function() {
+      var durationMs = Math.round(performance.now() - startTime + (Math.random() * 10 + 5));
+      var columns = [];
+      var rows = [];
+      var rawEvents = [];
+
+      var matchObj = PRE_CANNED_QUERIES.find(function(q) {
+        return q.spl.trim() === query || query.indexOf(q.id) !== -1;
+      }) || activeQueryObj;
+
+      if (matchObj && matchObj.simCols) {
+        columns = matchObj.simCols;
+        rows = matchObj.simRows;
+        rawEvents = rows.map(function(r, idx) {
+          return '[' + new Date(Date.now() - idx * 3600000).toISOString() + '] ' +
+                 columns.map(function(c, ci) { return c + '="' + r[ci] + '"'; }).join(' ');
+        });
+      } else {
+        columns = ['host', 'sourcetype', 'action', 'event_summary'];
+        rows = [
+          ['cat9300-access-01', 'cisco:ios:syslog', 'line protocol up', '%LINK-3-UPDOWN: Interface GigabitEthernet1/0/24 changed state to up'],
+          ['vedge-branch-102', 'cisco:sdwan:linkhealth', 'violated', 'loss_percentage=14.8 latency=184.2ms jitter=22.4ms'],
+          ['fw-edge-01', 'pan:traffic', 'deny', 'action=deny src=198.51.100.44 app=ms-rdp dest_port=3389']
+        ];
+        rawEvents = rows.map(function(r) { return r[0] + ' ' + r[1] + ' ' + r[3]; });
+      }
+
+      currentResults = {
+        columns: columns,
+        rows: rows,
+        rawEvents: rawEvents,
+        isSimulated: true
+      };
+
+      $('#stat-duration').text(durationMs + ' ms');
+      $('#stat-scanned').text(Math.round(rows.length * 150).toLocaleString());
+      $('#stat-matched').text(rows.length.toLocaleString());
+      $('#spl-status-pill').text('SIMULATED BENCHMARK').css({ 'background': '#1e293b', 'color': '#38bdf8' });
+
+      renderActiveView();
+    }, 40);
+  }
+
+  // --- Quick Telemetry Blaster from Playground ---
+  function blastSampleForQuery() {
+    var st = activeQueryObj ? activeQueryObj.sourcetype : 'cisco:ios';
+    var idx = activeQueryObj ? (activeQueryObj.default_index || 'main') : 'main';
+
+    var btn = $('#btn-quick-blast');
+    btn.prop('disabled', true).text('⏳ Ingesting to ' + idx + '...');
+
+    var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+    var locale = localeMatch ? localeMatch[1] : 'en-US';
+    var endpoint = '/' + locale + '/splunkd/__raw/services/datablaster/execute?action=blast_hec';
+
+    $.ajax({
+      url: endpoint,
+      type: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Splunk-Form-Key': getCsrfToken()
+      },
+      data: JSON.stringify({
+        sourcetype: st,
+        index: idx,
+        volume: 15
+      }),
+      timeout: 10000
+    })
+    .done(function(resp) {
+      btn.text('✔ Ingested! Re-running search...').css('background', '#16a34a');
+      setTimeout(function() {
+        executeQuery();
+      }, 1500);
+    })
+    .fail(function(xhr) {
+      btn.text('✖ Ingestion Failed').css('background', '#dc2626');
+      setTimeout(function() {
+        btn.prop('disabled', false).text('⚡ Retry Telemetry Ingestion').css('background', '#0284c7');
+      }, 2500);
     });
   }
 
@@ -703,10 +789,49 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
     var cols = currentResults.columns;
     var rows = currentResults.rows;
 
+    // Simulation Banner
+    var existingBanner = $('#spl-sim-notice-banner');
+    if (currentResults.isSimulated) {
+      if (!existingBanner.length) {
+        container.parent().prepend(
+          '<div id="spl-sim-notice-banner" style="background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; font-size: 11px; color: #38bdf8; display: flex; justify-content: space-between; align-items: center;">' +
+            '<span>⚡ <b>Fast Benchmark Mode:</b> Displaying simulated benchmark events. Switch Execution Engine above to <b>Splunk Enterprise REST</b> to query live indexed data.</span>' +
+          '</div>'
+        );
+      }
+    } else {
+      existingBanner.remove();
+    }
+
+    // Empty state handling
     if (!cols || cols.length === 0 || !rows || rows.length === 0) {
+      var st = activeQueryObj ? activeQueryObj.sourcetype : 'this vendor';
+      var idx = activeQueryObj ? (activeQueryObj.default_index || 'main') : 'main';
+
+      var emptyHtml =
+        '<div style="padding: 40px 20px; text-align: center; color: #94a3b8;">' +
+          '<div style="font-size: 32px; margin-bottom: 12px;">📡</div>' +
+          '<div style="font-size: 15px; font-weight: 700; color: #f8fafc; margin-bottom: 8px;">' +
+            (currentResults.emptyReason === 'splunk_error' ? 'Search Execution Failed' : 'No Matching Events Found in Splunk') +
+          '</div>' +
+          '<div style="font-size: 12px; max-width: 520px; margin: 0 auto 18px auto; line-height: 1.5; color: #94a3b8;">' +
+            (currentResults.errorMsg ? currentResults.errorMsg :
+              'Splunk executed the search but found 0 events matching this query in index <code>' + idx + '</code>. ' +
+              'Telemetry for sourcetype <code>' + st + '</code> has not been indexed yet.') +
+          '</div>' +
+          '<div style="display: inline-flex; gap: 10px;">' +
+            '<button type="button" id="btn-quick-blast" style="background: #0284c7; color: #ffffff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);">' +
+              '<span>⚡</span> Blast ' + st + ' Telemetry to Splunk Now' +
+            '</button>' +
+            '<button type="button" id="btn-switch-to-sim" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 9px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">' +
+              'View Simulated Benchmark' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
       container.append(
-        '<thead><tr style="background: #1e293b; color: #94a3b8; border-bottom: 1px solid #334155;"><th style="padding: 8px 12px;">Notice</th></tr></thead>' +
-        '<tbody><tr><td style="padding: 24px; text-align: center; color: #64748b; font-style: italic;">No matching events or results returned for this query.</td></tr></tbody>'
+        '<thead><tr style="background: #1e293b; color: #94a3b8;"><th style="padding: 8px 12px;">Status</th></tr></thead>' +
+        '<tbody><tr><td style="padding: 0;">' + emptyHtml + '</td></tr></tbody>'
       );
       return;
     }
@@ -739,9 +864,9 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
         var cellColor = '#e2e8f0';
         var isNum = !isNaN(parseFloat(cellText)) && isFinite(cellText);
 
-        if (cellText === 'VIOLATED' || cellText === 'critical' || cellText === 'DOWN' || cellText === 'deny' || cellText === 'blocked') {
+        if (cellText === 'VIOLATED' || cellText === 'critical' || cellText === 'DOWN' || cellText === 'deny' || cellText === 'blocked' || cellText === 'FRAUD' || cellText === 'DENIED' || cellText === 'FAILURE') {
           cellColor = '#f87171';
-        } else if (cellText === 'NORMAL' || cellText === 'healthy' || cellText === 'Passed' || cellText === 'permitted') {
+        } else if (cellText === 'NORMAL' || cellText === 'healthy' || cellText === 'Passed' || cellText === 'permitted' || cellText === 'SUCCESS') {
           cellColor = '#4ade80';
         } else if (cellText === 'DEGRADED' || cellText === 'warning' || cellText === 'alert') {
           cellColor = '#fbbf24';
@@ -867,7 +992,11 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
     var earliest = $('#spl-time-range').val();
     if (earliest === 'all') earliest = '0';
 
-    var searchStr = query.indexOf('search ') === 0 ? query : 'search ' + query;
+    var searchStr = query;
+    if (!query.startsWith('|') && !query.startsWith('search ')) {
+      searchStr = 'search ' + query;
+    }
+
     var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
     var locale = localeMatch ? localeMatch[1] : 'en-US';
 
@@ -888,12 +1017,19 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
 
     $(document).on('click', '#btn-run-spl', executeQuery);
     $(document).on('click', '#btn-format-spl', prettifySPL);
+    $(document).on('click', '#btn-quick-blast', blastSampleForQuery);
+    $(document).on('click', '#btn-switch-to-sim', function() {
+      $('#spl-exec-mode').val('instant');
+      executeQuery();
+    });
+
     $(document).on('click', '#btn-clear-spl', function() {
       $('#spl-editor-input').val('');
       currentResults = { columns: [], rows: [], rawEvents: [] };
       renderActiveView();
       $('#spl-status-pill').text('CLEARED').css({ 'background': '#1e293b', 'color': '#94a3b8' });
     });
+
     $(document).on('click', '#btn-copy-spl', function() {
       var val = $('#spl-editor-input').val();
       if (navigator.clipboard) {

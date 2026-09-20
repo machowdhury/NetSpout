@@ -19,6 +19,9 @@ import time
 import signal
 import subprocess
 import tempfile
+import urllib.request
+import urllib.error
+import ssl
 from typing import Dict, Any, Tuple, Optional
 
 # Splunk imports (with safe fallbacks for standalone unit testing)
@@ -585,7 +588,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         action = "start"
     allowed_actions = [
         "start", "start_simulation", "run_scenario", "stop", "status", "logs", "validate",
-        "blast_single_device", "stream_canvas_topology", "onboard_sample",
+        "blast_single_device", "stream_canvas_topology", "onboard_sample", "blast_hec",
         "test_hec", "get_config", "save_config", "validate_environment",
         "create_index", "list_indexes"
     ]
@@ -594,6 +597,24 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
 
     if action in ["status", "stop", "logs", "get_config"]:
         return {"action": action}
+
+    if action == "blast_hec":
+        raw_events = params.get("events")
+        if not raw_events or not isinstance(raw_events, list):
+            raise ValueError("Parameter 'events' must be a non-empty list of event objects")
+        stored_cfg = get_stored_config()
+        hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8888/services/collector")).strip()
+        token = str(params.get("token") or stored_cfg.get("hec_token", "00000000-0000-0000-0000-000000000000")).strip()
+        ssl_verify = bool(params.get("ssl_verify", False))
+        session_key = str(params.get("session_key") or params.get("sessionKey", ""))
+        return {
+            "action": "blast_hec",
+            "hec": hec_url,
+            "token": token,
+            "ssl_verify": ssl_verify,
+            "events": raw_events,
+            "session_key": session_key
+        }
 
     if action == "list_indexes":
         return {
@@ -1046,6 +1067,105 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 "nodes": len(clean["nodes"]),
                 "links": len(clean["links"])
             })
+
+        elif action == "blast_hec":
+            hec_url = clean["hec"]
+            token = clean["token"]
+            ssl_verify = clean["ssl_verify"]
+            events = clean["events"]
+            session_key = clean.get("session_key", "")
+
+            formatted_lines = []
+            target_index = "idx_network_ops"
+            target_sourcetype = "custom:telemetry"
+
+            for ev in events:
+                if isinstance(ev, dict):
+                    if "index" in ev:
+                        target_index = ev["index"]
+                    if "sourcetype" in ev:
+                        target_sourcetype = ev["sourcetype"]
+                    formatted_lines.append(json.dumps(ev))
+                elif isinstance(ev, str):
+                    formatted_lines.append(json.dumps({
+                        "event": ev,
+                        "time": time.time(),
+                        "index": target_index,
+                        "sourcetype": target_sourcetype
+                    }))
+
+            raw_payload = "\n".join(formatted_lines).encode("utf-8")
+
+            target_urls = [hec_url]
+            if ":8888" in hec_url:
+                target_urls.append(hec_url.replace(":8888", ":8088"))
+            elif ":8088" in hec_url:
+                target_urls.append(hec_url.replace(":8088", ":8888"))
+            if "127.0.0.1" in hec_url:
+                target_urls.append(hec_url.replace("127.0.0.1", "localhost"))
+            elif "localhost" in hec_url:
+                target_urls.append(hec_url.replace("localhost", "127.0.0.1"))
+
+            ctx = ssl.create_default_context()
+            if not ssl_verify:
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+
+            last_err = None
+            success = False
+            resp_data = ""
+
+            for url in target_urls:
+                try:
+                    req = urllib.request.Request(
+                        url,
+                        data=raw_payload,
+                        headers={
+                            "Authorization": f"Splunk {token}",
+                            "Content-Type": "application/json"
+                        }
+                    )
+                    with urllib.request.urlopen(req, timeout=10, context=ctx) as response:
+                        resp_data = response.read().decode("utf-8", errors="replace")
+                        success = True
+                        break
+                except Exception as e:
+                    last_err = str(e)
+                    continue
+
+            if success:
+                return (200, {
+                    "status": "success",
+                    "message": f"Successfully ingested {len(events)} event(s) via HEC into '{target_index}'!",
+                    "events_count": len(events),
+                    "hec_response": resp_data
+                })
+            else:
+                if session_key and SPLUNK_AVAILABLE:
+                    try:
+                        import splunk.rest
+                        for ev in events:
+                            st = ev.get("sourcetype", target_sourcetype) if isinstance(ev, dict) else target_sourcetype
+                            idx = ev.get("index", target_index) if isinstance(ev, dict) else target_index
+                            ev_text = ev.get("event", "") if isinstance(ev, dict) else str(ev)
+                            splunk.rest.simpleRequest(
+                                f"/services/receivers/simple?sourcetype={st}&index={idx}",
+                                sessionKey=session_key,
+                                postargs=ev_text,
+                                method="POST"
+                            )
+                        return (200, {
+                            "status": "success",
+                            "message": f"Successfully ingested {len(events)} event(s) via Splunk receiver pipeline!",
+                            "events_count": len(events)
+                        })
+                    except Exception as fb_err:
+                        last_err = f"{last_err} | Fallback receiver error: {fb_err}"
+
+                return (400, {
+                    "status": "error",
+                    "message": f"HEC delivery failed: {last_err}"
+                })
 
         elif action == "onboard_sample":
             sourcetype = clean.get("sourcetype", "custom:telemetry").strip()

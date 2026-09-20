@@ -64,6 +64,25 @@ for xml_file in all_xml:
 if xml_failures == 0:
     record_test("Suite 1", "All XML Files Well-Formed", True, f"100% Valid XML across {len(all_xml)} files")
 
+# Verify Top Navigation Menu
+nav_path = os.path.join(NETSPOUT_DIR, "default/data/ui/nav/default.xml")
+if os.path.exists(nav_path):
+    tree = ET.parse(nav_path)
+    root = tree.getroot()
+    top_items = [elem.get("label") for elem in root]
+    expected_items = [
+        "Data Onboarding Wizard",
+        "Scenario Builder",
+        "Canvas Orchestrator",
+        "Data Blaster Dashboard",
+        "Network Scenario Insight",
+        "SPL Playground",
+        "Operations",
+        "Search"
+    ]
+    nav_ok = (top_items == expected_items)
+    record_test("Suite 1", "Top Navigation 8 Exact Tabs", nav_ok, f"Found: {top_items}")
+
 # -----------------------------------------------------------------------------
 # SUITE 2: JavaScript Syntax Verification
 # -----------------------------------------------------------------------------

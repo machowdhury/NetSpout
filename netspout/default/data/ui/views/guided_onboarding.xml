@@ -547,9 +547,9 @@
                   <label style="color: #f8fafc; font-size: 12px; font-weight: 600; margin: 0;">
                     Target Splunk Index:
                   </label>
-                  <button type="button" id="btn-wizard-open-custom-index" style="background: #059669; color: #ffffff; border: none; border-radius: 4px; padding: 5px 12px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                    <span>+</span> Build New Custom Index
-                  </button>
+                  <span style="color: #94a3b8; font-size: 11px; font-family: monospace;">
+                    Default: <b style="color: #38bdf8;">idx_security_fw</b>
+                  </span>
                 </div>
 
                 <select id="wizard-target-index-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px 12px; color: #f8fafc; font-family: monospace; font-size: 13px; box-sizing: border-box; margin-bottom: 12px;">
@@ -561,38 +561,28 @@
                   <option value="main">main (Default Splunk Index)</option>
                 </select>
 
-                <!-- Custom Index Builder Modal/Inline Drawer -->
-                <div id="wizard-custom-index-drawer" style="display: none; background: #090d16; border: 1px solid #059669; border-radius: 6px; padding: 16px; margin-top: 14px;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 6px;">
-                    <b style="color: #34d399; font-size: 12px;">Provision Custom Splunk Index</b>
-                    <button type="button" id="btn-wizard-close-custom-index" style="background: transparent; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">&#215;</button>
+                <!-- Index Documentation & Guidance Card -->
+                <div style="background: #090d16; border: 1px solid #1e293b; border-radius: 6px; padding: 12px 16px; margin-top: 14px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                    <b style="color: #38bdf8; font-size: 11px; display: flex; align-items: center; gap: 6px;">
+                      <span>📘</span> Enterprise Index Management &amp; Custom Index Creation
+                    </b>
+                    <span style="color: #64748b; font-size: 10px; font-family: monospace;">Splunk Best Practices</span>
                   </div>
-                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px;">
-                    <div>
-                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Index Name *</label>
-                      <input type="text" id="wizard-custom-index-name" placeholder="e.g. idx_branch_office" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0; line-height: 1.4;">
+                    In accordance with Splunk Enterprise and Splunk Cloud security guidelines, index provisioning must be performed by Splunk Administrators via official configuration or Web UI:
+                  </p>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 11px;">
+                    <div style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 10px;">
+                      <b style="color: #cbd5e1; display: block; margin-bottom: 4px;">Option A: Splunk Web UI</b>
+                      <span style="color: #64748b;">Navigate to </span><span style="color: #38bdf8; font-family: monospace;">Settings &gt; Indexes &gt; New Index</span><br/>
+                      <span style="color: #94a3b8;">Specify Index Name, select Data Type (Events vs Metrics), and click Save.</span>
                     </div>
-                    <div>
-                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Data Type *</label>
-                      <select id="wizard-custom-index-datatype" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;">
-                        <option value="event" selected="selected">Event Index</option>
-                        <option value="metric">Metric Index</option>
-                      </select>
+                    <div style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 10px;">
+                      <b style="color: #cbd5e1; display: block; margin-bottom: 4px;">Option B: indexes.conf CLI</b>
+                      <span style="color: #64748b;">Define stanza in </span><span style="color: #38bdf8; font-family: monospace;">$SPLUNK_HOME/etc/apps/netspout/local/indexes.conf</span>:<br/>
+                      <code style="color: #a78bfa; font-family: monospace; font-size: 10px; display: block; margin-top: 2px;">[my_index]<br/>homePath=$SPLUNK_DB/my_index/db<br/>coldPath=$SPLUNK_DB/my_index/colddb<br/>thawedPath=$SPLUNK_DB/my_index/thaweddb</code>
                     </div>
-                    <div>
-                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Max Size (MB)</label>
-                      <input type="number" id="wizard-custom-index-maxsize" value="51200" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;" />
-                    </div>
-                    <div>
-                      <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Retention (Days)</label>
-                      <input type="number" id="wizard-custom-index-retention" value="90" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #f8fafc; font-size: 11px; box-sizing: border-box;" />
-                    </div>
-                  </div>
-                  <div style="display: flex; gap: 8px; align-items: center;">
-                    <button type="button" id="btn-wizard-submit-custom-index" style="background: #059669; color: #ffffff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">
-                      Create &amp; Select Index
-                    </button>
-                    <div id="wizard-custom-index-msg" style="font-size: 11px; font-family: monospace; color: #34d399;"></div>
                   </div>
                 </div>
 

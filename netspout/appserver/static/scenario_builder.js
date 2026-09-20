@@ -1123,37 +1123,6 @@ require([
     sendIngestion(st, idx, content, host, ip, count);
   }
 
-  // Continuous Streamer (Syslog / Selected Mode)
-  function startContinuousStream() {
-    if (continuousTimer) return;
-    var rate = parseInt($('#continuous-rate-select').val() || "50", 10);
-    var intervalMs = Math.round(1000 / Math.min(rate, 20));
-    var burstPerTick = Math.max(1, Math.round(rate / 20));
-
-    $('#btn-start-continuous').hide();
-    $('#btn-stop-continuous').show();
-    $('#continuous-status-badge').text('STREAMING ACTIVE (' + rate + ' EPS)').css({ 'background': '#15803d', 'color': '#ffffff' });
-
-    log('<span style="color: #4ade80; font-weight: bold;">CONTINUOUS STREAM STARTED:</span> Target rate ' + rate + ' EPS...');
-
-    continuousTimer = setInterval(function() {
-      var mode = $('input[name="sourcetype_mode"]:checked').val();
-      if (mode === "single") {
-        emitSyslogSingle(burstPerTick);
-      } else {
-        emitSyslogCount(burstPerTick);
-      }
-    }, intervalMs);
-  }
-
-  function stopContinuousStream() {
-    if (continuousTimer) clearInterval(continuousTimer);
-    continuousTimer = null;
-    $('#btn-start-continuous').show();
-    $('#btn-stop-continuous').hide();
-    $('#continuous-status-badge').text('STREAM IDLE').css({ 'background': '#334155', 'color': '#94a3b8' });
-    log('<span style="color: #f59e0b; font-weight: bold;">CONTINUOUS STREAM STOPPED.</span>');
-  }
 
   // Sequential Path Flow Traversal Stream
   function startPathStream() {
@@ -1294,8 +1263,6 @@ require([
     });
 
     // Streaming buttons
-    $('#btn-start-continuous').on('click', startContinuousStream);
-    $('#btn-stop-continuous').on('click', stopContinuousStream);
     $('#btn-stream-path').on('click', startPathStream);
     $('#btn-stop-path').on('click', stopPathStream);
 

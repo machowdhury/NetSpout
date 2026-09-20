@@ -8,6 +8,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        format: 'iife',
+        name: 'NetSpoutApp',
+        inlineDynamicImports: true
+      }
+    }
+  },
   server: {
     port: 5173,
     host: true,

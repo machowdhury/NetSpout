@@ -1,0 +1,119 @@
+# =========================================================================
+# NetSpout Standalone: All-In-One Docker Container (Splunk Enterprise + App)
+# Includes:
+#   - Splunk Enterprise 10.2 pre-configured
+#   - NetSpout Splunk App with Dark NOC Canvas UI
+#   - Pre-configured HEC on port 8088 (Token: 00000000-0000-0000-0000-000000000000)
+#   - Pre-configured cisco_mdt_metrics (500GB Metric Index tier)
+#   - Pre-configured Event Indexes (idx_network_ops, idx_security_fw, etc.)
+#   - 333 SC4SNMP MIBs and OpenConfig YANG Schema Engine
+#   - Universal Multi-Pipeline Telemetry Dispatcher (HEC, OTel, Telegraf, Syslog)
+# =========================================================================
+
+FROM splunk/splunk:10.2
+
+LABEL maintainer="NetSpout Telemetry Engineering Team"
+LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App"
+
+USER root
+
+# Install Python packages for standalone fast simulation engine
+RUN microdnf update -y && \
+    microdnf install -y python3 python3-pip python3-setuptools && \
+    python3 -m pip install --no-cache-dir \
+        fastapi==0.115.0 \
+        uvicorn==0.30.6 \
+        pydantic==2.8.2 \
+        websockets==12.0 && \
+    microdnf clean all
+
+# Copy NetSpout Splunk App directly into Splunk apps directory
+COPY netspout /opt/splunk/etc/apps/netspout
+
+# Copy Companion Fast Simulation Engine
+COPY backend /opt/netspout-backend
+
+# Pre-configure HEC and Indexes for zero-touch instant boot
+RUN mkdir -p /opt/splunk/etc/apps/netspout/local && \
+    cat << 'EOC' > /opt/splunk/etc/apps/netspout/local/inputs.conf
+[http]
+disabled = 0
+port = 8088
+enableSSL = 1
+dedicatedIoThreads = 2
+maxSockets = 10000
+maxThreads = 0
+
+[http://netspout_hec_token]
+disabled = 0
+token = 00000000-0000-0000-0000-000000000000
+index = idx_network_ops
+indexes = idx_network_ops,idx_security_fw,idx_wireless_ops,idx_performance_metrics,cisco_mdt_metrics
+datatype = event
+
+[http://netspout_metric_token]
+disabled = 0
+token = 00000000-0000-0000-0000-000000000000
+index = cisco_mdt_metrics
+indexes = cisco_mdt_metrics
+datatype = metric
+EOC
+    && \
+    cat << 'EOC' > /opt/splunk/etc/apps/netspout/local/indexes.conf
+[cisco_mdt_metrics]
+homePath = $SPLUNK_DB/cisco_mdt_metrics/db
+coldPath = $SPLUNK_DB/cisco_mdt_metrics/colddb
+thawedPath = $SPLUNK_DB/cisco_mdt_metrics/thaweddb
+maxTotalDataSizeMB = 512000
+datatype = metric
+frozenTimePeriodInSecs = 7776000
+
+[idx_network_ops]
+homePath = $SPLUNK_DB/idx_network_ops/db
+coldPath = $SPLUNK_DB/idx_network_ops/colddb
+thawedPath = $SPLUNK_DB/idx_network_ops/thaweddb
+maxTotalDataSizeMB = 102400
+datatype = event
+
+[idx_security_fw]
+homePath = $SPLUNK_DB/idx_security_fw/db
+coldPath = $SPLUNK_DB/idx_security_fw/colddb
+thawedPath = $SPLUNK_DB/idx_security_fw/thaweddb
+maxTotalDataSizeMB = 102400
+datatype = event
+
+[idx_wireless_ops]
+homePath = $SPLUNK_DB/idx_wireless_ops/db
+coldPath = $SPLUNK_DB/idx_wireless_ops/colddb
+thawedPath = $SPLUNK_DB/idx_wireless_ops/thaweddb
+maxTotalDataSizeMB = 102400
+datatype = event
+
+[idx_performance_metrics]
+homePath = $SPLUNK_DB/idx_performance_metrics/db
+coldPath = $SPLUNK_DB/idx_performance_metrics/colddb
+thawedPath = $SPLUNK_DB/idx_performance_metrics/thaweddb
+maxTotalDataSizeMB = 102400
+datatype = event
+EOC
+    && \
+    chown -R splunk:splunk /opt/splunk/etc/apps/netspout /opt/netspout-backend
+
+# Set up custom startup wrapper
+COPY entrypoint-standalone.sh /sbin/entrypoint-standalone.sh
+RUN chmod +x /sbin/entrypoint-standalone.sh
+
+# Environment variables for zero-prompt Splunk license acceptance
+ENV SPLUNK_START_ARGS="--accept-license" \
+    SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
+    SPLUNK_PASSWORD="SplunkPassword123!" \
+    SPLUNK_HEC_PORT="8088" \
+    SPLUNK_ROLE="splunk_standalone" \
+    FAST_SIMULATION_PORT="8081"
+
+EXPOSE 8000 8088 8089 8081 514/udp 514/tcp
+
+USER splunk
+
+ENTRYPOINT ["/sbin/entrypoint-standalone.sh"]
+CMD ["start-service"]

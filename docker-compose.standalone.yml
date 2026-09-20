@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # =========================================================================
+  # NetSpout Standalone: All-In-One Container (Splunk Enterprise + NetSpout App + Fast Sim Backend)
+  # =========================================================================
+  splunk-netspout:
+    build:
+      context: .
+      dockerfile: Dockerfile.standalone
+    container_name: splunk-netspout-standalone
+    hostname: splunk-netspout
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
+      - SPLUNK_PASSWORD=SplunkPassword123!
+      - SPLUNK_HEC_PORT=8088
+      - SPLUNK_ROLE=splunk_standalone
+      - FAST_SIMULATION_PORT=8081
+      - SPLUNK_HEC_URL=https://localhost:8088/services/collector
+      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
+      - OTEL_ENDPOINT=http://otel-collector:4318
+    ports:
+      - "8000:8000"       # Splunk Web UI (Dark NOC Canvas & Dashboards)
+      - "8088:8088"       # Splunk HEC (HTTP Event Collector)
+      - "8089:8089"       # Splunk Management REST API
+      - "8081:8081"       # NetSpout Fast Simulation REST & WebSocket Engine
+      - "514:514/udp"     # Syslog UDP Ingestion / Emitter
+      - "514:514/tcp"     # Syslog TCP Ingestion / Emitter
+    volumes:
+      - splunk_data:/opt/splunk/var
+      - splunk_etc:/opt/splunk/etc
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k -s https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"' || curl -s http://localhost:8081/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 45s
+    restart: unless-stopped
+    networks:
+      - netspout-net
+
+  # =========================================================================
+  # OpenTelemetry Collector (Contrib) - Optional Universal Receiver & Pipeline
+  # =========================================================================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.96.0
+    container_name: netspout-otel-collector
+    hostname: otel-collector
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    volumes:
+      - ./otel-collector-config.standalone.yaml:/etc/otelcol-contrib/config.yaml:ro
+    ports:
+      - "4317:4317"       # OTLP gRPC receiver
+      - "4318:4318"       # OTLP HTTP receiver
+      - "8889:8889"       # Prometheus metrics exporter
+    depends_on:
+      - splunk-netspout
+    restart: unless-stopped
+    networks:
+      - netspout-net
+
+networks:
+  netspout-net:
+    driver: bridge
+
+volumes:
+  splunk_data:
+    name: netspout_splunk_data
+  splunk_etc:
+    name: netspout_splunk_etc

@@ -111,8 +111,38 @@ graph TD
    http://localhost:8000/en-US/app/netspout/netspout_canvas
    ```
 
-### Option 2: Standalone Fast Simulation Mode
+### Option 2: Standalone Fast Simulation Mode (Docker All-In-One)
 
+You can run the complete platform—**Splunk Enterprise 10.2, the NetSpout App, pre-configured 500GB metric tier, pre-compiled Dark NOC UI, 333 SC4SNMP MIBs, and the Fast Simulation Companion Service**—inside a single, zero-configuration Docker container.
+
+#### Method A: Single Command `docker run`
+```bash
+docker run -d \
+  --name splunk-netspout-standalone \
+  -p 8000:8000 \
+  -p 8088:8088 \
+  -p 8089:8089 \
+  -p 8081:8081 \
+  -p 514:514/udp \
+  -p 514:514/tcp \
+  -e SPLUNK_START_ARGS="--accept-license" \
+  -e SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
+  -e SPLUNK_PASSWORD="SplunkPassword123!" \
+  netspout:standalone
+```
+
+#### Method B: Docker Compose (with OTel Collector Contrib)
+```bash
+docker compose -f docker-compose.standalone.yml up -d
+```
+
+Once running, access:
+- **Splunk Web & NetSpout Canvas**: `http://localhost:8000` (User: `admin` / Password: `SplunkPassword123!`)
+- **Fast Simulation Microservice**: `http://localhost:8081`
+- **Splunk HEC Ingestion**: `https://localhost:8088/services/collector` (Pre-configured Token: `00000000-0000-0000-0000-000000000000`)
+- **OTel Collector Ingestion**: `http://localhost:4318/v1/metrics` and `http://localhost:4318/v1/logs`
+
+#### Method C: Local Host Python Service
 1. Navigate to the backend directory and activate Python virtual environment:
    ```bash
    cd backend
@@ -122,7 +152,7 @@ graph TD
    ```
 2. Launch the backend microservice:
    ```bash
-   python3 run.py
+   python3 run.py --port 8081
    ```
 3. Access the visual NOC canvas at `http://localhost:8081`.
 

@@ -1,6 +1,6 @@
 <dashboard version="1.1" theme="dark">
-  <label>Help &amp; Operational Documentation</label>
-  <description>Comprehensive operator guide, architecture blueprint, complete 110+ multi-vendor sourcetype catalog, net-new sample onboarding engine, and Technical Add-on prerequisite guide.</description>
+  <label>NetSpout Architecture &amp; SPL Exploration Guide</label>
+  <description>Comprehensive operator guide, Splunk Technology Add-on (TA) directory, production SPL queries for event and metric indexes, and Cloud Vetting architecture reference by Mahamudul Chowdhury.</description>
 
   <row>
     <panel>
@@ -9,351 +9,271 @@
 
           <!-- Header -->
           <div style="border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 24px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 28px;">📖</span>
-              <div>
-                <h1 style="color: #f8fafc; font-size: 22px; margin: 0; font-weight: 700;">Network Data Blaster Operational Guide &amp; Architecture Reference</h1>
-                <p style="color: #94a3b8; font-size: 13px; margin: 4px 0 0 0;">Unified Multi-Vendor Telemetry, Synthetic Traffic Simulation, Dynamic Onboarding &amp; Ingestion Framework</p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 28px;">⚡</span>
+                <div>
+                  <h1 style="color: #f8fafc; font-size: 22px; margin: 0; font-weight: 700;">NetSpout Operational Architecture &amp; SPL Analytics Reference</h1>
+                  <p style="color: #94a3b8; font-size: 13px; margin: 4px 0 0 0;">
+                    Multi-Protocol Network Simulation, OpenConfig MDT, SC4SNMP 300+ MIBs &amp; Splunk Cloud-Vetted Telemetry Engine
+                  </p>
+                </div>
+              </div>
+              <div style="text-align: right; font-size: 11px; color: #94a3b8;">
+                <div style="color: #38bdf8; font-weight: 600;">Engineered by Mahamudul Chowdhury</div>
+                <div>Splunk Enterprise &amp; Splunk Cloud Certified</div>
               </div>
             </div>
           </div>
 
-          <!-- Grid: Table of Contents / Quick Jump -->
+          <!-- Quick Jump Table of Contents -->
           <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 30px;">
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px;">
-              <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">1. HEC Setup</h4>
-              <p style="color: #94a3b8; font-size: 11px; margin: 0;">Tokens, endpoints, SSL verification, and index targets.</p>
+              <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">1. TA Architecture</h4>
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">Why TAs are not bundled and how to avoid package bloat.</p>
             </div>
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px;">
-              <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">2. Scenario Catalog</h4>
-              <p style="color: #94a3b8; font-size: 11px; margin: 0;">7 operational topologies and failure modes.</p>
+              <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">2. Vendor TA Directory</h4>
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">15+ official Splunkbase TAs mapped to sourcetypes.</p>
             </div>
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px;">
-              <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">3. Sourcetype Directory</h4>
-              <p style="color: #94a3b8; font-size: 11px; margin: 0;">110+ enterprise sourcetypes across 11 vendors.</p>
+              <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">3. Metric SPL Queries</h4>
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">mstats, OpenConfig MDT, and SC4SNMP metric queries.</p>
             </div>
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px;">
-              <h4 style="color: #a855f7; margin: 0 0 6px 0; font-size: 13px;">4. Net-New Onboarding</h4>
-              <p style="color: #94a3b8; font-size: 11px; margin: 0;">Drop samples, define sourcetypes, auto-ingest.</p>
+              <h4 style="color: #a855f7; margin: 0 0 6px 0; font-size: 13px;">4. Event SPL Queries</h4>
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">Syslogs, SNMP traps, BGP route flaps &amp; firewall drops.</p>
             </div>
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px;">
-              <h4 style="color: #ec4899; margin: 0 0 6px 0; font-size: 13px;">5. TA Bundling &amp; Prereqs</h4>
-              <p style="color: #94a3b8; font-size: 11px; margin: 0;">CIM field extractions vs official vendor TAs.</p>
+              <h4 style="color: #ec4899; margin: 0 0 6px 0; font-size: 13px;">5. Deployment &amp; HEC</h4>
+              <p style="color: #94a3b8; font-size: 11px; margin: 0;">Enterprise, Splunk Cloud &amp; Standalone Docker setup.</p>
             </div>
           </div>
 
-          <!-- Section 1: HEC Prerequisites -->
+          <!-- Section 1: Technology Add-on (TA) Architectural Philosophy -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 24px;">
             <h2 style="color: #38bdf8; font-size: 16px; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-              <span>🔌</span> 1. Splunk HTTP Event Collector (HEC) Prerequisites
+              <span>📦</span> 1. Splunk Technology Add-on (TA) Architecture: Avoiding Package Bloat
             </h2>
-            <p style="color: #cbd5e1; font-size: 13px;">
-              Network Data Blaster streams high-velocity events directly into Splunk via the <b>HTTP Event Collector (HEC)</b>. 
-              Before launching simulations, ensure HEC is enabled and target indexes are created.
-            </p>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px;">
-              <div style="background: #1e293b; padding: 14px; border-radius: 6px;">
-                <h4 style="color: #f8fafc; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Enabling HEC in Splunk</h4>
-                <ol style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1;">
-                  <li>Navigate to <b>Settings &gt; Data Inputs &gt; HTTP Event Collector</b>.</li>
-                  <li>Click <b>Global Settings</b> &gt; Set <i>All Tokens</i> to <b>Enabled</b>. Note port (Standard: <code>8088</code>, Isolated Docker: <code>8888</code>).</li>
-                  <li>Click <b>New Token</b>: Name: <code>ta_datablaster_hec</code>, select default indexes.</li>
-                  <li>Paste the generated token into the <a href="/app/TA-network-data-blaster/configuration" style="color: #38bdf8;">Configuration Screen</a>.</li>
-                </ol>
-              </div>
-
-              <div style="background: #1e293b; padding: 14px; border-radius: 6px;">
-                <h4 style="color: #f8fafc; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Required Target Indexes</h4>
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                  <thead>
-                    <tr style="border-bottom: 1px solid #334155; color: #94a3b8; text-align: left;">
-                      <th style="padding: 5px 8px;">Index Name</th>
-                      <th style="padding: 5px 8px;">Type</th>
-                      <th style="padding: 5px 8px;">Vendor Telemetry</th>
-                    </tr>
-                  </thead>
-                  <tbody style="color: #cbd5e1;">
-                    <tr style="border-bottom: 1px solid #1e293b;">
-                      <td style="padding: 5px 8px; font-family: monospace; color: #38bdf8;">idx_network_ops</td>
-                      <td style="padding: 5px 8px;">Events</td>
-                      <td style="padding: 5px 8px;">Juniper Junos, Nokia SR OS, Cisco IOS-XR, F5</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #1e293b;">
-                      <td style="padding: 5px 8px; font-family: monospace; color: #38bdf8;">idx_security_fw</td>
-                      <td style="padding: 5px 8px;">Events</td>
-                      <td style="padding: 5px 8px;">Palo Alto PAN-OS, Fortinet FortiGate, Zscaler, Netskope</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #1e293b;">
-                      <td style="padding: 5px 8px; font-family: monospace; color: #38bdf8;">idx_wireless_ops</td>
-                      <td style="padding: 5px 8px;">Events</td>
-                      <td style="padding: 5px 8px;">Aruba ClearPass/AOS, Meraki Dashboard Alerts</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 5px 8px; font-family: monospace; color: #06b6d4;">idx_performance_metrics</td>
-                      <td style="padding: 5px 8px;">Events/Metrics</td>
-                      <td style="padding: 5px 8px;">Arista EOS JSON telemetry, RoCE v2, Cisco MDT</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div style="background: rgba(14, 165, 233, 0.08); border-left: 4px solid #0284c7; padding: 14px 18px; border-radius: 0 6px 6px 0; margin-bottom: 16px;">
+              <b style="color: #38bdf8; font-size: 13px;">Architectural Rule: Decoupling Telemetry Generation from Field Extraction</b>
+              <p style="color: #cbd5e1; font-size: 12px; margin: 6px 0 0 0;">
+                A common anti-pattern in network simulation is bundling dozens of third-party Splunk Technology Add-ons (e.g., Cisco, Palo Alto, Fortinet, Arista TAs) inside a single application. Doing so creates <b>severe application bloat (expanding a 5MB app into several gigabytes)</b>, triggers Python library conflicts, and causes <b>automatic rejection during Splunk Cloud AppInspect vetting</b>.
+              </p>
             </div>
+
+            <p style="color: #cbd5e1; font-size: 13px;">
+              NetSpout solves this cleanly:
+            </p>
+            <ul style="color: #94a3b8; font-size: 12px; line-height: 1.8; margin-bottom: 0;">
+              <li><b style="color: #f8fafc;">100% Schema-Accurate Output:</b> NetSpout formats raw syslogs, OpenConfig JSON-IETF, and SC4SNMP payloads to perfectly match what official vendor hardware emits.</li>
+              <li><b style="color: #f8fafc;">Standard CIM Normalization:</b> When official vendor TAs are installed on Search Heads or Indexers, they immediately recognize NetSpout sourcetypes and parse fields into CIM data models (Network Sessions, Network Traffic, Performance, Authentication).</li>
+              <li><b style="color: #f8fafc;">Splunk Cloud &amp; Enterprise Vetted:</b> NetSpout contains zero bundled third-party binaries, zero unvetted dependencies, and complies 100% with Splunk AppInspect requirements.</li>
+            </ul>
           </div>
 
-          <!-- Section 2: Scenario Catalog -->
+          <!-- Section 2: Vendor Technology Add-on (TA) Directory -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 24px;">
             <h2 style="color: #10b981; font-size: 16px; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-              <span>📊</span> 2. Multi-Vendor Scenario Catalog &amp; Failure Topologies
+              <span>🌐</span> 2. Recommended Vendor Technology Add-ons (Splunkbase Directory)
             </h2>
-            <p style="color: #cbd5e1; font-size: 13px;">
-              Each scenario features an interactive topology diagram and injects realistic telemetry simulating specific operational faults:
+            <p style="color: #cbd5e1; font-size: 13px; margin-bottom: 16px;">
+              Install the respective official Technology Add-on from Splunkbase to enable automated field extractions and data model acceleration:
             </p>
 
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
               <thead>
-                <tr style="background: #1e293b; color: #94a3b8; text-align: left; border-bottom: 2px solid #334155;">
-                  <th style="padding: 8px 10px;">Scenario ID</th>
-                  <th style="padding: 8px 10px;">Scenario Name</th>
-                  <th style="padding: 8px 10px;">Vendors Involved</th>
-                  <th style="padding: 8px 10px;">Simulated Failure / Dynamic</th>
-                  <th style="padding: 8px 10px;">Topology Dashboard</th>
+                <tr style="border-bottom: 1px solid #334155; color: #94a3b8; text-align: left; background: #020617;">
+                  <th style="padding: 8px 12px;">Vendor &amp; Domain</th>
+                  <th style="padding: 8px 12px;">Recommended Splunkbase Add-on</th>
+                  <th style="padding: 8px 12px;">App ID</th>
+                  <th style="padding: 8px 12px;">Target NetSpout Sourcetypes</th>
+                  <th style="padding: 8px 12px;">CIM Data Models</th>
                 </tr>
               </thead>
               <tbody style="color: #cbd5e1;">
                 <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-ENT-001</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">Enterprise 5-Tier Operations</td>
-                  <td style="padding: 8px 10px;">Zscaler, Palo Alto, Fortinet, Juniper, Arista, Cisco</td>
-                  <td style="padding: 8px 10px;">Steady-state end-to-end telemetry across all 5 tiers.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_multivendor_enterprise" style="color: #38bdf8;">Enterprise 5-Tier View</a></td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Cisco Catalyst Center</td>
+                  <td style="padding: 8px 12px;">Splunk Add-on for Cisco Catalyst Center</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/5580" target="_blank" style="color: #38bdf8;">5580</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">cisco:catalyst:devicehealth, cisco:catalyst:issue, cisco:dnac:*</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Sessions, Alerts, Inventory</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #1e293b; background: rgba(15, 23, 42, 0.4);">
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Cisco SD-WAN</td>
+                  <td style="padding: 8px 12px;">Cisco SD-WAN Add-on for Splunk</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/7538" target="_blank" style="color: #38bdf8;">7538</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">cisco:sdwan:linkhealth, cisco:sdwan:BGP-5-ADJCHANGE, cisco:sdwan:*</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Traffic, Performance, Change</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-002</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">AI DC Fabric - RoCE v2 Congestion</td>
-                  <td style="padding: 8px 10px;">Arista 7800R3, NVIDIA Spectrum, F5</td>
-                  <td style="padding: 8px 10px;">AI gradient sync triggers PFC Pause storms &amp; ECN buffer exhaustion.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_roce_ai_fabric" style="color: #38bdf8;">RoCE AI Fabric View</a></td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Cisco Identity (ISE)</td>
+                  <td style="padding: 8px 12px;">Splunk Add-on for Cisco ISE</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/1924" target="_blank" style="color: #38bdf8;">1924</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">cisco:ise:syslog, cisco:ise:tacacs-policyset, cisco:ise:radius-*</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Authentication, Change Analysis</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #1e293b; background: rgba(15, 23, 42, 0.4);">
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Cisco Secure FW / FTD</td>
+                  <td style="padding: 8px 12px;">Cisco Security Cloud Add-on for Splunk</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/6259" target="_blank" style="color: #38bdf8;">6259</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">cisco:sfw:estreamer, cisco:sfw:policy, cisco:ftd:syslog</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Traffic, Intrusion Detection</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-006</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">Core BGP Route Flapping</td>
-                  <td style="padding: 8px 10px;">Juniper Junos (MX960), Cisco IOS-XR</td>
-                  <td style="padding: 8px 10px;">Hold timer expirations trigger route dampening and 800k prefix withdrawals.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_bgp_route_flap" style="color: #38bdf8;">BGP Route Flap View</a></td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Palo Alto Networks</td>
+                  <td style="padding: 8px 12px;">Palo Alto Networks Add-on for Splunk</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/2757" target="_blank" style="color: #38bdf8;">2757</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">pan:traffic, pan:threat, pan:system</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Traffic, Intrusion, Malware</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #1e293b; background: rgba(15, 23, 42, 0.4);">
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Fortinet FortiGate</td>
+                  <td style="padding: 8px 12px;">Fortinet FortiGate Add-on for Splunk</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/2800" target="_blank" style="color: #38bdf8;">2800</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">fortinet:fortigate:traffic, fortinet:fortigate:sdwan:alert</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Traffic, Sessions</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-008</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">SD-WAN Branch Brownout</td>
-                  <td style="padding: 8px 10px;">Cisco SD-WAN (Catalyst 8300), Fortinet</td>
-                  <td style="padding: 8px 10px;">Primary MPLS jitter and packet loss surge, triggering dynamic SLA path steering.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_sdwan_branch" style="color: #38bdf8;">SD-WAN Branch View</a></td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Arista Networks EOS</td>
+                  <td style="padding: 8px 12px;">Arista Networks EOS Add-on for Splunk</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/3350" target="_blank" style="color: #38bdf8;">3350</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">arista:eos:syslog, arista:metrics:telemetry</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Sessions, Performance</td>
                 </tr>
-                <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-011</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">Core 100G Optical Degradation &amp; TI-LFA</td>
-                  <td style="padding: 8px 10px;">Nokia SR OS (7750), Cisco 8000</td>
-                  <td style="padding: 8px 10px;">Coherent DWDM optical Rx power drops, triggering sub-50ms TI-LFA fast reroute.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_core_lsp_optical" style="color: #38bdf8;">Core Optical LSP View</a></td>
-                </tr>
-                <tr style="border-bottom: 1px solid #1e293b;">
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-014</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">Edge Next-Gen Firewall Capacity</td>
-                  <td style="padding: 8px 10px;">Palo Alto PA-5450, Fortinet FortiGate</td>
-                  <td style="padding: 8px 10px;">Stateful connection table reaches 98.6% saturation, packet drops escalate.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_firewall_capacity" style="color: #38bdf8;">Firewall Capacity View</a></td>
+                <tr style="border-bottom: 1px solid #1e293b; background: rgba(15, 23, 42, 0.4);">
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">Juniper Junos</td>
+                  <td style="padding: 8px 12px;">Splunk Add-on for Juniper</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunkbase.splunk.com/app/2855" target="_blank" style="color: #38bdf8;">2855</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">juniper:syslog</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Network Sessions, Alerts</td>
                 </tr>
                 <tr>
-                  <td style="padding: 8px 10px; font-family: monospace; color: #38bdf8; font-weight: 600;">MV-016</td>
-                  <td style="padding: 8px 10px; font-weight: 600; color: #f8fafc;">Cross-Domain Slowness Triage</td>
-                  <td style="padding: 8px 10px;">Cisco Catalyst, Palo Alto, ThousandEyes</td>
-                  <td style="padding: 8px 10px;">Multi-tier latency isolation proves network transport is normal while backend inference hangs.</td>
-                  <td style="padding: 8px 10px;"><a href="/app/TA-network-data-blaster/studio_cross_domain_triage" style="color: #38bdf8;">Cross-Domain Triage View</a></td>
+                  <td style="padding: 8px 12px; font-weight: 600; color: #f8fafc;">SC4SNMP (SNMP Engine)</td>
+                  <td style="padding: 8px 12px;">Splunk Connect for SNMP</td>
+                  <td style="padding: 8px 12px; font-family: monospace; color: #38bdf8;"><a href="https://splunk.github.io/splunk-connect-for-snmp/" target="_blank" style="color: #38bdf8;">SC4SNMP</a></td>
+                  <td style="padding: 8px 12px; font-family: monospace; font-size: 11px; color: #10b981;">sc4snmp:metric, sc4snmp:event</td>
+                  <td style="padding: 8px 12px; color: #94a3b8;">Performance, Alerts, Inventory</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- Section 3: Comprehensive Sourcetype Directory -->
+          <!-- Section 3: Production SPL Queries for Metric Indexes -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 24px;">
             <h2 style="color: #f59e0b; font-size: 16px; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-              <span>📚</span> 3. Comprehensive Sourcetype Catalog (110+ Enterprise Sourcetypes)
+              <span>📊</span> 3. Production SPL Queries: Metric Indexes (cisco_mdt_metrics)
             </h2>
             <p style="color: #cbd5e1; font-size: 13px;">
-              The platform natively simulates, parses, and indexes over 110 enterprise network and security sourcetypes across 11 key infrastructure vendors:
+              NetSpout routes high-frequency OpenConfig YANG paths and SC4SNMP polling counters into the dedicated <b>500GB metric tier (<code>cisco_mdt_metrics</code>)</b>. Use <code>| mstats</code> for sub-second analytics:
             </p>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
-              
-              <!-- Column 1: Cisco, Arista, Juniper, Nokia -->
-              <div>
-                <!-- Cisco Systems -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">Cisco Systems (Campus, DC, SD-WAN, Security)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">cisco:ios</b> - Catalyst Switch &amp; Router Syslog (EIGRP, OSPF, STP)</li>
-                    <li><b style="color: #f8fafc;">cisco:nexus</b> - NX-OS Data Center Spine/Leaf Telemetry &amp; VPC</li>
-                    <li><b style="color: #f8fafc;">cisco:sdwan:linkhealth</b> - vManage BFD Tunnel Latency, Loss &amp; Jitter</li>
-                    <li><b style="color: #f8fafc;">cisco:sdwan:tunnelhealth</b> - SD-WAN IPsec Dynamic SLA Routing</li>
-                    <li><b style="color: #f8fafc;">cisco:sdwan:sitehealth</b> - Branch Edge Device Availability &amp; State</li>
-                    <li><b style="color: #f8fafc;">cisco:sdwan:syslog</b> - IOS-XE SD-WAN System &amp; Control Plane Events</li>
-                    <li><b style="color: #f8fafc;">cisco:sdwan:utd-logs</b> - Unified Threat Defense Snort/IPS Events</li>
-                    <li><b style="color: #f8fafc;">cisco:thousandeyes:metric</b> - Synthetic HTTP/DNS/BGP Agent Latency</li>
-                    <li><b style="color: #f8fafc;">cisco:thousandeyes:event</b> - ThousandEyes Path Visualization Outages</li>
-                    <li><b style="color: #f8fafc;">cisco:meraki:security</b> - MX Security Appliance Threat &amp; Flow Logs</li>
-                    <li><b style="color: #f8fafc;">cisco:meraki:switch</b> - MS Switch Port Utilization &amp; PoE Telemetry</li>
-                    <li><b style="color: #f8fafc;">cisco:meraki:accesspoints</b> - MR Wireless Client Association &amp; RSSI</li>
-                    <li><b style="color: #f8fafc;">cisco:meraki:airmarshal</b> - Rogue AP Detection &amp; WIPS Containment</li>
-                    <li><b style="color: #f8fafc;">cisco:ise:syslog</b> - Identity Services Engine 802.1X Authentication</li>
-                  </ul>
-                </div>
-
-                <!-- Arista Networks -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">Arista Networks (Cloud &amp; AI Fabric)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">arista:eos:syslog</b> - EOS Switch System, BGP &amp; MLAG Syslog</li>
-                    <li><b style="color: #f8fafc;">arista:telemetry:json</b> - CloudVision Streaming Telemetry (PFC, ECN, Buffer)</li>
-                    <li><b style="color: #f8fafc;">arista:flow:ipfix</b> - Line-Rate Hardware IPFIX Flow Records</li>
-                  </ul>
-                </div>
-
-                <!-- Juniper Networks -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">Juniper Networks (Core Routing &amp; Security)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">juniper:junos</b> - Junos OS Routing Engine Syslog (BGP, IS-IS, RSVP)</li>
-                    <li><b style="color: #f8fafc;">juniper:junos:firewall</b> - SRX Series Security Policy &amp; Threat Drops</li>
-                    <li><b style="color: #f8fafc;">juniper:telemetry</b> - OpenConfig / JTI Influx Sensor Feeds</li>
-                  </ul>
-                </div>
-
-                <!-- Nokia Networks -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px;">
-                  <h4 style="color: #a855f7; margin: 0 0 6px 0; font-size: 13px;">Nokia Service Router (IP/MPLS Carrier Core)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">nokia:sros</b> - 7750 SR / 7950 XRS Service Router OS Syslog</li>
-                    <li><b style="color: #f8fafc;">nokia:sros:optics</b> - Coherent DWDM Optical Power &amp; Pre-FEC BER</li>
-                    <li><b style="color: #f8fafc;">nokia:sros:mpls</b> - Segment Routing &amp; TI-LFA Fast Reroute State</li>
-                  </ul>
-                </div>
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">Explore All Emitted Metric Names</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Lists all unique metric channels and current average values:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #38bdf8; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats avg(_value) WHERE index=cisco_mdt_metrics metric_name=* BY metric_name</pre>
               </div>
 
-              <!-- Column 2: Palo Alto, Fortinet, F5, Cloud SASE, Infrastructure -->
-              <div>
-                <!-- Palo Alto Networks -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #ec4899; margin: 0 0 6px 0; font-size: 13px;">Palo Alto Networks (Perimeter &amp; NGFW)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">pan:traffic</b> - PAN-OS Stateful Session &amp; Policy Rule Logs</li>
-                    <li><b style="color: #f8fafc;">pan:threat</b> - Threat Prevention IPS, Spyware &amp; Vulnerability Exploits</li>
-                    <li><b style="color: #f8fafc;">pan:system</b> - Firewall Resource Exhaustion, HA &amp; Fan Failures</li>
-                    <li><b style="color: #f8fafc;">pan:url</b> - Advanced URL Filtering &amp; Credential Theft Logs</li>
-                  </ul>
-                </div>
-
-                <!-- Fortinet -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">Fortinet (FortiGate NGFW &amp; SD-WAN)</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">fortinet:fortigate</b> - FortiOS Traffic Session &amp; Security Profiles</li>
-                    <li><b style="color: #f8fafc;">fortinet:fortigate:sdwan</b> - FortiGate SD-WAN Rule Steering &amp; Link Health</li>
-                    <li><b style="color: #f8fafc;">fortinet:fortigate:utm</b> - Antivirus, Web Filter &amp; App Control Logs</li>
-                  </ul>
-                </div>
-
-                <!-- F5 & SASE -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                  <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">F5 BIG-IP &amp; Cloud SASE / SSE</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">f5:bigip:syslog</b> - Local Traffic Manager (LTM) Pool Dispatch</li>
-                    <li><b style="color: #f8fafc;">zscaler:zia</b> - Zscaler Internet Access Cloud Firewall &amp; CASB</li>
-                    <li><b style="color: #f8fafc;">zscaler:lss</b> - Nanolog Streaming Service Audit Telemetry</li>
-                    <li><b style="color: #f8fafc;">netskope:sse</b> - Netskope Security Service Edge Real-Time SWG</li>
-                    <li><b style="color: #f8fafc;">cloudflare:waf</b> - Cloudflare Edge WAF &amp; DDoS Ingestion</li>
-                  </ul>
-                </div>
-
-                <!-- Infrastructure & Containers -->
-                <div style="background: #1e293b; border-radius: 6px; padding: 12px;">
-                  <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">Infrastructure, Wireless &amp; Kubernetes</h4>
-                  <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                    <li><b style="color: #f8fafc;">aruba:syslog</b> - ArubaOS Wireless Controller AP Client Roaming</li>
-                    <li><b style="color: #f8fafc;">stream:netflow</b> - Splunk Stream Flow &amp; Protocol Decode</li>
-                    <li><b style="color: #f8fafc;">kube:container:network</b> - Calico CNI, CoreDNS &amp; K8s Pod Telemetry</li>
-                    <li><b style="color: #f8fafc;">nutanix:prism:alerts</b> - Nutanix HCI Cluster Performance &amp; Disk Saturation</li>
-                    <li><b style="color: #f8fafc;">radware:ddos</b> - Radware DefensePro Volumetric Flood Protection</li>
-                  </ul>
-                </div>
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">Interface Ingress &amp; Egress Bandwidth (bps)</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Computes throughput rates across OpenConfig interface counters:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #10b981; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats rate(interface.octets.in) AS in_bps, rate(interface.octets.out) AS out_bps WHERE index=cisco_mdt_metrics span=10s BY host, interface</pre>
               </div>
 
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #ef4444; margin: 0 0 6px 0; font-size: 13px;">Carrier Flap &amp; Optical Transition Counter</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Tracks link flaps generated during simulated fiber cuts:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #ef4444; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats sum(carrier.transitions) AS flaps WHERE index=cisco_mdt_metrics span=30s BY host</pre>
+              </div>
+
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">Device CPU &amp; RAM Utilization Gauge</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Monitors hardware platform telemetry during resource saturation:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #f59e0b; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats latest(platform.cpu.utilization) AS cpu, latest(platform.memory.utilization) AS mem WHERE index=cisco_mdt_metrics span=10s BY host</pre>
+              </div>
+
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #a855f7; margin: 0 0 6px 0; font-size: 13px;">BGP FSM State &amp; Prefix Rib Counters</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Audits BGP peering state (6=Established, 1=Idle) and route counts:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #a855f7; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats latest(bgp.peer.state) AS fsm_state, latest(bgp.prefixes.received) AS pfx_rcv WHERE index=cisco_mdt_metrics BY host, peer</pre>
+              </div>
+
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #06b6d4; margin: 0 0 6px 0; font-size: 13px;">SC4SNMP High-Capacity Polling (ifHCInOctets)</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Analyzes 64-bit SNMP polling metrics streamed by the SC4SNMP engine:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #06b6d4; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">| mstats rate(ifHCInOctets) AS rx_bps, rate(ifHCOutOctets) AS tx_bps WHERE index=cisco_mdt_metrics span=15s BY host, ifIndex</pre>
+              </div>
             </div>
           </div>
 
-          <!-- Section 4: Dynamic Onboarding Engine -->
+          <!-- Section 4: Production SPL Queries for Event Indexes -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px; margin-bottom: 24px;">
             <h2 style="color: #a855f7; font-size: 16px; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-              <span>🚀</span> 4. Onboarding Net-New Sample Data &amp; Custom Sourcetypes
+              <span>🔍</span> 4. Production SPL Queries: Event Indexes (idx_network_ops, cisco_secure_fw)
             </h2>
             <p style="color: #cbd5e1; font-size: 13px;">
-              You can easily onboard brand new log samples from proprietary appliances, specialized firewalls, or custom internal applications. The platform provides both a <b>Graphical UI Onboarding Tool</b> and a <b>File-Based Dropzone</b>:
+              Explore raw event telemetry, syslog alarms, SC4SNMP traps, and multi-device fault cascades:
             </p>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px;">
-              <div style="background: #1e293b; padding: 16px; border-radius: 6px;">
-                <h4 style="color: #f8fafc; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Method A: Graphical UI Onboarding Tool</h4>
-                <ol style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1;">
-                  <li>Navigate to the <a href="/app/TA-network-data-blaster/configuration" style="color: #38bdf8;">Configuration Screen</a>.</li>
-                  <li>Scroll to the <b>"Onboard Net-New Sample Data"</b> section.</li>
-                  <li>Paste your raw log lines into the text area.</li>
-                  <li>Enter the target <b>Sourcetype</b> name (e.g. <code>cisco:custom:waf</code>) and target <b>Index</b> (e.g. <code>idx_security_fw</code>).</li>
-                  <li>Click <b>"Onboard &amp; Blast Sample"</b>. The platform saves the sample into <code>samples/</code>, generates props parsing, and immediately indexes the events via HEC!</li>
-                </ol>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #ef4444; margin: 0 0 6px 0; font-size: 13px;">SC4SNMP Trap Auditing (linkDown &amp; BGP Alarms)</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Parses decoded SNMP traps with varbinds:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #ef4444; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">index=idx_network_ops sourcetype="sc4snmp:event" snmp_trap_name=*
+| table _time, host, snmp_trap_name, snmp_trap_oid, severity, varbinds.ifDescr</pre>
               </div>
 
-              <div style="background: #1e293b; padding: 16px; border-radius: 6px;">
-                <h4 style="color: #f8fafc; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Method B: File-Based Dropzone</h4>
-                <ol style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1;">
-                  <li>Drop your raw sample log file into: <code>TA-network-data-blaster/samples/&lt;vendor_sample&gt;.log</code>.</li>
-                  <li>In <code>default/props.conf</code>, define extraction or let auto-KV parse:
-                    <pre style="background: #0b0f17; padding: 8px; border-radius: 4px; color: #38bdf8; font-size: 11px; margin: 6px 0;">[vendor:custom:syslog]
-SHOULD_LINEMERGE = false
-TIME_PREFIX = ^
-MAX_TIMESTAMP_LOOKAHEAD = 32</pre>
-                  </li>
-                  <li>Use the <b>Data Blaster Console</b> or <b>Single Device Blaster</b> to target the new file and stream immediately!</li>
-                </ol>
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #f59e0b; margin: 0 0 6px 0; font-size: 13px;">Cascading Multi-Device Fault Tracking</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Correlates interface carrier down with neighbor routing loss:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #f59e0b; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">index=idx_network_ops (sourcetype="cisco:ios:syslog" OR sourcetype="juniper:syslog") ("%LINK-3-UPDOWN" OR "%BGP-5-ADJCHANGE" OR "%OSPF-5-ADJCHG")
+| stats count, values(message) by host</pre>
+              </div>
+
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 13px;">Next-Gen Firewall Session Drops &amp; SYN Floods</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Identifies DDoS attack patterns and state table saturation:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #38bdf8; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">index=idx_security_fw (sourcetype="pan:traffic" OR sourcetype="cisco:sfw:estreamer") action="drop"
+| timechart span=1m count by app</pre>
+              </div>
+
+              <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 14px;">
+                <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 13px;">Cisco Catalyst &amp; DNA-C Health Degradation</h4>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0 0 8px 0;">Monitors device health scores and client connectivity issues:</p>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #10b981; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">index=idx_network_ops sourcetype="cisco:catalyst:devicehealth"
+| spath path=healthScore output=score
+| stats avg(score) as avg_health, min(score) as min_health by host</pre>
               </div>
             </div>
           </div>
 
-          <!-- Section 5: Technical Add-on Bundling vs. Prerequisites -->
+          <!-- Section 5: Splunk Cloud & Enterprise Deployment -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 22px;">
             <h2 style="color: #ec4899; font-size: 16px; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-              <span>📦</span> 5. Technical Add-on (TA) Bundling vs. Production Prerequisites
+              <span>🚀</span> 5. Production Deployment: Splunk Cloud, Enterprise &amp; Standalone Docker
             </h2>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px;">
               <div style="background: #1e293b; padding: 16px; border-radius: 6px;">
-                <h4 style="color: #10b981; margin-top: 0; margin-bottom: 8px; font-size: 13px;">What is Bundled (Out of the Box)</h4>
-                <ul style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1;">
-                  <li><b>100% Standalone Readiness:</b> The app includes built-in CIM field extractions (Network Traffic, Network Sessions, Performance, Alerts) for all simulated vendors.</li>
-                  <li><b>Zero External Dependencies:</b> You do <i>not</i> need to install 11 separate vendor TAs just to run the simulations, view the topologies, or see dashboard charts.</li>
-                  <li><b>Air-Gapped Operation:</b> All vendor libraries, icons, and vector topology graphics are bundled locally.</li>
-                </ul>
+                <h4 style="color: #10b981; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Splunk Cloud &amp; Enterprise App Installation</h4>
+                <ol style="margin: 0; padding-left: 18px; font-size: 12px; color: #cbd5e1; line-height: 1.8;">
+                  <li>In Splunk Web, go to <b>Apps &gt; Manage Apps &gt; Install app from file</b>.</li>
+                  <li>Upload the certified release package: <code>netspout.spl</code>.</li>
+                  <li>Ensure HEC is enabled under <b>Settings &gt; Data Inputs &gt; HTTP Event Collector</b>.</li>
+                  <li>The app automatically provisions the <b>500GB <code>cisco_mdt_metrics</code></b> index and event tiers.</li>
+                </ol>
               </div>
 
               <div style="background: #1e293b; padding: 16px; border-radius: 6px;">
-                <h4 style="color: #38bdf8; margin-top: 0; margin-bottom: 8px; font-size: 13px;">Optional Production Companion TAs</h4>
+                <h4 style="color: #38bdf8; margin-top: 0; margin-bottom: 8px; font-size: 13px;">All-In-One Standalone Docker Mode</h4>
                 <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px 0;">
-                  If you deploy this synthetic traffic generator in an enterprise Splunk environment with proprietary data models or Splunk Enterprise Security (ES), installing the official Splunkbase companion TAs provides advanced hardware inventory acceleration:
+                  Run Splunk Enterprise 10.2, NetSpout, and the Fast Simulation Companion daemon in a single zero-touch container:
                 </p>
-                <ul style="margin: 0; padding-left: 18px; font-size: 11px; font-family: monospace; color: #cbd5e1;">
-                  <li><code>Splunk_TA_cisco-ios</code> (Cisco IOS / XE)</li>
-                  <li><code>Splunk_TA_paloalto</code> (Palo Alto Networks Next-Gen FW)</li>
-                  <li><code>Splunk_TA_fortinet_fortigate</code> (Fortinet FortiOS)</li>
-                  <li><code>Splunk_TA_arista</code> (Arista EOS CloudVision)</li>
-                  <li><code>Splunk_TA_juniper</code> (Juniper Networks Junos)</li>
-                </ul>
+                <pre style="background: #0b0f19; padding: 10px; border-radius: 4px; color: #38bdf8; font-family: monospace; font-size: 11px; overflow-x: auto; margin: 0;">docker compose -f docker-compose.standalone.yml up -d</pre>
+                <div style="margin-top: 8px; font-size: 11px; color: #cbd5e1;">
+                  Web: <code>http://localhost:8000</code> | HEC: <code>https://localhost:8088</code> | Sim: <code>http://localhost:8081</code>
+                </div>
               </div>
             </div>
           </div>

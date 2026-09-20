@@ -158,29 +158,90 @@ Once running, access:
 
 ---
 
-## Splunk SPL Analytics Examples
+## Splunk Technology Add-on (TA) Architecture & Directory
 
-### Query OpenConfig Streaming Metrics
+NetSpout generates 100% schema-accurate vendor raw events and OpenConfig/SC4SNMP metrics **without bundling third-party TAs** inside the app package. This keeps the distribution lightweight (~5MB vs. multiple gigabytes), eliminates library version drift, and satisfies strict **Splunk Cloud AppInspect vetting**.
+
+To enable Common Information Model (CIM) field extractions, install the corresponding official vendor TA from Splunkbase:
+
+| Vendor / Platform | Recommended Splunkbase Add-on | App ID | Target NetSpout Sourcetypes |
+| :--- | :--- | :---: | :--- |
+| **Cisco Catalyst Center** | [Splunk Add-on for Cisco Catalyst Center](https://splunkbase.splunk.com/app/5580) | `5580` | `cisco:catalyst:devicehealth`, `cisco:catalyst:issue`, `cisco:dnac:*` |
+| **Cisco SD-WAN** | [Cisco SD-WAN Add-on for Splunk](https://splunkbase.splunk.com/app/7538) | `7538` | `cisco:sdwan:linkhealth`, `cisco:sdwan:BGP-5-ADJCHANGE`, `cisco:sdwan:*` |
+| **Cisco Identity (ISE)** | [Splunk Add-on for Cisco ISE](https://splunkbase.splunk.com/app/1924) | `1924` | `cisco:ise:syslog`, `cisco:ise:tacacs-policyset` |
+| **Cisco Secure Firewall** | [Cisco Security Cloud Add-on for Splunk](https://splunkbase.splunk.com/app/6259) | `6259` | `cisco:sfw:estreamer`, `cisco:sfw:policy`, `cisco:ftd:syslog` |
+| **Palo Alto Networks** | [Palo Alto Networks Add-on for Splunk](https://splunkbase.splunk.com/app/2757) | `2757` | `pan:traffic`, `pan:threat`, `pan:system` |
+| **Fortinet FortiGate** | [Fortinet FortiGate Add-on for Splunk](https://splunkbase.splunk.com/app/2800) | `2800` | `fortinet:fortigate:traffic`, `fortinet:fortigate:sdwan:alert` |
+| **Arista EOS** | [Arista Networks EOS Add-on for Splunk](https://splunkbase.splunk.com/app/3350) | `3350` | `arista:eos:syslog`, `arista:metrics:telemetry` |
+| **Juniper Junos** | [Splunk Add-on for Juniper](https://splunkbase.splunk.com/app/2855) | `2855` | `juniper:syslog` |
+| **SNMP Engine** | [Splunk Connect for SNMP (SC4SNMP)](https://splunk.github.io/splunk-connect-for-snmp/) | `SC4SNMP` | `sc4snmp:metric`, `sc4snmp:event` |
+
+---
+
+## Production SPL Analytics Reference
+
+### 1. Metric Indexes (`cisco_mdt_metrics` - 500GB Tier)
+
+#### Explore All Streaming Metric Channels
 ```spl
 | mstats avg(_value) WHERE index=cisco_mdt_metrics metric_name=* BY metric_name
 ```
 
-### Timechart Interface Traffic & Carrier Flaps
+#### Real-Time Interface Throughput & Carrier Flap Rate
 ```spl
-| mstats rate(interface.octets.in) AS in_bps, rate(interface.octets.out) AS out_bps, sum(carrier.transitions) AS flaps 
+| mstats rate(interface.octets.in) AS rx_bps, rate(interface.octets.out) AS tx_bps, sum(carrier.transitions) AS flaps 
+  WHERE index=cisco_mdt_metrics span=10s BY host, interface
+```
+
+#### Device Hardware Health (CPU & Virtual Memory Saturation)
+```spl
+| mstats latest(platform.cpu.utilization) AS cpu_pct, latest(platform.memory.utilization) AS mem_pct 
   WHERE index=cisco_mdt_metrics span=10s BY host
 ```
 
-### Audit Fault Injection Cascades
+#### BGP Peer Finite State Machine (FSM) & Routing Table Size
 ```spl
-index=idx_network_ops (sourcetype="cisco:ios:syslog" OR sourcetype="juniper:junos") "%LINK-3-UPDOWN" OR "%BGP-5-ADJCHANGE" OR "%OSPF-5-ADJCHG"
-| stats count BY host, message
+| mstats latest(bgp.peer.state) AS fsm_state, latest(bgp.prefixes.received) AS prefixes 
+  WHERE index=cisco_mdt_metrics BY host, peer
+```
+
+#### SC4SNMP 64-Bit High-Capacity Octets Polling
+```spl
+| mstats rate(ifHCInOctets) AS in_bps, rate(ifHCOutOctets) AS out_bps 
+  WHERE index=cisco_mdt_metrics span=15s BY host, ifIndex
+```
+
+### 2. Event Indexes (`idx_network_ops`, `cisco_secure_fw`, `sdwan`)
+
+#### SC4SNMP Trap Alarms & Decoded Varbinds
+```spl
+index=idx_network_ops sourcetype="sc4snmp:event" snmp_trap_name=*
+| table _time, host, snmp_trap_name, snmp_trap_oid, severity, varbinds.ifDescr
+```
+
+#### Cross-Device Cascading Fault Analysis (Link Loss & Route Teardowns)
+```spl
+index=idx_network_ops (sourcetype="cisco:ios:syslog" OR sourcetype="juniper:syslog") ("%LINK-3-UPDOWN" OR "%BGP-5-ADJCHANGE" OR "%OSPF-5-ADJCHG")
+| stats count, values(message) AS alarm_text BY host
+```
+
+#### Next-Gen Firewall Traffic Drops & SYN Flood Tracking
+```spl
+index=idx_security_fw (sourcetype="pan:traffic" OR sourcetype="cisco:sfw:estreamer") action="drop"
+| timechart span=1m count BY app
+```
+
+#### Cisco Catalyst Device Health Score Analytics
+```spl
+index=idx_network_ops sourcetype="cisco:catalyst:devicehealth"
+| spath path=healthScore output=score
+| stats avg(score) AS avg_score, min(score) AS min_score BY host
 ```
 
 ---
 
 ## Author & License
 
-- **Author**: Mahamud Chowdhury ([mchowdhury@splunk.com](mailto:mchowdhury@splunk.com))
+- **Creator & Lead Architect**: Mahamudul Chowdhury ([mchowdhury@splunk.com](mailto:mchowdhury@splunk.com))
 - **Repository**: [https://github.com/machowdhury/NetSpout](https://github.com/machowdhury/NetSpout)
 - **License**: Apache-2.0

@@ -12,8 +12,8 @@
 
 FROM splunk/splunk:10.2
 
-LABEL maintainer="NetSpout Telemetry Engineering Team"
-LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App"
+LABEL maintainer="Mahamudul Chowdhury <mchowdhury@splunk.com>"
+LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App by Mahamudul Chowdhury"
 
 USER root
 
@@ -29,6 +29,7 @@ RUN microdnf update -y && \
 
 # Copy NetSpout Splunk App directly into Splunk apps directory
 COPY netspout /opt/splunk/etc/apps/netspout
+COPY netspout.spl /opt/splunk/etc/apps/netspout.spl
 
 # Copy Companion Fast Simulation Engine
 COPY backend /opt/netspout-backend

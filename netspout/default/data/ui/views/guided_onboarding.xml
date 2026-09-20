@@ -47,9 +47,18 @@
               <h3 style="color: #38bdf8; font-size: 15px; font-weight: 600; margin: 0 0 8px 0; display: flex; align-items: center; gap: 8px;">
                 <span>Step 1:</span> Choose Onboarding Methodology
               </h3>
-              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 20px 0;">
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 16px 0;">
                 Select how you wish to introduce data into Splunk. You can ingest an individual sourcetype, batch multiple vendors simultaneously, or stream complete architecture failure scenarios.
               </p>
+
+              <!-- Vendor Technology Add-on (TA) Guidance Notice -->
+              <div style="background: rgba(30, 58, 138, 0.25); border: 1px solid #1e40af; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 18px;">💡</span>
+                <div style="font-size: 11px; line-height: 1.5; color: #cbd5e1;">
+                  <strong style="color: #60a5fa;">Splunk Technology Add-on (TA) Architecture Note:</strong>
+                  NetSpout purposefully emits <b>100% schema-compliant vendor event formats</b> without bundling dozens of 3rd-party TAs inside the application package. Bundling external TAs causes multi-gigabyte bloat and violates Splunk Cloud AppInspect vetting standards. To enable Common Information Model (CIM) field extractions for ingested events, install the appropriate vendor TA from <a href="https://splunkbase.splunk.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Splunkbase</a> (e.g. <i>Splunk Add-on for Cisco Catalyst Center</i>, <i>Cisco SD-WAN Add-on</i>, <i>Palo Alto Networks Add-on</i>). See the <a href="help" style="color: #38bdf8; text-decoration: underline;">Help Guide</a> for the full mapping directory.
+                </div>
+              </div>
 
               <!-- 3 Mode Cards -->
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">

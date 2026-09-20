@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, Trash2, Download, Activity, Gauge, Network, Layers, Shield, Radio, Power, Zap, Database } from 'lucide-react';
+import { Play, Pause, Trash2, Download, Activity, Gauge, Network, Layers, Shield, Radio, Power, Zap, Database, Package } from 'lucide-react';
 import type { ScenarioType, EcosystemMode } from '../types/topology';
 import { SCENARIOS } from '../presets/defaultTopologies';
 
@@ -24,6 +24,7 @@ interface TopBarProps {
   onOpenOpenConfigModal: () => void;
   onOpenSNMPModal: () => void;
   onOpenPipelinesModal: () => void;
+  onOpenVendorAddonsModal: () => void;
   onPowerAll: (power: 'running' | 'stopped') => void;
 }
 
@@ -48,6 +49,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenOpenConfigModal,
   onOpenSNMPModal,
   onOpenPipelinesModal,
+  onOpenVendorAddonsModal,
   onPowerAll
 }) => {
   const filteredScenarios = SCENARIOS.filter(
@@ -239,7 +241,17 @@ export const TopBar: React.FC<TopBarProps> = ({
           title="Universal Multi-Pipeline Telemetry Dispatcher (Splunk HEC, OTel Collector, Telegraf, Syslog)"
         >
           <Radio className="w-3.5 h-3.5 text-violet-400" />
-          <span>Pipelines (OTel/Telegraf)</span>
+          <span>Pipelines</span>
+        </button>
+
+        {/* Vendor Add-ons (TAs) Directory Modal Trigger */}
+        <button
+          onClick={onOpenVendorAddonsModal}
+          className="px-2.5 py-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900/60 text-blue-300 hover:text-blue-200 border border-blue-600/60 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_10px_rgba(59,130,246,0.2)]"
+          title="Splunk Technology Add-on (TA) Directory & Guided Onboarding Mappings"
+        >
+          <Package className="w-3.5 h-3.5 text-blue-400" />
+          <span>Vendor TAs</span>
         </button>
 
         {/* Global Node Power Controls */}

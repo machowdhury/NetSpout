@@ -9,6 +9,7 @@ import { FaultInjectionModal } from './components/FaultInjectionModal';
 import { OpenConfigTreeModal } from './components/OpenConfigTreeModal';
 import { SNMPMibModal } from './components/SNMPMibModal';
 import { TelemetryPipelinesModal } from './components/TelemetryPipelinesModal';
+import { VendorAddonsModal } from './components/VendorAddonsModal';
 import type {
   TopologyState,
   ScenarioType,
@@ -59,6 +60,7 @@ export const App: React.FC = () => {
   const [showOpenConfigModal, setShowOpenConfigModal] = useState<boolean>(false);
   const [showSNMPModal, setShowSNMPModal] = useState<boolean>(false);
   const [showPipelinesModal, setShowPipelinesModal] = useState<boolean>(false);
+  const [showVendorAddonsModal, setShowVendorAddonsModal] = useState<boolean>(false);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'http://127.0.0.1:8888/services/collector',
@@ -508,6 +510,7 @@ export const App: React.FC = () => {
         onOpenOpenConfigModal={() => setShowOpenConfigModal(true)}
         onOpenSNMPModal={() => setShowSNMPModal(true)}
         onOpenPipelinesModal={() => setShowPipelinesModal(true)}
+        onOpenVendorAddonsModal={() => setShowVendorAddonsModal(true)}
         onPowerAll={handlePowerAll}
       />
 
@@ -593,6 +596,12 @@ export const App: React.FC = () => {
         onClose={() => setShowPipelinesModal(false)}
         config={transportConfig}
         onSaveConfig={handleSaveTransportConfig}
+      />
+
+      {/* Splunk Vendor Technology Add-on (TA) Directory Modal */}
+      <VendorAddonsModal
+        isOpen={showVendorAddonsModal}
+        onClose={() => setShowVendorAddonsModal(false)}
       />
     </div>
   );

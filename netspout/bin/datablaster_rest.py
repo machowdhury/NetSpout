@@ -1148,9 +1148,39 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                         resp_data = response.read().decode("utf-8", errors="replace")
                         success = True
                         break
+                except urllib.error.HTTPError as he:
+                    err_body = he.read().decode("utf-8", errors="replace")
+                    if "Invalid index" in err_body or he.code == 400:
+                        try:
+                            # Re-attempt delivery directed to main index
+                            fallback_lines = []
+                            for ev in events:
+                                ev_copy = dict(ev) if isinstance(ev, dict) else {"event": ev}
+                                ev_copy["index"] = "main"
+                                fallback_lines.append(json.dumps(ev_copy))
+                            fallback_payload = "\n".join(fallback_lines).encode("utf-8")
+                            fb_req = urllib.request.Request(
+                                url,
+                                data=fallback_payload,
+                                headers={
+                                    "Authorization": f"Splunk {token}",
+                                    "Content-Type": "application/json"
+                                }
+                            )
+                            with urllib.request.urlopen(fb_req, timeout=10, context=ctx) as fb_resp:
+                                resp_data = fb_resp.read().decode("utf-8", errors="replace")
+                                success = True
+                                target_index = f"main (fallback from {target_index})"
+                                break
+                        except Exception as fb_err:
+                            last_err = f"{he} -> {fb_err}"
+                            continue
+                    last_err = str(he)
+                    continue
                 except Exception as e:
                     last_err = str(e)
                     continue
+
 
             if success:
                 return (200, {

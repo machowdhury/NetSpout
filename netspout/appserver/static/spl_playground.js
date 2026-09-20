@@ -104,7 +104,7 @@ require(['jquery', 'splunkjs/mvc', 'splunkjs/mvc/simplexml/ready!'], function($,
       sourcetype: 'cisco:duo:authentication',
       default_index: 'cisco_duo',
       title: 'Duo MFA: Fraud Denials & Impossible Travel',
-      spl: 'index=* (sourcetype="cisco:duo:authentication" OR sourcetype="cisco:duo:push:prompt" OR sourcetype="cisco:duo:authentication_v2")\n| search result="FRAUD" OR result="DENIED" OR result="FAILURE" OR result="fraud" OR result="denied"\n| eval user=coalesce(username, \'user.name\', \'user\'), city=coalesce(\'location.city\', location, "Unknown")\n| stats count, values(city) as cities, dc(city) as distinct_cities by user\n| where count > 0\n| sort -count',
+      spl: 'index=* (sourcetype="cisco:duo:authentication" OR sourcetype="cisco:duo:push:prompt" OR sourcetype="cisco:duo:authentication_v2")\n| spath\n| search result="FRAUD" OR result="DENIED" OR result="FAILURE" OR result="fraud" OR result="denied"\n| eval user=coalesce(username, \'user.name\', \'user\'), city=coalesce(\'location.city\', location, "Unknown")\n| stats count, values(city) as cities, dc(city) as distinct_cities by user\n| where count > 0\n| sort -count',
       description: 'Audits Duo Mobile push fraud alerts, passcode brute-force attempts, and rapid geo-location anomalies.',
       simCols: ['user', 'count', 'cities', 'distinct_cities'],
       simRows: [

@@ -1,5 +1,8 @@
 import React from 'react';
-import { Play, Pause, Trash2, Download, Activity, Gauge, Network, Layers, Shield, Radio, Power, Zap, Database, Package } from 'lucide-react';
+import { 
+  Play, Pause, Trash2, Download, Activity, Gauge, Network, Layers, 
+  Shield, Radio, Power, Zap, Database, Package, Terminal, BookOpen, BarChart3 
+} from 'lucide-react';
 import type { ScenarioType, EcosystemMode } from '../types/topology';
 import { SCENARIOS } from '../presets/defaultTopologies';
 
@@ -25,6 +28,9 @@ interface TopBarProps {
   onOpenSNMPModal: () => void;
   onOpenPipelinesModal: () => void;
   onOpenVendorAddonsModal: () => void;
+  onOpenSPLPlayground: () => void;
+  onOpenUseCaseRepo: () => void;
+  onOpenNocSocMetrics: () => void;
   onPowerAll: (power: 'running' | 'stopped') => void;
 }
 
@@ -50,6 +56,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSNMPModal,
   onOpenPipelinesModal,
   onOpenVendorAddonsModal,
+  onOpenSPLPlayground,
+  onOpenUseCaseRepo,
+  onOpenNocSocMetrics,
   onPowerAll
 }) => {
   const filteredScenarios = SCENARIOS.filter(
@@ -252,6 +261,36 @@ export const TopBar: React.FC<TopBarProps> = ({
         >
           <Package className="w-3.5 h-3.5 text-blue-400" />
           <span>Vendor TAs</span>
+        </button>
+
+        {/* SPL Playground Modal Trigger */}
+        <button
+          onClick={onOpenSPLPlayground}
+          className="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-950/80 to-indigo-950/80 hover:from-cyan-900 hover:to-indigo-900 text-cyan-300 hover:text-white border border-cyan-500/60 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+          title="Interactive Jupyter-like SPL Playground (Notebook Cells, Pipeline Charts, CIM Inspector)"
+        >
+          <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+          <span>SPL Playground</span>
+        </button>
+
+        {/* NOC & SOC Use Case Repository Modal Trigger */}
+        <button
+          onClick={onOpenUseCaseRepo}
+          className="px-2.5 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 hover:text-emerald-200 border border-emerald-600/60 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+          title="NOC & SOC Use Case Repository & Automated Test Harness"
+        >
+          <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Use Cases</span>
+        </button>
+
+        {/* NOC & SOC Metrics Matrix Modal Trigger */}
+        <button
+          onClick={onOpenNocSocMetrics}
+          className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-700 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+          title="NOC & SOC Metric Telemetry Matrix (MOS 1.0-4.5, Goodput, Optical dBm, DDI, Firewall State)"
+        >
+          <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
+          <span>NOC/SOC Metrics</span>
         </button>
 
         {/* Global Node Power Controls */}

@@ -1,4 +1,7 @@
 {
+  "count": 30,
+  "author": "Mahamudul Chowdhury (mchowdhury@splunk.com)",
+  "version": "2.0.0",
   "vendors": [
     {
       "id": "paloalto-panos",
@@ -40,8 +43,7 @@
       },
       "sample_events": {
         "traffic_allow": "1,2026/09/19 14:00:00,001801000000,TRAFFIC,allow,2304,192.168.10.45,104.16.132.229,0.0.0.0,0.0.0.0,Corporate-Web-Access,trust,untrust,ethernet1/2,ethernet1/1,default,49201,443,0,0,0x0,tcp,allow,1420,8920,0,1,0,ssl,0,849201,0x0,United States,United States,0,24,18,0,0,,iad-edge-fw01,from-policy",
-        "threat_ips": "1,2026/09/19 14:02:15,001801000000,THREAT,vulnerability,9901,198.51.100.42,10.20.10.1,0.0.0.0,0.0.0.0,Perimeter-Drop-Exploit,untrust,trust,ethernet1/1,ethernet1/2,default,52410,80,0,0,0x0,tcp,drop,0,0,0,0,0,,(99012) Apache Struts OGNL Injection,web-browsing,informational,server-to-client,4920194,0x0,198.51.100.0-198.51.100.255,United States,0,,0,,,0,,,,0,0,iad-edge-fw01,from-policy",
-        "wildfire_malware": "1,2026/09/19 14:05:30,001801000000,THREAT,wildfire,9902,198.51.100.88,10.20.10.45,0.0.0.0,0.0.0.0,Perimeter-Wildfire-Block,untrust,trust,ethernet1/1,ethernet1/2,default,58192,443,0,0,0x0,tcp,reset-both,0,0,0,0,0,,WildFire.Malware.Gen (Trojan-Ransomware-Locky.exe),web-browsing,critical,server-to-client,5928104,0x0,198.51.100.0-198.51.100.255,United States,0,,0,,,0,,,,0,0,iad-edge-fw01,from-policy"
+        "threat_ips": "1,2026/09/19 14:02:15,001801000000,THREAT,vulnerability,9901,198.51.100.42,10.20.10.1,0.0.0.0,0.0.0.0,Perimeter-Drop-Exploit,untrust,trust,ethernet1/1,ethernet1/2,default,52410,80,0,0,0x0,tcp,drop,0,0,0,0,0,,(99012) Apache Struts OGNL Injection,web-browsing,informational,server-to-client,4920194,0x0,198.51.100.0-198.51.100.255,United States,0,,0,,,0,,,,0,0,iad-edge-fw01,from-policy"
       }
     },
     {
@@ -114,36 +116,38 @@
         "src_port": "src port",
         "dest_port": "dst port",
         "transport": "protocol",
-        "action": "Built/Teardown/Deny",
-        "duration": "duration H:M:S",
-        "vendor_product": "Cisco ASA / FTD"
+        "action": "action (Permit/Deny/Teardown)",
+        "bytes_in": "bytes_in",
+        "bytes_out": "bytes_out",
+        "rule": "access-group OUTSIDE_IN",
+        "vendor_product": "Cisco ASA / Firepower"
       },
       "sample_events": {
-        "deny_packet": "Sep 19 14:15:00 asa-perimeter01 %ASA-4-106023: Deny tcp src outside:198.51.100.42/51024 dst inside:10.20.1.10/443 by access-group \"OUTSIDE_IN\" [0x0, 0x0]",
-        "connection_teardown": "Sep 19 14:15:22 asa-perimeter01 %ASA-6-302014: Teardown TCP connection 948102 for outside:192.168.10.45/49201 to inside:10.20.1.50/80 duration 0:02:14 bytes 49201 TCP FINs"
+        "asa_deny": "Sep 19 14:15:00 sfo-edge-asa01 %ASA-4-106023: Deny tcp src outside:198.51.100.42/48192 dst inside:10.20.0.50/80 by access-group \"OUTSIDE_IN\" [0x0, 0x0] action=blocked signature=\"Inbound Access-List Deny\"",
+        "asa_teardown": "Sep 19 14:16:12 sfo-edge-asa01 %ASA-6-302014: Teardown TCP connection 984210 for outside:192.168.10.45/49201 to inside:104.16.132.229/443 duration 0:02:14 bytes 8920 TCP FINs"
       }
     },
     {
       "id": "checkpoint-quantum",
-      "vendor": "Check Point",
+      "vendor": "Check Point Software",
       "vendor_slug": "checkpoint",
       "category": "Next-Gen Firewall",
-      "name": "Check Point App & Add-on for Splunk",
-      "splunkbase_id": "4293",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/4293",
+      "name": "Check Point App for Splunk",
+      "splunkbase_id": "4292",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4292",
       "doc_url": "https://sc1.checkpoint.com/documents/R81/WebAdminGuides/EN/CP_R81_LoggingAndMonitoring_AdminGuide/Topics-LMG/Log-Fields.htm",
       "sourcetypes": [
-        "checkpoint:traffic",
+        "checkpoint:firewall",
         "checkpoint:threat",
-        "checkpoint:audit"
+        "opsec"
       ],
-      "header_type": "Key-Value Delimited (LEEF/OPSEC compatible)",
-      "delimiter": ";",
-      "timestamp_format": "time=%Y-%m-%d %H:%M:%S",
+      "header_type": "Key-Value Delimited (LEA / Log Export)",
+      "delimiter": " ",
+      "timestamp_format": "%d%b%Y %H:%M:%S",
       "cim_models": [
         "Network Traffic",
         "Intrusion Detection",
-        "Change Analysis"
+        "Authentication"
       ],
       "field_mappings": {
         "src": "src",
@@ -152,335 +156,697 @@
         "dest_port": "service",
         "transport": "proto",
         "action": "action (accept/drop/reject)",
-        "bytes_in": "client_inbound_bytes",
-        "bytes_out": "server_outbound_bytes",
+        "app": "app_name",
+        "rule": "rule_name",
         "vendor_product": "Check Point Quantum"
       },
       "sample_events": {
-        "drop_session": "time=2026-09-19 14:18:00;product=VPN-1 & FireWall-1;action=drop;src=198.51.100.103;dst=10.254.1.1;s_port=59124;service=445;proto=tcp;rule=42;rule_name=Block-SMB-Inbound;hostname=cp-quantum-fw01;loguid={0x66f1b0a1,0x0,0x10002};"
+        "cp_drop": "time=1726790400|action=\"drop\"|src=198.51.100.77|dst=10.20.0.50|proto=6|s_port=51294|service=22|rule_name=\"Stealth-Rule\"|product=\"VPN-1 & FireWall-1\"|reason=\"Unauthorized SSH Access\""
       }
     },
     {
       "id": "cisco-ios-xe",
       "vendor": "Cisco Systems",
       "vendor_slug": "cisco_ios",
-      "category": "Routing & Switching",
+      "category": "Enterprise Routing",
       "name": "Cisco Networks Add-on for Splunk",
-      "splunkbase_id": "1467",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/1467",
-      "doc_url": "https://www.cisco.com/c/en/us/td/docs/routers/asr9000/software/system-logging/command/reference/b-system-logging-cr-asr9000.html",
+      "splunkbase_id": "4144",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4144",
+      "doc_url": "https://www.cisco.com/c/en/us/td/docs/routers/asr1000/configuration/guide/chassis/syslog.html",
       "sourcetypes": [
-        "cisco:ios",
         "cisco:ios:syslog",
         "cisco:ios:mdt:metric"
       ],
-      "header_type": "RFC 3164 / 5424 with Facility-Severity-Mnemonic",
-      "delimiter": ": ",
+      "header_type": "RFC 5424 Syslog Header with %FAC-SEV-MNEM: Format",
+      "delimiter": " ",
       "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
-        "Network Sessions",
         "Network Traffic",
-        "Performance",
-        "Change Analysis"
+        "Change Analysis",
+        "Performance"
       ],
       "field_mappings": {
-        "host": "syslog host",
-        "facility": "%FACILITY",
-        "severity": "%SEVERITY",
-        "mnemonic": "%MNEMONIC",
-        "signature": "Facility-Mnemonic (e.g. BGP-5-ADJCHANGE)",
-        "vendor_product": "Cisco IOS-XE / XR"
+        "facility": "%BGP / %LINK / %SYS",
+        "severity": "Severity Level (1-7)",
+        "mnemonic": "ADJCHANGE / UPDOWN / CPU_RISING_THRESHOLD",
+        "vendor_product": "Cisco IOS-XE"
       },
       "sample_events": {
-        "bgp_down": "Sep 19 14:20:00 rtr-core-c8000-01 %BGP-5-ADJCHANGE: neighbor 10.100.1.2 vrf default Down BFD session down",
-        "link_flap": "Sep 19 14:20:02 sw-cat9600-core %LINK-3-UPDOWN: Interface HundredGigE1/0/1, changed state to down",
-        "bpdu_guard": "Sep 19 14:20:05 sw-cat9300-acc %SPANTREE-2-BLOCK_BPDUGUARD: Received BPDU on port Gi1/0/12 with BPDU Guard enabled. Disabling port."
+        "link_down": "<187>Sep 19 14:00:00 sfo-core-rtr01 %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to down",
+        "bgp_down": "<189>Sep 19 14:00:05 sfo-core-rtr01 %BGP-5-ADJCHANGE: neighbor 10.0.1.2 Down (HoldTimer Expired)"
       }
     },
     {
       "id": "juniper-junos",
       "vendor": "Juniper Networks",
       "vendor_slug": "juniper_junos",
-      "category": "Routing & Switching",
-      "name": "Splunk Add-on for Juniper",
-      "splunkbase_id": "2855",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/2855",
-      "doc_url": "https://www.juniper.net/documentation/us/en/software/junos/logging-reporting/topics/topic-map/junos-syslog-system-messages-overview.html",
+      "category": "Carrier Core Routing",
+      "name": "Juniper Networks Add-on for Splunk",
+      "splunkbase_id": "2819",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2819",
+      "doc_url": "https://www.juniper.net/documentation/us/en/software/junos/logging-reporting/topics/topic-map/system-logging-facilities-severity-levels.html",
       "sourcetypes": [
-        "juniper:syslog",
-        "juniper:junos"
+        "juniper:junos:syslog"
       ],
-      "header_type": "RFC 5424 / BSD Syslog with daemon tag",
-      "delimiter": ": ",
+      "header_type": "BSD Syslog Header with Junos Daemon Process Tag",
+      "delimiter": " ",
       "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
-        "Network Sessions",
         "Network Traffic",
-        "Alerts"
+        "Change Analysis",
+        "Performance"
       ],
       "field_mappings": {
-        "host": "router hostname",
-        "process": "daemon name (rpd, mib2d, chassisd)",
-        "action": "state transition",
+        "daemon": "rpd / mib2d / chassisd",
+        "event_name": "BGP_NEIGHBOR_STATE_CHANGED / SNMP_TRAP_LINK_DOWN",
         "vendor_product": "Junos OS"
       },
       "sample_events": {
-        "bgp_neighbor_loss": "Sep 19 14:22:00 ptx10k-pe01 rpd[8492]: BGP_NEIGHBOR_STATE_CHANGED: BGP peer 10.100.1.1 (External AS 65001) changed state from Established to Idle (event RecvHoldTimerExpired)",
-        "link_down": "Sep 19 14:22:01 ptx10k-pe01 mib2d[1042]: SNMP_TRAP_LINK_DOWN: ifIndex 531, ifAdminStatus up(1), ifOperStatus down(2), ifName et-0/0/0"
+        "link_down": "<187>Sep 19 14:00:00 jnx-border-gw01 mib2d[1042]: SNMP_TRAP_LINK_DOWN: ifIndex 501, ifAdminStatus up(1), ifOperStatus down(2), ifName ge-0/0/0"
       }
     },
     {
       "id": "arista-eos",
       "vendor": "Arista Networks",
       "vendor_slug": "arista_eos",
-      "category": "Cloud Networking & Leaf-Spine",
-      "name": "Arista Networks EOS Add-on for Splunk",
-      "splunkbase_id": "3350",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/3350",
-      "doc_url": "https://www.arista.com/en/um-eos/eos-system-messages",
+      "category": "Data Center Cloud Networking",
+      "name": "Arista Networks Add-on for Splunk",
+      "splunkbase_id": "3249",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/3249",
+      "doc_url": "https://www.arista.com/en/um-eos-4310f/eos-event-logging",
       "sourcetypes": [
-        "arista:eos:syslog",
-        "arista:flow:ipfix",
-        "arista:telemetry:json"
+        "arista:eos:syslog"
       ],
-      "header_type": "EOS Mnemonic Format / JSON Telemetry",
-      "delimiter": ": ",
+      "header_type": "RFC 5424 Syslog with EOS Process Tags",
+      "delimiter": " ",
       "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
+        "Network Traffic",
         "Network Sessions",
-        "Performance",
-        "Network Traffic"
+        "Performance"
       ],
       "field_mappings": {
-        "host": "switch hostname",
-        "process": "Ebra / Bgp / Phy",
-        "signature": "%FACILITY-SEVERITY-MNEMONIC",
+        "daemon": "Ebra / Bgp / ProcMgr",
+        "message_name": "LINEPROTO-5-UPDOWN / BGP-5-ADJCHANGE",
         "vendor_product": "Arista EOS"
       },
       "sample_events": {
-        "line_down": "Sep 19 14:24:00 arista-spine01 Ebra: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1, changed state to down",
-        "bgp_peer_down": "Sep 19 14:24:02 arista-spine01 Bgp: %BGP-5-ADJCHANGE: peer 10.100.2.2 (AS 65002) state changed from Established to Idle"
+        "line_down": "<187>Sep 19 14:00:00 leaf-sw01 Ebra: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1, changed state to down"
       }
     },
     {
-      "id": "dell-os10",
+      "id": "dell-emc-os10",
       "vendor": "Dell Technologies",
-      "vendor_slug": "dell",
-      "category": "Data Center & Enterprise Switching",
-      "name": "Dell EMC Networking Add-on for Splunk",
-      "splunkbase_id": "4820",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/4820",
-      "doc_url": "https://www.dell.com/support/manuals/en-us/smartfabric-os10-emp-edge/smartfabric-os-user-guide/system-logs",
+      "vendor_slug": "dell_os10",
+      "category": "Data Center Fabric",
+      "name": "Dell Technologies Add-on for Splunk",
+      "splunkbase_id": "5320",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/5320",
+      "doc_url": "https://www.dell.com/support/manuals/en-us/smartfabric-os10-emp-sw/smartfabric_os10_user_guide/syslog-messages",
       "sourcetypes": [
-        "dell:os10",
-        "sonic:syslog"
+        "dell:os10:syslog"
       ],
-      "header_type": "RFC 5424 Syslog with %IFM- / %BGP- tags",
-      "delimiter": ": ",
-      "timestamp_format": "%Y-%m-%dT%H:%M:%S%z",
+      "header_type": "Dell OS10 Syslog Header with %IFM- Tag",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
-        "Network Sessions",
         "Network Traffic",
-        "Performance"
+        "Change Analysis"
       ],
       "field_mappings": {
-        "host": "switch hostname",
-        "signature": "%MODULE-SEVERITY-EVENT",
+        "daemon": "dn_ifm / dn_bgp",
         "vendor_product": "Dell SmartFabric OS10"
       },
       "sample_events": {
-        "oper_down": "<189>1 2026-09-19T14:26:00.102+00:00 dell-s5248-core01 dn_ifm 581 - - %IFM-5-OPER_STATUS: Interface ethernet 1/1/48 operational status changed to down"
+        "if_down": "%Dell <187>Sep 19 14:00:00 spine01 dn_ifm[819]: %IFM-3-IF_DOWN: Interface 1/1/1 is Down"
       }
     },
     {
-      "id": "nokia-sros",
+      "id": "nokia-sr-os",
       "vendor": "Nokia",
-      "vendor_slug": "nokia_sros",
-      "category": "Carrier IP Routing & Optical Transport",
-      "name": "Nokia 7750 SR OS Add-on for Splunk",
-      "splunkbase_id": "5120",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/5120",
-      "doc_url": "https://documentation.nokia.com/html/0_add-h-f/pkg/7750_SR_Syslog_Guide.html",
+      "vendor_slug": "nokia_sr",
+      "category": "Service Provider Edge",
+      "name": "Nokia 7750 SR Add-on for Splunk",
+      "splunkbase_id": "5184",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/5184",
+      "doc_url": "https://documentation.nokia.com/html/0_add-ids/V21.10.R1/SR_OS_Log_Events_Guide.pdf",
       "sourcetypes": [
-        "nokia:sros",
-        "nokia:sros:syslog"
+        "nokia:sr:syslog"
       ],
-      "header_type": "TiMOS Event Log with Major/Minor Classification",
-      "delimiter": " - ",
-      "timestamp_format": "%Y/%m/%d %H:%M:%S.%f",
+      "header_type": "Nokia SR OS Log Event with Event-Number and Module",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
-        "Network Sessions",
-        "Alerts",
-        "Performance"
+        "Network Traffic",
+        "Change Analysis"
       ],
       "field_mappings": {
-        "host": "carrier router name",
-        "signature": "Event ID & Classification",
-        "vendor_product": "Nokia 7750 SR OS"
+        "module": "VRTR / CHASSIS",
+        "vendor_product": "Nokia 7750 SR"
       },
       "sample_events": {
-        "optical_los": "1 2026/09/19 14:28:00.412 UTC nokia-7750-sr12-core01 SYSTEM-WARNING-SYSTEM-1002 - [port 1/1/c1] Optical carrier Loss of Signal (LOS) detected on DWDM transceiver. Bit Error Rate (BER) exceeded 1.0E-4"
+        "port_down": "Sep 19 14:00:00 pe-router-01 Base SYSTEM-4-PORT_DOWN Port 1/1/1 Oper Status Changed to Down"
       }
     },
     {
       "id": "cisco-catalyst",
       "vendor": "Cisco Systems",
       "vendor_slug": "cisco_catalyst",
-      "category": "Campus LAN & Wireless",
-      "name": "Splunk Add-on for Cisco Catalyst Center (DNA-C)",
-      "splunkbase_id": "5580",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/5580",
-      "doc_url": "https://developer.cisco.com/docs/dna-center/#!cisco-dna-center-platform-overview",
+      "category": "Campus Access Switching",
+      "name": "Cisco Catalyst Switch Add-on for Splunk",
+      "splunkbase_id": "4144",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4144",
+      "doc_url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/sec/b_179_sec_9300_cg.html",
       "sourcetypes": [
-        "cisco:catalyst:networkhealth",
-        "cisco:catalyst:clienthealth",
-        "cisco:catalyst:rogue:threat_details",
-        "cisco:catalyst:issue"
+        "cisco:catalyst:syslog"
       ],
-      "header_type": "Structured Key-Value / JSON Webhook",
+      "header_type": "Cisco Standard Syslog (%PORT_SECURITY-, %SW_MATM-)",
       "delimiter": " ",
-      "timestamp_format": "timestamp=\"%Y-%m-%dT%H:%M:%S.%fZ\"",
+      "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
-        "Network Sessions",
         "Network Traffic",
-        "Alerts",
-        "Inventory"
+        "Authentication"
       ],
       "field_mappings": {
-        "device_name": "host / device",
-        "overall_health": "health_score",
-        "rogue_bssid": "rogue_mac",
-        "vendor_product": "Cisco Catalyst Center"
+        "facility": "%PORT_SECURITY / %SW_MATM",
+        "vendor_product": "Cisco Catalyst 9300"
       },
       "sample_events": {
-        "rogue_ap_threat": "cisco:catalyst:rogue:threat_details ap_name=\"AP-Floor3-West\" rogue_bssid=\"70:69:79:4c:11:02\" ssid=\"Corporate-Guest-EvilTwin\" rogue_type=\"Unclassified\" classification=\"Threat\" state=\"Alert\" signal_rssi=-68 containment_status=\"pending\"",
-        "client_health": "cisco:catalyst:clienthealth timestamp=\"2026-09-19T14:30:00.000Z\" controller=\"Catalyst-9800-WLC\" client_mac=\"70:69:79:4c:11:02\" ap_name=\"Catalyst-9130AX-AP\" client_ip=\"10.40.1.105\" ssid=\"Corp-Secure-WPA3\" health_score=98 rssi=-58 snr=38 channel=36 throughput_mbps=482.5 status=HEALTHY"
+        "port_security": "<187>Sep 19 14:00:00 cat9300-acc01 %PORT_SECURITY-2-PSECURE_VIOLATION: Security violation occurred, caused by MAC 0050.56a1.22c3 on port Gi1/0/12"
       }
     },
     {
       "id": "cisco-meraki",
-      "vendor": "Cisco Systems",
-      "vendor_slug": "meraki",
-      "category": "Cloud Networking",
-      "name": "Splunk Add-on for Cisco Meraki",
-      "splunkbase_id": "5619",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/5619",
+      "vendor": "Cisco Meraki",
+      "vendor_slug": "cisco_meraki",
+      "category": "Cloud-Managed Networking",
+      "name": "Cisco Meraki Add-on for Splunk",
+      "splunkbase_id": "2786",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2786",
       "doc_url": "https://documentation.meraki.com/General_Administration/Monitoring_and_Reporting/Syslog_Event_Types_and_Log_Samples",
       "sourcetypes": [
-        "meraki:accesspoints",
-        "meraki:airmarshal",
-        "meraki:switchports",
-        "meraki:devices"
+        "meraki:security",
+        "meraki:appliance"
       ],
-      "header_type": "JSON Webhook Payload / RFC 5424 Syslog",
+      "header_type": "Key-Value Delimited Syslog",
       "delimiter": " ",
-      "timestamp_format": "timestamp=\"%Y-%m-%dT%H:%M:%S.%fZ\"",
+      "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
         "Network Traffic",
-        "Network Sessions",
-        "Alerts"
+        "Authentication",
+        "Intrusion Detection"
       ],
       "field_mappings": {
-        "device_serial": "serial",
-        "client_count": "clients",
-        "vendor_product": "Cisco Meraki"
+        "src": "src",
+        "dest": "dst",
+        "mac": "client_mac",
+        "vendor_product": "Cisco Meraki MR/MX"
       },
       "sample_events": {
-        "ap_telemetry": "meraki:accesspoints timestamp=\"2026-09-19T14:32:00.000Z\" network_id=\"N_88192031\" device_serial=\"Q2KD-99A1-XZ34\" name=\"Meraki-MR56-AP\" client_count=34 channel_utilization_2_4ghz=18% channel_utilization_5ghz=42% tx_power_dbm=17 rx_packets=1289004 tx_packets=2490182 mesh_role=\"root\" status=\"online\""
+        "rogue_ap": "Sep 19 14:20:00 meraki-cloud events rogue_ap_detected ap_mac=00:18:0a:ff:01:23 radio=0 ssid=Corporate-Guest-Spoofed rssi=-42"
       }
     },
     {
       "id": "cisco-ise",
       "vendor": "Cisco Systems",
       "vendor_slug": "cisco_ise",
-      "category": "Identity & Access Control",
-      "name": "Splunk Add-on for Cisco ISE",
-      "splunkbase_id": "1924",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/1924",
-      "doc_url": "https://www.cisco.com/c/en/us/td/docs/security/ise/3-3/admin_guide/b_ise_admin_3_3/b_ise_admin_33_logging.html",
+      "category": "Network Access Control & Zero Trust",
+      "name": "Cisco Identity Services Engine (ISE) Add-on for Splunk",
+      "splunkbase_id": "2736",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2736",
+      "doc_url": "https://www.cisco.com/c/en/us/td/docs/security/ise/3-2/admin_guide/b_ise_admin_3_2/b_ise_admin_32_logging.html",
       "sourcetypes": [
-        "cisco:ise:byod:provisioning",
-        "cisco:ise:nac:8021x",
-        "cisco:ise:trustsec",
-        "cisco:ise:tacacs",
-        "cisco:ise:guest"
+        "cisco:ise:syslog"
       ],
-      "header_type": "CISE_ Mnemonic Key-Value Delimited",
+      "header_type": "Cisco ISE CISE_ Message Format (Delimited / Tagged)",
       "delimiter": " ",
-      "timestamp_format": "%Y-%m-%d %H:%M:%S.%f",
+      "timestamp_format": "%Y-%m-%d %H:%M:%S",
       "cim_models": [
         "Authentication",
-        "Change Analysis",
-        "Network Sessions"
+        "Change Analysis"
       ],
       "field_mappings": {
         "user": "User-Name",
         "src_mac": "Calling-Station-Id",
-        "dest": "NAS-IP-Address",
-        "action": "Response (Passed/Failed)",
-        "app": "EapAuthentication",
-        "sgt": "cisco-av-pair=security-group-tag",
+        "nas_ip": "NAS-IP-Address",
+        "action": "Passed-Authentication / Failed-Attempt",
         "vendor_product": "Cisco ISE"
       },
       "sample_events": {
-        "passed_auth": "CISE_Passed_Authentications 0001847291 1 0 2026-09-19 14:35:00.124 +00:00 0029481921 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=alex.turner@enterprise.corp, Calling-Station-Id=70-69-79-4C-11-02, NAS-IP-Address=10.254.3.1, NAS-Port=GigabitEthernet1/0/12, EapAuthentication=EAP-TLS, cisco-av-pair=security-group-tag=0004-TrustSec-Employee, SelectedAuthorizationProfiles=PermitAccess",
-        "tacacs_admin": "CISE_TACACS_Accounting 0001847399 1 0 2026-09-19 14:36:12.891 +00:00 0029482094 3300 NOTICE TACACS-Accounting: Command authorization accounting, User-Name=netadmin_root, NAS-IP-Address=10.254.1.1, Port=vty0, Cmd=configure terminal <args: >, CmdArg=interface HundredGigE1/0/1 <args: shutdown>, Privilege-Level=15, Response=Success"
+        "ise_passed": "<181>Sep 19 14:00:00 ise-node-01 CISE_Passed_Authentications 0000021481 1 0 2026-09-19 14:00:00.012 +00:00 0001234566 5200 NOTICE Passed-Authentication: User-Name=alice.engineer, NAS-IP-Address=10.0.1.10"
       }
     },
     {
       "id": "cisco-duo",
-      "vendor": "Cisco Duo Security",
+      "vendor": "Cisco Duo",
       "vendor_slug": "cisco_duo",
-      "category": "MFA & Zero Trust",
-      "name": "Duo Security Splunk Add-on",
-      "splunkbase_id": "3245",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/3245",
-      "doc_url": "https://duo.com/docs/splunk",
+      "category": "Multi-Factor Authentication & Zero Trust",
+      "name": "Duo Security Add-on for Splunk",
+      "splunkbase_id": "4768",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4768",
+      "doc_url": "https://duo.com/docs/adminapi#authentication-logs",
       "sourcetypes": [
-        "cisco:duo:push:prompt",
-        "cisco:duo:endpoint:health",
-        "cisco:duo:sso:saml",
-        "cisco:duo:zerotrust:policy",
-        "cisco:duo:vpn:remote"
+        "cisco:duo:auth"
       ],
-      "header_type": "JSON Key-Value Delimited",
-      "delimiter": " ",
-      "timestamp_format": "timestamp=\"%Y-%m-%dT%H:%M:%S.%fZ\"",
+      "header_type": "JSON Event Object",
+      "delimiter": "JSON",
+      "timestamp_format": "Unix Epoch / ISO 8601",
       "cim_models": [
-        "Authentication",
-        "Change Analysis",
-        "Alerts"
+        "Authentication"
       ],
       "field_mappings": {
-        "user": "user",
-        "action": "result (SUCCESS/FAILURE/FRAUD)",
-        "src": "ip_address",
-        "app": "integration",
-        "factor": "factor (duo_push/passcode/touchid)",
-        "vendor_product": "Cisco Duo"
+        "user": "username",
+        "action": "result (SUCCESS/FAILURE/ENROLL)",
+        "src_ip": "ip",
+        "factor": "factor (duo_push/passcode/phone_call)",
+        "vendor_product": "Cisco Duo Security"
       },
       "sample_events": {
-        "push_auth": "timestamp=\"2026-09-19T14:40:00.124Z\" host=\"cisco-duo-auth01\" event_type=\"authentication\" user=\"marcus.vance@enterprise.corp\" factor=\"duo_push\" result=\"SUCCESS\" ip_address=\"198.51.100.88\" integration=\"Cisco ASA AnyConnect SSL-VPN\" device=\"iPhone 15 Pro iOS 17.4\" posture_state=\"COMPLIANT\" location=\"Austin, TX, US\"",
-        "posture_check": "timestamp=\"2026-09-19T14:40:02.891Z\" host=\"cisco-duo-auth01\" event_type=\"endpoint_health\" user=\"marcus.vance@enterprise.corp\" tpm_version=\"2.0\" disk_encryption=\"FileVault2_Enabled\" biometrics=\"TouchID_Verified\" firewall_active=true result=\"COMPLIANT\""
+        "duo_push": "{\"timestamp\": 1726790400, \"username\": \"alice.engineer\", \"eventtype\": \"authentication\", \"result\": \"SUCCESS\", \"reason\": \"User approved Duo Push\", \"ip\": \"192.168.10.45\", \"factor\": \"duo_push\"}"
       }
     },
     {
       "id": "zscaler-zia",
       "vendor": "Zscaler",
-      "vendor_slug": "zscaler",
-      "category": "Cloud SASE & Web Proxy",
-      "name": "Zscaler App for Splunk",
-      "splunkbase_id": "5648",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/5648",
+      "vendor_slug": "zscaler_zia",
+      "category": "Cloud SASE & Secure Web Gateway",
+      "name": "Zscaler Add-on for Splunk",
+      "splunkbase_id": "3584",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/3584",
       "doc_url": "https://help.zscaler.com/zia/nss-feed-output-format-web-logs",
       "sourcetypes": [
-        "zscaler:zia",
-        "zscaler:zpa",
-        "zscaler:lss"
+        "zscaler:zia:web",
+        "zscaler:zia:tunnel"
       ],
-      "header_type": "JSON / Delimited Nanosecond Event",
+      "header_type": "NSS Tab/Key-Value Delimited",
+      "delimiter": "\t",
+      "timestamp_format": "%Y-%m-%d %H:%M:%S",
+      "cim_models": [
+        "Web",
+        "Proxy",
+        "Intrusion Detection"
+      ],
+      "field_mappings": {
+        "src": "clientip",
+        "url": "url",
+        "action": "action (Allowed/Blocked)",
+        "vendor_product": "Zscaler ZIA"
+      },
+      "sample_events": {
+        "zia_block": "2026-09-19 14:00:00\t192.168.10.45\tBlock-Malware\thttp://c2-beacon-malicious.biz/payload.exe\tBlocked\tMalware.Trojan.Downloader"
+      }
+    },
+    {
+      "id": "f5-bigip-ltm",
+      "vendor": "F5 Networks",
+      "vendor_slug": "f5_bigip",
+      "category": "Application Delivery Controller (ADC)",
+      "name": "F5 Networks Add-on for Splunk",
+      "splunkbase_id": "2680",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2680",
+      "doc_url": "https://my.f5.com/manage/s/article/K13080",
+      "sourcetypes": [
+        "f5:bigip:syslog",
+        "f5:bigip:ltm"
+      ],
+      "header_type": "BSD Syslog with tmm process tag",
       "delimiter": " ",
-      "timestamp_format": "datetime=\"%Y-%m-%d %H:%M:%S\"",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Web",
+        "Network Traffic",
+        "Performance"
+      ],
+      "field_mappings": {
+        "vip": "virtual_server",
+        "pool": "pool_name",
+        "member": "node_ip:port",
+        "vendor_product": "F5 BIG-IP LTM"
+      },
+      "sample_events": {
+        "ltm_pool": "Sep 19 14:00:00 f5-dc01-lb01 info tmm[1204]: 01010028:6: No members available for pool /Common/production_web_pool"
+      }
+    },
+    {
+      "id": "sc4snmp-telemetry",
+      "vendor": "Splunk Community / SC4SNMP",
+      "vendor_slug": "sc4snmp",
+      "category": "Enterprise SNMP Gateway",
+      "name": "Splunk Connect for SNMP",
+      "splunkbase_id": "6120",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/6120",
+      "doc_url": "https://splunk.github.io/splunk-connect-for-snmp/main/",
+      "sourcetypes": [
+        "sc4snmp:event",
+        "sc4snmp:metric"
+      ],
+      "header_type": "Key-Value Delimited Trap / Metric JSON",
+      "delimiter": " ",
+      "timestamp_format": "Unix Epoch / ISO 8601",
+      "cim_models": [
+        "Network Traffic",
+        "Performance",
+        "Alerts"
+      ],
+      "field_mappings": {
+        "trap_oid": "trap_oid (1.3.6.1...)",
+        "trap_name": "trap_name (linkDown, linkUp, etc.)",
+        "community": "community",
+        "vendor_product": "SC4SNMP"
+      },
+      "sample_events": {
+        "snmp_trap": "SNMP-COMMUNITY=public TRAP-TYPE=linkDown OID=1.3.6.1.6.3.1.1.5.3 SEVERITY=CRITICAL ifIndex=501 ifOperStatus=2"
+      }
+    },
+    {
+      "id": "aruba-os-cx",
+      "vendor": "Aruba / HPE",
+      "vendor_slug": "aruba_cx",
+      "category": "Enterprise Campus Switching",
+      "name": "ArubaOS-CX Add-on for Splunk",
+      "splunkbase_id": "5486",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/5486",
+      "doc_url": "https://www.arubanetworks.com/techdocs/AOS-CX/10.10/HTML/monitoring_6200-6300-6400/Content/Chp_syslog/sys-mes-10.htm",
+      "sourcetypes": [
+        "aruba:cx:syslog",
+        "aruba:cx:security"
+      ],
+      "header_type": "RFC 5424 Syslog with %LOG_ Prefix",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Authentication",
+        "Change Analysis"
+      ],
+      "field_mappings": {
+        "src": "src_ip",
+        "dest": "dest_ip",
+        "interface": "port",
+        "action": "status",
+        "vendor_product": "ArubaOS-CX"
+      },
+      "sample_events": {
+        "port_down": "<187>Sep 19 14:00:00 aruba-cx-6300 hpe-restd[842]: %LOG_WARN|EventType=PORT_DOWN|Port 1/1/24 state changed to Down",
+        "auth_violation": "<186>Sep 19 14:01:10 aruba-cx-6300 port-accessd[612]: %LOG_ERR|EventType=MAC_AUTH_FAILED|MAC 00:0c:29:ab:cd:ef failed authentication on Port 1/1/12"
+      }
+    },
+    {
+      "id": "extreme-xos",
+      "vendor": "Extreme Networks",
+      "vendor_slug": "extreme_networks",
+      "category": "Enterprise Switching & Fabric",
+      "name": "Extreme Networks Add-on for Splunk",
+      "splunkbase_id": "5440",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/5440",
+      "doc_url": "https://documentation.extremenetworks.com/exos_31.7/GUID-3D966B24-8149-43E5-A8F5-3E77BF7AEF9B.shtml",
+      "sourcetypes": [
+        "extreme:exos:syslog",
+        "extreme:voss:syslog"
+      ],
+      "header_type": "BSD Syslog with Process Daemon Tag",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Change Analysis"
+      ],
+      "field_mappings": {
+        "process": "vlan / hal",
+        "event": "Port.LinkDn / Port.LinkUp",
+        "vendor_product": "ExtremeXOS"
+      },
+      "sample_events": {
+        "link_down": "<187>Sep 19 14:00:00 summit-x460 hal: Port 1:2 link is down"
+      }
+    },
+    {
+      "id": "huawei-vrp",
+      "vendor": "Huawei Technologies",
+      "vendor_slug": "huawei_vrp",
+      "category": "Core & Metro Routing",
+      "name": "Huawei Network Add-on for Splunk",
+      "splunkbase_id": "5262",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/5262",
+      "doc_url": "https://support.huawei.com/enterprise/en/doc/EDOC1100127168",
+      "sourcetypes": [
+        "huawei:vrp:syslog",
+        "huawei:vrp:traffic"
+      ],
+      "header_type": "RFC 3164 Syslog with %% Prefix",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %Y %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Authentication"
+      ],
+      "field_mappings": {
+        "module": "%%01IFNET / %%01BGP",
+        "digest": "LINK_DOWN / ADJ_CHANGE",
+        "vendor_product": "Huawei VRP"
+      },
+      "sample_events": {
+        "link_down": "%%01IFNET/4/LINK_STATE(l)[0]:The line protocol on the interface GE1/0/1 has entered the DOWN state."
+      }
+    },
+    {
+      "id": "sonicwall-sonicos",
+      "vendor": "SonicWall",
+      "vendor_slug": "sonicwall",
+      "category": "Next-Gen Firewall",
+      "name": "SonicWall Add-on for Splunk",
+      "splunkbase_id": "3986",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/3986",
+      "doc_url": "https://www.sonicwall.com/support/technical-documentation/docs/sonicos-7-0-0-0-log/Content/Topics/Logging/Syslog_Format.htm",
+      "sourcetypes": [
+        "sonicwall:firewall"
+      ],
+      "header_type": "Key-Value Delimited Syslog (c=, m=, msg=)",
+      "delimiter": " ",
+      "timestamp_format": "%Y-%m-%d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Intrusion Detection",
+        "Authentication"
+      ],
+      "field_mappings": {
+        "src": "src",
+        "dest": "dst",
+        "src_port": "src:port",
+        "dest_port": "dst:port",
+        "transport": "proto",
+        "action": "action (allow/deny/drop)",
+        "vendor_product": "SonicWall SonicOS"
+      },
+      "sample_events": {
+        "drop": "id=firewall sn=2CF89B001234 time=\"2026-09-19 14:00:00\" fw=10.0.0.1 pri=4 c=1024 m=38 msg=\"Connection Dropped\" app=2 n=942 src=198.51.100.42:52104:X1 dst=10.20.0.50:22:X2 proto=tcp/22 note=\"Inbound Access Denied\""
+      }
+    },
+    {
+      "id": "sophos-xgs",
+      "vendor": "Sophos",
+      "vendor_slug": "sophos",
+      "category": "Next-Gen Firewall",
+      "name": "Sophos Firewall Add-on for Splunk",
+      "splunkbase_id": "4134",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4134",
+      "doc_url": "https://doc.sophos.com/nsg/sophos-firewall/20.0/help/en-us/webhelp/onlinehelp/AdministratorHelp/Logs/LogFileFormat/index.html",
+      "sourcetypes": [
+        "sophos:xg:firewall",
+        "sophos:central:cef"
+      ],
+      "header_type": "Space-Delimited Key-Value (key=value)",
+      "delimiter": " ",
+      "timestamp_format": "date=%Y-%m-%d time=%H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Intrusion Detection",
+        "Malware"
+      ],
+      "field_mappings": {
+        "src": "src_ip",
+        "dest": "dst_ip",
+        "src_port": "src_port",
+        "dest_port": "dst_port",
+        "transport": "protocol",
+        "action": "action (Allow/Drop/Deny)",
+        "vendor_product": "Sophos XGS"
+      },
+      "sample_events": {
+        "threat_block": "date=2026-09-19 time=14:00:00 devname=\"XGS-EDGE01\" log_id=010101600001 log_type=\"Firewall\" log_component=\"Firewall Rule\" log_subtype=\"Drop\" status=\"Deny\" src_ip=198.51.100.88 dst_ip=10.20.0.50 protocol=\"TCP\" src_port=52941 dst_port=445 message=\"Denied by Default Drop Rule\""
+      }
+    },
+    {
+      "id": "watchguard-fireware",
+      "vendor": "WatchGuard",
+      "vendor_slug": "watchguard",
+      "category": "Next-Gen Firewall & UTM",
+      "name": "WatchGuard Firebox Add-on for Splunk",
+      "splunkbase_id": "4038",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4038",
+      "doc_url": "https://www.watchguard.com/help/docs/help-center/en-US/Content/en-US/Fireware/logging/syslog_message_format_c.html",
+      "sourcetypes": [
+        "watchguard:fireware:traffic",
+        "watchguard:fireware:alarm"
+      ],
+      "header_type": "Key-Value Delimited Syslog with msg_id= and disp=",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Intrusion Detection"
+      ],
+      "field_mappings": {
+        "src": "src",
+        "dest": "dst",
+        "action": "disp (Deny/Allow)",
+        "vendor_product": "WatchGuard Firebox"
+      },
+      "sample_events": {
+        "deny": "Sep 19 14:00:00 Firebox msg_id=3000-0148 disp=Deny policy=Unhandled-Packets proto=tcp src=198.51.100.42 dst=10.20.0.50 prt_src=51492 prt_dst=23"
+      }
+    },
+    {
+      "id": "forcepoint-ngfw",
+      "vendor": "Forcepoint",
+      "vendor_slug": "forcepoint",
+      "category": "Next-Gen Firewall & Secure SD-WAN",
+      "name": "Forcepoint NGFW Add-on for Splunk",
+      "splunkbase_id": "3519",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/3519",
+      "doc_url": "https://help.forcepoint.com/ngfw/en/6.10/admin/c_syslog_messages.html",
+      "sourcetypes": [
+        "forcepoint:ngfw:traffic",
+        "forcepoint:ngfw:alert"
+      ],
+      "header_type": "CEF / Syslog Key-Value (k=\"v\")",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Intrusion Detection",
+        "Web"
+      ],
+      "field_mappings": {
+        "src": "Src",
+        "dest": "Dst",
+        "action": "Action (Allow/Discard)",
+        "vendor_product": "Forcepoint NGFW"
+      },
+      "sample_events": {
+        "discard": "Sep 19 14:00:00 fp-ngfw01 Action=\"Discard\" Reason=\"Rule Match\" Facility=\"Packet Filtering\" Src=\"198.51.100.42\" Dst=\"10.20.0.50\" Proto=\"6\" Service=\"22\""
+      }
+    },
+    {
+      "id": "a10-thunder",
+      "vendor": "A10 Networks",
+      "vendor_slug": "a10_networks",
+      "category": "Application Delivery & CGNAT",
+      "name": "A10 Networks Add-on for Splunk",
+      "splunkbase_id": "2963",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2963",
+      "doc_url": "https://documentation.a10networks.com/ACOS/521/ACOS_5_2_1_Syslog_Messages/index.html",
+      "sourcetypes": [
+        "a10:acos:syslog",
+        "a10:acos:cgnat"
+      ],
+      "header_type": "RFC 5424 Syslog with [ACOS] Tag",
+      "delimiter": " ",
+      "timestamp_format": "%b %d %H:%M:%S",
+      "cim_models": [
+        "Network Traffic",
+        "Network Sessions",
+        "Performance"
+      ],
+      "field_mappings": {
+        "src": "src_ip",
+        "dest": "dest_ip",
+        "vendor_product": "A10 Thunder ADC"
+      },
+      "sample_events": {
+        "slb_down": "<187>Sep 19 14:00:00 a10-adc01 [ACOS]: [SLB] Server Web-Backend-01 port 80 is DOWN (Health check timeout)"
+      }
+    },
+    {
+      "id": "radware-defensepro",
+      "vendor": "Radware",
+      "vendor_slug": "radware",
+      "category": "DDoS Protection & Cloud WAF",
+      "name": "Radware DefensePro Add-on for Splunk",
+      "splunkbase_id": "4976",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4976",
+      "doc_url": "https://support.radware.com/app/answers/detail/a_id/10294",
+      "sourcetypes": [
+        "radware:defensepro:attack",
+        "radware:cwaf:waf"
+      ],
+      "header_type": "CEF Format (CEF:0|Radware|DefensePro|...)",
+      "delimiter": "|",
+      "timestamp_format": "Unix Epoch / ISO 8601",
+      "cim_models": [
+        "Intrusion Detection",
+        "Network Traffic",
+        "Alerts"
+      ],
+      "field_mappings": {
+        "src": "src",
+        "dest": "dst",
+        "act": "act (Drop/Mitigate)",
+        "attack": "attack_name",
+        "vendor_product": "Radware DefensePro"
+      },
+      "sample_events": {
+        "ddos_drop": "CEF:0|Radware|DefensePro|8.2|SYN-Flood|SYN Flood Attack Detected|8|src=198.51.100.0 dst=10.20.0.50 dpt=80 proto=TCP act=Drop attack_bps=45000000000"
+      }
+    },
+    {
+      "id": "citrix-netscaler",
+      "vendor": "Citrix / Cloud Software Group",
+      "vendor_slug": "citrix_netscaler",
+      "category": "Application Delivery Controller (ADC)",
+      "name": "Citrix NetScaler Add-on for Splunk",
+      "splunkbase_id": "2748",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/2748",
+      "doc_url": "https://docs.netscaler.com/en-us/citrix-adc/current-release/system/audit-logging/log-format-and-specifications.html",
+      "sourcetypes": [
+        "citrix:netscaler:syslog",
+        "citrix:netscaler:web"
+      ],
+      "header_type": "NetScaler BSD Syslog with PPE-0 Process Tag",
+      "delimiter": " ",
+      "timestamp_format": "%m/%d/%Y:%H:%M:%S",
+      "cim_models": [
+        "Web",
+        "Network Traffic",
+        "Authentication",
+        "Performance"
+      ],
+      "field_mappings": {
+        "src": "Client_ip",
+        "dest": "Nat_ip",
+        "vserver": "Vserver",
+        "vendor_product": "Citrix NetScaler ADC"
+      },
+      "sample_events": {
+        "ns_tcp": "09/19/2026:14:00:00 GMT netscaler-vip01 0-PPE-0 : default TCP CONN_TERMINATE 1048 0 : Source 192.168.10.45:49201 - Destination 10.20.0.10:443 - Start_time 09/19/2026:13:58:00 - End_time 09/19/2026:14:00:00 - Total_bytes_send 1420 - Total_bytes_recv 8920"
+      }
+    },
+    {
+      "id": "cloudflare-one",
+      "vendor": "Cloudflare",
+      "vendor_slug": "cloudflare",
+      "category": "Cloud SASE & Edge WAF",
+      "name": "Cloudflare App for Splunk",
+      "splunkbase_id": "4501",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4501",
+      "doc_url": "https://developers.cloudflare.com/logs/reference/log-fields/",
+      "sourcetypes": [
+        "cloudflare:json",
+        "cloudflare:firewall"
+      ],
+      "header_type": "JSON Event Log",
+      "delimiter": "JSON",
+      "timestamp_format": "RFC 3339 / ISO 8601",
       "cim_models": [
         "Web",
         "Network Traffic",
@@ -488,83 +854,110 @@
       ],
       "field_mappings": {
         "src": "ClientIP",
-        "user": "user",
-        "url": "url",
-        "action": "action (Allow/Block)",
-        "app": "app",
-        "riskscore": "riskscore",
-        "vendor_product": "Zscaler ZIA"
+        "dest": "EdgeServerIP",
+        "url": "ClientRequestURI",
+        "action": "Action (block/challenge/allow)",
+        "vendor_product": "Cloudflare Magic WAN & WAF"
       },
       "sample_events": {
-        "url_block": "{\"datetime\":\"2026-09-19 14:45:00\",\"user\":\"eng-dev@corp.internal\",\"app\":\"ChatGPT-Enterprise\",\"action\":\"Block\",\"proto\":\"HTTPS\",\"url\":\"https://pastebin.com/raw/d849201\",\"threatname\":\"T1567 Exfiltration Over Web Service\",\"riskscore\":\"92\",\"egress_dc\":\"iad-zscaler\"}"
+        "waf_block": "{\"EdgeStartTimestamp\":1726790400000000,\"ClientIP\":\"198.51.100.42\",\"ClientRequestURI\":\"/api/login.php\",\"Action\":\"block\",\"RuleID\":\"100012\",\"ClientRequestUserAgent\":\"sqlmap/1.5\",\"EdgeResponseStatus\":403}"
       }
     },
     {
-      "id": "f5-bigip",
-      "vendor": "F5 Networks",
-      "vendor_slug": "f5_bigip",
-      "category": "Application Delivery Controller (ADC)",
-      "name": "F5 Networks Add-on for Splunk",
-      "splunkbase_id": "2680",
-      "splunkbase_url": "https://splunkbase.splunk.com/app/2680",
-      "doc_url": "https://techdocs.f5.com/en-us/bigip-16-0-0/big-ip-systems-syslog-messages-guide.html",
+      "id": "netskope-sse",
+      "vendor": "Netskope",
+      "vendor_slug": "netskope",
+      "category": "Security Service Edge (SSE) & CASB",
+      "name": "Netskope Add-on for Splunk",
+      "splunkbase_id": "4774",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/4774",
+      "doc_url": "https://docs.netskope.com/en/netskope-help/integrations-439799/log-streaming/syslog-and-cloud-exchange/",
       "sourcetypes": [
-        "f5:bigip:ltm",
-        "f5:bigip:syslog",
-        "f5:bigip:asm:syslog"
+        "netskope:events",
+        "netskope:alerts"
       ],
-      "header_type": "Syslog Format with tmm/mcpd process tag",
-      "delimiter": ": ",
+      "header_type": "JSON Event Object",
+      "delimiter": "JSON",
+      "timestamp_format": "Unix Epoch / ISO 8601",
+      "cim_models": [
+        "Web",
+        "Alerts",
+        "Authentication",
+        "DLP"
+      ],
+      "field_mappings": {
+        "src": "srcip",
+        "user": "user",
+        "app": "app",
+        "action": "action (allow/block/alert)",
+        "vendor_product": "Netskope Security Cloud"
+      },
+      "sample_events": {
+        "dlp_block": "{\"timestamp\": 1726790400, \"user\": \"alice.engineer@corp.com\", \"srcip\": \"192.168.10.45\", \"app\": \"Google Drive\", \"action\": \"block\", \"alert_type\": \"dlp\", \"policy\": \"Block-Confidential-SourceCode\"}"
+      }
+    },
+    {
+      "id": "vmware-nsx",
+      "vendor": "VMware by Broadcom",
+      "vendor_slug": "vmware_nsx",
+      "category": "Software-Defined Networking & Micro-segmentation",
+      "name": "VMware NSX-T Add-on for Splunk",
+      "splunkbase_id": "3110",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/3110",
+      "doc_url": "https://docs.vmware.com/en/VMware-NSX/4.1/administration/GUID-9C3E3A6E-DFBA-4DA4-A152-E9385C2A4DE6.html",
+      "sourcetypes": [
+        "vmware:nsx:firewall",
+        "vmware:nsx:audit"
+      ],
+      "header_type": "RFC 5424 Syslog with nsx-edge / FIREWALL Tag",
+      "delimiter": " ",
+      "timestamp_format": "%Y-%m-%dT%H:%M:%SZ",
+      "cim_models": [
+        "Network Traffic",
+        "Change Analysis",
+        "Authentication"
+      ],
+      "field_mappings": {
+        "src": "src",
+        "dest": "dst",
+        "action": "action (ALLOW/DROP)",
+        "rule": "rule_id",
+        "vendor_product": "VMware NSX-T"
+      },
+      "sample_events": {
+        "dfw_drop": "2026-09-19T14:00:00Z nsx-edge01 FIREWALL 1042 - [nsx@6876 comp=\"nsx-esx\" subcomp=\"ksec\" action=\"DROP\" rule_id=\"1024\" src=\"10.20.10.45\" dst=\"10.20.0.50\" proto=\"TCP\" sport=\"51294\" dport=\"445\"]"
+      }
+    },
+    {
+      "id": "cisco-aci",
+      "vendor": "Cisco Systems",
+      "vendor_slug": "cisco_aci",
+      "category": "Data Center Software-Defined Fabric",
+      "name": "Cisco ACI Add-on for Splunk Enterprise",
+      "splunkbase_id": "1896",
+      "splunkbase_url": "https://splunkbase.splunk.com/app/1896",
+      "doc_url": "https://www.cisco.com/c/en/us/td/docs/switches/datacenter/aci/apic/sw/all/syslog/guide/b_ACI_Syslog.html",
+      "sourcetypes": [
+        "cisco:aci:syslog",
+        "cisco:aci:fault"
+      ],
+      "header_type": "RFC 5424 Syslog with %LOG_LOCAL and [F...][flt...] Fault Tags",
+      "delimiter": " ",
       "timestamp_format": "%b %d %H:%M:%S",
       "cim_models": [
         "Network Traffic",
-        "Web",
-        "Intrusion Detection"
+        "Change Analysis",
+        "Alerts"
       ],
       "field_mappings": {
-        "host": "f5 hostname",
-        "pool": "pool name",
-        "member": "node IP:port",
-        "action": "Pool member state / failover",
-        "vendor_product": "F5 BIG-IP LTM"
+        "fault_code": "code (F0103, F1298, etc.)",
+        "dn": "affected distinguished name",
+        "severity": "severity (critical/major/minor/warning)",
+        "vendor_product": "Cisco ACI Fabric"
       },
       "sample_events": {
-        "pool_member_down": "Sep 19 14:50:00 bigip01.corp.internal notice mcpd[8192]: 01070638:5: Pool /Common/pool_prod_web member /Common/node_web02:80 monitor status down. [ was up for 142hrs ]",
-        "pool_routing": "Sep 19 14:50:05 bigip01.corp.internal info tmm[1002]: Rule /Common/irule_http_route <HTTP_REQUEST>: Client 192.168.1.100:49201 routed to active pool member 10.0.1.11:80"
-      }
-    },
-    {
-      "id": "sc4snmp-core",
-      "vendor": "Splunk Connect for SNMP",
-      "vendor_slug": "sc4snmp",
-      "category": "SNMP Polling & Trap Ingestion",
-      "name": "Splunk Connect for SNMP (SC4SNMP)",
-      "splunkbase_id": "SC4SNMP",
-      "splunkbase_url": "https://splunk.github.io/splunk-connect-for-snmp/",
-      "doc_url": "https://splunk.github.io/splunk-connect-for-snmp/main/profiles/cisco/",
-      "sourcetypes": [
-        "sc4snmp:metric",
-        "sc4snmp:event"
-      ],
-      "header_type": "HEC Metric & Event JSON (Splunk Standard)",
-      "delimiter": "json",
-      "timestamp_format": "epoch",
-      "cim_models": [
-        "Performance",
-        "Alerts",
-        "Inventory"
-      ],
-      "field_mappings": {
-        "metric_name": "metric_name:<oid_symbol>",
-        "_value": "numerical metric measurement",
-        "host": "managed network node",
-        "vendor_product": "SC4SNMP"
-      },
-      "sample_events": {
-        "metric_octets": "{\"time\":1789854000.0,\"event\":\"metric\",\"source\":\"sc4snmp\",\"sourcetype\":\"sc4snmp:metric\",\"host\":\"cat9600-core01.corp.internal\",\"index\":\"cisco_mdt_metrics\",\"fields\":{\"metric_name:ifInOctets\":94820140.0,\"metric_name:ifOutOctets\":128920194.0,\"metric_name:ifOperStatus\":1.0,\"_value\":94820140.0,\"ifIndex\":\"1\",\"ifDescr\":\"HundredGigE1/0/1\",\"device\":\"cat9600-core01\",\"vendor\":\"cisco\"}}",
-        "trap_event": "{\"time\":1789854002.0,\"event\":\"snmp_trap\",\"source\":\"sc4snmp:trap\",\"sourcetype\":\"sc4snmp:event\",\"host\":\"ptx10k-pe01.corp.internal\",\"index\":\"idx_network_ops\",\"fields\":{\"snmp_trap_oid\":\"1.3.6.1.6.3.1.1.5.3\",\"snmp_trap_name\":\"linkDown\",\"severity\":\"critical\",\"varbinds\":{\"ifIndex\":531,\"ifDescr\":\"et-0/0/0\",\"ifOperStatus\":2},\"device\":\"ptx10k-pe01\",\"vendor\":\"juniper\"}}"
+        "aci_fault": "<186>Sep 19 14:00:00 apic01 %LOG_LOCAL7-3-SYSTEM_MSG [F0103][raised][port-down][major][topology/pod-1/node-101/sys/phys-[eth1/1]/fault-F0103] Port eth1/1 is down, operational reason: link-failure"
       }
     }
-  ],
-  "count": 16
+  ]
 }

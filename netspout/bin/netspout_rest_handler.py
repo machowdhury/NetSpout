@@ -107,6 +107,36 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
                     return self._response(200, {"vendor": v} if v else {"error": "Vendor not found"})
                 return self._response(200, {"vendors": list_all_vendors(), "count": len(list_all_vendors())})
 
+            # 7. Interactive SPL Query Playground
+            elif "spl_query" in path or subpath == "spl_query" or subpath == "query":
+                from spl_engine import spl_engine
+                q_str = payload.get("query", query.get("q", "*"))
+                events_in = payload.get("events", [])
+                res = spl_engine.execute(q_str, events_in)
+                return self._response(200, res)
+
+            # 8. NOC & SOC Telemetry Metrics & Frequency Blueprints
+            elif "metrics" in path or subpath == "metrics":
+                from noc_soc_metrics import metric_engine
+                if "blueprints" in path or subpath == "blueprints":
+                    return self._response(200, metric_engine.get_frequency_blueprints())
+                is_deg = query.get("is_degraded", "false").lower() == "true"
+                is_atk = query.get("is_under_attack", "false").lower() == "true"
+                return self._response(200, {
+                    "noc": metric_engine.generate_noc_metrics(is_degraded=is_deg),
+                    "soc": metric_engine.generate_soc_metrics(is_under_attack=is_atk)
+                })
+
+            # 9. Use Case Repository & Test Harness
+            elif "use_cases" in path or subpath == "use_cases":
+                from use_case_repo import use_case_harness
+                uc_id = query.get("id", payload.get("use_case_id"))
+                if method == "POST" or "test" in path:
+                    target_id = uc_id or payload.get("id", "uc-noc-01-bgp-flap")
+                    test_res = use_case_harness.run_use_case_test(target_id, events=payload.get("events", []))
+                    return self._response(200, test_res)
+                return self._response(200, {"use_cases": use_case_harness.list_use_cases(), "count": len(use_case_harness.list_use_cases())})
+
             # Default /status
             return self._response(200, {
                 "status": "online",

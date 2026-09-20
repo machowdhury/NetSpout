@@ -736,8 +736,51 @@ def get_vendor_catalog(id: Optional[str] = None):
         v = get_vendor_by_id(id)
         if not v:
             raise HTTPException(status_code=404, detail="Vendor not found")
-        return {"vendor": v}
     return {"vendors": list_all_vendors(), "count": len(list_all_vendors())}
+
+
+# SPL Query Playground Endpoint
+@app.post("/api/spl/query")
+def execute_spl_query(payload: Dict[str, Any]):
+    from app.spl_engine import spl_engine
+    query = payload.get("query", "*")
+    input_events = payload.get("events")
+    if not input_events:
+        input_events = [e.dict() if hasattr(e, "dict") else e for e in list(accumulated_logs)]
+    return spl_engine.execute(query, input_events)
+
+
+# NOC & SOC Metrics Endpoints
+@app.get("/api/metrics/noc_soc")
+def get_noc_soc_metrics(is_degraded: bool = False, is_under_attack: bool = False):
+    from app.noc_soc_metrics import metric_engine
+    from datetime import datetime, timezone
+    return {
+        "noc": metric_engine.generate_noc_metrics(is_degraded=is_degraded),
+        "soc": metric_engine.generate_soc_metrics(is_under_attack=is_under_attack),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/metrics/blueprints")
+def get_metric_blueprints():
+    from app.noc_soc_metrics import metric_engine
+    return metric_engine.get_frequency_blueprints()
+
+
+# Use Case Repository & Test Harness Endpoints
+@app.get("/api/use_cases")
+def list_use_cases():
+    from app.use_case_repo import use_case_harness
+    return {"use_cases": use_case_harness.list_use_cases(), "count": len(use_case_harness.list_use_cases())}
+
+
+@app.post("/api/use_cases/{uc_id}/test")
+def run_use_case_test(uc_id: str):
+    from app.use_case_repo import use_case_harness
+    raw_evs = [e.dict() if hasattr(e, "dict") else e for e in list(accumulated_logs)]
+    res = use_case_harness.run_use_case_test(uc_id, topology=current_topology, events=raw_evs)
+    return res
 
 
 # WebSocket Endpoint

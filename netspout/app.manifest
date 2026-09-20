@@ -15,7 +15,7 @@
       }
     ],
     "releaseDate": null,
-    "description": "NetSpout: Native Splunk Network Telemetry Simulator, OpenConfig MDT Engine, and Dynamic Failure Orchestrator",
+    "description": "NetSpout: Splunk-Native Network Telemetry Simulation, Interactive SPL Playground, OpenConfig MDT Engine, 30-Vendor TA Ecosystem, and NOC/SOC Metric Matrix",
     "classification": {
       "intendedAudience": "IT Operations, Network Engineering, SecOps, SRE",
       "categories": ["IT Operations", "Security, Fraud & Compliance", "Utilities"],

@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 from app.models import (
+    SNMPTrapTriggerRequest, SNMPPollRequest, PipelineTestRequest,
     TopologyState, Node, Edge, NodeType, ScenarioType,
     LogEntry, SimulationRequest, EcosystemMode,
     ZoneAnnotation, NodePowerState, NodeHardware,
@@ -26,9 +27,10 @@ from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
+from app.snmp_engine import snmp_engine
 from app.fault_injection_engine import fault_engine
 
-app = FastAPI(title="Visual Network Topology Simulator API", version="2.0.0")
+app = FastAPI(title="NetSpout Telemetry & Simulation API", version="2.0.0")
 
 # Enable CORS for frontend development server
 app.add_middleware(
@@ -623,6 +625,162 @@ async def trigger_gnmi_sample(node_id: Optional[str] = Query(None)):
         "target_index": "cisco_mdt_metrics",
         "metrics": all_metrics[:10]
     }
+
+
+
+# =========================================================================
+# SC4SNMP 300+ MIB LIBRARY & TRAP DISPATCHER
+# =========================================================================
+
+@app.get("/api/snmp/mibs")
+async def get_snmp_mibs(
+    vendor: Optional[str] = Query(None),
+    module: Optional[str] = Query(None),
+    search: Optional[str] = Query(None)
+):
+    mibs = snmp_engine.list_mibs(vendor=vendor, module=module, search=search)
+    return {
+        "status": "success",
+        "total_count": len(mibs),
+        "mibs": [m.model_dump() for m in mibs]
+    }
+
+
+@app.post("/api/snmp/trap")
+async def trigger_snmp_trap(req: SNMPTrapTriggerRequest):
+    global current_topology
+    node = next((n for n in current_topology.nodes if n.id == req.target_node_id or n.name == req.host), None)
+    if not node:
+        node = Node(id="sim-node", name=req.host, type=NodeType.ROUTER, x=0, y=0, vendor="cisco")
+    
+    trap = snmp_engine.generate_trap(req.trap_name, node, req.varbind_overrides)
+    transport = req.destinations or current_topology.global_transport
+    results = dispatcher.dispatch_snmp_trap(trap, transport)
+    
+    # Broadcast to WebSocket log feed
+    await manager.broadcast_log({
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(trap.timestamp)),
+        "device_id": trap.host,
+        "src_ip": node.ip_address,
+        "dest_ip": "10.255.255.255",
+        "protocol": "SNMP-TRAP",
+        "duration": "0ms",
+        "action": "alerted",
+        "signature": f"SNMP TRAP {trap.trap_name}",
+        "status": "degraded",
+        "raw_log": f"SNMP-COMMUNITY=public TRAP-TYPE={trap.trap_name} OID={trap.trap_oid} SEVERITY={trap.severity.upper()}",
+        "node_type": node.type.value,
+        "node_id": node.id,
+        "vendor": node.vendor,
+        "sourcetype": "sc4snmp:event"
+    })
+    
+    return {
+        "status": "success",
+        "trap": trap.model_dump(),
+        "dispatch_results": results
+    }
+
+
+@app.post("/api/snmp/poll")
+async def trigger_snmp_poll(req: SNMPPollRequest):
+    global current_topology
+    node = next((n for n in current_topology.nodes if n.id == req.target_node_id or n.name == req.host), None)
+    if not node:
+        node = Node(id="sim-node", name=req.host, type=NodeType.SWITCH, x=0, y=0, vendor="cisco")
+
+    module = req.mib_module or "IF-MIB"
+    metrics = snmp_engine.simulate_snmp_poll(node, module=module)
+    transport = req.destinations or current_topology.global_transport
+    
+    for m in metrics:
+        dispatcher.dispatch_snmp_metric(m, transport)
+
+    return {
+        "status": "success",
+        "polled_module": module,
+        "metrics_count": len(metrics),
+        "target_index": "cisco_mdt_metrics",
+        "metrics": metrics[:10]
+    }
+
+
+@app.post("/api/telemetry/test-pipeline")
+async def test_pipeline_endpoint(req: PipelineTestRequest):
+    ok, msg = dispatcher.test_pipeline(req.pipeline, req.config)
+    return {
+        "pipeline": req.pipeline,
+        "success": ok,
+        "message": msg
+    }
+
+
+@app.get("/api/openconfig/export/{node_id}")
+async def export_openconfig_rfc7951(node_id: str):
+    node = next((n for n in current_topology.nodes if n.id == node_id), None)
+    if not node:
+        return Response(status_code=404, content=json.dumps({"error": "Node not found"}), media_type="application/json")
+    tree = yang_store.get_or_create_tree(node)
+    return Response(
+        content=json.dumps(tree, indent=2),
+        media_type="application/yang-data+json",
+        headers={"Content-Disposition": f"attachment; filename=openconfig_{node_id}.json"}
+    )
+
+
+# Vendor Catalog Endpoint
+@app.get("/api/vendors/catalog")
+def get_vendor_catalog(id: Optional[str] = None):
+    from app.vendor_catalog import list_all_vendors, get_vendor_by_id
+    if id:
+        v = get_vendor_by_id(id)
+        if not v:
+            raise HTTPException(status_code=404, detail="Vendor not found")
+    return {"vendors": list_all_vendors(), "count": len(list_all_vendors())}
+
+
+# SPL Query Playground Endpoint
+@app.post("/api/spl/query")
+def execute_spl_query(payload: Dict[str, Any]):
+    from app.spl_engine import spl_engine
+    query = payload.get("query", "*")
+    input_events = payload.get("events")
+    if not input_events:
+        input_events = [e.dict() if hasattr(e, "dict") else e for e in list(accumulated_logs)]
+    return spl_engine.execute(query, input_events)
+
+
+# NOC & SOC Metrics Endpoints
+@app.get("/api/metrics/noc_soc")
+def get_noc_soc_metrics(is_degraded: bool = False, is_under_attack: bool = False):
+    from app.noc_soc_metrics import metric_engine
+    from datetime import datetime, timezone
+    return {
+        "noc": metric_engine.generate_noc_metrics(is_degraded=is_degraded),
+        "soc": metric_engine.generate_soc_metrics(is_under_attack=is_under_attack),
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/metrics/blueprints")
+def get_metric_blueprints():
+    from app.noc_soc_metrics import metric_engine
+    return metric_engine.get_frequency_blueprints()
+
+
+# Use Case Repository & Test Harness Endpoints
+@app.get("/api/use_cases")
+def list_use_cases():
+    from app.use_case_repo import use_case_harness
+    return {"use_cases": use_case_harness.list_use_cases(), "count": len(use_case_harness.list_use_cases())}
+
+
+@app.post("/api/use_cases/{uc_id}/test")
+def run_use_case_test(uc_id: str):
+    from app.use_case_repo import use_case_harness
+    raw_evs = [e.dict() if hasattr(e, "dict") else e for e in list(accumulated_logs)]
+    res = use_case_harness.run_use_case_test(uc_id, topology=current_topology, events=raw_evs)
+    return res
 
 
 # WebSocket Endpoint

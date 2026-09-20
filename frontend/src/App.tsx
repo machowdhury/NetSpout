@@ -10,6 +10,9 @@ import { OpenConfigTreeModal } from './components/OpenConfigTreeModal';
 import { SNMPMibModal } from './components/SNMPMibModal';
 import { TelemetryPipelinesModal } from './components/TelemetryPipelinesModal';
 import { VendorAddonsModal } from './components/VendorAddonsModal';
+import { SPLPlaygroundModal } from './components/SPLPlaygroundModal';
+import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
+import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import type {
   TopologyState,
   ScenarioType,
@@ -68,6 +71,10 @@ export const App: React.FC = () => {
   const [showSNMPModal, setShowSNMPModal] = useState<boolean>(false);
   const [showPipelinesModal, setShowPipelinesModal] = useState<boolean>(false);
   const [showVendorAddonsModal, setShowVendorAddonsModal] = useState<boolean>(false);
+  const [showSPLModal, setShowSPLModal] = useState<boolean>(false);
+  const [showUseCaseModal, setShowUseCaseModal] = useState<boolean>(false);
+  const [showMetricsModal, setShowMetricsModal] = useState<boolean>(false);
+  const [splInitialQuery, setSplInitialQuery] = useState<string | undefined>(undefined);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'http://127.0.0.1:8888/services/collector',
@@ -564,6 +571,9 @@ export const App: React.FC = () => {
         onOpenSNMPModal={() => setShowSNMPModal(true)}
         onOpenPipelinesModal={() => setShowPipelinesModal(true)}
         onOpenVendorAddonsModal={() => setShowVendorAddonsModal(true)}
+        onOpenSPLPlayground={() => setShowSPLModal(true)}
+        onOpenUseCaseRepo={() => setShowUseCaseModal(true)}
+        onOpenNocSocMetrics={() => setShowMetricsModal(true)}
         onPowerAll={handlePowerAll}
       />
 
@@ -655,6 +665,34 @@ export const App: React.FC = () => {
       <VendorAddonsModal
         isOpen={showVendorAddonsModal}
         onClose={() => setShowVendorAddonsModal(false)}
+      />
+
+      {/* Interactive Jupyter-like SPL Playground Modal */}
+      <SPLPlaygroundModal
+        isOpen={showSPLModal}
+        onClose={() => {
+          setShowSPLModal(false);
+          setSplInitialQuery(undefined);
+        }}
+        logs={logs}
+        initialQuery={splInitialQuery}
+      />
+
+      {/* NOC & SOC Use Case Repository & Test Harness Modal */}
+      <UseCaseRepositoryModal
+        isOpen={showUseCaseModal}
+        onClose={() => setShowUseCaseModal(false)}
+        logs={logs}
+        onOpenInSPL={(query) => {
+          setSplInitialQuery(query);
+          setShowSPLModal(true);
+        }}
+      />
+
+      {/* NOC & SOC Metrics Matrix Modal */}
+      <NocSocMetricsModal
+        isOpen={showMetricsModal}
+        onClose={() => setShowMetricsModal(false)}
       />
     </div>
   );

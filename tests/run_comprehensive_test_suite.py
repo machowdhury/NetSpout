@@ -376,10 +376,126 @@ except Exception as e:
     record_test("Suite 13", "Multi-Vendor Cascading Fault Engine", False, str(e))
 
 # -----------------------------------------------------------------------------
-# SUITE 14: netspout.spl Production Release Package Integrity
 # -----------------------------------------------------------------------------
-print("\n>> Suite 14: netspout.spl Production Archive Validation")
-record_test("Suite 14", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
+# SUITE 15: 30-Vendor Splunkbase Directory & TA Ecosystem
+# -----------------------------------------------------------------------------
+print("\n>> Suite 15: 30-Vendor Splunkbase Directory & TA Ecosystem")
+try:
+    from vendor_catalog import list_all_vendors, get_vendor_by_id, VENDOR_ECOSYSTEM
+    all_v = list_all_vendors()
+    record_test("Suite 15", "Vendor Catalog Count (>= 30)", len(all_v) >= 30, f"Found {len(all_v)} audited enterprise vendors")
+    
+    categories = set(v["category"] for v in all_v)
+    cats_present = len(categories) >= 5
+    record_test("Suite 15", "All Vendor Categories Represented", cats_present, f"{len(categories)} distinct enterprise categories found")
+    
+    cisco = get_vendor_by_id("cisco_ios")
+    pa = get_vendor_by_id("palo_alto")
+    fortinet = get_vendor_by_id("fortinet")
+    f5 = get_vendor_by_id("f5_bigip")
+    cloudflare = get_vendor_by_id("cloudflare")
+    key_vendors_ok = all([cisco, pa, fortinet, f5, cloudflare])
+    record_test("Suite 15", "Key Vendors Audited with Splunkbase App IDs", key_vendors_ok, "Cisco, Palo Alto, Fortinet, F5, Cloudflare verified")
+    
+    # Check static JSON export
+    v_json = os.path.join(NETSPOUT_DIR, "appserver/static/vendor_catalog.json")
+    v_json_ok = os.path.exists(v_json) and os.path.getsize(v_json) > 5000
+    record_test("Suite 15", "Vendor Catalog JSON Mirror for Splunk Web", v_json_ok, f"Path: {v_json}")
+except Exception as e:
+    record_test("Suite 15", "Vendor Catalog Integrity", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 16: In-Memory SPL Playground Execution Engine
+# -----------------------------------------------------------------------------
+print("\n>> Suite 16: In-Memory SPL Playground Execution Engine")
+try:
+    from spl_engine import spl_engine
+    sample_events = [
+        {"raw_log": "%BGP-5-ADJCHANGE: peer 10.0.0.1 Up", "signature": "BGP_ADJ", "vendor": "cisco", "action": "allowed", "rtt_ms": 12.5, "protocol": "TCP"},
+        {"raw_log": "%BGP-5-ADJCHANGE: peer 10.0.0.2 Down", "signature": "BGP_ADJ", "vendor": "cisco", "action": "alerted", "rtt_ms": 84.0, "protocol": "TCP"},
+        {"raw_log": "threat: port scan detected", "signature": "PORT_SCAN", "vendor": "palo_alto", "action": "blocked", "rtt_ms": 2.1, "protocol": "TCP"},
+        {"raw_log": "dns lookup failure", "signature": "DNS_FAIL", "vendor": "infoblox", "action": "dropped", "rtt_ms": 95.2, "protocol": "UDP"}
+    ]
+    
+    # Test 1: stats count by vendor
+    res1 = spl_engine.execute('stats count by vendor', sample_events)
+    t1_ok = len(res1["results"]) == 3 and "cisco" in [r["vendor"] for r in res1["results"]]
+    record_test("Suite 16", "SPL Command: stats count by vendor", t1_ok, f"{len(res1['results'])} vendor buckets")
+
+    # Test 2: where clause filtering
+    res2 = spl_engine.execute('stats count, avg(rtt_ms) as avg_rtt by vendor | where count > 1', sample_events)
+    t2_ok = len(res2["results"]) == 1 and res2["results"][0]["vendor"] == "cisco"
+    record_test("Suite 16", "SPL Command: stats + where filtering", t2_ok, "Properly filtered out count <= 1")
+
+    # Test 3: head and sort
+    res3 = spl_engine.execute('* | sort -rtt_ms | head 2 | table vendor, rtt_ms', sample_events)
+    t3_ok = len(res3["results"]) == 2 and res3["results"][0]["vendor"] in ["infoblox", "cisco"]
+    record_test("Suite 16", "SPL Command: sort + head + table projection", t3_ok, "Sorted descending and capped to 2")
+
+    # Test 4: boolean OR text search
+    res4 = spl_engine.execute('("BGP" OR "scan")', sample_events)
+    t4_ok = len(res4["results"]) == 3
+    record_test("Suite 16", "SPL Command: Boolean OR Expression Matching", t4_ok, f"Matched {len(res4['results'])}/4 events")
+except Exception as e:
+    record_test("Suite 16", "SPL Execution Engine", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 17: NOC & SOC Metric Telemetry Matrix
+# -----------------------------------------------------------------------------
+print("\n>> Suite 17: NOC & SOC Metric Telemetry Matrix")
+try:
+    from noc_soc_metrics import metric_engine, NocSocMetricEngine
+    
+    # Test 1: ITU-T G.107 MOS E-Model calculation
+    mos_optimal = metric_engine.calculate_mos(rtt_ms=2.0, jitter_ms=0.5, loss_pct=0.0)
+    mos_degraded = metric_engine.calculate_mos(rtt_ms=120.0, jitter_ms=35.0, loss_pct=5.5)
+    mos_ok = mos_optimal >= 4.2 and mos_degraded <= 2.5
+    record_test("Suite 17", "ITU-T G.107 VoIP MOS Score E-Model", mos_ok, f"Optimal: {mos_optimal} / Degraded: {mos_degraded}")
+
+    # Test 2: Metric Generation Schema
+    metrics_normal = metric_engine.generate_noc_metrics(is_degraded=False)
+    metrics_degraded = metric_engine.generate_noc_metrics(is_degraded=True)
+    required_metric_keys = [
+        "throughput_mbps", "goodput_mbps", "flow_efficiency_pct", "optical_rx_dbm",
+        "thermal_chassis_c", "thermal_asic_c", "mtbf_hours", "dns_latency_ms",
+        "dhcp_pool_exhaustion_pct", "firewall_session_utilization_pct", "c2_beacon_threat_score"
+    ]
+    keys_ok = all(k in metrics_normal for k in required_metric_keys)
+    record_test("Suite 17", "NOC/SOC Telemetry Schema Completeness", keys_ok, f"All {len(required_metric_keys)} metric dimensions present")
+    
+    # Test 3: Operational Blueprints
+    blueprints = metric_engine.get_operational_blueprints()
+    bp_ok = "realtime_tactical" in blueprints and "weekly_capacity_forecast" in blueprints and "annual_strategic_compliance" in blueprints
+    record_test("Suite 17", "3-Tier Multi-Frequency Operational Blueprints", bp_ok, "Real-time, Weekly trends, Annual strategic verified")
+except Exception as e:
+    record_test("Suite 17", "NOC/SOC Metric Engine", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 18: NOC & SOC Use Case Repository & Test Harness
+# -----------------------------------------------------------------------------
+print("\n>> Suite 18: NOC & SOC Use Case Repository & Test Harness")
+try:
+    from use_case_repo import use_case_repo, USE_CASES
+    record_test("Suite 18", "Pre-Built Production Use Cases Count (>= 10)", len(USE_CASES) >= 10, f"Found {len(USE_CASES)} audited use cases")
+    
+    # Verify automated test execution for all use cases
+    all_passed = True
+    test_runs = []
+    for uc in USE_CASES:
+        res = use_case_repo.run_use_case_test(uc["id"])
+        test_runs.append(res)
+        if res.get("status") != "passed":
+            all_passed = False
+    
+    record_test("Suite 18", "Automated Assertions Verification Harness", all_passed, f"Verified {len(test_runs)}/{len(USE_CASES)} use cases passing")
+except Exception as e:
+    record_test("Suite 18", "Use Case Repository Test Harness", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 19: netspout.spl Production Release Package Integrity
+# -----------------------------------------------------------------------------
+print("\n>> Suite 19: netspout.spl Production Archive Validation")
+record_test("Suite 19", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
 
 archive_valid = False
 archive_size = 0
@@ -397,8 +513,8 @@ if os.path.exists(SPL_ARCHIVE):
     except Exception as e:
         archive_valid = False
 
-record_test("Suite 14", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
-record_test("Suite 14", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
+record_test("Suite 19", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
+record_test("Suite 19", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
 
 # -----------------------------------------------------------------------------
 # FINAL SUMMARY REPORT

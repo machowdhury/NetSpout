@@ -1,0 +1,38 @@
+samples:
+  - name: arista-eos-baseline
+    interval: 30
+    count: 8
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:00 sw-arista-7280-01 Rib: %ROUTING-6-BGP_NEIGHBOR_UP: BGP neighbor 10.254.1.2 AS 64512 state changed from OPENCONFIRM to ESTABLISHED"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:01 sw-arista-7280-01 Lineproto: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1, changed state to up"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:02 sw-arista-7280-01 Ebgp: %BGP-5-ADJCHANGE: neighbor 198.51.100.1 Up (VRF default)"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:03 sw-arista-7280-01 Rib: %ROUTING-5-ROUTE_INSTALL: BGP route 198.51.100.0/24 installed via 10.254.1.2 Ethernet1/1"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:04 sw-arista-7280-01 Sand: %SAND-6-PFC_WATCHDOG_RECOVERED: Priority-flow-control watchdog recovered on Ethernet1/1 priority 3"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:05 sw-arista-7280-01 Xmpp: %XMPP-6-STATUS: XMPP connection to CloudVision portal established successfully"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:06 sw-arista-7280-01 Thermostat: %ENVIRONMENT-6-TEMP_NORMAL: Chassis temperature normalized to 42 C"
+      - index: idx_network_ops
+        source: arista_eos_syslog
+        sourcetype: arista:eos
+        _raw: "May 20 14:00:07 sw-arista-7280-01 Bfd: %BFD-5-STATE_CHANGE: BFD session with neighbor 10.254.1.2 state changed to UP"

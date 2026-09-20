@@ -1,0 +1,14 @@
+samples:
+  - name: nokia-sros-syslog-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: nokia_sros_syslog
+        sourcetype: nokia:sros:syslog
+        _raw: "May 20 14:00:23 rtr-nokia-7750-01 MAJOR: SYSTEM #2041 Base SYSTEM-ENV-3-OVERTEMP: Chassis slot 1 temperature 68 C exceeds high warning threshold (65 C)"
+      - index: idx_network_ops
+        source: nokia_sros_syslog
+        sourcetype: nokia:sros:syslog
+        _raw: "May 20 14:00:24 rtr-nokia-7750-01 WARNING: CHASSIS #2042 Base CHASSIS-PSU-4-FAILOVER: PSU 2 input voltage fluctuation detected"

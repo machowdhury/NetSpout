@@ -1,0 +1,14 @@
+samples:
+  - name: zscaler-zia-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_security_fw
+        source: zscaler_zia
+        sourcetype: zscaler:zia
+        _raw: "May 20 14:00:28 zia-gateway-sjc zscaler-nss: sourcetype=zscaler:zia datetime=\"2026-09-20 14:00:28 UTC\" user=\"alice.sec@corp.internal\" department=\"SecOps\" reqmethod=\"GET\" url=\"https://portal.azure.com\" action=\"Allowed\" appname=\"Azure Portal\" dlprules=\"None\" traffic_class=\"Business\""
+      - index: idx_security_fw
+        source: zscaler_zia
+        sourcetype: zscaler:zia
+        _raw: "May 20 14:00:29 zia-gateway-sjc zscaler-nss: sourcetype=zscaler:zia datetime=\"2026-09-20 14:00:29 UTC\" user=\"bob.dev@corp.internal\" department=\"DevOps\" reqmethod=\"POST\" url=\"https://anonfiles.com/upload\" action=\"Blocked\" appname=\"File Sharing\" dlprules=\"Block_Sensitive_Data\" traffic_class=\"High-Risk\""

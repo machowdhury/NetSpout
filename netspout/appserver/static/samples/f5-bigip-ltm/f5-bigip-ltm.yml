@@ -1,0 +1,18 @@
+samples:
+  - name: f5-bigip-ltm-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_performance_metrics
+        source: f5_bigip_ltm
+        sourcetype: f5:bigip:ltm
+        _raw: "May 20 14:00:15 lb-f5-vip-01 notice tmm[14820]: 01010028:5: Pool /Common/pool_corp_web member /Common/10.20.1.10:80 monitor status up [ /Common/http: up ]"
+      - index: idx_performance_metrics
+        source: f5_bigip_ltm
+        sourcetype: f5:bigip:ltm
+        _raw: "May 20 14:00:15 lb-f5-vip-01 warning tmm[14820]: 01010029:4: Pool /Common/pool_corp_web member /Common/10.20.1.11:80 monitor status down [ /Common/http: Response timeout ]"
+      - index: idx_performance_metrics
+        source: f5_bigip_ltm
+        sourcetype: f5:bigip:ltm
+        _raw: "May 20 14:00:16 lb-f5-vip-01 info tmm[14820]: 01070727:6: Virtual /Common/vs_corp_portal received connection from 198.51.100.42:54210 selected pool member 10.20.1.10:80"

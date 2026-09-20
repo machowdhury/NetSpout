@@ -1,0 +1,18 @@
+samples:
+  - name: cisco-nxos-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: cisco_nxos
+        sourcetype: cisco:nxos
+        _raw: "{\"timestamp\": \"2026-09-20T14:00:11.000Z\", \"device\": \"sw-nexus-9300-01\", \"facility\": \"ETH_PORT\", \"severity\": 5, \"type\": \"LINK_STATUS\", \"interface\": \"Ethernet1/1\", \"status\": \"UP\", \"speed_gbps\": 100}"
+      - index: idx_network_ops
+        source: cisco_nxos
+        sourcetype: cisco:nxos
+        _raw: "{\"timestamp\": \"2026-09-20T14:00:12.000Z\", \"device\": \"sw-nexus-9300-01\", \"facility\": \"OSPF\", \"severity\": 5, \"type\": \"NEIGHBOR_STATE\", \"neighbor\": \"10.254.0.2\", \"state\": \"FULL\"}"
+      - index: idx_network_ops
+        source: cisco_nxos
+        sourcetype: cisco:nxos
+        _raw: "{\"timestamp\": \"2026-09-20T14:00:13.000Z\", \"device\": \"sw-nexus-9300-01\", \"facility\": \"BGP\", \"severity\": 6, \"type\": \"EVPN_ROUTE_ADD\", \"route\": \"[2]:[0]:[48]:[0050.56b7.10e2]:[32]:[10.20.1.5]\", \"vni\": 100100}"

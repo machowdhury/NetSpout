@@ -1,0 +1,22 @@
+samples:
+  - name: cisco-ios-syslog-baseline
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: cisco_ios_syslog
+        sourcetype: cisco:ios:syslog
+        _raw: "May 20 14:00:08 rtr-core-01 1849: *May 20 14:00:08.124 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed state to up"
+      - index: idx_network_ops
+        source: cisco_ios_syslog
+        sourcetype: cisco:ios:syslog
+        _raw: "May 20 14:00:08 rtr-core-01 1850: *May 20 14:00:09.124 UTC: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/1, changed state to up"
+      - index: idx_network_ops
+        source: cisco_ios_syslog
+        sourcetype: cisco:ios:syslog
+        _raw: "May 20 14:00:09 rtr-core-01 1851: *May 20 14:00:09.550 UTC: %OSPF-5-ADJCHG: Process 1, Nbr 10.254.0.2 on GigabitEthernet0/0/1 from LOADING to FULL, Done"
+      - index: idx_network_ops
+        source: cisco_ios_syslog
+        sourcetype: cisco:ios:syslog
+        _raw: "May 20 14:00:10 rtr-core-01 1852: *May 20 14:00:10.012 UTC: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (10.254.99.10)"

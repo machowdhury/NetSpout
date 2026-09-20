@@ -1,0 +1,14 @@
+samples:
+  - name: aruba-authmgr-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_wireless_ops
+        source: aruba_authmgr
+        sourcetype: aruba:authmgr
+        _raw: "May 20 14:00:00 wlc-aruba-7210 authmgr[1842]: <522008> <INFO> <wlc-aruba-7210 10.254.16.1> User Authentication Successful: username=corp\\alice.sec MAC=00:4e:01:11:22:33 IP=10.20.16.45 role=corp-employee VLAN=100"
+      - index: idx_wireless_ops
+        source: aruba_authmgr
+        sourcetype: aruba:authmgr
+        _raw: "May 20 14:00:01 wlc-aruba-7210 authmgr[1842]: <522005> <WARN> <wlc-aruba-7210 10.254.16.1> MAC Authentication Failed: MAC=00:4e:01:99:88:77 IP=0.0.0.0 reason=Unknown client role=logon VLAN=999"

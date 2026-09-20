@@ -1,0 +1,18 @@
+samples:
+  - name: cisco-ios-mdt-metric-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:ios:mdt:metric
+        _raw: "{\"time\": 1789840800, \"event\": \"metric\", \"source\": \"openconfig_telemetry\", \"sourcetype\": \"cisco:ios:mdt:metric\", \"host\": \"rtr-cisco-8000-01.corp.internal\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:interface.octets.in\": 984521000, \"metric_name:interface.octets.out\": 874219000, \"metric_name:interface.errors.in\": 0, \"metric_name:interface.errors.out\": 0, \"metric_name:cpu.utilization\": 24.5, \"interface\": \"HundredGigE0/0/0/0\", \"oper_status\": \"UP\", \"xpath\": \"/interfaces/interface/state/counters\"}}"
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:ios:mdt:metric
+        _raw: "{\"time\": 1789840801, \"event\": \"metric\", \"source\": \"openconfig_telemetry\", \"sourcetype\": \"cisco:ios:mdt:metric\", \"host\": \"rtr-cisco-8000-01.corp.internal\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:bgp.session_up\": 1.0, \"metric_name:bgp.prefixes.received\": 849200, \"metric_name:bgp.prefixes.installed\": 849180, \"peer_ip\": \"198.51.100.1\", \"xpath\": \"/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state\"}}"
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:ios:mdt:metric
+        _raw: "{\"time\": 1789840802, \"event\": \"metric\", \"source\": \"openconfig_telemetry\", \"sourcetype\": \"cisco:ios:mdt:metric\", \"host\": \"rtr-cisco-8000-01.corp.internal\", \"index\": \"cisco_mdt_metrics\", \"fields\": {\"metric_name:optics.laser_bias_ma\": 48.2, \"metric_name:optics.tx_power_dbm\": -1.5, \"metric_name:optics.rx_power_dbm\": -8.4, \"interface\": \"HundredGigE0/0/0/0\", \"xpath\": \"/optical-transport-line/optical-channel/state/laser-bias-current\"}}"

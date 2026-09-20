@@ -1,0 +1,10 @@
+samples:
+  - name: juniper-junos-syslog-baseline
+    interval: 30
+    count: 1
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: juniper_junos_syslog
+        sourcetype: juniper:junos:syslog
+        _raw: "May 20 14:00:20 rtr-juniper-ptx01 chassisd[1420]: %CHASSIS-5-CHASSISD_SNMP_ALARM: Alarm set: FPC color=YELLOW, class=CHASSIS, reason=FPC 0 Minor Temperature Alarm (52 C)"

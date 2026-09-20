@@ -1,0 +1,22 @@
+samples:
+  - name: aruba-baseline
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    lines:
+      - index: idx_wireless_ops
+        source: aruba_syslog
+        sourcetype: aruba
+        _raw: "May 20 14:00:00 ap-aruba-515-01 stm[2948]: <501095> <NOTI> <ap-aruba-515-01 10.254.16.42> Auth success: 00:4e:01:aa:bb:cc: AP 10.254.16.42-d8:c7:c8:11:22:33-corp_wifi ESSID: corp_secure VLAN: 100"
+      - index: idx_wireless_ops
+        source: aruba_syslog
+        sourcetype: aruba
+        _raw: "May 20 14:00:01 ap-aruba-515-01 stm[2948]: <501065> <NOTI> <ap-aruba-515-01 10.254.16.42> Station 00:4e:01:aa:bb:cc: Associated with BSSID d8:c7:c8:11:22:33 on AP ap-aruba-515-01 Channel 36 Radio 0 (802.11ax)"
+      - index: idx_wireless_ops
+        source: aruba_syslog
+        sourcetype: aruba
+        _raw: "May 20 14:00:02 wlc-aruba-7210 authmgr[1842]: <522008> <INFO> <wlc-aruba-7210 10.254.16.1> User Authentication Successful: username=corp\\bob.sec MAC=00:4e:01:aa:bb:cc IP=10.20.16.89 role=authenticated-corp VLAN=100 AP=ap-aruba-515-01"
+      - index: idx_wireless_ops
+        source: aruba_syslog
+        sourcetype: aruba
+        _raw: "May 20 14:00:03 wlc-aruba-7210 snmp[1204]: <501100> <WARN> <wlc-aruba-7210 10.254.16.1> High Channel Utilization detected: AP ap-aruba-515-01 Radio 1 (5GHz) utilization 78%"

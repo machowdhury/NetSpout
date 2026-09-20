@@ -1,0 +1,22 @@
+samples:
+  - name: cisco-nexus-baseline
+    interval: 30
+    count: 4
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: cisco_nexus
+        sourcetype: cisco:nexus
+        _raw: "May 20 14:00:10 sw-nexus-9300-01 %ETHPORT-5-IF_UP: Interface Ethernet1/1 is up in mode access"
+      - index: idx_network_ops
+        source: cisco_nexus
+        sourcetype: cisco:nexus
+        _raw: "May 20 14:00:10 sw-nexus-9300-01 %VPC-5-PEER_KEEP_ALIVE_STATUS: Peer keep-alive status is UP"
+      - index: idx_network_ops
+        source: cisco_nexus
+        sourcetype: cisco:nexus
+        _raw: "May 20 14:00:11 sw-nexus-9300-01 %FWM-5-MAC_MOVE: MAC 00:50:56:B7:10:E2 in vlan 100 moved from port Eth1/1 to Eth1/2"
+      - index: idx_network_ops
+        source: cisco_nexus
+        sourcetype: cisco:nexus
+        _raw: "May 20 14:00:12 sw-nexus-9300-01 %STP-6-PORT_STATE: Port Eth1/1 STP state changed to Forwarding"

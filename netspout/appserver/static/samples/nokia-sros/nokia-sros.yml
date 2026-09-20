@@ -1,0 +1,18 @@
+samples:
+  - name: nokia-sros-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: nokia_sros
+        sourcetype: nokia:sros
+        _raw: "2026-09-20T14:00:22.000Z rtr-nokia-7750-01 TiMOS-B-23.10.R1: BGP-5-BGP_ESTABLISHED: Peer 10.254.2.1 Router-ID 10.254.2.1 in VRF default ASN 64512 transitioned to state ESTABLISHED"
+      - index: idx_network_ops
+        source: nokia_sros
+        sourcetype: nokia:sros
+        _raw: "2026-09-20T14:00:22.000Z rtr-nokia-7750-01 TiMOS-B-23.10.R1: MPLS-4-LSP_DOWN: LSP \"lsp-core-ny-sf\" transitioned to state DOWN. Re-routing via TI-LFA backup path."
+      - index: idx_network_ops
+        source: nokia_sros
+        sourcetype: nokia:sros
+        _raw: "2026-09-20T14:00:23.000Z rtr-nokia-7750-01 TiMOS-B-23.10.R1: ISIS-5-ADJ_UP: Adjacency with system rtr-nokia-7750-02 on interface 1/1/c1/1 is UP (Level 2)"

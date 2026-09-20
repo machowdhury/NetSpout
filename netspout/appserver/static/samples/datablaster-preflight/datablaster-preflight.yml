@@ -1,0 +1,14 @@
+samples:
+  - name: datablaster-preflight-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: datablaster_preflight
+        sourcetype: datablaster:preflight
+        _raw: "{\"timestamp\": 1789840800, \"component\": \"preflight\", \"check\": \"splunk_hec_port\", \"endpoint\": \"https://127.0.0.1:8888/services/collector\", \"http_status\": 200, \"status\": \"PASSED\", \"latency_ms\": 2.4}"
+      - index: idx_network_ops
+        source: datablaster_preflight
+        sourcetype: datablaster:preflight
+        _raw: "{\"timestamp\": 1789840801, \"component\": \"preflight\", \"check\": \"index_cisco_mdt_metrics\", \"status\": \"READY\", \"datatype\": \"metric\", \"storage_tier\": \"500GB\"}"

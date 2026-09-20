@@ -1,0 +1,18 @@
+samples:
+  - name: cisco-nxos-syslog-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: cisco_nxos_syslog
+        sourcetype: cisco:nxos:syslog
+        _raw: "2026 Sep 20 14:00:12 sw-nexus-9300-01 %OSPF-5-ADJCHANGE: ospf-1 [1024] Process 1, Nbr 10.254.0.2 on Ethernet1/1 from LOADING to FULL, Done"
+      - index: idx_network_ops
+        source: cisco_nxos_syslog
+        sourcetype: cisco:nxos:syslog
+        _raw: "2026 Sep 20 14:00:13 sw-nexus-9300-01 %BGP-5-ADJCHANGE: bgp-64512 [1024] (default) neighbor 10.254.0.2 Up"
+      - index: idx_network_ops
+        source: cisco_nxos_syslog
+        sourcetype: cisco:nxos:syslog
+        _raw: "2026 Sep 20 14:00:14 sw-nexus-9300-01 %VPC-5-PEER_LINK_UP: vPC peer-link is UP"

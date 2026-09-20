@@ -1,0 +1,18 @@
+samples:
+  - name: cisco-dc-aci-events-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: cisco_aci_events
+        sourcetype: cisco:dc:aci:events
+        _raw: "{\"event\": \"aci_event\", \"code\": \"E4204819\", \"severity\": \"info\", \"cause\": \"transition\", \"dn\": \"topology/pod-1/node-101/sys/lldp/inst/if-[eth1/1]/adj-1\", \"descr\": \"LLDP Neighbor adjacency transition from None to Active on Leaf-101 eth1/1\", \"created\": \"2026-09-20T14:00:00.000Z\"}"
+      - index: idx_network_ops
+        source: cisco_aci_events
+        sourcetype: cisco:dc:aci:events
+        _raw: "{\"event\": \"aci_event\", \"code\": \"E4204820\", \"severity\": \"warning\", \"cause\": \"port-flap\", \"dn\": \"topology/pod-1/node-102/sys/lldp/inst/if-[eth1/2]\", \"descr\": \"Port flap detected on Leaf-102 interface eth1/2\", \"created\": \"2026-09-20T14:00:01.000Z\"}"
+      - index: idx_network_ops
+        source: cisco_aci_events
+        sourcetype: cisco:dc:aci:events
+        _raw: "{\"event\": \"aci_event\", \"code\": \"E4204821\", \"severity\": \"info\", \"cause\": \"ep-learn\", \"dn\": \"uni/tn-common/ap-prod/epg-web/cep-00:50:56:B7:10:E2\", \"descr\": \"Endpoint 00:50:56:B7:10:E2 discovered on encap vlan-100\", \"created\": \"2026-09-20T14:00:02.000Z\"}"

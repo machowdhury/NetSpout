@@ -1,0 +1,38 @@
+samples:
+  - name: cisco-asa-baseline
+    interval: 30
+    count: 8
+    randomizeEvents: true
+    lines:
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-6-302013: Built outbound TCP connection 984210 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10.45/52140 (198.51.100.200/52140)"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-6-302014: Teardown TCP connection 984210 for outside:198.51.100.80/443 to inside:10.20.10.45/52140 duration 0:02:14 bytes 148920 TCP FINs"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-4-106023: Deny tcp src outside:203.0.113.88/44820 dst inside:10.20.10.5/22 by access-group \"outside_access_in\" [0x8f2a1b9c, 0x0]"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-5-111008: User 'admin' executed the 'write memory' command from IP 10.254.8.1"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-6-305011: Built dynamic UDP translation from inside:10.20.10.45/53 to outside:198.51.100.200/18492"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-3-710003: TCP access denied by ACL from 203.0.113.14/51420 to outside:198.51.100.200/23"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-5-500003: Bad TCP checksum from 203.0.113.99/443 to outside:198.51.100.200/51200"
+      - index: idx_security_fw
+        source: cisco_asa
+        sourcetype: cisco:asa
+        _raw: "%ASA-6-605005: IPSEC: Received remote Proxy Host: 10.20.0.0/16 Protocol: 0 Port: 0 on peer 198.51.100.1"

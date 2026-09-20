@@ -1,0 +1,14 @@
+samples:
+  - name: fortinet-fortigate-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_security_fw
+        source: fortinet_fortigate
+        sourcetype: fortinet:fortigate
+        _raw: "date=2026-09-20 time=14:00:18 devname=\"fg-core-01\" devid=\"FG100E4Q18029481\" logid=\"0101037128\" type=\"event\" subtype=\"sdwan\" level=\"warning\" vd=\"root\" msg=\"SD-WAN rule 1: member wan2 SLA status changed to DEAD (latency: 184ms, packet loss: 12%)\""
+      - index: idx_security_fw
+        source: fortinet_fortigate
+        sourcetype: fortinet:fortigate
+        _raw: "date=2026-09-20 time=14:00:19 devname=\"fg-core-01\" devid=\"FG100E4Q18029481\" logid=\"0100032001\" type=\"event\" subtype=\"system\" level=\"information\" action=\"vpn-up\" msg=\"IPsec tunnel to HQ-Hub-01 established successfully\""

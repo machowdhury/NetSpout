@@ -422,7 +422,7 @@
     },
     {
       "categoryName": "Cisco DC (ACI, Nexus)",
-      "totalSamples": 5,
+      "totalSamples": 9,
       "samples": [
         {
           "id": "cisco-dc-aci-bridge-domain",
@@ -512,6 +512,78 @@
             "badgeText": "Route to standard Event Index (e.g., netops_logs).",
             "recommendedIndex": "netops_logs",
             "requiredTA": "Splunk Add-on for Unix and Linux"
+          }
+        },
+        {
+          "id": "cisco-dc-aci-events",
+          "name": "Cisco ACI Fabric State Events",
+          "files": [
+            "cisco-dc-aci-events.yml"
+          ],
+          "sampleFile": "cisco-dc-aci-events.yml",
+          "detectedSourcetype": "cisco:dc:aci:events",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "{\"event\": \"aci_event\", \"code\": \"E4204819\", \"severity\": \"info\", \"cause\": \"transition\", \"dn\": \"topology/pod-1/node-101/sys",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Cisco ACI Add-on for Splunk Enterprise"
+          }
+        },
+        {
+          "id": "cisco-nexus",
+          "name": "Cisco Nexus DC Switch Event",
+          "files": [
+            "cisco-nexus.yml"
+          ],
+          "sampleFile": "cisco-nexus.yml",
+          "detectedSourcetype": "cisco:nexus",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:10 sw-nexus-9300-01 %ETHPORT-5-IF_UP: Interface Ethernet1/1 is up in mode access",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Cisco Nexus Add-on for Splunk Enterprise"
+          }
+        },
+        {
+          "id": "cisco-nxos",
+          "name": "Cisco NX-OS Structured Event Stream",
+          "files": [
+            "cisco-nxos.yml"
+          ],
+          "sampleFile": "cisco-nxos.yml",
+          "detectedSourcetype": "cisco:nxos",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "{\"timestamp\": \"2026-09-20T14:00:11.000Z\", \"device\": \"sw-nexus-9300-01\", \"facility\": \"ETH_PORT\", \"severity\": 5, \"type\": \"",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Cisco Nexus Add-on for Splunk Enterprise"
+          }
+        },
+        {
+          "id": "cisco-nxos-syslog",
+          "name": "Cisco NX-OS Syslog Event",
+          "files": [
+            "cisco-nxos-syslog.yml"
+          ],
+          "sampleFile": "cisco-nxos-syslog.yml",
+          "detectedSourcetype": "cisco:nxos:syslog",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "2026 Sep 20 14:00:12 sw-nexus-9300-01 %OSPF-5-ADJCHANGE: ospf-1 [1024] Process 1, Nbr 10.254.0.2 on Ethernet1/1 from LOA",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Cisco Nexus Add-on for Splunk Enterprise"
           }
         }
       ]
@@ -1988,7 +2060,7 @@
     },
     {
       "categoryName": "Nutanix PC",
-      "totalSamples": 14,
+      "totalSamples": 16,
       "samples": [
         {
           "id": "nutanixpc-alerts",
@@ -2240,6 +2312,42 @@
             "badgeText": "Route to standard Event Index (e.g., netops_logs).",
             "recommendedIndex": "netops_logs",
             "requiredTA": "Nutanix Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-syslog",
+          "name": "Nutanix Prism Central Syslog (Colon Format)",
+          "files": [
+            "nutanixpc-syslog.yml"
+          ],
+          "sampleFile": "nutanixpc-syslog.yml",
+          "detectedSourcetype": "nutanixpc:syslog",
+          "detectedIndex": "idx_performance_metrics",
+          "previewSnippet": "May 20 14:00:24 nutanix-pc-01 cluster: %ALERT-3-HOST_HA_DEGRADED: Node 10.20.0.12 in cluster \"Prism-Prod-01\" uncontactab",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to idx_performance_metrics.",
+            "recommendedIndex": "idx_performance_metrics",
+            "requiredTA": "Nutanix Technology Add-on for Splunk"
+          }
+        },
+        {
+          "id": "nutanixpc-vms",
+          "name": "Nutanix Prism Central VM Inventory (Colon Format)",
+          "files": [
+            "nutanixpc-vms.yml"
+          ],
+          "sampleFile": "nutanixpc-vms.yml",
+          "detectedSourcetype": "nutanixpc:vms",
+          "detectedIndex": "idx_performance_metrics",
+          "previewSnippet": "{\"vm_name\": \"app-server-prod-04\", \"vm_uuid\": \"e4d2a1b9-c8f7-4820-9948-201849201849\", \"cluster_name\": \"Prism-Prod-01\", \"p",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to idx_performance_metrics.",
+            "recommendedIndex": "idx_performance_metrics",
+            "requiredTA": "Nutanix Technology Add-on for Splunk"
           }
         }
       ]
@@ -2624,7 +2732,7 @@
     },
     {
       "categoryName": "Cisco Security & Telemetry",
-      "totalSamples": 20,
+      "totalSamples": 24,
       "samples": [
         {
           "id": "cisco-ftd-syslog",
@@ -2985,6 +3093,78 @@
             "recommendedIndex": "netops_logs",
             "requiredTA": "Splunk Add-on for Unix and Linux"
           }
+        },
+        {
+          "id": "cisco-asa",
+          "name": "Cisco ASA Firewall Connection & Policy",
+          "files": [
+            "cisco-asa.yml"
+          ],
+          "sampleFile": "cisco-asa.yml",
+          "detectedSourcetype": "cisco:asa",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "%ASA-6-302013: Built outbound TCP connection 984210 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "Splunk Add-on for Cisco ASA"
+          }
+        },
+        {
+          "id": "cisco-asa-syslog",
+          "name": "Cisco ASA Syslog Message Stream",
+          "files": [
+            "cisco-asa-syslog.yml"
+          ],
+          "sampleFile": "cisco-asa-syslog.yml",
+          "detectedSourcetype": "cisco:asa:syslog",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "May 20 14:00:00 fw-cisco-asa-01 : %ASA-6-302013: Built outbound TCP connection 184920 for outside:198.51.100.80/443 to i",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "Splunk Add-on for Cisco ASA"
+          }
+        },
+        {
+          "id": "cisco-ios-mdt-metric",
+          "name": "Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON)",
+          "files": [
+            "cisco-ios-mdt-metric.yml"
+          ],
+          "sampleFile": "cisco-ios-mdt-metric.yml",
+          "detectedSourcetype": "cisco:ios:mdt:metric",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "{\"time\": 1789840800, \"event\": \"metric\", \"source\": \"openconfig_telemetry\", \"sourcetype\": \"cisco:ios:mdt:metric\", \"host\": ",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to cisco_mdt_metrics.",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "Splunk Add-on for Cisco IOS"
+          }
+        },
+        {
+          "id": "cisco-ios-syslog",
+          "name": "Cisco IOS System Syslog Facility",
+          "files": [
+            "cisco-ios-syslog.yml"
+          ],
+          "sampleFile": "cisco-ios-syslog.yml",
+          "detectedSourcetype": "cisco:ios:syslog",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:08 rtr-core-01 1849: *May 20 14:00:08.124 UTC: %LINK-3-UPDOWN: Interface GigabitEthernet0/0/1, changed stat",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Splunk Add-on for Cisco IOS"
+          }
         }
       ]
     },
@@ -3014,7 +3194,7 @@
     },
     {
       "categoryName": "Arista Networks Telemetry",
-      "totalSamples": 2,
+      "totalSamples": 3,
       "samples": [
         {
           "id": "arista-eos-syslog",
@@ -3051,12 +3231,30 @@
             "recommendedIndex": "cisco_mdt_metrics",
             "requiredTA": "Arista Networks Telemetry for Splunk"
           }
+        },
+        {
+          "id": "arista-eos",
+          "name": "Arista EOS Core Switching",
+          "files": [
+            "arista-eos.yml"
+          ],
+          "sampleFile": "arista-eos.yml",
+          "detectedSourcetype": "arista:eos",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:00 sw-arista-7280-01 Rib: %ROUTING-6-BGP_NEIGHBOR_UP: BGP neighbor 10.254.1.2 AS 64512 state changed from O",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Arista Networks App for Splunk"
+          }
         }
       ]
     },
     {
       "categoryName": "Aruba Networks",
-      "totalSamples": 1,
+      "totalSamples": 4,
       "samples": [
         {
           "id": "aruba-syslog",
@@ -3074,6 +3272,60 @@
             "badgeText": "Route to standard Event Index (e.g., netops_logs).",
             "recommendedIndex": "netops_logs",
             "requiredTA": "Aruba Networks Add-on for Splunk"
+          }
+        },
+        {
+          "id": "aruba",
+          "name": "Aruba Instant AP & Switch Event",
+          "files": [
+            "aruba.yml"
+          ],
+          "sampleFile": "aruba.yml",
+          "detectedSourcetype": "aruba",
+          "detectedIndex": "idx_wireless_ops",
+          "previewSnippet": "May 20 14:00:00 ap-aruba-515-01 stm[2948]: <501095> <NOTI> <ap-aruba-515-01 10.254.16.42> Auth success: 00:4e:01:aa:bb:c",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_wireless_ops.",
+            "recommendedIndex": "idx_wireless_ops",
+            "requiredTA": "Splunk Add-on for Aruba Networks"
+          }
+        },
+        {
+          "id": "aruba-authmgr",
+          "name": "Aruba Controller Authentication Manager",
+          "files": [
+            "aruba-authmgr.yml"
+          ],
+          "sampleFile": "aruba-authmgr.yml",
+          "detectedSourcetype": "aruba:authmgr",
+          "detectedIndex": "idx_wireless_ops",
+          "previewSnippet": "May 20 14:00:00 wlc-aruba-7210 authmgr[1842]: <522008> <INFO> <wlc-aruba-7210 10.254.16.1> User Authentication Successfu",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_wireless_ops.",
+            "recommendedIndex": "idx_wireless_ops",
+            "requiredTA": "Splunk Add-on for Aruba Networks"
+          }
+        },
+        {
+          "id": "aruba-stm",
+          "name": "Aruba Station Management (STM)",
+          "files": [
+            "aruba-stm.yml"
+          ],
+          "sampleFile": "aruba-stm.yml",
+          "detectedSourcetype": "aruba:stm",
+          "detectedIndex": "idx_wireless_ops",
+          "previewSnippet": "May 20 14:00:00 wlc-aruba-7210 stm[2104]: <501065> <NOTI> <wlc-aruba-7210 10.254.16.1> Station 00:4e:01:aa:bb:cc: Associ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_wireless_ops.",
+            "recommendedIndex": "idx_wireless_ops",
+            "requiredTA": "Splunk Add-on for Aruba Networks"
           }
         }
       ]
@@ -3188,7 +3440,7 @@
     },
     {
       "categoryName": "Fortinet FortiGate",
-      "totalSamples": 2,
+      "totalSamples": 5,
       "samples": [
         {
           "id": "fortinet-fortigate-sdwan-alert",
@@ -3225,6 +3477,60 @@
             "recommendedIndex": "netops_logs",
             "requiredTA": "Fortinet FortiGate Add-on for Splunk"
           }
+        },
+        {
+          "id": "fortigate-event",
+          "name": "Fortinet FortiGate System Event",
+          "files": [
+            "fortigate-event.yml"
+          ],
+          "sampleFile": "fortigate-event.yml",
+          "detectedSourcetype": "fortigate_event",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "date=2026-09-20 time=14:00:16 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0100032001\" type=\"event\" subtype=\"s",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "Fortinet FortiGate Add-on for Splunk"
+          }
+        },
+        {
+          "id": "fortigate-traffic",
+          "name": "Fortinet FortiGate Traffic Log",
+          "files": [
+            "fortigate-traffic.yml"
+          ],
+          "sampleFile": "fortigate-traffic.yml",
+          "detectedSourcetype": "fortigate_traffic",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "date=2026-09-20 time=14:00:17 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0000000013\" type=\"traffic\" subtype=",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "Fortinet FortiGate Add-on for Splunk"
+          }
+        },
+        {
+          "id": "fortinet-fortigate",
+          "name": "Fortinet FortiGate Unified Security Event",
+          "files": [
+            "fortinet-fortigate.yml"
+          ],
+          "sampleFile": "fortinet-fortigate.yml",
+          "detectedSourcetype": "fortinet:fortigate",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "date=2026-09-20 time=14:00:18 devname=\"fg-core-01\" devid=\"FG100E4Q18029481\" logid=\"0101037128\" type=\"event\" subtype=\"sdw",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "Fortinet FortiGate Add-on for Splunk"
+          }
         }
       ]
     },
@@ -3254,7 +3560,7 @@
     },
     {
       "categoryName": "Netskope SSE Framework",
-      "totalSamples": 1,
+      "totalSamples": 2,
       "samples": [
         {
           "id": "netskope-json",
@@ -3272,6 +3578,24 @@
             "badgeText": "Route to standard Event Index (e.g., netops_logs).",
             "recommendedIndex": "netops_logs",
             "requiredTA": "Netskope Add-on for Splunk"
+          }
+        },
+        {
+          "id": "netskope-sse",
+          "name": "Netskope Security Service Edge (SSE)",
+          "files": [
+            "netskope-sse.yml"
+          ],
+          "sampleFile": "netskope-sse.yml",
+          "detectedSourcetype": "netskope:sse",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "{\"timestamp\": 1789840800, \"tenant_id\": \"corp-tenant-01\", \"traffic_type\": \"CloudApp\", \"app_name\": \"Salesforce\", \"user\": \"",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "TA-NetSkopeAppForSplunk"
           }
         }
       ]
@@ -3320,7 +3644,7 @@
     },
     {
       "categoryName": "F5 BIG-IP",
-      "totalSamples": 1,
+      "totalSamples": 2,
       "samples": [
         {
           "id": "f5-bigip-syslog",
@@ -3339,12 +3663,30 @@
             "recommendedIndex": "netops_logs",
             "requiredTA": "Splunk Add-on for F5 BIG-IP"
           }
+        },
+        {
+          "id": "f5-bigip-ltm",
+          "name": "F5 BIG-IP Local Traffic Manager (LTM)",
+          "files": [
+            "f5-bigip-ltm.yml"
+          ],
+          "sampleFile": "f5-bigip-ltm.yml",
+          "detectedSourcetype": "f5:bigip:ltm",
+          "detectedIndex": "idx_performance_metrics",
+          "previewSnippet": "May 20 14:00:15 lb-f5-vip-01 notice tmm[14820]: 01010028:5: Pool /Common/pool_corp_web member /Common/10.20.1.10:80 moni",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to idx_performance_metrics.",
+            "recommendedIndex": "idx_performance_metrics",
+            "requiredTA": "F5 Networks Add-on for Splunk"
+          }
         }
       ]
     },
     {
       "categoryName": "Juniper Networks",
-      "totalSamples": 1,
+      "totalSamples": 3,
       "samples": [
         {
           "id": "juniper-syslog",
@@ -3362,6 +3704,42 @@
             "badgeText": "Route to standard Event Index (e.g., netops_logs).",
             "recommendedIndex": "netops_logs",
             "requiredTA": "Splunk Add-on for Juniper"
+          }
+        },
+        {
+          "id": "juniper-junos",
+          "name": "Juniper Junos Routing & System Log",
+          "files": [
+            "juniper-junos.yml"
+          ],
+          "sampleFile": "juniper-junos.yml",
+          "detectedSourcetype": "juniper:junos",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:19 rtr-juniper-ptx01 rpd[2481]: %ROUTING-5-BGP_PREFIX_LIMIT: BGP peer 10.254.1.1 (External AS 64512): Recei",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Juniper Networks Add-on for Splunk"
+          }
+        },
+        {
+          "id": "juniper-junos-syslog",
+          "name": "Juniper Junos Syslog Transport",
+          "files": [
+            "juniper-junos-syslog.yml"
+          ],
+          "sampleFile": "juniper-junos-syslog.yml",
+          "detectedSourcetype": "juniper:junos:syslog",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:20 rtr-juniper-ptx01 chassisd[1420]: %CHASSIS-5-CHASSISD_SNMP_ALARM: Alarm set: FPC color=YELLOW, class=CHA",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Juniper Networks Add-on for Splunk"
           }
         }
       ]
@@ -3428,7 +3806,7 @@
     },
     {
       "categoryName": "Zscaler SSE Infrastructure",
-      "totalSamples": 2,
+      "totalSamples": 3,
       "samples": [
         {
           "id": "zscaler-sse-tunnel",
@@ -3465,12 +3843,30 @@
             "recommendedIndex": "netops_logs",
             "requiredTA": "Zscaler Technical Add-on for Splunk"
           }
+        },
+        {
+          "id": "zscaler-zia",
+          "name": "Zscaler Internet Access (ZIA) NSS Log",
+          "files": [
+            "zscaler-zia.yml"
+          ],
+          "sampleFile": "zscaler-zia.yml",
+          "detectedSourcetype": "zscaler:zia",
+          "detectedIndex": "idx_security_fw",
+          "previewSnippet": "May 20 14:00:28 zia-gateway-sjc zscaler-nss: sourcetype=zscaler:zia datetime=\"2026-09-20 14:00:28 UTC\" user=\"alice.sec@c",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_security_fw.",
+            "recommendedIndex": "idx_security_fw",
+            "requiredTA": "TA-Zscaler_CIM"
+          }
         }
       ]
     },
     {
       "categoryName": "Other",
-      "totalSamples": 1,
+      "totalSamples": 7,
       "samples": [
         {
           "id": "geo_tokens",
@@ -3494,8 +3890,121 @@
             "recommendedIndex": "netops_logs",
             "requiredTA": "Splunk Add-on for Unix and Linux"
           }
+        },
+        {
+          "id": "datablaster-preflight",
+          "name": "NetSpout Ingestion Preflight Probe",
+          "files": [
+            "datablaster-preflight.yml"
+          ],
+          "sampleFile": "datablaster-preflight.yml",
+          "detectedSourcetype": "datablaster:preflight",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "{\"timestamp\": 1789840800, \"component\": \"preflight\", \"check\": \"splunk_hec_port\", \"endpoint\": \"https://127.0.0.1:8888/serv",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "NetSpout Telemetry App"
+          }
+        },
+        {
+          "id": "datablaster-probe",
+          "name": "NetSpout Telemetry Canary Probe",
+          "files": [
+            "datablaster-probe.yml"
+          ],
+          "sampleFile": "datablaster-probe.yml",
+          "detectedSourcetype": "datablaster:probe",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "{\"timestamp\": 1789840800, \"probe_id\": \"probe-mdt-canary-01\", \"target_index\": \"cisco_mdt_metrics\", \"eps_measured\": 1000, ",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "NetSpout Telemetry App"
+          }
+        },
+        {
+          "id": "nokia-sros",
+          "name": "Nokia 7750 SR OS Service Router Event",
+          "files": [
+            "nokia-sros.yml"
+          ],
+          "sampleFile": "nokia-sros.yml",
+          "detectedSourcetype": "nokia:sros",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "2026-09-20T14:00:22.000Z rtr-nokia-7750-01 TiMOS-B-23.10.R1: BGP-5-BGP_ESTABLISHED: Peer 10.254.2.1 Router-ID 10.254.2.1",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Nokia SR OS Splunk Add-on"
+          }
+        },
+        {
+          "id": "nokia-sros-syslog",
+          "name": "Nokia 7750 SR OS Syslog Facility",
+          "files": [
+            "nokia-sros-syslog.yml"
+          ],
+          "sampleFile": "nokia-sros-syslog.yml",
+          "detectedSourcetype": "nokia:sros:syslog",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:23 rtr-nokia-7750-01 MAJOR: SYSTEM #2041 Base SYSTEM-ENV-3-OVERTEMP: Chassis slot 1 temperature 68 C exceed",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "Nokia SR OS Splunk Add-on"
+          }
+        },
+        {
+          "id": "sc4snmp-event",
+          "name": "Splunk Connect for SNMP (SC4SNMP) Metric / Poller Event",
+          "files": [
+            "sc4snmp-event.yml"
+          ],
+          "sampleFile": "sc4snmp-event.yml",
+          "detectedSourcetype": "sc4snmp:event",
+          "detectedIndex": "cisco_mdt_metrics",
+          "previewSnippet": "{\"timestamp\": 1789840800, \"host\": \"10.254.8.1\", \"snmp_version\": \"3\", \"mib\": \"IF-MIB\", \"oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"m",
+          "ruleEngine": {
+            "indexType": "METRICS INDEX",
+            "badgeType": "blue",
+            "badgeText": "Route to cisco_mdt_metrics.",
+            "recommendedIndex": "cisco_mdt_metrics",
+            "requiredTA": "SC4SNMP Add-on"
+          }
+        },
+        {
+          "id": "snmp-trap",
+          "name": "Universal SNMP Trap Receiver Event",
+          "files": [
+            "snmp-trap.yml"
+          ],
+          "sampleFile": "snmp-trap.yml",
+          "detectedSourcetype": "snmp:trap",
+          "detectedIndex": "idx_network_ops",
+          "previewSnippet": "May 20 14:00:27 10.254.8.1 [UDP: [10.254.8.1]:54210->[10.254.99.50]:162]: DISMAN-EVENT-MIB::sysUpTimeInstance = Timetick",
+          "ruleEngine": {
+            "indexType": "EVENTS INDEX",
+            "badgeType": "green",
+            "badgeText": "Route to idx_network_ops.",
+            "recommendedIndex": "idx_network_ops",
+            "requiredTA": "SC4SNMP Add-on"
+          }
         }
       ]
+    },
+    {
+      "categoryName": "Nokia SR OS",
+      "totalSamples": 0,
+      "samples": []
     }
   ],
   "totalSamples": 185

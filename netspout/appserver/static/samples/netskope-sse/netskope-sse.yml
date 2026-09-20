@@ -1,0 +1,14 @@
+samples:
+  - name: netskope-sse-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_security_fw
+        source: netskope_sse
+        sourcetype: netskope:sse
+        _raw: "{\"timestamp\": 1789840800, \"tenant_id\": \"corp-tenant-01\", \"traffic_type\": \"CloudApp\", \"app_name\": \"Salesforce\", \"user\": \"alice.sec@corp.internal\", \"client_ip\": \"198.51.100.42\", \"pop\": \"US-West-SJC\", \"action\": \"allow\", \"dlp_incident\": false, \"policy\": \"Default_Corporate_Cloud_Permit\"}"
+      - index: idx_security_fw
+        source: netskope_sse
+        sourcetype: netskope:sse
+        _raw: "{\"timestamp\": 1789840801, \"tenant_id\": \"corp-tenant-01\", \"traffic_type\": \"WebRisk\", \"app_name\": \"Unknown-Upload\", \"user\": \"bob.dev@corp.internal\", \"client_ip\": \"198.51.100.43\", \"pop\": \"US-West-SJC\", \"action\": \"block\", \"dlp_incident\": true, \"policy\": \"Block_High_Risk_File_Uploads\"}"

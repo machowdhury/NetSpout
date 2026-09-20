@@ -1,0 +1,14 @@
+samples:
+  - name: fortigate-event-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_security_fw
+        source: fortigate_event
+        sourcetype: fortigate_event
+        _raw: "date=2026-09-20 time=14:00:16 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0100032001\" type=\"event\" subtype=\"system\" level=\"information\" action=\"login\" status=\"success\" user=\"admin\" ui=\"gui(10.254.99.10)\" msg=\"Administrator admin logged in from gui\""
+      - index: idx_security_fw
+        source: fortigate_event
+        sourcetype: fortigate_event
+        _raw: "date=2026-09-20 time=14:00:17 devname=\"fg-branch-01\" devid=\"FGT60E4Q18012840\" logid=\"0101037128\" type=\"event\" subtype=\"sdwan\" level=\"warning\" vd=\"root\" msg=\"SD-WAN member wan1 SLA status DEAD (latency 240ms, packet loss 8%)\""

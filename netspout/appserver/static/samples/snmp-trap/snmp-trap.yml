@@ -1,0 +1,14 @@
+samples:
+  - name: snmp-trap-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: snmp_trap
+        sourcetype: snmp:trap
+        _raw: "May 20 14:00:27 10.254.8.1 [UDP: [10.254.8.1]:54210->[10.254.99.50]:162]: DISMAN-EVENT-MIB::sysUpTimeInstance = Timeticks: (1849200) 5:08:12.00 .1.3.6.1.6.3.1.1.4.1.0 = OID: IF-MIB::linkUp IF-MIB::ifIndex = INTEGER: 2 IF-MIB::ifAdminStatus = INTEGER: up(1) IF-MIB::ifOperStatus = INTEGER: up(1)"
+      - index: idx_network_ops
+        source: snmp_trap
+        sourcetype: snmp:trap
+        _raw: "May 20 14:00:28 10.254.8.1 [UDP: [10.254.8.1]:54210->[10.254.99.50]:162]: DISMAN-EVENT-MIB::sysUpTimeInstance = Timeticks: (1849201) 5:08:13.00 .1.3.6.1.6.3.1.1.4.1.0 = OID: BGP4-MIB::bgpEstablished BGP4-MIB::bgpPeerRemoteAddr = IpAddress: 198.51.100.1 BGP4-MIB::bgpPeerLastError = Hex-STRING: 00 00 BGP4-MIB::bgpPeerState = INTEGER: established(6)"

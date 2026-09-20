@@ -13,6 +13,8 @@ import tarfile
 import hashlib
 import subprocess
 import xml.etree.ElementTree as ET
+import re
+import csv
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 NETSPOUT_DIR = os.path.join(REPO_ROOT, "netspout")
@@ -490,6 +492,62 @@ try:
     record_test("Suite 18", "Automated Assertions Verification Harness", all_passed, f"Verified {len(test_runs)}/{len(USE_CASES)} use cases passing")
 except Exception as e:
     record_test("Suite 18", "Use Case Repository Test Harness", False, str(e))
+
+# -----------------------------------------------------------------------------
+# SUITE 20: 197 User-Requested Sourcetypes 100% End-to-End Coverage
+# -----------------------------------------------------------------------------
+print("\n>> Suite 20: 197 User-Requested Sourcetypes 100% End-to-End Coverage")
+req_csv_file = os.path.join(REPO_ROOT, "tests/requested_sourcetypes.csv")
+req_sts = set()
+if os.path.exists(req_csv_file):
+    import csv
+    with open(req_csv_file) as f:
+        r = csv.DictReader(f)
+        req_sts = set(row["sourcetype"].strip() for row in r if row.get("sourcetype"))
+record_test("Suite 20", "197 Requested Sourcetypes Benchmark Specification", len(req_sts) == 197, f"{len(req_sts)}/197 benchmark sourcetypes loaded")
+
+# 1. Samples Manifest Coverage
+with open(os.path.join(NETSPOUT_DIR, "appserver/static/samples_manifest.json")) as f:
+    m_data = json.load(f)
+m_sts = set()
+m_files = set()
+for cat in m_data.get("categories", []):
+    for s in cat.get("samples", []):
+        st = s.get("detectedSourcetype") or s.get("sourcetype")
+        if st:
+            m_sts.add(st)
+        for fn in s.get("files", []):
+            m_files.add(fn)
+record_test("Suite 20", "Samples Manifest Coverage (197/197)", req_sts.issubset(m_sts), f"Manifest contains {len(m_sts)} sourcetypes (covers all 197 requested)")
+
+# 2. Disk Sample YAML Files
+samples_dir = os.path.join(NETSPOUT_DIR, "appserver/static/samples")
+disk_files = set()
+for root, dirs, files in os.walk(samples_dir):
+    for fn in files:
+        disk_files.add(fn)
+missing_disk = set(fn for fn in m_files if fn not in disk_files)
+record_test("Suite 20", "Disk Sample YAML Files Integrity", len(missing_disk) == 0, f"All {len(m_files)} sample YAML files present on disk")
+
+# 3. Vendor Catalog TA Mappings
+from vendor_catalog import VENDOR_CATALOG
+vc_sts = set()
+for v in VENDOR_CATALOG:
+    for st in v.get("sourcetypes", []):
+        vc_sts.add(st)
+record_test("Suite 20", "Vendor Catalog TA Coverage (197/197)", req_sts.issubset(vc_sts), f"Vendor catalog covers {len(vc_sts)} sourcetypes (covers all 197 requested)")
+
+# 4. Guided Onboarding JS Catalog
+with open(os.path.join(NETSPOUT_DIR, "appserver/static/guided_onboarding.js")) as f:
+    js_content = f.read()
+js_sts = set(re.findall(r'"id":\s*"([^"]+)"', js_content))
+record_test("Suite 20", "Guided Onboarding JS Catalog (197/197)", req_sts.issubset(js_sts), f"JS catalog contains {len(js_sts)} sourcetypes")
+
+# 5. Guided Onboarding SimpleXML Pre-rendered Select Options
+with open(os.path.join(NETSPOUT_DIR, "default/data/ui/views/guided_onboarding.xml")) as f:
+    xml_content = f.read()
+xml_sts = set(re.findall(r'<option\s+value="([^"]+)"', xml_content))
+record_test("Suite 20", "Guided Onboarding SimpleXML Pre-rendered Options (197/197)", req_sts.issubset(xml_sts), f"XML contains {len(xml_sts)} pre-rendered options")
 
 # -----------------------------------------------------------------------------
 # SUITE 19: netspout.spl Production Release Package Integrity

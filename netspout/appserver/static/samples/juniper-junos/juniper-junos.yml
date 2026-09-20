@@ -1,0 +1,18 @@
+samples:
+  - name: juniper-junos-baseline
+    interval: 30
+    count: 3
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: juniper_junos
+        sourcetype: juniper:junos
+        _raw: "May 20 14:00:19 rtr-juniper-ptx01 rpd[2481]: %ROUTING-5-BGP_PREFIX_LIMIT: BGP peer 10.254.1.1 (External AS 64512): Received 849200 prefixes; warning threshold 80% reached"
+      - index: idx_network_ops
+        source: juniper_junos
+        sourcetype: juniper:junos
+        _raw: "May 20 14:00:19 rtr-juniper-ptx01 mib2d[1820]: %DAEMON-6-SNMP_TRAP_LINK_UP: ifIndex 542, ifAdminStatus up(1), ifOperStatus up(1), ifName et-0/0/0"
+      - index: idx_network_ops
+        source: juniper_junos
+        sourcetype: juniper:junos
+        _raw: "May 20 14:00:20 rtr-juniper-ptx01 chassisd[1420]: %CHASSIS-5-CHASSISD_SNMP_ALARM: Alarm set: FPC color=YELLOW, class=CHASSIS, reason=FPC 0 Minor Temperature Alarm (52 C)"

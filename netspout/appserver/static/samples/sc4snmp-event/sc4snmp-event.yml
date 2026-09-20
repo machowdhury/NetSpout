@@ -1,0 +1,14 @@
+samples:
+  - name: sc4snmp-event-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: cisco_mdt_metrics
+        source: sc4snmp_poller
+        sourcetype: sc4snmp:event
+        _raw: "{\"timestamp\": 1789840800, \"host\": \"10.254.8.1\", \"snmp_version\": \"3\", \"mib\": \"IF-MIB\", \"oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"metric_name\": \"ifOperStatus\", \"value\": 1, \"value_name\": \"up\", \"tags\": {\"interface\": \"GigabitEthernet1/0/1\", \"device_vendor\": \"Cisco\"}}"
+      - index: cisco_mdt_metrics
+        source: sc4snmp_poller
+        sourcetype: sc4snmp:event
+        _raw: "{\"timestamp\": 1789840801, \"host\": \"10.254.8.1\", \"snmp_version\": \"3\", \"mib\": \"CISCO-PROCESS-MIB\", \"oid\": \"1.3.6.1.4.1.9.9.109.1.1.1.1.3.1\", \"metric_name\": \"cpmCPUTotal5minRev\", \"value\": 24, \"tags\": {\"cpu\": \"RoutingEngine0\"}}"

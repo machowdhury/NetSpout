@@ -152,8 +152,11 @@
                   <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                     Select Target Sourcetype:
                   </label>
+                                    <div style="margin-bottom: 8px;">
+                    <input type="text" id="wizard-sourcetype-search" placeholder="🔍 Filter 220+ sourcetypes in real-time..." style="width: 100%; background: #0b0f19; border: 1px solid #1e293b; border-radius: 4px; padding: 6px 10px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  </div>
                   <select id="wizard-single-sourcetype-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;">
-                    <optgroup label="Routing &amp; Core Fabric">
+                    <optgroup label="Routing &amp; Core">
                       <option value="cisco:mdt:grpc" selected="selected">cisco:mdt:grpc — Cisco MDT gRPC Metric Stream (OpenConfig)</option>
                       <option value="openconfig:yang:json">openconfig:yang:json — OpenConfig YANG JSON Telemetry (RFC 7950)</option>
                       <option value="cisco:ios">cisco:ios — Cisco IOS-XE / Classic Syslog</option>
@@ -161,7 +164,7 @@
                       <option value="nokia:sros">nokia:sros — Nokia 7750 SR OS Router Syslog</option>
                       <option value="arista:eos">arista:eos — Arista EOS Core Switching Syslog</option>
                     </optgroup>
-                    <optgroup label="Identity &amp; Access Control (Cisco ISE &amp; Duo)">
+                    <optgroup label="Identity &amp; Access Control">
                       <option value="cisco:ise:byod:provisioning">cisco:ise:byod:provisioning — Cisco ISE BYOD Device Onboarding &amp; Registration</option>
                       <option value="cisco:ise:nac:8021x">cisco:ise:nac:8021x — Cisco ISE 802.1X Port NAC &amp; RADIUS Auth</option>
                       <option value="cisco:ise:trustsec:sgt">cisco:ise:trustsec:sgt — Cisco ISE TrustSec SGT Micro-segmentation</option>
@@ -181,7 +184,7 @@
                       <option value="fortinet:fortigate">fortinet:fortigate — Fortinet FortiOS Security Events</option>
                       <option value="checkpoint:cef">checkpoint:cef — Check Point Quantum Firewall CEF</option>
                     </optgroup>
-                    <optgroup label="Campus Access, Wireless &amp; SD-WAN">
+                    <optgroup label="Campus Access &amp; Wireless">
                       <option value="cisco:catalyst:security:events">cisco:catalyst:security:events — Cisco Catalyst 9300 Security Events</option>
                       <option value="cisco:catalyst:rogue:threat_details">cisco:catalyst:rogue:threat_details — Cisco Catalyst Rogue AP Detection</option>
                       <option value="cisco:sdwan:linkhealth">cisco:sdwan:linkhealth — Cisco SD-WAN vEdge Link Health</option>
@@ -196,11 +199,252 @@
                       <option value="sc4snmp:metric">sc4snmp:metric — Splunk Connect for SNMP Metrics</option>
                       <option value="sc4snmp:event">sc4snmp:event — Splunk Connect for SNMP Traps</option>
                     </optgroup>
-                    <optgroup label="Storage &amp; Data Center (SAN / NAS)">
+                    <optgroup label="Storage &amp; Data Center">
                       <option value="cisco:mds:san:fc">cisco:mds:san:fc — Cisco MDS 9700 Fibre Channel SAN Fabric</option>
                       <option value="netapp:ontap:nas">netapp:ontap:nas — NetApp ONTAP Clustered NAS (NFS/SMB)</option>
                       <option value="cisco:dc:nexus9k:syslog">cisco:dc:nexus9k:syslog — Cisco Nexus 9000 Data Center Syslog</option>
                       <option value="arista:telemetry:json">arista:telemetry:json — Arista EOS Streaming Telemetry</option>
+                    </optgroup>
+                    <optgroup label="Cisco Catalyst">
+                      <option value="cisco:catalyst:client">cisco:catalyst:client — Cisco Catalyst Client</option>
+                      <option value="cisco:catalyst:clienthealth">cisco:catalyst:clienthealth — Cisco Catalyst Clienthealth</option>
+                      <option value="cisco:catalyst:compliance">cisco:catalyst:compliance — Cisco Catalyst Compliance</option>
+                      <option value="cisco:catalyst:devicehealth">cisco:catalyst:devicehealth — Cisco Catalyst Devicehealth</option>
+                      <option value="cisco:catalyst:issue">cisco:catalyst:issue — Cisco Catalyst Issue</option>
+                      <option value="cisco:catalyst:networkhealth">cisco:catalyst:networkhealth — Cisco Catalyst Networkhealth</option>
+                      <option value="cisco:catalyst:rogue:allowed">cisco:catalyst:rogue:allowed — Cisco Catalyst Rogue Allowed</option>
+                      <option value="cisco:catalyst:rogue:counts">cisco:catalyst:rogue:counts — Cisco Catalyst Rogue Counts</option>
+                      <option value="cisco:catalyst:rogue:verbose">cisco:catalyst:rogue:verbose — Cisco Catalyst Rogue Verbose</option>
+                      <option value="cisco:catalyst:rogue:verbose:legacy">cisco:catalyst:rogue:verbose:legacy — Cisco Catalyst Rogue Verbose Legacy</option>
+                      <option value="cisco:catalyst:rogue:wired">cisco:catalyst:rogue:wired — Cisco Catalyst Rogue Wired</option>
+                      <option value="cisco:catalyst:script:heartbeat">cisco:catalyst:script:heartbeat — Cisco Catalyst Script Heartbeat</option>
+                      <option value="cisco:catalyst:security:awips_signatures">cisco:catalyst:security:awips_signatures — Cisco Catalyst Security Awips Signatures</option>
+                      <option value="cisco:catalyst:security:profile">cisco:catalyst:security:profile — Cisco Catalyst Security Profile</option>
+                      <option value="cisco:catalyst:security:profile_signatures">cisco:catalyst:security:profile_signatures — Cisco Catalyst Security Profile Signatures</option>
+                      <option value="cisco:catalyst:security:rules">cisco:catalyst:security:rules — Cisco Catalyst Security Rules</option>
+                      <option value="cisco:catalyst:securityadvisory">cisco:catalyst:securityadvisory — Cisco Catalyst Securityadvisory</option>
+                      <option value="cisco:catalyst:threat:list">cisco:catalyst:threat:list — Cisco Catalyst Threat List</option>
+                      <option value="cisco:catalyst:threat:signatures">cisco:catalyst:threat:signatures — Cisco Catalyst Threat Signatures</option>
+                      <option value="cisco:catalyst:threat:summary">cisco:catalyst:threat:summary — Cisco Catalyst Threat Summary</option>
+                      <option value="cisco:catalyst:threat:summary:legacy">cisco:catalyst:threat:summary:legacy — Cisco Catalyst Threat Summary Legacy</option>
+                    </optgroup>
+                    <optgroup label="Cisco DC (ACI, Nexus)">
+                      <option value="cisco:dc:aci:health">cisco:dc:aci:health — Cisco Dc Aci Bridge Domain</option>
+                      <option value="cisco:dc:aci:class">cisco:dc:aci:class — Cisco Dc Aci Class</option>
+                      <option value="cisco:dc:nexus9k">cisco:dc:nexus9k — Cisco Dc Nexus9K</option>
+                      <option value="cisco:dc:aci:events">cisco:dc:aci:events — Cisco ACI Fabric State Events</option>
+                      <option value="cisco:nexus">cisco:nexus — Cisco Nexus DC Switch Event</option>
+                      <option value="cisco:nxos">cisco:nxos — Cisco NX-OS Structured Event Stream</option>
+                      <option value="cisco:nxos:syslog">cisco:nxos:syslog — Cisco NX-OS Syslog Event</option>
+                    </optgroup>
+                    <optgroup label="Cisco DNAC">
+                      <option value="cisco:dnac:audit:logs">cisco:dnac:audit:logs — Cisco Dnac Audit Logs</option>
+                      <option value="cisco:dnac:client">cisco:dnac:client — Cisco Dnac Client</option>
+                      <option value="cisco:dnac:clienthealth">cisco:dnac:clienthealth — Cisco Dnac Clienthealth</option>
+                      <option value="cisco:dnac:compliance">cisco:dnac:compliance — Cisco Dnac Compliance</option>
+                      <option value="cisco:dnac:devicehealth">cisco:dnac:devicehealth — Cisco Dnac Devicehealth</option>
+                      <option value="cisco:dnac:issue">cisco:dnac:issue — Cisco Dnac Issue</option>
+                      <option value="cisco:dnac:networkhealth">cisco:dnac:networkhealth — Cisco Dnac Networkhealth</option>
+                      <option value="cisco:dnac:securityadvisory">cisco:dnac:securityadvisory — Cisco Dnac Securityadvisory</option>
+                      <option value="cisco:dnac:site:topology">cisco:dnac:site:topology — Cisco Dnac Site Topology</option>
+                    </optgroup>
+                    <optgroup label="Cisco Duo">
+                      <option value="cisco:duo:account">cisco:duo:account — Cisco Duo Account</option>
+                      <option value="cisco:duo:activity">cisco:duo:activity — Cisco Duo Activity</option>
+                      <option value="cisco:duo:administrator">cisco:duo:administrator — Cisco Duo Administrator</option>
+                      <option value="cisco:duo:authentication">cisco:duo:authentication — Cisco Duo Authentication</option>
+                      <option value="cisco:duo:authentication_v2">cisco:duo:authentication_v2 — Cisco Duo Authentication V2</option>
+                      <option value="cisco:duo:endpoint">cisco:duo:endpoint — Cisco Duo Endpoint</option>
+                      <option value="cisco:duo:user">cisco:duo:user — Cisco Duo User</option>
+                    </optgroup>
+                    <optgroup label="Cisco Intersight">
+                      <option value="cisco:intersight:advisories">cisco:intersight:advisories — Cisco Intersight Advisories</option>
+                      <option value="cisco:intersight:alarms">cisco:intersight:alarms — Cisco Intersight Alarms</option>
+                      <option value="cisco:intersight:auditrecords">cisco:intersight:auditrecords — Cisco Intersight Auditrecords</option>
+                      <option value="cisco:intersight:compute">cisco:intersight:compute — Cisco Intersight Compute</option>
+                      <option value="cisco:intersight:contracts">cisco:intersight:contracts — Cisco Intersight Contracts</option>
+                      <option value="cisco:intersight:licenses">cisco:intersight:licenses — Cisco Intersight Licenses</option>
+                      <option value="cisco:intersight:metrics">cisco:intersight:metrics — Cisco Intersight Metrics</option>
+                      <option value="cisco:intersight:networkelements">cisco:intersight:networkelements — Cisco Intersight Networkelements</option>
+                      <option value="cisco:intersight:networkobjects">cisco:intersight:networkobjects — Cisco Intersight Networkobjects</option>
+                      <option value="cisco:intersight:profiles">cisco:intersight:profiles — Cisco Intersight Profiles</option>
+                      <option value="cisco:intersight:targets">cisco:intersight:targets — Cisco Intersight Targets</option>
+                    </optgroup>
+                    <optgroup label="Cisco SD-WAN">
+                      <option value="cisco:sdwan:AAA-6-METHOD_LIST_STATE">cisco:sdwan:AAA-6-METHOD_LIST_STATE — Cisco Sdwan Aaa 6 Method List State</option>
+                      <option value="cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT">cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT — Cisco Sdwan Aaa 6 Notify Mlist State To Aaa Client</option>
+                      <option value="cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE">cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE — Cisco Sdwan Aaa Audit Message 6 Method List State</option>
+                      <option value="cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT">cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT — Cisco Sdwan Aaa Audit Message 6 Notify Mlist State To Aaa Client</option>
+                      <option value="cisco:sdwan:BGP-5-NBR_RESET">cisco:sdwan:BGP-5-NBR_RESET — Cisco Sdwan Bgp 5 Nbr Reset</option>
+                      <option value="cisco:sdwan:BGP-6-NEXTHOP">cisco:sdwan:BGP-6-NEXTHOP — Cisco Sdwan Bgp 6 Nexthop</option>
+                      <option value="cisco:sdwan:BGP_SESSION-5-ADJCHANGE">cisco:sdwan:BGP_SESSION-5-ADJCHANGE — Cisco Sdwan Bgp Session 5 Adjchange</option>
+                      <option value="cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH">cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH — Cisco Sdwan Cdp 4 Native Vlan Mismatch</option>
+                      <option value="cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF">cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF — Cisco Sdwan Crypto 6 Isakmp On Off</option>
+                      <option value="cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER">cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER — Cisco Sdwan Cts 3 Aaa No Radius Server</option>
+                      <option value="cisco:sdwan:DMI-5-AUTH_PASSED">cisco:sdwan:DMI-5-AUTH_PASSED — Cisco Sdwan Dmi 5 Auth Passed</option>
+                      <option value="cisco:sdwan:DMI-5-CONFIG_I">cisco:sdwan:DMI-5-CONFIG_I — Cisco Sdwan Dmi 5 Config I</option>
+                      <option value="cisco:sdwan:DMI-5-SYNC_COMPLETE">cisco:sdwan:DMI-5-SYNC_COMPLETE — Cisco Sdwan Dmi 5 Sync Complete</option>
+                      <option value="cisco:sdwan:DMI-5-SYNC_NEEDED">cisco:sdwan:DMI-5-SYNC_NEEDED — Cisco Sdwan Dmi 5 Sync Needed</option>
+                      <option value="cisco:sdwan:DMI-5-SYNC_START">cisco:sdwan:DMI-5-SYNC_START — Cisco Sdwan Dmi 5 Sync Start</option>
+                      <option value="cisco:sdwan:ENVIRONMENTAL-1-ALERT">cisco:sdwan:ENVIRONMENTAL-1-ALERT — Cisco Sdwan Environmental 1 Alert</option>
+                      <option value="cisco:sdwan:EVENTLIB-3-CPUHOG">cisco:sdwan:EVENTLIB-3-CPUHOG — Cisco Sdwan Eventlib 3 Cpuhog</option>
+                      <option value="cisco:sdwan:IOSXE-3-PLATFORM">cisco:sdwan:IOSXE-3-PLATFORM — Cisco Sdwan Iosxe 3 Platform</option>
+                      <option value="cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE">cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE — Cisco Sdwan Iosxe Infra 4 No Punt Keepalive</option>
+                      <option value="cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP">cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP — Cisco Sdwan Iosxe Rp Pae Not 6 Pae Startup</option>
+                      <option value="cisco:sdwan:LINEPROTO-5-UPDOWN">cisco:sdwan:LINEPROTO-5-UPDOWN — Cisco Sdwan Lineproto 5 Updown</option>
+                      <option value="cisco:sdwan:LINK-5-CHANGED">cisco:sdwan:LINK-5-CHANGED — Cisco Sdwan Link 5 Changed</option>
+                      <option value="cisco:sdwan:LINK-5-UPDOWN">cisco:sdwan:LINK-5-UPDOWN — Cisco Sdwan Link 5 Updown</option>
+                      <option value="cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED">cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED — Cisco Sdwan Mdt Connection 6 State Changed</option>
+                      <option value="cisco:sdwan:MSDP-5-PEER_UPDOWN">cisco:sdwan:MSDP-5-PEER_UPDOWN — Cisco Sdwan Msdp 5 Peer Updown</option>
+                      <option value="cisco:sdwan:NDBMAN-5-CONFIG_I">cisco:sdwan:NDBMAN-5-CONFIG_I — Cisco Sdwan Ndbman 5 Config I</option>
+                      <option value="cisco:sdwan:OSPF-5-ADJCHG">cisco:sdwan:OSPF-5-ADJCHG — Cisco Sdwan Ospf 5 Adjchg</option>
+                      <option value="cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK">cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK — Cisco Sdwan Pki 6 Authoritative Clock</option>
+                      <option value="cisco:sdwan:PLATFORM-4-ELEMENT_WARNING">cisco:sdwan:PLATFORM-4-ELEMENT_WARNING — Cisco Sdwan Platform 4 Element Warning</option>
+                      <option value="cisco:sdwan:sitehealth">cisco:sdwan:sitehealth — Cisco Sdwan Sitehealth</option>
+                      <option value="cisco:sdwan:ssetunnels">cisco:sdwan:ssetunnels — Cisco Sdwan Ssetunnels</option>
+                      <option value="cisco:sdwan:SYS-5-CONFIG_P">cisco:sdwan:SYS-5-CONFIG_P — Cisco Sdwan Sys 5 Config P</option>
+                      <option value="cisco:sdwan:syslog">cisco:sdwan:syslog — Cisco Sdwan Syslog</option>
+                      <option value="cisco:sdwan:system:logs">cisco:sdwan:system:logs — Cisco Sdwan System Logs</option>
+                      <option value="cisco:sdwan:sytem:logs">cisco:sdwan:sytem:logs — Cisco Sdwan Sytem Logs</option>
+                      <option value="cisco:sdwan:tunnelhealth">cisco:sdwan:tunnelhealth — Cisco Sdwan Tunnelhealth</option>
+                      <option value="cisco:sdwan:utd:logs">cisco:sdwan:utd:logs — Cisco Sdwan Utd Logs</option>
+                      <option value="cisco:sdwan:utdhealth">cisco:sdwan:utdhealth — Cisco Sdwan Utdhealth</option>
+                    </optgroup>
+                    <optgroup label="Meraki">
+                      <option value="meraki:airmarshal">meraki:airmarshal — Meraki Airmarshal</option>
+                      <option value="meraki:appliancesdwanstatistics">meraki:appliancesdwanstatistics — Meraki Appliancesdwanstatistics</option>
+                      <option value="meraki:appliancesdwanstatuses">meraki:appliancesdwanstatuses — Meraki Appliancesdwanstatuses</option>
+                      <option value="meraki:assurancealerts">meraki:assurancealerts — Meraki Assurancealerts</option>
+                      <option value="meraki:devices">meraki:devices — Meraki Devices</option>
+                      <option value="meraki:devicesavailabilitieschangehistory">meraki:devicesavailabilitieschangehistory — Meraki Devices Availabilities</option>
+                      <option value="meraki:organizationsecurity">meraki:organizationsecurity — Meraki Organizationsecurity</option>
+                      <option value="meraki:summarytopappliancesbyutilization">meraki:summarytopappliancesbyutilization — Meraki Summarytopappliancesbyutilization</option>
+                      <option value="meraki:summarytopclientsbyusage">meraki:summarytopclientsbyusage — Meraki Summarytopclientsbyusage</option>
+                      <option value="meraki:summarytopdevicesbyusage">meraki:summarytopdevicesbyusage — Meraki Summarytopdevicesbyusage</option>
+                      <option value="meraki:switchportsbyswitch">meraki:switchportsbyswitch — Meraki Switchportsbyswitch</option>
+                      <option value="meraki:switchportsoverview">meraki:switchportsoverview — Meraki Switchportsoverview</option>
+                    </optgroup>
+                    <optgroup label="Nutanix PC">
+                      <option value="nutanixpc_alerts">nutanixpc_alerts — Nutanixpc Alerts</option>
+                      <option value="nutanixpc_cluster_performance">nutanixpc_cluster_performance — Nutanixpc Cluster Performance</option>
+                      <option value="nutanixpc_clusters">nutanixpc_clusters — Nutanixpc Clusters</option>
+                      <option value="nutanixpc_disk_performance">nutanixpc_disk_performance — Nutanixpc Disk Performance</option>
+                      <option value="nutanixPC_disks">nutanixPC_disks — Nutanixpc Disks</option>
+                      <option value="nutanixpc_events">nutanixpc_events — Nutanixpc Events</option>
+                      <option value="nutanixpc_host_performance">nutanixpc_host_performance — Nutanixpc Host Performance</option>
+                      <option value="nutanixpc_hosts">nutanixpc_hosts — Nutanixpc Hosts</option>
+                      <option value="nutanixpc_prismCentrals">nutanixpc_prismCentrals — Nutanixpc Prismcentrals</option>
+                      <option value="nutanixpc_storage_containers">nutanixpc_storage_containers — Nutanixpc Storage Containers</option>
+                      <option value="nutanixpc_syslog">nutanixpc_syslog — Nutanixpc Syslog</option>
+                      <option value="nutanixpc_vm_performance">nutanixpc_vm_performance — Nutanixpc Vm Performance</option>
+                      <option value="nutanixpc_vms">nutanixpc_vms — Nutanixpc Vms</option>
+                      <option value="nutanixpc_volume_groups">nutanixpc_volume_groups — Nutanixpc Volume Groups</option>
+                      <option value="nutanixpc:syslog">nutanixpc:syslog — Nutanix Prism Central Syslog (Colon Format)</option>
+                      <option value="nutanixpc:vms">nutanixpc:vms — Nutanix Prism Central VM Inventory (Colon Format)</option>
+                    </optgroup>
+                    <optgroup label="Kubernetes Containers">
+                      <option value="kube:container:calico-kube-controllers">kube:container:calico-kube-controllers — Kube Container Calico Kube Controllers</option>
+                      <option value="kube:container:calico-node">kube:container:calico-node — Kube Container Calico Node</option>
+                      <option value="kube:container:controller">kube:container:controller — Kube Container Controller</option>
+                      <option value="kube:container:coredns">kube:container:coredns — Kube Container Coredns</option>
+                      <option value="kube:container:hostpath-provisioner">kube:container:hostpath-provisioner — Kube Container Hostpath Provisioner</option>
+                      <option value="kube:container:install-cni">kube:container:install-cni — Kube Container Install Cni</option>
+                      <option value="kube:container:metrics">kube:container:metrics — Kube Container Metrics</option>
+                      <option value="kube:container:metrics-server">kube:container:metrics-server — Kube Container Metrics Server</option>
+                      <option value="kube:container:mibserver">kube:container:mibserver — Kube Container Mibserver</option>
+                      <option value="kube:container:mongodb">kube:container:mongodb — Kube Container Mongodb</option>
+                      <option value="kube:container:redis">kube:container:redis — Kube Container Redis</option>
+                      <option value="kube:container:speaker">kube:container:speaker — Kube Container Speaker</option>
+                      <option value="kube:container:splunk-connect-for-snmp-traps">kube:container:splunk-connect-for-snmp-traps — Kube Container Splunk Connect For Snmp Traps</option>
+                      <option value="kube:container:splunk-connect-for-snmp-worker-sender">kube:container:splunk-connect-for-snmp-worker-sender — Kube Container Splunk Connect For Snmp Worker Sender</option>
+                      <option value="kube:container:splunk-connect-for-snmp-worker-trap">kube:container:splunk-connect-for-snmp-worker-trap — Kube Container Splunk Connect For Snmp Worker Trap</option>
+                      <option value="kube:container:upgrade-ipam">kube:container:upgrade-ipam — Kube Container Upgrade Ipam</option>
+                      <option value="kube:events">kube:events — Kube Events</option>
+                      <option value="kube:object:pods">kube:object:pods — Kube Object Pods</option>
+                    </optgroup>
+                    <optgroup label="stream-netflow">
+                      <option value="stream:netflow">stream:netflow — Stream Netflow</option>
+                    </optgroup>
+                    <optgroup label="vmware-esx-perf">
+                      <option value="vmware:perf:cpu">vmware:perf:cpu — Vmware Esx Perf</option>
+                    </optgroup>
+                    <optgroup label="Cisco Security &amp; Telemetry">
+                      <option value="cisco:ftd:syslog">cisco:ftd:syslog — Cisco Ftd Syslog</option>
+                      <option value="cisco:ise:radius:authz:policy">cisco:ise:radius:authz:policy — Cisco Ise Radius Authz Policy</option>
+                      <option value="cisco:ise:radius:policyset">cisco:ise:radius:policyset — Cisco Ise Radius Policyset</option>
+                      <option value="cisco:ise:syslog">cisco:ise:syslog — Cisco Ise Syslog</option>
+                      <option value="cisco:ise:tacacs:authz:policy">cisco:ise:tacacs:authz:policy — Cisco Ise Tacacs Authz Policy</option>
+                      <option value="cisco:ise:tacacs:policyset">cisco:ise:tacacs:policyset — Cisco Ise Tacacs Policyset</option>
+                      <option value="httpevent">httpevent — Cisco Metrics Bgp Rib</option>
+                      <option value="cisco:metrics">cisco:metrics — Cisco Metrics Splunk Otel</option>
+                      <option value="cisco:nvm:flowdata">cisco:nvm:flowdata — Cisco Nvm Flowdata</option>
+                      <option value="cisco:se">cisco:se — Cisco Se</option>
+                      <option value="cisco:sfw:estreamer">cisco:sfw:estreamer — Cisco Sfw Estreamer</option>
+                      <option value="cisco:sfw:policy">cisco:sfw:policy — Cisco Sfw Policy</option>
+                      <option value="cisco_syslog">cisco_syslog — Cisco Syslog</option>
+                      <option value="cisco:thousandeyes:event">cisco:thousandeyes:event — Cisco Thousandeyes Event</option>
+                      <option value="cisco:thousandeyes:path-vis">cisco:thousandeyes:path-vis — Cisco Thousandeyes Path Vis</option>
+                      <option value="cisco:asa:syslog">cisco:asa:syslog — Cisco ASA Syslog Message Stream</option>
+                      <option value="cisco:ios:mdt:metric">cisco:ios:mdt:metric — Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON)</option>
+                      <option value="cisco:ios:syslog">cisco:ios:syslog — Cisco IOS System Syslog Facility</option>
+                    </optgroup>
+                    <optgroup label="Sophos Central">
+                      <option value="sophos:central:cef">sophos:central:cef — Sophos Central Cef</option>
+                    </optgroup>
+                    <optgroup label="Arista Networks Telemetry">
+                      <option value="arista:eos:syslog">arista:eos:syslog — Arista Eos Syslog</option>
+                    </optgroup>
+                    <optgroup label="Aruba Networks">
+                      <option value="aruba">aruba — Aruba Instant AP &amp; Switch Event</option>
+                      <option value="aruba:authmgr">aruba:authmgr — Aruba Controller Authentication Manager</option>
+                      <option value="aruba:stm">aruba:stm — Aruba Station Management (STM)</option>
+                    </optgroup>
+                    <optgroup label="Cloudflare Core &amp; R2">
+                      <option value="cloudflare:json">cloudflare:json — Cloudflare Json</option>
+                      <option value="cloudflare:r2:json">cloudflare:r2:json — Cloudflare R2 Metrics</option>
+                    </optgroup>
+                    <optgroup label="ExtraHop Performance Detection">
+                      <option value="extrahop:eda:alert">extrahop:eda:alert — Extrahop Eda Alert</option>
+                      <option value="extrahop:eda:metrics">extrahop:eda:metrics — Extrahop Metrics Performance</option>
+                    </optgroup>
+                    <optgroup label="Fortinet FortiGate">
+                      <option value="fgt_event">fgt_event — Fortinet Fortigate Sdwan Alert</option>
+                      <option value="fgt_traffic">fgt_traffic — Fortinet Fortigate Traffic</option>
+                      <option value="fortigate_event">fortigate_event — Fortinet FortiGate System Event</option>
+                      <option value="fortigate_traffic">fortigate_traffic — Fortinet FortiGate Traffic Log</option>
+                    </optgroup>
+                    <optgroup label="NetScout Omnis Core">
+                      <option value="netscout:omnis:alert">netscout:omnis:alert — Netscout Omnis Alert</option>
+                    </optgroup>
+                    <optgroup label="Netskope SSE Framework">
+                      <option value="netskope:json">netskope:json — Netskope Json</option>
+                      <option value="netskope:sse">netskope:sse — Netskope Security Service Edge (SSE)</option>
+                    </optgroup>
+                    <optgroup label="Radware CSMS &amp; CWAF">
+                      <option value="radware:ddos">radware:ddos — Radware Csms Ddos</option>
+                      <option value="radware:waf">radware:waf — Radware Cwaf Waf</option>
+                    </optgroup>
+                    <optgroup label="F5 BIG-IP">
+                      <option value="f5:bigip:syslog">f5:bigip:syslog — F5 Bigip Syslog</option>
+                      <option value="f5:bigip:ltm">f5:bigip:ltm — F5 BIG-IP Local Traffic Manager (LTM)</option>
+                    </optgroup>
+                    <optgroup label="Juniper Networks">
+                      <option value="juniper:syslog">juniper:syslog — Juniper Syslog</option>
+                      <option value="juniper:junos:syslog">juniper:junos:syslog — Juniper Junos Syslog Transport</option>
+                    </optgroup>
+                    <optgroup label="Palo Alto Networks">
+                      <option value="pan:system">pan:system — Pan System</option>
+                    </optgroup>
+                    <optgroup label="Zscaler SSE Infrastructure">
+                      <option value="zscaler:tunnel">zscaler:tunnel — Zscaler Sse Tunnel</option>
+                      <option value="zscaler:web">zscaler:web — Zscaler Sse Web</option>
+                    </optgroup>
+                    <optgroup label="Other">
+                      <option value="geo_tokens:generic">geo_tokens:generic — Geo_Tokens</option>
+                      <option value="datablaster:preflight">datablaster:preflight — NetSpout Ingestion Preflight Probe</option>
+                      <option value="datablaster:probe">datablaster:probe — NetSpout Telemetry Canary Probe</option>
+                      <option value="nokia:sros:syslog">nokia:sros:syslog — Nokia 7750 SR OS Syslog Facility</option>
+                      <option value="snmp:trap">snmp:trap — Universal SNMP Trap Receiver Event</option>
                     </optgroup>
                   </select>
                 </div>
@@ -246,6 +490,9 @@
                     <button type="button" class="vendor-filter-btn" data-vendor="paloalto" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Palo Alto / Fortinet</button>
                     <button type="button" class="vendor-filter-btn" data-vendor="arista" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Arista / Juniper / Nokia</button>
                     <button type="button" class="vendor-filter-btn" data-vendor="cloud" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Cloud / SASE</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="nutanix" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Nutanix</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="k8s" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Kubernetes</button>
+                    <button type="button" class="vendor-filter-btn" data-vendor="other" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Other</button>
                   </div>
                   <div style="display: flex; gap: 10px; align-items: center;">
                     <button type="button" id="btn-multi-select-all" style="background: #1e293b; color: #38bdf8; border: 1px solid #0284c7; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Select All</button>
@@ -254,6 +501,9 @@
                   </div>
                 </div>
 
+                                <div style="margin-bottom: 10px;">
+                  <input type="text" id="multi-sourcetype-search" placeholder="🔍 Search multi-batch sourcetypes (e.g., bgp, interface, nutanix, kube, threat)..." style="width: 100%; background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 6px 12px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                </div>
                 <!-- Multi Grid -->
                 <div id="multi-sourcetype-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; max-height: 280px; overflow-y: auto; padding: 4px;">
                   <!-- Dynamically populated checkboxes -->

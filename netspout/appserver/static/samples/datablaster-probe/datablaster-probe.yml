@@ -1,0 +1,14 @@
+samples:
+  - name: datablaster-probe-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    lines:
+      - index: idx_network_ops
+        source: datablaster_probe
+        sourcetype: datablaster:probe
+        _raw: "{\"timestamp\": 1789840800, \"probe_id\": \"probe-mdt-canary-01\", \"target_index\": \"cisco_mdt_metrics\", \"eps_measured\": 1000, \"rtt_ms\": 1.1, \"status\": \"HEALTHY\"}"
+      - index: idx_network_ops
+        source: datablaster_probe
+        sourcetype: datablaster:probe
+        _raw: "{\"timestamp\": 1789840801, \"probe_id\": \"probe-syslog-canary-01\", \"target_index\": \"idx_network_ops\", \"eps_measured\": 2500, \"rtt_ms\": 0.8, \"status\": \"HEALTHY\"}"

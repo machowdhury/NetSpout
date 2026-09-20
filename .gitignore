@@ -12,9 +12,15 @@ ENV/
 
 # Node / Frontend
 node_modules/
-dist/
-dist-ssr/
+frontend/dist/
+frontend/dist-ssr/
 *.local
+
+# Splunk App Symlinks
+netspout/bin/app
+
+# Allow appserver static dist
+!netspout/appserver/static/dist/**
 
 # Logs and databases
 *.log

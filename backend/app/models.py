@@ -1,5 +1,9 @@
 """
-Pydantic Models and Data Schemas for Network Topology Simulator
+Pydantic Models and Data Schemas for Network Topology Simulator (NetSpout)
+Includes full support for:
+  - OpenConfig YANG & Model-Driven Telemetry (MDT)
+  - SC4SNMP 300+ MIB library, traps & metrics
+  - Multi-Pipeline Telemetry (Splunk HEC, OTel Collector, Telegraf, RFC5424 Syslog)
 """
 
 from enum import Enum
@@ -40,6 +44,8 @@ class ScenarioType(str, Enum):
     MIXED_EDGE_BREACH = "mixed_edge_breach"
     MIXED_SASE_DEGRADATION = "mixed_sase_degradation"
     MIXED_BACKBONE_OPTICAL = "mixed_backbone_optical"
+    # Mode C: OpenConfig & Telemetry
+    OPENCONFIG_MDT_STREAMING = "openconfig_mdt_streaming"
 
 
 class SecurityZoneType(str, Enum):
@@ -98,12 +104,31 @@ class NodeHardware(BaseModel):
     interfaces: List[NetworkInterface] = Field(default_factory=list)
 
 
+# =========================================================================
+# Multi-Pipeline Telemetry Transport Configuration
+# =========================================================================
 class TelemetryTransportConfig(BaseModel):
+    # 1. Splunk HEC Pipeline
     hec_enabled: bool = True
     hec_url: str = "https://127.0.0.1:8888/services/collector"
     hec_token: str = "00000000-0000-0000-0000-000000000000"
     hec_index: str = "idx_network_ops"
+    hec_metric_index: str = "cisco_mdt_metrics"
     
+    # 2. OpenTelemetry (OTel) Collector Pipeline (OTLP HTTP)
+    otel_enabled: bool = False
+    otel_endpoint: str = "http://127.0.0.1:4318"
+    otel_metrics_path: str = "/v1/metrics"
+    otel_logs_path: str = "/v1/logs"
+    otel_headers: Dict[str, str] = Field(default_factory=dict)
+    otel_service_name: str = "netspout-telemetry-engine"
+
+    # 3. Telegraf Pipeline (HTTP / Influx Line Protocol or JSON)
+    telegraf_enabled: bool = False
+    telegraf_endpoint: str = "http://127.0.0.1:8080/telegraf"
+    telegraf_format: str = "influx"  # influx, json
+
+    # 4. Direct Syslog Pipeline (RFC 5424 / RFC 3164)
     syslog_enabled: bool = False
     syslog_host: str = "127.0.0.1"
     syslog_port: int = 514
@@ -119,7 +144,7 @@ class Node(BaseModel):
     x: float
     y: float
     ip_address: str = "10.0.1.1"
-    status: str = "active"  # active, degraded, breached, blocked
+    status: str = "active"  # active, degraded, breached, blocked, stopped, paused
     power_state: NodePowerState = NodePowerState.RUNNING
     vendor: str = "generic"  # cisco_catalyst, cisco_nexus, palo_alto, arista, juniper, nokia, zscaler, etc.
     sourcetype: Optional[str] = None
@@ -151,20 +176,85 @@ class TopologyState(BaseModel):
     global_transport: Optional[TelemetryTransportConfig] = Field(default_factory=TelemetryTransportConfig)
 
 
-class SyslogTestRequest(BaseModel):
-    host: str = "127.0.0.1"
-    port: int = 514
-    protocol: str = "udp"
-    message: Optional[str] = "RFC5424 Test Event from Network Telemetry Simulator"
-    format: str = "rfc5424"
+# =========================================================================
+# SNMP & SC4SNMP Schemas
+# =========================================================================
+class SNMPProtocolVersion(str, Enum):
+    V2C = "v2c"
+    V3 = "v3"
 
 
+class SNMPSecurityLevel(str, Enum):
+    NO_AUTH_NO_PRIV = "noAuthNoPriv"
+    AUTH_NO_PRIV = "authNoPriv"
+    AUTH_PRIV = "authPriv"
 
-class SimulationRequest(BaseModel):
-    scenario: ScenarioType
-    ecosystem_mode: Optional[EcosystemMode] = EcosystemMode.MIXED_VENDOR
-    running: bool = True
-    speed_ms: int = 500
+
+class SNMPMibDefinition(BaseModel):
+    name: str
+    oid: str
+    mib_module: str
+    data_type: str  # Counter32, Counter64, Gauge32, Integer32, OctetString, IpAddress, TimeTicks
+    description: str
+    is_table: bool = False
+    vendor: str = "RFC"  # RFC, Cisco, Juniper, Arista
+
+
+class SNMPPollingMetric(BaseModel):
+    timestamp: float
+    host: str
+    oid: str
+    mib_module: str
+    metric_name: str
+    value: float
+    dimensions: Dict[str, Any] = Field(default_factory=dict)
+    community: str = "public"
+    sourcetype: str = "sc4snmp:metric"
+    index: str = "cisco_mdt_metrics"
+
+
+class SNMPTrapEvent(BaseModel):
+    timestamp: float
+    host: str
+    trap_oid: str
+    trap_name: str
+    enterprise: str
+    generic_trap: Optional[int] = 6
+    specific_trap: Optional[int] = 1
+    varbinds: Dict[str, Any] = Field(default_factory=dict)
+    severity: str = "warning"  # informational, warning, minor, major, critical
+    sourcetype: str = "sc4snmp:event"
+    index: str = "idx_network_ops"
+
+
+class SNMPTrapTriggerRequest(BaseModel):
+    trap_name: str
+    host: str
+    target_node_id: Optional[str] = None
+    severity: str = "warning"
+    varbind_overrides: Dict[str, Any] = Field(default_factory=dict)
+    destinations: Optional[TelemetryTransportConfig] = None
+
+
+class SNMPPollRequest(BaseModel):
+    host: str
+    mib_module: Optional[str] = "IF-MIB"
+    target_node_id: Optional[str] = None
+    destinations: Optional[TelemetryTransportConfig] = None
+
+
+# =========================================================================
+# OpenConfig YANG & Export Configuration
+# =========================================================================
+class OpenConfigSubscriptionMode(str, Enum):
+    SAMPLE = "SAMPLE"
+    ON_CHANGE = "ON_CHANGE"
+
+
+class OpenConfigExportConfig(BaseModel):
+    rfc7951_json_ietf: bool = True
+    gnmi_encoding: str = "json_ietf"  # json_ietf, proto, kv
+    export_pipelines: List[str] = Field(default_factory=lambda: ["hec"])
 
 
 class LogEntry(BaseModel):
@@ -210,11 +300,6 @@ class InterfaceOperStatus(str, Enum):
     DORMANT = "DORMANT"
 
 
-class OpenConfigSubscriptionMode(str, Enum):
-    SAMPLE = "SAMPLE"
-    ON_CHANGE = "ON_CHANGE"
-
-
 class FaultScenarioType(str, Enum):
     LINK_CUT = "link_cut"
     HARDWARE_EXHAUSTION = "hardware_exhaustion"
@@ -222,6 +307,7 @@ class FaultScenarioType(str, Enum):
     DDOS_SYN_FLOOD = "ddos_syn_flood"
     LATERAL_MOVEMENT = "lateral_movement"
     OPTICAL_BER_DEGRADATION = "optical_ber_degradation"
+    SNMP_TRAP_BURST = "snmp_trap_burst"
 
 
 class FaultInjectionRequest(BaseModel):
@@ -251,3 +337,22 @@ class FaultEventRecord(BaseModel):
     affected_nodes: List[str] = Field(default_factory=list)
     affected_edges: List[str] = Field(default_factory=list)
 
+
+class SimulationRequest(BaseModel):
+    scenario: ScenarioType
+    ecosystem_mode: Optional[EcosystemMode] = EcosystemMode.MIXED_VENDOR
+    running: bool = True
+    speed_ms: int = 500
+
+
+class SyslogTestRequest(BaseModel):
+    host: str = "127.0.0.1"
+    port: int = 514
+    protocol: str = "udp"
+    message: Optional[str] = "RFC5424 Test Event from Network Telemetry Simulator"
+    format: str = "rfc5424"
+
+
+class PipelineTestRequest(BaseModel):
+    pipeline: str  # "hec", "otel", "telegraf", "syslog"
+    config: TelemetryTransportConfig

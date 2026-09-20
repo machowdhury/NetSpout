@@ -22,6 +22,8 @@ interface TopBarProps {
   onOpenSyslogModal: () => void;
   onOpenFaultModal: () => void;
   onOpenOpenConfigModal: () => void;
+  onOpenSNMPModal: () => void;
+  onOpenPipelinesModal: () => void;
   onPowerAll: (power: 'running' | 'stopped') => void;
 }
 
@@ -44,6 +46,8 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSyslogModal,
   onOpenFaultModal,
   onOpenOpenConfigModal,
+  onOpenSNMPModal,
+  onOpenPipelinesModal,
   onPowerAll
 }) => {
   const filteredScenarios = SCENARIOS.filter(
@@ -216,6 +220,26 @@ export const TopBar: React.FC<TopBarProps> = ({
         >
           <Database className="w-3.5 h-3.5 text-cyan-400" />
           <span>OpenConfig / gNMI</span>
+        </button>
+
+        {/* SC4SNMP 300+ MIB Library & Trap Emitter Trigger */}
+        <button
+          onClick={onOpenSNMPModal}
+          className="px-2.5 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 hover:text-emerald-200 border border-emerald-600/60 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.2)]"
+          title="SC4SNMP 300+ MIB Catalog, Polling Walk Simulator & Trap Generator"
+        >
+          <Activity className="w-3.5 h-3.5 text-emerald-400" />
+          <span>SC4SNMP (330+ MIBs)</span>
+        </button>
+
+        {/* Universal 4-Way Pipeline Matrix Trigger */}
+        <button
+          onClick={onOpenPipelinesModal}
+          className="px-2.5 py-1.5 rounded-lg bg-violet-950/60 hover:bg-violet-900/60 text-violet-300 hover:text-violet-200 border border-violet-600/60 text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-[0_0_10px_rgba(139,92,246,0.2)]"
+          title="Universal Multi-Pipeline Telemetry Dispatcher (Splunk HEC, OTel Collector, Telegraf, Syslog)"
+        >
+          <Radio className="w-3.5 h-3.5 text-violet-400" />
+          <span>Pipelines (OTel/Telegraf)</span>
         </button>
 
         {/* Global Node Power Controls */}

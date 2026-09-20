@@ -80,6 +80,18 @@ export interface TelemetryTransportConfig {
   hec_url: string;
   hec_token: string;
   hec_index: string;
+  hec_metric_index?: string;
+  
+  otel_enabled?: boolean;
+  otel_endpoint?: string;
+  otel_metrics_path?: string;
+  otel_logs_path?: string;
+  otel_service_name?: string;
+
+  telegraf_enabled?: boolean;
+  telegraf_endpoint?: string;
+  telegraf_format?: 'influx' | 'json';
+
   syslog_enabled: boolean;
   syslog_host: string;
   syslog_port: number;
@@ -161,7 +173,8 @@ export type FaultScenarioType =
   | 'bgp_route_flap'
   | 'ddos_syn_flood'
   | 'lateral_movement'
-  | 'optical_ber_degradation';
+  | 'optical_ber_degradation'
+  | 'snmp_trap_burst';
 
 export interface FaultInjectionRequest {
   scenario_type: FaultScenarioType;
@@ -184,4 +197,42 @@ export interface FaultEventRecord {
   affected_edges: string[];
 }
 
+// =========================================================================
+// SNMP & SC4SNMP Types
+// =========================================================================
+export interface SNMPMibDefinition {
+  name: string;
+  oid: string;
+  mib_module: string;
+  data_type: string;
+  description: string;
+  is_table: boolean;
+  vendor: string;
+}
 
+export interface SNMPTrapEvent {
+  timestamp: number;
+  host: string;
+  trap_oid: string;
+  trap_name: string;
+  enterprise: string;
+  generic_trap?: number;
+  specific_trap?: number;
+  varbinds: Record<string, any>;
+  severity: string;
+  sourcetype: string;
+  index: string;
+}
+
+export interface PipelineStats {
+  hec_dispatched: number;
+  otel_dispatched: number;
+  telegraf_dispatched: number;
+  syslog_dispatched: number;
+  hec_errors: number;
+  otel_errors: number;
+  telegraf_errors: number;
+  syslog_errors: number;
+  last_error: string | null;
+  last_active: number | null;
+}

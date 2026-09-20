@@ -7,6 +7,8 @@ import { NodeInspectorModal } from './components/NodeInspectorModal';
 import { SyslogConfigModal } from './components/SyslogConfigModal';
 import { FaultInjectionModal } from './components/FaultInjectionModal';
 import { OpenConfigTreeModal } from './components/OpenConfigTreeModal';
+import { SNMPMibModal } from './components/SNMPMibModal';
+import { TelemetryPipelinesModal } from './components/TelemetryPipelinesModal';
 import type {
   TopologyState,
   ScenarioType,
@@ -55,6 +57,8 @@ export const App: React.FC = () => {
   const [showSyslogModal, setShowSyslogModal] = useState<boolean>(false);
   const [showFaultModal, setShowFaultModal] = useState<boolean>(false);
   const [showOpenConfigModal, setShowOpenConfigModal] = useState<boolean>(false);
+  const [showSNMPModal, setShowSNMPModal] = useState<boolean>(false);
+  const [showPipelinesModal, setShowPipelinesModal] = useState<boolean>(false);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'http://127.0.0.1:8888/services/collector',
@@ -502,6 +506,8 @@ export const App: React.FC = () => {
         onOpenSyslogModal={() => setShowSyslogModal(true)}
         onOpenFaultModal={() => setShowFaultModal(true)}
         onOpenOpenConfigModal={() => setShowOpenConfigModal(true)}
+        onOpenSNMPModal={() => setShowSNMPModal(true)}
+        onOpenPipelinesModal={() => setShowPipelinesModal(true)}
         onPowerAll={handlePowerAll}
       />
 
@@ -571,6 +577,22 @@ export const App: React.FC = () => {
         isOpen={showOpenConfigModal}
         onClose={() => setShowOpenConfigModal(false)}
         topology={topology}
+      />
+
+      {/* SC4SNMP 300+ MIB Explorer & Trap Emitter Modal */}
+      <SNMPMibModal
+        isOpen={showSNMPModal}
+        onClose={() => setShowSNMPModal(false)}
+        nodes={topology.nodes}
+        globalTransport={transportConfig}
+      />
+
+      {/* Universal 4-Way Pipeline Matrix Modal */}
+      <TelemetryPipelinesModal
+        isOpen={showPipelinesModal}
+        onClose={() => setShowPipelinesModal(false)}
+        config={transportConfig}
+        onSaveConfig={handleSaveTransportConfig}
       />
     </div>
   );

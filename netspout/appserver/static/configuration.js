@@ -57,7 +57,9 @@ require([
     idx_security_fw: "idx_security_fw",
     idx_wireless_ops: "idx_wireless_ops",
     idx_performance_metrics: "idx_performance_metrics",
-    cisco_mdt_metrics: "cisco_mdt_metrics"
+    cisco_mdt_metrics: "cisco_mdt_metrics",
+    otel_endpoint: "http://127.0.0.1:4318",
+    telegraf_endpoint: "http://127.0.0.1:8080/telegraf"
   };
 
   function showAlert(msg, isSuccess) {

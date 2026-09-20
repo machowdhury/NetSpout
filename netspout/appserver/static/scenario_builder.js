@@ -84,6 +84,10 @@ require([
     ],
     "optical": [
       { id: "nokia_opt", name: "Nokia 100G Optical DWDM / TI-LFA", index: "idx_network_ops", sourcetypes: ["nokia:sros", "nokia:sros:syslog"], template: '<134>Sep 19 14:00:00 core-nokia-7750 OPTICAL-4-RX_POWER_DEGRADE: Transceiver port 1/1/c1/1 optical power dropped to -26.4 dBm. Pre-FEC BER exceeds 1.2e-3. TI-LFA Fast Reroute triggered.' }
+    ],
+    "snmp": [
+      { id: "sc4snmp_poll", name: "Splunk Connect for SNMP (Polling Walk)", index: "cisco_mdt_metrics", sourcetypes: ["sc4snmp:metric"], template: '{"time": 1789840800.0, "event": "metric", "source": "sc4snmp", "sourcetype": "sc4snmp:metric", "host": "rtr-cisco-8000-01.corp.internal", "index": "cisco_mdt_metrics", "fields": {"metric_name:ifInOctets": 58920140.0, "metric_name:ifOutOctets": 84920194.0, "metric_name:ifOperStatus": 1.0, "_value": 58920140.0, "ifIndex": "1", "ifDescr": "GigabitEthernet0/0/1", "device": "rtr-cisco-8000-01", "vendor": "cisco"}}' },
+      { id: "sc4snmp_trap", name: "Splunk Connect for SNMP (Traps)", index: "idx_network_ops", sourcetypes: ["sc4snmp:event"], template: '{"time": 1789840800.0, "source": "sc4snmp:trap", "sourcetype": "sc4snmp:event", "host": "rtr-cisco-8000-01.corp.internal", "index": "idx_network_ops", "event": {"snmp_trap_name": "linkDown", "snmp_trap_oid": "1.3.6.1.6.3.1.1.5.3", "enterprise": "1.3.6.1.4.1", "severity": "critical", "varbinds": {"ifIndex": 1, "ifAdminStatus": 1, "ifOperStatus": 2, "ifDescr": "GigabitEthernet0/0/1"}}, "fields": {"snmp_trap_name": "linkDown", "snmp_trap_oid": "1.3.6.1.6.3.1.1.5.3", "severity": "critical"}}' }
     ]
   };
 

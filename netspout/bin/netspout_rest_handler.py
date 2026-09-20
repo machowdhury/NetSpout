@@ -1,8 +1,12 @@
 """
 NetSpout Native Splunk REST Handler
 Registered under /services/netspout
-Handles KV Store topology persistence, fault injection orchestration,
-and OpenConfig MDT / gNMI telemetry requests directly within Splunk Enterprise.
+Handles:
+  - KV Store topology persistence
+  - Dynamic Fault Injection & Cascades
+  - OpenConfig YANG & MDT Telemetry (RFC 7951 JSON-IETF)
+  - SC4SNMP 300+ MIB Catalog & Trap Dispatcher
+  - Universal Multi-Pipeline Testing (Splunk HEC, OTel, Telegraf, Syslog)
 """
 
 import os
@@ -24,10 +28,13 @@ except ImportError:
         pass
 
 from models import (
-    TopologyState, FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest
+    TopologyState, FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest,
+    SNMPTrapTriggerRequest, SNMPPollRequest, PipelineTestRequest, TelemetryTransportConfig
 )
 from fault_injection_engine import fault_engine
 from gnmi_engine import yang_store, gnmi_server
+from snmp_engine import snmp_engine
+from telemetry_dispatcher import dispatcher
 from graph_engine import TopologyGraph
 
 class NetSpoutRestHandler(PersistentServerConnectionApplication):
@@ -44,16 +51,16 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
             payload_str = request.get("payload", "{}")
             payload = json.loads(payload_str) if payload_str else {}
 
-            # Route requests
-            # e.g., /services/netspout/topology, /services/netspout/faults/inject, etc.
             subpath = path.strip("/").split("/")[-1] if "/" in path else path
 
+            # 1. Topology Persistence (KV Store)
             if "topology" in path:
                 if method == "GET":
                     return self._handle_get_topology(session_key)
                 elif method == "POST":
                     return self._handle_post_topology(payload, session_key)
 
+            # 2. Fault Injection & Recovery
             elif "faults/inject" in path or subpath == "inject":
                 return self._handle_fault_inject(payload)
 
@@ -63,6 +70,7 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
             elif "faults/history" in path or subpath == "history":
                 return self._handle_fault_history()
 
+            # 3. OpenConfig & gNMI Telemetry
             elif "gnmi/sample" in path or subpath == "sample":
                 return self._handle_gnmi_sample(payload)
 
@@ -70,12 +78,34 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
                 node_id = query.get("node_id", payload.get("node_id", "node-core-1"))
                 return self._handle_openconfig_tree(node_id)
 
+            # 4. SC4SNMP MIBs & Traps
+            elif "snmp/mibs" in path or subpath == "mibs":
+                vendor = query.get("vendor")
+                module = query.get("module")
+                search = query.get("search")
+                return self._handle_snmp_mibs(vendor, module, search)
+
+            elif "snmp/trap" in path or subpath == "trap":
+                return self._handle_snmp_trap(payload)
+
+            elif "snmp/poll" in path or subpath == "poll":
+                return self._handle_snmp_poll(payload)
+
+            # 5. Multi-Pipeline Validation
+            elif "pipelines/test" in path or subpath == "test":
+                return self._handle_pipeline_test(payload)
+
+            elif "pipelines/config" in path or subpath == "config":
+                return self._handle_pipeline_config(method, payload)
+
             # Default /status
             return self._response(200, {
                 "status": "online",
                 "app": "netspout",
                 "version": "2.0.0",
                 "active_faults": len(fault_engine.active_faults),
+                "mibs_catalog_count": len(snmp_engine.list_mibs()),
+                "pipeline_stats": dispatcher.stats,
                 "timestamp": time.time()
             })
 
@@ -90,7 +120,6 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
         }
 
     def _handle_get_topology(self, session_key):
-        # Retrieve from KV store
         url = "http://127.0.0.1:8089/servicesNS/nobody/netspout/storage/collections/data/netspout_topologies"
         headers = {"Authorization": f"Splunk {session_key}", "Content-Type": "application/json"}
         req = urllib.request.Request(url, headers=headers, method="GET")
@@ -103,12 +132,9 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
                     return self._response(200, top_data)
         except Exception:
             pass
-
-        # Fallback to default in-memory active topology
         return self._response(200, {"nodes": [], "edges": []})
 
     def _handle_post_topology(self, payload, session_key):
-        # Save to Splunk KV store
         url = "http://127.0.0.1:8089/servicesNS/nobody/netspout/storage/collections/data/netspout_topologies"
         headers = {"Authorization": f"Splunk {session_key}", "Content-Type": "application/json"}
         record = {
@@ -128,12 +154,19 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
 
     def _handle_fault_inject(self, payload):
         req = FaultInjectionRequest(**payload)
-        record = fault_engine.inject_fault(req)
-        return self._response(200, record.model_dump())
+        top = TopologyState(**payload.get("topology", {})) if "topology" in payload else TopologyState()
+        record, logs, metrics, traps = fault_engine.inject_fault(top, req)
+        return self._response(200, {
+            "status": "success",
+            "record": record.model_dump(),
+            "cascades_count": len(logs) + len(metrics) + len(traps),
+            "traps_emitted": len(traps)
+        })
 
     def _handle_fault_recover(self, payload):
         req = FaultRecoveryRequest(**payload)
-        result = fault_engine.recover_fault(req)
+        top = TopologyState(**payload.get("topology", {})) if "topology" in payload else TopologyState()
+        result = fault_engine.recover_fault(top, req)
         return self._response(200, result)
 
     def _handle_fault_history(self):
@@ -144,17 +177,78 @@ class NetSpoutRestHandler(PersistentServerConnectionApplication):
         })
 
     def _handle_gnmi_sample(self, payload):
-        node_id = payload.get("node_id")
-        count = int(payload.get("count", 1))
-        emitted = gnmi_server.push_sample_metrics(node_id=node_id, sample_count=count)
+        from models import Node, NodeType
+        node_id = payload.get("node_id", "router-core")
+        node = Node(id=node_id, name=node_id, type=NodeType.ROUTER, x=0, y=0, vendor=payload.get("vendor", "cisco"))
+        metrics = gnmi_server.generate_sample_telemetry(node)
+        transport = TelemetryTransportConfig(**payload.get("transport", {})) if "transport" in payload else None
+        if transport:
+            for m in metrics:
+                dispatcher.dispatch_openconfig(m, transport)
         return self._response(200, {
             "status": "success",
-            "sampled_nodes": len(gnmi_server.yang_store.nodes),
-            "total_metrics_emitted": len(emitted),
-            "target_index": "cisco_mdt_metrics",
-            "metrics": emitted
+            "node_id": node_id,
+            "metrics_count": len(metrics),
+            "metrics": metrics
         })
 
     def _handle_openconfig_tree(self, node_id):
-        tree = yang_store.get_or_create_node(node_id)
+        from models import Node, NodeType
+        node = Node(id=node_id, name=node_id, type=NodeType.ROUTER, x=0, y=0)
+        tree = yang_store.get_or_create_tree(node)
         return self._response(200, {"node_id": node_id, "tree": tree})
+
+    def _handle_snmp_mibs(self, vendor, module, search):
+        mibs = snmp_engine.list_mibs(vendor=vendor, module=module, search=search)
+        return self._response(200, {
+            "status": "success",
+            "total_count": len(mibs),
+            "mibs": [m.model_dump() for m in mibs]
+        })
+
+    def _handle_snmp_trap(self, payload):
+        from models import Node, NodeType
+        trap_name = payload.get("trap_name", "linkDown")
+        host = payload.get("host", "core-router-01")
+        node = Node(id=host, name=host, type=NodeType.ROUTER, x=0, y=0, vendor=payload.get("vendor", "cisco"))
+        trap = snmp_engine.generate_trap(trap_name, node, payload.get("varbind_overrides"))
+        transport = TelemetryTransportConfig(**payload.get("transport", {})) if "transport" in payload else None
+        res = dispatcher.dispatch_snmp_trap(trap, transport)
+        return self._response(200, {
+            "status": "success",
+            "trap": trap.model_dump(),
+            "dispatch_results": res
+        })
+
+    def _handle_snmp_poll(self, payload):
+        from models import Node, NodeType
+        module = payload.get("mib_module", "IF-MIB")
+        host = payload.get("host", "core-switch-01")
+        node = Node(id=host, name=host, type=NodeType.SWITCH, x=0, y=0, vendor=payload.get("vendor", "cisco"))
+        metrics = snmp_engine.simulate_snmp_poll(node, module=module)
+        transport = TelemetryTransportConfig(**payload.get("transport", {})) if "transport" in payload else None
+        if transport:
+            for m in metrics:
+                dispatcher.dispatch_snmp_metric(m, transport)
+        return self._response(200, {
+            "status": "success",
+            "polled_module": module,
+            "metrics_count": len(metrics),
+            "metrics": metrics[:10]
+        })
+
+    def _handle_pipeline_test(self, payload):
+        pipeline = payload.get("pipeline", "hec")
+        cfg = TelemetryTransportConfig(**payload.get("config", {}))
+        ok, msg = dispatcher.test_pipeline(pipeline, cfg)
+        return self._response(200, {
+            "pipeline": pipeline,
+            "success": ok,
+            "message": msg
+        })
+
+    def _handle_pipeline_config(self, method, payload):
+        return self._response(200, {
+            "status": "success",
+            "stats": dispatcher.stats
+        })

@@ -1,24 +1,36 @@
 """
-OpenConfig YANG Data Modeling & Mock gNMI Telemetry Engine
-Implements RFC/OpenConfig schema trees:
+OpenConfig YANG Data Modeling & gNMI Model-Driven Telemetry (MDT) Engine
+Implements RFC 7951 JSON-IETF & OpenConfig Schema Trees:
   - openconfig-interfaces: /interfaces/interface[name=...]/state
-  - openconfig-bgp: /bgp/neighbors/neighbor[neighbor-address=...]/state
+  - openconfig-network-instance: /network-instances/network-instance[name=...]/protocols/protocol/bgp
+  - openconfig-rib-bgp: /network-instances/network-instance/ribs/rib/routes/route/state
   - openconfig-platform: /components/component[name=...]/state
   - openconfig-system: /system/state
-Supports SAMPLE (periodic stream) and ON_CHANGE (event-driven trigger) subscription modes.
-Formats compliant Splunk HEC metric payloads for cisco_mdt_metrics.
+Supports:
+  - Multi-vendor dialects: Cisco IOS-XE/XR, Juniper Junos, Arista EOS
+  - SAMPLE (periodic stream) and ON_CHANGE (event-driven trigger) subscriptions
+  - Universal Multi-Pipeline payloads: Splunk HEC (cisco_mdt_metrics), OTel OTLP, Telegraf Influx, RFC 5424 Syslog
 """
 
 import time
 import json
 import random
 from typing import Dict, List, Any, Optional, Tuple
-from app.models import Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
+
+try:
+    from app.models import (
+        Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
+    )
+except ImportError:
+    from models import (
+        Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
+    )
 
 
 class OpenConfigYANGStore:
     """
     Maintains hierarchical OpenConfig YANG state tree for all active network nodes.
+    Formats outputs with RFC 7951 JSON-IETF compliance.
     """
     def __init__(self):
         # node_id -> schema tree dict
@@ -30,30 +42,38 @@ class OpenConfigYANGStore:
         now_ts = int(time.time() * 1000)
         
         if nid not in self._trees:
-            # Construct standard baseline OpenConfig tree
             hw = node.hardware
             cpu_pct = hw.cpu_utilization_pct if hw else 18.5
             mem_pct = hw.memory_utilization_pct if hw else 34.0
             temp_c = hw.temperature_celsius if hw else 41.2
+            vendor = (node.vendor or "cisco").lower()
 
             interfaces_list = []
             if hw and hw.interfaces:
                 for intf in hw.interfaces:
                     interfaces_list.append({
                         "name": intf.name,
-                        "config": {"name": intf.name, "type": "iana-if-type:ethernetCsmacd", "enabled": True},
+                        "config": {
+                            "name": intf.name,
+                            "type": "iana-if-type:ethernetCsmacd",
+                            "enabled": (intf.admin_status.lower() == "up")
+                        },
                         "state": {
                             "name": intf.name,
                             "type": "iana-if-type:ethernetCsmacd",
                             "admin-status": intf.admin_status.upper(),
                             "oper-status": intf.oper_status.upper(),
                             "mtu": intf.mtu,
-                            "speed": f"SPEED_{intf.speed_mbps}MB",
+                            "high-speed": intf.speed_mbps,
                             "counters": {
-                                "in-octets": intf.in_octets or random.randint(10000000, 99000000),
-                                "out-octets": intf.out_octets or random.randint(8000000, 85000000),
+                                "in-octets": intf.in_octets or random.randint(15000000, 95000000),
+                                "out-octets": intf.out_octets or random.randint(12000000, 88000000),
+                                "in-unicast-pkts": random.randint(45000, 150000),
+                                "out-unicast-pkts": random.randint(40000, 140000),
                                 "in-errors": intf.in_errors,
                                 "out-errors": intf.out_errors,
+                                "in-discards": 0,
+                                "out-discards": 0,
                                 "carrier-transitions": 0
                             }
                         }
@@ -62,29 +82,41 @@ class OpenConfigYANGStore:
                 default_if = node.interface or "GigabitEthernet0/0/1"
                 interfaces_list.append({
                     "name": default_if,
-                    "config": {"name": default_if, "type": "iana-if-type:ethernetCsmacd", "enabled": True},
+                    "config": {
+                        "name": default_if,
+                        "type": "iana-if-type:ethernetCsmacd",
+                        "enabled": True
+                    },
                     "state": {
                         "name": default_if,
                         "type": "iana-if-type:ethernetCsmacd",
                         "admin-status": "UP",
                         "oper-status": "UP" if node.status != "degraded" else "DOWN",
                         "mtu": 1500,
-                        "speed": "SPEED_1000MB",
+                        "high-speed": 1000,
                         "counters": {
-                            "in-octets": random.randint(12000000, 88000000),
-                            "out-octets": random.randint(11000000, 75000000),
+                            "in-octets": random.randint(15000000, 95000000),
+                            "out-octets": random.randint(12000000, 88000000),
+                            "in-unicast-pkts": random.randint(45000, 150000),
+                            "out-unicast-pkts": random.randint(40000, 140000),
                             "in-errors": 0,
                             "out-errors": 0,
+                            "in-discards": 0,
+                            "out-discards": 0,
                             "carrier-transitions": 0
                         }
                     }
                 })
 
             bgp_neighbors = []
-            if "cisco" in node.vendor or "juniper" in node.vendor or "arista" in node.vendor or "nokia" in node.vendor:
+            if any(v in vendor for v in ["cisco", "juniper", "arista", "nokia", "router", "core"]):
                 bgp_neighbors.append({
                     "neighbor-address": "10.255.0.2",
-                    "config": {"neighbor-address": "10.255.0.2", "peer-as": 65001, "peer-group": "IBGP-CORE"},
+                    "config": {
+                        "neighbor-address": "10.255.0.2",
+                        "peer-as": 65001,
+                        "peer-group": "IBGP-CORE"
+                    },
                     "state": {
                         "neighbor-address": "10.255.0.2",
                         "peer-as": 65001,
@@ -101,6 +133,7 @@ class OpenConfigYANGStore:
                     }
                 })
 
+            # Base RFC 7951 JSON-IETF Tree
             self._trees[nid] = {
                 "openconfig-system:system": {
                     "config": {
@@ -110,7 +143,7 @@ class OpenConfigYANGStore:
                     "state": {
                         "hostname": node.name or node.id,
                         "domain-name": "corp.internal",
-                        "boot-time": now_ts - 86400000,
+                        "boot-time": str(now_ts - 86400000),
                         "current-datetime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
                     }
                 },
@@ -138,10 +171,45 @@ class OpenConfigYANGStore:
                 "openconfig-interfaces:interfaces": {
                     "interface": interfaces_list
                 },
-                "openconfig-bgp:bgp": {
-                    "neighbors": {
-                        "neighbor": bgp_neighbors
-                    }
+                "openconfig-network-instance:network-instances": {
+                    "network-instance": [
+                        {
+                            "name": "default",
+                            "protocols": {
+                                "protocol": [
+                                    {
+                                        "identifier": "openconfig-policy-types:BGP",
+                                        "name": "BGP",
+                                        "openconfig-bgp:bgp": {
+                                            "neighbors": {
+                                                "neighbor": bgp_neighbors
+                                            }
+                                        }
+                                    }
+                                ]
+                            },
+                            "openconfig-rib-bgp:ribs": {
+                                "rib": [
+                                    {
+                                        "name": "openconfig-rib-bgp:IPV4-UNICAST",
+                                        "routes": {
+                                            "route": [
+                                                {
+                                                    "prefix": "10.0.0.0/16",
+                                                    "state": {
+                                                        "prefix": "10.0.0.0/16",
+                                                        "valid-route": True,
+                                                        "best-path": True,
+                                                        "next-hop": "10.255.0.2"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
             self._last_update[nid] = time.time()
@@ -166,15 +234,20 @@ class OpenConfigYANGStore:
         if node_id not in self._trees:
             return None
         tree = self._trees[node_id]
-        neighbors = tree.get("openconfig-bgp:bgp", {}).get("neighbors", {}).get("neighbor", [])
-        for nbr in neighbors:
-            if nbr["neighbor-address"] == peer_addr or peer_addr == "*":
-                nbr["state"]["session-state"] = new_state.upper()
-                if new_state.upper() == "IDLE":
-                    nbr["state"]["prefixes"]["installed"] = 0
-                elif new_state.upper() == "ESTABLISHED":
-                    nbr["state"]["prefixes"]["installed"] = nbr["state"]["prefixes"]["received"]
-                return nbr["state"]
+        net_insts = tree.get("openconfig-network-instance:network-instances", {}).get("network-instance", [])
+        for ni in net_insts:
+            protos = ni.get("protocols", {}).get("protocol", [])
+            for p in protos:
+                bgp = p.get("openconfig-bgp:bgp", {})
+                neighbors = bgp.get("neighbors", {}).get("neighbor", [])
+                for nbr in neighbors:
+                    if nbr["neighbor-address"] == peer_addr or peer_addr == "*":
+                        nbr["state"]["session-state"] = new_state.upper()
+                        if new_state.upper() == "IDLE":
+                            nbr["state"]["prefixes"]["installed"] = 0
+                        elif new_state.upper() == "ESTABLISHED":
+                            nbr["state"]["prefixes"]["installed"] = nbr["state"]["prefixes"]["received"]
+                        return nbr["state"]
         return None
 
     def update_platform_utilization(self, node_id: str, cpu_pct: float, mem_pct: float):
@@ -186,19 +259,27 @@ class OpenConfigYANGStore:
                 c["state"]["cpu-utilization"] = round(cpu_pct, 1)
                 c["state"]["memory-utilization"] = round(mem_pct, 1)
 
+    def to_rfc7951_json(self, node_id: str) -> str:
+        """
+        Serialize node's YANG tree as strict RFC 7951 JSON-IETF string.
+        """
+        if node_id in self._trees:
+            return json.dumps(self._trees[node_id], indent=2)
+        return "{}"
+
 
 class MockGNMIServer:
     """
-    Emulates a carrier-grade gNMI/gRPC Streaming Telemetry Service.
+    Carrier-grade gNMI/gRPC Streaming Telemetry Service.
     Supports SAMPLE mode (cadence-based push) and ON_CHANGE mode (event-driven push).
-    Generates Splunk HEC metric payloads directed to cisco_mdt_metrics.
+    Formats Splunk HEC metric payloads, OTel OTLP, Telegraf Influx, and RFC 5424 Syslog.
     """
     def __init__(self, yang_store: OpenConfigYANGStore):
         self.yang_store = yang_store
         self.active_subscriptions: List[Dict[str, Any]] = [
             {"path": "openconfig-interfaces:interfaces/interface/state/counters", "mode": OpenConfigSubscriptionMode.SAMPLE, "interval_sec": 10},
             {"path": "openconfig-platform:components/component/state", "mode": OpenConfigSubscriptionMode.SAMPLE, "interval_sec": 5},
-            {"path": "openconfig-bgp:bgp/neighbors/neighbor/state", "mode": OpenConfigSubscriptionMode.ON_CHANGE},
+            {"path": "openconfig-network-instance:network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state", "mode": OpenConfigSubscriptionMode.ON_CHANGE},
             {"path": "openconfig-interfaces:interfaces/interface/state/oper-status", "mode": OpenConfigSubscriptionMode.ON_CHANGE}
         ]
 
@@ -216,9 +297,10 @@ class MockGNMIServer:
         for intf in interfaces:
             istate = intf.get("state", {})
             counters = istate.get("counters", {})
-            # advance counters realistically
-            counters["in-octets"] += random.randint(12000, 95000)
-            counters["out-octets"] += random.randint(10000, 85000)
+            counters["in-octets"] += random.randint(15000, 95000)
+            counters["out-octets"] += random.randint(12000, 85000)
+            counters["in-unicast-pkts"] += random.randint(20, 120)
+            counters["out-unicast-pkts"] += random.randint(18, 110)
             
             payload = {
                 "time": now,
@@ -230,6 +312,8 @@ class MockGNMIServer:
                 "fields": {
                     "metric_name:interface.octets.in": float(counters["in-octets"]),
                     "metric_name:interface.octets.out": float(counters["out-octets"]),
+                    "metric_name:interface.packets.in": float(counters["in-unicast-pkts"]),
+                    "metric_name:interface.packets.out": float(counters["out-unicast-pkts"]),
                     "metric_name:interface.errors.in": float(counters["in-errors"]),
                     "metric_name:interface.errors.out": float(counters["out-errors"]),
                     "metric_name:carrier.transitions": float(counters["carrier-transitions"]),
@@ -237,7 +321,7 @@ class MockGNMIServer:
                     "interface": intf["name"],
                     "oper_status": istate.get("oper-status", "UP"),
                     "subscription_mode": "SAMPLE",
-                    "openconfig_path": f"/interfaces/interface[name={intf["name"]}]/state/counters",
+                    "openconfig_path": f"/interfaces/interface[name={intf['name']}]/state/counters",
                     "device": dev_name,
                     "vendor": node.vendor or "cisco"
                 }
@@ -264,7 +348,7 @@ class MockGNMIServer:
                         "_value": float(cpu),
                         "component": comp["name"],
                         "subscription_mode": "SAMPLE",
-                        "openconfig_path": f"/components/component[name={comp["name"]}]/state",
+                        "openconfig_path": f"/components/component[name={comp['name']}]/state",
                         "device": dev_name,
                         "vendor": node.vendor or "cisco"
                     }
@@ -288,7 +372,7 @@ class MockGNMIServer:
         """
         dev_name = node.name or node.id
         now = time.time()
-        metric_key = numeric_metric_name or f"gnmi.on_change.{changed_field.replace("-", "_")}"
+        metric_key = numeric_metric_name or f"gnmi.on_change.{changed_field.replace('-', '_')}"
 
         payload = {
             "time": now,
@@ -310,6 +394,95 @@ class MockGNMIServer:
             }
         }
         return payload
+
+    def to_otel_metric_payload(self, metric_event: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Format OpenConfig MDT event as OpenTelemetry OTLP JSON /v1/metrics payload.
+        """
+        fields = metric_event.get("fields", {})
+        host = metric_event.get("host", "unknown-router")
+        now_nano = int(metric_event.get("time", time.time()) * 1e9)
+
+        data_points = []
+        for k, v in fields.items():
+            if k.startswith("metric_name:") and isinstance(v, (int, float)):
+                m_name = k.replace("metric_name:", "")
+                data_points.append({
+                    "name": m_name,
+                    "gauge": {
+                        "dataPoints": [{
+                            "asDouble": float(v),
+                            "timeUnixNano": str(now_nano),
+                            "attributes": [
+                                {"key": "host.name", "value": {"stringValue": host}},
+                                {"key": "service.name", "value": {"stringValue": "openconfig-mdt"}},
+                                {"key": "openconfig.path", "value": {"stringValue": fields.get("openconfig_path", "")}}
+                            ]
+                        }]
+                    }
+                })
+
+        return {
+            "resourceMetrics": [{
+                "resource": {
+                    "attributes": [
+                        {"key": "host.name", "value": {"stringValue": host}},
+                        {"key": "service.name", "value": {"stringValue": "openconfig-mdt"}}
+                    ]
+                },
+                "scopeMetrics": [{
+                    "scope": {"name": "netspout.openconfig", "version": "2.0.0"},
+                    "metrics": data_points
+                }]
+            }]
+        }
+
+    def to_telegraf_influx_line(self, metric_event: Dict[str, Any]) -> str:
+        """
+        Format OpenConfig MDT event as Influx Line Protocol for Telegraf.
+        """
+        fields = metric_event.get("fields", {})
+        host = metric_event.get("host", "unknown-router")
+        timestamp_nano = int(metric_event.get("time", time.time()) * 1e9)
+
+        tags = [f"host={host}", "source=openconfig_mdt"]
+        if "device" in fields:
+            tags.append(f"device={fields['device']}")
+        if "vendor" in fields:
+            tags.append(f"vendor={fields['vendor']}")
+        if "interface" in fields:
+            tags.append(f"interface={fields['interface']}")
+        if "component" in fields:
+            tags.append(f"component={fields['component']}")
+
+        field_assignments = []
+        for k, v in fields.items():
+            if k.startswith("metric_name:") and isinstance(v, (int, float)):
+                clean_k = k.replace("metric_name:", "").replace(".", "_")
+                field_assignments.append(f"{clean_k}={float(v)}")
+
+        if not field_assignments:
+            field_assignments.append("value=1.0")
+
+        return f"openconfig_telemetry,{','.join(tags)} {','.join(field_assignments)} {timestamp_nano}"
+
+    def to_rfc5424_syslog_mdt(self, metric_event: Dict[str, Any]) -> str:
+        """
+        Format OpenConfig notification as RFC 5424 structured syslog message.
+        """
+        fields = metric_event.get("fields", {})
+        host = metric_event.get("host", "unknown-router").split(".")[0]
+        now_iso = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(metric_event.get("time", time.time())))
+        
+        path = fields.get("openconfig_path", "/openconfig/telemetry")
+        sd = f'[openconfig@41888 xpath="{path}" mode="{fields.get("subscription_mode", "SAMPLE")}"]'
+        
+        metric_summary = ", ".join(
+            f"{k.replace('metric_name:', '')}={v}"
+            for k, v in fields.items() if k.startswith("metric_name:")
+        )
+        msg = f"gNMI MDT Notification: {metric_summary}"
+        return f"<134>1 {now_iso} {host} gnmi-telemetry - - {sd} {msg}"
 
 
 # Global singleton YANG store & gNMI Server

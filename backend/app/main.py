@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 from app.models import (
+    SNMPTrapTriggerRequest, SNMPPollRequest, PipelineTestRequest,
     TopologyState, Node, Edge, NodeType, ScenarioType,
     LogEntry, SimulationRequest, EcosystemMode,
     ZoneAnnotation, NodePowerState, NodeHardware,
@@ -26,6 +27,7 @@ from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
+from app.snmp_engine import snmp_engine
 from app.fault_injection_engine import fault_engine
 
 app = FastAPI(title="NetSpout Telemetry & Simulation API", version="2.0.0")
@@ -623,6 +625,107 @@ async def trigger_gnmi_sample(node_id: Optional[str] = Query(None)):
         "target_index": "cisco_mdt_metrics",
         "metrics": all_metrics[:10]
     }
+
+
+
+# =========================================================================
+# SC4SNMP 300+ MIB LIBRARY & TRAP DISPATCHER
+# =========================================================================
+
+@app.get("/api/snmp/mibs")
+async def get_snmp_mibs(
+    vendor: Optional[str] = Query(None),
+    module: Optional[str] = Query(None),
+    search: Optional[str] = Query(None)
+):
+    mibs = snmp_engine.list_mibs(vendor=vendor, module=module, search=search)
+    return {
+        "status": "success",
+        "total_count": len(mibs),
+        "mibs": [m.model_dump() for m in mibs]
+    }
+
+
+@app.post("/api/snmp/trap")
+async def trigger_snmp_trap(req: SNMPTrapTriggerRequest):
+    global current_topology
+    node = next((n for n in current_topology.nodes if n.id == req.target_node_id or n.name == req.host), None)
+    if not node:
+        node = Node(id="sim-node", name=req.host, type=NodeType.ROUTER, x=0, y=0, vendor="cisco")
+    
+    trap = snmp_engine.generate_trap(req.trap_name, node, req.varbind_overrides)
+    transport = req.destinations or current_topology.global_transport
+    results = dispatcher.dispatch_snmp_trap(trap, transport)
+    
+    # Broadcast to WebSocket log feed
+    await manager.broadcast_log({
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(trap.timestamp)),
+        "device_id": trap.host,
+        "src_ip": node.ip_address,
+        "dest_ip": "10.255.255.255",
+        "protocol": "SNMP-TRAP",
+        "duration": "0ms",
+        "action": "alerted",
+        "signature": f"SNMP TRAP {trap.trap_name}",
+        "status": "degraded",
+        "raw_log": f"SNMP-COMMUNITY=public TRAP-TYPE={trap.trap_name} OID={trap.trap_oid} SEVERITY={trap.severity.upper()}",
+        "node_type": node.type.value,
+        "node_id": node.id,
+        "vendor": node.vendor,
+        "sourcetype": "sc4snmp:event"
+    })
+    
+    return {
+        "status": "success",
+        "trap": trap.model_dump(),
+        "dispatch_results": results
+    }
+
+
+@app.post("/api/snmp/poll")
+async def trigger_snmp_poll(req: SNMPPollRequest):
+    global current_topology
+    node = next((n for n in current_topology.nodes if n.id == req.target_node_id or n.name == req.host), None)
+    if not node:
+        node = Node(id="sim-node", name=req.host, type=NodeType.SWITCH, x=0, y=0, vendor="cisco")
+
+    module = req.mib_module or "IF-MIB"
+    metrics = snmp_engine.simulate_snmp_poll(node, module=module)
+    transport = req.destinations or current_topology.global_transport
+    
+    for m in metrics:
+        dispatcher.dispatch_snmp_metric(m, transport)
+
+    return {
+        "status": "success",
+        "polled_module": module,
+        "metrics_count": len(metrics),
+        "target_index": "cisco_mdt_metrics",
+        "metrics": metrics[:10]
+    }
+
+
+@app.post("/api/telemetry/test-pipeline")
+async def test_pipeline_endpoint(req: PipelineTestRequest):
+    ok, msg = dispatcher.test_pipeline(req.pipeline, req.config)
+    return {
+        "pipeline": req.pipeline,
+        "success": ok,
+        "message": msg
+    }
+
+
+@app.get("/api/openconfig/export/{node_id}")
+async def export_openconfig_rfc7951(node_id: str):
+    node = next((n for n in current_topology.nodes if n.id == node_id), None)
+    if not node:
+        return Response(status_code=404, content=json.dumps({"error": "Node not found"}), media_type="application/json")
+    tree = yang_store.get_or_create_tree(node)
+    return Response(
+        content=json.dumps(tree, indent=2),
+        media_type="application/yang-data+json",
+        headers={"Content-Disposition": f"attachment; filename=openconfig_{node_id}.json"}
+    )
 
 
 # WebSocket Endpoint

@@ -268,6 +268,9 @@ export const TopBar: React.FC<TopBarProps> = ({
               <option value="mixed_sase">Mode B2: SASE Cloud Degradation (Zscaler-PA)</option>
               <option value="mixed_optical">Mode B3: MPLS Optical Carrier Shift (Nokia-Juniper)</option>
             </optgroup>
+            <optgroup label="Mode C: OpenConfig Model-Driven Telemetry">
+              <option value="openconfig_core">Mode C1: OpenConfig MDT Core Fabric</option>
+            </optgroup>
           </select>
         </div>
 

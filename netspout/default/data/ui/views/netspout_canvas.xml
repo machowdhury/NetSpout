@@ -4,9 +4,19 @@
   <row>
     <panel>
       <html>
-        <div id="netspout-container" style="width: 100%; min-height: calc(100vh - 110px); margin: -10px -20px; padding: 0; background: #0B0F19; overflow: hidden;">
-          <iframe id="netspout-canvas-frame" src="/static/app/netspout/dist/index.html" style="width: 100%; height: calc(100vh - 110px); border: none; display: block;" allow="clipboard-read; clipboard-write"></iframe>
+        <div id="netspout-container" style="width: 100%; min-height: calc(100vh - 110px); margin: -10px -20px; padding: 0; background: #0B0F19; overflow: hidden; position: relative;">
+          <iframe id="netspout-canvas-frame" src="/en-US/static/app/netspout/dist/index.html" style="width: 100%; height: calc(100vh - 110px); border: none; display: block;" allow="clipboard-read; clipboard-write"></iframe>
         </div>
+        <script>
+          (function() {
+            var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+            var locale = localeMatch ? localeMatch[1] : "en-US";
+            var frame = document.getElementById("netspout-canvas-frame");
+            if (frame) {
+              frame.src = "/" + locale + "/static/app/netspout/dist/index.html";
+            }
+          })();
+        </script>
       </html>
     </panel>
   </row>

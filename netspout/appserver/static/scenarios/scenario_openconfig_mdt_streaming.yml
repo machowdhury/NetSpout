@@ -1,0 +1,76 @@
+scenario_id: "OC-MDT-001"
+name: "OpenConfig MDT Streaming & Model-Driven Telemetry Assurance"
+description: "Model-Driven Telemetry (MDT) streaming over gNMI/gRPC from Cisco 8000, Juniper PTX, Arista 7280R, and Catalyst 9600 targeting metric index cisco_mdt_metrics with OpenConfig YANG schema validation."
+
+test_oracle:
+  expected_root_cause: "High-frequency interface microburst causing carrier transition flapping and optical power degradation"
+  symptomatic_systems: ["Cisco 8000 Core", "Juniper PTX Spine", "Arista 7280R Leaf"]
+  independent_verifier: "Splunk mstats analytic engine on cisco_mdt_metrics & OpenConfig YANG state tree"
+
+general:
+  workerThreads: 4
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: openconfig-mdt-baseline
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: IN_OCTETS
+        format: template
+        type: random
+        replacement: int
+        lower: 500000000
+        upper: 980000000
+      - name: OUT_OCTETS
+        format: template
+        type: random
+        replacement: int
+        lower: 400000000
+        upper: 850000000
+      - name: CPU_PCT
+        format: template
+        type: random
+        replacement: float
+        lower: 15.0
+        upper: 32.5
+    lines:
+      # Cisco 8000 Core Router - Interface Counters MDT Stream
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:mdt:grpc
+        host: rtr-cisco-8000-01.corp.internal
+        event: '{"time": $EPOCH$, "event": "metric", "source": "openconfig_telemetry", "sourcetype": "cisco:mdt:grpc", "host": "rtr-cisco-8000-01.corp.internal", "index": "cisco_mdt_metrics", "fields": {"metric_name:interface.octets.in": $IN_OCTETS$, "metric_name:interface.octets.out": $OUT_OCTETS$, "metric_name:interface.errors.in": 0, "metric_name:interface.errors.out": 0, "metric_name:cpu.utilization": $CPU_PCT$, "interface": "HundredGigE0/0/0/0", "oper_status": "UP", "xpath": "/interfaces/interface/state/counters"}}'
+
+      # Juniper PTX10008 Spine - OpenConfig Interface & BGP MDT
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:mdt:grpc
+        host: rtr-juniper-ptx01.corp.internal
+        event: '{"time": $EPOCH$, "event": "metric", "source": "openconfig_telemetry", "sourcetype": "cisco:mdt:grpc", "host": "rtr-juniper-ptx01.corp.internal", "index": "cisco_mdt_metrics", "fields": {"metric_name:interface.octets.in": $IN_OCTETS$, "metric_name:interface.octets.out": $OUT_OCTETS$, "metric_name:bgp.session_up": 1.0, "metric_name:bgp.prefixes.received": 1420, "interface": "et-0/0/0", "oper_status": "UP", "xpath": "/interfaces/interface/state/counters"}}'
+
+      # Arista 7280R3 Spine - OpenConfig Interface & Buffer MDT
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:mdt:grpc
+        host: sw-arista-7280-01.corp.internal
+        event: '{"time": $EPOCH$, "event": "metric", "source": "openconfig_telemetry", "sourcetype": "cisco:mdt:grpc", "host": "sw-arista-7280-01.corp.internal", "index": "cisco_mdt_metrics", "fields": {"metric_name:interface.octets.in": $IN_OCTETS$, "metric_name:interface.octets.out": $OUT_OCTETS$, "metric_name:buffer.utilization_pct": 28.4, "interface": "Ethernet1/1", "oper_status": "UP", "xpath": "/interfaces/interface/state/counters"}}'
+
+      # Cisco Catalyst 9600 Leaf - OpenConfig MDT
+      - index: cisco_mdt_metrics
+        source: openconfig_telemetry
+        sourcetype: cisco:mdt:grpc
+        host: sw-cat9600-01.corp.internal
+        event: '{"time": $EPOCH$, "event": "metric", "source": "openconfig_telemetry", "sourcetype": "cisco:mdt:grpc", "host": "sw-cat9600-01.corp.internal", "index": "cisco_mdt_metrics", "fields": {"metric_name:interface.octets.in": $IN_OCTETS$, "metric_name:interface.octets.out": $OUT_OCTETS$, "metric_name:cpu.utilization": $CPU_PCT$, "interface": "FortyGigE1/0/1", "oper_status": "UP", "xpath": "/interfaces/interface/state/counters"}}'

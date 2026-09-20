@@ -50,6 +50,22 @@ require([
   // Catalog of Network Sourcetypes
   var SOURCETYPE_CATALOG = [
     {
+      id: "cisco:mdt:grpc",
+      label: "Cisco MDT gRPC Metric Stream (OpenConfig)",
+      vendor: "cisco",
+      category: "Routing & Core",
+      index: "cisco_mdt_metrics",
+      sample: '{"event":"metric","time":1789840800,"fields":{"metric_name:interface.octets.in":984521000,"metric_name:interface.octets.out":874219000,"metric_name:cpu.utilization":24.5,"interface":"HundredGigE0/0/0/0","oper_status":"UP","xpath":"/interfaces/interface/state/counters"}}'
+    },
+    {
+      id: "openconfig:yang:json",
+      label: "OpenConfig YANG JSON Telemetry (RFC 7950)",
+      vendor: "cisco",
+      category: "Routing & Core",
+      index: "idx_network_ops",
+      sample: '{"openconfig-interfaces:interfaces":{"interface":[{"name":"HundredGigE0/0/0/0","state":{"admin-status":"UP","oper-status":"UP","counters":{"in-octets":984521000,"out-octets":874219000}}}]}}'
+    },
+    {
       id: "cisco:ios",
       label: "Cisco IOS-XE / Classic Syslog",
       vendor: "cisco",
@@ -261,6 +277,12 @@ require([
 
   // Scenarios Catalog
   var SCENARIOS_CATALOG = [
+    {
+      id: "scenario_openconfig_mdt_streaming.yml",
+      title: "OpenConfig MDT Streaming & Telemetry Assurance (Mode C / OC-001)",
+      desc: "Model-Driven Telemetry streaming from Cisco 8000, Juniper PTX, and Arista 7280R emitting to metric index cisco_mdt_metrics.",
+      sourcetypes: ["cisco:mdt:grpc", "openconfig:yang:json", "cisco:ios:mdt"]
+    },
     {
       id: "scenario_custom_multivendor_enterprise_stack.yml",
       title: "Full Multi-Vendor Enterprise Ingestion (MV-ENT-001)",
@@ -803,8 +825,7 @@ require([
       reader.onload = function(evt) {
         var content = evt.target.result;
         $('#wizard-custom-content').val(content);
-        var lines = content.split('
-').filter(function(l) { return l.trim().length > 0; });
+        var lines = content.split('\n').filter(function(l) { return l.trim().length > 0; });
         var sizeKb = (file.size / 1024).toFixed(1);
         fileBadge.show().text('📄 ' + file.name + ' (' + sizeKb + ' KB, ' + lines.length + ' lines)');
 

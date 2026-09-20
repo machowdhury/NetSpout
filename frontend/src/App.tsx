@@ -25,14 +25,15 @@ import {
   PRESET_CISCO_ACI,
   PRESET_MIXED_EDGE,
   PRESET_MIXED_SASE,
-  PRESET_MIXED_OPTICAL
+  PRESET_MIXED_OPTICAL,
+  PRESET_OPENCONFIG_CORE
 } from './presets/defaultTopologies';
 
-const BACKEND_HTTP = typeof window !== 'undefined' && window.location.port !== '5173'
+const BACKEND_HTTP = typeof window !== 'undefined' && window.location.port === '8081'
   ? window.location.origin
   : 'http://localhost:8081';
 
-const BACKEND_WS = typeof window !== 'undefined' && window.location.port !== '5173'
+const BACKEND_WS = typeof window !== 'undefined' && window.location.port === '8081'
   ? ((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/logs')
   : 'ws://localhost:8081/ws/logs';
 
@@ -156,6 +157,7 @@ export const App: React.FC = () => {
     else if (presetId === 'mixed_edge') selectedPreset = PRESET_MIXED_EDGE;
     else if (presetId === 'mixed_sase') selectedPreset = PRESET_MIXED_SASE;
     else if (presetId === 'mixed_optical') selectedPreset = PRESET_MIXED_OPTICAL;
+    else if (presetId === 'openconfig_core') selectedPreset = PRESET_OPENCONFIG_CORE;
 
     setTopology(selectedPreset);
     setSelectedNodeId(null);
@@ -233,6 +235,7 @@ export const App: React.FC = () => {
     else if (nextScenario === 'mixed_edge_breach') handleLoadPreset('mixed_edge');
     else if (nextScenario === 'mixed_sase_degradation') handleLoadPreset('mixed_sase');
     else if (nextScenario === 'mixed_backbone_optical') handleLoadPreset('mixed_optical');
+    else if (nextScenario === 'openconfig_mdt_streaming') handleLoadPreset('openconfig_core');
 
     fetch(`${BACKEND_HTTP}/api/scenarios/run`, {
       method: 'POST',
@@ -333,6 +336,96 @@ export const App: React.FC = () => {
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
     };
   }, []);
+
+  // In-Browser Local Simulation Fallback (Ensures simulation always works even without external Python server)
+  useEffect(() => {
+    if (!isRunning || isConnected) return;
+
+    const interval = setInterval(() => {
+      const activeNodes = topology.nodes.filter(n => n.power_state !== "stopped");
+      if (activeNodes.length === 0) return;
+
+      const randomNode = activeNodes[Math.floor(Math.random() * activeNodes.length)];
+      const ts = new Date().toISOString();
+      const timeSec = Math.floor(Date.now() / 1000);
+
+      let logText = "";
+      let sourcetype = randomNode.sourcetype || "cisco:ios:syslog";
+      let action: "allowed" | "blocked" | "alerted" | "dropped" = "allowed";
+
+      if (scenario === "openconfig_mdt_streaming") {
+        sourcetype = "cisco:ios:mdt:metric";
+        const inOctets = Math.floor(Math.random() * 50000000) + 10000000;
+        const outOctets = Math.floor(Math.random() * 40000000) + 8000000;
+        const cpu = (Math.random() * 15 + 15).toFixed(1);
+        const mem = (Math.random() * 10 + 30).toFixed(1);
+        logText = `cisco:ios:mdt:metric host=${randomNode.name} openconfig_path="/interfaces/interface[name=Gi1/0/1]/state/counters" metric_name:interface.octets.in=${inOctets} metric_name:interface.octets.out=${outOctets} metric_name:cpu.utilization=${cpu} metric_name:memory.utilization=${mem} oper_status=UP`;
+
+        // Direct HEC push if enabled
+        if (transportConfig.hec_enabled) {
+          fetch(transportConfig.hec_url, {
+            method: "POST",
+            headers: {
+              "Authorization": `Splunk ${transportConfig.hec_token}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              time: timeSec,
+              event: "metric",
+              source: "cisco:ios:mdt",
+              sourcetype: "cisco:ios:mdt:metric",
+              host: `${randomNode.name}.corp.internal`,
+              index: "cisco_mdt_metrics",
+              fields: {
+                "metric_name:interface.octets.in": inOctets,
+                "metric_name:interface.octets.out": outOctets,
+                "metric_name:cpu.utilization": parseFloat(cpu),
+                "metric_name:memory.utilization": parseFloat(mem),
+                "metric_name:carrier.transitions": 0.0,
+                "_value": inOctets,
+                "interface": "GigabitEthernet1/0/1",
+                "oper_status": "UP",
+                "device": randomNode.name
+              }
+            })
+          }).catch(() => {});
+        }
+      } else if (scenario === "cisco_campus_rogue") {
+        sourcetype = "cisco:catalyst:rogue:threat_details";
+        logText = `cisco:catalyst:rogue:threat_details ap_name="${randomNode.name}" rogue_bssid="70:69:79:4c:11:02" ssid="Corporate-Guest-EvilTwin" rogue_type="Unclassified" classification="Threat" state="Alert" signal_rssi=-68`;
+        action = "alerted";
+      } else if (scenario === "cisco_sdwan_brownout") {
+        sourcetype = "cisco:sdwan:linkhealth";
+        logText = `${randomNode.name}: bfd: event=state_change local_color=biz-internet remote_color=biz-internet loss_pct=14.8 latency_ms=184.2 jitter_ms=42.1 sla_state=violated`;
+        action = "alerted";
+      } else {
+        sourcetype = randomNode.sourcetype || "cisco:ios:syslog";
+        logText = `%SEC-6-IPACCESSLOGP: list 101 permitted tcp 192.168.1.100(49201) -> ${randomNode.ip_address}(443)`;
+      }
+
+      const newEntry: LogEntry = {
+        timestamp: ts,
+        device_id: randomNode.id,
+        node_id: randomNode.id,
+        node_type: randomNode.type,
+        src_ip: "192.168.1.100",
+        dest_ip: randomNode.ip_address,
+        protocol: "TCP",
+        duration: "14ms",
+        action: action,
+        signature: action === "alerted" ? "MALWARE-CNC-BEACON" : "TCP-FLOW-NORMAL",
+        status: (randomNode.status === 'blocked' || randomNode.status === 'breached' || randomNode.status === 'degraded')
+          ? randomNode.status
+          : 'normal',
+        raw_log: logText,
+        sourcetype: sourcetype
+      };
+
+      setLogs((prev) => [...prev.slice(-1500), newEntry]);
+    }, speedMs);
+
+    return () => clearInterval(interval);
+  }, [isRunning, isConnected, speedMs, scenario, topology, transportConfig]);
 
   // Fetch Telemetry Transport Config on Mount
   useEffect(() => {

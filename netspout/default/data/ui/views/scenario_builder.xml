@@ -1,25 +1,35 @@
 <dashboard version="1.1" theme="dark" script="scenario_builder.js">
   <label>Scenario Builder &amp; Path Emitter</label>
-  <description>Network path flow topology canvas, direct sourcetype streaming without scenarios, and dynamic device class filtering across all major networking vendors.</description>
+  <description>Multi-vendor network architecture canvas, OpenConfig Model-Driven Telemetry (MDT) streaming to cisco_mdt_metrics, and dynamic path flow emitter.</description>
 
   <row>
     <panel>
       <html>
         <div style="padding: 10px 0;">
           
-          <!-- Control Bar -->
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 12px; margin-bottom: 20px;">
-            <div>
-              <h2 style="color: #f8fafc; margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.01em;">
-                Network Path Flow Canvas &amp; Direct Telemetry Emitter
-              </h2>
-              <p style="color: #94a3b8; margin: 4px 0 0 0; font-size: 12px;">
-                Select any network device on the topology canvas or directory grid. Filter by device class, stream from single or multiple sourcetypes, or stream end-to-end corridor packets.
-              </p>
+          <!-- Top Architecture Scenario & Topology Preset Bar -->
+          <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 320px;">
+              <span style="font-size: 22px;">🌐</span>
+              <div style="flex: 1;">
+                <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">
+                  Active Architecture Scenario / Topology Preset
+                </label>
+                <select id="select-topology-preset" style="width: 100%; background: #1e293b; border: 1px solid #0284c7; border-radius: 4px; padding: 8px 12px; color: #38bdf8; font-size: 13px; font-weight: 600;">
+                  <option value="openconfig_core" selected="selected">⚡ Preset 1: OpenConfig MDT Core Fabric (Cisco 8000, Juniper PTX, Arista 7280R, Catalyst 9600)</option>
+                  <option value="multivendor_enterprise">🏢 Preset 2: Multi-Vendor Enterprise 5-Tier Backbone (Palo Alto, Fortinet, Juniper, Nokia, Arista, F5, Meraki)</option>
+                  <option value="roce_ai_fabric">🤖 Preset 3: AI Data Center Fabric - RoCE v2 Buffer Congestion (Arista, NVIDIA Quantum, Cisco Nexus)</option>
+                  <option value="sdwan_branch">📡 Preset 4: SD-WAN Branch Brownout &amp; Dynamic SLA Failover (FortiGate, Cisco vEdge, Meraki MX)</option>
+                  <option value="campus_security">🛡 Preset 5: Campus Core Rogue AP &amp; MAC Flapping Threat (Catalyst 9300, Catalyst 9800 WLC, Cisco ISE)</option>
+                </select>
+              </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
+              <a href="/en-US/app/netspout/netspout_canvas" target="_blank" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; text-decoration: none; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                <span>🎨</span> Open Visual Drag &amp; Drop Canvas (NetSpout Studio) &gt;
+              </a>
               <button type="button" id="btn-stream-path" style="background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                Stream Entire Path Telemetry
+                Stream Entire Path Flow
               </button>
               <button type="button" id="btn-stop-path" style="background: #dc2626; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: none;">
                 Stop Path Stream
@@ -31,8 +41,8 @@
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; margin-bottom: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
               <div>
-                <b style="color: #f8fafc; font-size: 13px;">Direct Telemetry Streamer (No Scenario Required)</b>
-                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Continuous live streaming from single or multiple sourcetypes directly to Splunk HEC</span>
+                <b style="color: #f8fafc; font-size: 13px;">Direct Telemetry Streamer (Continuous Ingestion)</b>
+                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Stream live metrics &amp; logs across selected sourcetypes directly into Splunk HEC</span>
               </div>
               <div style="display: flex; align-items: center; gap: 12px;">
                 <span id="continuous-status-badge" style="background: #334155; color: #94a3b8; font-size: 11px; font-family: monospace; padding: 3px 10px; border-radius: 3px; font-weight: 600;">
@@ -89,21 +99,23 @@
           </div>
 
           <!-- Main Two-Column Layout -->
-          <div style="display: grid; grid-template-columns: 1.4fr 1.1fr; gap: 20px; margin-bottom: 20px;">
+          <div style="display: grid; grid-template-columns: 1.35fr 1.15fr; gap: 20px; margin-bottom: 20px;">
             
             <!-- Left: Topology Canvas -->
             <div style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; display: flex; flex-direction: column;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <b style="color: #e2e8f0; font-size: 13px;">
-                  Network Path Flow (Click Node on Canvas or Grid Below)
-                </b>
-                <span style="color: #38bdf8; font-size: 11px; background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 3px; border: 1px solid rgba(56, 189, 248, 0.2);">
-                  10 Active Nodes in Path
+                <div>
+                  <b style="color: #e2e8f0; font-size: 13px;" id="canvas-scenario-title">
+                    Architecture Topology Flow (Click Node to Inspect / Stream)
+                  </b>
+                </div>
+                <span id="canvas-node-count-badge" style="color: #38bdf8; font-size: 11px; background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 3px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  Active Preset
                 </span>
               </div>
 
               <!-- SVG Canvas -->
-              <div id="canvas-container" style="position: relative; height: 430px; background: #0b0f17; border: 1px solid #1e293b; border-radius: 4px; overflow: hidden;">
+              <div id="canvas-container" style="position: relative; height: 440px; background: #0b0f17; border: 1px solid #1e293b; border-radius: 4px; overflow: hidden;">
                 <svg id="canvas-svg" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
                   <!-- Populated dynamically via JS -->
                 </svg>
@@ -112,7 +124,7 @@
               <!-- Canvas Selection Bar -->
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; background: #0f172a; padding: 10px 14px; border-radius: 4px; border: 1px solid #1e293b;">
                 <div style="font-size: 12px; color: #cbd5e1;">
-                  Selected Node: <b id="canvas-selected-name" style="color: #38bdf8; font-family: monospace;">pa-5450-perimeter</b> (<span id="canvas-selected-vendor">Palo Alto</span>)
+                  Selected Node: <b id="canvas-selected-name" style="color: #38bdf8; font-family: monospace;">rtr-cisco-8000-01</b> (<span id="canvas-selected-vendor">Cisco</span>)
                 </div>
                 <div style="display: flex; gap: 8px;">
                   <button type="button" id="btn-blast-selected-1" style="background: #16a34a; border: none; color: #ffffff; border-radius: 3px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer;">
@@ -125,117 +137,191 @@
               </div>
             </div>
 
-            <!-- Right: Device Telemetry Emitter Inspector -->
+            <!-- Right: Inspector with OpenConfig MDT Tab & Vendor Syslog Tab -->
             <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; display: flex; flex-direction: column;">
-              <h3 style="color: #e2e8f0; font-size: 13px; font-weight: 600; margin: 0 0 12px 0; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
-                Device Telemetry Parameters &amp; Sourcetype Selector
-              </h3>
-
-              <!-- Device Class & Vendor Filter Dropdowns -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
-                <div>
-                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
-                    1. Device Class (Filters Platforms)
-                  </label>
-                  <select id="emit-class" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
-                    <option value="firewall">Next-Gen Firewall (Security Edge)</option>
-                    <option value="router">Core &amp; WAN Router (MPLS / BGP)</option>
-                    <option value="switch_dc">Data Center Switch (AI / EVPN-VXLAN)</option>
-                    <option value="switch_campus">Campus Switch (Access / Distribution)</option>
-                    <option value="loadbalancer">Application Delivery &amp; Load Balancer</option>
-                    <option value="sase">Cloud SASE &amp; SSE Security Ingress</option>
-                    <option value="wireless">Campus &amp; Branch Wireless (WiFi 6E)</option>
-                    <option value="optical">100G Coherent Optical (DWDM / TI-LFA)</option>
-                  </select>
-                </div>
-                <div>
-                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
-                    2. Vendor &amp; Platform (Filtered)
-                  </label>
-                  <select id="emit-vendor" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
-                    <!-- Populated dynamically via JS -->
-                  </select>
-                </div>
+              
+              <!-- Tab Switcher -->
+              <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
+                <button type="button" id="tab-btn-openconfig" style="background: #0284c7; color: #ffffff; border: none; border-radius: 4px; padding: 6px 14px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  <span>⚡</span> OpenConfig MDT (Routers &amp; Switches)
+                </button>
+                <button type="button" id="tab-btn-syslog" style="background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; padding: 6px 14px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  <span>📄</span> Vendor Syslog &amp; Security Events
+                </button>
               </div>
 
-              <!-- Target Index & Hostname -->
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px;">
-                <div>
-                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Target Index</label>
-                  <input type="text" id="emit-index" value="idx_security_fw" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+              <!-- TAB 1: OPENCONFIG MDT PANEL -->
+              <div id="panel-tab-openconfig" style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="background: rgba(2, 132, 199, 0.08); border: 1px solid rgba(2, 132, 199, 0.3); border-radius: 4px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <b style="color: #38bdf8; font-size: 12px;">OpenConfig Model-Driven Telemetry (gNMI)</b>
+                    <div style="color: #94a3b8; font-size: 10px;">Standardized RFC 7950 YANG tree telemetry with sub-second streaming</div>
+                  </div>
+                  <span style="background: #1e293b; color: #38bdf8; font-family: monospace; font-size: 10px; padding: 2px 8px; border-radius: 3px; border: 1px solid #0284c7;">
+                    Index: cisco_mdt_metrics (500GB)
+                  </span>
                 </div>
+
                 <div>
-                  <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Device Hostname &amp; IP</label>
-                  <div style="display: flex; gap: 6px;">
-                    <input type="text" id="emit-host" value="pa-5450-fw01.corp.internal" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
-                    <input type="text" id="emit-ip" value="10.254.1.1" style="width: 85px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    1. Select OpenConfig YANG XPath Model:
+                  </label>
+                  <select id="select-openconfig-xpath" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px;">
+                    <option value="/interfaces/interface/state/counters" selected="selected">/interfaces/interface/state/counters (in/out octets, errors, discards)</option>
+                    <option value="/interfaces/interface/state/oper-status">/interfaces/interface/state/oper-status (admin &amp; oper status UP/DOWN)</option>
+                    <option value="/components/component/cpu/state/utilization">/components/component/cpu/state/utilization (instantaneous &amp; avg %)</option>
+                    <option value="/components/component/memory/state/utilized">/components/component/memory/state/utilized (RAM allocation %)</option>
+                    <option value="/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state">/bgp/neighbors/neighbor/state/session-state (ESTABLISHED/IDLE/ACTIVE)</option>
+                    <option value="/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/afi-safis/afi-safi/state/prefixes/received">/bgp/neighbors/.../prefixes/received (BGP installed prefix count)</option>
+                  </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Target MDT Metric Index</label>
+                    <input type="text" id="openconfig-target-index" value="cisco_mdt_metrics" readonly="readonly" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 5px 8px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  </div>
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 10px; font-weight: 600; margin-bottom: 3px;">Reporting MDT Router / Switch Host</label>
+                    <input type="text" id="openconfig-host" value="rtr-cisco-8000-01.corp.internal" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 5px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
                   </div>
                 </div>
-              </div>
 
-              <!-- Multi-Sourcetype Checkboxes -->
-              <div id="container-multi-sourcetype" style="margin-bottom: 10px; background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 10px 12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                  <label style="color: #cbd5e1; font-size: 11px; font-weight: 600;">
-                    3. Select Sourcetypes to Ingest
+                <div style="display: flex; gap: 14px; align-items: center;">
+                  <label style="color: #f8fafc; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="radio" name="openconfig_format" value="metric" checked="checked" style="margin: 0; accent-color: #0284c7;" />
+                    Splunk Metric Event (cisco_mdt_metrics)
                   </label>
-                  <button type="button" id="btn-select-all-st" style="background: #1e293b; border: 1px solid #334155; color: #38bdf8; font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer;">
-                    Select All / Clear
+                  <label style="color: #f8fafc; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                    <input type="radio" name="openconfig_format" value="yang_json" style="margin: 0; accent-color: #0284c7;" />
+                    YANG RFC 7950 JSON (idx_network_ops)
+                  </label>
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="color: #94a3b8; font-size: 10px; font-weight: 600;">Live MDT Telemetry Payload Preview</label>
+                    <span id="btn-refresh-openconfig-payload" style="color: #38bdf8; font-size: 10px; cursor: pointer;">↻ Refresh Values</span>
+                  </div>
+                  <textarea id="openconfig-payload" rows="4" style="width: 100%; background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #38bdf8; font-family: monospace; font-size: 11px; resize: vertical; box-sizing: border-box;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                  <button type="button" id="btn-emit-openconfig-probe" style="flex: 1; background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span>⚡</span> Emit 1 OpenConfig Metric Probe
+                  </button>
+                  <button type="button" id="btn-stream-openconfig" style="flex: 1; background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span>▶</span> Stream Continuous MDT (10/s)
+                  </button>
+                  <button type="button" id="btn-stop-openconfig-stream" style="background: #dc2626; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 11px; font-weight: 700; cursor: pointer; display: none;">
+                    Stop MDT
                   </button>
                 </div>
-                <div id="sourcetype-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 75px; overflow-y: auto; padding: 2px 0;">
-                  <!-- Populated dynamically via JS -->
-                </div>
               </div>
 
-              <!-- Payload Editor -->
-              <div style="margin-bottom: 10px; flex: 1; display: flex; flex-direction: column;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                  <label style="color: #94a3b8; font-size: 11px; font-weight: 600;">Sample Event Payload</label>
-                  <span id="btn-reset-template" style="color: #38bdf8; font-size: 10px; cursor: pointer;">Reset Template</span>
+              <!-- TAB 2: VENDOR SYSLOG & SECURITY PANEL -->
+              <div id="panel-tab-syslog" style="display: none; flex-direction: column; gap: 10px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                      1. Device Class
+                    </label>
+                    <select id="emit-class" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
+                      <option value="firewall">Next-Gen Firewall (Security Edge)</option>
+                      <option value="router">Core &amp; WAN Router (MPLS / BGP)</option>
+                      <option value="switch_dc">Data Center Switch (AI / EVPN-VXLAN)</option>
+                      <option value="switch_campus">Campus Switch (Access / Distribution)</option>
+                      <option value="loadbalancer">Application Delivery &amp; Load Balancer</option>
+                      <option value="sase">Cloud SASE &amp; SSE Security Ingress</option>
+                      <option value="wireless">Campus &amp; Branch Wireless (WiFi 6E)</option>
+                      <option value="optical">100G Coherent Optical (DWDM / TI-LFA)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                      2. Vendor &amp; Platform
+                    </label>
+                    <select id="emit-vendor" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-size: 12px;">
+                      <!-- Populated dynamically via JS -->
+                    </select>
+                  </div>
                 </div>
-                <textarea id="emit-payload" rows="3" style="width: 100%; background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #38bdf8; font-family: monospace; font-size: 11px; resize: vertical; box-sizing: border-box; flex: 1;"></textarea>
-              </div>
 
-              <!-- Action Emit Buttons -->
-              <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
-                <button type="button" id="btn-emit-single-st" style="flex: 1; background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                  Emit Single Sourcetype
-                </button>
-                <button type="button" id="btn-emit-selected" style="flex: 1; background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                  Emit All Selected
-                </button>
-                <button type="button" id="btn-burst-50" style="background: #475569; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                  Burst 50
-                </button>
-                <button type="button" id="btn-burst-100" style="background: #334155; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
-                  Burst 100
-                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Target Index</label>
+                    <input type="text" id="emit-index" value="idx_network_ops" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                  </div>
+                  <div>
+                    <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">Device Hostname &amp; IP</label>
+                    <div style="display: flex; gap: 6px;">
+                      <input type="text" id="emit-host" value="rtr-cisco-8000-01.corp.internal" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                      <input type="text" id="emit-ip" value="10.254.0.1" style="width: 85px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #f8fafc; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                    </div>
+                  </div>
+                </div>
+
+                <div id="container-multi-sourcetype" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label style="color: #cbd5e1; font-size: 11px; font-weight: 600;">
+                      Select Sourcetypes to Ingest
+                    </label>
+                    <button type="button" id="btn-select-all-st" style="background: #1e293b; border: 1px solid #334155; color: #38bdf8; font-size: 10px; padding: 2px 8px; border-radius: 3px; cursor: pointer;">
+                      Select All / Clear
+                    </button>
+                  </div>
+                  <div id="sourcetype-checkbox-group" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 70px; overflow-y: auto; padding: 2px 0;">
+                    <!-- Populated dynamically via JS -->
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <label style="color: #94a3b8; font-size: 11px; font-weight: 600;">Sample Event Payload</label>
+                    <span id="btn-reset-template" style="color: #38bdf8; font-size: 10px; cursor: pointer;">Reset Template</span>
+                  </div>
+                  <textarea id="emit-payload" rows="3" style="width: 100%; background: #020617; border: 1px solid #334155; border-radius: 4px; padding: 6px 8px; color: #38bdf8; font-family: monospace; font-size: 11px; resize: vertical; box-sizing: border-box;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                  <button type="button" id="btn-emit-single-st" style="flex: 1; background: #16a34a; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    Emit Single Sourcetype
+                  </button>
+                  <button type="button" id="btn-emit-selected" style="flex: 1; background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    Emit All Selected
+                  </button>
+                  <button type="button" id="btn-burst-50" style="background: #475569; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    Burst 50
+                  </button>
+                  <button type="button" id="btn-burst-100" style="background: #334155; border: none; color: #ffffff; border-radius: 4px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                    Burst 100
+                  </button>
+                </div>
               </div>
 
               <!-- Execution Log Console -->
-              <div id="emit-log-console" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 12px; font-family: monospace; font-size: 11px; color: #94a3b8; max-height: 85px; overflow-y: auto; line-height: 1.5;">
-                [READY] Select a device from canvas or directory to inspect and emit telemetry.
+              <div id="emit-log-console" style="margin-top: 10px; background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 8px 12px; font-family: monospace; font-size: 11px; color: #94a3b8; max-height: 80px; overflow-y: auto; line-height: 1.5;">
+                [READY] Select a device from canvas or directory to inspect and emit OpenConfig MDT or vendor telemetry.
               </div>
             </div>
 
           </div>
 
-          <!-- Bottom: 10-Device Network Flow Path Directory Grid -->
+          <!-- Bottom: Network Flow Path Directory Grid -->
           <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #1e293b; padding-bottom: 8px;">
               <div>
-                <b style="color: #f8fafc; font-size: 13px;">
-                  Network Flow Path Directory (10 Corridor Devices)
+                <b style="color: #f8fafc; font-size: 13px;" id="directory-grid-title">
+                  Corridor Devices Directory
                 </b>
-                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Click any card to select device and bind parameters</span>
+                <span style="color: #94a3b8; font-size: 11px; margin-left: 8px;">Click any card to select device and bind OpenConfig XPaths or vendor parameters</span>
               </div>
               <span id="grid-selection-label" style="font-size: 12px; color: #38bdf8; font-family: monospace;">
-                Active Node: pa-5450-perimeter
+                Active Node: rtr-cisco-8000-01
               </span>
             </div>
 
-            <div id="device-path-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px;">
+            <div id="device-path-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px;">
               <!-- Populated dynamically via JS -->
             </div>
           </div>

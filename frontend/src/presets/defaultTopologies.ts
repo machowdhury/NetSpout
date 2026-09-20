@@ -1,6 +1,17 @@
 import type { TopologyState, ScenarioDefinition } from '../types/topology';
 
 export const SCENARIOS: ScenarioDefinition[] = [
+  {
+    id: 'openconfig_mdt_streaming',
+    name: 'Mode C: OpenConfig MDT Streaming & Telemetry Assurance',
+    code: 'OC-001',
+    ecosystem: 'both',
+    description: 'Routers and switches stream real-time OpenConfig YANG metrics (interface counters, CPU/RAM, BGP peering) directly to cisco_mdt_metrics.',
+    attackVector: 'Core Carrier Link Flap & Optical BER Degradation',
+    defenseMechanism: 'Model-Driven Telemetry (MDT) detects carrier transitions and spikes within sub-second intervals for automated traffic re-routing.',
+    sourcetypes: ['cisco:ios:mdt:metric', 'arista:telemetry:json', 'openconfig:gnmi:telemetry', 'cisco:ios:syslog']
+  },
+
   // ==========================================
   // BASELINE SCENARIOS
   // ==========================================
@@ -299,3 +310,21 @@ export const PRESET_MIXED_OPTICAL: TopologyState = {
   ]
 };
 
+
+export const PRESET_OPENCONFIG_CORE: TopologyState = {
+  zones: [
+    { id: 'zone-oc-1', name: 'Carrier Core MDT Fabric (OpenConfig)', zone_type: 'core_backbone', color: '#8b5cf6', opacity: 0.12, x: 40, y: 140, width: 420, height: 250, description: 'OpenConfig YANG streaming routers emitting gNMI telemetry' },
+    { id: 'zone-oc-2', name: 'Leaf / Spine Telemetry Tier', zone_type: 'dc_fabric', color: '#06b6d4', opacity: 0.12, x: 490, y: 140, width: 490, height: 250, description: 'Arista and Catalyst Spine/Leaf telemetry aggregation' }
+  ],
+  nodes: [
+    { id: 'node-cisco8k', name: 'Cisco-8000-Core01', type: 'router', x: 70, y: 220, ip_address: '10.100.1.1', status: 'active', power_state: 'running', vendor: 'cisco_ios', sourcetype: 'cisco:ios:mdt:metric', hardware: { vcpu_count: 8, ram_mb: 16384, boot_time_sec: 5, cpu_utilization_pct: 24.5, memory_utilization_pct: 38.0, temperature_celsius: 42.0 } },
+    { id: 'node-juniper-ptx', name: 'Juniper-PTX10K-PE01', type: 'router', x: 260, y: 220, ip_address: '10.100.1.2', status: 'active', power_state: 'running', vendor: 'juniper_junos', sourcetype: 'cisco:ios:mdt:metric', hardware: { vcpu_count: 8, ram_mb: 16384, boot_time_sec: 5, cpu_utilization_pct: 21.0, memory_utilization_pct: 35.0, temperature_celsius: 40.0 } },
+    { id: 'node-arista-spine', name: 'Arista-7280R-Spine', type: 'switch', x: 520, y: 220, ip_address: '10.100.2.1', status: 'active', power_state: 'running', vendor: 'arista_eos', sourcetype: 'arista:telemetry:json', hardware: { vcpu_count: 4, ram_mb: 8192, boot_time_sec: 4, cpu_utilization_pct: 19.5, memory_utilization_pct: 32.0, temperature_celsius: 39.0 } },
+    { id: 'node-cat-leaf', name: 'Catalyst-9600-Leaf', type: 'switch', x: 750, y: 220, ip_address: '10.100.2.2', status: 'active', power_state: 'running', vendor: 'cisco_catalyst', sourcetype: 'cisco:ios:mdt:metric', hardware: { vcpu_count: 4, ram_mb: 8192, boot_time_sec: 4, cpu_utilization_pct: 18.0, memory_utilization_pct: 29.0, temperature_celsius: 38.0 } }
+  ],
+  edges: [
+    { id: 'e-oc1', source: 'node-cisco8k', target: 'node-juniper-ptx', source_port: 'HundredGigE0/0/0/0', target_port: 'et-0/0/0', status: 'up' },
+    { id: 'e-oc2', source: 'node-juniper-ptx', target: 'node-arista-spine', source_port: 'et-0/0/1', target_port: 'Ethernet1/1', status: 'up' },
+    { id: 'e-oc3', source: 'node-arista-spine', target: 'node-cat-leaf', source_port: 'Ethernet2/1', target_port: 'FortyGigE1/0/1', status: 'up' }
+  ]
+};

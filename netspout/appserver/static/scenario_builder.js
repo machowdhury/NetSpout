@@ -1,7 +1,7 @@
 /*
- * Splunk App: TA-network-data-blaster
+ * Splunk App: NetSpout (TA-network-data-blaster)
  * View Script: scenario_builder.js
- * Clean enterprise network engineering interface
+ * Scenario Builder, OpenConfig MDT Telemetry Emitter & Path Orchestrator
  */
 
 require([
@@ -48,7 +48,7 @@ require([
     return h;
   }
 
-  // Device Class & Platform Matrix
+  // Multi-Vendor Syslog & Event Platform Matrix
   var PLATFORM_MATRIX = {
     "firewall": [
       { id: "paloalto", name: "Palo Alto Networks (PAN-OS)", index: "idx_security_fw", sourcetypes: ["pan:traffic", "pan:threat", "pan:system"], template: '1,2026/09/19 14:00:00,001801000001,TRAFFIC,drop,1,2026/09/19 14:00:00,198.51.100.42,10.254.1.10,0.0.0.0,0.0.0.0,rule_syn_flood,vsys1,untrust,trust,ethernet1/1,ethernet1/2,default-log-forwarding,2026/09/19 14:00:00,0,1,54210,443,0,0,0x0,tcp,deny,64,64,0,1,2026/09/19 14:00:00,0,any,0,12345678,0x0,United States,10.0.0.0-10.255.255.255,0,1,0,threat-drop,0,0,0,0,,pa-5450-fw01,from-policy' },
@@ -57,17 +57,17 @@ require([
       { id: "cisco_ftd", name: "Cisco Secure Firewall (FTD / ASA)", index: "idx_security_fw", sourcetypes: ["cisco:ftd:syslog", "cisco:asa:syslog", "cisco:asa"], template: '%FTD-1-430002: EventPriority: Low, DeviceUUID: 4f1a23-8991, SnortId: 1:31456, Event: MALWARE-CNC Win.Trojan.CobaltStrike beacon detected, SrcIP: 10.40.12.88, DstIP: 198.51.100.99, Action: Dropped' }
     ],
     "router": [
-      { id: "cisco_ios", name: "Cisco IOS-XE (Catalyst 8000 / ASR)", index: "idx_network_ops", sourcetypes: ["cisco:ios", "cisco:ios:syslog", "cisco:ios:mdt", "cisco:metrics"], template: '<189>Sep 19 14:00:00 edge-core-01 %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet1/0/24, changed state to down' },
-      { id: "cisco_sdwan", name: "Cisco SD-WAN (Viptela OS)", index: "idx_network_ops", sourcetypes: ["cisco:sdwan:syslog", "cisco:sdwan:linkhealth", "cisco:sdwan:sitehealth", "cisco:sdwan:tunnelhealth", "cisco:sdwan:BGP-5-ADJCHANGE"], template: '{"edge_device": "sdwan-toronto-edge01", "tunnel": "biz-internet", "latency_ms": 14.2, "jitter_ms": 1.1, "loss_percentage": 0.02, "sla_status": "in_sla"}' },
-      { id: "juniper", name: "Juniper Networks (Junos MX)", index: "idx_network_ops", sourcetypes: ["juniper:junos", "juniper:syslog"], template: '<14>Sep 19 14:00:00 core-juniper-mx960 rpd[4821]: %ROUTING-4-BGP_PEER_FLAP: BGP peer 198.51.100.1 (External AS 65001) state changed from Established to Idle (HoldTimer expired)' },
+      { id: "cisco_ios", name: "Cisco IOS-XR / IOS-XE (8000 / ASR)", index: "idx_network_ops", sourcetypes: ["cisco:ios", "cisco:ios:syslog", "cisco:ios:mdt", "cisco:metrics"], template: '<189>Sep 19 14:00:00 rtr-cisco-8000-01 %LINEPROTO-5-UPDOWN: Line protocol on Interface HundredGigE0/0/0/0, changed state to up' },
+      { id: "cisco_sdwan", name: "Cisco SD-WAN (Viptela OS)", index: "idx_network_ops", sourcetypes: ["cisco:sdwan:syslog", "cisco:sdwan:linkhealth", "cisco:sdwan:sitehealth", "cisco:sdwan:tunnelhealth", "cisco:sdwan:BGP-5-ADJCHANGE"], template: '{"edge_device": "sdwan-branch-vedge", "tunnel": "biz-internet", "latency_ms": 14.2, "jitter_ms": 1.1, "loss_percentage": 0.02, "sla_status": "in_sla"}' },
+      { id: "juniper", name: "Juniper Networks (Junos PTX / MX)", index: "idx_network_ops", sourcetypes: ["juniper:junos", "juniper:syslog"], template: '<14>Sep 19 14:00:00 rtr-juniper-ptx01 rpd[4821]: %ROUTING-4-BGP_PEER_FLAP: BGP peer 198.51.100.1 (External AS 65001) state changed from Established to Idle (HoldTimer expired)' },
       { id: "nokia", name: "Nokia Service Router (SR OS 7750)", index: "idx_network_ops", sourcetypes: ["nokia:sros", "nokia:sros:syslog"], template: '<165>Sep 19 14:00:00 pe01-toronto-7750 Major: BGP #2002 Base Peer 10.254.0.1: Peer entered Established state; Session uptime 4d 12h.' }
     ],
     "switch_dc": [
-      { id: "arista", name: "Arista Networks (EOS / RoCE v2)", index: "idx_performance_metrics", sourcetypes: ["arista:eos", "arista:eos:syslog", "arista:telemetry:json"], template: '{"timestamp": 1789840800.0, "device": "dc-spine-arista7060", "interface": "Ethernet1/1", "pfc_pause_rx": 48201, "ecn_marked_packets": 1284, "buffer_utilization_pct": 98.4, "status": "CONGESTION_ROCE_V2"}' },
+      { id: "arista", name: "Arista Networks (EOS / 7280R3)", index: "idx_performance_metrics", sourcetypes: ["arista:eos", "arista:eos:syslog", "arista:telemetry:json"], template: '{"timestamp": 1789840800.0, "device": "sw-arista-7280-01", "interface": "Ethernet1/1", "pfc_pause_rx": 48201, "ecn_marked_packets": 1284, "buffer_utilization_pct": 98.4, "status": "CONGESTION_ROCE_V2"}' },
       { id: "cisco_nexus", name: "Cisco Nexus NX-OS & ACI Fabric", index: "idx_network_ops", sourcetypes: ["cisco:nexus", "cisco:nxos", "cisco:nxos:syslog", "cisco:dc:nexus9k", "cisco:dc:aci:health"], template: '<187>Sep 19 14:00:00 dc-spine-nexus %ETHPORT-5-IF_DOWN_LINK_FAILURE: Interface Ethernet1/1 is down (Link failure)' }
     ],
     "switch_campus": [
-      { id: "cisco_cat", name: "Cisco Catalyst 9300/9500 Fabric", index: "idx_network_ops", sourcetypes: ["cisco:catalyst:networkhealth", "cisco:catalyst:devicehealth", "cisco:catalyst:compliance", "cisco:catalyst:issue"], template: '{"deviceName": "cat9k-core.campus.acme.net", "healthScore": 99, "cpuScore": 100, "memoryScore": 98, "packetScore": 100, "linkHealth": 99}' },
+      { id: "cisco_cat", name: "Cisco Catalyst 9600/9300 Fabric", index: "idx_network_ops", sourcetypes: ["cisco:catalyst:networkhealth", "cisco:catalyst:devicehealth", "cisco:catalyst:compliance", "cisco:catalyst:issue"], template: '{"deviceName": "sw-cat9600-01.campus.internal", "healthScore": 99, "cpuScore": 100, "memoryScore": 98, "packetScore": 100, "linkHealth": 99}' },
       { id: "aruba_cx", name: "Aruba Networks (AOS-CX 8300)", index: "idx_network_ops", sourcetypes: ["aruba:syslog"], template: '<189>Sep 19 14:00:00 aruba-cx-switch01 hpe-authmgr[1142]: User A4:83:E7:4B:11:02 authenticated on port 1/1/12 via 802.1X VLAN 40' }
     ],
     "loadbalancer": [
@@ -87,59 +87,261 @@ require([
     ]
   };
 
-  // 10 Topology Path Nodes
-  var PATH_NODES = [
-    { id: "sase", name: "zscaler-edge-ingress", role: "Cloud SASE Gateway", vendor: "Zscaler", class: "sase", x: 80, y: 70, ip: "165.225.1.1", index: "idx_security_fw", platform: "zscaler", color: "#0ea5e9" },
-    { id: "fw", name: "pa-5450-perimeter", role: "Perimeter Next-Gen FW", vendor: "Palo Alto", class: "firewall", x: 230, y: 150, ip: "10.254.1.1", index: "idx_security_fw", platform: "paloalto", color: "#f97316" },
-    { id: "sdwan", name: "fortigate-3700d-sdwan", role: "SD-WAN Edge Hub", vendor: "Fortinet", class: "firewall", x: 380, y: 80, ip: "10.254.2.1", index: "idx_security_fw", platform: "fortinet", color: "#22c55e" },
-    { id: "core", name: "core-juniper-mx960", role: "Core MPLS/BGP Router", vendor: "Juniper", class: "router", x: 540, y: 220, ip: "10.254.3.1", index: "idx_network_ops", platform: "juniper", color: "#3b82f6" },
-    { id: "nokia", name: "core-nokia-7750", role: "100G Coherent Optical", vendor: "Nokia", class: "optical", x: 700, y: 120, ip: "10.254.4.1", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
-    { id: "spine", name: "dc-spine-arista7060", role: "AI DC Spine Switch", vendor: "Arista", class: "switch_dc", x: 860, y: 240, ip: "10.254.5.1", index: "idx_performance_metrics", platform: "arista", color: "#10b981" },
-    { id: "gpu", name: "nvidia-quantum-h100", role: "AI GPU Fabric Cluster", vendor: "NVIDIA", class: "switch_dc", x: 1020, y: 350, ip: "10.254.6.1", index: "idx_performance_metrics", platform: "arista", color: "#84cc16" },
-    { id: "f5", name: "bigip-ltm-cluster", role: "App Load Balancer", vendor: "F5", class: "loadbalancer", x: 860, y: 390, ip: "10.254.7.1", index: "idx_network_ops", platform: "f5", color: "#ef4444" },
-    { id: "campus", name: "campus-cat9k-access", role: "Campus Access Switch", vendor: "Cisco", class: "switch_campus", x: 380, y: 330, ip: "10.254.8.1", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
-    { id: "wifi", name: "aruba-ap635-campus", role: "Campus WiFi 6E AP", vendor: "Aruba", class: "wireless", x: 230, y: 390, ip: "10.254.9.1", index: "idx_wireless_ops", platform: "aruba_ap", color: "#eab308" }
-  ];
+  // Pre-Built Topology Presets
+  var TOPOLOGY_PRESETS = {
+    "openconfig_core": {
+      title: "OpenConfig MDT Core Fabric (Cisco 8000, Juniper PTX, Arista 7280R, Cat 9600)",
+      badge: "4 MDT gNMI Nodes",
+      nodes: [
+        { id: "oc_cisco8k", name: "rtr-cisco-8000-01", role: "Core Backbone Router", vendor: "Cisco", class: "router", x: 140, y: 130, ip: "10.254.0.1", index: "cisco_mdt_metrics", platform: "cisco_ios", color: "#0284c7" },
+        { id: "oc_juniper_ptx", name: "rtr-juniper-ptx01", role: "Core Spine Router", vendor: "Juniper", class: "router", x: 420, y: 90, ip: "10.254.0.2", index: "cisco_mdt_metrics", platform: "juniper", color: "#38bdf8" },
+        { id: "oc_arista_7280", name: "sw-arista-7280-01", role: "DC Spine Switch", vendor: "Arista", class: "switch_dc", x: 700, y: 150, ip: "10.254.1.1", index: "cisco_mdt_metrics", platform: "arista", color: "#10b981" },
+        { id: "oc_cat9600", name: "sw-cat9600-01", role: "Campus / DC Leaf", vendor: "Cisco", class: "switch_campus", x: 420, y: 310, ip: "10.254.2.1", index: "cisco_mdt_metrics", platform: "cisco_cat", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "oc_cisco8k", to: "oc_juniper_ptx", label: "400GE-ZR+ / BGP EVPN" },
+        { from: "oc_juniper_ptx", to: "oc_arista_7280", label: "100GE / gNMI Stream" },
+        { from: "oc_arista_7280", to: "oc_cat9600", label: "40GE MDT Telemetry" },
+        { from: "oc_cisco8k", to: "oc_cat9600", label: "100GE L3 Trunk" }
+      ]
+    },
+    "multivendor_enterprise": {
+      title: "Enterprise 5-Tier Backbone (Palo Alto, Fortinet, Juniper, Nokia, Arista, F5, Meraki)",
+      badge: "10 Active Corridor Nodes",
+      nodes: [
+        { id: "sase", name: "zscaler-edge-ingress", role: "Cloud SASE Gateway", vendor: "Zscaler", class: "sase", x: 70, y: 70, ip: "165.225.1.1", index: "idx_security_fw", platform: "zscaler", color: "#0ea5e9" },
+        { id: "fw", name: "pa-5450-perimeter", role: "Perimeter Next-Gen FW", vendor: "Palo Alto", class: "firewall", x: 210, y: 150, ip: "10.254.1.1", index: "idx_security_fw", platform: "paloalto", color: "#f97316" },
+        { id: "sdwan", name: "fortigate-3700d-sdwan", role: "SD-WAN Edge Hub", vendor: "Fortinet", class: "firewall", x: 350, y: 80, ip: "10.254.2.1", index: "idx_security_fw", platform: "fortinet", color: "#22c55e" },
+        { id: "core", name: "core-juniper-mx960", role: "Core MPLS/BGP Router", vendor: "Juniper", class: "router", x: 490, y: 220, ip: "10.254.3.1", index: "idx_network_ops", platform: "juniper", color: "#3b82f6" },
+        { id: "nokia", name: "core-nokia-7750", role: "100G Coherent Optical", vendor: "Nokia", class: "optical", x: 630, y: 120, ip: "10.254.4.1", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
+        { id: "spine", name: "dc-spine-arista7060", role: "AI DC Spine Switch", vendor: "Arista", class: "switch_dc", x: 770, y: 240, ip: "10.254.5.1", index: "idx_performance_metrics", platform: "arista", color: "#10b981" },
+        { id: "gpu", name: "nvidia-quantum-h100", role: "AI GPU Fabric Cluster", vendor: "NVIDIA", class: "switch_dc", x: 910, y: 350, ip: "10.254.6.1", index: "idx_performance_metrics", platform: "arista", color: "#84cc16" },
+        { id: "f5", name: "bigip-ltm-cluster", role: "App Load Balancer", vendor: "F5", class: "loadbalancer", x: 770, y: 390, ip: "10.254.7.1", index: "idx_network_ops", platform: "f5", color: "#ef4444" },
+        { id: "campus", name: "campus-cat9k-access", role: "Campus Access Switch", vendor: "Cisco", class: "switch_campus", x: 350, y: 330, ip: "10.254.8.1", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
+        { id: "wifi", name: "aruba-ap635-campus", role: "Campus WiFi 6E AP", vendor: "Aruba", class: "wireless", x: 210, y: 390, ip: "10.254.9.1", index: "idx_wireless_ops", platform: "aruba_ap", color: "#eab308" }
+      ],
+      links: [
+        { from: "sase", to: "fw", label: "GRE / IPsec" },
+        { from: "fw", to: "sdwan", label: "100G Trunk" },
+        { from: "sdwan", to: "core", label: "BGP AS 65001" },
+        { from: "core", to: "nokia", label: "100G DWDM" },
+        { from: "nokia", to: "spine", label: "400G SR-OS" },
+        { from: "spine", to: "gpu", label: "RoCE v2 PFC" },
+        { from: "spine", to: "f5", label: "LACP 100G" },
+        { from: "sdwan", to: "campus", label: "802.1Q Core" },
+        { from: "campus", to: "wifi", label: "PoE+ 10GE" }
+      ]
+    },
+    "roce_ai_fabric": {
+      title: "AI Data Center Fabric - RoCE v2 Buffer Congestion (Arista, NVIDIA, Nexus)",
+      badge: "4 GPU Fabric Nodes",
+      nodes: [
+        { id: "gpu_worker", name: "gpu-worker-01", role: "NVIDIA H100 SuperPOD", vendor: "NVIDIA", class: "switch_dc", x: 140, y: 220, ip: "10.200.1.1", index: "idx_performance_metrics", platform: "arista", color: "#84cc16" },
+        { id: "leaf_qm", name: "leaf-quantum-01", role: "NVIDIA Quantum QM9700", vendor: "NVIDIA", class: "switch_dc", x: 380, y: 110, ip: "10.200.0.1", index: "idx_performance_metrics", platform: "arista", color: "#10b981" },
+        { id: "spine_7060", name: "spine-arista-7060", role: "Arista 7060X5 800G Spine", vendor: "Arista", class: "switch_dc", x: 640, y: 190, ip: "10.200.0.10", index: "idx_performance_metrics", platform: "arista", color: "#0ea5e9" },
+        { id: "storage_nexus", name: "nexus-storage-01", role: "Nexus 9364C RoCE Storage", vendor: "Cisco", class: "switch_dc", x: 380, y: 320, ip: "10.200.0.20", index: "idx_network_ops", platform: "cisco_nexus", color: "#f59e0b" }
+      ],
+      links: [
+        { from: "gpu_worker", to: "leaf_qm", label: "RoCE v2 400G PFC" },
+        { from: "leaf_qm", to: "spine_7060", label: "800G ECN Fabric" },
+        { from: "spine_7060", to: "storage_nexus", label: "NVMe-oF RoCE" },
+        { from: "gpu_worker", to: "storage_nexus", label: "Direct RDMA" }
+      ]
+    },
+    "sdwan_branch": {
+      title: "SD-WAN Branch Brownout & Dynamic SLA Failover (FortiGate, Cisco vEdge)",
+      badge: "4 WAN Nodes",
+      nodes: [
+        { id: "branch_edge", name: "sdwan-branch-vedge", role: "Catalyst 8300 SD-WAN", vendor: "Cisco", class: "router", x: 140, y: 200, ip: "10.10.1.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#0284c7" },
+        { id: "inet_biz", name: "inet-circuit-biz", role: "Biz Internet Primary ISP", vendor: "Fortinet", class: "firewall", x: 400, y: 100, ip: "198.51.100.1", index: "idx_security_fw", platform: "fortinet", color: "#22c55e" },
+        { id: "lte_5g", name: "lte-backup-5g", role: "5G Cellular Backup Circuit", vendor: "Cisco", class: "router", x: 400, y: 300, ip: "203.0.113.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#f97316" },
+        { id: "hub_core", name: "hub-vedge-core", role: "HQ Aggregation Hub", vendor: "Cisco", class: "router", x: 680, y: 200, ip: "10.254.0.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "branch_edge", to: "inet_biz", label: "IPsec Primary (SLA)" },
+        { from: "branch_edge", to: "lte_5g", label: "5G Standby" },
+        { from: "inet_biz", to: "hub_core", label: "BFD Echo 15ms" },
+        { from: "lte_5g", to: "hub_core", label: "Failover Tunnel" }
+      ]
+    },
+    "campus_security": {
+      title: "Campus Core Rogue AP & MAC Flapping Threat (Catalyst 9300, WLC, ISE)",
+      badge: "4 Security Nodes",
+      nodes: [
+        { id: "cat9300_sw", name: "cat9300-access-sw01", role: "Catalyst 9300 Access", vendor: "Cisco", class: "switch_campus", x: 140, y: 200, ip: "10.30.1.1", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
+        { id: "rogue_ap", name: "rogue-ap-floor3", role: "Rogue Evil-Twin AP", vendor: "Cisco", class: "wireless", x: 400, y: 100, ip: "10.30.1.99", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#ef4444" },
+        { id: "cat9800_wlc", name: "cat9800-wlc-core", role: "Catalyst 9800 WLC", vendor: "Cisco", class: "wireless", x: 400, y: 300, ip: "10.30.0.1", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#eab308" },
+        { id: "cisco_ise", name: "cisco-ise-node01", role: "Cisco ISE Identity Engine", vendor: "Cisco", class: "firewall", x: 680, y: 200, ip: "10.30.0.10", index: "idx_security_fw", platform: "cisco_ftd", color: "#a855f7" }
+      ],
+      links: [
+        { from: "cat9300_sw", to: "rogue_ap", label: "Unauth Port Gi1/0/14" },
+        { from: "cat9300_sw", to: "cat9800_wlc", label: "CAPWAP Tunnel" },
+        { from: "cat9800_wlc", to: "cisco_ise", label: "RADIUS CoA Quarantine" },
+        { from: "cat9300_sw", to: "cisco_ise", label: "802.1X Auth" }
+      ]
+    }
+  };
 
-  var PATH_LINKS = [
-    { from: "sase", to: "fw", label: "GRE / IPsec" },
-    { from: "fw", to: "sdwan", label: "100G Trunk" },
-    { from: "sdwan", to: "core", label: "BGP AS 65001" },
-    { from: "core", to: "nokia", label: "100G DWDM" },
-    { from: "nokia", to: "spine", label: "400G SR-OS" },
-    { from: "spine", to: "gpu", label: "RoCE v2 PFC" },
-    { from: "spine", to: "f5", label: "LACP 100G" },
-    { from: "sdwan", to: "campus", label: "802.1Q Core" },
-    { from: "campus", to: "wifi", label: "PoE+ 10GE" }
-  ];
-
-  var selectedNode = PATH_NODES[1];
+  // State
+  var activePresetKey = "openconfig_core";
+  var currentPreset = TOPOLOGY_PRESETS[activePresetKey];
+  var selectedNode = currentPreset.nodes[0];
+  var activeTab = "openconfig"; // "openconfig" or "syslog"
   var continuousTimer = null;
   var pathStreamTimer = null;
-  var streamStats = { totalEvents: 0, startTime: 0 };
+  var openconfigStreamTimer = null;
+  var streamStats = { totalEvents: 0 };
 
   function log(msg) {
     var el = document.getElementById('emit-log-console');
     if (!el) return;
     var time = new Date().toLocaleTimeString();
-    el.innerHTML = '<div style="margin-bottom: 2px;">[' + time + '] ' + msg + '</div>' + el.innerHTML;
+    el.innerHTML = '<div style="margin-bottom: 3px;">[' + time + '] ' + msg + '</div>' + el.innerHTML;
   }
 
-  function getCheckedSourcetypes() {
-    var cbs = document.querySelectorAll('#sourcetype-checkbox-group input[type="checkbox"]:checked');
-    var result = [];
-    cbs.forEach(function(cb) { result.push(cb.value); });
-    return result;
+  function updateLiveCounter() {
+    var ctr = document.getElementById('live-total-counter');
+    if (ctr) ctr.textContent = streamStats.totalEvents.toLocaleString();
   }
 
+  // Generate OpenConfig MDT Telemetry Payload
+  function generateOpenConfigPayload() {
+    var xpath = $('#select-openconfig-xpath').val() || "/interfaces/interface/state/counters";
+    var host = $('#openconfig-host').val() || (selectedNode ? selectedNode.name : "rtr-cisco-8000-01.corp.internal");
+    var format = $('input[name="openconfig_format"]:checked').val() || "metric";
+    var now = (Date.now() / 1000).toFixed(3);
+
+    if (format === "metric") {
+      var inOctets = Math.floor(Math.random() * 50000000) + 950000000;
+      var outOctets = Math.floor(Math.random() * 40000000) + 840000000;
+      var cpu = (Math.random() * 15 + 18).toFixed(1);
+      var mem = (Math.random() * 8 + 38).toFixed(1);
+
+      var metricFields = {
+        "interface": "HundredGigE0/0/0/0",
+        "oper_status": "UP",
+        "xpath": xpath,
+        "device": host,
+        "vendor": selectedNode ? selectedNode.vendor : "Cisco"
+      };
+
+      if (xpath.indexOf("interfaces") !== -1) {
+        metricFields["metric_name:interface.octets.in"] = inOctets;
+        metricFields["metric_name:interface.octets.out"] = outOctets;
+        metricFields["metric_name:interface.errors.in"] = 0;
+        metricFields["metric_name:interface.errors.out"] = 0;
+        metricFields["metric_name:carrier.transitions"] = 0;
+      } else if (xpath.indexOf("cpu") !== -1) {
+        metricFields["metric_name:cpu.utilization"] = parseFloat(cpu);
+        metricFields["metric_name:cpu.load_avg_5m"] = parseFloat((cpu * 0.95).toFixed(1));
+      } else if (xpath.indexOf("memory") !== -1) {
+        metricFields["metric_name:memory.utilization"] = parseFloat(mem);
+        metricFields["metric_name:memory.used_bytes"] = 34359738368;
+      } else if (xpath.indexOf("bgp") !== -1 && xpath.indexOf("session-state") !== -1) {
+        metricFields["metric_name:bgp.session_up"] = 1.0;
+        metricFields["neighbor_address"] = "10.255.0.2";
+        metricFields["peer_as"] = "65001";
+        metricFields["session_state"] = "ESTABLISHED";
+      } else if (xpath.indexOf("prefixes") !== -1) {
+        metricFields["metric_name:bgp.prefixes.received"] = 1420;
+        metricFields["metric_name:bgp.prefixes.installed"] = 1420;
+      } else {
+        metricFields["metric_name:interface.status_code"] = 1.0;
+      }
+
+      var metricEvent = {
+        time: parseFloat(now),
+        event: "metric",
+        source: "openconfig_telemetry",
+        sourcetype: "cisco:mdt:grpc",
+        host: host,
+        index: "cisco_mdt_metrics",
+        fields: metricFields
+      };
+
+      return JSON.stringify(metricEvent, null, 2);
+
+    } else {
+      // RFC 7950 YANG JSON Tree
+      var yangData = {
+        "openconfig-interfaces:interfaces": {
+          "interface": [
+            {
+              "name": "HundredGigE0/0/0/0",
+              "config": { "name": "HundredGigE0/0/0/0", "enabled": true },
+              "state": {
+                "name": "HundredGigE0/0/0/0",
+                "admin-status": "UP",
+                "oper-status": "UP",
+                "counters": {
+                  "in-octets": 984521000,
+                  "out-octets": 874219000,
+                  "in-errors": 0,
+                  "out-errors": 0
+                }
+              }
+            }
+          ]
+        }
+      };
+      return JSON.stringify(yangData, null, 2);
+    }
+  }
+
+  function updateOpenConfigPayloadBox() {
+    var p = generateOpenConfigPayload();
+    $('#openconfig-payload').val(p);
+  }
+
+  // Switch Tabs
+  function setTab(tab) {
+    activeTab = tab;
+    if (tab === "openconfig") {
+      $('#tab-btn-openconfig').css({ 'background': '#0284c7', 'color': '#ffffff', 'border': 'none' });
+      $('#tab-btn-syslog').css({ 'background': '#1e293b', 'color': '#94a3b8', 'border': '1px solid #334155' });
+      $('#panel-tab-openconfig').show();
+      $('#panel-tab-syslog').hide();
+      updateOpenConfigPayloadBox();
+    } else {
+      $('#tab-btn-openconfig').css({ 'background': '#1e293b', 'color': '#94a3b8', 'border': '1px solid #334155' });
+      $('#tab-btn-syslog').css({ 'background': '#0284c7', 'color': '#ffffff', 'border': 'none' });
+      $('#panel-tab-openconfig').hide();
+      $('#panel-tab-syslog').show();
+    }
+  }
+
+  // Change Active Preset
+  function loadPreset(key) {
+    if (!TOPOLOGY_PRESETS[key]) return;
+    activePresetKey = key;
+    currentPreset = TOPOLOGY_PRESETS[key];
+    selectedNode = currentPreset.nodes[0];
+
+    $('#canvas-scenario-title').text(currentPreset.title);
+    $('#canvas-node-count-badge').text(currentPreset.badge);
+
+    renderCanvas();
+    renderDeviceGrid();
+    bindSelectedNode(selectedNode);
+
+    // Auto switch to OpenConfig for core router/switch presets
+    if (key === "openconfig_core" || (selectedNode && (selectedNode.class === "router" || selectedNode.class.indexOf("switch") !== -1))) {
+      setTab("openconfig");
+    } else {
+      setTab("syslog");
+    }
+
+    log('Loaded scenario preset: <b>' + currentPreset.title + '</b>');
+  }
+
+  // Populate Sourcetype Checkboxes for Syslog
   function populateSourcetypeCheckboxes(sourcetypes) {
     var grp = document.getElementById('sourcetype-checkbox-group');
     var selectSingle = document.getElementById('select-single-sourcetype');
     if (grp) grp.innerHTML = '';
     if (selectSingle) selectSingle.innerHTML = '';
 
-    sourcetypes.forEach(function(st, idx) {
-      // Checkbox pill
+    sourcetypes.forEach(function(st) {
       if (grp) {
         var label = document.createElement('label');
         label.style.cssText = 'display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-family: monospace; background: #1e293b; padding: 4px 10px; border-radius: 4px; border: 1px solid #334155; color: #f8fafc; cursor: pointer; user-select: none;';
@@ -153,7 +355,6 @@ require([
         grp.appendChild(label);
       }
 
-      // Single select dropdown option
       if (selectSingle) {
         var opt = document.createElement('option');
         opt.value = st;
@@ -163,57 +364,73 @@ require([
     });
   }
 
-  window.datablasterToggleAllSourcetypes = function() {
-    var cbs = document.querySelectorAll('#sourcetype-checkbox-group input[type="checkbox"]');
-    var anyUnchecked = false;
-    cbs.forEach(function(cb) { if (!cb.checked) anyUnchecked = true; });
-    cbs.forEach(function(cb) { cb.checked = anyUnchecked; });
-  };
+  function getCheckedSourcetypes() {
+    var cbs = document.querySelectorAll('#sourcetype-checkbox-group input[type="checkbox"]:checked');
+    var result = [];
+    cbs.forEach(function(cb) { result.push(cb.value); });
+    return result;
+  }
 
-  window.datablasterOnClassChange = function() {
-    var clsEl = document.getElementById('emit-class');
-    if (!clsEl) return;
-    var cls = clsEl.value;
-    var vendorSel = document.getElementById('emit-vendor');
-    if (!vendorSel) return;
-    vendorSel.innerHTML = '';
+  // Bind Selected Node to Form
+  function bindSelectedNode(node) {
+    if (!node) return;
+    selectedNode = node;
+
+    // Update headers & badges
+    $('#canvas-selected-name').text(node.name);
+    $('#canvas-selected-vendor').text(node.vendor);
+    $('#grid-selection-label').text('Active Node: ' + node.name);
+
+    // OpenConfig tab bindings
+    $('#openconfig-host').val(node.name + '.corp.internal');
+    updateOpenConfigPayloadBox();
+
+    // Syslog tab bindings
+    $('#emit-class').val(node.class);
+    updateVendorDropdown();
+
+    var platforms = PLATFORM_MATRIX[node.class] || [];
+    var matched = platforms.find(function(p) { return p.id === node.platform; }) || platforms[0];
+    if (matched) {
+      $('#emit-vendor').val(matched.id);
+      $('#emit-index').val(matched.index);
+      $('#emit-host').val(node.name + '.corp.internal');
+      $('#emit-ip').val(node.ip);
+      $('#emit-payload').val(matched.template);
+      populateSourcetypeCheckboxes(matched.sourcetypes);
+    }
+
+    // Re-render SVG to highlight node
+    highlightActiveSvgNode(node.id);
+    highlightActiveGridCard(node.id);
+  }
+
+  function updateVendorDropdown() {
+    var cls = $('#emit-class').val();
+    var vendorSel = $('#emit-vendor');
+    vendorSel.empty();
     var platforms = PLATFORM_MATRIX[cls] || [];
     platforms.forEach(function(p) {
-      var opt = document.createElement('option');
-      opt.value = p.id;
-      opt.textContent = p.name;
-      vendorSel.appendChild(opt);
+      var opt = $('<option></option>').val(p.id).text(p.name);
+      vendorSel.append(opt);
     });
-    window.datablasterOnVendorChange();
-  };
+  }
 
-  window.datablasterOnVendorChange = function() {
-    var clsEl = document.getElementById('emit-class');
-    var vEl = document.getElementById('emit-vendor');
-    if (!clsEl || !vEl) return;
-    var cls = clsEl.value;
-    var vId = vEl.value;
-    var platforms = PLATFORM_MATRIX[cls] || [];
-    var matched = platforms.find(function(p) { return p.id === vId; }) || platforms[0];
-    if (matched) {
-      if (document.getElementById('emit-index')) document.getElementById('emit-index').value = matched.index;
-      if (document.getElementById('emit-payload')) document.getElementById('emit-payload').value = matched.template;
-      populateSourcetypeCheckboxes(matched.sourcetypes);
-      log('Active platform: ' + matched.name + ' (' + matched.sourcetypes.length + ' sourcetypes, index: ' + matched.index + ')');
+  function highlightActiveSvgNode(nodeId) {
+    $('#canvas-svg circle.node-glow').attr('stroke', 'none').attr('stroke-width', '0');
+    var glow = $('#glow-' + nodeId);
+    if (glow.length) {
+      glow.attr('stroke', '#38bdf8').attr('stroke-width', '4');
     }
-  };
+  }
 
-  window.datablasterReloadTemplate = function() {
-    var clsEl = document.getElementById('emit-class');
-    var vEl = document.getElementById('emit-vendor');
-    if (!clsEl || !vEl) return;
-    var platforms = PLATFORM_MATRIX[clsEl.value] || [];
-    var matched = platforms.find(function(p) { return p.id === vEl.value; });
-    if (matched) {
-      document.getElementById('emit-payload').value = matched.template;
-      log('Reset payload template for ' + matched.name);
+  function highlightActiveGridCard(nodeId) {
+    $('.device-path-card').css({ 'border': '1px solid #1e293b', 'background': '#0f172a' });
+    var activeCard = $('#grid-card-' + nodeId);
+    if (activeCard.length) {
+      activeCard.css({ 'border': '2px solid #0284c7', 'background': '#0c1a2e' });
     }
-  };
+  }
 
   // Render SVG Canvas
   function renderCanvas() {
@@ -222,9 +439,9 @@ require([
     svg.innerHTML = '';
 
     // Draw Links
-    PATH_LINKS.forEach(function(l) {
-      var n1 = PATH_NODES.find(function(n) { return n.id === l.from; });
-      var n2 = PATH_NODES.find(function(n) { return n.id === l.to; });
+    currentPreset.links.forEach(function(l) {
+      var n1 = currentPreset.nodes.find(function(n) { return n.id === l.from; });
+      var n2 = currentPreset.nodes.find(function(n) { return n.id === l.to; });
       if (n1 && n2) {
         var gLink = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
@@ -235,7 +452,7 @@ require([
         line.setAttribute('y2', n2.y);
         line.setAttribute('stroke', '#334155');
         line.setAttribute('stroke-width', '2');
-        line.setAttribute('stroke-dasharray', '4,4');
+        line.setAttribute('stroke-dasharray', '5,5');
         gLink.appendChild(line);
 
         // Link Label
@@ -246,197 +463,140 @@ require([
         txt.setAttribute('y', midY);
         txt.setAttribute('text-anchor', 'middle');
         txt.setAttribute('fill', '#64748b');
-        txt.setAttribute('font-size', '8px');
+        txt.setAttribute('font-size', '9px');
         txt.setAttribute('font-family', 'monospace');
         txt.textContent = l.label;
         gLink.appendChild(txt);
-
-        // Animated Packet Particle
-        var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('r', '3.5');
-        circle.setAttribute('fill', '#38bdf8');
-        var anim = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');
-        anim.setAttribute('path', 'M ' + n1.x + ' ' + n1.y + ' L ' + n2.x + ' ' + n2.y);
-        anim.setAttribute('dur', '2.5s');
-        anim.setAttribute('repeatCount', 'indefinite');
-        circle.appendChild(anim);
-        gLink.appendChild(circle);
 
         svg.appendChild(gLink);
       }
     });
 
     // Draw Nodes
-    PATH_NODES.forEach(function(n) {
-      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.style.cursor = 'pointer';
-      g.onclick = function() { window.datablasterSelectNode(n); };
+    currentPreset.nodes.forEach(function(n) {
+      var gNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      gNode.setAttribute('cursor', 'pointer');
+      gNode.setAttribute('id', 'svg-node-' + n.id);
 
-      var isSel = (selectedNode && selectedNode.id === n.id);
+      // Glow / Selection Ring
+      var glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      glow.setAttribute('id', 'glow-' + n.id);
+      glow.setAttribute('cx', n.x);
+      glow.setAttribute('cy', n.y);
+      glow.setAttribute('r', '26');
+      glow.setAttribute('fill', 'transparent');
+      glow.setAttribute('class', 'node-glow');
+      glow.setAttribute('stroke', n.id === selectedNode.id ? '#38bdf8' : 'none');
+      glow.setAttribute('stroke-width', n.id === selectedNode.id ? '4' : '0');
+      gNode.appendChild(glow);
 
-      // Node Body
-      var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      rect.setAttribute('x', n.x - 55);
-      rect.setAttribute('y', n.y - 25);
-      rect.setAttribute('width', '110');
-      rect.setAttribute('height', '50');
-      rect.setAttribute('rx', '4');
-      rect.setAttribute('fill', isSel ? '#1e293b' : '#0f172a');
-      rect.setAttribute('stroke', isSel ? '#38bdf8' : '#334155');
-      rect.setAttribute('stroke-width', isSel ? '2.5' : '1');
-      g.appendChild(rect);
+      // Main Circle
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', n.x);
+      c.setAttribute('cy', n.y);
+      c.setAttribute('r', '20');
+      c.setAttribute('fill', n.color);
+      c.setAttribute('stroke', '#ffffff');
+      c.setAttribute('stroke-width', '2');
+      gNode.appendChild(c);
 
-      // Status indicator bar
-      var bar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      bar.setAttribute('x', n.x - 55);
-      bar.setAttribute('y', n.y - 25);
-      bar.setAttribute('width', '4');
-      bar.setAttribute('height', '50');
-      bar.setAttribute('rx', '2');
-      bar.setAttribute('fill', n.color);
-      g.appendChild(bar);
+      // Node Icon / Letter
+      var letter = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      letter.setAttribute('x', n.x);
+      letter.setAttribute('y', n.y + 4);
+      letter.setAttribute('text-anchor', 'middle');
+      letter.setAttribute('fill', '#ffffff');
+      letter.setAttribute('font-size', '11px');
+      letter.setAttribute('font-weight', 'bold');
+      letter.setAttribute('font-family', 'sans-serif');
+      letter.textContent = n.vendor.charAt(0);
+      gNode.appendChild(letter);
 
-      // Hostname Title
-      var title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      title.setAttribute('x', n.x - 45);
-      title.setAttribute('y', n.y - 8);
-      title.setAttribute('fill', isSel ? '#38bdf8' : '#f8fafc');
-      title.setAttribute('font-size', '10px');
-      title.setAttribute('font-family', 'monospace');
-      title.setAttribute('font-weight', 'bold');
-      title.textContent = n.name.length > 14 ? n.name.slice(0, 13) + '..' : n.name;
-      g.appendChild(title);
+      // Label (Node Name)
+      var nameTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      nameTxt.setAttribute('x', n.x);
+      nameTxt.setAttribute('y', n.y + 36);
+      nameTxt.setAttribute('text-anchor', 'middle');
+      nameTxt.setAttribute('fill', '#f1f5f9');
+      nameTxt.setAttribute('font-size', '10px');
+      nameTxt.setAttribute('font-weight', 'bold');
+      nameTxt.setAttribute('font-family', 'monospace');
+      nameTxt.textContent = n.name;
+      gNode.appendChild(nameTxt);
 
-      // Role / Vendor
-      var roleText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      roleText.setAttribute('x', n.x - 45);
-      roleText.setAttribute('y', n.y + 6);
-      roleText.setAttribute('fill', '#94a3b8');
-      roleText.setAttribute('font-size', '8px');
-      roleText.textContent = n.role;
-      g.appendChild(roleText);
+      // Sub-label (Role)
+      var roleTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      roleTxt.setAttribute('x', n.x);
+      roleTxt.setAttribute('y', n.y + 48);
+      roleTxt.setAttribute('text-anchor', 'middle');
+      roleTxt.setAttribute('fill', '#94a3b8');
+      roleTxt.setAttribute('font-size', '9px');
+      roleTxt.setAttribute('font-family', 'sans-serif');
+      roleTxt.textContent = n.role;
+      gNode.appendChild(roleTxt);
 
-      // IP Subtitle
-      var sub = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      sub.setAttribute('x', n.x - 45);
-      sub.setAttribute('y', n.y + 18);
-      sub.setAttribute('fill', n.color);
-      sub.setAttribute('font-size', '8px');
-      sub.setAttribute('font-family', 'monospace');
-      sub.textContent = n.vendor + ' - ' + n.ip;
-      g.appendChild(sub);
+      // Click Handler
+      gNode.addEventListener('click', function() {
+        bindSelectedNode(n);
+      });
 
-      svg.appendChild(g);
+      svg.appendChild(gNode);
     });
   }
 
-  // Render Device Grid
+  // Render Device Directory Grid
   function renderDeviceGrid() {
     var grid = document.getElementById('device-path-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    PATH_NODES.forEach(function(n, idx) {
-      var isSel = (selectedNode && selectedNode.id === n.id);
+
+    currentPreset.nodes.forEach(function(n) {
+      var isSelected = (selectedNode && selectedNode.id === n.id);
       var card = document.createElement('div');
-      card.style.cssText = 'background: ' + (isSel ? '#1e293b' : '#0f172a') + '; border: 1px solid ' + (isSel ? '#38bdf8' : '#1e293b') + '; border-radius: 6px; padding: 12px; cursor: pointer; transition: border-color 0.15s;';
-      card.onclick = function() { window.datablasterSelectNode(n); };
+      card.className = 'device-path-card';
+      card.id = 'grid-card-' + n.id;
+      card.style.cssText = 'background: ' + (isSelected ? '#0c1a2e' : '#0f172a') + '; border: ' + (isSelected ? '2px solid #0284c7' : '1px solid #1e293b') + '; border-radius: 6px; padding: 12px; cursor: pointer; transition: all 0.15s ease;';
 
-      var html = '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">';
-      html += '<div><div style="color: ' + (isSel ? '#38bdf8' : '#f8fafc') + '; font-size: 12px; font-weight: 600; font-family: monospace;">' + n.name + '</div>';
-      html += '<div style="color: #94a3b8; font-size: 11px;">' + n.role + '</div></div>';
-      html += '<span style="font-size: 10px; background: #334155; color: #cbd5e1; padding: 2px 6px; border-radius: 3px; font-family: monospace;">' + n.class + '</span>';
-      html += '</div>';
+      card.innerHTML =
+        '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">' +
+          '<div>' +
+            '<b style="color: #f8fafc; font-size: 12px; font-family: monospace; display: block;">' + n.name + '</b>' +
+            '<span style="color: #94a3b8; font-size: 11px;">' + n.role + '</span>' +
+          '</div>' +
+          '<span style="background: ' + n.color + '; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 3px;">' + n.vendor + '</span>' +
+        '</div>' +
+        '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; color: #64748b; font-family: monospace;">' +
+          '<span>' + n.ip + '</span>' +
+          '<span style="color: #38bdf8;">' + n.index + '</span>' +
+        '</div>';
 
-      html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px solid #1e293b; padding-top: 8px;">';
-      html += '<div style="font-size: 11px; font-family: monospace; color: ' + n.color + ';">' + n.vendor + ' (' + n.ip + ')</div>';
-      html += '<button type="button" class="btn-grid-blast" data-index="' + idx + '" style="background: #0284c7; border: none; color: #fff; border-radius: 3px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">Select &amp; Emit</button>';
-      html += '</div>';
+      card.addEventListener('click', function() {
+        bindSelectedNode(n);
+      });
 
-      card.innerHTML = html;
       grid.appendChild(card);
-    });
-
-    // Delegate grid blast buttons
-    $('.btn-grid-blast').off('click').on('click', function(e) {
-      e.stopPropagation();
-      var nodeIndex = parseInt($(this).data('index'), 10);
-      if (!isNaN(nodeIndex) && PATH_NODES[nodeIndex]) {
-        window.datablasterSelectNode(PATH_NODES[nodeIndex]);
-        window.datablasterEmitSingleSourcetype(1);
-      }
     });
   }
 
-  window.datablasterSelectNode = function(n) {
-    selectedNode = n;
-    if (document.getElementById('canvas-selected-name')) document.getElementById('canvas-selected-name').textContent = n.name;
-    if (document.getElementById('canvas-selected-vendor')) document.getElementById('canvas-selected-vendor').textContent = n.vendor;
-    var lbl = document.getElementById('grid-selection-label');
-    if (lbl) lbl.textContent = 'Active Node: ' + n.name + ' (' + n.vendor + ' - ' + n.ip + ')';
-
-    if (document.getElementById('emit-host')) document.getElementById('emit-host').value = n.name;
-    if (document.getElementById('emit-ip')) document.getElementById('emit-ip').value = n.ip;
-    if (document.getElementById('emit-index')) document.getElementById('emit-index').value = n.index;
-
-    // Synchronize Class and Platform dropdowns
-    if (document.getElementById('emit-class')) {
-      document.getElementById('emit-class').value = n.class;
-      window.datablasterOnClassChange();
-      if (n.platform && document.getElementById('emit-vendor')) {
-        document.getElementById('emit-vendor').value = n.platform;
-        window.datablasterOnVendorChange();
-      }
-    }
-
-    renderCanvas();
-    renderDeviceGrid();
-  };
-
-  // Emit Single Sourcetype
-  window.datablasterEmitSingleSourcetype = function(count) {
-    var mode = document.querySelector('input[name="sourcetype_mode"]:checked');
-    var singleSt = "";
-    if (mode && mode.value === "single") {
-      var selEl = document.getElementById('select-single-sourcetype');
-      singleSt = selEl ? selEl.value : "";
-    }
-    if (!singleSt) {
-      var checked = getCheckedSourcetypes();
-      singleSt = checked.length > 0 ? checked[0] : "";
-    }
-
-    if (!singleSt) {
-      alert('Please select a sourcetype to emit.');
-      return;
-    }
-
+  // Emit Ingestion Call
+  function sendIngestion(sourcetype, index, content, host, ip, count) {
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
     var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
-
-    var host = (document.getElementById('emit-host') || {}).value || "device01";
-    var ip = (document.getElementById('emit-ip') || {}).value || "10.0.0.1";
-    var idx = (document.getElementById('emit-index') || {}).value || "idx_network_ops";
-    var vendor = (document.getElementById('emit-vendor') || {}).value || "Cisco";
-    var payloadTpl = (document.getElementById('emit-payload') || {}).value || "TEST_EVENT";
-
-    log('Emitting ' + (count || 1) + ' event(s) -> [' + idx + '] sourcetype=' + singleSt + ' to Splunk HEC...');
+    var sslVerify = cfg.ssl_verify || false;
 
     var payload = {
-      action: "blast_single_device",
+      action: "onboard_sample",
+      sourcetype: sourcetype,
+      index: index,
+      sample_content: content,
+      host: host,
+      ip: ip,
+      count: count || 1,
       hec: hecUrl,
       token: token,
-      count: count || 1,
-      device_info: {
-        name: host,
-        host: host,
-        ip: ip,
-        index: idx,
-        sourcetype: singleSt,
-        vendor: vendor,
-        sampleEvent: payloadTpl
-      }
+      ssl_verify: sslVerify
     };
 
     fetch(getRestUrl(), {
@@ -447,214 +607,239 @@ require([
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.status === 'success' || data.code === 200) {
-        log('<span style="color: #22c55e; font-weight: bold;">SUCCESS:</span> Ingested ' + (count || 1) + ' event(s) -> index=' + idx + ' sourcetype=' + singleSt + ' (HTTP 200)');
+        log('<span style="color: #4ade80;">✔ SUCCESS:</span> ' + (count || 1) + ' event(s) -> [' + index + '] sourcetype=' + sourcetype + ' host=' + host);
         streamStats.totalEvents += (count || 1);
         updateLiveCounter();
       } else {
-        log('<span style="color: #ef4444;">HEC ERROR:</span> ' + (data.message || JSON.stringify(data)));
+        log('<span style="color: #f87171;">✖ HEC ERROR [' + sourcetype + ']:</span> ' + (data.message || JSON.stringify(data)));
       }
     })
     .catch(function(err) {
-      log('<span style="color: #ef4444;">COMMUNICATION ERROR:</span> ' + err.message);
+      log('<span style="color: #f87171;">✖ REST ERROR:</span> ' + err.message);
     });
-  };
-
-  // Emit All Selected Sourcetypes
-  window.datablasterEmitCount = function(count) {
-    var selectedSourcetypes = getCheckedSourcetypes();
-    if (selectedSourcetypes.length === 0) {
-      alert('Please check at least one sourcetype.');
-      return;
-    }
-
-    var cfg = {};
-    try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
-    var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
-
-    var host = (document.getElementById('emit-host') || {}).value || "device01";
-    var ip = (document.getElementById('emit-ip') || {}).value || "10.0.0.1";
-    var idx = (document.getElementById('emit-index') || {}).value || "idx_network_ops";
-    var vendor = (document.getElementById('emit-vendor') || {}).value || "Cisco";
-    var payloadTpl = (document.getElementById('emit-payload') || {}).value || "TEST_EVENT";
-
-    log('Blasting ' + count + ' event(s) simultaneously across ' + selectedSourcetypes.length + ' sourcetypes (' + selectedSourcetypes.join(', ') + ')...');
-
-    selectedSourcetypes.forEach(function(st) {
-      var payload = {
-        action: "blast_single_device",
-        hec: hecUrl,
-        token: token,
-        count: count || 1,
-        device_info: {
-          name: host,
-          host: host,
-          ip: ip,
-          index: idx,
-          sourcetype: st,
-          vendor: vendor,
-          sampleEvent: payloadTpl
-        }
-      };
-
-      fetch(getRestUrl(), {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(payload)
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (data.status === 'success' || data.code === 200) {
-          log('<span style="color: #22c55e;">SUCCESS:</span> ' + count + ' event(s) -> [' + idx + '] sourcetype=' + st);
-          streamStats.totalEvents += (count || 1);
-          updateLiveCounter();
-        } else {
-          log('<span style="color: #ef4444;">HEC ERROR [' + st + ']:</span> ' + (data.message || JSON.stringify(data)));
-        }
-      })
-      .catch(function(err) {
-        log('<span style="color: #ef4444;">ERROR [' + st + ']:</span> ' + err.message);
-      });
-    });
-  };
-
-  // Continuous Telemetry Streaming (Without Scenario)
-  window.datablasterStartContinuousStream = function() {
-    if (continuousTimer) return;
-
-    var rateEl = document.getElementById('continuous-rate-select');
-    var rate = parseInt(rateEl ? rateEl.value : "10", 10) || 10;
-    var batchSize = Math.max(1, Math.round(rate / 2));
-    var intervalMs = Math.round((batchSize / rate) * 1000);
-
-    var btnStart = document.getElementById('btn-start-continuous');
-    var btnStop = document.getElementById('btn-stop-continuous');
-    var badge = document.getElementById('continuous-status-badge');
-
-    if (btnStart) btnStart.style.display = 'none';
-    if (btnStop) btnStop.style.display = 'inline-flex';
-    if (badge) {
-      badge.textContent = 'STREAMING ACTIVE (' + rate + ' EPS)';
-      badge.style.background = '#15803d';
-      badge.style.color = '#ffffff';
-    }
-
-    log('<span style="color: #22c55e; font-weight: bold;">CONTINUOUS INGESTION STARTED:</span> Pumping live telemetry at target ' + rate + ' EPS without scenario constraints...');
-
-    continuousTimer = setInterval(function() {
-      var mode = (document.querySelector('input[name="sourcetype_mode"]:checked') || {}).value || "all";
-      if (mode === "single") {
-        window.datablasterEmitSingleSourcetype(batchSize);
-      } else {
-        window.datablasterEmitCount(batchSize);
-      }
-    }, intervalMs);
-  };
-
-  window.datablasterStopContinuousStream = function() {
-    if (continuousTimer) clearInterval(continuousTimer);
-    continuousTimer = null;
-
-    var btnStart = document.getElementById('btn-start-continuous');
-    var btnStop = document.getElementById('btn-stop-continuous');
-    var badge = document.getElementById('continuous-status-badge');
-
-    if (btnStart) btnStart.style.display = 'inline-flex';
-    if (btnStop) btnStop.style.display = 'none';
-    if (badge) {
-      badge.textContent = 'STREAM IDLE';
-      badge.style.background = '#334155';
-      badge.style.color = '#94a3b8';
-    }
-
-    log('<span style="color: #f59e0b; font-weight: bold;">CONTINUOUS INGESTION STOPPED:</span> Stream halted.');
-  };
-
-  // Full Network Path Sequential Traversal Stream
-  window.datablasterStartStream = function() {
-    var streamBtn = document.getElementById('btn-stream-path');
-    var stopBtn = document.getElementById('btn-stop-path');
-    if (streamBtn) streamBtn.style.display = 'none';
-    if (stopBtn) stopBtn.style.display = 'inline-flex';
-    log('<span style="color: #0284c7; font-weight: bold;">PATH FLOW ACTIVE:</span> Traversing all 10 network path devices in sequence...');
-
-    var nodeIdx = 0;
-    pathStreamTimer = setInterval(function() {
-      var n = PATH_NODES[nodeIdx % PATH_NODES.length];
-      window.datablasterSelectNode(n);
-      window.datablasterEmitSingleSourcetype(1);
-      nodeIdx++;
-    }, 1500);
-  };
-
-  window.datablasterStopStream = function() {
-    if (pathStreamTimer) clearInterval(pathStreamTimer);
-    pathStreamTimer = null;
-    var streamBtn = document.getElementById('btn-stream-path');
-    var stopBtn = document.getElementById('btn-stop-path');
-    if (streamBtn) streamBtn.style.display = 'inline-flex';
-    if (stopBtn) stopBtn.style.display = 'none';
-    log('<span style="color: #f59e0b; font-weight: bold;">PATH FLOW STOPPED:</span> Traversal terminated.');
-  };
-
-  function updateLiveCounter() {
-    var ctr = document.getElementById('live-total-counter');
-    if (ctr) ctr.textContent = streamStats.totalEvents.toLocaleString();
   }
 
-  // Bind Mode Radio Changes
-  window.datablasterOnModeChange = function() {
-    var mode = (document.querySelector('input[name="sourcetype_mode"]:checked') || {}).value || "all";
-    var singleContainer = document.getElementById('container-single-sourcetype');
-    var multiContainer = document.getElementById('container-multi-sourcetype');
-    if (mode === "single") {
-      if (singleContainer) singleContainer.style.display = 'block';
-      if (multiContainer) multiContainer.style.display = 'none';
-    } else {
-      if (singleContainer) singleContainer.style.display = 'none';
-      if (multiContainer) multiContainer.style.display = 'block';
+  // OpenConfig MDT Emit Handlers
+  function emitOpenConfigProbe() {
+    var payloadStr = $('#openconfig-payload').val();
+    var format = $('input[name="openconfig_format"]:checked').val() || "metric";
+    var targetIndex = format === "metric" ? "cisco_mdt_metrics" : "idx_network_ops";
+    var sourcetype = format === "metric" ? "cisco:mdt:grpc" : "openconfig:yang:json";
+    var host = $('#openconfig-host').val() || "rtr-cisco-8000-01.corp.internal";
+
+    log('Emitting OpenConfig probe (' + format + ') to <b style="color: #38bdf8;">' + targetIndex + '</b>...');
+    sendIngestion(sourcetype, targetIndex, payloadStr, host, selectedNode ? selectedNode.ip : "10.254.0.1", 1);
+  }
+
+  function startOpenConfigStream() {
+    if (openconfigStreamTimer) return;
+    $('#btn-stream-openconfig').hide();
+    $('#btn-stop-openconfig-stream').show();
+
+    log('<span style="color: #4ade80; font-weight: bold;">OPENCONFIG MDT ACTIVE:</span> Continuous gNMI telemetry streaming (10 msg/sec) to cisco_mdt_metrics...');
+
+    openconfigStreamTimer = setInterval(function() {
+      var payloadStr = generateOpenConfigPayload();
+      var host = $('#openconfig-host').val() || "rtr-cisco-8000-01.corp.internal";
+      sendIngestion("cisco:mdt:grpc", "cisco_mdt_metrics", payloadStr, host, selectedNode ? selectedNode.ip : "10.254.0.1", 1);
+    }, 100);
+  }
+
+  function stopOpenConfigStream() {
+    if (openconfigStreamTimer) clearInterval(openconfigStreamTimer);
+    openconfigStreamTimer = null;
+    $('#btn-stream-openconfig').show();
+    $('#btn-stop-openconfig-stream').hide();
+    log('<span style="color: #f59e0b; font-weight: bold;">OPENCONFIG MDT STOPPED:</span> MDT telemetry stream halted.');
+  }
+
+  // Syslog Emit Handlers
+  function emitSyslogCount(count) {
+    var sts = getCheckedSourcetypes();
+    if (sts.length === 0) {
+      log('<span style="color: #f87171;">WARNING:</span> No sourcetypes selected.');
+      return;
     }
-  };
+    var idx = $('#emit-index').val() || 'idx_network_ops';
+    var host = $('#emit-host').val() || 'network-device.corp.internal';
+    var ip = $('#emit-ip').val() || '10.254.1.1';
+    var content = $('#emit-payload').val();
 
-  // Direct jQuery Event Listeners
-  function bindDomEvents() {
-    $('#emit-class').on('change', window.datablasterOnClassChange);
-    $('#emit-vendor').on('change', window.datablasterOnVendorChange);
-    $('input[name="sourcetype_mode"]').on('change', window.datablasterOnModeChange);
+    sts.forEach(function(st) {
+      sendIngestion(st, idx, content, host, ip, count);
+    });
+  }
 
-    $('#btn-emit-single-st').on('click', function() { window.datablasterEmitSingleSourcetype(1); });
-    $('#btn-emit-selected').on('click', function() { window.datablasterEmitCount(1); });
-    $('#btn-burst-50').on('click', function() { window.datablasterEmitCount(50); });
-    $('#btn-burst-100').on('click', function() { window.datablasterEmitCount(100); });
-    $('#btn-blast-selected-1').on('click', function() { window.datablasterEmitSingleSourcetype(1); });
-    $('#btn-blast-selected-50').on('click', function() { window.datablasterEmitCount(50); });
+  function emitSyslogSingle(count) {
+    var st = $('#select-single-sourcetype').val() || "cisco:ios";
+    var idx = $('#emit-index').val() || 'idx_network_ops';
+    var host = $('#emit-host').val() || 'network-device.corp.internal';
+    var ip = $('#emit-ip').val() || '10.254.1.1';
+    var content = $('#emit-payload').val();
+    sendIngestion(st, idx, content, host, ip, count);
+  }
 
-    $('#btn-start-continuous').on('click', window.datablasterStartContinuousStream);
-    $('#btn-stop-continuous').on('click', window.datablasterStopContinuousStream);
-    $('#btn-stream-path').on('click', window.datablasterStartStream);
-    $('#btn-stop-path').on('click', window.datablasterStopStream);
+  // Continuous Streamer (Syslog / Selected Mode)
+  function startContinuousStream() {
+    if (continuousTimer) return;
+    var rate = parseInt($('#continuous-rate-select').val() || "50", 10);
+    var intervalMs = Math.round(1000 / Math.min(rate, 20));
+    var burstPerTick = Math.max(1, Math.round(rate / 20));
 
-    $('#btn-select-all-st').on('click', window.datablasterToggleAllSourcetypes);
-    $('#btn-reset-template').on('click', window.datablasterReloadTemplate);
+    $('#btn-start-continuous').hide();
+    $('#btn-stop-continuous').show();
+    $('#continuous-status-badge').text('STREAMING ACTIVE (' + rate + ' EPS)').css({ 'background': '#15803d', 'color': '#ffffff' });
+
+    log('<span style="color: #4ade80; font-weight: bold;">CONTINUOUS STREAM STARTED:</span> Target rate ' + rate + ' EPS...');
+
+    continuousTimer = setInterval(function() {
+      var mode = $('input[name="sourcetype_mode"]:checked').val();
+      if (mode === "single") {
+        emitSyslogSingle(burstPerTick);
+      } else {
+        emitSyslogCount(burstPerTick);
+      }
+    }, intervalMs);
+  }
+
+  function stopContinuousStream() {
+    if (continuousTimer) clearInterval(continuousTimer);
+    continuousTimer = null;
+    $('#btn-start-continuous').show();
+    $('#btn-stop-continuous').hide();
+    $('#continuous-status-badge').text('STREAM IDLE').css({ 'background': '#334155', 'color': '#94a3b8' });
+    log('<span style="color: #f59e0b; font-weight: bold;">CONTINUOUS STREAM STOPPED.</span>');
+  }
+
+  // Sequential Path Flow Traversal Stream
+  function startPathStream() {
+    if (pathStreamTimer) return;
+    $('#btn-stream-path').hide();
+    $('#btn-stop-path').show();
+    log('<span style="color: #0284c7; font-weight: bold;">PATH FLOW ACTIVE:</span> Traversing ' + currentPreset.nodes.length + ' architecture devices in sequence...');
+
+    var idx = 0;
+    pathStreamTimer = setInterval(function() {
+      var n = currentPreset.nodes[idx % currentPreset.nodes.length];
+      bindSelectedNode(n);
+      if (activeTab === "openconfig") {
+        emitOpenConfigProbe();
+      } else {
+        emitSyslogSingle(1);
+      }
+      idx++;
+    }, 1500);
+  }
+
+  function stopPathStream() {
+    if (pathStreamTimer) clearInterval(pathStreamTimer);
+    pathStreamTimer = null;
+    $('#btn-stream-path').show();
+    $('#btn-stop-path').hide();
+    log('<span style="color: #f59e0b; font-weight: bold;">PATH FLOW STOPPED.</span>');
+  }
+
+  // DOM Event Bindings
+  function bindEvents() {
+    // Preset Dropdown
+    $('#select-topology-preset').on('change', function() {
+      loadPreset($(this).val());
+    });
+
+    // Tab Buttons
+    $('#tab-btn-openconfig').on('click', function() { setTab('openconfig'); });
+    $('#tab-btn-syslog').on('click', function() { setTab('syslog'); });
+
+    // OpenConfig controls
+    $('#select-openconfig-xpath').on('change', updateOpenConfigPayloadBox);
+    $('input[name="openconfig_format"]').on('change', updateOpenConfigPayloadBox);
+    $('#btn-refresh-openconfig-payload').on('click', updateOpenConfigPayloadBox);
+    $('#btn-emit-openconfig-probe').on('click', emitOpenConfigProbe);
+    $('#btn-stream-openconfig').on('click', startOpenConfigStream);
+    $('#btn-stop-openconfig-stream').on('click', stopOpenConfigStream);
+
+    // Syslog controls
+    $('#emit-class').on('change', function() {
+      updateVendorDropdown();
+      var cls = $(this).val();
+      var platforms = PLATFORM_MATRIX[cls] || [];
+      if (platforms.length) {
+        $('#emit-vendor').val(platforms[0].id);
+        $('#emit-index').val(platforms[0].index);
+        $('#emit-payload').val(platforms[0].template);
+        populateSourcetypeCheckboxes(platforms[0].sourcetypes);
+      }
+    });
+
+    $('#emit-vendor').on('change', function() {
+      var cls = $('#emit-class').val();
+      var vId = $(this).val();
+      var platforms = PLATFORM_MATRIX[cls] || [];
+      var matched = platforms.find(function(p) { return p.id === vId; });
+      if (matched) {
+        $('#emit-index').val(matched.index);
+        $('#emit-payload').val(matched.template);
+        populateSourcetypeCheckboxes(matched.sourcetypes);
+      }
+    });
+
+    $('#btn-reset-template').on('click', function() {
+      var cls = $('#emit-class').val();
+      var vId = $('#emit-vendor').val();
+      var platforms = PLATFORM_MATRIX[cls] || [];
+      var matched = platforms.find(function(p) { return p.id === vId; });
+      if (matched) $('#emit-payload').val(matched.template);
+    });
+
+    $('#btn-select-all-st').on('click', function() {
+      var cbs = $('#sourcetype-checkbox-group input[type="checkbox"]');
+      var anyUnchecked = false;
+      cbs.each(function() { if (!this.checked) anyUnchecked = true; });
+      cbs.prop('checked', anyUnchecked);
+    });
+
+    $('input[name="sourcetype_mode"]').on('change', function() {
+      var mode = $(this).val();
+      $('#container-single-sourcetype').toggle(mode === 'single');
+    });
+
+    // Emission buttons
+    $('#btn-emit-single-st').on('click', function() { emitSyslogSingle(1); });
+    $('#btn-emit-selected').on('click', function() { emitSyslogCount(1); });
+    $('#btn-burst-50').on('click', function() { emitSyslogCount(50); });
+    $('#btn-burst-100').on('click', function() { emitSyslogCount(100); });
+    $('#btn-blast-selected-1').on('click', function() {
+      if (activeTab === "openconfig") emitOpenConfigProbe();
+      else emitSyslogSingle(1);
+    });
+    $('#btn-blast-selected-50').on('click', function() {
+      if (activeTab === "openconfig") {
+        for (var i = 0; i < 5; i++) emitOpenConfigProbe();
+      } else {
+        emitSyslogCount(50);
+      }
+    });
+
+    // Streaming buttons
+    $('#btn-start-continuous').on('click', startContinuousStream);
+    $('#btn-stop-continuous').on('click', stopContinuousStream);
+    $('#btn-stream-path').on('click', startPathStream);
+    $('#btn-stop-path').on('click', stopPathStream);
   }
 
   // Initialization
-  function initializeDashboard() {
-    bindDomEvents();
-    window.datablasterOnClassChange();
-    renderCanvas();
-    renderDeviceGrid();
-    window.datablasterOnModeChange();
-    log('Scenario Builder & Device Blaster ready. Topology canvas rendered with 10 network devices.');
+  function init() {
+    bindEvents();
+    loadPreset("openconfig_core");
+    log('Scenario Builder & Path Flow Canvas initialized with OpenConfig MDT Streaming.');
   }
 
-  // Retry loop until SimpleXML panel DOM nodes exist
-  var initAttempts = 0;
+  var attempts = 0;
   function pollReady() {
-    initAttempts++;
-    if (document.getElementById('canvas-svg') && document.getElementById('emit-class')) {
-      initializeDashboard();
-    } else if (initAttempts < 30) {
+    attempts++;
+    if (document.getElementById('canvas-svg') && document.getElementById('select-topology-preset')) {
+      init();
+    } else if (attempts < 30) {
       setTimeout(pollReady, 100);
     }
   }

@@ -29,7 +29,7 @@
       <single>
         <title>Total Telemetry Events Ingested</title>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats count</query>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats count</query>
           <earliest>$time_range.earliest$</earliest>
           <latest>$time_range.latest$</latest>
         </search>
@@ -44,7 +44,7 @@
       <single>
         <title>Active Ingesting Indexes</title>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(index) as count</query>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(index) as count</query>
           <earliest>$time_range.earliest$</earliest>
           <latest>$time_range.latest$</latest>
         </search>
@@ -59,7 +59,7 @@
       <single>
         <title>Active Sourcetypes Discovered</title>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(sourcetype) as count</query>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(sourcetype) as count</query>
           <earliest>$time_range.earliest$</earliest>
           <latest>$time_range.latest$</latest>
         </search>
@@ -74,7 +74,7 @@
       <single>
         <title>Reporting Network Hosts</title>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(host) as count</query>
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$ | stats dc(host) as count</query>
           <earliest>$time_range.earliest$</earliest>
           <latest>$time_range.latest$</latest>
         </search>
@@ -117,7 +117,7 @@
       <title>Telemetry Ingestion Velocity Across Indexes</title>
       <chart>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
 | timechart span=10m count by index</query>
           <earliest>$time_range.earliest$</earliest>
           <latest>$time_range.latest$</latest>
@@ -132,7 +132,7 @@
       <title>Ingested Volume by Sourcetype &amp; Vendor TA Normalization</title>
       <table>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
 | stats count as "Event Count", dc(host) as "Host Count", latest(_time) as "Last Ingested" by index, sourcetype
 | eval "Target Index Class" = if(index=="idx_performance_metrics" OR index=="cisco_mdt_metrics" OR index=="cisco_metrics", "Metrics / Telemetry", "Standard Events")
 | eval "Installed Technical Add-on" = case(
@@ -167,7 +167,7 @@
       <title>Live Telemetry Event Feed (Latest 20 Ingested Records)</title>
       <table>
         <search>
-          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_mdt_metrics, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
+          <query>index IN (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, netops_logs, cisco_metrics, sdwan, cisco_secure_fw, main) index=$selected_index$
 | table _time, index, host, sourcetype, _raw
 | head 20</query>
           <earliest>$time_range.earliest$</earliest>
@@ -177,6 +177,7 @@
         <option name="wrap">false</option>
       </table>
     </panel>
+  </row>
   <!-- Cisco Model-Driven Telemetry (MDT) Metrics Panel -->
   <row>
     <panel>

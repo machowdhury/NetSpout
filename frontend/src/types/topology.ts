@@ -23,7 +23,8 @@ export type ScenarioType =
   | 'cisco_aci_microburst'
   | 'mixed_edge_breach'
   | 'mixed_sase_degradation'
-  | 'mixed_backbone_optical';
+  | 'mixed_backbone_optical'
+  | 'openconfig_mdt_streaming';
 
 export type SecurityZoneType =
   | 'dmz'

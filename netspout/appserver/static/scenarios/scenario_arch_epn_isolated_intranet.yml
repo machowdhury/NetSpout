@@ -1,0 +1,40 @@
+scenario_id: "ARCH-EPN-10"
+name: "EPN (Enterprise Private Network) - Isolated Corporate Intranet & Multi-Cloud VPC"
+description: "Private multi-tenant enterprise intranet connecting physical branches and cloud VPCs via private QinQ 802.1ad and MPLS pseudo-wires."
+
+test_oracle:
+  expected_root_cause: "QinQ double-tagging outer VLAN mismatch causing branch isolation"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype cisco:ios:syslog"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-epn-10-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: cisco:ios:syslog
+        host: epn-core-rtr01.corp.internal
+        _raw: '%QINQ-4-VLAN_MISMATCH: Customer S-VLAN 200 C-VLAN 10 on port Gi0/0/2 does not match expected encapsulation profile. Traffic isolated.'

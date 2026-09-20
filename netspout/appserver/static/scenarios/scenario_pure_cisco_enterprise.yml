@@ -1,0 +1,40 @@
+scenario_id: "CISCO-ENT-01"
+name: "Pure Cisco Enterprise Architecture (Catalyst 9600, 9500, 9300, 9800 WLC, ISE, DNA-C)"
+description: "Complete end-to-end Cisco campus fabric: Catalyst 9600 Core, 9500 Distribution, 9300 Access, Catalyst 9800 WLC, Cisco ISE NAC, and Catalyst Center."
+
+test_oracle:
+  expected_root_cause: "Campus core rogue AP detected, TrustSec SGT quarantine enforced by Cisco ISE"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype cisco:catalyst:networkhealth"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: cisco-ent-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: cisco:catalyst:networkhealth
+        host: cat9600-core-01.campus.internal
+        _raw: '{"deviceName":"cat9600-core-01.campus.internal","healthScore":98,"cpuScore":99,"memoryScore":97,"packetScore":100,"linkHealth":98,"dnaCenterCluster":"dnac-primary.corp.internal"}'

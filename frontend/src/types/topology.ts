@@ -11,7 +11,13 @@ export type NodeType =
   | 'client_external'
   | 'wireless_ap'
   | 'sase_proxy'
-  | 'optical_core';
+  | 'optical_core'
+  | 'storage_san'
+  | 'storage_nas'
+  | 'vpn_gateway'
+  | 'cloud_transit'
+  | 'iot_sensor'
+  | 'wlc_controller';
 
 export type ScenarioType =
   | 'normal_traffic'
@@ -24,7 +30,25 @@ export type ScenarioType =
   | 'mixed_edge_breach'
   | 'mixed_sase_degradation'
   | 'mixed_backbone_optical'
-  | 'openconfig_mdt_streaming';
+  | 'openconfig_mdt_streaming'
+  | 'arch_pan_iot_mesh'
+  | 'arch_lan_campus_access'
+  | 'arch_wlan_meraki_catalyst'
+  | 'arch_can_multi_building'
+  | 'arch_man_carrier_ring'
+  | 'arch_wan_global_backbone'
+  | 'arch_san_fibre_channel'
+  | 'arch_nas_storage_cluster'
+  | 'arch_vpn_remote_workforce'
+  | 'arch_epn_isolated_intranet'
+  | 'arch_gan_subsea_cloud'
+  | 'pure_cisco_enterprise'
+  | 'mixed_vendor_enterprise'
+  | 'service_provider_cisco'
+  | 'service_provider_mixed'
+  | 'sdwan_connected_core'
+  | 'wireless_connected_core_cisco'
+  | 'wireless_connected_core_mixed';
 
 export type SecurityZoneType =
   | 'dmz'
@@ -73,6 +97,25 @@ export interface NodeHardware {
   memory_utilization_pct: number;
   temperature_celsius: number;
   interfaces?: NetworkInterface[];
+  // 4 KPI Dimensions
+  bandwidth_utilization_pct?: number;
+  throughput_bps?: number;
+  latency_ms?: number;
+  jitter_ms?: number;
+  packet_loss_pct?: number;
+  error_rate?: number;
+  uptime_seconds?: number;
+  thermal_status?: string;
+  psu_status?: string;
+  ups_runtime_min?: number;
+  routing_table_version?: number;
+  bgp_prefix_count?: number;
+  route_flaps?: number;
+  config_checksum?: string;
+  ipam_utilization_pct?: number;
+  traffic_anomaly_score?: number;
+  unauthorized_access_count?: number;
+  firewall_drops?: number;
 }
 
 export interface TelemetryTransportConfig {

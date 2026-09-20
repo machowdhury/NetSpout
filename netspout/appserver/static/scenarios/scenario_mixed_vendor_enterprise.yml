@@ -1,0 +1,40 @@
+scenario_id: "MIXED-ENT-01"
+name: "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)"
+description: "Multi-vendor campus and DC: Cisco Catalyst Core, Arista Spine/Leaf, Palo Alto NGFW perimeter, Fortinet branch, Juniper edge, and Aruba APs."
+
+test_oracle:
+  expected_root_cause: "Cross-vendor route leak between Arista EVPN and Juniper MPLS edge caught by Palo Alto firewall inspection"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_security_fw and sourcetype pan:threat"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: mixed-ent-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_security_fw
+        source: scenario_stream
+        sourcetype: pan:threat
+        host: pa-5450-fw01.corp.internal
+        _raw: '1,2026/09/19 14:00:00,001801000001,THREAT,drop,1,2026/09/19 14:00:00,198.51.100.42,10.254.1.10,0.0.0.0,0.0.0.0,rule_threat_prevention,vsys1,untrust,trust,ethernet1/1,ethernet1/2,threat-drop,0,0,0,0,0,tcp,deny'

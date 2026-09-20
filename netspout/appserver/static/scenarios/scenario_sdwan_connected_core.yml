@@ -1,0 +1,40 @@
+scenario_id: "SDWAN-CORE-01"
+name: "Separate SD-WAN Environment Connected to Core Network (All Cisco)"
+description: "Cisco Catalyst SD-WAN fabric (vEdge/cEdge routers, vSmart controller, vManage) interconnecting remote branches into Cisco Catalyst 9600 Campus Core."
+
+test_oracle:
+  expected_root_cause: "SD-WAN branch MPLS link brownout triggers dynamic OMP policy failover to Internet IPsec tunnel"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype cisco:sdwan:linkhealth"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: sdwan-core-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: cisco:sdwan:linkhealth
+        host: vedge-branch01.sdwan.internal
+        _raw: '{"edge_device":"vedge-branch01","tunnel":"mpls","latency_ms":194.5,"jitter_ms":38.2,"loss_percentage":0.14,"sla_status":"violated","action":"FAILOVER_TO_BIZ_INTERNET"}'

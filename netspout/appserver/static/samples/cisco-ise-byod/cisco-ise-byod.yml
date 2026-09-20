@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-ise-byod-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_network_ops
+        source: udp:514
+        sourcetype: cisco:ise:byod:provisioning
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_Passed_Authentications 0001847291 1 0 $ISO_TIMESTAMP$ +00:00 0029481921 5200 NOTICE Passed-Authentication: BYOD Registration Succeeded, ConfigVersionId=127, DeviceRegistrationStatus=Registered, DeviceType=Apple-Device, MacAddress=00-1A-2B-3C-4D-5E, CertificateSerialNumber=49810283, EapAuthentication=EAP-TLS, User-Name=j.doe@corp.internal, NAS-IP-Address=10.254.8.1, NAS-Port=GigabitEthernet1/0/12, IdentityGroup=Employee_BYOD, SelectedAuthorizationProfiles=PermitAccess"
+      - index: idx_network_ops
+        source: udp:514
+        sourcetype: cisco:ise:byod:provisioning
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_Passed_Authentications 0001847292 1 0 $ISO_TIMESTAMP$ +00:00 0029481922 5200 NOTICE Passed-Authentication: BYOD Certificate Enrolled, DeviceRegistrationStatus=Registered, DeviceType=Android-Device, MacAddress=68-D7-9A-B2-C3-11, User-Name=eng_user@corp.internal, IdentityGroup=Employee_BYOD, SelectedAuthorizationProfiles=PermitAccess"

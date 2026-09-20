@@ -1,0 +1,40 @@
+scenario_id: "ARCH-VPN-09"
+name: "VPN (Virtual Private Network) - Cisco AnyConnect & Site-to-Site IPsec"
+description: "Remote access VPN concentrator and IPsec crypto tunnels supporting 10,000+ concurrent workforce sessions with Duo MFA integration."
+
+test_oracle:
+  expected_root_cause: "Concentrator crypto tunnel pool exhaustion and invalid certificate revoking"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_security_fw and sourcetype cisco:duo:remote:vpn"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-vpn-09-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_security_fw
+        source: scenario_stream
+        sourcetype: cisco:duo:remote:vpn
+        host: cisco-asa-vpn01.corp.internal
+        _raw: '{"timestamp":$EPOCH$,"iso_timestamp":"$ISO_TIMESTAMP$","event_type":"vpn_authentication","vpn_gateway":"cisco-asa-vpn01.corp.internal","client_software":"Cisco Secure Client 5.0","assigned_ip":"10.240.14.92","username":"eng_remote@corp.internal","factor":"duo_push","status":"CONNECTED","bytes_rx":4520190,"bytes_tx":1820490,"duration_seconds":7200}'

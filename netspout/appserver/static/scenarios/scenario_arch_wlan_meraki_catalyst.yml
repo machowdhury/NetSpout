@@ -1,0 +1,40 @@
+scenario_id: "ARCH-WLAN-03"
+name: "WLAN (Wireless Local Area Network) - Catalyst 9800 & Meraki Wi-Fi 6E/7"
+description: "Dual-vendor campus wireless with Catalyst 9800 WLC and Meraki MR56 APs tracking client roaming, SNR, and CleanAir interference."
+
+test_oracle:
+  expected_root_cause: "CleanAir RF interference trigger and rapid 802.11k/r client roam failure"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_wireless_ops and sourcetype cisco:catalyst:rogue:threat_details"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-wlan-03-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_wireless_ops
+        source: scenario_stream
+        sourcetype: cisco:catalyst:rogue:threat_details
+        host: wlc9800-core.campus.internal
+        _raw: '{"timestamp":"$ISO_TIMESTAMP$","ap_name":"AP-Floor2-East","client_mac":"00:11:22:33:44:55","event":"ROAM_FAILURE","reason":"SNR_DEGRADATION","snr_db":14,"rssi_dbm":-82,"band":"5GHz","ssid":"CORP-SECURE"}'

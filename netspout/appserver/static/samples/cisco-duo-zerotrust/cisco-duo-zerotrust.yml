@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-duo-zerotrust-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:zerotrust:policy
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"zero_trust_policy_evaluation\",\"policy_name\":\"High_Privilege_Core_Access\",\"policy_outcome\":\"ALLOW\",\"context\":{\"user_risk\":\"LOW\",\"device_trust\":\"VERIFIED_MANAGED\",\"location_risk\":\"DOMESTIC_ALLOWED\",\"geo_velocity_check\":\"PASSED\"},\"requested_resource\":\"cisco-catalyst-center-api\",\"enforced_action\":\"GRANT_SESSION\"}"
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:zerotrust:policy
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"zero_trust_policy_evaluation\",\"policy_name\":\"PCI_Zone_Restricted\",\"policy_outcome\":\"DENY\",\"context\":{\"user_risk\":\"HIGH\",\"device_trust\":\"UNTRUSTED_UNKNOWN\",\"location_risk\":\"ANOMALOUS_LOCATION\"},\"requested_resource\":\"pci-payment-gateway\",\"enforced_action\":\"STEP_UP_MFA_REQUIRED\"}"

@@ -1,0 +1,40 @@
+scenario_id: "ARCH-CAN-04"
+name: "CAN (Campus Area Network) - Multi-Building Backbone & Catalyst Center"
+description: "Multi-building campus network with redundant Catalyst 9600 cores, 100G fiber interconnects, and DNA Center automated assurance."
+
+test_oracle:
+  expected_root_cause: "OSPF area 0 neighbor adjacency failure between Building A and Building B"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype cisco:ios:syslog"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-can-04-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: cisco:ios:syslog
+        host: cat9600-core-bldg-a.campus.internal
+        _raw: '%OSPF-5-ADJCHANGE: Process 1, Nbr 10.254.1.2 on HundredGigE1/0/1 from FULL to DOWN, Neighbor Down: Dead timer expired'

@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-ise-tacacs-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_network_ops
+        source: udp:514
+        sourcetype: cisco:ise:deviceadmin:tacacs
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_TACACS_Accounting 0001847299 1 0 $ISO_TIMESTAMP$ +00:00 0029481929 3300 NOTICE TACACS-Accounting: Command Authorization Succeeded, ConfigVersionId=127, User=netadmin_bob, Remote-Address=10.254.99.12, Device-IP-Address=10.254.1.1, Port=tty0, Privilege-Level=15, Command=configure terminal ; interface HundredGigE0/0/0/1 ; shutdown, Authen-Method=TACACS+"
+      - index: idx_network_ops
+        source: udp:514
+        sourcetype: cisco:ise:deviceadmin:tacacs
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_TACACS_Accounting 0001847300 1 0 $ISO_TIMESTAMP$ +00:00 0029481930 3300 NOTICE TACACS-Accounting: Command Authorization Denied, ConfigVersionId=127, User=contractor_guest, Remote-Address=10.254.99.88, Device-IP-Address=10.254.1.1, Port=tty0, Privilege-Level=1, Command=reload, FailureReason=Authorization privilege insufficient"

@@ -1,0 +1,40 @@
+scenario_id: "WLAN-CORE-01"
+name: "Enterprise Wireless Connected to Core Network (Cisco Catalyst & Mixed)"
+description: "Catalyst 9800 WLC and Meraki MR APs connecting multi-SSID traffic through 802.1Q trunks directly into Catalyst 9600 / Arista core switches."
+
+test_oracle:
+  expected_root_cause: "Client high-density onboarding surge causes RADIUS queue saturation at core boundary"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_wireless_ops and sourcetype cisco:catalyst:clienthealth"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: wlan-core-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_wireless_ops
+        source: scenario_stream
+        sourcetype: cisco:catalyst:clienthealth
+        host: cat9800-wlc-core.campus.internal
+        _raw: '{"wlc":"cat9800-wlc-core","connected_clients":1420,"avg_snr_db":34,"radio_channel_utilization_pct":68.5,"radius_latency_ms":8.2,"status":"OPTIMAL"}'

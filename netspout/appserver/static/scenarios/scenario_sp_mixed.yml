@@ -1,0 +1,40 @@
+scenario_id: "SP-MIXED-01"
+name: "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)"
+description: "Tier-1 multi-vendor carrier transit backbone with Cisco 8000, Juniper PTX10008, and Nokia 7750 SR OS routers running BGP-LU and RSVP-TE."
+
+test_oracle:
+  expected_root_cause: "BGP-LU label allocation exhaustion on Nokia PE forces Juniper/Cisco path reroute"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype juniper:junos"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: sp-mixed-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: juniper:junos
+        host: rtr-juniper-ptx01.corp.internal
+        _raw: '<14>Sep 19 14:00:00 rtr-juniper-ptx01 rpd[4821]: %ROUTING-4-BGP_LABEL_REALLOC: BGP-LU route 10.254.0.0/16 switched to alternate peer 10.254.0.1'

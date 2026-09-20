@@ -29,7 +29,14 @@ import {
   PRESET_MIXED_EDGE,
   PRESET_MIXED_SASE,
   PRESET_MIXED_OPTICAL,
-  PRESET_OPENCONFIG_CORE
+  PRESET_OPENCONFIG_CORE,
+  PRESET_PAN,
+  PRESET_LAN,
+  PRESET_WLAN,
+  PRESET_SAN,
+  PRESET_NAS,
+  PRESET_VPN,
+  PRESET_PURE_CISCO_ENT
 } from './presets/defaultTopologies';
 
 const BACKEND_HTTP = typeof window !== 'undefined' && window.location.port === '8081'
@@ -41,11 +48,11 @@ const BACKEND_WS = typeof window !== 'undefined' && window.location.port === '80
   : 'ws://localhost:8081/ws/logs';
 
 export const App: React.FC = () => {
-  // Main State
-  const [ecosystemMode, setEcosystemMode] = useState<EcosystemMode>('mixed_vendor');
-  const [topology, setTopology] = useState<TopologyState>(PRESET_MIXED_EDGE);
-  const [scenario, setScenario] = useState<ScenarioType>('mixed_edge_breach');
-  const [isRunning, setIsRunning] = useState<boolean>(false);
+  // Main State - Defaults to Pure Cisco Enterprise Fabric with simulation running
+  const [ecosystemMode, setEcosystemMode] = useState<EcosystemMode>('pure_cisco');
+  const [topology, setTopology] = useState<TopologyState>(PRESET_PURE_CISCO_ENT);
+  const [scenario, setScenario] = useState<ScenarioType>('pure_cisco_enterprise');
+  const [isRunning, setIsRunning] = useState<boolean>(true);
   const [speedMs, setSpeedMs] = useState<number>(500);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -155,7 +162,14 @@ export const App: React.FC = () => {
   // Preset Loader
   const handleLoadPreset = (presetId: string) => {
     let selectedPreset = PRESET_SECURE;
-    if (presetId === 'bypassed') selectedPreset = PRESET_BYPASSED;
+    if (presetId === 'pure_cisco') selectedPreset = PRESET_PURE_CISCO_ENT;
+    else if (presetId === 'pan') selectedPreset = PRESET_PAN;
+    else if (presetId === 'lan') selectedPreset = PRESET_LAN;
+    else if (presetId === 'wlan') selectedPreset = PRESET_WLAN;
+    else if (presetId === 'san') selectedPreset = PRESET_SAN;
+    else if (presetId === 'nas') selectedPreset = PRESET_NAS;
+    else if (presetId === 'vpn') selectedPreset = PRESET_VPN;
+    else if (presetId === 'bypassed') selectedPreset = PRESET_BYPASSED;
     else if (presetId === 'lateral') selectedPreset = PRESET_LATERAL;
     else if (presetId === 'cisco_campus') selectedPreset = PRESET_CISCO_CAMPUS;
     else if (presetId === 'cisco_sdwan') selectedPreset = PRESET_CISCO_SDWAN;
@@ -205,8 +219,8 @@ export const App: React.FC = () => {
     let nextPreset = topology;
 
     if (nextMode === 'pure_cisco') {
-      nextScenario = 'cisco_campus_rogue';
-      nextPreset = PRESET_CISCO_CAMPUS;
+      nextScenario = 'pure_cisco_enterprise';
+      nextPreset = PRESET_PURE_CISCO_ENT;
     } else {
       nextScenario = 'mixed_edge_breach';
       nextPreset = PRESET_MIXED_EDGE;
@@ -235,13 +249,21 @@ export const App: React.FC = () => {
     setScenario(nextScenario);
 
     // Auto load correlated topology preset for optimal visual alignment
-    if (nextScenario === 'cisco_campus_rogue') handleLoadPreset('cisco_campus');
+    if (nextScenario === 'pure_cisco_enterprise') handleLoadPreset('pure_cisco');
+    else if (nextScenario === 'cisco_campus_rogue') handleLoadPreset('cisco_campus');
     else if (nextScenario === 'cisco_sdwan_brownout') handleLoadPreset('cisco_sdwan');
     else if (nextScenario === 'cisco_aci_microburst') handleLoadPreset('cisco_aci');
+    else if (nextScenario === 'mixed_vendor_enterprise') handleLoadPreset('mixed_edge');
     else if (nextScenario === 'mixed_edge_breach') handleLoadPreset('mixed_edge');
     else if (nextScenario === 'mixed_sase_degradation') handleLoadPreset('mixed_sase');
     else if (nextScenario === 'mixed_backbone_optical') handleLoadPreset('mixed_optical');
     else if (nextScenario === 'openconfig_mdt_streaming') handleLoadPreset('openconfig_core');
+    else if (nextScenario === 'arch_pan_iot_mesh') handleLoadPreset('pan');
+    else if (nextScenario === 'arch_lan_campus_access') handleLoadPreset('lan');
+    else if (nextScenario === 'arch_wlan_meraki_catalyst') handleLoadPreset('wlan');
+    else if (nextScenario === 'arch_san_fibre_channel') handleLoadPreset('san');
+    else if (nextScenario === 'arch_nas_storage_cluster') handleLoadPreset('nas');
+    else if (nextScenario === 'arch_vpn_remote_workforce') handleLoadPreset('vpn');
 
     fetch(`${BACKEND_HTTP}/api/scenarios/run`, {
       method: 'POST',
@@ -404,6 +426,37 @@ export const App: React.FC = () => {
         sourcetype = "cisco:sdwan:linkhealth";
         logText = `${randomNode.name}: bfd: event=state_change local_color=biz-internet remote_color=biz-internet loss_pct=14.8 latency_ms=184.2 jitter_ms=42.1 sla_state=violated`;
         action = "alerted";
+      } else if (scenario === "pure_cisco_enterprise") {
+        if (randomNode.vendor === "cisco_ise") {
+          sourcetype = "cisco:ise:nac:8021x";
+          logText = `CISE_Passed_Authentications 00000001 1 0 ${ts} host=${randomNode.name} User-Name=alex.turner@enterprise.corp Calling-Station-Id=70-69-79-4C-11-02 NAS-IP-Address=10.254.3.1 NAS-Port=50101 Framing-Protocol=PPP Tunnel-Type=VLAN Tunnel-Medium-Type=802 Tunnel-Private-Group-ID=VLAN_DATA cisco-av-pair=profile-name=Apple-Device cisco-av-pair=security-group-tag=0004-TrustSec-Employee EapAuthentication=EAP-TLS Response=Passed`;
+        } else if (randomNode.type === "wlc_controller") {
+          sourcetype = "cisco:catalyst:clienthealth";
+          logText = `cisco:catalyst:clienthealth timestamp="${ts}" controller="${randomNode.name}" client_mac="70:69:79:4c:11:02" ap_name="Meraki-MR56-AP" client_ip="10.40.1.105" ssid="Corp-Secure-WPA3" health_score=98 rssi=-58 snr=38 channel=36 throughput_mbps=482.5 status=HEALTHY`;
+        } else {
+          sourcetype = "cisco:catalyst:networkhealth";
+          logText = `cisco:catalyst:networkhealth timestamp="${ts}" device_name="${randomNode.name}" management_ip="${randomNode.ip_address}" platform="Catalyst 9600" overall_health=95 cpu_utilization_pct=${(Math.random() * 15 + 20).toFixed(1)} memory_utilization_pct=${(Math.random() * 10 + 35).toFixed(1)} thermal_state="normal" routing_table_version=1420 bgp_prefixes=18400 psu_status="redundant_ok"`;
+        }
+      } else if (scenario === "arch_vpn_remote_workforce") {
+        if (randomNode.vendor === "cisco_duo") {
+          sourcetype = "cisco:duo:push:prompt";
+          logText = `timestamp="${ts}" host="${randomNode.name}" event_type="authentication" user="marcus.vance@enterprise.corp" factor="duo_push" result="SUCCESS" ip_address="198.51.100.88" integration="Cisco ASA AnyConnect SSL-VPN" device="iPhone 15 Pro iOS 17.4" posture_state="COMPLIANT" location="Austin, TX, US"`;
+        } else {
+          sourcetype = "cisco:asa";
+          logText = `%ASA-6-725001: Group <Employee-VPN-Policy> User <marcus.vance> IP <198.51.100.88> Assigned IPv4 address <10.240.1.55> to remote user, encryption=AES-GCM-256, hashing=SHA-384, posture=compliant.`;
+        }
+      } else if (scenario === "arch_wlan_meraki_catalyst") {
+        sourcetype = randomNode.sourcetype || "meraki:accesspoints";
+        logText = `meraki:accesspoints timestamp="${ts}" network_id="N_88192031" device_serial="Q2KD-99A1-XZ34" name="${randomNode.name}" client_count=34 channel_utilization_2_4ghz=18% channel_utilization_5ghz=42% tx_power_dbm=17 rx_packets=1289004 tx_packets=2490182 mesh_role="root" status="online"`;
+      } else if (scenario === "arch_san_fibre_channel") {
+        sourcetype = "cisco:mds:san:fc";
+        logText = `cisco:mds:san:fc timestamp="${ts}" switch="${randomNode.name}" vsan=100 fc_port="fc1/1" rx_frames=2948010 tx_frames=3819020 rx_bytes=64424509440 tx_bytes=85899345920 b2b_credit_drops=0 link_resets=0 crc_errors=0 throughput_gbps=64.0 status=optimal`;
+      } else if (scenario === "arch_nas_storage_cluster") {
+        sourcetype = "netapp:ontap:nas";
+        logText = `netapp:ontap:nas timestamp="${ts}" cluster="${randomNode.name}" vserver="svm_corp_nfs" volume="vol_prod_ai_models" protocol="NFSv4.1" iops=42800 throughput_mbps=1240.5 latency_ms=0.85 capacity_used_pct=64.2 multi_path="active-active"`;
+      } else if (scenario === "arch_pan_iot_mesh") {
+        sourcetype = "pan:ble:iot:sensor";
+        logText = `pan:ble:iot:sensor timestamp="${ts}" sensor_id="${randomNode.name}" protocol="BLE_MESH" adv_interval_ms=100 rssi=-54 battery_pct=96.4 temperature_celsius=${(Math.random() * 2 + 23).toFixed(1)} humidity_pct=45.2 vibration_g=0.02 status="nominal"`;
       } else {
         sourcetype = randomNode.sourcetype || "cisco:ios:syslog";
         logText = `%SEC-6-IPACCESSLOGP: list 101 permitted tcp 192.168.1.100(49201) -> ${randomNode.ip_address}(443)`;

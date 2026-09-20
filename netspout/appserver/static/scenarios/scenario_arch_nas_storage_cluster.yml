@@ -1,0 +1,40 @@
+scenario_id: "ARCH-NAS-08"
+name: "NAS (Network-Attached Storage) - NetApp ONTAP & PowerScale Clustered Storage"
+description: "High-throughput NAS cluster serving petabyte NFSv4.1 and SMB3 workloads with IOPS burst tracking and volume latency metrics."
+
+test_oracle:
+  expected_root_cause: "Extreme IOPS burst on aggregate aggr1 causes volume latency surge exceeding 45ms"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_performance_metrics and sourcetype netapp:ontap:nas"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-nas-08-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_performance_metrics
+        source: scenario_stream
+        sourcetype: netapp:ontap:nas
+        host: netapp-ontap-cluster01.dc.internal
+        _raw: '{"timestamp":"$ISO_TIMESTAMP$","cluster":"netapp-ontap-01","node":"node-01","vserver":"vs_prod","volume":"vol_analytics","iops":128400,"throughput_mbps":1480,"latency_ms":48.2,"protocol":"nfs4.1","status":"DEGRADED"}'

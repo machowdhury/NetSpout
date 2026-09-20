@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-ise-guest-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_network_ops
+        source: rest:ise
+        sourcetype: cisco:ise:guest:voucher
+        host: ise-pan01.corp.internal
+        _raw: "{\"timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"GUEST_VOUCHER_ACTIVATION\",\"ise_node\":\"ise-pan01.corp.internal\",\"portal_name\":\"Corporate_Sponsor_Guest_Portal\",\"voucher_code\":\"GUEST-9481-VX\",\"sponsor_user\":\"admin_frontdesk@corp.internal\",\"guest_phone\":\"+1-555-0199\",\"guest_email\":\"vendor_contractor@partner.com\",\"mac_address\":\"f4:f5:e8:11:22:33\",\"duration_hours\":8,\"vlan_assigned\":99,\"status\":\"ACTIVE\"}"
+      - index: idx_network_ops
+        source: rest:ise
+        sourcetype: cisco:ise:guest:voucher
+        host: ise-pan01.corp.internal
+        _raw: "{\"timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"GUEST_SESSION_EXPIRED\",\"ise_node\":\"ise-pan01.corp.internal\",\"voucher_code\":\"GUEST-9481-VX\",\"guest_email\":\"vendor_contractor@partner.com\",\"bytes_transferred\":4829100,\"reason\":\"TIME_QUOTA_EXCEEDED\"}"

@@ -283,6 +283,7 @@ export const TopologyCanvas: React.FC<TopologyCanvasProps> = ({
       case 'client_external':
         return Globe;
       case 'firewall':
+      case 'vpn_gateway':
         return ShieldAlert;
       case 'load_balancer':
         return GitFork;
@@ -293,14 +294,19 @@ export const TopologyCanvas: React.FC<TopologyCanvasProps> = ({
       case 'web_server':
         return Server;
       case 'database':
+      case 'storage_san':
+      case 'storage_nas':
         return Database;
       case 'subnet':
         return Box;
       case 'wireless_ap':
+      case 'wlc_controller':
         return Radio;
       case 'sase_proxy':
+      case 'cloud_transit':
         return Cloud;
       case 'optical_core':
+      case 'iot_sensor':
         return Cpu;
       default:
         return Server;
@@ -351,6 +357,29 @@ export const TopologyCanvas: React.FC<TopologyCanvasProps> = ({
         <span className="text-[11px] font-mono text-slate-500 px-2">
           {Math.round(zoom * 100)}%
         </span>
+      </div>
+
+      {/* Top HUD Banner with Canvas Info & Status */}
+      <div className="absolute top-4 left-44 right-4 z-10 flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded-lg px-4 py-2 backdrop-blur shadow-lg">
+        <div className="flex items-center gap-3">
+          <span className="flex h-2.5 w-2.5 relative">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isRunning ? 'bg-emerald-400 opacity-75' : 'bg-amber-400 opacity-75'}`}></span>
+            <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isRunning ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+          </span>
+          <div>
+            <b className="text-xs font-mono text-slate-200">
+              NetSpout Visual NOC Studio — {isRunning ? 'Live Telemetry Active' : 'Simulation Paused'}
+            </b>
+            <p className="text-[10px] text-slate-400 font-mono m-0">
+              Model-Driven Telemetry streaming directly into Splunk HEC. Click nodes to inspect, drag anchors to wire links.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-mono bg-cyan-950/80 border border-cyan-700/60 text-cyan-300 px-2.5 py-1 rounded">
+            {topology.nodes.length} Active Nodes | {topology.edges.length} Links
+          </span>
+        </div>
       </div>
 
       {/* SVG Canvas for Wires and Dynamic Links */}

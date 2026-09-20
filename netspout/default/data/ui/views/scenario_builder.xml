@@ -16,17 +16,43 @@
                   Active Architecture Scenario / Topology Preset
                 </label>
                 <select id="select-topology-preset" style="width: 100%; background: #1e293b; border: 1px solid #0284c7; border-radius: 4px; padding: 8px 12px; color: #38bdf8; font-size: 13px; font-weight: 600;">
-                  <option value="openconfig_core" selected="selected">⚡ Preset 1: OpenConfig MDT Core Fabric (Cisco 8000, Juniper PTX, Arista 7280R, Catalyst 9600)</option>
-                  <option value="multivendor_enterprise">🏢 Preset 2: Multi-Vendor Enterprise 5-Tier Backbone (Palo Alto, Fortinet, Juniper, Nokia, Arista, F5, Meraki)</option>
-                  <option value="roce_ai_fabric">🤖 Preset 3: AI Data Center Fabric - RoCE v2 Buffer Congestion (Arista, NVIDIA Quantum, Cisco Nexus)</option>
-                  <option value="sdwan_branch">📡 Preset 4: SD-WAN Branch Brownout &amp; Dynamic SLA Failover (FortiGate, Cisco vEdge, Meraki MX)</option>
-                  <option value="campus_security">🛡 Preset 5: Campus Core Rogue AP &amp; MAC Flapping Threat (Catalyst 9300, Catalyst 9800 WLC, Cisco ISE)</option>
+                  <optgroup label="Core &amp; Specialized Presets">
+                    <option value="openconfig_core" selected="selected">⚡ Preset 1: OpenConfig MDT Core Fabric (Cisco 8000, Juniper PTX, Arista 7280R, Catalyst 9600)</option>
+                    <option value="multivendor_enterprise">🏢 Preset 2: Multi-Vendor Enterprise 5-Tier Backbone (Palo Alto, Fortinet, Juniper, Nokia, Arista, F5, Meraki)</option>
+                    <option value="roce_ai_fabric">🤖 Preset 3: AI Data Center Fabric - RoCE v2 Buffer Congestion (Arista, NVIDIA Quantum, Cisco Nexus)</option>
+                    <option value="sdwan_branch">📡 Preset 4: SD-WAN Branch Brownout &amp; Dynamic SLA Failover (FortiGate, Cisco vEdge, Meraki MX)</option>
+                    <option value="campus_security">🛡 Preset 5: Campus Core Rogue AP &amp; MAC Flapping Threat (Catalyst 9300, Catalyst 9800 WLC, Cisco ISE)</option>
+                  </optgroup>
+                  <optgroup label="Complete Network Architectures (PAN to GAN)">
+                    <option value="arch_pan">📡 PAN: Personal Area Network - IoT Sensor Cluster &amp; BLE Mesh</option>
+                    <option value="arch_lan">🏢 LAN: Local Area Network - Enterprise Campus Switching &amp; 802.1Q</option>
+                    <option value="arch_wlan">📶 WLAN: Wireless Local Area Network - Catalyst 9800 &amp; Meraki Wi-Fi 6E/7</option>
+                    <option value="arch_can">🏫 CAN: Campus Area Network - Multi-Building Backbone &amp; Catalyst Center</option>
+                    <option value="arch_man">🏙 MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring &amp; G.8032 ERPS</option>
+                    <option value="arch_wan">🌐 WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone &amp; DWDM</option>
+                    <option value="arch_san">💾 SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel &amp; NVMe-oF</option>
+                    <option value="arch_nas">📂 NAS: Network-Attached Storage - NetApp ONTAP &amp; PowerScale Clusters</option>
+                    <option value="arch_vpn">🔒 VPN: Virtual Private Network - Cisco AnyConnect &amp; Site-to-Site IPsec</option>
+                    <option value="arch_epn">🛡 EPN: Enterprise Private Network - Isolated Corporate Intranet &amp; QinQ</option>
+                    <option value="arch_gan">🌍 GAN: Global Area Network - Worldwide Multi-Cloud &amp; Subsea Cable Transit</option>
+                  </optgroup>
+                  <optgroup label="Enterprise, Service Provider &amp; Integrated Core">
+                    <option value="pure_cisco_enterprise">🔵 Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)</option>
+                    <option value="sp_cisco">🌐 Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)</option>
+                    <option value="sp_mixed">🔀 Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)</option>
+                    <option value="sdwan_core_cisco">📡 Dedicated SD-WAN Connected to Core Backbone (All Cisco)</option>
+                    <option value="wireless_core_cisco">📶 Enterprise Wireless Connected to Campus Core (All Cisco)</option>
+                    <option value="wireless_core_mixed">📶 Enterprise Wireless Connected to Core (Mixed Vendor)</option>
+                  </optgroup>
                 </select>
               </div>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
-              <a href="/en-US/app/netspout/netspout_canvas" target="_blank" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; text-decoration: none; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                <span>🎨</span> Open Visual Drag &amp; Drop Canvas (NetSpout Studio) &gt;
+              <button type="button" id="btn-toggle-inline-canvas" style="background: #1e293b; color: #38bdf8; border: 1px solid #0284c7; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                <span>🖼</span> Toggle In-Page Studio Canvas
+              </button>
+              <a href="netspout_canvas" target="_blank" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; text-decoration: none; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                <span>🎨</span> Open Visual Studio Canvas &gt;
               </a>
               <button type="button" id="btn-stream-path" style="background: #0284c7; border: none; color: #ffffff; border-radius: 4px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;">
                 Stream Entire Path Flow
@@ -35,6 +61,17 @@
                 Stop Path Stream
               </button>
             </div>
+          </div>
+
+          <!-- Embedded Studio Canvas Drawer (Collapsible) -->
+          <div id="inline-canvas-drawer" style="display: none; background: #0B0F19; border: 1px solid #0284c7; border-radius: 8px; margin-bottom: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+            <div style="background: #0f172a; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b;">
+              <span style="color: #38bdf8; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <span>⚡</span> Interactive NetSpout Canvas &amp; Telemetry Orchestrator (Live Embedded View)
+              </span>
+              <button type="button" id="btn-close-inline-canvas" style="background: #334155; border: none; color: #f8fafc; font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer;">✕ Hide Canvas</button>
+            </div>
+            <iframe id="inline-canvas-frame" src="netspout_canvas" style="width: 100%; height: 560px; border: none; display: block;" allow="clipboard-read; clipboard-write"></iframe>
           </div>
 
           <!-- Section: Direct Telemetry Streaming (Without Scenarios) -->

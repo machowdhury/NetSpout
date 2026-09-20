@@ -1,39 +1,6 @@
 samples:
-  ### CISCO-DUO-ENDPOINT - HEALTHY BASELINE ###
   - name: cisco-duo-endpoint-baseline
     interval: 30
-    count: 3
-    randomizeEvents: true
-    tokens:
-      - name: ISO_TIMESTAMP
-        format: template
-        type: timestamp
-        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
-        format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
-      - name: EPOCH
-        format: template
-        type: epochtimestamp
-      - name: HOST
-        format: template
-        type: weightedChoice
-        weightedChoice:
-          - weight: 3
-            choice: splunkhf.maple.ciscolabs.com
-          - weight: 2
-            choice: splunkhf.maple.ciscolabs.com-peer
-    lines:
-      - index: cisco_duo
-        source: sbg_duo_input://MAPLE_DUO
-        sourcetype: cisco:duo:endpoint
-        host: $HOST$
-        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'
-
-  ### CISCO-DUO-ENDPOINT - DEGRADED / WARNING ###
-  - name: cisco-duo-endpoint-degraded
-    interval: 30
     count: 2
     randomizeEvents: true
     tokens:
@@ -48,45 +15,14 @@ samples:
       - name: EPOCH
         format: template
         type: epochtimestamp
-      - name: HOST
-        format: template
-        type: weightedChoice
-        weightedChoice:
-          - weight: 3
-            choice: splunkhf.maple.ciscolabs.com
     lines:
-      - index: cisco_duo
-        source: sbg_duo_input://MAPLE_DUO
-        sourcetype: cisco:duo:endpoint
-        host: $HOST$
-        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'
-
-  ### CISCO-DUO-ENDPOINT - CRITICAL / FAILURE ###
-  - name: cisco-duo-endpoint-failure
-    interval: 30
-    count: 2
-    randomizeEvents: true
-    tokens:
-      - name: ISO_TIMESTAMP
-        format: template
-        type: timestamp
-        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
-      - name: SYSLOG_TIMESTAMP
-        format: template
-        type: timestamp
-        replacement: "%b %d %H:%M:%S"
-      - name: EPOCH
-        format: template
-        type: epochtimestamp
-      - name: HOST
-        format: template
-        type: weightedChoice
-        weightedChoice:
-          - weight: 3
-            choice: splunkhf.maple.ciscolabs.com
-    lines:
-      - index: cisco_duo
-        source: sbg_duo_input://MAPLE_DUO
-        sourcetype: cisco:duo:endpoint
-        host: $HOST$
-        _raw: '{"ctime": "Thu $SYSLOG_TIMESTAMP$ 2026", "alternative_ids": [], "browsers": [], "computer_sid": "", "cpu_id": "", "device_id": "", "device_identifier": "", "device_identifier_type": "", "device_name": "", "device_udid": "", "device_username": "", "device_username_type": "", "disk_encryption_status": "Unknown", "domain_sid": "", "email": "mrayani@cisco.com", "epkey": "EP2YU6L9NENSABJAIX1D", "firewall_status": "Unknown", "hardware_uuid": "", "health_app_client_version": "", "health_data_last_collected": "", "last_updated": 1789650854, "last_used": "", "machine_guid": "", "model": "", "os_build": "", "os_family": "Android", "os_software_status": "supported-up-to-date", "os_version": "16", "password_status": "Unknown", "security_agents": [], "trusted_endpoint": "unknown", "type": "", "username": "mrayani", "timestamp": 1789675030, "host": "api-dd716ff8.duosecurity.com", "extracted_eventtype": "endpoint"}'
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:endpoint:posture
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"endpoint_health\",\"device\":{\"os\":\"macOS\",\"os_version\":\"15.3.1\",\"model\":\"MacBookPro18,1\",\"encryption\":{\"disk\":\"FileVault_Encrypted\",\"status\":\"HEALTHY\"},\"security_software\":{\"edr\":\"CrowdStrike Falcon 7.14\",\"firewall_active\":true,\"screen_lock_enforced\":true},\"jailbroken\":false},\"user\":\"m.chowdhury@corp.internal\",\"posture_result\":\"COMPLIANT\",\"trusted_endpoint\":true}"
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:endpoint:posture
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"endpoint_health\",\"device\":{\"os\":\"Windows\",\"os_version\":\"11_23H2\",\"model\":\"Dell Latitude 5530\",\"encryption\":{\"disk\":\"Unencrypted\",\"status\":\"NON_COMPLIANT\"},\"security_software\":{\"firewall_active\":false}},\"user\":\"contractor_dave@corp.internal\",\"posture_result\":\"BLOCKED\",\"remediation_url\":\"https://help.corp.internal/duo-posture-fix\"}"

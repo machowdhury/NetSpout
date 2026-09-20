@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-ise-trustsec-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_security_fw
+        source: udp:514
+        sourcetype: cisco:ise:trustsec:sgt
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_TrustSec 0001847297 1 0 $ISO_TIMESTAMP$ +00:00 0029481927 5400 NOTICE TrustSec: SGT Assignment Enforcement, ConfigVersionId=127, Source-SGT=14:Employees, Destination-SGT=25:Quarantine, SGACL-Name=DENY_QUARANTINE_TRAFFIC, Action=DENIED, Packet-Count=412, Byte-Count=328400, Enforcement-Node=cat9600-core-01, Source-IP=10.20.10.45, Dest-IP=10.50.4.12, Protocol=TCP, Dest-Port=445"
+      - index: idx_security_fw
+        source: udp:514
+        sourcetype: cisco:ise:trustsec:sgt
+        host: ise-pan01.corp.internal
+        _raw: "$SYSLOG_TIMESTAMP$ ise-pan01.corp.internal CISE_TrustSec 0001847298 1 0 $ISO_TIMESTAMP$ +00:00 0029481928 5400 NOTICE TrustSec: SGT Classification Update, Endpoint=00-1A-2B-3C-4D-5E, Assigned-SGT=4:Developers, Device=cat9300-access-01"

@@ -50,6 +50,14 @@ require([
 
   // Multi-Vendor Syslog & Event Platform Matrix
   var PLATFORM_MATRIX = {
+    "identity": [
+      { id: "cisco_ise", name: "Cisco ISE (Identity Services Engine)", index: "idx_network_ops", sourcetypes: ["cisco:ise:nac:8021x", "cisco:ise:byod:provisioning", "cisco:ise:trustsec:sgt", "cisco:ise:deviceadmin:tacacs", "cisco:ise:guest:voucher"], template: 'CISE_Passed_Authentications 0001847295 1 0 2026-09-19T14:00:00.000Z +00:00 0029481925 5200 NOTICE Passed-Authentication: Authentication succeeded, ConfigVersionId=127, Device IP Address=10.254.8.1, DestinationPort=1812, UserName=corp\\alice.sec, Protocol=Radius, NAS-Port-Id=GigabitEthernet1/0/24, Framed-IP-Address=10.20.10.45, EapAuthentication=EAP-TLS, IdentityGroup=SecOps_Endpoints, SelectedAuthorizationProfiles=TrustSec_SecOps_Permit' },
+      { id: "cisco_duo", name: "Cisco Duo (Cloud MFA & Zero Trust)", index: "idx_security_fw", sourcetypes: ["cisco:duo:push:prompt", "cisco:duo:endpoint:posture", "cisco:duo:sso:saml", "cisco:duo:zerotrust:policy", "cisco:duo:remote:vpn"], template: '{"timestamp":1789840800,"iso_timestamp":"2026-09-19T14:00:00.000Z","event_type":"authentication","factor":"duo_push","result":"SUCCESS","reason":"user_approved","user":{"name":"m.chowdhury@corp.internal","groups":["Enterprise_Admins","NetDevOps"]},"application":{"name":"Splunk Enterprise Production NOC","key":"DI94810294810"},"auth_device":{"name":"iPhone 15 Pro","ip":"198.51.100.42","location":{"city":"San Jose","state":"California","country":"US"}},"txid":"duo-tx-9948201"}' }
+    ],
+    "storage": [
+      { id: "cisco_san", name: "Cisco MDS 9700 SAN Director", index: "idx_performance_metrics", sourcetypes: ["cisco:mds:san:fc"], template: '%PORT-3-CREDIT_LOSS: Interface fc1/14 Tx credit loss detected. Peer device slow drain. Dropped frames: 842. B2B credit recovery initiated.' },
+      { id: "netapp_nas", name: "NetApp ONTAP Storage Cluster", index: "idx_performance_metrics", sourcetypes: ["netapp:ontap:nas"], template: '{"timestamp":"2026-09-19T14:00:00.000Z","cluster":"netapp-ontap-01","node":"node-01","vserver":"vs_prod","volume":"vol_analytics","iops":128400,"throughput_mbps":1480,"latency_ms":48.2,"protocol":"nfs4.1","status":"DEGRADED"}' }
+    ],
     "firewall": [
       { id: "paloalto", name: "Palo Alto Networks (PAN-OS)", index: "idx_security_fw", sourcetypes: ["pan:traffic", "pan:threat", "pan:system"], template: '1,2026/09/19 14:00:00,001801000001,TRAFFIC,drop,1,2026/09/19 14:00:00,198.51.100.42,10.254.1.10,0.0.0.0,0.0.0.0,rule_syn_flood,vsys1,untrust,trust,ethernet1/1,ethernet1/2,default-log-forwarding,2026/09/19 14:00:00,0,1,54210,443,0,0,0x0,tcp,deny,64,64,0,1,2026/09/19 14:00:00,0,any,0,12345678,0x0,United States,10.0.0.0-10.255.255.255,0,1,0,threat-drop,0,0,0,0,,pa-5450-fw01,from-policy' },
       { id: "fortinet", name: "Fortinet FortiGate (FortiOS)", index: "idx_security_fw", sourcetypes: ["fortinet:fortigate", "fortigate_traffic", "fortigate_event"], template: 'date=2026-09-19 time=14:00:00 devname="fortigate-3700d" devid="FG370D4615800001" eventtime=1789840800 level="warning" vd="root" type="traffic" subtype="forward" action="accept" policyid=12 sessionid=9872411 srcip=10.254.2.50 dstip=198.51.100.80 proto=6 sentbyte=2400 rcvdbyte=8900 utmaction="allow" transport="sdwan" sla="violated" msg="dynamic path failover to biz-internet"' },
@@ -91,7 +99,7 @@ require([
     ]
   };
 
-  // Pre-Built Topology Presets
+  // Pre-Built Topology Presets (All 22 Network Architectures & Scenarios)
   var TOPOLOGY_PRESETS = {
     "openconfig_core": {
       title: "OpenConfig MDT Core Fabric (Cisco 8000, Juniper PTX, Arista 7280R, Cat 9600)",
@@ -183,6 +191,274 @@ require([
         { from: "cat9800_wlc", to: "cisco_ise", label: "RADIUS CoA Quarantine" },
         { from: "cat9300_sw", to: "cisco_ise", label: "802.1X Auth" }
       ]
+    },
+
+    // 11 Network Architectures (PAN to GAN)
+    "arch_pan": {
+      title: "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+      badge: "IoT Mesh Tier",
+      nodes: [
+        { id: "pan_sensor1", name: "ble-sensor-rack01", role: "Bluetooth LE Beacon", vendor: "Generic", class: "switch_dc", x: 140, y: 120, ip: "192.168.99.11", index: "idx_network_ops", platform: "cisco_ios", color: "#10b981" },
+        { id: "pan_sensor2", name: "zigbee-env-temp02", role: "Zigbee Thermal Probe", vendor: "Generic", class: "switch_dc", x: 140, y: 280, ip: "192.168.99.12", index: "idx_network_ops", platform: "cisco_ios", color: "#10b981" },
+        { id: "pan_gateway", name: "iot-pan-gateway01", role: "PAN Micro-Gateway", vendor: "Cisco", class: "router", x: 420, y: 200, ip: "10.254.99.1", index: "idx_network_ops", platform: "cisco_ios", color: "#0284c7" },
+        { id: "pan_collector", name: "iot-telemetry-server", role: "OTel IoT Collector", vendor: "Generic", class: "switch_dc", x: 700, y: 200, ip: "10.254.99.50", index: "idx_network_ops", platform: "cisco_ios", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "pan_sensor1", to: "pan_gateway", label: "BLE 5.2 Mesh" },
+        { from: "pan_sensor2", to: "pan_gateway", label: "Zigbee 3.0" },
+        { from: "pan_gateway", to: "pan_collector", label: "MQTT / CoAP TLS" }
+      ]
+    },
+    "arch_lan": {
+      title: "LAN: Local Area Network - Enterprise Campus Switching & 802.1Q",
+      badge: "Campus L2/L3 Tier",
+      nodes: [
+        { id: "lan_client", name: "workstation-corp-01", role: "Enterprise End User", vendor: "Generic", class: "switch_campus", x: 140, y: 200, ip: "10.20.10.45", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
+        { id: "lan_acc", name: "cat9300-access-sw", role: "Catalyst 9300 Access", vendor: "Cisco", class: "switch_campus", x: 380, y: 200, ip: "10.20.10.1", index: "idx_network_ops", platform: "cisco_cat", color: "#0284c7" },
+        { id: "lan_dist", name: "cat9500-dist-sw", role: "Catalyst 9500 Distribution", vendor: "Cisco", class: "switch_campus", x: 620, y: 200, ip: "10.20.0.1", index: "idx_network_ops", platform: "cisco_cat", color: "#8b5cf6" },
+        { id: "lan_ise", name: "ise-pan01-auth", role: "Cisco ISE 802.1X NAC", vendor: "Cisco", class: "firewall", x: 620, y: 340, ip: "10.20.0.50", index: "idx_security_fw", platform: "cisco_ftd", color: "#a855f7" }
+      ],
+      links: [
+        { from: "lan_client", to: "lan_acc", label: "802.1X EAP-TLS" },
+        { from: "lan_acc", to: "lan_dist", label: "100G 802.1Q Trunk" },
+        { from: "lan_acc", to: "lan_ise", label: "RADIUS AAA Port 1812" }
+      ]
+    },
+    "arch_wlan": {
+      title: "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+      badge: "Enterprise Wi-Fi Tier",
+      nodes: [
+        { id: "wlan_mr", name: "meraki-mr56-east", role: "Meraki MR56 Wi-Fi 6 AP", vendor: "Cisco", class: "wireless", x: 140, y: 120, ip: "10.40.1.10", index: "idx_wireless_ops", platform: "meraki_mr", color: "#10b981" },
+        { id: "wlan_cat", name: "catalyst-9130-west", role: "Catalyst 9130AX AP", vendor: "Cisco", class: "wireless", x: 140, y: 280, ip: "10.40.1.20", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#0284c7" },
+        { id: "wlan_wlc", name: "cat9800-wlc-cluster", role: "Catalyst 9800 WLC HA", vendor: "Cisco", class: "wireless", x: 420, y: 200, ip: "10.40.0.1", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#eab308" },
+        { id: "wlan_dash", name: "catalyst-center-assurance", role: "DNA-C Wireless Assurance", vendor: "Cisco", class: "switch_campus", x: 700, y: 200, ip: "10.40.0.100", index: "idx_network_ops", platform: "cisco_cat", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "wlan_mr", to: "wlan_wlc", label: "CAPWAP / Cloud Link" },
+        { from: "wlan_cat", to: "wlan_wlc", label: "CAPWAP Data & Control" },
+        { from: "wlan_wlc", to: "wlan_dash", label: "Telemetry Stream" }
+      ]
+    },
+    "arch_can": {
+      title: "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+      badge: "Multi-Building Core",
+      nodes: [
+        { id: "can_bldga", name: "bldg-a-cat9500", role: "Building A Aggregation", vendor: "Cisco", class: "switch_campus", x: 140, y: 120, ip: "10.100.1.1", index: "idx_network_ops", platform: "cisco_cat", color: "#0284c7" },
+        { id: "can_bldgb", name: "bldg-b-cat9500", role: "Building B Aggregation", vendor: "Cisco", class: "switch_campus", x: 140, y: 280, ip: "10.100.2.1", index: "idx_network_ops", platform: "cisco_cat", color: "#0284c7" },
+        { id: "can_core", name: "cat9600-quad-sup", role: "Campus Core 9600 Redundant", vendor: "Cisco", class: "switch_campus", x: 440, y: 200, ip: "10.100.0.1", index: "idx_network_ops", platform: "cisco_cat", color: "#8b5cf6" },
+        { id: "can_dc", name: "dc-spine-nexus", role: "Enterprise DC Interconnect", vendor: "Cisco", class: "switch_dc", x: 720, y: 200, ip: "10.100.0.254", index: "idx_network_ops", platform: "cisco_nexus", color: "#10b981" }
+      ],
+      links: [
+        { from: "can_bldga", to: "can_core", label: "100G Dark Fiber (OSPF)" },
+        { from: "can_bldgb", to: "can_core", label: "100G Dark Fiber (OSPF)" },
+        { from: "can_core", to: "can_dc", label: "400G L3 EVPN Link" }
+      ]
+    },
+    "arch_man": {
+      title: "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+      badge: "Metro Ring 100G",
+      nodes: [
+        { id: "man_n1", name: "metro-nokia-pe01", role: "Metro Hub North", vendor: "Nokia", class: "optical", x: 160, y: 90, ip: "10.220.0.1", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
+        { id: "man_n2", name: "metro-juniper-pe02", role: "Metro Hub East", vendor: "Juniper", class: "router", x: 640, y: 90, ip: "10.220.0.2", index: "idx_network_ops", platform: "juniper", color: "#3b82f6" },
+        { id: "man_n3", name: "metro-cisco-pe03", role: "Metro Hub South", vendor: "Cisco", class: "router", x: 640, y: 310, ip: "10.220.0.3", index: "idx_network_ops", platform: "cisco_ios", color: "#0284c7" },
+        { id: "man_n4", name: "metro-arista-pe04", role: "Metro Hub West", vendor: "Arista", class: "switch_dc", x: 160, y: 310, ip: "10.220.0.4", index: "idx_performance_metrics", platform: "arista", color: "#10b981" }
+      ],
+      links: [
+        { from: "man_n1", to: "man_n2", label: "100GE G.8032 ERPS" },
+        { from: "man_n2", to: "man_n3", label: "100GE G.8032 ERPS" },
+        { from: "man_n3", to: "man_n4", label: "100GE G.8032 ERPS" },
+        { from: "man_n4", to: "man_n1", label: "RPL (Ring Protection Link)" }
+      ]
+    },
+    "arch_wan": {
+      title: "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & DWDM",
+      badge: "Inter-Continental WAN",
+      nodes: [
+        { id: "wan_ny", name: "cisco8k-nyc-core", role: "North America Core P/PE", vendor: "Cisco", class: "router", x: 140, y: 140, ip: "198.51.100.1", index: "cisco_mdt_metrics", platform: "cisco_ios", color: "#0284c7" },
+        { id: "wan_lon", name: "ptx-london-core", role: "Europe Core P/PE", vendor: "Juniper", class: "router", x: 420, y: 140, ip: "198.51.100.2", index: "idx_network_ops", platform: "juniper", color: "#38bdf8" },
+        { id: "wan_tokyo", name: "nokia-tokyo-core", role: "Asia-Pacific Core P/PE", vendor: "Nokia", class: "optical", x: 700, y: 140, ip: "198.51.100.3", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
+        { id: "wan_trans", name: "subsea-lambda-transport", role: "Trans-Oceanic DWDM Link", vendor: "Generic", class: "optical", x: 420, y: 310, ip: "198.51.100.254", index: "idx_network_ops", platform: "nokia_opt", color: "#f59e0b" }
+      ],
+      links: [
+        { from: "wan_ny", to: "wan_lon", label: "Transatlantic 400G SRv6" },
+        { from: "wan_lon", to: "wan_tokyo", label: "Eurasia Terrestrial 100G" },
+        { from: "wan_tokyo", to: "wan_trans", label: "Transpacific 200G DWDM" },
+        { from: "wan_trans", to: "wan_ny", label: "Subsea Cable Return" }
+      ]
+    },
+    "arch_san": {
+      title: "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+      badge: "64G Fibre Channel",
+      nodes: [
+        { id: "san_srv", name: "compute-esxi-cluster", role: "VMware vSphere ESXi Host", vendor: "Generic", class: "switch_dc", x: 140, y: 200, ip: "10.80.1.10", index: "idx_performance_metrics", platform: "arista", color: "#38bdf8" },
+        { id: "san_mds1", name: "mds9700-director-a", role: "Cisco MDS 9718 Director A", vendor: "Cisco", class: "switch_dc", x: 420, y: 120, ip: "10.80.0.1", index: "idx_performance_metrics", platform: "cisco_nexus", color: "#0284c7" },
+        { id: "san_mds2", name: "mds9700-director-b", role: "Cisco MDS 9718 Director B", vendor: "Cisco", class: "switch_dc", x: 420, y: 280, ip: "10.80.0.2", index: "idx_performance_metrics", platform: "cisco_nexus", color: "#0284c7" },
+        { id: "san_pure", name: "flasharray-x90-nvme", role: "Pure FlashArray NVMe-oF", vendor: "Generic", class: "switch_dc", x: 700, y: 200, ip: "10.80.2.50", index: "idx_performance_metrics", platform: "cisco_nexus", color: "#f97316" }
+      ],
+      links: [
+        { from: "san_srv", to: "san_mds1", label: "64G FC HBA 1 (Fabric A)" },
+        { from: "san_srv", to: "san_mds2", label: "64G FC HBA 2 (Fabric B)" },
+        { from: "san_mds1", to: "san_pure", label: "NVMe-over-FC ISL" },
+        { from: "san_mds2", to: "san_pure", label: "NVMe-over-FC ISL" }
+      ]
+    },
+    "arch_nas": {
+      title: "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+      badge: "Petabyte NFS/SMB Tier",
+      nodes: [
+        { id: "nas_client", name: "ai-inference-workers", role: "PyTorch Training Cluster", vendor: "Generic", class: "switch_dc", x: 140, y: 200, ip: "10.70.1.10", index: "idx_performance_metrics", platform: "arista", color: "#84cc16" },
+        { id: "nas_switch", name: "nexus9336-storage-sw", role: "Nexus 9336C Storage Switch", vendor: "Cisco", class: "switch_dc", x: 420, y: 200, ip: "10.70.0.1", index: "idx_network_ops", platform: "cisco_nexus", color: "#0284c7" },
+        { id: "nas_netapp", name: "netapp-ontap-a900", role: "NetApp AFF A900 Cluster", vendor: "Generic", class: "switch_dc", x: 700, y: 120, ip: "10.70.2.1", index: "idx_performance_metrics", platform: "arista", color: "#38bdf8" },
+        { id: "nas_isilon", name: "powerscale-f900", role: "Dell PowerScale Clustered NAS", vendor: "Generic", class: "switch_dc", x: 700, y: 280, ip: "10.70.2.2", index: "idx_performance_metrics", platform: "arista", color: "#f59e0b" }
+      ],
+      links: [
+        { from: "nas_client", to: "nas_switch", label: "100G RDMA (NFS over RDMA)" },
+        { from: "nas_switch", to: "nas_netapp", label: "100G LACP (NFSv4.1)" },
+        { from: "nas_switch", to: "nas_isilon", label: "100G LACP (SMB3 Multichannel)" }
+      ]
+    },
+    "arch_vpn": {
+      title: "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+      badge: "Remote Access & IPsec",
+      nodes: [
+        { id: "vpn_user", name: "remote-workforce-client", role: "Cisco Secure Client User", vendor: "Generic", class: "switch_campus", x: 140, y: 120, ip: "198.51.100.88", index: "idx_security_fw", platform: "cisco_ftd", color: "#f43f5e" },
+        { id: "vpn_branch", name: "branch-router-ipsec", role: "Branch Office Router", vendor: "Cisco", class: "router", x: 140, y: 280, ip: "203.0.113.15", index: "idx_network_ops", platform: "cisco_ios", color: "#f97316" },
+        { id: "vpn_hub", name: "asa5585-vpn-concentrator", role: "Cisco ASA / FTD Headend", vendor: "Cisco", class: "firewall", x: 440, y: 200, ip: "10.240.0.1", index: "idx_security_fw", platform: "cisco_ftd", color: "#0284c7" },
+        { id: "vpn_duo", name: "duo-cloud-mfa-sso", role: "Cisco Duo Zero Trust SSO", vendor: "Cisco", class: "firewall", x: 720, y: 200, ip: "10.240.0.50", index: "idx_security_fw", platform: "cisco_ftd", color: "#10b981" }
+      ],
+      links: [
+        { from: "vpn_user", to: "vpn_hub", label: "TLS 1.3 / DTLS Tunnel" },
+        { from: "vpn_branch", to: "vpn_hub", label: "IKEv2 IPsec VTI Tunnel" },
+        { from: "vpn_hub", to: "vpn_duo", label: "SAML 2.0 / Push MFA" }
+      ]
+    },
+    "arch_epn": {
+      title: "EPN: Enterprise Private Network - Isolated Corporate Intranet & QinQ",
+      badge: "Multi-Tenant Intranet",
+      nodes: [
+        { id: "epn_hq", name: "hq-campus-core", role: "HQ Corporate Boundary", vendor: "Cisco", class: "router", x: 140, y: 120, ip: "10.150.1.1", index: "idx_network_ops", platform: "cisco_ios", color: "#0284c7" },
+        { id: "epn_branch", name: "remote-factory-edge", role: "Industrial Factory Edge", vendor: "Cisco", class: "router", x: 140, y: 280, ip: "10.150.2.1", index: "idx_network_ops", platform: "cisco_ios", color: "#f97316" },
+        { id: "epn_carrier", name: "carrier-carrier-8000", role: "Private Carrier Core (QinQ)", vendor: "Cisco", class: "router", x: 440, y: 200, ip: "10.254.0.1", index: "idx_network_ops", platform: "cisco_ios", color: "#8b5cf6" },
+        { id: "epn_cloud", name: "aws-directconnect-gw", role: "Private Cloud VPC Interconnect", vendor: "Generic", class: "sase", x: 720, y: 200, ip: "10.150.100.1", index: "idx_security_fw", platform: "zscaler", color: "#38bdf8" }
+      ],
+      links: [
+        { from: "epn_hq", to: "epn_carrier", label: "802.1ad QinQ S-VLAN 200" },
+        { from: "epn_branch", to: "epn_carrier", label: "802.1ad QinQ S-VLAN 200" },
+        { from: "epn_carrier", to: "epn_cloud", label: "DirectConnect 10G Private VIF" }
+      ]
+    },
+    "arch_gan": {
+      title: "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+      badge: "Worldwide Cloud Transit",
+      nodes: [
+        { id: "gan_subsea", name: "subsea-landing-station", role: "Subsea Transponder Terminal", vendor: "Nokia", class: "optical", x: 140, y: 200, ip: "198.51.100.99", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
+        { id: "gan_sase", name: "zscaler-cloud-transit", role: "Cloud SASE Backbone", vendor: "Zscaler", class: "sase", x: 400, y: 100, ip: "165.225.0.1", index: "idx_security_fw", platform: "zscaler", color: "#0ea5e9" },
+        { id: "gan_express", name: "azure-expressroute-core", role: "Azure ExpressRoute Gateway", vendor: "Generic", class: "router", x: 400, y: 300, ip: "198.51.100.150", index: "idx_network_ops", platform: "cisco_ios", color: "#38bdf8" },
+        { id: "gan_aws", name: "aws-transit-gateway", role: "AWS TGW Global Mesh", vendor: "Generic", class: "router", x: 680, y: 200, ip: "198.51.100.200", index: "idx_network_ops", platform: "cisco_ios", color: "#10b981" }
+      ],
+      links: [
+        { from: "gan_subsea", to: "gan_sase", label: "Global Lambda 400G" },
+        { from: "gan_subsea", to: "gan_express", label: "Direct Fiber Cross-Connect" },
+        { from: "gan_sase", to: "gan_aws", label: "Cloud WAN Peering" },
+        { from: "gan_express", to: "gan_aws", label: "Multi-Cloud Interconnect" }
+      ]
+    },
+
+    // Specialized Enterprise & Service Provider Architectures
+    "pure_cisco_enterprise": {
+      title: "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+      badge: "All-Cisco Campus Tier",
+      nodes: [
+        { id: "cisco_core", name: "cat9600-campus-core", role: "Catalyst 9600 Core (Quad-Sup)", vendor: "Cisco", class: "switch_campus", x: 140, y: 200, ip: "10.254.1.1", index: "idx_network_ops", platform: "cisco_cat", color: "#0284c7" },
+        { id: "cisco_dist", name: "cat9500-distribution", role: "Catalyst 9500 Distribution", vendor: "Cisco", class: "switch_campus", x: 380, y: 120, ip: "10.254.2.1", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
+        { id: "cisco_acc", name: "cat9300-access-sw", role: "Catalyst 9300 UPOE Access", vendor: "Cisco", class: "switch_campus", x: 620, y: 120, ip: "10.254.3.1", index: "idx_network_ops", platform: "cisco_cat", color: "#38bdf8" },
+        { id: "cisco_wlc_node", name: "cat9800-wlc-ha", role: "Catalyst 9800-80 WLC HA", vendor: "Cisco", class: "wireless", x: 380, y: 280, ip: "10.254.4.1", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#eab308" },
+        { id: "cisco_ise_node", name: "cisco-ise-primary", role: "Cisco ISE 3.3 Node (TrustSec)", vendor: "Cisco", class: "firewall", x: 620, y: 280, ip: "10.254.5.1", index: "idx_security_fw", platform: "cisco_ftd", color: "#a855f7" }
+      ],
+      links: [
+        { from: "cisco_core", to: "cisco_dist", label: "100G StackWise-Virtual" },
+        { from: "cisco_dist", to: "cisco_acc", label: "40G L2/L3 Trunk" },
+        { from: "cisco_core", to: "cisco_wlc_node", label: "CAPWAP Aggregation" },
+        { from: "cisco_dist", to: "cisco_ise_node", label: "802.1X / RADIUS CoA" },
+        { from: "cisco_acc", to: "cisco_ise_node", label: "TrustSec SGT Tagging" }
+      ]
+    },
+    "sp_cisco": {
+      title: "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
+      badge: "Carrier SRv6 Fabric",
+      nodes: [
+        { id: "sp_cisco_8k", name: "cisco8808-core-p01", role: "Cisco 8808 28.8Tbps Core Router", vendor: "Cisco", class: "router", x: 140, y: 200, ip: "10.0.0.1", index: "cisco_mdt_metrics", platform: "cisco_ios", color: "#0284c7" },
+        { id: "sp_cisco_ncs", name: "ncs5508-metro-pe01", role: "NCS 5508 Metro Aggregation", vendor: "Cisco", class: "router", x: 420, y: 120, ip: "10.0.0.2", index: "cisco_mdt_metrics", platform: "cisco_ios", color: "#38bdf8" },
+        { id: "sp_cisco_asr", name: "asr9904-access-pe02", role: "ASR 9904 Edge Router", vendor: "Cisco", class: "router", x: 420, y: 280, ip: "10.0.0.3", index: "idx_network_ops", platform: "cisco_ios", color: "#38bdf8" },
+        { id: "sp_cisco_dc", name: "nexus-edge-dc01", role: "Nexus 9500 Cloud Gateway", vendor: "Cisco", class: "switch_dc", x: 700, y: 200, ip: "10.0.0.4", index: "idx_network_ops", platform: "cisco_nexus", color: "#10b981" }
+      ],
+      links: [
+        { from: "sp_cisco_8k", to: "sp_cisco_ncs", label: "400GE-ZR+ SRv6" },
+        { from: "sp_cisco_8k", to: "sp_cisco_asr", label: "400GE-ZR+ SRv6" },
+        { from: "sp_cisco_ncs", to: "sp_cisco_dc", label: "100G EVPN L3VPN" },
+        { from: "sp_cisco_asr", to: "sp_cisco_dc", label: "100G EVPN L3VPN" }
+      ]
+    },
+    "sp_mixed": {
+      title: "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
+      badge: "Multi-Carrier Core",
+      nodes: [
+        { id: "spm_cisco", name: "cisco8201-transit-p01", role: "Cisco 8201 10.8T Router", vendor: "Cisco", class: "router", x: 140, y: 200, ip: "10.254.0.1", index: "cisco_mdt_metrics", platform: "cisco_ios", color: "#0284c7" },
+        { id: "spm_juniper", name: "ptx10008-spine-p02", role: "Juniper PTX10008 Spine", vendor: "Juniper", class: "router", x: 420, y: 120, ip: "10.254.0.2", index: "idx_network_ops", platform: "juniper", color: "#38bdf8" },
+        { id: "spm_nokia", name: "nokia-7750-sr14s", role: "Nokia 7750 SR-14s PE", vendor: "Nokia", class: "optical", x: 420, y: 280, ip: "10.254.0.3", index: "idx_network_ops", platform: "nokia_opt", color: "#a855f7" },
+        { id: "spm_arista", name: "arista-7800r3-pe", role: "Arista 7800R3 Cloud PE", vendor: "Arista", class: "switch_dc", x: 700, y: 200, ip: "10.254.0.4", index: "idx_performance_metrics", platform: "arista", color: "#10b981" }
+      ],
+      links: [
+        { from: "spm_cisco", to: "spm_juniper", label: "400GE BGP-LU Peer" },
+        { from: "spm_cisco", to: "spm_nokia", label: "400G Coherent Optical" },
+        { from: "spm_juniper", to: "spm_arista", label: "100G RSVP-TE Tunnel" },
+        { from: "spm_nokia", to: "spm_arista", label: "100G SR-OS MPLS" }
+      ]
+    },
+    "sdwan_core_cisco": {
+      title: "Dedicated SD-WAN Connected to Core Backbone (All Cisco)",
+      badge: "Catalyst SD-WAN Fabric",
+      nodes: [
+        { id: "sdw_branch1", name: "cedge-branch-8300", role: "Catalyst 8300 Branch Edge", vendor: "Cisco", class: "router", x: 140, y: 120, ip: "10.10.1.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#0284c7" },
+        { id: "sdw_branch2", name: "vedge-branch-2000", role: "vEdge 2000 Retail Edge", vendor: "Cisco", class: "router", x: 140, y: 280, ip: "10.10.2.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#f97316" },
+        { id: "sdw_hub", name: "cedge-hub-8500", role: "Catalyst 8500 Aggregation Hub", vendor: "Cisco", class: "router", x: 420, y: 200, ip: "10.254.10.1", index: "idx_network_ops", platform: "cisco_sdwan", color: "#0284c7" },
+        { id: "sdw_core", name: "cat9600-core-backbone", role: "Catalyst 9600 Campus Core", vendor: "Cisco", class: "switch_campus", x: 700, y: 200, ip: "10.254.0.1", index: "idx_network_ops", platform: "cisco_cat", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "sdw_branch1", to: "sdw_hub", label: "OMP / IPsec SLA Tunnel" },
+        { from: "sdw_branch2", to: "sdw_hub", label: "OMP / IPsec SLA Tunnel" },
+        { from: "sdw_hub", to: "sdw_core", label: "100G L3 Trunk / BGP" }
+      ]
+    },
+    "wireless_core_cisco": {
+      title: "Enterprise Wireless Connected to Campus Core (All Cisco)",
+      badge: "WLAN to Core Fabric",
+      nodes: [
+        { id: "wcc_ap1", name: "catalyst-9130ax-01", role: "Catalyst 9130AX AP (Bldg 1)", vendor: "Cisco", class: "wireless", x: 140, y: 120, ip: "10.30.1.11", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#0284c7" },
+        { id: "wcc_ap2", name: "catalyst-9130ax-02", role: "Catalyst 9130AX AP (Bldg 2)", vendor: "Cisco", class: "wireless", x: 140, y: 280, ip: "10.30.1.12", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#0284c7" },
+        { id: "wcc_wlc", name: "cat9800-80-wlc", role: "Catalyst 9800-80 Core WLC", vendor: "Cisco", class: "wireless", x: 420, y: 200, ip: "10.30.0.1", index: "idx_wireless_ops", platform: "cisco_wlc", color: "#eab308" },
+        { id: "wcc_core", name: "cat9600-core-spine", role: "Catalyst 9600 Core Switch", vendor: "Cisco", class: "switch_campus", x: 700, y: 200, ip: "10.30.0.254", index: "idx_network_ops", platform: "cisco_cat", color: "#8b5cf6" }
+      ],
+      links: [
+        { from: "wcc_ap1", to: "wcc_wlc", label: "CAPWAP Data Tunnel" },
+        { from: "wcc_ap2", to: "wcc_wlc", label: "CAPWAP Data Tunnel" },
+        { from: "wcc_wlc", to: "wcc_core", label: "100G 802.1Q LACP Trunk" }
+      ]
+    },
+    "wireless_core_mixed": {
+      title: "Enterprise Wireless Connected to Core (Mixed Vendor)",
+      badge: "Meraki / Arista Core",
+      nodes: [
+        { id: "wcm_meraki", name: "meraki-mr56-wifi6e", role: "Meraki MR56 Cloud AP", vendor: "Cisco", class: "wireless", x: 140, y: 120, ip: "10.50.1.10", index: "idx_wireless_ops", platform: "meraki_mr", color: "#10b981" },
+        { id: "wcm_aruba", name: "aruba-ap635-wifi6e", role: "Aruba AP-635 Campus AP", vendor: "Aruba", class: "wireless", x: 140, y: 280, ip: "10.50.1.20", index: "idx_wireless_ops", platform: "aruba_ap", color: "#eab308" },
+        { id: "wcm_pan", name: "pa-5450-fw01", role: "Palo Alto NGFW Perimeter", vendor: "Palo Alto", class: "firewall", x: 420, y: 200, ip: "10.50.0.1", index: "idx_security_fw", platform: "paloalto", color: "#f97316" },
+        { id: "wcm_core", name: "arista-7280r3-core", role: "Arista 7280R3 Core Switch", vendor: "Arista", class: "switch_dc", x: 700, y: 200, ip: "10.50.0.254", index: "idx_performance_metrics", platform: "arista", color: "#10b981" }
+      ],
+      links: [
+        { from: "wcm_meraki", to: "wcm_pan", label: "10G PoE+ Segment" },
+        { from: "wcm_aruba", to: "wcm_pan", label: "10G PoE+ Segment" },
+        { from: "wcm_pan", to: "wcm_core", label: "100G Trunk Inspection" }
+      ]
     }
   };
 
@@ -208,50 +484,81 @@ require([
     if (ctr) ctr.textContent = streamStats.totalEvents.toLocaleString();
   }
 
-  // Generate OpenConfig MDT Telemetry Payload
+  // Generate OpenConfig MDT Telemetry Payload (4 KPI Dimensions)
   function generateOpenConfigPayload() {
     var xpath = $('#select-openconfig-xpath').val() || "/interfaces/interface/state/counters";
     var host = $('#openconfig-host').val() || (selectedNode ? selectedNode.name : "rtr-cisco-8000-01.corp.internal");
     var format = $('input[name="openconfig_format"]:checked').val() || "metric";
     var now = (Date.now() / 1000).toFixed(3);
 
-    if (format === "metric") {
-      var inOctets = Math.floor(Math.random() * 50000000) + 950000000;
-      var outOctets = Math.floor(Math.random() * 40000000) + 840000000;
-      var cpu = (Math.random() * 15 + 18).toFixed(1);
-      var mem = (Math.random() * 8 + 38).toFixed(1);
+    // KPI Dimension 1: Performance & Traffic
+    var inOctets = Math.floor(Math.random() * 50000000) + 950000000;
+    var outOctets = Math.floor(Math.random() * 40000000) + 840000000;
+    var bandwidthPct = (Math.random() * 25 + 35).toFixed(1);
+    var throughputBps = Math.floor(Math.random() * 200000000) + 750000000;
+    var latencyMs = (Math.random() * 3.5 + 1.2).toFixed(2);
+    var jitterMs = (Math.random() * 0.8 + 0.1).toFixed(2);
+    var packetLossPct = (Math.random() * 0.02).toFixed(4);
 
+    // KPI Dimension 2: Device & Infrastructure Health
+    var cpu = (Math.random() * 15 + 18).toFixed(1);
+    var mem = (Math.random() * 8 + 38).toFixed(1);
+    var tempC = (Math.random() * 6 + 39).toFixed(1);
+    var uptimeSec = Math.floor(Date.now() / 1000) - 1700000000;
+    var psuStatus = "redundant_ok";
+    var upsRuntimeMin = 145;
+    var upsVoltage = 120.4;
+
+    // KPI Dimension 3: Configuration & Protocols
+    var routingTableVer = 184920;
+    var bgpPrefixCount = 894210;
+    var routeFlaps = 0;
+    var configChecksum = "e4d2a1b9c8f7";
+    var ipamUtilPct = 68.4;
+
+    // KPI Dimension 4: Security & Compliance
+    var trafficAnomalyScore = 0.04;
+    var unauthorizedAccessCount = 0;
+    var firewallDrops = 14;
+
+    if (format === "metric") {
       var metricFields = {
         "interface": "HundredGigE0/0/0/0",
         "oper_status": "UP",
         "xpath": xpath,
         "device": host,
-        "vendor": selectedNode ? selectedNode.vendor : "Cisco"
+        "vendor": selectedNode ? selectedNode.vendor : "Cisco",
+        // KPI 1: Performance & Traffic
+        "metric_name:interface.octets.in": inOctets,
+        "metric_name:interface.octets.out": outOctets,
+        "metric_name:bandwidth.utilization_pct": parseFloat(bandwidthPct),
+        "metric_name:throughput_bps": throughputBps,
+        "metric_name:latency_ms": parseFloat(latencyMs),
+        "metric_name:jitter_ms": parseFloat(jitterMs),
+        "metric_name:packet_loss_pct": parseFloat(packetLossPct),
+        "metric_name:interface.errors.in": 0,
+        "metric_name:interface.errors.out": 0,
+        "metric_name:carrier.transitions": 0,
+        // KPI 2: Device & Infrastructure Health
+        "metric_name:cpu.utilization": parseFloat(cpu),
+        "metric_name:cpu.load_avg_5m": parseFloat((cpu * 0.95).toFixed(1)),
+        "metric_name:memory.utilization": parseFloat(mem),
+        "metric_name:memory.used_bytes": 34359738368,
+        "metric_name:temperature_celsius": parseFloat(tempC),
+        "metric_name:uptime_seconds": uptimeSec,
+        "metric_name:ups_battery_runtime_min": upsRuntimeMin,
+        "metric_name:ups_input_voltage": upsVoltage,
+        // KPI 3: Configuration & Protocols
+        "metric_name:routing_table_version": routingTableVer,
+        "metric_name:bgp.prefixes.received": bgpPrefixCount,
+        "metric_name:bgp.session_up": 1.0,
+        "metric_name:route_flaps": routeFlaps,
+        "metric_name:ipam_subnet_utilization_pct": ipamUtilPct,
+        // KPI 4: Security & Compliance
+        "metric_name:traffic_spike_anomaly_score": trafficAnomalyScore,
+        "metric_name:unauthorized_access_count": unauthorizedAccessCount,
+        "metric_name:firewall_drop_count": firewallDrops
       };
-
-      if (xpath.indexOf("interfaces") !== -1) {
-        metricFields["metric_name:interface.octets.in"] = inOctets;
-        metricFields["metric_name:interface.octets.out"] = outOctets;
-        metricFields["metric_name:interface.errors.in"] = 0;
-        metricFields["metric_name:interface.errors.out"] = 0;
-        metricFields["metric_name:carrier.transitions"] = 0;
-      } else if (xpath.indexOf("cpu") !== -1) {
-        metricFields["metric_name:cpu.utilization"] = parseFloat(cpu);
-        metricFields["metric_name:cpu.load_avg_5m"] = parseFloat((cpu * 0.95).toFixed(1));
-      } else if (xpath.indexOf("memory") !== -1) {
-        metricFields["metric_name:memory.utilization"] = parseFloat(mem);
-        metricFields["metric_name:memory.used_bytes"] = 34359738368;
-      } else if (xpath.indexOf("bgp") !== -1 && xpath.indexOf("session-state") !== -1) {
-        metricFields["metric_name:bgp.session_up"] = 1.0;
-        metricFields["neighbor_address"] = "10.255.0.2";
-        metricFields["peer_as"] = "65001";
-        metricFields["session_state"] = "ESTABLISHED";
-      } else if (xpath.indexOf("prefixes") !== -1) {
-        metricFields["metric_name:bgp.prefixes.received"] = 1420;
-        metricFields["metric_name:bgp.prefixes.installed"] = 1420;
-      } else {
-        metricFields["metric_name:interface.status_code"] = 1.0;
-      }
 
       var metricEvent = {
         time: parseFloat(now),
@@ -262,33 +569,43 @@ require([
         index: "cisco_mdt_metrics",
         fields: metricFields
       };
-
       return JSON.stringify(metricEvent, null, 2);
-
     } else {
-      // RFC 7950 YANG JSON Tree
-      var yangData = {
+      var yangDoc = {
         "openconfig-interfaces:interfaces": {
           "interface": [
             {
               "name": "HundredGigE0/0/0/0",
-              "config": { "name": "HundredGigE0/0/0/0", "enabled": true },
+              "config": { "name": "HundredGigE0/0/0/0", "type": "iana-if-type:ethernetCsmacd", "enabled": true },
               "state": {
-                "name": "HundredGigE0/0/0/0",
                 "admin-status": "UP",
                 "oper-status": "UP",
                 "counters": {
-                  "in-octets": 984521000,
-                  "out-octets": 874219000,
+                  "in-octets": inOctets,
+                  "out-octets": outOctets,
+                  "in-pkts": Math.floor(inOctets / 1024),
+                  "out-pkts": Math.floor(outOctets / 1024),
                   "in-errors": 0,
                   "out-errors": 0
                 }
               }
             }
           ]
+        },
+        "openconfig-platform:components": {
+          "component": [
+            {
+              "name": "Chassis-Main",
+              "state": {
+                "temperature": { "instant": parseFloat(tempC) },
+                "memory": { "utilization": parseFloat(mem) },
+                "cpu": { "instant": parseFloat(cpu) }
+              }
+            }
+          ]
         }
       };
-      return JSON.stringify(yangData, null, 2);
+      return JSON.stringify(yangDoc, null, 2);
     }
   }
 
@@ -829,6 +1146,14 @@ require([
     $('#btn-stop-continuous').on('click', stopContinuousStream);
     $('#btn-stream-path').on('click', startPathStream);
     $('#btn-stop-path').on('click', stopPathStream);
+
+    // Toggle In-Page Canvas Drawer
+    $(document).on('click', '#btn-toggle-inline-canvas', function() {
+      $('#inline-canvas-drawer').slideToggle(200);
+    });
+    $(document).on('click', '#btn-close-inline-canvas', function() {
+      $('#inline-canvas-drawer').slideUp(200);
+    });
   }
 
   // Initialization
@@ -838,12 +1163,10 @@ require([
     log('Scenario Builder & Path Flow Canvas initialized with OpenConfig MDT Streaming.');
   }
 
-  var attempts = 0;
   function pollReady() {
-    attempts++;
     if (document.getElementById('canvas-svg') && document.getElementById('select-topology-preset')) {
       init();
-    } else if (attempts < 30) {
+    } else {
       setTimeout(pollReady, 100);
     }
   }

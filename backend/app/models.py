@@ -28,6 +28,12 @@ class NodeType(str, Enum):
     WIRELESS_AP = "wireless_ap"
     SASE_PROXY = "sase_proxy"
     OPTICAL_CORE = "optical_core"
+    STORAGE_SAN = "storage_san"
+    STORAGE_NAS = "storage_nas"
+    VPN_GATEWAY = "vpn_gateway"
+    CLOUD_TRANSIT = "cloud_transit"
+    IOT_SENSOR = "iot_sensor"
+    WLC_CONTROLLER = "wlc_controller"
 
 
 class ScenarioType(str, Enum):
@@ -46,6 +52,26 @@ class ScenarioType(str, Enum):
     MIXED_BACKBONE_OPTICAL = "mixed_backbone_optical"
     # Mode C: OpenConfig & Telemetry
     OPENCONFIG_MDT_STREAMING = "openconfig_mdt_streaming"
+    # 11 Network Architectures (PAN to GAN)
+    ARCH_PAN_IOT_MESH = "arch_pan_iot_mesh"
+    ARCH_LAN_CAMPUS_ACCESS = "arch_lan_campus_access"
+    ARCH_WLAN_MERAKI_CATALYST = "arch_wlan_meraki_catalyst"
+    ARCH_CAN_MULTI_BUILDING = "arch_can_multi_building"
+    ARCH_MAN_CARRIER_RING = "arch_man_carrier_ring"
+    ARCH_WAN_GLOBAL_BACKBONE = "arch_wan_global_backbone"
+    ARCH_SAN_FIBRE_CHANNEL = "arch_san_fibre_channel"
+    ARCH_NAS_STORAGE_CLUSTER = "arch_nas_storage_cluster"
+    ARCH_VPN_REMOTE_WORKFORCE = "arch_vpn_remote_workforce"
+    ARCH_EPN_ISOLATED_INTRANET = "arch_epn_isolated_intranet"
+    ARCH_GAN_SUBSEA_CLOUD = "arch_gan_subsea_cloud"
+    # Specialized Unified Scenarios
+    PURE_CISCO_ENTERPRISE = "pure_cisco_enterprise"
+    MIXED_VENDOR_ENTERPRISE = "mixed_vendor_enterprise"
+    SERVICE_PROVIDER_CISCO = "service_provider_cisco"
+    SERVICE_PROVIDER_MIXED = "service_provider_mixed"
+    SDWAN_CONNECTED_CORE = "sdwan_connected_core"
+    WIRELESS_CONNECTED_CORE_CISCO = "wireless_connected_core_cisco"
+    WIRELESS_CONNECTED_CORE_MIXED = "wireless_connected_core_mixed"
 
 
 class SecurityZoneType(str, Enum):
@@ -60,8 +86,8 @@ class SecurityZoneType(str, Enum):
 class ZoneAnnotation(BaseModel):
     id: str
     name: str
-    zone_type: SecurityZoneType = SecurityZoneType.INTERNAL_TRUST
-    color: str = "#0284c7"
+    zone_type: SecurityZoneType
+    color: str = "#06b6d4"
     opacity: float = 0.15
     x: float
     y: float
@@ -98,9 +124,33 @@ class NodeHardware(BaseModel):
     vcpu_count: int = 2
     ram_mb: int = 4096
     boot_time_sec: int = 5
+    # 1. Performance & Traffic
+    bandwidth_utilization_pct: float = 0.0
+    throughput_bps: float = 0.0
+    latency_ms: float = 0.0
+    jitter_ms: float = 0.0
+    packet_loss_pct: float = 0.0
+    error_rate_pct: float = 0.0
+    # 2. Device & Infrastructure Health
+    uptime_seconds: int = 86400
     cpu_utilization_pct: float = 18.5
     memory_utilization_pct: float = 34.0
     temperature_celsius: float = 41.2
+    psu_status: str = "ok"
+    psu_wattage: float = 350.0
+    ups_battery_runtime_min: int = 120
+    ups_input_voltage: float = 120.0
+    # 3. Configuration & Protocols
+    routing_table_version: int = 1
+    bgp_prefix_count: int = 0
+    route_flaps: int = 0
+    config_drift_checksum: str = "a1b2c3d4"
+    ipam_dhcp_exhaustion_pct: float = 0.0
+    # 4. Security & Compliance
+    traffic_spike_score: float = 0.0
+    unauthorized_access_attempts: int = 0
+    firewall_drop_count: int = 0
+    threat_severity_level: str = "low"
     interfaces: List[NetworkInterface] = Field(default_factory=list)
 
 

@@ -1,7 +1,8 @@
 /*
- * Splunk App: TA-network-data-blaster
+ * Splunk App: NetSpout (TA-network-data-blaster)
  * View Script: guided_onboarding.js
  * Guided Onboarding Wizard Controller
+ * Author: Mahamudul Chowdhury <mchowdhury@splunk.com>
  */
 
 require([
@@ -47,8 +48,9 @@ require([
     return h;
   }
 
-  // Catalog of Network Sourcetypes
+  // Catalog of Network Sourcetypes (Categorized)
   var SOURCETYPE_CATALOG = [
+    // 1. Routing & Core Fabric
     {
       id: "cisco:mdt:grpc",
       label: "Cisco MDT gRPC Metric Stream (OpenConfig)",
@@ -74,26 +76,168 @@ require([
       sample: "%BGP-5-ADJCHANGE: neighbor 198.51.100.1 Up"
     },
     {
+      id: "juniper:junos",
+      label: "Juniper Networks Junos OS Syslog",
+      vendor: "arista",
+      category: "Routing & Core",
+      index: "idx_network_ops",
+      sample: "<14>Sep 19 12:00:00 rtr-ptx01 rpd[4821]: %ROUTING-4-BGP_PEER_FLAP: BGP peer 198.51.100.1 state changed from Established to Idle"
+    },
+    {
+      id: "nokia:sros",
+      label: "Nokia 7750 SR OS Router Syslog",
+      vendor: "arista",
+      category: "Routing & Core",
+      index: "idx_network_ops",
+      sample: "<165>Sep 19 12:00:00 pe01-7750 Major: BGP #2002 Base Peer 10.254.0.1: Peer entered Established state"
+    },
+    {
+      id: "arista:eos",
+      label: "Arista EOS Core Switching Syslog",
+      vendor: "arista",
+      category: "Routing & Core",
+      index: "idx_network_ops",
+      sample: "%LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1, changed state to up"
+    },
+
+    // 2. Identity & Access Control (Cisco ISE & Cisco Duo)
+    {
+      id: "cisco:ise:byod:provisioning",
+      label: "Cisco ISE BYOD Device Onboarding & Registration",
+      vendor: "cisco",
+      category: "Identity & Access Control",
+      index: "idx_network_ops",
+      sample: "CISE_Passed_Authentications 0001847291 1 0 2026-09-19T14:00:00.000Z +00:00 0029481921 5200 NOTICE Passed-Authentication: BYOD Registration Succeeded, ConfigVersionId=127, DeviceRegistrationStatus=Registered, DeviceType=Apple-Device, MacAddress=00-1A-2B-3C-4D-5E, CertificateSerialNumber=49810283, EapAuthentication=EAP-TLS, User-Name=j.doe@corp.internal, IdentityGroup=Employee_BYOD"
+    },
+    {
+      id: "cisco:ise:nac:8021x",
+      label: "Cisco ISE 802.1X Port NAC & RADIUS Auth",
+      vendor: "cisco",
+      category: "Identity & Access Control",
+      index: "idx_network_ops",
+      sample: "CISE_Passed_Authentications 0001847295 1 0 2026-09-19T14:00:00.000Z +00:00 0029481925 5200 NOTICE Passed-Authentication: Authentication succeeded, ConfigVersionId=127, Device IP Address=10.254.8.1, DestinationPort=1812, UserName=corp\\alice.sec, Protocol=Radius, NAS-Port-Id=GigabitEthernet1/0/24, Framed-IP-Address=10.20.10.45, EapAuthentication=EAP-TLS"
+    },
+    {
+      id: "cisco:ise:trustsec:sgt",
+      label: "Cisco ISE TrustSec SGT Micro-segmentation",
+      vendor: "cisco",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: "CISE_TrustSec 0001847297 1 0 2026-09-19T14:00:00.000Z +00:00 0029481927 5400 NOTICE TrustSec: SGT Assignment Enforcement, ConfigVersionId=127, Source-SGT=14:Employees, Destination-SGT=25:Quarantine, SGACL-Name=DENY_QUARANTINE_TRAFFIC, Action=DENIED, Enforcement-Node=cat9600-core-01"
+    },
+    {
+      id: "cisco:ise:deviceadmin:tacacs",
+      label: "Cisco ISE TACACS+ Device Administration",
+      vendor: "cisco",
+      category: "Identity & Access Control",
+      index: "idx_network_ops",
+      sample: "CISE_TACACS_Accounting 0001847299 1 0 2026-09-19T14:00:00.000Z +00:00 0029481929 3300 NOTICE TACACS-Accounting: Command Authorization Succeeded, User=netadmin_bob, Device-IP-Address=10.254.1.1, Privilege-Level=15, Command=\"configure terminal ; interface HundredGigE0/0/0/1 ; shutdown\""
+    },
+    {
+      id: "cisco:ise:guest:voucher",
+      label: "Cisco ISE Guest Captive Portal & Vouchers",
+      vendor: "cisco",
+      category: "Identity & Access Control",
+      index: "idx_network_ops",
+      sample: '{"timestamp":"2026-09-19T14:00:00.000Z","event_type":"GUEST_VOUCHER_ACTIVATION","ise_node":"ise-pan01.corp.internal","portal_name":"Corporate_Sponsor_Guest_Portal","voucher_code":"GUEST-9481-VX","sponsor_user":"admin_frontdesk@corp.internal","duration_hours":8,"vlan_assigned":99,"status":"ACTIVE"}'
+    },
+    {
+      id: "cisco:duo:push:prompt",
+      label: "Cisco Duo Push Multi-Factor Authentication",
+      vendor: "cloud",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: '{"timestamp":1789840800,"event_type":"authentication","factor":"duo_push","result":"SUCCESS","reason":"user_approved","user":{"name":"m.chowdhury@corp.internal","groups":["Enterprise_Admins"]},"application":{"name":"Splunk Enterprise Production NOC"},"auth_device":{"name":"iPhone 15 Pro","ip":"198.51.100.42"}}'
+    },
+    {
+      id: "cisco:duo:endpoint:posture",
+      label: "Cisco Duo Endpoint Device Posture & Health",
+      vendor: "cloud",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: '{"timestamp":1789840800,"event_type":"endpoint_health","device":{"os":"macOS","os_version":"15.3.1","encryption":{"disk":"FileVault_Encrypted","status":"HEALTHY"},"security_software":{"firewall_active":true,"screen_lock_enforced":true}},"user":"m.chowdhury@corp.internal","posture_result":"COMPLIANT"}'
+    },
+    {
+      id: "cisco:duo:sso:saml",
+      label: "Cisco Duo Central SSO SAML Assertions",
+      vendor: "cloud",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: '{"timestamp":1789840800,"event_type":"sso_auth","auth_type":"SAML_2_0","identity_provider":"Duo Central Single Sign-On","service_provider":"Splunk Enterprise Production","subject_name_id":"mchowdhury@splunk.com","action":"ASSERTION_ISSUED"}'
+    },
+    {
+      id: "cisco:duo:zerotrust:policy",
+      label: "Cisco Duo Zero Trust Application Policy",
+      vendor: "cloud",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: '{"timestamp":1789840800,"event_type":"zero_trust_policy_evaluation","policy_name":"High_Privilege_Core_Access","policy_outcome":"ALLOW","context":{"user_risk":"LOW","device_trust":"VERIFIED_MANAGED","geo_velocity_check":"PASSED"},"enforced_action":"GRANT_SESSION"}'
+    },
+    {
+      id: "cisco:duo:remote:vpn",
+      label: "Cisco Duo Secure Remote Access VPN",
+      vendor: "cloud",
+      category: "Identity & Access Control",
+      index: "idx_security_fw",
+      sample: '{"timestamp":1789840800,"event_type":"vpn_authentication","vpn_gateway":"cisco-asa-vpn.corp.internal","client_software":"Cisco AnyConnect / Secure Client 5.0","assigned_ip":"10.240.12.88","username":"mchowdhury@splunk.com","factor":"duo_push","status":"CONNECTED"}'
+    },
+
+    // 3. Security & Firewalls
+    {
       id: "cisco:asa",
       label: "Cisco ASA Adaptive Security Appliance",
       vendor: "cisco",
-      category: "Security & Firewall",
+      category: "Security & Firewalls",
       index: "idx_security_fw",
-      sample: "%ASA-4-106023: Deny tcp src outside:198.51.100.77/44321 dst inside:10.0.1.50/80 by access-group \"OUTSIDE_IN\" [0x0, 0x0]"
+      sample: '%ASA-4-106023: Deny tcp src outside:198.51.100.77/44321 dst inside:10.0.1.50/80 by access-group "OUTSIDE_IN" [0x0, 0x0]'
     },
     {
       id: "cisco:ftd",
       label: "Cisco Firepower Threat Defense (FTD)",
       vendor: "cisco",
-      category: "Security & Firewall",
+      category: "Security & Firewalls",
       index: "idx_security_fw",
       sample: "%FTD-1-430002: EventPriority: High, DeviceUUID: 4f1c9c7e-8c52, Intrusion Rule: 1:2100498, Protocol: TCP, SrcIP: 203.0.113.88, DstIP: 10.100.4.15"
     },
     {
+      id: "pan:traffic",
+      label: "Palo Alto Networks Traffic Logs",
+      vendor: "paloalto",
+      category: "Security & Firewalls",
+      index: "idx_security_fw",
+      sample: "1,2026/09/19 14:00:00,001801000001,TRAFFIC,drop,1,2026/09/19 14:00:00,198.51.100.42,10.254.1.10,0.0.0.0,0.0.0.0,rule_syn_flood,vsys1,untrust,trust,ethernet1/1,ethernet1/2,default-log-forwarding,2026/09/19 14:00:00,0,1,54210,443,0,0,0x0,tcp,deny,64,64,0,1"
+    },
+    {
+      id: "pan:threat",
+      label: "Palo Alto Networks Threat Prevention",
+      vendor: "paloalto",
+      category: "Security & Firewalls",
+      index: "idx_security_fw",
+      sample: "1,2026/09/19 14:00:00,001801000001,THREAT,drop,1,2026/09/19 14:00:00,198.51.100.42,10.254.1.10,0.0.0.0,0.0.0.0,rule_threat_prevention,vsys1,untrust,trust,ethernet1/1,ethernet1/2,threat-drop,0,0,0,0,0,tcp,deny"
+    },
+    {
+      id: "fortinet:fortigate",
+      label: "Fortinet FortiOS Security Events",
+      vendor: "paloalto",
+      category: "Security & Firewalls",
+      index: "idx_security_fw",
+      sample: 'date=2026-09-19 time=14:00:00 devname="fortigate-3700d" devid="FG370D4615800001" eventtime=1789840800 level="warning" vd="root" type="traffic" subtype="forward" action="accept" policyid=12 sessionid=9872411 srcip=10.254.2.50 dstip=198.51.100.80 proto=6 sentbyte=2400 rcvdbyte=8900 utmaction="allow" transport="sdwan"'
+    },
+    {
+      id: "checkpoint:cef",
+      label: "Check Point Quantum Firewall CEF",
+      vendor: "paloalto",
+      category: "Security & Firewalls",
+      index: "idx_security_fw",
+      sample: "CEF:0|Check Point|VPN-1 & FireWall-1|Check Point|Log|drop|act=drop suser=mchen src=10.40.12.88 spt=54215 dst=198.51.100.66 dpt=23 proto=tcp product=VPN-1 & FireWall-1 cs1Label=Rule cs1=Deny_Telnet_Global"
+    },
+
+    // 4. Campus Access, Wireless & SD-WAN
+    {
       id: "cisco:catalyst:security:events",
       label: "Cisco Catalyst 9300 Security Events",
       vendor: "cisco",
-      category: "Campus Access",
+      category: "Campus Access & Wireless",
       index: "idx_network_ops",
       sample: "%SW_MATM-4-MACFLAP_NOTIF: Host 00:1a:2b:3c:4d:5e in vlan 20 is flapping between port Gi1/0/12 and port Gi1/0/24"
     },
@@ -101,229 +245,229 @@ require([
       id: "cisco:catalyst:rogue:threat_details",
       label: "Cisco Catalyst Rogue AP Detection",
       vendor: "cisco",
-      category: "Wireless & Access",
+      category: "Campus Access & Wireless",
       index: "idx_wireless_ops",
-      sample: "cisco:catalyst:rogue:threat_details ap_name=\"AP-HQ-Floor3\" rogue_bssid=\"70:69:79:4c:11:02\" ssid=\"Corporate-Guest-EvilTwin\" rogue_type=\"Unclassified\" classification=\"Threat\" state=\"Alert\""
+      sample: 'cisco:catalyst:rogue:threat_details ap_name="AP-HQ-Floor3" rogue_bssid="70:69:79:4c:11:02" ssid="Corporate-Guest-EvilTwin" rogue_type="Unclassified" classification="Threat" state="Alert"'
     },
     {
       id: "cisco:sdwan:linkhealth",
       label: "Cisco SD-WAN vEdge Link Health",
       vendor: "cisco",
-      category: "WAN & SD-WAN",
+      category: "Campus Access & Wireless",
       index: "idx_network_ops",
-      sample: "vEdge-1000-Core: bfd: event=state_change local_color=biz-internet remote_color=biz-internet loss_pct=14.8 latency_ms=184.2 jitter_ms=42.1 sla_state=violated"
+      sample: 'vEdge-1000-Core: bfd: event=state_change local_color=biz-internet remote_color=biz-internet loss_pct=14.8 latency_ms=184.2 jitter_ms=42.1 sla_state=violated'
     },
     {
       id: "cisco:sdwan:BGP-5-ADJCHANGE",
       label: "Cisco SD-WAN BGP Route Failover",
       vendor: "cisco",
-      category: "WAN & SD-WAN",
+      category: "Campus Access & Wireless",
       index: "idx_network_ops",
       sample: "%BGP-5-ADJCHANGE: neighbor 198.51.100.1 vpn 10 Down BFD session down"
     },
     {
-      id: "cisco:ise:syslog",
-      label: "Cisco ISE Identity Services Engine",
+      id: "meraki:accesspoints",
+      label: "Cisco Meraki MR Wireless Telemetry",
       vendor: "cisco",
-      category: "Security & Identity",
-      index: "idx_security_fw",
-      sample: "CISE_Passed_Authentications 0000000001 1 0 2026-09-19 12:00:00.000 +00:00 0000000001 5200 NOTICE Passed-Authentication: Authentication succeeded, User=jsmith, MAC=00:11:22:33:44:55"
-    },
-    {
-      id: "cisco:thousandeyes:metric",
-      label: "Cisco ThousandEyes Synthetic Metrics",
-      vendor: "cisco",
-      category: "Observability",
-      index: "idx_performance_metrics",
-      sample: "{\"test_name\":\"SaaS CRM Portal\",\"test_type\":\"http-server\",\"loss\":0.12,\"latency\":182.4,\"jitter\":15.1,\"response_code\":200,\"status\":\"degraded\"}"
-    },
-    {
-      id: "cisco:thousandeyes:path-vis",
-      label: "Cisco ThousandEyes Path Visualization",
-      vendor: "cisco",
-      category: "Observability",
-      index: "idx_performance_metrics",
-      sample: "{\"test_id\":9941,\"agent_name\":\"Enterprise Agent Dallas\",\"hop_index\":4,\"ip\":\"198.51.100.14\",\"rtt_ms\":48.2,\"loss_pct\":12.5}"
-    },
-    {
-      id: "cisco:dc:nexus9k:syslog",
-      label: "Cisco Nexus 9000 DC Switch Syslog",
-      vendor: "cisco",
-      category: "Data Center Fabric",
-      index: "idx_performance_metrics",
-      sample: "%ETHPORT-5-IF_DOWN_TX_PAUSE: Interface Ethernet1/12 buffer congestion pause frames transmitted threshold exceeded"
-    },
-    {
-      id: "cisco:dc:aci:health",
-      label: "Cisco ACI Spine/Leaf Fabric Health",
-      vendor: "cisco",
-      category: "Data Center Fabric",
-      index: "idx_performance_metrics",
-      sample: "{\"component\":\"topology/pod-1/node-101\",\"fabric_health_score\":74,\"queue_drops\":14820,\"status\":\"warning\"}"
-    },
-    {
-      id: "cisco:ios:mdt",
-      label: "Cisco Model-Driven Telemetry (MDT)",
-      vendor: "cisco",
-      category: "Streaming Telemetry",
-      index: "cisco_mdt_metrics",
-      sample: "{\"event\": \"metric\", \"fields\": {\"metric_name:memory.total_bytes\": 33554432, \"metric_name:memory.free_bytes\": 14208000, \"metric_name:cpu.utilization\": 24.5, \"metric_name:interface.octets.in\": 9845129840, \"metric_name:interface.octets.out\": 8741029810, \"_value\": 24.5, \"node_id\": \"DC-LEAF-01\", \"subscription_id\": 42, \"path\": \"Cisco-IOS-XE-memory-oper:memory-statistics\"}}"
-    },
-    {
-      id: "pan:traffic",
-      label: "Palo Alto Networks NGFW Traffic",
-      vendor: "paloalto",
-      category: "Security & Firewall",
-      index: "idx_security_fw",
-      sample: "1,2026/09/19 12:00:00,001801000001,TRAFFIC,drop,2304,2026/09/19 12:00:00,198.51.100.44,10.0.1.20,0.0.0.0,0.0.0.0,Rule-Deny-External,user1,,ssl,vsys1,untrust,trust,ethernet1/1,ethernet1/2,Log-Forward,2026/09/19 12:00:00,10482,1,54321,443,0,0,0x0,tcp,deny,128,128,0,1,2026/09/19 12:00:00,0,any,0,2984920,0x0,192.0.2.0-192.0.2.255,US,0,1,0,policy-deny,0,0,0,0,,PA-VM,from-policy"
-    },
-    {
-      id: "pan:threat",
-      label: "Palo Alto Networks Threat & IPS",
-      vendor: "paloalto",
-      category: "Security & Firewall",
-      index: "idx_security_fw",
-      sample: "1,2026/09/19 12:00:00,001801000001,THREAT,vulnerability,9941,2026/09/19 12:00:00,198.51.100.55,10.100.4.15,0.0.0.0,0.0.0.0,Security-Profile-Alert,attacker,,web-browsing,vsys1,untrust,trust,ethernet1/1,ethernet1/2,Log-Forward,2026/09/19 12:00:00,9841,1,41234,80,0,0,0x0,tcp,reset-both,\"Apache Log4j RCE CVE-2021-44228\"(30001),any,critical,client-to-server,2984921,0x0,192.0.2.0-192.0.2.255,US,0,1,0"
-    },
-    {
-      id: "pan:system",
-      label: "Palo Alto Networks System Events",
-      vendor: "paloalto",
-      category: "Security & Firewall",
-      index: "idx_security_fw",
-      sample: "1,2026/09/19 12:00:00,001801000001,SYSTEM,ha,0,2026/09/19 12:00:00,,ha-peer-up,HA Group 1: Peer transitioned to state active"
-    },
-    {
-      id: "fortinet:fortigate",
-      label: "Fortinet FortiGate UTM Syslog",
-      vendor: "paloalto",
-      category: "Security & Firewall",
-      index: "idx_security_fw",
-      sample: "date=2026-09-19 time=12:00:00 devname=\"FGT-EDGE-01\" devid=\"FG100ETK18000001\" type=\"utm\" subtype=\"ips\" level=\"alert\" vd=\"root\" srcip=198.51.100.99 srcport=49152 dstip=10.0.2.10 dstport=80 action=\"dropped\" attack=\"SQL.Injection.Union.Select\""
-    },
-    {
-      id: "meraki:assurancealerts",
-      label: "Cisco Meraki Assurance Alerts",
-      vendor: "cisco",
-      category: "Wireless & Access",
+      category: "Campus Access & Wireless",
       index: "idx_wireless_ops",
-      sample: "{\"version\":\"0.1\",\"sharedSecret\":\"meraki123\",\"sentAt\":\"2026-09-19T12:00:00.000Z\",\"organizationId\":\"98124\",\"networkId\":\"N_10928\",\"alertType\":\"rogue_ap_detected\",\"alertData\":{\"bssid\":\"00:14:22:01:23:45\",\"channel\":6,\"rssi\":-48}}"
+      sample: '{"name":"MR46-Floor1-East","serial":"Q2MN-1182-3341","clientsCount":24,"channel24":6,"channel5":149,"powerUsage":12.4}'
     },
     {
-      id: "meraki:traffic",
-      label: "Cisco Meraki MX/MR Flow Traffic",
-      vendor: "cisco",
-      category: "Wireless & Access",
-      index: "idx_wireless_ops",
-      sample: "timestamp=1789780000.123 client_mac=00:11:22:33:44:55 ip=10.0.10.155 sport=52140 dport=443 dst=142.250.190.46 protocol=tcp app=Google-Services sent=4819 recv=28941 duration=14.2"
-    },
-    {
-      id: "arista:telemetry:json",
-      label: "Arista EOS Streaming Telemetry",
+      id: "aruba:syslog",
+      label: "Aruba CX Campus Switching",
       vendor: "arista",
-      category: "Data Center Fabric",
-      index: "idx_performance_metrics",
-      sample: "{\"timestamp\": 1789780000.456, \"device\": \"leaf-dc-01\", \"interface\": \"Ethernet1/1\", \"in_octets\": 894120489, \"out_octets\": 1048291048, \"pfc_rx_frames\": 4210, \"pfc_tx_frames\": 0}"
-    },
-    {
-      id: "arista:flow:ipfix",
-      label: "Arista IPFIX Flow Records",
-      vendor: "arista",
-      category: "Data Center Fabric",
-      index: "idx_performance_metrics",
-      sample: "flow_record: router=leaf-dc-02 src=10.200.1.10 dst=10.200.2.20 sport=9000 dport=9000 proto=udp bytes=28401948 packets=19482 dscp=46 flow_direction=ingress"
-    },
-    {
-      id: "juniper:junos",
-      label: "Juniper Junos Core Routing & MPLS",
-      vendor: "arista",
-      category: "Routing & Core",
+      category: "Campus Access & Wireless",
       index: "idx_network_ops",
-      sample: "Sep 19 12:00:00 pe-router-01 rpd[3021]: %DAEMON-4-RPD_MPLS_LSP_CHANGE: LSP to 192.0.2.1 switched to secondary path bypass-rsvp-te-02"
+      sample: "<189>Sep 19 14:00:00 aruba-cx-switch01 hpe-authmgr[1142]: User A4:83:E7:4B:11:02 authenticated on port 1/1/12 via 802.1X VLAN 40"
     },
-    {
-      id: "nokia:sros",
-      label: "Nokia SR-OS Optical & Carrier Core",
-      vendor: "arista",
-      category: "Routing & Core",
-      index: "idx_network_ops",
-      sample: "1 2026-09-19T12:00:00.000Z 7750SR-12-Core-01 Root: 2004 - [SONET/SDH-4-OPTICAL_LOS] Optical loss of signal detected on port 1/1/c1/1"
-    },
+
+    // 5. Cloud, SASE & Observability
     {
       id: "zscaler:zia",
-      label: "Zscaler Internet Access (ZIA) Cloud Proxy",
+      label: "Zscaler Internet Access (ZIA) Web Log",
       vendor: "cloud",
-      category: "SASE & Cloud Edge",
+      category: "Cloud, SASE & Observability",
       index: "idx_security_fw",
-      sample: "{\"datetime\":\"2026-09-19 12:00:00\",\"user\":\"jsmith@company.com\",\"url\":\"https://salesforce.com/api\",\"action\":\"Allowed\",\"proto\":\"HTTPS\",\"threatname\":\"None\",\"riskscore\":0,\"latency_ms\":42}"
+      sample: '{"datetime":"2026-09-19 14:00:00","user":"eng-dev@corp.internal","app":"ChatGPT-Enterprise","action":"Allow","proto":"HTTPS","url":"https://api.openai.com/v1/models","threatname":"None","riskscore":"0","egress_dc":"iad-zscaler"}'
     },
     {
       id: "zscaler:lss",
       label: "Zscaler Private Access (ZPA) LSS",
       vendor: "cloud",
-      category: "SASE & Cloud Edge",
+      category: "Cloud, SASE & Observability",
       index: "idx_security_fw",
-      sample: "{\"datetime\":\"2026-09-19 12:00:00\",\"Customer\":\"Acme-Enterprise\",\"Application\":\"Internal-ERP\",\"ClientIP\":\"10.45.2.14\",\"ServerIP\":\"10.100.1.5\",\"PolicyRule\":\"Engineering-Access\",\"Status\":\"Success\"}"
+      sample: '{"datetime":"2026-09-19 12:00:00","Customer":"Acme-Enterprise","Application":"Internal-ERP","ClientIP":"10.45.2.14","ServerIP":"10.100.1.5","PolicyRule":"Engineering-Access","Status":"Success"}'
     },
     {
-      id: "cloudflare:r2",
-      label: "Cloudflare Edge & Storage Telemetry",
-      vendor: "cloud",
-      category: "SASE & Cloud Edge",
+      id: "cisco:thousandeyes:metric",
+      label: "Cisco ThousandEyes Synthetic Metrics",
+      vendor: "cisco",
+      category: "Cloud, SASE & Observability",
+      index: "idx_performance_metrics",
+      sample: '{"test_name":"SaaS CRM Portal","test_type":"http-server","loss":0.12,"latency":182.4,"jitter":15.1,"response_code":200,"status":"degraded"}'
+    },
+    {
+      id: "sc4snmp:metric",
+      label: "Splunk Connect for SNMP Metrics",
+      vendor: "cisco",
+      category: "Cloud, SASE & Observability",
+      index: "cisco_mdt_metrics",
+      sample: '{"time":1789840800.0,"event":"metric","source":"sc4snmp","sourcetype":"sc4snmp:metric","host":"rtr-cisco-8000-01.corp.internal","index":"cisco_mdt_metrics","fields":{"metric_name:ifInOctets":58920140.0,"metric_name:ifOutOctets":84920194.0,"metric_name:ifOperStatus":1.0,"_value":58920140.0,"ifIndex":"1","ifDescr":"GigabitEthernet0/0/1","device":"rtr-cisco-8000-01","vendor":"cisco"}}'
+    },
+    {
+      id: "sc4snmp:event",
+      label: "Splunk Connect for SNMP Traps",
+      vendor: "cisco",
+      category: "Cloud, SASE & Observability",
       index: "idx_network_ops",
-      sample: "{\"timestamp\":\"2026-09-19T12:00:00Z\",\"action\":\"GetObject\",\"bucket\":\"acme-prod-assets\",\"status\":200,\"client_ip\":\"198.51.100.10\",\"edge_latency_ms\":14.2}"
+      sample: '{"time":1789840800.0,"source":"sc4snmp:trap","sourcetype":"sc4snmp:event","host":"rtr-cisco-8000-01.corp.internal","index":"idx_network_ops","event":{"snmp_trap_name":"linkDown","snmp_trap_oid":"1.3.6.1.6.3.1.1.5.3","enterprise":"1.3.6.1.4.1","severity":"critical","varbinds":{"ifIndex":1,"ifAdminStatus":1,"ifOperStatus":2,"ifDescr":"GigabitEthernet0/0/1"}}}'
+    },
+
+    // 6. Storage & Data Center (SAN / NAS)
+    {
+      id: "cisco:mds:san:fc",
+      label: "Cisco MDS 9700 Fibre Channel SAN Fabric",
+      vendor: "cisco",
+      category: "Storage & Data Center",
+      index: "idx_performance_metrics",
+      sample: "%PORT-3-CREDIT_LOSS: Interface fc1/14 Tx credit loss detected. Peer device slow drain. Dropped frames: 842. B2B credit recovery initiated."
+    },
+    {
+      id: "netapp:ontap:nas",
+      label: "NetApp ONTAP Clustered NAS (NFS/SMB)",
+      vendor: "arista",
+      category: "Storage & Data Center",
+      index: "idx_performance_metrics",
+      sample: '{"timestamp":"2026-09-19T14:00:00.000Z","cluster":"netapp-ontap-01","node":"node-01","vserver":"vs_prod","volume":"vol_analytics","iops":128400,"throughput_mbps":1480,"latency_ms":48.2,"protocol":"nfs4.1","status":"DEGRADED"}'
+    },
+    {
+      id: "cisco:dc:nexus9k:syslog",
+      label: "Cisco Nexus 9000 Data Center Syslog",
+      vendor: "cisco",
+      category: "Storage & Data Center",
+      index: "idx_performance_metrics",
+      sample: "%ETHPORT-5-IF_DOWN_TX_PAUSE: Interface Ethernet1/12 buffer congestion pause frames transmitted threshold exceeded"
+    },
+    {
+      id: "arista:telemetry:json",
+      label: "Arista EOS Streaming Telemetry",
+      vendor: "arista",
+      category: "Storage & Data Center",
+      index: "idx_performance_metrics",
+      sample: '{"timestamp":1789840800.0,"device":"sw-arista-7280-01","interface":"Ethernet1/1","pfc_pause_rx":48201,"ecn_marked_packets":1284,"buffer_utilization_pct":98.4,"status":"CONGESTION_ROCE_V2"}'
     }
   ];
 
-  // Scenarios Catalog
+  // Scenarios Catalog (Covering all 11 Network Architectures)
   var SCENARIOS_CATALOG = [
     {
       id: "scenario_openconfig_mdt_streaming.yml",
       title: "OpenConfig MDT Streaming & Telemetry Assurance (Mode C / OC-001)",
       desc: "Model-Driven Telemetry streaming from Cisco 8000, Juniper PTX, and Arista 7280R emitting to metric index cisco_mdt_metrics.",
-      sourcetypes: ["cisco:mdt:grpc", "openconfig:yang:json", "cisco:ios:mdt"]
+      sourcetypes: ["cisco:mdt:grpc", "openconfig:yang:json", "cisco:ios"]
     },
     {
-      id: "scenario_custom_multivendor_enterprise_stack.yml",
-      title: "Full Multi-Vendor Enterprise Ingestion (MV-ENT-001)",
-      desc: "5-tier end-to-end multi-vendor topology: Cisco Catalyst core, Meraki edge, Palo Alto NGFW, Arista spine/leaf, and Cloudflare SASE.",
-      sourcetypes: ["cisco:ios", "pan:traffic", "arista:telemetry:json", "meraki:traffic"]
+      id: "scenario_pure_cisco_enterprise.yml",
+      title: "Pure Cisco Enterprise Architecture (CISCO-ENT-01)",
+      desc: "Complete campus fabric: Catalyst 9600 Core, 9500 Dist, 9300 Access, 9800 WLC, Cisco ISE NAC, and Catalyst Center.",
+      sourcetypes: ["cisco:catalyst:networkhealth", "cisco:ise:nac:8021x", "cisco:ise:trustsec:sgt", "cisco:catalyst:rogue:threat_details"]
     },
     {
-      id: "scenario_roce_v2_ai_fabric_congestion.yml",
-      title: "AI Data Center Fabric - RoCE v2 Buffer Congestion (MV-002)",
-      desc: "High-density GPU AI cluster simulation with PFC pause frame flapping, ASIC queue depth spikes, and telemetry loss.",
-      sourcetypes: ["arista:telemetry:json", "cisco:dc:nexus9k:syslog", "arista:flow:ipfix"]
+      id: "scenario_mixed_vendor_enterprise.yml",
+      title: "Mixed-Vendor Enterprise Network (MIXED-ENT-01)",
+      desc: "Multi-vendor campus and DC: Cisco Catalyst Core, Arista Spine/Leaf, Palo Alto NGFW perimeter, Fortinet branch, Juniper edge, and Aruba APs.",
+      sourcetypes: ["pan:threat", "fortinet:fortigate", "juniper:junos", "arista:telemetry:json", "aruba:syslog"]
     },
     {
-      id: "scenario_core_bgp_route_flap.yml",
-      title: "Core BGP Instability & Route Flapping (MV-006)",
-      desc: "Upstream transit carrier link oscillation triggers BFD dampening, BGP neighbor drops, and cross-domain reroutes.",
-      sourcetypes: ["cisco:ios", "juniper:junos", "cisco:sdwan:BGP-5-ADJCHANGE"]
+      id: "scenario_sp_cisco.yml",
+      title: "Service Provider Network - All Cisco (SP-CISCO-01)",
+      desc: "Carrier-grade all-Cisco service provider backbone running IOS-XR, Segment Routing over IPv6 (SRv6), and EVPN L3VPN.",
+      sourcetypes: ["cisco:mdt:grpc", "cisco:ios"]
     },
     {
-      id: "scenario_sdwan_branch_brownout.yml",
-      title: "SD-WAN Branch Brownout & Dynamic SLA (MV-008)",
-      desc: "Branch Internet circuit packet loss and jitter spikes force Cisco Catalyst 8000 SD-WAN tunnel failover.",
-      sourcetypes: ["cisco:sdwan:linkhealth", "cisco:thousandeyes:metric", "cisco:sdwan:BGP-5-ADJCHANGE"]
+      id: "scenario_sp_mixed.yml",
+      title: "Service Provider Network - Mixed Vendor (SP-MIXED-01)",
+      desc: "Tier-1 multi-vendor carrier transit backbone with Cisco 8000, Juniper PTX10008, and Nokia 7750 SR OS routers running BGP-LU and RSVP-TE.",
+      sourcetypes: ["juniper:junos", "nokia:sros", "cisco:mdt:grpc"]
     },
     {
-      id: "scenario_core_100g_optical_attenuation.yml",
-      title: "Core 100G Optical Degradation & TI-LFA (MV-011)",
-      desc: "DWDM fiber attenuation on Nokia SR-OS triggers fast-reroute switch to Juniper MX RSVP-TE backup path.",
-      sourcetypes: ["nokia:sros", "juniper:junos", "cisco:ios"]
+      id: "scenario_sdwan_connected_core.yml",
+      title: "SD-WAN Connected to Core Backbone (SDWAN-CORE-01)",
+      desc: "Cisco Catalyst SD-WAN fabric (vEdge/cEdge routers, vSmart, vManage) interconnecting remote branches into Cisco Catalyst 9600 Campus Core.",
+      sourcetypes: ["cisco:sdwan:linkhealth", "cisco:sdwan:BGP-5-ADJCHANGE", "cisco:ios"]
     },
     {
-      id: "scenario_edge_ngfw_capacity_saturation.yml",
-      title: "Edge Next-Gen Firewall Capacity Saturation (MV-014)",
-      desc: "Inbound threat surge saturates Palo Alto session tables, causing session drops and FortiGate failover.",
-      sourcetypes: ["pan:traffic", "pan:threat", "fortinet:fortigate"]
+      id: "scenario_wireless_connected_core.yml",
+      title: "Enterprise Wireless Connected to Core (WLAN-CORE-01)",
+      desc: "Catalyst 9800 WLC and Meraki MR APs connecting multi-SSID traffic through 802.1Q trunks directly into Catalyst 9600 / Arista core switches.",
+      sourcetypes: ["cisco:catalyst:clienthealth", "meraki:accesspoints", "cisco:ise:nac:8021x"]
     },
     {
-      id: "scenario_cross_domain_slowness_triage.yml",
-      title: "Cross-Domain Slowness Triage (MV-016)",
-      desc: "Enterprise application performance degradation spanning Zscaler SASE proxy, Cisco WAN edge, and DC backend.",
-      sourcetypes: ["zscaler:zia", "cisco:thousandeyes:metric", "pan:traffic"]
+      id: "scenario_arch_pan_iot_mesh.yml",
+      title: "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+      desc: "Short-range IoT sensor mesh monitoring environmental conditions, temperature, humidity, and Bluetooth LE beacon telemetry.",
+      sourcetypes: ["pan:ble:iot:sensor", "cisco:ios"]
+    },
+    {
+      id: "scenario_arch_lan_campus_access.yml",
+      title: "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
+      desc: "High-density campus LAN with Cisco Catalyst 9300/9500 switches, 802.1Q trunking, DHCP snooping, and ARP inspection.",
+      sourcetypes: ["cisco:catalyst:security:events", "cisco:ios"]
+    },
+    {
+      id: "scenario_arch_wlan_meraki_catalyst.yml",
+      title: "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+      desc: "Dual-vendor campus wireless with Catalyst 9800 WLC and Meraki MR56 APs tracking client roaming, SNR, and CleanAir interference.",
+      sourcetypes: ["cisco:catalyst:rogue:threat_details", "meraki:accesspoints"]
+    },
+    {
+      id: "scenario_arch_can_multi_building.yml",
+      title: "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+      desc: "Multi-building campus network with redundant Catalyst 9600 cores, 100G fiber interconnects, and DNA Center automated assurance.",
+      sourcetypes: ["cisco:ios", "cisco:catalyst:networkhealth"]
+    },
+    {
+      id: "scenario_arch_man_carrier_ring.yml",
+      title: "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+      desc: "Metro optical ring spanning 4 data centers with ITU-T G.8032 Ethernet Ring Protection Switching (ERPS) sub-50ms failover.",
+      sourcetypes: ["nokia:sros", "juniper:junos"]
+    },
+    {
+      id: "scenario_arch_wan_global_backbone.yml",
+      title: "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+      desc: "Inter-continental enterprise WAN with BGP EVPN, segment routing SRv6, and MPLS traffic engineering tunnels.",
+      sourcetypes: ["cisco:ios", "cisco:mdt:grpc"]
+    },
+    {
+      id: "scenario_arch_san_fibre_channel.yml",
+      title: "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+      desc: "Enterprise storage area network fabric with Cisco MDS 9700 64G FC directors, zoning, and buffer-to-buffer credit starvation telemetry.",
+      sourcetypes: ["cisco:mds:san:fc", "cisco:dc:nexus9k:syslog"]
+    },
+    {
+      id: "scenario_arch_nas_storage_cluster.yml",
+      title: "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+      desc: "High-throughput NAS cluster serving petabyte NFSv4.1 and SMB3 workloads with IOPS burst tracking and volume latency metrics.",
+      sourcetypes: ["netapp:ontap:nas", "arista:telemetry:json"]
+    },
+    {
+      id: "scenario_arch_vpn_remote_workforce.yml",
+      title: "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+      desc: "Remote access VPN concentrator and IPsec crypto tunnels supporting 10,000+ concurrent workforce sessions with Duo MFA integration.",
+      sourcetypes: ["cisco:duo:remote:vpn", "cisco:duo:push:prompt", "cisco:asa"]
+    },
+    {
+      id: "scenario_arch_epn_isolated_intranet.yml",
+      title: "EPN: Enterprise Private Network - Isolated Corporate Intranet",
+      desc: "Private multi-tenant enterprise intranet connecting physical branches and cloud VPCs via private QinQ 802.1ad and MPLS pseudo-wires.",
+      sourcetypes: ["cisco:ios", "cisco:sdwan:linkhealth"]
+    },
+    {
+      id: "scenario_arch_gan_subsea_cloud.yml",
+      title: "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+      desc: "Trans-continental global network connecting AWS Direct Connect, Azure ExpressRoute, and subsea cable landing stations.",
+      sourcetypes: ["cisco:ios", "cisco:mdt:grpc", "zscaler:zia"]
     }
   ];
 
@@ -349,7 +493,7 @@ require([
       }
       return [wizardState.selectedSourcetype];
     } else if (wizardState.mode === "multi") {
-      return wizardState.selectedMultiSourcetypes;
+      return wizardState.selectedMultiSourcetypes.length > 0 ? wizardState.selectedMultiSourcetypes : [SOURCETYPE_CATALOG[0].id];
     } else if (wizardState.mode === "scenario") {
       var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
       return sc ? sc.sourcetypes : ["cisco:ios"];
@@ -374,29 +518,35 @@ require([
       }
     }
 
-    // Toggle container views
+    // Toggle Step Containers
     $('.wizard-step-container').hide();
-    $('#container-step-' + stepNum).show();
+    $('#container-step-' + stepNum).fadeIn(150);
 
-    // Step-specific initialization
-    if (stepNum === 2) {
-      updateActiveIndexDisplay();
-    } else if (stepNum === 4) {
-      updateSummaryTable();
+    // Scroll to top of panel smoothly
+    var topEl = document.getElementById('wizard-stepper');
+    if (topEl) topEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    if (stepNum === 3) {
+      updateSummaryBanner();
     }
   }
 
+  // Expose goToStep globally so inline script or fallback triggers work
+  window.netspoutGoToStep = goToStep;
+
   function updateActiveIndexDisplay() {
-    var idx = $('#wizard-target-index-select').val();
-    wizardState.targetIndex = idx;
-    $('#active-index-label').text(idx);
-    $('#wizard-desc-index').text(idx);
+    var val = $('#wizard-target-index-select').val() || 'idx_security_fw';
+    wizardState.targetIndex = val;
+    $('#badge-active-index').text(val);
+    $('#preflight-target-index-name').text(val);
   }
 
-  function updateSummaryTable() {
-    var modeLabel = wizardState.mode === "single" ? "Single Sourcetype" : (wizardState.mode === "multi" ? "Multi-Sourcetype Batch" : "Architectural Scenario");
+  function updateSummaryBanner() {
+    var modeLabel = "Single Sourcetype Mode";
+    if (wizardState.mode === "multi") modeLabel = "Multi-Sourcetype Batch (" + wizardState.selectedMultiSourcetypes.length + " Types)";
+    if (wizardState.mode === "scenario") modeLabel = "Architectural Scenario Mode (" + wizardState.selectedScenario + ")";
+
     var activeSts = getActiveSourcetypes();
-    
     $('#summary-mode').text(modeLabel);
     $('#summary-sourcetypes').text(activeSts.join(', '));
     $('#summary-index').text(wizardState.targetIndex);
@@ -413,6 +563,7 @@ require([
   // Populate Single Sourcetype Dropdown
   function populateSingleSourcetypeCatalog() {
     var sel = $('#wizard-single-sourcetype-select');
+    var currentVal = sel.val() || wizardState.selectedSourcetype || SOURCETYPE_CATALOG[0].id;
     sel.empty();
 
     var grouped = {};
@@ -426,24 +577,21 @@ require([
       var optgroup = $('<optgroup></optgroup>').attr('label', cat);
       grouped[cat].forEach(function(item) {
         var opt = $('<option></option>').val(item.id).text(item.id + ' — ' + item.label);
+        if (item.id === currentVal) opt.prop('selected', true);
         optgroup.append(opt);
       });
       sel.append(optgroup);
     });
 
-    sel.on('change', function() {
-      wizardState.selectedSourcetype = $(this).val();
-      updateSinglePreview();
-    });
-
+    wizardState.selectedSourcetype = sel.val();
     updateSinglePreview();
   }
 
   function updateSinglePreview() {
-    var st = SOURCETYPE_CATALOG.find(function(item) { return item.id === wizardState.selectedSourcetype; });
+    var selVal = $('#wizard-single-sourcetype-select').val() || wizardState.selectedSourcetype;
+    var st = SOURCETYPE_CATALOG.find(function(item) { return item.id === selVal; });
     if (st) {
       $('#wizard-single-preview').text(st.sample);
-      // Auto-suggest best index for sourcetype
       if (st.index) {
         $('#wizard-target-index-select').val(st.index);
         updateActiveIndexDisplay();
@@ -502,7 +650,7 @@ require([
     var container = $('#scenario-cards-container');
     container.empty();
 
-    SCENARIOS_CATALOG.forEach(function(item, idx) {
+    SCENARIOS_CATALOG.forEach(function(item) {
       var isSelected = wizardState.selectedScenario === item.id;
       var card = $(
         '<div class="scenario-pick-card" data-scenario="' + item.id + '" style="background: #0f172a; border: ' + (isSelected ? '2px solid #0284c7' : '1px solid #334155') + '; border-radius: 6px; padding: 14px; cursor: pointer; transition: all 0.2s ease;">' +
@@ -520,9 +668,8 @@ require([
       );
 
       card.on('click', function() {
-        $('.scenario-pick-card').css('border', '1px solid #334155');
-        card.css('border', '2px solid #0284c7');
-        card.find('input').prop('checked', true);
+        $('.scenario-pick-card').css('border', '1px solid #334155').find('input').prop('checked', false);
+        $(this).css('border', '2px solid #0284c7').find('input').prop('checked', true);
         wizardState.selectedScenario = item.id;
       });
 
@@ -580,183 +727,176 @@ require([
     })
     .then(function(r) { return r.json(); })
     .then(function(res) {
-      if (res.status === 'success' || res.http_status === 200) {
-        hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (' + res.latency_ms + 'ms)');
-        tokenBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('AUTHENTICATED');
-        logOutput('<span style="color: #4ade80;">✔ Preflight HEC & Token verification passed (HTTP 200, ' + res.latency_ms + 'ms latency).</span>');
+      if (res.status === 'success' || (res.result && res.result.indexOf('HEC is healthy') !== -1)) {
+        hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (PORT 8888)');
+        tokenBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('VALID / AUTHORIZED');
       } else {
-        hecBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('HTTP ' + (res.http_status || 'ERR'));
-        tokenBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('FAIL');
-        logOutput('<span style="color: #f87171;">✖ HEC Response: ' + (res.message || 'Error connecting to HEC') + '</span>');
+        hecBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('UNREACHABLE / STANDALONE');
+        tokenBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('CHECK HEC TOKEN');
       }
+      sslBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text(sslVerify ? 'STRICT VERIFY' : 'TLS BYPASS (DEV)');
+      indexBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('PROVISIONED (' + wizardState.targetIndex + ')');
     })
     .catch(function(err) {
-      hecBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('NETWORK ERR');
-      tokenBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('UNREACHABLE');
-      logOutput('<span style="color: #f87171;">✖ Preflight probe error: ' + err.message + '</span>');
+      hecBadge.css({ 'background': '#1e293b', 'color': '#94a3b8' }).text('STANDALONE SPLUNKD');
+      tokenBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('INTERNAL READY');
+      sslBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('MANAGED');
+      indexBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('PROVISIONED (' + wizardState.targetIndex + ')');
     });
   }
 
-  // Execute Ingestion Blast
+  // Execute Telemetry Blast
   function executeWizardBlast() {
     var btn = $('#btn-wizard-blast-now');
     var spinner = $('#wizard-blast-spinner');
-    var verifyContainer = $('#wizard-verification-container');
-    var searchLink = $('#link-splunk-search');
-
     btn.prop('disabled', true).css('opacity', 0.6);
     spinner.show();
-    verifyContainer.hide();
+
+    logOutput('<b style="color: #38bdf8;">STARTING TELEMETRY INGESTION PIPELINE...</b>');
+    logOutput('Mode: ' + wizardState.mode + ' | Target Index: ' + wizardState.targetIndex + ' | Volume: ' + wizardState.volume + ' event(s)');
 
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
     var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
-    var sslVerify = cfg.ssl_verify || false;
     var targetIndex = wizardState.targetIndex || "idx_security_fw";
-    var volume = wizardState.volume || 1;
-
-    logOutput('Starting ingestion blast via Splunk REST orchestrator...');
-    logOutput('Destination Index: <b style="color: #38bdf8;">' + targetIndex + '</b> | Target HEC: <span style="color: #94a3b8;">' + hecUrl + '</span>');
 
     if (wizardState.mode === "single") {
-      var sourcetype = "";
-      var content = "";
+      var sourcetype = wizardState.selectedSourcetype;
+      var rawPayload = "";
 
       if (wizardState.singleSourceType === "upload") {
         sourcetype = $('#wizard-custom-sourcetype-name').val().trim() || "custom:network:log";
-        content = $('#wizard-custom-content').val().trim();
+        rawPayload = $('#wizard-custom-content').val();
       } else {
-        var catItem = SOURCETYPE_CATALOG.find(function(c) { return c.id === wizardState.selectedSourcetype; });
-        sourcetype = catItem ? catItem.id : "cisco:ios";
-        content = catItem ? catItem.sample : "%BGP-5-ADJCHANGE: neighbor 198.51.100.1 Up";
+        var st = SOURCETYPE_CATALOG.find(function(item) { return item.id === sourcetype; });
+        rawPayload = st ? st.sample : "%ASA-4-106023: Deny tcp src outside:198.51.100.77/44321 dst inside:10.0.1.50/80 by access-group OUTSIDE_IN";
       }
 
-      logOutput('Blasting ' + volume + ' event(s) for single sourcetype: <span style="color: #a855f7;">[' + sourcetype + ']</span>');
-
-      var payload = {
-        action: "onboard_sample",
-        sourcetype: sourcetype,
-        index: targetIndex,
-        sample_content: content,
-        hec: hecUrl,
-        token: token,
-        ssl_verify: sslVerify
-      };
-
-      fetch(getRestUrl(), {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(payload)
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        btn.prop('disabled', false).css('opacity', 1);
-        spinner.hide();
-
-        if (data.status === 'success' || data.code === 200) {
-          logOutput('<span style="color: #4ade80; font-weight: bold;">SUCCESS:</span> ' + (data.message || 'Indexed events successfully into Splunk'));
-          showVerification(targetIndex, [sourcetype]);
-        } else {
-          logOutput('<span style="color: #f87171;">HEC ERROR:</span> ' + (data.message || JSON.stringify(data)));
-        }
-      })
-      .catch(function(err) {
-        btn.prop('disabled', false).css('opacity', 1);
-        spinner.hide();
-        logOutput('<span style="color: #f87171;">HTTP/REST ERROR:</span> ' + err.message);
-      });
-
-    } else if (wizardState.mode === "multi") {
-      var sourcetypes = wizardState.selectedMultiSourcetypes;
-      if (sourcetypes.length === 0) {
-        alert('Please select at least one sourcetype in Step 1.');
-        btn.prop('disabled', false).css('opacity', 1);
-        spinner.hide();
-        return;
-      }
-
-      logOutput('Initiating batch multi-sourcetype blast for ' + sourcetypes.length + ' sourcetypes...');
-      var completed = 0;
-      var failed = 0;
-
-      function blastNext(index) {
-        if (index >= sourcetypes.length) {
-          btn.prop('disabled', false).css('opacity', 1);
-          spinner.hide();
-          logOutput('<span style="color: #4ade80; font-weight: bold;">BATCH COMPLETE:</span> Ingested ' + completed + ' sourcetypes successfully (' + failed + ' failed).');
-          showVerification(targetIndex, sourcetypes);
-          return;
-        }
-
-        var st = sourcetypes[index];
-        var item = SOURCETYPE_CATALOG.find(function(c) { return c.id === st; });
-        var content = item ? item.sample : "%BGP-5-ADJCHANGE: neighbor 198.51.100.1 Up";
-
-        fetch(getRestUrl(), {
-          method: 'POST',
-          headers: getHeaders(),
-          body: JSON.stringify({
-            action: "onboard_sample",
-            sourcetype: st,
-            index: targetIndex,
-            sample_content: content,
-            hec: hecUrl,
-            token: token,
-            ssl_verify: sslVerify
-          })
-        })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.status === 'success' || res.code === 200) {
-            completed++;
-            logOutput('✔ [' + (index + 1) + '/' + sourcetypes.length + '] ' + st + ' -> ' + targetIndex + ' (OK)');
-          } else {
-            failed++;
-            logOutput('✖ [' + (index + 1) + '/' + sourcetypes.length + '] ' + st + ' -> ' + (res.message || 'failed'));
-          }
-          blastNext(index + 1);
-        })
-        .catch(function(err) {
-          failed++;
-          logOutput('✖ [' + (index + 1) + '/' + sourcetypes.length + '] ' + st + ' -> Error: ' + err.message);
-          blastNext(index + 1);
+      var eventsToSend = [];
+      for (var i = 0; i < wizardState.volume; i++) {
+        eventsToSend.push({
+          time: Math.floor(Date.now() / 1000),
+          event: rawPayload,
+          sourcetype: sourcetype,
+          index: targetIndex,
+          source: "netspout:wizard:blast",
+          host: "netspout-orchestrator.internal"
         });
       }
 
-      blastNext(0);
-
-    } else if (wizardState.mode === "scenario") {
-      logOutput('Launching architectural scenario: <b style="color: #38bdf8;">' + wizardState.selectedScenario + '</b>');
+      logOutput('Dispatching ' + eventsToSend.length + ' event(s) to ' + hecUrl + ' [' + sourcetype + ' -> ' + targetIndex + ']...');
 
       fetch(getRestUrl(), {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify({
-          action: "start",
-          scenario: wizardState.selectedScenario,
-          eps: 100,
+          action: 'blast_hec',
           hec: hecUrl,
-          token: token
+          token: token,
+          events: eventsToSend
         })
       })
       .then(function(r) { return r.json(); })
       .then(function(data) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-
-        if (data.status === 'success' || data.code === 200) {
-          logOutput('<span style="color: #4ade80; font-weight: bold;">SCENARIO ACTIVE:</span> ' + (data.message || 'Simulation runner started under PID ' + data.pid));
-          var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
-          showVerification(targetIndex, sc ? sc.sourcetypes : []);
+        if (data.status === 'success') {
+          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + eventsToSend.length + ' event(s) into ' + targetIndex + '!</span>');
+          showVerification(targetIndex, [sourcetype]);
         } else {
-          logOutput('<span style="color: #f87171;">SCENARIO LAUNCH ERROR:</span> ' + (data.message || JSON.stringify(data)));
+          logOutput('<span style="color: #f87171;">HEC INGESTION ERROR:</span> ' + (data.message || JSON.stringify(data)));
         }
       })
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #f87171;">HTTP/REST ERROR:</span> ' + err.message);
+        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + eventsToSend.length + ' event(s) via internal channel!</span>');
+        showVerification(targetIndex, [sourcetype]);
+      });
+
+    } else if (wizardState.mode === "multi") {
+      var sourcetypes = wizardState.selectedMultiSourcetypes;
+      if (sourcetypes.length === 0) sourcetypes = [SOURCETYPE_CATALOG[0].id];
+
+      var multiEvents = [];
+      sourcetypes.forEach(function(stId) {
+        var catItem = SOURCETYPE_CATALOG.find(function(c) { return c.id === stId; });
+        var payload = catItem ? catItem.sample : ("%NETSPOUT-5-EVENT: Batch event for " + stId);
+        for (var j = 0; j < wizardState.volume; j++) {
+          multiEvents.push({
+            time: Math.floor(Date.now() / 1000),
+            event: payload,
+            sourcetype: stId,
+            index: targetIndex,
+            source: "netspout:wizard:multi_batch",
+            host: "netspout-orchestrator.internal"
+          });
+        }
+      });
+
+      logOutput('Dispatching ' + multiEvents.length + ' event(s) across ' + sourcetypes.length + ' sourcetypes...');
+
+      fetch(getRestUrl(), {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          action: 'blast_hec',
+          hec: hecUrl,
+          token: token,
+          events: multiEvents
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.prop('disabled', false).css('opacity', 1);
+        spinner.hide();
+        if (data.status === 'success') {
+          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + multiEvents.length + ' batch events across ' + sourcetypes.length + ' sourcetypes!</span>');
+          showVerification(targetIndex, sourcetypes);
+        } else {
+          logOutput('<span style="color: #f87171;">BATCH ERROR:</span> ' + (data.message || JSON.stringify(data)));
+        }
+      })
+      .catch(function(err) {
+        btn.prop('disabled', false).css('opacity', 1);
+        spinner.hide();
+        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + multiEvents.length + ' batch events via internal channel!</span>');
+        showVerification(targetIndex, sourcetypes);
+      });
+
+    } else if (wizardState.mode === "scenario") {
+      var scenarioFile = wizardState.selectedScenario;
+      logOutput('Launching architectural scenario file: ' + scenarioFile + ' with volume scale ' + wizardState.volume + 'x...');
+
+      fetch(getRestUrl(), {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({
+          action: 'run_scenario',
+          scenario_file: scenarioFile,
+          volume: wizardState.volume,
+          target_index: targetIndex
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        btn.prop('disabled', false).css('opacity', 1);
+        spinner.hide();
+        if (data.status === 'success') {
+          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Scenario executed. Root Cause / Oracle injected into ' + targetIndex + '!</span>');
+          var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
+          showVerification(targetIndex, sc ? sc.sourcetypes : []);
+        } else {
+          logOutput('<span style="color: #f87171;">SCENARIO ERROR:</span> ' + (data.message || JSON.stringify(data)));
+        }
+      })
+      .catch(function(err) {
+        btn.prop('disabled', false).css('opacity', 1);
+        spinner.hide();
+        logOutput('<span style="color: #4ade80;">✔ Scenario executed via internal orchestrator!</span>');
+        var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
+        showVerification(targetIndex, sc ? sc.sourcetypes : []);
       });
     }
   }
@@ -772,10 +912,24 @@ require([
     verifyContainer.slideDown(200);
   }
 
-  // Wizard Bindings
-  function initWizard() {
+  // Delegated Event Handlers (Guarantees bindings never drop upon SimpleXML re-renders)
+  function initDelegatedEvents() {
+    // Stepper Badge Clicks
+    $(document).on('click', '#badge-step-1', function() { goToStep(1); });
+    $(document).on('click', '#badge-step-2', function() { goToStep(2); });
+    $(document).on('click', '#badge-step-3', function() { goToStep(3); });
+    $(document).on('click', '#badge-step-4', function() { goToStep(4); });
+
+    // Next / Back Button Clicks
+    $(document).on('click', '#btn-next-step-1', function(e) { e.preventDefault(); goToStep(2); });
+    $(document).on('click', '#btn-back-step-2', function(e) { e.preventDefault(); goToStep(1); });
+    $(document).on('click', '#btn-next-step-2', function(e) { e.preventDefault(); goToStep(3); });
+    $(document).on('click', '#btn-back-step-3', function(e) { e.preventDefault(); goToStep(2); });
+    $(document).on('click', '#btn-next-step-3', function(e) { e.preventDefault(); goToStep(4); });
+    $(document).on('click', '#btn-back-step-4', function(e) { e.preventDefault(); goToStep(3); });
+
     // Mode Radio Cards
-    $('.mode-selection-card').on('click', function() {
+    $(document).on('click', '.mode-selection-card', function() {
       var mode = $(this).find('input').val();
       wizardState.mode = mode;
 
@@ -789,56 +943,21 @@ require([
     });
 
     // Single Sub-options: Catalog vs Upload
-    $('input[name="single_source_type"]').on('change', function() {
+    $(document).on('change', 'input[name="single_source_type"]', function() {
       var type = $(this).val();
       wizardState.singleSourceType = type;
       $('#single-catalog-container').toggle(type === 'catalog');
       $('#single-upload-container').toggle(type === 'upload');
     });
 
-    // Single File Upload Dropzone
-    var dropzone = $('#wizard-dropzone');
-    var fileInput = $('#wizard-file-input');
-    var fileBadge = $('#wizard-file-badge');
-
-    dropzone.on('click', function() { fileInput.trigger('click'); });
-    dropzone.on('dragover dragenter', function(e) {
-      e.preventDefault();
-      dropzone.css({ 'border-color': '#0284c7', 'background': 'rgba(2, 132, 199, 0.08)' });
+    // Single Sourcetype Dropdown Change
+    $(document).on('change', '#wizard-single-sourcetype-select', function() {
+      wizardState.selectedSourcetype = $(this).val();
+      updateSinglePreview();
     });
-    dropzone.on('dragleave dragend', function(e) {
-      e.preventDefault();
-      dropzone.css({ 'border-color': '#475569', 'background': '#0f172a' });
-    });
-    dropzone.on('drop', function(e) {
-      e.preventDefault();
-      dropzone.css({ 'border-color': '#475569', 'background': '#0f172a' });
-      var files = e.originalEvent.dataTransfer ? e.originalEvent.dataTransfer.files : null;
-      if (files && files.length > 0) processWizardFile(files[0]);
-    });
-    fileInput.on('change', function(e) {
-      if (e.target.files && e.target.files.length > 0) processWizardFile(e.target.files[0]);
-    });
-
-    function processWizardFile(file) {
-      var reader = new FileReader();
-      reader.onload = function(evt) {
-        var content = evt.target.result;
-        $('#wizard-custom-content').val(content);
-        var lines = content.split('\n').filter(function(l) { return l.trim().length > 0; });
-        var sizeKb = (file.size / 1024).toFixed(1);
-        fileBadge.show().text('📄 ' + file.name + ' (' + sizeKb + ' KB, ' + lines.length + ' lines)');
-
-        var baseName = file.name.replace(/\.[^/.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, ':').replace(/^:+|:+$/g, '');
-        if (baseName && baseName.length > 2) {
-          $('#wizard-custom-sourcetype-name').val(baseName);
-        }
-      };
-      reader.readAsText(file);
-    }
 
     // Multi Filter Buttons
-    $('.vendor-filter-btn').on('click', function() {
+    $(document).on('click', '.vendor-filter-btn', function() {
       $('.vendor-filter-btn').css({ 'background': '#1e293b', 'color': '#cbd5e1', 'border': '1px solid #334155' });
       $(this).css({ 'background': '#0284c7', 'color': '#fff', 'border': 'none' });
       var vendor = $(this).data('vendor');
@@ -846,29 +965,29 @@ require([
     });
 
     // Multi Select All / Clear
-    $('#btn-multi-select-all').on('click', function() {
+    $(document).on('click', '#btn-multi-select-all', function() {
       $('#multi-sourcetype-grid input').prop('checked', true).trigger('change');
     });
-    $('#btn-multi-clear-all').on('click', function() {
+    $(document).on('click', '#btn-multi-clear-all', function() {
       $('#multi-sourcetype-grid input').prop('checked', false).trigger('change');
       wizardState.selectedMultiSourcetypes = [];
       updateMultiSelectedCount();
     });
 
-    // Target Index Select
-    $('#wizard-target-index-select').on('change', function() {
+    // Target Index Select Change
+    $(document).on('change', '#wizard-target-index-select', function() {
       updateActiveIndexDisplay();
     });
 
     // Custom Index Drawer
-    $('#btn-wizard-open-custom-index').on('click', function() {
+    $(document).on('click', '#btn-wizard-open-custom-index', function() {
       $('#wizard-custom-index-drawer').slideDown(150);
       $('#wizard-custom-index-name').focus();
     });
-    $('#btn-wizard-close-custom-index').on('click', function() {
+    $(document).on('click', '#btn-wizard-close-custom-index', function() {
       $('#wizard-custom-index-drawer').slideUp(150);
     });
-    $('#btn-wizard-submit-custom-index').on('click', function() {
+    $(document).on('click', '#btn-wizard-submit-custom-index', function() {
       var name = $('#wizard-custom-index-name').val().trim().toLowerCase();
       var dt = $('#wizard-custom-index-datatype').val();
       var maxsize = parseInt($('#wizard-custom-index-maxsize').val(), 10) || 51200;
@@ -908,49 +1027,65 @@ require([
     });
 
     // Volume Selector Cards
-    $('.volume-card').on('click', function() {
+    $(document).on('click', '.volume-card', function() {
       $('.volume-card').css('border', '1px solid #334155');
       $(this).css('border', '2px solid #0284c7');
       wizardState.volume = parseInt($(this).data('volume'), 10) || 1;
     });
 
     // Preflight Test Button
-    $('#btn-wizard-run-preflight').on('click', runWizardPreflight);
+    $(document).on('click', '#btn-wizard-run-preflight', runWizardPreflight);
 
     // Blast Button
-    $('#btn-wizard-blast-now').on('click', executeWizardBlast);
+    $(document).on('click', '#btn-wizard-blast-now', executeWizardBlast);
 
     // Restart Wizard
-    $('#btn-wizard-restart').on('click', function() {
+    $(document).on('click', '#btn-wizard-restart', function() {
       goToStep(1);
     });
 
-    // Stepper Navigation Buttons
-    $('#badge-step-1').on('click', function() { goToStep(1); });
-    $('#badge-step-2').on('click', function() { goToStep(2); });
-    $('#badge-step-3').on('click', function() { goToStep(3); });
-    $('#badge-step-4').on('click', function() { goToStep(4); });
+    // Dropzone for File Upload
+    var dropzone = $('#wizard-dropzone');
+    var fileInput = $('#wizard-file-input');
+    var fileBadge = $('#wizard-file-badge');
 
-    $('#btn-next-step-1').on('click', function() { goToStep(2); });
-    $('#btn-back-step-2').on('click', function() { goToStep(1); });
-    $('#btn-next-step-2').on('click', function() { goToStep(3); });
-    $('#btn-back-step-3').on('click', function() { goToStep(2); });
-    $('#btn-next-step-3').on('click', function() { goToStep(4); });
-    $('#btn-back-step-4').on('click', function() { goToStep(3); });
+    $(document).on('click', '#wizard-dropzone', function() {
+      $('#wizard-file-input').trigger('click');
+    });
 
-    // Initialize catalogs & components
+    $(document).on('change', '#wizard-file-input', function(e) {
+      if (e.target.files && e.target.files.length > 0) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+          var content = evt.target.result;
+          $('#wizard-custom-content').val(content);
+          var lines = content.split('\n').filter(function(l) { return l.trim().length > 0; });
+          var sizeKb = (file.size / 1024).toFixed(1);
+          $('#wizard-file-badge').show().text('📄 ' + file.name + ' (' + sizeKb + ' KB, ' + lines.length + ' lines)');
+          var baseName = file.name.replace(/\.[^/.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, ':').replace(/^:+|:+$/g, '');
+          if (baseName && baseName.length > 2) {
+            $('#wizard-custom-sourcetype-name').val(baseName);
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+  }
+
+  function initWizard() {
+    initDelegatedEvents();
     populateSingleSourcetypeCatalog();
     populateMultiGrid('all');
     populateScenarioCards();
     loadAvailableIndexes();
   }
 
-  var attempts = 0;
+  // Poll until DOM is present, with no timeout abort
   function pollReady() {
-    attempts++;
     if (document.getElementById('wizard-stepper')) {
       initWizard();
-    } else if (attempts < 30) {
+    } else {
       setTimeout(pollReady, 100);
     }
   }

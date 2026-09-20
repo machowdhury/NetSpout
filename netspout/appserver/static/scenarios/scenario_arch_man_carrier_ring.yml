@@ -1,0 +1,40 @@
+scenario_id: "ARCH-MAN-05"
+name: "MAN (Metropolitan Area Network) - 100G Carrier Ethernet Ring & G.8032 ERPS"
+description: "Metro optical ring spanning 4 data centers with ITU-T G.8032 Ethernet Ring Protection Switching (ERPS) sub-50ms failover."
+
+test_oracle:
+  expected_root_cause: "Metro ring fiber break triggers G.8032 Ring Protection Link (RPL) unblocking"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype nokia:sros:syslog"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-man-05-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: nokia:sros:syslog
+        host: man-ring-nokia-node1.metro.internal
+        _raw: 'G.8032-ERPS-NOTIF: Ring Metro-Ring-01 port 1/1/c2 signal fail detected. RPL unblocked. Protection switch completed in 38ms.'

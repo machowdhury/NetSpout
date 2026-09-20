@@ -1,0 +1,40 @@
+scenario_id: "SP-CISCO-01"
+name: "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, ASR 9000, IOS-XR SRv6)"
+description: "Carrier-grade all-Cisco service provider backbone running IOS-XR, Segment Routing over IPv6 (SRv6), and EVPN L3VPN."
+
+test_oracle:
+  expected_root_cause: "SRv6 flexible algorithm path degradation triggers sub-second micro-loop avoidance"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index cisco_mdt_metrics and sourcetype cisco:mdt:grpc"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: sp-cisco-01-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: cisco_mdt_metrics
+        source: scenario_stream
+        sourcetype: cisco:mdt:grpc
+        host: rtr-cisco-8000-01.corp.internal
+        _raw: '{"time":$EPOCH$,"event":"metric","source":"openconfig_telemetry","sourcetype":"cisco:mdt:grpc","host":"rtr-cisco-8000-01.corp.internal","index":"cisco_mdt_metrics","fields":{"metric_name:interface.octets.in":948102900,"metric_name:interface.octets.out":874102900,"metric_name:srv6.sid_counter":184291,"interface":"HundredGigE0/0/0/0","oper_status":"UP"}}'

@@ -289,10 +289,20 @@ export const TopBar: React.FC<TopBarProps> = ({
             <option value="" disabled>
               Topology Presets...
             </option>
-            <optgroup label="Baseline Topologies">
+            <optgroup label="Unified Topologies">
+              <option value="pure_cisco">Pure Cisco Enterprise Fabric (Catalyst 9600/9500/9300, 9800, ISE)</option>
+              <option value="openconfig_core">Mode C1: OpenConfig MDT Core Fabric</option>
               <option value="secure">Standard Secure Perimeter</option>
               <option value="bypassed">Bypassed Firewall (Breach)</option>
               <option value="lateral">Flat Subnet (Lateral Ransomware)</option>
+            </optgroup>
+            <optgroup label="11 Network Architectures (PAN to GAN)">
+              <option value="pan">PAN: IoT Sensor Mesh & BLE</option>
+              <option value="lan">LAN: Campus Access 802.1Q (Catalyst 9300/9500)</option>
+              <option value="wlan">WLAN: Catalyst 9800 & Meraki Wi-Fi 6E</option>
+              <option value="san">SAN: Cisco MDS 9700 64G Fibre Channel</option>
+              <option value="nas">NAS: NetApp ONTAP Petabyte Storage Cluster</option>
+              <option value="vpn">VPN: Cisco AnyConnect & Duo MFA Concentrator</option>
             </optgroup>
             <optgroup label="Mode A: Pure Cisco Architecture">
               <option value="cisco_campus">Mode A1: Campus Core Rogue AP & ISE</option>
@@ -303,9 +313,6 @@ export const TopBar: React.FC<TopBarProps> = ({
               <option value="mixed_edge">Mode B1: Edge Breach (Meraki-PA-Catalyst)</option>
               <option value="mixed_sase">Mode B2: SASE Cloud Degradation (Zscaler-PA)</option>
               <option value="mixed_optical">Mode B3: MPLS Optical Carrier Shift (Nokia-Juniper)</option>
-            </optgroup>
-            <optgroup label="Mode C: OpenConfig Model-Driven Telemetry">
-              <option value="openconfig_core">Mode C1: OpenConfig MDT Core Fabric</option>
             </optgroup>
           </select>
         </div>

@@ -1,0 +1,40 @@
+scenario_id: "ARCH-SAN-07"
+name: "SAN (Storage Area Network) - Cisco MDS 9700 Fibre Channel & NVMe-oF"
+description: "Enterprise storage area network fabric with Cisco MDS 9700 64G FC directors, zoning, and buffer-to-buffer credit starvation telemetry."
+
+test_oracle:
+  expected_root_cause: "Slow-drain device causes B2B credit depletion and drop alarms on FC port fc1/14"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_performance_metrics and sourcetype cisco:mds:san:fc"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-san-07-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_performance_metrics
+        source: scenario_stream
+        sourcetype: cisco:mds:san:fc
+        host: mds9700-san-director01.dc.internal
+        _raw: '%PORT-3-CREDIT_LOSS: Interface fc1/14 Tx credit loss detected. Peer device slow drain. Dropped frames: 842. B2B credit recovery initiated.'

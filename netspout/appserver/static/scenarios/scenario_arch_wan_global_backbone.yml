@@ -1,0 +1,40 @@
+scenario_id: "ARCH-WAN-06"
+name: "WAN (Wide Area Network) - Global BGP/MPLS L3VPN Backbone & Optical DWDM"
+description: "Inter-continental enterprise WAN with BGP EVPN, segment routing SRv6, and MPLS traffic engineering tunnels."
+
+test_oracle:
+  expected_root_cause: "Trans-atlantic carrier latency degradation triggers BGP path hunting and TE reroute"
+  symptomatic_systems: ["Campus Core", "Edge Gateway", "Aggregation Spine"]
+  independent_verifier: "Splunk search validation on index idx_network_ops and sourcetype cisco:ios:syslog"
+
+general:
+  workerThreads: 2
+  globalInterval: 1
+  rotInterval: 1
+  output:
+    bufferBytes: 4096
+    outputter: splunkhec
+    outputTemplate: splunkhec
+    endpoints:
+      - https://127.0.0.1:8888/services/collector
+    splunkHECToken: 00000000-0000-0000-0000-000000000000
+
+samples:
+  - name: arch-wan-06-telemetry
+    interval: 2
+    count: 1
+    randomizeEvents: true
+    tokens:
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+    lines:
+      - index: idx_network_ops
+        source: scenario_stream
+        sourcetype: cisco:ios:syslog
+        host: wan-cisco-8000-lon.corp.internal
+        _raw: '%BGP-5-ADJCHANGE: neighbor 198.51.100.44 Up (New bestpath via SRv6 SID 2001:db8:1::14)'

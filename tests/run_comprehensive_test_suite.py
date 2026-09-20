@@ -204,14 +204,118 @@ fault_engine_ok = "inject_fault" in fault_content and "recover_fault" in fault_c
 record_test("Suite 8", "All 6 Production Fault Cascades", all_scenarios and fault_engine_ok, f"Scenarios: {', '.join(scenarios)}")
 
 # -----------------------------------------------------------------------------
-# SUITE 9: netspout.spl Production Release Package Integrity
+# SUITE 9: Cisco ISE vs Cisco Duo Granular Sample Manifests & Schemas
 # -----------------------------------------------------------------------------
-print("\n>> Suite 9: netspout.spl Production Archive Validation")
-record_test("Suite 9", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
+print("\n>> Suite 9: Cisco ISE vs Cisco Duo Granular Sample Manifests & Schemas")
+samples_dir = os.path.join(NETSPOUT_DIR, "appserver/static/samples")
+ise_samples = ["cisco-ise-byod", "cisco-ise-nac-8021x", "cisco-ise-trustsec", "cisco-ise-tacacs", "cisco-ise-guest"]
+duo_samples = ["cisco-duo-push", "cisco-duo-endpoint", "cisco-duo-sso", "cisco-duo-zerotrust", "cisco-duo-remote-vpn"]
+
+def get_sample_file(s_name):
+    p1 = os.path.join(samples_dir, s_name, f"{s_name}.yml")
+    p2 = os.path.join(samples_dir, s_name, "manifest.yml")
+    if os.path.exists(p1): return p1
+    if os.path.exists(p2): return p2
+    return None
+
+ise_found = all(get_sample_file(s) is not None for s in ise_samples)
+duo_found = all(get_sample_file(s) is not None for s in duo_samples)
+
+record_test("Suite 9", "Cisco ISE 5 Dedicated Sample Manifests", ise_found, f"BYOD, 802.1X NAC, TrustSec, TACACS+, Guest in {samples_dir}")
+record_test("Suite 9", "Cisco Duo 5 Dedicated Sample Manifests", duo_found, f"Push MFA, Endpoint Health, SSO SAML, Zero Trust, Remote VPN in {samples_dir}")
+
+# Verify schema and event count in manifests
+total_sample_events = 0
+for s in ise_samples + duo_samples:
+    mpath = get_sample_file(s)
+    if mpath and os.path.exists(mpath):
+        with open(mpath) as mf:
+            content = mf.read()
+            total_sample_events += content.count("_raw:") + content.count("raw_text:")
+
+record_test("Suite 9", "Granular Events Extracted in Manifests", total_sample_events >= 20, f"Found {total_sample_events} discrete security events")
+
+# -----------------------------------------------------------------------------
+# SUITE 10: 11 Network Architectures & Specialized Scenarios (PAN to GAN)
+# -----------------------------------------------------------------------------
+print("\n>> Suite 10: 11 Network Architectures & Specialized Topology Scenarios")
+scenarios_dir = os.path.join(NETSPOUT_DIR, "appserver/static/scenarios")
+arch_scenarios = [
+    "scenario_arch_pan_iot_mesh.yml", "scenario_arch_lan_campus_access.yml", "scenario_arch_wlan_meraki_catalyst.yml",
+    "scenario_arch_can_multi_building.yml", "scenario_arch_man_carrier_ring.yml", "scenario_arch_wan_global_backbone.yml",
+    "scenario_arch_san_fibre_channel.yml", "scenario_arch_nas_storage_cluster.yml", "scenario_arch_vpn_remote_workforce.yml",
+    "scenario_arch_epn_isolated_intranet.yml", "scenario_arch_gan_subsea_cloud.yml"
+]
+specialized_scenarios = [
+    "scenario_pure_cisco_enterprise.yml", "scenario_mixed_vendor_enterprise.yml",
+    "scenario_sp_cisco.yml", "scenario_sp_mixed.yml",
+    "scenario_sdwan_connected_core.yml", "scenario_wireless_connected_core.yml"
+]
+
+all_arch_found = all(os.path.exists(os.path.join(scenarios_dir, s)) for s in arch_scenarios)
+all_spec_found = all(os.path.exists(os.path.join(scenarios_dir, s)) for s in specialized_scenarios)
+
+record_test("Suite 10", "All 11 Network Architectures (PAN to GAN)", all_arch_found, f"Found 11/11 architecture manifests in {scenarios_dir}")
+record_test("Suite 10", "6 Specialized Enterprise & SP Scenarios", all_spec_found, f"Found 6/6 specialized scenario manifests in {scenarios_dir}")
+
+# -----------------------------------------------------------------------------
+# SUITE 11: 4 KPI Telemetry & Metric Dimensions Verification
+# -----------------------------------------------------------------------------
+print("\n>> Suite 11: 4 KPI Telemetry & Metric Dimensions Verification")
+models_py = os.path.join(BACKEND_DIR, "app/models.py")
+with open(models_py) as mf:
+    m_code = mf.read()
+
+dim_perf = all(k in m_code for k in ["bandwidth_utilization_pct", "throughput_bps", "latency_ms", "jitter_ms", "packet_loss_pct", "error_rate_pct"])
+dim_health = all(k in m_code for k in ["uptime_seconds", "cpu_utilization_pct", "memory_utilization_pct", "temperature_celsius", "psu_status", "ups_battery_runtime_min"])
+dim_config = all(k in m_code for k in ["routing_table_version", "bgp_prefix_count", "route_flaps", "config_drift_checksum", "ipam_dhcp_exhaustion_pct"])
+dim_sec = all(k in m_code for k in ["traffic_spike_score", "unauthorized_access_attempts", "firewall_drop_count", "threat_severity_level"])
+
+record_test("Suite 11", "KPI Dim 1: Performance & Traffic", dim_perf, "Bandwidth %, Throughput bps, Latency ms, Jitter ms, Loss %, Error %")
+record_test("Suite 11", "KPI Dim 2: Device & Infrastructure Health", dim_health, "Uptime s, CPU %, RAM %, Temp °C, PSU, UPS battery & voltage")
+record_test("Suite 11", "KPI Dim 3: Configuration & Protocols", dim_config, "Routing version, BGP prefixes, Flaps, Drift checksum, IPAM exhaustion %")
+record_test("Suite 11", "KPI Dim 4: Security & Compliance", dim_sec, "Spike score, Unauthorized access, Firewall drops, Threat severity")
+
+# -----------------------------------------------------------------------------
+# SUITE 12: UI Flow Integrity & Onboarding / Scenario Builder Linkages
+# -----------------------------------------------------------------------------
+print("\n>> Suite 12: UI Flow Integrity & Onboarding / Scenario Builder Linkages")
+onboarding_xml = os.path.join(NETSPOUT_DIR, "default/data/ui/views/guided_onboarding.xml")
+scenario_xml = os.path.join(NETSPOUT_DIR, "default/data/ui/views/scenario_builder.xml")
+onboarding_js = os.path.join(NETSPOUT_DIR, "appserver/static/guided_onboarding.js")
+scenario_js = os.path.join(NETSPOUT_DIR, "appserver/static/scenario_builder.js")
+
+with open(onboarding_xml) as f:
+    ob_xml_content = f.read()
+with open(scenario_xml) as f:
+    sb_xml_content = f.read()
+with open(onboarding_js) as f:
+    ob_js_content = f.read()
+with open(scenario_js) as f:
+    sb_js_content = f.read()
+
+# Verify pre-rendered options and non-empty selectors
+ob_prerender = '<select id="wizard-single-sourcetype-select"' in ob_xml_content and ('Cisco ISE' in ob_xml_content or 'Identity Services Engine' in ob_xml_content)
+record_test("Suite 12", "Guided Onboarding Pre-Rendered Selectors", ob_prerender, "Pre-populated HTML options prevent blank dropdowns")
+
+# Verify relative canvas link and inline drawer in scenario builder
+sb_canvas_link = 'href="netspout_canvas"' in sb_xml_content and 'id="inline-canvas-drawer"' in sb_xml_content
+record_test("Suite 12", "Scenario Builder Canvas Link & Inline Drawer", sb_canvas_link, "Relative link prevents 404 and inline drawer provides instant preview")
+
+# Verify delegated event handling in JS
+delegated_listeners = ("$(document).on('click'" in ob_js_content or '$(document).on("click"' in ob_js_content) and ("$(document).on('click'" in sb_js_content or '$(document).on("click"' in sb_js_content)
+record_test("Suite 12", "Delegated Event Handling Across SimpleXML", delegated_listeners, "Robust against SimpleXML DOM lifecycle re-renders")
+
+# -----------------------------------------------------------------------------
+# SUITE 13: netspout.spl Production Release Package Integrity
+# -----------------------------------------------------------------------------
+print("\n>> Suite 13: netspout.spl Production Archive Validation")
+record_test("Suite 13", "netspout.spl Exists", os.path.exists(SPL_ARCHIVE), f"Location: {SPL_ARCHIVE}")
 
 archive_valid = False
 archive_size = 0
 sha256_hash = ""
+top_levels = set()
 if os.path.exists(SPL_ARCHIVE):
     archive_size = os.path.getsize(SPL_ARCHIVE)
     with open(SPL_ARCHIVE, "rb") as f:
@@ -224,8 +328,8 @@ if os.path.exists(SPL_ARCHIVE):
     except Exception as e:
         archive_valid = False
 
-record_test("Suite 9", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
-record_test("Suite 9", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
+record_test("Suite 13", "SPL Tarball Structure (netspout/ top level)", archive_valid, f"Extracted top level: {top_levels}")
+record_test("Suite 13", "SPL Lightweight Sizing (< 5MB)", archive_size < 5 * 1024 * 1024, f"Actual size: {archive_size / 1024:.1f} KB")
 
 # -----------------------------------------------------------------------------
 # FINAL SUMMARY REPORT

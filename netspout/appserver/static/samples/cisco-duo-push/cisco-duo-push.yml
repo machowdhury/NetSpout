@@ -1,0 +1,28 @@
+samples:
+  - name: cisco-duo-push-baseline
+    interval: 30
+    count: 2
+    randomizeEvents: true
+    tokens:
+      - name: ISO_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%Y-%m-%dT%H:%M:%S.%fZ"
+      - name: SYSLOG_TIMESTAMP
+        format: template
+        type: timestamp
+        replacement: "%b %d %H:%M:%S"
+      - name: EPOCH
+        format: template
+        type: epochtimestamp
+    lines:
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:push:prompt
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"authentication\",\"factor\":\"duo_push\",\"result\":\"SUCCESS\",\"reason\":\"user_approved\",\"user\":{\"name\":\"m.chowdhury@corp.internal\",\"groups\":[\"Enterprise_Admins\",\"NetDevOps\"]},\"application\":{\"name\":\"Splunk Enterprise Production NOC\",\"key\":\"DI94810294810\"},\"auth_device\":{\"name\":\"iPhone 15 Pro\",\"ip\":\"198.51.100.42\",\"location\":{\"city\":\"San Jose\",\"state\":\"California\",\"country\":\"US\"}},\"txid\":\"duo-tx-9948201\"}"
+      - index: idx_security_fw
+        source: rest:duo
+        sourcetype: cisco:duo:push:prompt
+        host: duo-api.corp.internal
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"authentication\",\"factor\":\"duo_push\",\"result\":\"FAILURE\",\"reason\":\"user_denied\",\"user\":{\"name\":\"m.chowdhury@corp.internal\"},\"application\":{\"name\":\"Cisco Catalyst Center WebUI\"},\"auth_device\":{\"ip\":\"203.0.113.88\",\"location\":{\"city\":\"Moscow\",\"country\":\"RU\"}},\"fraud_reported\":true,\"txid\":\"duo-tx-9948202\"}"

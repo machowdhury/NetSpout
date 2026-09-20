@@ -128,7 +128,55 @@
                     Select Target Sourcetype:
                   </label>
                   <select id="wizard-single-sourcetype-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;">
-                    <!-- Populated dynamically -->
+                    <optgroup label="Routing &amp; Core Fabric">
+                      <option value="cisco:mdt:grpc" selected="selected">cisco:mdt:grpc — Cisco MDT gRPC Metric Stream (OpenConfig)</option>
+                      <option value="openconfig:yang:json">openconfig:yang:json — OpenConfig YANG JSON Telemetry (RFC 7950)</option>
+                      <option value="cisco:ios">cisco:ios — Cisco IOS-XE / Classic Syslog</option>
+                      <option value="juniper:junos">juniper:junos — Juniper Networks Junos OS Syslog</option>
+                      <option value="nokia:sros">nokia:sros — Nokia 7750 SR OS Router Syslog</option>
+                      <option value="arista:eos">arista:eos — Arista EOS Core Switching Syslog</option>
+                    </optgroup>
+                    <optgroup label="Identity &amp; Access Control (Cisco ISE &amp; Duo)">
+                      <option value="cisco:ise:byod:provisioning">cisco:ise:byod:provisioning — Cisco ISE BYOD Device Onboarding &amp; Registration</option>
+                      <option value="cisco:ise:nac:8021x">cisco:ise:nac:8021x — Cisco ISE 802.1X Port NAC &amp; RADIUS Auth</option>
+                      <option value="cisco:ise:trustsec:sgt">cisco:ise:trustsec:sgt — Cisco ISE TrustSec SGT Micro-segmentation</option>
+                      <option value="cisco:ise:deviceadmin:tacacs">cisco:ise:deviceadmin:tacacs — Cisco ISE TACACS+ Device Administration</option>
+                      <option value="cisco:ise:guest:voucher">cisco:ise:guest:voucher — Cisco ISE Guest Captive Portal &amp; Vouchers</option>
+                      <option value="cisco:duo:push:prompt">cisco:duo:push:prompt — Cisco Duo Push Multi-Factor Authentication</option>
+                      <option value="cisco:duo:endpoint:posture">cisco:duo:endpoint:posture — Cisco Duo Endpoint Device Posture &amp; Health</option>
+                      <option value="cisco:duo:sso:saml">cisco:duo:sso:saml — Cisco Duo Central SSO SAML Assertions</option>
+                      <option value="cisco:duo:zerotrust:policy">cisco:duo:zerotrust:policy — Cisco Duo Zero Trust Application Policy</option>
+                      <option value="cisco:duo:remote:vpn">cisco:duo:remote:vpn — Cisco Duo Secure Remote Access VPN</option>
+                    </optgroup>
+                    <optgroup label="Security &amp; Firewalls">
+                      <option value="cisco:asa">cisco:asa — Cisco ASA Adaptive Security Appliance</option>
+                      <option value="cisco:ftd">cisco:ftd — Cisco Firepower Threat Defense (FTD)</option>
+                      <option value="pan:traffic">pan:traffic — Palo Alto Networks Traffic Logs</option>
+                      <option value="pan:threat">pan:threat — Palo Alto Networks Threat Prevention</option>
+                      <option value="fortinet:fortigate">fortinet:fortigate — Fortinet FortiOS Security Events</option>
+                      <option value="checkpoint:cef">checkpoint:cef — Check Point Quantum Firewall CEF</option>
+                    </optgroup>
+                    <optgroup label="Campus Access, Wireless &amp; SD-WAN">
+                      <option value="cisco:catalyst:security:events">cisco:catalyst:security:events — Cisco Catalyst 9300 Security Events</option>
+                      <option value="cisco:catalyst:rogue:threat_details">cisco:catalyst:rogue:threat_details — Cisco Catalyst Rogue AP Detection</option>
+                      <option value="cisco:sdwan:linkhealth">cisco:sdwan:linkhealth — Cisco SD-WAN vEdge Link Health</option>
+                      <option value="cisco:sdwan:BGP-5-ADJCHANGE">cisco:sdwan:BGP-5-ADJCHANGE — Cisco SD-WAN BGP Route Failover</option>
+                      <option value="meraki:accesspoints">meraki:accesspoints — Cisco Meraki MR Wireless Telemetry</option>
+                      <option value="aruba:syslog">aruba:syslog — Aruba CX Campus Switching</option>
+                    </optgroup>
+                    <optgroup label="Cloud, SASE &amp; Observability">
+                      <option value="zscaler:zia">zscaler:zia — Zscaler Internet Access (ZIA) Web Log</option>
+                      <option value="zscaler:lss">zscaler:lss — Zscaler Private Access (ZPA) LSS</option>
+                      <option value="cisco:thousandeyes:metric">cisco:thousandeyes:metric — Cisco ThousandEyes Synthetic Metrics</option>
+                      <option value="sc4snmp:metric">sc4snmp:metric — Splunk Connect for SNMP Metrics</option>
+                      <option value="sc4snmp:event">sc4snmp:event — Splunk Connect for SNMP Traps</option>
+                    </optgroup>
+                    <optgroup label="Storage &amp; Data Center (SAN / NAS)">
+                      <option value="cisco:mds:san:fc">cisco:mds:san:fc — Cisco MDS 9700 Fibre Channel SAN Fabric</option>
+                      <option value="netapp:ontap:nas">netapp:ontap:nas — NetApp ONTAP Clustered NAS (NFS/SMB)</option>
+                      <option value="cisco:dc:nexus9k:syslog">cisco:dc:nexus9k:syslog — Cisco Nexus 9000 Data Center Syslog</option>
+                      <option value="arista:telemetry:json">arista:telemetry:json — Arista EOS Streaming Telemetry</option>
+                    </optgroup>
                   </select>
                 </div>
 
@@ -160,7 +208,7 @@
                   <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                     Sample Payload Preview:
                   </label>
-                  <pre id="wizard-single-preview" style="background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 10px; color: #38bdf8; font-family: monospace; font-size: 11px; margin: 0; white-space: pre-wrap; word-break: break-all; max-height: 120px; overflow-y: auto;">Select a sourcetype above to preview payload...</pre>
+                  <pre id="wizard-single-preview" style="background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 10px; color: #38bdf8; font-family: monospace; font-size: 11px; margin: 0; white-space: pre-wrap; word-break: break-all; max-height: 120px; overflow-y: auto;">{"event":"metric","time":1789840800,"fields":{"metric_name:interface.octets.in":984521000,"metric_name:interface.octets.out":874219000,"metric_name:cpu.utilization":24.5,"interface":"HundredGigE0/0/0/0","oper_status":"UP","xpath":"/interfaces/interface/state/counters"}}</pre>
                 </div>
               </div>
 
@@ -477,6 +525,62 @@
             </div>
           </div>
 
+          <script><![CDATA[
+            (function() {
+              function initFallbackWizard() {
+                function localGoToStep(num) {
+                  if (window.netspoutGoToStep) {
+                    window.netspoutGoToStep(num);
+                    return;
+                  }
+                  for (var i = 1; i <= 4; i++) {
+                    var c = document.getElementById('container-step-' + i);
+                    if (c) c.style.display = (i === num ? 'block' : 'none');
+                    var b = document.getElementById('badge-step-' + i);
+                    if (b) {
+                      if (i === num) {
+                        b.style.background = '#0284c7'; b.style.color = '#ffffff';
+                      } else if (i < num) {
+                        b.style.background = '#14532d'; b.style.color = '#4ade80';
+                      } else {
+                        b.style.background = '#1e293b'; b.style.color = '#94a3b8';
+                      }
+                    }
+                  }
+                }
+
+                // Attach fallbacks
+                var next1 = document.getElementById('btn-next-step-1');
+                if (next1) next1.onclick = function() { localGoToStep(2); };
+                var back2 = document.getElementById('btn-back-step-2');
+                if (back2) back2.onclick = function() { localGoToStep(1); };
+                var next2 = document.getElementById('btn-next-step-2');
+                if (next2) next2.onclick = function() { localGoToStep(3); };
+                var back3 = document.getElementById('btn-back-step-3');
+                if (back3) back3.onclick = function() { localGoToStep(2); };
+                var next3 = document.getElementById('btn-next-step-3');
+                if (next3) next3.onclick = function() { localGoToStep(4); };
+                var back4 = document.getElementById('btn-back-step-4');
+                if (back4) back4.onclick = function() { localGoToStep(3); };
+
+                // Stepper badges
+                for (var j = 1; j <= 4; j++) {
+                  (function(step) {
+                    var b = document.getElementById('badge-step-' + step);
+                    if (b) b.onclick = function() { localGoToStep(step); };
+                  })(j);
+                }
+              }
+
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initFallbackWizard);
+              } else {
+                initFallbackWizard();
+              }
+              setTimeout(initFallbackWizard, 250);
+              setTimeout(initFallbackWizard, 1000);
+            })();
+          ]]></script>
         </div>
       </html>
     </panel>

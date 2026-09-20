@@ -2052,31 +2052,110 @@ require([
     con.scrollTop(con.prop('scrollHeight'));
   }
 
-  // Populate Single Sourcetype Dropdown
-  function populateSingleSourcetypeCatalog() {
+  // Populate Single Sourcetype Dropdown with dynamic filtering and grouping
+  function populateSingleSourcetypeCatalog(searchTerm) {
     var sel = $('#wizard-single-sourcetype-select');
-    var currentVal = sel.val() || wizardState.selectedSourcetype || SOURCETYPE_CATALOG[0].id;
+    var currentVal = wizardState.selectedSourcetype || sel.val() || (SOURCETYPE_CATALOG[0] ? SOURCETYPE_CATALOG[0].id : '');
     sel.empty();
 
+    var term = (searchTerm || '').toLowerCase().trim();
+    var filtered = SOURCETYPE_CATALOG;
+    if (term) {
+      filtered = SOURCETYPE_CATALOG.filter(function(item) {
+        var id = (item.id || '').toLowerCase();
+        var lbl = (item.label || '').toLowerCase();
+        var cat = (item.category || '').toLowerCase();
+        var ven = (item.vendor || '').toLowerCase();
+        return id.indexOf(term) !== -1 || lbl.indexOf(term) !== -1 || cat.indexOf(term) !== -1 || ven.indexOf(term) !== -1;
+      });
+    }
+
+    if (filtered.length === 0) {
+      var noOpt = $('<option></option>')
+        .val(term)
+        .text('Custom: ' + term + ' (Click to use)')
+        .prop('selected', true);
+      sel.append(noOpt);
+      wizardState.selectedSourcetype = term;
+      updateSinglePreview();
+      return;
+    }
+
     var grouped = {};
-    SOURCETYPE_CATALOG.forEach(function(item) {
+    filtered.forEach(function(item) {
       var cat = item.category || "General";
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push(item);
     });
 
+    var hasSelected = false;
     Object.keys(grouped).forEach(function(cat) {
-      var optgroup = $('<optgroup></optgroup>').attr('label', cat);
+      var optgroup = $('<optgroup></optgroup>').attr('label', cat + ' (' + grouped[cat].length + ')');
       grouped[cat].forEach(function(item) {
         var opt = $('<option></option>').val(item.id).text(item.id + ' — ' + item.label);
-        if (item.id === currentVal) opt.prop('selected', true);
+        if (item.id === currentVal) {
+          opt.prop('selected', true);
+          hasSelected = true;
+        }
         optgroup.append(opt);
       });
       sel.append(optgroup);
     });
 
+    if (!hasSelected && filtered.length > 0) {
+      sel.val(filtered[0].id);
+    }
+
     wizardState.selectedSourcetype = sel.val();
     updateSinglePreview();
+  }
+
+  // Render Real-Time Autocomplete Dropdown Panel
+  function renderSourcetypeAutocomplete(term) {
+    var panel = $('#wizard-sourcetype-autocomplete');
+    if (!panel.length) return;
+
+    term = (term || '').toLowerCase().trim();
+    if (!term) {
+      panel.hide().empty();
+      return;
+    }
+
+    var matches = SOURCETYPE_CATALOG.filter(function(item) {
+      var id = (item.id || '').toLowerCase();
+      var lbl = (item.label || '').toLowerCase();
+      var cat = (item.category || '').toLowerCase();
+      var ven = (item.vendor || '').toLowerCase();
+      return id.indexOf(term) !== -1 || lbl.indexOf(term) !== -1 || cat.indexOf(term) !== -1 || ven.indexOf(term) !== -1;
+    }).slice(0, 15);
+
+    panel.empty();
+
+    if (matches.length === 0) {
+      var customRow = $(
+        '<div class="st-autocomplete-item" data-id="' + term + '" style="padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #1e293b; color: #38bdf8; font-family: monospace; font-size: 11px;">' +
+          '➕ <b>Use custom sourcetype:</b> <span style="color: #4ade80;">' + term + '</span>' +
+        '</div>'
+      );
+      panel.append(customRow);
+      panel.show();
+      return;
+    }
+
+    matches.forEach(function(item) {
+      var row = $(
+        '<div class="st-autocomplete-item" data-id="' + item.id + '" style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #1e293b; transition: background 0.15s ease;">' +
+          '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">' +
+            '<span style="color: #38bdf8; font-family: monospace; font-weight: 600; font-size: 11px;">' + item.id + '</span>' +
+            '<span style="background: #1e293b; color: #94a3b8; font-size: 9px; padding: 2px 6px; border-radius: 3px;">' + (item.vendor || 'network').toUpperCase() + '</span>' +
+          '</div>' +
+          '<div style="color: #94a3b8; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">' + item.label + '</div>' +
+        '</div>'
+      );
+      panel.append(row);
+    });
+
+    panel.show();
   }
 
   function updateSinglePreview() {
@@ -2090,9 +2169,15 @@ require([
     if (st) {
       $('#wizard-single-preview').text(st.sample);
       if (st.index) {
-        $('#wizard-target-index-select').val(st.index);
+        var targetSelect = $('#wizard-target-index-select');
+        if (targetSelect.find('option[value="' + st.index + '"]').length === 0) {
+          targetSelect.append($('<option></option>').val(st.index).text(st.index + ' (Recommended)'));
+        }
+        targetSelect.val(st.index);
         updateActiveIndexDisplay();
       }
+    } else if (selVal) {
+      $('#wizard-single-preview').text("Custom Sourcetype: " + selVal + "\nReady to emit simulated payload to Splunk HEC.");
     }
   }
 
@@ -2480,37 +2565,41 @@ require([
 
     // Single Sourcetype Dropdown Change
     
-    // Single Sourcetype Quick Search Filter
+    // Single Sourcetype Quick Search Filter & Real-Time Autocomplete
     $(document).on('input keyup', '#wizard-sourcetype-search', function() {
-      var term = $(this).val().toLowerCase().trim();
-      var sel = $('#wizard-single-sourcetype-select');
-      sel.find('optgroup').each(function() {
-        var optgroup = $(this);
-        var hasVisibleChild = false;
-        optgroup.find('option').each(function() {
-          var text = $(this).text().toLowerCase();
-          var val = $(this).val().toLowerCase();
-          if (!term || text.indexOf(term) !== -1 || val.indexOf(term) !== -1) {
-            $(this).show().prop('disabled', false);
-            hasVisibleChild = true;
-          } else {
-            $(this).hide().prop('disabled', true);
-          }
-        });
-        if (hasVisibleChild) {
-          optgroup.show();
-        } else {
-          optgroup.hide();
-        }
-      });
-      var curr = sel.find('option:selected');
-      if (curr.is(':disabled') || curr.css('display') === 'none') {
-        var firstVis = sel.find('option:not(:disabled):first');
-        if (firstVis.length > 0) {
-          sel.val(firstVis.val());
-          wizardState.selectedSourcetype = firstVis.val();
-          updateSinglePreview();
-        }
+      var term = $(this).val();
+      populateSingleSourcetypeCatalog(term);
+      renderSourcetypeAutocomplete(term);
+    });
+
+    $(document).on('focus', '#wizard-sourcetype-search', function() {
+      var term = $(this).val();
+      if (term) renderSourcetypeAutocomplete(term);
+    });
+
+    // Autocomplete item selection
+    $(document).on('click', '.st-autocomplete-item', function(e) {
+      e.stopPropagation();
+      var id = $(this).data('id');
+      if (!id) return;
+      $('#wizard-sourcetype-search').val(id);
+      $('#wizard-sourcetype-autocomplete').hide();
+      populateSingleSourcetypeCatalog(id);
+      $('#wizard-single-sourcetype-select').val(id);
+      wizardState.selectedSourcetype = id;
+      updateSinglePreview();
+    });
+
+    $(document).on('mouseenter', '.st-autocomplete-item', function() {
+      $(this).css('background', '#1e293b');
+    }).on('mouseleave', '.st-autocomplete-item', function() {
+      $(this).css('background', 'transparent');
+    });
+
+    // Close autocomplete on click outside
+    $(document).on('click', function(e) {
+      if (!$(e.target).closest('#single-catalog-container').length) {
+        $('#wizard-sourcetype-autocomplete').hide();
       }
     });
 

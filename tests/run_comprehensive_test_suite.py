@@ -332,6 +332,12 @@ record_test("Suite 12", "Delegated Event Handling Across SimpleXML", delegated_l
 # -----------------------------------------------------------------------------
 print("\n>> Suite 13: Splunkbase Vendor Discovery, Official Doc Audit & Modular Input Streamer")
 sys.path.insert(0, os.path.join(NETSPOUT_DIR, "bin"))
+import types
+if 'app' not in sys.modules:
+    _app_pkg = types.ModuleType('app')
+    _app_pkg.__path__ = [os.path.join(NETSPOUT_DIR, "bin")]
+    _app_pkg.__file__ = os.path.join(NETSPOUT_DIR, "bin/__init__.py")
+    sys.modules['app'] = _app_pkg
 try:
     from vendor_catalog import VENDOR_CATALOG
     vendor_cat_loaded = True

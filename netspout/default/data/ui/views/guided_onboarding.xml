@@ -152,8 +152,9 @@
                   <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                     Select Target Sourcetype:
                   </label>
-                                    <div style="margin-bottom: 8px;">
-                    <input type="text" id="wizard-sourcetype-search" placeholder="🔍 Filter 220+ sourcetypes in real-time..." style="width: 100%; background: #0b0f19; border: 1px solid #1e293b; border-radius: 4px; padding: 6px 10px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                                    <div style="margin-bottom: 8px; position: relative;">
+                    <input type="text" id="wizard-sourcetype-search" placeholder="🔍 Filter or search 220+ sourcetypes in real-time (e.g. cisco, pan, duo, ios)..." style="width: 100%; background: #0b0f19; border: 1px solid #1e293b; border-radius: 4px; padding: 7px 10px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" autocomplete="off" />
+                    <div id="wizard-sourcetype-autocomplete" style="display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; background: #0b0f19; border: 1px solid #0284c7; border-radius: 4px; max-height: 280px; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.6);"></div>
                   </div>
                   <select id="wizard-single-sourcetype-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;">
                     <optgroup label="Routing &amp; Core">

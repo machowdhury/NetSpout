@@ -1,6 +1,6 @@
 <nav search_view="search">
   <view name="netspout_canvas" default="true" label="⚡ NetSpout Canvas"/>
-  <view name="guided_onboarding" label="Data Onboarding Wizard"/>
+  <view name="guided_onboarding" label="🚀 Ingestion &amp; Blast Orchestrator"/>
   <view name="scenario_builder" label="Scenario Builder &amp; Path Emitter"/>
   <view name="datablaster_console" label="Data Blaster Console"/>
   <collection label="Network Scenarios (Studio)">

@@ -2,6 +2,31 @@
   <label>Data Onboarding Wizard</label>
   <description>Guided 4-step wizard for single sourcetypes, multi-vendor batch telemetry, or operational scenarios with custom index provisioning and immediate Splunk search validation.</description>
 
+  <!-- Consolidated Ingestion & Blast Hub Switcher -->
+  <row>
+    <panel>
+      <html>
+        <div style="background: #0B0F19; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 22px;">🚀</span>
+            <div>
+              <span style="color: #f8fafc; font-size: 14px; font-weight: 700; display: block;">Unified Telemetry Ingestion &amp; Blast Center</span>
+              <span style="color: #94a3b8; font-size: 11px;">Consolidated Hub: Step-by-Step Onboarding Wizard &amp; High-Throughput Blast Mission Control</span>
+            </div>
+          </div>
+          <div style="display: flex; background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 4px; gap: 6px;">
+            <a id="btn-switch-to-wizard" href="guided_onboarding" style="background: #0284c7; color: #ffffff; padding: 6px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+              <span>🧙</span> Guided Onboarding Wizard
+            </a>
+            <a id="btn-switch-to-console" href="datablaster_console" style="background: transparent; color: #94a3b8; padding: 6px 16px; border-radius: 4px; font-size: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>⚡</span> High-Throughput Blast Console
+            </a>
+          </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+
   <row>
     <panel>
       <html>

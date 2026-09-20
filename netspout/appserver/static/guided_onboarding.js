@@ -874,7 +874,9 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'run_scenario',
+          scenario: scenarioFile,
           scenario_file: scenarioFile,
+          eps: wizardState.volume * 100,
           volume: wizardState.volume,
           target_index: targetIndex
         })
@@ -915,7 +917,21 @@ require([
   // Delegated Event Handlers (Guarantees bindings never drop upon SimpleXML re-renders)
   function initDelegatedEvents() {
     // Stepper Badge Clicks
-    $(document).on('click', '#badge-step-1', function() { goToStep(1); });
+    $(document).on('click', '#btn-switch-to-console', function(e) {
+    e.preventDefault();
+    var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+    var locale = localeMatch ? localeMatch[1] : 'en-US';
+    window.location.href = '/' + locale + '/app/netspout/datablaster_console';
+  });
+
+  $(document).on('click', '#btn-switch-to-wizard', function(e) {
+    e.preventDefault();
+    var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+    var locale = localeMatch ? localeMatch[1] : 'en-US';
+    window.location.href = '/' + locale + '/app/netspout/guided_onboarding';
+  });
+
+  $(document).on('click', '#badge-step-1', function() { goToStep(1); });
     $(document).on('click', '#badge-step-2', function() { goToStep(2); });
     $(document).on('click', '#badge-step-3', function() { goToStep(3); });
     $(document).on('click', '#badge-step-4', function() { goToStep(4); });

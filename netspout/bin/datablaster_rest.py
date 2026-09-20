@@ -18,6 +18,7 @@ import json
 import time
 import signal
 import subprocess
+import tempfile
 from typing import Dict, Any, Tuple, Optional
 
 # Splunk imports (with safe fallbacks for standalone unit testing)
@@ -38,10 +39,42 @@ except ImportError:
 # Paths
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN_DIR = os.path.join(APP_DIR, "bin")
-RUN_DIR = os.path.join(APP_DIR, "var", "run")
+
+def resolve_run_dir() -> str:
+    """Dynamically determine writable runtime directory with graceful fallbacks."""
+    candidates = [
+        os.path.join(APP_DIR, "var", "run"),
+    ]
+    splunk_home = os.environ.get("SPLUNK_HOME")
+    if splunk_home:
+        candidates.append(os.path.join(splunk_home, "var", "run", "netspout"))
+    candidates.append(os.path.join(tempfile.gettempdir(), "netspout_run"))
+
+    for path in candidates:
+        try:
+            os.makedirs(path, mode=0o777, exist_ok=True)
+            test_f = os.path.join(path, f".perm_test_{os.getpid()}")
+            with open(test_f, "w") as f:
+                f.write("ok")
+            os.remove(test_f)
+            return path
+        except (OSError, PermissionError):
+            continue
+    return tempfile.gettempdir()
+
+RUN_DIR = resolve_run_dir()
 PID_FILE = os.path.join(RUN_DIR, "datablaster.pid")
 STATUS_FILE = os.path.join(RUN_DIR, "datablaster_status.json")
 CONFIG_FILE = os.path.join(RUN_DIR, "datablaster_config.json")
+
+def get_active_run_dir() -> str:
+    global RUN_DIR, PID_FILE, STATUS_FILE, CONFIG_FILE
+    if not os.path.exists(RUN_DIR) or not os.access(RUN_DIR, os.W_OK):
+        RUN_DIR = resolve_run_dir()
+        PID_FILE = os.path.join(RUN_DIR, "datablaster.pid")
+        STATUS_FILE = os.path.join(RUN_DIR, "datablaster_status.json")
+        CONFIG_FILE = os.path.join(RUN_DIR, "datablaster_config.json")
+    return RUN_DIR
 
 # Regex validation rules
 RE_EPS = re.compile(r"^\d+$")
@@ -78,7 +111,8 @@ def get_stored_config() -> Dict[str, Any]:
 
 def save_stored_config(new_cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Persist configuration to disk."""
-    os.makedirs(RUN_DIR, exist_ok=True)
+    active_dir = get_active_run_dir()
+    os.makedirs(active_dir, mode=0o777, exist_ok=True)
     cfg = get_stored_config()
     for k in ["hec_url", "hec_token", "ssl_verify", "target_eps", "idx_network_ops", "idx_security_fw", "idx_wireless_ops", "idx_performance_metrics", "cisco_mdt_metrics", "default_scenario"]:
         if k in new_cfg:
@@ -547,8 +581,10 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     Rigorously validate and sanitize all input parameters to eliminate command injection.
     """
     action = params.get("action", "start").strip().lower()
+    if action in ("start_simulation", "run_scenario"):
+        action = "start"
     allowed_actions = [
-        "start", "stop", "status", "logs", "validate",
+        "start", "start_simulation", "run_scenario", "stop", "status", "logs", "validate",
         "blast_single_device", "stream_canvas_topology", "onboard_sample",
         "test_hec", "get_config", "save_config", "validate_environment",
         "create_index", "list_indexes"
@@ -677,7 +713,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         }
 
     if action == "stream_canvas_topology":
-        raw_eps = str(params.get("eps", "1000")).strip()
+        raw_eps = str(params.get("eps") or (int(params.get("volume", 1)) * 100)).strip()
         if not RE_EPS.match(raw_eps):
             raise ValueError(f"Invalid 'eps' parameter '{raw_eps}'. Must contain only digits.")
         eps_val = int(raw_eps)
@@ -711,7 +747,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError(f"Parameter 'eps' ({eps_val}) out of safe bounds (1 - 500,000).")
 
     # 2. Scenario Path Validation (no traversal)
-    scenario = str(params.get("scenario", "")).strip()
+    scenario = str(params.get("scenario") or params.get("scenario_file") or "").strip()
     if not scenario:
         raise ValueError("Missing required 'scenario' parameter.")
     if ".." in scenario or not RE_SAFE_PATH.match(scenario):
@@ -762,12 +798,21 @@ def is_process_running(pid: int) -> bool:
 def get_current_status() -> Dict[str, Any]:
     """Retrieve current running simulation status."""
     active_pid = None
-    if os.path.exists(PID_FILE):
-        try:
-            with open(PID_FILE, "r") as f:
-                active_pid = int(f.read().strip())
-        except (ValueError, IOError):
-            active_pid = None
+    active_dir = get_active_run_dir()
+    pid_candidates = [
+        os.path.join(active_dir, "datablaster.pid"),
+        os.path.join(tempfile.gettempdir(), "datablaster.pid"),
+        os.path.join(tempfile.gettempdir(), "netspout_run", "datablaster.pid")
+    ]
+    for p_file in pid_candidates:
+        if os.path.exists(p_file):
+            try:
+                with open(p_file, "r") as f:
+                    active_pid = int(f.read().strip())
+                    if active_pid:
+                        break
+            except (ValueError, IOError):
+                active_pid = None
 
     running = False
     if active_pid:
@@ -810,8 +855,12 @@ def stop_simulation() -> Dict[str, Any]:
         time.sleep(0.5)
         if is_process_running(pid):
             os.kill(pid, signal.SIGKILL)
-        if os.path.exists(PID_FILE):
-            os.remove(PID_FILE)
+        for p_file in [PID_FILE, os.path.join(tempfile.gettempdir(), "datablaster.pid"), os.path.join(tempfile.gettempdir(), "netspout_run", "datablaster.pid")]:
+            if os.path.exists(p_file):
+                try:
+                    os.remove(p_file)
+                except OSError:
+                    pass
         return {"status": "success", "message": f"Terminated process {pid}"}
     except Exception as e:
         return {"status": "error", "message": f"Failed stopping process {pid}: {str(e)}"}
@@ -886,9 +935,16 @@ def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
             start_new_session=True
         )
 
-    # Record PID
-    with open(PID_FILE, "w") as pf:
-        pf.write(str(proc.pid))
+    # Record PID with safe multi-path write
+    active_dir = get_active_run_dir()
+    for p_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
+        try:
+            os.makedirs(p_dir, mode=0o777, exist_ok=True)
+            with open(os.path.join(p_dir, "datablaster.pid"), "w") as pf:
+                pf.write(str(proc.pid))
+            break
+        except Exception:
+            continue
 
     # Record metadata
     meta = {
@@ -899,8 +955,14 @@ def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
         "hec": clean_params["hec"],
         "pid": proc.pid
     }
-    with open(STATUS_FILE, "w") as sf:
-        json.dump(meta, sf, indent=2)
+    for s_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
+        try:
+            os.makedirs(s_dir, mode=0o777, exist_ok=True)
+            with open(os.path.join(s_dir, "datablaster_status.json"), "w") as sf:
+                json.dump(meta, sf, indent=2)
+            break
+        except Exception:
+            continue
 
     return {
         "status": "success",
@@ -937,7 +999,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
         elif action == "validate":
             return (200, {"status": "valid", "sanitized": clean})
 
-        elif action in ("start", "start_simulation"):
+        elif action in ("start", "start_simulation", "run_scenario"):
             res = start_simulation(clean)
             return (200, res)
 
@@ -951,8 +1013,15 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             sys.path.insert(0, BIN_DIR)
             import run_simulation
             pid = run_simulation.stream_custom_canvas_topology(clean["nodes"], clean["links"], clean["hec"], clean["token"], clean["eps"])
-            with open(PID_FILE, "w") as pf:
-                pf.write(str(pid))
+            active_dir = get_active_run_dir()
+            for p_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
+                try:
+                    os.makedirs(p_dir, mode=0o777, exist_ok=True)
+                    with open(os.path.join(p_dir, "datablaster.pid"), "w") as pf:
+                        pf.write(str(pid))
+                    break
+                except Exception:
+                    continue
             meta = {
                 "started_at": time.time(),
                 "scenario": "custom_canvas_topology",
@@ -962,8 +1031,14 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 "nodes_count": len(clean["nodes"]),
                 "links_count": len(clean["links"])
             }
-            with open(STATUS_FILE, "w") as sf:
-                json.dump(meta, sf, indent=2)
+            for s_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
+                try:
+                    os.makedirs(s_dir, mode=0o777, exist_ok=True)
+                    with open(os.path.join(s_dir, "datablaster_status.json"), "w") as sf:
+                        json.dump(meta, sf, indent=2)
+                    break
+                except Exception:
+                    continue
             return (200, {
                 "status": "success",
                 "message": f"Custom canvas topology stream launched under PID {pid}",

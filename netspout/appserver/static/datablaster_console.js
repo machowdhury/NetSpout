@@ -141,3 +141,17 @@ require([
 
   pollReady();
 });
+
+  $(document).on('click', '#btn-switch-to-wizard', function(e) {
+    e.preventDefault();
+    var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+    var locale = localeMatch ? localeMatch[1] : 'en-US';
+    window.location.href = '/' + locale + '/app/netspout/guided_onboarding';
+  });
+
+  $(document).on('click', '#btn-switch-to-console', function(e) {
+    e.preventDefault();
+    var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+    var locale = localeMatch ? localeMatch[1] : 'en-US';
+    window.location.href = '/' + locale + '/app/netspout/datablaster_console';
+  });

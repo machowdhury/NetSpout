@@ -484,94 +484,230 @@ require([
     if (ctr) ctr.textContent = streamStats.totalEvents.toLocaleString();
   }
 
-  // Generate OpenConfig MDT Telemetry Payload (4 KPI Dimensions)
-  function generateOpenConfigPayload() {
-    var xpath = $('#select-openconfig-xpath').val() || "/interfaces/interface/state/counters";
-    var host = $('#openconfig-host').val() || (selectedNode ? selectedNode.name : "rtr-cisco-8000-01.corp.internal");
-    var format = $('input[name="openconfig_format"]:checked').val() || "metric";
-    var now = (Date.now() / 1000).toFixed(3);
+  // 24 Key OpenConfig YANG Models Catalog
+  var KEY_OPENCONFIG_XPATHS = [
+    { xpath: "/interfaces/interface/state/counters", category: "interfaces", desc: "Interface octets in/out, packets, errors, discards" },
+    { xpath: "/interfaces/interface/state/oper-status", category: "interfaces", desc: "Operational & admin status (UP/DOWN), last state transition" },
+    { xpath: "/interfaces/interface/state/high-speed", category: "interfaces", desc: "Line rate speed (100G/400G), duplex full, MTU 9216" },
+    { xpath: "/interfaces/interface/subinterfaces/subinterface/state/counters", category: "interfaces", desc: "VLAN subinterface ingress/egress routed octets" },
+    { xpath: "/interfaces/interface/ethernet/state/auto-negotiate", category: "interfaces", desc: "Ethernet auto-negotiation, carrier pulse, FEC status" },
 
-    // KPI Dimension 1: Performance & Traffic
+    { xpath: "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state", category: "bgp", desc: "BGP FSM state: ESTABLISHED, IDLE, ACTIVE" },
+    { xpath: "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/afi-safis/afi-safi/state/prefixes/received", category: "bgp", desc: "BGP IPv4/IPv6 Unicast received prefix count" },
+    { xpath: "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/afi-safis/afi-safi/state/prefixes/installed", category: "bgp", desc: "BGP installed prefixes in routing table (RIB)" },
+    { xpath: "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/messages/sent", category: "bgp", desc: "BGP Keepalive & Update protocol messages sent" },
+    { xpath: "/network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/messages/received", category: "bgp", desc: "BGP protocol messages received & hold-timer tracking" },
+
+    { xpath: "/components/component/cpu/state/utilization", category: "platform", desc: "Control plane & forwarding engine CPU utilization (%)" },
+    { xpath: "/components/component/memory/state/utilized", category: "platform", desc: "Forwarding ASIC & system RAM allocated vs available" },
+    { xpath: "/components/component/state/temperature", category: "platform", desc: "Chassis & ASIC thermal sensor readings (Celsius)" },
+    { xpath: "/components/component/power-supply/state/capacity", category: "platform", desc: "PSU input/output wattage draw & redundant status" },
+    { xpath: "/components/component/fan/state/speed", category: "platform", desc: "Chassis fan tray tachometer speed (RPM) & health" },
+
+    { xpath: "/optical-transport-line/optical-channel/state/laser-bias-current", category: "optics", desc: "Transceiver laser bias current (mA)" },
+    { xpath: "/optical-transport-line/optical-channel/state/output-power", category: "optics", desc: "Optical channel Tx output power (dBm)" },
+    { xpath: "/optical-transport-line/optical-channel/state/input-power", category: "optics", desc: "Optical channel Rx input power (dBm) & LOS alarm" },
+    { xpath: "/components/component/transceiver/state/vendor", category: "optics", desc: "QSFP28/SFP+ optical vendor, part number, serial" },
+
+    { xpath: "/qos/interfaces/interface/output/queues/queue/state/transmit-pkts", category: "qos", desc: "Egress QoS hardware priority queue transmitted packets" },
+    { xpath: "/qos/interfaces/interface/output/queues/queue/state/dropped-pkts", category: "qos", desc: "Egress QoS congestion tail-drops & WRED discards" },
+    { xpath: "/qos/interfaces/interface/input/classifiers/classifier/state/matched-pkts", category: "qos", desc: "Ingress DSCP / 802.1p CoS classifier matched packets" },
+
+    { xpath: "/system/state/current-datetime", category: "system", desc: "High-precision RFC 3339 system timestamp & uptime" },
+    { xpath: "/system/ntp/state/peer-type", category: "system", desc: "NTP synchronization stratum level, offset & jitter" }
+  ];
+
+  function populateOpenConfigXPathCheckboxes() {
+    var container = document.getElementById('openconfig-xpath-checkbox-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    KEY_OPENCONFIG_XPATHS.forEach(function(item, idx) {
+      var row = document.createElement('label');
+      row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; border-radius: 3px; font-size: 11px; cursor: pointer; transition: background 0.1s ease; border-bottom: 1px solid rgba(30, 41, 59, 0.4);';
+      row.onmouseover = function() { this.style.background = '#0f172a'; };
+      row.onmouseout = function() { this.style.background = 'transparent'; };
+
+      var leftDiv = document.createElement('div');
+      leftDiv.style.cssText = 'display: flex; align-items: center; gap: 8px; flex: 1; overflow: hidden;';
+
+      var chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.className = 'xpath-checkbox';
+      chk.value = item.xpath;
+      chk.dataset.cat = item.category;
+      chk.checked = true; // All key XPaths selected by default
+      chk.style.cssText = 'accent-color: #0284c7; cursor: pointer; margin: 0;';
+
+      var pathSpan = document.createElement('span');
+      pathSpan.style.cssText = 'font-family: monospace; color: #38bdf8; font-weight: 600; font-size: 11px; white-space: nowrap;';
+      pathSpan.textContent = item.xpath;
+
+      var descSpan = document.createElement('span');
+      descSpan.style.cssText = 'color: #94a3b8; font-size: 10px; margin-left: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;';
+      descSpan.textContent = '(' + item.desc + ')';
+
+      leftDiv.appendChild(chk);
+      leftDiv.appendChild(pathSpan);
+      leftDiv.appendChild(descSpan);
+
+      var catBadge = document.createElement('span');
+      catBadge.style.cssText = 'font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 1px 6px; border-radius: 2px; margin-left: 8px; white-space: nowrap;';
+      if (item.category === 'interfaces') { catBadge.style.background = 'rgba(56, 189, 248, 0.15)'; catBadge.style.color = '#38bdf8'; }
+      else if (item.category === 'bgp') { catBadge.style.background = 'rgba(168, 85, 247, 0.15)'; catBadge.style.color = '#c084fc'; }
+      else if (item.category === 'platform') { catBadge.style.background = 'rgba(34, 197, 94, 0.15)'; catBadge.style.color = '#4ade80'; }
+      else if (item.category === 'optics') { catBadge.style.background = 'rgba(234, 179, 8, 0.15)'; catBadge.style.color = '#facc15'; }
+      else if (item.category === 'qos') { catBadge.style.background = 'rgba(239, 68, 68, 0.15)'; catBadge.style.color = '#f87171'; }
+      else { catBadge.style.background = 'rgba(148, 163, 184, 0.15)'; catBadge.style.color = '#cbd5e1'; }
+      catBadge.textContent = item.category;
+
+      row.appendChild(leftDiv);
+      row.appendChild(catBadge);
+      container.appendChild(row);
+    });
+
+    updateXPathSelectionCount();
+  }
+
+  function getSelectedXPaths() {
+    var checked = [];
+    var cbs = document.querySelectorAll('.xpath-checkbox:checked');
+    cbs.forEach(function(cb) { checked.push(cb.value); });
+    if (checked.length === 0) {
+      checked.push("/interfaces/interface/state/counters");
+    }
+    return checked;
+  }
+
+  function updateXPathSelectionCount() {
+    var total = KEY_OPENCONFIG_XPATHS.length;
+    var count = document.querySelectorAll('.xpath-checkbox:checked').length;
+    var el = document.getElementById('xpath-selected-count');
+    if (el) el.textContent = count;
+  }
+
+
+  function generateSingleXPathMetric(xpath, host, vendor, now) {
     var inOctets = Math.floor(Math.random() * 50000000) + 950000000;
     var outOctets = Math.floor(Math.random() * 40000000) + 840000000;
-    var bandwidthPct = (Math.random() * 25 + 35).toFixed(1);
+    var bandwidthPct = parseFloat((Math.random() * 25 + 35).toFixed(1));
     var throughputBps = Math.floor(Math.random() * 200000000) + 750000000;
-    var latencyMs = (Math.random() * 3.5 + 1.2).toFixed(2);
-    var jitterMs = (Math.random() * 0.8 + 0.1).toFixed(2);
-    var packetLossPct = (Math.random() * 0.02).toFixed(4);
+    var latencyMs = parseFloat((Math.random() * 3.5 + 1.2).toFixed(2));
+    var jitterMs = parseFloat((Math.random() * 0.8 + 0.1).toFixed(2));
+    var cpu = parseFloat((Math.random() * 15 + 18).toFixed(1));
+    var mem = parseFloat((Math.random() * 8 + 38).toFixed(1));
+    var tempC = parseFloat((Math.random() * 6 + 39).toFixed(1));
 
-    // KPI Dimension 2: Device & Infrastructure Health
-    var cpu = (Math.random() * 15 + 18).toFixed(1);
-    var mem = (Math.random() * 8 + 38).toFixed(1);
-    var tempC = (Math.random() * 6 + 39).toFixed(1);
-    var uptimeSec = Math.floor(Date.now() / 1000) - 1700000000;
-    var psuStatus = "redundant_ok";
-    var upsRuntimeMin = 145;
-    var upsVoltage = 120.4;
+    var fields = {
+      "device": host,
+      "vendor": vendor,
+      "xpath": xpath,
+      "oper_status": "UP"
+    };
 
-    // KPI Dimension 3: Configuration & Protocols
-    var routingTableVer = 184920;
-    var bgpPrefixCount = 894210;
-    var routeFlaps = 0;
-    var configChecksum = "e4d2a1b9c8f7";
-    var ipamUtilPct = 68.4;
+    if (xpath.indexOf("/interfaces") !== -1) {
+      fields["interface"] = "HundredGigE0/0/0/0";
+      fields["metric_name:interface.octets.in"] = inOctets;
+      fields["metric_name:interface.octets.out"] = outOctets;
+      fields["metric_name:interface.packets.in"] = Math.floor(inOctets / 1024);
+      fields["metric_name:interface.packets.out"] = Math.floor(outOctets / 1024);
+      fields["metric_name:interface.errors.in"] = 0;
+      fields["metric_name:interface.errors.out"] = 0;
+      fields["metric_name:interface.discards.in"] = 0;
+      fields["metric_name:interface.discards.out"] = 0;
+      fields["metric_name:bandwidth.utilization_pct"] = bandwidthPct;
+      fields["metric_name:throughput_bps"] = throughputBps;
+    } else if (xpath.indexOf("/bgp") !== -1) {
+      fields["peer_ip"] = "198.51.100.1";
+      fields["peer_asn"] = 64512;
+      fields["metric_name:bgp.session_up"] = 1.0;
+      fields["metric_name:bgp.peer_state_code"] = 6;
+      fields["metric_name:bgp.prefixes.received"] = 849200;
+      fields["metric_name:bgp.prefixes.installed"] = 849180;
+      fields["metric_name:bgp.messages.sent"] = 14820;
+      fields["metric_name:bgp.messages.received"] = 14819;
+      fields["metric_name:bgp.holdtime_seconds"] = 90;
+    } else if (xpath.indexOf("/cpu") !== -1) {
+      fields["component"] = "CPU-RoutingEngine-0";
+      fields["metric_name:cpu.utilization"] = cpu;
+      fields["metric_name:cpu.1min_avg"] = parseFloat((cpu * 0.95).toFixed(1));
+      fields["metric_name:cpu.5min_avg"] = parseFloat((cpu * 0.90).toFixed(1));
+    } else if (xpath.indexOf("/memory") !== -1) {
+      fields["component"] = "RAM-System";
+      fields["metric_name:memory.utilization_pct"] = mem;
+      fields["metric_name:memory.utilized_bytes"] = Math.floor(34359738368 * (mem / 100));
+      fields["metric_name:memory.total_bytes"] = 34359738368;
+    } else if (xpath.indexOf("/temperature") !== -1) {
+      fields["component"] = "Sensor-ASIC-Core";
+      fields["metric_name:hardware.temperature_celsius"] = tempC;
+      fields["metric_name:hardware.thermal_alarm"] = 0;
+    } else if (xpath.indexOf("/power-supply") !== -1) {
+      fields["component"] = "PSU-0";
+      fields["metric_name:power.consumed_watts"] = 420.0;
+      fields["metric_name:power.capacity_watts"] = 1200.0;
+      fields["metric_name:power.psu_redundant"] = 1;
+    } else if (xpath.indexOf("/fan") !== -1) {
+      fields["component"] = "FanTray-1";
+      fields["metric_name:fan.speed_rpm"] = 7200;
+      fields["metric_name:fan.status_code"] = 1;
+    } else if (xpath.indexOf("/optical") !== -1 || xpath.indexOf("/transceiver") !== -1) {
+      fields["interface"] = "HundredGigE0/0/0/0";
+      fields["optic_channel"] = "Channel-1";
+      fields["metric_name:optics.laser_bias_ma"] = 48.2;
+      fields["metric_name:optics.tx_power_dbm"] = -1.5;
+      fields["metric_name:optics.rx_power_dbm"] = -8.4;
+      fields["metric_name:optics.laser_temp_celsius"] = 38.5;
+    } else if (xpath.indexOf("/qos") !== -1) {
+      fields["interface"] = "HundredGigE0/0/0/0";
+      fields["queue"] = "Queue-Voice-EF";
+      fields["metric_name:qos.queue.tx_packets"] = 948201;
+      fields["metric_name:qos.queue.dropped_packets"] = 0;
+      fields["metric_name:qos.queue.wred_discards"] = 0;
+    } else {
+      fields["metric_name:system.uptime_seconds"] = 1849200;
+      fields["metric_name:ntp.offset_ms"] = 0.42;
+      fields["metric_name:ntp.jitter_ms"] = 0.12;
+      fields["metric_name:ntp.stratum"] = 2;
+    }
 
-    // KPI Dimension 4: Security & Compliance
-    var trafficAnomalyScore = 0.04;
-    var unauthorizedAccessCount = 0;
-    var firewallDrops = 14;
+    return JSON.stringify({
+      "time": now,
+      "event": "metric",
+      "source": "openconfig_telemetry",
+      "sourcetype": "cisco:mdt:grpc",
+      "host": host,
+      "index": "cisco_mdt_metrics",
+      "fields": fields
+    });
+  }
+
+  // Generate OpenConfig MDT Telemetry Payloads Across Selected Models
+  function generateOpenConfigPayload() {
+    var xpaths = getSelectedXPaths();
+    var host = $('#openconfig-host').val() || (selectedNode ? selectedNode.name : "rtr-cisco-8000-01.corp.internal");
+    var vendor = selectedNode ? selectedNode.vendor : "Cisco";
+    var format = $('input[name="openconfig_format"]:checked').val() || "metric";
+    var now = parseFloat((Date.now() / 1000).toFixed(3));
 
     if (format === "metric") {
-      var metricFields = {
-        "interface": "HundredGigE0/0/0/0",
-        "oper_status": "UP",
-        "xpath": xpath,
-        "device": host,
-        "vendor": selectedNode ? selectedNode.vendor : "Cisco",
-        // KPI 1: Performance & Traffic
-        "metric_name:interface.octets.in": inOctets,
-        "metric_name:interface.octets.out": outOctets,
-        "metric_name:bandwidth.utilization_pct": parseFloat(bandwidthPct),
-        "metric_name:throughput_bps": throughputBps,
-        "metric_name:latency_ms": parseFloat(latencyMs),
-        "metric_name:jitter_ms": parseFloat(jitterMs),
-        "metric_name:packet_loss_pct": parseFloat(packetLossPct),
-        "metric_name:interface.errors.in": 0,
-        "metric_name:interface.errors.out": 0,
-        "metric_name:carrier.transitions": 0,
-        // KPI 2: Device & Infrastructure Health
-        "metric_name:cpu.utilization": parseFloat(cpu),
-        "metric_name:cpu.load_avg_5m": parseFloat((cpu * 0.95).toFixed(1)),
-        "metric_name:memory.utilization": parseFloat(mem),
-        "metric_name:memory.used_bytes": 34359738368,
-        "metric_name:temperature_celsius": parseFloat(tempC),
-        "metric_name:uptime_seconds": uptimeSec,
-        "metric_name:ups_battery_runtime_min": upsRuntimeMin,
-        "metric_name:ups_input_voltage": upsVoltage,
-        // KPI 3: Configuration & Protocols
-        "metric_name:routing_table_version": routingTableVer,
-        "metric_name:bgp.prefixes.received": bgpPrefixCount,
-        "metric_name:bgp.session_up": 1.0,
-        "metric_name:route_flaps": routeFlaps,
-        "metric_name:ipam_subnet_utilization_pct": ipamUtilPct,
-        // KPI 4: Security & Compliance
-        "metric_name:traffic_spike_anomaly_score": trafficAnomalyScore,
-        "metric_name:unauthorized_access_count": unauthorizedAccessCount,
-        "metric_name:firewall_drop_count": firewallDrops
-      };
-
-      var metricEvent = {
-        time: parseFloat(now),
-        event: "metric",
-        source: "openconfig_telemetry",
-        sourcetype: "cisco:mdt:grpc",
-        host: host,
-        index: "cisco_mdt_metrics",
-        fields: metricFields
-      };
-      return JSON.stringify(metricEvent, null, 2);
+      var lines = [];
+      xpaths.forEach(function(xp) {
+        lines.push(generateSingleXPathMetric(xp, host, vendor, now));
+      });
+      return lines.join("\n");
     } else {
+      // RFC 7951 JSON-IETF
       var yangDoc = {
+        "ietf-yang-library:modules-state": {
+          "module": [
+            { "name": "openconfig-interfaces", "revision": "2024-01-15", "namespace": "http://openconfig.net/yang/interfaces" },
+            { "name": "openconfig-bgp", "revision": "2024-02-01", "namespace": "http://openconfig.net/yang/bgp" },
+            { "name": "openconfig-platform", "revision": "2024-01-10", "namespace": "http://openconfig.net/yang/platform" }
+          ]
+        },
+        "selected_xpaths": xpaths,
+        "device": host,
+        "vendor": vendor,
         "openconfig-interfaces:interfaces": {
           "interface": [
             {
@@ -581,25 +717,11 @@ require([
                 "admin-status": "UP",
                 "oper-status": "UP",
                 "counters": {
-                  "in-octets": inOctets,
-                  "out-octets": outOctets,
-                  "in-pkts": Math.floor(inOctets / 1024),
-                  "out-pkts": Math.floor(outOctets / 1024),
+                  "in-octets": Math.floor(Math.random() * 50000000) + 950000000,
+                  "out-octets": Math.floor(Math.random() * 40000000) + 840000000,
                   "in-errors": 0,
                   "out-errors": 0
                 }
-              }
-            }
-          ]
-        },
-        "openconfig-platform:components": {
-          "component": [
-            {
-              "name": "Chassis-Main",
-              "state": {
-                "temperature": { "instant": parseFloat(tempC) },
-                "memory": { "utilization": parseFloat(mem) },
-                "cpu": { "instant": parseFloat(cpu) }
               }
             }
           ]
@@ -942,14 +1064,15 @@ require([
 
   // OpenConfig MDT Emit Handlers
   function emitOpenConfigProbe() {
-    var payloadStr = $('#openconfig-payload').val();
+    var xpaths = getSelectedXPaths();
+    var payloadStr = generateOpenConfigPayload();
     var format = $('input[name="openconfig_format"]:checked').val() || "metric";
     var targetIndex = format === "metric" ? "cisco_mdt_metrics" : "idx_network_ops";
     var sourcetype = format === "metric" ? "cisco:mdt:grpc" : "openconfig:yang:json";
-    var host = $('#openconfig-host').val() || "rtr-cisco-8000-01.corp.internal";
+    var host = $('#openconfig-host').val() || (selectedNode ? selectedNode.name : "rtr-cisco-8000-01.corp.internal");
 
-    log('Emitting OpenConfig probe (' + format + ') to <b style="color: #38bdf8;">' + targetIndex + '</b>...');
-    sendIngestion(sourcetype, targetIndex, payloadStr, host, selectedNode ? selectedNode.ip : "10.254.0.1", 1);
+    log('Emitting OpenConfig probe (' + format + ') across <b style="color: #38bdf8;">' + xpaths.length + ' selected XPath model(s)</b> to index <b style="color: #38bdf8;">' + targetIndex + '</b>...');
+    sendIngestion(sourcetype, targetIndex, payloadStr, host, selectedNode ? selectedNode.ip : "10.254.0.1", xpaths.length);
   }
 
   function startOpenConfigStream() {
@@ -1071,7 +1194,36 @@ require([
     $('#tab-btn-openconfig').on('click', function() { setTab('openconfig'); });
     $('#tab-btn-syslog').on('click', function() { setTab('syslog'); });
 
-    // OpenConfig controls
+    // OpenConfig controls & XPath multi-select handlers
+    $(document).on('change', '.xpath-checkbox', function() {
+      updateXPathSelectionCount();
+      updateOpenConfigPayloadBox();
+    });
+
+    $(document).on('click', '#btn-xpath-select-all', function() {
+      $('.xpath-checkbox').prop('checked', true);
+      updateXPathSelectionCount();
+      updateOpenConfigPayloadBox();
+    });
+
+    $(document).on('click', '#btn-xpath-clear-all', function() {
+      $('.xpath-checkbox').prop('checked', false);
+      // Keep primary interface counters active
+      $('.xpath-checkbox[value="/interfaces/interface/state/counters"]').prop('checked', true);
+      updateXPathSelectionCount();
+      updateOpenConfigPayloadBox();
+    });
+
+    $(document).on('click', '.btn-xpath-cat', function() {
+      var cat = $(this).data('cat');
+      var cbs = $('.xpath-checkbox[data-cat="' + cat + '"]');
+      var anyUnchecked = false;
+      cbs.each(function() { if (!this.checked) anyUnchecked = true; });
+      cbs.prop('checked', anyUnchecked);
+      updateXPathSelectionCount();
+      updateOpenConfigPayloadBox();
+    });
+
     $('#select-openconfig-xpath').on('change', updateOpenConfigPayloadBox);
     $('input[name="openconfig_format"]').on('change', updateOpenConfigPayloadBox);
     $('#btn-refresh-openconfig-payload').on('click', updateOpenConfigPayloadBox);
@@ -1147,8 +1299,21 @@ require([
     $('#btn-stream-path').on('click', startPathStream);
     $('#btn-stop-path').on('click', stopPathStream);
 
-    // Toggle In-Page Canvas Drawer
+    // Visual Canvas Navigation & Drawer Handlers
+    $(document).on('click', '#btn-open-visual-canvas', function(e) {
+      e.preventDefault();
+      var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+      var locale = localeMatch ? localeMatch[1] : 'en-US';
+      window.open('/' + locale + '/app/netspout/netspout_canvas', '_blank');
+    });
+
     $(document).on('click', '#btn-toggle-inline-canvas', function() {
+      var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
+      var locale = localeMatch ? localeMatch[1] : 'en-US';
+      var frame = document.getElementById('inline-canvas-frame');
+      if (frame && (!frame.src || frame.src.indexOf('index.html') === -1 || frame.src.indexOf('netspout_canvas') !== -1)) {
+        frame.src = '/' + locale + '/static/app/netspout/dist/index.html';
+      }
       $('#inline-canvas-drawer').slideToggle(200);
     });
     $(document).on('click', '#btn-close-inline-canvas', function() {
@@ -1159,8 +1324,9 @@ require([
   // Initialization
   function init() {
     bindEvents();
+    populateOpenConfigXPathCheckboxes();
     loadPreset("openconfig_core");
-    log('Scenario Builder & Path Flow Canvas initialized with OpenConfig MDT Streaming.');
+    log('Scenario Builder & Path Flow Canvas initialized with 24 OpenConfig MDT Streaming models.');
   }
 
   function pollReady() {

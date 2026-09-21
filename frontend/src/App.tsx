@@ -77,7 +77,7 @@ export const App: React.FC = () => {
   const [splInitialQuery, setSplInitialQuery] = useState<string | undefined>(undefined);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
-    hec_url: 'http://127.0.0.1:8888/services/collector',
+    hec_url: 'https://127.0.0.1:8888/services/collector',
     hec_token: '00000000-0000-0000-0000-000000000000',
     hec_index: 'idx_network_ops',
     syslog_enabled: true,
@@ -488,6 +488,31 @@ export const App: React.FC = () => {
       };
 
       setLogs((prev) => [...prev.slice(-1500), newEntry]);
+
+      // Direct HEC push for non-metric scenarios if enabled
+      if (transportConfig.hec_enabled && scenario !== "openconfig_mdt_streaming") {
+        fetch(transportConfig.hec_url, {
+          method: "POST",
+          headers: {
+            "Authorization": `Splunk ${transportConfig.hec_token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            time: timeSec,
+            event: logText,
+            source: "netspout:canvas",
+            sourcetype: sourcetype,
+            host: `${randomNode.name}.corp.internal`,
+            index: transportConfig.hec_index || "idx_network_ops",
+            fields: {
+              action: action,
+              status: newEntry.status,
+              node_type: randomNode.type,
+              vendor: randomNode.vendor
+            }
+          })
+        }).catch(() => {});
+      }
     }, speedMs);
 
     return () => clearInterval(interval);

@@ -239,11 +239,17 @@ async def run_simulation_loop():
         try:
             if simulation_running:
                 logs = scenario_runner.execute_step(current_topology, active_scenario)
+                transport = getattr(current_topology, "global_transport", None)
                 for entry in logs:
                     accumulated_logs.append(entry)
                     if len(accumulated_logs) > MAX_LOG_HISTORY:
                         accumulated_logs.pop(0)
                     await manager.broadcast_log(entry.dict())
+                    if transport and getattr(transport, "hec_enabled", False):
+                        try:
+                            dispatcher.dispatch_log(entry, transport)
+                        except Exception:
+                            pass
             await asyncio.sleep(simulation_interval_ms / 1000.0)
         except asyncio.CancelledError:
             break

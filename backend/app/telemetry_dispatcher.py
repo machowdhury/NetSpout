@@ -100,32 +100,49 @@ class TelemetryDispatcher:
         token: str,
         ssl_verify: bool = False
     ) -> Tuple[bool, str]:
-        try:
-            ctx = ssl.create_default_context()
-            if not ssl_verify:
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
+        candidates = [hec_url]
+        if ":8888" in hec_url:
+            candidates.append(hec_url.replace(":8888", ":8088"))
+        elif ":8088" in hec_url:
+            candidates.append(hec_url.replace(":8088", ":8888"))
+        if "127.0.0.1" in hec_url:
+            for c in list(candidates):
+                candidates.append(c.replace("127.0.0.1", "localhost"))
+        elif "localhost" in hec_url:
+            for c in list(candidates):
+                candidates.append(c.replace("localhost", "127.0.0.1"))
 
-            payload = json.dumps(event).encode("utf-8")
-            req = urllib.request.Request(
-                hec_url,
-                data=payload,
-                headers={
-                    "Authorization": f"Splunk {token}",
-                    "Content-Type": "application/json"
-                }
-            )
+        last_error = None
+        for cand_url in candidates:
+            try:
+                ctx = ssl.create_default_context()
+                if not ssl_verify:
+                    ctx.check_hostname = False
+                    ctx.verify_mode = ssl.CERT_NONE
 
-            with urllib.request.urlopen(req, timeout=3.0, context=ctx) as resp:
-                resp_text = resp.read().decode("utf-8", errors="replace")
-                self.stats["hec_dispatched"] += 1
-                self.stats["last_active"] = time.time()
-                return True, f"HEC HTTP {resp.status}: {resp_text[:100]}"
+                payload = json.dumps(event).encode("utf-8")
+                req = urllib.request.Request(
+                    cand_url,
+                    data=payload,
+                    headers={
+                        "Authorization": f"Splunk {token}",
+                        "Content-Type": "application/json"
+                    }
+                )
 
-        except Exception as e:
-            self.stats["hec_errors"] += 1
-            self.stats["last_error"] = f"HEC error: {str(e)}"
-            return False, str(e)
+                with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
+                    resp_text = resp.read().decode("utf-8", errors="replace")
+                    self.stats["hec_dispatched"] += 1
+                    self.stats["last_active"] = time.time()
+                    return True, f"HEC HTTP {resp.status}: {resp_text[:100]}"
+
+            except Exception as e:
+                last_error = str(e)
+                continue
+
+        self.stats["hec_errors"] += 1
+        self.stats["last_error"] = f"HEC error: {last_error}"
+        return False, str(last_error)
 
     # -------------------------------------------------------------------------
     # 2. OpenTelemetry (OTel) Collector Transport (OTLP HTTP)

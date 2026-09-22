@@ -7,11 +7,17 @@ interface LogTerminalProps {
   onClearLogs: () => void;
   isRunning: boolean;
   onTogglePlay: () => void;
+  hecTarget?: string;
+  hecIndex?: string;
 }
 
 export const LogTerminal: React.FC<LogTerminalProps> = ({
   logs,
-  onClearLogs
+  onClearLogs,
+  isRunning,
+  onTogglePlay,
+  hecTarget = '127.0.0.1:8888',
+  hecIndex = 'idx_network_ops'
 }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const [autoScroll, setAutoScroll] = useState<boolean>(true);
@@ -19,10 +25,11 @@ export const LogTerminal: React.FC<LogTerminalProps> = ({
   const [copied, setCopied] = useState<boolean>(false);
 
   useEffect(() => {
-    if (autoScroll && terminalRef.current) {
+    // Only autoscroll if user enabled autoscroll AND simulation is actively running
+    if (autoScroll && isRunning && terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
-  }, [logs, autoScroll]);
+  }, [logs, autoScroll, isRunning]);
 
   const filteredLogs = logs.filter((l) => {
     if (!filterText) return true;
@@ -191,8 +198,32 @@ export const LogTerminal: React.FC<LogTerminalProps> = ({
       {/* Log Stream Container */}
       <div
         ref={terminalRef}
-        className="flex-1 overflow-y-auto bg-[#070b14] p-1 select-text scrollbar-thin scrollbar-thumb-slate-800"
+        className="flex-1 overflow-y-auto bg-[#070b14] p-1 select-text scrollbar-thin scrollbar-thumb-slate-800 relative"
       >
+        {/* Sticky Active State Banner */}
+        <div className={`sticky top-0 z-10 px-3 py-1.5 flex items-center justify-between text-[11px] font-mono backdrop-blur border-b mb-1 ${
+          isRunning 
+            ? 'bg-emerald-950/90 border-emerald-700/80 text-emerald-300'
+            : 'bg-amber-950/90 border-amber-600/80 text-amber-300'
+        }`}>
+          <div className="flex items-center gap-2 font-bold">
+            <span className={`inline-block w-2 h-2 rounded-full ${
+              isRunning ? 'bg-emerald-400 animate-ping' : 'bg-amber-400 animate-pulse'
+            }`} />
+            <span>
+              {isRunning ? `● TRANSMITTING TO HEC (${hecTarget} → ${hecIndex})` : '[❚❚ SIMULATION PAUSED - INGESTION FROZEN]'}
+            </span>
+          </div>
+          {!isRunning && (
+            <button
+              onClick={onTogglePlay}
+              className="px-2 py-0.5 bg-amber-500 text-slate-950 font-bold rounded text-[10px] hover:bg-amber-400 transition-colors cursor-pointer"
+            >
+              Resume
+            </button>
+          )}
+        </div>
+
         {filteredLogs.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center p-6 text-slate-600 font-mono text-xs">
             <Terminal className="w-8 h-8 mb-2 stroke-[1.5] text-slate-700" />
@@ -214,7 +245,9 @@ export const LogTerminal: React.FC<LogTerminalProps> = ({
         </div>
         <div className="flex items-center gap-2">
           {copied && <span className="text-emerald-400">Copied to clipboard!</span>}
-          <span className="text-slate-600">Rate: 2 logs/sec</span>
+          <span className="text-slate-400">
+            Rate: <b className={isRunning ? "text-emerald-400" : "text-amber-400"}>{isRunning ? "Active (~2 logs/sec)" : "0 logs/sec (Paused)"}</b>
+          </span>
         </div>
       </div>
     </aside>

@@ -2,8 +2,8 @@
   <view name="guided_onboarding" default="true" label="Data Onboarding Wizard"/>
   <view name="scenario_builder" label="Scenario Builder"/>
   <view name="netspout_canvas" label="Canvas Orchestrator"/>
-  <view name="datablaster_dashboard" label="Data Blaster Dashboard"/>
-  <collection label="Network Scenario Insight">
+  <collection label="NetSpout Dashboards">
+    <view name="datablaster_dashboard" label="Analytics Overview &amp; Ingestion Telemetry"/>
     <view name="studio_multivendor_enterprise" label="Enterprise 5-Tier Backbone (MV-ENT-001)"/>
     <view name="studio_roce_ai_fabric" label="AI Data Center Fabric - RoCE v2 (MV-002)"/>
     <view name="studio_bgp_route_flap" label="Core BGP Instability &amp; Route Flapping (MV-006)"/>

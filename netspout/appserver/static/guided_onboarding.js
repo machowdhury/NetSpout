@@ -1963,6 +1963,52 @@ require([
     }
   ];
 
+  // Pre-configured Multi-Vendor Telemetry Suites
+  var MULTI_BATCH_PRESETS = {
+    cisco_sdwan_suite: [
+      "cisco:sdwan:linkhealth", "cisco:sdwan:BGP-5-ADJCHANGE", "cisco:sdwan:BGP-5-NBR_RESET",
+      "cisco:sdwan:AAA-6-METHOD_LIST_STATE", "cisco:sdwan:DMI-5-SYNC_COMPLETE", "cisco:sdwan:ENVIRONMENTAL-1-ALERT"
+    ],
+    cisco_catalyst_suite: [
+      "cisco:catalyst:clienthealth", "cisco:catalyst:devicehealth", "cisco:catalyst:networkhealth",
+      "cisco:catalyst:rogue:threat_details", "cisco:catalyst:security:events", "cisco:catalyst:issue"
+    ],
+    cisco_duo_suite: [
+      "cisco:duo:authentication", "cisco:duo:authentication_v2", "cisco:duo:push:prompt",
+      "cisco:duo:endpoint:posture", "cisco:duo:zerotrust:policy", "cisco:duo:administrator"
+    ],
+    cisco_intersight_suite: [
+      "cisco:intersight:compute", "cisco:intersight:alarms", "cisco:intersight:advisories",
+      "cisco:intersight:metrics", "cisco:intersight:auditrecords"
+    ],
+    cisco_dc_suite: [
+      "cisco:dc:nexus9k", "cisco:dc:nexus9k:syslog", "cisco:dc:aci:health",
+      "cisco:dc:aci:events", "cisco:nexus", "cisco:nxos:syslog"
+    ],
+    cisco_security_suite: [
+      "cisco:ftd:syslog", "cisco:ftd", "cisco:ise:syslog", "cisco:ise:nac:8021x",
+      "cisco:ise:trustsec:sgt", "cisco:asa:syslog", "cisco:asa"
+    ],
+    all_cisco_stack: [
+      "cisco:dc:nexus9k", "cisco:dnac:audit:logs", "cisco:dnac:client", "cisco:dnac:clienthealth",
+      "cisco:dnac:compliance", "cisco:dnac:devicehealth", "cisco:dnac:issue", "cisco:dnac:networkhealth",
+      "cisco:dnac:securityadvisory", "cisco:dnac:site:topology", "cisco:duo:account", "cisco:duo:activity",
+      "cisco:duo:administrator", "cisco:duo:authentication", "cisco:duo:authentication_v2", "cisco:duo:endpoint",
+      "cisco:duo:user", "cisco:ftd:syslog", "cisco:intersight:advisories", "cisco:intersight:alarms",
+      "cisco:intersight:auditrecords", "cisco:intersight:compute", "cisco:intersight:contracts",
+      "cisco:intersight:licenses", "cisco:intersight:metrics", "cisco:intersight:networkelements",
+      "cisco:intersight:networkobjects", "cisco:intersight:profiles", "cisco:intersight:targets",
+      "cisco:ise:radius:authz:policy", "cisco:ise:radius:policyset", "cisco:ise:syslog",
+      "cisco:ise:tacacs:authz:policy", "cisco:ise:tacacs:policyset"
+    ],
+    multivendor_ngfw: [
+      "pan:traffic", "pan:threat", "fortinet:fortigate", "fgt_traffic", "checkpoint:cef", "cisco:ftd:syslog"
+    ],
+    cloud_sase_suite: [
+      "zscaler:zia", "zscaler:lss", "netskope:sse", "netskope:json", "cisco:thousandeyes:event", "cisco:thousandeyes:metric"
+    ]
+  };
+
   // Wizard State
   var wizardState = {
     currentStep: 1,
@@ -2018,7 +2064,7 @@ require([
     var topEl = document.getElementById('wizard-stepper');
     if (topEl) topEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    if (stepNum === 3) {
+    if (stepNum === 3 || stepNum === 4) {
       updateSummaryBanner();
     }
   }
@@ -2548,6 +2594,46 @@ require([
       $('#subpanel-single').toggle(mode === 'single');
       $('#subpanel-multi').toggle(mode === 'multi');
       $('#subpanel-scenario').toggle(mode === 'scenario');
+      updateSummaryBanner();
+    });
+
+    // Multi Batch Preset Dropdown Change
+    $(document).on('change', '#wizard-multi-batch-preset-select', function() {
+      var preset = $(this).val();
+      if (preset && MULTI_BATCH_PRESETS[preset]) {
+        var targets = MULTI_BATCH_PRESETS[preset];
+        wizardState.selectedMultiSourcetypes = targets.slice();
+        $('#multi-sourcetype-grid input').each(function() {
+          var val = $(this).val();
+          $(this).prop('checked', targets.indexOf(val) !== -1);
+        });
+        updateMultiSelectedCount();
+        updateSummaryBanner();
+      }
+    });
+
+    // Scenario Dropdown Change
+    $(document).on('change', '#wizard-scenario-select', function() {
+      var scId = $(this).val();
+      wizardState.selectedScenario = scId;
+      $('.scenario-pick-card').each(function() {
+        var isThis = $(this).data('scenario') === scId;
+        $(this).css('border', isThis ? '2px solid #0284c7' : '1px solid #334155');
+        $(this).find('input').prop('checked', isThis);
+      });
+      updateSummaryBanner();
+    });
+
+    // Scenario Pick Card Click
+    $(document).on('click', '.scenario-pick-card', function() {
+      var scId = $(this).data('scenario');
+      if (scId) {
+        wizardState.selectedScenario = scId;
+        $('#wizard-scenario-select').val(scId);
+        $('.scenario-pick-card').css('border', '1px solid #334155').find('input').prop('checked', false);
+        $(this).css('border', '2px solid #0284c7').find('input').prop('checked', true);
+        updateSummaryBanner();
+      }
     });
 
     // Single Sub-options: Catalog vs Upload

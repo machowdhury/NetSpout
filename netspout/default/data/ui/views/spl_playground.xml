@@ -110,12 +110,11 @@
 
                 <div>
                   <label style="color: #94a3b8; font-size: 11px; font-weight: 600; display: block; margin-bottom: 2px;">
-                    Execution Engine
+                    Execution Target
                   </label>
-                  <select id="spl-exec-mode" style="background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 5px 8px; color: #38bdf8; font-size: 11px; font-weight: 600;">
-                    <option value="splunkd" selected="selected">🔍 Splunk Enterprise REST (/services/search)</option>
-                    <option value="instant">⚡ Fast In-Memory Benchmark Engine</option>
-                  </select>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 5px 8px; color: #38bdf8; font-size: 11px; font-weight: 600;">
+                    🔍 Splunk Enterprise REST (/services/search)
+                  </span>
                 </div>
               </div>
 

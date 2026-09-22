@@ -484,6 +484,24 @@
 
               <!-- Sub-panel: Multi Mode Details -->
               <div id="subpanel-multi" style="display: none; background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+                <div style="margin-bottom: 14px;">
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Choose Multi-Vendor Telemetry Suite / Batch Preset:
+                  </label>
+                  <select id="wizard-multi-batch-preset-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #38bdf8; font-family: monospace; font-size: 12px; box-sizing: border-box; margin-bottom: 12px;">
+                    <option value="custom">-- Custom Selection (Filter &amp; select sourcetypes below) --</option>
+                    <option value="cisco_sdwan_suite">📡 Cisco SD-WAN Telemetry Suite (BGP, Link Health, AAA, DMI, Config)</option>
+                    <option value="cisco_catalyst_suite">🏢 Cisco Catalyst Center &amp; Campus (Client Health, Device Health, Issues, Rogues)</option>
+                    <option value="cisco_duo_suite">🔒 Cisco Duo Zero Trust &amp; MFA Suite (Auth, Push, Endpoint Posture, SAML)</option>
+                    <option value="cisco_intersight_suite">☁ Cisco Intersight Hybrid Cloud (Compute, Metrics, Advisories, Alarms)</option>
+                    <option value="cisco_dc_suite">⚡ Cisco Data Center Nexus &amp; ACI (Nexus 9K Syslog, ACI Health, NX-OS)</option>
+                    <option value="cisco_security_suite">🛡 Cisco Security &amp; Perimeter (FTD Syslog, ISE Syslog, ASA Syslog, Duo)</option>
+                    <option value="all_cisco_stack">🔵 Complete Cisco Telemetry Stack (All 34 Real Cisco Sourcetypes)</option>
+                    <option value="multivendor_ngfw">🔥 Multi-Vendor NGFW &amp; Edge (Palo Alto, Fortinet, Check Point, Cisco FTD)</option>
+                    <option value="cloud_sase_suite">🌐 Cloud, SASE &amp; Observability (Zscaler ZIA/ZPA, Netskope, ThousandEyes)</option>
+                  </select>
+                </div>
+
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
                   <div style="display: flex; gap: 6px;" id="multi-filter-buttons">
                     <button type="button" class="vendor-filter-btn" data-vendor="all" style="background: #0284c7; color: #fff; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;">All Vendors</button>
@@ -502,8 +520,8 @@
                   </div>
                 </div>
 
-                                <div style="margin-bottom: 10px;">
-                  <input type="text" id="multi-sourcetype-search" placeholder="🔍 Search multi-batch sourcetypes (e.g., bgp, interface, nutanix, kube, threat)..." style="width: 100%; background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 6px 12px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
+                <div style="margin-bottom: 10px;">
+                  <input type="text" id="multi-sourcetype-search" placeholder="🔍 Search multi-batch sourcetypes (e.g., cisco, bgp, interface, threat)..." style="width: 100%; background: #090d16; border: 1px solid #1e293b; border-radius: 4px; padding: 6px 12px; color: #38bdf8; font-family: monospace; font-size: 11px; box-sizing: border-box;" />
                 </div>
                 <!-- Multi Grid -->
                 <div id="multi-sourcetype-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; max-height: 280px; overflow-y: auto; padding: 4px;">
@@ -513,8 +531,38 @@
 
               <!-- Sub-panel: Scenario Mode Details -->
               <div id="subpanel-scenario" style="display: none; background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 18px; margin-bottom: 16px;">
+                <div style="margin-bottom: 14px;">
+                  <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
+                    Select Operational Architecture Scenario:
+                  </label>
+                  <select id="wizard-scenario-select" style="width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 8px 12px; color: #38bdf8; font-family: monospace; font-size: 12px; box-sizing: border-box; margin-bottom: 14px;">
+                    <optgroup label="Cisco Network Operational Incidents">
+                      <option value="scenario_acme_sdwan_toronto_degradation.yml" selected="selected">Scenario 1: Cisco SD-WAN Underlay Brownout &amp; BGP Route Flapping</option>
+                      <option value="scenario_acme_campus_cross_domain_visibility.yml">Scenario 2: Cisco Catalyst Center Campus Rogue AP Infiltration &amp; AWIPS Alert</option>
+                      <option value="scenario_maple_security.yml">Scenario 3: Cisco Duo MFA Push Fatigue Attack &amp; Compromised Posture</option>
+                      <option value="scenario_maple_intersight.yml">Scenario 4: Cisco Intersight Server Hardware Thermal Alarm &amp; Compute Fault</option>
+                      <option value="scenario_acme_bridge_domain_withdrawal.yml">Scenario 5: Cisco Nexus 9000 DC Spine-Leaf Link Failure &amp; ECN Congestion</option>
+                      <option value="scenario_acme_mpls_to_srv6_transition.yml">Scenario 6: Cisco Core MPLS to SRv6 Transition &amp; Optical Power Degradation</option>
+                      <option value="scenario_acme_full_network_topology.yml">Scenario 7: Full Enterprise Network Topology Incident Simulation</option>
+                    </optgroup>
+                    <optgroup label="Complete Network Architectures (PAN to GAN)">
+                      <option value="scenario_arch_lan_campus_access.yml">LAN: Local Area Network - Campus Access &amp; 802.1Q Switching</option>
+                      <option value="scenario_arch_wlan_meraki_catalyst.yml">WLAN: Wireless LAN - Meraki &amp; Catalyst 9800 Wi-Fi 6E/7</option>
+                      <option value="scenario_arch_wan_global_backbone.yml">WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone</option>
+                      <option value="scenario_arch_san_fibre_channel.yml">SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel 64G</option>
+                      <option value="scenario_arch_nas_storage_cluster.yml">NAS: Network-Attached Storage - NetApp ONTAP &amp; PowerScale</option>
+                      <option value="scenario_arch_vpn_remote_workforce.yml">VPN: Virtual Private Network - Cisco AnyConnect &amp; Site IPsec</option>
+                      <option value="scenario_arch_can_multi_building.yml">CAN: Campus Area Network - Multi-Building Backbone</option>
+                      <option value="scenario_arch_man_carrier_ring.yml">MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring</option>
+                      <option value="scenario_arch_epn_isolated_intranet.yml">EPN: Enterprise Private Network - Isolated Intranet</option>
+                      <option value="scenario_arch_gan_subsea_cloud.yml">GAN: Global Area Network - Worldwide Multi-Cloud &amp; Subsea Transit</option>
+                      <option value="scenario_arch_pan_iot_mesh.yml">PAN: Personal Area Network - IoT Sensor Cluster &amp; BLE Mesh</option>
+                    </optgroup>
+                  </select>
+                </div>
+
                 <label style="display: block; color: #94a3b8; font-size: 11px; font-weight: 600; margin-bottom: 8px;">
-                  Choose Correlated Network Operational Scenario:
+                  Or Pick Correlated Scenario Card:
                 </label>
                 <div id="scenario-cards-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
                   <!-- Scenario cards populated dynamically -->

@@ -207,6 +207,11 @@ export const App: React.FC = () => {
   const handleTogglePlay = () => {
     const nextRunning = !isRunning;
     setIsRunning(nextRunning);
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      try {
+        wsRef.current.send(JSON.stringify({ action: 'set_running', running: nextRunning }));
+      } catch (e) {}
+    }
     fetch(`${BACKEND_HTTP}/api/scenarios/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -340,7 +345,11 @@ export const App: React.FC = () => {
                 });
               }
             } else if (data.type === 'simulation_state') {
-              setIsRunning(data.running);
+              setIsRunning(Boolean(data.running));
+            } else if (data.type === 'connection_established') {
+              if (typeof data.simulation_running === 'boolean') {
+                setIsRunning(data.simulation_running);
+              }
             } else if (data.type === 'scenario_state') {
               setScenario(data.scenario);
             }
@@ -600,6 +609,7 @@ export const App: React.FC = () => {
         onOpenUseCaseRepo={() => setShowUseCaseModal(true)}
         onOpenNocSocMetrics={() => setShowMetricsModal(true)}
         onPowerAll={handlePowerAll}
+        transportConfig={transportConfig}
       />
 
       {/* 3-Column Split Screen Dashboard */}
@@ -633,6 +643,8 @@ export const App: React.FC = () => {
           onClearLogs={handleClearLogs}
           isRunning={isRunning}
           onTogglePlay={handleTogglePlay}
+          hecTarget={transportConfig.hec_url ? transportConfig.hec_url.replace(/^https?:\/\//, '').replace(/\/services\/collector$/, '') : '127.0.0.1:8888'}
+          hecIndex={transportConfig.hec_index || 'idx_network_ops'}
         />
       </div>
 

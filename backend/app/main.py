@@ -309,6 +309,12 @@ async def control_simulation(req: SimulationRequest):
         simulation_interval_ms = max(50, min(req.speed_ms, 5000))
     if req.ecosystem_mode:
         active_ecosystem_mode = req.ecosystem_mode
+    await manager.broadcast({
+        "type": "simulation_state",
+        "running": simulation_running,
+        "scenario": active_scenario,
+        "speed_ms": simulation_interval_ms
+    })
     return {
         "status": "success",
         "running": simulation_running,
@@ -802,6 +808,11 @@ async def websocket_logs_endpoint(websocket: WebSocket):
             "simulation_running": simulation_running,
             "scenario": active_scenario
         })
+        await websocket.send_json({
+            "type": "simulation_state",
+            "running": simulation_running,
+            "scenario": active_scenario
+        })
         while True:
             # Receive client interactions (e.g. topology mutations or play/pause)
             data_text = await websocket.receive_text()
@@ -810,10 +821,13 @@ async def websocket_logs_endpoint(websocket: WebSocket):
                 action = data.get("action")
                 if action == "toggle_play":
                     simulation_running = not simulation_running
-                    await websocket.send_json({"type": "simulation_state", "running": simulation_running})
+                    await manager.broadcast({"type": "simulation_state", "running": simulation_running})
+                elif action == "set_running":
+                    simulation_running = bool(data.get("running", True))
+                    await manager.broadcast({"type": "simulation_state", "running": simulation_running})
                 elif action == "set_scenario":
                     active_scenario = ScenarioType(data.get("scenario", "normal_traffic"))
-                    await websocket.send_json({"type": "scenario_state", "scenario": active_scenario})
+                    await manager.broadcast({"type": "scenario_state", "scenario": active_scenario})
                 elif action == "update_topology":
                     current_topology = TopologyState(**data.get("topology", {}))
             except Exception as e:

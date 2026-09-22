@@ -1155,13 +1155,13 @@ require([
   // DOM Event Bindings
   function bindEvents() {
     // Preset Dropdown
-    $('#select-topology-preset').on('change', function() {
+    $(document).on('change', '#select-topology-preset', function() {
       loadPreset($(this).val());
     });
 
     // Tab Buttons
-    $('#tab-btn-openconfig').on('click', function() { setTab('openconfig'); });
-    $('#tab-btn-syslog').on('click', function() { setTab('syslog'); });
+    $(document).on('click', '#tab-btn-openconfig', function() { setTab('openconfig'); });
+    $(document).on('click', '#tab-btn-syslog', function() { setTab('syslog'); });
 
     // OpenConfig controls & XPath multi-select handlers
     $(document).on('change', '.xpath-checkbox', function() {
@@ -1193,15 +1193,15 @@ require([
       updateOpenConfigPayloadBox();
     });
 
-    $('#select-openconfig-xpath').on('change', updateOpenConfigPayloadBox);
-    $('input[name="openconfig_format"]').on('change', updateOpenConfigPayloadBox);
-    $('#btn-refresh-openconfig-payload').on('click', updateOpenConfigPayloadBox);
-    $('#btn-emit-openconfig-probe').on('click', emitOpenConfigProbe);
-    $('#btn-stream-openconfig').on('click', startOpenConfigStream);
-    $('#btn-stop-openconfig-stream').on('click', stopOpenConfigStream);
+    $(document).on('change', '#select-openconfig-xpath', updateOpenConfigPayloadBox);
+    $(document).on('change', 'input[name="openconfig_format"]', updateOpenConfigPayloadBox);
+    $(document).on('click', '#btn-refresh-openconfig-payload', updateOpenConfigPayloadBox);
+    $(document).on('click', '#btn-emit-openconfig-probe', emitOpenConfigProbe);
+    $(document).on('click', '#btn-stream-openconfig', startOpenConfigStream);
+    $(document).on('click', '#btn-stop-openconfig-stream', stopOpenConfigStream);
 
     // Syslog controls
-    $('#emit-class').on('change', function() {
+    $(document).on('change', '#emit-class', function() {
       updateVendorDropdown();
       var cls = $(this).val();
       var platforms = PLATFORM_MATRIX[cls] || [];
@@ -1213,7 +1213,7 @@ require([
       }
     });
 
-    $('#emit-vendor').on('change', function() {
+    $(document).on('change', '#emit-vendor', function() {
       var cls = $('#emit-class').val();
       var vId = $(this).val();
       var platforms = PLATFORM_MATRIX[cls] || [];
@@ -1225,7 +1225,7 @@ require([
       }
     });
 
-    $('#btn-reset-template').on('click', function() {
+    $(document).on('click', '#btn-reset-template', function() {
       var cls = $('#emit-class').val();
       var vId = $('#emit-vendor').val();
       var platforms = PLATFORM_MATRIX[cls] || [];
@@ -1233,28 +1233,28 @@ require([
       if (matched) $('#emit-payload').val(matched.template);
     });
 
-    $('#btn-select-all-st').on('click', function() {
+    $(document).on('click', '#btn-select-all-st', function() {
       var cbs = $('#sourcetype-checkbox-group input[type="checkbox"]');
       var anyUnchecked = false;
       cbs.each(function() { if (!this.checked) anyUnchecked = true; });
       cbs.prop('checked', anyUnchecked);
     });
 
-    $('input[name="sourcetype_mode"]').on('change', function() {
+    $(document).on('change', 'input[name="sourcetype_mode"]', function() {
       var mode = $(this).val();
       $('#container-single-sourcetype').toggle(mode === 'single');
     });
 
     // Emission buttons
-    $('#btn-emit-single-st').on('click', function() { emitSyslogSingle(1); });
-    $('#btn-emit-selected').on('click', function() { emitSyslogCount(1); });
-    $('#btn-burst-50').on('click', function() { emitSyslogCount(50); });
-    $('#btn-burst-100').on('click', function() { emitSyslogCount(100); });
-    $('#btn-blast-selected-1').on('click', function() {
+    $(document).on('click', '#btn-emit-single-st', function() { emitSyslogSingle(1); });
+    $(document).on('click', '#btn-emit-selected', function() { emitSyslogCount(1); });
+    $(document).on('click', '#btn-burst-50', function() { emitSyslogCount(50); });
+    $(document).on('click', '#btn-burst-100', function() { emitSyslogCount(100); });
+    $(document).on('click', '#btn-blast-selected-1', function() {
       if (activeTab === "openconfig") emitOpenConfigProbe();
       else emitSyslogSingle(1);
     });
-    $('#btn-blast-selected-50').on('click', function() {
+    $(document).on('click', '#btn-blast-selected-50', function() {
       if (activeTab === "openconfig") {
         for (var i = 0; i < 5; i++) emitOpenConfigProbe();
       } else {
@@ -1263,8 +1263,8 @@ require([
     });
 
     // Streaming buttons
-    $('#btn-stream-path').on('click', startPathStream);
-    $('#btn-stop-path').on('click', stopPathStream);
+    $(document).on('click', '#btn-stream-path', startPathStream);
+    $(document).on('click', '#btn-stop-path', stopPathStream);
 
     // Visual Canvas Navigation & Drawer Handlers
     $(document).on('click', '#btn-open-visual-canvas', function(e) {

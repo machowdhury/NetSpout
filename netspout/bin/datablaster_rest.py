@@ -125,6 +125,33 @@ def save_stored_config(new_cfg: Dict[str, Any]) -> Dict[str, Any]:
     return cfg
 
 
+def resolve_hec_urls(hec_url: str) -> List[str]:
+    """Generate candidate HEC URLs handling port 8888 (host) vs 8088 (container) mapping and localhost."""
+    urls: List[str] = []
+    if hec_url:
+        clean = hec_url.strip()
+        urls.append(clean)
+        if ":8888" in clean:
+            urls.append(clean.replace(":8888", ":8088"))
+        elif ":8088" in clean:
+            urls.append(clean.replace(":8088", ":8888"))
+        if "127.0.0.1" in clean:
+            urls.append(clean.replace("127.0.0.1", "localhost"))
+        elif "localhost" in clean:
+            urls.append(clean.replace("localhost", "127.0.0.1"))
+    
+    defaults = [
+        "https://127.0.0.1:8088/services/collector",
+        "https://localhost:8088/services/collector",
+        "https://127.0.0.1:8888/services/collector",
+        "http://127.0.0.1:8088/services/collector"
+    ]
+    for d in defaults:
+        if d not in urls:
+            urls.append(d)
+    return urls
+
+
 def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> Dict[str, Any]:
     """Test connectivity and authentication against Splunk HEC with selectable SSL verification."""
     import urllib.request
@@ -140,11 +167,7 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
-    candidate_urls = [hec_url]
-    if ":8888" in hec_url:
-        candidate_urls.append(hec_url.replace(":8888", ":8088"))
-    elif ":8088" in hec_url:
-        candidate_urls.append(hec_url.replace(":8088", ":8888"))
+    candidate_urls = resolve_hec_urls(hec_url)
 
     last_res = None
     for candidate in candidate_urls:
@@ -1115,15 +1138,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
 
             raw_payload = "\n".join(formatted_lines).encode("utf-8")
 
-            target_urls = [hec_url]
-            if ":8888" in hec_url:
-                target_urls.append(hec_url.replace(":8888", ":8088"))
-            elif ":8088" in hec_url:
-                target_urls.append(hec_url.replace(":8088", ":8888"))
-            if "127.0.0.1" in hec_url:
-                target_urls.append(hec_url.replace("127.0.0.1", "localhost"))
-            elif "localhost" in hec_url:
-                target_urls.append(hec_url.replace("localhost", "127.0.0.1"))
+            target_urls = resolve_hec_urls(hec_url)
 
             ctx = ssl.create_default_context()
             if not ssl_verify:
@@ -1221,9 +1236,18 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             index_target = clean.get("index", "idx_network_ops").strip()
             sample_content = clean.get("sample_content", "").strip()
             if not sample_content:
-                return (400, {"status": "error", "message": "sample_content cannot be empty"})
+                try:
+                    from cisco_sample_provider import get_sample_lines
+                    s_lines = get_sample_lines(sourcetype)
+                except Exception:
+                    s_lines = []
+                if s_lines:
+                    sample_content = "\n".join(s_lines)
+                else:
+                    sample_content = f"%NETSPOUT-5-SAMPLE: Sample event for {sourcetype}"
             
             safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', sourcetype)
+            os.makedirs(os.path.join(APP_DIR, "samples"), exist_ok=True)
             sample_file = os.path.join(APP_DIR, "samples", f"{safe_name}.log")
             with open(sample_file, "w") as fp:
                 fp.write(sample_content + "\n")
@@ -1284,14 +1308,29 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             if not ssl_verify:
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
-            req = urllib.request.Request(
-                hec_url,
-                data=raw_payload,
-                headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"}
-            )
-            with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
-                resp_text = resp.read().decode("utf-8", errors="replace")
-                ingested_count = len(lines)
+
+            target_urls = resolve_hec_urls(hec_url)
+            success = False
+            resp_text = ""
+            last_err = None
+            for url in target_urls:
+                try:
+                    req = urllib.request.Request(
+                        url,
+                        data=raw_payload,
+                        headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"}
+                    )
+                    with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
+                        resp_text = resp.read().decode("utf-8", errors="replace")
+                        success = True
+                        break
+                except Exception as e:
+                    last_err = e
+
+            if not success:
+                raise RuntimeError(f"HEC delivery failed across all endpoints: {last_err}")
+
+            ingested_count = len(lines) * repeat_count
             
             return (200, {
                 "status": "success",

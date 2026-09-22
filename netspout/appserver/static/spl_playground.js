@@ -1,6 +1,6 @@
 /**
  * NetSpout SPL Playground & NOC/SOC Analytics Workbench
- * Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+ * Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
  *
  * Interactive SPL workspace with 30+ pre-canned multi-vendor queries,
  * live Splunkd REST search execution, dynamic table/raw/chart rendering,

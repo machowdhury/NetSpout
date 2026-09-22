@@ -1,7 +1,7 @@
 """
 VENDOR CATALOG: Multi-Vendor Telemetry Ecosystem Directory
 36 Audited Enterprise Vendors, 238 Sourcetypes, 100% Coverage of User Specifications.
-Author: Mahamudul Chowdhury <mchowdhury@splunk.com>
+Author: Mahamudul Chowdhury <machowdhury@yahoo.com>
 """
 
 from typing import Dict, List, Any, Optional

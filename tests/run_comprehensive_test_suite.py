@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 NetSpout Comprehensive Automated Production Verification Test Suite
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 Repository: https://github.com/machowdhury/NetSpout
 """
 
@@ -35,7 +35,7 @@ def record_test(suite: str, name: str, passed: bool, detail: str = ""):
 
 print("==========================================================================")
 print("⚡ NetSpout: Comprehensive Production Verification & Test Suite")
-print("   Author: Mahamudul Chowdhury (mchowdhury@splunk.com)")
+print("   Author: Mahamudul Chowdhury (machowdhury@yahoo.com)")
 print("==========================================================================\n")
 
 # -----------------------------------------------------------------------------

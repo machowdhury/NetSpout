@@ -12,7 +12,7 @@ Parses and executes real-time SPL queries over simulated telemetry and log event
     * | top <n> <field> / rare <field>
     * | timechart span=<sec> count by <field>
 
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 """
 
 import re

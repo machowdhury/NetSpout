@@ -3,7 +3,7 @@ NetSpout Splunk Modular Input
 Emits real-time multi-vendor network telemetry (Syslog, SNMP, Flow, gNMI metrics)
 directly into Splunk indexing pipeline via stdout streaming XML mode.
 
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 """
 
 import os

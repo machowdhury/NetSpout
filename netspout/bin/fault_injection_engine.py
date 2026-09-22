@@ -7,7 +7,7 @@ Synchronously emits cross-protocol telemetry:
   - OpenConfig YANG ON_CHANGE Model-Driven Telemetry (MDT)
 Dispatches to all active pipelines: Splunk HEC, OTel Collector, Telegraf, and Syslog.
 
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 """
 
 import time

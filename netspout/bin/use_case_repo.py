@@ -6,7 +6,7 @@ Provides 10+ production-grade NOC and SOC use-case scenarios with:
   - Verification SPL queries
   - Automated assertions against the SPL Execution Engine
 
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 """
 
 import time

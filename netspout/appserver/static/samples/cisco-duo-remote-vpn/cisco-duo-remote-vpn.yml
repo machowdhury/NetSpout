@@ -20,7 +20,7 @@ samples:
         source: rest:duo
         sourcetype: cisco:duo:remote:vpn
         host: duo-api.corp.internal
-        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"vpn_authentication\",\"vpn_gateway\":\"cisco-asa-vpn.corp.internal\",\"client_software\":\"Cisco AnyConnect / Secure Client 5.0\",\"assigned_ip\":\"10.240.12.88\",\"username\":\"mchowdhury@splunk.com\",\"factor\":\"duo_push\",\"status\":\"CONNECTED\",\"bytes_rx\":12849000,\"bytes_tx\":4820100,\"duration_seconds\":14400}"
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"vpn_authentication\",\"vpn_gateway\":\"cisco-asa-vpn.corp.internal\",\"client_software\":\"Cisco AnyConnect / Secure Client 5.0\",\"assigned_ip\":\"10.240.12.88\",\"username\":\"machowdhury@yahoo.com\",\"factor\":\"duo_push\",\"status\":\"CONNECTED\",\"bytes_rx\":12849000,\"bytes_tx\":4820100,\"duration_seconds\":14400}"
       - index: idx_security_fw
         source: rest:duo
         sourcetype: cisco:duo:remote:vpn

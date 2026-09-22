@@ -12,7 +12,7 @@
 
 FROM splunk/splunk:10.2
 
-LABEL maintainer="Mahamudul Chowdhury <mchowdhury@splunk.com>"
+LABEL maintainer="Mahamudul Chowdhury <machowdhury@yahoo.com>"
 LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App by Mahamudul Chowdhury"
 
 USER root

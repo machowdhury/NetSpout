@@ -20,9 +20,9 @@ samples:
         source: rest:duo
         sourcetype: cisco:duo:sso:saml
         host: duo-api.corp.internal
-        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"sso_auth\",\"auth_type\":\"SAML_2_0\",\"identity_provider\":\"Duo Central Single Sign-On\",\"service_provider\":\"Splunk Enterprise Production\",\"relay_state\":\"/app/netspout/netspout_canvas\",\"subject_name_id\":\"mchowdhury@splunk.com\",\"session_index\":\"duo_sso_sess_849201\",\"mfa_method\":\"duo_push\",\"ip_address\":\"198.51.100.42\",\"action\":\"ASSERTION_ISSUED\"}"
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"sso_auth\",\"auth_type\":\"SAML_2_0\",\"identity_provider\":\"Duo Central Single Sign-On\",\"service_provider\":\"Splunk Enterprise Production\",\"relay_state\":\"/app/netspout/netspout_canvas\",\"subject_name_id\":\"machowdhury@yahoo.com\",\"session_index\":\"duo_sso_sess_849201\",\"mfa_method\":\"duo_push\",\"ip_address\":\"198.51.100.42\",\"action\":\"ASSERTION_ISSUED\"}"
       - index: idx_security_fw
         source: rest:duo
         sourcetype: cisco:duo:sso:saml
         host: duo-api.corp.internal
-        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"sso_auth\",\"auth_type\":\"OIDC\",\"identity_provider\":\"Duo Central\",\"service_provider\":\"AWS Management Console\",\"subject_name_id\":\"mchowdhury@splunk.com\",\"action\":\"ASSERTION_ISSUED\"}"
+        _raw: "{\"timestamp\":$EPOCH$,\"iso_timestamp\":\"$ISO_TIMESTAMP$\",\"event_type\":\"sso_auth\",\"auth_type\":\"OIDC\",\"identity_provider\":\"Duo Central\",\"service_provider\":\"AWS Management Console\",\"subject_name_id\":\"machowdhury@yahoo.com\",\"action\":\"ASSERTION_ISSUED\"}"

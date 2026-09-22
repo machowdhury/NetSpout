@@ -5,7 +5,7 @@ Emulates:
   - Security Architecture (SOC): Firewall session utilization, DPI, shadow rules, micro-segmentation, C2 beaconing.
   - Multi-Frequency Operational Blueprints: Real-time, Weekly trends, Strategic annual compliance.
 
-Author: Mahamudul Chowdhury (mchowdhury@splunk.com)
+Author: Mahamudul Chowdhury (machowdhury@yahoo.com)
 """
 
 import time

@@ -2,7 +2,7 @@
  * Splunk App: NetSpout (TA-network-data-blaster)
  * View Script: guided_onboarding.js
  * Guided Onboarding Wizard Controller
- * Author: Mahamudul Chowdhury <mchowdhury@splunk.com>
+ * Author: Mahamudul Chowdhury <machowdhury@yahoo.com>
  */
 
 require([
@@ -160,7 +160,7 @@ require([
     "vendor": "cisco",
     "category": "Identity & Access Control",
     "index": "idx_security_fw",
-    "sample": "{\\\"timestamp\\\":2026-09-20T14:30:00.000ZEPOCH2026-09-20T14:30:00.000Z,\\\"iso_timestamp\\\":\\\"2026-09-20T14:30:00.000ZISO_TIMESTAMP2026-09-20T14:30:00.000Z\\\",\\\"event_type\\\":\\\"sso_auth\\\",\\\"auth_type\\\":\\\"SAML_2_0\\\",\\\"identity_provider\\\":\\\"Duo Central Single Sign-On\\\",\\\"service_provider\\\":\\\"Splunk Enterprise Production\\\",\\\"relay_state\\\":\\\"/app/netspout/netspout_canvas\\\",\\\"subject_name_id\\\":\\\"mchowdhury@splunk.com\\\",\\\"session_index\\\":\\\"duo_sso_sess_849201\\\",\\\"mfa_method\\\":\\\"duo_push\\\",\\\"ip_address\\\":\\\"198.51.100.42\\\",\\\"action\\\":\\\"ASSERTION_ISSUED\\\"}"
+    "sample": "{\\\"timestamp\\\":2026-09-20T14:30:00.000ZEPOCH2026-09-20T14:30:00.000Z,\\\"iso_timestamp\\\":\\\"2026-09-20T14:30:00.000ZISO_TIMESTAMP2026-09-20T14:30:00.000Z\\\",\\\"event_type\\\":\\\"sso_auth\\\",\\\"auth_type\\\":\\\"SAML_2_0\\\",\\\"identity_provider\\\":\\\"Duo Central Single Sign-On\\\",\\\"service_provider\\\":\\\"Splunk Enterprise Production\\\",\\\"relay_state\\\":\\\"/app/netspout/netspout_canvas\\\",\\\"subject_name_id\\\":\\\"machowdhury@yahoo.com\\\",\\\"session_index\\\":\\\"duo_sso_sess_849201\\\",\\\"mfa_method\\\":\\\"duo_push\\\",\\\"ip_address\\\":\\\"198.51.100.42\\\",\\\"action\\\":\\\"ASSERTION_ISSUED\\\"}"
   },
   {
     "id": "cisco:duo:zerotrust:policy",
@@ -176,7 +176,7 @@ require([
     "vendor": "cisco",
     "category": "Identity & Access Control",
     "index": "idx_security_fw",
-    "sample": "{\\\"timestamp\\\":2026-09-20T14:30:00.000ZEPOCH2026-09-20T14:30:00.000Z,\\\"iso_timestamp\\\":\\\"2026-09-20T14:30:00.000ZISO_TIMESTAMP2026-09-20T14:30:00.000Z\\\",\\\"event_type\\\":\\\"vpn_authentication\\\",\\\"vpn_gateway\\\":\\\"cisco-asa-vpn.corp.internal\\\",\\\"client_software\\\":\\\"Cisco AnyConnect / Secure Client 5.0\\\",\\\"assigned_ip\\\":\\\"10.240.12.88\\\",\\\"username\\\":\\\"mchowdhury@splunk.com\\\",\\\"factor\\\":\\\"duo_push\\\",\\\"status\\\":\\\"CONNECTED\\\",\\\"bytes_rx\\\":12849000,\\\"bytes_tx\\\":4820100,\\\"duration_seconds\\\":14400}"
+    "sample": "{\\\"timestamp\\\":2026-09-20T14:30:00.000ZEPOCH2026-09-20T14:30:00.000Z,\\\"iso_timestamp\\\":\\\"2026-09-20T14:30:00.000ZISO_TIMESTAMP2026-09-20T14:30:00.000Z\\\",\\\"event_type\\\":\\\"vpn_authentication\\\",\\\"vpn_gateway\\\":\\\"cisco-asa-vpn.corp.internal\\\",\\\"client_software\\\":\\\"Cisco AnyConnect / Secure Client 5.0\\\",\\\"assigned_ip\\\":\\\"10.240.12.88\\\",\\\"username\\\":\\\"machowdhury@yahoo.com\\\",\\\"factor\\\":\\\"duo_push\\\",\\\"status\\\":\\\"CONNECTED\\\",\\\"bytes_rx\\\":12849000,\\\"bytes_tx\\\":4820100,\\\"duration_seconds\\\":14400}"
   },
   {
     "id": "cisco:asa",
@@ -672,7 +672,7 @@ require([
     "vendor": "cisco",
     "category": "Cisco Duo",
     "index": "netops_logs",
-    "sample": "{\"timestamp\": 2026-09-20T14:30:00.000Z, \"isotimestamp\": \"2026-09-20T14:30:00.000Z\", \"username\": \"mchowdhury@splunk.com\", \"user\": {\"key\": \"DU19284101\", \"name\": \"mchowdhury@splunk.com\"}, \"factor\": \"Duo Push\", \"result\": \"SUCCESS\", \"reason\": \"User approved\", \"integration\": \"Cisco AnyConnect SSL-VPN\", \"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}, \"access_device\": {\"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}, \"browser\": \"Safari\", \"browser_version\": \"17.4\", \"os\": \"macOS\", \"os_version\": \"14.4\", \"trusted_endpoint_status\": \"trusted\"}, \"auth_device\": {\"name\": \"iPhone 15 Pro\", \"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}}, \"host\": \"api-dd716ff8.duosecurity.com\", \"extracted_eventtype\": \"authentication\"}"
+    "sample": "{\"timestamp\": 2026-09-20T14:30:00.000Z, \"isotimestamp\": \"2026-09-20T14:30:00.000Z\", \"username\": \"machowdhury@yahoo.com\", \"user\": {\"key\": \"DU19284101\", \"name\": \"machowdhury@yahoo.com\"}, \"factor\": \"Duo Push\", \"result\": \"SUCCESS\", \"reason\": \"User approved\", \"integration\": \"Cisco AnyConnect SSL-VPN\", \"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}, \"access_device\": {\"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}, \"browser\": \"Safari\", \"browser_version\": \"17.4\", \"os\": \"macOS\", \"os_version\": \"14.4\", \"trusted_endpoint_status\": \"trusted\"}, \"auth_device\": {\"name\": \"iPhone 15 Pro\", \"ip\": \"198.51.100.42\", \"location\": {\"city\": \"San Jose\", \"state\": \"California\", \"country\": \"US\"}}, \"host\": \"api-dd716ff8.duosecurity.com\", \"extracted_eventtype\": \"authentication\"}"
   },
   {
     "id": "cisco:duo:authentication_v2",

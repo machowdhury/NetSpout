@@ -2,7 +2,7 @@
  * Splunk App: NetSpout (TA-network-data-blaster)
  * View Script: netspout_canvas.js
  * Canvas & Telemetry Orchestrator Controller
- * Author: Mahamudul Chowdhury <mchowdhury@splunk.com>
+ * Author: Mahamudul Chowdhury <machowdhury@yahoo.com>
  */
 
 require([

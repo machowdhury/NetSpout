@@ -531,7 +531,7 @@ export const UseCaseRepositoryModal: React.FC<UseCaseRepositoryModalProps> = ({
         {/* Footer */}
         <div className="px-6 py-3 border-t border-[#374151] bg-[#1F2937] flex items-center justify-between text-xs text-slate-400 font-mono">
           <span>NetSpout Multi-Vendor Test Harness</span>
-          <span>Author: Mahamudul Chowdhury (mchowdhury@splunk.com)</span>
+          <span>Author: Mahamudul Chowdhury (machowdhury@yahoo.com)</span>
         </div>
       </div>
     </div>

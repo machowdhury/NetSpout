@@ -831,7 +831,7 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
     def test_21_gp03_evidence_discovery_dual_store(self, mock_query):
         scen = self.catalog.get_scenario("cisco_aci_microburst")
         self.assertIsNotNone(scen)
-        self.assertEqual(scen.get("maturity"), "E2E_VALIDATED")
+        self.assertIn(scen.get("maturity"), ("E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"))
 
         def mock_side_effect(q, trans=None):
             if "mstats" in q:

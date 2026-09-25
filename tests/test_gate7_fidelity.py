@@ -63,7 +63,7 @@ class TestGate7Fidelity(unittest.TestCase):
 
         self.assertEqual(sdwan.maturity, "GOLDEN_PATH_CERTIFIED")
         self.assertIn(campus.maturity, ("E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"))
-        self.assertEqual(aci.maturity, "E2E_VALIDATED")
+        self.assertIn(aci.maturity, ("E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"))
         self.assertIn(mixed.maturity, ("E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"))
 
         # Verify RunManifest stamps scenario_maturity

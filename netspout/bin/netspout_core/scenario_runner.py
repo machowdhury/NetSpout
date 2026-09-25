@@ -168,6 +168,72 @@ def get_mixed_edge_topology() -> TopologyState:
     )
 
 
+def get_mixed_sase_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-zscaler", name="Zscaler-ZIA-CloudEdge", type=NodeType.SASE_PROXY, x=70, y=220, ip_address="165.225.10.1", status="degraded", vendor="zscaler", sourcetype="zscaler:zia"),
+            Node(id="node-pan-sdwan", name="PaloAlto-Prisma-SDWAN", type=NodeType.FIREWALL, x=290, y=220, ip_address="10.20.1.1", status="active", vendor="palo_alto", sourcetype="pan:threat"),
+            Node(id="node-nexus-core", name="Cisco-Nexus-DC-Core", type=NodeType.SWITCH, x=530, y=220, ip_address="10.20.1.254", status="active", vendor="cisco_nexus", sourcetype="cisco:dc:nexus9k:syslog"),
+            Node(id="node-saas-erp", name="SaaS ERP Target", type=NodeType.WEB_SERVER, x=780, y=220, ip_address="104.16.132.229", status="active", vendor="nginx", sourcetype="nginx:plus:kv")
+        ],
+        edges=[
+            Edge(id="e-sase1", source="node-zscaler", target="node-pan-sdwan", source_port="gre-tunnel", target_port="tunnel.1", status="congested"),
+            Edge(id="e-sase2", source="node-pan-sdwan", target="node-nexus-core", source_port="ethernet1/1", target_port="Eth1/1"),
+            Edge(id="e-sase3", source="node-nexus-core", target="node-saas-erp", source_port="Eth1/2", target_port="eth0")
+        ]
+    )
+
+
+def get_mixed_optical_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-nokia-core", name="Nokia-7750-SR12-Transport", type=NodeType.OPTICAL_CORE, x=70, y=220, ip_address="10.200.0.1", status="degraded", vendor="nokia_sros", sourcetype="nokia:sros:syslog"),
+            Node(id="node-juniper-pe", name="Juniper-MX960-PE01", type=NodeType.ROUTER, x=380, y=220, ip_address="10.200.0.2", status="active", vendor="juniper_junos", sourcetype="juniper:junos"),
+            Node(id="node-arista-leaf", name="Arista-7280R-Leaf01", type=NodeType.SWITCH, x=700, y=220, ip_address="10.200.0.3", status="active", vendor="arista_eos", sourcetype="arista:flow:ipfix")
+        ],
+        edges=[
+            Edge(id="e-opt1", source="node-nokia-core", target="node-juniper-pe", source_port="1/1/c1", target_port="ge-0/0/0", status="congested"),
+            Edge(id="e-opt2", source="node-juniper-pe", target="node-arista-leaf", source_port="ge-0/0/1", target_port="Ethernet49/1")
+        ]
+    )
+
+
+def get_openconfig_core_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-cisco8k", name="Cisco-8000-Core01", type=NodeType.ROUTER, x=70, y=220, ip_address="10.100.1.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt"),
+            Node(id="node-juniper-ptx", name="Juniper-PTX10K-PE01", type=NodeType.ROUTER, x=260, y=220, ip_address="10.100.1.2", status="active", vendor="juniper_junos", sourcetype="cisco:ios:mdt"),
+            Node(id="node-arista-spine", name="Arista-7280R-Spine", type=NodeType.SWITCH, x=520, y=220, ip_address="10.100.2.1", status="active", vendor="arista_eos", sourcetype="arista:telemetry:json"),
+            Node(id="node-cat-leaf", name="Catalyst-9600-Leaf", type=NodeType.SWITCH, x=750, y=220, ip_address="10.100.2.2", status="active", vendor="cisco_catalyst", sourcetype="cisco:ios:mdt")
+        ],
+        edges=[
+            Edge(id="e-oc1", source="node-cisco8k", target="node-juniper-ptx", source_port="HundredGigE0/0/0/0", target_port="et-0/0/0", status="up"),
+            Edge(id="e-oc2", source="node-juniper-ptx", target="node-arista-spine", source_port="et-0/0/1", target_port="Ethernet1/1", status="up"),
+            Edge(id="e-oc3", source="node-arista-spine", target="node-cat-leaf", source_port="Ethernet2/1", target_port="FortyGigE1/0/1", status="up")
+        ]
+    )
+
+
+def get_bypassed_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-client", name="External Client", type=NodeType.CLIENT_EXTERNAL, x=60, y=240, ip_address="198.51.100.42", status="active", vendor="generic"),
+            Node(id="node-fw", name="Perimeter Firewall (Bypassed)", type=NodeType.FIREWALL, x=260, y=100, ip_address="198.51.100.1", status="degraded", vendor="cisco_asa", sourcetype="cisco:asa"),
+            Node(id="node-lb", name="Core Load Balancer", type=NodeType.LOAD_BALANCER, x=470, y=240, ip_address="10.0.1.5", status="active", vendor="f5", sourcetype="f5:bigip:ltm"),
+            Node(id="node-web1", name="Vulnerable Web Server 01", type=NodeType.WEB_SERVER, x=690, y=150, ip_address="10.0.1.10", status="breached", vendor="nginx", sourcetype="nginx:plus:kv"),
+            Node(id="node-web2", name="Web Server 02", type=NodeType.WEB_SERVER, x=690, y=330, ip_address="10.0.1.11", status="active", vendor="nginx", sourcetype="nginx:plus:kv"),
+            Node(id="node-db", name="Production Database", type=NodeType.DATABASE, x=920, y=240, ip_address="10.0.2.50", status="active", vendor="postgresql", sourcetype="postgresql:audit")
+        ],
+        edges=[
+            Edge(id="edge-bypass", source="node-client", target="node-web1", source_port="direct", target_port="eth0", status="breached"),
+            Edge(id="edge-2", source="node-fw", target="node-lb", source_port="inside", target_port="vip"),
+            Edge(id="edge-3", source="node-lb", target="node-web1", source_port="pool-1", target_port="eth0"),
+            Edge(id="edge-4", source="node-lb", target="node-web2", source_port="pool-2", target_port="eth0"),
+            Edge(id="edge-5", source="node-web1", target="node-db", source_port="db-link", target_port="pg-port", status="breached")
+        ]
+    )
+
+
 # =========================================================================
 # Validation Engine (Gate 4 Machine-Readable Contract Evaluation)
 # =========================================================================
@@ -999,7 +1065,15 @@ class ScenarioRunner:
             return get_cisco_campus_topology()
         elif "aci" in top_id or "microburst" in scen_id or "nexus" in top_id:
             return get_cisco_aci_topology()
-        elif "edge" in top_id or "breach" in scen_id or "mixed" in scen_id:
+        elif "sase" in top_id or "sase" in scen_id:
+            return get_mixed_sase_topology()
+        elif "optical" in top_id or "optical" in scen_id:
+            return get_mixed_optical_topology()
+        elif "openconfig" in top_id or "openconfig" in scen_id or "mdt" in scen_id:
+            return get_openconfig_core_topology()
+        elif "bypassed" in top_id or "sql_injection" in scen_id:
+            return get_bypassed_topology()
+        elif "edge" in top_id or "breach" in scen_id or "mixed_edge" in top_id:
             return get_mixed_edge_topology()
         else:
             return get_default_secure_topology()
@@ -1032,6 +1106,7 @@ class ScenarioRunner:
         ap_node = aps[0] if aps else Node(id="ap-01", name="AP-01", type=NodeType.WIRELESS_AP, ip_address="10.10.20.99", vendor="cisco_catalyst")
         te_node = clients[0] if clients else Node(id="te-01", name="TE-Agent", type=NodeType.CLIENT_EXTERNAL, ip_address="172.16.1.50", vendor="cisco_thousandeyes")
         srv_node = servers[0] if servers else Node(id="srv-01", name="AppServer-01", type=NodeType.WEB_SERVER, ip_address="10.0.1.10", vendor="nginx")
+        node_map = {n.id: n for n in graph.topology.nodes}
 
         # ---------------------------------------------------------------------
         # CISCO SD-WAN BROWNOUT
@@ -1236,7 +1311,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # MIXED VENDOR / EDGE BREACH
         # ---------------------------------------------------------------------
-        elif "mixed" in scen_id or "edge" in scen_id or "breach" in scen_id:
+        elif "mixed_edge" in scen_id or "breach" in scen_id:
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_palo_alto_log(
                     device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
@@ -1316,17 +1391,362 @@ class ScenarioRunner:
                 ))
 
         # ---------------------------------------------------------------------
-        # OPENCONFIG / MDT STREAMING
+        # SASE CLOUD INGRESS DEGRADATION (Mode B2)
+        # ---------------------------------------------------------------------
+        elif "sase" in scen_id:
+            zscaler_node = node_map.get("node-zscaler") or (graph.find_nodes_by_type(NodeType.SASE_PROXY) or [None])[0] or Node(id="node-zscaler", name="Zscaler-ZIA-CloudEdge", type=NodeType.SASE_PROXY, ip_address="165.225.10.1", vendor="zscaler", sourcetype="zscaler:zia")
+            pan_node = node_map.get("node-pan-sdwan") or fw_node
+            nexus_node = node_map.get("node-nexus-core") or switch_node
+            te_node = Node(id="node-te-agent", name="ThousandEyes-CloudAgent", type=NodeType.CLIENT_EXTERNAL, ip_address="10.20.1.50", vendor="cisco_thousandeyes", sourcetype="cisco:thousandeyes:metric")
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_zscaler_zia_log(
+                    device=zscaler_node, client_ip="10.20.1.45",
+                    dest_url="https://erp.cloud-enterprise.corp/api/v2/ledger",
+                    latency_ms=28, action="allowed", status="normal",
+                    signature="SASE Zscaler Cloud Edge Inspection Baseline"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_thousandeyes_log(
+                    device=te_node, target_url="https://erp.cloud-enterprise.corp",
+                    latency_ms=32.0, packet_loss_pct=0.0, http_code=200,
+                    action="allowed", status="normal",
+                    signature="ThousandEyes Synthetic Baseline Conformance"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_zscaler_zia_log(
+                    device=zscaler_node, client_ip="10.20.1.45",
+                    dest_url="https://erp.cloud-enterprise.corp/api/v2/ledger",
+                    latency_ms=465, action="alerted", status="degraded",
+                    signature="Zscaler ZIA Cloud Edge TLS Inspection Latency Surge"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_thousandeyes_log(
+                    device=te_node, target_url="https://erp.cloud-enterprise.corp",
+                    latency_ms=480.0, packet_loss_pct=8.5, http_code=504,
+                    action="alerted", status="degraded",
+                    signature="ThousandEyes Cloud Path Ingress Latency Violation"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_palo_alto_threat_log(
+                    device=pan_node, src_ip="10.20.1.45", dest_ip="165.225.10.1",
+                    src_port=49152, dest_port=443,
+                    threat_name="App-Queue-Congestion-Spike", threat_id=89201,
+                    action="alerted", status="degraded"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
+                    device=nexus_node, asic_interface="Eth1/1",
+                    buffer_util_pct=82.5, dropped_packets=128, fabric_health=65,
+                    action="alerted", status="degraded",
+                    signature="Nexus DC Core SASE Transit Queue Saturation"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_palo_alto_threat_log(
+                    device=pan_node, src_ip="10.20.1.45", dest_ip="104.16.132.229",
+                    src_port=49153, dest_port=443,
+                    threat_name="Policy-Based-Forwarding-Engaged", threat_id=89202,
+                    action="allowed", status="mitigated"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_zscaler_zia_log(
+                    device=zscaler_node, client_ip="10.20.1.45",
+                    dest_url="https://erp.cloud-enterprise.corp/api/v2/ledger",
+                    latency_ms=31, action="allowed", status="restored",
+                    signature="Zscaler ZIA Cloud Edge Inspection Latency Normalized"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_thousandeyes_log(
+                    device=te_node, target_url="https://erp.cloud-enterprise.corp",
+                    latency_ms=34.0, packet_loss_pct=0.0, http_code=200,
+                    action="allowed", status="restored",
+                    signature="ThousandEyes Cloud Path Latency Restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_zscaler_zia_log(
+                    device=zscaler_node, client_ip="10.20.1.45",
+                    dest_url="https://erp.cloud-enterprise.corp/healthz",
+                    latency_ms=25, action="allowed", status="normal",
+                    signature="SASE Multi-Cloud SLA Verified Conformance"
+                ))
+
+        # ---------------------------------------------------------------------
+        # OPTICAL CARRIER SHIFT & FRR (Mode B3)
+        # ---------------------------------------------------------------------
+        elif "optical" in scen_id:
+            nokia_node = node_map.get("node-nokia-core") or (graph.find_nodes_by_type(NodeType.OPTICAL_CORE) or [None])[0] or Node(id="node-nokia-core", name="Nokia-7750-SR12-Transport", type=NodeType.OPTICAL_CORE, ip_address="10.200.0.1", vendor="nokia_sros", sourcetype="nokia:sros:syslog")
+            juniper_node = node_map.get("node-juniper-pe") or router_node
+            arista_node = node_map.get("node-arista-leaf") or switch_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_nokia_sros_log(
+                    device=nokia_node, port_id="1/1/c1", lsp_name="LSP-CORE-CHICAGO-NYC-01",
+                    action="allowed", status="normal",
+                    signature="Nokia SR-OS 100G Coherent Optical Interface Up"
+                ))
+                logs.append(SplunkLogEngine.format_arista_ipfix_log(
+                    device=arista_node, src_ip="10.200.0.1", dest_ip="10.200.0.3",
+                    bytes_transferred=8420950, egress_intf="Ethernet49/1",
+                    reroute_flag=0, action="allowed", status="normal",
+                    signature="Arista EOS IPFIX Flow Telemetry Primary Egress"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_nokia_sros_log(
+                    device=nokia_node, port_id="1/1/c1", lsp_name="LSP-CORE-CHICAGO-NYC-01",
+                    action="alerted", status="degraded",
+                    signature="Nokia SR-OS Optical DWDM Loss of Signal (LOS)"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_juniper_junos_log(
+                    device=juniper_node, lsp_name="LSP-CORE-CHICAGO-NYC-01",
+                    primary_nh="10.200.0.1", bypass_nh="10.200.0.10",
+                    action="alerted", status="degraded",
+                    signature="Juniper Junos MPLS RSVP-TE FRR Switchover"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_arista_ipfix_log(
+                    device=arista_node, src_ip="10.200.0.1", dest_ip="10.200.0.3",
+                    bytes_transferred=12948200, egress_intf="Ethernet49/2",
+                    reroute_flag=1, action="allowed", status="mitigated",
+                    signature="Arista EOS IPFIX Flow Telemetry Rerouted Bypass Egress"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_nokia_sros_log(
+                    device=nokia_node, port_id="1/1/c1", lsp_name="LSP-CORE-CHICAGO-NYC-01",
+                    action="allowed", status="restored",
+                    signature="Nokia SR-OS Optical DWDM Carrier Signal Restored"
+                ))
+                logs.append(SplunkLogEngine.format_juniper_junos_log(
+                    device=juniper_node, lsp_name="LSP-CORE-CHICAGO-NYC-01",
+                    primary_nh="10.200.0.1", bypass_nh="10.200.0.1",
+                    action="allowed", status="restored",
+                    signature="Juniper Junos MPLS RSVP-TE Reverted to Primary LSP"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_arista_ipfix_log(
+                    device=arista_node, src_ip="10.200.0.1", dest_ip="10.200.0.3",
+                    bytes_transferred=4920100, egress_intf="Ethernet49/1",
+                    reroute_flag=0, action="allowed", status="normal",
+                    signature="Arista EOS IPFIX Telemetry Optical SLA Verified"
+                ))
+
+        # ---------------------------------------------------------------------
+        # OPENCONFIG / MDT STREAMING TELEMETRY (Mode C1)
         # ---------------------------------------------------------------------
         elif "openconfig" in scen_id or "mdt" in scen_id:
-            logs.append(SplunkLogEngine.format_mdt_stream(
-                device=switch_node, interface_name="GigabitEthernet0/0/1",
-                in_octets=random.randint(60000000, 95000000),
-                out_octets=random.randint(40000000, 70000000),
-                cpu_pct=45.0 if phase != ScenarioPhase.FAULT.value else 92.0,
-                memory_pct=50.0, action="allowed",
-                status="normal" if phase != ScenarioPhase.FAULT.value else "degraded"
-            ))
+            c8k_node = node_map.get("node-cisco8k") or router_node
+            juniper_node = node_map.get("node-juniper-ptx") or router_node
+            cat_node = node_map.get("node-cat-leaf") or switch_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=c8k_node, interface_name="HundredGigE0/0/0/0",
+                    in_octets=58291040, out_octets=69482010,
+                    cpu_pct=18.5, memory_pct=34.0, action="allowed", status="normal"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=c8k_node, sensor_path="openconfig-interfaces:interfaces/interface/state/counters",
+                    queue_depth_bytes=14200, peak_buffer_pct=12.4,
+                    action="allowed", status="normal",
+                    signature="OpenConfig MDT Streaming Baseline Subscription"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=cat_node, src_ip="10.100.2.1", dest_ip="10.100.2.2",
+                    interface="FortyGigE1/0/1", action="allowed",
+                    signature="Catalyst 9600 Leaf L3 Route Established", status="normal"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=c8k_node, interface_name="HundredGigE0/0/0/0",
+                    in_octets=498291040, out_octets=129482010,
+                    cpu_pct=72.0, memory_pct=68.5, action="alerted", status="degraded"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=c8k_node, sensor_path="openconfig-interfaces:interfaces/interface/state/counters",
+                    queue_depth_bytes=1850000, peak_buffer_pct=92.5,
+                    action="alerted", status="degraded",
+                    signature="OpenConfig MDT Interface Ingress Surge & Buffer Congestion"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=juniper_node, interface_name="et-0/0/0",
+                    in_octets=384920100, out_octets=110294800,
+                    cpu_pct=64.2, memory_pct=59.0, action="alerted", status="degraded"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=cat_node, sensor_path="openconfig-qos:qos/interfaces/interface/output/queues",
+                    queue_depth_bytes=1240000, peak_buffer_pct=84.0,
+                    action="alerted", status="degraded",
+                    signature="OpenConfig Leaf Buffer Watermark Spike"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=cat_node, src_ip="10.100.2.1", dest_ip="10.100.2.2",
+                    interface="FortyGigE1/0/1", action="alerted",
+                    signature="OpenConfig Buffer Watermark Event Log", status="degraded"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=c8k_node, interface_name="HundredGigE0/0/0/0",
+                    in_octets=198291040, out_octets=189482010,
+                    cpu_pct=42.0, memory_pct=48.0, action="allowed", status="mitigated"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=c8k_node, interface_name="HundredGigE0/0/0/0",
+                    in_octets=62291040, out_octets=71482010,
+                    cpu_pct=21.0, memory_pct=35.0, action="allowed", status="restored"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=c8k_node, sensor_path="openconfig-interfaces:interfaces/interface/state/counters",
+                    queue_depth_bytes=16500, peak_buffer_pct=14.2,
+                    action="allowed", status="restored",
+                    signature="OpenConfig MDT Buffer Equilibrium Restored"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=cat_node, src_ip="10.100.2.1", dest_ip="10.100.2.2",
+                    interface="FortyGigE1/0/1", action="allowed",
+                    signature="Catalyst 9600 Queue Buffer Normal", status="restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=c8k_node, interface_name="HundredGigE0/0/0/0",
+                    in_octets=59291040, out_octets=68482010,
+                    cpu_pct=19.0, memory_pct=34.5, action="allowed", status="normal"
+                ))
+
+        # ---------------------------------------------------------------------
+        # SQL INJECTION / APPLICATION SECURITY (Mode S1)
+        # ---------------------------------------------------------------------
+        elif "sql" in scen_id:
+            fw = node_map.get("node-fw") or fw_node
+            web = node_map.get("node-web1") or srv_node
+            db = node_map.get("node-db") or Node(id="node-db", name="Production Database", type=NodeType.DATABASE, ip_address="10.0.2.50", vendor="postgresql", sourcetype="postgresql:audit")
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=51234, dest_port=443, proto="TCP",
+                    action="allowed", signature="Perimeter Inbound HTTPS Traffic Permitted",
+                    status="normal"
+                ))
+                logs.append(SplunkLogEngine.format_nginx_web_log(
+                    device=web, src_ip="198.51.100.42", dest_ip="10.0.1.10",
+                    method="GET", uri="/api/catalog/items?id=101",
+                    http_code=200, bytes_sent=412, action="allowed",
+                    signature="HTTP GET Catalog Item Request", status="normal"
+                ))
+                logs.append(SplunkLogEngine.format_postgres_db_log(
+                    device=db, src_ip="10.0.1.10", dest_ip="10.0.2.50",
+                    sql_statement="SELECT * FROM catalog WHERE item_id = 101",
+                    action="allowed", signature="PostgreSQL Parameterized Query Executed",
+                    status="normal"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_nginx_web_log(
+                    device=web, src_ip="198.51.100.42", dest_ip="10.0.1.10",
+                    method="GET", uri="/api/catalog/items?id=1' OR '1'='1' -- UNION SELECT * FROM users",
+                    http_code=500, bytes_sent=182, action="alerted",
+                    signature="OWASP SQL Injection Attempt Detected in URI", status="degraded"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_postgres_db_log(
+                    device=db, src_ip="10.0.1.10", dest_ip="10.0.2.50",
+                    sql_statement="UNION SELECT username, password_hash, credit_card FROM users",
+                    action="alerted", signature="PostgreSQL Security Audit: Unauthorized Schema Query Attempt",
+                    status="degraded"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=51235, dest_port=443, proto="TCP",
+                    action="blocked", signature="Cisco ASA Perimeter WAF/IPS Denied Malicious SQL Payload",
+                    status="mitigated"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_postgres_db_log(
+                    device=db, src_ip="10.0.1.10", dest_ip="10.0.2.50",
+                    sql_statement="SELECT 1 FROM pg_database WHERE datname='enterprise'",
+                    action="allowed", signature="PostgreSQL Connection Pool Sanitized & Restored",
+                    status="restored"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=51236, dest_port=443, proto="TCP",
+                    action="blocked", signature="Cisco ASA Threat Quarantined Attacker IP Blacklisted",
+                    status="restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=51237, dest_port=443, proto="TCP",
+                    action="blocked", signature="Perimeter Security Audit Clean",
+                    status="normal"
+                ))
+
+        # ---------------------------------------------------------------------
+        # DDOS SYN FLOOD / PERIMETER DEFENSE (Mode D1)
+        # ---------------------------------------------------------------------
+        elif "ddos" in scen_id:
+            fw = node_map.get("node-fw") or fw_node
+            lb = node_map.get("node-lb") or (graph.find_nodes_by_type(NodeType.LOAD_BALANCER) or [None])[0] or Node(id="node-lb", name="Core Load Balancer", type=NodeType.LOAD_BALANCER, ip_address="10.0.1.5", vendor="f5", sourcetype="f5:bigip:ltm")
+            web = node_map.get("node-web1") or srv_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=48210, dest_port=443, proto="TCP",
+                    action="allowed", signature="Cisco ASA Baseline Permitted Inbound TCP Flow",
+                    status="normal"
+                ))
+                logs.append(SplunkLogEngine.format_f5_lb_log(
+                    device=lb, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    backend_ip="10.0.1.10", backend_port=80,
+                    action="allowed", signature="F5 Big-IP LTM VIP Connection Balanced",
+                    status="normal"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=48211, dest_port=443, proto="TCP",
+                    action="alerted", signature="Cisco ASA Embryonic Connection Limit Exceeded SYN Surge",
+                    status="degraded"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_f5_lb_log(
+                    device=lb, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    backend_ip="10.0.1.10", backend_port=80,
+                    action="alerted", signature="F5 Big-IP Virtual Server SYN Flood Protection Alerted",
+                    status="degraded"
+                ))
+                logs.append(SplunkLogEngine.format_nginx_web_log(
+                    device=web, src_ip="198.51.100.42", dest_ip="10.0.1.10",
+                    method="GET", uri="/", http_code=503, bytes_sent=95,
+                    action="alerted", signature="NGINX Web Server Upstream Connection Queue Saturation",
+                    status="degraded"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=48212, dest_port=443, proto="TCP",
+                    action="blocked", signature="Cisco ASA TCP Intercept SYN Proxy Dropped Embryonic Packets",
+                    status="mitigated"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=48213, dest_port=443, proto="TCP",
+                    action="allowed", signature="Cisco ASA Embryonic Connection Rate Restored to Nominal",
+                    status="restored"
+                ))
+                logs.append(SplunkLogEngine.format_f5_lb_log(
+                    device=lb, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    backend_ip="10.0.1.10", backend_port=80,
+                    action="allowed", signature="F5 Big-IP VIP Pool Cleared and Healthy",
+                    status="restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=fw, src_ip="198.51.100.42", dest_ip="10.0.1.5",
+                    src_port=48214, dest_port=443, proto="TCP",
+                    action="allowed", signature="Perimeter DDoS Defense Posture Verified",
+                    status="normal"
+                ))
 
         # ---------------------------------------------------------------------
         # GENERAL FALLBACK (Synthesize from Contract Sourcetypes)

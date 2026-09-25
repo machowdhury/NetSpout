@@ -397,11 +397,11 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     clean_defense = defense.replace("\\'", "'")
 
     maturity = "CONTRACTED"
-    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach"):
+    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach", "cisco_aci_microburst"):
         maturity = "GOLDEN_PATH_CERTIFIED"
-    elif sid in ("cisco_aci_microburst",):
+    elif sid in ("mixed_sase_degradation", "mixed_backbone_optical", "openconfig_mdt_streaming", "sql_injection", "ddos_attack"):
         maturity = "E2E_VALIDATED"
-    elif sid in ("normal_traffic", "ddos_attack", "sql_injection", "lateral_movement"):
+    elif sid in ("normal_traffic", "lateral_movement"):
         maturity = "FORMAT_VALIDATED"
 
     scen_obj = {
@@ -580,30 +580,163 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
             {"id": "mixed-val-04", "name": "Meraki Air Marshal Alerted", "type": "COUNT_THRESHOLD", "target_sourcetype": "meraki:assurancealerts", "min_count": 1, "description": "Verify Meraki wireless alert events logged."}
         ]
 
-    elif sid == "openconfig_mdt_streaming":
+    elif sid == "mixed_sase_degradation":
         scen_obj["difficulty"] = "INTERMEDIATE"
-        scen_obj["vendor_scope"] = ["openconfig", "cisco", "arista"]
-        scen_obj["telemetry_requirements"] = ["gnmi", "hec"]
+        scen_obj["vendor_scope"] = ["zscaler", "palo_alto", "cisco_thousandeyes", "cisco_nexus"]
+        scen_obj["telemetry_requirements"] = ["syslog", "hec"]
+        scen_obj["sourcetypes"] = [
+            "zscaler:zia",
+            "pan:threat",
+            "cisco:thousandeyes:metric",
+            "cisco:dc:nexus9k:syslog"
+        ]
         scen_obj["phases"] = [
-            {"phase": "BASELINE", "name": "MDT Subscription Established", "duration_ticks": 2, "description": "Establish gNMI ON_CHANGE and SAMPLE subscriptions for interface counters.", "expected_observations": ["YANG tree synchronized"]},
-            {"phase": "FAULT", "name": "Traffic Step Change", "duration_ticks": 3, "description": "Simulate 500% traffic increase across core transit interfaces.", "expected_observations": ["Interface in-octets jump", "Bandwidth utilization spike"]},
-            {"phase": "PROPAGATE", "name": "Streaming MDT Notifications", "duration_ticks": 2, "description": "RFC 7951 JSON-IETF telemetry messages dispatched to Splunk HEC metrics index.", "expected_observations": ["Metric events indexed in cisco_mdt_metrics"]},
-            {"phase": "RECOVER", "name": "Traffic Equilibrium", "duration_ticks": 2, "description": "Flow rate settles back to normal baseline levels.", "expected_observations": ["Octet rates normalize"]},
-            {"phase": "VALIDATE", "name": "Schema & Counter Verification", "duration_ticks": 1, "description": "Verify monotonic counter integrity and RFC 7951 compliance.", "expected_observations": ["YANG validation clean"]}
+            {"phase": "BASELINE", "name": "Nominal SASE Cloud Ingress", "duration_ticks": 2, "description": "Nominal traffic forwarding through Zscaler ZIA cloud edge with low inspection latency.", "expected_observations": ["ZIA latency < 35ms", "ThousandEyes TTFB normal"]},
+            {"phase": "FAULT", "name": "Cloud SWG Inspection Bottleneck", "duration_ticks": 3, "description": "Zscaler cloud edge proxy experiences TLS inspection latency surge.", "expected_observations": ["zscaler:zia latency spike > 400ms", "status=degraded"]},
+            {"phase": "PROPAGATE", "name": "Perimeter Queue & Synthetic Alerting", "duration_ticks": 2, "description": "ThousandEyes probe alerts on SaaS TTFB degradation and Palo Alto SD-WAN queues sessions.", "expected_observations": ["ThousandEyes alert event", "pan:threat queue congestion"]},
+            {"phase": "FAILOVER", "name": "Direct Cloud Breakout Reroute", "duration_ticks": 2, "description": "Palo Alto Prisma SD-WAN prioritizes critical ERP traffic over secondary direct cloud breakout.", "expected_observations": ["Direct cloud breakout active", "action=allowed status=mitigated"]},
+            {"phase": "RECOVER", "name": "Cloud Inspection Recovery", "duration_ticks": 2, "description": "Zscaler cloud proxy queues clear and latency returns to nominal baseline.", "expected_observations": ["ZIA latency normalizes", "status=restored"]},
+            {"phase": "VALIDATE", "name": "Cloud SLA Verification", "duration_ticks": 1, "description": "Verify SaaS application latency and multi-cloud SLA compliance.", "expected_observations": ["All synthetic tests passing"]}
         ]
         scen_obj["use_case"] = {
-            "objective": "Demonstrate OpenConfig gNMI Model-Driven Telemetry streaming and RFC 7951 JSON-IETF metric ingestion into Splunk metric indexes.",
-            "required_telemetry": ["cisco:ios:mdt:metric", "openconfig:gnmi:telemetry"],
-            "expected_progression": ["MDT subscription initial sync", "Traffic step increase", "Streaming metric dispatch", "Counter normalization", "Validation"],
-            "expected_observations": ["Metric points in cisco:ios:mdt:metric", "RFC 7951 JSON structure"],
-            "validation_criteria": ["At least 1 MDT metric record emitted", "Metric values non-zero"]
+            "objective": "Demonstrate SASE cloud edge TLS inspection bottleneck detection, ThousandEyes synthetic degradation isolation, and SD-WAN cloud breakout prioritization.",
+            "required_telemetry": ["zscaler:zia", "pan:threat", "cisco:thousandeyes:metric", "cisco:dc:nexus9k:syslog"],
+            "expected_progression": ["Nominal SASE cloud ingress", "Cloud SWG inspection bottleneck", "Synthetic alert & queue propagation", "Direct cloud breakout reroute", "Restoration & validation"],
+            "expected_observations": ["Latency spike in zscaler:zia", "Synthetic alert in cisco:thousandeyes:metric", "Reroute action in pan:threat", "Restoration event in zscaler:zia"],
+            "validation_criteria": ["Zscaler ZIA logs emitted", "Degradation status detected", "ThousandEyes metric emitted", "Restoration verified"]
         }
         scen_obj["validation_rules"] = [
-            {"id": "oc-val-01", "name": "MDT Metric Streamed", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:ios:mdt:metric", "min_count": 1, "description": "Verify MDT telemetry records emitted."},
-            {"id": "oc-val-02", "name": "Action Allowed Recorded", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "allowed", "comparison": "==", "description": "Verify telemetry transport success."}
+            {"id": "sase-val-01", "name": "Zscaler ZIA Cloud Edge Logs Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "zscaler:zia", "min_count": 1, "description": "Verify Zscaler ZIA cloud edge telemetry records logged."},
+            {"id": "sase-val-02", "name": "SASE Ingress Degradation Detected", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "degraded", "comparison": "==", "description": "Verify degraded status recorded during SASE bottleneck."},
+            {"id": "sase-val-03", "name": "ThousandEyes Synthetic Assurance Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:thousandeyes:metric", "min_count": 1, "description": "Verify ThousandEyes synthetic metrics logged."},
+            {"id": "sase-val-04", "name": "Cloud SASE Path Restored", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "==", "description": "Verify restored status recorded upon cloud proxy recovery."}
         ]
 
-    elif sid in ("ddos_attack", "sql_injection", "lateral_movement", "normal_traffic"):
+    elif sid == "mixed_backbone_optical":
+        scen_obj["difficulty"] = "ADVANCED"
+        scen_obj["vendor_scope"] = ["nokia_sros", "juniper_junos", "arista_eos"]
+        scen_obj["telemetry_requirements"] = ["syslog", "hec"]
+        scen_obj["sourcetypes"] = [
+            "nokia:sros:syslog",
+            "juniper:junos",
+            "arista:flow:ipfix"
+        ]
+        scen_obj["phases"] = [
+            {"phase": "BASELINE", "name": "Nominal Coherent Optical Backbone", "duration_ticks": 2, "description": "Nominal DWDM 100G lambda forwarding across Nokia optical core and Juniper MPLS RSVP-TE.", "expected_observations": ["Optical BER clean", "Primary RSVP-TE LSP active"]},
+            {"phase": "FAULT", "name": "DWDM Optical Loss of Signal (LOS)", "duration_ticks": 3, "description": "Terrestrial fiber cut triggers DWDM Loss of Signal alarm on Nokia 7750 SR-12.", "expected_observations": ["Nokia %ROUTING-3-OPTICAL_LOS alarm", "status=degraded"]},
+            {"phase": "PROPAGATE", "name": "MPLS Fast Reroute Activation", "duration_ticks": 2, "description": "Juniper MX960 PE router detects carrier loss and activates sub-50ms RSVP-TE Fast Reroute (FRR).", "expected_observations": ["Juniper RPD_MPLS_LSP_CHANGE log", "Primary next-hop down"]},
+            {"phase": "FAILOVER", "name": "Traffic Egress Diversion via IPFIX", "duration_ticks": 2, "description": "Traffic diverts across secondary bypass path; Arista leaf confirms rerouted egress flow via IPFIX.", "expected_observations": ["Arista IPFIX flow telemetry with reroute_flag=1", "action=allowed status=mitigated"]},
+            {"phase": "RECOVER", "name": "Optical Carrier Restoration", "duration_ticks": 2, "description": "DWDM optical span spliced and restored; RSVP-TE reverts cleanly to primary LSP.", "expected_observations": ["Nokia optical carrier up", "Juniper primary LSP restored", "status=restored"]},
+            {"phase": "VALIDATE", "name": "Backbone SLA Verification", "duration_ticks": 1, "description": "Verify sub-50ms FRR convergence and zero packet loss on backbone core.", "expected_observations": ["Carrier metrics normal"]}
+        ]
+        scen_obj["use_case"] = {
+            "objective": "Demonstrate Nokia DWDM optical Loss of Signal detection, Juniper RSVP-TE Fast Reroute sub-50ms failover, and Arista IPFIX flow divert validation.",
+            "required_telemetry": ["nokia:sros:syslog", "juniper:junos", "arista:flow:ipfix"],
+            "expected_progression": ["Nominal optical backbone", "Fiber cut & DWDM Loss of Signal", "Juniper RSVP-TE Fast Reroute switchover", "Arista IPFIX flow telemetry diversion", "Optical carrier restoration"],
+            "expected_observations": ["Optical LOS alarm in nokia:sros:syslog", "FRR switchover in juniper:junos", "Flow diversion in arista:flow:ipfix", "Restoration in nokia:sros:syslog"],
+            "validation_criteria": ["Nokia optical LOS logged", "Juniper FRR switchover logged", "Arista IPFIX flow logged", "Restoration verified"]
+        }
+        scen_obj["validation_rules"] = [
+            {"id": "optical-val-01", "name": "Nokia SR-OS Optical LOS Syslog Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "nokia:sros:syslog", "min_count": 1, "description": "Verify Nokia SR-OS optical carrier Loss of Signal alarm emitted."},
+            {"id": "optical-val-02", "name": "Juniper Junos RSVP-TE FRR Switchover Logged", "type": "COUNT_THRESHOLD", "target_sourcetype": "juniper:junos", "min_count": 1, "description": "Verify Juniper Junos MPLS Fast Reroute switchover syslog emitted."},
+            {"id": "optical-val-03", "name": "Arista EOS IPFIX Telemetry Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "arista:flow:ipfix", "min_count": 1, "description": "Verify Arista EOS IPFIX flow telemetry emitted."},
+            {"id": "optical-val-04", "name": "Backbone Optical Path Restored", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "==", "description": "Verify restored status recorded upon optical link restoration."}
+        ]
+
+    elif sid == "openconfig_mdt_streaming":
+        scen_obj["difficulty"] = "INTERMEDIATE"
+        scen_obj["vendor_scope"] = ["cisco_ios", "juniper_junos", "arista_eos", "cisco_catalyst"]
+        scen_obj["telemetry_requirements"] = ["gnmi", "hec"]
+        scen_obj["sourcetypes"] = [
+            "cisco:ios:mdt",
+            "arista:telemetry:json",
+            "cisco:ios:syslog"
+        ]
+        scen_obj["phases"] = [
+            {"phase": "BASELINE", "name": "MDT Subscription Established", "duration_ticks": 2, "description": "Establish gNMI ON_CHANGE and SAMPLE subscriptions for interface counters and buffer state.", "expected_observations": ["YANG tree synchronized", "Nominal interface in-octets"]},
+            {"phase": "FAULT", "name": "Traffic Step Change & Buffer Surge", "duration_ticks": 3, "description": "Simulate 500% traffic increase across core transit interfaces, saturating buffer headroom.", "expected_observations": ["Interface in-octets jump", "Queue depth spike > 1MB", "status=degraded"]},
+            {"phase": "PROPAGATE", "name": "Streaming MDT Telemetry Notifications", "duration_ticks": 2, "description": "RFC 7951 JSON-IETF telemetry messages dispatched to Splunk HEC metrics index.", "expected_observations": ["Metric events indexed in cisco_mdt_metrics", "Buffer congestion notification in idx_network_ops"]},
+            {"phase": "FAILOVER", "name": "Dynamic QoS Headroom & Rate Shaping", "duration_ticks": 2, "description": "Dynamic buffer management expands headroom and shapes egress queues.", "expected_observations": ["Buffer watermark stabilizes", "action=allowed status=mitigated"]},
+            {"phase": "RECOVER", "name": "Traffic Equilibrium & Queue Drain", "duration_ticks": 2, "description": "Flow rate settles back to normal baseline levels; interface buffers drain.", "expected_observations": ["Queue depth normalizes", "status=restored"]},
+            {"phase": "VALIDATE", "name": "Schema & Counter Verification", "duration_ticks": 1, "description": "Verify monotonic counter integrity and RFC 7951 compliance.", "expected_observations": ["YANG validation clean", "Zero active queue alarms"]}
+        ]
+        scen_obj["use_case"] = {
+            "objective": "Demonstrate OpenConfig gNMI Model-Driven Telemetry streaming and RFC 7951 JSON-IETF metric ingestion into Splunk metric indexes, with real-time buffer congestion detection and mitigation.",
+            "required_telemetry": ["cisco:ios:mdt", "arista:telemetry:json"],
+            "expected_progression": ["MDT subscription initial sync", "Traffic step increase & buffer surge", "Streaming metric dispatch", "Dynamic queue drain", "Restoration & validation"],
+            "expected_observations": ["Metric points in cisco:ios:mdt", "RFC 7951 JSON structure", "Congestion event in cisco:ios:mdt", "Restoration in cisco:ios:mdt"],
+            "validation_criteria": ["MDT records emitted", "Congestion status degraded logged", "Streaming action allowed logged", "Interface restoration verified"]
+        }
+        scen_obj["validation_rules"] = [
+            {"id": "oc-val-01", "name": "MDT Telemetry Stream Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:ios:mdt", "min_count": 1, "description": "Verify OpenConfig MDT telemetry records emitted."},
+            {"id": "oc-val-02", "name": "Core Interface Congestion Detected", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "degraded", "comparison": "==", "description": "Verify degraded status recorded during interface buffer spike."},
+            {"id": "oc-val-03", "name": "MDT Telemetry Streaming Active", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "allowed", "comparison": "in", "description": "Verify allowed action recorded for telemetry stream."},
+            {"id": "oc-val-04", "name": "Core Interface Restored to Nominal", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "==", "description": "Verify restored status recorded upon buffer normalization."}
+        ]
+
+    elif sid == "sql_injection":
+        scen_obj["difficulty"] = "INTERMEDIATE"
+        scen_obj["vendor_scope"] = ["cisco_asa", "nginx", "postgresql"]
+        scen_obj["telemetry_requirements"] = ["syslog", "hec"]
+        scen_obj["sourcetypes"] = [
+            "cisco:asa",
+            "nginx:plus:kv",
+            "postgresql:audit"
+        ]
+        scen_obj["phases"] = [
+            {"phase": "BASELINE", "name": "Nominal Web Application Queries", "duration_ticks": 2, "description": "Standard legitimate HTTP requests querying database records.", "expected_observations": ["HTTP 200 responses", "Clean SQL queries"]},
+            {"phase": "FAULT", "name": "OWASP SQL Injection Vector", "duration_ticks": 3, "description": "Adversary injects malicious SQL payload (' OR 1=1 -- UNION SELECT) through web tier.", "expected_observations": ["Malicious query in nginx:plus:kv", "status=degraded"]},
+            {"phase": "PROPAGATE", "name": "Database Security Audit Trigger", "duration_ticks": 2, "description": "PostgreSQL database audit engine alerts on syntax exception and unauthorized table query.", "expected_observations": ["PostgreSQL audit alert", "action=alerted status=degraded"]},
+            {"phase": "FAILOVER", "name": "Perimeter Inspection & Threat Block", "duration_ticks": 2, "description": "Cisco ASA perimeter firewall detects SQL exploit signature and drops connection.", "expected_observations": ["Cisco ASA %ASA-4-106023 deny event", "action=blocked status=mitigated"]},
+            {"phase": "RECOVER", "name": "Source IP Quarantine & Sanitization", "duration_ticks": 2, "description": "Attacker IP blocked at perimeter; database connection pool returns to nominal state.", "expected_observations": ["Legitimate queries resumed", "status=restored"]},
+            {"phase": "VALIDATE", "name": "Database Integrity & Posture Audit", "duration_ticks": 1, "description": "Verify database integrity and zero active unauthorized connections.", "expected_observations": ["Database clean"]}
+        ]
+        scen_obj["use_case"] = {
+            "objective": "Demonstrate OWASP SQL injection attack detection across NGINX web tier, PostgreSQL database audit log, and Cisco ASA perimeter firewall enforcement.",
+            "required_telemetry": ["cisco:asa", "nginx:plus:kv", "postgresql:audit"],
+            "expected_progression": ["Nominal web queries", "SQL injection exploit injection", "Database audit alert", "Perimeter firewall drop", "Restoration & validation"],
+            "expected_observations": ["NGINX URI log in nginx:plus:kv", "Audit alert in postgresql:audit", "Deny log in cisco:asa", "Restoration in postgresql:audit"],
+            "validation_criteria": ["Cisco ASA log emitted", "PostgreSQL audit threat logged", "Threat blocked action verified", "Restoration verified"]
+        }
+        scen_obj["validation_rules"] = [
+            {"id": "sqli-val-01", "name": "Cisco ASA Firewall Security Log Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:asa", "min_count": 1, "description": "Verify Cisco ASA firewall security event logged."},
+            {"id": "sqli-val-02", "name": "PostgreSQL Audit Threat Log Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "postgresql:audit", "min_count": 1, "description": "Verify PostgreSQL audit threat event logged."},
+            {"id": "sqli-val-03", "name": "Firewall Threat Drop/Block Action Verified", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "blocked", "comparison": "in", "description": "Verify blocked action in perimeter firewall security log."},
+            {"id": "sqli-val-04", "name": "Database Security Posture Restored", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "==", "description": "Verify restored status recorded upon attack mitigation."}
+        ]
+
+    elif sid == "ddos_attack":
+        scen_obj["difficulty"] = "INTERMEDIATE"
+        scen_obj["vendor_scope"] = ["cisco_asa", "f5", "nginx"]
+        scen_obj["telemetry_requirements"] = ["syslog", "hec"]
+        scen_obj["sourcetypes"] = [
+            "cisco:asa",
+            "f5:bigip:ltm",
+            "nginx:plus:kv"
+        ]
+        scen_obj["phases"] = [
+            {"phase": "BASELINE", "name": "Nominal Client Traffic Flow", "duration_ticks": 2, "description": "Normal distributed HTTP traffic flowing through Cisco ASA and F5 Load Balancer to Web Server.", "expected_observations": ["HTTP 200 responses", "Nominal connection rate"]},
+            {"phase": "FAULT", "name": "Volumetric TCP SYN Flood Injection", "duration_ticks": 3, "description": "Botnet launches high-rate TCP SYN flood targeting VIP 10.0.1.5:443.", "expected_observations": ["Cisco ASA embryonic connection alert", "status=degraded"]},
+            {"phase": "PROPAGATE", "name": "Load Balancer & Web Tier Saturation", "duration_ticks": 2, "description": "F5 Big-IP LTM logs SYN flood protection alert on Virtual Server pool.", "expected_observations": ["F5 SYN flood mitigation alert", "action=alerted status=degraded"]},
+            {"phase": "FAILOVER", "name": "Perimeter TCP Intercept & SYN Cookie Block", "duration_ticks": 2, "description": "Cisco ASA activates TCP Intercept SYN proxy cookies, dropping unauthenticated SYN bursts.", "expected_observations": ["Cisco ASA %ASA-2-106017 drop log", "action=blocked status=mitigated"]},
+            {"phase": "RECOVER", "name": "Flood Mitigation & Rate Normalization", "duration_ticks": 2, "description": "Attack traffic suppressed; embryonic connections return to nominal levels.", "expected_observations": ["Connection rates normal", "status=restored"]},
+            {"phase": "VALIDATE", "name": "Perimeter Health Verification", "duration_ticks": 1, "description": "Verify perimeter firewall connection table health and VIP responsiveness.", "expected_observations": ["Clean perimeter status"]}
+        ]
+        scen_obj["use_case"] = {
+            "objective": "Demonstrate DDoS volumetric TCP SYN flood detection, F5 Big-IP load balancer VIP protection, and Cisco ASA embryonic connection mitigation.",
+            "required_telemetry": ["cisco:asa", "f5:bigip:ltm", "nginx:plus:kv"],
+            "expected_progression": ["Nominal client traffic", "TCP SYN flood attack", "F5 VIP alert & propagation", "Cisco ASA TCP Intercept drop", "Mitigation & restoration"],
+            "expected_observations": ["SYN flood alert in cisco:asa", "VIP protection alert in f5:bigip:ltm", "Block action in cisco:asa", "Restoration in cisco:asa"],
+            "validation_criteria": ["Cisco ASA perimeter log emitted", "Volumetric attack blocked", "F5 VIP protection logged", "Service restoration verified"]
+        }
+        scen_obj["validation_rules"] = [
+            {"id": "ddos-val-01", "name": "Cisco ASA Perimeter Defense Log Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:asa", "min_count": 1, "description": "Verify Cisco ASA perimeter defense log emitted."},
+            {"id": "ddos-val-02", "name": "DDoS Volumetric Traffic Blocked", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "blocked", "comparison": "in", "description": "Verify blocked action recorded during DDoS mitigation."},
+            {"id": "ddos-val-03", "name": "F5 Big-IP Load Balancer SYN Protection Alerted", "type": "COUNT_THRESHOLD", "target_sourcetype": "f5:bigip:ltm", "min_count": 1, "description": "Verify F5 Big-IP LTM SYN protection alerts emitted."},
+            {"id": "ddos-val-04", "name": "DDoS Mitigation Cleared & Service Restored", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "==", "description": "Verify restored status recorded upon attack cessation."}
+        ]
+
+    elif sid in ("lateral_movement", "normal_traffic"):
         scen_obj["difficulty"] = "BEGINNER" if sid == "normal_traffic" else "INTERMEDIATE"
         scen_obj["phases"] = [
             {"phase": "BASELINE", "name": "Baseline Ingress", "duration_ticks": 2, "description": "Normal application traffic.", "expected_observations": ["HTTP permit"]},

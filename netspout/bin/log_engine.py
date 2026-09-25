@@ -81,7 +81,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="cisco_asa"
+            vendor="cisco_asa",
+            sourcetype="cisco:asa"
         )
 
     @staticmethod
@@ -208,7 +209,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="f5_bigip"
+            vendor="f5_bigip",
+            sourcetype="f5:bigip:ltm"
         )
 
     @staticmethod
@@ -247,7 +249,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="postgresql"
+            vendor="postgresql",
+            sourcetype="postgresql:audit"
         )
 
     @staticmethod
@@ -287,7 +290,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="cisco_ios"
+            vendor="cisco_ios",
+            sourcetype="cisco:ios:syslog"
         )
 
     # =========================================================================

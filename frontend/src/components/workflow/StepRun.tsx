@@ -30,9 +30,12 @@ export const StepRun: React.FC<StepRunProps> = ({
   const [speedMode, setSpeedMode] = useState<'TEST' | 'ACCELERATED' | 'REALTIME'>('ACCELERATED');
   const [copiedRunId, setCopiedRunId] = useState(false);
   const [copiedSpl, setCopiedSpl] = useState(false);
+  const [copiedMetric, setCopiedMetric] = useState(false);
 
   const spl = runState.splunk_search_query || (runState.run_id ? `index=idx_network_ops netspout_run_id="${runState.run_id}"` : '');
   const splunkSearchUrl = `http://localhost:8800/en-US/app/netspout/search?q=search%20${encodeURIComponent(spl || 'index=idx_network_ops')}`;
+  const metricQuery = runState.splunk_metric_query;
+  const splunkMetricUrl = metricQuery ? `http://localhost:8800/en-US/app/netspout/search?q=${encodeURIComponent(metricQuery)}` : '';
 
   const handleCopyRunId = () => {
     if (runState.run_id) {
@@ -47,6 +50,14 @@ export const StepRun: React.FC<StepRunProps> = ({
       navigator.clipboard.writeText(spl);
       setCopiedSpl(true);
       setTimeout(() => setCopiedSpl(false), 2000);
+    }
+  };
+
+  const handleCopyMetric = () => {
+    if (metricQuery) {
+      navigator.clipboard.writeText(metricQuery);
+      setCopiedMetric(true);
+      setTimeout(() => setCopiedMetric(false), 2000);
     }
   };
 
@@ -142,6 +153,28 @@ export const StepRun: React.FC<StepRunProps> = ({
                     <span>Open in Splunk</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
+                  {metricQuery && (
+                    <>
+                      <button
+                        onClick={handleCopyMetric}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded bg-purple-950/60 hover:bg-purple-900/60 text-purple-300 text-xs font-semibold border border-purple-800 transition"
+                        title="Copy run metric | mstats query"
+                      >
+                        {copiedMetric ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>{copiedMetric ? 'mstats Copied' : 'Copy mstats'}</span>
+                      </button>
+                      <a
+                        href={splunkMetricUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 px-2.5 py-1 rounded bg-purple-950/60 hover:bg-purple-900/60 text-purple-300 text-xs font-semibold border border-purple-800 transition"
+                        title="Open metric query in Splunk Search app"
+                      >
+                        <span>Metrics in Splunk</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </>
+                  )}
                 </>
               )}
             </div>

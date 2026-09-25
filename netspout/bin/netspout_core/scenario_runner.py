@@ -26,7 +26,8 @@ try:
         TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
         ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
         UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
-        RunManifest, ScenarioRunRequest, TelemetryTransportConfig
+        RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
+        TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
     )
     from netspout_core.graph_engine import TopologyGraph
     from netspout_core.log_engine import SplunkLogEngine
@@ -39,7 +40,8 @@ except ImportError:
             TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
             ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
             UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
-            RunManifest, ScenarioRunRequest, TelemetryTransportConfig
+            RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
+            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
         )
         from app.graph_engine import TopologyGraph
         from app.log_engine import SplunkLogEngine
@@ -51,7 +53,8 @@ except ImportError:
             TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
             ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
             UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
-            RunManifest, ScenarioRunRequest, TelemetryTransportConfig
+            RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
+            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
         )
         from graph_engine import TopologyGraph
         from log_engine import SplunkLogEngine
@@ -196,8 +199,12 @@ class ValidationEngine:
         return False
 
     @classmethod
-    def evaluate_rule(cls, rule: ValidationRule, logs: List[LogEntry], graph: Optional[TopologyGraph] = None) -> ValidationResult:
+    def evaluate_rule(cls, rule: Any, logs: List[LogEntry], graph: Optional[TopologyGraph] = None) -> ValidationResult:
+        rule_id = rule.get("id", "unknown") if isinstance(rule, dict) else getattr(rule, "id", "unknown")
+        rule_name = rule.get("name", "unknown") if isinstance(rule, dict) else getattr(rule, "name", "unknown")
         try:
+            if isinstance(rule, dict):
+                rule = ValidationRule(**rule)
             r_type = rule.type.value if hasattr(rule.type, "value") else str(rule.type)
 
             # -----------------------------------------------------------------
@@ -421,8 +428,8 @@ class ValidationEngine:
 
         except Exception as e:
             return ValidationResult(
-                rule_id=rule.id,
-                rule_name=rule.name,
+                rule_id=rule_id,
+                rule_name=rule_name,
                 status=ValidationStatus.BLOCKED,
                 message=f"Rule evaluation error: {str(e)}",
                 evidence={"error": str(e)}
@@ -1355,6 +1362,237 @@ class ScenarioRunner:
     # -------------------------------------------------------------------------
     # Destination Observation & Evidence Verification (Gate 6)
     # -------------------------------------------------------------------------
+    def _execute_splunk_rest_query(
+        self,
+        query: str,
+        transport: Optional[TelemetryTransportConfig] = None
+    ) -> Tuple[int, Optional[str]]:
+        """
+        Executes a REST query against Splunk export endpoint.
+        Supports both standard SPL searches and | mstats metric queries.
+        Returns: (count, error_message)
+        """
+        hec_url = (transport.hec_url if transport else None) or "https://127.0.0.1:8888/services/collector"
+        rest_candidates = []
+        if ":8888" in hec_url:
+            rest_candidates.append(hec_url.replace(":8888", ":8889").replace("/services/collector", "/services/search/jobs/export"))
+        elif ":8088" in hec_url:
+            rest_candidates.append(hec_url.replace(":8088", ":8089").replace("/services/collector", "/services/search/jobs/export"))
+        rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
+        rest_candidates.append("https://localhost:8889/services/search/jobs/export")
+
+        auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+        ssl_verify = getattr(transport, "hec_ssl_verify", True) if transport else True
+        allow_insecure = getattr(transport, "hec_allow_insecure_tls", False) if transport else False
+        ctx = ssl.create_default_context()
+        if allow_insecure or not ssl_verify:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+
+        full_query = query.strip()
+        if not full_query.startswith("|") and not full_query.startswith("search"):
+            full_query = f"search {full_query}"
+
+        data = urllib.parse.urlencode({
+            "search": full_query,
+            "output_mode": "json"
+        }).encode("utf-8")
+
+        last_error = None
+        for endpoint in rest_candidates:
+            try:
+                req = urllib.request.Request(endpoint, data=data, headers={"Authorization": auth_header})
+                with urllib.request.urlopen(req, timeout=3.0, context=ctx) as resp:
+                    lines_count = 0
+                    mstats_val = None
+                    for line in resp:
+                        line_str = line.decode("utf-8", errors="replace").strip()
+                        if line_str:
+                            try:
+                                d = json.loads(line_str)
+                                if "result" in d and isinstance(d["result"], dict):
+                                    res_obj = d["result"]
+                                    if "count" in res_obj:
+                                        try:
+                                            mstats_val = int(res_obj["count"])
+                                        except (ValueError, TypeError):
+                                            lines_count += 1
+                                    else:
+                                        lines_count += 1
+                            except Exception:
+                                pass
+                    if mstats_val is not None:
+                        return mstats_val, None
+                    return lines_count, None
+            except Exception as e:
+                last_error = str(e)
+                continue
+        return 0, last_error
+
+    def get_run_evidence(
+        self,
+        run_id: str,
+        transport: Optional[TelemetryTransportConfig] = None
+    ) -> UnifiedRunEvidence:
+        """
+        Discovers all storage destinations dynamically from run telemetry and transport metadata.
+        Queries each destination according to its native Splunk semantics (SPL search vs | mstats).
+        Decouples Observation Completeness from Contract Validation.
+        """
+        if not transport:
+            transport = TelemetryTransportConfig()
+
+        logs = self.run_logs.get(run_id, [])
+        manifest = self.active_manifests.get(run_id)
+        scenario_id = manifest.scenario_id if manifest else (self.current_scenario_id or "unknown")
+
+        contract = None
+        if hasattr(self, "get_contract"):
+            try:
+                contract = self.get_contract(scenario_id)
+            except Exception:
+                pass
+
+        required_sourcetypes = set()
+        if contract and contract.validation_rules:
+            for rule in contract.validation_rules:
+                if hasattr(rule, "target_sourcetype") and rule.target_sourcetype:
+                    required_sourcetypes.add(rule.target_sourcetype)
+
+        event_index = transport.hec_index or "idx_network_ops"
+        metric_index = transport.hec_metric_index or "cisco_mdt_metrics"
+
+        dest_map: Dict[str, Dict[str, Any]] = {}
+
+        if logs:
+            for entry in logs:
+                st = entry.sourcetype or "cisco:ios"
+                is_metric = (
+                    st in ("cisco:ios:mdt", "cisco:ios:mdt:metric") or
+                    (transport.hec_metric_index and st == transport.hec_metric_index)
+                )
+
+                if is_metric:
+                    dest_key = f"metric_{metric_index}"
+                    if dest_key not in dest_map:
+                        dest_map[dest_key] = {
+                            "destination_id": f"splunk_metric_{metric_index}",
+                            "name": f"Splunk Metric Store ({metric_index})",
+                            "telemetry_type": TelemetryType.METRIC,
+                            "target_index": metric_index,
+                            "query_mechanism": QueryMechanism.MSTATS,
+                            "query": f'| mstats count where index={metric_index} metric_name=* AND netspout_run_id="{run_id}"',
+                            "expected_count": 0,
+                            "role": EvidenceRole.REQUIRED if any(rst in st for rst in required_sourcetypes) else EvidenceRole.SUPPORTING,
+                            "sourcetypes": set()
+                        }
+                    dest_map[dest_key]["expected_count"] += 1
+                    dest_map[dest_key]["sourcetypes"].add(st)
+                else:
+                    dest_key = f"event_{event_index}"
+                    if dest_key not in dest_map:
+                        dest_map[dest_key] = {
+                            "destination_id": f"splunk_event_{event_index}",
+                            "name": f"Splunk Event Index ({event_index})",
+                            "telemetry_type": TelemetryType.EVENT,
+                            "target_index": event_index,
+                            "query_mechanism": QueryMechanism.SPL_SEARCH,
+                            "query": f'search index={event_index} netspout_run_id="{run_id}"',
+                            "expected_count": 0,
+                            "role": EvidenceRole.REQUIRED,
+                            "sourcetypes": set()
+                        }
+                    dest_map[dest_key]["expected_count"] += 1
+                    dest_map[dest_key]["sourcetypes"].add(st)
+        else:
+            dest_map[f"event_{event_index}"] = {
+                "destination_id": f"splunk_event_{event_index}",
+                "name": f"Splunk Event Index ({event_index})",
+                "telemetry_type": TelemetryType.EVENT,
+                "target_index": event_index,
+                "query_mechanism": QueryMechanism.SPL_SEARCH,
+                "query": f'search index={event_index} netspout_run_id="{run_id}"',
+                "expected_count": manifest.total_events_generated if manifest else 0,
+                "role": EvidenceRole.REQUIRED,
+                "sourcetypes": set(manifest.expected_sourcetypes) if manifest else set()
+            }
+            if manifest and any("mdt" in st.lower() or "metric" in st.lower() for st in manifest.expected_sourcetypes):
+                dest_map[f"metric_{metric_index}"] = {
+                    "destination_id": f"splunk_metric_{metric_index}",
+                    "name": f"Splunk Metric Store ({metric_index})",
+                    "telemetry_type": TelemetryType.METRIC,
+                    "target_index": metric_index,
+                    "query_mechanism": QueryMechanism.MSTATS,
+                    "query": f'| mstats count where index={metric_index} metric_name=* AND netspout_run_id="{run_id}"',
+                    "expected_count": 4,
+                    "role": EvidenceRole.SUPPORTING,
+                    "sourcetypes": {"cisco:ios:mdt:metric"}
+                }
+
+        observations: List[EvidenceObservation] = []
+        for dest_info in dest_map.values():
+            cnt, err = self._execute_splunk_rest_query(dest_info["query"], transport)
+            errors = [err] if err else []
+            if cnt >= dest_info["expected_count"] and dest_info["expected_count"] > 0:
+                status = "PASS"
+            elif cnt > 0:
+                status = "PASS" if dest_info["role"] == EvidenceRole.SUPPORTING else "PARTIAL"
+            elif err:
+                status = "ERROR"
+            else:
+                status = "PENDING"
+
+            obs = EvidenceObservation(
+                destination_id=dest_info["destination_id"],
+                name=dest_info["name"],
+                telemetry_type=dest_info["telemetry_type"],
+                target_index=dest_info["target_index"],
+                query_mechanism=dest_info["query_mechanism"],
+                query=dest_info["query"],
+                observed_count=cnt,
+                expected_count=dest_info["expected_count"],
+                status=status,
+                role=dest_info["role"],
+                errors=errors
+            )
+            observations.append(obs)
+
+        total_gen = len(logs) if logs else (manifest.total_events_generated if manifest else 0)
+        total_disp = manifest.dispatch_succeeded if manifest else total_gen
+        evt_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
+        evt_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
+        met_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.METRIC)
+        met_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.METRIC)
+        total_obs = evt_obs + met_obs
+
+        completeness_pct = round((total_obs / total_gen * 100.0), 1) if total_gen > 0 else 0.0
+        req_satisfied = all(o.status in ("PASS", "PARTIAL") and o.observed_count > 0 for o in observations if o.role == EvidenceRole.REQUIRED)
+
+        if total_obs == 0:
+            obs_status = "PENDING"
+        elif completeness_pct >= 100.0:
+            obs_status = "COMPLETE"
+        else:
+            obs_status = "PARTIAL"
+
+        return UnifiedRunEvidence(
+            run_id=run_id,
+            scenario_id=scenario_id,
+            destinations=observations,
+            total_generated=total_gen,
+            total_dispatched=total_disp,
+            total_observed=total_obs,
+            event_observed_count=evt_obs,
+            event_expected_count=evt_exp,
+            metric_observed_count=met_obs,
+            metric_expected_count=met_exp,
+            observation_completeness_pct=completeness_pct,
+            observation_status=obs_status,
+            contract_validation=manifest.destination_validation if manifest else "NOT_RUN",
+            required_evidence_satisfied=req_satisfied,
+            errors=[e for o in observations for e in o.errors]
+        )
+
     def check_destination_observation(
         self,
         run_id: str,
@@ -1365,7 +1603,7 @@ class ScenarioRunner:
         delay_sec: Optional[float] = None
     ) -> Tuple[str, int]:
         """
-        Queries the destination (Splunk REST API) to observe indexed events for the run_id.
+        Queries destinations (Splunk REST API) to observe indexed events/metrics for the run_id.
         Handles indexing delay using bounded retry.
         Returns: (status, observed_count)
         status: VERIFIED | OBSERVATION_PENDING | FAILED | NOT_CHECKED
@@ -1375,58 +1613,23 @@ class ScenarioRunner:
 
         if not transport:
             transport = TelemetryTransportConfig(hec_index=index or "idx_network_ops")
+        elif index:
+            transport.hec_index = index
 
-        hec_url = transport.hec_url or "https://127.0.0.1:8888/services/collector"
-        rest_candidates = []
-        if ":8888" in hec_url:
-            rest_candidates.append(hec_url.replace(":8888", ":8889").replace("/services/collector", "/services/search/jobs/export"))
-        elif ":8088" in hec_url:
-            rest_candidates.append(hec_url.replace(":8088", ":8089").replace("/services/collector", "/services/search/jobs/export"))
-        rest_candidates.append("https://localhost:8889/services/search/jobs/export")
-        rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
-
-        auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
-        target_idx = index or transport.hec_index or "idx_network_ops"
-        search_query = f"search index={target_idx} {run_id}"
-
-        ssl_verify = getattr(transport, "hec_ssl_verify", True)
-        allow_insecure = getattr(transport, "hec_allow_insecure_tls", False)
-        ctx = ssl.create_default_context()
-        if allow_insecure or not ssl_verify:
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-
-        data = urllib.parse.urlencode({
-            "search": search_query,
-            "output_mode": "json"
-        }).encode("utf-8")
-
+        evidence = None
         for attempt in range(max_retries):
-            for endpoint in rest_candidates:
-                try:
-                    req = urllib.request.Request(endpoint, data=data, headers={"Authorization": auth_header})
-                    with urllib.request.urlopen(req, timeout=2.5, context=ctx) as resp:
-                        count = 0
-                        for line in resp:
-                            line_str = line.decode("utf-8", errors="replace").strip()
-                            if line_str:
-                                try:
-                                    d = json.loads(line_str)
-                                    if "result" in d:
-                                        count += 1
-                                except Exception:
-                                    pass
-                        if count > 0:
-                            return "VERIFIED", count
-                except Exception:
-                    continue
-
+            evidence = self.get_run_evidence(run_id, transport)
+            if evidence.observation_completeness_pct >= 100.0:
+                return "VERIFIED", evidence.total_observed
+            if evidence.required_evidence_satisfied and evidence.total_observed > 0 and attempt == max_retries - 1:
+                return "VERIFIED", evidence.total_observed
             if attempt < max_retries - 1:
                 time.sleep(backoff_sec)
 
+        if evidence and evidence.total_observed > 0:
+            return "VERIFIED", evidence.total_observed
         return "OBSERVATION_PENDING", 0
 
-    # -------------------------------------------------------------------------
     # Multi-Phase Scenario Execution Engine (Gate 4 Core Lifecycle)
     # -------------------------------------------------------------------------
     def run_scenario(
@@ -1701,11 +1904,22 @@ class ScenarioRunner:
         target_idx = topology.global_transport.hec_index if topology.global_transport else "idx_network_ops"
         manifest.splunk_search_query = f'index={target_idx} netspout_run_id="{run_id}"'
 
-        # Destination Observation Check (handles indexing delay)
+        # Destination Observation Check (handles indexing delay & unified evidence discovery)
+        evidence = None
         if request.dispatch_telemetry and manifest.dispatch_succeeded > 0:
             obs_status, observed_cnt = self.check_destination_observation(run_id, topology.global_transport)
             manifest.observed_count = observed_cnt
             manifest.observation_status = obs_status
+            evidence = self.get_run_evidence(run_id, topology.global_transport)
+            manifest.evidence_summary = evidence
+            manifest.event_observed_count = evidence.event_observed_count
+            manifest.metric_observed_count = evidence.metric_observed_count
+            manifest.observation_completeness_pct = evidence.observation_completeness_pct
+            for d in evidence.destinations:
+                if d.telemetry_type == TelemetryType.METRIC:
+                    manifest.splunk_metric_query = d.query
+                elif d.telemetry_type == TelemetryType.EVENT:
+                    manifest.splunk_search_query = d.query
         elif request.dispatch_telemetry and manifest.dispatch_failed > 0:
             manifest.observed_count = 0
             manifest.observation_status = "FAILED"

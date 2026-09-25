@@ -787,11 +787,18 @@ async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTes
 @app.get("/api/scenarios/runs/{run_id}/observation")
 async def get_run_observation(run_id: str):
     global current_topology
+    transport = current_topology.global_transport if current_topology and getattr(current_topology, "global_transport", None) else TelemetryTransportConfig()
     status, count = scenario_runner.check_destination_observation(run_id, transport)
     manifest = scenario_runner.get_run(run_id)
+    evidence = scenario_runner.get_run_evidence(run_id, transport) if hasattr(scenario_runner, "get_run_evidence") else None
     if manifest:
         manifest.observed_count = count
         manifest.observation_status = status
+        if evidence:
+            manifest.evidence_summary = evidence
+            manifest.event_observed_count = evidence.event_observed_count
+            manifest.metric_observed_count = evidence.metric_observed_count
+            manifest.observation_completeness_pct = evidence.observation_completeness_pct
         if count > 0:
             manifest.destination_validation = "PASS"
             if manifest.overall_validation in ("BLOCKED", "FAIL"):
@@ -801,7 +808,12 @@ async def get_run_observation(run_id: str):
         "run_id": run_id,
         "observed_count": count,
         "observation_status": status,
-        "destination_validation": manifest.destination_validation if manifest else ("PASS" if count > 0 else "FAIL")
+        "destination_validation": manifest.destination_validation if manifest else ("PASS" if count > 0 else "FAIL"),
+        "event_observed_count": evidence.event_observed_count if evidence else count,
+        "metric_observed_count": evidence.metric_observed_count if evidence else 0,
+        "observation_completeness_pct": evidence.observation_completeness_pct if evidence else 100.0,
+        "destinations": [d.dict() for d in evidence.destinations] if evidence else [],
+        "evidence_summary": evidence.dict() if evidence else None
     }
 
 

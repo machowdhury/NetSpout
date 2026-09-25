@@ -209,8 +209,8 @@ class TelemetryTransportConfig(BaseModel):
     hec_token: str = "00000000-0000-0000-0000-000000000000"
     hec_index: str = "idx_network_ops"
     hec_metric_index: str = "cisco_mdt_metrics"
-    hec_ssl_verify: bool = True
-    hec_allow_insecure_tls: bool = False
+    hec_ssl_verify: bool = False
+    hec_allow_insecure_tls: bool = True
     default_index: Optional[str] = None
     hec_endpoint: Optional[str] = None
 
@@ -597,6 +597,69 @@ class GroundTruthRecord(BaseModel):
     expected_secondary_effects: List[str] = Field(default_factory=list)
 
 
+class TelemetryType(str, Enum):
+    EVENT = "EVENT"
+    METRIC = "METRIC"
+    FLOW = "FLOW"
+    TRACE = "TRACE"
+
+
+class QueryMechanism(str, Enum):
+    SPL_SEARCH = "SPL_SEARCH"
+    MSTATS = "MSTATS"
+
+
+class EvidenceRole(str, Enum):
+    REQUIRED = "REQUIRED"
+    SUPPORTING = "SUPPORTING"
+    OPTIONAL = "OPTIONAL"
+
+
+class EvidenceDestination(BaseModel):
+    id: str
+    name: str
+    telemetry_type: TelemetryType = TelemetryType.EVENT
+    target_index: str
+    sourcetype: Optional[str] = None
+    metric_names: List[str] = Field(default_factory=list)
+    query_mechanism: QueryMechanism = QueryMechanism.SPL_SEARCH
+    query_template: Optional[str] = None
+    role: EvidenceRole = EvidenceRole.REQUIRED
+    expected_count: int = 0
+
+
+class EvidenceObservation(BaseModel):
+    destination_id: str
+    name: str
+    telemetry_type: TelemetryType = TelemetryType.EVENT
+    target_index: str
+    query_mechanism: QueryMechanism = QueryMechanism.SPL_SEARCH
+    query: str
+    observed_count: int = 0
+    expected_count: int = 0
+    status: str = "PENDING"  # PASS | FAIL | PENDING | ERROR
+    role: EvidenceRole = EvidenceRole.REQUIRED
+    errors: List[str] = Field(default_factory=list)
+
+
+class UnifiedRunEvidence(BaseModel):
+    run_id: str
+    scenario_id: str
+    destinations: List[EvidenceObservation] = Field(default_factory=list)
+    total_generated: int = 0
+    total_dispatched: int = 0
+    total_observed: int = 0
+    event_observed_count: int = 0
+    event_expected_count: int = 0
+    metric_observed_count: int = 0
+    metric_expected_count: int = 0
+    observation_completeness_pct: float = 0.0
+    observation_status: str = "PENDING"  # COMPLETE | PARTIAL | FAILED | PENDING
+    contract_validation: str = "NOT_RUN"  # PASS | FAIL | BLOCKED | NOT_RUN
+    required_evidence_satisfied: bool = False
+    errors: List[str] = Field(default_factory=list)
+
+
 class RunManifest(BaseModel):
     run_id: str
     scenario_id: str
@@ -624,6 +687,11 @@ class RunManifest(BaseModel):
     observation_status: str = "NOT_CHECKED"  # NOT_CHECKED | PENDING | VERIFIED | FAILED
     destination_validation: str = "NOT_RUN"  # NOT_RUN | PASS | FAIL | BLOCKED
     splunk_search_query: Optional[str] = None
+    splunk_metric_query: Optional[str] = None
+    event_observed_count: int = 0
+    metric_observed_count: int = 0
+    observation_completeness_pct: float = 0.0
+    evidence_summary: Optional[UnifiedRunEvidence] = None
     errors: List[str] = Field(default_factory=list)
 
 
@@ -635,4 +703,5 @@ class ScenarioRunRequest(BaseModel):
     duration_ticks: Optional[int] = None
     dispatch_telemetry: bool = False
     transport_config: Optional[TelemetryTransportConfig] = None
+
 

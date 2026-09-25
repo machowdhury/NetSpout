@@ -81,6 +81,38 @@ export interface EvidenceBreakdown {
   validation_passed_count: number;
 }
 
+export interface EvidenceSourceItem {
+  destination_id: string;
+  name: string;
+  telemetry_type: 'EVENT' | 'METRIC' | 'FLOW' | 'TRACE';
+  target_index: string;
+  query_mechanism: 'SPL_SEARCH' | 'MSTATS';
+  query: string;
+  observed_count: number;
+  expected_count: number;
+  status: 'PASS' | 'FAIL' | 'PENDING' | 'ERROR' | 'PARTIAL';
+  role: 'REQUIRED' | 'SUPPORTING' | 'OPTIONAL';
+  errors?: string[];
+}
+
+export interface UnifiedEvidenceSummary {
+  run_id: string;
+  scenario_id: string;
+  destinations: EvidenceSourceItem[];
+  total_generated: number;
+  total_dispatched: number;
+  total_observed: number;
+  event_observed_count: number;
+  event_expected_count: number;
+  metric_observed_count: number;
+  metric_expected_count: number;
+  observation_completeness_pct: number;
+  observation_status: string;
+  contract_validation: string;
+  required_evidence_satisfied: boolean;
+  errors?: string[];
+}
+
 export interface WorkflowRunState {
   run_id: string | null;
   scenario_id: string | null;
@@ -95,6 +127,12 @@ export interface WorkflowRunState {
   destination_validation: string;
   observation_status: string;
   splunk_search_query?: string;
+  splunk_metric_query?: string;
+  event_observed_count?: number;
+  metric_observed_count?: number;
+  observation_completeness_pct?: number;
+  destinations?: EvidenceSourceItem[];
+  evidence_summary?: UnifiedEvidenceSummary;
   eps: number;
   affected_devices: string[];
   manifest: any | null;

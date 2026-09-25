@@ -160,6 +160,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
       let observedCount = manifest.observed_count ?? 0;
       let observationStatus = manifest.observation_status || 'NOT_RUN';
       let destValidation = manifest.destination_validation || 'NOT_RUN';
+      let obsDataFinal: any = null;
 
       if (observationStatus === 'OBSERVATION_PENDING' || (manifest.dispatch_succeeded > 0 && observedCount === 0)) {
         for (let attempt = 0; attempt < 3; attempt++) {
@@ -168,6 +169,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
             const obsRes = await fetch(`http://localhost:8081/api/scenarios/runs/${manifest.run_id}/observation`);
             if (obsRes.ok) {
               const obsData = await obsRes.json();
+              obsDataFinal = obsData;
               observedCount = obsData.observed_count ?? observedCount;
               observationStatus = obsData.observation_status ?? observationStatus;
               destValidation = obsData.destination_validation ?? destValidation;
@@ -214,6 +216,12 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
         destination_validation: destValidation,
         observation_status: observationStatus,
         splunk_search_query: manifest.splunk_search_query || `index=${connection.index || 'idx_network_ops'} netspout_run_id="${manifest.run_id}"`,
+        splunk_metric_query: manifest.splunk_metric_query,
+        event_observed_count: obsDataFinal?.event_observed_count ?? manifest.event_observed_count ?? observedCount,
+        metric_observed_count: obsDataFinal?.metric_observed_count ?? manifest.metric_observed_count ?? 0,
+        observation_completeness_pct: obsDataFinal?.observation_completeness_pct ?? manifest.observation_completeness_pct ?? 100,
+        destinations: obsDataFinal?.destinations ?? manifest.evidence_summary?.destinations ?? [],
+        evidence_summary: obsDataFinal?.evidence_summary ?? manifest.evidence_summary,
         eps: manifest.duration_sec ? Math.round(manifest.total_events_generated / manifest.duration_sec) : 100,
         affected_devices: manifest.affected_devices || [],
         manifest,

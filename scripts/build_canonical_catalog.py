@@ -396,6 +396,14 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     clean_attack = attack.replace("\\'", "'")
     clean_defense = defense.replace("\\'", "'")
 
+    maturity = "CONTRACTED"
+    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach"):
+        maturity = "GOLDEN_PATH_CERTIFIED"
+    elif sid in ("cisco_aci_microburst",):
+        maturity = "E2E_VALIDATED"
+    elif sid in ("normal_traffic", "ddos_attack", "sql_injection", "lateral_movement"):
+        maturity = "FORMAT_VALIDATED"
+
     scen_obj = {
         "id": sid,
         "code": code,
@@ -403,6 +411,7 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         "display_name": clean_name,
         "category": cat,
         "ecosystem": eco,
+        "maturity": maturity,
         "description": clean_desc,
         "attack_vector": clean_attack,
         "defense_mechanism": clean_defense,
@@ -502,17 +511,25 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         }
         scen_obj["validation_rules"] = [
             {"id": "rogue-val-01", "name": "Rogue Event Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:catalyst:rogue:threat_details", "min_count": 1, "description": "Verify rogue threat detection logged."},
-            {"id": "rogue-val-02", "name": "Security Threat Alerted", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "alerted", "comparison": "in", "description": "Verify alert status emitted."}
+            {"id": "rogue-val-02", "name": "Security Threat Alerted", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "alerted", "comparison": "in", "description": "Verify alert status emitted."},
+            {"id": "rogue-val-03", "name": "ISE Quarantine Logged", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:ise:syslog", "min_count": 1, "description": "Verify ISE 802.1X quarantine syslog emitted."},
+            {"id": "rogue-val-04", "name": "RF Space Restored", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "in", "description": "Verify rogue clearance status."}
         ]
 
     elif sid == "cisco_aci_microburst":
         scen_obj["difficulty"] = "ADVANCED"
         scen_obj["vendor_scope"] = ["cisco_nexus", "cisco_aci"]
         scen_obj["telemetry_requirements"] = ["gnmi", "syslog"]
+        scen_obj["sourcetypes"] = [
+            "cisco:dc:nexus9k:syslog",
+            "cisco:dc:aci:health",
+            "cisco:ios:mdt"
+        ]
         scen_obj["phases"] = [
             {"phase": "BASELINE", "name": "Nominal Fabric Utilization", "duration_ticks": 2, "description": "East-West container traffic flowing across spine-leaf fabric.", "expected_observations": ["Buffer utilization < 20%"]},
             {"phase": "FAULT", "name": "Egress Queue Saturation Spike", "duration_ticks": 3, "description": "Sub-millisecond microburst saturates leaf switch output buffers.", "expected_observations": ["Buffer watermark > 90%", "PFC pause frames sent"]},
             {"phase": "PROPAGATE", "name": "Telemetry Telemetry Burst", "duration_ticks": 2, "description": "Streaming telemetry emits buffer pool congestion notifications.", "expected_observations": ["cisco:aci:health drop events"]},
+            {"phase": "FAILOVER", "name": "QoS Dynamic Buffer Allocation", "duration_ticks": 2, "description": "ASIC dynamically expands buffer headroom and reallocates burst absorption pools.", "expected_observations": ["Buffer headroom expanded", "ASIC drops mitigated"]},
             {"phase": "RECOVER", "name": "Buffer Drain & Nominal Flow", "duration_ticks": 2, "description": "Bursty traffic subsides; queues drain back to nominal levels.", "expected_observations": ["Buffer watermarks normalize"]},
             {"phase": "VALIDATE", "name": "Fabric Health Clearance", "duration_ticks": 1, "description": "Verify fabric health metric restoration.", "expected_observations": ["Zero active drop alarms"]}
         ]
@@ -524,18 +541,28 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
             "validation_criteria": ["Microburst alert logged", "Buffer recovery confirmed"]
         }
         scen_obj["validation_rules"] = [
-            {"id": "aci-val-01", "name": "ACI Health Telemetry Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:aci:health", "min_count": 1, "description": "Verify ACI health records emitted."},
-            {"id": "aci-val-02", "name": "Degradation Status Logged", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "degraded", "comparison": "in", "description": "Verify congestion state recorded."}
+            {"id": "aci-val-01", "name": "ACI Health Telemetry Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:dc:aci:health", "min_count": 1, "description": "Verify ACI health records emitted."},
+            {"id": "aci-val-02", "name": "Degradation Status Logged", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "degraded", "comparison": "in", "description": "Verify congestion state recorded."},
+            {"id": "aci-val-03", "name": "Nexus 9K ASIC Congestion Logged", "type": "COUNT_THRESHOLD", "target_sourcetype": "cisco:dc:nexus9k:syslog", "min_count": 1, "description": "Verify Nexus 9K ASIC queue saturation events."},
+            {"id": "aci-val-04", "name": "Health Restored to Nominal", "type": "EVENT_EXISTS", "target_field": "status", "expected_value": "restored", "comparison": "in", "description": "Verify fabric health restored status."}
         ]
 
     elif sid in ("mixed_vendor_enterprise", "mixed_edge_breach"):
         scen_obj["difficulty"] = "INTERMEDIATE"
         scen_obj["vendor_scope"] = ["palo_alto", "fortinet", "cisco_asa", "arista_eos", "juniper_junos"]
         scen_obj["telemetry_requirements"] = ["syslog", "hec"]
+        scen_obj["sourcetypes"] = [
+            "meraki:assurancealerts",
+            "pan:threat",
+            "pan:traffic",
+            "fortinet:fortigate:utm",
+            "nginx:plus:kv"
+        ]
         scen_obj["phases"] = [
             {"phase": "BASELINE", "name": "Permitted Perimeter Traffic", "duration_ticks": 2, "description": "Standard HTTP/HTTPS corporate web traffic passing through perimeter firewall.", "expected_observations": ["PAN-OS allow logs", "FortiGate permit logs"]},
             {"phase": "FAULT", "name": "External Exploit Scan Injection", "duration_ticks": 3, "description": "Adversary probes perimeter with OWASP exploit payloads and vulnerability scanning.", "expected_observations": ["Threat signatures triggered"]},
             {"phase": "PROPAGATE", "name": "Cross-Firewall Alert Correlation", "duration_ticks": 2, "description": "Perimeter firewalls drop malicious packets and generate threat alerts.", "expected_observations": ["pan:threat drop events", "fortinet:fortigate:utm alerts"]},
+            {"phase": "FAILOVER", "name": "Perimeter Microsegmentation Quarantine", "duration_ticks": 2, "description": "Palo Alto and Fortinet perimeter firewalls apply automated microsegmentation and IP blacklist.", "expected_observations": ["Microsegmentation rule applied", "Attacker quarantined"]},
             {"phase": "RECOVER", "name": "Threat Mitigation & Source Ban", "duration_ticks": 2, "description": "Attacker source IP automatically quarantined on edge perimeter.", "expected_observations": ["Drop count returns to nominal"]},
             {"phase": "VALIDATE", "name": "Security Posture Verification", "duration_ticks": 1, "description": "Verify perimeter defense integrity.", "expected_observations": ["Perimeter secure"]}
         ]
@@ -548,7 +575,9 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         }
         scen_obj["validation_rules"] = [
             {"id": "mixed-val-01", "name": "Firewall Threat Event Present", "type": "COUNT_THRESHOLD", "target_sourcetype": "pan:threat", "min_count": 1, "description": "Verify PAN threat events logged."},
-            {"id": "mixed-val-02", "name": "Threat Packet Dropped", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "dropped", "comparison": "in", "description": "Verify dropped action in security log."}
+            {"id": "mixed-val-02", "name": "Threat Packet Dropped", "type": "EVENT_EXISTS", "target_field": "action", "expected_value": "dropped", "comparison": "in", "description": "Verify dropped action in security log."},
+            {"id": "mixed-val-03", "name": "Fortinet UTM IPS Alerted", "type": "COUNT_THRESHOLD", "target_sourcetype": "fortinet:fortigate:utm", "min_count": 1, "description": "Verify FortiOS UTM IPS events logged."},
+            {"id": "mixed-val-04", "name": "Meraki Air Marshal Alerted", "type": "COUNT_THRESHOLD", "target_sourcetype": "meraki:assurancealerts", "min_count": 1, "description": "Verify Meraki wireless alert events logged."}
         ]
 
     elif sid == "openconfig_mdt_streaming":

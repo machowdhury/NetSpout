@@ -242,8 +242,26 @@ class NetSpoutCatalog:
     # -------------------------------------------------------------------------
     # Scenarios API
     # -------------------------------------------------------------------------
+    def resolve_scenario_id(self, scenario_id_or_alias: str) -> Tuple[str, bool]:
+        """
+        Resolves any scenario ID or alias to (canonical_scenario_id, is_alias).
+        Returns the original string and False if already canonical or unregistered.
+        """
+        if scenario_id_or_alias in self._scenarios_by_id:
+            return scenario_id_or_alias, False
+        if scenario_id_or_alias in self._aliases:
+            alias_info = self._aliases[scenario_id_or_alias]
+            if alias_info.get("type") in ("SCENARIO_ALIAS", "DEPRECATED_SCENARIO", "COMPATIBILITY_ALIAS"):
+                can_id = alias_info.get("canonical_id")
+                if can_id in self._scenarios_by_id:
+                    return can_id, True
+        return scenario_id_or_alias, False
+
     def get_scenario(self, scenario_id: str) -> Optional[Dict[str, Any]]:
-        return self._scenarios_by_id.get(scenario_id)
+        if scenario_id in self._scenarios_by_id:
+            return self._scenarios_by_id[scenario_id]
+        can_id, _ = self.resolve_scenario_id(scenario_id)
+        return self._scenarios_by_id.get(can_id)
 
     def get_scenario_contract(self, scenario_id: str) -> Optional[Any]:
         sc = self.get_scenario(scenario_id)

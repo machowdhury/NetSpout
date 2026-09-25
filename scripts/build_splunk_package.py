@@ -58,6 +58,13 @@ def build_package():
         print("❌ Architecture verification failed! Aborting packaging.")
         sys.exit(1)
 
+    # 2.5 Verify Canonical Catalog & Gate 10.6 Release Guardrails
+    catalog_script = os.path.join(REPO_ROOT, "scripts", "validate_catalog.py")
+    res = subprocess.run([sys.executable, catalog_script], cwd=REPO_ROOT)
+    if res.returncode != 0:
+        print("❌ Canonical catalog guardrail verification failed! Aborting packaging.")
+        sys.exit(1)
+
     # 3. Clean caches
     print("\n>> Cleaning ephemeral caches...")
     clean_caches(NETSPOUT_DIR)

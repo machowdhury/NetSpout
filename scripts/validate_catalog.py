@@ -89,9 +89,34 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
         if not vid or (vid not in vendor_map and vid not in vendor_slug_map):
             errors.append(f"[Sourcetypes] Sourcetype '{st['splunk_sourcetype']}' references unknown vendor_id '{vid}'")
 
-    # 4. Validate Scenario References
+    # 4. Validate Scenario References & Gate 10.6 Release Guardrails
+    allowed_maturities = {"GOLDEN_PATH_CERTIFIED", "E2E_VALIDATED", "FORMAT_VALIDATED", "CONTRACTED"}
+    evidence_file = os.path.join(CATALOG_DIR, "golden_path_evidence.json")
+    ev_map = {}
+    if os.path.exists(evidence_file):
+        try:
+            with open(evidence_file, "r", encoding="utf-8") as ef:
+                ev_data = json.load(ef)
+                ev_map = {gp["canonical_id"]: gp for gp in ev_data.get("golden_paths", [])}
+        except Exception:
+            pass
+
     for sc in scenarios:
         sid = sc["id"]
+        # Maturity validation
+        mat = sc.get("maturity")
+        if not mat or mat not in allowed_maturities:
+            errors.append(f"[Scenarios] Scenario '{sid}' has invalid maturity '{mat}' (allowed: {allowed_maturities})")
+
+        # Golden Path certification evidence validation
+        if mat == "GOLDEN_PATH_CERTIFIED":
+            if ev_map and sid not in ev_map:
+                errors.append(f"[Golden Path Guardrail] Scenario '{sid}' is marked GOLDEN_PATH_CERTIFIED but missing from golden_path_evidence.json")
+            elif ev_map and sid in ev_map:
+                report_path = os.path.join(REPO_ROOT, ev_map[sid]["primary_acceptance_report"])
+                if not os.path.exists(report_path):
+                    errors.append(f"[Golden Path Guardrail] Scenario '{sid}' primary acceptance report missing: {report_path}")
+
         # Topology reference
         top_id = sc.get("default_topology_id")
         if top_id and top_id not in topology_map:
@@ -173,6 +198,23 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
         missing_on_disk = sample_json_files - disk_sample_files
         if missing_on_disk:
             errors.append(f"[Samples] {len(missing_on_disk)} sample files in catalog missing from disk: {sorted(list(missing_on_disk))[:5]}")
+
+    # 9. Validate Catalog Mirror Synchronization (Gate 10.6 Release Guardrail)
+    mirrors = [
+        ("netspout/bin/catalog_data", os.path.join(REPO_ROOT, "netspout", "bin", "catalog_data")),
+        ("backend/app/catalog_data", os.path.join(REPO_ROOT, "backend", "app", "catalog_data"))
+    ]
+    for label, mdir in mirrors:
+        if os.path.isdir(mdir):
+            m_scen = os.path.join(mdir, "scenarios.json")
+            if os.path.exists(m_scen):
+                try:
+                    with open(m_scen, "r", encoding="utf-8") as mf:
+                        m_data = json.load(mf)
+                    if len(m_data) != len(scenarios):
+                        errors.append(f"[Catalog Mirror] Scenario count mismatch in {label}: expected {len(scenarios)}, got {len(m_data)}")
+                except Exception as e:
+                    errors.append(f"[Catalog Mirror] Failed reading {label}/scenarios.json: {e}")
 
     is_valid = len(errors) == 0
     return is_valid, errors, orphans

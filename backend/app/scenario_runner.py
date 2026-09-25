@@ -2543,10 +2543,14 @@ class ScenarioRunner:
         scenario_id = request.scenario_id
         contract = None
         if catalog_instance:
+            if hasattr(catalog_instance, "resolve_scenario_id"):
+                scenario_id, _ = catalog_instance.resolve_scenario_id(scenario_id)
             contract = catalog_instance.get_scenario_contract(scenario_id)
         if not contract and NetSpoutCatalog:
             try:
                 cat = NetSpoutCatalog()
+                if hasattr(cat, "resolve_scenario_id"):
+                    scenario_id, _ = cat.resolve_scenario_id(scenario_id)
                 contract = cat.get_scenario_contract(scenario_id)
             except Exception:
                 pass

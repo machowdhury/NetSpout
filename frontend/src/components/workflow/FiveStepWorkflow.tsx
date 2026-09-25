@@ -35,7 +35,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
     token: '00000000-0000-0000-0000-000000000000',
     index: 'idx_network_ops',
     status: 'CONFIGURED',
-    allow_insecure_tls: false
+    allow_insecure_tls: true
   });
 
   const [runState, setRunState] = useState<WorkflowRunState>({
@@ -97,7 +97,18 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
                 validation_rules: s.validation_rules || [],
                 default_topology_id: s.default_topology_id || 'default_secure',
                 phases: s.phases || [],
-                source: 'SCENARIO_BOUND'
+                source: 'SCENARIO_BOUND',
+                maturity: s.maturity || 'CONTRACTED',
+                telemetry_model: s.telemetry_model || 'Standard Telemetry Payload',
+                transport_protocol: s.transport_protocol || 'Splunk HEC',
+                splunk_storage: s.splunk_storage || 'Splunk Event Index',
+                fidelity_badge: s.fidelity_badge || 'MODELED PAYLOAD',
+                telemetry_notes: s.telemetry_notes,
+                timing_claim: s.timing_claim,
+                timing_value: s.timing_value,
+                timing_unit: s.timing_unit,
+                timing_classification: s.timing_classification || 'NOT_APPLICABLE',
+                timing_notes: s.timing_notes
               }));
               setUseCases(mapped);
               if (mapped.length > 0) setSelectedUseCase(mapped[0]);

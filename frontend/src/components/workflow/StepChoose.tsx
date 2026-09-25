@@ -205,6 +205,14 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                         {uc.fidelity_badge}
                       </span>
                     )}
+                    {uc.timing_classification && uc.timing_classification !== 'NOT_APPLICABLE' && (
+                      <span
+                        className="text-[9px] font-semibold px-1.5 py-0.5 rounded border uppercase shrink-0 bg-amber-500/10 text-amber-300 border-amber-500/30 font-mono"
+                        title={uc.timing_notes || `${uc.timing_classification} timing`}
+                      >
+                        {uc.timing_classification}: {uc.timing_value ? `${uc.timing_value}${uc.timing_unit || 'ms'}` : uc.timing_claim}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span className={"text-[10px] font-bold px-1.5 py-0.5 rounded border " + getDifficultyColor(uc.difficulty)}>
@@ -296,6 +304,16 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                             <span className="text-slate-300 font-mono">{uc.splunk_storage}</span>
                           </div>
                         )}
+                      </div>
+                    )}
+                    {uc.timing_claim && (
+                      <div className="pt-1.5 border-t border-slate-800/60 text-[10px]">
+                        <span className="text-amber-400 font-medium block">
+                          Protection Timing ({uc.timing_classification}):
+                        </span>
+                        <p className="text-slate-300 mt-0.5">
+                          <strong className="text-white">{uc.timing_claim}</strong> ({uc.timing_value}{uc.timing_unit}): {uc.timing_notes}
+                        </p>
                       </div>
                     )}
                     {uc.validation_rules.length > 0 && (

@@ -397,9 +397,14 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     clean_defense = defense.replace("\\'", "'")
 
     maturity = "CONTRACTED"
-    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach", "cisco_aci_microburst", "mixed_sase_degradation", "sql_injection", "openconfig_mdt_streaming"):
+    if sid in (
+        "cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach",
+        "cisco_aci_microburst", "mixed_sase_degradation", "sql_injection",
+        "openconfig_mdt_streaming", "arch_lan_campus_access", "arch_vpn_remote_workforce",
+        "service_provider_cisco", "arch_wlan_meraki_catalyst", "arch_man_carrier_ring"
+    ):
         maturity = "GOLDEN_PATH_CERTIFIED"
-    elif sid in ("mixed_backbone_optical", "ddos_attack", "arch_lan_campus_access", "arch_vpn_remote_workforce", "service_provider_cisco", "arch_wlan_meraki_catalyst", "arch_man_carrier_ring"):
+    elif sid in ("mixed_backbone_optical", "ddos_attack"):
         maturity = "E2E_VALIDATED"
     elif sid in ("normal_traffic", "lateral_movement"):
         maturity = "FORMAT_VALIDATED"
@@ -410,6 +415,13 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     sp_storage = "Splunk Event Index (idx_network_ops)"
     fid_badge = "MODELED PAYLOAD"
     tel_notes = None
+
+    # Gate 10.5 Structured Timing Metadata
+    timing_claim = None
+    timing_val = None
+    timing_unit = None
+    timing_class = "NOT_APPLICABLE"
+    timing_notes = None
 
     if sid == "openconfig_mdt_streaming":
         tel_model = "OpenConfig / MDT"
@@ -483,6 +495,11 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         sp_storage = "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)"
         fid_badge = "MODELED PAYLOAD"
         tel_notes = "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC."
+        timing_claim = "TI-LFA Fast Reroute"
+        timing_val = 32.0
+        timing_unit = "ms"
+        timing_class = "MODELED"
+        timing_notes = "Modeled sub-50ms local data-plane protection prior to BGP control-plane convergence. NetSpout models this protocol behavior and does not claim empirical hardware packet measurements."
     elif sid == "arch_wlan_meraki_catalyst":
         tel_model = "Catalyst CleanAir & Meraki Air Marshal"
         trans_proto = "Splunk HEC"
@@ -495,6 +512,11 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         sp_storage = "Splunk Event Index (idx_network_ops)"
         fid_badge = "MODELED PAYLOAD"
         tel_notes = "Nokia SR-OS, Juniper Junos, and Arista EOS G.8032 Ring Automatic Protection Switching telemetry delivered to Splunk via HEC."
+        timing_claim = "ITU-T G.8032 ERPS Protection"
+        timing_val = 38.0
+        timing_unit = "ms"
+        timing_class = "MODELED"
+        timing_notes = "Modeled sub-50ms RPL unblock failover. WTR is a post-repair stabilization hold timer before revertive restoration, distinct from protection switching time."
 
     scen_obj = {
         "id": sid,
@@ -529,7 +551,12 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         "transport_protocol": trans_proto,
         "splunk_storage": sp_storage,
         "fidelity_badge": fid_badge,
-        "telemetry_notes": tel_notes
+        "telemetry_notes": tel_notes,
+        "timing_claim": timing_claim,
+        "timing_value": timing_val,
+        "timing_unit": timing_unit,
+        "timing_classification": timing_class,
+        "timing_notes": timing_notes
     }
 
     if sid == "cisco_sdwan_brownout":
@@ -938,14 +965,14 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
             {"phase": "BASELINE", "name": "CleanAir RF Health & Client SNR", "duration_ticks": 2, "description": "Catalyst 9130AX and Meraki MR56 APs report nominal 5GHz radio channel utilization and high client SNR.", "expected_observations": ["Channel utilization < 20%", "Client SNR > 35dB"]},
             {"phase": "FAULT", "name": "Non-Wi-Fi RF Interference Surge", "duration_ticks": 3, "description": "Severe continuous frequency interference surge (video bridge / microwave) saturates Channel 36.", "expected_observations": ["%DOT11-4-CLEANAIR_INTERFERENCE detected", "Noise floor spike", "status=degraded"]},
             {"phase": "PROPAGATE", "name": "Rogue Evil-Twin SSID Broadcast", "duration_ticks": 2, "description": "Adversary launches rogue access point broadcasting spoofed corporate SSID 'Corp-Executive-Secure'.", "expected_observations": ["Rogue AP evil-twin alert in cisco:catalyst:rogue:threat_details", "Meraki Air Marshal alert in meraki:accesspoints", "action=alerted status=degraded"]},
-            {"phase": "FAILOVER", "name": "CleanAir Channel Switch & Air Marshal Containment", "duration_ticks": 2, "description": "CleanAir dynamically reassigns radio to Channel 100; Meraki Air Marshal suppresses rogue BSSID.", "expected_observations": ["Dynamic channel switch executed", "%AIRMARSHAL-4-ROGUE_CONTAINMENT active", "action=blocked status=mitigated"]},
+            {"phase": "FAILOVER", "name": "CleanAir DCA Channel Switch & Air Marshal Containment", "duration_ticks": 2, "description": "CleanAir dynamically reassigns radio to Channel 100 via automated DCA/RRM; Meraki Air Marshal suppresses rogue BSSID.", "expected_observations": ["Dynamic channel switch executed", "%AIRMARSHAL-4-ROGUE_CONTAINMENT active", "action=blocked status=mitigated"]},
             {"phase": "RECOVER", "name": "Airspace Cleaned & SNR Restored", "duration_ticks": 2, "description": "Rogue AP suppressed and powered off; RF interference subsides; client SNR returns to 38dB.", "expected_observations": ["CleanAir health restored on Channel 100", "status=restored"]},
             {"phase": "VALIDATE", "name": "Campus Wireless RF Audit Verification", "duration_ticks": 1, "description": "Verify zero active rogue BSSIDs and optimal client roaming health.", "expected_observations": ["Air Marshal audit clean"]}
         ]
         scen_obj["use_case"] = {
-            "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment and Air Marshal rogue suppression.",
+            "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment (DCA) and Air Marshal rogue suppression.",
             "required_telemetry": ["cisco:catalyst:rogue:threat_details", "meraki:accesspoints", "cisco:catalyst:clienthealth"],
-            "expected_progression": ["CleanAir baseline health", "RF interference surge on Ch 36", "Evil-twin rogue SSID broadcast", "Dynamic channel switch & rogue containment", "Airspace restoration & validation"],
+            "expected_progression": ["CleanAir baseline health", "RF interference surge on Ch 36", "Evil-twin rogue SSID broadcast", "Dynamic channel switch via DCA & rogue containment", "Airspace restoration & validation"],
             "expected_observations": ["Interference log in cisco:catalyst:clienthealth", "Rogue AP alert in cisco:catalyst:rogue:threat_details", "Air Marshal alert in meraki:accesspoints", "Restoration verified"],
             "validation_criteria": ["Catalyst CleanAir RF health telemetry emitted", "Rogue AP threat detection emitted", "Air Marshal rogue suppression active", "WLAN RF spectrum restored"]
         }
@@ -1102,9 +1129,9 @@ TOPOLOGY_SPECS = [
     # 11 Architecture Topologies
     ("arch_pan_iot_mesh", "PAN: Personal Area Network - IoT Mesh & BLE Beacon Infrastructure", "both", 6, 6, "Industrial IoT mesh network reporting sensor states."),
     ("arch_lan_campus_access", "LAN: Local Area Network - Campus Access & 802.1X TrustSec", "both", 6, 6, "Enterprise LAN access switching with port-security."),
-    ("arch_wlan_meraki_catalyst", "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7", "both", 6, 6, "High-density campus wireless with CleanAir tracking."),
+    ("arch_wlan_meraki_catalyst", "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7", "both", 6, 6, "High-density campus wireless with CleanAir DCA tracking."),
     ("arch_can_multi_building", "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center", "pure_cisco", 8, 8, "Multi-building campus network with redundant Catalyst 9600 cores."),
-    ("arch_man_carrier_ring", "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS", "mixed_vendor", 6, 6, "Metro optical ring spanning 4 data centers with G.8032 sub-50ms failover."),
+    ("arch_man_carrier_ring", "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS", "mixed_vendor", 6, 6, "Metro optical ring spanning 4 data centers with G.8032 modeled sub-50ms failover."),
     ("arch_wan_global_backbone", "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM", "both", 8, 8, "Inter-continental enterprise WAN with BGP EVPN and segment routing SRv6."),
     ("arch_san_fibre_channel", "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF", "both", 6, 6, "Enterprise storage SAN fabric with FC buffer credits."),
     ("arch_nas_storage_cluster", "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters", "both", 6, 6, "NFS and SMB storage clusters under IOPS load."),

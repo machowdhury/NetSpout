@@ -931,11 +931,17 @@ def list_catalog_use_cases(category: Optional[str] = None):
             "default_topology_id": s.get("default_topology_id") or s.get("topology_id", "default_secure"),
             "phases": s.get("phases", []),
             "source": "SCENARIO_BOUND",
+            "maturity": s.get("maturity", "CONTRACTED"),
             "telemetry_model": s.get("telemetry_model") or "Standard Telemetry Payload",
             "transport_protocol": s.get("transport_protocol") or "Splunk HEC",
             "splunk_storage": s.get("splunk_storage") or "Splunk Event Index",
             "fidelity_badge": s.get("fidelity_badge") or "MODELED PAYLOAD",
-            "telemetry_notes": s.get("telemetry_notes")
+            "telemetry_notes": s.get("telemetry_notes"),
+            "timing_claim": s.get("timing_claim"),
+            "timing_value": s.get("timing_value"),
+            "timing_unit": s.get("timing_unit"),
+            "timing_classification": s.get("timing_classification", "NOT_APPLICABLE"),
+            "timing_notes": s.get("timing_notes")
         }
         use_cases.append(uc_entry)
         

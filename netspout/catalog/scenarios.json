@@ -48,6 +48,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -194,6 +199,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -340,6 +350,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -443,7 +458,7 @@
     "display_name": "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
     "category": "NETWORK_OPERATIONS",
     "ecosystem": "pure_cisco",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "High-density campus LAN with Cisco Catalyst 9300/9500 switches, 802.1Q trunking, DHCP snooping, and ARP inspection.",
     "attack_vector": "Rogue DHCP server spoofing and ARP cache poisoning",
     "defense_mechanism": "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
@@ -486,6 +501,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco Catalyst DHCP snooping, Dynamic ARP Inspection, and Cisco ISE 802.1X TrustSec telemetry delivered to Splunk via HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -624,7 +644,7 @@
     "display_name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
     "category": "SERVICE_PROVIDER",
     "ecosystem": "mixed_vendor",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Metro optical ring spanning 4 data centers with ITU-T G.8032 Ethernet Ring Protection Switching (ERPS) sub-50ms failover.",
     "attack_vector": "Physical metro fiber cut on transit span",
     "defense_mechanism": "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
@@ -668,6 +688,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Nokia SR-OS, Juniper Junos, and Arista EOS G.8032 Ring Automatic Protection Switching telemetry delivered to Splunk via HEC.",
+    "timing_claim": "ITU-T G.8032 ERPS Protection",
+    "timing_value": 38.0,
+    "timing_unit": "ms",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled sub-50ms RPL unblock failover. WTR is a post-repair stabilization hold timer before revertive restoration, distinct from protection switching time.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -849,6 +874,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -994,6 +1024,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1139,6 +1174,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1241,7 +1281,7 @@
     "display_name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
     "category": "WAN",
     "ecosystem": "both",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Remote access VPN concentrator and IPsec crypto tunnels supporting 10,000+ concurrent workforce sessions with Duo MFA integration.",
     "attack_vector": "Credential stuffing attack targeting SSL-VPN endpoint",
     "defense_mechanism": "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
@@ -1284,6 +1324,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco AnyConnect SSL-VPN connection logs and Cisco Duo Push MFA authentication events delivered to Splunk via HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1466,6 +1511,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1569,7 +1619,7 @@
     "display_name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
     "category": "WIRELESS",
     "ecosystem": "both",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Dual-vendor campus wireless with Catalyst 9800 WLC and Meraki MR56 APs tracking client roaming, SNR, and CleanAir interference.",
     "attack_vector": "CleanAir RF interference and rogue evil-twin SSID broadcast",
     "defense_mechanism": "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
@@ -1612,6 +1662,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco Catalyst CleanAir RF interference tracking and Meraki Air Marshal rogue containment telemetry delivered to Splunk via HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1647,9 +1702,9 @@
       },
       {
         "phase": "FAILOVER",
-        "name": "CleanAir Channel Switch & Air Marshal Containment",
+        "name": "CleanAir DCA Channel Switch & Air Marshal Containment",
         "duration_ticks": 2,
-        "description": "CleanAir dynamically reassigns radio to Channel 100; Meraki Air Marshal suppresses rogue BSSID.",
+        "description": "CleanAir dynamically reassigns radio to Channel 100 via automated DCA/RRM; Meraki Air Marshal suppresses rogue BSSID.",
         "expected_observations": [
           "Dynamic channel switch executed",
           "%AIRMARSHAL-4-ROGUE_CONTAINMENT active",
@@ -1677,7 +1732,7 @@
       }
     ],
     "use_case": {
-      "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment and Air Marshal rogue suppression.",
+      "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment (DCA) and Air Marshal rogue suppression.",
       "required_telemetry": [
         "cisco:catalyst:rogue:threat_details",
         "meraki:accesspoints",
@@ -1687,7 +1742,7 @@
         "CleanAir baseline health",
         "RF interference surge on Ch 36",
         "Evil-twin rogue SSID broadcast",
-        "Dynamic channel switch & rogue containment",
+        "Dynamic channel switch via DCA & rogue containment",
         "Airspace restoration & validation"
       ],
       "expected_observations": [
@@ -1795,6 +1850,11 @@
     "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "High-frequency microburst queue depth metrics are modeled and ingested via Splunk HEC into the metric store, while fabric health events route to the event index.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1971,6 +2031,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Switch port security, MAC flap notifications, and ISE 802.1X supplicant logs are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2146,6 +2211,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "SD-WAN BFD link health and ThousandEyes synthetic latency are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "fault_definition": {
       "type": "link_degradation",
       "target_edge_id": "edge-branch-mpls",
@@ -2344,6 +2414,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco ASR, Palo Alto, and F5 BIG-IP SYN Defender logs are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2525,6 +2600,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2661,6 +2741,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Ciena Waveserver DWDM alarms and Cisco ASR MPLS FRR events are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2846,6 +2931,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Perimeter threat, UTM, and WAF telemetry are delivered to Splunk through HEC using authentic vendor payload schemas.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3023,6 +3113,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Zscaler proxy and ThousandEyes synthetic latency telemetry are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3209,6 +3304,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3386,6 +3486,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3525,6 +3630,11 @@
     "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "NetSpout models OpenConfig/MDT telemetry fields and metric behavior. In this scenario the telemetry is delivered to Splunk through HEC rather than a native gNMI/gRPC session.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3707,6 +3817,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3853,6 +3968,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3956,7 +4076,7 @@
     "display_name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
     "category": "SERVICE_PROVIDER",
     "ecosystem": "pure_cisco",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Carrier-scale Cisco 8000 / NCS core running Segment Routing over IPv6 (SRv6).",
     "attack_vector": "High-frequency carrier flap causing BGP route withdrawal",
     "defense_mechanism": "TI-LFA pre-computed backup path provides sub-50ms local repair.",
@@ -3997,6 +4117,11 @@
     "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC.",
+    "timing_claim": "TI-LFA Fast Reroute",
+    "timing_value": 32.0,
+    "timing_unit": "ms",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled sub-50ms local data-plane protection prior to BGP control-plane convergence. NetSpout models this protocol behavior and does not claim empirical hardware packet measurements.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -4177,6 +4302,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -4324,6 +4454,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": "Cisco ASA, NGINX Plus, and PostgreSQL audit records are delivered to Splunk through HEC.",
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -4503,6 +4638,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -4648,6 +4788,11 @@
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
     "telemetry_notes": null,
+    "timing_claim": null,
+    "timing_value": null,
+    "timing_unit": null,
+    "timing_classification": "NOT_APPLICABLE",
+    "timing_notes": null,
     "phases": [
       {
         "phase": "BASELINE",

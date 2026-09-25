@@ -209,7 +209,7 @@ def get_openconfig_core_topology() -> TopologyState:
             Node(id="node-cisco8k", name="Cisco-8000-Core01", type=NodeType.ROUTER, x=70, y=220, ip_address="10.100.1.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt"),
             Node(id="node-juniper-ptx", name="Juniper-PTX10K-PE01", type=NodeType.ROUTER, x=260, y=220, ip_address="10.100.1.2", status="active", vendor="juniper_junos", sourcetype="cisco:ios:mdt"),
             Node(id="node-arista-spine", name="Arista-7280R-Spine", type=NodeType.SWITCH, x=520, y=220, ip_address="10.100.2.1", status="active", vendor="arista_eos", sourcetype="arista:telemetry:json"),
-            Node(id="node-cat-leaf", name="Catalyst-9600-Leaf", type=NodeType.SWITCH, x=750, y=220, ip_address="10.100.2.2", status="active", vendor="cisco_catalyst", sourcetype="cisco:ios:mdt")
+            Node(id="node-cat-leaf", name="Catalyst-9600-Leaf", type=NodeType.SWITCH, x=750, y=220, ip_address="10.100.2.2", status="active", vendor="cisco_catalyst", sourcetype="cisco:ios:syslog")
         ],
         edges=[
             Edge(id="e-oc1", source="node-cisco8k", target="node-juniper-ptx", source_port="HundredGigE0/0/0/0", target_port="et-0/0/0", status="up"),
@@ -1423,7 +1423,7 @@ class ScenarioRunner:
                 logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
                     device=c8k, neighbor_ip="198.51.100.1", event_type="TI_LFA_REROUTE",
                     action="allowed", status="mitigated", prefix="10.200.0.0/16",
-                    signature="TI-LFA Sub-50ms Fast Reroute Activated"
+                    signature="TI-LFA Modeled Sub-50ms Fast Reroute Activated"
                 ))
                 logs.append(SplunkLogEngine.format_mdt_stream(
                     device=asr_node, interface_name="HundredGigE0/0/0/2",
@@ -1483,7 +1483,7 @@ class ScenarioRunner:
                 logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
                     device=ap_node, channel=36, util_pct=22.0, noise_floor=-90,
                     event_type="CHANNEL_SWITCH", action="allowed", status="mitigated",
-                    sourcetype="cisco:catalyst:clienthealth", signature="CleanAir Dynamic Frequency Selection Channel Reassignment"
+                    sourcetype="cisco:catalyst:clienthealth", signature="CleanAir Dynamic Channel Assignment (DCA) Reassignment"
                 ))
                 logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
                     device=ap_node, channel=36, util_pct=15.0, noise_floor=-88,
@@ -1544,12 +1544,12 @@ class ScenarioRunner:
                 logs.append(SplunkLogEngine.format_g8032_erps_log(
                     device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c2",
                     event_type="RPL_UNBLOCK", action="allowed", status="mitigated",
-                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring RPL Unblocked (Sub-50ms Failover)"
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring RPL Unblocked (Modeled Sub-50ms Failover)"
                 ))
                 logs.append(SplunkLogEngine.format_router_switch_log(
                     device=arista_e, src_ip="10.250.1.1", dest_ip="10.250.0.1",
                     interface="Ethernet1/1", action="allowed", status="mitigated",
-                    signature="Arista EOS Metro Traffic Sub-50ms Alternate Path Active"
+                    signature="Arista EOS Metro Traffic Modeled Sub-50ms Alternate Path Active"
                 ))
             elif phase == ScenarioPhase.RECOVER.value:
                 logs.append(SplunkLogEngine.format_g8032_erps_log(
@@ -2589,7 +2589,12 @@ class ScenarioRunner:
             time_mode=time_mode,
             start_time=start_time,
             affected_devices=list(contract.affected_entities) if contract.affected_entities else [n.id for n in topology.nodes[:3]],
-            expected_sourcetypes=list(contract.sourcetypes) if contract.sourcetypes else []
+            expected_sourcetypes=list(contract.sourcetypes) if contract.sourcetypes else [],
+            timing_claim=getattr(contract, "timing_claim", None),
+            timing_value=getattr(contract, "timing_value", None),
+            timing_unit=getattr(contract, "timing_unit", None),
+            timing_classification=getattr(contract, "timing_classification", "NOT_APPLICABLE"),
+            timing_notes=getattr(contract, "timing_notes", None)
         )
 
         self.active_manifests[run_id] = manifest

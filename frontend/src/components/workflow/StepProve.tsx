@@ -159,6 +159,23 @@ export const StepProve: React.FC<StepProveProps> = ({
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto pr-1 space-y-6">
+        {/* Protection Timing Semantics Banner */}
+        {useCase.timing_classification && useCase.timing_classification !== 'NOT_APPLICABLE' && (
+          <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-amber-500/10 text-amber-300 border-amber-500/30 text-[10px] font-mono shrink-0">
+                {useCase.timing_classification} TIMING
+              </span>
+              <span className="text-slate-300">
+                <strong className="text-white">{useCase.timing_claim}</strong> ({useCase.timing_value}{useCase.timing_unit || 'ms'}): {useCase.timing_notes}
+              </span>
+            </div>
+            <span className="text-[11px] text-amber-400 font-mono shrink-0">
+              Protocol Simulation
+            </span>
+          </div>
+        )}
+
         {/* Unified Evidence Discovery Table */}
         <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
           <div className="flex flex-wrap justify-between items-center gap-3">

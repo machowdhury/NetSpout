@@ -51,6 +51,11 @@ export interface UseCase {
   splunk_storage?: string;
   fidelity_badge?: 'NATIVE TRANSPORT' | 'MODELED PAYLOAD' | 'SYNTHETIC';
   telemetry_notes?: string;
+  timing_claim?: string;
+  timing_value?: number;
+  timing_unit?: string;
+  timing_classification?: 'MEASURED' | 'MODELED' | 'DECLARED_ONLY' | 'NOT_APPLICABLE';
+  timing_notes?: string;
 }
 
 export interface PipelineConnection {

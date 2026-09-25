@@ -49,7 +49,7 @@
     "ecosystem": "mixed_vendor",
     "node_count": 6,
     "edge_count": 6,
-    "description": "Metro optical ring spanning 4 data centers with G.8032 sub-50ms failover.",
+    "description": "Metro optical ring spanning 4 data centers with G.8032 modeled sub-50ms failover.",
     "associated_scenarios": [
       "arch_man_carrier_ring"
     ]
@@ -115,7 +115,7 @@
     "ecosystem": "both",
     "node_count": 6,
     "edge_count": 6,
-    "description": "High-density campus wireless with CleanAir tracking.",
+    "description": "High-density campus wireless with CleanAir DCA tracking.",
     "associated_scenarios": [
       "arch_wlan_meraki_catalyst"
     ]

@@ -545,6 +545,11 @@ class UseCaseContract(BaseModel):
     splunk_storage: Optional[str] = None
     fidelity_badge: Optional[str] = None
     telemetry_notes: Optional[str] = None
+    timing_claim: Optional[str] = None
+    timing_value: Optional[float] = None
+    timing_unit: Optional[str] = None
+    timing_classification: Optional[str] = None
+    timing_notes: Optional[str] = None
 
 
 class ScenarioPhaseDefinition(BaseModel):
@@ -587,6 +592,11 @@ class ScenarioContract(BaseModel):
     splunk_storage: Optional[str] = "Splunk Event Index (idx_network_ops)"
     fidelity_badge: Optional[str] = "MODELED PAYLOAD"
     telemetry_notes: Optional[str] = None
+    timing_claim: Optional[str] = None
+    timing_value: Optional[float] = None
+    timing_unit: Optional[str] = None
+    timing_classification: str = "NOT_APPLICABLE"  # MEASURED, MODELED, DECLARED_ONLY, NOT_APPLICABLE
+    timing_notes: Optional[str] = None
 
 
 class GroundTruthRecord(BaseModel):
@@ -697,6 +707,11 @@ class RunManifest(BaseModel):
     metric_observed_count: int = 0
     observation_completeness_pct: float = 0.0
     evidence_summary: Optional[UnifiedRunEvidence] = None
+    timing_claim: Optional[str] = None
+    timing_value: Optional[float] = None
+    timing_unit: Optional[str] = None
+    timing_classification: str = "NOT_APPLICABLE"
+    timing_notes: Optional[str] = None
     errors: List[str] = Field(default_factory=list)
 
 

@@ -156,6 +156,47 @@ export const StepPreview: React.FC<StepPreviewProps> = ({ useCase, onBack, onNex
             )}
           </div>
 
+          {/* Protection Timing Semantics Card */}
+          {useCase.timing_classification && useCase.timing_classification !== 'NOT_APPLICABLE' && (
+            <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-amber-400" />
+                  <span>Protection Timing Semantics</span>
+                </h4>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-amber-500/10 text-amber-300 border-amber-500/30 font-mono">
+                  {useCase.timing_classification}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800/80 text-xs space-y-2">
+                <div className="flex justify-between items-center text-slate-400">
+                  <span>Protection Behavior:</span>
+                  <span className="text-slate-200 font-mono text-[11px] font-medium">{useCase.timing_claim}</span>
+                </div>
+                {useCase.timing_value && (
+                  <div className="flex justify-between items-center text-slate-400">
+                    <span>Simulated Interval:</span>
+                    <span className="text-amber-300 font-mono font-bold text-[11px]">{useCase.timing_value} {useCase.timing_unit || 'ms'}</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center text-slate-400">
+                  <span>Timing Classification:</span>
+                  <span className="text-amber-400 font-mono text-[11px]">{useCase.timing_classification} PROTOCOL CONVERGENCE</span>
+                </div>
+              </div>
+
+              {useCase.timing_notes && (
+                <div className="p-3 rounded-lg bg-amber-950/20 border border-amber-800/40 text-xs text-slate-300 flex items-start gap-2.5">
+                  <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <p className="text-[11px] leading-relaxed text-amber-200/90">
+                    {useCase.timing_notes}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
             <h4 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <Radio className="w-4 h-4 text-cyan-400" />

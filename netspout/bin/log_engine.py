@@ -1308,7 +1308,7 @@ class SplunkLogEngine:
             sig = signature or f"BGP Neighbor {neighbor_ip} Down: Carrier Link Flap"
             msg = f"%ROUTING-BGP-5-ADJCHANGE: neighbor {neighbor_ip} Down - Interface flap on HundredGigE0/0/0/1"
         elif event_type == "TI_LFA_REROUTE":
-            sig = signature or "TI-LFA Sub-50ms Fast Reroute Activated"
+            sig = signature or "TI-LFA Modeled Sub-50ms Fast Reroute Activated"
             msg = f"%MPLS-6-TI_LFA_LOCAL_REPAIR: Fast reroute activated for prefix {prefix} via HundredGigE0/0/0/2 backup path, convergence_ms=32"
         elif event_type == "BGP_UP":
             sig = signature or f"BGP Neighbor {neighbor_ip} Up: Peering Restored"
@@ -1358,7 +1358,7 @@ class SplunkLogEngine:
             sig = signature or f"CleanAir Non-Wi-Fi RF Interference Surge on Channel {channel}"
             msg = f"%DOT11-4-CLEANAIR_INTERFERENCE: Radio 1 Channel {channel} interference surge detected: utilization={util_pct}% noise_floor={noise_floor}dBm duty_cycle=88%"
         elif event_type == "CHANNEL_SWITCH":
-            sig = signature or "CleanAir Dynamic Frequency Selection Channel Reassignment"
+            sig = signature or "CleanAir Dynamic Channel Assignment (DCA) Reassignment"
             msg = f"%DOT11-5-CLEANAIR_CHANNEL_SWITCH: Radio 1 shifted from congested Channel {channel} to pristine Channel 100 via automated DCA/RRM"
         elif event_type == "ROGUE_CONTAINED":
             sig = signature or "Air Marshal Evil-Twin SSID Rogue Containment Active"
@@ -1408,7 +1408,7 @@ class SplunkLogEngine:
             sig = signature or f"G.8032 ERPS Ring {ring_id} Span {port_id} Fiber Cut Signal Failure"
             msg = f"%ETH_RING-4-SIGNAL_FAILURE: Ring {ring_id} port {port_id} Terrestrial Fiber Cut detected, state transitioned to SIGNAL_FAIL (SF)"
         elif event_type == "RPL_UNBLOCK":
-            sig = signature or f"G.8032 ERPS Ring {ring_id} RPL Unblocked (Sub-50ms Failover)"
+            sig = signature or f"G.8032 ERPS Ring {ring_id} RPL Unblocked (Modeled Sub-50ms Failover)"
             msg = f"%ETH_RING-4-RPL_UNBLOCK: Ring {ring_id} Ring Protection Link (RPL) unblocked in 38ms, traffic forwarding maintained across alternate span"
         elif event_type == "REVERTIVE_RESTORE":
             sig = signature or f"G.8032 ERPS Ring {ring_id} WTR Expired Revertive Restoration"

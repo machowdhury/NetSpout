@@ -443,7 +443,7 @@
     "display_name": "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
     "category": "NETWORK_OPERATIONS",
     "ecosystem": "pure_cisco",
-    "maturity": "CONTRACTED",
+    "maturity": "E2E_VALIDATED",
     "description": "High-density campus LAN with Cisco Catalyst 9300/9500 switches, 802.1Q trunking, DHCP snooping, and ARP inspection.",
     "attack_vector": "Rogue DHCP server spoofing and ARP cache poisoning",
     "defense_mechanism": "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
@@ -455,14 +455,15 @@
     ],
     "default_topology_id": "arch_lan_campus_access",
     "topology_id": "arch_lan_campus_access",
-    "difficulty": "ADVANCED",
+    "difficulty": "INTERMEDIATE",
     "estimated_duration_sec": 30,
     "vendor_scope": [
-      "pure_cisco"
+      "cisco_catalyst",
+      "cisco_ise"
     ],
     "telemetry_requirements": [
       "syslog",
-      "snmp"
+      "hec"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
@@ -480,104 +481,139 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Standard Telemetry Payload",
+    "telemetry_model": "Catalyst DHCP Snooping, DAI & ISE 802.1X",
     "transport_protocol": "Splunk HEC",
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": null,
+    "telemetry_notes": "Cisco Catalyst DHCP snooping, Dynamic ARP Inspection, and Cisco ISE 802.1X TrustSec telemetry delivered to Splunk via HEC.",
     "phases": [
       {
         "phase": "BASELINE",
-        "name": "Baseline Steady State",
+        "name": "Nominal 802.1X Port Operations",
         "duration_ticks": 2,
-        "description": "Establish baseline telemetry for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
+        "description": "Legitimate enterprise workstations authenticate via 802.1X and receive authorized VLAN lease.",
         "expected_observations": [
-          "Nominal operations"
+          "802.1X authentication authorized",
+          "Clean DHCP binding table"
         ]
       },
       {
         "phase": "FAULT",
-        "name": "Fault Trigger Event",
+        "name": "Rogue DHCP Server Offer Injection",
         "duration_ticks": 3,
-        "description": "Rogue DHCP server spoofing and ARP cache poisoning",
+        "description": "Attacker connects unauthorized DHCP server issuing rogue default gateways and DNS servers.",
         "expected_observations": [
-          "Anomaly detected"
+          "DHCP Snooping drop event logged",
+          "Untrusted port offer suppressed",
+          "status=degraded"
         ]
       },
       {
         "phase": "PROPAGATE",
-        "name": "Telemetry & Alert Propagation",
+        "name": "Dynamic ARP Inspection Rate Violation",
         "duration_ticks": 2,
-        "description": "Alerts cascade across affected network nodes.",
+        "description": "Attacker attempts high-frequency ARP cache poisoning, exceeding DAI burst threshold.",
         "expected_observations": [
-          "Alerts logged"
+          "DAI packet burst limit exceeded",
+          "action=alerted status=degraded"
         ]
       },
       {
         "phase": "FAILOVER",
-        "name": "Policy Mitigation / Failover",
+        "name": "Switchport Err-Disable & ISE CoA Quarantine",
         "duration_ticks": 2,
-        "description": "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
+        "description": "Catalyst 9300 places rogue port in err-disable; Cisco ISE applies Change of Authorization (CoA) quarantine.",
         "expected_observations": [
-          "Failover / mitigation active"
+          "Interface placed in err-disable state",
+          "action=blocked status=mitigated"
         ]
       },
       {
         "phase": "RECOVER",
-        "name": "Steady State Restoration",
+        "name": "Err-Disable Recovery & Attacker Isolation",
         "duration_ticks": 2,
-        "description": "Return to nominal operational state.",
+        "description": "Malicious host disconnected; err-disable automatic recovery timer restores port to operational state.",
         "expected_observations": [
-          "Normal telemetry restored"
+          "Port recovered to forwarding",
+          "status=restored"
         ]
       },
       {
         "phase": "VALIDATE",
-        "name": "SLA Verification",
+        "name": "LAN Access Security Posture Audit",
         "duration_ticks": 1,
-        "description": "Verify health criteria.",
+        "description": "Verify zero rogue DHCP offers and compliant 802.1X TrustSec policy.",
         "expected_observations": [
-          "SLA met"
+          "Clean switchport security audit"
         ]
       }
     ],
     "use_case": {
-      "objective": "Prove operational resilience and telemetry assurance for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
+      "objective": "Demonstrate campus LAN access security defense against rogue DHCP servers and ARP poisoning using DHCP Snooping, Dynamic ARP Inspection (DAI), and Cisco ISE TrustSec quarantine.",
       "required_telemetry": [
         "cisco:catalyst:security:events",
         "cisco:ios:syslog",
         "cisco:ise:nac:8021x"
       ],
       "expected_progression": [
-        "Establish baseline telemetry for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
-        "Rogue DHCP server spoofing and ARP cache poisoning",
-        "Alerts cascade across affected network nodes.",
-        "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
-        "Return to nominal operational state.",
-        "Verify health criteria."
+        "Nominal 802.1X baseline",
+        "Rogue DHCP offer drop",
+        "DAI burst rate alert",
+        "Switchport err-disable quarantine",
+        "Port recovery & validation"
       ],
       "expected_observations": [
-        "Rogue DHCP server spoofing and ARP cache poisoning"
+        "DHCP snooping drop log in cisco:catalyst:security:events",
+        "DAI burst log in cisco:catalyst:security:events",
+        "ISE CoA quarantine in cisco:ise:nac:8021x",
+        "Restoration verified"
       ],
       "validation_criteria": [
-        "Required sourcetypes (3) emitted and indexed",
-        "Fault trigger signature detected for arch_lan_campus_access",
-        "State restored to nominal baseline"
+        "Catalyst security events emitted",
+        "Rogue DHCP/ARP attack blocked",
+        "Campus access switchport restored",
+        "Cisco ISE posture telemetry present"
       ],
-      "telemetry_model": "Standard Telemetry Payload",
+      "telemetry_model": "Catalyst DHCP Snooping, DAI & ISE 802.1X",
       "transport_protocol": "Splunk HEC",
       "splunk_storage": "Splunk Event Index (idx_network_ops)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": null
+      "telemetry_notes": "Cisco Catalyst DHCP snooping, Dynamic ARP Inspection, and Cisco ISE 802.1X TrustSec telemetry delivered to Splunk via HEC."
     },
     "validation_rules": [
       {
-        "id": "arch_lan_campus_access-val-01",
-        "name": "Required Telemetry Emitted",
+        "id": "lan-val-01",
+        "name": "Catalyst Security Events Emitted",
         "type": "COUNT_THRESHOLD",
         "target_sourcetype": "cisco:catalyst:security:events",
         "min_count": 1,
-        "description": "Verify scenario telemetry is generated."
+        "description": "Verify Cisco Catalyst DHCP snooping and DAI events emitted."
+      },
+      {
+        "id": "lan-val-02",
+        "name": "Rogue DHCP/ARP Attack Blocked",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "blocked",
+        "comparison": "in",
+        "description": "Verify blocked action recorded during rogue DHCP drop or DAI err-disable."
+      },
+      {
+        "id": "lan-val-03",
+        "name": "Campus Access Switchport Restored",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify restored status recorded upon err-disable recovery."
+      },
+      {
+        "id": "lan-val-04",
+        "name": "Cisco ISE 802.1X Posture Telemetry Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ise:nac:8021x",
+        "min_count": 1,
+        "description": "Verify Cisco ISE 802.1X authorization telemetry emitted."
       }
     ]
   },
@@ -588,7 +624,7 @@
     "display_name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
     "category": "SERVICE_PROVIDER",
     "ecosystem": "mixed_vendor",
-    "maturity": "CONTRACTED",
+    "maturity": "E2E_VALIDATED",
     "description": "Metro optical ring spanning 4 data centers with ITU-T G.8032 Ethernet Ring Protection Switching (ERPS) sub-50ms failover.",
     "attack_vector": "Physical metro fiber cut on transit span",
     "defense_mechanism": "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
@@ -600,14 +636,16 @@
     ],
     "default_topology_id": "arch_man_carrier_ring",
     "topology_id": "arch_man_carrier_ring",
-    "difficulty": "ADVANCED",
+    "difficulty": "INTERMEDIATE",
     "estimated_duration_sec": 30,
     "vendor_scope": [
-      "mixed_vendor"
+      "nokia_sros",
+      "juniper_junos",
+      "arista_eos"
     ],
     "telemetry_requirements": [
       "syslog",
-      "snmp"
+      "hec"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
@@ -625,104 +663,139 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Standard Telemetry Payload",
+    "telemetry_model": "ITU-T G.8032 ERPS & Carrier Ethernet Syslog",
     "transport_protocol": "Splunk HEC",
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": null,
+    "telemetry_notes": "Nokia SR-OS, Juniper Junos, and Arista EOS G.8032 Ring Automatic Protection Switching telemetry delivered to Splunk via HEC.",
     "phases": [
       {
         "phase": "BASELINE",
-        "name": "Baseline Steady State",
+        "name": "100G Carrier Ethernet Ring IDLE",
         "duration_ticks": 2,
-        "description": "Establish baseline telemetry for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
+        "description": "Multi-vendor metro Ethernet ring operating normally with Ring Protection Link (RPL) blocked to prevent loops.",
         "expected_observations": [
-          "Nominal operations"
+          "G.8032 ERPS state IDLE",
+          "RPL port blocked"
         ]
       },
       {
         "phase": "FAULT",
-        "name": "Fault Trigger Event",
+        "name": "Terrestrial Fiber Cut on Metro Span",
         "duration_ticks": 3,
-        "description": "Physical metro fiber cut on transit span",
+        "description": "Physical fiber cut severs 100G optical connection between Node A and Node B.",
         "expected_observations": [
-          "Anomaly detected"
+          "%ETH_RING-4-SIGNAL_FAILURE detected",
+          "Loss of signal on span 1/1/c1",
+          "status=degraded"
         ]
       },
       {
         "phase": "PROPAGATE",
-        "name": "Telemetry & Alert Propagation",
+        "name": "R-APS Signal Fail Message Broadcast",
         "duration_ticks": 2,
-        "description": "Alerts cascade across affected network nodes.",
+        "description": "Ring Automatic Protection Switching (R-APS) Signal Fail frames circulate across alternate nodes in < 5ms.",
         "expected_observations": [
-          "Alerts logged"
+          "R-APS SF frame logged in juniper:junos",
+          "action=alerted status=degraded"
         ]
       },
       {
         "phase": "FAILOVER",
-        "name": "Policy Mitigation / Failover",
+        "name": "RPL Unblock Sub-50ms Traffic Shift",
         "duration_ticks": 2,
-        "description": "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
+        "description": "RPL Owner switch unblocks Ring Protection Link in 38ms; customer frames forward along healthy arc.",
         "expected_observations": [
-          "Failover / mitigation active"
+          "%ETH_RING-4-RPL_UNBLOCK completed in 38ms",
+          "action=allowed status=mitigated"
         ]
       },
       {
         "phase": "RECOVER",
-        "name": "Steady State Restoration",
+        "name": "Fiber Spliced & Revertive WTR Expiry",
         "duration_ticks": 2,
-        "description": "Return to nominal operational state.",
+        "description": "Metro fiber repaired; Wait-to-Restore (WTR) timer expires; ring reverts to nominal IDLE topology.",
         "expected_observations": [
-          "Normal telemetry restored"
+          "%ETH_RING-5-REVERTIVE_RESTORE completed",
+          "status=restored"
         ]
       },
       {
         "phase": "VALIDATE",
-        "name": "SLA Verification",
+        "name": "Metro Carrier Ring Conformance Audit",
         "duration_ticks": 1,
-        "description": "Verify health criteria.",
+        "description": "Verify zero ring loops and nominal 100G carrier transit SLA.",
         "expected_observations": [
-          "SLA met"
+          "Ring IDLE state verified"
         ]
       }
     ],
     "use_case": {
-      "objective": "Prove operational resilience and telemetry assurance for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
+      "objective": "Demonstrate metro carrier Ethernet protection switching resilience during fiber cut events using ITU-T G.8032 ERPS sub-50ms failover across Nokia, Juniper, and Arista ring nodes.",
       "required_telemetry": [
         "nokia:sros:syslog",
         "juniper:junos",
         "arista:eos"
       ],
       "expected_progression": [
-        "Establish baseline telemetry for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
-        "Physical metro fiber cut on transit span",
-        "Alerts cascade across affected network nodes.",
-        "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
-        "Return to nominal operational state.",
-        "Verify health criteria."
+        "G.8032 IDLE baseline",
+        "Metro fiber cut signal failure",
+        "R-APS broadcast across ring",
+        "RPL unblock sub-50ms failover",
+        "WTR revertive restoration & validation"
       ],
       "expected_observations": [
-        "Physical metro fiber cut on transit span"
+        "Signal fail in nokia:sros:syslog",
+        "R-APS SF in juniper:junos",
+        "RPL unblock in nokia:sros:syslog",
+        "Restoration verified"
       ],
       "validation_criteria": [
-        "Required sourcetypes (3) emitted and indexed",
-        "Fault trigger signature detected for arch_man_carrier_ring",
-        "State restored to nominal baseline"
+        "Nokia SR-OS G.8032 ERPS syslog emitted",
+        "Juniper Junos G.8032 R-APS syslog emitted",
+        "Metro fiber cut signal failure detected",
+        "G.8032 ring revertive restoration complete"
       ],
-      "telemetry_model": "Standard Telemetry Payload",
+      "telemetry_model": "ITU-T G.8032 ERPS & Carrier Ethernet Syslog",
       "transport_protocol": "Splunk HEC",
       "splunk_storage": "Splunk Event Index (idx_network_ops)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": null
+      "telemetry_notes": "Nokia SR-OS, Juniper Junos, and Arista EOS G.8032 Ring Automatic Protection Switching telemetry delivered to Splunk via HEC."
     },
     "validation_rules": [
       {
-        "id": "arch_man_carrier_ring-val-01",
-        "name": "Required Telemetry Emitted",
+        "id": "man-val-01",
+        "name": "Nokia SR-OS G.8032 ERPS Syslog Emitted",
         "type": "COUNT_THRESHOLD",
         "target_sourcetype": "nokia:sros:syslog",
         "min_count": 1,
-        "description": "Verify scenario telemetry is generated."
+        "description": "Verify Nokia SR-OS G.8032 ERPS ring status logs emitted."
+      },
+      {
+        "id": "man-val-02",
+        "name": "Juniper Junos G.8032 R-APS Syslog Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "juniper:junos",
+        "min_count": 1,
+        "description": "Verify Juniper Junos G.8032 R-APS protection switching logs emitted."
+      },
+      {
+        "id": "man-val-03",
+        "name": "Metro Fiber Cut Signal Failure Detected",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "degraded",
+        "comparison": "==",
+        "description": "Verify degraded status recorded during optical fiber cut."
+      },
+      {
+        "id": "man-val-04",
+        "name": "G.8032 Ring Revertive Restoration Complete",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify restored status recorded upon WTR revertive restoration."
       }
     ]
   },
@@ -1168,7 +1241,7 @@
     "display_name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
     "category": "WAN",
     "ecosystem": "both",
-    "maturity": "CONTRACTED",
+    "maturity": "E2E_VALIDATED",
     "description": "Remote access VPN concentrator and IPsec crypto tunnels supporting 10,000+ concurrent workforce sessions with Duo MFA integration.",
     "attack_vector": "Credential stuffing attack targeting SSL-VPN endpoint",
     "defense_mechanism": "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
@@ -1180,16 +1253,15 @@
     ],
     "default_topology_id": "arch_vpn_remote_workforce",
     "topology_id": "arch_vpn_remote_workforce",
-    "difficulty": "ADVANCED",
+    "difficulty": "INTERMEDIATE",
     "estimated_duration_sec": 30,
     "vendor_scope": [
-      "cisco",
-      "palo_alto",
-      "juniper"
+      "cisco_asa",
+      "cisco_duo"
     ],
     "telemetry_requirements": [
       "syslog",
-      "snmp"
+      "hec"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
@@ -1207,104 +1279,139 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Standard Telemetry Payload",
+    "telemetry_model": "Cisco ASA AnyConnect & Cisco Duo Cloud MFA",
     "transport_protocol": "Splunk HEC",
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": null,
+    "telemetry_notes": "Cisco AnyConnect SSL-VPN connection logs and Cisco Duo Push MFA authentication events delivered to Splunk via HEC.",
     "phases": [
       {
         "phase": "BASELINE",
-        "name": "Baseline Steady State",
+        "name": "Legitimate SSL-VPN & Duo Push",
         "duration_ticks": 2,
-        "description": "Establish baseline telemetry for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
+        "description": "Workforce users establish AnyConnect SSL-VPN sessions with multi-factor authentication (MFA).",
         "expected_observations": [
-          "Nominal operations"
+          "AnyConnect session established",
+          "Duo push approved"
         ]
       },
       {
         "phase": "FAULT",
-        "name": "Fault Trigger Event",
+        "name": "Credential Stuffing & Geolocation Anomaly",
         "duration_ticks": 3,
-        "description": "Credential stuffing attack targeting SSL-VPN endpoint",
+        "description": "Automated adversary launches credential stuffing bursts from anomalous overseas IP addresses.",
         "expected_observations": [
-          "Anomaly detected"
+          "Burst of failed logins in cisco:duo:remote:vpn",
+          "status=degraded"
         ]
       },
       {
         "phase": "PROPAGATE",
-        "name": "Telemetry & Alert Propagation",
+        "name": "User-Reported MFA Push Fraud Alert",
         "duration_ticks": 2,
-        "description": "Alerts cascade across affected network nodes.",
+        "description": "Legitimate employee receives unexpected push prompt and triggers Duo Fraud Alert button.",
         "expected_observations": [
-          "Alerts logged"
+          "Fraud report recorded in cisco:duo:push:prompt",
+          "action=alerted status=degraded"
         ]
       },
       {
         "phase": "FAILOVER",
-        "name": "Policy Mitigation / Failover",
+        "name": "Automated Account Lockout & ASA Drop",
         "duration_ticks": 2,
-        "description": "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
+        "description": "Cisco Duo locks out compromised account; Cisco ASA blacklists source IP and terminates tunnel.",
         "expected_observations": [
-          "Failover / mitigation active"
+          "Account locked out in cisco:duo:remote:vpn",
+          "Cisco ASA %ASA-4-106023 deny event",
+          "action=blocked status=mitigated"
         ]
       },
       {
         "phase": "RECOVER",
-        "name": "Steady State Restoration",
+        "name": "Credential Reset & Session Restoration",
         "duration_ticks": 2,
-        "description": "Return to nominal operational state.",
+        "description": "User resets credentials; Security team verifies endpoint posture; legitimate logins resume.",
         "expected_observations": [
-          "Normal telemetry restored"
+          "Legitimate VPN session restored",
+          "status=restored"
         ]
       },
       {
         "phase": "VALIDATE",
-        "name": "SLA Verification",
+        "name": "VPN Perimeter Health Verification",
         "duration_ticks": 1,
-        "description": "Verify health criteria.",
+        "description": "Verify zero active brute force attempts and nominal gateway load.",
         "expected_observations": [
-          "SLA met"
+          "VPN gateway healthy"
         ]
       }
     ],
     "use_case": {
-      "objective": "Prove operational resilience and telemetry assurance for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
+      "objective": "Demonstrate enterprise remote access defense against credential stuffing and MFA fatigue attacks using Cisco AnyConnect SSL-VPN and Cisco Duo Push fraud alerting.",
       "required_telemetry": [
         "cisco:duo:remote:vpn",
         "cisco:duo:push:prompt",
         "cisco:asa"
       ],
       "expected_progression": [
-        "Establish baseline telemetry for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
-        "Credential stuffing attack targeting SSL-VPN endpoint",
-        "Alerts cascade across affected network nodes.",
-        "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
-        "Return to nominal operational state.",
-        "Verify health criteria."
+        "Baseline authorized logins",
+        "Credential stuffing surge",
+        "User Duo push fraud report",
+        "Account lockout & ASA drop",
+        "Credential reset & restoration"
       ],
       "expected_observations": [
-        "Credential stuffing attack targeting SSL-VPN endpoint"
+        "Failed auth in cisco:duo:remote:vpn",
+        "Fraud report in cisco:duo:push:prompt",
+        "Firewall drop in cisco:asa",
+        "Restoration verified"
       ],
       "validation_criteria": [
-        "Required sourcetypes (3) emitted and indexed",
-        "Fault trigger signature detected for arch_vpn_remote_workforce",
-        "State restored to nominal baseline"
+        "Cisco Duo authentication logs emitted",
+        "Compromised account blocked via lockout",
+        "Cisco ASA SSL-VPN security logs emitted",
+        "Remote workforce access restored"
       ],
-      "telemetry_model": "Standard Telemetry Payload",
+      "telemetry_model": "Cisco ASA AnyConnect & Cisco Duo Cloud MFA",
       "transport_protocol": "Splunk HEC",
       "splunk_storage": "Splunk Event Index (idx_network_ops)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": null
+      "telemetry_notes": "Cisco AnyConnect SSL-VPN connection logs and Cisco Duo Push MFA authentication events delivered to Splunk via HEC."
     },
     "validation_rules": [
       {
-        "id": "arch_vpn_remote_workforce-val-01",
-        "name": "Required Telemetry Emitted",
+        "id": "vpn-val-01",
+        "name": "Cisco Duo Authentication Logs Emitted",
         "type": "COUNT_THRESHOLD",
         "target_sourcetype": "cisco:duo:remote:vpn",
         "min_count": 1,
-        "description": "Verify scenario telemetry is generated."
+        "description": "Verify Cisco Duo remote VPN authentication events emitted."
+      },
+      {
+        "id": "vpn-val-02",
+        "name": "Compromised Account Blocked via Lockout",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "blocked",
+        "comparison": "in",
+        "description": "Verify blocked action recorded during account lockout or firewall denial."
+      },
+      {
+        "id": "vpn-val-03",
+        "name": "Cisco ASA SSL-VPN Security Logs Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:asa",
+        "min_count": 1,
+        "description": "Verify Cisco ASA perimeter VPN security logs emitted."
+      },
+      {
+        "id": "vpn-val-04",
+        "name": "Remote Workforce Access Restored",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify restored status recorded upon credential reset."
       }
     ]
   },
@@ -1462,7 +1569,7 @@
     "display_name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
     "category": "WIRELESS",
     "ecosystem": "both",
-    "maturity": "CONTRACTED",
+    "maturity": "E2E_VALIDATED",
     "description": "Dual-vendor campus wireless with Catalyst 9800 WLC and Meraki MR56 APs tracking client roaming, SNR, and CleanAir interference.",
     "attack_vector": "CleanAir RF interference and rogue evil-twin SSID broadcast",
     "defense_mechanism": "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
@@ -1474,16 +1581,15 @@
     ],
     "default_topology_id": "arch_wlan_meraki_catalyst",
     "topology_id": "arch_wlan_meraki_catalyst",
-    "difficulty": "ADVANCED",
+    "difficulty": "INTERMEDIATE",
     "estimated_duration_sec": 30,
     "vendor_scope": [
-      "cisco",
-      "palo_alto",
-      "juniper"
+      "cisco_catalyst",
+      "meraki"
     ],
     "telemetry_requirements": [
       "syslog",
-      "snmp"
+      "hec"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
@@ -1501,104 +1607,141 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Standard Telemetry Payload",
+    "telemetry_model": "Catalyst CleanAir & Meraki Air Marshal",
     "transport_protocol": "Splunk HEC",
     "splunk_storage": "Splunk Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": null,
+    "telemetry_notes": "Cisco Catalyst CleanAir RF interference tracking and Meraki Air Marshal rogue containment telemetry delivered to Splunk via HEC.",
     "phases": [
       {
         "phase": "BASELINE",
-        "name": "Baseline Steady State",
+        "name": "CleanAir RF Health & Client SNR",
         "duration_ticks": 2,
-        "description": "Establish baseline telemetry for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
+        "description": "Catalyst 9130AX and Meraki MR56 APs report nominal 5GHz radio channel utilization and high client SNR.",
         "expected_observations": [
-          "Nominal operations"
+          "Channel utilization < 20%",
+          "Client SNR > 35dB"
         ]
       },
       {
         "phase": "FAULT",
-        "name": "Fault Trigger Event",
+        "name": "Non-Wi-Fi RF Interference Surge",
         "duration_ticks": 3,
-        "description": "CleanAir RF interference and rogue evil-twin SSID broadcast",
+        "description": "Severe continuous frequency interference surge (video bridge / microwave) saturates Channel 36.",
         "expected_observations": [
-          "Anomaly detected"
+          "%DOT11-4-CLEANAIR_INTERFERENCE detected",
+          "Noise floor spike",
+          "status=degraded"
         ]
       },
       {
         "phase": "PROPAGATE",
-        "name": "Telemetry & Alert Propagation",
+        "name": "Rogue Evil-Twin SSID Broadcast",
         "duration_ticks": 2,
-        "description": "Alerts cascade across affected network nodes.",
+        "description": "Adversary launches rogue access point broadcasting spoofed corporate SSID 'Corp-Executive-Secure'.",
         "expected_observations": [
-          "Alerts logged"
+          "Rogue AP evil-twin alert in cisco:catalyst:rogue:threat_details",
+          "Meraki Air Marshal alert in meraki:accesspoints",
+          "action=alerted status=degraded"
         ]
       },
       {
         "phase": "FAILOVER",
-        "name": "Policy Mitigation / Failover",
+        "name": "CleanAir Channel Switch & Air Marshal Containment",
         "duration_ticks": 2,
-        "description": "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
+        "description": "CleanAir dynamically reassigns radio to Channel 100; Meraki Air Marshal suppresses rogue BSSID.",
         "expected_observations": [
-          "Failover / mitigation active"
+          "Dynamic channel switch executed",
+          "%AIRMARSHAL-4-ROGUE_CONTAINMENT active",
+          "action=blocked status=mitigated"
         ]
       },
       {
         "phase": "RECOVER",
-        "name": "Steady State Restoration",
+        "name": "Airspace Cleaned & SNR Restored",
         "duration_ticks": 2,
-        "description": "Return to nominal operational state.",
+        "description": "Rogue AP suppressed and powered off; RF interference subsides; client SNR returns to 38dB.",
         "expected_observations": [
-          "Normal telemetry restored"
+          "CleanAir health restored on Channel 100",
+          "status=restored"
         ]
       },
       {
         "phase": "VALIDATE",
-        "name": "SLA Verification",
+        "name": "Campus Wireless RF Audit Verification",
         "duration_ticks": 1,
-        "description": "Verify health criteria.",
+        "description": "Verify zero active rogue BSSIDs and optimal client roaming health.",
         "expected_observations": [
-          "SLA met"
+          "Air Marshal audit clean"
         ]
       }
     ],
     "use_case": {
-      "objective": "Prove operational resilience and telemetry assurance for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
+      "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment and Air Marshal rogue suppression.",
       "required_telemetry": [
         "cisco:catalyst:rogue:threat_details",
         "meraki:accesspoints",
         "cisco:catalyst:clienthealth"
       ],
       "expected_progression": [
-        "Establish baseline telemetry for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
-        "CleanAir RF interference and rogue evil-twin SSID broadcast",
-        "Alerts cascade across affected network nodes.",
-        "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
-        "Return to nominal operational state.",
-        "Verify health criteria."
+        "CleanAir baseline health",
+        "RF interference surge on Ch 36",
+        "Evil-twin rogue SSID broadcast",
+        "Dynamic channel switch & rogue containment",
+        "Airspace restoration & validation"
       ],
       "expected_observations": [
-        "CleanAir RF interference and rogue evil-twin SSID broadcast"
+        "Interference log in cisco:catalyst:clienthealth",
+        "Rogue AP alert in cisco:catalyst:rogue:threat_details",
+        "Air Marshal alert in meraki:accesspoints",
+        "Restoration verified"
       ],
       "validation_criteria": [
-        "Required sourcetypes (3) emitted and indexed",
-        "Fault trigger signature detected for arch_wlan_meraki_catalyst",
-        "State restored to nominal baseline"
+        "Catalyst CleanAir RF health telemetry emitted",
+        "Rogue AP threat detection emitted",
+        "Air Marshal rogue suppression active",
+        "WLAN RF spectrum restored"
       ],
-      "telemetry_model": "Standard Telemetry Payload",
+      "telemetry_model": "Catalyst CleanAir & Meraki Air Marshal",
       "transport_protocol": "Splunk HEC",
       "splunk_storage": "Splunk Event Index (idx_network_ops)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": null
+      "telemetry_notes": "Cisco Catalyst CleanAir RF interference tracking and Meraki Air Marshal rogue containment telemetry delivered to Splunk via HEC."
     },
     "validation_rules": [
       {
-        "id": "arch_wlan_meraki_catalyst-val-01",
-        "name": "Required Telemetry Emitted",
+        "id": "wlan-val-01",
+        "name": "Catalyst CleanAir RF Health Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:clienthealth",
+        "min_count": 1,
+        "description": "Verify Catalyst CleanAir RF interference and health logs emitted."
+      },
+      {
+        "id": "wlan-val-02",
+        "name": "Rogue AP Threat Detection Emitted",
         "type": "COUNT_THRESHOLD",
         "target_sourcetype": "cisco:catalyst:rogue:threat_details",
         "min_count": 1,
-        "description": "Verify scenario telemetry is generated."
+        "description": "Verify Cisco Catalyst rogue AP threat events emitted."
+      },
+      {
+        "id": "wlan-val-03",
+        "name": "Air Marshal Rogue Suppression Active",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "blocked",
+        "comparison": "in",
+        "description": "Verify blocked action recorded during Air Marshal rogue containment."
+      },
+      {
+        "id": "wlan-val-04",
+        "name": "WLAN RF Spectrum Restored",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify restored status recorded upon RF spectrum normalization."
       }
     ]
   },
@@ -3813,7 +3956,7 @@
     "display_name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
     "category": "SERVICE_PROVIDER",
     "ecosystem": "pure_cisco",
-    "maturity": "CONTRACTED",
+    "maturity": "E2E_VALIDATED",
     "description": "Carrier-scale Cisco 8000 / NCS core running Segment Routing over IPv6 (SRv6).",
     "attack_vector": "High-frequency carrier flap causing BGP route withdrawal",
     "defense_mechanism": "TI-LFA pre-computed backup path provides sub-50ms local repair.",
@@ -3827,11 +3970,11 @@
     "difficulty": "INTERMEDIATE",
     "estimated_duration_sec": 30,
     "vendor_scope": [
-      "pure_cisco"
+      "cisco_ios"
     ],
     "telemetry_requirements": [
       "syslog",
-      "snmp"
+      "gnmi"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
@@ -3849,103 +3992,139 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Standard Telemetry Payload",
+    "telemetry_model": "Cisco IOS-XR BGP Syslog & MDT Metrics",
     "transport_protocol": "Splunk HEC",
-    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": null,
+    "telemetry_notes": "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC.",
     "phases": [
       {
         "phase": "BASELINE",
-        "name": "Baseline Steady State",
+        "name": "Core Transit BGP & MDT Nominal",
         "duration_ticks": 2,
-        "description": "Establish baseline telemetry for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
+        "description": "Cisco 8000 and ASR 9000 routers maintain stable eBGP peerings and stream real-time MDT interface telemetry.",
         "expected_observations": [
-          "Nominal operations"
+          "BGP peer established",
+          "Nominal transit traffic flow"
         ]
       },
       {
         "phase": "FAULT",
-        "name": "Fault Trigger Event",
+        "name": "Carrier Transport Flap & BGP Collapse",
         "duration_ticks": 3,
-        "description": "High-frequency carrier flap causing BGP route withdrawal",
+        "description": "Upstream carrier circuit flaps repeatedly, causing BGP hold-timer expiration and neighbor adjacency drop.",
         "expected_observations": [
-          "Anomaly detected"
+          "%ROUTING-BGP-5-ADJCHANGE neighbor Down",
+          "MDT ingress drop",
+          "status=degraded"
         ]
       },
       {
         "phase": "PROPAGATE",
-        "name": "Telemetry & Alert Propagation",
+        "name": "Core Route Withdrawal Notification",
         "duration_ticks": 2,
-        "description": "Alerts cascade across affected network nodes.",
+        "description": "Prefix withdrawal ripples across autonomous system; downstream routers update forwarding tables.",
         "expected_observations": [
-          "Alerts logged"
+          "Route withdrawal logged",
+          "action=alerted status=degraded"
         ]
       },
       {
         "phase": "FAILOVER",
-        "name": "Policy Mitigation / Failover",
+        "name": "TI-LFA Sub-50ms Fast Reroute Active",
         "duration_ticks": 2,
-        "description": "TI-LFA pre-computed backup path provides sub-50ms local repair.",
+        "description": "Topology-Independent Loop-Free Alternate (TI-LFA) engages pre-computed backup path without route flapping.",
         "expected_observations": [
-          "Failover / mitigation active"
+          "%MPLS-6-TI_LFA_LOCAL_REPAIR activated",
+          "action=allowed status=mitigated"
         ]
       },
       {
         "phase": "RECOVER",
-        "name": "Steady State Restoration",
+        "name": "Carrier Transport Stabilization & BGP Up",
         "duration_ticks": 2,
-        "description": "Return to nominal operational state.",
+        "description": "Physical link stabilizes; BGP neighbor adjacency re-established; primary path restored.",
         "expected_observations": [
-          "Normal telemetry restored"
+          "%ROUTING-BGP-5-ADJCHANGE neighbor Up",
+          "status=restored"
         ]
       },
       {
         "phase": "VALIDATE",
-        "name": "SLA Verification",
+        "name": "Core Routing Equilibrium Verification",
         "duration_ticks": 1,
-        "description": "Verify health criteria.",
+        "description": "Verify BGP convergence and disarming of fast-reroute backup path.",
         "expected_observations": [
-          "SLA met"
+          "Routing table equilibrium verified"
         ]
       }
     ],
     "use_case": {
-      "objective": "Prove operational resilience and telemetry assurance for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
+      "objective": "Demonstrate tier-1 carrier core routing resilience during optical link flaps using Cisco IOS-XR eBGP peering telemetry and TI-LFA sub-50ms fast reroute.",
       "required_telemetry": [
         "cisco:ios:mdt:metric",
         "cisco:ios:syslog"
       ],
       "expected_progression": [
-        "Establish baseline telemetry for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
-        "High-frequency carrier flap causing BGP route withdrawal",
-        "Alerts cascade across affected network nodes.",
-        "TI-LFA pre-computed backup path provides sub-50ms local repair.",
-        "Return to nominal operational state.",
-        "Verify health criteria."
+        "Nominal transit routing",
+        "Carrier link flap & BGP down",
+        "Transit withdrawal propagation",
+        "TI-LFA sub-50ms failover",
+        "BGP re-establishment & validation"
       ],
       "expected_observations": [
-        "High-frequency carrier flap causing BGP route withdrawal"
+        "BGP flap in cisco:ios:syslog",
+        "MDT metric drop in cisco:ios:mdt:metric",
+        "TI-LFA local repair in cisco:ios:syslog",
+        "Restoration verified"
       ],
       "validation_criteria": [
-        "Required sourcetypes (2) emitted and indexed",
-        "Fault trigger signature detected for service_provider_cisco",
-        "State restored to nominal baseline"
+        "Cisco IOS-XR BGP syslog emitted",
+        "Carrier flap BGP adjacency collapse detected",
+        "TI-LFA fast reroute active",
+        "BGP peering restored to nominal"
       ],
-      "telemetry_model": "Standard Telemetry Payload",
+      "telemetry_model": "Cisco IOS-XR BGP Syslog & MDT Metrics",
       "transport_protocol": "Splunk HEC",
-      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": null
+      "telemetry_notes": "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC."
     },
     "validation_rules": [
       {
-        "id": "service_provider_cisco-val-01",
-        "name": "Required Telemetry Emitted",
+        "id": "sp-val-01",
+        "name": "Cisco IOS-XR BGP Syslog Emitted",
         "type": "COUNT_THRESHOLD",
-        "target_sourcetype": "cisco:ios:mdt:metric",
+        "target_sourcetype": "cisco:ios:syslog",
         "min_count": 1,
-        "description": "Verify scenario telemetry is generated."
+        "description": "Verify Cisco IOS-XR BGP routing events emitted."
+      },
+      {
+        "id": "sp-val-02",
+        "name": "Carrier Flap BGP Adjacency Collapse Detected",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "degraded",
+        "comparison": "==",
+        "description": "Verify degraded status recorded during BGP neighbor collapse."
+      },
+      {
+        "id": "sp-val-03",
+        "name": "TI-LFA Fast Reroute Active",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "allowed",
+        "comparison": "in",
+        "description": "Verify allowed action recorded for TI-LFA backup path activation."
+      },
+      {
+        "id": "sp-val-04",
+        "name": "BGP Peering Restored to Nominal",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify restored status recorded upon BGP adjacency recovery."
       }
     ]
   },

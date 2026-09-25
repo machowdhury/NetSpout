@@ -285,8 +285,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="cisco_ios",
-            sourcetype="cisco:ios:syslog"
+            vendor=getattr(device, "vendor", "cisco_ios") or "cisco_ios",
+            sourcetype=getattr(device, "sourcetype", "cisco:ios:syslog") or "cisco:ios:syslog"
         )
 
     # =========================================================================
@@ -334,23 +334,27 @@ class SplunkLogEngine:
     @staticmethod
     def format_cisco_ise_log(
         device: Node,
-        client_mac: str,
-        client_ip: str,
-        user: str,
-        auth_status: str,
-        profile: str,
-        action: str,
-        status: str,
-        signature: str = "802.1X Quarantine Profile Applied via Cisco ISE"
+        client_mac: str = "00:1A:2B:3C:4D:5E",
+        client_ip: str = "10.10.30.50",
+        user: str = "corporate_user",
+        auth_status: str = "SUCCESS",
+        profile: str = "Corporate-Access",
+        action: str = "allowed",
+        status: str = "normal",
+        signature: str = "802.1X Quarantine Profile Applied via Cisco ISE",
+        sourcetype: str = "cisco:ise:syslog",
+        **kwargs
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
+        c_mac = kwargs.get("mac_address", client_mac)
+        c_prof = kwargs.get("endpoint_profile", profile)
         raw = (
             f"{now_syslog} {dev_id} CISE_Failed_Authentications 0000042812 1 0 {now_ts} "
-            f"Event-Timestamp={int(time.time())}, User-Name={user}, Calling-Station-Id={client_mac}, "
+            f"Event-Timestamp={int(time.time())}, User-Name={user}, Calling-Station-Id={c_mac}, "
             f"Framed-IP-Address={client_ip}, Audit-Session-Id=0A0101010000005C61, "
-            f"Failure-Reason=Unauthorized_Supplicant, Authorization-Profile={profile}, "
+            f"Failure-Reason=Unauthorized_Supplicant, Authorization-Profile={c_prof}, "
             f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={client_ip} dest_ip=10.0.0.1 "
             f"protocol=RADIUS duration=14ms action={action} signature=\"{signature}\" status={status}"
         )
@@ -368,7 +372,7 @@ class SplunkLogEngine:
             node_type=device.type.value,
             node_id=device.id,
             vendor="cisco_ise",
-            sourcetype="cisco:ise:syslog"
+            sourcetype=sourcetype
         )
 
     @staticmethod
@@ -674,7 +678,8 @@ class SplunkLogEngine:
         channel: int,
         action: str,
         status: str,
-        signature: str = "Meraki Wireless Intrusion / Rogue Probe Alert"
+        signature: str = "Meraki Wireless Intrusion / Rogue Probe Alert",
+        sourcetype: str = "meraki:assurancealerts"
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         dev_id = device.name or device.id
@@ -700,7 +705,7 @@ class SplunkLogEngine:
             node_type=device.type.value,
             node_id=device.id,
             vendor="meraki",
-            sourcetype="meraki:assurancealerts"
+            sourcetype=sourcetype
         )
 
     @staticmethod
@@ -950,7 +955,8 @@ class SplunkLogEngine:
         cpu_pct: float = 24.5,
         memory_pct: float = 38.2,
         action: str = "allowed",
-        status: str = "normal"
+        status: str = "normal",
+        sourcetype: str = "cisco:ios:mdt"
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         dev_id = device.name or device.id
@@ -999,7 +1005,7 @@ class SplunkLogEngine:
             node_type=device.type.value,
             node_id=device.id,
             vendor=device.vendor or "cisco",
-            sourcetype="cisco:ios:mdt"
+            sourcetype=sourcetype
         )
 
     @staticmethod
@@ -1173,5 +1179,254 @@ class SplunkLogEngine:
             node_id=device.id,
             vendor="controller_push",
             sourcetype="controller:webhook:event"
+        )
+
+    @staticmethod
+    def format_cisco_catalyst_dhcp_snooping_log(
+        device: Node,
+        client_mac: str,
+        vlan_id: int,
+        interface: str,
+        rogue_ip: str,
+        event_code: str,
+        action: str,
+        status: str,
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+        sig = signature or f"Catalyst Access Security: {event_code}"
+
+        if event_code == "DHCP_OFFER_DROPPED":
+            msg = f"%DHCP_SNOOPING-5-DHCP_OFFER_DROPPED: Rogue DHCP offer packet dropped on untrusted port {interface}, vlan {vlan_id}, rogue server IP {rogue_ip}, client MAC {client_mac}"
+        elif event_code == "DAI_BURST_EXCEEDED":
+            msg = f"%SW_DAI-4-PACKET_BURST_RATE_EXCEEDED: 15 packets received per second exceeded burst rate on {interface}, vlan {vlan_id}"
+        elif event_code == "ERR_DISABLE":
+            msg = f"%PM-4-ERR_DISABLE: arp-inspection error detected on {interface}, putting {interface} in err-disable state"
+        elif event_code == "PORT_RESTORED":
+            msg = f"%PM-4-ERR_RECOVER: Attempting to recover from arp-inspection err-disable state on {interface}, port restored to forwarding"
+        else:
+            msg = f"%CATALYST_SEC-5-STATUS: Interface {interface} vlan {vlan_id} security event {event_code}"
+
+        raw = f"{now_syslog} {dev_id} {msg} event_code={event_code} interface={interface} rogue_ip={rogue_ip} action={action} signature=\"{sig}\" status={status}"
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=rogue_ip,
+            dest_ip="255.255.255.255",
+            protocol="UDP",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_catalyst",
+            sourcetype="cisco:catalyst:security:events"
+        )
+
+    @staticmethod
+    def format_cisco_duo_vpn_log(
+        device: Node,
+        user: str,
+        client_ip: str,
+        factor: str,
+        result: str,
+        reason: str,
+        country: str,
+        action: str,
+        status: str,
+        sourcetype: str = "cisco:duo:remote:vpn",
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        dev_id = device.name or device.id
+        sig = signature or f"Cisco Duo MFA: {factor} - {result} ({reason})"
+        event_payload = {
+            "timestamp": now_ts,
+            "eventtype": "authentication",
+            "username": user,
+            "factor": factor,
+            "result": result,
+            "reason": reason,
+            "ip_address": client_ip,
+            "access_device": {
+                "ip": client_ip,
+                "location": {
+                    "city": "Moscow" if country == "RU" else "Dallas",
+                    "country": country
+                }
+            },
+            "application": {
+                "name": "Cisco AnyConnect SSL-VPN",
+                "device": dev_id
+            },
+            "action": action,
+            "status": status,
+            "signature": sig
+        }
+        raw = json.dumps(event_payload)
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=client_ip,
+            dest_ip=device.ip_address,
+            protocol="HTTPS",
+            duration="2ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_duo",
+            sourcetype=sourcetype
+        )
+
+    @staticmethod
+    def format_cisco_ios_xr_bgp_log(
+        device: Node,
+        neighbor_ip: str,
+        event_type: str,
+        action: str,
+        status: str,
+        prefix: str = "10.200.0.0/16",
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+
+        if event_type == "BGP_DOWN":
+            sig = signature or f"BGP Neighbor {neighbor_ip} Down: Carrier Link Flap"
+            msg = f"%ROUTING-BGP-5-ADJCHANGE: neighbor {neighbor_ip} Down - Interface flap on HundredGigE0/0/0/1"
+        elif event_type == "TI_LFA_REROUTE":
+            sig = signature or "TI-LFA Sub-50ms Fast Reroute Activated"
+            msg = f"%MPLS-6-TI_LFA_LOCAL_REPAIR: Fast reroute activated for prefix {prefix} via HundredGigE0/0/0/2 backup path, convergence_ms=32"
+        elif event_type == "BGP_UP":
+            sig = signature or f"BGP Neighbor {neighbor_ip} Up: Peering Restored"
+            msg = f"%ROUTING-BGP-5-ADJCHANGE: neighbor {neighbor_ip} Up - Peering re-established after carrier stabilization"
+        elif event_type == "ROUTE_STABLE":
+            sig = signature or "Core BGP/MPLS Routing Equilibrium Restored"
+            msg = f"%ROUTING-BGP-6-STABILITY: Prefix {prefix} active via primary path HundredGigE0/0/0/1, fast-reroute disarmed"
+        else:
+            sig = signature or f"BGP Routing Event: {event_type}"
+            msg = f"%ROUTING-BGP-6-INFO: Peering {neighbor_ip} state={event_type}"
+
+        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=device.ip_address,
+            dest_ip=neighbor_ip,
+            protocol="BGP",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_ios",
+            sourcetype="cisco:ios:syslog"
+        )
+
+    @staticmethod
+    def format_cisco_catalyst_wlan_rf_log(
+        device: Node,
+        channel: int,
+        util_pct: float,
+        noise_floor: int,
+        event_type: str,
+        action: str,
+        status: str,
+        sourcetype: str = "cisco:catalyst:clienthealth",
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+
+        if event_type == "INTERFERENCE_SURGE":
+            sig = signature or f"CleanAir Non-Wi-Fi RF Interference Surge on Channel {channel}"
+            msg = f"%DOT11-4-CLEANAIR_INTERFERENCE: Radio 1 Channel {channel} interference surge detected: utilization={util_pct}% noise_floor={noise_floor}dBm duty_cycle=88%"
+        elif event_type == "CHANNEL_SWITCH":
+            sig = signature or "CleanAir Dynamic Frequency Selection Channel Reassignment"
+            msg = f"%DOT11-5-CLEANAIR_CHANNEL_SWITCH: Radio 1 shifted from congested Channel {channel} to pristine Channel 100 via automated DCA/RRM"
+        elif event_type == "ROGUE_CONTAINED":
+            sig = signature or "Air Marshal Evil-Twin SSID Rogue Containment Active"
+            msg = f"%AIRMARSHAL-4-ROGUE_CONTAINMENT: Rogue AP with spoofed SSID 'Corp-Executive-Secure' suppressed on channel {channel}"
+        elif event_type == "RF_RESTORED":
+            sig = signature or "WLAN RF Spectrum & Client SNR Restored to Nominal"
+            msg = f"%DOT11-6-CLEANAIR_HEALTH: Channel 100 clean, channel utilization={util_pct}% noise_floor={noise_floor}dBm, client SNR=38dB"
+        else:
+            sig = signature or f"WLAN Telemetry: {event_type}"
+            msg = f"%DOT11-6-INFO: Radio 1 channel={channel} util={util_pct}%"
+
+        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=device.ip_address,
+            dest_ip="255.255.255.255",
+            protocol="802.11ax",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_catalyst",
+            sourcetype=sourcetype
+        )
+
+    @staticmethod
+    def format_g8032_erps_log(
+        device: Node,
+        ring_id: str,
+        port_id: str,
+        event_type: str,
+        action: str,
+        status: str,
+        vendor: str = "nokia_sros",
+        sourcetype: str = "nokia:sros:syslog",
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+
+        if event_type == "SIGNAL_FAIL":
+            sig = signature or f"G.8032 ERPS Ring {ring_id} Span {port_id} Fiber Cut Signal Failure"
+            msg = f"%ETH_RING-4-SIGNAL_FAILURE: Ring {ring_id} port {port_id} Terrestrial Fiber Cut detected, state transitioned to SIGNAL_FAIL (SF)"
+        elif event_type == "RPL_UNBLOCK":
+            sig = signature or f"G.8032 ERPS Ring {ring_id} RPL Unblocked (Sub-50ms Failover)"
+            msg = f"%ETH_RING-4-RPL_UNBLOCK: Ring {ring_id} Ring Protection Link (RPL) unblocked in 38ms, traffic forwarding maintained across alternate span"
+        elif event_type == "REVERTIVE_RESTORE":
+            sig = signature or f"G.8032 ERPS Ring {ring_id} WTR Expired Revertive Restoration"
+            msg = f"%ETH_RING-5-REVERTIVE_RESTORE: Ring {ring_id} fiber span spliced, WTR timer expired, ring reverted to IDLE state"
+        else:
+            sig = signature or f"G.8032 ERPS Ring Event: {event_type}"
+            msg = f"%ETH_RING-6-INFO: Ring {ring_id} port {port_id} state={event_type}"
+
+        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=device.ip_address,
+            dest_ip="224.0.0.251",
+            protocol="G.8032",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor=vendor,
+            sourcetype=sourcetype
         )
 

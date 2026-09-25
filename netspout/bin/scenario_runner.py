@@ -239,6 +239,115 @@ def get_bypassed_topology() -> TopologyState:
     )
 
 
+def get_arch_lan_campus_access_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-cat9300-access01", name="Catalyst-9300-Access01", type=NodeType.SWITCH, x=290, y=220, ip_address="10.10.30.1", status="active", vendor="cisco_catalyst", sourcetype="cisco:catalyst:security:events"),
+            Node(id="node-cat9300-access02", name="Catalyst-9300-Access02", type=NodeType.SWITCH, x=290, y=360, ip_address="10.10.30.2", status="active", vendor="cisco_catalyst", sourcetype="cisco:ios:syslog"),
+            Node(id="node-cat9600-core", name="Catalyst-9600-CampusCore", type=NodeType.ROUTER, x=780, y=220, ip_address="10.10.0.1", status="active", vendor="cisco_catalyst", sourcetype="cisco:ios:syslog"),
+            Node(id="node-ise-trustsec", name="Cisco-ISE-TrustSec", type=NodeType.FIREWALL, x=530, y=310, ip_address="10.10.10.25", status="active", vendor="cisco_ise", sourcetype="cisco:ise:nac:8021x"),
+            Node(id="node-dhcp-auth", name="Enterprise-DHCP-Core", type=NodeType.WEB_SERVER, x=780, y=100, ip_address="10.10.10.5", status="active", vendor="generic", sourcetype="cisco:ios:syslog"),
+            Node(id="node-rogue-client", name="Untrusted-Endpoint-Port12", type=NodeType.CLIENT_EXTERNAL, x=70, y=220, ip_address="10.10.30.50", status="active", vendor="generic")
+        ],
+        edges=[
+            Edge(id="e-lan1", source="node-rogue-client", target="node-cat9300-access01", source_port="eth0", target_port="GigabitEthernet1/0/12", status="active"),
+            Edge(id="e-lan2", source="node-cat9300-access01", target="node-cat9600-core", source_port="Te1/1/1", target_port="FortyGig1/0/1", status="active"),
+            Edge(id="e-lan3", source="node-cat9300-access02", target="node-cat9600-core", source_port="Te1/1/1", target_port="FortyGig1/0/2", status="active"),
+            Edge(id="e-lan4", source="node-cat9300-access01", target="node-ise-trustsec", source_port="Te1/1/2", target_port="eth0", status="active"),
+            Edge(id="e-lan5", source="node-cat9600-core", target="node-dhcp-auth", source_port="FortyGig1/0/3", target_port="eth0", status="active"),
+            Edge(id="e-lan6", source="node-cat9300-access01", target="node-cat9300-access02", source_port="Stack1", target_port="Stack2", status="active")
+        ]
+    )
+
+
+def get_arch_vpn_remote_workforce_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-remote-client", name="Remote-Workforce-Client", type=NodeType.CLIENT_EXTERNAL, x=70, y=220, ip_address="198.51.100.77", status="active", vendor="generic"),
+            Node(id="node-asa-vpn", name="Cisco-ASA-5585-VPN", type=NodeType.VPN_GATEWAY, x=290, y=220, ip_address="198.51.100.1", status="active", vendor="cisco_asa", sourcetype="cisco:asa"),
+            Node(id="node-duo-mfa", name="Cisco-Duo-Cloud-Auth", type=NodeType.FIREWALL, x=530, y=120, ip_address="162.247.241.1", status="active", vendor="cisco_duo", sourcetype="cisco:duo:remote:vpn"),
+            Node(id="node-corp-gateway", name="Corporate-Core-Gateway", type=NodeType.ROUTER, x=530, y=290, ip_address="10.100.0.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-ad-dc", name="Corporate-AD-DC01", type=NodeType.WEB_SERVER, x=780, y=160, ip_address="10.100.1.10", status="active", vendor="microsoft", sourcetype="cisco:duo:push:prompt"),
+            Node(id="node-internal-erp", name="Internal-Enterprise-ERP", type=NodeType.WEB_SERVER, x=780, y=320, ip_address="10.100.2.20", status="active", vendor="nginx", sourcetype="cisco:duo:push:prompt")
+        ],
+        edges=[
+            Edge(id="e-vpn1", source="node-remote-client", target="node-asa-vpn", source_port="wan", target_port="outside", status="active"),
+            Edge(id="e-vpn2", source="node-asa-vpn", target="node-duo-mfa", source_port="inside", target_port="mfa-api", status="active"),
+            Edge(id="e-vpn3", source="node-asa-vpn", target="node-corp-gateway", source_port="dmz", target_port="Gig0/0", status="active"),
+            Edge(id="e-vpn4", source="node-corp-gateway", target="node-ad-dc", source_port="Gig0/1", target_port="eth0", status="active"),
+            Edge(id="e-vpn5", source="node-corp-gateway", target="node-internal-erp", source_port="Gig0/2", target_port="eth0", status="active"),
+            Edge(id="e-vpn6", source="node-ad-dc", target="node-internal-erp", source_port="ldap", target_port="auth", status="active")
+        ]
+    )
+
+
+def get_service_provider_cisco_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-peer-as65000", name="Upstream-Carrier-AS65000", type=NodeType.ROUTER, x=70, y=180, ip_address="198.51.100.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-cisco8k-core01", name="Cisco-8201-Core01", type=NodeType.ROUTER, x=290, y=130, ip_address="10.200.0.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-cisco8k-core02", name="Cisco-8201-Core02", type=NodeType.ROUTER, x=290, y=270, ip_address="10.200.0.2", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-ncs5500-spine01", name="Cisco-NCS5504-Spine01", type=NodeType.ROUTER, x=530, y=130, ip_address="10.200.1.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt:metric"),
+            Node(id="node-ncs5500-spine02", name="Cisco-NCS5504-Spine02", type=NodeType.ROUTER, x=530, y=270, ip_address="10.200.1.2", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt:metric"),
+            Node(id="node-asr9k-pe01", name="Cisco-ASR9010-PE01", type=NodeType.ROUTER, x=770, y=130, ip_address="10.200.2.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-asr9k-pe02", name="Cisco-ASR9010-PE02", type=NodeType.ROUTER, x=770, y=270, ip_address="10.200.2.2", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="node-metro-ce01", name="Metro-Customer-CE01", type=NodeType.CLIENT_EXTERNAL, x=950, y=200, ip_address="10.200.3.1", status="active", vendor="generic")
+        ],
+        edges=[
+            Edge(id="e-sp1", source="node-peer-as65000", target="node-cisco8k-core01", source_port="HundredGigE0/0/0/1", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp2", source="node-peer-as65000", target="node-cisco8k-core02", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp3", source="node-cisco8k-core01", target="node-ncs5500-spine01", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp4", source="node-cisco8k-core02", target="node-ncs5500-spine02", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp5", source="node-ncs5500-spine01", target="node-asr9k-pe01", source_port="TenGigE0/0/0/1", target_port="TenGigE0/0/0/1", status="active"),
+            Edge(id="e-sp6", source="node-ncs5500-spine02", target="node-asr9k-pe02", source_port="TenGigE0/0/0/1", target_port="TenGigE0/0/0/1", status="active"),
+            Edge(id="e-sp7", source="node-asr9k-pe01", target="node-asr9k-pe02", source_port="Bundle-Ether1", target_port="Bundle-Ether1", status="active"),
+            Edge(id="e-sp8", source="node-asr9k-pe01", target="node-metro-ce01", source_port="GigE0/0/0/1", target_port="eth0", status="active")
+        ]
+    )
+
+
+def get_arch_wlan_meraki_catalyst_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-cat9130-ap", name="Catalyst-9130AX-AP01", type=NodeType.WIRELESS_AP, x=70, y=140, ip_address="10.20.10.50", status="active", vendor="cisco_catalyst", sourcetype="cisco:catalyst:clienthealth"),
+            Node(id="node-meraki-mr56", name="Meraki-MR56-AP01", type=NodeType.WIRELESS_AP, x=70, y=280, ip_address="10.20.10.60", status="active", vendor="meraki", sourcetype="meraki:accesspoints"),
+            Node(id="node-cat9800-wlc", name="Catalyst-9800-CL-WLC", type=NodeType.WLC_CONTROLLER, x=340, y=210, ip_address="10.20.0.10", status="active", vendor="cisco_catalyst", sourcetype="cisco:catalyst:rogue:threat_details"),
+            Node(id="node-cat9300-dist", name="Catalyst-9300-Dist01", type=NodeType.SWITCH, x=580, y=210, ip_address="10.20.0.1", status="active", vendor="cisco_catalyst", sourcetype="cisco:catalyst:clienthealth"),
+            Node(id="node-ise-wlan", name="Cisco-ISE-WLAN-Profiler", type=NodeType.FIREWALL, x=580, y=350, ip_address="10.20.0.25", status="active", vendor="cisco_ise", sourcetype="cisco:catalyst:clienthealth"),
+            Node(id="node-rf-interferer", name="Unsanctioned-AP-Interferer", type=NodeType.CLIENT_EXTERNAL, x=70, y=40, ip_address="10.20.10.99", status="active", vendor="generic")
+        ],
+        edges=[
+            Edge(id="e-wlan1", source="node-cat9130-ap", target="node-cat9800-wlc", source_port="capwap", target_port="Gig0", status="active"),
+            Edge(id="e-wlan2", source="node-meraki-mr56", target="node-cat9800-wlc", source_port="meraki-tunnel", target_port="Gig1", status="active"),
+            Edge(id="e-wlan3", source="node-cat9800-wlc", target="node-cat9300-dist", source_port="Te1/0/1", target_port="Te1/1/1", status="active"),
+            Edge(id="e-wlan4", source="node-cat9800-wlc", target="node-ise-wlan", source_port="Te1/0/2", target_port="eth0", status="active"),
+            Edge(id="e-wlan5", source="node-rf-interferer", target="node-cat9130-ap", source_port="rf-radio", target_port="radio1", status="active"),
+            Edge(id="e-wlan6", source="node-cat9130-ap", target="node-meraki-mr56", source_port="bssid-overlap", target_port="bssid-overlap", status="active")
+        ]
+    )
+
+
+def get_arch_man_carrier_ring_topology() -> TopologyState:
+    return TopologyState(
+        nodes=[
+            Node(id="node-nokia-ring-A", name="Nokia-7750-SR12-NodeA", type=NodeType.OPTICAL_CORE, x=150, y=120, ip_address="10.250.0.1", status="active", vendor="nokia_sros", sourcetype="nokia:sros:syslog"),
+            Node(id="node-nokia-ring-B", name="Nokia-7750-SR12-NodeB", type=NodeType.OPTICAL_CORE, x=550, y=120, ip_address="10.250.0.2", status="active", vendor="nokia_sros", sourcetype="nokia:sros:syslog"),
+            Node(id="node-juniper-ring-C", name="Juniper-MX960-NodeC", type=NodeType.ROUTER, x=550, y=320, ip_address="10.250.0.3", status="active", vendor="juniper_junos", sourcetype="juniper:junos"),
+            Node(id="node-juniper-ring-D", name="Juniper-MX960-NodeD", type=NodeType.ROUTER, x=150, y=320, ip_address="10.250.0.4", status="active", vendor="juniper_junos", sourcetype="juniper:junos"),
+            Node(id="node-arista-leaf-E", name="Arista-7280R-LeafE", type=NodeType.SWITCH, x=350, y=80, ip_address="10.250.1.1", status="active", vendor="arista_eos", sourcetype="arista:eos"),
+            Node(id="node-arista-leaf-F", name="Arista-7280R-LeafF", type=NodeType.SWITCH, x=350, y=360, ip_address="10.250.1.2", status="active", vendor="arista_eos", sourcetype="arista:eos")
+        ],
+        edges=[
+            Edge(id="e-ring1", source="node-nokia-ring-A", target="node-nokia-ring-B", source_port="1/1/c1", target_port="1/1/c1", status="active"),
+            Edge(id="e-ring2", source="node-nokia-ring-B", target="node-juniper-ring-C", source_port="1/1/c2", target_port="ge-0/0/0", status="active"),
+            Edge(id="e-ring3", source="node-juniper-ring-C", target="node-juniper-ring-D", source_port="ge-0/0/1", target_port="ge-0/0/0", status="active"),
+            Edge(id="e-ring4", source="node-juniper-ring-D", target="node-nokia-ring-A", source_port="ge-0/0/1", target_port="1/1/c2", status="active"),
+            Edge(id="e-ring5", source="node-nokia-ring-A", target="node-arista-leaf-E", source_port="1/1/c3", target_port="Ethernet1/1", status="active"),
+            Edge(id="e-ring6", source="node-juniper-ring-C", target="node-arista-leaf-F", source_port="ge-0/0/2", target_port="Ethernet1/1", status="active")
+        ]
+    )
+
+
 # =========================================================================
 # Validation Engine (Gate 4 Machine-Readable Contract Evaluation)
 # =========================================================================
@@ -1064,7 +1173,17 @@ class ScenarioRunner:
         top_id = (getattr(contract, "topology_id", None) or (contract.get("topology_id") if isinstance(contract, dict) else "") or "").lower()
         scen_id = (getattr(contract, "id", None) or (contract.get("id") if isinstance(contract, dict) else "") or "").lower()
 
-        if "sdwan" in top_id or "sdwan" in scen_id or "brownout" in scen_id:
+        if "arch_lan_campus_access" in top_id or "arch_lan_campus_access" in scen_id:
+            return get_arch_lan_campus_access_topology()
+        elif "arch_vpn_remote_workforce" in top_id or "arch_vpn_remote_workforce" in scen_id:
+            return get_arch_vpn_remote_workforce_topology()
+        elif "service_provider_cisco" in top_id or "service_provider_cisco" in scen_id:
+            return get_service_provider_cisco_topology()
+        elif "arch_wlan_meraki_catalyst" in top_id or "arch_wlan_meraki_catalyst" in scen_id:
+            return get_arch_wlan_meraki_catalyst_topology()
+        elif "arch_man_carrier_ring" in top_id or "arch_man_carrier_ring" in scen_id:
+            return get_arch_man_carrier_ring_topology()
+        elif "sdwan" in top_id or "sdwan" in scen_id or "brownout" in scen_id:
             return get_cisco_sdwan_topology()
         elif "campus" in top_id or "rogue" in scen_id or "campus" in scen_id:
             return get_cisco_campus_topology()
@@ -1114,9 +1233,341 @@ class ScenarioRunner:
         node_map = {n.id: n for n in graph.topology.nodes}
 
         # ---------------------------------------------------------------------
+        # GATE 10: ARCH_LAN_CAMPUS_ACCESS
+        # ---------------------------------------------------------------------
+        if "arch_lan_campus_access" in scen_id:
+            cat_sw = node_map.get("node-cat9300-access01") or switch_node
+            core_sw = node_map.get("node-cat9600-core") or router_node
+            ise_node = node_map.get("node-ise-trustsec") or fw_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_dhcp_snooping_log(
+                    device=cat_sw, client_mac="00:1A:2B:3C:4D:5E", vlan_id=10,
+                    interface="GigabitEthernet1/0/12", rogue_ip="10.10.30.50",
+                    event_code="PORT_RESTORED", action="allowed", status="normal",
+                    signature="Catalyst 9300 Port Security Baseline Forwarding"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                    device=ise_node, user="student_user_12", mac_address="00:1A:2B:3C:4D:5E",
+                    endpoint_profile="Workstation-Corporate", action="allowed", status="normal",
+                    signature="Cisco ISE 802.1X Authentication & MAB Authorized",
+                    sourcetype="cisco:ise:nac:8021x"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=core_sw, src_ip="10.10.30.1", dest_ip="10.10.0.1",
+                    interface="FortyGig1/0/1", action="allowed", status="normal",
+                    signature="Campus Core L3 Uplink Nominal"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_cisco_catalyst_dhcp_snooping_log(
+                    device=cat_sw, client_mac="00:1A:2B:3C:4D:5E", vlan_id=10,
+                    interface="GigabitEthernet1/0/12", rogue_ip="10.10.30.50",
+                    event_code="DHCP_OFFER_DROPPED", action="blocked", status="degraded",
+                    signature="Rogue DHCP Server Offer Dropped by DHCP Snooping"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_dhcp_snooping_log(
+                    device=cat_sw, client_mac="00:1A:2B:3C:4D:5E", vlan_id=10,
+                    interface="GigabitEthernet1/0/12", rogue_ip="10.10.30.50",
+                    event_code="DAI_BURST_EXCEEDED", action="alerted", status="degraded",
+                    signature="Dynamic ARP Inspection Rate Limit Exceeded"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=cat_sw, src_ip="10.10.30.50", dest_ip="10.10.30.1",
+                    interface="GigabitEthernet1/0/12", action="alerted", status="degraded",
+                    signature="Catalyst Access Port ARP Bursts Detected"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_catalyst_dhcp_snooping_log(
+                    device=cat_sw, client_mac="00:1A:2B:3C:4D:5E", vlan_id=10,
+                    interface="GigabitEthernet1/0/12", rogue_ip="10.10.30.50",
+                    event_code="ERR_DISABLE", action="blocked", status="mitigated",
+                    signature="Port Err-Disabled via Dynamic ARP Inspection Enforcement"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                    device=ise_node, user="unauthorized_endpoint", mac_address="00:1A:2B:3C:4D:5E",
+                    endpoint_profile="Untrusted-Rogue", action="blocked", status="mitigated",
+                    signature="Cisco ISE CoA Quarantine Issued for Rogue Host",
+                    sourcetype="cisco:ise:nac:8021x"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_dhcp_snooping_log(
+                    device=cat_sw, client_mac="00:1A:2B:3C:4D:5E", vlan_id=10,
+                    interface="GigabitEthernet1/0/12", rogue_ip="10.10.30.50",
+                    event_code="PORT_RESTORED", action="allowed", status="restored",
+                    signature="Port Restored from Err-Disable to Forwarding"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=cat_sw, src_ip="10.10.30.1", dest_ip="10.10.0.1",
+                    interface="GigabitEthernet1/0/12", action="allowed", status="restored",
+                    signature="Catalyst 9300 Port Security Equilibrium Restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                    device=ise_node, user="student_user_12", mac_address="00:1A:2B:3C:4D:5E",
+                    endpoint_profile="Workstation-Corporate", action="allowed", status="normal",
+                    signature="Campus Access 802.1X TrustSec Policy Conformance Verified",
+                    sourcetype="cisco:ise:nac:8021x"
+                ))
+
+        # ---------------------------------------------------------------------
+        # GATE 10: ARCH_VPN_REMOTE_WORKFORCE
+        # ---------------------------------------------------------------------
+        elif "arch_vpn_remote_workforce" in scen_id:
+            asa_vpn = node_map.get("node-asa-vpn") or fw_node
+            duo_node = node_map.get("node-duo-mfa") or fw_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_duo_vpn_log(
+                    device=duo_node, user="alice.smith@corp.internal", client_ip="198.51.100.77",
+                    factor="duo_push", result="SUCCESS", reason="User approved push",
+                    country="US", action="allowed", status="normal", sourcetype="cisco:duo:push:prompt",
+                    signature="Cisco Duo MFA Push Approved"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=asa_vpn, src_ip="198.51.100.77", dest_ip="10.100.1.1",
+                    src_port=52341, dest_port=443, proto="TCP",
+                    action="allowed", status="normal",
+                    signature="Cisco ASA AnyConnect SSL-VPN Session Established"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_cisco_duo_vpn_log(
+                    device=duo_node, user="bob.jones@corp.internal", client_ip="185.220.101.5",
+                    factor="passcode", result="FAILURE", reason="Invalid password credential stuffing surge",
+                    country="RU", action="alerted", status="degraded", sourcetype="cisco:duo:remote:vpn",
+                    signature="Cisco Duo Credential Stuffing Anomaly Detected"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=asa_vpn, src_ip="185.220.101.5", dest_ip="10.100.1.1",
+                    src_port=41982, dest_port=443, proto="TCP",
+                    action="alerted", status="degraded",
+                    signature="Cisco ASA %ASA-6-113015: AAA user authentication Rejected"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_cisco_duo_vpn_log(
+                    device=duo_node, user="bob.jones@corp.internal", client_ip="185.220.101.5",
+                    factor="duo_push", result="FRAUD", reason="User marked push as fraudulent / denied",
+                    country="RU", action="alerted", status="degraded", sourcetype="cisco:duo:push:prompt",
+                    signature="Cisco Duo Fraud Alert: Unauthorized Push Rejected by User"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_duo_vpn_log(
+                    device=duo_node, user="bob.jones@corp.internal", client_ip="185.220.101.5",
+                    factor="account_lockout", result="LOCKED", reason="Account locked out due to fraud report",
+                    country="RU", action="blocked", status="mitigated", sourcetype="cisco:duo:remote:vpn",
+                    signature="Cisco Duo Account Locked Out Following Fraud Report"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=asa_vpn, src_ip="185.220.101.5", dest_ip="10.100.1.1",
+                    src_port=41983, dest_port=443, proto="TCP",
+                    action="blocked", status="mitigated",
+                    signature="Cisco ASA %ASA-4-106023: Denied inbound SSL-VPN from blacklisted IP"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_cisco_duo_vpn_log(
+                    device=duo_node, user="bob.jones@corp.internal", client_ip="198.51.100.77",
+                    factor="duo_push", result="SUCCESS", reason="User approved push after credential reset",
+                    country="US", action="allowed", status="restored", sourcetype="cisco:duo:push:prompt",
+                    signature="Cisco Duo User Authenticated After Credential Reset"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=asa_vpn, src_ip="198.51.100.77", dest_ip="10.100.1.1",
+                    src_port=52344, dest_port=443, proto="TCP",
+                    action="allowed", status="restored",
+                    signature="Cisco ASA SSL-VPN Tunnel Clean & Restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_cisco_asa_log(
+                    device=asa_vpn, src_ip="198.51.100.77", dest_ip="10.100.1.1",
+                    src_port=52345, dest_port=443, proto="TCP",
+                    action="allowed", status="normal",
+                    signature="Cisco ASA SSL-VPN Gateway Conformance Verified"
+                ))
+
+        # ---------------------------------------------------------------------
+        # GATE 10: SERVICE_PROVIDER_CISCO
+        # ---------------------------------------------------------------------
+        elif "service_provider_cisco" in scen_id:
+            c8k = node_map.get("node-cisco8k-core01") or router_node
+            asr_node = node_map.get("node-asr9k-pe01") or router_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=c8k, neighbor_ip="198.51.100.1", event_type="ROUTE_STABLE",
+                    action="allowed", status="normal", prefix="10.200.0.0/16",
+                    signature="Cisco IOS-XR BGP Peer AS65000 Established Nominal"
+                ))
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=asr_node, interface_name="HundredGigE0/0/0/1",
+                    in_octets=840291000, out_octets=795810200, cpu_pct=22.0, memory_pct=36.0,
+                    action="allowed", status="normal", sourcetype="cisco:ios:mdt:metric"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=c8k, neighbor_ip="198.51.100.1", event_type="BGP_DOWN",
+                    action="alerted", status="degraded", prefix="10.200.0.0/16",
+                    signature="BGP Peer Adjacency Down: Carrier Link Flap"
+                ))
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=asr_node, interface_name="HundredGigE0/0/0/1",
+                    in_octets=24000, out_octets=12000, cpu_pct=68.0, memory_pct=45.0,
+                    action="alerted", status="degraded", sourcetype="cisco:ios:mdt:metric"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=asr_node, neighbor_ip="10.200.0.1", event_type="BGP_DOWN",
+                    action="alerted", status="degraded", prefix="10.200.0.0/16",
+                    signature="Core Transit Route Withdrawal Notification Received"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=c8k, neighbor_ip="198.51.100.1", event_type="TI_LFA_REROUTE",
+                    action="allowed", status="mitigated", prefix="10.200.0.0/16",
+                    signature="TI-LFA Sub-50ms Fast Reroute Activated"
+                ))
+                logs.append(SplunkLogEngine.format_mdt_stream(
+                    device=asr_node, interface_name="HundredGigE0/0/0/2",
+                    in_octets=810291000, out_octets=775810200, cpu_pct=34.0, memory_pct=40.0,
+                    action="allowed", status="mitigated", sourcetype="cisco:ios:mdt:metric"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=c8k, neighbor_ip="198.51.100.1", event_type="BGP_UP",
+                    action="allowed", status="restored", prefix="10.200.0.0/16",
+                    signature="BGP Peer Adjacency Re-established Restored"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
+                    device=c8k, neighbor_ip="198.51.100.1", event_type="ROUTE_STABLE",
+                    action="allowed", status="normal", prefix="10.200.0.0/16",
+                    signature="Core BGP/MPLS Routing Equilibrium Restored"
+                ))
+
+        # ---------------------------------------------------------------------
+        # GATE 10: ARCH_WLAN_MERAKI_CATALYST
+        # ---------------------------------------------------------------------
+        elif "arch_wlan_meraki_catalyst" in scen_id:
+            ap_node = node_map.get("node-cat9130-ap") or switch_node
+            meraki_node = node_map.get("node-meraki-mr56") or switch_node
+            wlc_node = node_map.get("node-cat9800-wlc") or switch_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
+                    device=ap_node, channel=36, util_pct=14.2, noise_floor=-92,
+                    event_type="RF_RESTORED", action="allowed", status="normal",
+                    sourcetype="cisco:catalyst:clienthealth", signature="Catalyst CleanAir RF Health Nominal"
+                ))
+                logs.append(SplunkLogEngine.format_meraki_alert_log(
+                    device=meraki_node, client_mac="E0:D5:5E:11:22:33", alert_type="client_health_report",
+                    channel=36, action="allowed", status="normal",
+                    signature="Meraki MR56 Client Health Status Nominal", sourcetype="meraki:accesspoints"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
+                    device=ap_node, channel=36, util_pct=94.5, noise_floor=-58,
+                    event_type="INTERFERENCE_SURGE", action="alerted", status="degraded",
+                    sourcetype="cisco:catalyst:clienthealth", signature="CleanAir Non-Wi-Fi RF Interference Surge on Channel 36"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_rogue_log(
+                    device=wlc_node, rogue_mac="00:14:22:01:23:45", bssid="00:14:22:01:23:45",
+                    ssid="Corp-Executive-Secure", channel=36, rssi=-48,
+                    action="alerted", status="degraded", signature="Rogue AP Evil-Twin SSID Broadcast Detected"
+                ))
+                logs.append(SplunkLogEngine.format_meraki_alert_log(
+                    device=meraki_node, client_mac="00:14:22:01:23:45", alert_type="air_marshal_rogue_detected",
+                    channel=36, action="alerted", status="degraded",
+                    signature="Meraki Air Marshal Rogue SSID Detected", sourcetype="meraki:accesspoints"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
+                    device=ap_node, channel=36, util_pct=22.0, noise_floor=-90,
+                    event_type="CHANNEL_SWITCH", action="allowed", status="mitigated",
+                    sourcetype="cisco:catalyst:clienthealth", signature="CleanAir Dynamic Frequency Selection Channel Reassignment"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
+                    device=ap_node, channel=36, util_pct=15.0, noise_floor=-88,
+                    event_type="ROGUE_CONTAINED", action="blocked", status="mitigated",
+                    sourcetype="cisco:catalyst:rogue:threat_details", signature="Air Marshal Evil-Twin SSID Rogue Containment Active"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_wlan_rf_log(
+                    device=ap_node, channel=100, util_pct=15.0, noise_floor=-92,
+                    event_type="RF_RESTORED", action="allowed", status="restored",
+                    sourcetype="cisco:catalyst:clienthealth", signature="WLAN RF Spectrum & Client SNR Restored to Nominal"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_meraki_alert_log(
+                    device=meraki_node, client_mac="E0:D5:5E:11:22:33", alert_type="client_health_report",
+                    channel=100, action="allowed", status="normal",
+                    signature="Meraki Air Marshal Containment Audit Complete", sourcetype="meraki:accesspoints"
+                ))
+
+        # ---------------------------------------------------------------------
+        # GATE 10: ARCH_MAN_CARRIER_RING
+        # ---------------------------------------------------------------------
+        elif "arch_man_carrier_ring" in scen_id:
+            nokia_a = node_map.get("node-nokia-ring-A") or router_node
+            nokia_b = node_map.get("node-nokia-ring-B") or router_node
+            juniper_c = node_map.get("node-juniper-ring-C") or router_node
+            arista_e = node_map.get("node-arista-leaf-E") or switch_node
+
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c1",
+                    event_type="RING_IDLE", action="allowed", status="normal",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring IDLE State Nominal"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=arista_e, src_ip="10.250.1.1", dest_ip="10.250.0.1",
+                    interface="Ethernet1/1", action="allowed", status="normal",
+                    signature="Arista EOS Metro Aggregation Link Nominal"
+                ))
+            elif phase in (ScenarioPhase.FAULT.value, ScenarioPhase.DEGRADE.value):
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c1",
+                    event_type="SIGNAL_FAIL", action="alerted", status="degraded",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring Span 1/1/c1 Fiber Cut Signal Failure"
+                ))
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=juniper_c, ring_id="RING-MAN-100G", port_id="ge-0/0/0",
+                    event_type="SIGNAL_FAIL", action="alerted", status="degraded",
+                    vendor="juniper_junos", sourcetype="juniper:junos", signature="Juniper Junos G.8032 R-APS Signal Fail Frame Received"
+                ))
+            elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_b, ring_id="RING-MAN-100G", port_id="1/1/c1",
+                    event_type="SIGNAL_FAIL", action="alerted", status="degraded",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="Nokia SR-OS R-APS SF Forwarded Ring Span Degraded"
+                ))
+            elif phase in (ScenarioPhase.FAILOVER.value, "MITIGATION"):
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c2",
+                    event_type="RPL_UNBLOCK", action="allowed", status="mitigated",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring RPL Unblocked (Sub-50ms Failover)"
+                ))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=arista_e, src_ip="10.250.1.1", dest_ip="10.250.0.1",
+                    interface="Ethernet1/1", action="allowed", status="mitigated",
+                    signature="Arista EOS Metro Traffic Sub-50ms Alternate Path Active"
+                ))
+            elif phase == ScenarioPhase.RECOVER.value:
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c1",
+                    event_type="REVERTIVE_RESTORE", action="allowed", status="restored",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring WTR Expired Revertive Restoration"
+                ))
+            elif phase == ScenarioPhase.VALIDATE.value:
+                logs.append(SplunkLogEngine.format_g8032_erps_log(
+                    device=nokia_a, ring_id="RING-MAN-100G", port_id="1/1/c1",
+                    event_type="RING_IDLE", action="allowed", status="normal",
+                    vendor="nokia_sros", sourcetype="nokia:sros:syslog", signature="G.8032 ERPS Ring Verification Complete"
+                ))
+
+        # ---------------------------------------------------------------------
         # CISCO SD-WAN BROWNOUT
         # ---------------------------------------------------------------------
-        if "sdwan" in scen_id or "brownout" in scen_id:
+        elif "sdwan" in scen_id or "brownout" in scen_id:
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_cisco_sdwan_linkhealth_log(
                     device=router_node, remote_system_ip="198.51.100.1", latency_ms=15.0,
@@ -2185,6 +2636,18 @@ class ScenarioRunner:
             self.current_phase = phase_name
             phase_logs: List[LogEntry] = []
 
+            phase_def = None
+            for p in getattr(contract, "phases", []):
+                p_name = getattr(p, "phase", None) or (p.get("phase") if isinstance(p, dict) else "")
+                if p_name and p_name.upper() == phase_name.upper():
+                    phase_def = p
+                    break
+            contract_obs = []
+            if phase_def:
+                exp_obs = getattr(phase_def, "expected_observations", None) or (phase_def.get("expected_observations") if isinstance(phase_def, dict) else None)
+                if exp_obs:
+                    contract_obs = list(exp_obs)
+
             if phase_name == ScenarioPhase.INITIALIZE.value:
                 self.record_ground_truth(
                     run_id=run_id,
@@ -2192,7 +2655,7 @@ class ScenarioRunner:
                     phase=phase_name,
                     affected_nodes=[n.id for n in topology.nodes],
                     affected_edges=[e.id for e in topology.edges],
-                    observations=["Topology initialized", "Initial graph state snapshotted"]
+                    observations=contract_obs or ["Topology initialized", "Initial graph state snapshotted"]
                 )
 
             elif phase_name == ScenarioPhase.BASELINE.value:
@@ -2200,7 +2663,7 @@ class ScenarioRunner:
                     run_id=run_id,
                     scenario_id=contract.id,
                     phase=phase_name,
-                    observations=["Establishing nominal baseline telemetry stream", "Zero packet loss"]
+                    observations=contract_obs or ["Establishing nominal baseline telemetry stream", "Zero packet loss"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
                 if not phase_logs:
@@ -2222,7 +2685,7 @@ class ScenarioRunner:
                     phase=phase_name,
                     intentional_fault={"type": "link_degradation", "target_edge": target_edge_id, "loss_pct": 14.5, "latency_ms": 185.0},
                     affected_edges=[target_edge_id] if target_edge_id else [],
-                    observations=["SLA violation observed", "Link quality degraded"]
+                    observations=contract_obs or ["SLA violation observed", "Link quality degraded"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
 
@@ -2233,7 +2696,7 @@ class ScenarioRunner:
                     phase=phase_name,
                     intentional_fault={"type": "primary_fault", "description": contract.attack_vector or "Primary fault injected"},
                     affected_nodes=manifest.affected_devices,
-                    observations=["Primary fault triggered", "Alerts dispatched"]
+                    observations=contract_obs or ["Primary fault triggered", "Alerts dispatched"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
 
@@ -2243,7 +2706,7 @@ class ScenarioRunner:
                     scenario_id=contract.id,
                     phase=phase_name,
                     secondary_effects=["Cascading buffer incast", "Neighbor flap alert"],
-                    observations=["Secondary telemetry spike observed"]
+                    observations=contract_obs or ["Secondary telemetry spike observed"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
 
@@ -2252,7 +2715,7 @@ class ScenarioRunner:
                     run_id=run_id,
                     scenario_id=contract.id,
                     phase=phase_name,
-                    observations=["Dynamic route steer engaged", "Quarantine enforcement verified"]
+                    observations=contract_obs or ["Dynamic route steer engaged", "Quarantine enforcement verified"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
 
@@ -2263,7 +2726,7 @@ class ScenarioRunner:
                     scenario_id=contract.id,
                     phase=phase_name,
                     intentional_recovery={"type": "full_restoration", "status": "restored"},
-                    observations=["Topology state restored to nominal", "Alarms cleared"]
+                    observations=contract_obs or ["Topology state restored to nominal", "Alarms cleared"]
                 )
                 phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
 
@@ -2272,7 +2735,7 @@ class ScenarioRunner:
                     run_id=run_id,
                     scenario_id=contract.id,
                     phase=phase_name,
-                    observations=["Evaluating validation rules against generated telemetry"]
+                    observations=contract_obs or ["Evaluating validation rules against generated telemetry"]
                 )
                 manifest.validation_results = ValidationEngine.evaluate_all(contract.validation_rules, self.run_logs[run_id], graph)
 
@@ -2281,7 +2744,7 @@ class ScenarioRunner:
                     run_id=run_id,
                     scenario_id=contract.id,
                     phase=phase_name,
-                    observations=["Scenario lifecycle complete"]
+                    observations=contract_obs or ["Scenario lifecycle complete"]
                 )
 
             # Tag and accumulate logs for this phase

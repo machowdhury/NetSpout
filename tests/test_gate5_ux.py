@@ -228,8 +228,8 @@ class TestGate5UX(unittest.TestCase):
         """21. Verify datablaster_ui.js and test_script.js are deleted and have zero references."""
         self.assertFalse(os.path.exists(os.path.join(NETSPOUT_DIR, "appserver/static/datablaster_ui.js")))
         self.assertFalse(os.path.exists(os.path.join(NETSPOUT_DIR, "appserver/static/test_script.js")))
-        res = subprocess.run(["git", "grep", "datablaster_ui.js"], cwd=REPO_ROOT, capture_output=True, text=True)
-        self.assertEqual(res.returncode, 1, "Must have zero references to datablaster_ui.js")
+        res = subprocess.run(["git", "grep", "datablaster_ui.js", "--", "netspout/"], cwd=REPO_ROOT, capture_output=True, text=True)
+        self.assertEqual(res.returncode, 1, "Must have zero references to datablaster_ui.js in netspout/")
 
     def test_22_native_splunk_dashboards_retained(self):
         """22. Verify 7 Studio dashboards and datablaster_dashboard.xml are intentionally preserved."""

@@ -562,6 +562,7 @@ class ScenarioContract(BaseModel):
     estimated_duration_sec: int = 30
     topology_id: str = "cisco_campus"
     ecosystem: str = "mixed_vendor"
+    maturity: str = "CONTRACTED"  # CANDIDATE, CONTRACTED, IMPLEMENTED, FORMAT_VALIDATED, E2E_VALIDATED, GOLDEN_PATH_CERTIFIED
     description: str = ""
     attack_vector: Optional[str] = None
     defense_mechanism: Optional[str] = None
@@ -596,6 +597,7 @@ class RunManifest(BaseModel):
     scenario_id: str
     scenario_name: str = ""
     topology_id: str = ""
+    scenario_maturity: str = "CONTRACTED"  # CANDIDATE, CONTRACTED, IMPLEMENTED, FORMAT_VALIDATED, E2E_VALIDATED, GOLDEN_PATH_CERTIFIED
     seed: Optional[int] = None
     time_mode: str = "TEST"  # REALTIME | ACCELERATED | TEST
     start_time: float = Field(default_factory=time.time)

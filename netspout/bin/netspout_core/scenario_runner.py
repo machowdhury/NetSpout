@@ -1030,7 +1030,18 @@ class ScenarioRunner:
         # CISCO SD-WAN BROWNOUT
         # ---------------------------------------------------------------------
         if "sdwan" in scen_id or "brownout" in scen_id:
-            if phase == ScenarioPhase.DEGRADE.value:
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_sdwan_linkhealth_log(
+                    device=router_node, remote_system_ip="198.51.100.1", latency_ms=15.0,
+                    jitter_ms=2.0, loss_pct=0.0, sla_status="COMPLIANT",
+                    action="allowed", status="normal", signature="SD-WAN Tunnel SLA Compliant: Primary MPLS Carrier"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_thousandeyes_log(
+                    device=te_node, target_url="https://crm.corp.internal/health",
+                    latency_ms=15.0, packet_loss_pct=0.0, http_code=200,
+                    action="allowed", status="normal", signature="ThousandEyes synthetic latency nominal"
+                ))
+            elif phase == ScenarioPhase.DEGRADE.value:
                 logs.append(SplunkLogEngine.format_cisco_sdwan_linkhealth_log(
                     device=router_node, remote_system_ip="198.51.100.1", latency_ms=185.0,
                     jitter_ms=38.0, loss_pct=14.5, sla_status="VIOLATION",
@@ -1082,27 +1093,50 @@ class ScenarioRunner:
         # CISCO CAMPUS ROGUE AP
         # ---------------------------------------------------------------------
         elif "campus" in scen_id or "rogue" in scen_id:
-            if phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
+                    device=switch_node, client_mac="00:11:22:33:44:55",
+                    event_type="DOT1X_CLIENT_AUTH_SUCCESS", action="allowed", status="normal",
+                    signature="802.1X Supplicant Authenticated on GigabitEthernet1/0/12"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                    device=fw_node, client_mac="00:11:22:33:44:55", client_ip="10.10.20.101",
+                    user="corp_user_01", auth_status="PASSED", profile="Corporate_Secure_VLAN",
+                    action="allowed", status="normal", signature="ISE 802.1X Authentication Success"
+                ))
+            elif phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
                 logs.append(SplunkLogEngine.format_cisco_catalyst_rogue_log(
                     device=ap_node, rogue_mac="00:1A:2B:3C:4D:5E", bssid="00:1A:2B:FF:EE:DD",
-                    ssid="CORP_GUEST_ROGUE", channel=6, rssi=-55, action="alerted", status="breached"
+                    ssid="CORP_GUEST_ROGUE", channel=6, rssi=-55, action="alerted", status="breached",
+                    signature="Rogue AP Detected: Unsanctioned BSSID on Campus Perimeter"
                 ))
                 logs.append(SplunkLogEngine.format_cisco_ise_log(
                     device=fw_node, client_mac="00:1A:2B:3C:4D:5E", client_ip="10.10.20.142",
                     user="rogue_attacker", auth_status="FAILED", profile="Quarantine_Restricted_VLAN",
-                    action="blocked", status="blocked"
+                    action="blocked", status="blocked", signature="ISE 802.1X Unauthorized Supplicant Rejected"
                 ))
             elif phase == ScenarioPhase.PROPAGATE.value:
                 logs.append(SplunkLogEngine.format_cisco_mac_flap_log(
                     device=switch_node, mac="00:1A:2B:3C:4D:5E", vlan=10,
                     port1="GigabitEthernet1/0/12", port2="GigabitEthernet1/0/48",
-                    action="alerted", status="breached"
+                    action="alerted", status="breached",
+                    signature="%SW_MATM-4-MACFLAP_NOTIF: L2 Loop / Rogue Device Flapping"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
+                    device=switch_node, client_mac="00:1A:2B:3C:4D:5E",
+                    event_type="PORT_SECURITY_VIOLATION", action="alerted", status="degraded",
+                    signature="Port Security Violation: Host Flap Threshold Exceeded"
                 ))
             elif phase == ScenarioPhase.FAILOVER.value:
                 logs.append(SplunkLogEngine.format_cisco_ise_log(
                     device=fw_node, client_mac="00:1A:2B:3C:4D:5E", client_ip="10.10.20.142",
                     user="rogue_attacker", auth_status="CONTAINED", profile="Quarantine_Restricted_VLAN",
-                    action="blocked", status="blocked"
+                    action="blocked", status="blocked", signature="ISE CoA Dynamic Quarantine Profile Enforced"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
+                    device=switch_node, client_mac="00:1A:2B:3C:4D:5E",
+                    event_type="PORT_SECURITY_SHUTDOWN", action="blocked", status="blocked",
+                    signature="Port Security Error-Disable Action Applied to GigabitEthernet1/0/12"
                 ))
             elif phase == ScenarioPhase.RECOVER.value:
                 logs.append(SplunkLogEngine.format_cisco_catalyst_rogue_log(
@@ -1110,41 +1144,61 @@ class ScenarioRunner:
                     ssid="CORP_GUEST_ROGUE", channel=6, rssi=-95, action="allowed", status="restored",
                     signature="Rogue AP De-authenticated & Cleared from RF Matrix"
                 ))
+                logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
+                    device=switch_node, client_mac="00:11:22:33:44:55",
+                    event_type="PORT_RESTORED_NOMINAL", action="allowed", status="restored",
+                    signature="Switchport GigabitEthernet1/0/12 Re-enabled in Standard VLAN"
+                ))
 
         # ---------------------------------------------------------------------
         # CISCO ACI MICROBURST
         # ---------------------------------------------------------------------
         elif "aci" in scen_id or "microburst" in scen_id:
-            if phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=switch_node, sensor_path="Cisco-NX-OS-buffer-stats:queue-depth",
+                    queue_depth_bytes=1250000, peak_buffer_pct=12.5, action="allowed", status="normal",
+                    signature="Cisco IOS-XE MDT Streaming Telemetry: Nominal Buffer Utilization"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_aci_health_log(
+                    device=switch_node, fabric_health=100, action="allowed", status="normal",
+                    signature="ACI Fabric Health Score: 100/100 Nominal East-West Flow"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
+                    device=switch_node, asic_interface="Ethernet1/24",
+                    buffer_util_pct=12.5, dropped_packets=0, fabric_health=100,
+                    action="allowed", status="normal", signature="Nexus 9K ASIC Buffer Normal Flow"
+                ))
+            elif phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
                 logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
                     device=switch_node, asic_interface="Ethernet1/24 (Ingress Incast)",
                     buffer_util_pct=98.5, dropped_packets=1250, fabric_health=58,
-                    action="dropped", status="degraded"
+                    action="dropped", status="degraded", signature="Nexus 9K Ingress Microburst Queue Saturation"
                 ))
-                logs.append(LogEntry(
-                    timestamp=SplunkLogEngine.current_timestamp_iso(),
-                    device_id=switch_node.name or switch_node.id,
-                    src_ip=switch_node.ip_address,
-                    dest_ip="10.255.0.1",
-                    protocol="DC-ETHERNET",
-                    duration="1ms",
-                    action="alerted",
-                    signature="ACI Fabric Health Score Degraded: Leaf Buffer Incast Detected",
-                    status="degraded",
-                    raw_log=f"{SplunkLogEngine.current_timestamp_syslog()} {switch_node.name} %ACI-HEALTH-4-SCORE_DROP: Fabric health score dropped to 58. Buffer utilization critical.",
-                    node_type=switch_node.type.value,
-                    node_id=switch_node.id,
-                    vendor="cisco_aci",
-                    sourcetype="cisco:dc:aci:health"
+                logs.append(SplunkLogEngine.format_cisco_aci_health_log(
+                    device=switch_node, fabric_health=58, action="alerted", status="degraded",
+                    signature="ACI Fabric Health Score Degraded: Leaf Buffer Incast Detected"
                 ))
                 logs.append(SplunkLogEngine.format_cisco_mdt_log(
                     device=switch_node, sensor_path="Cisco-NX-OS-buffer-stats:queue-depth",
-                    queue_depth_bytes=25500000, peak_buffer_pct=98.5, action="alerted", status="degraded"
+                    queue_depth_bytes=26500000, peak_buffer_pct=98.5, action="alerted", status="degraded",
+                    signature="Cisco IOS-XE MDT Streaming Telemetry Ingress Incast"
                 ))
             elif phase == ScenarioPhase.PROPAGATE.value:
                 logs.append(SplunkLogEngine.format_cisco_mdt_log(
                     device=switch_node, sensor_path="Cisco-NX-OS-buffer-stats:egress-queue",
-                    queue_depth_bytes=28900000, peak_buffer_pct=99.1, action="alerted", status="degraded"
+                    queue_depth_bytes=28900000, peak_buffer_pct=99.1, action="alerted", status="degraded",
+                    signature="Cisco IOS-XE MDT Egress Queue Buffer Congestion Alert"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
+                    device=switch_node, asic_interface="Ethernet1/24",
+                    buffer_util_pct=99.1, dropped_packets=2450, fabric_health=52,
+                    action="dropped", status="degraded",
+                    signature="%ETHPORT-5-IF_RX_OVERFLOW: Ingress FIFO Overrun / PFC Storm Active"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_aci_health_log(
+                    device=switch_node, fabric_health=52, action="alerted", status="degraded",
+                    signature="ACI Fabric Health Score Critical: Fabric Incast Propagation"
                 ))
             elif phase == ScenarioPhase.FAILOVER.value:
                 logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
@@ -1152,34 +1206,64 @@ class ScenarioRunner:
                     buffer_util_pct=68.0, dropped_packets=5, fabric_health=85,
                     action="allowed", status="normal", signature="Dynamic Ingress Buffer Reserving Active"
                 ))
+                logs.append(SplunkLogEngine.format_cisco_aci_health_log(
+                    device=switch_node, fabric_health=85, action="allowed", status="normal",
+                    signature="ACI Fabric Health Score Recovering: Buffer Allocation Rebalanced"
+                ))
             elif phase == ScenarioPhase.RECOVER.value:
                 logs.append(SplunkLogEngine.format_cisco_aci_nexus_log(
                     device=switch_node, asic_interface="Ethernet1/24",
                     buffer_util_pct=14.0, dropped_packets=0, fabric_health=100,
                     action="allowed", status="restored", signature="Buffer Incast Cleared - Line Rate Forwarding Restored"
                 ))
+                logs.append(SplunkLogEngine.format_cisco_aci_health_log(
+                    device=switch_node, fabric_health=100, action="allowed", status="restored",
+                    signature="ACI Fabric Health Score Restored: 100/100"
+                ))
+                logs.append(SplunkLogEngine.format_cisco_mdt_log(
+                    device=switch_node, sensor_path="Cisco-NX-OS-buffer-stats:queue-depth",
+                    queue_depth_bytes=1400000, peak_buffer_pct=14.0, action="allowed", status="restored",
+                    signature="Cisco IOS-XE MDT Streaming Telemetry: Nominal Queue Depth"
+                ))
 
         # ---------------------------------------------------------------------
         # MIXED VENDOR / EDGE BREACH
         # ---------------------------------------------------------------------
         elif "mixed" in scen_id or "edge" in scen_id or "breach" in scen_id:
-            if phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
+            if phase == ScenarioPhase.BASELINE.value:
+                logs.append(SplunkLogEngine.format_palo_alto_log(
+                    device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
+                    src_port=52341, dest_port=443, proto="TCP", action="allowed",
+                    signature="PAN-OS Clean Traffic Flow", status="normal", duration_ms=4
+                ))
+                logs.append(SplunkLogEngine.format_fortinet_ips_log(
+                    device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
+                    src_port=52341, dest_port=443, attack="Corporate.HTTPS.Web.Session",
+                    action="allowed", status="normal", duration_ms=2, signature="FortiGate UTM Policy Permit"
+                ))
+            elif phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
                 logs.append(SplunkLogEngine.format_meraki_alert_log(
                     device=ap_node, client_mac="44:65:0E:12:34:56",
-                    alert_type="Air Marshal Rogue Containment Probe", channel=36,
-                    action="alerted", status="breached"
+                    alert_type="air_marshal_rogue_detected", channel=36,
+                    action="alerted", status="breached",
+                    signature="Meraki Air Marshal Rogue AP Detected on Edge Wireless"
                 ))
                 logs.append(SplunkLogEngine.format_palo_alto_threat_log(
                     device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
                     src_port=445, dest_port=445, threat_name="Scan: TCP Port Scan / Lateral Probing",
-                    threat_id=80012, action="dropped", status="blocked"
+                    threat_id=80012, action="dropped", status="blocked", duration_ms=3
                 ))
             elif phase == ScenarioPhase.PROPAGATE.value:
+                logs.append(SplunkLogEngine.format_fortinet_ips_log(
+                    device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
+                    src_port=49210, dest_port=445, attack="CobaltStrike.Command.and.Control.Beacon",
+                    action="dropped", status="blocked", duration_ms=2, signature="FortiGate IPS Exploit Attempt Denied"
+                ))
                 logs.append(SplunkLogEngine.format_nginx_web_log(
                     device=srv_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
-                    method="POST", uri="/api/v1/admin/exploit", http_code=200, bytes_sent=4500,
-                    action="allowed", signature="Lateral Intrusion Established Post-Perimeter Bypass",
-                    status="breached", duration_ms=38
+                    method="POST", uri="/api/v1/admin/exploit", http_code=403, bytes_sent=182,
+                    action="blocked", signature="WAF Blocked Unauthorized Exploit Path",
+                    status="blocked", duration_ms=5
                 ))
             elif phase == ScenarioPhase.FAILOVER.value:
                 logs.append(SplunkLogEngine.format_palo_alto_threat_log(
@@ -1187,11 +1271,23 @@ class ScenarioRunner:
                     src_port=445, dest_port=445, threat_name="Micro-Segmentation Isolation Applied",
                     threat_id=99002, action="blocked", status="blocked"
                 ))
+                logs.append(SplunkLogEngine.format_fortinet_ips_log(
+                    device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
+                    src_port=49211, dest_port=80, attack="Perimeter.Blacklist.Quarantine.Active",
+                    action="dropped", status="blocked", duration_ms=1,
+                    signature="FortiGate Source IP Dynamic Quarantine Applied"
+                ))
             elif phase == ScenarioPhase.RECOVER.value:
                 logs.append(SplunkLogEngine.format_palo_alto_log(
                     device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
                     src_port=54321, dest_port=443, proto="TCP", action="allowed",
                     signature="PAN-OS Policy Permit: Clean Enterprise Traffic", status="restored"
+                ))
+                logs.append(SplunkLogEngine.format_fortinet_ips_log(
+                    device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
+                    src_port=54321, dest_port=443, attack="Corporate.HTTPS.Web.Session",
+                    action="allowed", status="restored", duration_ms=2,
+                    signature="FortiGate Perimeter Security Restored to Nominal"
                 ))
 
         # ---------------------------------------------------------------------
@@ -1409,6 +1505,7 @@ class ScenarioRunner:
             scenario_id=contract.id,
             scenario_name=contract.display_name or contract.name or contract.id,
             topology_id=contract.topology_id or getattr(topology, "id", "custom"),
+            scenario_maturity=getattr(contract, "maturity", "CONTRACTED"),
             seed=request.seed,
             time_mode=time_mode,
             start_time=start_time,
@@ -1477,7 +1574,9 @@ class ScenarioRunner:
                     phase=phase_name,
                     observations=["Establishing nominal baseline telemetry stream", "Zero packet loss"]
                 )
-                phase_logs = self.execute_step(topology, ScenarioType.NORMAL_TRAFFIC)
+                phase_logs = self._generate_phase_telemetry(phase_name, contract, topology, graph)
+                if not phase_logs:
+                    phase_logs = self.execute_step(topology, ScenarioType.NORMAL_TRAFFIC)
 
             elif phase_name == ScenarioPhase.DEGRADE.value:
                 target_edge_id = None

@@ -1488,6 +1488,7 @@
     "display_name": "Data Center Fabric ACI Ingress Microburst Traffic",
     "category": "DATACENTER",
     "ecosystem": "pure_cisco",
+    "maturity": "E2E_VALIDATED",
     "description": "Microburst traffic pattern saturates Nexus 9K leaf switch ingress ASIC buffers; ACI fabric health score drops and MDT telemetry flags queue incast.",
     "attack_vector": "High-bandwidth Incast Traffic Burst saturating Switch ASIC Buffers",
     "defense_mechanism": "Nexus 9K buffer manager drops packets to protect spine; Cisco ACI health scoring reflects leaf congestion.",
@@ -1555,6 +1556,16 @@
         ]
       },
       {
+        "phase": "FAILOVER",
+        "name": "QoS Dynamic Buffer Allocation",
+        "duration_ticks": 2,
+        "description": "ASIC dynamically expands buffer headroom and reallocates burst absorption pools.",
+        "expected_observations": [
+          "Buffer headroom expanded",
+          "ASIC drops mitigated"
+        ]
+      },
+      {
         "phase": "RECOVER",
         "name": "Buffer Drain & Nominal Flow",
         "duration_ticks": 2,
@@ -1601,7 +1612,7 @@
         "id": "aci-val-01",
         "name": "ACI Health Telemetry Emitted",
         "type": "COUNT_THRESHOLD",
-        "target_sourcetype": "cisco:aci:health",
+        "target_sourcetype": "cisco:dc:aci:health",
         "min_count": 1,
         "description": "Verify ACI health records emitted."
       },
@@ -1613,6 +1624,23 @@
         "expected_value": "degraded",
         "comparison": "in",
         "description": "Verify congestion state recorded."
+      },
+      {
+        "id": "aci-val-03",
+        "name": "Nexus 9K ASIC Congestion Logged",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:dc:nexus9k:syslog",
+        "min_count": 1,
+        "description": "Verify Nexus 9K ASIC queue saturation events."
+      },
+      {
+        "id": "aci-val-04",
+        "name": "Health Restored to Nominal",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "in",
+        "description": "Verify fabric health restored status."
       }
     ]
   },
@@ -1623,6 +1651,7 @@
     "display_name": "Campus Core L2/3 Disturbance & Rogue AP",
     "category": "WIRELESS",
     "ecosystem": "pure_cisco",
+    "maturity": "E2E_VALIDATED",
     "description": "Unsanctioned Rogue AP connects to campus switch; Cisco ISE applies 802.1X quarantine while Catalyst core detects MAC flapping.",
     "attack_vector": "Evil Twin / Rogue AP SSID injection causing L2 broadcast loop & MAC flapping",
     "defense_mechanism": "Catalyst Rogue Detection triggers ISE quarantine profile; switch isolates flapping access port.",
@@ -1760,6 +1789,23 @@
         "expected_value": "alerted",
         "comparison": "in",
         "description": "Verify alert status emitted."
+      },
+      {
+        "id": "rogue-val-03",
+        "name": "ISE Quarantine Logged",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ise:syslog",
+        "min_count": 1,
+        "description": "Verify ISE 802.1X quarantine syslog emitted."
+      },
+      {
+        "id": "rogue-val-04",
+        "name": "RF Space Restored",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "in",
+        "description": "Verify rogue clearance status."
       }
     ]
   },
@@ -1770,6 +1816,7 @@
     "display_name": "Enterprise WAN Circuit Brownout & App Route Failover",
     "category": "WAN",
     "ecosystem": "pure_cisco",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "MPLS transport experiences high latency and packet loss; Cisco SD-WAN vEdge triggers SLA violation and BGP failover to secondary LTE/Broadband.",
     "attack_vector": "Underlay Carrier Brownout (185ms Latency, 12% Packet Loss)",
     "defense_mechanism": "SD-WAN BFD triggers dynamic SLA policy redirect; ThousandEyes synthetic probe validates application continuity.",
@@ -2345,14 +2392,17 @@
     "display_name": "Distributed Edge Breach & Internal Probing",
     "category": "SECURITY",
     "ecosystem": "mixed_vendor",
+    "maturity": "E2E_VALIDATED",
     "description": "Attacker probes wireless network via Meraki AP through Catalyst Core toward internal servers; Palo Alto NGFW inspects traffic.",
     "attack_vector": "Wireless Air Marshal Probe & Lateral Internal Port Scanning",
     "defense_mechanism": "Palo Alto NGFW drops threat inline (action=blocked). If NGFW is bypassed via direct wire or removed, breach penetrates internal servers (action=allowed status=breached)!",
     "generation_mode": "SCENARIO_DERIVED",
     "sourcetypes": [
       "meraki:assurancealerts",
-      "cisco:catalyst:security:events",
-      "pan:threat"
+      "pan:threat",
+      "pan:traffic",
+      "fortinet:fortigate:utm",
+      "nginx:plus:kv"
     ],
     "default_topology_id": "mixed_edge",
     "topology_id": "mixed_edge",
@@ -2416,6 +2466,16 @@
         ]
       },
       {
+        "phase": "FAILOVER",
+        "name": "Perimeter Microsegmentation Quarantine",
+        "duration_ticks": 2,
+        "description": "Palo Alto and Fortinet perimeter firewalls apply automated microsegmentation and IP blacklist.",
+        "expected_observations": [
+          "Microsegmentation rule applied",
+          "Attacker quarantined"
+        ]
+      },
+      {
         "phase": "RECOVER",
         "name": "Threat Mitigation & Source Ban",
         "duration_ticks": 2,
@@ -2475,6 +2535,22 @@
         "expected_value": "dropped",
         "comparison": "in",
         "description": "Verify dropped action in security log."
+      },
+      {
+        "id": "mixed-val-03",
+        "name": "Fortinet UTM IPS Alerted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "fortinet:fortigate:utm",
+        "min_count": 1,
+        "description": "Verify FortiOS UTM IPS events logged."
+      },
+      {
+        "id": "mixed-val-04",
+        "name": "Meraki Air Marshal Alerted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "meraki:assurancealerts",
+        "min_count": 1,
+        "description": "Verify Meraki wireless alert events logged."
       }
     ]
   },

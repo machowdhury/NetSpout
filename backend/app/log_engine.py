@@ -123,7 +123,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="palo_alto"
+            vendor="palo_alto",
+            sourcetype="pan:traffic"
         )
 
     @staticmethod
@@ -166,7 +167,8 @@ class SplunkLogEngine:
             raw_log=raw,
             node_type=device.type.value,
             node_id=device.id,
-            vendor="nginx"
+            vendor="nginx",
+            sourcetype="nginx:plus:kv"
         )
 
     @staticmethod
@@ -408,6 +410,42 @@ class SplunkLogEngine:
         )
 
     @staticmethod
+    def format_cisco_catalyst_security_event(
+        device: Node,
+        client_mac: str,
+        event_type: str,
+        action: str,
+        status: str,
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+        sig = signature or f"Catalyst Security Event: {event_type}"
+        raw = (
+            f"{now_syslog} {dev_id} %CATALYST_SEC-6-EVENT: event_type=\"{event_type}\" "
+            f"client_mac=\"{client_mac}\" timestamp=\"{now_ts}\" device_id=\"{dev_id}\" "
+            f"src_ip={device.ip_address} dest_ip=255.255.255.255 protocol=802.1X "
+            f"duration=1ms action={action} signature=\"{sig}\" status={status}"
+        )
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=device.ip_address,
+            dest_ip="255.255.255.255",
+            protocol="802.1X",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_catalyst",
+            sourcetype="cisco:catalyst:security:events"
+        )
+
+    @staticmethod
     def format_cisco_sdwan_linkhealth_log(
         device: Node,
         remote_system_ip: str,
@@ -559,6 +597,40 @@ class SplunkLogEngine:
         )
 
     @staticmethod
+    def format_cisco_aci_health_log(
+        device: Node,
+        fabric_health: int,
+        action: str,
+        status: str,
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        now_syslog = SplunkLogEngine.current_timestamp_syslog()
+        dev_id = device.name or device.id
+        sig = signature or f"ACI Fabric Health Score: {fabric_health}/100"
+        raw = (
+            f"{now_syslog} {dev_id} %ACI-HEALTH-4-SCORE: fabricHealthScore={fabric_health} "
+            f"status={status} timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
+            f"dest_ip=10.255.0.1 protocol=DC-ETHERNET duration=1ms action={action} signature=\"{sig}\""
+        )
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=device.ip_address,
+            dest_ip="10.255.0.1",
+            protocol="DC-ETHERNET",
+            duration="1ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="cisco_aci",
+            sourcetype="cisco:dc:aci:health"
+        )
+
+    @staticmethod
     def format_cisco_mdt_log(
         device: Node,
         sensor_path: str,
@@ -672,6 +744,51 @@ class SplunkLogEngine:
             node_id=device.id,
             vendor="palo_alto",
             sourcetype="pan:threat"
+        )
+
+    @staticmethod
+    def format_fortinet_ips_log(
+        device: Node,
+        src_ip: str,
+        dest_ip: str,
+        src_port: int,
+        dest_port: int,
+        attack: str,
+        action: str,
+        status: str,
+        duration_ms: int = 2,
+        signature: Optional[str] = None
+    ) -> LogEntry:
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        dev_id = device.name or device.id
+        sig = signature or f"FortiGate IPS Detection: {attack}"
+        forti_action = "dropped" if action in ("dropped", "blocked") else "pass"
+        now_utc = datetime.utcnow()
+        raw = (
+            f"<189>date={now_utc.strftime('%Y-%m-%d')} time={now_utc.strftime('%H:%M:%S')} "
+            f"devname=\"{dev_id}\" devid=\"FG60ET4619000000\" logid=\"0419016384\" "
+            f"type=\"utm\" subtype=\"ips\" level=\"alert\" severity=\"high\" "
+            f"srcip={src_ip} srcport={src_port} srcintf=\"port1\" "
+            f"dstip={dest_ip} dstport={dest_port} dstintf=\"port2\" proto=6 "
+            f"action=\"{forti_action}\" attack=\"{attack}\" msg=\"IPS: {attack}\" "
+            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" duration={duration_ms}ms "
+            f"action={action} signature=\"{sig}\" status={status}"
+        )
+        return LogEntry(
+            timestamp=now_ts,
+            device_id=dev_id,
+            src_ip=src_ip,
+            dest_ip=dest_ip,
+            protocol="TCP",
+            duration=f"{duration_ms}ms",
+            action=action,
+            signature=sig,
+            status=status,
+            raw_log=raw,
+            node_type=device.type.value,
+            node_id=device.id,
+            vendor="fortinet",
+            sourcetype="fortinet:fortigate:utm"
         )
 
     @staticmethod

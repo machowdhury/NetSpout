@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/spl_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 In-Memory Search Processing Language (SPL) Query & Pipeline Engine (NetSpout)
 Parses and executes real-time SPL queries over simulated telemetry and log events:

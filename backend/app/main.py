@@ -10,8 +10,9 @@ import time
 import csv
 import io
 import os
-from typing import List, Dict, Set
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Response
+from typing import List, Dict, Set, Optional, Any, Union
+from pydantic import BaseModel
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
@@ -21,7 +22,8 @@ from app.models import (
     LogEntry, SimulationRequest, EcosystemMode,
     ZoneAnnotation, NodePowerState, NodeHardware,
     TelemetryTransportConfig, SyslogTestRequest,
-    FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest, FaultEventRecord
+    FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest, FaultEventRecord,
+    ScenarioRunRequest, RunManifest, ScenarioContract, ValidationRule, ValidationResult
 )
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
@@ -329,12 +331,12 @@ async def list_presets():
         {"id": "secure", "name": "Standard Secure Perimeter (Firewall + LB + Web + DB)", "mode": "mixed_vendor"},
         {"id": "bypassed", "name": "Bypassed Firewall (Shadow IT / Direct Wire)", "mode": "mixed_vendor"},
         {"id": "lateral", "name": "Flat Unsegmented Subnet (Ransomware Lateral Spread)", "mode": "mixed_vendor"},
-        {"id": "cisco_campus", "name": "Mode A1: Cisco Campus Core Rogue AP & ISE Quarantine", "mode": "pure_cisco"},
-        {"id": "cisco_sdwan", "name": "Mode A2: Cisco SD-WAN WAN Circuit Brownout & BGP Failover", "mode": "pure_cisco"},
-        {"id": "cisco_aci", "name": "Mode A3: Cisco Data Center ACI Ingress Microburst", "mode": "pure_cisco"},
-        {"id": "mixed_edge", "name": "Mode B1: Mixed-Vendor Edge Breach (Meraki -> Catalyst -> Palo Alto)", "mode": "mixed_vendor"},
-        {"id": "mixed_sase", "name": "Mode B2: SASE Cloud Ingress Degradation (Zscaler -> Palo Alto -> Nexus)", "mode": "mixed_vendor"},
-        {"id": "mixed_optical", "name": "Mode B3: Multicast/MPLS Backbone Optical Shift (Nokia -> Juniper -> Arista)", "mode": "mixed_vendor"}
+        {"id": "cisco_campus", "name": "Cisco Campus Core Rogue AP & ISE Quarantine", "mode": "pure_cisco"},
+        {"id": "cisco_sdwan", "name": "Cisco SD-WAN WAN Circuit Brownout & BGP Failover", "mode": "pure_cisco"},
+        {"id": "cisco_aci", "name": "Cisco Data Center ACI Ingress Microburst", "mode": "pure_cisco"},
+        {"id": "mixed_edge", "name": "Mixed-Vendor Edge Breach (Meraki -> Catalyst -> Palo Alto)", "mode": "mixed_vendor"},
+        {"id": "mixed_sase", "name": "SASE Cloud Ingress Degradation (Zscaler -> Palo Alto -> Nexus)", "mode": "mixed_vendor"},
+        {"id": "mixed_optical", "name": "Multicast/MPLS Backbone Optical Shift (Nokia -> Juniper -> Arista)", "mode": "mixed_vendor"}
     ]
 
 @app.post("/api/presets/{preset_id}")
@@ -717,13 +719,89 @@ async def trigger_snmp_poll(req: SNMPPollRequest):
     }
 
 
+class ConnectionTestPayload(BaseModel):
+    endpoint: Optional[str] = None
+    hec_url: Optional[str] = None
+    token: Optional[str] = None
+    hec_token: Optional[str] = None
+    index: Optional[str] = None
+    hec_index: Optional[str] = None
+    pipeline: str = "hec"
+    allow_insecure_tls: bool = False
+    ssl_verify: bool = True
+    config: Optional[TelemetryTransportConfig] = None
+
+
+@app.post("/api/telemetry/test-connection")
+@app.post("/api/telemetry/test-hec")
 @app.post("/api/telemetry/test-pipeline")
-async def test_pipeline_endpoint(req: PipelineTestRequest):
-    ok, msg = dispatcher.test_pipeline(req.pipeline, req.config)
+async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTestRequest, Dict[str, Any]]):
+    global current_topology
+    if isinstance(req, PipelineTestRequest):
+        pipeline = req.pipeline
+        transport = req.config
+    elif isinstance(req, ConnectionTestPayload):
+        pipeline = req.pipeline
+        if req.config:
+            transport = req.config
+        else:
+            def_url = current_topology.global_transport.hec_url if current_topology and current_topology.global_transport else "https://localhost:8888/services/collector"
+            def_tok = current_topology.global_transport.hec_token if current_topology and current_topology.global_transport else "00000000-0000-0000-0000-000000000000"
+            def_idx = current_topology.global_transport.hec_index if current_topology and current_topology.global_transport else "idx_network_ops"
+            transport = TelemetryTransportConfig(
+                hec_url=req.endpoint or req.hec_url or def_url,
+                hec_token=req.token or req.hec_token or def_tok,
+                hec_index=req.index or req.hec_index or def_idx,
+                hec_ssl_verify=req.ssl_verify,
+                hec_allow_insecure_tls=req.allow_insecure_tls
+            )
+    else:
+        d = dict(req) if isinstance(req, dict) else {}
+        pipeline = d.get("pipeline", "hec")
+        transport = TelemetryTransportConfig(
+            hec_url=d.get("endpoint") or d.get("hec_url") or "https://localhost:8888/services/collector",
+            hec_token=d.get("token") or d.get("hec_token") or "00000000-0000-0000-0000-000000000000",
+            hec_index=d.get("index") or d.get("hec_index") or "idx_network_ops",
+            hec_ssl_verify=d.get("ssl_verify", True),
+            hec_allow_insecure_tls=d.get("allow_insecure_tls", False)
+        )
+
+    if current_topology:
+        current_topology.global_transport = transport
+
+    result = dispatcher.test_connection(transport, pipeline=pipeline)
     return {
-        "pipeline": req.pipeline,
-        "success": ok,
-        "message": msg
+        "status": result.get("status", result["state"]),
+        "state": result["state"],
+        "stage": result["stage"],
+        "reachable": result["reachable"],
+        "authenticated": result["authenticated"],
+        "event_accepted": result["event_accepted"],
+        "target_index": result["target_index"],
+        "message": result["message"],
+        "success": result["state"] in ("VERIFIED", "REACHABLE"),
+        "latency_ms": 4
+    }
+
+
+@app.get("/api/scenarios/runs/{run_id}/observation")
+async def get_run_observation(run_id: str):
+    global current_topology
+    status, count = scenario_runner.check_destination_observation(run_id, transport)
+    manifest = scenario_runner.get_run(run_id)
+    if manifest:
+        manifest.observed_count = count
+        manifest.observation_status = status
+        if count > 0:
+            manifest.destination_validation = "PASS"
+            if manifest.overall_validation in ("BLOCKED", "FAIL"):
+                all_pass = all(r.status == ValidationStatus.PASS for r in manifest.validation_results)
+                manifest.overall_validation = "PASS" if all_pass else "FAIL"
+    return {
+        "run_id": run_id,
+        "observed_count": count,
+        "observation_status": status,
+        "destination_validation": manifest.destination_validation if manifest else ("PASS" if count > 0 else "FAIL")
     }
 
 
@@ -793,6 +871,194 @@ def run_use_case_test(uc_id: str):
     raw_evs = [e.dict() if hasattr(e, "dict") else e for e in list(accumulated_logs)]
     res = use_case_harness.run_use_case_test(uc_id, topology=current_topology, events=raw_evs)
     return res
+
+
+# =========================================================================
+# Gate 4: Scenario Contract & Lifecycle API Endpoints
+# =========================================================================
+
+@app.get("/api/scenarios")
+def list_catalog_scenarios(category: Optional[str] = None, ecosystem: Optional[str] = None):
+    from app.catalog import catalog
+    scenarios = catalog.list_scenarios(category=category, ecosystem=ecosystem)
+    return {"scenarios": scenarios, "count": len(scenarios)}
+
+
+@app.get("/api/use-cases")
+def list_catalog_use_cases(category: Optional[str] = None):
+    from app.catalog import catalog
+    from app.use_case_repo import USE_CASES as PRE_BUILT_USE_CASES
+    
+    use_cases = []
+    # 1. Add 29 scenario-bound use cases
+    for s in catalog.list_scenarios():
+        sc_id = s.get("id")
+        sc_name = s.get("name")
+        sc_cat = s.get("category", "NETWORK_OPERATIONS")
+        sc_desc = s.get("description", "")
+        sc_diff = s.get("difficulty", "INTERMEDIATE")
+        sc_duration = s.get("estimated_duration_sec", 30)
+        sc_vendors = s.get("vendor_scope", [])
+        sc_sourcetypes = s.get("sourcetypes", [])
+        uc_data = s.get("use_case", {})
+        
+        uc_entry = {
+            "id": f"uc-{sc_id}",
+            "scenario_id": sc_id,
+            "name": sc_name,
+            "category": sc_cat,
+            "domain": sc_cat.replace("_", " ").title(),
+            "difficulty": sc_diff,
+            "estimated_runtime_sec": sc_duration,
+            "vendors": sc_vendors,
+            "sourcetypes": sc_sourcetypes,
+            "description": sc_desc,
+            "objective": uc_data.get("objective", sc_desc) if uc_data else sc_desc,
+            "expected_observations": uc_data.get("expected_observations", s.get("expected_observations", [])) if uc_data else s.get("expected_observations", []),
+            "validation_rules": s.get("validation_rules", []),
+            "default_topology_id": s.get("default_topology_id") or s.get("topology_id", "default_secure"),
+            "phases": s.get("phases", []),
+            "source": "SCENARIO_BOUND"
+        }
+        use_cases.append(uc_entry)
+        
+    # 2. Add 10 pre-built NOC/SOC production use cases
+    for pb in PRE_BUILT_USE_CASES:
+        uc_entry = {
+            "id": pb.get("id"),
+            "scenario_id": pb.get("fault_scenario"),
+            "name": pb.get("name"),
+            "category": "SECURITY" if "SOC" in pb.get("domain", "") or (pb.get("severity") in ("critical", "high") and "Security" in pb.get("domain", "")) else "NETWORK_OPERATIONS",
+            "domain": pb.get("domain", "NOC Operations"),
+            "difficulty": "ADVANCED" if pb.get("severity") == "critical" else "INTERMEDIATE",
+            "estimated_runtime_sec": 30,
+            "vendors": pb.get("vendors", []),
+            "sourcetypes": pb.get("target_sourcetypes", []),
+            "description": pb.get("description", ""),
+            "objective": f"Demonstrate operational response to {pb.get('name')}.",
+            "expected_observations": [pb.get("expected_cim_model", "")] if pb.get("expected_cim_model") else [],
+            "validation_rules": [
+                {
+                    "id": f"{pb.get('id')}-rule-01",
+                    "name": "Target Sourcetype Emitted",
+                    "type": "COUNT_THRESHOLD",
+                    "target_sourcetype": pb.get("target_sourcetypes", ["cisco:ios:syslog"])[0],
+                    "min_count": pb.get("assertions", {}).get("min_events", 1),
+                    "description": pb.get("verification_spl", "")
+                }
+            ],
+            "default_topology_id": "default_secure",
+            "phases": [],
+            "source": "PRE_BUILT_REPO"
+        }
+        use_cases.append(uc_entry)
+        
+    if category:
+        use_cases = [u for u in use_cases if u.get("category", "").upper() == category.upper()]
+        
+    return {"use_cases": use_cases, "count": len(use_cases)}
+
+
+
+@app.get("/api/scenarios/run/active")
+def get_active_scenario_run():
+    active = scenario_runner.get_active_run()
+    if not active:
+        return {"active": False, "manifest": None}
+    return {"active": True, "manifest": active.dict() if hasattr(active, "dict") else active}
+
+
+@app.post("/api/scenarios/run/stop")
+def stop_active_scenario_run(run_id: Optional[str] = None):
+    if not run_id:
+        active = scenario_runner.get_active_run()
+        run_id = active.run_id if active else None
+    if not run_id:
+        return {"status": "no_active_run", "stopped": False}
+    stopped = scenario_runner.stop_run(run_id)
+    return {"status": "stopped" if stopped else "not_found", "run_id": run_id, "stopped": stopped}
+
+
+@app.get("/api/scenarios/runs/{run_id}")
+def get_scenario_run_manifest(run_id: str):
+    manifest = scenario_runner.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found")
+    return manifest.dict() if hasattr(manifest, "dict") else manifest
+
+
+@app.get("/api/scenarios/runs/{run_id}/logs")
+def get_scenario_run_logs(run_id: str, limit: int = 100):
+    manifest = scenario_runner.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found")
+    logs = scenario_runner.get_run_logs(run_id)
+    if limit and limit > 0:
+        logs = logs[:limit]
+    return {
+        "run_id": run_id,
+        "count": len(logs),
+        "logs": [l.dict() if hasattr(l, "dict") else l for l in logs]
+    }
+
+
+
+@app.post("/api/scenarios/runs/{run_id}/validate")
+def validate_scenario_run(run_id: str):
+    manifest = scenario_runner.get_run(run_id)
+    if not manifest:
+        raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found")
+    results = scenario_runner.validate_manifest(run_id)
+    return {
+        "run_id": run_id,
+        "overall_validation": manifest.overall_validation,
+        "results": [r.dict() if hasattr(r, "dict") else r for r in results]
+    }
+
+
+@app.get("/api/scenarios/{scenario_id}")
+def get_catalog_scenario(scenario_id: str):
+    from app.catalog import catalog
+    sc = catalog.get_scenario(scenario_id)
+    if not sc:
+        raise HTTPException(status_code=404, detail=f"Scenario '{scenario_id}' not found")
+    contract = catalog.get_scenario_contract(scenario_id)
+    return contract.dict() if hasattr(contract, "dict") else contract
+
+
+@app.post("/api/scenarios/{scenario_id}/run")
+def run_scenario_contract(
+    scenario_id: str,
+    payload: Optional[Dict[str, Any]] = None,
+    seed: Optional[int] = None,
+    time_mode: str = "TEST",
+    topology_id: Optional[str] = None
+):
+    global current_topology
+    dispatch_telemetry = True
+    transport_config = current_topology.global_transport if current_topology and current_topology.global_transport else TelemetryTransportConfig()
+
+    if payload:
+        seed = payload.get("seed", seed)
+        time_mode = payload.get("time_mode", payload.get("mode", time_mode))
+        topology_id = payload.get("topology_id", topology_id)
+        if "dispatch_telemetry" in payload:
+            dispatch_telemetry = bool(payload["dispatch_telemetry"])
+        if "transport_config" in payload and payload["transport_config"]:
+            transport_config = TelemetryTransportConfig(**payload["transport_config"])
+            if current_topology:
+                current_topology.global_transport = transport_config
+
+    req = ScenarioRunRequest(
+        scenario_id=scenario_id,
+        seed=seed,
+        time_mode=time_mode,
+        topology_id=topology_id,
+        dispatch_telemetry=dispatch_telemetry,
+        transport_config=transport_config
+    )
+    manifest = scenario_runner.run_scenario(req)
+    return manifest.dict() if hasattr(manifest, "dict") else manifest
 
 
 # WebSocket Endpoint

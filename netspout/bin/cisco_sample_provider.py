@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/cisco_sample_provider.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 NetSpout Cisco Sample Provider
 Provides real Cisco log samples extracted from production telemetry captures.
@@ -8,8 +13,19 @@ import random
 import time
 import re
 
-APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SAMPLES_DIR = os.path.join(APP_DIR, "samples")
+def _find_samples_dir():
+    candidates = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "samples"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "samples"),
+        "/opt/splunk/etc/apps/netspout/samples",
+        "/opt/splunk/etc/apps/TA-network-data-blaster/samples"
+    ]
+    for c in candidates:
+        if os.path.isdir(c):
+            return c
+    return os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "samples")
+
+SAMPLES_DIR = _find_samples_dir()
 
 _CACHE = {}
 

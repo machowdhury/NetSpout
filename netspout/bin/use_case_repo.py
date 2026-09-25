@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/use_case_repo.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Use Case Repository & Automated Test Harness (NetSpout)
 Provides 10+ production-grade NOC and SOC use-case scenarios with:
@@ -13,13 +18,18 @@ import time
 from typing import List, Dict, Any, Optional
 
 try:
-    from app.spl_engine import spl_engine
-    from app.fault_injection_engine import fault_engine
-    from app.models import TopologyState, FaultScenarioType, FaultInjectionRequest
+    from netspout_core.spl_engine import spl_engine
+    from netspout_core.fault_injection_engine import fault_engine
+    from netspout_core.models import TopologyState, FaultScenarioType, FaultInjectionRequest
 except ImportError:
-    from spl_engine import spl_engine
-    from fault_injection_engine import fault_engine
-    from models import TopologyState, FaultScenarioType, FaultInjectionRequest
+    try:
+        from app.spl_engine import spl_engine
+        from app.fault_injection_engine import fault_engine
+        from app.models import TopologyState, FaultScenarioType, FaultInjectionRequest
+    except ImportError:
+        from spl_engine import spl_engine
+        from fault_injection_engine import fault_engine
+        from models import TopologyState, FaultScenarioType, FaultInjectionRequest
 
 
 USE_CASES: List[Dict[str, Any]] = [

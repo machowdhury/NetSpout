@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/fault_injection_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Dynamic Failure & Fault Injection Engine (NetSpout)
 Orchestrates multi-stage physical, protocol, and security failure cascades.
@@ -17,27 +22,39 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional, Tuple
 
 try:
-    from app.models import (
+    from netspout_core.models import (
         TopologyState, Node, Edge, NodeType, LogEntry,
         FaultScenarioType, FaultInjectionRequest, FaultEventRecord, FaultRecoveryRequest,
         SNMPTrapEvent
     )
-    from app.graph_engine import TopologyGraph
-    from app.log_engine import SplunkLogEngine
-    from app.gnmi_engine import yang_store, gnmi_server
-    from app.snmp_engine import snmp_engine
-    from app.telemetry_dispatcher import dispatcher
+    from netspout_core.graph_engine import TopologyGraph
+    from netspout_core.log_engine import SplunkLogEngine
+    from netspout_core.gnmi_engine import yang_store, gnmi_server
+    from netspout_core.snmp_engine import snmp_engine
+    from netspout_core.telemetry_dispatcher import dispatcher
 except ImportError:
-    from models import (
-        TopologyState, Node, Edge, NodeType, LogEntry,
-        FaultScenarioType, FaultInjectionRequest, FaultEventRecord, FaultRecoveryRequest,
-        SNMPTrapEvent
-    )
-    from graph_engine import TopologyGraph
-    from log_engine import SplunkLogEngine
-    from gnmi_engine import yang_store, gnmi_server
-    from snmp_engine import snmp_engine
-    from telemetry_dispatcher import dispatcher
+    try:
+        from app.models import (
+            TopologyState, Node, Edge, NodeType, LogEntry,
+            FaultScenarioType, FaultInjectionRequest, FaultEventRecord, FaultRecoveryRequest,
+            SNMPTrapEvent
+        )
+        from app.graph_engine import TopologyGraph
+        from app.log_engine import SplunkLogEngine
+        from app.gnmi_engine import yang_store, gnmi_server
+        from app.snmp_engine import snmp_engine
+        from app.telemetry_dispatcher import dispatcher
+    except ImportError:
+        from models import (
+            TopologyState, Node, Edge, NodeType, LogEntry,
+            FaultScenarioType, FaultInjectionRequest, FaultEventRecord, FaultRecoveryRequest,
+            SNMPTrapEvent
+        )
+        from graph_engine import TopologyGraph
+        from log_engine import SplunkLogEngine
+        from gnmi_engine import yang_store, gnmi_server
+        from snmp_engine import snmp_engine
+        from telemetry_dispatcher import dispatcher
 
 
 def get_vendor_slug(node: Node) -> str:

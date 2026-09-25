@@ -13,6 +13,9 @@ import { VendorAddonsModal } from './components/VendorAddonsModal';
 import { SPLPlaygroundModal } from './components/SPLPlaygroundModal';
 import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
+import { FiveStepWorkflow } from './components/workflow/FiveStepWorkflow';
+import { OperationsView } from './components/operations/OperationsView';
+import type { AppViewMode } from './types/workflow';
 import type {
   TopologyState,
   ScenarioType,
@@ -51,6 +54,9 @@ const BACKEND_WS = typeof window !== 'undefined' && window.location.port === '80
   : 'ws://localhost:8081/ws/logs';
 
 export const App: React.FC = () => {
+  // Primary Navigation Mode - Defaults to 5-Step Workflow ("What do you want to prove?")
+  const [appMode, setAppMode] = useState<AppViewMode>('workflow');
+
   // Main State - Defaults to Pure Cisco Enterprise Fabric with simulation running
   const [ecosystemMode, setEcosystemMode] = useState<EcosystemMode>('pure_cisco');
   const [topology, setTopology] = useState<TopologyState>(PRESET_PURE_CISCO_ENT);
@@ -584,6 +590,8 @@ export const App: React.FC = () => {
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#0B0F19] text-slate-100">
       {/* Top Navigation & Action Controls */}
       <TopBar
+        appMode={appMode}
+        onSelectAppMode={setAppMode}
         ecosystemMode={ecosystemMode}
         onSelectEcosystemMode={handleSelectEcosystemMode}
         scenario={scenario}
@@ -612,8 +620,18 @@ export const App: React.FC = () => {
         transportConfig={transportConfig}
       />
 
-      {/* 3-Column Split Screen Dashboard */}
-      <div className="flex-1 flex overflow-hidden relative">
+      {/* Main View Switcher */}
+      {appMode === 'workflow' ? (
+        <div className="flex-1 flex overflow-hidden">
+          <FiveStepWorkflow onOpenCanvas={() => setAppMode('advanced')} />
+        </div>
+      ) : appMode === 'operations' ? (
+        <div className="flex-1 flex overflow-hidden">
+          <OperationsView />
+        </div>
+      ) : (
+        /* 3-Column Split Screen Dashboard (Advanced Canvas Mode) */
+        <div className="flex-1 flex overflow-hidden relative">
         {/* Left: Categorized Component Palette & Node Inspector */}
         <NodePalette
           ecosystemMode={ecosystemMode}
@@ -647,6 +665,7 @@ export const App: React.FC = () => {
           hecIndex={transportConfig.hec_index || 'idx_network_ops'}
         />
       </div>
+      )}
 
       {/* Virtual Hardware & Node Power Inspector Modal */}
       {inspectingNode && (

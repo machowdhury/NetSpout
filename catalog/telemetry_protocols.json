@@ -1,0 +1,98 @@
+[
+  {
+    "id": "syslog_rfc5424",
+    "name": "Syslog RFC 5424",
+    "transport": "UDP/TCP",
+    "default_port": 514,
+    "format": "PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "cisco:ios:syslog",
+      "pan:system",
+      "juniper:junos"
+    ]
+  },
+  {
+    "id": "syslog_rfc3164",
+    "name": "Syslog BSD RFC 3164",
+    "transport": "UDP",
+    "default_port": 514,
+    "format": "<PRI>TIMESTAMP HOSTNAME TAG: MSG",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "cisco:asa",
+      "fortigate_traffic"
+    ]
+  },
+  {
+    "id": "hec_event",
+    "name": "Splunk HTTP Event Collector (Events)",
+    "transport": "HTTP/HTTPS",
+    "default_port": 8888,
+    "format": "JSON {\"time\": ts, \"event\": {...}, \"sourcetype\": ..., \"index\": ...}",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "cisco:catalyst:security:events",
+      "cisco:ise:syslog"
+    ]
+  },
+  {
+    "id": "hec_metric",
+    "name": "Splunk HTTP Event Collector (Metrics)",
+    "transport": "HTTP/HTTPS",
+    "default_port": 8888,
+    "format": "JSON {\"time\": ts, \"event\": \"metric\", \"fields\": {\"metric_name:...\": val}}",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "sc4snmp:metric",
+      "cisco_mdt_metrics"
+    ]
+  },
+  {
+    "id": "snmp_sc4snmp",
+    "name": "SC4SNMP MIB Polling & Trap Gateway",
+    "transport": "UDP",
+    "default_port": 162,
+    "format": "SNMP Trap PDU & SC4SNMP HEC Metric Payload",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "sc4snmp:metric",
+      "sc4snmp:event"
+    ]
+  },
+  {
+    "id": "gnmi_openconfig",
+    "name": "OpenConfig gNMI Model-Driven Telemetry",
+    "transport": "gRPC / HTTP",
+    "default_port": 57400,
+    "format": "RFC 7951 JSON-IETF Hierarchical Telemetry Tree",
+    "generation_mode": "STATEFUL",
+    "sourcetypes": [
+      "openconfig:gnmi:telemetry",
+      "cisco:ios:mdt:metric"
+    ]
+  },
+  {
+    "id": "otlp_http",
+    "name": "OpenTelemetry OTLP HTTP Pipeline",
+    "transport": "HTTP/HTTPS",
+    "default_port": 4318,
+    "format": "OTLP JSON Metrics & Logs",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "otel:metric",
+      "otel:log"
+    ]
+  },
+  {
+    "id": "telegraf_influx",
+    "name": "Telegraf Agent HTTP Influx Pipeline",
+    "transport": "HTTP",
+    "default_port": 8080,
+    "format": "Influx Line Protocol or JSON metrics",
+    "generation_mode": "SYNTHETIC",
+    "sourcetypes": [
+      "telegraf:metric"
+    ]
+  }
+]

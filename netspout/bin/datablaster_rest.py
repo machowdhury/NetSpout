@@ -22,7 +22,7 @@ import tempfile
 import urllib.request
 import urllib.error
 import ssl
-from typing import Dict, Any, Tuple, Optional
+from typing import Dict, List, Any, Tuple, Optional
 
 # Splunk imports (with safe fallbacks for standalone unit testing)
 try:

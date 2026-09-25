@@ -1,0 +1,189 @@
+[
+  {
+    "id": "client_external",
+    "name": "External Client",
+    "category": "compute",
+    "description": "External Internet client generating inbound HTTP traffic",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "cloud_transit",
+    "name": "Multi-Cloud Transit Gateway",
+    "category": "cloud",
+    "description": "Cloud interconnect (AWS DirectConnect, Azure ExpressRoute)",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "database",
+    "name": "Database Server",
+    "category": "compute",
+    "description": "Relational/NoSQL datastore (PostgreSQL/MySQL), SQL queries",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "firewall",
+    "name": "Next-Gen Firewall",
+    "category": "security",
+    "description": "Stateful packet inspection, ACL enforcement, NAT, IPS/IDS",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "iot_sensor",
+    "name": "IoT Sensor Endpoint",
+    "category": "iot",
+    "description": "Telemetry sensor sending intermittent SCADA/MQTT signals",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "load_balancer",
+    "name": "Application Delivery Controller",
+    "category": "network",
+    "description": "TCP/HTTP server load balancing, SSL termination, health checking",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "optical_core",
+    "name": "Optical Core Transponder",
+    "category": "network",
+    "description": "DWDM optical wavelength transponder and BER performance",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "router",
+    "name": "Edge/Core Router",
+    "category": "network",
+    "description": "BGP/OSPF dynamic routing, MPLS/SRv6, WAN edge termination",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "sase_proxy",
+    "name": "Cloud SASE / SSE Proxy",
+    "category": "cloud",
+    "description": "Secure web gateway, CASB proxy, cloud zero trust edge",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "storage_nas",
+    "name": "Network-Attached Storage",
+    "category": "storage",
+    "description": "NFS/SMB shared file storage cluster and IOPS burst",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "storage_san",
+    "name": "Storage Area Network Director",
+    "category": "storage",
+    "description": "Fibre Channel (FC) storage fabric and credit buffers",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "subnet",
+    "name": "Network Subnet",
+    "category": "network",
+    "description": "IP broadcast domain segment and CIDR boundary",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "switch",
+    "name": "L2/L3 Switch",
+    "category": "network",
+    "description": "Ethernet switching, VLANs, 802.1Q trunking, STP/RSTP/MSTP",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "vpn_gateway",
+    "name": "VPN Concentrator",
+    "category": "security",
+    "description": "IPsec site-to-site tunnels and remote access client sessions",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "web_server",
+    "name": "Web Application Server",
+    "category": "compute",
+    "description": "HTTP/HTTPS service, Nginx/Apache, API reverse proxy",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "wireless_ap",
+    "name": "Wireless Access Point",
+    "category": "wireless",
+    "description": "Wi-Fi 6/6E/7 access point broadcasting SSIDs and tracking SNR",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  },
+  {
+    "id": "wlc_controller",
+    "name": "Wireless LAN Controller",
+    "category": "wireless",
+    "description": "Centralized AP configuration, RF management, and CAPWAP tunnel",
+    "supported_protocols": [
+      "syslog",
+      "snmp",
+      "hec"
+    ]
+  }
+]

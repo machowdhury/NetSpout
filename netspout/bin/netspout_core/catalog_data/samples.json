@@ -1,0 +1,2132 @@
+[
+  {
+    "id": "arista-eos",
+    "sample_file": "arista-eos.yml",
+    "sample_path": "netspout/appserver/static/samples/arista-eos/arista-eos.yml",
+    "sourcetype": "arista:eos",
+    "vendor_id": "arista_eos",
+    "category": "Arista Networks Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "arista-eos-syslog",
+    "sample_file": "arista-eos-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/arista-eos-syslog/arista-eos-syslog.yml",
+    "sourcetype": "arista:eos:syslog",
+    "vendor_id": "arista_eos",
+    "category": "Arista Networks Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "arista-metrics-telemetry",
+    "sample_file": "arista-metrics-telemetry.yml",
+    "sample_path": "netspout/appserver/static/samples/arista-metrics-telemetry/arista-metrics-telemetry.yml",
+    "sourcetype": "arista:telemetry:json",
+    "vendor_id": "arista_eos",
+    "category": "Arista Networks Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "aruba",
+    "sample_file": "aruba.yml",
+    "sample_path": "netspout/appserver/static/samples/aruba/aruba.yml",
+    "sourcetype": "aruba",
+    "vendor_id": "aruba_cx",
+    "category": "Aruba Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "aruba-authmgr",
+    "sample_file": "aruba-authmgr.yml",
+    "sample_path": "netspout/appserver/static/samples/aruba-authmgr/aruba-authmgr.yml",
+    "sourcetype": "aruba:authmgr",
+    "vendor_id": "aruba_cx",
+    "category": "Aruba Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "aruba-stm",
+    "sample_file": "aruba-stm.yml",
+    "sample_path": "netspout/appserver/static/samples/aruba-stm/aruba-stm.yml",
+    "sourcetype": "aruba:stm",
+    "vendor_id": "aruba_cx",
+    "category": "Aruba Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "aruba-syslog",
+    "sample_file": "aruba-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/aruba-syslog/aruba-syslog.yml",
+    "sourcetype": "aruba:syslog",
+    "vendor_id": "aruba_cx",
+    "category": "Aruba Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "checkpoint-cef",
+    "sample_file": "checkpoint-cef.yml",
+    "sample_path": "netspout/appserver/static/samples/checkpoint-cef/checkpoint-cef.yml",
+    "sourcetype": "checkpoint:cef",
+    "vendor_id": "checkpoint",
+    "category": "Check Point",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-asa",
+    "sample_file": "cisco-asa.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-asa/cisco-asa.yml",
+    "sourcetype": "cisco:asa",
+    "vendor_id": "cisco_asa",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-asa-syslog",
+    "sample_file": "cisco-asa-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-asa-syslog/cisco-asa-syslog.yml",
+    "sourcetype": "cisco:asa:syslog",
+    "vendor_id": "cisco_asa",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-client",
+    "sample_file": "cisco-catalyst-client.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-client/cisco-catalyst-client.yml",
+    "sourcetype": "cisco:catalyst:client",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-clienthealth",
+    "sample_file": "cisco-catalyst-clienthealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-clienthealth/cisco-catalyst-clienthealth.yml",
+    "sourcetype": "cisco:catalyst:clienthealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-compliance",
+    "sample_file": "cisco-catalyst-compliance.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-compliance/cisco-catalyst-compliance.yml",
+    "sourcetype": "cisco:catalyst:compliance",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-devicehealth",
+    "sample_file": "cisco-catalyst-devicehealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-devicehealth/cisco-catalyst-devicehealth.yml",
+    "sourcetype": "cisco:catalyst:devicehealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-issue",
+    "sample_file": "cisco-catalyst-issue.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-issue/cisco-catalyst-issue.yml",
+    "sourcetype": "cisco:catalyst:issue",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-networkhealth",
+    "sample_file": "cisco-catalyst-networkhealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-networkhealth/cisco-catalyst-networkhealth.yml",
+    "sourcetype": "cisco:catalyst:networkhealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-rogue-allowed",
+    "sample_file": "cisco-catalyst-rogue-allowed.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-allowed/cisco-catalyst-rogue-allowed.yml",
+    "sourcetype": "cisco:catalyst:rogue:allowed",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-rogue-counts",
+    "sample_file": "cisco-catalyst-rogue-counts.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-counts/cisco-catalyst-rogue-counts.yml",
+    "sourcetype": "cisco:catalyst:rogue:counts",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-rogue-threat-details",
+    "sample_file": "cisco-catalyst-rogue-threat-details.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-threat-details/cisco-catalyst-rogue-threat-details.yml",
+    "sourcetype": "cisco:catalyst:rogue:threat_details",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-rogue-verbose",
+    "sample_file": "cisco-catalyst-rogue-verbose.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-verbose/cisco-catalyst-rogue-verbose.yml",
+    "sourcetype": "cisco:catalyst:rogue:verbose",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-rogue-verbose-legacy",
+    "sample_file": "cisco-catalyst-rogue-verbose-legacy.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-verbose-legacy/cisco-catalyst-rogue-verbose-legacy.yml",
+    "sourcetype": "cisco:catalyst:rogue:verbose:legacy",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": true
+  },
+  {
+    "id": "cisco-catalyst-rogue-wired",
+    "sample_file": "cisco-catalyst-rogue-wired.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-rogue-wired/cisco-catalyst-rogue-wired.yml",
+    "sourcetype": "cisco:catalyst:rogue:wired",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-script-heartbeat",
+    "sample_file": "cisco-catalyst-script-heartbeat.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-script-heartbeat/cisco-catalyst-script-heartbeat.yml",
+    "sourcetype": "cisco:catalyst:script:heartbeat",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-security-awips-signatures",
+    "sample_file": "cisco-catalyst-security-awips-signatures.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-security-awips-signatures/cisco-catalyst-security-awips-signatures.yml",
+    "sourcetype": "cisco:catalyst:security:awips_signatures",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-security-events",
+    "sample_file": "cisco-catalyst-security-events.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-security-events/cisco-catalyst-security-events.yml",
+    "sourcetype": "cisco:catalyst:security:events",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-security-profile",
+    "sample_file": "cisco-catalyst-security-profile.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-security-profile/cisco-catalyst-security-profile.yml",
+    "sourcetype": "cisco:catalyst:security:profile",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-security-profile-signatures",
+    "sample_file": "cisco-catalyst-security-profile-signatures.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-security-profile-signatures/cisco-catalyst-security-profile-signatures.yml",
+    "sourcetype": "cisco:catalyst:security:profile_signatures",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-security-rules",
+    "sample_file": "cisco-catalyst-security-rules.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-security-rules/cisco-catalyst-security-rules.yml",
+    "sourcetype": "cisco:catalyst:security:rules",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-securityadvisory",
+    "sample_file": "cisco-catalyst-securityadvisory.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-securityadvisory/cisco-catalyst-securityadvisory.yml",
+    "sourcetype": "cisco:catalyst:securityadvisory",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-threat-list",
+    "sample_file": "cisco-catalyst-threat-list.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-threat-list/cisco-catalyst-threat-list.yml",
+    "sourcetype": "cisco:catalyst:threat:list",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-threat-signatures",
+    "sample_file": "cisco-catalyst-threat-signatures.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-threat-signatures/cisco-catalyst-threat-signatures.yml",
+    "sourcetype": "cisco:catalyst:threat:signatures",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-threat-summary",
+    "sample_file": "cisco-catalyst-threat-summary.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-threat-summary/cisco-catalyst-threat-summary.yml",
+    "sourcetype": "cisco:catalyst:threat:summary",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-catalyst-threat-summary-legacy",
+    "sample_file": "cisco-catalyst-threat-summary-legacy.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-catalyst-threat-summary-legacy/cisco-catalyst-threat-summary-legacy.yml",
+    "sourcetype": "cisco:catalyst:threat:summary:legacy",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco Catalyst",
+    "generation_mode": "REPLAY",
+    "is_deprecated": true
+  },
+  {
+    "id": "cisco-dc-aci-bridge-domain",
+    "sample_file": "cisco-dc-aci-bridge-domain.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-aci-bridge-domain/cisco-dc-aci-bridge-domain.yml",
+    "sourcetype": "cisco:dc:aci:health",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dc-aci-class",
+    "sample_file": "cisco-dc-aci-class.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-aci-class/cisco-dc-aci-class.yml",
+    "sourcetype": "cisco:dc:aci:class",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dc-aci-events",
+    "sample_file": "cisco-dc-aci-events.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-aci-events/cisco-dc-aci-events.yml",
+    "sourcetype": "cisco:dc:aci:events",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dc-aci-health",
+    "sample_file": "cisco-dc-aci-health.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-aci-health/cisco-dc-aci-health.yml",
+    "sourcetype": "cisco:dc:aci:health",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dc-nexus9k",
+    "sample_file": "cisco-dc-nexus9k.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-nexus9k/cisco-dc-nexus9k.yml",
+    "sourcetype": "cisco:dc:nexus9k",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dc-nexus9k-syslog",
+    "sample_file": "cisco-dc-nexus9k-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dc-nexus9k-syslog/cisco-dc-nexus9k-syslog.yml",
+    "sourcetype": "cisco:dc:nexus9k:syslog",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-audit-logs",
+    "sample_file": "cisco-dnac-audit-logs.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-audit-logs/cisco-dnac-audit-logs.yml",
+    "sourcetype": "cisco:dnac:audit:logs",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-client",
+    "sample_file": "cisco-dnac-client.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-client/cisco-dnac-client.yml",
+    "sourcetype": "cisco:dnac:client",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-clienthealth",
+    "sample_file": "cisco-dnac-clienthealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-clienthealth/cisco-dnac-clienthealth.yml",
+    "sourcetype": "cisco:dnac:clienthealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-compliance",
+    "sample_file": "cisco-dnac-compliance.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-compliance/cisco-dnac-compliance.yml",
+    "sourcetype": "cisco:dnac:compliance",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-devicehealth",
+    "sample_file": "cisco-dnac-devicehealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-devicehealth/cisco-dnac-devicehealth.yml",
+    "sourcetype": "cisco:dnac:devicehealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-issue",
+    "sample_file": "cisco-dnac-issue.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-issue/cisco-dnac-issue.yml",
+    "sourcetype": "cisco:dnac:issue",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-networkhealth",
+    "sample_file": "cisco-dnac-networkhealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-networkhealth/cisco-dnac-networkhealth.yml",
+    "sourcetype": "cisco:dnac:networkhealth",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-securityadvisory",
+    "sample_file": "cisco-dnac-securityadvisory.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-securityadvisory/cisco-dnac-securityadvisory.yml",
+    "sourcetype": "cisco:dnac:securityadvisory",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-dnac-site-topology",
+    "sample_file": "cisco-dnac-site-topology.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-dnac-site-topology/cisco-dnac-site-topology.yml",
+    "sourcetype": "cisco:dnac:site:topology",
+    "vendor_id": "cisco_catalyst",
+    "category": "Cisco DNAC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-account",
+    "sample_file": "cisco-duo-account.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-account/cisco-duo-account.yml",
+    "sourcetype": "cisco:duo:account",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-activity",
+    "sample_file": "cisco-duo-activity.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-activity/cisco-duo-activity.yml",
+    "sourcetype": "cisco:duo:activity",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-administrator",
+    "sample_file": "cisco-duo-administrator.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-administrator/cisco-duo-administrator.yml",
+    "sourcetype": "cisco:duo:administrator",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-authentication",
+    "sample_file": "cisco-duo-authentication.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-authentication/cisco-duo-authentication.yml",
+    "sourcetype": "cisco:duo:authentication",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-authentication-v2",
+    "sample_file": "cisco-duo-authentication-v2.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-authentication-v2/cisco-duo-authentication-v2.yml",
+    "sourcetype": "cisco:duo:authentication_v2",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-endpoint",
+    "sample_file": "cisco-duo-endpoint.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-endpoint/cisco-duo-endpoint.yml",
+    "sourcetype": "cisco:duo:endpoint",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-duo-user",
+    "sample_file": "cisco-duo-user.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-duo-user/cisco-duo-user.yml",
+    "sourcetype": "cisco:duo:user",
+    "vendor_id": "cisco_duo",
+    "category": "Cisco Duo",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ftd-syslog",
+    "sample_file": "cisco-ftd-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ftd-syslog/cisco-ftd-syslog.yml",
+    "sourcetype": "cisco:ftd:syslog",
+    "vendor_id": "cisco_asa",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-advisories",
+    "sample_file": "cisco-intersight-advisories.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-advisories/cisco-intersight-advisories.yml",
+    "sourcetype": "cisco:intersight:advisories",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-alarms",
+    "sample_file": "cisco-intersight-alarms.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-alarms/cisco-intersight-alarms.yml",
+    "sourcetype": "cisco:intersight:alarms",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-auditrecords",
+    "sample_file": "cisco-intersight-auditrecords.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-auditrecords/cisco-intersight-auditrecords.yml",
+    "sourcetype": "cisco:intersight:auditrecords",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-compute",
+    "sample_file": "cisco-intersight-compute.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-compute/cisco-intersight-compute.yml",
+    "sourcetype": "cisco:intersight:compute",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-contracts",
+    "sample_file": "cisco-intersight-contracts.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-contracts/cisco-intersight-contracts.yml",
+    "sourcetype": "cisco:intersight:contracts",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-licenses",
+    "sample_file": "cisco-intersight-licenses.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-licenses/cisco-intersight-licenses.yml",
+    "sourcetype": "cisco:intersight:licenses",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-metrics",
+    "sample_file": "cisco-intersight-metrics.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-metrics/cisco-intersight-metrics.yml",
+    "sourcetype": "cisco:intersight:metrics",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-networkelements",
+    "sample_file": "cisco-intersight-networkelements.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-networkelements/cisco-intersight-networkelements.yml",
+    "sourcetype": "cisco:intersight:networkelements",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-networkobjects",
+    "sample_file": "cisco-intersight-networkobjects.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-networkobjects/cisco-intersight-networkobjects.yml",
+    "sourcetype": "cisco:intersight:networkobjects",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-profiles",
+    "sample_file": "cisco-intersight-profiles.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-profiles/cisco-intersight-profiles.yml",
+    "sourcetype": "cisco:intersight:profiles",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-intersight-targets",
+    "sample_file": "cisco-intersight-targets.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-intersight-targets/cisco-intersight-targets.yml",
+    "sourcetype": "cisco:intersight:targets",
+    "vendor_id": "cisco_intersight",
+    "category": "Cisco Intersight",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ios",
+    "sample_file": "cisco-ios.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ios/cisco-ios.yml",
+    "sourcetype": "cisco:ios",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ios-mdt-metric",
+    "sample_file": "cisco-ios-mdt-metric.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ios-mdt-metric/cisco-ios-mdt-metric.yml",
+    "sourcetype": "cisco:ios:mdt:metric",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ios-syslog",
+    "sample_file": "cisco-ios-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ios-syslog/cisco-ios-syslog.yml",
+    "sourcetype": "cisco:ios:syslog",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ise-radius-authz-policy",
+    "sample_file": "cisco-ise-radius-authz-policy.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ise-radius-authz-policy/cisco-ise-radius-authz-policy.yml",
+    "sourcetype": "cisco:ise:radius:authz:policy",
+    "vendor_id": "cisco_ise",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ise-radius-policyset",
+    "sample_file": "cisco-ise-radius-policyset.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ise-radius-policyset/cisco-ise-radius-policyset.yml",
+    "sourcetype": "cisco:ise:radius:policyset",
+    "vendor_id": "cisco_ise",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ise-syslog",
+    "sample_file": "cisco-ise-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ise-syslog/cisco-ise-syslog.yml",
+    "sourcetype": "cisco:ise:syslog",
+    "vendor_id": "cisco_ise",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ise-tacacs-authz-policy",
+    "sample_file": "cisco-ise-tacacs-authz-policy.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ise-tacacs-authz-policy/cisco-ise-tacacs-authz-policy.yml",
+    "sourcetype": "cisco:ise:tacacs:authz:policy",
+    "vendor_id": "cisco_ise",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-ise-tacacs-policyset",
+    "sample_file": "cisco-ise-tacacs-policyset.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-ise-tacacs-policyset/cisco-ise-tacacs-policyset.yml",
+    "sourcetype": "cisco:ise:tacacs:policyset",
+    "vendor_id": "cisco_ise",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-metrics-bgp-rib",
+    "sample_file": "cisco-metrics-bgp-rib.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-metrics-bgp-rib/cisco-metrics-bgp-rib.yml",
+    "sourcetype": "httpevent",
+    "vendor_id": "splunk",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-metrics-interface-counters",
+    "sample_file": "cisco-metrics-interface-counters.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-metrics-interface-counters/cisco-metrics-interface-counters.yml",
+    "sourcetype": "httpevent",
+    "vendor_id": "splunk",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-metrics-isis",
+    "sample_file": "cisco-metrics-isis.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-metrics-isis/cisco-metrics-isis.yml",
+    "sourcetype": "httpevent",
+    "vendor_id": "splunk",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-metrics-splunk-otel",
+    "sample_file": "cisco-metrics-splunk-otel.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-metrics-splunk-otel/cisco-metrics-splunk-otel.yml",
+    "sourcetype": "cisco:metrics",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-metrics-system-monitoring",
+    "sample_file": "cisco-metrics-system-monitoring.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-metrics-system-monitoring/cisco-metrics-system-monitoring.yml",
+    "sourcetype": "httpevent",
+    "vendor_id": "splunk",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-nexus",
+    "sample_file": "cisco-nexus.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-nexus/cisco-nexus.yml",
+    "sourcetype": "cisco:nexus",
+    "vendor_id": "cisco_aci",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-nvm-flowdata",
+    "sample_file": "cisco-nvm-flowdata.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-nvm-flowdata/cisco-nvm-flowdata.yml",
+    "sourcetype": "cisco:nvm:flowdata",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-nxos",
+    "sample_file": "cisco-nxos.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-nxos/cisco-nxos.yml",
+    "sourcetype": "cisco:nxos",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-nxos-syslog",
+    "sample_file": "cisco-nxos-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-nxos-syslog/cisco-nxos-syslog.yml",
+    "sourcetype": "cisco:nxos:syslog",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco DC (ACI, Nexus)",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-aaa-6-method-list-state",
+    "sample_file": "cisco-sdwan-aaa-6-method-list-state.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-aaa-6-method-list-state/cisco-sdwan-aaa-6-method-list-state.yml",
+    "sourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client",
+    "sample_file": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client/cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client.yml",
+    "sourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-aaa-audit-message-6-method-list-state",
+    "sample_file": "cisco-sdwan-aaa-audit-message-6-method-list-state.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-aaa-audit-message-6-method-list-state/cisco-sdwan-aaa-audit-message-6-method-list-state.yml",
+    "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client",
+    "sample_file": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client/cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client.yml",
+    "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-bgp-5-adjchange",
+    "sample_file": "cisco-sdwan-bgp-5-adjchange.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-bgp-5-adjchange/cisco-sdwan-bgp-5-adjchange.yml",
+    "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-bgp-5-nbr-reset",
+    "sample_file": "cisco-sdwan-bgp-5-nbr-reset.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-bgp-5-nbr-reset/cisco-sdwan-bgp-5-nbr-reset.yml",
+    "sourcetype": "cisco:sdwan:BGP-5-NBR_RESET",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-bgp-6-nexthop",
+    "sample_file": "cisco-sdwan-bgp-6-nexthop.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-bgp-6-nexthop/cisco-sdwan-bgp-6-nexthop.yml",
+    "sourcetype": "cisco:sdwan:BGP-6-NEXTHOP",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-bgp-session-5-adjchange",
+    "sample_file": "cisco-sdwan-bgp-session-5-adjchange.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-bgp-session-5-adjchange/cisco-sdwan-bgp-session-5-adjchange.yml",
+    "sourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-cdp-4-native-vlan-mismatch",
+    "sample_file": "cisco-sdwan-cdp-4-native-vlan-mismatch.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-cdp-4-native-vlan-mismatch/cisco-sdwan-cdp-4-native-vlan-mismatch.yml",
+    "sourcetype": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-crypto-6-isakmp-on-off",
+    "sample_file": "cisco-sdwan-crypto-6-isakmp-on-off.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-crypto-6-isakmp-on-off/cisco-sdwan-crypto-6-isakmp-on-off.yml",
+    "sourcetype": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-cts-3-aaa-no-radius-server",
+    "sample_file": "cisco-sdwan-cts-3-aaa-no-radius-server.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-cts-3-aaa-no-radius-server/cisco-sdwan-cts-3-aaa-no-radius-server.yml",
+    "sourcetype": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-dmi-5-auth-passed",
+    "sample_file": "cisco-sdwan-dmi-5-auth-passed.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-dmi-5-auth-passed/cisco-sdwan-dmi-5-auth-passed.yml",
+    "sourcetype": "cisco:sdwan:DMI-5-AUTH_PASSED",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-dmi-5-config-i",
+    "sample_file": "cisco-sdwan-dmi-5-config-i.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-dmi-5-config-i/cisco-sdwan-dmi-5-config-i.yml",
+    "sourcetype": "cisco:sdwan:DMI-5-CONFIG_I",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-dmi-5-sync-complete",
+    "sample_file": "cisco-sdwan-dmi-5-sync-complete.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-dmi-5-sync-complete/cisco-sdwan-dmi-5-sync-complete.yml",
+    "sourcetype": "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-dmi-5-sync-needed",
+    "sample_file": "cisco-sdwan-dmi-5-sync-needed.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-dmi-5-sync-needed/cisco-sdwan-dmi-5-sync-needed.yml",
+    "sourcetype": "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-dmi-5-sync-start",
+    "sample_file": "cisco-sdwan-dmi-5-sync-start.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-dmi-5-sync-start/cisco-sdwan-dmi-5-sync-start.yml",
+    "sourcetype": "cisco:sdwan:DMI-5-SYNC_START",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-environmental-1-alert",
+    "sample_file": "cisco-sdwan-environmental-1-alert.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-environmental-1-alert/cisco-sdwan-environmental-1-alert.yml",
+    "sourcetype": "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-eventlib-3-cpuhog",
+    "sample_file": "cisco-sdwan-eventlib-3-cpuhog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-eventlib-3-cpuhog/cisco-sdwan-eventlib-3-cpuhog.yml",
+    "sourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-iosxe-3-platform",
+    "sample_file": "cisco-sdwan-iosxe-3-platform.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-iosxe-3-platform/cisco-sdwan-iosxe-3-platform.yml",
+    "sourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive",
+    "sample_file": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-iosxe-infra-4-no-punt-keepalive/cisco-sdwan-iosxe-infra-4-no-punt-keepalive.yml",
+    "sourcetype": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup",
+    "sample_file": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-iosxe-rp-pae-not-6-pae-startup/cisco-sdwan-iosxe-rp-pae-not-6-pae-startup.yml",
+    "sourcetype": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-lineproto-5-updown",
+    "sample_file": "cisco-sdwan-lineproto-5-updown.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-lineproto-5-updown/cisco-sdwan-lineproto-5-updown.yml",
+    "sourcetype": "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-link-5-changed",
+    "sample_file": "cisco-sdwan-link-5-changed.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-link-5-changed/cisco-sdwan-link-5-changed.yml",
+    "sourcetype": "cisco:sdwan:LINK-5-CHANGED",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-link-5-updown",
+    "sample_file": "cisco-sdwan-link-5-updown.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-link-5-updown/cisco-sdwan-link-5-updown.yml",
+    "sourcetype": "cisco:sdwan:LINK-5-UPDOWN",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-linkhealth",
+    "sample_file": "cisco-sdwan-linkhealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-linkhealth/cisco-sdwan-linkhealth.yml",
+    "sourcetype": "cisco:sdwan:linkhealth",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-mdt-connection-6-state-changed",
+    "sample_file": "cisco-sdwan-mdt-connection-6-state-changed.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-mdt-connection-6-state-changed/cisco-sdwan-mdt-connection-6-state-changed.yml",
+    "sourcetype": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-msdp-5-peer-updown",
+    "sample_file": "cisco-sdwan-msdp-5-peer-updown.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-msdp-5-peer-updown/cisco-sdwan-msdp-5-peer-updown.yml",
+    "sourcetype": "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-ndbman-5-config-i",
+    "sample_file": "cisco-sdwan-ndbman-5-config-i.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-ndbman-5-config-i/cisco-sdwan-ndbman-5-config-i.yml",
+    "sourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-ospf-5-adjchg",
+    "sample_file": "cisco-sdwan-ospf-5-adjchg.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-ospf-5-adjchg/cisco-sdwan-ospf-5-adjchg.yml",
+    "sourcetype": "cisco:sdwan:OSPF-5-ADJCHG",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-pki-6-authoritative-clock",
+    "sample_file": "cisco-sdwan-pki-6-authoritative-clock.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-pki-6-authoritative-clock/cisco-sdwan-pki-6-authoritative-clock.yml",
+    "sourcetype": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-platform-4-element-warning",
+    "sample_file": "cisco-sdwan-platform-4-element-warning.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-platform-4-element-warning/cisco-sdwan-platform-4-element-warning.yml",
+    "sourcetype": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-sitehealth",
+    "sample_file": "cisco-sdwan-sitehealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-sitehealth/cisco-sdwan-sitehealth.yml",
+    "sourcetype": "cisco:sdwan:sitehealth",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-ssetunnels",
+    "sample_file": "cisco-sdwan-ssetunnels.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-ssetunnels/cisco-sdwan-ssetunnels.yml",
+    "sourcetype": "cisco:sdwan:ssetunnels",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-sys-5-config-p",
+    "sample_file": "cisco-sdwan-sys-5-config-p.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-sys-5-config-p/cisco-sdwan-sys-5-config-p.yml",
+    "sourcetype": "cisco:sdwan:SYS-5-CONFIG_P",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-syslog",
+    "sample_file": "cisco-sdwan-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-syslog/cisco-sdwan-syslog.yml",
+    "sourcetype": "cisco:sdwan:syslog",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-system-logs",
+    "sample_file": "cisco-sdwan-system-logs.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-system-logs/cisco-sdwan-system-logs.yml",
+    "sourcetype": "cisco:sdwan:system:logs",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-sytem-logs",
+    "sample_file": "cisco-sdwan-sytem-logs.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-sytem-logs/cisco-sdwan-sytem-logs.yml",
+    "sourcetype": "cisco:sdwan:sytem:logs",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": true
+  },
+  {
+    "id": "cisco-sdwan-tunnelhealth",
+    "sample_file": "cisco-sdwan-tunnelhealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-tunnelhealth/cisco-sdwan-tunnelhealth.yml",
+    "sourcetype": "cisco:sdwan:tunnelhealth",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-utd-logs",
+    "sample_file": "cisco-sdwan-utd-logs.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-utd-logs/cisco-sdwan-utd-logs.yml",
+    "sourcetype": "cisco:sdwan:utd:logs",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sdwan-utdhealth",
+    "sample_file": "cisco-sdwan-utdhealth.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sdwan-utdhealth/cisco-sdwan-utdhealth.yml",
+    "sourcetype": "cisco:sdwan:utdhealth",
+    "vendor_id": "cisco_sdwan",
+    "category": "Cisco SD-WAN",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-se",
+    "sample_file": "cisco-se.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-se/cisco-se.yml",
+    "sourcetype": "cisco:se",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sfw-estreamer",
+    "sample_file": "cisco-sfw-estreamer.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sfw-estreamer/cisco-sfw-estreamer.yml",
+    "sourcetype": "cisco:sfw:estreamer",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-sfw-policy",
+    "sample_file": "cisco-sfw-policy.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-sfw-policy/cisco-sfw-policy.yml",
+    "sourcetype": "cisco:sfw:policy",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-syslog",
+    "sample_file": "cisco-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-syslog/cisco-syslog.yml",
+    "sourcetype": "cisco_syslog",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-thousandeyes-event",
+    "sample_file": "cisco-thousandeyes-event.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-thousandeyes-event/cisco-thousandeyes-event.yml",
+    "sourcetype": "cisco:thousandeyes:event",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-thousandeyes-metric",
+    "sample_file": "cisco-thousandeyes-metric.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-thousandeyes-metric/cisco-thousandeyes-metric.yml",
+    "sourcetype": "cisco:thousandeyes:metric",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cisco-thousandeyes-path-vis",
+    "sample_file": "cisco-thousandeyes-path-vis.yml",
+    "sample_path": "netspout/appserver/static/samples/cisco-thousandeyes-path-vis/cisco-thousandeyes-path-vis.yml",
+    "sourcetype": "cisco:thousandeyes:path-vis",
+    "vendor_id": "cisco_ios",
+    "category": "Cisco Security & Telemetry",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cloudflare-json",
+    "sample_file": "cloudflare-json.yml",
+    "sample_path": "netspout/appserver/static/samples/cloudflare-json/cloudflare-json.yml",
+    "sourcetype": "cloudflare:json",
+    "vendor_id": "cloudflare",
+    "category": "Cloudflare Core & R2",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "cloudflare-r2-metrics",
+    "sample_file": "cloudflare-r2-metrics.yml",
+    "sample_path": "netspout/appserver/static/samples/cloudflare-r2-metrics/cloudflare-r2-metrics.yml",
+    "sourcetype": "cloudflare:r2:json",
+    "vendor_id": "cloudflare",
+    "category": "Cloudflare Core & R2",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "datablaster-preflight",
+    "sample_file": "datablaster-preflight.yml",
+    "sample_path": "netspout/appserver/static/samples/datablaster-preflight/datablaster-preflight.yml",
+    "sourcetype": "datablaster:preflight",
+    "vendor_id": "cisco_ios",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "datablaster-probe",
+    "sample_file": "datablaster-probe.yml",
+    "sample_path": "netspout/appserver/static/samples/datablaster-probe/datablaster-probe.yml",
+    "sourcetype": "datablaster:probe",
+    "vendor_id": "cisco_ios",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "extrahop-eda-alert",
+    "sample_file": "extrahop-eda-alert.yml",
+    "sample_path": "netspout/appserver/static/samples/extrahop-eda-alert/extrahop-eda-alert.yml",
+    "sourcetype": "extrahop:eda:alert",
+    "vendor_id": "extrahop",
+    "category": "ExtraHop Performance Detection",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "extrahop-metrics-performance",
+    "sample_file": "extrahop-metrics-performance.yml",
+    "sample_path": "netspout/appserver/static/samples/extrahop-metrics-performance/extrahop-metrics-performance.yml",
+    "sourcetype": "extrahop:eda:metrics",
+    "vendor_id": "extrahop",
+    "category": "ExtraHop Performance Detection",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "f5-bigip-ltm",
+    "sample_file": "f5-bigip-ltm.yml",
+    "sample_path": "netspout/appserver/static/samples/f5-bigip-ltm/f5-bigip-ltm.yml",
+    "sourcetype": "f5:bigip:ltm",
+    "vendor_id": "f5_bigip",
+    "category": "F5 BIG-IP",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "f5-bigip-syslog",
+    "sample_file": "f5-bigip-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/f5-bigip-syslog/f5-bigip-syslog.yml",
+    "sourcetype": "f5:bigip:syslog",
+    "vendor_id": "f5_bigip",
+    "category": "F5 BIG-IP",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "fortigate-event",
+    "sample_file": "fortigate-event.yml",
+    "sample_path": "netspout/appserver/static/samples/fortigate-event/fortigate-event.yml",
+    "sourcetype": "fortigate_event",
+    "vendor_id": "fortinet",
+    "category": "Fortinet FortiGate",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "fortigate-traffic",
+    "sample_file": "fortigate-traffic.yml",
+    "sample_path": "netspout/appserver/static/samples/fortigate-traffic/fortigate-traffic.yml",
+    "sourcetype": "fortigate_traffic",
+    "vendor_id": "fortinet",
+    "category": "Fortinet FortiGate",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "fortinet-fortigate",
+    "sample_file": "fortinet-fortigate.yml",
+    "sample_path": "netspout/appserver/static/samples/fortinet-fortigate/fortinet-fortigate.yml",
+    "sourcetype": "fortinet:fortigate",
+    "vendor_id": "fortinet",
+    "category": "Fortinet FortiGate",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "fortinet-fortigate-sdwan-alert",
+    "sample_file": "fortinet-fortigate-sdwan-alert.yml",
+    "sample_path": "netspout/appserver/static/samples/fortinet-fortigate-sdwan-alert/fortinet-fortigate-sdwan-alert.yml",
+    "sourcetype": "fgt_event",
+    "vendor_id": "fortinet",
+    "category": "Fortinet FortiGate",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "fortinet-fortigate-traffic",
+    "sample_file": "fortinet-fortigate-traffic.yml",
+    "sample_path": "netspout/appserver/static/samples/fortinet-fortigate-traffic/fortinet-fortigate-traffic.yml",
+    "sourcetype": "fgt_traffic",
+    "vendor_id": "fortinet",
+    "category": "Fortinet FortiGate",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "geo_tokens",
+    "sample_file": "hosts_core.sample",
+    "sample_path": "netspout/appserver/static/samples/geo_tokens/hosts_core.sample",
+    "sourcetype": "geo_tokens:generic",
+    "vendor_id": "splunk",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "juniper-junos",
+    "sample_file": "juniper-junos.yml",
+    "sample_path": "netspout/appserver/static/samples/juniper-junos/juniper-junos.yml",
+    "sourcetype": "juniper:junos",
+    "vendor_id": "juniper_junos",
+    "category": "Juniper Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "juniper-junos-syslog",
+    "sample_file": "juniper-junos-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/juniper-junos-syslog/juniper-junos-syslog.yml",
+    "sourcetype": "juniper:junos:syslog",
+    "vendor_id": "juniper_junos",
+    "category": "Juniper Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "juniper-syslog",
+    "sample_file": "juniper-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/juniper-syslog/juniper-syslog.yml",
+    "sourcetype": "juniper:syslog",
+    "vendor_id": "juniper_junos",
+    "category": "Juniper Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-calico-kube-controllers",
+    "sample_file": "kube-container-calico-kube-controllers.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-calico-kube-controllers/kube-container-calico-kube-controllers.yml",
+    "sourcetype": "kube:container:calico-kube-controllers",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-calico-node",
+    "sample_file": "kube-container-calico-node.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-calico-node/kube-container-calico-node.yml",
+    "sourcetype": "kube:container:calico-node",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-controller",
+    "sample_file": "kube-container-controller.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-controller/kube-container-controller.yml",
+    "sourcetype": "kube:container:controller",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-coredns",
+    "sample_file": "kube-container-coredns.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-coredns/kube-container-coredns.yml",
+    "sourcetype": "kube:container:coredns",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-hostpath-provisioner",
+    "sample_file": "kube-container-hostpath-provisioner.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-hostpath-provisioner/kube-container-hostpath-provisioner.yml",
+    "sourcetype": "kube:container:hostpath-provisioner",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-install-cni",
+    "sample_file": "kube-container-install-cni.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-install-cni/kube-container-install-cni.yml",
+    "sourcetype": "kube:container:install-cni",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-metrics",
+    "sample_file": "kube-container-metrics.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-metrics/kube-container-metrics.yml",
+    "sourcetype": "kube:container:metrics",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-metrics-server",
+    "sample_file": "kube-container-metrics-server.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-metrics-server/kube-container-metrics-server.yml",
+    "sourcetype": "kube:container:metrics-server",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-mibserver",
+    "sample_file": "kube-container-mibserver.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-mibserver/kube-container-mibserver.yml",
+    "sourcetype": "kube:container:mibserver",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-mongodb",
+    "sample_file": "kube-container-mongodb.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-mongodb/kube-container-mongodb.yml",
+    "sourcetype": "kube:container:mongodb",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-redis",
+    "sample_file": "kube-container-redis.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-redis/kube-container-redis.yml",
+    "sourcetype": "kube:container:redis",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-speaker",
+    "sample_file": "kube-container-speaker.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-speaker/kube-container-speaker.yml",
+    "sourcetype": "kube:container:speaker",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-splunk-connect-for-snmp-traps",
+    "sample_file": "kube-container-splunk-connect-for-snmp-traps.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-splunk-connect-for-snmp-traps/kube-container-splunk-connect-for-snmp-traps.yml",
+    "sourcetype": "kube:container:splunk-connect-for-snmp-traps",
+    "vendor_id": "sc4snmp",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-splunk-connect-for-snmp-worker-sender",
+    "sample_file": "kube-container-splunk-connect-for-snmp-worker-sender.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-splunk-connect-for-snmp-worker-sender/kube-container-splunk-connect-for-snmp-worker-sender.yml",
+    "sourcetype": "kube:container:splunk-connect-for-snmp-worker-sender",
+    "vendor_id": "sc4snmp",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-splunk-connect-for-snmp-worker-trap",
+    "sample_file": "kube-container-splunk-connect-for-snmp-worker-trap.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-splunk-connect-for-snmp-worker-trap/kube-container-splunk-connect-for-snmp-worker-trap.yml",
+    "sourcetype": "kube:container:splunk-connect-for-snmp-worker-trap",
+    "vendor_id": "sc4snmp",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-container-upgrade-ipam",
+    "sample_file": "kube-container-upgrade-ipam.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-container-upgrade-ipam/kube-container-upgrade-ipam.yml",
+    "sourcetype": "kube:container:upgrade-ipam",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-events",
+    "sample_file": "kube-events.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-events/kube-events.yml",
+    "sourcetype": "kube:events",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "kube-object-pods",
+    "sample_file": "kube-object-pods.yml",
+    "sample_path": "netspout/appserver/static/samples/kube-object-pods/kube-object-pods.yml",
+    "sourcetype": "kube:object:pods",
+    "vendor_id": "splunk",
+    "category": "Kubernetes Containers",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-accesspoints",
+    "sample_file": "meraki-accesspoints.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-accesspoints/meraki-accesspoints.yml",
+    "sourcetype": "meraki:accesspoints",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-airmarshal",
+    "sample_file": "meraki-airmarshal.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-airmarshal/meraki-airmarshal.yml",
+    "sourcetype": "meraki:airmarshal",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-appliancesdwanstatistics",
+    "sample_file": "meraki-appliancesdwanstatistics.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-appliancesdwanstatistics/meraki-appliancesdwanstatistics.yml",
+    "sourcetype": "meraki:appliancesdwanstatistics",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-appliancesdwanstatuses",
+    "sample_file": "meraki-appliancesdwanstatuses.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-appliancesdwanstatuses/meraki-appliancesdwanstatuses.yml",
+    "sourcetype": "meraki:appliancesdwanstatuses",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-assurancealerts",
+    "sample_file": "meraki-assurancealerts.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-assurancealerts/meraki-assurancealerts.yml",
+    "sourcetype": "meraki:assurancealerts",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-devices",
+    "sample_file": "meraki-devices.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-devices/meraki-devices.yml",
+    "sourcetype": "meraki:devices",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-devices-availabilities",
+    "sample_file": "meraki-devices-availabilities.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-devices-availabilities/meraki-devices-availabilities.yml",
+    "sourcetype": "meraki:devicesavailabilitieschangehistory",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-organizationsecurity",
+    "sample_file": "meraki-organizationsecurity.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-organizationsecurity/meraki-organizationsecurity.yml",
+    "sourcetype": "meraki:organizationsecurity",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-summarytopappliancesbyutilization",
+    "sample_file": "meraki-summarytopappliancesbyutilization.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-summarytopappliancesbyutilization/meraki-summarytopappliancesbyutilization.yml",
+    "sourcetype": "meraki:summarytopappliancesbyutilization",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-summarytopclientsbyusage",
+    "sample_file": "meraki-summarytopclientsbyusage.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-summarytopclientsbyusage/meraki-summarytopclientsbyusage.yml",
+    "sourcetype": "meraki:summarytopclientsbyusage",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-summarytopdevicesbyusage",
+    "sample_file": "meraki-summarytopdevicesbyusage.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-summarytopdevicesbyusage/meraki-summarytopdevicesbyusage.yml",
+    "sourcetype": "meraki:summarytopdevicesbyusage",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-switchportsbyswitch",
+    "sample_file": "meraki-switchportsbyswitch.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-switchportsbyswitch/meraki-switchportsbyswitch.yml",
+    "sourcetype": "meraki:switchportsbyswitch",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "meraki-switchportsoverview",
+    "sample_file": "meraki-switchportsoverview.yml",
+    "sample_path": "netspout/appserver/static/samples/meraki-switchportsoverview/meraki-switchportsoverview.yml",
+    "sourcetype": "meraki:switchportsoverview",
+    "vendor_id": "cisco_meraki",
+    "category": "Meraki",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "netscout-omnis-alert",
+    "sample_file": "netscout-omnis-alert.yml",
+    "sample_path": "netspout/appserver/static/samples/netscout-omnis-alert/netscout-omnis-alert.yml",
+    "sourcetype": "netscout:omnis:alert",
+    "vendor_id": "netscout",
+    "category": "NetScout Omnis Core",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "netskope-json",
+    "sample_file": "netskope-json.yml",
+    "sample_path": "netspout/appserver/static/samples/netskope-json/netskope-json.yml",
+    "sourcetype": "netskope:json",
+    "vendor_id": "netskope",
+    "category": "Netskope SSE Framework",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "netskope-sse",
+    "sample_file": "netskope-sse.yml",
+    "sample_path": "netspout/appserver/static/samples/netskope-sse/netskope-sse.yml",
+    "sourcetype": "netskope:sse",
+    "vendor_id": "netskope",
+    "category": "Netskope SSE Framework",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nokia-sros",
+    "sample_file": "nokia-sros.yml",
+    "sample_path": "netspout/appserver/static/samples/nokia-sros/nokia-sros.yml",
+    "sourcetype": "nokia:sros",
+    "vendor_id": "nokia_sr",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nokia-sros-syslog",
+    "sample_file": "nokia-sros-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/nokia-sros-syslog/nokia-sros-syslog.yml",
+    "sourcetype": "nokia:sros:syslog",
+    "vendor_id": "nokia_sr",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-alerts",
+    "sample_file": "nutanixpc-alerts.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-alerts/nutanixpc-alerts.yml",
+    "sourcetype": "nutanixpc_alerts",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-cluster-performance",
+    "sample_file": "nutanixpc-cluster-performance.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-cluster-performance/nutanixpc-cluster-performance.yml",
+    "sourcetype": "nutanixpc_cluster_performance",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-clusters",
+    "sample_file": "nutanixpc-clusters.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-clusters/nutanixpc-clusters.yml",
+    "sourcetype": "nutanixpc_clusters",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-disk-performance",
+    "sample_file": "nutanixpc-disk-performance.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-disk-performance/nutanixpc-disk-performance.yml",
+    "sourcetype": "nutanixpc_disk_performance",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-disks",
+    "sample_file": "nutanixpc-disks.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-disks/nutanixpc-disks.yml",
+    "sourcetype": "nutanixPC_disks",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-events",
+    "sample_file": "nutanixpc-events.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-events/nutanixpc-events.yml",
+    "sourcetype": "nutanixpc_events",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-host-performance",
+    "sample_file": "nutanixpc-host-performance.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-host-performance/nutanixpc-host-performance.yml",
+    "sourcetype": "nutanixpc_host_performance",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-hosts",
+    "sample_file": "nutanixpc-hosts.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-hosts/nutanixpc-hosts.yml",
+    "sourcetype": "nutanixpc_hosts",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-prismcentrals",
+    "sample_file": "nutanixpc-prismcentrals.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-prismcentrals/nutanixpc-prismcentrals.yml",
+    "sourcetype": "nutanixpc_prismCentrals",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-storage-containers",
+    "sample_file": "nutanixpc-storage-containers.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-storage-containers/nutanixpc-storage-containers.yml",
+    "sourcetype": "nutanixpc_storage_containers",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-syslog",
+    "sample_file": "nutanixpc-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-syslog/nutanixpc-syslog.yml",
+    "sourcetype": "nutanixpc_syslog",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-syslog-colon",
+    "sample_file": "nutanixpc-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-syslog-colon/nutanixpc-syslog.yml",
+    "sourcetype": "nutanixpc:syslog",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-vm-performance",
+    "sample_file": "nutanixpc-vm-performance.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-vm-performance/nutanixpc-vm-performance.yml",
+    "sourcetype": "nutanixpc_vm_performance",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-vms",
+    "sample_file": "nutanixpc-vms.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-vms/nutanixpc-vms.yml",
+    "sourcetype": "nutanixpc_vms",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-vms-colon",
+    "sample_file": "nutanixpc-vms.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-vms-colon/nutanixpc-vms.yml",
+    "sourcetype": "nutanixpc:vms",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "nutanixpc-volume-groups",
+    "sample_file": "nutanixpc-volume-groups.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-volume-groups/nutanixpc-volume-groups.yml",
+    "sourcetype": "nutanixpc_volume_groups",
+    "vendor_id": "nutanix",
+    "category": "Nutanix PC",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "pan-system",
+    "sample_file": "pan-system.yml",
+    "sample_path": "netspout/appserver/static/samples/pan-system/pan-system.yml",
+    "sourcetype": "pan:system",
+    "vendor_id": "palo_alto",
+    "category": "Palo Alto Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "pan-threat",
+    "sample_file": "pan-threat.yml",
+    "sample_path": "netspout/appserver/static/samples/pan-threat/pan-threat.yml",
+    "sourcetype": "pan:threat",
+    "vendor_id": "palo_alto",
+    "category": "Palo Alto Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "pan-traffic",
+    "sample_file": "pan-traffic.yml",
+    "sample_path": "netspout/appserver/static/samples/pan-traffic/pan-traffic.yml",
+    "sourcetype": "pan:traffic",
+    "vendor_id": "palo_alto",
+    "category": "Palo Alto Networks",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "radware-csms-ddos",
+    "sample_file": "radware-csms-ddos.yml",
+    "sample_path": "netspout/appserver/static/samples/radware-csms-ddos/radware-csms-ddos.yml",
+    "sourcetype": "radware:ddos",
+    "vendor_id": "radware",
+    "category": "Radware CSMS & CWAF",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "radware-cwaf-waf",
+    "sample_file": "radware-cwaf-waf.yml",
+    "sample_path": "netspout/appserver/static/samples/radware-cwaf-waf/radware-cwaf-waf.yml",
+    "sourcetype": "radware:waf",
+    "vendor_id": "radware",
+    "category": "Radware CSMS & CWAF",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "sc4snmp-event",
+    "sample_file": "sc4snmp-event.yml",
+    "sample_path": "netspout/appserver/static/samples/sc4snmp-event/sc4snmp-event.yml",
+    "sourcetype": "sc4snmp:event",
+    "vendor_id": "sc4snmp",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "snmp-trap",
+    "sample_file": "snmp-trap.yml",
+    "sample_path": "netspout/appserver/static/samples/snmp-trap/snmp-trap.yml",
+    "sourcetype": "snmp:trap",
+    "vendor_id": "sc4snmp",
+    "category": "Other",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "sophos-central-cef",
+    "sample_file": "sophos-central-cef.yml",
+    "sample_path": "netspout/appserver/static/samples/sophos-central-cef/sophos-central-cef.yml",
+    "sourcetype": "sophos:central:cef",
+    "vendor_id": "sophos",
+    "category": "Sophos Central",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "stream-netflow",
+    "sample_file": "stream-netflow.yml",
+    "sample_path": "netspout/appserver/static/samples/stream-netflow/stream-netflow.yml",
+    "sourcetype": "stream:netflow",
+    "vendor_id": "splunk",
+    "category": "stream-netflow",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "vmware-esx-perf",
+    "sample_file": "vmware-esx-perf.yml",
+    "sample_path": "netspout/appserver/static/samples/vmware-esx-perf/vmware-esx-perf.yml",
+    "sourcetype": "vmware:perf:cpu",
+    "vendor_id": "vmware_nsx",
+    "category": "vmware-esx-perf",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "zscaler-sse-tunnel",
+    "sample_file": "zscaler-sse-tunnel.yml",
+    "sample_path": "netspout/appserver/static/samples/zscaler-sse-tunnel/zscaler-sse-tunnel.yml",
+    "sourcetype": "zscaler:tunnel",
+    "vendor_id": "zscaler_zia",
+    "category": "Zscaler SSE Infrastructure",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "zscaler-sse-web",
+    "sample_file": "zscaler-sse-web.yml",
+    "sample_path": "netspout/appserver/static/samples/zscaler-sse-web/zscaler-sse-web.yml",
+    "sourcetype": "zscaler:web",
+    "vendor_id": "zscaler_zia",
+    "category": "Zscaler SSE Infrastructure",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  },
+  {
+    "id": "zscaler-zia",
+    "sample_file": "zscaler-zia.yml",
+    "sample_path": "netspout/appserver/static/samples/zscaler-zia/zscaler-zia.yml",
+    "sourcetype": "zscaler:zia",
+    "vendor_id": "zscaler_zia",
+    "category": "Zscaler SSE Infrastructure",
+    "generation_mode": "REPLAY",
+    "is_deprecated": false
+  }
+]

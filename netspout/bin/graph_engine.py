@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/graph_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Graph Engine for Network Topology Analysis
 Traverses custom network topologies, computes shortest paths (BFS),
@@ -6,8 +11,30 @@ whether attack vectors reach internal targets or are intercepted.
 """
 
 from collections import deque
-from typing import List, Dict, Set, Optional, Tuple
-from app.models import TopologyState, Node, Edge, NodeType
+from typing import List, Dict, Set, Optional, Tuple, Any
+try:
+    from netspout_core.models import TopologyState, Node, Edge, NodeType, NodeHardware, NodePowerState
+except ImportError:
+    try:
+        from app.models import TopologyState, Node, Edge, NodeType, NodeHardware, NodePowerState
+    except ImportError:
+        from models import TopologyState, Node, Edge, NodeType, NodeHardware, NodePowerState
+
+
+def _get_yang_store():
+    try:
+        from netspout_core.gnmi_engine import yang_store
+        return yang_store
+    except ImportError:
+        try:
+            from app.gnmi_engine import yang_store
+            return yang_store
+        except ImportError:
+            try:
+                from gnmi_engine import yang_store
+                return yang_store
+            except ImportError:
+                return None
 
 
 class TopologyGraph:
@@ -34,6 +61,33 @@ class TopologyGraph:
                     self.adj[edge.source].append(edge.target)
                 if edge.source not in self.adj[edge.target]:
                     self.adj[edge.target].append(edge.source)
+
+    def get_node(self, node_id: str) -> Optional[Node]:
+        return self.nodes_by_id.get(node_id)
+
+    def get_edge(self, edge_id: str) -> Optional[Edge]:
+        return next((e for e in self.topology.edges if e.id == edge_id), None)
+
+    def get_neighbors(self, node_id: str) -> List[str]:
+        return list(self.adj.get(node_id, []))
+
+    def get_affected_neighbors(self, node_id: str, hops: int = 2) -> List[str]:
+        """Discovers all nodes within N hops of node_id."""
+        if node_id not in self.adj:
+            return []
+        visited = {node_id}
+        queue = deque([(node_id, 0)])
+        neighbors = []
+        while queue:
+            curr, dist = queue.popleft()
+            if 0 < dist <= hops:
+                neighbors.append(curr)
+            if dist < hops:
+                for nxt in self.adj.get(curr, []):
+                    if nxt not in visited:
+                        visited.add(nxt)
+                        queue.append((nxt, dist + 1))
+        return neighbors
 
     def find_nodes_by_type(self, node_type: NodeType) -> List[Node]:
         return [n for n in self.topology.nodes if n.type == node_type]
@@ -207,16 +261,17 @@ class TopologyGraph:
                     intf.oper_status = "down"
 
         # Update OpenConfig YANG state
-        try:
-            from app.gnmi_engine import yang_store
-            if node_a:
-                yang_store.update_interface_oper_status(node_a.id, edge.source_port, "DOWN")
-                yang_store.update_bgp_session_state(node_a.id, node_b.ip_address if node_b else "*", "IDLE")
-            if node_b:
-                yang_store.update_interface_oper_status(node_b.id, edge.target_port, "DOWN")
-                yang_store.update_bgp_session_state(node_b.id, node_a.ip_address if node_a else "*", "IDLE")
-        except Exception:
-            pass
+        yang_store = _get_yang_store()
+        if yang_store:
+            try:
+                if node_a:
+                    yang_store.update_interface_oper_status(node_a.id, edge.source_port, "DOWN")
+                    yang_store.update_bgp_session_state(node_a.id, node_b.ip_address if node_b else "*", "IDLE")
+                if node_b:
+                    yang_store.update_interface_oper_status(node_b.id, edge.target_port, "DOWN")
+                    yang_store.update_bgp_session_state(node_b.id, node_a.ip_address if node_a else "*", "IDLE")
+            except Exception:
+                pass
 
         self._build_graph()
 
@@ -246,7 +301,6 @@ class TopologyGraph:
 
         node.status = "degraded"
         if not node.hardware:
-            from app.models import NodeHardware
             node.hardware = NodeHardware()
         node.hardware.cpu_utilization_pct = cpu_pct
         node.hardware.memory_utilization_pct = mem_pct
@@ -258,11 +312,12 @@ class TopologyGraph:
                 e.latency_ms = round(e.latency_ms * 3.5, 1)
                 affected_edges.append(e.id)
 
-        try:
-            from app.gnmi_engine import yang_store
-            yang_store.update_platform_utilization(node_id, cpu_pct, mem_pct)
-        except Exception:
-            pass
+        yang_store = _get_yang_store()
+        if yang_store:
+            try:
+                yang_store.update_platform_utilization(node_id, cpu_pct, mem_pct)
+            except Exception:
+                pass
 
         return {
             "success": True,
@@ -295,16 +350,17 @@ class TopologyGraph:
                 if intf.name == edge.target_port:
                     intf.oper_status = "up"
 
-        try:
-            from app.gnmi_engine import yang_store
-            if node_a:
-                yang_store.update_interface_oper_status(node_a.id, edge.source_port, "UP")
-                yang_store.update_bgp_session_state(node_a.id, node_b.ip_address if node_b else "*", "ESTABLISHED")
-            if node_b:
-                yang_store.update_interface_oper_status(node_b.id, edge.target_port, "UP")
-                yang_store.update_bgp_session_state(node_b.id, node_a.ip_address if node_a else "*", "ESTABLISHED")
-        except Exception:
-            pass
+        yang_store = _get_yang_store()
+        if yang_store:
+            try:
+                if node_a:
+                    yang_store.update_interface_oper_status(node_a.id, edge.source_port, "UP")
+                    yang_store.update_bgp_session_state(node_a.id, node_b.ip_address if node_b else "*", "ESTABLISHED")
+                if node_b:
+                    yang_store.update_interface_oper_status(node_b.id, edge.target_port, "UP")
+                    yang_store.update_bgp_session_state(node_b.id, node_a.ip_address if node_a else "*", "ESTABLISHED")
+            except Exception:
+                pass
 
         self._build_graph()
         return {"success": True, "edge_id": edge_id, "status": "restored"}
@@ -321,11 +377,186 @@ class TopologyGraph:
             if e.source == node_id or e.target == node_id:
                 e.latency_ms = 1.0
 
-        try:
-            from app.gnmi_engine import yang_store
-            yang_store.update_platform_utilization(node_id, 18.5, 34.0)
-        except Exception:
-            pass
+        yang_store = _get_yang_store()
+        if yang_store:
+            try:
+                yang_store.update_platform_utilization(node_id, 18.5, 34.0)
+            except Exception:
+                pass
 
         return {"success": True, "node_id": node_id, "status": "restored"}
+
+    def degrade_link(
+        self,
+        edge_id: str,
+        packet_loss_pct: float = 12.0,
+        latency_ms: float = 150.0,
+        jitter_ms: float = 35.0
+    ) -> Dict[str, Any]:
+        """
+        Degrades link quality (brownout simulation):
+        - Raises packet loss and latency without tearing down physical layer.
+        - Triggers BFD degradation and SD-WAN App-Route path switching.
+        """
+        edge = next((e for e in self.topology.edges if e.id == edge_id), None)
+        if not edge:
+            return {"success": False, "error": f"Edge {edge_id} not found"}
+
+        edge.status = "degraded"
+        edge.packet_loss_pct = packet_loss_pct
+        edge.latency_ms = latency_ms
+        edge.jitter_ms = jitter_ms
+
+        node_a = self.nodes_by_id.get(edge.source)
+        node_b = self.nodes_by_id.get(edge.target)
+        if node_a and node_a.hardware:
+            for intf in node_a.hardware.interfaces:
+                if intf.name == edge.source_port:
+                    intf.out_errors += int(packet_loss_pct * 10)
+        if node_b and node_b.hardware:
+            for intf in node_b.hardware.interfaces:
+                if intf.name == edge.target_port:
+                    intf.in_errors += int(packet_loss_pct * 10)
+
+        return {
+            "success": True,
+            "edge_id": edge_id,
+            "status": "degraded",
+            "packet_loss_pct": packet_loss_pct,
+            "latency_ms": latency_ms,
+            "jitter_ms": jitter_ms,
+            "cascades": [
+                f"Link {edge_id} degraded: {packet_loss_pct}% loss, {latency_ms}ms latency",
+                f"SLA threshold violation detected across {edge.source} <-> {edge.target}",
+                f"BFD path quality score dropped below acceptance criteria"
+            ]
+        }
+
+    def restore_all(self) -> Dict[str, Any]:
+        """Restores entire topology graph to clean, healthy baseline."""
+        restored_edges = 0
+        restored_nodes = 0
+        for edge in self.topology.edges:
+            edge.status = "up"
+            edge.packet_loss_pct = 0.0
+            edge.latency_ms = 1.0
+            edge.jitter_ms = 0.0
+            restored_edges += 1
+
+        for node in self.topology.nodes:
+            node.status = "active"
+            if getattr(node, "power_state", None) != NodePowerState.RUNNING:
+                node.power_state = NodePowerState.RUNNING
+            if node.hardware:
+                node.hardware.cpu_utilization_pct = 18.5
+                node.hardware.memory_utilization_pct = 34.0
+                for intf in node.hardware.interfaces:
+                    intf.oper_status = "up"
+                    intf.in_errors = 0
+                    intf.out_errors = 0
+            restored_nodes += 1
+
+        self._build_graph()
+        return {
+            "success": True,
+            "restored_nodes": restored_nodes,
+            "restored_edges": restored_edges
+        }
+
+    def snapshot_state(self) -> Dict[str, Any]:
+        """Captures current mutable runtime state for rollback/restoration."""
+        return {
+            "nodes": [
+                {
+                    "id": n.id,
+                    "status": n.status,
+                    "power_state": str(n.power_state.value if hasattr(n.power_state, "value") else n.power_state),
+                    "cpu_pct": n.hardware.cpu_utilization_pct if n.hardware else 0.0,
+                    "mem_pct": n.hardware.memory_utilization_pct if n.hardware else 0.0,
+                    "interfaces": [
+                        {
+                            "name": i.name,
+                            "oper_status": i.oper_status,
+                            "in_errors": i.in_errors,
+                            "out_errors": i.out_errors
+                        }
+                        for i in (n.hardware.interfaces if n.hardware else [])
+                    ]
+                }
+                for n in self.topology.nodes
+            ],
+            "edges": [
+                {
+                    "id": e.id,
+                    "status": e.status,
+                    "latency_ms": e.latency_ms,
+                    "packet_loss_pct": getattr(e, "packet_loss_pct", 0.0),
+                    "jitter_ms": getattr(e, "jitter_ms", 0.0)
+                }
+                for e in self.topology.edges
+            ]
+        }
+
+    def restore_snapshot(self, snapshot: Dict[str, Any]) -> Dict[str, Any]:
+        """Restores exact mutable runtime state from snapshot."""
+        node_map = {n["id"]: n for n in snapshot.get("nodes", [])}
+        edge_map = {e["id"]: e for e in snapshot.get("edges", [])}
+
+        for node in self.topology.nodes:
+            if node.id in node_map:
+                s = node_map[node.id]
+                node.status = s["status"]
+                if hasattr(NodePowerState, s.get("power_state", "RUNNING")):
+                    node.power_state = NodePowerState(s["power_state"])
+                if node.hardware:
+                    node.hardware.cpu_utilization_pct = s.get("cpu_pct", 18.5)
+                    node.hardware.memory_utilization_pct = s.get("mem_pct", 34.0)
+                    intf_map = {i["name"]: i for i in s.get("interfaces", [])}
+                    for intf in node.hardware.interfaces:
+                        if intf.name in intf_map:
+                            intf.oper_status = intf_map[intf.name].get("oper_status", "up")
+                            intf.in_errors = intf_map[intf.name].get("in_errors", 0)
+                            intf.out_errors = intf_map[intf.name].get("out_errors", 0)
+
+        for edge in self.topology.edges:
+            if edge.id in edge_map:
+                s = edge_map[edge.id]
+                edge.status = s["status"]
+                edge.latency_ms = s.get("latency_ms", 1.0)
+                edge.packet_loss_pct = s.get("packet_loss_pct", 0.0)
+                edge.jitter_ms = s.get("jitter_ms", 0.0)
+
+        self._build_graph()
+        return {"success": True, "restored_from_snapshot": True}
+
+    def find_target_nodes(
+        self,
+        node_types: Optional[List[NodeType]] = None,
+        vendor: Optional[str] = None
+    ) -> List[Node]:
+        """Finds target nodes matching node types or vendor criteria."""
+        results = self.topology.nodes
+        if node_types:
+            results = [n for n in results if n.type in node_types]
+        if vendor:
+            v_clean = vendor.lower()
+            results = [n for n in results if v_clean in getattr(n, "vendor", "").lower() or v_clean in n.name.lower()]
+        return results
+
+    def find_target_edges(
+        self,
+        link_type: Optional[str] = None
+    ) -> List[Edge]:
+        """Finds target edges matching link type criteria."""
+        if link_type:
+            return [e for e in self.topology.edges if e.link_type == link_type]
+        return list(self.topology.edges)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serializes topology graph to clean dictionary for UI/API consumption."""
+        return {
+            "nodes": [n.dict() if hasattr(n, "dict") else dict(n) for n in self.topology.nodes],
+            "edges": [e.dict() if hasattr(e, "dict") else dict(e) for e in self.topology.edges],
+            "zones": [z.dict() if hasattr(z, "dict") else dict(z) for z in getattr(self.topology, "zones", [])]
+        }
 

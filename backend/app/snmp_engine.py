@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/snmp_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 SC4SNMP & Multi-Vendor SNMP Simulation Engine (NetSpout)
 Implements:
@@ -15,15 +20,21 @@ import random
 from typing import Dict, List, Any, Optional, Tuple
 
 try:
-    from app.models import (
+    from netspout_core.models import (
         Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
         TelemetryTransportConfig
     )
 except ImportError:
-    from models import (
-        Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
-        TelemetryTransportConfig
-    )
+    try:
+        from app.models import (
+            Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
+            TelemetryTransportConfig
+        )
+    except ImportError:
+        from models import (
+            Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
+            TelemetryTransportConfig
+        )
 
 # =========================================================================
 # 300+ Comprehensive MIB Catalog

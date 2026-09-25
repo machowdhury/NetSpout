@@ -1,0 +1,311 @@
+[
+  {
+    "id": "arch_can_multi_building",
+    "name": "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+    "ecosystem": "pure_cisco",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Multi-building campus network with redundant Catalyst 9600 cores.",
+    "associated_scenarios": [
+      "arch_can_multi_building"
+    ]
+  },
+  {
+    "id": "arch_epn_isolated_intranet",
+    "name": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Private multi-tenant enterprise intranet connecting branches and VPCs.",
+    "associated_scenarios": [
+      "arch_epn_isolated_intranet"
+    ]
+  },
+  {
+    "id": "arch_gan_subsea_cloud",
+    "name": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+    "ecosystem": "both",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Trans-continental global network connecting cloud landing stations.",
+    "associated_scenarios": [
+      "arch_gan_subsea_cloud"
+    ]
+  },
+  {
+    "id": "arch_lan_campus_access",
+    "name": "LAN: Local Area Network - Campus Access & 802.1X TrustSec",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Enterprise LAN access switching with port-security.",
+    "associated_scenarios": [
+      "arch_lan_campus_access"
+    ]
+  },
+  {
+    "id": "arch_man_carrier_ring",
+    "name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Metro optical ring spanning 4 data centers with G.8032 sub-50ms failover.",
+    "associated_scenarios": [
+      "arch_man_carrier_ring"
+    ]
+  },
+  {
+    "id": "arch_nas_storage_cluster",
+    "name": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "NFS and SMB storage clusters under IOPS load.",
+    "associated_scenarios": [
+      "arch_nas_storage_cluster"
+    ]
+  },
+  {
+    "id": "arch_pan_iot_mesh",
+    "name": "PAN: Personal Area Network - IoT Mesh & BLE Beacon Infrastructure",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Industrial IoT mesh network reporting sensor states.",
+    "associated_scenarios": [
+      "arch_pan_iot_mesh"
+    ]
+  },
+  {
+    "id": "arch_san_fibre_channel",
+    "name": "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Enterprise storage SAN fabric with FC buffer credits.",
+    "associated_scenarios": [
+      "arch_san_fibre_channel"
+    ]
+  },
+  {
+    "id": "arch_vpn_remote_workforce",
+    "name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Remote workforce VPN endpoint with Duo MFA prompts.",
+    "associated_scenarios": [
+      "arch_vpn_remote_workforce"
+    ]
+  },
+  {
+    "id": "arch_wan_global_backbone",
+    "name": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+    "ecosystem": "both",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Inter-continental enterprise WAN with BGP EVPN and segment routing SRv6.",
+    "associated_scenarios": [
+      "arch_wan_global_backbone"
+    ]
+  },
+  {
+    "id": "arch_wlan_meraki_catalyst",
+    "name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "High-density campus wireless with CleanAir tracking.",
+    "associated_scenarios": [
+      "arch_wlan_meraki_catalyst"
+    ]
+  },
+  {
+    "id": "bypassed",
+    "name": "Bypassed Firewall (Shadow IT / Direct Wire)",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Perimeter firewall bypassed by direct uninspected bypass connection.",
+    "associated_scenarios": [
+      "sql_injection"
+    ]
+  },
+  {
+    "id": "cisco_aci",
+    "name": "Cisco Data Center ACI Ingress Microburst",
+    "ecosystem": "pure_cisco",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Spine-leaf DC fabric with Nexus 9K switches undergoing burst ingress.",
+    "associated_scenarios": [
+      "cisco_aci_microburst"
+    ]
+  },
+  {
+    "id": "cisco_campus",
+    "name": "Cisco Campus Core Rogue AP & ISE Quarantine",
+    "ecosystem": "pure_cisco",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Campus fabric with Catalyst 9300/9800 and ISE 802.1X quarantine.",
+    "associated_scenarios": [
+      "cisco_campus_rogue"
+    ]
+  },
+  {
+    "id": "cisco_sdwan",
+    "name": "Cisco SD-WAN WAN Circuit Brownout & BGP Failover",
+    "ecosystem": "pure_cisco",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Enterprise dual-link WAN circuit with MPLS and LTE failover.",
+    "associated_scenarios": [
+      "cisco_sdwan_brownout"
+    ]
+  },
+  {
+    "id": "lateral",
+    "name": "Flat Unsegmented Subnet (Ransomware Lateral Spread)",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Unsegmented flat network exposing database to direct peer attacks.",
+    "associated_scenarios": [
+      "lateral_movement"
+    ]
+  },
+  {
+    "id": "mixed_edge",
+    "name": "Mixed-Vendor Edge Breach (Meraki -> Catalyst -> Palo Alto)",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Multi-vendor perimeter passing traffic through Palo Alto and Fortinet.",
+    "associated_scenarios": [
+      "mixed_edge_breach"
+    ]
+  },
+  {
+    "id": "mixed_optical",
+    "name": "Multicast/MPLS Backbone Optical Shift (Nokia -> Juniper -> Arista)",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Carrier optical DWDM backbone connecting metro rings.",
+    "associated_scenarios": [
+      "mixed_backbone_optical"
+    ]
+  },
+  {
+    "id": "mixed_sase",
+    "name": "SASE Cloud Ingress Degradation (Zscaler -> Palo Alto -> Nexus)",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Cloud SSE edge routed into on-prem datacenter infrastructure.",
+    "associated_scenarios": [
+      "mixed_sase_degradation"
+    ]
+  },
+  {
+    "id": "mixed_vendor_enterprise",
+    "name": "Unified Mixed-Vendor Enterprise Fabric",
+    "ecosystem": "mixed_vendor",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Multi-vendor enterprise fabric connecting campus, DC, and SASE cloud.",
+    "associated_scenarios": [
+      "mixed_vendor_enterprise"
+    ]
+  },
+  {
+    "id": "openconfig_core",
+    "name": "OpenConfig Carrier Core & gNMI Assurance",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Carrier backbone streaming real-time OpenConfig YANG MDT.",
+    "associated_scenarios": [
+      "openconfig_mdt_streaming"
+    ]
+  },
+  {
+    "id": "pure_cisco_enterprise",
+    "name": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+    "ecosystem": "pure_cisco",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "End-to-end all-Cisco enterprise architecture.",
+    "associated_scenarios": [
+      "pure_cisco_enterprise"
+    ]
+  },
+  {
+    "id": "sdwan_connected_core",
+    "name": "SD-WAN Overlay with Integrated Catalyst Campus Core",
+    "ecosystem": "pure_cisco",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Unified SD-WAN edge directly interconnecting with campus distribution.",
+    "associated_scenarios": [
+      "sdwan_connected_core"
+    ]
+  },
+  {
+    "id": "secure",
+    "name": "Protected 3-Tier Enterprise Network (Inline Firewall)",
+    "ecosystem": "both",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Standard enterprise DMZ with inline perimeter firewall.",
+    "associated_scenarios": [
+      "ddos_attack",
+      "normal_traffic"
+    ]
+  },
+  {
+    "id": "service_provider_cisco",
+    "name": "Service Provider Cisco IP/MPLS Backbone",
+    "ecosystem": "pure_cisco",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Tier-1 Service Provider backbone with Cisco 8000 and ASR 9000 routers.",
+    "associated_scenarios": [
+      "service_provider_cisco"
+    ]
+  },
+  {
+    "id": "service_provider_mixed",
+    "name": "Service Provider Multi-Vendor Core Transit",
+    "ecosystem": "mixed_vendor",
+    "node_count": 8,
+    "edge_count": 8,
+    "description": "Multi-vendor transit fabric linking Cisco, Juniper, and Nokia edge.",
+    "associated_scenarios": [
+      "service_provider_mixed"
+    ]
+  },
+  {
+    "id": "wireless_connected_core_cisco",
+    "name": "Catalyst Wireless LAN Fabric with 9800 WLC Integration",
+    "ecosystem": "pure_cisco",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Campus wireless fabric mapped to Catalyst core.",
+    "associated_scenarios": [
+      "wireless_connected_core_cisco"
+    ]
+  },
+  {
+    "id": "wireless_connected_core_mixed",
+    "name": "Multi-Vendor Campus Wireless & Security Perimeter",
+    "ecosystem": "mixed_vendor",
+    "node_count": 6,
+    "edge_count": 6,
+    "description": "Meraki wireless access points routed through Palo Alto perimeter.",
+    "associated_scenarios": [
+      "wireless_connected_core_mixed"
+    ]
+  }
+]

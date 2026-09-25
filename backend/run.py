@@ -4,6 +4,9 @@ import argparse
 import uvicorn
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_src_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
+if os.path.isdir(_src_dir) and _src_dir not in sys.path:
+    sys.path.insert(0, _src_dir)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NetSpout Fast Simulation Engine")

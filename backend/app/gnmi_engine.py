@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/gnmi_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 OpenConfig YANG Data Modeling & gNMI Model-Driven Telemetry (MDT) Engine
 Implements RFC 7951 JSON-IETF & OpenConfig Schema Trees:
@@ -18,13 +23,18 @@ import random
 from typing import Dict, List, Any, Optional, Tuple
 
 try:
-    from app.models import (
+    from netspout_core.models import (
         Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
     )
 except ImportError:
-    from models import (
-        Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
-    )
+    try:
+        from app.models import (
+            Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
+        )
+    except ImportError:
+        from models import (
+            Node, Edge, TopologyState, OpenConfigSubscriptionMode, LogEntry
+        )
 
 
 class OpenConfigYANGStore:

@@ -197,6 +197,13 @@ export interface LogEntry {
   node_id: string;
   vendor?: string;
   sourcetype?: string;
+  netspout_run_id?: string | null;
+  netspout_scenario_id?: string | null;
+  netspout_phase?: string | null;
+  netspout_device_id?: string | null;
+  netspout_event_id?: string | null;
+  netspout_parent_event_id?: string | null;
+  netspout_ground_truth?: string | null;
 }
 
 export interface ScenarioDefinition {

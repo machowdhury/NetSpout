@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/noc_soc_metrics.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Comprehensive NOC & SOC Metric Emulation Engine (NetSpout)
 Emulates:

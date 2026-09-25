@@ -3,7 +3,7 @@ import type { TopologyState, ScenarioDefinition } from '../types/topology';
 export const SCENARIOS: ScenarioDefinition[] = [
   {
     id: 'openconfig_mdt_streaming',
-    name: 'Mode C: OpenConfig MDT Streaming & Telemetry Assurance',
+    name: 'OpenConfig MDT Streaming & Telemetry Assurance',
     code: 'OC-001',
     ecosystem: 'both',
     description: 'Routers and switches stream real-time OpenConfig YANG metrics (interface counters, CPU/RAM, BGP peering) directly to cisco_mdt_metrics.',
@@ -61,7 +61,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   // ==========================================
   {
     id: 'cisco_campus_rogue',
-    name: 'Mode A1: Campus Core L2/3 Disturbance & Rogue AP',
+    name: 'Campus Core L2/3 Disturbance & Rogue AP',
     code: 'CISCO-A1',
     ecosystem: 'pure_cisco',
     description: 'Unsanctioned Rogue AP connects to campus switch; Cisco ISE applies 802.1X quarantine while Catalyst core detects MAC flapping.',
@@ -71,7 +71,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   },
   {
     id: 'cisco_sdwan_brownout',
-    name: 'Mode A2: Enterprise WAN Circuit Brownout & App Route Failover',
+    name: 'Enterprise WAN Circuit Brownout & App Route Failover',
     code: 'CISCO-A2',
     ecosystem: 'pure_cisco',
     description: 'MPLS transport experiences high latency and packet loss; Cisco SD-WAN vEdge triggers SLA violation and BGP failover to secondary LTE/Broadband.',
@@ -81,7 +81,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   },
   {
     id: 'cisco_aci_microburst',
-    name: 'Mode A3: Data Center Fabric ACI Ingress Microburst Traffic',
+    name: 'Data Center Fabric ACI Ingress Microburst Traffic',
     code: 'CISCO-A3',
     ecosystem: 'pure_cisco',
     description: 'Microburst traffic pattern saturates Nexus 9K leaf switch ingress ASIC buffers; ACI fabric health score drops and MDT telemetry flags queue incast.',
@@ -95,7 +95,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   // ==========================================
   {
     id: 'mixed_edge_breach',
-    name: 'Mode B1: Distributed Edge Breach & Internal Probing',
+    name: 'Distributed Edge Breach & Internal Probing',
     code: 'MIXED-B1',
     ecosystem: 'mixed_vendor',
     description: 'Attacker probes wireless network via Meraki AP through Catalyst Core toward internal servers; Palo Alto NGFW inspects traffic.',
@@ -105,7 +105,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   },
   {
     id: 'mixed_sase_degradation',
-    name: 'Mode B2: SASE Cloud Ingress App Degradation & Synthetic Validation',
+    name: 'SASE Cloud Ingress App Degradation & Synthetic Validation',
     code: 'MIXED-B2',
     ecosystem: 'mixed_vendor',
     description: 'Zscaler/Cloudflare edge proxy experiences SSL inspection latency surge; Palo Alto SD-WAN queues sessions and ThousandEyes detects SaaS TTFB slowdown.',
@@ -115,7 +115,7 @@ export const SCENARIOS: ScenarioDefinition[] = [
   },
   {
     id: 'mixed_backbone_optical',
-    name: 'Mode B3: Multicast/MPLS Backbone Optical Carrier Shift',
+    name: 'Multicast/MPLS Backbone Optical Carrier Shift',
     code: 'MIXED-B3',
     ecosystem: 'mixed_vendor',
     description: 'DWDM Loss-of-Signal alarm on Nokia SR-OS core triggers Juniper Junos RSVP-TE Fast Reroute (FRR) switchover; Arista IPFIX telemetry tracks rerouted flow.',

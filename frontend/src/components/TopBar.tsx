@@ -8,6 +8,8 @@ import type { ScenarioType, EcosystemMode, TelemetryTransportConfig } from '../t
 import { SCENARIOS } from '../presets/defaultTopologies';
 
 interface TopBarProps {
+  appMode?: 'workflow' | 'advanced' | 'operations';
+  onSelectAppMode?: (mode: 'workflow' | 'advanced' | 'operations') => void;
   ecosystemMode: EcosystemMode;
   onSelectEcosystemMode: (mode: EcosystemMode) => void;
   scenario: ScenarioType;
@@ -37,6 +39,8 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
+  appMode = 'workflow',
+  onSelectAppMode,
   ecosystemMode,
   onSelectEcosystemMode,
   scenario,
@@ -172,6 +176,40 @@ export const TopBar: React.FC<TopBarProps> = ({
           >
             <Layers className="w-3 h-3" />
             <span>Multi-Vendor</span>
+          </button>
+        </div>
+
+        {/* Top-Level Navigation Tabs */}
+        <div className="flex items-center bg-slate-900 border border-slate-700/80 rounded-lg p-0.5 ml-2">
+          <button
+            onClick={() => onSelectAppMode && onSelectAppMode('workflow')}
+            className={`px-3 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
+              appMode === 'workflow'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Use Cases (5-Step)
+          </button>
+          <button
+            onClick={() => onSelectAppMode && onSelectAppMode('advanced')}
+            className={`px-3 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
+              appMode === 'advanced'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Canvas Orchestrator
+          </button>
+          <button
+            onClick={() => onSelectAppMode && onSelectAppMode('operations')}
+            className={`px-3 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
+              appMode === 'operations'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Operations
           </button>
         </div>
       </div>

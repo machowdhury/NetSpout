@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/log_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Dynamic Splunk Log Engine
 Generates authentic raw Splunk Key-Value (KV) format logs for:
@@ -15,7 +20,13 @@ import random
 import json
 from datetime import datetime
 from typing import Dict, Any, Optional
-from app.models import LogEntry, Node, NodeType
+try:
+    from netspout_core.models import LogEntry, Node, NodeType
+except ImportError:
+    try:
+        from app.models import LogEntry, Node, NodeType
+    except ImportError:
+        from models import LogEntry, Node, NodeType
 
 
 class SplunkLogEngine:

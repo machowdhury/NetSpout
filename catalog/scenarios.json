@@ -1,0 +1,3951 @@
+[
+  {
+    "id": "arch_can_multi_building",
+    "code": "ARCH-CAN",
+    "name": "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+    "display_name": "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "pure_cisco",
+    "description": "Multi-building campus network with redundant Catalyst 9600 cores, 100G fiber interconnects, and DNA Center automated assurance.",
+    "attack_vector": "Building inter-link fiber flap and OSPF area 0 route thrashing",
+    "defense_mechanism": "Non-Stop Forwarding (NSF) with Stateful Switchover (SSO) preserves forwarding during supervisor failover.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:networkhealth",
+      "cisco:ios:syslog",
+      "cisco:ise:trustsec:sgt"
+    ],
+    "default_topology_id": "arch_can_multi_building",
+    "topology_id": "arch_can_multi_building",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_can_multi_building"
+    ],
+    "expected_observations": [
+      "Building inter-link fiber flap and OSPF area 0 route thrashing"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Building inter-link fiber flap and OSPF area 0 route thrashing",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Non-Stop Forwarding (NSF) with Stateful Switchover (SSO) preserves forwarding during supervisor failover.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center.",
+      "required_telemetry": [
+        "cisco:catalyst:networkhealth",
+        "cisco:ios:syslog",
+        "cisco:ise:trustsec:sgt"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center.",
+        "Building inter-link fiber flap and OSPF area 0 route thrashing",
+        "Alerts cascade across affected network nodes.",
+        "Non-Stop Forwarding (NSF) with Stateful Switchover (SSO) preserves forwarding during supervisor failover.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Building inter-link fiber flap and OSPF area 0 route thrashing"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_can_multi_building",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_can_multi_building-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:networkhealth",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_epn_isolated_intranet",
+    "code": "ARCH-EPN",
+    "name": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
+    "display_name": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "both",
+    "description": "Private multi-tenant enterprise intranet connecting physical branches and cloud VPCs via private QinQ 802.1ad and MPLS pseudo-wires.",
+    "attack_vector": "Double-tagged QinQ VLAN hopping attempt",
+    "defense_mechanism": "Outer S-VLAN stripping and hardware ACL drop malicious inner encapsulation frames.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:syslog",
+      "cisco:sdwan:linkhealth"
+    ],
+    "default_topology_id": "arch_epn_isolated_intranet",
+    "topology_id": "arch_epn_isolated_intranet",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_epn_isolated_intranet"
+    ],
+    "expected_observations": [
+      "Double-tagged QinQ VLAN hopping attempt"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Double-tagged QinQ VLAN hopping attempt",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Outer S-VLAN stripping and hardware ACL drop malicious inner encapsulation frames.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC.",
+      "required_telemetry": [
+        "cisco:ios:syslog",
+        "cisco:sdwan:linkhealth"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC.",
+        "Double-tagged QinQ VLAN hopping attempt",
+        "Alerts cascade across affected network nodes.",
+        "Outer S-VLAN stripping and hardware ACL drop malicious inner encapsulation frames.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Double-tagged QinQ VLAN hopping attempt"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (2) emitted and indexed",
+        "Fault trigger signature detected for arch_epn_isolated_intranet",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_epn_isolated_intranet-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:syslog",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_gan_subsea_cloud",
+    "code": "ARCH-GAN",
+    "name": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+    "display_name": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "both",
+    "description": "Trans-continental global network connecting AWS Direct Connect, Azure ExpressRoute, and subsea cable landing stations.",
+    "attack_vector": "Subsea lambda optical BER degradation during undersea seismic event",
+    "defense_mechanism": "Optical transponder fast-protection switch redirects wavelength to terrestrial fallback.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:mdt:metric",
+      "zscaler:zia",
+      "cisco:thousandeyes:metric"
+    ],
+    "default_topology_id": "arch_gan_subsea_cloud",
+    "topology_id": "arch_gan_subsea_cloud",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_gan_subsea_cloud"
+    ],
+    "expected_observations": [
+      "Subsea lambda optical BER degradation during undersea seismic event"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Subsea lambda optical BER degradation during undersea seismic event",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Optical transponder fast-protection switch redirects wavelength to terrestrial fallback.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit.",
+      "required_telemetry": [
+        "cisco:ios:mdt:metric",
+        "zscaler:zia",
+        "cisco:thousandeyes:metric"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit.",
+        "Subsea lambda optical BER degradation during undersea seismic event",
+        "Alerts cascade across affected network nodes.",
+        "Optical transponder fast-protection switch redirects wavelength to terrestrial fallback.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Subsea lambda optical BER degradation during undersea seismic event"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_gan_subsea_cloud",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_gan_subsea_cloud-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:mdt:metric",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_lan_campus_access",
+    "code": "ARCH-LAN",
+    "name": "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
+    "display_name": "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "pure_cisco",
+    "description": "High-density campus LAN with Cisco Catalyst 9300/9500 switches, 802.1Q trunking, DHCP snooping, and ARP inspection.",
+    "attack_vector": "Rogue DHCP server spoofing and ARP cache poisoning",
+    "defense_mechanism": "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:security:events",
+      "cisco:ios:syslog",
+      "cisco:ise:nac:8021x"
+    ],
+    "default_topology_id": "arch_lan_campus_access",
+    "topology_id": "arch_lan_campus_access",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_lan_campus_access"
+    ],
+    "expected_observations": [
+      "Rogue DHCP server spoofing and ARP cache poisoning"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Rogue DHCP server spoofing and ARP cache poisoning",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
+      "required_telemetry": [
+        "cisco:catalyst:security:events",
+        "cisco:ios:syslog",
+        "cisco:ise:nac:8021x"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for LAN: Local Area Network - Campus Switching & 802.1Q Segments.",
+        "Rogue DHCP server spoofing and ARP cache poisoning",
+        "Alerts cascade across affected network nodes.",
+        "DHCP snooping drops rogue offers; Dynamic ARP Inspection (DAI) isolates attacker port.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Rogue DHCP server spoofing and ARP cache poisoning"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_lan_campus_access",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_lan_campus_access-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:security:events",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_man_carrier_ring",
+    "code": "ARCH-MAN",
+    "name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+    "display_name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+    "category": "SERVICE_PROVIDER",
+    "ecosystem": "mixed_vendor",
+    "description": "Metro optical ring spanning 4 data centers with ITU-T G.8032 Ethernet Ring Protection Switching (ERPS) sub-50ms failover.",
+    "attack_vector": "Physical metro fiber cut on transit span",
+    "defense_mechanism": "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "nokia:sros:syslog",
+      "juniper:junos",
+      "arista:eos"
+    ],
+    "default_topology_id": "arch_man_carrier_ring",
+    "topology_id": "arch_man_carrier_ring",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "mixed_vendor"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_man_carrier_ring"
+    ],
+    "expected_observations": [
+      "Physical metro fiber cut on transit span"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Physical metro fiber cut on transit span",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
+      "required_telemetry": [
+        "nokia:sros:syslog",
+        "juniper:junos",
+        "arista:eos"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS.",
+        "Physical metro fiber cut on transit span",
+        "Alerts cascade across affected network nodes.",
+        "G.8032 ERPS unblocks Ring Protection Link (RPL) within 38ms to prevent broadcast storms.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Physical metro fiber cut on transit span"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_man_carrier_ring",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_man_carrier_ring-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "nokia:sros:syslog",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_nas_storage_cluster",
+    "code": "ARCH-NAS",
+    "name": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+    "display_name": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+    "category": "DATACENTER",
+    "ecosystem": "both",
+    "description": "High-throughput NAS cluster serving petabyte NFSv4.1 and SMB3 workloads with IOPS burst tracking and volume latency metrics.",
+    "attack_vector": "Simultaneous AI model checkpoint dump exhausting NFS aggregate write buffers",
+    "defense_mechanism": "Autonomous Ransomware Protection and QoS IOPS governor smooth write queues.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "netapp:ontap:nas",
+      "arista:telemetry:json"
+    ],
+    "default_topology_id": "arch_nas_storage_cluster",
+    "topology_id": "arch_nas_storage_cluster",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_nas_storage_cluster"
+    ],
+    "expected_observations": [
+      "Simultaneous AI model checkpoint dump exhausting NFS aggregate write buffers"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Simultaneous AI model checkpoint dump exhausting NFS aggregate write buffers",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Autonomous Ransomware Protection and QoS IOPS governor smooth write queues.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters.",
+      "required_telemetry": [
+        "netapp:ontap:nas",
+        "arista:telemetry:json"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters.",
+        "Simultaneous AI model checkpoint dump exhausting NFS aggregate write buffers",
+        "Alerts cascade across affected network nodes.",
+        "Autonomous Ransomware Protection and QoS IOPS governor smooth write queues.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Simultaneous AI model checkpoint dump exhausting NFS aggregate write buffers"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (2) emitted and indexed",
+        "Fault trigger signature detected for arch_nas_storage_cluster",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_nas_storage_cluster-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "netapp:ontap:nas",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_pan_iot_mesh",
+    "code": "ARCH-PAN",
+    "name": "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+    "display_name": "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "both",
+    "description": "Short-range IoT sensor mesh monitoring environmental conditions, temperature, humidity, and Bluetooth LE beacon telemetry.",
+    "attack_vector": "Environmental temperature threshold breach and low battery alert",
+    "defense_mechanism": "Micro-gateway aggregates telemetry and throttles noisy sensor payloads.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "pan:ble:iot:sensor",
+      "cisco:ios:syslog"
+    ],
+    "default_topology_id": "arch_pan_iot_mesh",
+    "topology_id": "arch_pan_iot_mesh",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_pan_iot_mesh"
+    ],
+    "expected_observations": [
+      "Environmental temperature threshold breach and low battery alert"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Environmental temperature threshold breach and low battery alert",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Micro-gateway aggregates telemetry and throttles noisy sensor payloads.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh.",
+      "required_telemetry": [
+        "pan:ble:iot:sensor",
+        "cisco:ios:syslog"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh.",
+        "Environmental temperature threshold breach and low battery alert",
+        "Alerts cascade across affected network nodes.",
+        "Micro-gateway aggregates telemetry and throttles noisy sensor payloads.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Environmental temperature threshold breach and low battery alert"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (2) emitted and indexed",
+        "Fault trigger signature detected for arch_pan_iot_mesh",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_pan_iot_mesh-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "pan:ble:iot:sensor",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_san_fibre_channel",
+    "code": "ARCH-SAN",
+    "name": "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+    "display_name": "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+    "category": "DATACENTER",
+    "ecosystem": "both",
+    "description": "Enterprise storage area network fabric with Cisco MDS 9700 64G FC directors, zoning, and buffer-to-buffer credit starvation telemetry.",
+    "attack_vector": "Slow-drain compute node causing credit loss and ISL congestion spreading",
+    "defense_mechanism": "FC Congestion Notification (FCCND) pauses slow-drain device to protect healthy storage paths.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:mds:san:fc",
+      "cisco:dc:nexus9k:syslog"
+    ],
+    "default_topology_id": "arch_san_fibre_channel",
+    "topology_id": "arch_san_fibre_channel",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_san_fibre_channel"
+    ],
+    "expected_observations": [
+      "Slow-drain compute node causing credit loss and ISL congestion spreading"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Slow-drain compute node causing credit loss and ISL congestion spreading",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "FC Congestion Notification (FCCND) pauses slow-drain device to protect healthy storage paths.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF.",
+      "required_telemetry": [
+        "cisco:mds:san:fc",
+        "cisco:dc:nexus9k:syslog"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF.",
+        "Slow-drain compute node causing credit loss and ISL congestion spreading",
+        "Alerts cascade across affected network nodes.",
+        "FC Congestion Notification (FCCND) pauses slow-drain device to protect healthy storage paths.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Slow-drain compute node causing credit loss and ISL congestion spreading"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (2) emitted and indexed",
+        "Fault trigger signature detected for arch_san_fibre_channel",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_san_fibre_channel-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:mds:san:fc",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_vpn_remote_workforce",
+    "code": "ARCH-VPN",
+    "name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+    "display_name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+    "category": "WAN",
+    "ecosystem": "both",
+    "description": "Remote access VPN concentrator and IPsec crypto tunnels supporting 10,000+ concurrent workforce sessions with Duo MFA integration.",
+    "attack_vector": "Credential stuffing attack targeting SSL-VPN endpoint",
+    "defense_mechanism": "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:duo:remote:vpn",
+      "cisco:duo:push:prompt",
+      "cisco:asa"
+    ],
+    "default_topology_id": "arch_vpn_remote_workforce",
+    "topology_id": "arch_vpn_remote_workforce",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_vpn_remote_workforce"
+    ],
+    "expected_observations": [
+      "Credential stuffing attack targeting SSL-VPN endpoint"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Credential stuffing attack targeting SSL-VPN endpoint",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
+      "required_telemetry": [
+        "cisco:duo:remote:vpn",
+        "cisco:duo:push:prompt",
+        "cisco:asa"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec.",
+        "Credential stuffing attack targeting SSL-VPN endpoint",
+        "Alerts cascade across affected network nodes.",
+        "Cisco Duo Push MFA and posture hygiene evaluation block compromised credentials and jailbroken endpoints.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Credential stuffing attack targeting SSL-VPN endpoint"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_vpn_remote_workforce",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_vpn_remote_workforce-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:duo:remote:vpn",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_wan_global_backbone",
+    "code": "ARCH-WAN",
+    "name": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+    "display_name": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+    "category": "WAN",
+    "ecosystem": "both",
+    "description": "Inter-continental enterprise WAN with BGP EVPN, segment routing SRv6, and MPLS traffic engineering tunnels.",
+    "attack_vector": "Trans-oceanic latency degradation and BGP prefix hijacking",
+    "defense_mechanism": "SRv6 flexible algorithm reroutes traffic to low-latency alternate path.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:mdt:metric",
+      "cisco:ios:syslog",
+      "juniper:junos"
+    ],
+    "default_topology_id": "arch_wan_global_backbone",
+    "topology_id": "arch_wan_global_backbone",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_wan_global_backbone"
+    ],
+    "expected_observations": [
+      "Trans-oceanic latency degradation and BGP prefix hijacking"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Trans-oceanic latency degradation and BGP prefix hijacking",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "SRv6 flexible algorithm reroutes traffic to low-latency alternate path.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM.",
+      "required_telemetry": [
+        "cisco:ios:mdt:metric",
+        "cisco:ios:syslog",
+        "juniper:junos"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM.",
+        "Trans-oceanic latency degradation and BGP prefix hijacking",
+        "Alerts cascade across affected network nodes.",
+        "SRv6 flexible algorithm reroutes traffic to low-latency alternate path.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Trans-oceanic latency degradation and BGP prefix hijacking"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_wan_global_backbone",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_wan_global_backbone-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:mdt:metric",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "arch_wlan_meraki_catalyst",
+    "code": "ARCH-WLAN",
+    "name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+    "display_name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+    "category": "WIRELESS",
+    "ecosystem": "both",
+    "description": "Dual-vendor campus wireless with Catalyst 9800 WLC and Meraki MR56 APs tracking client roaming, SNR, and CleanAir interference.",
+    "attack_vector": "CleanAir RF interference and rogue evil-twin SSID broadcast",
+    "defense_mechanism": "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:rogue:threat_details",
+      "meraki:accesspoints",
+      "cisco:catalyst:clienthealth"
+    ],
+    "default_topology_id": "arch_wlan_meraki_catalyst",
+    "topology_id": "arch_wlan_meraki_catalyst",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "arch_wlan_meraki_catalyst"
+    ],
+    "expected_observations": [
+      "CleanAir RF interference and rogue evil-twin SSID broadcast"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "CleanAir RF interference and rogue evil-twin SSID broadcast",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
+      "required_telemetry": [
+        "cisco:catalyst:rogue:threat_details",
+        "meraki:accesspoints",
+        "cisco:catalyst:clienthealth"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7.",
+        "CleanAir RF interference and rogue evil-twin SSID broadcast",
+        "Alerts cascade across affected network nodes.",
+        "Air Marshal containment suppresses rogue BSSID; CleanAir shifts channel automatically.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "CleanAir RF interference and rogue evil-twin SSID broadcast"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for arch_wlan_meraki_catalyst",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "arch_wlan_meraki_catalyst-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:rogue:threat_details",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "cisco_aci_microburst",
+    "code": "CISCO-A3",
+    "name": "Data Center Fabric ACI Ingress Microburst Traffic",
+    "display_name": "Data Center Fabric ACI Ingress Microburst Traffic",
+    "category": "DATACENTER",
+    "ecosystem": "pure_cisco",
+    "description": "Microburst traffic pattern saturates Nexus 9K leaf switch ingress ASIC buffers; ACI fabric health score drops and MDT telemetry flags queue incast.",
+    "attack_vector": "High-bandwidth Incast Traffic Burst saturating Switch ASIC Buffers",
+    "defense_mechanism": "Nexus 9K buffer manager drops packets to protect spine; Cisco ACI health scoring reflects leaf congestion.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:dc:nexus9k:syslog",
+      "cisco:dc:aci:health",
+      "cisco:ios:mdt"
+    ],
+    "default_topology_id": "cisco_aci",
+    "topology_id": "cisco_aci",
+    "difficulty": "ADVANCED",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco_nexus",
+      "cisco_aci"
+    ],
+    "telemetry_requirements": [
+      "gnmi",
+      "syslog"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "cisco_aci"
+    ],
+    "expected_observations": [
+      "High-bandwidth Incast Traffic Burst saturating Switch ASIC Buffers"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Nominal Fabric Utilization",
+        "duration_ticks": 2,
+        "description": "East-West container traffic flowing across spine-leaf fabric.",
+        "expected_observations": [
+          "Buffer utilization < 20%"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Egress Queue Saturation Spike",
+        "duration_ticks": 3,
+        "description": "Sub-millisecond microburst saturates leaf switch output buffers.",
+        "expected_observations": [
+          "Buffer watermark > 90%",
+          "PFC pause frames sent"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry Telemetry Burst",
+        "duration_ticks": 2,
+        "description": "Streaming telemetry emits buffer pool congestion notifications.",
+        "expected_observations": [
+          "cisco:aci:health drop events"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Buffer Drain & Nominal Flow",
+        "duration_ticks": 2,
+        "description": "Bursty traffic subsides; queues drain back to nominal levels.",
+        "expected_observations": [
+          "Buffer watermarks normalize"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Fabric Health Clearance",
+        "duration_ticks": 1,
+        "description": "Verify fabric health metric restoration.",
+        "expected_observations": [
+          "Zero active drop alarms"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate ACI spine-leaf datacenter fabric microburst detection and buffer congestion observability.",
+      "required_telemetry": [
+        "cisco:aci:health",
+        "cisco:nexus:syslog",
+        "cisco:ios:mdt:metric"
+      ],
+      "expected_progression": [
+        "Nominal fabric flow",
+        "Ingress microburst",
+        "PFC pause frames and buffer alert",
+        "Congestion clearance",
+        "Health restoration"
+      ],
+      "expected_observations": [
+        "Buffer drop alerts in cisco:aci:health",
+        "Interface metric anomalies in cisco:ios:mdt:metric"
+      ],
+      "validation_criteria": [
+        "Microburst alert logged",
+        "Buffer recovery confirmed"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "aci-val-01",
+        "name": "ACI Health Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:aci:health",
+        "min_count": 1,
+        "description": "Verify ACI health records emitted."
+      },
+      {
+        "id": "aci-val-02",
+        "name": "Degradation Status Logged",
+        "type": "EVENT_EXISTS",
+        "target_field": "status",
+        "expected_value": "degraded",
+        "comparison": "in",
+        "description": "Verify congestion state recorded."
+      }
+    ]
+  },
+  {
+    "id": "cisco_campus_rogue",
+    "code": "CISCO-A1",
+    "name": "Campus Core L2/3 Disturbance & Rogue AP",
+    "display_name": "Campus Core L2/3 Disturbance & Rogue AP",
+    "category": "WIRELESS",
+    "ecosystem": "pure_cisco",
+    "description": "Unsanctioned Rogue AP connects to campus switch; Cisco ISE applies 802.1X quarantine while Catalyst core detects MAC flapping.",
+    "attack_vector": "Evil Twin / Rogue AP SSID injection causing L2 broadcast loop & MAC flapping",
+    "defense_mechanism": "Catalyst Rogue Detection triggers ISE quarantine profile; switch isolates flapping access port.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:security:events",
+      "cisco:catalyst:rogue:threat_details",
+      "cisco:ise:syslog",
+      "cisco:ios:syslog"
+    ],
+    "default_topology_id": "cisco_campus",
+    "topology_id": "cisco_campus",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco_catalyst",
+      "cisco_ise"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "cat9300-access01",
+      "wlc-9800-core",
+      "rogue-ap-unauth"
+    ],
+    "expected_observations": [
+      "Evil Twin / Rogue AP SSID injection causing L2 broadcast loop & MAC flapping"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Authorized Campus Operations",
+        "duration_ticks": 2,
+        "description": "Normal 802.1X client authentication and authorized AP telemetry.",
+        "expected_observations": [
+          "Normal client associations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Rogue AP Broadcast Injection",
+        "duration_ticks": 3,
+        "description": "Unapproved rogue access point powers on broadcasting corporate SSID.",
+        "expected_observations": [
+          "Rogue AP beacon frames detected",
+          "Channel conflict"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "WLC & Catalyst Center Alerting",
+        "duration_ticks": 2,
+        "description": "Catalyst 9800 WLC flags rogue AP as malicious and notifies Catalyst Center.",
+        "expected_observations": [
+          "Rogue threat alarm generated"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Automated Port Quarantine",
+        "duration_ticks": 2,
+        "description": "Switchport connected to rogue AP placed in quarantine VLAN via ISE change of authorization (CoA).",
+        "expected_observations": [
+          "ISE CoA quarantine action"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Rogue Device Decommission",
+        "duration_ticks": 2,
+        "description": "Rogue device removed; switchport returned to standard VLAN.",
+        "expected_observations": [
+          "Quarantine cleared"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Wireless Security Audit",
+        "duration_ticks": 1,
+        "description": "Verify zero uncontained rogues remain active.",
+        "expected_observations": [
+          "Air quality normal"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate campus wireless rogue AP detection, automated containment, and switchport quarantine triage.",
+      "required_telemetry": [
+        "cisco:catalyst:networkhealth",
+        "cisco:catalyst:rogue:threat:details",
+        "cisco:ise:nac:8021x"
+      ],
+      "expected_progression": [
+        "Baseline campus operations",
+        "Rogue AP activated",
+        "WLC detects unauthorized BSSID",
+        "Quarantine port via ISE CoA",
+        "Airspace cleared"
+      ],
+      "expected_observations": [
+        "Rogue threat detail alert in cisco:catalyst:rogue:threat:details",
+        "ISE quarantine event in cisco:ise:nac:8021x"
+      ],
+      "validation_criteria": [
+        "At least 1 rogue detection event emitted",
+        "Containment action verified in security telemetry"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "rogue-val-01",
+        "name": "Rogue Event Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:rogue:threat_details",
+        "min_count": 1,
+        "description": "Verify rogue threat detection logged."
+      },
+      {
+        "id": "rogue-val-02",
+        "name": "Security Threat Alerted",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "alerted",
+        "comparison": "in",
+        "description": "Verify alert status emitted."
+      }
+    ]
+  },
+  {
+    "id": "cisco_sdwan_brownout",
+    "code": "CISCO-A2",
+    "name": "Enterprise WAN Circuit Brownout & App Route Failover",
+    "display_name": "Enterprise WAN Circuit Brownout & App Route Failover",
+    "category": "WAN",
+    "ecosystem": "pure_cisco",
+    "description": "MPLS transport experiences high latency and packet loss; Cisco SD-WAN vEdge triggers SLA violation and BGP failover to secondary LTE/Broadband.",
+    "attack_vector": "Underlay Carrier Brownout (185ms Latency, 12% Packet Loss)",
+    "defense_mechanism": "SD-WAN BFD triggers dynamic SLA policy redirect; ThousandEyes synthetic probe validates application continuity.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:sdwan:linkhealth",
+      "cisco:sdwan:BGP-5-ADJCHANGE",
+      "cisco:thousandeyes:path-vis",
+      "cisco:thousandeyes:metric"
+    ],
+    "default_topology_id": "cisco_sdwan",
+    "topology_id": "cisco_sdwan",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco_sdwan"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "gnmi",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "edge-branch-mpls",
+      "vedge-branch-01",
+      "vedge-hub-01"
+    ],
+    "expected_observations": [
+      "Underlay Carrier Brownout (185ms Latency, 12% Packet Loss)"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "fault_definition": {
+      "type": "link_degradation",
+      "target_edge_id": "edge-branch-mpls",
+      "packet_loss_pct": 12.0,
+      "latency_ms": 150.0,
+      "jitter_ms": 35.0,
+      "description": "Simulates 12% packet loss and 150ms latency across primary MPLS transport."
+    },
+    "recovery_definition": {
+      "type": "link_restoration",
+      "target_edge_id": "edge-branch-mpls",
+      "description": "Restores primary MPLS circuit to <1% loss and nominal latency."
+    },
+    "phases": [
+      {
+        "phase": "INITIALIZE",
+        "name": "Topology Provisioning",
+        "duration_ticks": 1,
+        "description": "Initialize SD-WAN branch and hub nodes with dual transport paths.",
+        "expected_observations": [
+          "Nodes active"
+        ]
+      },
+      {
+        "phase": "BASELINE",
+        "name": "Healthy Path SLA",
+        "duration_ticks": 2,
+        "description": "BFD sessions establish SLA metrics below brownout thresholds.",
+        "expected_observations": [
+          "BFD jitter < 10ms",
+          "0% packet loss"
+        ]
+      },
+      {
+        "phase": "DEGRADE",
+        "name": "Carrier Brownout Injection",
+        "duration_ticks": 3,
+        "description": "Introduce 12% packet loss and 150ms latency on primary MPLS.",
+        "fault_action": {
+          "type": "link_degradation",
+          "target_edge_id": "edge-branch-mpls",
+          "packet_loss_pct": 12.0,
+          "latency_ms": 150.0,
+          "jitter_ms": 35.0,
+          "description": "Simulates 12% packet loss and 150ms latency across primary MPLS transport."
+        },
+        "expected_observations": [
+          "BFD latency violation detected",
+          "Path quality score drops"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "App-Route Dynamic Steer",
+        "duration_ticks": 2,
+        "description": "vManage App-Route policy activates; traffic steers to secondary DIA Internet circuit.",
+        "expected_observations": [
+          "cisco:sdwan:approute reroute event",
+          "Secondary tunnel active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Carrier Restoration",
+        "duration_ticks": 2,
+        "description": "Restore primary MPLS circuit quality to nominal levels.",
+        "recovery_action": {
+          "type": "link_restoration",
+          "target_edge_id": "edge-branch-mpls",
+          "description": "Restores primary MPLS circuit to <1% loss and nominal latency."
+        },
+        "expected_observations": [
+          "BFD alarms cleared",
+          "Traffic returns to primary"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify complete recovery and SLA conformance.",
+        "expected_observations": [
+          "All tunnels healthy"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate detection, isolation, and automated App-Route failover of an enterprise SD-WAN branch circuit suffering brownout degradation, followed by automated recovery.",
+      "required_telemetry": [
+        "cisco:sdwan:bfd",
+        "cisco:sdwan:approute",
+        "cisco:sdwan:linkhealth",
+        "cisco:sdwan:system:logs"
+      ],
+      "expected_progression": [
+        "Healthy baseline traffic over primary MPLS circuit",
+        "Carrier brownout introduced with 12% loss and 150ms latency",
+        "BFD path quality drops below SLA threshold",
+        "App-Route steers critical application traffic to backup DIA tunnel",
+        "Primary circuit restored; traffic returns to primary MPLS tunnel"
+      ],
+      "expected_observations": [
+        "BFD degradation alerts in cisco:sdwan:bfd",
+        "Tunnel health degradation in cisco:sdwan:linkhealth",
+        "AppRoute failover event in cisco:sdwan:approute",
+        "Recovery log in cisco:sdwan:system:logs"
+      ],
+      "validation_criteria": [
+        "cisco:sdwan:system:logs emitted with failover confirmation",
+        "cisco:sdwan:approute emitted with reroute action",
+        "Primary edge state restored to nominal"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "sdwan-val-01",
+        "name": "SD-WAN Sourcetypes Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:sdwan:linkhealth",
+        "min_count": 1,
+        "description": "Verify at least 1 SD-WAN linkhealth log was emitted."
+      },
+      {
+        "id": "sdwan-val-02",
+        "name": "AppRoute Failover Action",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "allowed",
+        "comparison": "in",
+        "description": "Verify AppRoute failover event was generated."
+      },
+      {
+        "id": "sdwan-val-03",
+        "name": "Link Health Transition",
+        "type": "STATE_TRANSITION",
+        "target_field": "status",
+        "expected_value": "restored",
+        "comparison": "==",
+        "description": "Verify edge link returned to up/restored status."
+      }
+    ]
+  },
+  {
+    "id": "ddos_attack",
+    "code": "BASE-02",
+    "name": "Distributed Denial of Service (DDoS SYN Flood)",
+    "display_name": "Distributed Denial of Service (DDoS SYN Flood)",
+    "category": "SECURITY",
+    "ecosystem": "both",
+    "description": "Malicious botnet IPs launch high-rate TCP SYN floods targeting internal infrastructure.",
+    "attack_vector": "Volumetric TCP SYN Flood targeting Port 80/443",
+    "defense_mechanism": "Firewall intercepts with action=blocked. If Firewall is bypassed with a wire or deleted, logs switch to action=allowed status=breached!",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:asa",
+      "pan:traffic",
+      "nginx:plus:kv"
+    ],
+    "default_topology_id": "secure",
+    "topology_id": "secure",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "secure"
+    ],
+    "expected_observations": [
+      "Volumetric TCP SYN Flood targeting Port 80/443"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Ingress",
+        "duration_ticks": 2,
+        "description": "Normal application traffic.",
+        "expected_observations": [
+          "HTTP permit"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Security Anomaly",
+        "duration_ticks": 3,
+        "description": "Trigger ddos_attack security event.",
+        "expected_observations": [
+          "Security event triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Firewall Defense Action",
+        "duration_ticks": 2,
+        "description": "Perimeter defenses mitigate threat.",
+        "expected_observations": [
+          "Drop or block action"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Mitigation Clearance",
+        "duration_ticks": 2,
+        "description": "Traffic returns to normal baseline.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Audit Check",
+        "duration_ticks": 1,
+        "description": "Verify zero residual anomalies.",
+        "expected_observations": [
+          "Clean security posture"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate network security monitoring and defense triage for ddos_attack.",
+      "required_telemetry": [
+        "cisco:asa",
+        "pan:traffic",
+        "nginx:plus:kv"
+      ],
+      "expected_progression": [
+        "Baseline",
+        "ddos_attack injected",
+        "Defenses trigger",
+        "Recovery",
+        "Audit"
+      ],
+      "expected_observations": [
+        "ddos_attack events in security logs"
+      ],
+      "validation_criteria": [
+        "Telemetry emitted",
+        "Security mitigation logged"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "ddos_attack-val-01",
+        "name": "Security Telemetry Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:asa",
+        "min_count": 1,
+        "description": "Verify security logs generated."
+      }
+    ]
+  },
+  {
+    "id": "lateral_movement",
+    "code": "BASE-04",
+    "name": "Ransomware / Lateral Spread (Port 445)",
+    "display_name": "Ransomware / Lateral Spread (Port 445)",
+    "category": "SECURITY",
+    "ecosystem": "both",
+    "description": "Malware attempts lateral propagation between internal servers across subnet boundaries using SMB Port 445.",
+    "attack_vector": "Lateral PsExec / Mimikatz SMB credential spread",
+    "defense_mechanism": "Internal segmentation firewall blocks lateral spread. On flat unsegmented topology, malware breaches multiple interior nodes.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:syslog",
+      "cisco:asa",
+      "postgresql:audit"
+    ],
+    "default_topology_id": "lateral",
+    "topology_id": "lateral",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "lateral"
+    ],
+    "expected_observations": [
+      "Lateral PsExec / Mimikatz SMB credential spread"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Ingress",
+        "duration_ticks": 2,
+        "description": "Normal application traffic.",
+        "expected_observations": [
+          "HTTP permit"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Security Anomaly",
+        "duration_ticks": 3,
+        "description": "Trigger lateral_movement security event.",
+        "expected_observations": [
+          "Security event triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Firewall Defense Action",
+        "duration_ticks": 2,
+        "description": "Perimeter defenses mitigate threat.",
+        "expected_observations": [
+          "Drop or block action"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Mitigation Clearance",
+        "duration_ticks": 2,
+        "description": "Traffic returns to normal baseline.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Audit Check",
+        "duration_ticks": 1,
+        "description": "Verify zero residual anomalies.",
+        "expected_observations": [
+          "Clean security posture"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate network security monitoring and defense triage for lateral_movement.",
+      "required_telemetry": [
+        "cisco:ios:syslog",
+        "cisco:asa",
+        "postgresql:audit"
+      ],
+      "expected_progression": [
+        "Baseline",
+        "lateral_movement injected",
+        "Defenses trigger",
+        "Recovery",
+        "Audit"
+      ],
+      "expected_observations": [
+        "lateral_movement events in security logs"
+      ],
+      "validation_criteria": [
+        "Telemetry emitted",
+        "Security mitigation logged"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "lateral_movement-val-01",
+        "name": "Security Telemetry Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:syslog",
+        "min_count": 1,
+        "description": "Verify security logs generated."
+      }
+    ]
+  },
+  {
+    "id": "mixed_backbone_optical",
+    "code": "MIXED-B3",
+    "name": "Multicast/MPLS Backbone Optical Carrier Shift",
+    "display_name": "Multicast/MPLS Backbone Optical Carrier Shift",
+    "category": "DATACENTER",
+    "ecosystem": "mixed_vendor",
+    "description": "DWDM Loss-of-Signal alarm on Nokia SR-OS core triggers Juniper Junos RSVP-TE Fast Reroute (FRR) switchover; Arista IPFIX telemetry tracks rerouted flow.",
+    "attack_vector": "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal",
+    "defense_mechanism": "Nokia/Juniper MPLS Fast Reroute switches to sub-50ms facility bypass tunnel; Arista telemetry confirms alternate egress routing.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "nokia:sros:syslog",
+      "juniper:junos",
+      "arista:flow:ipfix",
+      "arista:telemetry:json"
+    ],
+    "default_topology_id": "mixed_optical",
+    "topology_id": "mixed_optical",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "mixed_vendor"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "mixed_optical"
+    ],
+    "expected_observations": [
+      "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Multicast/MPLS Backbone Optical Carrier Shift.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Nokia/Juniper MPLS Fast Reroute switches to sub-50ms facility bypass tunnel; Arista telemetry confirms alternate egress routing.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Multicast/MPLS Backbone Optical Carrier Shift.",
+      "required_telemetry": [
+        "nokia:sros:syslog",
+        "juniper:junos",
+        "arista:flow:ipfix",
+        "arista:telemetry:json"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Multicast/MPLS Backbone Optical Carrier Shift.",
+        "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal",
+        "Alerts cascade across affected network nodes.",
+        "Nokia/Juniper MPLS Fast Reroute switches to sub-50ms facility bypass tunnel; Arista telemetry confirms alternate egress routing.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (4) emitted and indexed",
+        "Fault trigger signature detected for mixed_backbone_optical",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "mixed_backbone_optical-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "nokia:sros:syslog",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "mixed_edge_breach",
+    "code": "MIXED-B1",
+    "name": "Distributed Edge Breach & Internal Probing",
+    "display_name": "Distributed Edge Breach & Internal Probing",
+    "category": "SECURITY",
+    "ecosystem": "mixed_vendor",
+    "description": "Attacker probes wireless network via Meraki AP through Catalyst Core toward internal servers; Palo Alto NGFW inspects traffic.",
+    "attack_vector": "Wireless Air Marshal Probe & Lateral Internal Port Scanning",
+    "defense_mechanism": "Palo Alto NGFW drops threat inline (action=blocked). If NGFW is bypassed via direct wire or removed, breach penetrates internal servers (action=allowed status=breached)!",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "meraki:assurancealerts",
+      "cisco:catalyst:security:events",
+      "pan:threat"
+    ],
+    "default_topology_id": "mixed_edge",
+    "topology_id": "mixed_edge",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "palo_alto",
+      "fortinet",
+      "cisco_asa",
+      "arista_eos",
+      "juniper_junos"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "hec"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "mixed_edge"
+    ],
+    "expected_observations": [
+      "Wireless Air Marshal Probe & Lateral Internal Port Scanning"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Permitted Perimeter Traffic",
+        "duration_ticks": 2,
+        "description": "Standard HTTP/HTTPS corporate web traffic passing through perimeter firewall.",
+        "expected_observations": [
+          "PAN-OS allow logs",
+          "FortiGate permit logs"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "External Exploit Scan Injection",
+        "duration_ticks": 3,
+        "description": "Adversary probes perimeter with OWASP exploit payloads and vulnerability scanning.",
+        "expected_observations": [
+          "Threat signatures triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Cross-Firewall Alert Correlation",
+        "duration_ticks": 2,
+        "description": "Perimeter firewalls drop malicious packets and generate threat alerts.",
+        "expected_observations": [
+          "pan:threat drop events",
+          "fortinet:fortigate:utm alerts"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Threat Mitigation & Source Ban",
+        "duration_ticks": 2,
+        "description": "Attacker source IP automatically quarantined on edge perimeter.",
+        "expected_observations": [
+          "Drop count returns to nominal"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Posture Verification",
+        "duration_ticks": 1,
+        "description": "Verify perimeter defense integrity.",
+        "expected_observations": [
+          "Perimeter secure"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate unified multi-vendor security correlation across Palo Alto, Fortinet, and Cisco firewalls during an external intrusion attempt.",
+      "required_telemetry": [
+        "pan:threat",
+        "pan:traffic",
+        "fortinet:fortigate:utm",
+        "cisco:asa"
+      ],
+      "expected_progression": [
+        "Baseline traffic allowed",
+        "Exploit scan launched",
+        "Threat detected and dropped by perimeter",
+        "Source IP banned",
+        "Security baseline restored"
+      ],
+      "expected_observations": [
+        "Threat drop events in pan:threat",
+        "Security events in fortinet:fortigate:utm"
+      ],
+      "validation_criteria": [
+        "At least 1 threat event generated",
+        "Action blocked or dropped recorded"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "mixed-val-01",
+        "name": "Firewall Threat Event Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "pan:threat",
+        "min_count": 1,
+        "description": "Verify PAN threat events logged."
+      },
+      {
+        "id": "mixed-val-02",
+        "name": "Threat Packet Dropped",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "dropped",
+        "comparison": "in",
+        "description": "Verify dropped action in security log."
+      }
+    ]
+  },
+  {
+    "id": "mixed_sase_degradation",
+    "code": "MIXED-B2",
+    "name": "SASE Cloud Ingress App Degradation & Synthetic Validation",
+    "display_name": "SASE Cloud Ingress App Degradation & Synthetic Validation",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "mixed_vendor",
+    "description": "Zscaler/Cloudflare edge proxy experiences SSL inspection latency surge; Palo Alto SD-WAN queues sessions and ThousandEyes detects SaaS TTFB slowdown.",
+    "attack_vector": "Cloud SASE Proxy TLS Handshake Schedular Bottleneck",
+    "defense_mechanism": "Palo Alto Prisma SD-WAN prioritizes critical ERP traffic; ThousandEyes synthetics detect and isolate edge cloud hop delay.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "zscaler:zia",
+      "pan:threat",
+      "cisco:thousandeyes:metric"
+    ],
+    "default_topology_id": "mixed_sase",
+    "topology_id": "mixed_sase",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "mixed_vendor"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "mixed_sase"
+    ],
+    "expected_observations": [
+      "Cloud SASE Proxy TLS Handshake Schedular Bottleneck"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for SASE Cloud Ingress App Degradation & Synthetic Validation.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Cloud SASE Proxy TLS Handshake Schedular Bottleneck",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Palo Alto Prisma SD-WAN prioritizes critical ERP traffic; ThousandEyes synthetics detect and isolate edge cloud hop delay.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for SASE Cloud Ingress App Degradation & Synthetic Validation.",
+      "required_telemetry": [
+        "zscaler:zia",
+        "pan:threat",
+        "cisco:thousandeyes:metric"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for SASE Cloud Ingress App Degradation & Synthetic Validation.",
+        "Cloud SASE Proxy TLS Handshake Schedular Bottleneck",
+        "Alerts cascade across affected network nodes.",
+        "Palo Alto Prisma SD-WAN prioritizes critical ERP traffic; ThousandEyes synthetics detect and isolate edge cloud hop delay.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Cloud SASE Proxy TLS Handshake Schedular Bottleneck"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for mixed_sase_degradation",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "mixed_sase_degradation-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "zscaler:zia",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "mixed_vendor_enterprise",
+    "code": "MIXED-ALL",
+    "name": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
+    "display_name": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "mixed_vendor",
+    "description": "Heterogeneous multi-vendor infrastructure with best-of-breed routing, switching, and firewall appliances.",
+    "attack_vector": "Perimeter port scan and application exploit attempting DC ingress",
+    "defense_mechanism": "Palo Alto NGFW inspects and blocks threat; Fortinet and Arista log correlated traffic flows.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "pan:threat",
+      "fortinet:fortigate",
+      "juniper:junos",
+      "arista:telemetry:json",
+      "aruba:syslog"
+    ],
+    "default_topology_id": "mixed_vendor_enterprise",
+    "topology_id": "mixed_vendor_enterprise",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "palo_alto",
+      "fortinet",
+      "cisco_asa",
+      "arista_eos",
+      "juniper_junos"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "hec"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "mixed_vendor_enterprise"
+    ],
+    "expected_observations": [
+      "Perimeter port scan and application exploit attempting DC ingress"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Permitted Perimeter Traffic",
+        "duration_ticks": 2,
+        "description": "Standard HTTP/HTTPS corporate web traffic passing through perimeter firewall.",
+        "expected_observations": [
+          "PAN-OS allow logs",
+          "FortiGate permit logs"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "External Exploit Scan Injection",
+        "duration_ticks": 3,
+        "description": "Adversary probes perimeter with OWASP exploit payloads and vulnerability scanning.",
+        "expected_observations": [
+          "Threat signatures triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Cross-Firewall Alert Correlation",
+        "duration_ticks": 2,
+        "description": "Perimeter firewalls drop malicious packets and generate threat alerts.",
+        "expected_observations": [
+          "pan:threat drop events",
+          "fortinet:fortigate:utm alerts"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Threat Mitigation & Source Ban",
+        "duration_ticks": 2,
+        "description": "Attacker source IP automatically quarantined on edge perimeter.",
+        "expected_observations": [
+          "Drop count returns to nominal"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Posture Verification",
+        "duration_ticks": 1,
+        "description": "Verify perimeter defense integrity.",
+        "expected_observations": [
+          "Perimeter secure"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate unified multi-vendor security correlation across Palo Alto, Fortinet, and Cisco firewalls during an external intrusion attempt.",
+      "required_telemetry": [
+        "pan:threat",
+        "pan:traffic",
+        "fortinet:fortigate:utm",
+        "cisco:asa"
+      ],
+      "expected_progression": [
+        "Baseline traffic allowed",
+        "Exploit scan launched",
+        "Threat detected and dropped by perimeter",
+        "Source IP banned",
+        "Security baseline restored"
+      ],
+      "expected_observations": [
+        "Threat drop events in pan:threat",
+        "Security events in fortinet:fortigate:utm"
+      ],
+      "validation_criteria": [
+        "At least 1 threat event generated",
+        "Action blocked or dropped recorded"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "mixed-val-01",
+        "name": "Firewall Threat Event Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "pan:threat",
+        "min_count": 1,
+        "description": "Verify PAN threat events logged."
+      },
+      {
+        "id": "mixed-val-02",
+        "name": "Threat Packet Dropped",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "dropped",
+        "comparison": "in",
+        "description": "Verify dropped action in security log."
+      }
+    ]
+  },
+  {
+    "id": "normal_traffic",
+    "code": "BASE-01",
+    "name": "Normal Operations (HTTP Round-Robin)",
+    "display_name": "Normal Operations (HTTP Round-Robin)",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "both",
+    "description": "Legitimate external clients make distributed HTTP requests passing through Firewall and Load Balancer to Web tier.",
+    "attack_vector": "None (Standard Production Traffic)",
+    "defense_mechanism": "In-line stateful inspection allows HTTP traffic to flow evenly across Web nodes.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:asa",
+      "pan:traffic",
+      "f5:bigip:ltm",
+      "nginx:plus:kv",
+      "postgresql:audit"
+    ],
+    "default_topology_id": "secure",
+    "topology_id": "secure",
+    "difficulty": "BEGINNER",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "secure"
+    ],
+    "expected_observations": [
+      "None (Standard Production Traffic)"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Ingress",
+        "duration_ticks": 2,
+        "description": "Normal application traffic.",
+        "expected_observations": [
+          "HTTP permit"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Security Anomaly",
+        "duration_ticks": 3,
+        "description": "Trigger normal_traffic security event.",
+        "expected_observations": [
+          "Security event triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Firewall Defense Action",
+        "duration_ticks": 2,
+        "description": "Perimeter defenses mitigate threat.",
+        "expected_observations": [
+          "Drop or block action"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Mitigation Clearance",
+        "duration_ticks": 2,
+        "description": "Traffic returns to normal baseline.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Audit Check",
+        "duration_ticks": 1,
+        "description": "Verify zero residual anomalies.",
+        "expected_observations": [
+          "Clean security posture"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate network security monitoring and defense triage for normal_traffic.",
+      "required_telemetry": [
+        "cisco:asa",
+        "pan:traffic",
+        "f5:bigip:ltm",
+        "nginx:plus:kv",
+        "postgresql:audit"
+      ],
+      "expected_progression": [
+        "Baseline",
+        "normal_traffic injected",
+        "Defenses trigger",
+        "Recovery",
+        "Audit"
+      ],
+      "expected_observations": [
+        "normal_traffic events in security logs"
+      ],
+      "validation_criteria": [
+        "Telemetry emitted",
+        "Security mitigation logged"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "normal_traffic-val-01",
+        "name": "Security Telemetry Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:asa",
+        "min_count": 1,
+        "description": "Verify security logs generated."
+      }
+    ]
+  },
+  {
+    "id": "openconfig_mdt_streaming",
+    "code": "OC-001",
+    "name": "OpenConfig MDT Streaming & Telemetry Assurance",
+    "display_name": "OpenConfig MDT Streaming & Telemetry Assurance",
+    "category": "SERVICE_ASSURANCE",
+    "ecosystem": "both",
+    "description": "Routers and switches stream real-time OpenConfig YANG metrics (interface counters, CPU/RAM, BGP peering) directly to cisco_mdt_metrics.",
+    "attack_vector": "Core Carrier Link Flap & Optical BER Degradation",
+    "defense_mechanism": "Model-Driven Telemetry (MDT) detects carrier transitions and spikes within sub-second intervals for automated traffic re-routing.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:mdt:metric",
+      "arista:telemetry:json",
+      "openconfig:gnmi:telemetry",
+      "cisco:ios:syslog"
+    ],
+    "default_topology_id": "openconfig_core",
+    "topology_id": "openconfig_core",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "openconfig",
+      "cisco",
+      "arista"
+    ],
+    "telemetry_requirements": [
+      "gnmi",
+      "hec"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "openconfig_core"
+    ],
+    "expected_observations": [
+      "Core Carrier Link Flap & Optical BER Degradation"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "MDT Subscription Established",
+        "duration_ticks": 2,
+        "description": "Establish gNMI ON_CHANGE and SAMPLE subscriptions for interface counters.",
+        "expected_observations": [
+          "YANG tree synchronized"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Traffic Step Change",
+        "duration_ticks": 3,
+        "description": "Simulate 500% traffic increase across core transit interfaces.",
+        "expected_observations": [
+          "Interface in-octets jump",
+          "Bandwidth utilization spike"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Streaming MDT Notifications",
+        "duration_ticks": 2,
+        "description": "RFC 7951 JSON-IETF telemetry messages dispatched to Splunk HEC metrics index.",
+        "expected_observations": [
+          "Metric events indexed in cisco_mdt_metrics"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Traffic Equilibrium",
+        "duration_ticks": 2,
+        "description": "Flow rate settles back to normal baseline levels.",
+        "expected_observations": [
+          "Octet rates normalize"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Schema & Counter Verification",
+        "duration_ticks": 1,
+        "description": "Verify monotonic counter integrity and RFC 7951 compliance.",
+        "expected_observations": [
+          "YANG validation clean"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate OpenConfig gNMI Model-Driven Telemetry streaming and RFC 7951 JSON-IETF metric ingestion into Splunk metric indexes.",
+      "required_telemetry": [
+        "cisco:ios:mdt:metric",
+        "openconfig:gnmi:telemetry"
+      ],
+      "expected_progression": [
+        "MDT subscription initial sync",
+        "Traffic step increase",
+        "Streaming metric dispatch",
+        "Counter normalization",
+        "Validation"
+      ],
+      "expected_observations": [
+        "Metric points in cisco:ios:mdt:metric",
+        "RFC 7951 JSON structure"
+      ],
+      "validation_criteria": [
+        "At least 1 MDT metric record emitted",
+        "Metric values non-zero"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "oc-val-01",
+        "name": "MDT Metric Streamed",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:mdt:metric",
+        "min_count": 1,
+        "description": "Verify MDT telemetry records emitted."
+      },
+      {
+        "id": "oc-val-02",
+        "name": "Action Allowed Recorded",
+        "type": "EVENT_EXISTS",
+        "target_field": "action",
+        "expected_value": "allowed",
+        "comparison": "==",
+        "description": "Verify telemetry transport success."
+      }
+    ]
+  },
+  {
+    "id": "pure_cisco_enterprise",
+    "code": "CISCO-ALL",
+    "name": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+    "display_name": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+    "category": "NETWORK_OPERATIONS",
+    "ecosystem": "pure_cisco",
+    "description": "Unified Cisco enterprise architecture spanning core, distribution, access, wireless, and identity.",
+    "attack_vector": "Unauthorized endpoint connecting to campus switch port",
+    "defense_mechanism": "Cisco ISE 802.1X denies port access and applies TrustSec Quarantine SGT.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:networkhealth",
+      "cisco:ise:nac:8021x",
+      "cisco:ise:trustsec:sgt",
+      "cisco:catalyst:rogue:threat_details"
+    ],
+    "default_topology_id": "pure_cisco_enterprise",
+    "topology_id": "pure_cisco_enterprise",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "pure_cisco_enterprise"
+    ],
+    "expected_observations": [
+      "Unauthorized endpoint connecting to campus switch port"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Unauthorized endpoint connecting to campus switch port",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Cisco ISE 802.1X denies port access and applies TrustSec Quarantine SGT.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C).",
+      "required_telemetry": [
+        "cisco:catalyst:networkhealth",
+        "cisco:ise:nac:8021x",
+        "cisco:ise:trustsec:sgt",
+        "cisco:catalyst:rogue:threat_details"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C).",
+        "Unauthorized endpoint connecting to campus switch port",
+        "Alerts cascade across affected network nodes.",
+        "Cisco ISE 802.1X denies port access and applies TrustSec Quarantine SGT.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Unauthorized endpoint connecting to campus switch port"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (4) emitted and indexed",
+        "Fault trigger signature detected for pure_cisco_enterprise",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "pure_cisco_enterprise-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:networkhealth",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "sdwan_connected_core",
+    "code": "SDWAN-CORE",
+    "name": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
+    "display_name": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
+    "category": "WAN",
+    "ecosystem": "pure_cisco",
+    "description": "Catalyst SD-WAN fabric peering dynamically with Catalyst 9600 campus core.",
+    "attack_vector": "Branch transport brownout and latency surge",
+    "defense_mechanism": "Dynamic Application-Aware Routing (AAR) steers voice and video traffic to pristine secondary circuit.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:sdwan:linkhealth",
+      "cisco:sdwan:BGP-5-ADJCHANGE",
+      "cisco:ios:syslog"
+    ],
+    "default_topology_id": "sdwan_connected_core",
+    "topology_id": "sdwan_connected_core",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "sdwan_connected_core"
+    ],
+    "expected_observations": [
+      "Branch transport brownout and latency surge"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Separate SD-WAN Environment Connected to Core Backbone (All Cisco).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Branch transport brownout and latency surge",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Dynamic Application-Aware Routing (AAR) steers voice and video traffic to pristine secondary circuit.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Separate SD-WAN Environment Connected to Core Backbone (All Cisco).",
+      "required_telemetry": [
+        "cisco:sdwan:linkhealth",
+        "cisco:sdwan:BGP-5-ADJCHANGE",
+        "cisco:ios:syslog"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Separate SD-WAN Environment Connected to Core Backbone (All Cisco).",
+        "Branch transport brownout and latency surge",
+        "Alerts cascade across affected network nodes.",
+        "Dynamic Application-Aware Routing (AAR) steers voice and video traffic to pristine secondary circuit.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Branch transport brownout and latency surge"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for sdwan_connected_core",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "sdwan_connected_core-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:sdwan:linkhealth",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "service_provider_cisco",
+    "code": "SP-CISCO",
+    "name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
+    "display_name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
+    "category": "SERVICE_PROVIDER",
+    "ecosystem": "pure_cisco",
+    "description": "Carrier-scale Cisco 8000 / NCS core running Segment Routing over IPv6 (SRv6).",
+    "attack_vector": "High-frequency carrier flap causing BGP route withdrawal",
+    "defense_mechanism": "TI-LFA pre-computed backup path provides sub-50ms local repair.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:ios:mdt:metric",
+      "cisco:ios:syslog"
+    ],
+    "default_topology_id": "service_provider_cisco",
+    "topology_id": "service_provider_cisco",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "service_provider_cisco"
+    ],
+    "expected_observations": [
+      "High-frequency carrier flap causing BGP route withdrawal"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "High-frequency carrier flap causing BGP route withdrawal",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "TI-LFA pre-computed backup path provides sub-50ms local repair.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
+      "required_telemetry": [
+        "cisco:ios:mdt:metric",
+        "cisco:ios:syslog"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6).",
+        "High-frequency carrier flap causing BGP route withdrawal",
+        "Alerts cascade across affected network nodes.",
+        "TI-LFA pre-computed backup path provides sub-50ms local repair.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "High-frequency carrier flap causing BGP route withdrawal"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (2) emitted and indexed",
+        "Fault trigger signature detected for service_provider_cisco",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "service_provider_cisco-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:ios:mdt:metric",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "service_provider_mixed",
+    "code": "SP-MIXED",
+    "name": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
+    "display_name": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
+    "category": "SERVICE_PROVIDER",
+    "ecosystem": "mixed_vendor",
+    "description": "Tier-1 carrier transit core with Cisco, Juniper, and Nokia interconnects.",
+    "attack_vector": "BGP peering de-synchronization across vendor boundaries",
+    "defense_mechanism": "Graceful Restart and BFD dampening maintain routing table stability.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "juniper:junos",
+      "nokia:sros:syslog",
+      "cisco:ios:mdt:metric"
+    ],
+    "default_topology_id": "service_provider_mixed",
+    "topology_id": "service_provider_mixed",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "mixed_vendor"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "service_provider_mixed"
+    ],
+    "expected_observations": [
+      "BGP peering de-synchronization across vendor boundaries"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "BGP peering de-synchronization across vendor boundaries",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Graceful Restart and BFD dampening maintain routing table stability.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750).",
+      "required_telemetry": [
+        "juniper:junos",
+        "nokia:sros:syslog",
+        "cisco:ios:mdt:metric"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750).",
+        "BGP peering de-synchronization across vendor boundaries",
+        "Alerts cascade across affected network nodes.",
+        "Graceful Restart and BFD dampening maintain routing table stability.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "BGP peering de-synchronization across vendor boundaries"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for service_provider_mixed",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "service_provider_mixed-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "juniper:junos",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "sql_injection",
+    "code": "BASE-03",
+    "name": "SQL Injection / Application Breach",
+    "display_name": "SQL Injection / Application Breach",
+    "category": "SECURITY",
+    "ecosystem": "both",
+    "description": "Adversary injects malicious SQL exploitation payload through HTTP query parameters targeting Database backend.",
+    "attack_vector": "OWASP SQLi Vector (1' OR '1'='1 -- UNION SELECT)",
+    "defense_mechanism": "Perimeter WAF/Firewall drops attack. If bypassed, payload passes Web Server and triggers critical alert at Database layer!",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:asa",
+      "nginx:plus:kv",
+      "postgresql:audit"
+    ],
+    "default_topology_id": "bypassed",
+    "topology_id": "bypassed",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "cisco",
+      "palo_alto",
+      "juniper"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "bypassed"
+    ],
+    "expected_observations": [
+      "OWASP SQLi Vector (1' OR '1'='1 -- UNION SELECT)"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Ingress",
+        "duration_ticks": 2,
+        "description": "Normal application traffic.",
+        "expected_observations": [
+          "HTTP permit"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Security Anomaly",
+        "duration_ticks": 3,
+        "description": "Trigger sql_injection security event.",
+        "expected_observations": [
+          "Security event triggered"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Firewall Defense Action",
+        "duration_ticks": 2,
+        "description": "Perimeter defenses mitigate threat.",
+        "expected_observations": [
+          "Drop or block action"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Mitigation Clearance",
+        "duration_ticks": 2,
+        "description": "Traffic returns to normal baseline.",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "Security Audit Check",
+        "duration_ticks": 1,
+        "description": "Verify zero residual anomalies.",
+        "expected_observations": [
+          "Clean security posture"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Demonstrate network security monitoring and defense triage for sql_injection.",
+      "required_telemetry": [
+        "cisco:asa",
+        "nginx:plus:kv",
+        "postgresql:audit"
+      ],
+      "expected_progression": [
+        "Baseline",
+        "sql_injection injected",
+        "Defenses trigger",
+        "Recovery",
+        "Audit"
+      ],
+      "expected_observations": [
+        "sql_injection events in security logs"
+      ],
+      "validation_criteria": [
+        "Telemetry emitted",
+        "Security mitigation logged"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "sql_injection-val-01",
+        "name": "Security Telemetry Present",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:asa",
+        "min_count": 1,
+        "description": "Verify security logs generated."
+      }
+    ]
+  },
+  {
+    "id": "wireless_connected_core_cisco",
+    "code": "WLAN-CORE-C",
+    "name": "Enterprise Wireless Connected to Campus Core (All Cisco)",
+    "display_name": "Enterprise Wireless Connected to Campus Core (All Cisco)",
+    "category": "WIRELESS",
+    "ecosystem": "pure_cisco",
+    "description": "Catalyst 9800 WLC trunking wireless VLANs directly into Catalyst 9600 core switches.",
+    "attack_vector": "Wi-Fi de-authentication flood targeting executive SSID",
+    "defense_mechanism": "Protected Management Frames (802.11w) and WLC client profiling isolate attack.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "cisco:catalyst:clienthealth",
+      "cisco:catalyst:rogue:threat_details",
+      "cisco:ise:nac:8021x"
+    ],
+    "default_topology_id": "wireless_connected_core_cisco",
+    "topology_id": "wireless_connected_core_cisco",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "pure_cisco"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "wireless_connected_core_cisco"
+    ],
+    "expected_observations": [
+      "Wi-Fi de-authentication flood targeting executive SSID"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Enterprise Wireless Connected to Campus Core (All Cisco).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Wi-Fi de-authentication flood targeting executive SSID",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Protected Management Frames (802.11w) and WLC client profiling isolate attack.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Enterprise Wireless Connected to Campus Core (All Cisco).",
+      "required_telemetry": [
+        "cisco:catalyst:clienthealth",
+        "cisco:catalyst:rogue:threat_details",
+        "cisco:ise:nac:8021x"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Enterprise Wireless Connected to Campus Core (All Cisco).",
+        "Wi-Fi de-authentication flood targeting executive SSID",
+        "Alerts cascade across affected network nodes.",
+        "Protected Management Frames (802.11w) and WLC client profiling isolate attack.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Wi-Fi de-authentication flood targeting executive SSID"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for wireless_connected_core_cisco",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "wireless_connected_core_cisco-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "cisco:catalyst:clienthealth",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  },
+  {
+    "id": "wireless_connected_core_mixed",
+    "code": "WLAN-CORE-M",
+    "name": "Enterprise Wireless Connected to Core (Mixed Vendor)",
+    "display_name": "Enterprise Wireless Connected to Core (Mixed Vendor)",
+    "category": "WIRELESS",
+    "ecosystem": "mixed_vendor",
+    "description": "Meraki and Aruba APs routing through Palo Alto NGFW into Arista 7280 core.",
+    "attack_vector": "Wireless guest network breach attempting lateral pivot to corporate DC",
+    "defense_mechanism": "Palo Alto Zero Trust policy prevents guest subnet routing to data center assets.",
+    "generation_mode": "SCENARIO_DERIVED",
+    "sourcetypes": [
+      "meraki:accesspoints",
+      "pan:traffic",
+      "arista:telemetry:json"
+    ],
+    "default_topology_id": "wireless_connected_core_mixed",
+    "topology_id": "wireless_connected_core_mixed",
+    "difficulty": "INTERMEDIATE",
+    "estimated_duration_sec": 30,
+    "vendor_scope": [
+      "mixed_vendor"
+    ],
+    "telemetry_requirements": [
+      "syslog",
+      "snmp"
+    ],
+    "generation_modes": [
+      "SCENARIO_DERIVED"
+    ],
+    "affected_entities": [
+      "wireless_connected_core_mixed"
+    ],
+    "expected_observations": [
+      "Wireless guest network breach attempting lateral pivot to corporate DC"
+    ],
+    "expected_phases": [
+      "baseline",
+      "trigger_event",
+      "telemetry_spike",
+      "policy_enforcement",
+      "steady_state"
+    ],
+    "phases": [
+      {
+        "phase": "BASELINE",
+        "name": "Baseline Steady State",
+        "duration_ticks": 2,
+        "description": "Establish baseline telemetry for Enterprise Wireless Connected to Core (Mixed Vendor).",
+        "expected_observations": [
+          "Nominal operations"
+        ]
+      },
+      {
+        "phase": "FAULT",
+        "name": "Fault Trigger Event",
+        "duration_ticks": 3,
+        "description": "Wireless guest network breach attempting lateral pivot to corporate DC",
+        "expected_observations": [
+          "Anomaly detected"
+        ]
+      },
+      {
+        "phase": "PROPAGATE",
+        "name": "Telemetry & Alert Propagation",
+        "duration_ticks": 2,
+        "description": "Alerts cascade across affected network nodes.",
+        "expected_observations": [
+          "Alerts logged"
+        ]
+      },
+      {
+        "phase": "FAILOVER",
+        "name": "Policy Mitigation / Failover",
+        "duration_ticks": 2,
+        "description": "Palo Alto Zero Trust policy prevents guest subnet routing to data center assets.",
+        "expected_observations": [
+          "Failover / mitigation active"
+        ]
+      },
+      {
+        "phase": "RECOVER",
+        "name": "Steady State Restoration",
+        "duration_ticks": 2,
+        "description": "Return to nominal operational state.",
+        "expected_observations": [
+          "Normal telemetry restored"
+        ]
+      },
+      {
+        "phase": "VALIDATE",
+        "name": "SLA Verification",
+        "duration_ticks": 1,
+        "description": "Verify health criteria.",
+        "expected_observations": [
+          "SLA met"
+        ]
+      }
+    ],
+    "use_case": {
+      "objective": "Prove operational resilience and telemetry assurance for Enterprise Wireless Connected to Core (Mixed Vendor).",
+      "required_telemetry": [
+        "meraki:accesspoints",
+        "pan:traffic",
+        "arista:telemetry:json"
+      ],
+      "expected_progression": [
+        "Establish baseline telemetry for Enterprise Wireless Connected to Core (Mixed Vendor).",
+        "Wireless guest network breach attempting lateral pivot to corporate DC",
+        "Alerts cascade across affected network nodes.",
+        "Palo Alto Zero Trust policy prevents guest subnet routing to data center assets.",
+        "Return to nominal operational state.",
+        "Verify health criteria."
+      ],
+      "expected_observations": [
+        "Wireless guest network breach attempting lateral pivot to corporate DC"
+      ],
+      "validation_criteria": [
+        "Required sourcetypes (3) emitted and indexed",
+        "Fault trigger signature detected for wireless_connected_core_mixed",
+        "State restored to nominal baseline"
+      ]
+    },
+    "validation_rules": [
+      {
+        "id": "wireless_connected_core_mixed-val-01",
+        "name": "Required Telemetry Emitted",
+        "type": "COUNT_THRESHOLD",
+        "target_sourcetype": "meraki:accesspoints",
+        "min_count": 1,
+        "description": "Verify scenario telemetry is generated."
+      }
+    ]
+  }
+]

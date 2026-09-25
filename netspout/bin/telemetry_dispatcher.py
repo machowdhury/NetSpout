@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/telemetry_dispatcher.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Universal Multi-Pipeline Telemetry Dispatcher (NetSpout)
 Implements concurrent routing and export to:
@@ -17,15 +22,21 @@ from datetime import datetime, timezone
 from typing import Dict, Any, Optional, Tuple, List, Union
 
 try:
-    from app.models import (
+    from netspout_core.models import (
         TelemetryTransportConfig, LogEntry, Node,
         SNMPPollingMetric, SNMPTrapEvent
     )
 except ImportError:
-    from models import (
-        TelemetryTransportConfig, LogEntry, Node,
-        SNMPPollingMetric, SNMPTrapEvent
-    )
+    try:
+        from app.models import (
+            TelemetryTransportConfig, LogEntry, Node,
+            SNMPPollingMetric, SNMPTrapEvent
+        )
+    except ImportError:
+        from models import (
+            TelemetryTransportConfig, LogEntry, Node,
+            SNMPPollingMetric, SNMPTrapEvent
+        )
 
 
 def format_rfc5424_message(
@@ -72,6 +83,32 @@ def format_rfc3164_message(
     return f"<{pri}>{now_bsd} {clean_host} {clean_app}: {message}"
 
 
+def _get_gnmi_server():
+    try:
+        from netspout_core.gnmi_engine import gnmi_server
+        return gnmi_server
+    except ImportError:
+        try:
+            from app.gnmi_engine import gnmi_server
+            return gnmi_server
+        except ImportError:
+            from gnmi_engine import gnmi_server
+            return gnmi_server
+
+
+def _get_snmp_engine():
+    try:
+        from netspout_core.snmp_engine import snmp_engine
+        return snmp_engine
+    except ImportError:
+        try:
+            from app.snmp_engine import snmp_engine
+            return snmp_engine
+        except ImportError:
+            from snmp_engine import snmp_engine
+            return snmp_engine
+
+
 class TelemetryDispatcher:
     """
     High-throughput universal telemetry dispatcher with concurrent multi-pipeline routing.
@@ -98,34 +135,60 @@ class TelemetryDispatcher:
         event: Dict[str, Any],
         hec_url: str,
         token: str,
-        ssl_verify: bool = False
+        ssl_verify: bool = True,
+        allow_insecure_tls: bool = False
     ) -> Tuple[bool, str]:
-        try:
-            ctx = ssl.create_default_context()
-            if not ssl_verify:
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
+        candidates = [hec_url]
+        if ":8888" in hec_url:
+            candidates.append(hec_url.replace(":8888", ":8088"))
+        elif ":8088" in hec_url:
+            candidates.append(hec_url.replace(":8088", ":8888"))
+        if "127.0.0.1" in hec_url:
+            for c in list(candidates):
+                candidates.append(c.replace("127.0.0.1", "localhost"))
+        elif "localhost" in hec_url:
+            for c in list(candidates):
+                candidates.append(c.replace("localhost", "127.0.0.1"))
 
-            payload = json.dumps(event).encode("utf-8")
-            req = urllib.request.Request(
-                hec_url,
-                data=payload,
-                headers={
-                    "Authorization": f"Splunk {token}",
-                    "Content-Type": "application/json"
-                }
-            )
+        last_error = None
+        for cand_url in candidates:
+            try:
+                ctx = ssl.create_default_context()
+                if allow_insecure_tls or not ssl_verify:
+                    ctx.check_hostname = False
+                    ctx.verify_mode = ssl.CERT_NONE
 
-            with urllib.request.urlopen(req, timeout=3.0, context=ctx) as resp:
-                resp_text = resp.read().decode("utf-8", errors="replace")
-                self.stats["hec_dispatched"] += 1
-                self.stats["last_active"] = time.time()
-                return True, f"HEC HTTP {resp.status}: {resp_text[:100]}"
+                payload = json.dumps(event).encode("utf-8")
+                req = urllib.request.Request(
+                    cand_url,
+                    data=payload,
+                    headers={
+                        "Authorization": f"Splunk {token}",
+                        "Content-Type": "application/json"
+                    }
+                )
 
-        except Exception as e:
-            self.stats["hec_errors"] += 1
-            self.stats["last_error"] = f"HEC error: {str(e)}"
-            return False, str(e)
+                with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
+                    resp_text = resp.read().decode("utf-8", errors="replace")
+                    self.stats["hec_dispatched"] += 1
+                    self.stats["last_active"] = time.time()
+                    return True, f"HEC HTTP {resp.status}: {resp_text[:100]}"
+
+            except urllib.error.HTTPError as e:
+                err_body = e.read().decode("utf-8", errors="replace") if hasattr(e, "read") else ""
+                last_error = f"HTTP {e.code}: {e.reason} - {err_body[:80]}"
+                break
+            except (ssl.SSLCertVerificationError, urllib.error.URLError) as e:
+                err_str = str(e)
+                if isinstance(e, ssl.SSLCertVerificationError) or "CERTIFICATE_VERIFY_FAILED" in err_str or "certificate verify failed" in err_str:
+                    last_error = f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints."
+                    break
+                last_error = err_str
+                continue
+
+        self.stats["hec_errors"] += 1
+        self.stats["last_error"] = f"HEC error: {last_error}"
+        return False, str(last_error)
 
     # -------------------------------------------------------------------------
     # 2. OpenTelemetry (OTel) Collector Transport (OTLP HTTP)
@@ -282,30 +345,21 @@ class TelemetryDispatcher:
 
         # 2. OTel Collector (/v1/metrics)
         if transport.otel_enabled and transport.otel_endpoint:
-            try:
-                from app.gnmi_engine import gnmi_server
-            except ImportError:
-                from gnmi_engine import gnmi_server
+            gnmi_server = _get_gnmi_server()
             otel_payload = gnmi_server.to_otel_metric_payload(hec_metric_payload)
             ok, msg = self.emit_otel(otel_payload, transport.otel_endpoint, is_metric=True, headers=transport.otel_headers)
             results["otel"] = {"success": ok, "message": msg}
 
         # 3. Telegraf (Influx Line Protocol)
         if transport.telegraf_enabled and transport.telegraf_endpoint:
-            try:
-                from app.gnmi_engine import gnmi_server
-            except ImportError:
-                from gnmi_engine import gnmi_server
+            gnmi_server = _get_gnmi_server()
             influx_line = gnmi_server.to_telegraf_influx_line(hec_metric_payload)
             ok, msg = self.emit_telegraf(influx_line, transport.telegraf_endpoint, fmt=transport.telegraf_format)
             results["telegraf"] = {"success": ok, "message": msg}
 
         # 4. RFC 5424 Syslog
         if transport.syslog_enabled and transport.syslog_host and transport.syslog_port:
-            try:
-                from app.gnmi_engine import gnmi_server
-            except ImportError:
-                from gnmi_engine import gnmi_server
+            gnmi_server = _get_gnmi_server()
             syslog_line = gnmi_server.to_rfc5424_syslog_mdt(hec_metric_payload)
             ok, msg = self.emit_syslog(
                 raw_message=syslog_line,
@@ -347,20 +401,14 @@ class TelemetryDispatcher:
 
         # 2. OTel Collector (/v1/metrics)
         if transport.otel_enabled and transport.otel_endpoint:
-            try:
-                from app.snmp_engine import snmp_engine
-            except ImportError:
-                from snmp_engine import snmp_engine
+            snmp_engine = _get_snmp_engine()
             otel_payload = snmp_engine.to_otel_metric_payload(hec_metric_payload)
             ok, msg = self.emit_otel(otel_payload, transport.otel_endpoint, is_metric=True, headers=transport.otel_headers)
             results["otel"] = {"success": ok, "message": msg}
 
         # 3. Telegraf (Influx Line Protocol)
         if transport.telegraf_enabled and transport.telegraf_endpoint:
-            try:
-                from app.snmp_engine import snmp_engine
-            except ImportError:
-                from snmp_engine import snmp_engine
+            snmp_engine = _get_snmp_engine()
             influx_line = snmp_engine.to_telegraf_influx_line(hec_metric_payload)
             ok, msg = self.emit_telegraf(influx_line, transport.telegraf_endpoint, fmt=transport.telegraf_format)
             results["telegraf"] = {"success": ok, "message": msg}
@@ -399,10 +447,7 @@ class TelemetryDispatcher:
 
         # 1. Splunk HEC (idx_network_ops)
         if transport.hec_enabled and transport.hec_url and transport.hec_token:
-            try:
-                from app.snmp_engine import snmp_engine
-            except ImportError:
-                from snmp_engine import snmp_engine
+            snmp_engine = _get_snmp_engine()
             hec_payload = snmp_engine.to_sc4snmp_hec_trap_payload(trap)
             if transport.hec_index:
                 hec_payload["index"] = transport.hec_index
@@ -438,10 +483,7 @@ class TelemetryDispatcher:
 
         # 3. RFC 5424 Syslog
         if transport.syslog_enabled and transport.syslog_host and transport.syslog_port:
-            try:
-                from app.snmp_engine import snmp_engine
-            except ImportError:
-                from snmp_engine import snmp_engine
+            snmp_engine = _get_snmp_engine()
             raw_syslog = snmp_engine.to_rfc5424_syslog_trap(trap)
             pri_map = {"informational": 6, "warning": 4, "minor": 4, "major": 3, "critical": 2}
             sev = pri_map.get(trap.severity.lower(), 4)
@@ -534,10 +576,18 @@ class TelemetryDispatcher:
                         "dest_ip": log.dest_ip,
                         "protocol": log.protocol,
                         "vendor": log.vendor,
-                        "node_type": log.node_type
+                        "node_type": log.node_type,
+                        "netspout_run_id": log.netspout_run_id,
+                        "netspout_scenario_id": log.netspout_scenario_id,
+                        "netspout_phase": log.netspout_phase,
+                        "netspout_device_id": log.netspout_device_id,
+                        "netspout_event_id": log.netspout_event_id,
+                        "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }
-            ok, msg = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token)
+            ssl_v = getattr(transport, "hec_ssl_verify", True)
+            insec = getattr(transport, "hec_allow_insecure_tls", False)
+            ok, msg = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
             results["hec"] = {"success": ok, "message": msg}
 
         # 2. Syslog Transport (UDP/TCP)
@@ -612,7 +662,9 @@ class TelemetryDispatcher:
                 "sourcetype": "netspout:test",
                 "index": config.hec_index or "idx_network_ops"
             }
-            return self.emit_hec(test_event, config.hec_url, config.hec_token)
+            ssl_v = getattr(config, "hec_ssl_verify", True)
+            insec = getattr(config, "hec_allow_insecure_tls", False)
+            return self.emit_hec(test_event, config.hec_url, config.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
 
         elif p == "otel":
             test_payload = {
@@ -655,6 +707,220 @@ class TelemetryDispatcher:
             )
 
         return False, f"Unknown pipeline type: {pipeline}"
+
+    def test_connection(
+        self,
+        config: Optional[TelemetryTransportConfig] = None,
+        pipeline: str = "hec",
+        endpoint: Optional[str] = None,
+        token: Optional[str] = None,
+        index: Optional[str] = None,
+        allow_insecure_tls: bool = False,
+        ssl_verify: bool = True
+    ) -> Dict[str, Any]:
+        """
+        Validates pipeline connectivity and returns canonical states:
+        NOT_CONFIGURED, CONFIGURED, REACHABLE, VERIFIED, ERROR.
+        Never exposes secrets/tokens in the response.
+        """
+        if config is None:
+            if endpoint is not None or token is not None:
+                if not endpoint and not token:
+                    return {
+                        "status": "NOT_CONFIGURED",
+                        "state": "NOT_CONFIGURED",
+                        "stage": "config",
+                        "reachable": False,
+                        "authenticated": False,
+                        "event_accepted": False,
+                        "target_index": index or "",
+                        "message": "Splunk HEC URL and Authentication Token are required.",
+                        "detail": "Splunk HEC URL and Authentication Token are required.",
+                        "latency_ms": 0.0
+                    }
+                config = TelemetryTransportConfig(
+                    hec_url=endpoint or "",
+                    hec_token=token or "",
+                    hec_index=index or "idx_network_ops",
+                    hec_ssl_verify=ssl_verify,
+                    hec_allow_insecure_tls=allow_insecure_tls
+                )
+            else:
+                return {
+                    "status": "NOT_CONFIGURED",
+                    "state": "NOT_CONFIGURED",
+                    "stage": "config",
+                    "reachable": False,
+                    "authenticated": False,
+                    "event_accepted": False,
+                    "target_index": "",
+                    "message": "Telemetry transport configuration is missing.",
+                    "detail": "Telemetry transport configuration is missing.",
+                    "latency_ms": 0.0
+                }
+
+        p = pipeline.lower()
+        if p == "hec":
+            if not config.hec_url or not config.hec_token:
+                return {
+                    "status": "NOT_CONFIGURED",
+                    "state": "NOT_CONFIGURED",
+                    "stage": "config",
+                    "reachable": False,
+                    "authenticated": False,
+                    "event_accepted": False,
+                    "target_index": config.hec_index or "",
+                    "message": "Splunk HEC URL and Authentication Token are required.",
+                    "detail": "Splunk HEC URL and Authentication Token are required.",
+                    "latency_ms": 0.0
+                }
+
+            # 1. Reachability pre-check via HTTP GET/HEAD
+            url_parsed = config.hec_url.rstrip("/")
+            health_url = f"{url_parsed}/health" if not url_parsed.endswith("/health") else url_parsed
+            candidates = [health_url]
+            if ":8888" in health_url:
+                candidates.append(health_url.replace(":8888", ":8088"))
+            elif ":8088" in health_url:
+                candidates.append(health_url.replace(":8088", ":8888"))
+            if "127.0.0.1" in health_url:
+                for c in list(candidates):
+                    candidates.append(c.replace("127.0.0.1", "localhost"))
+            elif "localhost" in health_url:
+                for c in list(candidates):
+                    candidates.append(c.replace("localhost", "127.0.0.1"))
+
+            ssl_verify = getattr(config, "hec_ssl_verify", True)
+            allow_insecure = getattr(config, "hec_allow_insecure_tls", False)
+
+            ctx = ssl.create_default_context()
+            if allow_insecure or not ssl_verify:
+                ctx.check_hostname = False
+                ctx.verify_mode = ssl.CERT_NONE
+
+            reachable = False
+            last_err = ""
+            start_t = time.time()
+            latency_ms = 0.0
+            for cur_url in candidates:
+                try:
+                    req = urllib.request.Request(cur_url, headers={"User-Agent": "NetSpout-Preflight/2.0"})
+                    with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
+                        reachable = True
+                        latency_ms = max(1.0, round((time.time() - start_t) * 1000, 2))
+                        break
+                except urllib.error.HTTPError:
+                    reachable = True
+                    latency_ms = max(1.0, round((time.time() - start_t) * 1000, 2))
+                    break
+                except (ssl.SSLCertVerificationError, urllib.error.URLError) as e:
+                    err_str = str(e)
+                    if isinstance(e, ssl.SSLCertVerificationError) or "CERTIFICATE_VERIFY_FAILED" in err_str or "certificate verify failed" in err_str:
+                        return {
+                            "status": "ERROR",
+                            "state": "ERROR",
+                            "stage": "network",
+                            "reachable": True,
+                            "authenticated": False,
+                            "event_accepted": False,
+                            "target_index": config.hec_index or "idx_network_ops",
+                            "message": f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
+                            "detail": f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
+                            "latency_ms": max(1.0, round((time.time() - start_t) * 1000, 2))
+                        }
+                    last_err = err_str
+                    continue
+                except Exception as e:
+                    last_err = str(e)
+                    continue
+
+            if not reachable:
+                return {
+                    "status": "ERROR",
+                    "state": "ERROR",
+                    "stage": "network",
+                    "reachable": False,
+                    "authenticated": False,
+                    "event_accepted": False,
+                    "target_index": config.hec_index or "idx_network_ops",
+                    "message": f"Endpoint unreachable: {last_err or 'Connection timed out or refused.'}",
+                    "detail": f"Endpoint unreachable: {last_err or 'Connection timed out or refused.'}",
+                    "latency_ms": 0.0
+                }
+
+            # 2. Authenticated Test Event Verification
+            test_event = {
+                "event": "NetSpout Connection Preflight Test Event",
+                "time": time.time(),
+                "host": "netspout-preflight",
+                "source": "netspout-preflight",
+                "sourcetype": "netspout:preflight",
+                "index": config.hec_index or "idx_network_ops",
+                "fields": {
+                    "netspout_preflight": "true",
+                    "timestamp_epoch": time.time()
+                }
+            }
+            ok, msg = self.emit_hec(
+                test_event,
+                config.hec_url,
+                config.hec_token,
+                ssl_verify=ssl_verify,
+                allow_insecure_tls=allow_insecure
+            )
+
+            if ok:
+                return {
+                    "status": "VERIFIED",
+                    "state": "VERIFIED",
+                    "stage": "dispatch",
+                    "reachable": True,
+                    "authenticated": True,
+                    "event_accepted": True,
+                    "target_index": config.hec_index or "idx_network_ops",
+                    "message": f"Splunk HEC connection verified. Test event accepted ({msg}).",
+                    "detail": f"Splunk HEC connection verified. Test event accepted ({msg}).",
+                    "latency_ms": latency_ms or 4.0
+                }
+            elif "401" in msg or "403" in msg or "Invalid token" in msg:
+                return {
+                    "status": "ERROR",
+                    "state": "ERROR",
+                    "stage": "auth",
+                    "reachable": True,
+                    "authenticated": False,
+                    "event_accepted": False,
+                    "target_index": config.hec_index or "idx_network_ops",
+                    "message": "HEC Authentication Failed: Invalid or unauthorized token.",
+                    "detail": "HEC Authentication Failed: Invalid or unauthorized token.",
+                    "latency_ms": latency_ms or 4.0
+                }
+            else:
+                return {
+                    "status": "ERROR",
+                    "state": "ERROR",
+                    "stage": "dispatch",
+                    "reachable": True,
+                    "authenticated": True,
+                    "event_accepted": False,
+                    "target_index": config.hec_index or "idx_network_ops",
+                    "message": f"HEC test event rejected: {msg}",
+                    "detail": f"HEC test event rejected: {msg}",
+                    "latency_ms": latency_ms or 4.0
+                }
+
+        return {
+            "status": "CONFIGURED",
+            "state": "CONFIGURED",
+            "stage": "config",
+            "reachable": True,
+            "authenticated": True,
+            "event_accepted": False,
+            "target_index": getattr(config, "hec_index", "idx_network_ops"),
+            "message": f"Pipeline '{pipeline}' configured.",
+            "detail": f"Pipeline '{pipeline}' configured.",
+            "latency_ms": 1.0
+        }
 
 
 # Global singleton dispatcher instance

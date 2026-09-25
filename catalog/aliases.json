@@ -1,0 +1,221 @@
+{
+  "cisco:sdwan:sytem:logs": {
+    "canonical_sourcetype": "cisco:sdwan:system:logs",
+    "canonical_id": "cisco-sdwan-system-logs",
+    "type": "DEPRECATED_ALIAS",
+    "reason": "Typographical error in historical releases (sytem -> system); retained for query and test compatibility."
+  },
+  "cisco-sdwan-sytem-logs": {
+    "canonical_sourcetype": "cisco:sdwan:system:logs",
+    "canonical_id": "cisco-sdwan-system-logs",
+    "type": "DEPRECATED_ALIAS",
+    "reason": "Typographical error in historical sample filenames; retained for backward compatibility."
+  },
+  "a10-thunder": {
+    "canonical_id": "a10_networks",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "arista-eos": {
+    "canonical_id": "arista_eos",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "aruba-os-cx": {
+    "canonical_id": "aruba_cx",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "checkpoint-quantum": {
+    "canonical_id": "checkpoint",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-aci": {
+    "canonical_id": "cisco_aci",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-sec-fw": {
+    "canonical_id": "cisco_asa",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-catalyst": {
+    "canonical_id": "cisco_catalyst",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-duo": {
+    "canonical_id": "cisco_duo",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-intersight": {
+    "canonical_id": "cisco_intersight",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-ios-xe": {
+    "canonical_id": "cisco_ios",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-ise": {
+    "canonical_id": "cisco_ise",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-meraki": {
+    "canonical_id": "cisco_meraki",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco-sdwan": {
+    "canonical_id": "cisco_sdwan",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "citrix-netscaler": {
+    "canonical_id": "citrix_netscaler",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cloudflare-one": {
+    "canonical_id": "cloudflare",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "dell-emc-os10": {
+    "canonical_id": "dell_os10",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "extrahop-revealx": {
+    "canonical_id": "extrahop",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "extreme-xos": {
+    "canonical_id": "extreme_networks",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "f5-bigip-ltm": {
+    "canonical_id": "f5_bigip",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "forcepoint-ngfw": {
+    "canonical_id": "forcepoint",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "fortinet-fortigate": {
+    "canonical_id": "fortinet",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "huawei-vrp": {
+    "canonical_id": "huawei_vrp",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "juniper-junos": {
+    "canonical_id": "juniper_junos",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "netscout-omnis": {
+    "canonical_id": "netscout",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "netskope-sse": {
+    "canonical_id": "netskope",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "nokia-sr-os": {
+    "canonical_id": "nokia_sr",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "nutanix-prism": {
+    "canonical_id": "nutanix",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "paloalto-panos": {
+    "canonical_id": "palo_alto",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "radware-defensepro": {
+    "canonical_id": "radware",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "sc4snmp-telemetry": {
+    "canonical_id": "sc4snmp",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "sonicwall-sonicos": {
+    "canonical_id": "sonicwall",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "sophos-xgs": {
+    "canonical_id": "sophos",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "splunk-core-telemetry": {
+    "canonical_id": "splunk",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "vmware-nsx": {
+    "canonical_id": "vmware_nsx",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "watchguard-fireware": {
+    "canonical_id": "watchguard",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "zscaler-zia": {
+    "canonical_id": "zscaler_zia",
+    "type": "VENDOR_ALIAS",
+    "reason": "Legacy vendor slug used in historical releases."
+  },
+  "cisco_campus_rogue": {
+    "canonical_id": "cisco_campus",
+    "type": "TOPOLOGY_ALIAS",
+    "reason": "Scenario name alias mapping to cisco_campus topology."
+  },
+  "cisco_sdwan_brownout": {
+    "canonical_id": "cisco_sdwan",
+    "type": "TOPOLOGY_ALIAS",
+    "reason": "Scenario name alias mapping to cisco_sdwan topology."
+  },
+  "cisco_aci_microburst": {
+    "canonical_id": "cisco_aci",
+    "type": "TOPOLOGY_ALIAS",
+    "reason": "Scenario name alias mapping to cisco_aci topology."
+  },
+  "nutanixpc_syslog": {
+    "canonical_sourcetype": "nutanixpc:syslog",
+    "canonical_id": "nutanixpc-syslog",
+    "type": "COMPATIBILITY_ALIAS",
+    "reason": "Legacy underscore delimited sourcetype mapped to colon standard."
+  },
+  "nutanixpc_vms": {
+    "canonical_sourcetype": "nutanixpc:vms",
+    "canonical_id": "nutanixpc-vms",
+    "type": "COMPATIBILITY_ALIAS",
+    "reason": "Legacy underscore delimited sourcetype mapped to colon standard."
+  }
+}

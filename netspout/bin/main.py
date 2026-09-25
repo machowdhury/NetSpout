@@ -323,12 +323,12 @@ async def list_presets():
         {"id": "secure", "name": "Standard Secure Perimeter (Firewall + LB + Web + DB)", "mode": "mixed_vendor"},
         {"id": "bypassed", "name": "Bypassed Firewall (Shadow IT / Direct Wire)", "mode": "mixed_vendor"},
         {"id": "lateral", "name": "Flat Unsegmented Subnet (Ransomware Lateral Spread)", "mode": "mixed_vendor"},
-        {"id": "cisco_campus", "name": "Mode A1: Cisco Campus Core Rogue AP & ISE Quarantine", "mode": "pure_cisco"},
-        {"id": "cisco_sdwan", "name": "Mode A2: Cisco SD-WAN WAN Circuit Brownout & BGP Failover", "mode": "pure_cisco"},
-        {"id": "cisco_aci", "name": "Mode A3: Cisco Data Center ACI Ingress Microburst", "mode": "pure_cisco"},
-        {"id": "mixed_edge", "name": "Mode B1: Mixed-Vendor Edge Breach (Meraki -> Catalyst -> Palo Alto)", "mode": "mixed_vendor"},
-        {"id": "mixed_sase", "name": "Mode B2: SASE Cloud Ingress Degradation (Zscaler -> Palo Alto -> Nexus)", "mode": "mixed_vendor"},
-        {"id": "mixed_optical", "name": "Mode B3: Multicast/MPLS Backbone Optical Shift (Nokia -> Juniper -> Arista)", "mode": "mixed_vendor"}
+        {"id": "cisco_campus", "name": "Cisco Campus Core Rogue AP & ISE Quarantine", "mode": "pure_cisco"},
+        {"id": "cisco_sdwan", "name": "Cisco SD-WAN WAN Circuit Brownout & BGP Failover", "mode": "pure_cisco"},
+        {"id": "cisco_aci", "name": "Cisco Data Center ACI Ingress Microburst", "mode": "pure_cisco"},
+        {"id": "mixed_edge", "name": "Mixed-Vendor Edge Breach (Meraki -> Catalyst -> Palo Alto)", "mode": "mixed_vendor"},
+        {"id": "mixed_sase", "name": "SASE Cloud Ingress Degradation (Zscaler -> Palo Alto -> Nexus)", "mode": "mixed_vendor"},
+        {"id": "mixed_optical", "name": "Multicast/MPLS Backbone Optical Shift (Nokia -> Juniper -> Arista)", "mode": "mixed_vendor"}
     ]
 
 @app.post("/api/presets/{preset_id}")

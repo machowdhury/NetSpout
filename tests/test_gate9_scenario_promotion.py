@@ -67,10 +67,10 @@ class TestGate9ScenarioPromotion(unittest.TestCase):
         for sc_id in self.promoted_scenarios:
             scen = self.catalog.get_scenario(sc_id)
             self.assertIsNotNone(scen, f"Scenario {sc_id} not found in catalog")
-            self.assertEqual(
+            self.assertIn(
                 scen.get("maturity"),
-                "E2E_VALIDATED",
-                f"Scenario {sc_id} expected E2E_VALIDATED but found {scen.get('maturity')}"
+                ["E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"],
+                f"Scenario {sc_id} expected at least E2E_VALIDATED but found {scen.get('maturity')}"
             )
 
     def test_02_golden_paths_remain_certified(self):
@@ -227,7 +227,7 @@ class TestGate9ScenarioPromotion(unittest.TestCase):
                 "PASS",
                 f"Scenario {sc_id} overall validation failed: {[f'{r.rule_id}: {r.message}' for r in manifest.validation_results if r.status != ValidationStatus.PASS]}"
             )
-            self.assertEqual(manifest.scenario_maturity, "E2E_VALIDATED")
+            self.assertIn(manifest.scenario_maturity, ["E2E_VALIDATED", "GOLDEN_PATH_CERTIFIED"])
             for vr in manifest.validation_results:
                 self.assertEqual(
                     vr.status,

@@ -45,6 +45,12 @@ export interface UseCase {
   default_topology_id: string;
   phases: ScenarioPhaseDef[];
   source: 'SCENARIO_BOUND' | 'PRE_BUILT_REPO';
+  maturity?: 'GOLDEN_PATH_CERTIFIED' | 'E2E_VALIDATED' | 'FORMAT_VALIDATED' | 'CONTRACTED';
+  telemetry_model?: string;
+  transport_protocol?: string;
+  splunk_storage?: string;
+  fidelity_badge?: 'NATIVE TRANSPORT' | 'MODELED PAYLOAD' | 'SYNTHETIC';
+  telemetry_notes?: string;
 }
 
 export interface PipelineConnection {

@@ -496,7 +496,7 @@ export const PRESET_MIXED_OPTICAL: TopologyState = {
 
 export const PRESET_OPENCONFIG_CORE: TopologyState = {
   zones: [
-    { id: 'zone-oc-1', name: 'Carrier Core MDT Fabric (OpenConfig)', zone_type: 'core_backbone', color: '#8b5cf6', opacity: 0.12, x: 40, y: 140, width: 420, height: 250, description: 'OpenConfig YANG streaming routers emitting gNMI telemetry' },
+    { id: 'zone-oc-1', name: 'Carrier Core MDT Fabric (OpenConfig)', zone_type: 'core_backbone', color: '#8b5cf6', opacity: 0.12, x: 40, y: 140, width: 420, height: 250, description: 'OpenConfig YANG streaming routers with modeled telemetry payload' },
     { id: 'zone-oc-2', name: 'Leaf / Spine Telemetry Tier', zone_type: 'dc_fabric', color: '#06b6d4', opacity: 0.12, x: 490, y: 140, width: 490, height: 250, description: 'Arista and Catalyst Spine/Leaf telemetry aggregation' }
   ],
   nodes: [

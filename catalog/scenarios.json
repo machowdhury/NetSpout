@@ -43,6 +43,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -121,7 +126,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_can_multi_building",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -179,6 +189,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -256,7 +271,12 @@
         "Required sourcetypes (2) emitted and indexed",
         "Fault trigger signature detected for arch_epn_isolated_intranet",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -315,6 +335,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -393,7 +418,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_gan_subsea_cloud",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -450,6 +480,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -528,7 +563,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_lan_campus_access",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -585,6 +625,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -663,7 +708,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_man_carrier_ring",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -721,6 +771,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -798,7 +853,12 @@
         "Required sourcetypes (2) emitted and indexed",
         "Fault trigger signature detected for arch_nas_storage_cluster",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -856,6 +916,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -933,7 +998,12 @@
         "Required sourcetypes (2) emitted and indexed",
         "Fault trigger signature detected for arch_pan_iot_mesh",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -991,6 +1061,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1068,7 +1143,12 @@
         "Required sourcetypes (2) emitted and indexed",
         "Fault trigger signature detected for arch_san_fibre_channel",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -1127,6 +1207,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1205,7 +1290,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_vpn_remote_workforce",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -1264,6 +1354,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1342,7 +1437,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_wan_global_backbone",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -1401,6 +1501,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -1479,7 +1584,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for arch_wlan_meraki_catalyst",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -1537,6 +1647,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Cisco MDT & Nexus Syslog",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "High-frequency microburst queue depth metrics are modeled and ingested via Splunk HEC into the metric store, while fabric health events route to the event index.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -1616,7 +1731,12 @@
       "validation_criteria": [
         "Microburst alert logged",
         "Buffer recovery confirmed"
-      ]
+      ],
+      "telemetry_model": "Cisco MDT & Nexus Syslog",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "High-frequency microburst queue depth metrics are modeled and ingested via Splunk HEC into the metric store, while fabric health events route to the event index."
     },
     "validation_rules": [
       {
@@ -1703,6 +1823,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Catalyst Syslog & Cisco ISE Authentication",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Switch port security, MAC flap notifications, and ISE 802.1X supplicant logs are delivered to Splunk through HEC.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -1781,7 +1906,12 @@
       "validation_criteria": [
         "At least 1 rogue detection event emitted",
         "Containment action verified in security telemetry"
-      ]
+      ],
+      "telemetry_model": "Catalyst Syslog & Cisco ISE Authentication",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Switch port security, MAC flap notifications, and ISE 802.1X supplicant logs are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -1868,6 +1998,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "SD-WAN BFD Tunnel & ThousandEyes Synthetics",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "SD-WAN BFD link health and ThousandEyes synthetic latency are delivered to Splunk through HEC.",
     "fault_definition": {
       "type": "link_degradation",
       "target_edge_id": "edge-branch-mpls",
@@ -1979,7 +2114,12 @@
         "cisco:sdwan:system:logs emitted with failover confirmation",
         "cisco:sdwan:approute emitted with reroute action",
         "Primary edge state restored to nominal"
-      ]
+      ],
+      "telemetry_model": "SD-WAN BFD Tunnel & ThousandEyes Synthetics",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "SD-WAN BFD link health and ThousandEyes synthetic latency are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -2056,6 +2196,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Perimeter BGP & SYN Defender Telemetry",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Cisco ASR, Palo Alto, and F5 BIG-IP SYN Defender logs are delivered to Splunk through HEC.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -2142,7 +2287,12 @@
         "Volumetric attack blocked",
         "F5 VIP protection logged",
         "Service restoration verified"
-      ]
+      ],
+      "telemetry_model": "Perimeter BGP & SYN Defender Telemetry",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Cisco ASR, Palo Alto, and F5 BIG-IP SYN Defender logs are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -2227,6 +2377,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2294,7 +2449,12 @@
       "validation_criteria": [
         "Telemetry emitted",
         "Security mitigation logged"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -2353,6 +2513,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Optical DWDM & MPLS RSVP-TE Syslog",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Ciena Waveserver DWDM alarms and Cisco ASR MPLS FRR events are delivered to Splunk through HEC.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -2440,7 +2605,12 @@
         "Juniper FRR switchover logged",
         "Arista IPFIX flow logged",
         "Restoration verified"
-      ]
+      ],
+      "telemetry_model": "Optical DWDM & MPLS RSVP-TE Syslog",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Ciena Waveserver DWDM alarms and Cisco ASR MPLS FRR events are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -2528,6 +2698,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Multi-Vendor Perimeter Defense",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Perimeter threat, UTM, and WAF telemetry are delivered to Splunk through HEC using authentic vendor payload schemas.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -2609,7 +2784,12 @@
       "validation_criteria": [
         "At least 1 threat event generated",
         "Action blocked or dropped recorded"
-      ]
+      ],
+      "telemetry_model": "Multi-Vendor Perimeter Defense",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Perimeter threat, UTM, and WAF telemetry are delivered to Splunk through HEC using authentic vendor payload schemas."
     },
     "validation_rules": [
       {
@@ -2654,7 +2834,7 @@
     "display_name": "SASE Cloud Ingress App Degradation & Synthetic Validation",
     "category": "NETWORK_OPERATIONS",
     "ecosystem": "mixed_vendor",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Zscaler/Cloudflare edge proxy experiences SSL inspection latency surge; Palo Alto SD-WAN queues sessions and ThousandEyes detects SaaS TTFB slowdown.",
     "attack_vector": "Cloud SASE Proxy TLS Handshake Schedular Bottleneck",
     "defense_mechanism": "Palo Alto Prisma SD-WAN prioritizes critical ERP traffic; ThousandEyes synthetics detect and isolate edge cloud hop delay.",
@@ -2695,6 +2875,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Cloud SASE & ThousandEyes Synthetics",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Zscaler proxy and ThousandEyes synthetic latency telemetry are delivered to Splunk through HEC.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -2782,7 +2967,12 @@
         "Degradation status detected",
         "ThousandEyes metric emitted",
         "Restoration verified"
-      ]
+      ],
+      "telemetry_model": "Cloud SASE & ThousandEyes Synthetics",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Zscaler proxy and ThousandEyes synthetic latency telemetry are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -2871,6 +3061,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -2952,7 +3147,12 @@
       "validation_criteria": [
         "At least 1 threat event generated",
         "Action blocked or dropped recorded"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3038,6 +3238,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3107,7 +3312,12 @@
       "validation_criteria": [
         "Telemetry emitted",
         "Security mitigation logged"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3127,7 +3337,7 @@
     "display_name": "OpenConfig MDT Streaming & Telemetry Assurance",
     "category": "SERVICE_ASSURANCE",
     "ecosystem": "both",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Routers and switches stream real-time OpenConfig YANG metrics (interface counters, CPU/RAM, BGP peering) directly to cisco_mdt_metrics.",
     "attack_vector": "Core Carrier Link Flap & Optical BER Degradation",
     "defense_mechanism": "Model-Driven Telemetry (MDT) detects carrier transitions and spikes within sub-second intervals for automated traffic re-routing.",
@@ -3167,6 +3377,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "OpenConfig / MDT",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "NetSpout models OpenConfig/MDT telemetry fields and metric behavior. In this scenario the telemetry is delivered to Splunk through HEC rather than a native gNMI/gRPC session.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -3254,7 +3469,12 @@
         "Congestion status degraded logged",
         "Streaming action allowed logged",
         "Interface restoration verified"
-      ]
+      ],
+      "telemetry_model": "OpenConfig / MDT",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "NetSpout models OpenConfig/MDT telemetry fields and metric behavior. In this scenario the telemetry is delivered to Splunk through HEC rather than a native gNMI/gRPC session."
     },
     "validation_rules": [
       {
@@ -3339,6 +3559,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3418,7 +3643,12 @@
         "Required sourcetypes (4) emitted and indexed",
         "Fault trigger signature detected for pure_cisco_enterprise",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3475,6 +3705,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3553,7 +3788,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for sdwan_connected_core",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3609,6 +3849,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3686,7 +3931,12 @@
         "Required sourcetypes (2) emitted and indexed",
         "Fault trigger signature detected for service_provider_cisco",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3743,6 +3993,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -3821,7 +4076,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for service_provider_mixed",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -3841,7 +4101,7 @@
     "display_name": "SQL Injection / Application Breach",
     "category": "SECURITY",
     "ecosystem": "both",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "Adversary injects malicious SQL exploitation payload through HTTP query parameters targeting Database backend.",
     "attack_vector": "OWASP SQLi Vector (1' OR '1'='1 -- UNION SELECT)",
     "defense_mechanism": "Perimeter WAF/Firewall drops attack. If bypassed, payload passes Web Server and triggers critical alert at Database layer!",
@@ -3880,6 +4140,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Perimeter Firewall, WAF & Database Audit",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": "Cisco ASA, NGINX Plus, and PostgreSQL audit records are delivered to Splunk through HEC.",
     "phases": [
       {
         "phase": "BASELINE",
@@ -3966,7 +4231,12 @@
         "PostgreSQL audit threat logged",
         "Threat blocked action verified",
         "Restoration verified"
-      ]
+      ],
+      "telemetry_model": "Perimeter Firewall, WAF & Database Audit",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": "Cisco ASA, NGINX Plus, and PostgreSQL audit records are delivered to Splunk through HEC."
     },
     "validation_rules": [
       {
@@ -4049,6 +4319,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -4127,7 +4402,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for wireless_connected_core_cisco",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {
@@ -4184,6 +4464,11 @@
       "policy_enforcement",
       "steady_state"
     ],
+    "telemetry_model": "Standard Telemetry Payload",
+    "transport_protocol": "Splunk HEC",
+    "splunk_storage": "Splunk Event Index (idx_network_ops)",
+    "fidelity_badge": "MODELED PAYLOAD",
+    "telemetry_notes": null,
     "phases": [
       {
         "phase": "BASELINE",
@@ -4262,7 +4547,12 @@
         "Required sourcetypes (3) emitted and indexed",
         "Fault trigger signature detected for wireless_connected_core_mixed",
         "State restored to nominal baseline"
-      ]
+      ],
+      "telemetry_model": "Standard Telemetry Payload",
+      "transport_protocol": "Splunk HEC",
+      "splunk_storage": "Splunk Event Index (idx_network_ops)",
+      "fidelity_badge": "MODELED PAYLOAD",
+      "telemetry_notes": null
     },
     "validation_rules": [
       {

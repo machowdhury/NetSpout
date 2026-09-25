@@ -930,7 +930,12 @@ def list_catalog_use_cases(category: Optional[str] = None):
             "validation_rules": s.get("validation_rules", []),
             "default_topology_id": s.get("default_topology_id") or s.get("topology_id", "default_secure"),
             "phases": s.get("phases", []),
-            "source": "SCENARIO_BOUND"
+            "source": "SCENARIO_BOUND",
+            "telemetry_model": s.get("telemetry_model") or "Standard Telemetry Payload",
+            "transport_protocol": s.get("transport_protocol") or "Splunk HEC",
+            "splunk_storage": s.get("splunk_storage") or "Splunk Event Index",
+            "fidelity_badge": s.get("fidelity_badge") or "MODELED PAYLOAD",
+            "telemetry_notes": s.get("telemetry_notes")
         }
         use_cases.append(uc_entry)
         
@@ -961,7 +966,12 @@ def list_catalog_use_cases(category: Optional[str] = None):
             ],
             "default_topology_id": "default_secure",
             "phases": [],
-            "source": "PRE_BUILT_REPO"
+            "source": "PRE_BUILT_REPO",
+            "telemetry_model": pb.get("telemetry_model", "Standard Telemetry Payload"),
+            "transport_protocol": "Splunk HEC",
+            "splunk_storage": "Splunk Event Index",
+            "fidelity_badge": "MODELED PAYLOAD",
+            "telemetry_notes": None
         }
         use_cases.append(uc_entry)
         

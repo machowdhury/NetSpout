@@ -72,6 +72,15 @@ export const StepChoose: React.FC<StepChooseProps> = ({
     }
   };
 
+  const getFidelityBadgeColor = (badge?: string) => {
+    switch (badge) {
+      case 'NATIVE TRANSPORT': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+      case 'MODELED PAYLOAD': return 'bg-violet-500/10 text-violet-400 border-violet-500/30';
+      case 'SYNTHETIC':
+      default: return 'bg-slate-500/10 text-slate-400 border-slate-500/30';
+    }
+  };
+
   return (
     <div className="flex flex-col h-full overflow-hidden p-6 space-y-6">
       {/* Header Banner */}
@@ -187,9 +196,16 @@ export const StepChoose: React.FC<StepChooseProps> = ({
               >
                 {/* Card Top Row: Category & Badges */}
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">
-                    {uc.domain}
-                  </span>
+                  <div className="flex items-center gap-1.5 truncate">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">
+                      {uc.domain}
+                    </span>
+                    {uc.fidelity_badge && (
+                      <span className={"text-[9px] font-semibold px-1.5 py-0.5 rounded border uppercase shrink-0 " + getFidelityBadgeColor(uc.fidelity_badge)}>
+                        {uc.fidelity_badge}
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <span className={"text-[10px] font-bold px-1.5 py-0.5 rounded border " + getDifficultyColor(uc.difficulty)}>
                       {uc.difficulty}
@@ -264,6 +280,24 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                         ))}
                       </div>
                     </div>
+                    {uc.telemetry_model && (
+                      <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-slate-800/60 text-[10px]">
+                        <div>
+                          <span className="text-slate-500 font-medium block">Model:</span>
+                          <span className="text-slate-300 font-mono">{uc.telemetry_model}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-500 font-medium block">Transport:</span>
+                          <span className="text-cyan-400 font-mono">{uc.transport_protocol || 'Splunk HEC'}</span>
+                        </div>
+                        {uc.splunk_storage && (
+                          <div className="col-span-2">
+                            <span className="text-slate-500 font-medium block">Storage:</span>
+                            <span className="text-slate-300 font-mono">{uc.splunk_storage}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     {uc.validation_rules.length > 0 && (
                       <div>
                         <span className="text-slate-500 font-medium block">Validation Rule:</span>

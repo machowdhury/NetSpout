@@ -540,6 +540,11 @@ class UseCaseContract(BaseModel):
     expected_progression: List[str] = Field(default_factory=list)  # WHAT SHOULD HAPPEN?
     expected_observations: List[str] = Field(default_factory=list)  # WHAT SHOULD THE USER OBSERVE?
     validation_criteria: List[str] = Field(default_factory=list)  # HOW DO WE KNOW IT WORKED?
+    telemetry_model: Optional[str] = None
+    transport_protocol: Optional[str] = None
+    splunk_storage: Optional[str] = None
+    fidelity_badge: Optional[str] = None
+    telemetry_notes: Optional[str] = None
 
 
 class ScenarioPhaseDefinition(BaseModel):
@@ -577,6 +582,11 @@ class ScenarioContract(BaseModel):
     expected_observations: List[str] = Field(default_factory=list)
     validation_rules: List[ValidationRule] = Field(default_factory=list)
     use_case: Optional[UseCaseContract] = None
+    telemetry_model: Optional[str] = "Standard Telemetry Payload"
+    transport_protocol: Optional[str] = "Splunk HEC"
+    splunk_storage: Optional[str] = "Splunk Event Index (idx_network_ops)"
+    fidelity_badge: Optional[str] = "MODELED PAYLOAD"
+    telemetry_notes: Optional[str] = None
 
 
 class GroundTruthRecord(BaseModel):

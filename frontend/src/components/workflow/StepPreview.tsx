@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   ArrowLeft, ArrowRight, Clock, CheckCircle2, 
-  Layers, Radio, Network
+  Layers, Radio, Network, Info
 } from 'lucide-react';
 import type { UseCase } from '../../types/workflow';
 
@@ -103,6 +103,57 @@ export const StepPreview: React.FC<StepPreviewProps> = ({ useCase, onBack, onNex
                 <span className="text-slate-300 font-semibold">{useCase.phases.length || 9} Distinct Phases</span>
               </div>
             </div>
+          </div>
+
+          {/* Telemetry Semantics & Architecture Card */}
+          <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <Radio className="w-4 h-4 text-cyan-400" />
+                <span>Telemetry Semantics & Architecture</span>
+              </h4>
+              {useCase.fidelity_badge && (
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${
+                  useCase.fidelity_badge === 'MODELED PAYLOAD'
+                    ? 'bg-violet-500/10 text-violet-400 border-violet-500/30'
+                    : useCase.fidelity_badge === 'NATIVE TRANSPORT'
+                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                    : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
+                }`}>
+                  {useCase.fidelity_badge}
+                </span>
+              )}
+            </div>
+
+            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800/80 text-xs space-y-2">
+              <div className="flex justify-between items-center text-slate-400">
+                <span>Telemetry Model:</span>
+                <span className="text-slate-200 font-mono text-[11px]">
+                  {useCase.telemetry_model || 'Standard Event Telemetry'}
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-slate-400">
+                <span>Transport Protocol:</span>
+                <span className="text-cyan-400 font-mono text-[11px]">
+                  {useCase.transport_protocol || 'Splunk HEC'}
+                </span>
+              </div>
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="shrink-0 mr-2">Splunk Storage:</span>
+                <span className="text-slate-300 font-mono text-[11px] text-right">
+                  {useCase.splunk_storage || 'Splunk Event Index (idx_network_ops)'}
+                </span>
+              </div>
+            </div>
+
+            {useCase.telemetry_notes && (
+              <div className="p-3 rounded-lg bg-cyan-950/30 border border-cyan-800/50 text-xs text-slate-300 flex items-start gap-2.5">
+                <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                <p className="text-[11px] leading-relaxed text-slate-300">
+                  {useCase.telemetry_notes}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">

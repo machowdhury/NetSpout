@@ -397,12 +397,74 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     clean_defense = defense.replace("\\'", "'")
 
     maturity = "CONTRACTED"
-    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach", "cisco_aci_microburst"):
+    if sid in ("cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach", "cisco_aci_microburst", "mixed_sase_degradation", "sql_injection", "openconfig_mdt_streaming"):
         maturity = "GOLDEN_PATH_CERTIFIED"
-    elif sid in ("mixed_sase_degradation", "mixed_backbone_optical", "openconfig_mdt_streaming", "sql_injection", "ddos_attack"):
+    elif sid in ("mixed_backbone_optical", "ddos_attack"):
         maturity = "E2E_VALIDATED"
     elif sid in ("normal_traffic", "lateral_movement"):
         maturity = "FORMAT_VALIDATED"
+
+    # Gate 9.5 Telemetry Semantics & Architecture Metadata
+    tel_model = "Standard Telemetry Payload"
+    trans_proto = "Splunk HEC"
+    sp_storage = "Splunk Event Index (idx_network_ops)"
+    fid_badge = "MODELED PAYLOAD"
+    tel_notes = None
+
+    if sid == "openconfig_mdt_streaming":
+        tel_model = "OpenConfig / MDT"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "NetSpout models OpenConfig/MDT telemetry fields and metric behavior. In this scenario the telemetry is delivered to Splunk through HEC rather than a native gNMI/gRPC session."
+    elif sid == "cisco_aci_microburst":
+        tel_model = "Cisco MDT & Nexus Syslog"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "High-frequency microburst queue depth metrics are modeled and ingested via Splunk HEC into the metric store, while fabric health events route to the event index."
+    elif sid == "mixed_sase_degradation":
+        tel_model = "Cloud SASE & ThousandEyes Synthetics"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Zscaler proxy and ThousandEyes synthetic latency telemetry are delivered to Splunk through HEC."
+    elif sid == "sql_injection":
+        tel_model = "Perimeter Firewall, WAF & Database Audit"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Cisco ASA, NGINX Plus, and PostgreSQL audit records are delivered to Splunk through HEC."
+    elif sid == "mixed_backbone_optical":
+        tel_model = "Optical DWDM & MPLS RSVP-TE Syslog"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Ciena Waveserver DWDM alarms and Cisco ASR MPLS FRR events are delivered to Splunk through HEC."
+    elif sid == "ddos_attack":
+        tel_model = "Perimeter BGP & SYN Defender Telemetry"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Cisco ASR, Palo Alto, and F5 BIG-IP SYN Defender logs are delivered to Splunk through HEC."
+    elif sid == "cisco_sdwan_brownout":
+        tel_model = "SD-WAN BFD Tunnel & ThousandEyes Synthetics"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "SD-WAN BFD link health and ThousandEyes synthetic latency are delivered to Splunk through HEC."
+    elif sid == "cisco_campus_rogue":
+        tel_model = "Catalyst Syslog & Cisco ISE Authentication"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Switch port security, MAC flap notifications, and ISE 802.1X supplicant logs are delivered to Splunk through HEC."
+    elif sid == "mixed_edge_breach":
+        tel_model = "Multi-Vendor Perimeter Defense"
+        trans_proto = "Splunk HEC"
+        sp_storage = "Splunk Event Index (idx_network_ops)"
+        fid_badge = "MODELED PAYLOAD"
+        tel_notes = "Perimeter threat, UTM, and WAF telemetry are delivered to Splunk through HEC using authentic vendor payload schemas."
 
     scen_obj = {
         "id": sid,
@@ -432,7 +494,12 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
             "telemetry_spike",
             "policy_enforcement",
             "steady_state"
-        ]
+        ],
+        "telemetry_model": tel_model,
+        "transport_protocol": trans_proto,
+        "splunk_storage": sp_storage,
+        "fidelity_badge": fid_badge,
+        "telemetry_notes": tel_notes
     }
 
     if sid == "cisco_sdwan_brownout":
@@ -780,6 +847,13 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         scen_obj["validation_rules"] = [
             {"id": f"{sid}-val-01", "name": "Required Telemetry Emitted", "type": "COUNT_THRESHOLD", "target_sourcetype": scen_obj.get("sourcetypes", ["cisco:ios:syslog"])[0] if scen_obj.get("sourcetypes") else None, "min_count": 1, "description": "Verify scenario telemetry is generated."}
         ]
+
+    if scen_obj.get("use_case"):
+        scen_obj["use_case"]["telemetry_model"] = scen_obj.get("telemetry_model")
+        scen_obj["use_case"]["transport_protocol"] = scen_obj.get("transport_protocol")
+        scen_obj["use_case"]["splunk_storage"] = scen_obj.get("splunk_storage")
+        scen_obj["use_case"]["fidelity_badge"] = scen_obj.get("fidelity_badge")
+        scen_obj["use_case"]["telemetry_notes"] = scen_obj.get("telemetry_notes")
 
     # Validate against ScenarioContract schema
     ScenarioContract(**scen_obj)

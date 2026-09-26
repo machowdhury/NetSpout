@@ -713,6 +713,9 @@ class RunManifest(BaseModel):
     timing_classification: str = "NOT_APPLICABLE"
     timing_notes: Optional[str] = None
     errors: List[str] = Field(default_factory=list)
+    native_transport_result: Optional[Any] = None
+    companion_manifest: Optional[Any] = None
+    native_flow_records: List[Any] = Field(default_factory=list)
 
 
 class ScenarioRunRequest(BaseModel):
@@ -723,5 +726,105 @@ class ScenarioRunRequest(BaseModel):
     duration_ticks: Optional[int] = None
     dispatch_telemetry: bool = False
     transport_config: Optional[TelemetryTransportConfig] = None
+    transport_mode: str = "DIRECT_TO_SPLUNK"  # DIRECT_TO_SPLUNK | NATIVE_TRANSPORT
+    native_protocol: Optional[str] = None     # IPFIX | NETFLOW_V9
+    native_destination_host: Optional[str] = None
+    native_destination_port: Optional[int] = None
+    native_rate_pps: int = 100
+
+
+class FlowRecord(BaseModel):
+    """Canonical protocol-agnostic flow record representation."""
+    src_ip: str
+    dest_ip: str
+    src_port: int
+    dest_port: int
+    protocol: int = 6                     # 6=TCP, 17=UDP, 1=ICMP, 58=ICMPv6
+    tcp_flags: int = 0                    # Bitmask (SYN=2, ACK=16, FIN=1, RST=4)
+    tos_dscp: int = 0                     # DiffServ / Type of Service
+    src_as: int = 0                       # Autonomous System Number
+    dest_as: int = 0                      # Autonomous System Number
+    input_snmp: int = 1                   # Ingress interface ifIndex
+    output_snmp: int = 2                  # Egress interface ifIndex
+    bytes_count: int = 0                  # Octets transferred
+    packets_count: int = 0                # Packets transferred
+    start_time_ms: int = 0                # Flow start (relative sysUptime or absolute epoch)
+    end_time_ms: int = 0                  # Flow end
+    ip_version: int = 4                   # 4 or 6
+    bgp_next_hop: Optional[str] = None    # Next hop IP address
+    vlan_id: Optional[int] = None         # 802.1Q tag
+    flow_direction: int = 0               # 0=Ingress, 1=Egress
+    netspout_run_id: Optional[str] = None
+    netspout_scenario_id: Optional[str] = None
+    netspout_phase: Optional[str] = None
+    anomaly_type: Optional[str] = "normal"
+
+    @property
+    def dst_ip(self) -> str:
+        return self.dest_ip
+
+    @property
+    def dst_port(self) -> int:
+        return self.dest_port
+
+    @property
+    def byte_count(self) -> int:
+        return self.bytes_count
+
+    @property
+    def packet_count(self) -> int:
+        return self.packets_count
+
+
+class TransportErrorType(str, Enum):
+    DESTINATION_INVALID = "DESTINATION_INVALID"
+    DESTINATION_BLOCKED = "DESTINATION_BLOCKED"
+    SOCKET_CREATE_FAILED = "SOCKET_CREATE_FAILED"
+    ENCODING_FAILED = "ENCODING_FAILED"
+    PACKET_TOO_LARGE = "PACKET_TOO_LARGE"
+    SEND_FAILED = "SEND_FAILED"
+    PARTIAL_EXPORT = "PARTIAL_EXPORT"
+    TEMPLATE_FAILED = "TEMPLATE_FAILED"
+    RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
+    CIRCUIT_BREAKER_TRIGGERED = "CIRCUIT_BREAKER_TRIGGERED"
+    COLLECTOR_TIMEOUT = "COLLECTOR_TIMEOUT"
+
+
+class TransportResult(BaseModel):
+    transport_type: str = "UNKNOWN"       # e.g. "IPFIX_UDP", "NETFLOW_V9_UDP", "HEC"
+    destination_host: str = ""
+    destination_port: int = 0
+    records_received: int = 0             # Count of records passed into encoder
+    records_encoded: int = 0              # Count of records packed into flow sets
+    datagrams_attempted: int = 0          # Number of UDP packets passed to sendto()
+    datagrams_sent: int = 0               # Number of UDP packets successfully sent by OS
+    bytes_sent: int = 0                   # Total wire bytes transmitted
+    templates_sent: int = 0               # Number of template sets emitted
+    sequence_start: int = 0               # Initial sequence number
+    sequence_end: int = 0                 # Final sequence number
+    encoding_failures: int = 0
+    send_failures: int = 0
+    elapsed_ms: float = 0.0
+    errors: List[str] = Field(default_factory=list)
+    error_types: List[str] = Field(default_factory=list)
+
+
+class CompanionControlManifest(BaseModel):
+    run_id: str
+    scenario_id: str
+    protocol: str                         # "IPFIX" or "NETFLOW_V9"
+    destination_host: str
+    destination_port: int
+    observation_domain_id: int            # Or source_id
+    exporter_ip: str
+    template_ids: List[int] = Field(default_factory=list)
+    records_generated: int = 0
+    records_encoded: int = 0
+    datagrams_sent: int = 0
+    bytes_sent: int = 0
+    start_time_epoch_ms: int = 0
+    end_time_epoch_ms: int = 0
+    splunk_suggested_spl: str = ""
+
 
 

@@ -37,7 +37,14 @@ CORE_MODULES = [
     "use_case_repo.py",
     "noc_soc_metrics.py",
     "catalog.py",
-    "vendor_catalog.py"
+    "vendor_catalog.py",
+    "exporter_session.py",
+    "netflow_v9_encoder.py",
+    "ipfix_encoder.py",
+    "transport_safety.py",
+    "rate_limiter.py",
+    "transport_native_flow.py",
+    "companion_manifest.py"
 ]
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")

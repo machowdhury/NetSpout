@@ -27,13 +27,15 @@ try:
         ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
         UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
         RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
-        TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
+        TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
+        FlowRecord, TransportResult, CompanionControlManifest
     )
     from netspout_core.graph_engine import TopologyGraph
     from netspout_core.log_engine import SplunkLogEngine
     from netspout_core.telemetry_dispatcher import dispatcher
     from netspout_core.spl_engine import SPLExecutionEngine
     from netspout_core.catalog import catalog_instance, NetSpoutCatalog
+    from netspout_core.exporter_session import ExporterSession
 except ImportError:
     try:
         from app.models import (
@@ -41,23 +43,27 @@ except ImportError:
             ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
             UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
             RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
-            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
+            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
+            FlowRecord, TransportResult, CompanionControlManifest
         )
         from app.graph_engine import TopologyGraph
         from app.log_engine import SplunkLogEngine
         from app.telemetry_dispatcher import dispatcher
         from app.spl_engine import SPLExecutionEngine
         from app.catalog import catalog_instance, NetSpoutCatalog
+        from app.exporter_session import ExporterSession
     except ImportError:
         from models import (
             TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
             ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
             UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
             RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
-            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence
+            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
+            FlowRecord, TransportResult, CompanionControlManifest
         )
         from graph_engine import TopologyGraph
         from log_engine import SplunkLogEngine
+        from exporter_session import ExporterSession
         from telemetry_dispatcher import dispatcher
         try:
             from spl_engine import SPLExecutionEngine
@@ -2847,12 +2853,127 @@ class ScenarioRunner:
         else:
             manifest.overall_validation = ValidationStatus.PASS.value
 
+        # Gate 11B: Optional Native Flow Transport Execution (Mode B)
+        if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT":
+            flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
+            manifest.native_flow_records = flow_records
+
+            if flow_records:
+                protocol = (getattr(request, "native_protocol", None) or "IPFIX").upper()
+                dest_host = getattr(request, "native_destination_host", None) or "127.0.0.1"
+                dest_port = getattr(request, "native_destination_port", None) or (4739 if protocol == "IPFIX" else 2055)
+                rate_pps = getattr(request, "native_rate_pps", 100) or 100
+
+                session = ExporterSession(
+                    node_id="node-arista-leaf",
+                    exporter_ip="10.200.0.3",
+                    observation_domain_id=1,
+                    source_id=1
+                )
+
+                try:
+                    from netspout_core.transport_native_flow import NativeFlowTransport
+                    from netspout_core.companion_manifest import CompanionManifestBuilder
+                except ImportError:
+                    try:
+                        from app.transport_native_flow import NativeFlowTransport
+                        from app.companion_manifest import CompanionManifestBuilder
+                    except ImportError:
+                        from transport_native_flow import NativeFlowTransport
+                        from companion_manifest import CompanionManifestBuilder
+
+                transport = NativeFlowTransport(
+                    destination_host=dest_host,
+                    destination_port=dest_port,
+                    protocol=protocol,
+                    rate_pps=rate_pps,
+                    test_mode=(time_mode == "TEST")
+                )
+
+                transport_res = transport.send_batch(flow_records, session, force_template=True)
+                manifest.native_transport_result = transport_res
+
+                companion = CompanionManifestBuilder.build_manifest(
+                    run_id=run_id,
+                    scenario_id=scenario_id,
+                    protocol=protocol,
+                    destination_host=dest_host,
+                    destination_port=dest_port,
+                    exporter_ip="10.200.0.3",
+                    observation_domain_id=1,
+                    template_ids=[256],
+                    records_generated=len(flow_records),
+                    records_encoded=transport_res.records_encoded,
+                    datagrams_sent=transport_res.datagrams_sent,
+                    bytes_sent=transport_res.bytes_sent,
+                    start_time_epoch_ms=int(start_time * 1000),
+                    end_time_epoch_ms=int(time.time() * 1000)
+                )
+                manifest.companion_manifest = companion
+
         manifest.end_time = time.time()
         manifest.duration_sec = round(manifest.end_time - start_time, 3)
 
         self.current_run_id = None
         self.current_scenario_id = None
         return manifest
+
+    @staticmethod
+    def extract_canonical_flow_records(scenario_id: str, logs: List[LogEntry]) -> List[FlowRecord]:
+        """
+        Extracts protocol-neutral FlowRecord representations from scenario logs.
+        For mixed_backbone_optical, maps Arista IPFIX telemetry logs to FlowRecords.
+        """
+        records: List[FlowRecord] = []
+        for l in logs:
+            if l.sourcetype == "arista:flow:ipfix":
+                bytes_cnt = 8420950
+                pkts_cnt = 6200
+                in_if = 49
+                out_if = 1
+                raw_text = l.raw_log or ""
+                if "Ethernet49/2" in raw_text or "12948200" in raw_text:
+                    out_if = 2
+                    bytes_cnt = 12948200
+                    pkts_cnt = 9500
+                elif "Optical SLA Verified" in (l.signature or "") or "4920100" in raw_text:
+                    bytes_cnt = 4920100
+                    pkts_cnt = 3600
+
+                rec = FlowRecord(
+                    src_ip=l.src_ip or "10.200.0.1",
+                    dest_ip=l.dest_ip or "10.200.0.3",
+                    src_port=49152,
+                    dest_port=443,
+                    protocol=6,
+                    tos_dscp=0,
+                    tcp_flags=0x18,
+                    input_snmp=in_if,
+                    output_snmp=out_if,
+                    packets_count=pkts_cnt,
+                    bytes_count=bytes_cnt,
+                    start_time_ms=1000,
+                    end_time_ms=5000,
+                    src_as=65001,
+                    dest_as=65002,
+                    netspout_scenario_id=scenario_id,
+                    netspout_phase=l.action
+                )
+                records.append(rec)
+            elif l.src_ip and l.dest_ip and getattr(l, "protocol", None) in ("TCP", "UDP", "6", "17"):
+                proto_num = 17 if l.protocol in ("UDP", "17") else 6
+                rec = FlowRecord(
+                    src_ip=l.src_ip,
+                    dest_ip=l.dest_ip,
+                    src_port=getattr(l, "src_port", 5000) or 5000,
+                    dest_port=getattr(l, "dest_port", 80) or 80,
+                    protocol=proto_num,
+                    packets_count=100,
+                    bytes_count=15000,
+                    netspout_scenario_id=scenario_id
+                )
+                records.append(rec)
+        return records
 
     # -------------------------------------------------------------------------
     # Run Management & Query APIs

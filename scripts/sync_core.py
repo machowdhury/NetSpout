@@ -44,7 +44,8 @@ CORE_MODULES = [
     "transport_safety.py",
     "rate_limiter.py",
     "transport_native_flow.py",
-    "companion_manifest.py"
+    "companion_manifest.py",
+    "collector_evidence.py"
 ]
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")

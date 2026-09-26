@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  netspout-flow-collector:
+    image: netsampler/goflow2:latest
+    user: "0:0"
+    container_name: netspout-flow-collector
+    command:
+      - -listen
+      - netflow://:2055,netflow://:4739
+      - -format
+      - json
+      - -transport
+      - file
+      - -transport.file
+      - /flows/flows.json
+    ports:
+      - "127.0.0.1:2055:2055/udp"
+      - "127.0.0.1:4739:4739/udp"
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - netspout_flow_data:/flows
+    restart: unless-stopped
+
+  netspout-flow-forwarder:
+    build:
+      context: .
+      dockerfile: Dockerfile.forwarder
+    container_name: netspout-flow-forwarder
+    environment:
+      - SPLUNK_HEC_URL=https://host.docker.internal:8888/services/collector/event
+      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
+      - SPLUNK_INDEX=idx_network_ops
+      - SPLUNK_SOURCETYPE=netflow:collector
+      - FLOW_FILE=/flows/flows.json
+      - STATUS_PORT=8082
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "127.0.0.1:8082:8082"
+    volumes:
+      - netspout_flow_data:/flows
+    depends_on:
+      - netspout-flow-collector
+    restart: unless-stopped
+
+volumes:
+  netspout_flow_data:
+    name: netspout_flow_data

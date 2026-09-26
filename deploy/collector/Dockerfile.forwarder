@@ -1,0 +1,10 @@
+FROM python:3.12-alpine
+
+WORKDIR /app
+
+COPY forwarder.py /app/forwarder.py
+RUN chmod +x /app/forwarder.py
+
+EXPOSE 8082
+
+ENTRYPOINT ["python3", "-u", "/app/forwarder.py"]

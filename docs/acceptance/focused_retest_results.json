@@ -1,6 +1,6 @@
 {
   "service_provider_cisco": {
-    "run_id": "NS-20260926-a9ae2719",
+    "run_id": "NS-20260927-226393ee",
     "generated": 8,
     "dispatched": 8,
     "observed": 8,
@@ -12,10 +12,10 @@
     "timing_unit": "ms",
     "timing_classification": "MODELED",
     "timing_notes": "Modeled sub-50ms local data-plane protection prior to BGP control-plane convergence. NetSpout models this protocol behavior and does not claim empirical hardware packet measurements.",
-    "kpi_time_sec": 10.737771987915039
+    "kpi_time_sec": 11.111516952514648
   },
   "arch_wlan_meraki_catalyst": {
-    "run_id": "NS-20260926-4734baa7",
+    "run_id": "NS-20260927-5e54a9f4",
     "generated": 8,
     "dispatched": 8,
     "observed": 8,
@@ -27,10 +27,10 @@
     "timing_unit": null,
     "timing_classification": "NOT_APPLICABLE",
     "timing_notes": null,
-    "kpi_time_sec": 11.322450876235962
+    "kpi_time_sec": 10.191203832626343
   },
   "arch_man_carrier_ring": {
-    "run_id": "NS-20260926-3f985f07",
+    "run_id": "NS-20260927-385ed8bc",
     "generated": 8,
     "dispatched": 8,
     "observed": 8,
@@ -42,6 +42,6 @@
     "timing_unit": "ms",
     "timing_classification": "MODELED",
     "timing_notes": "Modeled sub-50ms RPL unblock failover. WTR is a post-repair stabilization hold timer before revertive restoration, distinct from protection switching time.",
-    "kpi_time_sec": 10.196471691131592
+    "kpi_time_sec": 10.175732135772705
   }
 }

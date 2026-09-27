@@ -1,10 +1,22 @@
 version: '3.8'
 
 services:
+  init-volume:
+    image: busybox:1.36
+    container_name: netspout-flow-init
+    command: ["sh", "-c", "chmod 777 /flows && touch /flows/flows.json && chmod 666 /flows/flows.json"]
+    volumes:
+      - netspout_flow_data:/flows
+    restart: "no"
+
   netspout-flow-collector:
-    image: netsampler/goflow2:latest
-    user: "0:0"
+    image: netsampler/goflow2:v2.2.5
+    user: "100:65533"
     container_name: netspout-flow-collector
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     command:
       - -listen
       - netflow://:2055,netflow://:4739
@@ -20,13 +32,26 @@ services:
       - "127.0.0.1:8080:8080"
     volumes:
       - netspout_flow_data:/flows
+    depends_on:
+      init-volume:
+        condition: service_completed_successfully
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   netspout-flow-forwarder:
     build:
       context: .
       dockerfile: Dockerfile.forwarder
+    user: "10001:10001"
     container_name: netspout-flow-forwarder
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     environment:
       - SPLUNK_HEC_URL=https://host.docker.internal:8888/services/collector/event
       - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
@@ -41,8 +66,16 @@ services:
     volumes:
       - netspout_flow_data:/flows
     depends_on:
-      - netspout-flow-collector
+      init-volume:
+        condition: service_completed_successfully
+      netspout-flow-collector:
+        condition: service_started
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   netspout_flow_data:

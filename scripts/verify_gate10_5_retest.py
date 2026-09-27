@@ -134,8 +134,8 @@ def run_focused_retest():
 
         generated = manifest.total_events_generated
         dispatched = manifest.dispatch_succeeded
-        observed = manifest.observed_count
-        completeness = manifest.observation_completeness_pct
+        observed = evidence.total_observed if evidence else manifest.observed_count
+        completeness = evidence.observation_completeness_pct if evidence else manifest.observation_completeness_pct
         overall_val = manifest.overall_validation
         dest_val = manifest.destination_validation
 

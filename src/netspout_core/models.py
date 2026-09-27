@@ -247,6 +247,18 @@ class TelemetryTransportConfig(BaseModel):
     syslog_facility: int = 16     # local0
     syslog_format: str = "rfc5424" # rfc5424 or rfc3164
 
+    # 5. Native Flow Telemetry Pipeline (RFC 3954 NetFlow v9 & RFC 7011 IPFIX)
+    native_flow_enabled: bool = False
+    native_flow_protocol: str = "IPFIX"  # NETFLOW_V9, IPFIX, BOTH
+    native_flow_collector_host: str = "127.0.0.1"
+    native_flow_netflow_port: int = 2055
+    native_flow_ipfix_port: int = 4739
+    native_flow_observation_domain_id: int = 1
+    native_flow_rate_limit_pps: int = 100
+    native_flow_packet_cap: int = 10000
+    native_flow_template_refresh_policy: str = "EVERY_BURST"
+    native_flow_allow_public: bool = False
+
 
 class Node(BaseModel):
     id: str
@@ -809,6 +821,67 @@ class TransportResult(BaseModel):
     error_types: List[str] = Field(default_factory=list)
 
 
+class NativeFlowProtocol(str, Enum):
+    NETFLOW_V9 = "NETFLOW_V9"
+    IPFIX = "IPFIX"
+    BOTH = "BOTH"
+
+
+class TemplateRefreshPolicy(str, Enum):
+    EVERY_BURST = "EVERY_BURST"
+    PERIODIC = "PERIODIC"
+    ADAPTIVE = "ADAPTIVE"
+
+
+class CollectorHealthState(str, Enum):
+    STOPPED = "STOPPED"
+    STARTING = "STARTING"
+    HEALTHY = "HEALTHY"
+    DEGRADED = "DEGRADED"
+    UNREACHABLE = "UNREACHABLE"
+    RECEIVING = "RECEIVING"
+    FORWARDER_BLOCKED = "FORWARDER_BLOCKED"
+    SPLUNK_UNAVAILABLE = "SPLUNK_UNAVAILABLE"
+
+
+class NativeFlowConfig(BaseModel):
+    protocol: NativeFlowProtocol = NativeFlowProtocol.IPFIX
+    collector_host: str = "127.0.0.1"
+    netflow_port: int = 2055
+    ipfix_port: int = 4739
+    observation_domain_id: int = 1
+    exporter_identity: str = "10.0.0.1"
+    template_id: int = 256
+    template_refresh_policy: TemplateRefreshPolicy = TemplateRefreshPolicy.EVERY_BURST
+    rate_limit_pps: int = 100
+    packet_cap: int = 10000
+    collector_enabled: bool = True
+    splunk_index: str = "idx_network_ops"
+    splunk_sourcetype: str = "netflow:collector"
+    allow_public_export: bool = False
+    goflow_metrics_port: int = 8080
+    forwarder_status_port: int = 8082
+
+
+class CollectorDetailedHealth(BaseModel):
+    state: CollectorHealthState = CollectorHealthState.STOPPED
+    collector_process: bool = False
+    udp_listeners_active: bool = False
+    netflow_port: int = 2055
+    ipfix_port: int = 4739
+    packets_received_total: int = 0
+    records_decoded_total: int = 0
+    decode_errors_total: int = 0
+    forwarder_healthy: bool = False
+    hec_connectivity: bool = False
+    hec_failures_total: int = 0
+    flows_forwarded_total: int = 0
+    splunk_observation_verified: bool = False
+    last_packet_timestamp: Optional[float] = None
+    last_splunk_observation_timestamp: Optional[float] = None
+    details: Dict[str, Any] = Field(default_factory=dict)
+
+
 class CompanionControlManifest(BaseModel):
     run_id: str
     scenario_id: str
@@ -824,7 +897,83 @@ class CompanionControlManifest(BaseModel):
     bytes_sent: int = 0
     start_time_epoch_ms: int = 0
     end_time_epoch_ms: int = 0
+    fidelity_badge: str = "NATIVE TRANSPORT"
     splunk_suggested_spl: str = ""
+    splunk_raw_events_spl: str = ""
+    splunk_stats_spl: str = ""
+    pipeline_stage: str = "UNKNOWN"
+    troubleshooting_notes: List[str] = Field(default_factory=list)
+
+
+def resolve_native_flow_config(
+    explicit_config: Optional[Union[Dict[str, Any], NativeFlowConfig]] = None,
+    env: Optional[Dict[str, str]] = None
+) -> NativeFlowConfig:
+    """
+    Resolves NativeFlowConfig applying strict configuration precedence:
+    Explicit Run Configuration > Environment Configuration > NetSpout Defaults.
+    Never commits secrets or alters unconfigured fields.
+    """
+    if env is None:
+        import os
+        env = os.environ
+
+    # Start with defaults
+    cfg_data: Dict[str, Any] = {
+        "protocol": "IPFIX",
+        "collector_host": "127.0.0.1",
+        "netflow_port": 2055,
+        "ipfix_port": 4739,
+        "observation_domain_id": 1,
+        "exporter_identity": "10.0.0.1",
+        "template_id": 256,
+        "template_refresh_policy": "EVERY_BURST",
+        "rate_limit_pps": 100,
+        "packet_cap": 10000,
+        "collector_enabled": True,
+        "splunk_index": "idx_network_ops",
+        "splunk_sourcetype": "netflow:collector",
+        "allow_public_export": False,
+        "goflow_metrics_port": 8080,
+        "forwarder_status_port": 8082
+    }
+
+    # Environment variables overlay (NETSPOUT_*)
+    env_mappings = {
+        "NETSPOUT_FLOW_PROTOCOL": ("protocol", str),
+        "NETSPOUT_COLLECTOR_HOST": ("collector_host", str),
+        "NETSPOUT_NETFLOW_PORT": ("netflow_port", int),
+        "NETSPOUT_IPFIX_PORT": ("ipfix_port", int),
+        "NETSPOUT_OBSERVATION_DOMAIN_ID": ("observation_domain_id", int),
+        "NETSPOUT_EXPORTER_IP": ("exporter_identity", str),
+        "NETSPOUT_TEMPLATE_ID": ("template_id", int),
+        "NETSPOUT_TEMPLATE_REFRESH_POLICY": ("template_refresh_policy", str),
+        "NETSPOUT_RATE_LIMIT_PPS": ("rate_limit_pps", int),
+        "NETSPOUT_PACKET_CAP": ("packet_cap", int),
+        "NETSPOUT_COLLECTOR_ENABLED": ("collector_enabled", lambda v: v.lower() in ("1", "true", "yes")),
+        "NETSPOUT_SPLUNK_INDEX": ("splunk_index", str),
+        "NETSPOUT_SPLUNK_SOURCETYPE": ("splunk_sourcetype", str),
+        "NETSPOUT_ALLOW_PUBLIC_EXPORT": ("allow_public_export", lambda v: v.lower() in ("1", "true", "yes")),
+        "NETSPOUT_GOFLOW_METRICS_PORT": ("goflow_metrics_port", int),
+        "NETSPOUT_FORWARDER_STATUS_PORT": ("forwarder_status_port", int),
+    }
+
+    for env_key, (cfg_key, parser) in env_mappings.items():
+        if env_key in env:
+            try:
+                cfg_data[cfg_key] = parser(env[env_key])
+            except Exception:
+                pass
+
+    # Explicit configuration overlay (takes highest precedence)
+    if explicit_config:
+        explicit_dict = explicit_config.dict() if hasattr(explicit_config, "dict") else dict(explicit_config)
+        for k, v in explicit_dict.items():
+            if v is not None:
+                cfg_data[k] = v
+
+    return NativeFlowConfig(**cfg_data)
+
 
 
 

@@ -1089,6 +1089,47 @@ def run_scenario_contract(
     return manifest.dict() if hasattr(manifest, "dict") else manifest
 
 
+# =========================================================================
+# Native Flow Subsystem Endpoints (Gate 11D Productization)
+# =========================================================================
+@app.get("/api/native-flow/health")
+def get_native_flow_health():
+    from app.collector_evidence import CollectorEvidenceAdapter
+    adapter = CollectorEvidenceAdapter()
+    detailed = adapter.get_detailed_health()
+    return detailed.dict() if hasattr(detailed, "dict") else detailed
+
+
+@app.get("/api/native-flow/config")
+def get_native_flow_config():
+    from app.models import resolve_native_flow_config
+    cfg = resolve_native_flow_config()
+    return cfg.dict() if hasattr(cfg, "dict") else cfg
+
+
+@app.post("/api/native-flow/preflight")
+def post_native_flow_preflight(payload: Optional[Dict[str, Any]] = None):
+    from app.collector_evidence import CollectorEvidenceAdapter
+    from app.models import resolve_native_flow_config
+    cfg = resolve_native_flow_config(explicit_config=payload)
+    adapter = CollectorEvidenceAdapter()
+    return adapter.run_preflight_check(config=cfg)
+
+
+@app.get("/api/native-flow/diagnostics")
+def get_native_flow_diagnostics():
+    from app.collector_evidence import CollectorEvidenceAdapter
+    adapter = CollectorEvidenceAdapter()
+    health = adapter.get_detailed_health()
+    prom = adapter.get_prometheus_metrics()
+    return {
+        "status": health.state,
+        "health": health.dict() if hasattr(health, "dict") else health,
+        "prometheus_metrics": prom,
+        "recent_flows_count": len(adapter.get_recent_flows())
+    }
+
+
 # WebSocket Endpoint
 @app.websocket("/ws/logs")
 async def websocket_logs_endpoint(websocket: WebSocket):

@@ -193,9 +193,20 @@ index=idx_network_ops (sourcetype="cisco:asa" OR sourcetype="pan:traffic" OR sou
 
 ---
 
+## ⚡ Native Flow Telemetry (NetFlow v9 & IPFIX)
+
+In addition to direct HEC and Syslog modes, NetSpout supports **Native Flow Transport (Mode B)**, emitting wire-compliant RFC 3954 (NetFlow v9) and RFC 7011 (IPFIX) binary UDP datagrams to real network flow collectors (e.g. GoFlow2, Splunk Stream).
+
+- **Fidelity Badge:** `NATIVE TRANSPORT` (standards-compliant binary UDP serialization).
+- **Collector Stack:** Pre-packaged, unprivileged GoFlow2 container environment in `deploy/collector/`.
+- **Quickstart Guide:** For step-by-step setup, configuration, and troubleshooting instructions, see the [Native Flow Quickstart Guide](docs/guides/NATIVE_FLOW_QUICKSTART.md).
+
+---
+
 ## 👨‍💻 Creator & Contributors
 
 - **Creator and Maintainer**: [machowdhury@yahoo.com](mailto:machowdhury@yahoo.com)
 - **Contributor**: [machowdhury](https://github.com/machowdhury)
 - **Project Repository**: [https://github.com/machowdhury/NetSpout](https://github.com/machowdhury/NetSpout)
 - **License**: Apache-2.0
+

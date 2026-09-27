@@ -1,0 +1,66 @@
+{
+  "timestamp": 1790450352.353493,
+  "environment": "macOS / Docker Localhost Collector",
+  "results": [
+    {
+      "rate_pps": 10,
+      "record_count": 10,
+      "datagrams_sent": 1,
+      "datagrams_attempted": 1,
+      "generation_latency_sec": 8e-05,
+      "encoding_and_send_latency_sec": 0.00027,
+      "collector_decode_latency_sec": 0.11577,
+      "splunk_indexing_latency_sec": 1.31054,
+      "total_time_to_validated_evidence_sec": 1.4267,
+      "collector_observed": true,
+      "splunk_observed": true,
+      "packet_loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    {
+      "rate_pps": 100,
+      "record_count": 10,
+      "datagrams_sent": 1,
+      "datagrams_attempted": 1,
+      "generation_latency_sec": 5e-05,
+      "encoding_and_send_latency_sec": 0.00032,
+      "collector_decode_latency_sec": 0.06179,
+      "splunk_indexing_latency_sec": 0.96742,
+      "total_time_to_validated_evidence_sec": 1.0296,
+      "collector_observed": true,
+      "splunk_observed": true,
+      "packet_loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    {
+      "rate_pps": 500,
+      "record_count": 10,
+      "datagrams_sent": 1,
+      "datagrams_attempted": 1,
+      "generation_latency_sec": 3e-05,
+      "encoding_and_send_latency_sec": 0.00027,
+      "collector_decode_latency_sec": 0.05791,
+      "splunk_indexing_latency_sec": 1.66502,
+      "total_time_to_validated_evidence_sec": 1.7232,
+      "collector_observed": true,
+      "splunk_observed": true,
+      "packet_loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    {
+      "rate_pps": 1000,
+      "record_count": 10,
+      "datagrams_sent": 1,
+      "datagrams_attempted": 1,
+      "generation_latency_sec": 6e-05,
+      "encoding_and_send_latency_sec": 0.00023,
+      "collector_decode_latency_sec": 0.11548,
+      "splunk_indexing_latency_sec": 1.94443,
+      "total_time_to_validated_evidence_sec": 2.0602,
+      "collector_observed": true,
+      "splunk_observed": true,
+      "packet_loss_pct": 0.0,
+      "decode_errors": 0
+    }
+  ]
+}

@@ -40,11 +40,13 @@ class NativeFlowTransport:
         rate_pps: int = 100,
         max_packets_per_run: int = 10000,
         allow_privileged_ports: bool = False,
+        template_refresh_policy: str = "EVERY_BURST",
         test_mode: bool = False
     ):
         self.destination_host = destination_host
         self.destination_port = destination_port
         self.protocol = protocol.upper()
+        self.template_refresh_policy = template_refresh_policy.upper()
         self.test_mode = test_mode
         self.allow_privileged_ports = allow_privileged_ports
 
@@ -58,6 +60,23 @@ class NativeFlowTransport:
         self.rate_limiter = TokenBucketRateLimiter(
             rate_pps=rate_pps,
             max_packets_per_run=max_packets_per_run
+        )
+
+    @classmethod
+    def from_config(cls, config: Any, test_mode: bool = False) -> "NativeFlowTransport":
+        """Factory constructor from NativeFlowConfig model."""
+        protocol_str = getattr(config.protocol, "value", str(config.protocol)).upper()
+        port = config.netflow_port if protocol_str == "NETFLOW_V9" else config.ipfix_port
+        policy_str = getattr(config.template_refresh_policy, "value", str(config.template_refresh_policy))
+        return cls(
+            destination_host=config.collector_host,
+            destination_port=port,
+            protocol=protocol_str,
+            rate_pps=config.rate_limit_pps,
+            max_packets_per_run=config.packet_cap,
+            allow_privileged_ports=False,
+            template_refresh_policy=policy_str,
+            test_mode=test_mode
         )
 
     def test_connectivity(self) -> Tuple[bool, str]:
@@ -92,7 +111,7 @@ class NativeFlowTransport:
             records_received=len(records)
         )
 
-        include_template = force_template or session.should_send_template()
+        include_template = force_template or session.should_send_template(policy=self.template_refresh_policy)
         seq_start = session.sequence_number
         result.sequence_start = seq_start
 

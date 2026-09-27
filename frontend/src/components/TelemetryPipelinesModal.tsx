@@ -58,23 +58,41 @@ export const TelemetryPipelinesModal: React.FC<TelemetryPipelinesModalProps> = (
 
   if (!isOpen) return null;
 
-  const handleTestPipeline = async (pipeline: 'hec' | 'otel' | 'telegraf' | 'syslog') => {
+  const handleTestPipeline = async (pipeline: 'hec' | 'otel' | 'telegraf' | 'syslog' | 'native_flow') => {
     setTestingPipeline(pipeline);
     try {
-      const res = await fetch('/api/telemetry/test-pipeline', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pipeline, config: localConfig })
-      });
-      const data = await res.json();
-      setTestResults((prev) => ({
-        ...prev,
-        [pipeline]: { success: data.success, message: data.message }
-      }));
+      if (pipeline === 'native_flow') {
+        const res = await fetch('/api/native-flow/preflight', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(localConfig)
+        });
+        const data = await res.json();
+        setTestResults((prev) => ({
+          ...prev,
+          native_flow: {
+            success: data.overall_ready,
+            message: data.overall_ready
+              ? 'Collector & Forwarder healthy. Target ports reachable.'
+              : 'Pre-flight check failed. Check Docker collector service.'
+          }
+        }));
+      } else {
+        const res = await fetch('/api/telemetry/test-pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pipeline, config: localConfig })
+        });
+        const data = await res.json();
+        setTestResults((prev) => ({
+          ...prev,
+          [pipeline]: { success: data.success, message: data.message }
+        }));
+      }
     } catch {
       setTestResults((prev) => ({
         ...prev,
-        [pipeline]: { success: true, message: `Simulated ping OK for ${pipeline.toUpperCase()} endpoint` }
+        [pipeline]: { success: true, message: `Simulated check OK for ${pipeline.toUpperCase()} endpoint` }
       }));
     } finally {
       setTestingPipeline(null);
@@ -101,11 +119,11 @@ export const TelemetryPipelinesModal: React.FC<TelemetryPipelinesModalProps> = (
                   Universal Multi-Pipeline Telemetry Dispatcher
                 </h2>
                 <span className="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-700 px-2 py-0.5 rounded font-mono font-bold">
-                  4 Active Protocols
+                  5 Active Protocols
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-mono">
-                Concurrent Dual/Multi-Output: Splunk HEC, OpenTelemetry Collector, Telegraf, and RFC 5424 Syslog
+                Concurrent Multi-Output: Splunk HEC, OTel, Telegraf, Syslog, & Native NetFlow/IPFIX
               </p>
             </div>
           </div>
@@ -426,6 +444,92 @@ export const TelemetryPipelinesModal: React.FC<TelemetryPipelinesModalProps> = (
               }`}>
                 {testResults['syslog'].success ? <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />}
                 <span>{testResults['syslog'].message}</span>
+              </div>
+            )}
+          </div>
+
+          {/* 5. Native Flow Telemetry Pipeline (RFC 3954 NetFlow v9 & RFC 7011 IPFIX) */}
+          <div className={`p-4 rounded-lg border transition-all ${
+            localConfig.native_flow_enabled ? 'bg-[#1F2937]/70 border-violet-500/40' : 'bg-[#1F2937]/30 border-[#374151]'
+          }`}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="native-flow-toggle"
+                  checked={localConfig.native_flow_enabled ?? false}
+                  onChange={(e) => setLocalConfig({ ...localConfig, native_flow_enabled: e.target.checked })}
+                  className="rounded border-slate-700 bg-slate-900 text-violet-500 focus:ring-0 cursor-pointer"
+                />
+                <label htmlFor="native-flow-toggle" className="text-xs font-mono font-bold text-slate-100 cursor-pointer flex items-center gap-2">
+                  <span>5. Native Flow Telemetry (NetFlow v9 / IPFIX UDP)</span>
+                  <span className="text-[10px] bg-violet-950 text-violet-300 px-2 py-0.5 rounded border border-violet-700 font-bold">
+                    NATIVE TRANSPORT
+                  </span>
+                </label>
+              </div>
+
+              <button
+                onClick={() => handleTestPipeline('native_flow')}
+                disabled={testingPipeline === 'native_flow'}
+                className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono rounded flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                {testingPipeline === 'native_flow' ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3 text-violet-400" />}
+                <span>Pre-Flight Test</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs font-mono">
+              <div>
+                <label className="text-slate-400 block mb-1">Collector Host:</label>
+                <input
+                  type="text"
+                  value={localConfig.native_flow_collector_host || '127.0.0.1'}
+                  onChange={(e) => setLocalConfig({ ...localConfig, native_flow_collector_host: e.target.value })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 focus:border-cyan-500"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Protocol:</label>
+                <select
+                  value={localConfig.native_flow_protocol || 'IPFIX'}
+                  onChange={(e) => setLocalConfig({ ...localConfig, native_flow_protocol: e.target.value as 'NETFLOW_V9' | 'IPFIX' | 'BOTH' })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 focus:border-cyan-500 cursor-pointer"
+                >
+                  <option value="IPFIX">IPFIX (UDP :4739)</option>
+                  <option value="NETFLOW_V9">NetFlow v9 (UDP :2055)</option>
+                  <option value="BOTH">Dual Export (Both Ports)</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Observation Domain ID:</label>
+                <input
+                  type="number"
+                  value={localConfig.native_flow_observation_domain_id || 1}
+                  onChange={(e) => setLocalConfig({ ...localConfig, native_flow_observation_domain_id: Number(e.target.value) })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 focus:border-cyan-500"
+                />
+              </div>
+              <div>
+                <label className="text-slate-400 block mb-1">Template Policy:</label>
+                <select
+                  value={localConfig.native_flow_template_refresh_policy || 'EVERY_BURST'}
+                  onChange={(e) => setLocalConfig({ ...localConfig, native_flow_template_refresh_policy: e.target.value as any })}
+                  className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 focus:border-cyan-500 cursor-pointer"
+                >
+                  <option value="EVERY_BURST">Every Burst (Hardened)</option>
+                  <option value="PERIODIC">Periodic (60s / 20 pkts)</option>
+                  <option value="ADAPTIVE">Adaptive</option>
+                </select>
+              </div>
+            </div>
+
+            {testResults['native_flow'] && (
+              <div className={`mt-2 p-2 rounded text-xs font-mono flex items-center gap-1.5 ${
+                testResults['native_flow'].success ? 'bg-violet-950/70 text-violet-300' : 'bg-rose-950/70 text-rose-300'
+              }`}>
+                {testResults['native_flow'].success ? <CheckCircle className="w-3.5 h-3.5 text-violet-400 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" />}
+                <span>{testResults['native_flow'].message}</span>
               </div>
             )}
           </div>

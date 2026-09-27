@@ -42,8 +42,22 @@ class CompanionManifestBuilder:
         collector_sourcetype: str = "stream:netflow"
     ) -> CompanionControlManifest:
         """
-        Creates a structured CompanionControlManifest with a pre-constructed SPL search query.
+        Creates a structured CompanionControlManifest with pre-constructed copyable SPL queries.
         """
+        raw_spl = (
+            f'search index=idx_network_ops sourcetype=netflow:collector '
+            f'| spath '
+            f'| search (ObservationDomainID={observation_domain_id} OR observation_domain_id={observation_domain_id} OR ObservationDomainId={observation_domain_id})'
+        )
+        table_spl = (
+            f'{raw_spl} '
+            f'| table _time SrcAddr DstAddr SrcPort DstPort Proto Bytes Packets InIf OutIf'
+        )
+        stats_spl = (
+            f'{raw_spl} '
+            f'| stats count as total_flows sum(Bytes) as total_bytes sum(Packets) as total_packets by SrcAddr DstAddr'
+        )
+
         spl_query = (
             f'index=* sourcetype="{collector_sourcetype}" '
             f'earliest={int(start_time_epoch_ms / 1000) - 10} '
@@ -66,7 +80,11 @@ class CompanionManifestBuilder:
             bytes_sent=bytes_sent,
             start_time_epoch_ms=start_time_epoch_ms,
             end_time_epoch_ms=end_time_epoch_ms,
-            splunk_suggested_spl=spl_query
+            fidelity_badge="NATIVE TRANSPORT",
+            splunk_suggested_spl=spl_query,
+            splunk_raw_events_spl=raw_spl,
+            splunk_stats_spl=stats_spl,
+            pipeline_stage="SENT"
         )
 
     @staticmethod

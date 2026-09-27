@@ -141,6 +141,17 @@ export interface TelemetryTransportConfig {
   syslog_protocol: 'udp' | 'tcp';
   syslog_facility: number;
   syslog_format: 'rfc5424' | 'rfc3164';
+
+  // 5. Native Flow Pipeline (NetFlow v9 / IPFIX UDP)
+  native_flow_enabled?: boolean;
+  native_flow_protocol?: 'NETFLOW_V9' | 'IPFIX' | 'BOTH';
+  native_flow_collector_host?: string;
+  native_flow_netflow_port?: number;
+  native_flow_ipfix_port?: number;
+  native_flow_observation_domain_id?: number;
+  native_flow_rate_limit_pps?: number;
+  native_flow_packet_cap?: number;
+  native_flow_template_refresh_policy?: 'EVERY_BURST' | 'PERIODIC' | 'ADAPTIVE';
 }
 
 export interface Node {

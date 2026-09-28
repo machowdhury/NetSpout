@@ -937,10 +937,23 @@ class CompanionControlManifest(BaseModel):
     inform_retries: int = 0
     inform_timeouts: int = 0
     receiver_observed_count: int = 0
+    # Gate 12C Native SNMPv2c Polling Agent evidence fields
+    snmp_agent_bind_host: Optional[str] = None
+    snmp_agent_port: Optional[int] = None
+    exposed_oid_count: int = 0
+    mib_families: List[str] = Field(default_factory=list)
+    snmp_requests_received: int = 0
+    snmp_get_requests: int = 0
+    snmp_getnext_requests: int = 0
+    snmp_getbulk_requests: int = 0
+    snmp_responses_sent: int = 0
+    snmp_malformed_requests: int = 0
+    snmp_set_rejected: int = 0
+    simulated_device_ids: List[str] = Field(default_factory=list)
 
 
 # =========================================================================
-# Gate 12B: Native SNMPv2c Protocol & Transport Models
+# Gate 12B / 12C: Native SNMPv2c Protocol, Transport & Polling Models
 # =========================================================================
 
 SYSUPTIME_OID = "1.3.6.1.2.1.1.3.0"
@@ -993,6 +1006,12 @@ class SnmpEvidenceStage(str, Enum):
     SENT = "SENT"
     ACKNOWLEDGED = "ACKNOWLEDGED"
     RECEIVER_OBSERVED = "RECEIVER_OBSERVED"
+    REQUEST_RECEIVED = "REQUEST_RECEIVED"
+    REQUEST_DECODED = "REQUEST_DECODED"
+    RESPONSE_GENERATED = "RESPONSE_GENERATED"
+    RESPONSE_ENCODED = "RESPONSE_ENCODED"
+    RESPONSE_SENT = "RESPONSE_SENT"
+    MANAGER_OBSERVED = "MANAGER_OBSERVED"
     SPLUNK_OBSERVED = "SPLUNK_OBSERVED"
 
 
@@ -1285,6 +1304,58 @@ class SnmpTransportResult(BaseModel):
     elapsed_ms: float = 0.0
     errors: List[str] = Field(default_factory=list)
     error_types: List[str] = Field(default_factory=list)
+
+
+class SnmpOidEntry(BaseModel):
+    oid: str
+    symbolic_name: Optional[str] = None
+    asn1_type: str = "OctetString"
+    value: Any = None
+    fidelity: str = OidFidelityClass.STANDARD_VERIFIED.value
+    source_mib: str = "SNMPv2-MIB"
+    writable: bool = False
+    base_oid: Optional[str] = None
+    scenario_id: Optional[str] = None
+    device_id: Optional[str] = None
+    phase: Optional[str] = None
+
+    def to_varbind(self) -> SnmpVarBind:
+        return SnmpVarBind(
+            oid=self.oid,
+            asn1_type=self.asn1_type,
+            value=self.value,
+            mib_module=self.source_mib,
+            object_name=self.symbolic_name,
+            fidelity=self.fidelity,
+        )
+
+
+class SnmpPollingEvidence(BaseModel):
+    bind_host: str = "127.0.0.1"
+    bind_port: int = 1161
+    scenario_id: str = "service_provider_cisco"
+    phase: str = "BASELINE"
+    seed: int = 42
+    simulated_device_ids: List[str] = Field(default_factory=list)
+    exposed_oid_count: int = 0
+    mib_families: List[str] = Field(default_factory=list)
+    requests_received: int = 0
+    requests_decoded: int = 0
+    get_requests: int = 0
+    getnext_requests: int = 0
+    getbulk_requests: int = 0
+    set_requests_rejected: int = 0
+    unsupported_pdu_rejected: int = 0
+    malformed_requests: int = 0
+    bad_community_requests: int = 0
+    bad_version_requests: int = 0
+    rate_limited_requests: int = 0
+    responses_generated: int = 0
+    responses_encoded: int = 0
+    responses_sent: int = 0
+    manager_observed_responses: int = 0
+    evidence_stage: str = "IDLE"
+    stage_history: List[str] = Field(default_factory=list)
 
 
 def resolve_native_flow_config(

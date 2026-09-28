@@ -1,0 +1,1158 @@
+{
+  "scenario_id": "service_provider_cisco",
+  "device_id": "cisco-asr9k-pe1",
+  "phase": "BASELINE",
+  "seed": 42,
+  "total_oids": 127,
+  "mib_families": [
+    "BGP4-MIB",
+    "IF-MIB",
+    "IP-MIB",
+    "SNMPv2-MIB"
+  ],
+  "entries": [
+    {
+      "oid": "1.3.6.1.2.1.1.1.0",
+      "symbolic_name": "sysDescr.0",
+      "asn1_type": "OctetString",
+      "value": "Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.2.0",
+      "symbolic_name": "sysObjectID.0",
+      "asn1_type": "ObjectIdentifier",
+      "value": "1.3.6.1.4.1.9.1.1639",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.3.0",
+      "symbolic_name": "sysUpTime.0",
+      "asn1_type": "TimeTicks",
+      "value": 8639000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.4.0",
+      "symbolic_name": "sysContact.0",
+      "asn1_type": "OctetString",
+      "value": "noc-ops@netspout.lab",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.5.0",
+      "symbolic_name": "sysName.0",
+      "asn1_type": "OctetString",
+      "value": "cisco-asr9k-pe1.netspout.lab",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.6.0",
+      "symbolic_name": "sysLocation.0",
+      "asn1_type": "OctetString",
+      "value": "Ashburn-Core-POP1-Rack04",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.1.7.0",
+      "symbolic_name": "sysServices.0",
+      "asn1_type": "Integer32",
+      "value": 78,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "SNMPv2-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.1.0",
+      "symbolic_name": "ifNumber.0",
+      "asn1_type": "Integer32",
+      "value": 3,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.1.1",
+      "symbolic_name": "ifIndex.1",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.1.2",
+      "symbolic_name": "ifIndex.2",
+      "asn1_type": "Integer32",
+      "value": 2,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.1.3",
+      "symbolic_name": "ifIndex.3",
+      "asn1_type": "Integer32",
+      "value": 3,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.2.1",
+      "symbolic_name": "ifDescr.1",
+      "asn1_type": "OctetString",
+      "value": "HundredGigE0/0/0/1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.2.2",
+      "symbolic_name": "ifDescr.2",
+      "asn1_type": "OctetString",
+      "value": "HundredGigE0/0/0/2",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.2.3",
+      "symbolic_name": "ifDescr.3",
+      "asn1_type": "OctetString",
+      "value": "Loopback0",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.3.1",
+      "symbolic_name": "ifType.1",
+      "asn1_type": "Integer32",
+      "value": 6,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.3.2",
+      "symbolic_name": "ifType.2",
+      "asn1_type": "Integer32",
+      "value": 6,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.3.3",
+      "symbolic_name": "ifType.3",
+      "asn1_type": "Integer32",
+      "value": 24,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.4.1",
+      "symbolic_name": "ifMtu.1",
+      "asn1_type": "Integer32",
+      "value": 9192,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.4.2",
+      "symbolic_name": "ifMtu.2",
+      "asn1_type": "Integer32",
+      "value": 9192,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.4.3",
+      "symbolic_name": "ifMtu.3",
+      "asn1_type": "Integer32",
+      "value": 1500,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.5.1",
+      "symbolic_name": "ifSpeed.1",
+      "asn1_type": "Gauge32",
+      "value": 4294967295,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.5.2",
+      "symbolic_name": "ifSpeed.2",
+      "asn1_type": "Gauge32",
+      "value": 4294967295,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.5.3",
+      "symbolic_name": "ifSpeed.3",
+      "asn1_type": "Gauge32",
+      "value": 1000000000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.6.1",
+      "symbolic_name": "ifPhysAddress.1",
+      "asn1_type": "OctetString",
+      "value": "00:1e:be:01:00:01",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.6.2",
+      "symbolic_name": "ifPhysAddress.2",
+      "asn1_type": "OctetString",
+      "value": "00:1e:be:01:00:02",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.6.3",
+      "symbolic_name": "ifPhysAddress.3",
+      "asn1_type": "OctetString",
+      "value": "00:00:00:00:00:00",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.7.1",
+      "symbolic_name": "ifAdminStatus.1",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.7.2",
+      "symbolic_name": "ifAdminStatus.2",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.7.3",
+      "symbolic_name": "ifAdminStatus.3",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.8.1",
+      "symbolic_name": "ifOperStatus.1",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.8.2",
+      "symbolic_name": "ifOperStatus.2",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.8.3",
+      "symbolic_name": "ifOperStatus.3",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.9.1",
+      "symbolic_name": "ifLastChange.1",
+      "asn1_type": "TimeTicks",
+      "value": 12000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.9.2",
+      "symbolic_name": "ifLastChange.2",
+      "asn1_type": "TimeTicks",
+      "value": 12000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.9.3",
+      "symbolic_name": "ifLastChange.3",
+      "asn1_type": "TimeTicks",
+      "value": 1000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.10.1",
+      "symbolic_name": "ifInOctets.1",
+      "asn1_type": "Counter32",
+      "value": 125004200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.10.2",
+      "symbolic_name": "ifInOctets.2",
+      "asn1_type": "Counter32",
+      "value": 15004200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.10.3",
+      "symbolic_name": "ifInOctets.3",
+      "asn1_type": "Counter32",
+      "value": 454200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.11.1",
+      "symbolic_name": "ifInUcastPkts.1",
+      "asn1_type": "Counter32",
+      "value": 954200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.11.2",
+      "symbolic_name": "ifInUcastPkts.2",
+      "asn1_type": "Counter32",
+      "value": 124200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.11.3",
+      "symbolic_name": "ifInUcastPkts.3",
+      "asn1_type": "Counter32",
+      "value": 4242,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.13.1",
+      "symbolic_name": "ifInDiscards.1",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.13.2",
+      "symbolic_name": "ifInDiscards.2",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.13.3",
+      "symbolic_name": "ifInDiscards.3",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.14.1",
+      "symbolic_name": "ifInErrors.1",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.14.2",
+      "symbolic_name": "ifInErrors.2",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.14.3",
+      "symbolic_name": "ifInErrors.3",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.16.1",
+      "symbolic_name": "ifOutOctets.1",
+      "asn1_type": "Counter32",
+      "value": 118004200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.16.2",
+      "symbolic_name": "ifOutOctets.2",
+      "asn1_type": "Counter32",
+      "value": 14004200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.16.3",
+      "symbolic_name": "ifOutOctets.3",
+      "asn1_type": "Counter32",
+      "value": 454200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.17.1",
+      "symbolic_name": "ifOutUcastPkts.1",
+      "asn1_type": "Counter32",
+      "value": 914200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.17.2",
+      "symbolic_name": "ifOutUcastPkts.2",
+      "asn1_type": "Counter32",
+      "value": 119200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.17.3",
+      "symbolic_name": "ifOutUcastPkts.3",
+      "asn1_type": "Counter32",
+      "value": 4242,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.19.1",
+      "symbolic_name": "ifOutDiscards.1",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.19.2",
+      "symbolic_name": "ifOutDiscards.2",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.19.3",
+      "symbolic_name": "ifOutDiscards.3",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.20.1",
+      "symbolic_name": "ifOutErrors.1",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.20.2",
+      "symbolic_name": "ifOutErrors.2",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.2.2.1.20.3",
+      "symbolic_name": "ifOutErrors.3",
+      "asn1_type": "Counter32",
+      "value": 0,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.1.0",
+      "symbolic_name": "ipForwarding.0",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.1.0.0.0.0",
+      "symbolic_name": "ipRouteDest.0.0.0.0",
+      "asn1_type": "IpAddress",
+      "value": "0.0.0.0",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.2.0.0.0.0",
+      "symbolic_name": "ipRouteIfIndex.0.0.0.0",
+      "asn1_type": "Integer32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.3.0.0.0.0",
+      "symbolic_name": "ipRouteMetric1.0.0.0.0",
+      "asn1_type": "Integer32",
+      "value": 10,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.7.0.0.0.0",
+      "symbolic_name": "ipRouteNextHop.0.0.0.0",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.8.0.0.0.0",
+      "symbolic_name": "ipRouteType.0.0.0.0",
+      "asn1_type": "Integer32",
+      "value": 4,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.9.0.0.0.0",
+      "symbolic_name": "ipRouteProto.0.0.0.0",
+      "asn1_type": "Integer32",
+      "value": 14,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.4.21.1.10.0.0.0.0",
+      "symbolic_name": "ipRouteAge.0.0.0.0",
+      "asn1_type": "Integer32",
+      "value": 86270,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IP-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.1.0",
+      "symbolic_name": "bgpVersion.0",
+      "asn1_type": "OctetString",
+      "value": "10",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.2.0",
+      "symbolic_name": "bgpLocalAs.0",
+      "asn1_type": "Integer32",
+      "value": 65001,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.1.198.51.100.1",
+      "symbolic_name": "bgpPeerIdentifier.198.51.100.1",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.1.198.51.100.2",
+      "symbolic_name": "bgpPeerIdentifier.198.51.100.2",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.2",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.2.198.51.100.1",
+      "symbolic_name": "bgpPeerState.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 6,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.2.198.51.100.2",
+      "symbolic_name": "bgpPeerState.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 6,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.3.198.51.100.1",
+      "symbolic_name": "bgpPeerAdminStatus.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 2,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.3.198.51.100.2",
+      "symbolic_name": "bgpPeerAdminStatus.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 2,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.4.198.51.100.1",
+      "symbolic_name": "bgpPeerNegotiatedVersion.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 4,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.4.198.51.100.2",
+      "symbolic_name": "bgpPeerNegotiatedVersion.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 4,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.5.198.51.100.1",
+      "symbolic_name": "bgpPeerLocalAddr.198.51.100.1",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.0",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.5.198.51.100.2",
+      "symbolic_name": "bgpPeerLocalAddr.198.51.100.2",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.4",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.6.198.51.100.1",
+      "symbolic_name": "bgpPeerLocalPort.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 52179,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.6.198.51.100.2",
+      "symbolic_name": "bgpPeerLocalPort.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 52180,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.7.198.51.100.1",
+      "symbolic_name": "bgpPeerRemoteAddr.198.51.100.1",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.7.198.51.100.2",
+      "symbolic_name": "bgpPeerRemoteAddr.198.51.100.2",
+      "asn1_type": "IpAddress",
+      "value": "198.51.100.2",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.8.198.51.100.1",
+      "symbolic_name": "bgpPeerRemotePort.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 179,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.8.198.51.100.2",
+      "symbolic_name": "bgpPeerRemotePort.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 179,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.9.198.51.100.1",
+      "symbolic_name": "bgpPeerRemoteAs.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 65002,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.9.198.51.100.2",
+      "symbolic_name": "bgpPeerRemoteAs.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 65003,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.10.198.51.100.1",
+      "symbolic_name": "bgpPeerInUpdates.198.51.100.1",
+      "asn1_type": "Counter32",
+      "value": 1462,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.10.198.51.100.2",
+      "symbolic_name": "bgpPeerInUpdates.198.51.100.2",
+      "asn1_type": "Counter32",
+      "value": 652,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.11.198.51.100.1",
+      "symbolic_name": "bgpPeerOutUpdates.198.51.100.1",
+      "asn1_type": "Counter32",
+      "value": 1422,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.11.198.51.100.2",
+      "symbolic_name": "bgpPeerOutUpdates.198.51.100.2",
+      "asn1_type": "Counter32",
+      "value": 622,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.12.198.51.100.1",
+      "symbolic_name": "bgpPeerInTotalMessages.198.51.100.1",
+      "asn1_type": "Counter32",
+      "value": 2862,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.12.198.51.100.2",
+      "symbolic_name": "bgpPeerInTotalMessages.198.51.100.2",
+      "asn1_type": "Counter32",
+      "value": 2052,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.13.198.51.100.1",
+      "symbolic_name": "bgpPeerOutTotalMessages.198.51.100.1",
+      "asn1_type": "Counter32",
+      "value": 2822,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.13.198.51.100.2",
+      "symbolic_name": "bgpPeerOutTotalMessages.198.51.100.2",
+      "asn1_type": "Counter32",
+      "value": 2022,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.14.198.51.100.1",
+      "symbolic_name": "bgpPeerLastError.198.51.100.1",
+      "asn1_type": "OctetString",
+      "value": "0000",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.14.198.51.100.2",
+      "symbolic_name": "bgpPeerLastError.198.51.100.2",
+      "asn1_type": "OctetString",
+      "value": "0000",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.15.198.51.100.1",
+      "symbolic_name": "bgpPeerFsmEstablishedTransitions.198.51.100.1",
+      "asn1_type": "Counter32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.15.198.51.100.2",
+      "symbolic_name": "bgpPeerFsmEstablishedTransitions.198.51.100.2",
+      "asn1_type": "Counter32",
+      "value": 1,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.16.198.51.100.1",
+      "symbolic_name": "bgpPeerFsmEstablishedTime.198.51.100.1",
+      "asn1_type": "Gauge32",
+      "value": 86270,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.16.198.51.100.2",
+      "symbolic_name": "bgpPeerFsmEstablishedTime.198.51.100.2",
+      "asn1_type": "Gauge32",
+      "value": 86270,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.18.198.51.100.1",
+      "symbolic_name": "bgpPeerHoldTime.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 180,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.18.198.51.100.2",
+      "symbolic_name": "bgpPeerHoldTime.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 180,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.19.198.51.100.1",
+      "symbolic_name": "bgpPeerKeepAlive.198.51.100.1",
+      "asn1_type": "Integer32",
+      "value": 60,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.3.1.19.198.51.100.2",
+      "symbolic_name": "bgpPeerKeepAlive.198.51.100.2",
+      "asn1_type": "Integer32",
+      "value": 60,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.15.4.0",
+      "symbolic_name": "bgpIdentifier.0",
+      "asn1_type": "IpAddress",
+      "value": "10.254.0.1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "BGP4-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.1.1",
+      "symbolic_name": "ifName.1",
+      "asn1_type": "OctetString",
+      "value": "Hu0/0/0/1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.1.2",
+      "symbolic_name": "ifName.2",
+      "asn1_type": "OctetString",
+      "value": "Hu0/0/0/2",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.1.3",
+      "symbolic_name": "ifName.3",
+      "asn1_type": "OctetString",
+      "value": "Lo0",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.6.1",
+      "symbolic_name": "ifHCInOctets.1",
+      "asn1_type": "Counter64",
+      "value": 98504200000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.6.2",
+      "symbolic_name": "ifHCInOctets.2",
+      "asn1_type": "Counter64",
+      "value": 4200420000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.6.3",
+      "symbolic_name": "ifHCInOctets.3",
+      "asn1_type": "Counter64",
+      "value": 454200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.7.1",
+      "symbolic_name": "ifHCInUcastPkts.1",
+      "asn1_type": "Counter64",
+      "value": 9542000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.7.2",
+      "symbolic_name": "ifHCInUcastPkts.2",
+      "asn1_type": "Counter64",
+      "value": 1242000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.7.3",
+      "symbolic_name": "ifHCInUcastPkts.3",
+      "asn1_type": "Counter64",
+      "value": 4242,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.10.1",
+      "symbolic_name": "ifHCOutOctets.1",
+      "asn1_type": "Counter64",
+      "value": 91204200000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.10.2",
+      "symbolic_name": "ifHCOutOctets.2",
+      "asn1_type": "Counter64",
+      "value": 4100420000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.10.3",
+      "symbolic_name": "ifHCOutOctets.3",
+      "asn1_type": "Counter64",
+      "value": 454200,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.11.1",
+      "symbolic_name": "ifHCOutUcastPkts.1",
+      "asn1_type": "Counter64",
+      "value": 9142000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.11.2",
+      "symbolic_name": "ifHCOutUcastPkts.2",
+      "asn1_type": "Counter64",
+      "value": 1192000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.11.3",
+      "symbolic_name": "ifHCOutUcastPkts.3",
+      "asn1_type": "Counter64",
+      "value": 4242,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.15.1",
+      "symbolic_name": "ifHighSpeed.1",
+      "asn1_type": "Gauge32",
+      "value": 100000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.15.2",
+      "symbolic_name": "ifHighSpeed.2",
+      "asn1_type": "Gauge32",
+      "value": 100000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.15.3",
+      "symbolic_name": "ifHighSpeed.3",
+      "asn1_type": "Gauge32",
+      "value": 1000,
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.18.1",
+      "symbolic_name": "ifAlias.1",
+      "asn1_type": "OctetString",
+      "value": "Primary-Core-Transit-AS65002",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.18.2",
+      "symbolic_name": "ifAlias.2",
+      "asn1_type": "OctetString",
+      "value": "Backup-Core-Transit-AS65003",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    },
+    {
+      "oid": "1.3.6.1.2.1.31.1.1.1.18.3",
+      "symbolic_name": "ifAlias.3",
+      "asn1_type": "OctetString",
+      "value": "BGP-Router-ID-10.254.0.1",
+      "fidelity": "STANDARD_VERIFIED",
+      "source_mib": "IF-MIB",
+      "writable": false
+    }
+  ]
+}

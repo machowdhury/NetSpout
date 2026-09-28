@@ -1,0 +1,24 @@
+{
+  "agent_offline": {
+    "command": "snmpget -v2c -t 1 -r 0 -c netspout-lab -On 127.0.0.1:1161 1.3.6.1.2.1.1.1.0",
+    "exit_code": 1,
+    "stderr": "Timeout: No Response from 127.0.0.1:1161.",
+    "false_manager_observed": false,
+    "false_receiver_observed": false,
+    "false_splunk_observed": false,
+    "verdict": "PASS"
+  },
+  "unknown_oid": {
+    "output": ".1.3.6.1.2.1.999.1.0 = No Such Object available on this agent at this OID\n.1.3.6.1.2.1.2.2.1.8.999 = No Such Instance currently exists at this OID",
+    "verdict": "PASS"
+  },
+  "end_of_mib": {
+    "output": ".1.3.6.1.2.1.31.1.1.1.18.3 = No more variables left in this MIB View (It is past the end of the MIB tree)",
+    "verdict": "PASS"
+  },
+  "oversized_getbulk": {
+    "requested_max_repetitions": 65535,
+    "returned_varbinds": 60,
+    "verdict": "PASS"
+  }
+}

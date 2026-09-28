@@ -157,6 +157,80 @@ class CompanionManifestBuilder:
         )
 
     @staticmethod
+    def build_snmp_polling_manifest(
+        run_id: str,
+        scenario_id: str,
+        bind_host: str,
+        bind_port: int,
+        exporter_ip: str,
+        simulated_device_ids: List[str],
+        exposed_oid_count: int,
+        mib_families: List[str],
+        requests_received: int,
+        get_requests: int,
+        getnext_requests: int,
+        getbulk_requests: int,
+        responses_sent: int,
+        malformed_requests: int,
+        set_rejected: int,
+        evidence_stage: str,
+        start_time_epoch_ms: int,
+        end_time_epoch_ms: int,
+    ) -> CompanionControlManifest:
+        """
+        Constructs an out-of-band CompanionControlManifest for Native SNMPv2c Polling Agent runs
+        without injecting any proprietary NetSpout correlation OIDs into the MIB tree.
+        """
+        dev_filter = (
+            " OR ".join(f'device_id="{d}"' for d in simulated_device_ids)
+            if simulated_device_ids
+            else 'device_id="*"'
+        )
+        raw_spl = (
+            f'search index=idx_network_ops sourcetype="netspout:control:manifest" run_id="{run_id}" '
+            f'| spath | search ({dev_filter})'
+        )
+        stats_spl = (
+            f'{raw_spl} '
+            f'| table _time run_id scenario_id snmp_agent_bind_host snmp_agent_port exposed_oid_count '
+            f'snmp_get_requests snmp_getnext_requests snmp_getbulk_requests snmp_responses_sent pipeline_stage'
+        )
+        return CompanionControlManifest(
+            run_id=run_id,
+            scenario_id=scenario_id,
+            protocol="SNMPV2C_POLL",
+            destination_host=bind_host,
+            destination_port=bind_port,
+            observation_domain_id=1,
+            exporter_ip=exporter_ip,
+            template_ids=[],
+            records_generated=exposed_oid_count,
+            records_encoded=responses_sent,
+            datagrams_sent=responses_sent,
+            bytes_sent=0,
+            start_time_epoch_ms=start_time_epoch_ms,
+            end_time_epoch_ms=end_time_epoch_ms,
+            fidelity_badge="NATIVE TRANSPORT",
+            splunk_suggested_spl=raw_spl,
+            splunk_raw_events_spl=raw_spl,
+            splunk_stats_spl=stats_spl,
+            pipeline_stage=evidence_stage,
+            pdu_mode="POLL",
+            snmp_agent_bind_host=bind_host,
+            snmp_agent_port=bind_port,
+            exposed_oid_count=exposed_oid_count,
+            mib_families=list(mib_families),
+            snmp_requests_received=requests_received,
+            snmp_get_requests=get_requests,
+            snmp_getnext_requests=getnext_requests,
+            snmp_getbulk_requests=getbulk_requests,
+            snmp_responses_sent=responses_sent,
+            snmp_malformed_requests=malformed_requests,
+            snmp_set_rejected=set_rejected,
+            simulated_device_ids=list(simulated_device_ids),
+        )
+
+    @staticmethod
     def to_hec_event(manifest: CompanionControlManifest) -> Dict[str, Any]:
         """
         Formats the manifest as a Splunk HEC event for index idx_network_ops.

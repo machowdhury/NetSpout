@@ -1,0 +1,567 @@
+=== GET PCAP (165 lines, malformed=0) ===
+Frame 1: Packet, 155 bytes on wire (1240 bits), 155 bytes captured (1240 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.193466000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.193466000 UTC
+    Epoch Arrival Time: 1790621039.193466000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time since reference or first frame: 0.000000000 seconds]
+    Frame Number: 1
+    Frame Length: 155 bytes (1240 bits)
+    Capture Length: 155 bytes (1240 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 141
+    Identification: 0x03e8 (1000)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x3876 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 52417, Dst Port: 161
+    Source Port: 52417
+    Destination Port: 161
+    Length: 121
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 1]
+    [Timestamps]
+        [Time since first frame: 0.000000000 seconds]
+        [Time since previous frame: 0.000000000 seconds]
+    UDP payload (113 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-request (0)
+        get-request
+            request-id: 497644049
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 5 items
+                1.3.6.1.2.1.1.1.0: Value (Null)
+                    Object Name: 1.3.6.1.2.1.1.1.0 (iso.3.6.1.2.1.1.1.0)
+                    Value (Null)
+                1.3.6.1.2.1.1.2.0: Value (Null)
+                    Object Name: 1.3.6.1.2.1.1.2.0 (iso.3.6.1.2.1.1.2.0)
+                    Value (Null)
+                1.3.6.1.2.1.1.3.0: Value (Null)
+                    Object Name: 1.3.6.1.2.1.1.3.0 (iso.3.6.1.2.1.1.3.0)
+                    Value (Null)
+                1.3.6.1.2.1.2.2.1.8.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1.2.2.1.8.1 (iso.3.6.1.2.1.2.2.1.8.1)
+                    Value (Null)
+                1.3.6.1.2.1.15.3.1.2.198.51.100.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1.15.3.1.2.198.51.100.1 (iso.3.6.1.2.1.15.3.1.2.198.51.100.1)
+                    Value (Null)
+
+Frame 2: Packet, 244 bytes on wire (1952 bits), 244 bytes captured (1952 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.193962000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.193962000 UTC
+    Epoch Arrival Time: 1790621039.193962000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 496.000 microseconds]
+    [Time delta from previous displayed frame: 496.000 microseconds]
+    [Time since reference or first frame: 496.000 microseconds]
+    Frame Number: 2
+    Frame Length: 244 bytes (1952 bits)
+    Capture Length: 244 bytes (1952 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 230
+    Identification: 0x03e9 (1001)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x381c [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 161, Dst Port: 52417
+    Source Port: 161
+    Destination Port: 52417
+    Length: 210
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 2]
+    [Timestamps]
+        [Time since first frame: 496.000 microseconds]
+        [Time since previous frame: 496.000 microseconds]
+    UDP payload (202 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+
+=== GETNEXT PCAP (152 lines, malformed=0) ===
+Frame 1: Packet, 127 bytes on wire (1016 bits), 127 bytes captured (1016 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.214509000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.214509000 UTC
+    Epoch Arrival Time: 1790621039.214509000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time since reference or first frame: 0.000000000 seconds]
+    Frame Number: 1
+    Frame Length: 127 bytes (1016 bits)
+    Capture Length: 127 bytes (1016 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 113
+    Identification: 0x03e8 (1000)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x3892 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 51659, Dst Port: 161
+    Source Port: 51659
+    Destination Port: 161
+    Length: 93
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 1]
+    [Timestamps]
+        [Time since first frame: 0.000000000 seconds]
+        [Time since previous frame: 0.000000000 seconds]
+    UDP payload (85 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-next-request (1)
+        get-next-request
+            request-id: 535095289
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 3 items
+                1.3.6.1.2.1.1.1.0: Value (Null)
+                    Object Name: 1.3.6.1.2.1.1.1.0 (iso.3.6.1.2.1.1.1.0)
+                    Value (Null)
+                1.3.6.1.2.1.2.2.1.8.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1.2.2.1.8.1 (iso.3.6.1.2.1.2.2.1.8.1)
+                    Value (Null)
+                1.3.6.1.2.1.15.3.1.2.198.51.100.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1.15.3.1.2.198.51.100.1 (iso.3.6.1.2.1.15.3.1.2.198.51.100.1)
+                    Value (Null)
+
+Frame 2: Packet, 138 bytes on wire (1104 bits), 138 bytes captured (1104 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.215052000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.215052000 UTC
+    Epoch Arrival Time: 1790621039.215052000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 543.000 microseconds]
+    [Time delta from previous displayed frame: 543.000 microseconds]
+    [Time since reference or first frame: 543.000 microseconds]
+    Frame Number: 2
+    Frame Length: 138 bytes (1104 bits)
+    Capture Length: 138 bytes (1104 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 124
+    Identification: 0x03e9 (1001)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x3886 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 161, Dst Port: 51659
+    Source Port: 161
+    Destination Port: 51659
+    Length: 104
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 2]
+    [Timestamps]
+        [Time since first frame: 543.000 microseconds]
+        [Time since previous frame: 543.000 microseconds]
+    UDP payload (96 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-response (2)
+        get-response
+            request-id: 535095289
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 3 items
+
+=== GETBULK PCAP (1639 lines, malformed=0) ===
+Frame 1: Packet, 88 bytes on wire (704 bits), 88 bytes captured (704 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.236348000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.236348000 UTC
+    Epoch Arrival Time: 1790621039.236348000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time since reference or first frame: 0.000000000 seconds]
+    Frame Number: 1
+    Frame Length: 88 bytes (704 bits)
+    Capture Length: 88 bytes (704 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 74
+    Identification: 0x03e8 (1000)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x38b9 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 54063, Dst Port: 161
+    Source Port: 54063
+    Destination Port: 161
+    Length: 54
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 1]
+    [Timestamps]
+        [Time since first frame: 0.000000000 seconds]
+        [Time since previous frame: 0.000000000 seconds]
+    UDP payload (46 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: getBulkRequest (5)
+        getBulkRequest
+            request-id: 1141664288
+            non-repeaters: 0
+            max-repetitions: 15
+            variable-bindings: 1 item
+                1.3.6.1.2.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1 (iso.3.6.1.2.1)
+                    Value (Null)
+
+Frame 2: Packet, 514 bytes on wire (4112 bits), 514 bytes captured (4112 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.237324000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.237324000 UTC
+    Epoch Arrival Time: 1790621039.237324000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 976.000 microseconds]
+    [Time delta from previous displayed frame: 976.000 microseconds]
+    [Time since reference or first frame: 976.000 microseconds]
+    Frame Number: 2
+    Frame Length: 514 bytes (4112 bits)
+    Capture Length: 514 bytes (4112 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp:snmp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 500
+    Identification: 0x03e9 (1001)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x370e [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 161, Dst Port: 54063
+    Source Port: 161
+    Destination Port: 54063
+    Length: 480
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 2]
+    [Timestamps]
+        [Time since first frame: 976.000 microseconds]
+        [Time since previous frame: 976.000 microseconds]
+    UDP payload (472 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-response (2)
+        get-response
+            request-id: 1141664288
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 15 items
+                1.3.6.1.2.1.1.1.0: "Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]"
+                    Object Name: 1.3.6.1.2.1.1.1.0 (iso.3.6.1.2.1.1.1.0)
+                    Value (OctetString): "Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]"
+                        Variable-binding-string: Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]
+                1.3.6.1.2.1.1.2.0: 1.3.6.1.4.1.9.1.1639 (iso.3.6.1.4.1.9.1.1639)
+                    Object Name: 1.3.6.1.2.1.1.2.0 (iso.3.6.1.2.1.1.2.0)
+
+=== WALK PCAP (18180 lines, malformed=0) ===
+Frame 1: Packet, 88 bytes on wire (704 bits), 88 bytes captured (704 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.262995000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.262995000 UTC
+    Epoch Arrival Time: 1790621039.262995000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time since reference or first frame: 0.000000000 seconds]
+    Frame Number: 1
+    Frame Length: 88 bytes (704 bits)
+    Capture Length: 88 bytes (704 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 74
+    Identification: 0x03e8 (1000)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x38b9 [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 64733, Dst Port: 161
+    Source Port: 64733
+    Destination Port: 161
+    Length: 54
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 1]
+    [Timestamps]
+        [Time since first frame: 0.000000000 seconds]
+        [Time since previous frame: 0.000000000 seconds]
+    UDP payload (46 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-next-request (1)
+        get-next-request
+            request-id: 1862308744
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 1 item
+                1.3.6.1.2.1: Value (Null)
+                    Object Name: 1.3.6.1.2.1 (iso.3.6.1.2.1)
+                    Value (Null)
+
+Frame 2: Packet, 162 bytes on wire (1296 bits), 162 bytes captured (1296 bits)
+    Encapsulation type: Ethernet (1)
+    Arrival Time: Sep 28, 2026 14:43:59.263250000 EDT
+    UTC Arrival Time: Sep 28, 2026 18:43:59.263250000 UTC
+    Epoch Arrival Time: 1790621039.263250000
+    [Time shift for this packet: 0.000000000 seconds]
+    [Time delta from previous captured frame: 255.000 microseconds]
+    [Time delta from previous displayed frame: 255.000 microseconds]
+    [Time since reference or first frame: 255.000 microseconds]
+    Frame Number: 2
+    Frame Length: 162 bytes (1296 bits)
+    Capture Length: 162 bytes (1296 bits)
+    [Frame is marked: False]
+    [Frame is ignored: False]
+    [Protocols in frame: eth:ethertype:ip:udp:snmp:snmp]
+    Character encoding: ASCII (0)
+Ethernet II, Src: ICANNIANADep_00:53:01 (00:00:5e:00:53:01), Dst: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+    Destination: ICANNIANADep_00:53:02 (00:00:5e:00:53:02)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Source: ICANNIANADep_00:53:01 (00:00:5e:00:53:01)
+        .... ..0. .... .... .... .... = LG bit: Globally unique address (factory default)
+        .... ...0 .... .... .... .... = IG bit: Individual address (unicast)
+    Type: IPv4 (0x0800)
+    [Stream index: 0]
+Internet Protocol Version 4, Src: 127.0.0.1, Dst: 127.0.0.1
+    0100 .... = Version: 4
+    .... 0101 = Header Length: 20 bytes (5)
+    Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+        0000 00.. = Differentiated Services Codepoint: Default (0)
+        .... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+    Total Length: 148
+    Identification: 0x03e9 (1001)
+    010. .... = Flags: 0x2, Don't fragment
+        0... .... = Reserved bit: Not set
+        .1.. .... = Don't fragment: Set
+        ..0. .... = More fragments: Not set
+    ...0 0000 0000 0000 = Fragment Offset: 0
+    Time to Live: 64
+    Protocol: UDP (17)
+    Header Checksum: 0x386e [validation disabled]
+    [Header checksum status: Unverified]
+    Source Address: 127.0.0.1
+    Destination Address: 127.0.0.1
+    [Stream index: 0]
+User Datagram Protocol, Src Port: 161, Dst Port: 64733
+    Source Port: 161
+    Destination Port: 64733
+    Length: 128
+    Checksum: 0x0000 [zero-value ignored]
+        [Checksum Status: Not present]
+    [Stream index: 0]
+    [Stream Packet Number: 2]
+    [Timestamps]
+        [Time since first frame: 255.000 microseconds]
+        [Time since previous frame: 255.000 microseconds]
+    UDP payload (120 bytes)
+Simple Network Management Protocol
+    version: v2c (1)
+    community: netspout-lab
+    data: get-response (2)
+        get-response
+            request-id: 1862308744
+            error-status: noError (0)
+            error-index: 0
+            variable-bindings: 1 item
+                1.3.6.1.2.1.1.1.0: "Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]"
+                    Object Name: 1.3.6.1.2.1.1.1.0 (iso.3.6.1.2.1.1.1.0)
+                    Value (OctetString): "Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]"
+                        Variable-binding-string: Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]
+    [Response To: 1]
+    [Time: 255.000 microseconds]

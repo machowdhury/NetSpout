@@ -1,0 +1,10 @@
+{
+  "iterations_per_operation": 200,
+  "get_req_per_sec": 4604.1,
+  "getnext_req_per_sec": 7565.0,
+  "getbulk_req_per_sec": 1997.1,
+  "average_latency_ms": 0.283,
+  "p95_latency_ms": 0.516,
+  "peak_cpu_pct": 88.0,
+  "peak_memory_mb": 39.16
+}

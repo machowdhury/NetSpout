@@ -738,6 +738,18 @@ class SnmpBerDecoder:
                 error_index=error_index,
                 varbinds=varbinds,
             )
+        elif pdu_tag == SnmpPduType.GET_BULK_REQUEST.value:
+            return SnmpMessage(
+                version=version,
+                community=community,
+                pdu_type=pdu_tag,
+                request_id=request_id,
+                error_status=error_status,
+                error_index=error_index,
+                non_repeaters=error_status,
+                max_repetitions=error_index,
+                varbinds=varbinds,
+            )
         else:
             return SnmpMessage(
                 version=version,

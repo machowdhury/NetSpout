@@ -1,0 +1,5 @@
+Raw Events SPL:
+search index=idx_network_ops sourcetype=netflow:collector | spath | search (ObservationDomainID=1 OR observation_domain_id=1 OR ObservationDomainId=1)
+
+Aggregated Stats SPL:
+search index=idx_network_ops sourcetype=netflow:collector | spath | search (ObservationDomainID=1 OR observation_domain_id=1 OR ObservationDomainId=1) | stats count as total_flows sum(Bytes) as total_bytes sum(Packets) as total_packets by SrcAddr DstAddr

@@ -1,0 +1,7 @@
+{
+  "sent_udp": true,
+  "collector_state": "STOPPED",
+  "diagnosis": "Pipeline failure at stage 'STOPPED': Unspecified error",
+  "false_delivery_claims": 0,
+  "pass": true
+}

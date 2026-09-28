@@ -1,0 +1,22 @@
+{
+  "run_id": "NS-20260927-26f1b2c1",
+  "observation_domain_id": 1,
+  "exporter_identity": "10.200.0.3",
+  "template_id": 256,
+  "records_generated": 2,
+  "records_encoded": 2,
+  "packets_sent": 1,
+  "collector_observed": true,
+  "collector_records_decoded": 2,
+  "splunk_records_observed": 40,
+  "validation_result": "PASS",
+  "kpi_time_sec": 2.58,
+  "distinct_states": {
+    "GENERATED": true,
+    "ENCODED": true,
+    "SENT": true,
+    "COLLECTOR_OBSERVED": true,
+    "SPLUNK_OBSERVED": true,
+    "VALIDATED": true
+  }
+}

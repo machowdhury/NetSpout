@@ -15,38 +15,74 @@ import time
 import urllib.request
 from typing import Dict, Any, Optional
 
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+SRC_DIR = os.path.join(REPO_ROOT, "src")
+if SRC_DIR not in sys.path:
+    sys.path.insert(0, SRC_DIR)
+
 COMPOSE_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), "docker-compose.collector.yml"))
 
+DOCKER_SEARCH_LOCATIONS = [
+    "/usr/local/bin/docker",
+    "/opt/homebrew/bin/docker",
+    "/Applications/Docker.app/Contents/Resources/bin/docker",
+    os.path.expanduser("~/.docker/bin/docker"),
+]
 
-def find_docker_bin() -> str:
-    """Finds available docker binary across standard system paths."""
-    candidates = [
-        shutil.which("docker"),
-        os.path.expanduser("~/.docker/bin/docker"),
-        "/usr/local/bin/docker",
-        "/opt/homebrew/bin/docker",
-        "/Applications/Docker.app/Contents/Resources/bin/docker"
-    ]
-    for c in candidates:
+
+def find_docker_bin() -> Optional[str]:
+    """
+    Finds available docker binary across standard PATH first, then common macOS
+    Docker Desktop binary locations without hardcoding a user home directory.
+    """
+    which_docker = shutil.which("docker")
+    if which_docker and os.path.exists(which_docker) and os.access(which_docker, os.X_OK):
+        return which_docker
+
+    for c in DOCKER_SEARCH_LOCATIONS:
         if c and os.path.exists(c) and os.access(c, os.X_OK):
             return c
-    return "docker"
+    return None
 
 
 DOCKER_BIN = find_docker_bin()
 ENV = os.environ.copy()
-docker_dir = os.path.dirname(DOCKER_BIN)
-ENV["PATH"] = f"{docker_dir}:/usr/local/bin:/opt/homebrew/bin:{ENV.get('PATH', '')}"
+if DOCKER_BIN:
+    docker_dir = os.path.dirname(DOCKER_BIN)
+    ENV["PATH"] = f"{docker_dir}:/usr/local/bin:/opt/homebrew/bin:{ENV.get('PATH', '')}"
+else:
+    ENV["PATH"] = f"/usr/local/bin:/opt/homebrew/bin:{ENV.get('PATH', '')}"
+
+
+def ensure_docker_bin() -> Optional[str]:
+    """Returns discovered docker binary or prints an actionable error message."""
+    binary = find_docker_bin()
+    if not binary:
+        print(
+            "[FAIL] Docker executable not found in PATH or standard macOS locations "
+            "(/usr/local/bin/docker, /opt/homebrew/bin/docker, "
+            "/Applications/Docker.app/Contents/Resources/bin/docker, ~/.docker/bin/docker). "
+            "Please install Docker Desktop or add the docker binary directory to PATH."
+        )
+        return None
+    return binary
 
 
 def run_cmd(cmd: list) -> subprocess.CompletedProcess:
+    if cmd and cmd[0] in (DOCKER_BIN, "docker", None):
+        binary = ensure_docker_bin()
+        if not binary:
+            return subprocess.CompletedProcess(cmd, returncode=127, stdout="", stderr="Docker executable not found")
+        cmd = [binary] + list(cmd[1:])
     return subprocess.run(cmd, env=ENV, capture_output=True, text=True)
 
 
 def start_collector() -> bool:
+    if not ensure_docker_bin():
+        return False
     print(f"Starting NetSpout Native Collector stack...")
     print(f"Compose file: {COMPOSE_FILE}")
-    res = run_cmd([DOCKER_BIN, "compose", "-f", COMPOSE_FILE, "up", "-d", "--build"])
+    res = run_cmd([DOCKER_BIN or "docker", "compose", "-f", COMPOSE_FILE, "up", "-d", "--build"])
     if res.returncode != 0:
         print(f"[FAIL] Failed to start collector: {res.stderr}")
         return False
@@ -56,8 +92,10 @@ def start_collector() -> bool:
 
 
 def stop_collector() -> bool:
+    if not ensure_docker_bin():
+        return False
     print("Stopping NetSpout Native Collector stack...")
-    res = run_cmd([DOCKER_BIN, "compose", "-f", COMPOSE_FILE, "stop"])
+    res = run_cmd([DOCKER_BIN or "docker", "compose", "-f", COMPOSE_FILE, "stop"])
     if res.returncode == 0:
         print("[OK] Collector stack stopped.")
         return True

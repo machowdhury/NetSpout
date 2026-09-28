@@ -1,5 +1,5 @@
 {
-  "timestamp": 1790450561.021347,
+  "timestamp": 1790601446.043266,
   "collector": {
     "healthy": true,
     "goflow_metrics": true,
@@ -7,18 +7,18 @@
     "splunk_hec": true
   },
   "netflow_v9_e2e": {
-    "run_id": "NS-20260926-127a13ca",
+    "run_id": "NS-20260928-3711e54d",
     "records_generated": 2,
     "datagrams_sent": 1,
     "collector_observed": true,
     "collector_record": {
       "type": "NETFLOW_V9",
-      "time_received_ns": 1790450561063014797,
+      "time_received_ns": 1790601446073969669,
       "sequence_num": 0,
       "sampling_rate": 0,
       "sampler_address": "172.19.0.1",
-      "time_flow_start_ns": 1790450561999000000,
-      "time_flow_end_ns": 1790450565999000000,
+      "time_flow_start_ns": 1790601446998000000,
+      "time_flow_end_ns": 1790601450998000000,
       "bytes": 8420950,
       "packets": 6200,
       "src_addr": "10.200.0.1",
@@ -65,23 +65,23 @@
     },
     "splunk_observed_count": 2,
     "validation": "PASS",
-    "time_to_validated_evidence_sec": 6.441,
-    "collector_latency_ms": 1505.19,
-    "splunk_latency_ms": 4934.94
+    "time_to_validated_evidence_sec": 6.893,
+    "collector_latency_ms": 1509.77,
+    "splunk_latency_ms": 5381.46
   },
   "ipfix_e2e": {
-    "run_id": "NS-20260926-325744bb",
+    "run_id": "NS-20260928-857011b8",
     "records_generated": 2,
     "datagrams_sent": 1,
     "collector_observed": true,
     "collector_record": {
       "type": "IPFIX",
-      "time_received_ns": 1790450567506657092,
+      "time_received_ns": 1790601452968934214,
       "sequence_num": 0,
       "sampling_rate": 0,
       "sampler_address": "172.19.0.1",
-      "time_flow_start_ns": 1790450568506000000,
-      "time_flow_end_ns": 1790450572506000000,
+      "time_flow_start_ns": 1790601453968000000,
+      "time_flow_end_ns": 1790601457968000000,
       "bytes": 8420950,
       "packets": 6200,
       "src_addr": "10.200.0.1",
@@ -128,14 +128,14 @@
     },
     "splunk_observed_count": 2,
     "validation": "PASS",
-    "time_to_validated_evidence_sec": 6.775,
-    "collector_latency_ms": 1502.9,
-    "splunk_latency_ms": 5270.1
+    "time_to_validated_evidence_sec": 6.701,
+    "collector_latency_ms": 1508.61,
+    "splunk_latency_ms": 5189.79
   },
   "dual_run_isolation": {
-    "run_a_obs_domain": 83284,
+    "run_a_obs_domain": 84669,
     "run_a_found": 1,
-    "run_b_obs_domain": 83285,
+    "run_b_obs_domain": 84670,
     "run_b_found": 1,
     "cross_contamination": false,
     "isolation_verified": true

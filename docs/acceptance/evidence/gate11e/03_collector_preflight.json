@@ -1,0 +1,12 @@
+{
+  "overall_ready": true,
+  "collector_host_check": "PASS",
+  "udp_socket_check": "PASS",
+  "udp_connectionless_note_present": true,
+  "collector_metrics_check": "PASS",
+  "forwarder_status_check": "PASS",
+  "splunk_hec_check": "PASS",
+  "health_state": "RECEIVING",
+  "goflow2_packets_received": 15,
+  "flows_forwarded_total": 30
+}

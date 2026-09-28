@@ -1,0 +1,9 @@
+{
+  "git_branch": "main",
+  "git_sha": "c5d56da3ffef6f52c02798b3f7491d6475c990b3",
+  "working_tree_clean": false,
+  "splunk_version": "10.2.7",
+  "goflow2_version": "v2.2.5",
+  "python_version": "3.14.7",
+  "tshark_version": "4.6.9"
+}

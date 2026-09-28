@@ -1,0 +1,59 @@
+{
+  "determination": "PASS",
+  "concurrency": {
+    "runs_executed": 10,
+    "domain_match_counts": {
+      "94827": 1,
+      "94828": 1,
+      "94829": 1,
+      "94830": 1,
+      "94831": 1,
+      "94832": 1,
+      "94833": 1,
+      "94834": 1,
+      "94835": 1,
+      "94836": 1
+    },
+    "cross_talk_detected": false,
+    "isolation_verified": true
+  },
+  "security": {
+    "collector_user_non_root": true,
+    "forwarder_user_non_root": true,
+    "capabilities_dropped": true,
+    "no_new_privileges": true,
+    "loopback_binding_only": true,
+    "public_destination_protection_default": true,
+    "secret_hygiene": true
+  },
+  "performance": {
+    "10": {
+      "rate_pps": 10,
+      "packets_sent": 1,
+      "send_duration_sec": 0.0,
+      "loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    "100": {
+      "rate_pps": 100,
+      "packets_sent": 1,
+      "send_duration_sec": 0.001,
+      "loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    "500": {
+      "rate_pps": 500,
+      "packets_sent": 2,
+      "send_duration_sec": 0.0,
+      "loss_pct": 0.0,
+      "decode_errors": 0
+    },
+    "1000": {
+      "rate_pps": 1000,
+      "packets_sent": 5,
+      "send_duration_sec": 0.002,
+      "loss_pct": 0.0,
+      "decode_errors": 0
+    }
+  }
+}

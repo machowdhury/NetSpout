@@ -401,10 +401,11 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
         "cisco_sdwan_brownout", "cisco_campus_rogue", "mixed_edge_breach",
         "cisco_aci_microburst", "mixed_sase_degradation", "sql_injection",
         "openconfig_mdt_streaming", "arch_lan_campus_access", "arch_vpn_remote_workforce",
-        "service_provider_cisco", "arch_wlan_meraki_catalyst", "arch_man_carrier_ring"
+        "service_provider_cisco", "arch_wlan_meraki_catalyst", "arch_man_carrier_ring",
+        "mixed_backbone_optical"
     ):
         maturity = "GOLDEN_PATH_CERTIFIED"
-    elif sid in ("mixed_backbone_optical", "ddos_attack"):
+    elif sid in ("ddos_attack",):
         maturity = "E2E_VALIDATED"
     elif sid in ("normal_traffic", "lateral_movement"):
         maturity = "FORMAT_VALIDATED"

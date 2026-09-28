@@ -2697,7 +2697,7 @@
     "display_name": "Multicast/MPLS Backbone Optical Carrier Shift",
     "category": "DATACENTER",
     "ecosystem": "mixed_vendor",
-    "maturity": "E2E_VALIDATED",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
     "description": "DWDM Loss-of-Signal alarm on Nokia SR-OS core triggers Juniper Junos RSVP-TE Fast Reroute (FRR) switchover; Arista IPFIX telemetry tracks rerouted flow.",
     "attack_vector": "Physical Layer Fiber Cut / DWDM 100G Lambda Optical Loss of Signal",
     "defense_mechanism": "Nokia/Juniper MPLS Fast Reroute switches to sub-50ms facility bypass tunnel; Arista telemetry confirms alternate egress routing.",

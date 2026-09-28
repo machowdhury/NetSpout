@@ -1,0 +1,5 @@
+{
+  "test_a_fresh_session_pass": true,
+  "test_b_post_restart_recovery_pass": true,
+  "manual_template_repair_required": false
+}

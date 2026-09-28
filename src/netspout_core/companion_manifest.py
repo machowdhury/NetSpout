@@ -42,22 +42,22 @@ class CompanionManifestBuilder:
         raw_spl = (
             f'search index=idx_network_ops sourcetype=netflow:collector '
             f'| spath '
-            f'| search (ObservationDomainID={observation_domain_id} OR observation_domain_id={observation_domain_id} OR ObservationDomainId={observation_domain_id})'
+            f'| search (observation_domain_id={observation_domain_id} OR ObservationDomainID={observation_domain_id} OR ObservationDomainId={observation_domain_id})'
         )
         table_spl = (
             f'{raw_spl} '
-            f'| table _time SrcAddr DstAddr SrcPort DstPort Proto Bytes Packets InIf OutIf'
+            f'| table _time src_addr dst_addr src_port dst_port proto bytes packets in_if out_if observation_domain_id'
         )
         stats_spl = (
             f'{raw_spl} '
-            f'| stats count as total_flows sum(Bytes) as total_bytes sum(Packets) as total_packets by SrcAddr DstAddr'
+            f'| stats count as total_flows sum(bytes) as total_bytes sum(packets) as total_packets by src_addr dst_addr src_port dst_port proto'
         )
 
         spl_query = (
             f'index=* sourcetype="{collector_sourcetype}" '
             f'earliest={int(start_time_epoch_ms / 1000) - 10} '
             f'latest={int(end_time_epoch_ms / 1000) + 10} '
-            f'| stats count as observed_flows, sum(bytes) as total_bytes by src_ip, dest_ip, dest_port'
+            f'| stats count as observed_flows, sum(bytes) as total_bytes by src_addr, dst_addr, dst_port'
         )
 
         return CompanionControlManifest(

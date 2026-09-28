@@ -35,7 +35,8 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
             "arch_vpn_remote_workforce",
             "service_provider_cisco",
             "arch_wlan_meraki_catalyst",
-            "arch_man_carrier_ring"
+            "arch_man_carrier_ring",
+            "mixed_backbone_optical"
         ]
         cls.expected_contracted = [
             "arch_can_multi_building",
@@ -80,26 +81,26 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
     # 2. Maturity Distribution & Reconciliation
     # -------------------------------------------------------------------------
     def test_03_exact_maturity_distribution(self):
-        """Verify exact maturity breakdown: 12 Golden, 2 E2E, 2 Format, 13 Contracted = 29 Total."""
+        """Verify exact maturity breakdown: 13 Golden, 1 E2E, 2 Format, 13 Contracted = 29 Total."""
         scenarios = self.catalog.list_scenarios()
         counts = Counter(s.get("maturity") for s in scenarios)
 
-        self.assertEqual(counts["GOLDEN_PATH_CERTIFIED"], 12, "Must have exactly 12 GOLDEN_PATH_CERTIFIED scenarios")
-        self.assertEqual(counts["E2E_VALIDATED"], 2, "Must have exactly 2 E2E_VALIDATED scenarios (mixed_backbone_optical, ddos_attack)")
+        self.assertEqual(counts["GOLDEN_PATH_CERTIFIED"], 13, "Must have exactly 13 GOLDEN_PATH_CERTIFIED scenarios")
+        self.assertEqual(counts["E2E_VALIDATED"], 1, "Must have exactly 1 E2E_VALIDATED scenario (ddos_attack)")
         self.assertEqual(counts["FORMAT_VALIDATED"], 2, "Must have exactly 2 FORMAT_VALIDATED scenarios (normal_traffic, lateral_movement)")
         self.assertEqual(counts["CONTRACTED"], 13, "Must have exactly 13 CONTRACTED scenarios")
         self.assertEqual(sum(counts.values()), 29, "Total of all maturity counts must equal 29")
 
     def test_04_golden_path_identifiers(self):
-        """Verify the exact set of 12 GOLDEN_PATH_CERTIFIED scenario identifiers."""
+        """Verify the exact set of 13 GOLDEN_PATH_CERTIFIED scenario identifiers."""
         certified = [s["id"] for s in self.catalog.list_scenarios() if s.get("maturity") == "GOLDEN_PATH_CERTIFIED"]
-        self.assertEqual(len(certified), 12)
+        self.assertEqual(len(certified), 13)
         self.assertEqual(set(certified), set(self.expected_golden_paths))
 
     def test_05_e2e_and_format_validated_identifiers(self):
         """Verify E2E_VALIDATED and FORMAT_VALIDATED scenarios match expected canonical sets."""
         e2e = [s["id"] for s in self.catalog.list_scenarios() if s.get("maturity") == "E2E_VALIDATED"]
-        self.assertEqual(set(e2e), {"mixed_backbone_optical", "ddos_attack"})
+        self.assertEqual(set(e2e), {"ddos_attack"})
 
         format_val = [s["id"] for s in self.catalog.list_scenarios() if s.get("maturity") == "FORMAT_VALIDATED"]
         self.assertEqual(set(format_val), {"normal_traffic", "lateral_movement"})
@@ -132,7 +133,7 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
     # 4. Golden Path Evidence Ledger & Artifact Verifiability
     # -------------------------------------------------------------------------
     def test_08_golden_path_evidence_ledger_completeness(self):
-        """Verify catalog/golden_path_evidence.json contains all 12 Golden Paths with PROVEN status."""
+        """Verify catalog/golden_path_evidence.json contains all 13 Golden Paths with PROVEN status."""
         evidence_path = os.path.join(self.repo_root, "catalog", "golden_path_evidence.json")
         self.assertTrue(os.path.exists(evidence_path), "golden_path_evidence.json must exist")
 
@@ -140,7 +141,7 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
             ledger = json.load(f)
 
         entries = ledger.get("golden_paths", [])
-        self.assertEqual(len(entries), 12, "Evidence ledger must contain exactly 12 Golden Paths")
+        self.assertEqual(len(entries), 13, "Evidence ledger must contain exactly 13 Golden Paths")
 
         for entry in entries:
             sid = entry.get("canonical_id")

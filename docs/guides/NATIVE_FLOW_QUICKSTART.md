@@ -29,7 +29,13 @@ NetSpout provides a containerized, production-grade **GoFlow2** collector stack 
 
 ## 3. Starting the Collector Stack
 
-Start the collector with a single command:
+Start the collector stack using the lifecycle manager (which automatically discovers `docker` across `PATH` and standard macOS Docker Desktop locations such as `/usr/local/bin/docker`, `/opt/homebrew/bin/docker`, `/Applications/Docker.app/Contents/Resources/bin/docker`, and `~/.docker/bin/docker`):
+
+```bash
+python3 deploy/collector/manage_collector.py start
+```
+
+Or directly via Docker Compose (if `docker` is in your shell `PATH`):
 
 ```bash
 docker compose -f deploy/collector/docker-compose.collector.yml up -d
@@ -48,7 +54,7 @@ Expected output:
          Flows Read: 0, Forwarded: 0, Failures: 0
 ```
 
-Run a pre-flight readiness audit:
+Run a pre-flight readiness audit from the repository root (no `PYTHONPATH` environment variable required):
 
 ```bash
 python3 deploy/collector/manage_collector.py preflight
@@ -105,15 +111,42 @@ print(f"Datagrams Sent: {result.datagrams_sent}, Bytes: {result.bytes_sent}")
 
 ---
 
-## 6. Finding Flow Evidence in Splunk
+## 6. Finding Flow Evidence in Splunk & Canonical Field Schema
 
-Open Splunk Web (`http://localhost:8800` or `8000`) and search:
+GoFlow2 decodes binary NetFlow v9 and IPFIX packets into structured JSON records indexed in Splunk under `index=idx_network_ops` and `sourcetype=netflow:collector`.
+
+### Canonical Collector JSON Field Schema (`snake_case`):
+| Field Name | Description | Example Value |
+| :--- | :--- | :--- |
+| `type` | Decoded protocol type | `"NETFLOW_V9"` or `"IPFIX"` |
+| `observation_domain_id` | Exporter Source ID / Observation Domain ID | `101` |
+| `sampler_address` | Exporter source IP address | `"127.0.0.1"` |
+| `src_addr` | Source IPv4/IPv6 address | `"10.100.1.10"` |
+| `dst_addr` | Destination IPv4/IPv6 address | `"10.200.1.20"` |
+| `src_port` | Layer 4 source port | `443` |
+| `dst_port` | Layer 4 destination port | `52100` |
+| `proto` | IP protocol number (`6`=TCP, `17`=UDP) | `6` |
+| `bytes` | Octet delta count (`IN_BYTES`) | `8420950` |
+| `packets` | Packet delta count (`IN_PKTS`) | `5614` |
+| `in_if` / `out_if` | Ingress / Egress SNMP interface index | `10` / `22` |
+| `src_as` / `dst_as` | Source / Destination BGP Autonomous System | `65001` / `65002` |
+
+Open Splunk Web (`http://localhost:8800` or `8000`) and search using the canonical `snake_case` fields:
 
 ```spl
 search index=idx_network_ops sourcetype=netflow:collector
 | spath
-| search (ObservationDomainID=101 OR observation_domain_id=101)
-| table _time SrcAddr DstAddr SrcPort DstPort Proto Bytes Packets InIf OutIf
+| search observation_domain_id=101
+| table _time src_addr dst_addr src_port dst_port proto bytes packets in_if out_if observation_domain_id
+```
+
+For flow volume aggregation:
+
+```spl
+search index=idx_network_ops sourcetype=netflow:collector
+| spath
+| search observation_domain_id=101
+| stats count as total_flows sum(bytes) as total_bytes sum(packets) as total_packets by src_addr dst_addr src_port dst_port proto
 ```
 
 ---
@@ -128,7 +161,7 @@ If evidence does not appear in Splunk, check the specific pipeline stage:
 | `No collector evidence` | GoFlow2 container offline or wrong port | Run `python3 deploy/collector/manage_collector.py status`. |
 | `Collector decode failure` | Template not yet received | Restart session or set `NETSPOUT_TEMPLATE_REFRESH_POLICY=EVERY_BURST`. |
 | `Forwarder failure` | Splunk HEC unreachable | Verify Splunk container is running on port 8888 (`curl -k https://127.0.0.1:8888/services/collector/health`). |
-| `Splunk search returns 0` | Mismatched observation domain | Verify `ObservationDomainID` in companion manifest matches query filter. |
+| `Splunk search returns 0` | Mismatched observation domain | Verify `observation_domain_id` in companion manifest matches query filter. |
 
 ---
 

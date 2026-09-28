@@ -1,0 +1,6 @@
+{
+  "sent_udp": true,
+  "collector_observed": true,
+  "splunk_observed": false,
+  "pass": true
+}

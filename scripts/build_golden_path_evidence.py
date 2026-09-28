@@ -324,6 +324,52 @@ GOLDEN_PATHS_REGISTRY: List[Dict[str, Any]] = [
         "certification_recommendation": "GOLDEN_PATH_CERTIFIED",
         "evidence_classification": "PROVEN",
         "evidence_summary": "Terrestrial 100G optical fiber cut triggers G.8032 Signal Fail, sub-50ms RPL unblock in 38ms, WTR stabilization hold, and revertive restoration."
+    },
+    {
+        "canonical_id": "mixed_backbone_optical",
+        "user_facing_name": "Multicast/MPLS Backbone Optical Carrier Shift",
+        "domain": "Core / Optical Backbone & Native Flow",
+        "topology_id": "mixed_optical",
+        "maturity": "GOLDEN_PATH_CERTIFIED",
+        "wave": "Gate 11E / Gate 11F (Native Flow)",
+        "primary_acceptance_report": "docs/acceptance/NETSPOUT_GATE_11E_INDEPENDENT_NATIVE_FLOW_ACCEPTANCE.md",
+        "retest_report": None,
+        "scorecard_report": "docs/acceptance/gate11e_native_flow_scorecard.json",
+        "recorded_run_id": "NS-20260927-4beee979",
+        "verified_run_ids": [
+            "NS-20260927-ef8e8ba9",
+            "NS-20260927-4beee979",
+            "NS-20260928-3711e54d",
+            "NS-20260928-857011b8"
+        ],
+        "events_generated": 8,
+        "events_dispatched": 8,
+        "events_observed": 8,
+        "native_flows_generated": 2,
+        "native_flows_encoded": 2,
+        "native_flows_collector_observed": 2,
+        "native_flows_splunk_observed": 2,
+        "completeness_pct": 100.0,
+        "destination_validation": "PASS",
+        "overall_validation": "PASS",
+        "protocol_coverage": [
+            "Splunk HEC (Nokia/Juniper syslog control-plane telemetry)",
+            "Native NetFlow v9 (RFC 3954)",
+            "Native IPFIX (RFC 7011)"
+        ],
+        "fidelity_classification": {
+            "syslog_hec": "MODELED PAYLOAD",
+            "native_flow": "NATIVE TRANSPORT"
+        },
+        "timing_classification": "NOT_APPLICABLE",
+        "timing_claim": None,
+        "timing_value": None,
+        "timing_unit": None,
+        "developer_knowledge_required": False,
+        "acceptance_determination": "PASS",
+        "certification_recommendation": "GOLDEN_PATH_CERTIFIED",
+        "evidence_classification": "PROVEN",
+        "evidence_summary": "DWDM Loss-of-Signal alarm on Nokia SR-OS core triggers Juniper Junos RSVP-TE Fast Reroute switchover via HEC, while Arista EOS flow diversion is exported over native binary UDP NetFlow v9 (RFC 3954) and IPFIX (RFC 7011), decoded by GoFlow2, and indexed in Splunk."
     }
 ]
 
@@ -332,7 +378,7 @@ def build_evidence_ledger() -> Dict[str, Any]:
     # Verify all acceptance reports exist on disk
     missing = []
     for gp in GOLDEN_PATHS_REGISTRY:
-        for doc_key in ("primary_acceptance_report", "retest_report"):
+        for doc_key in ("primary_acceptance_report", "retest_report", "scorecard_report"):
             doc_path = gp.get(doc_key)
             if doc_path:
                 abs_p = os.path.join(REPO_ROOT, doc_path)
@@ -347,11 +393,11 @@ def build_evidence_ledger() -> Dict[str, Any]:
 
     ledger = {
         "metadata": {
-            "schema_version": "1.0.0",
-            "authoritative_gate": "Gate 10.6",
+            "schema_version": "1.1.0",
+            "authoritative_gate": "Gate 11F",
             "total_certified_golden_paths": len(GOLDEN_PATHS_REGISTRY),
             "evidence_classification_all": "PROVEN",
-            "acceptance_standard": "Gate 7/8/9/10/10.5 Strict Evidence Invariants"
+            "acceptance_standard": "Gate 7/8/9/10/10.5/11E/11F Strict Evidence Invariants"
         },
         "golden_paths": GOLDEN_PATHS_REGISTRY
     }

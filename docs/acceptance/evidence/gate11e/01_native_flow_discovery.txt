@@ -1,0 +1,4 @@
+Discovery Source: README.md Section ⚡ Native Flow Telemetry (NetFlow v9 & IPFIX)
+Guide: docs/guides/NATIVE_FLOW_QUICKSTART.md
+CLI: deploy/collector/manage_collector.py
+UI: Telemetry Pipelines Modal -> Card 5 (Native Flow Telemetry Pipeline)

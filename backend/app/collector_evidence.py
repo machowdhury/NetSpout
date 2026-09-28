@@ -358,14 +358,14 @@ class CollectorEvidenceAdapter:
         """
         base_search = (
             f"search index=idx_network_ops sourcetype=netflow:collector "
-            f"(ObservationDomainID={observation_domain_id} OR observation_domain_id={observation_domain_id} OR ObservationDomainId={observation_domain_id})"
+            f"(observation_domain_id={observation_domain_id} OR ObservationDomainID={observation_domain_id} OR ObservationDomainId={observation_domain_id})"
         )
         if exporter_ip:
-            base_search += f" (host=\"*{exporter_ip}*\" OR SamplerAddress=\"*{exporter_ip}*\")"
+            base_search += f" (host=\"*{exporter_ip}*\" OR sampler_address=\"*{exporter_ip}*\" OR SamplerAddress=\"*{exporter_ip}*\")"
 
         raw_events_spl = f"{base_search} | spath"
-        table_spl = f"{base_search} | spath | table _time SrcAddr DstAddr SrcPort DstPort Proto Bytes Packets InIf OutIf"
-        stats_spl = f"{base_search} | spath | stats count as total_flows sum(Bytes) as total_bytes sum(Packets) as total_packets by SrcAddr DstAddr"
+        table_spl = f"{base_search} | spath | table _time src_addr dst_addr src_port dst_port proto bytes packets in_if out_if observation_domain_id"
+        stats_spl = f"{base_search} | spath | stats count as total_flows sum(bytes) as total_bytes sum(packets) as total_packets by src_addr dst_addr src_port dst_port proto"
 
         return {
             "table_spl": table_spl,

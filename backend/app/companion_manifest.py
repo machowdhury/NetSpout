@@ -88,6 +88,75 @@ class CompanionManifestBuilder:
         )
 
     @staticmethod
+    def build_snmp_manifest(
+        run_id: str,
+        scenario_id: str,
+        pdu_mode: str,
+        destination_host: str,
+        destination_port: int,
+        exporter_ip: str,
+        request_ids: List[int],
+        acknowledged_request_ids: List[int],
+        trap_oids: List[str],
+        pdus_generated: int,
+        pdus_encoded: int,
+        datagrams_sent: int,
+        bytes_sent: int,
+        informs_acknowledged: int,
+        inform_retries: int,
+        inform_timeouts: int,
+        receiver_observed_count: int,
+        evidence_stage: str,
+        start_time_epoch_ms: int,
+        end_time_epoch_ms: int,
+        collector_sourcetype: str = "sc4snmp:traps",
+    ) -> CompanionControlManifest:
+        """
+        Constructs an out-of-band CompanionControlManifest for Native SNMPv2c Trap/Inform runs
+        correlating wire PDUs via deterministic 31-bit request-id values without polluting wire varbinds.
+        """
+        req_filter = " OR ".join(f"request_id={rid}" for rid in request_ids) if request_ids else "request_id=*"
+        raw_spl = (
+            f'search index=idx_network_ops (sourcetype="{collector_sourcetype}" OR sourcetype="snmptrapd:collector") '
+            f'| spath | search ({req_filter})'
+        )
+        stats_spl = (
+            f'{raw_spl} '
+            f'| stats count as total_notifications values(snmpTrapOID) as trap_oids by host request_id pdu_type'
+        )
+        protocol_label = f"SNMPV2C_{pdu_mode.upper()}" if pdu_mode.upper() in ("TRAP", "INFORM") else "SNMPV2C"
+
+        return CompanionControlManifest(
+            run_id=run_id,
+            scenario_id=scenario_id,
+            protocol=protocol_label,
+            destination_host=destination_host,
+            destination_port=destination_port,
+            observation_domain_id=1,
+            exporter_ip=exporter_ip,
+            template_ids=[],
+            records_generated=pdus_generated,
+            records_encoded=pdus_encoded,
+            datagrams_sent=datagrams_sent,
+            bytes_sent=bytes_sent,
+            start_time_epoch_ms=start_time_epoch_ms,
+            end_time_epoch_ms=end_time_epoch_ms,
+            fidelity_badge="NATIVE TRANSPORT",
+            splunk_suggested_spl=raw_spl,
+            splunk_raw_events_spl=raw_spl,
+            splunk_stats_spl=stats_spl,
+            pipeline_stage=evidence_stage,
+            pdu_mode=pdu_mode.upper(),
+            request_ids=list(request_ids),
+            acknowledged_request_ids=list(acknowledged_request_ids),
+            trap_oids=list(trap_oids),
+            informs_acknowledged=informs_acknowledged,
+            inform_retries=inform_retries,
+            inform_timeouts=inform_timeouts,
+            receiver_observed_count=receiver_observed_count,
+        )
+
+    @staticmethod
     def to_hec_event(manifest: CompanionControlManifest) -> Dict[str, Any]:
         """
         Formats the manifest as a Splunk HEC event for index idx_network_ops.

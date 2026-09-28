@@ -12,23 +12,28 @@ Implements:
 import time
 import json
 import random
+import hashlib
+import struct
 from typing import Dict, List, Any, Optional, Tuple
 
 try:
     from netspout_core.models import (
         Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
-        TelemetryTransportConfig
+        TelemetryTransportConfig, OidFidelityClass, SnmpVarBind, SnmpMessage,
+        SnmpTrap, SnmpInform, SnmpPduType
     )
 except ImportError:
     try:
         from app.models import (
             Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
-            TelemetryTransportConfig
+            TelemetryTransportConfig, OidFidelityClass, SnmpVarBind, SnmpMessage,
+            SnmpTrap, SnmpInform, SnmpPduType
         )
     except ImportError:
         from models import (
             Node, Edge, SNMPMibDefinition, SNMPPollingMetric, SNMPTrapEvent,
-            TelemetryTransportConfig
+            TelemetryTransportConfig, OidFidelityClass, SnmpVarBind, SnmpMessage,
+            SnmpTrap, SnmpInform, SnmpPduType
         )
 
 # =========================================================================
@@ -59,7 +64,7 @@ RAW_MIB_DEFINITIONS: List[Dict[str, Any]] = [
     {"name": "ifOutDiscards", "oid": "1.3.6.1.2.1.2.2.1.19", "module": "IF-MIB", "type": "Counter32", "vendor": "RFC", "desc": "Outbound packets discarded due to buffer overflow", "is_table": True},
     {"name": "ifOutErrors", "oid": "1.3.6.1.2.1.2.2.1.20", "module": "IF-MIB", "type": "Counter32", "vendor": "RFC", "desc": "Outbound packets that could not be transmitted due to errors", "is_table": True},
     {"name": "ifOutQLen", "oid": "1.3.6.1.2.1.2.2.1.21", "module": "IF-MIB", "type": "Gauge32", "vendor": "RFC", "desc": "Current length of output packet queue", "is_table": True},
-    {"name": "ifSpecific", "oid": "1.3.6.1.2.1.2.2.1.22", "module": "IF-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Reference to MIB definition specific to physical medium", "is_table": True},
+    {"name": "ifSpecific", "oid": "1.3.6.1.2.1.2.2.1.22", "module": "IF-MIB", "type": "ObjectIdentifier", "vendor": "RFC", "desc": "Reference to MIB definition specific to physical medium", "is_table": True},
     {"name": "ifName", "oid": "1.3.6.1.2.1.31.1.1.1.1", "module": "IF-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Textual name of the interface (e.g. GigabitEthernet0/1)", "is_table": True},
     {"name": "ifInMulticastPkts", "oid": "1.3.6.1.2.1.31.1.1.1.2", "module": "IF-MIB", "type": "Counter32", "vendor": "RFC", "desc": "Multicast packets delivered to higher-layer protocol", "is_table": True},
     {"name": "ifInBroadcastPkts", "oid": "1.3.6.1.2.1.31.1.1.1.3", "module": "IF-MIB", "type": "Counter32", "vendor": "RFC", "desc": "Broadcast packets delivered to higher-layer protocol", "is_table": True},
@@ -84,7 +89,7 @@ RAW_MIB_DEFINITIONS: List[Dict[str, Any]] = [
     # 2. SNMPv2-MIB (RFC 3418) - 35 MIBs
     # ---------------------------------------------------------------------
     {"name": "sysDescr", "oid": "1.3.6.1.2.1.1.1.0", "module": "SNMPv2-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Hardware and software version description", "is_table": False},
-    {"name": "sysObjectID", "oid": "1.3.6.1.2.1.1.2.0", "module": "SNMPv2-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Vendor authoritative identification of network subsystem", "is_table": False},
+    {"name": "sysObjectID", "oid": "1.3.6.1.2.1.1.2.0", "module": "SNMPv2-MIB", "type": "ObjectIdentifier", "vendor": "RFC", "desc": "Vendor authoritative identification of network subsystem", "is_table": False},
     {"name": "sysUpTime", "oid": "1.3.6.1.2.1.1.3.0", "module": "SNMPv2-MIB", "type": "TimeTicks", "vendor": "RFC", "desc": "Time in hundredths of a second since agent initialized", "is_table": False},
     {"name": "sysContact", "oid": "1.3.6.1.2.1.1.4.0", "module": "SNMPv2-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Contact person for this managed node", "is_table": False},
     {"name": "sysName", "oid": "1.3.6.1.2.1.1.5.0", "module": "SNMPv2-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Fully qualified administrative node name", "is_table": False},
@@ -161,7 +166,7 @@ RAW_MIB_DEFINITIONS: List[Dict[str, Any]] = [
     {"name": "ipRouteAge", "oid": "1.3.6.1.2.1.4.21.1.10", "module": "IP-MIB", "type": "Integer32", "vendor": "RFC", "desc": "Number of seconds since route was last updated or verified", "is_table": True},
     {"name": "ipRouteMask", "oid": "1.3.6.1.2.1.4.21.1.11", "module": "IP-MIB", "type": "IpAddress", "vendor": "RFC", "desc": "Subnet mask to apply to destination address before comparison", "is_table": True},
     {"name": "ipRouteMetric5", "oid": "1.3.6.1.2.1.4.21.1.12", "module": "IP-MIB", "type": "Integer32", "vendor": "RFC", "desc": "Alternate routing metric 5", "is_table": True},
-    {"name": "ipRouteInfo", "oid": "1.3.6.1.2.1.4.21.1.13", "module": "IP-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Reference to MIB definition specific to routing protocol", "is_table": True},
+    {"name": "ipRouteInfo", "oid": "1.3.6.1.2.1.4.21.1.13", "module": "IP-MIB", "type": "ObjectIdentifier", "vendor": "RFC", "desc": "Reference to MIB definition specific to routing protocol", "is_table": True},
     {"name": "ipNetToMediaIfIndex", "oid": "1.3.6.1.2.1.4.22.1.1", "module": "IP-MIB", "type": "Integer32", "vendor": "RFC", "desc": "Interface index for ARP address mapping entry", "is_table": True},
     {"name": "ipNetToMediaPhysAddress", "oid": "1.3.6.1.2.1.4.22.1.2", "module": "IP-MIB", "type": "OctetString", "vendor": "RFC", "desc": "Media-dependent physical MAC address", "is_table": True},
     {"name": "ipNetToMediaNetAddress", "oid": "1.3.6.1.2.1.4.22.1.3", "module": "IP-MIB", "type": "IpAddress", "vendor": "RFC", "desc": "IPv4 address corresponding to physical address", "is_table": True},
@@ -531,6 +536,70 @@ TRAP_DEFINITIONS = {
 }
 
 
+def classify_oid_fidelity(oid: str, module: str = "", vendor: str = "RFC") -> str:
+    """
+    Classifies an OID into its authoritative Gate 12 / 12B fidelity tier:
+      - STANDARD_VERIFIED: IETF RFC MIBs under mib-2 (1.3.6.1.2.1.*) or snmpModules (1.3.6.1.6.3.*)
+      - VENDOR_VERIFIED: Published vendor enterprise MIB subtrees (Cisco 9.9.109/48/13/187, Juniper 2636.3.1/4.1)
+      - MODELED: Modeled vendor enterprise subtrees (Juniper 2636.3.35, Arista 30065.3.*)
+      - SYNTHETIC: Test/synthetic OIDs (1.3.6.1.4.1.59999.*)
+    """
+    if oid.startswith("1.3.6.1.2.1.") or oid.startswith("1.3.6.1.6.3.") or vendor.upper() == "RFC":
+        return OidFidelityClass.STANDARD_VERIFIED.value
+    if oid.startswith("1.3.6.1.4.1.59999.") or vendor.upper() == "SYNTHETIC":
+        return OidFidelityClass.SYNTHETIC.value
+    verified_vendor_prefixes = (
+        "1.3.6.1.4.1.9.9.109.",
+        "1.3.6.1.4.1.9.9.48.",
+        "1.3.6.1.4.1.9.9.13.",
+        "1.3.6.1.4.1.9.9.187.",
+        "1.3.6.1.4.1.2636.3.1.",
+        "1.3.6.1.4.1.2636.4.1.",
+    )
+    if any(oid.startswith(p) for p in verified_vendor_prefixes):
+        return OidFidelityClass.VENDOR_VERIFIED.value
+    return OidFidelityClass.MODELED.value
+
+
+def format_instance_oid(
+    base_oid: str,
+    is_table: bool = False,
+    if_index: Optional[int] = None,
+    ip_index: Optional[str] = None,
+) -> str:
+    """
+    Appends deterministic SNMPv2c instance suffixes:
+      - Scalar objects: '.0' (if not already ending in '.0')
+      - Interface table columns: '.<ifIndex>' (1..N)
+      - BGP/OSPF IPv4 peer table columns: '.<A.B.C.D>'
+    """
+    clean_oid = base_oid.strip(".")
+    if not is_table:
+        return clean_oid if clean_oid.endswith(".0") else f"{clean_oid}.0"
+    if ip_index is not None:
+        return f"{clean_oid}.{ip_index.strip('.')}"
+    if if_index is not None:
+        return f"{clean_oid}.{int(if_index)}"
+    return f"{clean_oid}.1"
+
+
+def derive_deterministic_request_id(
+    scenario_id: str,
+    seed: Optional[int] = 42,
+    pdu_index: int = 0,
+) -> int:
+    """
+    Derives a deterministic positive 31-bit SNMP request-id (1..2147483647)
+    from (scenario_id, seed, pdu_index) for out-of-band CompanionControlManifest
+    correlation without injecting proprietary varbinds onto the wire.
+    """
+    seed_val = 42 if seed is None else int(seed)
+    token = f"netspout:snmpv2c:{scenario_id}:{seed_val}:{int(pdu_index)}".encode("utf-8")
+    digest = hashlib.sha256(token).digest()[:4]
+    raw_int = struct.unpack("!I", digest)[0] & 0x7FFFFFFF
+    return raw_int if raw_int > 0 else 1
+
+
 class SNMPEngine:
     """
     Carrier-grade SNMP & SC4SNMP Engine for Network Simulation
@@ -544,7 +613,8 @@ class SNMPEngine:
                 data_type=m["type"],
                 description=m["desc"],
                 is_table=m["is_table"],
-                vendor=m["vendor"]
+                vendor=m["vendor"],
+                fidelity=classify_oid_fidelity(m["oid"], m["module"], m["vendor"])
             )
             for m in RAW_MIB_DEFINITIONS
         ]
@@ -856,6 +926,196 @@ class SNMPEngine:
 
         return f"sc4snmp_metrics,{','.join(tags)} {','.join(field_assignments)} {timestamp_nano}"
 
+    def build_service_provider_cisco_native_pdus(
+        self,
+        seed: Optional[int] = 42,
+        pdu_mode: str = "TRAP",
+        community: str = "netspout-lab",
+        exporter_ip: str = "10.200.0.1",
+        device_id: str = "node-cisco8k-core01",
+    ) -> List[SnmpMessage]:
+        """
+        Builds the authoritative Gate 12B Native SNMPv2c notification progression
+        for scenario 'service_provider_cisco':
+          1. FAULT:     IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)
+          2. PROPAGATE: BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)
+          3. RECOVER:   IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)
+          4. VALIDATE:  BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)
+        Enforces RFC 3416 Section 4.2.6 VarBind ordering (sysUpTime.0, snmpTrapOID.0, ...)
+        and deterministic seeded 31-bit request-id values with zero proprietary varbinds.
+        """
+        mode = (pdu_mode or "TRAP").strip().upper()
+        scenario_id = "service_provider_cisco"
+        peer_ip = "198.51.100.1"
+        if_idx = 1
+        if_descr = "HundredGigE0/0/0/1"
+
+        def _make_pdu(
+            idx: int,
+            phase: str,
+            sys_uptime: int,
+            trap_oid: str,
+            extra_vbs: List[SnmpVarBind],
+            prefer_inform_in_mixed: bool = False,
+        ) -> SnmpMessage:
+            req_id = derive_deterministic_request_id(scenario_id, seed=seed, pdu_index=idx)
+            use_inform = (mode == "INFORM") or (mode == "MIXED" and prefer_inform_in_mixed)
+            cls_to_use = SnmpInform if use_inform else SnmpTrap
+            return cls_to_use(
+                community=community,
+                request_id=req_id,
+                sys_uptime=sys_uptime,
+                trap_oid=trap_oid,
+                varbinds=extra_vbs,
+                source_device_id=device_id,
+                source_ip=exporter_ip,
+                scenario_id=scenario_id,
+                phase=phase,
+            )
+
+        # 1. IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)
+        pdu_link_down = _make_pdu(
+            idx=0,
+            phase="FAULT",
+            sys_uptime=8640000,
+            trap_oid="1.3.6.1.6.3.1.1.5.3",
+            extra_vbs=[
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.1", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=if_idx,
+                    mib_module="IF-MIB",
+                    object_name=f"ifIndex.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.7", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=1,  # up
+                    mib_module="IF-MIB",
+                    object_name=f"ifAdminStatus.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.8", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=2,  # down
+                    mib_module="IF-MIB",
+                    object_name=f"ifOperStatus.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.2", is_table=True, if_index=if_idx),
+                    asn1_type="OctetString",
+                    value=if_descr,
+                    mib_module="IF-MIB",
+                    object_name=f"ifDescr.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+            ],
+            prefer_inform_in_mixed=False,
+        )
+
+        # 2. BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)
+        pdu_bgp_down = _make_pdu(
+            idx=1,
+            phase="PROPAGATE",
+            sys_uptime=8640500,
+            trap_oid="1.3.6.1.2.1.15.7.2",
+            extra_vbs=[
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.15.3.1.14", is_table=True, ip_index=peer_ip),
+                    asn1_type="OctetString",
+                    value=b"\x04\x00",  # Hold Timer Expired
+                    mib_module="BGP4-MIB",
+                    object_name=f"bgpPeerLastError.{peer_ip}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.15.3.1.2", is_table=True, ip_index=peer_ip),
+                    asn1_type="Integer32",
+                    value=1,  # idle
+                    mib_module="BGP4-MIB",
+                    object_name=f"bgpPeerState.{peer_ip}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+            ],
+            prefer_inform_in_mixed=True,
+        )
+
+        # 3. IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)
+        pdu_link_up = _make_pdu(
+            idx=2,
+            phase="RECOVER",
+            sys_uptime=8643000,
+            trap_oid="1.3.6.1.6.3.1.1.5.4",
+            extra_vbs=[
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.1", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=if_idx,
+                    mib_module="IF-MIB",
+                    object_name=f"ifIndex.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.7", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=1,  # up
+                    mib_module="IF-MIB",
+                    object_name=f"ifAdminStatus.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.8", is_table=True, if_index=if_idx),
+                    asn1_type="Integer32",
+                    value=1,  # up
+                    mib_module="IF-MIB",
+                    object_name=f"ifOperStatus.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.2.2.1.2", is_table=True, if_index=if_idx),
+                    asn1_type="OctetString",
+                    value=if_descr,
+                    mib_module="IF-MIB",
+                    object_name=f"ifDescr.{if_idx}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+            ],
+            prefer_inform_in_mixed=False,
+        )
+
+        # 4. BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)
+        pdu_bgp_up = _make_pdu(
+            idx=3,
+            phase="VALIDATE",
+            sys_uptime=8643500,
+            trap_oid="1.3.6.1.2.1.15.7.1",
+            extra_vbs=[
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.15.3.1.14", is_table=True, ip_index=peer_ip),
+                    asn1_type="OctetString",
+                    value=b"\x00\x00",
+                    mib_module="BGP4-MIB",
+                    object_name=f"bgpPeerLastError.{peer_ip}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+                SnmpVarBind(
+                    oid=format_instance_oid("1.3.6.1.2.1.15.3.1.2", is_table=True, ip_index=peer_ip),
+                    asn1_type="Integer32",
+                    value=6,  # established
+                    mib_module="BGP4-MIB",
+                    object_name=f"bgpPeerState.{peer_ip}",
+                    fidelity=OidFidelityClass.STANDARD_VERIFIED.value,
+                ),
+            ],
+            prefer_inform_in_mixed=True,
+        )
+
+        return [pdu_link_down, pdu_bgp_down, pdu_link_up, pdu_bgp_up]
+
 
 # Global singleton instance
 snmp_engine = SNMPEngine()
+

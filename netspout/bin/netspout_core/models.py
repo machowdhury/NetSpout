@@ -8,7 +8,7 @@ Includes full support for:
 
 from enum import Enum
 import time
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any, Union
 
 try:
     from pydantic import BaseModel, Field
@@ -259,6 +259,19 @@ class TelemetryTransportConfig(BaseModel):
     native_flow_template_refresh_policy: str = "EVERY_BURST"
     native_flow_allow_public: bool = False
 
+    # 6. Native SNMPv2c Telemetry Pipeline (RFC 3416 / RFC 1905)
+    native_snmp_enabled: bool = False
+    native_snmp_pdu_mode: str = "TRAP"  # TRAP, INFORM, MIXED
+    native_snmp_receiver_host: str = "127.0.0.1"
+    native_snmp_receiver_port: int = 1162
+    native_snmp_community: str = "netspout-lab"
+    native_snmp_trap_rate_pps: int = 50
+    native_snmp_inform_rate_pps: int = 25
+    native_snmp_packet_cap: int = 1000
+    native_snmp_inform_timeout_ms: int = 1500
+    native_snmp_inform_max_retries: int = 2
+    native_snmp_allow_public: bool = False
+
 
 class Node(BaseModel):
     id: str
@@ -319,10 +332,11 @@ class SNMPMibDefinition(BaseModel):
     name: str
     oid: str
     mib_module: str
-    data_type: str  # Counter32, Counter64, Gauge32, Integer32, OctetString, IpAddress, TimeTicks
+    data_type: str  # Counter32, Counter64, Gauge32, Integer32, OctetString, IpAddress, TimeTicks, ObjectIdentifier
     description: str
     is_table: bool = False
     vendor: str = "RFC"  # RFC, Cisco, Juniper, Arista
+    fidelity: str = "STANDARD_VERIFIED"
 
 
 class SNMPPollingMetric(BaseModel):
@@ -728,6 +742,8 @@ class RunManifest(BaseModel):
     native_transport_result: Optional[Any] = None
     companion_manifest: Optional[Any] = None
     native_flow_records: List[Any] = Field(default_factory=list)
+    native_snmp_result: Optional[Any] = None
+    native_snmp_pdus: List[Any] = Field(default_factory=list)
 
 
 class ScenarioRunRequest(BaseModel):
@@ -739,10 +755,14 @@ class ScenarioRunRequest(BaseModel):
     dispatch_telemetry: bool = False
     transport_config: Optional[TelemetryTransportConfig] = None
     transport_mode: str = "DIRECT_TO_SPLUNK"  # DIRECT_TO_SPLUNK | NATIVE_TRANSPORT
-    native_protocol: Optional[str] = None     # IPFIX | NETFLOW_V9
+    native_protocol: Optional[str] = None     # IPFIX | NETFLOW_V9 | SNMPV2C_TRAP | SNMPV2C_INFORM | SNMPV2C
     native_destination_host: Optional[str] = None
     native_destination_port: Optional[int] = None
     native_rate_pps: int = 100
+    native_snmp_pdu_mode: Optional[str] = None  # TRAP | INFORM | MIXED
+    native_snmp_community: Optional[str] = None
+    native_snmp_timeout_ms: int = 1500
+    native_snmp_max_retries: int = 2
 
 
 class FlowRecord(BaseModel):
@@ -885,10 +905,10 @@ class CollectorDetailedHealth(BaseModel):
 class CompanionControlManifest(BaseModel):
     run_id: str
     scenario_id: str
-    protocol: str                         # "IPFIX" or "NETFLOW_V9"
+    protocol: str                         # "IPFIX", "NETFLOW_V9", "SNMPV2C_TRAP", "SNMPV2C_INFORM", "SNMPV2C"
     destination_host: str
     destination_port: int
-    observation_domain_id: int            # Or source_id
+    observation_domain_id: int = 1        # Or source_id
     exporter_ip: str
     template_ids: List[int] = Field(default_factory=list)
     records_generated: int = 0
@@ -903,6 +923,363 @@ class CompanionControlManifest(BaseModel):
     splunk_stats_spl: str = ""
     pipeline_stage: str = "UNKNOWN"
     troubleshooting_notes: List[str] = Field(default_factory=list)
+    # Gate 12B Native SNMPv2c correlation fields
+    pdu_mode: Optional[str] = None
+    request_ids: List[int] = Field(default_factory=list)
+    acknowledged_request_ids: List[int] = Field(default_factory=list)
+    trap_oids: List[str] = Field(default_factory=list)
+    informs_acknowledged: int = 0
+    inform_retries: int = 0
+    inform_timeouts: int = 0
+    receiver_observed_count: int = 0
+
+
+# =========================================================================
+# Gate 12B: Native SNMPv2c Protocol & Transport Models
+# =========================================================================
+
+SYSUPTIME_OID = "1.3.6.1.2.1.1.3.0"
+SNMP_TRAP_OID = "1.3.6.1.6.3.1.1.4.1.0"
+
+
+class SnmpVersion(int, Enum):
+    V1 = 0
+    V2C = 1
+    V3 = 3
+
+
+class SnmpPduType(int, Enum):
+    GET_REQUEST = 0xA0
+    GET_NEXT_REQUEST = 0xA1
+    RESPONSE = 0xA2
+    SET_REQUEST = 0xA3
+    GET_BULK_REQUEST = 0xA5
+    INFORM_REQUEST = 0xA6
+    SNMPV2_TRAP = 0xA7
+
+
+class SnmpAsn1Type(int, Enum):
+    INTEGER = 0x02
+    OCTET_STRING = 0x04
+    NULL = 0x05
+    OBJECT_IDENTIFIER = 0x06
+    SEQUENCE = 0x30
+    IP_ADDRESS = 0x40
+    COUNTER32 = 0x41
+    GAUGE32 = 0x42
+    TIME_TICKS = 0x43
+    OPAQUE = 0x44
+    COUNTER64 = 0x46
+    NO_SUCH_OBJECT = 0x80
+    NO_SUCH_INSTANCE = 0x81
+    END_OF_MIB_VIEW = 0x82
+
+
+class OidFidelityClass(str, Enum):
+    STANDARD_VERIFIED = "STANDARD_VERIFIED"
+    VENDOR_VERIFIED = "VENDOR_VERIFIED"
+    MODELED = "MODELED"
+    SYNTHETIC = "SYNTHETIC"
+
+
+class SnmpEvidenceStage(str, Enum):
+    GENERATED = "GENERATED"
+    ENCODED = "ENCODED"
+    SENT = "SENT"
+    ACKNOWLEDGED = "ACKNOWLEDGED"
+    RECEIVER_OBSERVED = "RECEIVER_OBSERVED"
+    SPLUNK_OBSERVED = "SPLUNK_OBSERVED"
+
+
+ASN1_TYPE_NAME_TO_TAG: Dict[str, int] = {
+    "INTEGER": 0x02,
+    "INTEGER32": 0x02,
+    "INT": 0x02,
+    "OCTETSTRING": 0x04,
+    "OCTET_STRING": 0x04,
+    "OCTET STRING": 0x04,
+    "STRING": 0x04,
+    "NULL": 0x05,
+    "OBJECTIDENTIFIER": 0x06,
+    "OBJECT_IDENTIFIER": 0x06,
+    "OBJECT IDENTIFIER": 0x06,
+    "OID": 0x06,
+    "SEQUENCE": 0x30,
+    "IPADDRESS": 0x40,
+    "IP_ADDRESS": 0x40,
+    "COUNTER32": 0x41,
+    "COUNTER": 0x41,
+    "GAUGE32": 0x42,
+    "GAUGE": 0x42,
+    "UNSIGNED32": 0x42,
+    "TIMETICKS": 0x43,
+    "TIME_TICKS": 0x43,
+    "OPAQUE": 0x44,
+    "COUNTER64": 0x46,
+    "NOSUCHOBJECT": 0x80,
+    "NO_SUCH_OBJECT": 0x80,
+    "NOSUCHINSTANCE": 0x81,
+    "NO_SUCH_INSTANCE": 0x81,
+    "ENDOFMIBVIEW": 0x82,
+    "END_OF_MIB_VIEW": 0x82,
+}
+
+ASN1_TAG_TO_CANONICAL_NAME: Dict[int, str] = {
+    0x02: "Integer32",
+    0x04: "OctetString",
+    0x05: "Null",
+    0x06: "ObjectIdentifier",
+    0x30: "Sequence",
+    0x40: "IpAddress",
+    0x41: "Counter32",
+    0x42: "Gauge32",
+    0x43: "TimeTicks",
+    0x44: "Opaque",
+    0x46: "Counter64",
+    0x80: "noSuchObject",
+    0x81: "noSuchInstance",
+    0x82: "endOfMibView",
+}
+
+
+def resolve_asn1_tag(asn1_type: Union[int, str, SnmpAsn1Type]) -> int:
+    if isinstance(asn1_type, SnmpAsn1Type):
+        return int(asn1_type.value)
+    if isinstance(asn1_type, int):
+        if asn1_type in ASN1_TAG_TO_CANONICAL_NAME:
+            return asn1_type
+        raise ValueError(f"Unsupported ASN.1 tag integer: 0x{asn1_type:02x}")
+    if isinstance(asn1_type, str):
+        key = asn1_type.strip().upper()
+        if key in ASN1_TYPE_NAME_TO_TAG:
+            return ASN1_TYPE_NAME_TO_TAG[key]
+    raise ValueError(f"Unsupported ASN.1 type specification: {asn1_type!r}")
+
+
+class SnmpVarBind(BaseModel):
+    oid: str
+    asn1_type: str = "OctetString"
+    value: Any = None
+    mib_module: Optional[str] = None
+    object_name: Optional[str] = None
+    fidelity: str = OidFidelityClass.STANDARD_VERIFIED.value
+
+    def __init__(self, **data):
+        if "syntax" in data and "asn1_type" not in data:
+            data["asn1_type"] = data.pop("syntax")
+        if "tag" in data and "asn1_type" not in data:
+            tag_val = data.pop("tag")
+            data["asn1_type"] = ASN1_TAG_TO_CANONICAL_NAME.get(int(tag_val), str(tag_val))
+        elif "asn1_type" in data and isinstance(data["asn1_type"], (int, SnmpAsn1Type)):
+            tag_val = int(data["asn1_type"].value if isinstance(data["asn1_type"], SnmpAsn1Type) else data["asn1_type"])
+            data["asn1_type"] = ASN1_TAG_TO_CANONICAL_NAME.get(tag_val, str(tag_val))
+        super().__init__(**data)
+
+    @property
+    def tag(self) -> int:
+        return resolve_asn1_tag(self.asn1_type)
+
+
+def validate_notification_varbind_order(varbinds: List[SnmpVarBind]) -> None:
+    """
+    Enforces RFC 3416 Section 4.2.6 mandatory notification varbind ordering:
+      VarBind[0] MUST be sysUpTime.0 (1.3.6.1.2.1.1.3.0, TimeTicks / 0x43)
+      VarBind[1] MUST be snmpTrapOID.0 (1.3.6.1.6.3.1.1.4.1.0, ObjectIdentifier / 0x06)
+    """
+    if len(varbinds) < 2:
+        raise ValueError(
+            f"SNMPv2c notification PDU requires at least 2 varbinds (sysUpTime.0 and snmpTrapOID.0), got {len(varbinds)}"
+        )
+    vb0 = varbinds[0]
+    vb1 = varbinds[1]
+    if vb0.oid != SYSUPTIME_OID:
+        raise ValueError(
+            f"VarBind[0] must be sysUpTime.0 ({SYSUPTIME_OID}), got {vb0.oid!r}"
+        )
+    if resolve_asn1_tag(vb0.asn1_type) != SnmpAsn1Type.TIME_TICKS.value:
+        raise ValueError(
+            f"VarBind[0] (sysUpTime.0) must have ASN.1 type TimeTicks (0x43), got {vb0.asn1_type!r}"
+        )
+    if vb1.oid != SNMP_TRAP_OID:
+        raise ValueError(
+            f"VarBind[1] must be snmpTrapOID.0 ({SNMP_TRAP_OID}), got {vb1.oid!r}"
+        )
+    if resolve_asn1_tag(vb1.asn1_type) != SnmpAsn1Type.OBJECT_IDENTIFIER.value:
+        raise ValueError(
+            f"VarBind[1] (snmpTrapOID.0) must have ASN.1 type ObjectIdentifier (0x06), got {vb1.asn1_type!r}"
+        )
+
+
+class SnmpMessage(BaseModel):
+    version: int = SnmpVersion.V2C.value
+    community: str = "netspout-lab"
+    pdu_type: int = SnmpPduType.SNMPV2_TRAP.value
+    request_id: int = 1
+    error_status: int = 0
+    error_index: int = 0
+    varbinds: List[SnmpVarBind] = Field(default_factory=list)
+    source_device_id: Optional[str] = None
+    source_ip: Optional[str] = None
+    scenario_id: Optional[str] = None
+    phase: Optional[str] = None
+    non_repeaters: Optional[int] = None
+    max_repetitions: Optional[int] = None
+
+    def __init__(self, **data):
+        if "pdu_type" in data and isinstance(data["pdu_type"], SnmpPduType):
+            data["pdu_type"] = int(data["pdu_type"].value)
+        if "version" in data and isinstance(data["version"], SnmpVersion):
+            data["version"] = int(data["version"].value)
+        if "varbinds" in data and isinstance(data["varbinds"], list):
+            converted = []
+            for vb in data["varbinds"]:
+                if isinstance(vb, dict):
+                    converted.append(SnmpVarBind(**vb))
+                else:
+                    converted.append(vb)
+            data["varbinds"] = converted
+        super().__init__(**data)
+
+
+class SnmpTrap(SnmpMessage):
+    pdu_type: int = SnmpPduType.SNMPV2_TRAP.value
+
+    def __init__(self, **data):
+        data["pdu_type"] = int(SnmpPduType.SNMPV2_TRAP.value)
+        sys_uptime = data.pop("sys_uptime", None)
+        trap_oid = data.pop("trap_oid", None)
+        vbs = list(data.get("varbinds", []))
+        converted_vbs = [SnmpVarBind(**vb) if isinstance(vb, dict) else vb for vb in vbs]
+        if sys_uptime is not None and trap_oid is not None:
+            if not converted_vbs or converted_vbs[0].oid != SYSUPTIME_OID:
+                converted_vbs = [
+                    SnmpVarBind(
+                        oid=SYSUPTIME_OID,
+                        asn1_type="TimeTicks",
+                        value=int(sys_uptime),
+                        mib_module="SNMPv2-MIB",
+                        object_name="sysUpTime.0",
+                        fidelity=OidFidelityClass.STANDARD_VERIFIED.value
+                    ),
+                    SnmpVarBind(
+                        oid=SNMP_TRAP_OID,
+                        asn1_type="ObjectIdentifier",
+                        value=str(trap_oid),
+                        mib_module="SNMPv2-MIB",
+                        object_name="snmpTrapOID.0",
+                        fidelity=OidFidelityClass.STANDARD_VERIFIED.value
+                    )
+                ] + converted_vbs
+        data["varbinds"] = converted_vbs
+        super().__init__(**data)
+        validate_notification_varbind_order(self.varbinds)
+
+    @property
+    def sys_uptime(self) -> int:
+        return int(self.varbinds[0].value)
+
+    @property
+    def trap_oid(self) -> str:
+        return str(self.varbinds[1].value)
+
+
+class SnmpInform(SnmpMessage):
+    pdu_type: int = SnmpPduType.INFORM_REQUEST.value
+
+    def __init__(self, **data):
+        data["pdu_type"] = int(SnmpPduType.INFORM_REQUEST.value)
+        sys_uptime = data.pop("sys_uptime", None)
+        trap_oid = data.pop("trap_oid", None)
+        vbs = list(data.get("varbinds", []))
+        converted_vbs = [SnmpVarBind(**vb) if isinstance(vb, dict) else vb for vb in vbs]
+        if sys_uptime is not None and trap_oid is not None:
+            if not converted_vbs or converted_vbs[0].oid != SYSUPTIME_OID:
+                converted_vbs = [
+                    SnmpVarBind(
+                        oid=SYSUPTIME_OID,
+                        asn1_type="TimeTicks",
+                        value=int(sys_uptime),
+                        mib_module="SNMPv2-MIB",
+                        object_name="sysUpTime.0",
+                        fidelity=OidFidelityClass.STANDARD_VERIFIED.value
+                    ),
+                    SnmpVarBind(
+                        oid=SNMP_TRAP_OID,
+                        asn1_type="ObjectIdentifier",
+                        value=str(trap_oid),
+                        mib_module="SNMPv2-MIB",
+                        object_name="snmpTrapOID.0",
+                        fidelity=OidFidelityClass.STANDARD_VERIFIED.value
+                    )
+                ] + converted_vbs
+        data["varbinds"] = converted_vbs
+        super().__init__(**data)
+        validate_notification_varbind_order(self.varbinds)
+
+    @property
+    def sys_uptime(self) -> int:
+        return int(self.varbinds[0].value)
+
+    @property
+    def trap_oid(self) -> str:
+        return str(self.varbinds[1].value)
+
+
+class SnmpResponse(SnmpMessage):
+    pdu_type: int = SnmpPduType.RESPONSE.value
+
+    def __init__(self, **data):
+        data["pdu_type"] = int(SnmpPduType.RESPONSE.value)
+        super().__init__(**data)
+
+    @classmethod
+    def from_inform(cls, inform: SnmpMessage, error_status: int = 0, error_index: int = 0) -> "SnmpResponse":
+        """
+        Constructs an RFC 3416 Section 4.2.7 Response-PDU (0xA2) acknowledging an InformRequest-PDU (0xA6)
+        with identical version, community, request-id, error-status=0, error-index=0, and varbinds.
+        """
+        return cls(
+            version=inform.version,
+            community=inform.community,
+            request_id=inform.request_id,
+            error_status=error_status,
+            error_index=error_index,
+            varbinds=list(inform.varbinds),
+            source_device_id=inform.source_device_id,
+            source_ip=inform.source_ip,
+            scenario_id=inform.scenario_id,
+            phase=inform.phase
+        )
+
+
+class SnmpTransportResult(BaseModel):
+    transport_type: str = "SNMPV2C_UDP"
+    pdu_mode: str = "TRAP"                # "TRAP", "INFORM", "MIXED"
+    destination_host: str = "127.0.0.1"
+    destination_port: int = 1162
+    pdus_generated: int = 0
+    pdus_encoded: int = 0
+    datagrams_attempted: int = 0
+    datagrams_sent: int = 0
+    bytes_sent: int = 0
+    informs_sent: int = 0
+    informs_acknowledged: int = 0
+    inform_retries: int = 0
+    inform_timeouts: int = 0
+    late_or_mismatched_acks: int = 0
+    request_ids: List[int] = Field(default_factory=list)
+    acknowledged_request_ids: List[int] = Field(default_factory=list)
+    receiver_observed_count: int = 0
+    receiver_observed_request_ids: List[int] = Field(default_factory=list)
+    evidence_stage: str = SnmpEvidenceStage.GENERATED.value
+    stage_history: List[str] = Field(default_factory=list)
+    rtt_ms_samples: List[float] = Field(default_factory=list)
+    packet_cap_exceeded: bool = False
+    encoding_failures: int = 0
+    send_failures: int = 0
+    elapsed_ms: float = 0.0
+    errors: List[str] = Field(default_factory=list)
+    error_types: List[str] = Field(default_factory=list)
 
 
 def resolve_native_flow_config(
@@ -973,6 +1350,7 @@ def resolve_native_flow_config(
                 cfg_data[k] = v
 
     return NativeFlowConfig(**cfg_data)
+
 
 
 

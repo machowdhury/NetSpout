@@ -41,7 +41,9 @@ CORE_MODULES = [
     "rate_limiter.py",
     "transport_native_flow.py",
     "companion_manifest.py",
-    "collector_evidence.py"
+    "collector_evidence.py",
+    "snmp_ber.py",
+    "transport_native_snmp.py"
 ]
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")

@@ -2853,63 +2853,154 @@ class ScenarioRunner:
         else:
             manifest.overall_validation = ValidationStatus.PASS.value
 
-        # Gate 11B: Optional Native Flow Transport Execution (Mode B)
+        # Gate 11B & Gate 12B: Optional Native Transport Execution (Mode B)
         if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT":
-            flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
-            manifest.native_flow_records = flow_records
+            raw_proto = (getattr(request, "native_protocol", None) or "").upper()
+            pdu_mode_req = getattr(request, "native_snmp_pdu_mode", None)
+            is_snmp_run = (
+                scenario_id == "service_provider_cisco"
+                and (not raw_proto or "SNMP" in raw_proto or pdu_mode_req is not None)
+            ) or ("SNMP" in raw_proto)
 
-            if flow_records:
-                protocol = (getattr(request, "native_protocol", None) or "IPFIX").upper()
+            if is_snmp_run and scenario_id == "service_provider_cisco":
+                if pdu_mode_req:
+                    pdu_mode = pdu_mode_req.upper()
+                elif "INFORM" in raw_proto:
+                    pdu_mode = "INFORM"
+                elif "MIXED" in raw_proto:
+                    pdu_mode = "MIXED"
+                else:
+                    pdu_mode = "TRAP"
+
                 dest_host = getattr(request, "native_destination_host", None) or "127.0.0.1"
-                dest_port = getattr(request, "native_destination_port", None) or (4739 if protocol == "IPFIX" else 2055)
-                rate_pps = getattr(request, "native_rate_pps", 100) or 100
-
-                session = ExporterSession(
-                    node_id="node-arista-leaf",
-                    exporter_ip="10.200.0.3",
-                    observation_domain_id=1,
-                    source_id=1
-                )
+                dest_port = getattr(request, "native_destination_port", None) or 1162
+                community = getattr(request, "native_snmp_community", None) or "netspout-lab"
+                timeout_ms = getattr(request, "native_snmp_timeout_ms", 1500) or 1500
+                max_retries = getattr(request, "native_snmp_max_retries", 2)
+                if max_retries is None:
+                    max_retries = 2
 
                 try:
-                    from netspout_core.transport_native_flow import NativeFlowTransport
+                    from netspout_core.snmp_engine import snmp_engine
+                    from netspout_core.transport_native_snmp import NativeSnmpTransport
                     from netspout_core.companion_manifest import CompanionManifestBuilder
                 except ImportError:
                     try:
-                        from app.transport_native_flow import NativeFlowTransport
+                        from app.snmp_engine import snmp_engine
+                        from app.transport_native_snmp import NativeSnmpTransport
                         from app.companion_manifest import CompanionManifestBuilder
                     except ImportError:
-                        from transport_native_flow import NativeFlowTransport
+                        from snmp_engine import snmp_engine
+                        from transport_native_snmp import NativeSnmpTransport
                         from companion_manifest import CompanionManifestBuilder
 
-                transport = NativeFlowTransport(
+                snmp_pdus = snmp_engine.build_service_provider_cisco_native_pdus(
+                    seed=request.seed,
+                    pdu_mode=pdu_mode,
+                    community=community,
+                    exporter_ip="10.200.0.1",
+                    device_id="node-cisco8k-core01",
+                )
+                manifest.native_snmp_pdus = snmp_pdus
+
+                raw_rate = getattr(request, "native_rate_pps", None)
+                trap_rate = min(max(1, int(raw_rate or 50)), 250)
+                inform_rate = min(max(1, int(raw_rate or 25)), 100)
+
+                snmp_transport = NativeSnmpTransport(
                     destination_host=dest_host,
                     destination_port=dest_port,
-                    protocol=protocol,
-                    rate_pps=rate_pps,
-                    test_mode=(time_mode == "TEST")
+                    community=community,
+                    trap_rate_pps=trap_rate,
+                    inform_rate_pps=inform_rate,
+                    inform_timeout_ms=timeout_ms,
+                    inform_max_retries=max_retries,
+                    test_mode=(time_mode == "TEST"),
                 )
+                snmp_res = snmp_transport.send_batch(snmp_pdus)
+                manifest.native_snmp_result = snmp_res
+                manifest.native_transport_result = snmp_res
 
-                transport_res = transport.send_batch(flow_records, session, force_template=True)
-                manifest.native_transport_result = transport_res
-
-                companion = CompanionManifestBuilder.build_manifest(
+                trap_oids = [str(m.varbinds[1].value) for m in snmp_pdus if len(m.varbinds) >= 2]
+                companion = CompanionManifestBuilder.build_snmp_manifest(
                     run_id=run_id,
                     scenario_id=scenario_id,
-                    protocol=protocol,
+                    pdu_mode=pdu_mode,
                     destination_host=dest_host,
                     destination_port=dest_port,
-                    exporter_ip="10.200.0.3",
-                    observation_domain_id=1,
-                    template_ids=[256],
-                    records_generated=len(flow_records),
-                    records_encoded=transport_res.records_encoded,
-                    datagrams_sent=transport_res.datagrams_sent,
-                    bytes_sent=transport_res.bytes_sent,
+                    exporter_ip="10.200.0.1",
+                    request_ids=snmp_res.request_ids,
+                    acknowledged_request_ids=snmp_res.acknowledged_request_ids,
+                    trap_oids=trap_oids,
+                    pdus_generated=snmp_res.pdus_generated,
+                    pdus_encoded=snmp_res.pdus_encoded,
+                    datagrams_sent=snmp_res.datagrams_sent,
+                    bytes_sent=snmp_res.bytes_sent,
+                    informs_acknowledged=snmp_res.informs_acknowledged,
+                    inform_retries=snmp_res.inform_retries,
+                    inform_timeouts=snmp_res.inform_timeouts,
+                    receiver_observed_count=snmp_res.receiver_observed_count,
+                    evidence_stage=snmp_res.evidence_stage,
                     start_time_epoch_ms=int(start_time * 1000),
-                    end_time_epoch_ms=int(time.time() * 1000)
+                    end_time_epoch_ms=int(time.time() * 1000),
                 )
                 manifest.companion_manifest = companion
+            else:
+                flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
+                manifest.native_flow_records = flow_records
+
+                if flow_records:
+                    protocol = (getattr(request, "native_protocol", None) or "IPFIX").upper()
+                    dest_host = getattr(request, "native_destination_host", None) or "127.0.0.1"
+                    dest_port = getattr(request, "native_destination_port", None) or (4739 if protocol == "IPFIX" else 2055)
+                    rate_pps = getattr(request, "native_rate_pps", 100) or 100
+
+                    session = ExporterSession(
+                        node_id="node-arista-leaf",
+                        exporter_ip="10.200.0.3",
+                        observation_domain_id=1,
+                        source_id=1
+                    )
+
+                    try:
+                        from netspout_core.transport_native_flow import NativeFlowTransport
+                        from netspout_core.companion_manifest import CompanionManifestBuilder
+                    except ImportError:
+                        try:
+                            from app.transport_native_flow import NativeFlowTransport
+                            from app.companion_manifest import CompanionManifestBuilder
+                        except ImportError:
+                            from transport_native_flow import NativeFlowTransport
+                            from companion_manifest import CompanionManifestBuilder
+
+                    transport = NativeFlowTransport(
+                        destination_host=dest_host,
+                        destination_port=dest_port,
+                        protocol=protocol,
+                        rate_pps=rate_pps,
+                        test_mode=(time_mode == "TEST")
+                    )
+
+                    transport_res = transport.send_batch(flow_records, session, force_template=True)
+                    manifest.native_transport_result = transport_res
+
+                    companion = CompanionManifestBuilder.build_manifest(
+                        run_id=run_id,
+                        scenario_id=scenario_id,
+                        protocol=protocol,
+                        destination_host=dest_host,
+                        destination_port=dest_port,
+                        exporter_ip="10.200.0.3",
+                        observation_domain_id=1,
+                        template_ids=[256],
+                        records_generated=len(flow_records),
+                        records_encoded=transport_res.records_encoded,
+                        datagrams_sent=transport_res.datagrams_sent,
+                        bytes_sent=transport_res.bytes_sent,
+                        start_time_epoch_ms=int(start_time * 1000),
+                        end_time_epoch_ms=int(time.time() * 1000)
+                    )
+                    manifest.companion_manifest = companion
 
         manifest.end_time = time.time()
         manifest.duration_sec = round(manifest.end_time - start_time, 3)

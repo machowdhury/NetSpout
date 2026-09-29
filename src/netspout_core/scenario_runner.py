@@ -2853,13 +2853,13 @@ class ScenarioRunner:
         else:
             manifest.overall_validation = ValidationStatus.PASS.value
 
-        # Gate 11B & Gate 12B: Optional Native Transport Execution (Mode B)
-        if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT":
+        # Gate 11B, Gate 12B & Gate 12D: Optional Native Transport Execution (Mode B / E2E)
+        if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False):
             raw_proto = (getattr(request, "native_protocol", None) or "").upper()
             pdu_mode_req = getattr(request, "native_snmp_pdu_mode", None)
             is_snmp_run = (
                 scenario_id == "service_provider_cisco"
-                and (not raw_proto or "SNMP" in raw_proto or pdu_mode_req is not None)
+                and (not raw_proto or "SNMP" in raw_proto or pdu_mode_req is not None or getattr(request, "native_snmp_e2e", False))
             ) or ("SNMP" in raw_proto)
 
             if is_snmp_run and scenario_id == "service_provider_cisco":
@@ -2945,6 +2945,36 @@ class ScenarioRunner:
                     end_time_epoch_ms=int(time.time() * 1000),
                 )
                 manifest.companion_manifest = companion
+
+                if getattr(request, "native_snmp_e2e", False) or raw_proto == "SNMPV2C_E2E":
+                    try:
+                        from netspout_core.snmp_splunk_e2e import SnmpSplunkE2EOrchestrator
+                    except ImportError:
+                        try:
+                            from app.snmp_splunk_e2e import SnmpSplunkE2EOrchestrator
+                        except ImportError:
+                            from snmp_splunk_e2e import SnmpSplunkE2EOrchestrator
+
+                    orchestrator = SnmpSplunkE2EOrchestrator(
+                        index=target_idx,
+                        device_id="cisco-asr9k-pe1",
+                        seed=request.seed if request.seed is not None else 42,
+                    )
+                    scorecard, e2e_artifacts = orchestrator.execute_e2e_run(run_id=run_id)
+                    manifest.snmp_e2e_scorecard = scorecard
+                    manifest.snmp_normalized_events = e2e_artifacts.get("normalized_events", [])
+                    manifest.evidence_summary = SnmpSplunkE2EOrchestrator.build_unified_run_evidence(scorecard)
+                    manifest.observed_count = scorecard.splunk_observed_records
+                    manifest.event_observed_count = scorecard.splunk_observed_records
+                    manifest.observation_completeness_pct = scorecard.observation_completeness_pct
+                    manifest.observation_status = (
+                        "VERIFIED" if scorecard.splunk_observed_records > 0 else "FAILED"
+                    )
+                    manifest.destination_validation = scorecard.validation_result
+                    manifest.overall_validation = scorecard.validation_result
+                    manifest.splunk_search_query = scorecard.investigation_queries.get(
+                        "all_snmp_evidence_spl", manifest.splunk_search_query
+                    )
             else:
                 flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
                 manifest.native_flow_records = flow_records

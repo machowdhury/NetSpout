@@ -48,7 +48,8 @@ CORE_MODULES = [
     "collector_evidence.py",
     "snmp_ber.py",
     "transport_native_snmp.py",
-    "snmp_agent.py"
+    "snmp_agent.py",
+    "snmp_splunk_e2e.py"
 ]
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")

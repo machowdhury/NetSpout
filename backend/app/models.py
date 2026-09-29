@@ -749,6 +749,8 @@ class RunManifest(BaseModel):
     native_flow_records: List[Any] = Field(default_factory=list)
     native_snmp_result: Optional[Any] = None
     native_snmp_pdus: List[Any] = Field(default_factory=list)
+    snmp_e2e_scorecard: Optional[Any] = None
+    snmp_normalized_events: List[Any] = Field(default_factory=list)
 
 
 class ScenarioRunRequest(BaseModel):
@@ -768,6 +770,8 @@ class ScenarioRunRequest(BaseModel):
     native_snmp_community: Optional[str] = None
     native_snmp_timeout_ms: int = 1500
     native_snmp_max_retries: int = 2
+    native_snmp_e2e: bool = False
+    native_snmp_agent_port: Optional[int] = None
 
 
 class FlowRecord(BaseModel):
@@ -1012,7 +1016,9 @@ class SnmpEvidenceStage(str, Enum):
     RESPONSE_ENCODED = "RESPONSE_ENCODED"
     RESPONSE_SENT = "RESPONSE_SENT"
     MANAGER_OBSERVED = "MANAGER_OBSERVED"
+    SPLUNK_DISPATCHED = "SPLUNK_DISPATCHED"
     SPLUNK_OBSERVED = "SPLUNK_OBSERVED"
+    VALIDATED = "VALIDATED"
 
 
 ASN1_TYPE_NAME_TO_TAG: Dict[str, int] = {
@@ -1356,6 +1362,200 @@ class SnmpPollingEvidence(BaseModel):
     manager_observed_responses: int = 0
     evidence_stage: str = "IDLE"
     stage_history: List[str] = Field(default_factory=list)
+
+
+class NormalizedSnmpEvent(BaseModel):
+    """
+    Canonical Gate 12D normalized SNMP collector/poller event for Splunk indexing.
+    Correlation metadata (`netspout_run_id`, `netspout_scenario_id`, `netspout_phase`,
+    `netspout_device_id`, `netspout_event_id`) is attached out-of-band in the collector
+    normalization tier so the native SNMPv2c wire payload remains 100% standards-pure.
+    """
+    timestamp: float = Field(default_factory=time.time)
+    sourcetype: str = "netspout:snmp:trap"  # "netspout:snmp:trap" | "netspout:snmp:poll"
+    index: str = "idx_network_ops"
+    source: str = "snmptrapd:udp:1162"
+    host: str = "cisco-asr9k-pe1"
+    netspout_run_id: str = ""
+    netspout_scenario_id: str = "service_provider_cisco"
+    netspout_phase: str = "BASELINE"
+    netspout_device_id: str = "cisco-asr9k-pe1"
+    netspout_event_id: str = ""
+    snmp_version: str = "2c"
+    snmp_pdu_type: str = "SNMPv2-Trap"      # "SNMPv2-Trap", "InformRequest", "GetRequest", "GetNextRequest", "GetBulkRequest"
+    snmp_request_id: Optional[int] = None
+    snmp_trap_oid: Optional[str] = None
+    snmp_trap_name: Optional[str] = None
+    snmp_oid: str = ""
+    snmp_oid_name: str = ""
+    snmp_value: str = ""
+    snmp_numeric_value: Optional[float] = None
+    snmp_value_type: str = "OctetString"
+    snmp_source: str = "127.0.0.1"
+    snmp_collector: str = "snmptrapd"       # "snmptrapd" | "net-snmp-cli"
+    snmp_transport: str = "SNMPV2C_UDP"
+    evidence_stage: str = SnmpEvidenceStage.RECEIVER_OBSERVED.value
+    sys_uptime: Optional[int] = None
+    varbinds: Dict[str, Any] = Field(default_factory=dict)
+    raw_collector_line: Optional[str] = None
+    telemetry_semantics: str = "NATIVE TRANSPORT / MODELED DEVICE STATE"
+
+    def to_event_dict(self) -> Dict[str, Any]:
+        return {
+            "netspout_run_id": self.netspout_run_id,
+            "netspout_scenario_id": self.netspout_scenario_id,
+            "netspout_phase": self.netspout_phase,
+            "netspout_device_id": self.netspout_device_id,
+            "netspout_event_id": self.netspout_event_id,
+            "snmp_version": self.snmp_version,
+            "snmp_pdu_type": self.snmp_pdu_type,
+            "snmp_request_id": self.snmp_request_id,
+            "snmp_trap_oid": self.snmp_trap_oid,
+            "snmp_trap_name": self.snmp_trap_name,
+            "snmp_oid": self.snmp_oid,
+            "snmp_oid_name": self.snmp_oid_name,
+            "snmp_value": self.snmp_value,
+            "snmp_numeric_value": self.snmp_numeric_value,
+            "snmp_value_type": self.snmp_value_type,
+            "snmp_source": self.snmp_source,
+            "snmp_collector": self.snmp_collector,
+            "snmp_transport": self.snmp_transport,
+            "evidence_stage": self.evidence_stage,
+            "sys_uptime": self.sys_uptime,
+            "varbinds": dict(self.varbinds),
+            "raw_collector_line": self.raw_collector_line,
+            "telemetry_semantics": self.telemetry_semantics,
+        }
+
+    def to_hec_payload(self) -> Dict[str, Any]:
+        ev_dict = self.to_event_dict()
+        return {
+            "time": self.timestamp,
+            "host": self.host,
+            "source": self.source,
+            "sourcetype": self.sourcetype,
+            "index": self.index,
+            "event": ev_dict,
+        }
+
+    def to_log_entry(self) -> LogEntry:
+        iso_ts = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(self.timestamp))
+        status_val = "normal"
+        action_val = "allowed"
+        if self.netspout_phase in ("DEGRADE", "FAULT", "FAILOVER", "PROPAGATE"):
+            status_val = "degraded" if self.netspout_phase in ("DEGRADE", "FAULT") else "mitigated"
+            action_val = "alerted"
+        elif self.netspout_phase in ("RECOVERY", "RECOVER", "VALIDATE"):
+            status_val = "restored"
+            action_val = "allowed"
+        sig = self.snmp_trap_name or f"SNMP Poll {self.snmp_oid_name}={self.snmp_value}"
+        kv_pairs = [
+            f'netspout_run_id="{self.netspout_run_id}"',
+            f'netspout_scenario_id="{self.netspout_scenario_id}"',
+            f'netspout_phase="{self.netspout_phase}"',
+            f'netspout_device_id="{self.netspout_device_id}"',
+            f'netspout_event_id="{self.netspout_event_id}"',
+            f'snmp_version="{self.snmp_version}"',
+            f'snmp_pdu_type="{self.snmp_pdu_type}"',
+            f'snmp_request_id="{self.snmp_request_id if self.snmp_request_id is not None else ""}"',
+            f'snmp_trap_oid="{self.snmp_trap_oid or ""}"',
+            f'snmp_trap_name="{self.snmp_trap_name or ""}"',
+            f'snmp_oid="{self.snmp_oid}"',
+            f'snmp_oid_name="{self.snmp_oid_name}"',
+            f'snmp_value="{self.snmp_value}"',
+            f'snmp_value_type="{self.snmp_value_type}"',
+            f'snmp_source="{self.snmp_source}"',
+            f'snmp_collector="{self.snmp_collector}"',
+            f'snmp_transport="{self.snmp_transport}"',
+            f'evidence_stage="{self.evidence_stage}"',
+        ]
+        return LogEntry(
+            timestamp=iso_ts,
+            device_id=self.netspout_device_id,
+            src_ip=self.snmp_source,
+            dest_ip="127.0.0.1",
+            protocol="UDP",
+            duration="1ms",
+            action=action_val,
+            signature=sig,
+            status=status_val,
+            raw_log=" ".join(kv_pairs),
+            node_type="router",
+            node_id=self.netspout_device_id,
+            vendor="cisco_ios",
+            sourcetype=self.sourcetype,
+            netspout_run_id=self.netspout_run_id,
+            netspout_scenario_id=self.netspout_scenario_id,
+            netspout_phase=self.netspout_phase,
+            netspout_device_id=self.netspout_device_id,
+            netspout_event_id=self.netspout_event_id,
+            netspout_ground_truth="true",
+        )
+
+
+class SnmpE2ERunScorecard(BaseModel):
+    """
+    Machine-readable Gate 12D End-to-End Scorecard preserving strict separation across:
+    GENERATED -> ENCODED -> SENT -> ACKNOWLEDGED -> RECEIVER_OBSERVED -> SPLUNK_DISPATCHED -> SPLUNK_OBSERVED -> VALIDATED
+    """
+    run_id: str
+    scenario_id: str = "service_provider_cisco"
+    device_id: str = "cisco-asr9k-pe1"
+    seed: int = 42
+    external_trap_receiver: str = "/usr/sbin/snmptrapd"
+    external_poller: str = "net-snmp-cli (/usr/bin/snmpget, /usr/bin/snmpgetnext, /usr/bin/snmpwalk, /usr/bin/snmpbulkwalk)"
+    target_index: str = "idx_network_ops"
+    sourcetypes: List[str] = Field(default_factory=lambda: ["netspout:snmp:trap", "netspout:snmp:poll"])
+    telemetry_semantics: str = "NATIVE TRANSPORT / MODELED DEVICE STATE"
+    # Stage 1-3: Generation, Encoding, Transmission
+    generated_notifications: int = 0
+    encoded_notifications: int = 0
+    sent_notifications: int = 0
+    traps_generated: int = 0
+    traps_sent: int = 0
+    informs_generated: int = 0
+    informs_sent: int = 0
+    # Stage 4: Acknowledgement
+    informs_acknowledged: int = 0
+    # Stage 5: External Receiver / Poller Observation
+    traps_receiver_observed: int = 0
+    informs_receiver_observed: int = 0
+    receiver_observed_notifications: int = 0
+    polling_requests: int = 0
+    polling_responses: int = 0
+    get_requests: int = 0
+    getnext_requests: int = 0
+    getbulk_requests: int = 0
+    walk_oids_observed: int = 0
+    # Normalization
+    normalized_records: int = 0
+    normalized_trap_records: int = 0
+    normalized_poll_records: int = 0
+    duplicate_records_suppressed: int = 0
+    malformed_records_dropped: int = 0
+    # Stage 6: Splunk HEC Dispatch
+    splunk_dispatched_records: int = 0
+    splunk_dispatch_failures: int = 0
+    # Stage 7: Fresh Splunk Search Observation
+    splunk_observed_records: int = 0
+    splunk_observed_trap_records: int = 0
+    splunk_observed_poll_records: int = 0
+    observation_completeness_pct: float = 0.0
+    # Explicit UI/API boundary distinction
+    snmp_receiver_observed_status: str = "NO"
+    splunk_dispatched_status: str = "NO"
+    splunk_observed_status: str = "NO"
+    # Stage 8: Validation & Coherence
+    phases_verified: List[str] = Field(default_factory=list)
+    trap_poll_coherence: bool = False
+    coherence_details: Dict[str, Any] = Field(default_factory=dict)
+    validation_result: str = "NOT_RUN"
+    validation_checks: List[Dict[str, Any]] = Field(default_factory=list)
+    evidence_stage: str = SnmpEvidenceStage.GENERATED.value
+    stage_history: List[str] = Field(default_factory=list)
+    stage_classification: Dict[str, str] = Field(default_factory=dict)
+    investigation_queries: Dict[str, str] = Field(default_factory=dict)
+    errors: List[str] = Field(default_factory=list)
 
 
 def resolve_native_flow_config(

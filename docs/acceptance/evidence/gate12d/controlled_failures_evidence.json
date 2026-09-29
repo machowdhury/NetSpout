@@ -1,0 +1,100 @@
+{
+  "all_verified": true,
+  "results": {
+    "failure_a": {
+      "failure_id": "FAILURE_A_RECEIVER_UNAVAILABLE",
+      "run_id": "run-gate12d-cf-a",
+      "traps_sent": 4,
+      "informs_sent": 4,
+      "informs_acknowledged": 0,
+      "receiver_observed_notifications": 0,
+      "splunk_observed_records": 0,
+      "stage_classification": {
+        "GENERATED": "YES",
+        "ENCODED": "YES",
+        "SENT": "YES",
+        "ACKNOWLEDGED": "NO",
+        "RECEIVER_OBSERVED": "NO",
+        "SPLUNK_DISPATCHED": "NO",
+        "SPLUNK_OBSERVED": "NO",
+        "VALIDATED": "NO"
+      },
+      "validation_result": "FAIL",
+      "expected_behavior_verified": true
+    },
+    "failure_b": {
+      "failure_id": "FAILURE_B_RECEIVER_UP_SPLUNK_DOWN",
+      "run_id": "run-gate12d-cf-b",
+      "receiver_observed_notifications": 8,
+      "polling_responses": 290,
+      "normalized_records": 326,
+      "splunk_dispatched_records": 0,
+      "splunk_dispatch_failures": 326,
+      "splunk_observed_records": 0,
+      "stage_classification": {
+        "GENERATED": "YES",
+        "ENCODED": "YES",
+        "SENT": "YES",
+        "ACKNOWLEDGED": "YES",
+        "RECEIVER_OBSERVED": "YES",
+        "SPLUNK_DISPATCHED": "NO",
+        "SPLUNK_OBSERVED": "NO",
+        "VALIDATED": "NO"
+      },
+      "validation_result": "FAIL",
+      "expected_behavior_verified": true
+    },
+    "failure_c": {
+      "failure_id": "FAILURE_C_AGENT_UNREACHABLE_DURING_POLL",
+      "run_id": "run-gate12d-cf-c",
+      "polling_requests": 1,
+      "polling_responses": 0,
+      "normalized_poll_records": 0,
+      "splunk_observed_poll_records": 0,
+      "errors": [
+        "External poller failed to reach SNMP agent on 127.0.0.1:63568: Timeout: No Response from 127.0.0.1:63568."
+      ],
+      "validation_result": "FAIL",
+      "expected_behavior_verified": true
+    },
+    "failure_d": {
+      "failure_id": "FAILURE_D_MISSING_SCENARIO_PHASE",
+      "run_id": "run-gate12d-cf-d",
+      "suppressed_phase": "RECOVERY",
+      "phases_verified": [
+        "BASELINE",
+        "DEGRADE",
+        "FAILOVER"
+      ],
+      "splunk_observed_records": 306,
+      "missing_phase_check": {
+        "check_id": "all_four_phases_present",
+        "passed": false,
+        "expected_phases": [
+          "BASELINE",
+          "DEGRADE",
+          "FAILOVER",
+          "RECOVERY"
+        ],
+        "observed_phases": [
+          "BASELINE",
+          "DEGRADE",
+          "FAILOVER"
+        ]
+      },
+      "validation_result": "FAIL",
+      "expected_behavior_verified": true
+    },
+    "failure_e": {
+      "failure_id": "FAILURE_E_DUPLICATE_RETRIED_INFORM",
+      "run_id": "run-gate12d-cf-e",
+      "total_informs_transmitted": 8,
+      "raw_notifications_received": 8,
+      "receiver_deduplicated_notifications": 4,
+      "receiver_duplicate_informs_suppressed": 4,
+      "normalizer_unique_events": 4,
+      "normalizer_duplicate_events_suppressed": 4,
+      "expected_behavior_verified": true
+    }
+  }
+}

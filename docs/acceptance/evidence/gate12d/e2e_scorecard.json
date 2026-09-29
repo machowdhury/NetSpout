@@ -1,0 +1,151 @@
+{
+  "run_id": "run-gate12d-canonical-001",
+  "scenario_id": "service_provider_cisco",
+  "device_id": "cisco-asr9k-pe1",
+  "seed": 42,
+  "external_trap_receiver": "/usr/sbin/snmptrapd",
+  "external_poller": "net-snmp-cli (/usr/bin/snmpget, /usr/bin/snmpgetnext, /usr/bin/snmpwalk, /usr/bin/snmpbulkwalk)",
+  "target_index": "idx_network_ops",
+  "sourcetypes": [
+    "netspout:snmp:trap",
+    "netspout:snmp:poll"
+  ],
+  "telemetry_semantics": "NATIVE TRANSPORT / MODELED DEVICE STATE",
+  "generated_notifications": 8,
+  "encoded_notifications": 8,
+  "sent_notifications": 8,
+  "traps_generated": 4,
+  "traps_sent": 4,
+  "informs_generated": 4,
+  "informs_sent": 4,
+  "informs_acknowledged": 4,
+  "traps_receiver_observed": 4,
+  "informs_receiver_observed": 4,
+  "receiver_observed_notifications": 8,
+  "polling_requests": 290,
+  "polling_responses": 290,
+  "get_requests": 4,
+  "getnext_requests": 260,
+  "getbulk_requests": 26,
+  "walk_oids_observed": 127,
+  "normalized_records": 326,
+  "normalized_trap_records": 8,
+  "normalized_poll_records": 318,
+  "duplicate_records_suppressed": 0,
+  "malformed_records_dropped": 0,
+  "splunk_dispatched_records": 326,
+  "splunk_dispatch_failures": 0,
+  "splunk_observed_records": 326,
+  "splunk_observed_trap_records": 8,
+  "splunk_observed_poll_records": 318,
+  "observation_completeness_pct": 100.0,
+  "snmp_receiver_observed_status": "YES",
+  "splunk_dispatched_status": "YES",
+  "splunk_observed_status": "YES",
+  "phases_verified": [
+    "BASELINE",
+    "DEGRADE",
+    "FAILOVER",
+    "RECOVERY"
+  ],
+  "trap_poll_coherence": true,
+  "coherence_details": {
+    "coherent": true,
+    "checks": {
+      "baseline_if_up": true,
+      "baseline_bgp_est": true,
+      "degrade_if_down_matches_linkDown_trap": true,
+      "degrade_if_errors_elevated": true,
+      "failover_bgp_idle_matches_bgpBackwardTransition_trap": true,
+      "failover_backup_route_active": true,
+      "recovery_if_up_matches_linkUp_trap": true,
+      "recovery_bgp_est_matches_bgpEstablished_trap": true,
+      "recovery_primary_route_restored": true
+    }
+  },
+  "validation_result": "PASS",
+  "validation_checks": [
+    {
+      "check_id": "run_correlation_isolation",
+      "passed": true,
+      "foreign_records": 0,
+      "matched_records": 326
+    },
+    {
+      "check_id": "all_four_phases_present",
+      "passed": true,
+      "expected_phases": [
+        "BASELINE",
+        "DEGRADE",
+        "FAILOVER",
+        "RECOVERY"
+      ],
+      "observed_phases": [
+        "BASELINE",
+        "DEGRADE",
+        "FAILOVER",
+        "RECOVERY"
+      ]
+    },
+    {
+      "check_id": "required_notifications_observed",
+      "passed": true,
+      "observed_trap_oids": [
+        "1.3.6.1.2.1.15.7.1",
+        "1.3.6.1.2.1.15.7.2",
+        "1.3.6.1.6.3.1.1.5.3",
+        "1.3.6.1.6.3.1.1.5.4"
+      ],
+      "observed_pdu_types": [
+        "InformRequest",
+        "SNMPv2-Trap"
+      ]
+    },
+    {
+      "check_id": "trap_poll_state_coherence",
+      "passed": true,
+      "details": {
+        "baseline_if_up": true,
+        "baseline_bgp_est": true,
+        "degrade_if_down_matches_linkDown_trap": true,
+        "degrade_if_errors_elevated": true,
+        "failover_bgp_idle_matches_bgpBackwardTransition_trap": true,
+        "failover_backup_route_active": true,
+        "recovery_if_up_matches_linkUp_trap": true,
+        "recovery_bgp_est_matches_bgpEstablished_trap": true,
+        "recovery_primary_route_restored": true
+      }
+    }
+  ],
+  "evidence_stage": "VALIDATED",
+  "stage_history": [
+    "GENERATED",
+    "ENCODED",
+    "SENT",
+    "ACKNOWLEDGED",
+    "RECEIVER_OBSERVED",
+    "SPLUNK_DISPATCHED",
+    "SPLUNK_OBSERVED",
+    "VALIDATED"
+  ],
+  "stage_classification": {
+    "GENERATED": "YES",
+    "ENCODED": "YES",
+    "SENT": "YES",
+    "ACKNOWLEDGED": "YES",
+    "RECEIVER_OBSERVED": "YES",
+    "SPLUNK_DISPATCHED": "YES",
+    "SPLUNK_OBSERVED": "YES",
+    "VALIDATED": "YES"
+  },
+  "investigation_queries": {
+    "all_snmp_evidence_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"run-gate12d-canonical-001\" | table _time netspout_phase sourcetype snmp_pdu_type snmp_request_id snmp_trap_name snmp_oid_name snmp_value snmp_collector",
+    "trap_inform_evidence_spl": "search index=idx_network_ops sourcetype=\"netspout:snmp:trap\" netspout_run_id=\"run-gate12d-canonical-001\" | table _time netspout_phase snmp_pdu_type snmp_request_id snmp_trap_name snmp_trap_oid snmp_oid_name snmp_value sys_uptime",
+    "polling_evidence_spl": "search index=idx_network_ops sourcetype=\"netspout:snmp:poll\" netspout_run_id=\"run-gate12d-canonical-001\" | table _time netspout_phase snmp_pdu_type snmp_oid_name snmp_oid snmp_value snmp_value_type",
+    "timeline_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"run-gate12d-canonical-001\" | stats count as evidence_count values(sourcetype) as sourcetypes values(snmp_pdu_type) as pdu_types values(snmp_trap_name) as notifications by netspout_phase",
+    "interface_state_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"run-gate12d-canonical-001\" (snmp_oid=\"1.3.6.1.2.1.2.2.1.8.1\" OR snmp_oid=\"1.3.6.1.2.1.2.2.1.14.1\" OR snmp_trap_oid=\"1.3.6.1.6.3.1.1.5.3\" OR snmp_trap_oid=\"1.3.6.1.6.3.1.1.5.4\") | table _time netspout_phase sourcetype snmp_pdu_type snmp_trap_name snmp_oid_name snmp_value",
+    "bgp_state_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"run-gate12d-canonical-001\" (snmp_oid=\"1.3.6.1.2.1.15.3.1.2.198.51.100.1\" OR snmp_oid=\"1.3.6.1.2.1.15.3.1.14.198.51.100.1\" OR snmp_oid=\"1.3.6.1.2.1.15.3.1.2.198.51.100.2\" OR snmp_trap_oid=\"1.3.6.1.2.1.15.7.2\" OR snmp_trap_oid=\"1.3.6.1.2.1.15.7.1\") | table _time netspout_phase sourcetype snmp_pdu_type snmp_trap_name snmp_oid_name snmp_value",
+    "notification_vs_poll_correlation_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"run-gate12d-canonical-001\" | stats count(eval(sourcetype=\"netspout:snmp:trap\")) as notification_count count(eval(sourcetype=\"netspout:snmp:poll\")) as poll_count values(snmp_trap_name) as notifications values(eval(if(sourcetype=\"netspout:snmp:poll\", snmp_oid_name.\"=\".snmp_value, null()))) as polled_states by netspout_phase"
+  },
+  "errors": []
+}

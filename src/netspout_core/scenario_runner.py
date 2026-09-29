@@ -286,7 +286,7 @@ def get_service_provider_cisco_topology() -> TopologyState:
     return TopologyState(
         nodes=[
             Node(id="node-peer-as65000", name="Upstream-Carrier-AS65000", type=NodeType.ROUTER, x=70, y=180, ip_address="198.51.100.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
-            Node(id="node-cisco8k-core01", name="Cisco-8201-Core01", type=NodeType.ROUTER, x=290, y=130, ip_address="10.200.0.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
+            Node(id="cisco-asr9k-pe1", name="cisco-asr9k-pe1", type=NodeType.ROUTER, x=290, y=130, ip_address="10.200.0.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
             Node(id="node-cisco8k-core02", name="Cisco-8201-Core02", type=NodeType.ROUTER, x=290, y=270, ip_address="10.200.0.2", status="active", vendor="cisco_ios", sourcetype="cisco:ios:syslog"),
             Node(id="node-ncs5500-spine01", name="Cisco-NCS5504-Spine01", type=NodeType.ROUTER, x=530, y=130, ip_address="10.200.1.1", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt:metric"),
             Node(id="node-ncs5500-spine02", name="Cisco-NCS5504-Spine02", type=NodeType.ROUTER, x=530, y=270, ip_address="10.200.1.2", status="active", vendor="cisco_ios", sourcetype="cisco:ios:mdt:metric"),
@@ -295,9 +295,9 @@ def get_service_provider_cisco_topology() -> TopologyState:
             Node(id="node-metro-ce01", name="Metro-Customer-CE01", type=NodeType.CLIENT_EXTERNAL, x=950, y=200, ip_address="10.200.3.1", status="active", vendor="generic")
         ],
         edges=[
-            Edge(id="e-sp1", source="node-peer-as65000", target="node-cisco8k-core01", source_port="HundredGigE0/0/0/1", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp1", source="node-peer-as65000", target="cisco-asr9k-pe1", source_port="HundredGigE0/0/0/1", target_port="HundredGigE0/0/0/1", status="active"),
             Edge(id="e-sp2", source="node-peer-as65000", target="node-cisco8k-core02", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
-            Edge(id="e-sp3", source="node-cisco8k-core01", target="node-ncs5500-spine01", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
+            Edge(id="e-sp3", source="cisco-asr9k-pe1", target="node-ncs5500-spine01", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
             Edge(id="e-sp4", source="node-cisco8k-core02", target="node-ncs5500-spine02", source_port="HundredGigE0/0/0/2", target_port="HundredGigE0/0/0/1", status="active"),
             Edge(id="e-sp5", source="node-ncs5500-spine01", target="node-asr9k-pe01", source_port="TenGigE0/0/0/1", target_port="TenGigE0/0/0/1", status="active"),
             Edge(id="e-sp6", source="node-ncs5500-spine02", target="node-asr9k-pe02", source_port="TenGigE0/0/0/1", target_port="TenGigE0/0/0/1", status="active"),
@@ -1389,8 +1389,8 @@ class ScenarioRunner:
         # GATE 10: SERVICE_PROVIDER_CISCO
         # ---------------------------------------------------------------------
         elif "service_provider_cisco" in scen_id:
-            c8k = node_map.get("node-cisco8k-core01") or router_node
-            asr_node = node_map.get("node-asr9k-pe01") or router_node
+            c8k = node_map.get("cisco-asr9k-pe1") or router_node
+            asr_node = node_map.get("cisco-asr9k-pe1") or router_node
 
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_cisco_ios_xr_bgp_log(
@@ -2572,6 +2572,9 @@ class ScenarioRunner:
                 phases=[]
             )
 
+        # 3b. Validate Native Transport Request (F-12E-01 & Controlled Failure 6: No silent downgrade to Mode A)
+        self.validate_native_transport_request(request, contract.id)
+
         # 4. Resolve Topology & Graph
         if topology is None:
             topology = self._get_topology_for_scenario(contract)
@@ -2584,6 +2587,14 @@ class ScenarioRunner:
 
         # 5. Initialize Run Manifest & State
         run_id = self.generate_run_id()
+        effective_mode = (
+            "NATIVE_TRANSPORT"
+            if (getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False))
+            else "DIRECT_TO_SPLUNK"
+        )
+        effective_proto = getattr(request, "native_protocol", None) or (
+            "SNMPV2C_E2E" if getattr(request, "native_snmp_e2e", False) else None
+        )
         manifest = RunManifest(
             run_id=run_id,
             scenario_id=contract.id,
@@ -2592,6 +2603,8 @@ class ScenarioRunner:
             scenario_maturity=getattr(contract, "maturity", "CONTRACTED"),
             seed=request.seed,
             time_mode=time_mode,
+            transport_mode=effective_mode,
+            native_protocol=effective_proto,
             start_time=start_time,
             affected_devices=list(contract.affected_entities) if contract.affected_entities else [n.id for n in topology.nodes[:3]],
             expected_sourcetypes=list(contract.sourcetypes) if contract.sourcetypes else [],
@@ -2853,7 +2866,7 @@ class ScenarioRunner:
         else:
             manifest.overall_validation = ValidationStatus.PASS.value
 
-        # Gate 11B, Gate 12B & Gate 12D: Optional Native Transport Execution (Mode B / E2E)
+        # Gate 11B, Gate 12B, Gate 12D & Gate 12F: Native Transport Execution (Mode B / E2E)
         if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False):
             raw_proto = (getattr(request, "native_protocol", None) or "").upper()
             pdu_mode_req = getattr(request, "native_snmp_pdu_mode", None)
@@ -2863,22 +2876,8 @@ class ScenarioRunner:
             ) or ("SNMP" in raw_proto)
 
             if is_snmp_run and scenario_id == "service_provider_cisco":
-                if pdu_mode_req:
-                    pdu_mode = pdu_mode_req.upper()
-                elif "INFORM" in raw_proto:
-                    pdu_mode = "INFORM"
-                elif "MIXED" in raw_proto:
-                    pdu_mode = "MIXED"
-                else:
-                    pdu_mode = "TRAP"
-
-                dest_host = getattr(request, "native_destination_host", None) or "127.0.0.1"
-                dest_port = getattr(request, "native_destination_port", None) or 1162
-                community = getattr(request, "native_snmp_community", None) or "netspout-lab"
-                timeout_ms = getattr(request, "native_snmp_timeout_ms", 1500) or 1500
-                max_retries = getattr(request, "native_snmp_max_retries", 2)
-                if max_retries is None:
-                    max_retries = 2
+                canonical_device_id = "cisco-asr9k-pe1"
+                manifest.affected_devices = [canonical_device_id]
 
                 try:
                     from netspout_core.snmp_engine import snmp_engine
@@ -2894,59 +2893,9 @@ class ScenarioRunner:
                         from transport_native_snmp import NativeSnmpTransport
                         from companion_manifest import CompanionManifestBuilder
 
-                snmp_pdus = snmp_engine.build_service_provider_cisco_native_pdus(
-                    seed=request.seed,
-                    pdu_mode=pdu_mode,
-                    community=community,
-                    exporter_ip="10.200.0.1",
-                    device_id="node-cisco8k-core01",
-                )
-                manifest.native_snmp_pdus = snmp_pdus
-
-                raw_rate = getattr(request, "native_rate_pps", None)
-                trap_rate = min(max(1, int(raw_rate or 50)), 250)
-                inform_rate = min(max(1, int(raw_rate or 25)), 100)
-
-                snmp_transport = NativeSnmpTransport(
-                    destination_host=dest_host,
-                    destination_port=dest_port,
-                    community=community,
-                    trap_rate_pps=trap_rate,
-                    inform_rate_pps=inform_rate,
-                    inform_timeout_ms=timeout_ms,
-                    inform_max_retries=max_retries,
-                    test_mode=(time_mode == "TEST"),
-                )
-                snmp_res = snmp_transport.send_batch(snmp_pdus)
-                manifest.native_snmp_result = snmp_res
-                manifest.native_transport_result = snmp_res
-
-                trap_oids = [str(m.varbinds[1].value) for m in snmp_pdus if len(m.varbinds) >= 2]
-                companion = CompanionManifestBuilder.build_snmp_manifest(
-                    run_id=run_id,
-                    scenario_id=scenario_id,
-                    pdu_mode=pdu_mode,
-                    destination_host=dest_host,
-                    destination_port=dest_port,
-                    exporter_ip="10.200.0.1",
-                    request_ids=snmp_res.request_ids,
-                    acknowledged_request_ids=snmp_res.acknowledged_request_ids,
-                    trap_oids=trap_oids,
-                    pdus_generated=snmp_res.pdus_generated,
-                    pdus_encoded=snmp_res.pdus_encoded,
-                    datagrams_sent=snmp_res.datagrams_sent,
-                    bytes_sent=snmp_res.bytes_sent,
-                    informs_acknowledged=snmp_res.informs_acknowledged,
-                    inform_retries=snmp_res.inform_retries,
-                    inform_timeouts=snmp_res.inform_timeouts,
-                    receiver_observed_count=snmp_res.receiver_observed_count,
-                    evidence_stage=snmp_res.evidence_stage,
-                    start_time_epoch_ms=int(start_time * 1000),
-                    end_time_epoch_ms=int(time.time() * 1000),
-                )
-                manifest.companion_manifest = companion
-
                 if getattr(request, "native_snmp_e2e", False) or raw_proto == "SNMPV2C_E2E":
+                    # Gate 12F (F-12E-04): Execute a single coherent E2E SNMP path without a redundant
+                    # blind UDP send to 127.0.0.1:1162. All RunManifest fields describe this single execution.
                     try:
                         from netspout_core.snmp_splunk_e2e import SnmpSplunkE2EOrchestrator
                     except ImportError:
@@ -2957,13 +2906,60 @@ class ScenarioRunner:
 
                     orchestrator = SnmpSplunkE2EOrchestrator(
                         index=target_idx,
-                        device_id="cisco-asr9k-pe1",
+                        device_id=canonical_device_id,
                         seed=request.seed if request.seed is not None else 42,
                     )
                     scorecard, e2e_artifacts = orchestrator.execute_e2e_run(run_id=run_id)
                     manifest.snmp_e2e_scorecard = scorecard
                     manifest.snmp_normalized_events = e2e_artifacts.get("normalized_events", [])
+                    manifest.native_snmp_pdus = e2e_artifacts.get("generated_pdus", [])
+                    snmp_res = e2e_artifacts.get("transport_result")
+                    manifest.native_snmp_result = snmp_res
+                    manifest.native_transport_result = snmp_res
+                    manifest.snmp_polling_evidence = e2e_artifacts.get("polling_evidence")
+
+                    trap_oids = [
+                        str(m.varbinds[1].value)
+                        for m in (manifest.native_snmp_pdus or [])
+                        if hasattr(m, "varbinds") and len(m.varbinds) >= 2
+                    ]
+                    companion = CompanionManifestBuilder.build_snmp_manifest(
+                        run_id=run_id,
+                        scenario_id=scenario_id,
+                        pdu_mode="MIXED",
+                        destination_host=snmp_res.destination_host if snmp_res else "127.0.0.1",
+                        destination_port=snmp_res.destination_port if snmp_res else 1162,
+                        exporter_ip="10.200.0.1",
+                        request_ids=snmp_res.request_ids if snmp_res else [],
+                        acknowledged_request_ids=snmp_res.acknowledged_request_ids if snmp_res else [],
+                        trap_oids=trap_oids,
+                        pdus_generated=scorecard.generated_notifications,
+                        pdus_encoded=scorecard.encoded_notifications,
+                        datagrams_sent=scorecard.sent_notifications,
+                        bytes_sent=snmp_res.bytes_sent if snmp_res else 0,
+                        informs_acknowledged=scorecard.informs_acknowledged,
+                        inform_retries=snmp_res.inform_retries if snmp_res else 0,
+                        inform_timeouts=snmp_res.inform_timeouts if snmp_res else 0,
+                        receiver_observed_count=scorecard.receiver_observed_notifications,
+                        evidence_stage=scorecard.evidence_stage,
+                        start_time_epoch_ms=int(start_time * 1000),
+                        end_time_epoch_ms=int(time.time() * 1000),
+                        collector_sourcetype="netspout:snmp:trap",
+                        simulated_device_ids=[canonical_device_id],
+                        protocol_override="SNMPV2C_E2E",
+                        snmp_requests_received=scorecard.polling_requests,
+                        snmp_get_requests=scorecard.get_requests,
+                        snmp_getnext_requests=scorecard.getnext_requests,
+                        snmp_getbulk_requests=scorecard.getbulk_requests,
+                        snmp_responses_sent=scorecard.polling_responses,
+                        splunk_suggested_spl_override=scorecard.investigation_queries.get("all_snmp_evidence_spl"),
+                        splunk_raw_events_spl_override=scorecard.investigation_queries.get("trap_inform_evidence_spl"),
+                        splunk_stats_spl_override=scorecard.investigation_queries.get("notification_vs_poll_correlation_spl"),
+                    )
+                    manifest.companion_manifest = companion
                     manifest.evidence_summary = SnmpSplunkE2EOrchestrator.build_unified_run_evidence(scorecard)
+                    manifest.actual_generated_counts["netspout:snmp:trap"] = scorecard.normalized_trap_records
+                    manifest.actual_generated_counts["netspout:snmp:poll"] = scorecard.normalized_poll_records
                     manifest.observed_count = scorecard.splunk_observed_records
                     manifest.event_observed_count = scorecard.splunk_observed_records
                     manifest.observation_completeness_pct = scorecard.observation_completeness_pct
@@ -2975,6 +2971,76 @@ class ScenarioRunner:
                     manifest.splunk_search_query = scorecard.investigation_queries.get(
                         "all_snmp_evidence_spl", manifest.splunk_search_query
                     )
+                else:
+                    if pdu_mode_req:
+                        pdu_mode = pdu_mode_req.upper()
+                    elif "INFORM" in raw_proto:
+                        pdu_mode = "INFORM"
+                    elif "MIXED" in raw_proto:
+                        pdu_mode = "MIXED"
+                    else:
+                        pdu_mode = "TRAP"
+
+                    dest_host = getattr(request, "native_destination_host", None) or "127.0.0.1"
+                    dest_port = getattr(request, "native_destination_port", None) or 1162
+                    community = getattr(request, "native_snmp_community", None) or "netspout-lab"
+                    timeout_ms = getattr(request, "native_snmp_timeout_ms", 1500) or 1500
+                    max_retries = getattr(request, "native_snmp_max_retries", 2)
+                    if max_retries is None:
+                        max_retries = 2
+
+                    snmp_pdus = snmp_engine.build_service_provider_cisco_native_pdus(
+                        seed=request.seed,
+                        pdu_mode=pdu_mode,
+                        community=community,
+                        exporter_ip="10.200.0.1",
+                        device_id=canonical_device_id,
+                    )
+                    manifest.native_snmp_pdus = snmp_pdus
+
+                    raw_rate = getattr(request, "native_rate_pps", None)
+                    trap_rate = min(max(1, int(raw_rate or 50)), 250)
+                    inform_rate = min(max(1, int(raw_rate or 25)), 100)
+
+                    snmp_transport = NativeSnmpTransport(
+                        destination_host=dest_host,
+                        destination_port=dest_port,
+                        community=community,
+                        trap_rate_pps=trap_rate,
+                        inform_rate_pps=inform_rate,
+                        inform_timeout_ms=timeout_ms,
+                        inform_max_retries=max_retries,
+                        test_mode=(time_mode == "TEST"),
+                    )
+                    snmp_res = snmp_transport.send_batch(snmp_pdus)
+                    manifest.native_snmp_result = snmp_res
+                    manifest.native_transport_result = snmp_res
+
+                    trap_oids = [str(m.varbinds[1].value) for m in snmp_pdus if len(m.varbinds) >= 2]
+                    companion = CompanionManifestBuilder.build_snmp_manifest(
+                        run_id=run_id,
+                        scenario_id=scenario_id,
+                        pdu_mode=pdu_mode,
+                        destination_host=dest_host,
+                        destination_port=dest_port,
+                        exporter_ip="10.200.0.1",
+                        request_ids=snmp_res.request_ids,
+                        acknowledged_request_ids=snmp_res.acknowledged_request_ids,
+                        trap_oids=trap_oids,
+                        pdus_generated=snmp_res.pdus_generated,
+                        pdus_encoded=snmp_res.pdus_encoded,
+                        datagrams_sent=snmp_res.datagrams_sent,
+                        bytes_sent=snmp_res.bytes_sent,
+                        informs_acknowledged=snmp_res.informs_acknowledged,
+                        inform_retries=snmp_res.inform_retries,
+                        inform_timeouts=snmp_res.inform_timeouts,
+                        receiver_observed_count=snmp_res.receiver_observed_count,
+                        evidence_stage=snmp_res.evidence_stage,
+                        start_time_epoch_ms=int(start_time * 1000),
+                        end_time_epoch_ms=int(time.time() * 1000),
+                        simulated_device_ids=[canonical_device_id],
+                    )
+                    manifest.companion_manifest = companion
             else:
                 flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
                 manifest.native_flow_records = flow_records
@@ -3038,6 +3104,76 @@ class ScenarioRunner:
         self.current_run_id = None
         self.current_scenario_id = None
         return manifest
+
+    @staticmethod
+    def validate_native_transport_request(request: ScenarioRunRequest, scenario_id: str) -> None:
+        """
+        Gate 12F Section 3 & Section 13:
+        Validates native transport execution requests and refuses silent downgrade to Mode A
+        when `transport_mode="NATIVE_TRANSPORT"` has missing or invalid native configuration.
+        """
+        req_mode = (getattr(request, "transport_mode", None) or "DIRECT_TO_SPLUNK").upper()
+        if req_mode not in ("DIRECT_TO_SPLUNK", "NATIVE_TRANSPORT"):
+            raise ValueError(
+                f"Unsupported transport_mode '{req_mode}'. Expected 'DIRECT_TO_SPLUNK' or 'NATIVE_TRANSPORT'."
+            )
+
+        native_e2e = bool(getattr(request, "native_snmp_e2e", False))
+        raw_proto = getattr(request, "native_protocol", None)
+        pdu_mode = getattr(request, "native_snmp_pdu_mode", None)
+
+        if req_mode == "NATIVE_TRANSPORT":
+            if not raw_proto and not pdu_mode and not native_e2e:
+                raise ValueError(
+                    "Missing required native transport configuration: when transport_mode='NATIVE_TRANSPORT', "
+                    "at least one of 'native_protocol', 'native_snmp_pdu_mode', or 'native_snmp_e2e=True' must be "
+                    "specified. Refusing silent downgrade to Mode A."
+                )
+
+        if req_mode == "NATIVE_TRANSPORT" or native_e2e:
+            if scenario_id == "service_provider_cisco":
+                if raw_proto:
+                    proto_up = str(raw_proto).upper()
+                    allowed_snmp_protos = {
+                        "SNMPV2C_E2E",
+                        "SNMPV2C",
+                        "SNMPV2C_TRAP",
+                        "SNMPV2C_INFORM",
+                        "SNMPV2C_MIXED",
+                    }
+                    if proto_up not in allowed_snmp_protos:
+                        raise ValueError(
+                            f"Invalid native_protocol '{raw_proto}' for scenario 'service_provider_cisco'. "
+                            f"Expected one of {sorted(allowed_snmp_protos)}."
+                        )
+                if pdu_mode:
+                    if str(pdu_mode).upper() not in ("TRAP", "INFORM", "MIXED"):
+                        raise ValueError(
+                            f"Invalid native_snmp_pdu_mode '{pdu_mode}'. Expected 'TRAP', 'INFORM', or 'MIXED'."
+                        )
+                dest_port = getattr(request, "native_destination_port", None)
+                if dest_port is not None:
+                    try:
+                        p_int = int(dest_port)
+                    except (TypeError, ValueError):
+                        raise ValueError(f"Invalid native_destination_port '{dest_port}'.")
+                    if p_int <= 0 or p_int > 65535:
+                        raise ValueError(
+                            f"Invalid native_destination_port '{dest_port}': must be between 1 and 65535."
+                        )
+                comm = getattr(request, "native_snmp_community", None)
+                if comm is not None and not str(comm).strip():
+                    raise ValueError("Invalid native_snmp_community: community string cannot be empty.")
+            else:
+                if native_e2e or (raw_proto and "SNMP" in str(raw_proto).upper()):
+                    raise ValueError(
+                        f"Native SNMP transport is not supported for scenario '{scenario_id}'. "
+                        f"Supported scenario: 'service_provider_cisco'."
+                    )
+                if raw_proto and str(raw_proto).upper() not in ("IPFIX", "NETFLOW_V9"):
+                    raise ValueError(
+                        f"Unsupported native_protocol '{raw_proto}' for scenario '{scenario_id}'."
+                    )
 
     @staticmethod
     def extract_canonical_flow_records(scenario_id: str, logs: List[LogEntry]) -> List[FlowRecord]:

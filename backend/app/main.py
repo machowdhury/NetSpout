@@ -937,6 +937,10 @@ def list_catalog_use_cases(category: Optional[str] = None):
             "splunk_storage": s.get("splunk_storage") or "Splunk Event Index",
             "fidelity_badge": s.get("fidelity_badge") or "MODELED PAYLOAD",
             "telemetry_notes": s.get("telemetry_notes"),
+            "native_snmp_supported": bool(s.get("native_snmp_supported", False)),
+            "native_snmp_capabilities": s.get("native_snmp_capabilities"),
+            "telemetry_requirements": s.get("telemetry_requirements", []),
+            "affected_entities": s.get("affected_entities", []),
             "timing_claim": s.get("timing_claim"),
             "timing_value": s.get("timing_value"),
             "timing_unit": s.get("timing_unit"),
@@ -977,7 +981,11 @@ def list_catalog_use_cases(category: Optional[str] = None):
             "transport_protocol": "Splunk HEC",
             "splunk_storage": "Splunk Event Index",
             "fidelity_badge": "MODELED PAYLOAD",
-            "telemetry_notes": None
+            "telemetry_notes": None,
+            "native_snmp_supported": False,
+            "native_snmp_capabilities": None,
+            "telemetry_requirements": [],
+            "affected_entities": []
         }
         use_cases.append(uc_entry)
         
@@ -1065,6 +1073,16 @@ def run_scenario_contract(
     global current_topology
     dispatch_telemetry = True
     transport_config = current_topology.global_transport if current_topology and current_topology.global_transport else TelemetryTransportConfig()
+    transport_mode = "DIRECT_TO_SPLUNK"
+    native_protocol: Optional[str] = None
+    native_destination_host: Optional[str] = None
+    native_destination_port: Optional[int] = None
+    native_rate_pps: Optional[int] = 100
+    native_snmp_pdu_mode: Optional[str] = None
+    native_snmp_community: Optional[str] = "netspout-lab"
+    native_snmp_timeout_ms: Optional[int] = 1500
+    native_snmp_max_retries: Optional[int] = 2
+    native_snmp_e2e: bool = False
 
     if payload:
         seed = payload.get("seed", seed)
@@ -1076,6 +1094,32 @@ def run_scenario_contract(
             transport_config = TelemetryTransportConfig(**payload["transport_config"])
             if current_topology:
                 current_topology.global_transport = transport_config
+        if "transport_mode" in payload and payload["transport_mode"] is not None:
+            transport_mode = str(payload["transport_mode"])
+        if "native_protocol" in payload:
+            native_protocol = payload["native_protocol"]
+        if "native_destination_host" in payload:
+            native_destination_host = payload["native_destination_host"]
+        if "native_destination_port" in payload and payload["native_destination_port"] is not None:
+            try:
+                native_destination_port = int(payload["native_destination_port"])
+            except (TypeError, ValueError):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Invalid native_destination_port: {payload['native_destination_port']}",
+                )
+        if "native_rate_pps" in payload and payload["native_rate_pps"] is not None:
+            native_rate_pps = int(payload["native_rate_pps"])
+        if "native_snmp_pdu_mode" in payload:
+            native_snmp_pdu_mode = payload["native_snmp_pdu_mode"]
+        if "native_snmp_community" in payload:
+            native_snmp_community = payload["native_snmp_community"]
+        if "native_snmp_timeout_ms" in payload and payload["native_snmp_timeout_ms"] is not None:
+            native_snmp_timeout_ms = int(payload["native_snmp_timeout_ms"])
+        if "native_snmp_max_retries" in payload and payload["native_snmp_max_retries"] is not None:
+            native_snmp_max_retries = int(payload["native_snmp_max_retries"])
+        if "native_snmp_e2e" in payload:
+            native_snmp_e2e = bool(payload["native_snmp_e2e"])
 
     req = ScenarioRunRequest(
         scenario_id=scenario_id,
@@ -1083,10 +1127,39 @@ def run_scenario_contract(
         time_mode=time_mode,
         topology_id=topology_id,
         dispatch_telemetry=dispatch_telemetry,
-        transport_config=transport_config
+        transport_config=transport_config,
+        transport_mode=transport_mode,
+        native_protocol=native_protocol,
+        native_destination_host=native_destination_host,
+        native_destination_port=native_destination_port,
+        native_rate_pps=native_rate_pps,
+        native_snmp_pdu_mode=native_snmp_pdu_mode,
+        native_snmp_community=native_snmp_community,
+        native_snmp_timeout_ms=native_snmp_timeout_ms,
+        native_snmp_max_retries=native_snmp_max_retries,
+        native_snmp_e2e=native_snmp_e2e,
     )
-    manifest = scenario_runner.run_scenario(req)
+    try:
+        manifest = scenario_runner.run_scenario(req)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
     return manifest.dict() if hasattr(manifest, "dict") else manifest
+
+
+# =========================================================================
+# Native SNMP Subsystem Endpoints (Gate 12F Productization)
+# =========================================================================
+@app.get("/api/native-snmp/preflight")
+def get_native_snmp_preflight(index: str = "idx_network_ops"):
+    from app.snmp_splunk_e2e import run_snmp_preflight_check
+    return run_snmp_preflight_check(index=index)
+
+
+@app.post("/api/native-snmp/preflight")
+def post_native_snmp_preflight(payload: Optional[Dict[str, Any]] = None):
+    from app.snmp_splunk_e2e import run_snmp_preflight_check
+    idx = (payload or {}).get("index", "idx_network_ops") or "idx_network_ops"
+    return run_snmp_preflight_check(index=idx)
 
 
 # =========================================================================

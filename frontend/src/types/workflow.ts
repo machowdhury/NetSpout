@@ -28,6 +28,21 @@ export interface ScenarioPhaseDef {
   expected_observations: string[];
 }
 
+export interface NativeSnmpCapabilities {
+  protocol: string;
+  pdu_types: string[];
+  notifications: string[];
+  polling_operations: string[];
+  mibs: string[];
+  external_tooling: string[];
+  splunk_sourcetypes: string[];
+  splunk_index: string;
+  canonical_device_id: string;
+  transport_fidelity: string;
+  device_state_fidelity: string;
+  semantic_statement: string;
+}
+
 export interface UseCase {
   id: string;
   scenario_id: string;
@@ -51,6 +66,10 @@ export interface UseCase {
   splunk_storage?: string;
   fidelity_badge?: 'NATIVE TRANSPORT' | 'MODELED PAYLOAD' | 'SYNTHETIC';
   telemetry_notes?: string;
+  native_snmp_supported?: boolean;
+  native_snmp_capabilities?: NativeSnmpCapabilities | null;
+  telemetry_requirements?: string[];
+  affected_entities?: string[];
   timing_claim?: string;
   timing_value?: number;
   timing_unit?: string;
@@ -70,6 +89,11 @@ export interface PipelineConnection {
   latency_ms?: number;
   last_verified?: string;
   allow_insecure_tls?: boolean;
+  transport_mode?: 'DIRECT_TO_SPLUNK' | 'NATIVE_TRANSPORT';
+  native_protocol?: string;
+  native_snmp_e2e?: boolean;
+  native_snmp_pdu_mode?: 'TRAP' | 'INFORM' | 'MIXED';
+  native_snmp_community?: string;
 }
 
 export interface ValidationResultItem {
@@ -147,6 +171,10 @@ export interface WorkflowRunState {
   eps: number;
   affected_devices: string[];
   manifest: any | null;
+  snmp_e2e_scorecard?: any | null;
+  native_snmp_result?: any | null;
+  transport_mode?: string;
+  native_protocol?: string;
   validation_results: ValidationResultItem[];
   recent_logs: LogEntry[];
   error: string | null;

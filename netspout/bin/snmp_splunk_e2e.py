@@ -976,6 +976,8 @@ class SnmpCollectorNormalizer:
             snmp_source=str(obs.get("src_ip", "127.0.0.1")),
             snmp_collector="snmptrapd",
             snmp_transport="SNMPV2C_UDP",
+            origin_evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
+            current_evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
             evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
             sys_uptime=int(obs.get("sys_uptime", 0)),
             varbinds=dict(obs.get("varbinds", {})),
@@ -1031,6 +1033,8 @@ class SnmpCollectorNormalizer:
             snmp_source=str(obs.get("target_host", "127.0.0.1")),
             snmp_collector="net-snmp-cli",
             snmp_transport="SNMPV2C_UDP",
+            origin_evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
+            current_evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
             evidence_stage=SnmpEvidenceStage.RECEIVER_OBSERVED.value,
             sys_uptime=None,
             varbinds={str(obs.get("oid_name", oid)): val_str},
@@ -1046,24 +1050,29 @@ def build_snmp_investigation_queries(
     index: str = "idx_network_ops",
 ) -> Dict[str, str]:
     """
-    Returns copyable, executable SPL queries for investigating a Gate 12D SNMP run in Splunk.
-    Every query matches the implemented field model (`netspout:snmp:trap` and `netspout:snmp:poll`).
+    Returns copyable, executable SPL queries for investigating a Gate 12D/12F SNMP run in Splunk.
+    Every query matches the implemented field model (`netspout:snmp:trap` and `netspout:snmp:poll`)
+    and exposes explicit provenance (`origin_evidence_stage="RECEIVER_OBSERVED"`,
+    `current_evidence_stage="SPLUNK_OBSERVED"`).
     """
     base = f'search index={index} (sourcetype="netspout:snmp:trap" OR sourcetype="netspout:snmp:poll") netspout_run_id="{run_id}"'
+    prov_eval = '| eval origin_evidence_stage=coalesce(origin_evidence_stage, "RECEIVER_OBSERVED"), current_evidence_stage="SPLUNK_OBSERVED"'
     return {
         "all_snmp_evidence_spl": (
-            f'{base} | table _time netspout_phase sourcetype snmp_pdu_type '
-            f'snmp_request_id snmp_trap_name snmp_oid_name snmp_value snmp_collector'
+            f'{base} {prov_eval} | table _time netspout_phase sourcetype snmp_pdu_type '
+            f'snmp_request_id snmp_trap_name snmp_oid_name snmp_value snmp_collector '
+            f'origin_evidence_stage current_evidence_stage'
         ),
         "trap_inform_evidence_spl": (
             f'search index={index} sourcetype="netspout:snmp:trap" netspout_run_id="{run_id}" '
-            f'| table _time netspout_phase snmp_pdu_type snmp_request_id '
-            f'snmp_trap_name snmp_trap_oid snmp_oid_name snmp_value sys_uptime'
+            f'{prov_eval} | table _time netspout_phase snmp_pdu_type snmp_request_id '
+            f'snmp_trap_name snmp_trap_oid snmp_oid_name snmp_value sys_uptime '
+            f'origin_evidence_stage current_evidence_stage'
         ),
         "polling_evidence_spl": (
             f'search index={index} sourcetype="netspout:snmp:poll" netspout_run_id="{run_id}" '
-            f'| table _time netspout_phase snmp_pdu_type snmp_oid_name '
-            f'snmp_oid snmp_value snmp_value_type'
+            f'{prov_eval} | table _time netspout_phase snmp_pdu_type snmp_oid_name '
+            f'snmp_oid snmp_value snmp_value_type origin_evidence_stage current_evidence_stage'
         ),
         "timeline_spl": (
             f'{base} | stats count as evidence_count values(sourcetype) as sourcetypes '
@@ -1141,7 +1150,7 @@ class SnmpSplunkBridge:
         """
         Dispatches normalized SNMP collector/poller events to Splunk HEC.
         Only marks `SPLUNK_DISPATCHED` when HEC returns HTTP 200.
-        Never claims `SPLUNK_OBSERVED`.
+        Never claims `SPLUNK_OBSERVED`. Preserves `origin_evidence_stage = RECEIVER_OBSERVED`.
         """
         dispatched = 0
         failed = 0
@@ -1170,6 +1179,7 @@ class SnmpSplunkBridge:
                     if resp.status == 200:
                         dispatched += 1
                         ev.evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
+                        ev.current_evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
                     else:
                         failed += 1
                         errors.append(f"HEC returned HTTP {resp.status}")
@@ -1200,6 +1210,8 @@ class SnmpSplunkBridge:
         """
         Executes a fresh SPL search against Splunk REST `/services/search/jobs/export`
         and returns the parsed result rows.
+        Establishes `current_evidence_stage = SPLUNK_OBSERVED` strictly upon search verification
+        while preserving `origin_evidence_stage = RECEIVER_OBSERVED`.
         """
         if self.simulate_splunk_unavailable:
             return []
@@ -1247,6 +1259,14 @@ class SnmpSplunkBridge:
                                     norm_row[rk] = rv[0]
                                 else:
                                     norm_row[rk] = rv
+                            if "netspout_run_id" in norm_row or "snmp_pdu_type" in norm_row:
+                                norm_row["origin_evidence_stage"] = str(
+                                    norm_row.get("origin_evidence_stage")
+                                    or SnmpEvidenceStage.RECEIVER_OBSERVED.value
+                                )
+                                norm_row["current_evidence_stage"] = (
+                                    SnmpEvidenceStage.SPLUNK_OBSERVED.value
+                                )
                             rows.append(norm_row)
                 last_results = rows
                 if len(rows) >= min_expected:
@@ -1290,7 +1310,7 @@ class SnmpSplunkE2EOrchestrator:
         work_dir: Optional[str] = None,
     ) -> Tuple[SnmpE2ERunScorecard, Dict[str, Any]]:
         """
-        Executes a fresh `service_provider_cisco` Gate 12D E2E run across:
+        Executes a fresh `service_provider_cisco` Gate 12D/12F E2E run across:
           - Pipeline A: Native SNMPv2c TRAP (4 PDUs) + INFORM (4 PDUs) -> `/usr/sbin/snmptrapd`
           - Pipeline B: External `/usr/bin/snmpget`, `/usr/bin/snmpgetnext`, `/usr/bin/snmpwalk`,
                         `/usr/bin/snmpbulkwalk` -> `SimulatedSnmpAgent` across
@@ -1343,6 +1363,8 @@ class SnmpSplunkE2EOrchestrator:
         scorecard.generated_notifications = scorecard.traps_generated + scorecard.informs_generated
         scorecard.stage_history.append(SnmpEvidenceStage.GENERATED.value)
         scorecard.evidence_stage = SnmpEvidenceStage.GENERATED.value
+        scorecard.current_evidence_stage = SnmpEvidenceStage.GENERATED.value
+        scorecard.origin_evidence_stage = SnmpEvidenceStage.RECEIVER_OBSERVED.value
 
         normalizer = SnmpCollectorNormalizer(
             run_id=active_run_id,
@@ -1359,11 +1381,13 @@ class SnmpSplunkE2EOrchestrator:
             "poll_pcap_frames": [],
             "cli_outputs": {},
             "splunk_search_results": {},
+            "generated_pdus": list(traps) + list(informs),
         }
 
         # -----------------------------------------------------------------
         # PIPELINE A: Native SNMPv2c TRAP & INFORM -> External snmptrapd
         # -----------------------------------------------------------------
+        bound_trap_port = DEFAULT_SNMP_TRAP_PORT
         if receiver_available:
             with ExternalSnmpTrapReceiver(
                 host="127.0.0.1",
@@ -1371,6 +1395,7 @@ class SnmpSplunkE2EOrchestrator:
                 community="netspout-lab",
                 work_dir=work_dir,
             ) as trap_receiver:
+                bound_trap_port = trap_receiver.bound_port
                 transport = NativeSnmpTransport(
                     destination_host="127.0.0.1",
                     destination_port=trap_receiver.bound_port,
@@ -1391,6 +1416,7 @@ class SnmpSplunkE2EOrchestrator:
         else:
             # Controlled Failure A: Receiver unavailable (send to closed local UDP port)
             closed_port = _find_free_udp_port("127.0.0.1")
+            bound_trap_port = closed_port
             transport = NativeSnmpTransport(
                 destination_host="127.0.0.1",
                 destination_port=closed_port,
@@ -1420,12 +1446,15 @@ class SnmpSplunkE2EOrchestrator:
         if scorecard.encoded_notifications > 0:
             scorecard.stage_history.append(SnmpEvidenceStage.ENCODED.value)
             scorecard.evidence_stage = SnmpEvidenceStage.ENCODED.value
+            scorecard.current_evidence_stage = SnmpEvidenceStage.ENCODED.value
         if scorecard.sent_notifications > 0:
             scorecard.stage_history.append(SnmpEvidenceStage.SENT.value)
             scorecard.evidence_stage = SnmpEvidenceStage.SENT.value
+            scorecard.current_evidence_stage = SnmpEvidenceStage.SENT.value
         if scorecard.informs_acknowledged > 0:
             scorecard.stage_history.append(SnmpEvidenceStage.ACKNOWLEDGED.value)
             scorecard.evidence_stage = SnmpEvidenceStage.ACKNOWLEDGED.value
+            scorecard.current_evidence_stage = SnmpEvidenceStage.ACKNOWLEDGED.value
 
         scorecard.traps_receiver_observed = obs_summary["traps_observed"]
         scorecard.informs_receiver_observed = obs_summary["informs_observed"]
@@ -1435,6 +1464,45 @@ class SnmpSplunkE2EOrchestrator:
             norm_ev = normalizer.normalize_trap_observation(notif_obs)
             if norm_ev is not None:
                 normalized_events.append(norm_ev)
+
+        # Build combined SnmpTransportResult for single-execution RunManifest consistency (F-12E-04)
+        combined_req_ids = list(res_trap.request_ids) + list(res_inform.request_ids)
+        combined_ack_ids = list(res_inform.acknowledged_request_ids)
+        obs_req_ids = [
+            int(n["request_id"])
+            for n in obs_summary["deduplicated_notifications"]
+            if n.get("request_id") is not None
+        ]
+        raw_artifacts["transport_result"] = SnmpTransportResult(
+            transport_type="SNMPV2C_UDP",
+            pdu_mode="MIXED",
+            destination_host="127.0.0.1",
+            destination_port=bound_trap_port,
+            pdus_generated=scorecard.generated_notifications,
+            pdus_encoded=scorecard.encoded_notifications,
+            datagrams_attempted=res_trap.datagrams_attempted + res_inform.datagrams_attempted,
+            datagrams_sent=scorecard.sent_notifications,
+            bytes_sent=res_trap.bytes_sent + res_inform.bytes_sent,
+            informs_sent=scorecard.informs_sent,
+            informs_acknowledged=scorecard.informs_acknowledged,
+            inform_retries=res_inform.inform_retries,
+            inform_timeouts=res_inform.inform_timeouts,
+            late_or_mismatched_acks=res_inform.late_or_mismatched_acks,
+            request_ids=combined_req_ids,
+            acknowledged_request_ids=combined_ack_ids,
+            receiver_observed_count=scorecard.receiver_observed_notifications,
+            receiver_observed_request_ids=obs_req_ids,
+            evidence_stage=(
+                SnmpEvidenceStage.RECEIVER_OBSERVED.value
+                if scorecard.receiver_observed_notifications > 0
+                else scorecard.evidence_stage
+            ),
+            stage_history=list(scorecard.stage_history),
+            rtt_ms_samples=list(res_inform.rtt_ms_samples),
+            elapsed_ms=round(res_trap.elapsed_ms + res_inform.elapsed_ms, 3),
+            errors=list(res_trap.errors) + list(res_inform.errors),
+            error_types=list(res_trap.error_types) + list(res_inform.error_types),
+        )
 
         # -----------------------------------------------------------------
         # PIPELINE B: External Net-SNMP Poller -> SimulatedSnmpAgent
@@ -1495,6 +1563,7 @@ class SnmpSplunkE2EOrchestrator:
                                 normalized_events.append(ev)
 
                 poll_ev = agent.get_evidence()
+                raw_artifacts["polling_evidence"] = poll_ev
                 scorecard.get_requests = poll_ev.get_requests
                 scorecard.getnext_requests = poll_ev.getnext_requests
                 scorecard.getbulk_requests = poll_ev.getbulk_requests
@@ -1535,6 +1604,7 @@ class SnmpSplunkE2EOrchestrator:
             scorecard.snmp_receiver_observed_status = "YES"
             scorecard.stage_history.append(SnmpEvidenceStage.RECEIVER_OBSERVED.value)
             scorecard.evidence_stage = SnmpEvidenceStage.RECEIVER_OBSERVED.value
+            scorecard.current_evidence_stage = SnmpEvidenceStage.RECEIVER_OBSERVED.value
         else:
             scorecard.snmp_receiver_observed_status = "NO"
 
@@ -1550,6 +1620,7 @@ class SnmpSplunkE2EOrchestrator:
                 scorecard.splunk_dispatched_status = "YES"
                 scorecard.stage_history.append(SnmpEvidenceStage.SPLUNK_DISPATCHED.value)
                 scorecard.evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
+                scorecard.current_evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
             elif scorecard.splunk_dispatched_records > 0:
                 scorecard.splunk_dispatched_status = "PARTIAL"
             else:
@@ -1576,6 +1647,18 @@ class SnmpSplunkE2EOrchestrator:
             raw_artifacts["splunk_search_results"]["trap_rows"] = trap_rows
             raw_artifacts["splunk_search_results"]["poll_rows"] = poll_rows
 
+            # Promote current_evidence_stage to SPLUNK_OBSERVED ONLY for events verified by fresh Splunk search
+            observed_event_ids = {
+                str(r.get("netspout_event_id", ""))
+                for r in (trap_rows + poll_rows)
+                if r.get("netspout_event_id")
+            }
+            for ev in normalized_events:
+                if ev.netspout_event_id in observed_event_ids or (
+                    scorecard.splunk_observed_records >= scorecard.normalized_records
+                ):
+                    ev.current_evidence_stage = SnmpEvidenceStage.SPLUNK_OBSERVED.value
+
             # Execute all 7 canonical SPL investigation queries to prove fresh SPL reconstruction
             for q_name, q_spl in scorecard.investigation_queries.items():
                 raw_artifacts["splunk_search_results"][q_name] = self.splunk_bridge.execute_spl_search(
@@ -1591,6 +1674,7 @@ class SnmpSplunkE2EOrchestrator:
                 scorecard.splunk_observed_status = "YES"
                 scorecard.stage_history.append(SnmpEvidenceStage.SPLUNK_OBSERVED.value)
                 scorecard.evidence_stage = SnmpEvidenceStage.SPLUNK_OBSERVED.value
+                scorecard.current_evidence_stage = SnmpEvidenceStage.SPLUNK_OBSERVED.value
         else:
             scorecard.splunk_observed_status = "NO"
             scorecard.observation_completeness_pct = 0.0
@@ -1611,6 +1695,7 @@ class SnmpSplunkE2EOrchestrator:
         if val_passed:
             scorecard.stage_history.append(SnmpEvidenceStage.VALIDATED.value)
             scorecard.evidence_stage = SnmpEvidenceStage.VALIDATED.value
+            scorecard.current_evidence_stage = SnmpEvidenceStage.VALIDATED.value
 
         scorecard.stage_classification = {
             "GENERATED": "YES" if scorecard.generated_notifications > 0 else "NO",
@@ -2051,3 +2136,197 @@ class SnmpSplunkE2EOrchestrator:
             required_evidence_satisfied=(scorecard.validation_result == "PASS"),
             errors=list(scorecard.errors),
         )
+
+
+def _resolve_binary(name: str, search_dirs: List[str]) -> Optional[str]:
+    for d in search_dirs:
+        candidate = os.path.join(d, name)
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    return shutil.which(name)
+
+
+def run_snmp_preflight_check(
+    index: str = "idx_network_ops",
+    hec_url: str = "https://127.0.0.1:8888/services/collector/event",
+    rest_search_url: str = "https://127.0.0.1:8889/services/search/jobs/export",
+) -> Dict[str, Any]:
+    """
+    Executes Gate 12F Section 8 customer-usable Native SNMP preflight and readiness checks:
+      1. Net-SNMP CLI binaries (`/usr/bin/snmpget`, `/usr/bin/snmpgetnext`, `/usr/bin/snmpwalk`, `/usr/bin/snmpbulkwalk`)
+      2. `snmptrapd` binary (`/usr/sbin/snmptrapd`)
+      3. Local UDP bind capability for ephemeral SNMP trap receiver & agent ports
+      4. Splunk HEC reachability (`https://127.0.0.1:8888/services/collector/health` or `/event`)
+      5. Splunk REST search reachability (`https://127.0.0.1:8889/services/search/jobs/export`)
+      6. Target index availability (`idx_network_ops`)
+    """
+    checks: List[Dict[str, Any]] = []
+    remediations: List[str] = []
+
+    # 1. Net-SNMP CLI binaries
+    cli_binaries = ["snmpget", "snmpgetnext", "snmpwalk", "snmpbulkwalk"]
+    resolved_cli: Dict[str, Optional[str]] = {}
+    missing_cli: List[str] = []
+    for b in cli_binaries:
+        p = _resolve_binary(b, ["/usr/bin", "/usr/local/bin", "/opt/homebrew/bin"])
+        resolved_cli[b] = p
+        if not p:
+            missing_cli.append(b)
+
+    cli_ok = len(missing_cli) == 0
+    checks.append(
+        {
+            "id": "net_snmp_cli_binaries",
+            "name": "Net-SNMP CLI Binaries (snmpget, snmpgetnext, snmpwalk, snmpbulkwalk)",
+            "passed": cli_ok,
+            "detail": (
+                ", ".join(f"{k}={v}" for k, v in resolved_cli.items())
+                if cli_ok
+                else f"Missing CLI binaries: {', '.join(missing_cli)}"
+            ),
+        }
+    )
+    if not cli_ok:
+        remediations.append("Install Net-SNMP CLI tools (`snmpget`, `snmpgetnext`, `snmpwalk`, `snmpbulkwalk`).")
+
+    # 2. snmptrapd binary
+    snmptrapd_path = _resolve_binary(
+        "snmptrapd", ["/usr/sbin", "/usr/local/sbin", "/opt/homebrew/sbin", "/usr/bin"]
+    )
+    trapd_ok = snmptrapd_path is not None
+    checks.append(
+        {
+            "id": "snmptrapd_binary",
+            "name": "External SNMP Trap Receiver Binary (snmptrapd)",
+            "passed": trapd_ok,
+            "detail": snmptrapd_path or "Missing snmptrapd binary in /usr/sbin or PATH",
+        }
+    )
+    if not trapd_ok:
+        remediations.append("Ensure `/usr/sbin/snmptrapd` is installed and executable.")
+
+    # 3. Local UDP bind capability for ephemeral SNMP trap receiver & agent ports
+    udp_ok = False
+    udp_detail = ""
+    try:
+        port_a = _find_free_udp_port("127.0.0.1")
+        port_b = _find_free_udp_port("127.0.0.1")
+        udp_ok = port_a > 0 and port_b > 0
+        udp_detail = f"Verified ephemeral UDP bind on 127.0.0.1 (sample ports {port_a}, {port_b})"
+    except Exception as exc:
+        udp_ok = False
+        udp_detail = f"UDP bind check failed: {exc}"
+        remediations.append("Allow local UDP socket binds on 127.0.0.1 ephemeral ports.")
+
+    checks.append(
+        {
+            "id": "local_udp_bind",
+            "name": "Local UDP Bind Capability (Trap Receiver & Simulated Agent)",
+            "passed": udp_ok,
+            "detail": udp_detail,
+        }
+    )
+
+    # 4. Splunk HEC reachability
+    bridge = SnmpSplunkBridge(index=index, hec_url=hec_url, rest_search_url=rest_search_url)
+    hec_ok = False
+    hec_detail = ""
+    health_url = hec_url.rsplit("/", 1)[0] + "/health"
+    ctx = bridge._ssl_ctx() if health_url.startswith("https") else None
+    try:
+        req = urllib.request.Request(health_url, method="GET")
+        with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
+            hec_ok = resp.status == 200
+            hec_detail = f"Splunk HEC healthy at {health_url} (HTTP {resp.status})"
+    except Exception as exc:
+        hec_ok = False
+        hec_detail = f"Splunk HEC unreachable at {health_url}: {exc}"
+        remediations.append("Verify Splunk HEC is running and reachable on port 8888.")
+
+    checks.append(
+        {
+            "id": "splunk_hec_reachability",
+            "name": "Splunk HEC Reachability",
+            "passed": hec_ok,
+            "detail": hec_detail,
+        }
+    )
+
+    # 5. Splunk REST search reachability & 6. Target index availability (`idx_network_ops`)
+    rest_ok = False
+    rest_detail = ""
+    index_ok = False
+    index_detail = ""
+    try:
+        rows = bridge.execute_spl_search(
+            f'| rest /services/data/indexes | search title="{index}" | table title totalEventCount disabled',
+            earliest_time="-1m",
+            latest_time="now",
+            max_wait_sec=4.0,
+            min_expected=1,
+        )
+        rest_ok = True
+        rest_detail = f"Splunk REST search endpoint reachable at {rest_search_url}"
+        if rows and any(str(r.get("title", "")) == index for r in rows):
+            index_ok = True
+            idx_row = next(r for r in rows if str(r.get("title", "")) == index)
+            index_detail = (
+                f"Target index '{index}' available (disabled={idx_row.get('disabled', '0')}, "
+                f"totalEventCount={idx_row.get('totalEventCount', '0')})"
+            )
+        else:
+            # Fallback check via eventcount
+            ev_rows = bridge.execute_spl_search(
+                f'| eventcount summarize=false index={index}',
+                earliest_time="-24h",
+                latest_time="now",
+                max_wait_sec=3.0,
+                min_expected=1,
+            )
+            if ev_rows:
+                index_ok = True
+                index_detail = f"Target index '{index}' verified via | eventcount"
+            else:
+                index_ok = False
+                index_detail = f"Target index '{index}' not found in Splunk"
+                remediations.append(f"Create or enable target Splunk index '{index}'.")
+    except Exception as exc:
+        rest_ok = False
+        rest_detail = f"Splunk REST search unreachable at {rest_search_url}: {exc}"
+        index_ok = False
+        index_detail = f"Cannot verify index '{index}' while Splunk REST search is unreachable"
+        remediations.append("Verify Splunk management REST API is reachable on port 8889.")
+
+    checks.append(
+        {
+            "id": "splunk_rest_search",
+            "name": "Splunk REST Search Reachability",
+            "passed": rest_ok,
+            "detail": rest_detail,
+        }
+    )
+    checks.append(
+        {
+            "id": "target_index_availability",
+            "name": f"Target Index Availability ({index})",
+            "passed": index_ok,
+            "detail": index_detail,
+        }
+    )
+
+    all_passed = all(c["passed"] for c in checks)
+    return {
+        "status": "READY" if all_passed else "BLOCKED",
+        "all_passed": all_passed,
+        "scenario_id": "service_provider_cisco",
+        "device_id": "cisco-asr9k-pe1",
+        "target_index": index,
+        "sourcetypes": ["netspout:snmp:trap", "netspout:snmp:poll"],
+        "binaries": {
+            **resolved_cli,
+            "snmptrapd": snmptrapd_path,
+        },
+        "checks": checks,
+        "remediation": remediations,
+    }
+

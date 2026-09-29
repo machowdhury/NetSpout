@@ -1,0 +1,25 @@
+{
+  "finding_id": "F-12E-01",
+  "before_fix_reproduction": {
+    "commit": "f3493d285e4ec69c0af24d26562af6c47d688bff",
+    "reproduced_run_id": "NS-20260929-a19def75",
+    "input_params": {
+      "transport_mode": "NATIVE_TRANSPORT",
+      "native_protocol": "SNMPV2C_E2E",
+      "native_snmp_e2e": true
+    },
+    "snmp_e2e_scorecard": null,
+    "native_snmp_result": null,
+    "root_cause": "run_scenario_contract only checked config.get(\"native_snmp\") and main.py dropped native_snmp parameters"
+  },
+  "after_fix_verification": {
+    "http_status": 200,
+    "fresh_closure_run_id": "NS-20260929-27d18955",
+    "transport_mode": "NATIVE_TRANSPORT",
+    "native_protocol": "SNMPV2C_E2E",
+    "snmp_e2e_scorecard_verdict": "PASS",
+    "origin_evidence_stage": "RECEIVER_OBSERVED",
+    "current_evidence_stage": "VALIDATED",
+    "splunk_observed_records": 326
+  }
+}

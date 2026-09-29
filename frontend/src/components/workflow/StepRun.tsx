@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { 
   Play, Square, Copy, Check, CheckCircle2, 
-  Terminal, ArrowRight, ArrowLeft, ExternalLink
+  Terminal, ArrowRight, ArrowLeft, ExternalLink, Radio
 } from 'lucide-react';
-import type { UseCase, WorkflowRunState } from '../../types/workflow';
+import type { UseCase, WorkflowRunState, PipelineConnection } from '../../types/workflow';
 
 interface StepRunProps {
   useCase: UseCase;
+  connection?: PipelineConnection;
+  onUpdateConnection?: (conn: PipelineConnection) => void;
   runState: WorkflowRunState;
   onStartRun: (speedMode: 'TEST' | 'ACCELERATED' | 'REALTIME') => void;
   onStopRun: () => void;
@@ -21,6 +23,8 @@ const LIFECYCLE_PHASES = [
 
 export const StepRun: React.FC<StepRunProps> = ({
   useCase,
+  connection,
+  onUpdateConnection,
   runState,
   onStartRun,
   onStopRun,
@@ -31,6 +35,12 @@ export const StepRun: React.FC<StepRunProps> = ({
   const [copiedRunId, setCopiedRunId] = useState(false);
   const [copiedSpl, setCopiedSpl] = useState(false);
   const [copiedMetric, setCopiedMetric] = useState(false);
+
+  const isSnmpScenario = Boolean(
+    useCase.native_snmp_supported || useCase.scenario_id === 'service_provider_cisco'
+  );
+  const isNativeMode = connection?.transport_mode === 'NATIVE_TRANSPORT';
+  const scorecard = runState.manifest?.snmp_e2e_scorecard;
 
   const spl = runState.splunk_search_query || (runState.run_id ? `index=idx_network_ops netspout_run_id="${runState.run_id}"` : '');
   const splunkSearchUrl = `http://localhost:8800/en-US/app/netspout/search?q=search%20${encodeURIComponent(spl || 'index=idx_network_ops')}`;
@@ -66,12 +76,21 @@ export const StepRun: React.FC<StepRunProps> = ({
   const activePhaseIdx = LIFECYCLE_PHASES.indexOf(runState.phase.toUpperCase());
 
   return (
-    <div className="flex flex-col h-full overflow-hidden p-6 space-y-6">
+    <div className="flex flex-col h-full overflow-hidden p-6 space-y-5">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-2xl font-bold tracking-tight text-white flex flex-wrap items-center gap-2">
             <span>4. Run Lifecycle Simulation</span>
+            {isSnmpScenario && (
+              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold border ${
+                isNativeMode
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+              }`}>
+                {isNativeMode ? 'MODE B / E2E: NATIVE SNMPv2c (UDP WIRE)' : 'MODE A: DIRECT HEC'}
+              </span>
+            )}
             {runState.status === 'running' && (
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse">
                 SIMULATION ACTIVE ({runState.phase})
@@ -89,7 +108,9 @@ export const StepRun: React.FC<StepRunProps> = ({
             )}
           </h2>
           <p className="text-sm text-slate-400 mt-1">
-            Executing deterministic 9-phase scenario with stamped run identity and ground truth correlation.
+            {isSnmpScenario && isNativeMode
+              ? 'Executing Native SNMPv2c Trap, Inform & External Net-SNMP Polling (GET/GETNEXT/GETBULK/Walk) on canonical device cisco-asr9k-pe1.'
+              : 'Executing deterministic 9-phase scenario with stamped run identity and ground truth correlation.'}
           </p>
         </div>
 
@@ -108,7 +129,7 @@ export const StepRun: React.FC<StepRunProps> = ({
               onClick={onNext}
               className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium transition shadow-lg shadow-emerald-900/30 focus:outline-none focus:ring-2 focus:ring-emerald-400"
             >
-              <span>View Evidence & Proof</span>
+              <span>View Evidence &amp; Proof</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           )}
@@ -178,16 +199,64 @@ export const StepRun: React.FC<StepRunProps> = ({
                 </>
               )}
             </div>
-            <span className="text-xs text-slate-400">
-              Scenario: <strong className="text-slate-200">{useCase.name}</strong>
-            </span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 mt-0.5">
+              <span>
+                Scenario: <strong className="text-slate-200">{useCase.name}</strong>
+              </span>
+              <span className="text-slate-600">|</span>
+              <span>
+                Canonical Device: <code className="text-emerald-400 font-mono font-bold">{useCase.affected_entities?.[0] || 'cisco-asr9k-pe1'}</code>
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {!isRunning ? (
             <>
+              {isSnmpScenario && connection && onUpdateConnection && (
+                <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs font-mono">
+                  <button
+                    onClick={() =>
+                      onUpdateConnection({
+                        ...connection,
+                        transport_mode: 'NATIVE_TRANSPORT',
+                        native_protocol: 'SNMPV2C_E2E',
+                        native_snmp_e2e: true,
+                        native_snmp_pdu_mode: 'MIXED'
+                      })
+                    }
+                    className={`px-2.5 py-1 rounded font-bold transition ${
+                      isNativeMode
+                        ? 'bg-emerald-600 text-slate-950 shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                    title="Execute Native SNMPv2c E2E (Traps, Informs, External Net-SNMP Poller)"
+                  >
+                    Native SNMPv2c E2E
+                  </button>
+                  <button
+                    onClick={() =>
+                      onUpdateConnection({
+                        ...connection,
+                        transport_mode: 'DIRECT_TO_SPLUNK',
+                        native_protocol: undefined,
+                        native_snmp_e2e: false
+                      })
+                    }
+                    className={`px-2.5 py-1 rounded font-bold transition ${
+                      !isNativeMode
+                        ? 'bg-cyan-600 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-200'
+                    }`}
+                    title="Execute Mode A Direct HEC Only"
+                  >
+                    Direct HEC (Mode A)
+                  </button>
+                </div>
+              )}
+
               <div className="flex items-center bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
                 {(['TEST', 'ACCELERATED', 'REALTIME'] as const).map((m) => (
                   <button
@@ -223,6 +292,25 @@ export const StepRun: React.FC<StepRunProps> = ({
           )}
         </div>
       </div>
+
+      {/* Native SNMPv2c E2E Execution Summary Ribbon (when scorecard is present) */}
+      {scorecard && (
+        <div className="p-3.5 rounded-xl bg-emerald-950/25 border border-emerald-800/60 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div className="flex items-center gap-2 text-emerald-300 font-bold">
+            <Radio className="w-4 h-4 text-emerald-400" />
+            <span>Native SNMPv2c E2E Verified ({scorecard.device_id})</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-300">
+            <span>Traps: <b className="text-emerald-400">{scorecard.traps_receiver_observed}/{scorecard.traps_sent}</b></span>
+            <span>|</span>
+            <span>Informs Acked: <b className="text-emerald-400">{scorecard.informs_acknowledged}/{scorecard.informs_sent}</b></span>
+            <span>|</span>
+            <span>External Polls: <b className="text-cyan-400">{scorecard.polling_responses}/{scorecard.polling_requests}</b> (GET={scorecard.get_requests}, NEXT={scorecard.getnext_requests}, BULK={scorecard.getbulk_requests})</span>
+            <span>|</span>
+            <span>Provenance: <b className="text-amber-300">{scorecard.origin_evidence_stage || 'RECEIVER_OBSERVED'}</b> &rarr; <b className="text-emerald-400">{scorecard.current_evidence_stage || 'VALIDATED'}</b></span>
+          </div>
+        </div>
+      )}
 
       {/* 9-Phase Lifecycle Progression Track */}
       <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">

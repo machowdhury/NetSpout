@@ -215,12 +215,12 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* 2. Center: Scenario, Play/Pause, and Live Active Transmission Telemetry */}
-      <div className="flex items-center gap-2 min-w-0">
-        <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 px-2 py-1 rounded-lg">
+      <div className="hidden xl:flex items-center gap-2 min-w-0 overflow-hidden">
+        <div className="hidden 2xl:flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 px-2 py-1 rounded-lg">
           <select
             value={scenario}
             onChange={(e) => onSelectScenario(e.target.value as ScenarioType)}
-            className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded px-2 py-0.5 font-mono focus:outline-none focus:border-cyan-500 cursor-pointer max-w-[190px] truncate"
+            className="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded px-2 py-0.5 font-mono focus:outline-none focus:border-cyan-500 cursor-pointer max-w-[160px] truncate"
             title="Operational Scenario"
           >
             {filteredScenarios.map((s) => (
@@ -269,18 +269,18 @@ export const TopBar: React.FC<TopBarProps> = ({
             </span>
           </div>
 
-          <span className="text-slate-600">|</span>
+          <span className="hidden 2xl:inline text-slate-600">|</span>
 
-          <div className="flex items-center gap-1 text-slate-300 whitespace-nowrap">
+          <div className="hidden 2xl:flex items-center gap-1 text-slate-300 whitespace-nowrap">
             <span className="text-slate-500">HEC:</span>
             <span className="text-cyan-300 font-semibold">{hecTargetHost}</span>
-            <span className="text-slate-500">&rarr;</span>
-            <span className="text-emerald-300 font-semibold">{targetIndex}</span>
+            <span className="hidden 2xl:inline text-slate-500">&rarr;</span>
+            <span className="hidden 2xl:inline text-emerald-300 font-semibold">{targetIndex}</span>
           </div>
 
-          <span className="text-slate-600">|</span>
+          <span className="hidden 2xl:inline text-slate-600">|</span>
 
-          <div className="flex items-center gap-1 whitespace-nowrap">
+          <div className="hidden 2xl:flex items-center gap-1 whitespace-nowrap">
             <span className="text-amber-300 font-semibold max-w-[130px] truncate" title={activeSourcetype}>
               {activeSourcetype}
             </span>
@@ -289,7 +289,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* Speed Slider */}
-        <div className="flex items-center gap-1 bg-slate-900/80 border border-slate-800 px-1.5 py-0.5 rounded-lg shrink-0">
+        <div className="hidden 2xl:flex items-center gap-1 bg-slate-900/80 border border-slate-800 px-1.5 py-0.5 rounded-lg shrink-0">
           <Gauge className="w-3 h-3 text-cyan-400 shrink-0" />
           <input
             type="range"
@@ -315,7 +315,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }
           }}
           defaultValue=""
-          className="bg-slate-900 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 font-mono focus:outline-none focus:border-cyan-500 cursor-pointer max-w-[130px] truncate"
+          className="hidden xl:block bg-slate-900 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 font-mono focus:outline-none focus:border-cyan-500 cursor-pointer max-w-[130px] truncate"
           title="Load Predefined Topologies"
         >
           <option value="" disabled>Presets...</option>
@@ -413,16 +413,17 @@ export const TopBar: React.FC<TopBarProps> = ({
 
                 <button
                   onClick={() => { setToolsOpen(false); onOpenSNMPModal(); }}
+                  data-testid="open-mode-a-snmp-modal-btn"
                   className="w-full px-3 py-2 text-left hover:bg-slate-800/90 flex items-center justify-between text-slate-200 hover:text-emerald-300 transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-2.5">
                     <Activity className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
                     <div>
-                      <div className="font-bold">SC4SNMP (330+ MIBs)</div>
-                      <div className="text-[10px] text-slate-400">MIB catalog, polling walks & traps</div>
+                      <div className="font-bold">Mode A — HEC Payload Preview (SC4SNMP)</div>
+                      <div className="text-[10px] text-slate-400">sc4snmp:metric / sc4snmp:event preview</div>
                     </div>
                   </div>
-                  <span className="text-[10px] bg-emerald-950/80 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-800">330+</span>
+                  <span className="text-[10px] bg-slate-800 text-amber-300 px-1.5 py-0.5 rounded border border-amber-700/60">MODE A</span>
                 </button>
 
                 <button

@@ -4083,7 +4083,9 @@
     "generation_mode": "SCENARIO_DERIVED",
     "sourcetypes": [
       "cisco:ios:mdt:metric",
-      "cisco:ios:syslog"
+      "cisco:ios:syslog",
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
     ],
     "default_topology_id": "service_provider_cisco",
     "topology_id": "service_provider_cisco",
@@ -4094,16 +4096,19 @@
     ],
     "telemetry_requirements": [
       "syslog",
-      "gnmi"
+      "gnmi",
+      "snmp"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
     ],
     "affected_entities": [
-      "service_provider_cisco"
+      "cisco-asr9k-pe1"
     ],
     "expected_observations": [
-      "High-frequency carrier flap causing BGP route withdrawal"
+      "High-frequency carrier flap causing BGP route withdrawal",
+      "Native SNMPv2c IF-MIB::linkDown, BGP4-MIB::bgpBackwardTransition, IF-MIB::linkUp, BGP4-MIB::bgpEstablished Traps & Informs",
+      "External Net-SNMP GET / GETNEXT / GETBULK / Walk across IF-MIB, IP-MIB & BGP4-MIB"
     ],
     "expected_phases": [
       "baseline",
@@ -4112,11 +4117,57 @@
       "policy_enforcement",
       "steady_state"
     ],
-    "telemetry_model": "Cisco IOS-XR BGP Syslog & MDT Metrics",
+    "telemetry_model": "Cisco IOS-XR BGP Syslog, MDT Metrics & Native SNMPv2c (IF-MIB / BGP4-MIB Trap, Inform & Poll)",
     "transport_protocol": "Splunk HEC",
-    "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+    "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops: cisco:ios:syslog, netspout:snmp:trap, netspout:snmp:poll)",
     "fidelity_badge": "MODELED PAYLOAD",
-    "telemetry_notes": "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC.",
+    "telemetry_notes": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required. Supports both Mode A (Direct HEC Syslog & MDT Metrics) and Mode B / E2E Native SNMPv2c (SNMPv2-Trap, InformRequest, GET, GETNEXT, GETBULK, Walk across IF-MIB & BGP4-MIB via external Net-SNMP snmptrapd & snmpget/snmpwalk/snmpbulkwalk into netspout:snmp:trap and netspout:snmp:poll).",
+    "native_snmp_supported": true,
+    "native_snmp_capabilities": {
+      "protocol": "Native SNMPv2c (RFC 3416 / RFC 1905 ASN.1 BER over UDP)",
+      "pdu_types": [
+        "SNMPv2-Trap",
+        "InformRequest",
+        "GetRequest",
+        "GetNextRequest",
+        "GetBulkRequest",
+        "Response"
+      ],
+      "notifications": [
+        "IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)",
+        "BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)",
+        "IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)",
+        "BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)"
+      ],
+      "polling_operations": [
+        "GET",
+        "GETNEXT",
+        "GETBULK",
+        "Walk"
+      ],
+      "mibs": [
+        "SNMPv2-MIB",
+        "IF-MIB",
+        "IP-MIB",
+        "BGP4-MIB"
+      ],
+      "external_tooling": [
+        "/usr/sbin/snmptrapd",
+        "/usr/bin/snmpget",
+        "/usr/bin/snmpgetnext",
+        "/usr/bin/snmpwalk",
+        "/usr/bin/snmpbulkwalk"
+      ],
+      "splunk_sourcetypes": [
+        "netspout:snmp:trap",
+        "netspout:snmp:poll"
+      ],
+      "splunk_index": "idx_network_ops",
+      "canonical_device_id": "cisco-asr9k-pe1",
+      "transport_fidelity": "NATIVE TRANSPORT",
+      "device_state_fidelity": "MODELED DEVICE STATE",
+      "semantic_statement": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required."
+    },
     "timing_claim": "TI-LFA Fast Reroute",
     "timing_value": 32.0,
     "timing_unit": "ms",
@@ -4185,10 +4236,12 @@
       }
     ],
     "use_case": {
-      "objective": "Demonstrate tier-1 carrier core routing resilience during optical link flaps using Cisco IOS-XR eBGP peering telemetry and TI-LFA sub-50ms fast reroute.",
+      "objective": "Demonstrate tier-1 carrier core routing resilience during optical link flaps using Cisco IOS-XR eBGP peering telemetry, Native SNMPv2c traps/informs/polling (IF-MIB & BGP4-MIB), and TI-LFA sub-50ms fast reroute.",
       "required_telemetry": [
         "cisco:ios:mdt:metric",
-        "cisco:ios:syslog"
+        "cisco:ios:syslog",
+        "netspout:snmp:trap",
+        "netspout:snmp:poll"
       ],
       "expected_progression": [
         "Nominal transit routing",
@@ -4200,6 +4253,8 @@
       "expected_observations": [
         "BGP flap in cisco:ios:syslog",
         "MDT metric drop in cisco:ios:mdt:metric",
+        "Native SNMPv2c IF-MIB::linkDown & BGP4-MIB::bgpBackwardTransition in netspout:snmp:trap",
+        "External Net-SNMP GET / GETNEXT / GETBULK / Walk state transitions in netspout:snmp:poll",
         "TI-LFA local repair in cisco:ios:syslog",
         "Restoration verified"
       ],
@@ -4209,11 +4264,11 @@
         "TI-LFA fast reroute active",
         "BGP peering restored to nominal"
       ],
-      "telemetry_model": "Cisco IOS-XR BGP Syslog & MDT Metrics",
+      "telemetry_model": "Cisco IOS-XR BGP Syslog, MDT Metrics & Native SNMPv2c (IF-MIB / BGP4-MIB Trap, Inform & Poll)",
       "transport_protocol": "Splunk HEC",
-      "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops)",
+      "splunk_storage": "Metrics Index (cisco_mdt_metrics) + Event Index (idx_network_ops: cisco:ios:syslog, netspout:snmp:trap, netspout:snmp:poll)",
       "fidelity_badge": "MODELED PAYLOAD",
-      "telemetry_notes": "Cisco 8000 and ASR 9000 BGP adjacency state changes and high-speed transit MDT metrics delivered to Splunk via HEC."
+      "telemetry_notes": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required."
     },
     "validation_rules": [
       {

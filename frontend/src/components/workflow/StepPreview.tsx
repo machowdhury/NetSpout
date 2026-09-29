@@ -94,6 +94,14 @@ export const StepPreview: React.FC<StepPreviewProps> = ({ useCase, onBack, onNex
                 <span>Topology Model:</span>
                 <code className="text-cyan-400 font-mono text-[11px]">{useCase.default_topology_id}</code>
               </div>
+              {useCase.affected_entities && useCase.affected_entities.length > 0 && (
+                <div className="flex justify-between items-center text-slate-400">
+                  <span>Canonical Device ID:</span>
+                  <code className="text-emerald-400 font-mono font-bold text-[11px]">
+                    {useCase.affected_entities.join(', ')}
+                  </code>
+                </div>
+              )}
               <div className="flex justify-between items-center text-slate-400">
                 <span>Vendor Scope:</span>
                 <span className="text-slate-300 font-mono text-[11px]">{useCase.vendors.join(', ')}</span>
@@ -107,35 +115,50 @@ export const StepPreview: React.FC<StepPreviewProps> = ({ useCase, onBack, onNex
 
           {/* Telemetry Semantics & Architecture Card */}
           <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
               <h4 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
                 <Radio className="w-4 h-4 text-cyan-400" />
-                <span>Telemetry Semantics & Architecture</span>
+                <span>Telemetry Semantics &amp; Architecture</span>
               </h4>
-              {useCase.fidelity_badge && (
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${
-                  useCase.fidelity_badge === 'MODELED PAYLOAD'
-                    ? 'bg-violet-500/10 text-violet-400 border-violet-500/30'
-                    : useCase.fidelity_badge === 'NATIVE TRANSPORT'
-                    ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-                    : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
-                }`}>
-                  {useCase.fidelity_badge}
-                </span>
-              )}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {useCase.native_snmp_supported ? (
+                  <>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border-emerald-500/40">
+                      NATIVE TRANSPORT
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-cyan-500/15 text-cyan-300 border-cyan-500/40">
+                      MODELED DEVICE STATE
+                    </span>
+                  </>
+                ) : (
+                  useCase.fidelity_badge && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${
+                      useCase.fidelity_badge === 'MODELED PAYLOAD'
+                        ? 'bg-violet-500/10 text-violet-400 border-violet-500/30'
+                        : useCase.fidelity_badge === 'NATIVE TRANSPORT'
+                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
+                    }`}>
+                      {useCase.fidelity_badge}
+                    </span>
+                  )
+                )}
+              </div>
             </div>
 
             <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800/80 text-xs space-y-2">
-              <div className="flex justify-between items-center text-slate-400">
-                <span>Telemetry Model:</span>
-                <span className="text-slate-200 font-mono text-[11px]">
+              <div className="flex justify-between items-start text-slate-400">
+                <span className="shrink-0 mr-2">Telemetry Model:</span>
+                <span className="text-slate-200 font-mono text-[11px] text-right">
                   {useCase.telemetry_model || 'Standard Event Telemetry'}
                 </span>
               </div>
               <div className="flex justify-between items-center text-slate-400">
                 <span>Transport Protocol:</span>
                 <span className="text-cyan-400 font-mono text-[11px]">
-                  {useCase.transport_protocol || 'Splunk HEC'}
+                  {useCase.native_snmp_supported
+                    ? 'Native SNMPv2c (ASN.1 BER over UDP) + Splunk HEC'
+                    : (useCase.transport_protocol || 'Splunk HEC')}
                 </span>
               </div>
               <div className="flex justify-between items-start text-slate-400">
@@ -146,7 +169,43 @@ export const StepPreview: React.FC<StepPreviewProps> = ({ useCase, onBack, onNex
               </div>
             </div>
 
-            {useCase.telemetry_notes && (
+            {useCase.native_snmp_supported && useCase.native_snmp_capabilities && (
+              <div className="p-3.5 rounded-lg bg-emerald-950/25 border border-emerald-800/50 text-xs space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-emerald-300 uppercase tracking-wider text-[10px] font-mono">
+                    Native SNMPv2c E2E Specification ({useCase.native_snmp_capabilities.canonical_device_id})
+                  </span>
+                  <span className="text-[10px] font-mono text-cyan-300">
+                    index={useCase.native_snmp_capabilities.splunk_index}
+                  </span>
+                </div>
+                <p className="text-[11px] leading-relaxed text-emerald-100/90 bg-slate-950/70 p-2.5 rounded border border-emerald-800/40">
+                  {useCase.native_snmp_capabilities.semantic_statement}
+                </p>
+                <div className="grid grid-cols-1 gap-1.5 text-[10px] font-mono text-slate-300">
+                  <div>
+                    <span className="text-slate-500">PDU Types: </span>
+                    <span className="text-emerald-300">{useCase.native_snmp_capabilities.pdu_types.join(', ')}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500">Polling Ops: </span>
+                    <span className="text-cyan-300">{useCase.native_snmp_capabilities.polling_operations.join(', ')}</span>
+                    <span className="text-slate-500"> across </span>
+                    <span className="text-amber-300">{useCase.native_snmp_capabilities.mibs.join(', ')}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500">External Tooling: </span>
+                    <span className="text-slate-200">{useCase.native_snmp_capabilities.external_tooling.join(', ')}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500">Splunk Sourcetypes: </span>
+                    <span className="text-emerald-300 font-bold">{useCase.native_snmp_capabilities.splunk_sourcetypes.join(', ')}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {useCase.telemetry_notes && !useCase.native_snmp_supported && (
               <div className="p-3 rounded-lg bg-cyan-950/30 border border-cyan-800/50 text-xs text-slate-300 flex items-start gap-2.5">
                 <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <p className="text-[11px] leading-relaxed text-slate-300">

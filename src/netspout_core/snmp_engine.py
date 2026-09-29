@@ -932,7 +932,7 @@ class SNMPEngine:
         pdu_mode: str = "TRAP",
         community: str = "netspout-lab",
         exporter_ip: str = "10.200.0.1",
-        device_id: str = "node-cisco8k-core01",
+        device_id: str = "cisco-asr9k-pe1",
     ) -> List[SnmpMessage]:
         """
         Builds the authoritative Gate 12B Native SNMPv2c notification progression

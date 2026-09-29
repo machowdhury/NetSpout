@@ -196,14 +196,25 @@ export const StepChoose: React.FC<StepChooseProps> = ({
               >
                 {/* Card Top Row: Category & Badges */}
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-1.5 truncate">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">
                       {uc.domain}
                     </span>
-                    {uc.fidelity_badge && (
-                      <span className={"text-[9px] font-semibold px-1.5 py-0.5 rounded border uppercase shrink-0 " + getFidelityBadgeColor(uc.fidelity_badge)}>
-                        {uc.fidelity_badge}
-                      </span>
+                    {uc.native_snmp_supported ? (
+                      <>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase shrink-0 bg-emerald-500/15 text-emerald-300 border-emerald-500/40">
+                          NATIVE TRANSPORT
+                        </span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase shrink-0 bg-cyan-500/15 text-cyan-300 border-cyan-500/40">
+                          MODELED DEVICE STATE
+                        </span>
+                      </>
+                    ) : (
+                      uc.fidelity_badge && (
+                        <span className={"text-[9px] font-semibold px-1.5 py-0.5 rounded border uppercase shrink-0 " + getFidelityBadgeColor(uc.fidelity_badge)}>
+                          {uc.fidelity_badge}
+                        </span>
+                      )
                     )}
                     {uc.timing_classification && uc.timing_classification !== 'NOT_APPLICABLE' && (
                       <span
@@ -235,11 +246,28 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                   {uc.description}
                 </p>
 
+                {/* Native SNMPv2c Highlight Pill when supported */}
+                {uc.native_snmp_supported && (
+                  <div className="mb-2.5 p-2 rounded-lg bg-emerald-950/30 border border-emerald-800/60 text-[10px] text-emerald-200 font-mono flex flex-wrap items-center gap-1.5">
+                    <span className="font-bold text-emerald-400">Native SNMPv2c E2E:</span>
+                    <span>Trap + Inform + GET/GETNEXT/GETBULK/Walk</span>
+                    <span className="text-slate-500">|</span>
+                    <span className="text-cyan-300">IF-MIB &amp; BGP4-MIB</span>
+                    <span className="text-slate-500">|</span>
+                    <span className="text-amber-300">Device: {uc.native_snmp_capabilities?.canonical_device_id || 'cisco-asr9k-pe1'}</span>
+                  </div>
+                )}
+
                 {/* Vendors Scope Tags */}
                 <div className="flex flex-wrap gap-1 mb-3">
                   {uc.vendors.slice(0, 3).map((v, i) => (
                     <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800/90 text-slate-300 border border-slate-700/60 font-mono">
                       {v.replace('_', ' ')}
+                    </span>
+                  ))}
+                  {uc.sourcetypes.filter(st => st.startsWith('netspout:snmp:')).map((st, i) => (
+                    <span key={`snmp-${i}`} className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 font-mono">
+                      {st}
                     </span>
                   ))}
                   {uc.vendors.length > 3 && (
@@ -288,6 +316,16 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                         ))}
                       </div>
                     </div>
+                    {uc.native_snmp_supported && uc.native_snmp_capabilities && (
+                      <div className="pt-1.5 border-t border-slate-800/60 text-[10px] space-y-1">
+                        <span className="text-emerald-400 font-bold block">
+                          Native SNMPv2c Capabilities ({uc.native_snmp_capabilities.canonical_device_id}):
+                        </span>
+                        <p className="text-slate-300">
+                          {uc.native_snmp_capabilities.semantic_statement}
+                        </p>
+                      </div>
+                    )}
                     {uc.telemetry_model && (
                       <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-slate-800/60 text-[10px]">
                         <div>
@@ -296,7 +334,9 @@ export const StepChoose: React.FC<StepChooseProps> = ({
                         </div>
                         <div>
                           <span className="text-slate-500 font-medium block">Transport:</span>
-                          <span className="text-cyan-400 font-mono">{uc.transport_protocol || 'Splunk HEC'}</span>
+                          <span className="text-cyan-400 font-mono">
+                            {uc.native_snmp_supported ? 'Native SNMPv2c UDP + Splunk HEC' : (uc.transport_protocol || 'Splunk HEC')}
+                          </span>
                         </div>
                         {uc.splunk_storage && (
                           <div className="col-span-2">

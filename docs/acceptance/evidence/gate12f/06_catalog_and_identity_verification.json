@@ -1,0 +1,110 @@
+{
+  "use_case_api_status": 200,
+  "service_provider_cisco_use_case": {
+    "scenario_id": "service_provider_cisco",
+    "native_snmp_supported": true,
+    "native_snmp_capabilities": {
+      "protocol": "Native SNMPv2c (RFC 3416 / RFC 1905 ASN.1 BER over UDP)",
+      "pdu_types": [
+        "SNMPv2-Trap",
+        "InformRequest",
+        "GetRequest",
+        "GetNextRequest",
+        "GetBulkRequest",
+        "Response"
+      ],
+      "notifications": [
+        "IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)",
+        "BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)",
+        "IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)",
+        "BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)"
+      ],
+      "polling_operations": [
+        "GET",
+        "GETNEXT",
+        "GETBULK",
+        "Walk"
+      ],
+      "mibs": [
+        "SNMPv2-MIB",
+        "IF-MIB",
+        "IP-MIB",
+        "BGP4-MIB"
+      ],
+      "external_tooling": [
+        "/usr/sbin/snmptrapd",
+        "/usr/bin/snmpget",
+        "/usr/bin/snmpgetnext",
+        "/usr/bin/snmpwalk",
+        "/usr/bin/snmpbulkwalk"
+      ],
+      "splunk_sourcetypes": [
+        "netspout:snmp:trap",
+        "netspout:snmp:poll"
+      ],
+      "splunk_index": "idx_network_ops",
+      "canonical_device_id": "cisco-asr9k-pe1",
+      "transport_fidelity": "NATIVE TRANSPORT",
+      "device_state_fidelity": "MODELED DEVICE STATE",
+      "semantic_statement": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required."
+    },
+    "telemetry_requirements": [
+      "syslog",
+      "gnmi",
+      "snmp"
+    ],
+    "sourcetypes": [
+      "cisco:ios:mdt:metric",
+      "cisco:ios:syslog",
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
+    ],
+    "affected_entities": [
+      "cisco-asr9k-pe1"
+    ]
+  },
+  "registered_snmp_sourcetypes": [
+    {
+      "id": "netspout-snmp-trap",
+      "splunk_sourcetype": "netspout:snmp:trap",
+      "display_name": "NetSpout Native SNMPv2c Trap & Inform Collector Event",
+      "vendor_id": "cisco_ios",
+      "category": "Enterprise Telemetry",
+      "data_kind": "event",
+      "default_index": "idx_network_ops",
+      "recommended_index": "idx_network_ops",
+      "generation_mode": "SCENARIO_DERIVED",
+      "protocol": "snmp",
+      "sample_file": null,
+      "required_ta": null,
+      "aliases": [
+        "netspout-snmp-trap",
+        "netspout:snmp:trap"
+      ],
+      "deprecated_aliases": [],
+      "is_benchmark_197": false,
+      "status": "active"
+    },
+    {
+      "id": "netspout-snmp-poll",
+      "splunk_sourcetype": "netspout:snmp:poll",
+      "display_name": "NetSpout Native SNMPv2c Poller Observation Event (GET/GETNEXT/GETBULK/Walk)",
+      "vendor_id": "cisco_ios",
+      "category": "Enterprise Telemetry",
+      "data_kind": "event",
+      "default_index": "idx_network_ops",
+      "recommended_index": "idx_network_ops",
+      "generation_mode": "SCENARIO_DERIVED",
+      "protocol": "snmp",
+      "sample_file": null,
+      "required_ta": null,
+      "aliases": [
+        "netspout-snmp-poll",
+        "netspout:snmp:poll"
+      ],
+      "deprecated_aliases": [],
+      "is_benchmark_197": false,
+      "status": "active"
+    }
+  ]
+}

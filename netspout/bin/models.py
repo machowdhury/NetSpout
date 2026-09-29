@@ -623,6 +623,8 @@ class ScenarioContract(BaseModel):
     splunk_storage: Optional[str] = "Splunk Event Index (idx_network_ops)"
     fidelity_badge: Optional[str] = "MODELED PAYLOAD"
     telemetry_notes: Optional[str] = None
+    native_snmp_supported: bool = False
+    native_snmp_capabilities: Optional[Dict[str, Any]] = None
     timing_claim: Optional[str] = None
     timing_value: Optional[float] = None
     timing_unit: Optional[str] = None
@@ -714,6 +716,8 @@ class RunManifest(BaseModel):
     scenario_maturity: str = "CONTRACTED"  # CANDIDATE, CONTRACTED, IMPLEMENTED, FORMAT_VALIDATED, E2E_VALIDATED, GOLDEN_PATH_CERTIFIED
     seed: Optional[int] = None
     time_mode: str = "TEST"  # REALTIME | ACCELERATED | TEST
+    transport_mode: str = "DIRECT_TO_SPLUNK"  # DIRECT_TO_SPLUNK | NATIVE_TRANSPORT
+    native_protocol: Optional[str] = None
     start_time: float = Field(default_factory=time.time)
     end_time: Optional[float] = None
     duration_sec: float = 0.0
@@ -751,6 +755,7 @@ class RunManifest(BaseModel):
     native_snmp_pdus: List[Any] = Field(default_factory=list)
     snmp_e2e_scorecard: Optional[Any] = None
     snmp_normalized_events: List[Any] = Field(default_factory=list)
+    snmp_polling_evidence: Optional[Any] = None
 
 
 class ScenarioRunRequest(BaseModel):
@@ -1394,6 +1399,8 @@ class NormalizedSnmpEvent(BaseModel):
     snmp_source: str = "127.0.0.1"
     snmp_collector: str = "snmptrapd"       # "snmptrapd" | "net-snmp-cli"
     snmp_transport: str = "SNMPV2C_UDP"
+    origin_evidence_stage: str = SnmpEvidenceStage.RECEIVER_OBSERVED.value
+    current_evidence_stage: str = SnmpEvidenceStage.RECEIVER_OBSERVED.value
     evidence_stage: str = SnmpEvidenceStage.RECEIVER_OBSERVED.value
     sys_uptime: Optional[int] = None
     varbinds: Dict[str, Any] = Field(default_factory=dict)
@@ -1420,6 +1427,8 @@ class NormalizedSnmpEvent(BaseModel):
             "snmp_source": self.snmp_source,
             "snmp_collector": self.snmp_collector,
             "snmp_transport": self.snmp_transport,
+            "origin_evidence_stage": self.origin_evidence_stage,
+            "current_evidence_stage": self.current_evidence_stage,
             "evidence_stage": self.evidence_stage,
             "sys_uptime": self.sys_uptime,
             "varbinds": dict(self.varbinds),
@@ -1429,6 +1438,11 @@ class NormalizedSnmpEvent(BaseModel):
 
     def to_hec_payload(self) -> Dict[str, Any]:
         ev_dict = self.to_event_dict()
+        # Preserve original collector observation state in origin_evidence_stage without
+        # claiming that HEC dispatch equals SPLUNK_OBSERVED (SPLUNK_OBSERVED is established
+        # strictly by fresh Splunk search verification).
+        ev_dict["origin_evidence_stage"] = self.origin_evidence_stage
+        ev_dict["hec_dispatch_stage"] = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
         return {
             "time": self.timestamp,
             "host": self.host,
@@ -1467,6 +1481,8 @@ class NormalizedSnmpEvent(BaseModel):
             f'snmp_source="{self.snmp_source}"',
             f'snmp_collector="{self.snmp_collector}"',
             f'snmp_transport="{self.snmp_transport}"',
+            f'origin_evidence_stage="{self.origin_evidence_stage}"',
+            f'current_evidence_stage="{self.current_evidence_stage}"',
             f'evidence_stage="{self.evidence_stage}"',
         ]
         return LogEntry(
@@ -1495,7 +1511,7 @@ class NormalizedSnmpEvent(BaseModel):
 
 class SnmpE2ERunScorecard(BaseModel):
     """
-    Machine-readable Gate 12D End-to-End Scorecard preserving strict separation across:
+    Machine-readable Gate 12D/12F End-to-End Scorecard preserving strict separation across:
     GENERATED -> ENCODED -> SENT -> ACKNOWLEDGED -> RECEIVER_OBSERVED -> SPLUNK_DISPATCHED -> SPLUNK_OBSERVED -> VALIDATED
     """
     run_id: str
@@ -1551,6 +1567,8 @@ class SnmpE2ERunScorecard(BaseModel):
     coherence_details: Dict[str, Any] = Field(default_factory=dict)
     validation_result: str = "NOT_RUN"
     validation_checks: List[Dict[str, Any]] = Field(default_factory=list)
+    origin_evidence_stage: str = SnmpEvidenceStage.RECEIVER_OBSERVED.value
+    current_evidence_stage: str = SnmpEvidenceStage.GENERATED.value
     evidence_stage: str = SnmpEvidenceStage.GENERATED.value
     stage_history: List[str] = Field(default_factory=list)
     stage_classification: Dict[str, str] = Field(default_factory=dict)

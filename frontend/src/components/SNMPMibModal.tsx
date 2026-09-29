@@ -7,6 +7,7 @@ interface SNMPMibModalProps {
   onClose: () => void;
   nodes: Node[];
   globalTransport?: TelemetryTransportConfig;
+  onLaunchNativeSnmpWorkflow?: () => void;
 }
 
 const PRELOADED_TRAPS = [
@@ -25,7 +26,8 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
   isOpen,
   onClose,
   nodes,
-  globalTransport
+  globalTransport,
+  onLaunchNativeSnmpWorkflow
 }) => {
   const [activeTab, setActiveTab] = useState<'catalog' | 'poll' | 'trap'>('catalog');
   const [searchQuery, setSearchQuery] = useState('');
@@ -194,9 +196,9 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
         })
       });
       await res.json();
-      setTrapStatus(`Successfully dispatched ${selectedTrap} to active pipelines! (HEC & Syslog)`);
+      setTrapStatus(`Successfully dispatched ${selectedTrap} Mode A HEC preview payload! (sc4snmp:event)`);
     } catch {
-      setTrapStatus(`Dispatched ${selectedTrap} in simulation mode across active streams.`);
+      setTrapStatus(`Dispatched ${selectedTrap} Mode A preview payload across active streams.`);
     } finally {
       setIsEmittingTrap(false);
     }
@@ -208,27 +210,27 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-5xl h-[85vh] bg-[#0B0F19] border border-[#374151] rounded-xl shadow-2xl flex flex-col overflow-hidden font-sans text-slate-200">
+      <div data-testid="mode-a-snmp-modal" className="w-full max-w-5xl h-[85vh] bg-[#0B0F19] border border-[#374151] rounded-xl shadow-2xl flex flex-col overflow-hidden font-sans text-slate-200">
         {/* Header */}
-        <div className="h-14 px-6 bg-[#1F2937] border-b border-[#374151] flex items-center justify-between shrink-0">
+        <div className="min-h-14 py-2.5 px-6 bg-[#1F2937] border-b border-[#374151] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
               <Activity className="w-4 h-4" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-sm font-bold tracking-wide uppercase font-mono text-slate-100">
-                  SC4SNMP & Multi-Vendor MIB Engine
+                  Mode A — HEC Payload Preview (sc4snmp:metric / sc4snmp:event)
                 </h2>
-                <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono font-bold">
-                  {mibs.length} MIBs Active
+                <span className="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-mono font-bold">
+                  MODE A PREVIEW ONLY
                 </span>
-                <span className="text-[10px] bg-violet-950 text-violet-300 border border-violet-800 px-2 py-0.5 rounded font-mono font-bold">
-                  Target: cisco_mdt_metrics
+                <span className="text-[10px] bg-slate-900 text-slate-300 border border-slate-700 px-2 py-0.5 rounded font-mono font-bold">
+                  {mibs.length} MIBs Cataloged
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-mono">
-                Compliant with Splunk Connect for SNMP (SC4SNMP), RFC standards & enterprise MIB trees
+                Direct HTTP HEC payload synthesis (`sc4snmp:metric` / `sc4snmp:event`) — NOT the native UDP SNMPv2c BER/ASN.1 protocol engine
               </p>
             </div>
           </div>
@@ -250,7 +252,7 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
                   activeTab === 'poll' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                Polling Simulator
+                Mode A Poll Preview
               </button>
               <button
                 onClick={() => setActiveTab('trap')}
@@ -258,7 +260,7 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
                   activeTab === 'trap' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                Trap Emitter
+                Mode A Trap Preview
               </button>
             </div>
 
@@ -269,6 +271,30 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
               <X className="w-5 h-5" />
             </button>
           </div>
+        </div>
+
+        {/* Disambiguation Banner (F-12E-05) */}
+        <div className="px-6 py-3 bg-amber-950/30 border-b border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shrink-0">
+          <div className="text-xs text-slate-200 space-y-0.5">
+            <div className="font-bold text-amber-300 font-mono uppercase tracking-wide">
+              Transport Honesty Notice: Mode A (Direct HTTP HEC Payload Preview) vs Mode B (Native UDP SNMPv2c Engine)
+            </div>
+            <p className="text-[11px] text-slate-300">
+              This utility previews JSON HEC events (<code className="text-amber-300">sc4snmp:metric</code> / <code className="text-amber-300">sc4snmp:event</code>) over HTTP. It does <strong>not</strong> encode BER/ASN.1 UDP datagrams or query a live SNMPv2c agent. For real UDP BER/ASN.1 traps, informs, and MIB polling (<code className="text-emerald-300">netspout:snmp:trap</code> / <code className="text-emerald-300">netspout:snmp:poll</code>), use the 5-Step Workflow for <code className="text-cyan-300">service_provider_cisco</code>.
+            </p>
+          </div>
+          {onLaunchNativeSnmpWorkflow && (
+            <button
+              data-testid="launch-native-snmp-workflow-btn"
+              onClick={() => {
+                onClose();
+                onLaunchNativeSnmpWorkflow();
+              }}
+              className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-mono font-bold text-xs shrink-0 transition cursor-pointer shadow-lg"
+            >
+              Launch Native SNMPv2c Workflow (service_provider_cisco) &rarr;
+            </button>
+          )}
         </div>
 
         {/* Tab 1: MIB Catalog Browser */}

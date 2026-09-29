@@ -1,0 +1,552 @@
+{
+  "fresh_closure_run_id": "NS-20260929-27d18955",
+  "splunk_rest_endpoint": "https://127.0.0.1:8889/services/search/jobs/export",
+  "counts_by_sourcetype_and_phase": [
+    {
+      "sourcetype": "cisco:ios:syslog",
+      "netspout_phase": "BASELINE",
+      "count": "1"
+    },
+    {
+      "sourcetype": "cisco:ios:syslog",
+      "netspout_phase": "FAILOVER",
+      "count": "1"
+    },
+    {
+      "sourcetype": "cisco:ios:syslog",
+      "netspout_phase": "FAULT",
+      "count": "1"
+    },
+    {
+      "sourcetype": "cisco:ios:syslog",
+      "netspout_phase": "PROPAGATE",
+      "count": "1"
+    },
+    {
+      "sourcetype": "cisco:ios:syslog",
+      "netspout_phase": "RECOVER",
+      "count": "1"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "netspout_phase": "BASELINE",
+      "count": "143"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "netspout_phase": "DEGRADE",
+      "count": "16"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "netspout_phase": "FAILOVER",
+      "count": "143"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "netspout_phase": "RECOVERY",
+      "count": "16"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "netspout_phase": "DEGRADE",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "netspout_phase": "FAILOVER",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "netspout_phase": "RECOVERY",
+      "count": "4"
+    }
+  ],
+  "snmp_evidence_breakdown": [
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetBulkRequest",
+      "netspout_phase": "BASELINE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "127"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetBulkRequest",
+      "netspout_phase": "FAILOVER",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "127"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetNextRequest",
+      "netspout_phase": "BASELINE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetNextRequest",
+      "netspout_phase": "DEGRADE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetNextRequest",
+      "netspout_phase": "FAILOVER",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetNextRequest",
+      "netspout_phase": "RECOVERY",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetRequest",
+      "netspout_phase": "BASELINE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "14"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetRequest",
+      "netspout_phase": "DEGRADE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "14"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetRequest",
+      "netspout_phase": "FAILOVER",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "14"
+    },
+    {
+      "sourcetype": "netspout:snmp:poll",
+      "snmp_pdu_type": "GetRequest",
+      "netspout_phase": "RECOVERY",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "14"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "InformRequest",
+      "netspout_phase": "DEGRADE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "1"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "InformRequest",
+      "netspout_phase": "FAILOVER",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "1"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "InformRequest",
+      "netspout_phase": "RECOVERY",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "SNMPv2-Trap",
+      "netspout_phase": "DEGRADE",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "1"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "SNMPv2-Trap",
+      "netspout_phase": "FAILOVER",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "1"
+    },
+    {
+      "sourcetype": "netspout:snmp:trap",
+      "snmp_pdu_type": "SNMPv2-Trap",
+      "netspout_phase": "RECOVERY",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "origin_evidence_stage": "RECEIVER_OBSERVED",
+      "evidence_stage": "RECEIVER_OBSERVED",
+      "count": "2"
+    }
+  ],
+  "trap_inform_sample_events": [
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255273",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-08bec5856661\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"InformRequest\", \"snmp_request_id\": 1448858006, \"snmp_trap_oid\": \"1.3.6.1.2.1.15.7.1\", \"snmp_trap_name\": \"BGP4-MIB::bgpEstablished\", \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.1\", \"snmp_value\": \"6\", \"snmp_numeric_value\": 6.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8643500, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8643500\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.2.1.15.7.1\", \"BGP4-MIB::bgpPeerLastError.198.51.100.1\": \"\\u0000\\u0000\", \"BGP4-MIB::bgpPeerState.198.51.100.1\": \"6\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:58353->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8643500\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.2.1.15.7.1\\t.1.3.6.1.2.1.15.3.1.14.198.51.100.1 = \\\"00 00 \\\"\\t.1.3.6.1.2.1.15.3.1.2.198.51.100.1 = 6\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "0",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021596",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255227",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-e69d2a07c83a\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"InformRequest\", \"snmp_request_id\": 1944419436, \"snmp_trap_oid\": \"1.3.6.1.6.3.1.1.5.4\", \"snmp_trap_name\": \"IF-MIB::linkUp\", \"snmp_oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"snmp_oid_name\": \"IF-MIB::ifOperStatus.1\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8643000, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8643000\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.6.3.1.1.5.4\", \"IF-MIB::ifIndex.1\": \"1\", \"IF-MIB::ifAdminStatus.1\": \"1\", \"IF-MIB::ifOperStatus.1\": \"1\", \"IF-MIB::ifDescr.1\": \"HundredGigE0/0/0/1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:58353->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8643000\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.6.3.1.1.5.4\\t.1.3.6.1.2.1.2.2.1.1.1 = 1\\t.1.3.6.1.2.1.2.2.1.7.1 = 1\\t.1.3.6.1.2.1.2.2.1.8.1 = 1\\t.1.3.6.1.2.1.2.2.1.2.1 = HundredGigE0/0/0/1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "1",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021586",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255182",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"FAILOVER\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-f4b2cf5498d9\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"InformRequest\", \"snmp_request_id\": 1727170603, \"snmp_trap_oid\": \"1.3.6.1.2.1.15.7.2\", \"snmp_trap_name\": \"BGP4-MIB::bgpBackwardTransition\", \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.1\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8640500, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8640500\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.2.1.15.7.2\", \"BGP4-MIB::bgpPeerLastError.198.51.100.1\": \"\\u0004\\u0000\", \"BGP4-MIB::bgpPeerState.198.51.100.1\": \"1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:58353->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8640500\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.2.1.15.7.2\\t.1.3.6.1.2.1.15.3.1.14.198.51.100.1 = \\\"04 00 \\\"\\t.1.3.6.1.2.1.15.3.1.2.198.51.100.1 = 1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "2",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021576",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255136",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"DEGRADE\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-660d39deb286\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"InformRequest\", \"snmp_request_id\": 1778926213, \"snmp_trap_oid\": \"1.3.6.1.6.3.1.1.5.3\", \"snmp_trap_name\": \"IF-MIB::linkDown\", \"snmp_oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"snmp_oid_name\": \"IF-MIB::ifOperStatus.1\", \"snmp_value\": \"2\", \"snmp_numeric_value\": 2.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8640000, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8640000\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.6.3.1.1.5.3\", \"IF-MIB::ifIndex.1\": \"1\", \"IF-MIB::ifAdminStatus.1\": \"1\", \"IF-MIB::ifOperStatus.1\": \"2\", \"IF-MIB::ifDescr.1\": \"HundredGigE0/0/0/1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:58353->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8640000\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.6.3.1.1.5.3\\t.1.3.6.1.2.1.2.2.1.1.1 = 1\\t.1.3.6.1.2.1.2.2.1.7.1 = 1\\t.1.3.6.1.2.1.2.2.1.8.1 = 2\\t.1.3.6.1.2.1.2.2.1.2.1 = HundredGigE0/0/0/1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "3",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021562",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255092",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-21687172c706\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"SNMPv2-Trap\", \"snmp_request_id\": 1223736209, \"snmp_trap_oid\": \"1.3.6.1.2.1.15.7.1\", \"snmp_trap_name\": \"BGP4-MIB::bgpEstablished\", \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.1\", \"snmp_value\": \"6\", \"snmp_numeric_value\": 6.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8643500, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8643500\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.2.1.15.7.1\", \"BGP4-MIB::bgpPeerLastError.198.51.100.1\": \"\\u0000\\u0000\", \"BGP4-MIB::bgpPeerState.198.51.100.1\": \"6\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:61914->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8643500\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.2.1.15.7.1\\t.1.3.6.1.2.1.15.3.1.14.198.51.100.1 = \\\"00 00 \\\"\\t.1.3.6.1.2.1.15.3.1.2.198.51.100.1 = 6\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "4",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".0215309",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255046",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-21bd5c894f04\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"SNMPv2-Trap\", \"snmp_request_id\": 1650977050, \"snmp_trap_oid\": \"1.3.6.1.6.3.1.1.5.4\", \"snmp_trap_name\": \"IF-MIB::linkUp\", \"snmp_oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"snmp_oid_name\": \"IF-MIB::ifOperStatus.1\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8643000, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8643000\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.6.3.1.1.5.4\", \"IF-MIB::ifIndex.1\": \"1\", \"IF-MIB::ifAdminStatus.1\": \"1\", \"IF-MIB::ifOperStatus.1\": \"1\", \"IF-MIB::ifDescr.1\": \"HundredGigE0/0/0/1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:61914->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8643000\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.6.3.1.1.5.4\\t.1.3.6.1.2.1.2.2.1.1.1 = 1\\t.1.3.6.1.2.1.2.2.1.7.1 = 1\\t.1.3.6.1.2.1.2.2.1.8.1 = 1\\t.1.3.6.1.2.1.2.2.1.2.1 = HundredGigE0/0/0/1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "5",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021516",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:255001",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"FAILOVER\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-9bf83c2b5f49\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"SNMPv2-Trap\", \"snmp_request_id\": 255593296, \"snmp_trap_oid\": \"1.3.6.1.2.1.15.7.2\", \"snmp_trap_name\": \"BGP4-MIB::bgpBackwardTransition\", \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.1\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8640500, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8640500\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.2.1.15.7.2\", \"BGP4-MIB::bgpPeerLastError.198.51.100.1\": \"\\u0004\\u0000\", \"BGP4-MIB::bgpPeerState.198.51.100.1\": \"1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:61914->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8640500\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.2.1.15.7.2\\t.1.3.6.1.2.1.15.3.1.14.198.51.100.1 = \\\"04 00 \\\"\\t.1.3.6.1.2.1.15.3.1.2.198.51.100.1 = 1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "6",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".021495",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:254956",
+      "_indextime": "1790709909",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"DEGRADE\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-trap-306ed872d800\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"SNMPv2-Trap\", \"snmp_request_id\": 761037435, \"snmp_trap_oid\": \"1.3.6.1.6.3.1.1.5.3\", \"snmp_trap_name\": \"IF-MIB::linkDown\", \"snmp_oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"snmp_oid_name\": \"IF-MIB::ifOperStatus.1\", \"snmp_value\": \"2\", \"snmp_numeric_value\": 2.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"snmptrapd\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": 8640000, \"varbinds\": {\"SNMPv2-MIB::sysUpTime.0\": \"8640000\", \"SNMPv2-MIB::snmpTrapOID.0\": \"1.3.6.1.6.3.1.1.5.3\", \"IF-MIB::ifIndex.1\": \"1\", \"IF-MIB::ifAdminStatus.1\": \"1\", \"IF-MIB::ifOperStatus.1\": \"2\", \"IF-MIB::ifDescr.1\": \"HundredGigE0/0/0/1\"}, \"raw_collector_line\": \"2026-09-29 15:25:08 localhost [UDP: [127.0.0.1]:61914->[0.0.0.0]:0]: .1.3.6.1.2.1.1.3.0 = 8640000\\t.1.3.6.1.6.3.1.1.4.1.0 = .1.3.6.1.6.3.1.1.5.3\\t.1.3.6.1.2.1.2.2.1.1.1 = 1\\t.1.3.6.1.2.1.2.2.1.7.1 = 1\\t.1.3.6.1.2.1.2.2.1.8.1 = 2\\t.1.3.6.1.2.1.2.2.1.2.1 = HundredGigE0/0/0/1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "7",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:trap",
+      "_subsecond": ".02143",
+      "_time": "2026-09-29 19:25:09.021 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "snmptrapd:udp:58726",
+      "sourcetype": "netspout:snmp:trap",
+      "splunk_server": "f740b2f0db82"
+    }
+  ],
+  "poll_sample_events": [
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265519",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-7704bc30adf0\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetNextRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.2.2.1.8.1\", \"snmp_oid_name\": \"IF-MIB::ifOperStatus.1\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"IF-MIB::ifOperStatus.1\": \"1\"}, \"raw_collector_line\": \".1.3.6.1.2.1.2.2.1.8.1 = 1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "0",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".3411431",
+      "_time": "2026-09-29 19:25:09.341 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265482",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-fcde981ca3e4\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetNextRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.1.1.0\", \"snmp_oid_name\": \"SNMPv2-MIB::sysDescr.0\", \"snmp_value\": \"Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]\", \"snmp_numeric_value\": null, \"snmp_value_type\": \"OctetString\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"SNMPv2-MIB::sysDescr.0\": \"Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]\"}, \"raw_collector_line\": \".1.3.6.1.2.1.1.1.0 = Cisco IOS XR Software (ASR9K), Version 7.9.2 [NetSpout Simulated Agent]\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "1",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".341126",
+      "_time": "2026-09-29 19:25:09.341 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265450",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-5dad1fd46d58\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.2\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.2\", \"snmp_value\": \"6\", \"snmp_numeric_value\": 6.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"BGP4-MIB::bgpPeerState.198.51.100.2\": \"6\"}, \"raw_collector_line\": \".1.3.6.1.2.1.15.3.1.2.198.51.100.2 = 6\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "2",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".3237948",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265417",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-9a8845e874d1\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.14.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerLastError.198.51.100.1\", \"snmp_value\": \"0000\", \"snmp_numeric_value\": 0.0, \"snmp_value_type\": \"OctetString\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"BGP4-MIB::bgpPeerLastError.198.51.100.1\": \"0000\"}, \"raw_collector_line\": \".1.3.6.1.2.1.15.3.1.14.198.51.100.1 = \\\"00 00 \\\"\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "3",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".323792",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265385",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-28df650a1846\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.15.3.1.2.198.51.100.1\", \"snmp_oid_name\": \"BGP4-MIB::bgpPeerState.198.51.100.1\", \"snmp_value\": \"6\", \"snmp_numeric_value\": 6.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"BGP4-MIB::bgpPeerState.198.51.100.1\": \"6\"}, \"raw_collector_line\": \".1.3.6.1.2.1.15.3.1.2.198.51.100.1 = 6\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "4",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".323787",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265352",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-27db6b338e21\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.4.21.1.7.0.0.0.0\", \"snmp_oid_name\": \"IP-MIB::ipRouteNextHop.0.0.0.0\", \"snmp_value\": \"198.51.100.1\", \"snmp_numeric_value\": null, \"snmp_value_type\": \"IpAddress\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"IP-MIB::ipRouteNextHop.0.0.0.0\": \"198.51.100.1\"}, \"raw_collector_line\": \".1.3.6.1.2.1.4.21.1.7.0.0.0.0 = 198.51.100.1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "5",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".3237839",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265320",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-fa5cf04acd97\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.4.21.1.2.0.0.0.0\", \"snmp_oid_name\": \"IP-MIB::ipRouteIfIndex.0.0.0.0\", \"snmp_value\": \"1\", \"snmp_numeric_value\": 1.0, \"snmp_value_type\": \"Integer32\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"IP-MIB::ipRouteIfIndex.0.0.0.0\": \"1\"}, \"raw_collector_line\": \".1.3.6.1.2.1.4.21.1.2.0.0.0.0 = 1\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "6",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".323781",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    },
+    {
+      "_bkt": "idx_network_ops~11~79E30031-BA19-4BF0-83F6-6A34238054CB",
+      "_cd": "11:265288",
+      "_indextime": "1790709910",
+      "_raw": "{\"netspout_run_id\": \"NS-20260929-27d18955\", \"netspout_scenario_id\": \"service_provider_cisco\", \"netspout_phase\": \"RECOVERY\", \"netspout_device_id\": \"cisco-asr9k-pe1\", \"netspout_event_id\": \"snmp-poll-7a319f96682c\", \"snmp_version\": \"2c\", \"snmp_pdu_type\": \"GetRequest\", \"snmp_request_id\": null, \"snmp_trap_oid\": null, \"snmp_trap_name\": null, \"snmp_oid\": \"1.3.6.1.2.1.31.1.1.1.6.2\", \"snmp_oid_name\": \"IF-MIB::ifHCInOctets.2\", \"snmp_value\": \"46504200000\", \"snmp_numeric_value\": 46504200000.0, \"snmp_value_type\": \"Counter64\", \"snmp_source\": \"127.0.0.1\", \"snmp_collector\": \"net-snmp-cli\", \"snmp_transport\": \"SNMPV2C_UDP\", \"origin_evidence_stage\": \"RECEIVER_OBSERVED\", \"current_evidence_stage\": \"RECEIVER_OBSERVED\", \"evidence_stage\": \"RECEIVER_OBSERVED\", \"sys_uptime\": null, \"varbinds\": {\"IF-MIB::ifHCInOctets.2\": \"46504200000\"}, \"raw_collector_line\": \".1.3.6.1.2.1.31.1.1.1.6.2 = 46504200000\", \"telemetry_semantics\": \"NATIVE TRANSPORT / MODELED DEVICE STATE\", \"hec_dispatch_stage\": \"SPLUNK_DISPATCHED\"}",
+      "_serial": "7",
+      "_si": [
+        "f740b2f0db82",
+        "idx_network_ops"
+      ],
+      "_sourcetype": "netspout:snmp:poll",
+      "_subsecond": ".3237782",
+      "_time": "2026-09-29 19:25:09.323 GMT",
+      "host": "cisco-asr9k-pe1",
+      "index": "idx_network_ops",
+      "linecount": "1",
+      "netspout_run_id": "NS-20260929-27d18955",
+      "source": "netsnmp:poll:udp:54675",
+      "sourcetype": "netspout:snmp:poll",
+      "splunk_server": "f740b2f0db82"
+    }
+  ]
+}

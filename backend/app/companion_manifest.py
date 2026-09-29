@@ -109,22 +109,39 @@ class CompanionManifestBuilder:
         evidence_stage: str,
         start_time_epoch_ms: int,
         end_time_epoch_ms: int,
-        collector_sourcetype: str = "sc4snmp:traps",
+        collector_sourcetype: str = "netspout:snmp:trap",
+        simulated_device_ids: Optional[List[str]] = None,
+        protocol_override: Optional[str] = None,
+        snmp_requests_received: int = 0,
+        snmp_get_requests: int = 0,
+        snmp_getnext_requests: int = 0,
+        snmp_getbulk_requests: int = 0,
+        snmp_responses_sent: int = 0,
+        splunk_suggested_spl_override: Optional[str] = None,
+        splunk_raw_events_spl_override: Optional[str] = None,
+        splunk_stats_spl_override: Optional[str] = None,
     ) -> CompanionControlManifest:
         """
-        Constructs an out-of-band CompanionControlManifest for Native SNMPv2c Trap/Inform runs
+        Constructs an out-of-band CompanionControlManifest for Native SNMPv2c Trap/Inform/E2E runs
         correlating wire PDUs via deterministic 31-bit request-id values without polluting wire varbinds.
         """
-        req_filter = " OR ".join(f"request_id={rid}" for rid in request_ids) if request_ids else "request_id=*"
-        raw_spl = (
-            f'search index=idx_network_ops (sourcetype="{collector_sourcetype}" OR sourcetype="snmptrapd:collector") '
-            f'| spath | search ({req_filter})'
+        req_filter = (
+            " OR ".join(f"snmp_request_id={rid} OR request_id={rid}" for rid in request_ids)
+            if request_ids
+            else "snmp_request_id=*"
         )
-        stats_spl = (
+        raw_spl = splunk_raw_events_spl_override or (
+            f'search index=idx_network_ops (sourcetype="{collector_sourcetype}" OR sourcetype="netspout:snmp:poll" OR sourcetype="sc4snmp:traps" OR sourcetype="snmptrapd:collector") '
+            f'netspout_run_id="{run_id}" | spath | search ({req_filter})'
+        )
+        stats_spl = splunk_stats_spl_override or (
             f'{raw_spl} '
-            f'| stats count as total_notifications values(snmpTrapOID) as trap_oids by host request_id pdu_type'
+            f'| stats count as total_notifications values(snmp_trap_oid) as trap_oids by host snmp_request_id snmp_pdu_type'
         )
-        protocol_label = f"SNMPV2C_{pdu_mode.upper()}" if pdu_mode.upper() in ("TRAP", "INFORM") else "SNMPV2C"
+        suggested_spl = splunk_suggested_spl_override or raw_spl
+        protocol_label = protocol_override or (
+            f"SNMPV2C_{pdu_mode.upper()}" if pdu_mode.upper() in ("TRAP", "INFORM") else "SNMPV2C"
+        )
 
         return CompanionControlManifest(
             run_id=run_id,
@@ -142,7 +159,7 @@ class CompanionManifestBuilder:
             start_time_epoch_ms=start_time_epoch_ms,
             end_time_epoch_ms=end_time_epoch_ms,
             fidelity_badge="NATIVE TRANSPORT",
-            splunk_suggested_spl=raw_spl,
+            splunk_suggested_spl=suggested_spl,
             splunk_raw_events_spl=raw_spl,
             splunk_stats_spl=stats_spl,
             pipeline_stage=evidence_stage,
@@ -154,6 +171,12 @@ class CompanionManifestBuilder:
             inform_retries=inform_retries,
             inform_timeouts=inform_timeouts,
             receiver_observed_count=receiver_observed_count,
+            simulated_device_ids=list(simulated_device_ids or ["cisco-asr9k-pe1"]),
+            snmp_requests_received=snmp_requests_received,
+            snmp_get_requests=snmp_get_requests,
+            snmp_getnext_requests=snmp_getnext_requests,
+            snmp_getbulk_requests=snmp_getbulk_requests,
+            snmp_responses_sent=snmp_responses_sent,
         )
 
     @staticmethod

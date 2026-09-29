@@ -81,6 +81,7 @@ export const App: React.FC = () => {
   const [showUseCaseModal, setShowUseCaseModal] = useState<boolean>(false);
   const [showMetricsModal, setShowMetricsModal] = useState<boolean>(false);
   const [splInitialQuery, setSplInitialQuery] = useState<string | undefined>(undefined);
+  const [launchScenarioSignal, setLaunchScenarioSignal] = useState<{ scenarioId: string; timestamp: number } | null>(null);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'https://127.0.0.1:8888/services/collector',
@@ -623,7 +624,10 @@ export const App: React.FC = () => {
       {/* Main View Switcher */}
       {appMode === 'workflow' ? (
         <div className="flex-1 flex overflow-hidden">
-          <FiveStepWorkflow onOpenCanvas={() => setAppMode('advanced')} />
+          <FiveStepWorkflow
+            onOpenCanvas={() => setAppMode('advanced')}
+            launchScenarioSignal={launchScenarioSignal}
+          />
         </div>
       ) : appMode === 'operations' ? (
         <div className="flex-1 flex overflow-hidden">
@@ -701,12 +705,16 @@ export const App: React.FC = () => {
         topology={topology}
       />
 
-      {/* SC4SNMP 300+ MIB Explorer & Trap Emitter Modal */}
+      {/* SC4SNMP 300+ MIB Explorer & Trap Emitter Modal (Mode A Disambiguated) */}
       <SNMPMibModal
         isOpen={showSNMPModal}
         onClose={() => setShowSNMPModal(false)}
         nodes={topology.nodes}
         globalTransport={transportConfig}
+        onLaunchNativeSnmpWorkflow={() => {
+          setAppMode('workflow');
+          setLaunchScenarioSignal({ scenarioId: 'service_provider_cisco', timestamp: Date.now() });
+        }}
       />
 
       {/* Universal 4-Way Pipeline Matrix Modal */}

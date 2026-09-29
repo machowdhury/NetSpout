@@ -5506,5 +5506,47 @@
     "deprecated_aliases": [],
     "is_benchmark_197": false,
     "status": "active"
+  },
+  {
+    "id": "netspout-snmp-trap",
+    "splunk_sourcetype": "netspout:snmp:trap",
+    "display_name": "NetSpout Native SNMPv2c Trap & Inform Collector Event",
+    "vendor_id": "cisco_ios",
+    "category": "Enterprise Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SCENARIO_DERIVED",
+    "protocol": "snmp",
+    "sample_file": null,
+    "required_ta": null,
+    "aliases": [
+      "netspout-snmp-trap",
+      "netspout:snmp:trap"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": false,
+    "status": "active"
+  },
+  {
+    "id": "netspout-snmp-poll",
+    "splunk_sourcetype": "netspout:snmp:poll",
+    "display_name": "NetSpout Native SNMPv2c Poller Observation Event (GET/GETNEXT/GETBULK/Walk)",
+    "vendor_id": "cisco_ios",
+    "category": "Enterprise Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SCENARIO_DERIVED",
+    "protocol": "snmp",
+    "sample_file": null,
+    "required_ta": null,
+    "aliases": [
+      "netspout-snmp-poll",
+      "netspout:snmp:poll"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": false,
+    "status": "active"
   }
 ]

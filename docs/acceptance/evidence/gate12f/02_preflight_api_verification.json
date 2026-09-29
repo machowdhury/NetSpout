@@ -1,0 +1,118 @@
+{
+  "get_status": 200,
+  "get_response": {
+    "status": "READY",
+    "all_passed": true,
+    "scenario_id": "service_provider_cisco",
+    "device_id": "cisco-asr9k-pe1",
+    "target_index": "idx_network_ops",
+    "sourcetypes": [
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
+    ],
+    "binaries": {
+      "snmpget": "/usr/bin/snmpget",
+      "snmpgetnext": "/usr/bin/snmpgetnext",
+      "snmpwalk": "/usr/bin/snmpwalk",
+      "snmpbulkwalk": "/usr/bin/snmpbulkwalk",
+      "snmptrapd": "/usr/sbin/snmptrapd"
+    },
+    "checks": [
+      {
+        "id": "net_snmp_cli_binaries",
+        "name": "Net-SNMP CLI Binaries (snmpget, snmpgetnext, snmpwalk, snmpbulkwalk)",
+        "passed": true,
+        "detail": "snmpget=/usr/bin/snmpget, snmpgetnext=/usr/bin/snmpgetnext, snmpwalk=/usr/bin/snmpwalk, snmpbulkwalk=/usr/bin/snmpbulkwalk"
+      },
+      {
+        "id": "snmptrapd_binary",
+        "name": "External SNMP Trap Receiver Binary (snmptrapd)",
+        "passed": true,
+        "detail": "/usr/sbin/snmptrapd"
+      },
+      {
+        "id": "local_udp_bind",
+        "name": "Local UDP Bind Capability (Trap Receiver & Simulated Agent)",
+        "passed": true,
+        "detail": "Verified ephemeral UDP bind on 127.0.0.1 (sample ports 55049, 49930)"
+      },
+      {
+        "id": "splunk_hec_reachability",
+        "name": "Splunk HEC Reachability",
+        "passed": true,
+        "detail": "Splunk HEC healthy at https://127.0.0.1:8888/services/collector/health (HTTP 200)"
+      },
+      {
+        "id": "splunk_rest_search",
+        "name": "Splunk REST Search Reachability",
+        "passed": true,
+        "detail": "Splunk REST search endpoint reachable at https://127.0.0.1:8889/services/search/jobs/export"
+      },
+      {
+        "id": "target_index_availability",
+        "name": "Target Index Availability (idx_network_ops)",
+        "passed": true,
+        "detail": "Target index 'idx_network_ops' available (disabled=0, totalEventCount=825882)"
+      }
+    ],
+    "remediation": []
+  },
+  "post_status": 200,
+  "post_response": {
+    "status": "READY",
+    "all_passed": true,
+    "scenario_id": "service_provider_cisco",
+    "device_id": "cisco-asr9k-pe1",
+    "target_index": "idx_network_ops",
+    "sourcetypes": [
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
+    ],
+    "binaries": {
+      "snmpget": "/usr/bin/snmpget",
+      "snmpgetnext": "/usr/bin/snmpgetnext",
+      "snmpwalk": "/usr/bin/snmpwalk",
+      "snmpbulkwalk": "/usr/bin/snmpbulkwalk",
+      "snmptrapd": "/usr/sbin/snmptrapd"
+    },
+    "checks": [
+      {
+        "id": "net_snmp_cli_binaries",
+        "name": "Net-SNMP CLI Binaries (snmpget, snmpgetnext, snmpwalk, snmpbulkwalk)",
+        "passed": true,
+        "detail": "snmpget=/usr/bin/snmpget, snmpgetnext=/usr/bin/snmpgetnext, snmpwalk=/usr/bin/snmpwalk, snmpbulkwalk=/usr/bin/snmpbulkwalk"
+      },
+      {
+        "id": "snmptrapd_binary",
+        "name": "External SNMP Trap Receiver Binary (snmptrapd)",
+        "passed": true,
+        "detail": "/usr/sbin/snmptrapd"
+      },
+      {
+        "id": "local_udp_bind",
+        "name": "Local UDP Bind Capability (Trap Receiver & Simulated Agent)",
+        "passed": true,
+        "detail": "Verified ephemeral UDP bind on 127.0.0.1 (sample ports 54034, 53886)"
+      },
+      {
+        "id": "splunk_hec_reachability",
+        "name": "Splunk HEC Reachability",
+        "passed": true,
+        "detail": "Splunk HEC healthy at https://127.0.0.1:8888/services/collector/health (HTTP 200)"
+      },
+      {
+        "id": "splunk_rest_search",
+        "name": "Splunk REST Search Reachability",
+        "passed": true,
+        "detail": "Splunk REST search endpoint reachable at https://127.0.0.1:8889/services/search/jobs/export"
+      },
+      {
+        "id": "target_index_availability",
+        "name": "Target Index Availability (idx_network_ops)",
+        "passed": true,
+        "detail": "Target index 'idx_network_ops' available (disabled=0, totalEventCount=825882)"
+      }
+    ],
+    "remediation": []
+  }
+}

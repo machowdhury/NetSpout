@@ -1,0 +1,19 @@
+{
+  "finding_id": "F-12E-01",
+  "endpoint": "POST /api/scenarios/service_provider_cisco/run",
+  "request_payload": {
+    "seed": 42,
+    "mode": "TEST",
+    "dispatch_telemetry": true,
+    "transport_mode": "NATIVE_TRANSPORT",
+    "native_protocol": "SNMPV2C_E2E",
+    "native_snmp_e2e": true
+  },
+  "returned_run_id": "NS-20260929-4fd7b02b",
+  "returned_snmp_e2e_scorecard": null,
+  "returned_native_snmp_result": null,
+  "returned_actual_generated_counts": {
+    "cisco:ios:syslog": 5,
+    "cisco:ios:mdt:metric": 3
+  }
+}

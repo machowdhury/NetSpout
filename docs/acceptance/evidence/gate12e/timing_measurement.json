@@ -1,0 +1,13 @@
+{
+  "fresh_run_id": "NS-20260929-6f40774b",
+  "scenario_execution_and_e2e_validation_sec": 9.36,
+  "fresh_spl_8_queries_reconstruction_sec": 4.891,
+  "total_time_to_validated_evidence_sec": 14.251,
+  "meaningful_customer_interactions": 4,
+  "interaction_breakdown": [
+    "1. Select scenario service_provider_cisco and inspect telemetry contract",
+    "2. Verify local Splunk HEC (idx_network_ops) and Net-SNMP binary availability",
+    "3. Trigger deterministic service_provider_cisco native SNMPv2c E2E run (Requires Python invocation due to Finding F-12E-01)",
+    "4. Execute fresh SPL investigation queries in Splunk by netspout_run_id and verify 4-phase outage/failover/recovery"
+  ]
+}

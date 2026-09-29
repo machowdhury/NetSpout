@@ -1,0 +1,849 @@
+{
+  "run_id": "NS-20260929-6f40774b",
+  "scenario_id": "service_provider_cisco",
+  "scenario_name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
+  "topology_id": "service_provider_cisco",
+  "scenario_maturity": "GOLDEN_PATH_CERTIFIED",
+  "seed": 42,
+  "time_mode": "TEST",
+  "start_time": 1790705385.224245,
+  "end_time": 1790705394.583682,
+  "duration_sec": 9.359,
+  "phases_executed": [
+    "INITIALIZE",
+    "BASELINE",
+    "FAULT",
+    "PROPAGATE",
+    "FAILOVER",
+    "RECOVER",
+    "VALIDATE",
+    "COMPLETE"
+  ],
+  "affected_devices": [
+    "service_provider_cisco"
+  ],
+  "expected_sourcetypes": [
+    "cisco:ios:mdt:metric",
+    "cisco:ios:syslog"
+  ],
+  "actual_generated_counts": {
+    "cisco:ios:syslog": 5,
+    "cisco:ios:mdt:metric": 3
+  },
+  "total_events_generated": 8,
+  "ground_truth_records": [
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "INITIALIZE",
+      "timestamp": 1790705385.225285,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [
+        "node-peer-as65000",
+        "node-cisco8k-core01",
+        "node-cisco8k-core02",
+        "node-ncs5500-spine01",
+        "node-ncs5500-spine02",
+        "node-asr9k-pe01",
+        "node-asr9k-pe02",
+        "node-metro-ce01"
+      ],
+      "affected_edges": [
+        "e-sp1",
+        "e-sp2",
+        "e-sp3",
+        "e-sp4",
+        "e-sp5",
+        "e-sp6",
+        "e-sp7",
+        "e-sp8"
+      ],
+      "expected_observations": [
+        "Topology initialized",
+        "Initial graph state snapshotted"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "BASELINE",
+      "timestamp": 1790705385.2252932,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "BGP peer established",
+        "Nominal transit traffic flow"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "FAULT",
+      "timestamp": 1790705385.266855,
+      "intentional_fault": {
+        "type": "primary_fault",
+        "description": "High-frequency carrier flap causing BGP route withdrawal"
+      },
+      "intentional_recovery": null,
+      "affected_nodes": [
+        "service_provider_cisco"
+      ],
+      "affected_edges": [],
+      "expected_observations": [
+        "%ROUTING-BGP-5-ADJCHANGE neighbor Down",
+        "MDT ingress drop",
+        "status=degraded"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "PROPAGATE",
+      "timestamp": 1790705385.283764,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "Route withdrawal logged",
+        "action=alerted status=degraded"
+      ],
+      "expected_secondary_effects": [
+        "Cascading buffer incast",
+        "Neighbor flap alert"
+      ]
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "FAILOVER",
+      "timestamp": 1790705385.2917812,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "%MPLS-6-TI_LFA_LOCAL_REPAIR activated",
+        "action=allowed status=mitigated"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "RECOVER",
+      "timestamp": 1790705385.3059871,
+      "intentional_fault": null,
+      "intentional_recovery": {
+        "type": "full_restoration",
+        "status": "restored"
+      },
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "%ROUTING-BGP-5-ADJCHANGE neighbor Up",
+        "status=restored"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "VALIDATE",
+      "timestamp": 1790705385.3148339,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "Routing table equilibrium verified"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20260929-6f40774b",
+      "scenario_id": "service_provider_cisco",
+      "phase": "COMPLETE",
+      "timestamp": 1790705385.314948,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "Scenario lifecycle complete"
+      ],
+      "expected_secondary_effects": []
+    }
+  ],
+  "validation_results": [
+    {
+      "rule_id": "sp-val-01",
+      "rule_name": "Cisco IOS-XR BGP Syslog Emitted",
+      "status": "PASS",
+      "message": "Count 8 >= 1 -> PASS",
+      "observed_value": 8,
+      "expected_value": 1,
+      "evidence": {
+        "count": 8,
+        "comparison": ">="
+      }
+    },
+    {
+      "rule_id": "sp-val-02",
+      "rule_name": "Carrier Flap BGP Adjacency Collapse Detected",
+      "status": "PASS",
+      "message": "Observed 3 event(s) matching criteria (expected >= 1)",
+      "observed_value": 3,
+      "expected_value": 1,
+      "evidence": {
+        "matched_count": 3
+      }
+    },
+    {
+      "rule_id": "sp-val-03",
+      "rule_name": "TI-LFA Fast Reroute Active",
+      "status": "PASS",
+      "message": "Observed 5 event(s) matching criteria (expected >= 1)",
+      "observed_value": 5,
+      "expected_value": 1,
+      "evidence": {
+        "matched_count": 5
+      }
+    },
+    {
+      "rule_id": "sp-val-04",
+      "rule_name": "BGP Peering Restored to Nominal",
+      "status": "PASS",
+      "message": "Observed 1 event(s) matching criteria (expected >= 1)",
+      "observed_value": 1,
+      "expected_value": 1,
+      "evidence": {
+        "matched_count": 1
+      }
+    }
+  ],
+  "overall_validation": "PASS",
+  "dispatch_results": {
+    "evt-1bfa799c": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-e8704a1c": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-08f617e7": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-e63d3eb8": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-b826d6de": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-3b2c8ab6": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-9f276837": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-b7ce0631": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    }
+  },
+  "dispatch_attempted": 8,
+  "dispatch_succeeded": 8,
+  "dispatch_failed": 0,
+  "observed_count": 326,
+  "observation_status": "VERIFIED",
+  "destination_validation": "PASS",
+  "splunk_search_query": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase sourcetype snmp_pdu_type snmp_request_id snmp_trap_name snmp_oid_name snmp_value snmp_collector",
+  "splunk_metric_query": "| mstats count where index=cisco_mdt_metrics metric_name=* AND netspout_run_id=\"NS-20260929-6f40774b\"",
+  "event_observed_count": 326,
+  "metric_observed_count": 3,
+  "observation_completeness_pct": 100.0,
+  "evidence_summary": {
+    "run_id": "NS-20260929-6f40774b",
+    "scenario_id": "service_provider_cisco",
+    "destinations": [
+      {
+        "destination_id": "splunk_snmp_trap_idx_network_ops",
+        "name": "Splunk SNMP Notifications (idx_network_ops / netspout:snmp:trap)",
+        "telemetry_type": "EVENT",
+        "target_index": "idx_network_ops",
+        "query_mechanism": "SPL_SEARCH",
+        "query": "search index=idx_network_ops sourcetype=\"netspout:snmp:trap\" netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase snmp_pdu_type snmp_request_id snmp_trap_name snmp_trap_oid snmp_oid_name snmp_value sys_uptime",
+        "observed_count": 8,
+        "expected_count": 8,
+        "status": "PASS",
+        "role": "REQUIRED",
+        "errors": []
+      },
+      {
+        "destination_id": "splunk_snmp_poll_idx_network_ops",
+        "name": "Splunk SNMP Polling State (idx_network_ops / netspout:snmp:poll)",
+        "telemetry_type": "EVENT",
+        "target_index": "idx_network_ops",
+        "query_mechanism": "SPL_SEARCH",
+        "query": "search index=idx_network_ops sourcetype=\"netspout:snmp:poll\" netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase snmp_pdu_type snmp_oid_name snmp_oid snmp_value snmp_value_type",
+        "observed_count": 318,
+        "expected_count": 318,
+        "status": "PASS",
+        "role": "REQUIRED",
+        "errors": []
+      }
+    ],
+    "total_generated": 326,
+    "total_dispatched": 326,
+    "total_observed": 326,
+    "event_observed_count": 326,
+    "event_expected_count": 326,
+    "metric_observed_count": 0,
+    "metric_expected_count": 0,
+    "observation_completeness_pct": 100.0,
+    "observation_status": "COMPLETE",
+    "contract_validation": "PASS",
+    "required_evidence_satisfied": true,
+    "errors": []
+  },
+  "timing_claim": "TI-LFA Fast Reroute",
+  "timing_value": 32.0,
+  "timing_unit": "ms",
+  "timing_classification": "MODELED",
+  "timing_notes": "Modeled sub-50ms local data-plane protection prior to BGP control-plane convergence. NetSpout models this protocol behavior and does not claim empirical hardware packet measurements.",
+  "errors": [],
+  "native_transport_result": {
+    "transport_type": "SNMPV2C_UDP",
+    "pdu_mode": "TRAP",
+    "destination_host": "127.0.0.1",
+    "destination_port": 1162,
+    "pdus_generated": 4,
+    "pdus_encoded": 4,
+    "datagrams_attempted": 4,
+    "datagrams_sent": 4,
+    "bytes_sent": 572,
+    "informs_sent": 0,
+    "informs_acknowledged": 0,
+    "inform_retries": 0,
+    "inform_timeouts": 0,
+    "late_or_mismatched_acks": 0,
+    "request_ids": [
+      761037435,
+      255593296,
+      1650977050,
+      1223736209
+    ],
+    "acknowledged_request_ids": [],
+    "receiver_observed_count": 0,
+    "receiver_observed_request_ids": [],
+    "evidence_stage": "SENT",
+    "stage_history": [
+      "GENERATED",
+      "ENCODED",
+      "SENT"
+    ],
+    "rtt_ms_samples": [],
+    "packet_cap_exceeded": false,
+    "encoding_failures": 0,
+    "send_failures": 0,
+    "elapsed_ms": 6.59,
+    "errors": [],
+    "error_types": []
+  },
+  "companion_manifest": {
+    "run_id": "NS-20260929-6f40774b",
+    "scenario_id": "service_provider_cisco",
+    "protocol": "SNMPV2C_TRAP",
+    "destination_host": "127.0.0.1",
+    "destination_port": 1162,
+    "observation_domain_id": 1,
+    "exporter_ip": "10.200.0.1",
+    "template_ids": [],
+    "records_generated": 4,
+    "records_encoded": 4,
+    "datagrams_sent": 4,
+    "bytes_sent": 572,
+    "start_time_epoch_ms": 1790705385224,
+    "end_time_epoch_ms": 1790705388074,
+    "fidelity_badge": "NATIVE TRANSPORT",
+    "splunk_suggested_spl": "search index=idx_network_ops (sourcetype=\"sc4snmp:traps\" OR sourcetype=\"snmptrapd:collector\") | spath | search (request_id=761037435 OR request_id=255593296 OR request_id=1650977050 OR request_id=1223736209)",
+    "splunk_raw_events_spl": "search index=idx_network_ops (sourcetype=\"sc4snmp:traps\" OR sourcetype=\"snmptrapd:collector\") | spath | search (request_id=761037435 OR request_id=255593296 OR request_id=1650977050 OR request_id=1223736209)",
+    "splunk_stats_spl": "search index=idx_network_ops (sourcetype=\"sc4snmp:traps\" OR sourcetype=\"snmptrapd:collector\") | spath | search (request_id=761037435 OR request_id=255593296 OR request_id=1650977050 OR request_id=1223736209) | stats count as total_notifications values(snmpTrapOID) as trap_oids by host request_id pdu_type",
+    "pipeline_stage": "SENT",
+    "troubleshooting_notes": [],
+    "pdu_mode": "TRAP",
+    "request_ids": [
+      761037435,
+      255593296,
+      1650977050,
+      1223736209
+    ],
+    "acknowledged_request_ids": [],
+    "trap_oids": [
+      "1.3.6.1.6.3.1.1.5.3",
+      "1.3.6.1.2.1.15.7.2",
+      "1.3.6.1.6.3.1.1.5.4",
+      "1.3.6.1.2.1.15.7.1"
+    ],
+    "informs_acknowledged": 0,
+    "inform_retries": 0,
+    "inform_timeouts": 0,
+    "receiver_observed_count": 0,
+    "snmp_agent_bind_host": null,
+    "snmp_agent_port": null,
+    "exposed_oid_count": 0,
+    "mib_families": [],
+    "snmp_requests_received": 0,
+    "snmp_get_requests": 0,
+    "snmp_getnext_requests": 0,
+    "snmp_getbulk_requests": 0,
+    "snmp_responses_sent": 0,
+    "snmp_malformed_requests": 0,
+    "snmp_set_rejected": 0,
+    "simulated_device_ids": []
+  },
+  "native_flow_records": [],
+  "native_snmp_result": {
+    "transport_type": "SNMPV2C_UDP",
+    "pdu_mode": "TRAP",
+    "destination_host": "127.0.0.1",
+    "destination_port": 1162,
+    "pdus_generated": 4,
+    "pdus_encoded": 4,
+    "datagrams_attempted": 4,
+    "datagrams_sent": 4,
+    "bytes_sent": 572,
+    "informs_sent": 0,
+    "informs_acknowledged": 0,
+    "inform_retries": 0,
+    "inform_timeouts": 0,
+    "late_or_mismatched_acks": 0,
+    "request_ids": [
+      761037435,
+      255593296,
+      1650977050,
+      1223736209
+    ],
+    "acknowledged_request_ids": [],
+    "receiver_observed_count": 0,
+    "receiver_observed_request_ids": [],
+    "evidence_stage": "SENT",
+    "stage_history": [
+      "GENERATED",
+      "ENCODED",
+      "SENT"
+    ],
+    "rtt_ms_samples": [],
+    "packet_cap_exceeded": false,
+    "encoding_failures": 0,
+    "send_failures": 0,
+    "elapsed_ms": 6.59,
+    "errors": [],
+    "error_types": []
+  },
+  "native_snmp_pdus": [
+    {
+      "version": 1,
+      "community": "netspout-lab",
+      "pdu_type": 167,
+      "request_id": 761037435,
+      "error_status": 0,
+      "error_index": 0,
+      "varbinds": [
+        {
+          "oid": "1.3.6.1.2.1.1.3.0",
+          "asn1_type": "TimeTicks",
+          "value": 8640000,
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "sysUpTime.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.6.3.1.1.4.1.0",
+          "asn1_type": "ObjectIdentifier",
+          "value": "1.3.6.1.6.3.1.1.5.3",
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "snmpTrapOID.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.1.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "IF-MIB",
+          "object_name": "ifIndex.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.7.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "IF-MIB",
+          "object_name": "ifAdminStatus.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.8.1",
+          "asn1_type": "Integer32",
+          "value": 2,
+          "mib_module": "IF-MIB",
+          "object_name": "ifOperStatus.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.2.1",
+          "asn1_type": "OctetString",
+          "value": "HundredGigE0/0/0/1",
+          "mib_module": "IF-MIB",
+          "object_name": "ifDescr.1",
+          "fidelity": "STANDARD_VERIFIED"
+        }
+      ],
+      "source_device_id": "node-cisco8k-core01",
+      "source_ip": "10.200.0.1",
+      "scenario_id": "service_provider_cisco",
+      "phase": "FAULT",
+      "non_repeaters": null,
+      "max_repetitions": null
+    },
+    {
+      "version": 1,
+      "community": "netspout-lab",
+      "pdu_type": 167,
+      "request_id": 255593296,
+      "error_status": 0,
+      "error_index": 0,
+      "varbinds": [
+        {
+          "oid": "1.3.6.1.2.1.1.3.0",
+          "asn1_type": "TimeTicks",
+          "value": 8640500,
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "sysUpTime.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.6.3.1.1.4.1.0",
+          "asn1_type": "ObjectIdentifier",
+          "value": "1.3.6.1.2.1.15.7.2",
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "snmpTrapOID.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.15.3.1.14.198.51.100.1",
+          "asn1_type": "OctetString",
+          "value": "b'\\x04\\x00'",
+          "mib_module": "BGP4-MIB",
+          "object_name": "bgpPeerLastError.198.51.100.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.15.3.1.2.198.51.100.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "BGP4-MIB",
+          "object_name": "bgpPeerState.198.51.100.1",
+          "fidelity": "STANDARD_VERIFIED"
+        }
+      ],
+      "source_device_id": "node-cisco8k-core01",
+      "source_ip": "10.200.0.1",
+      "scenario_id": "service_provider_cisco",
+      "phase": "PROPAGATE",
+      "non_repeaters": null,
+      "max_repetitions": null
+    },
+    {
+      "version": 1,
+      "community": "netspout-lab",
+      "pdu_type": 167,
+      "request_id": 1650977050,
+      "error_status": 0,
+      "error_index": 0,
+      "varbinds": [
+        {
+          "oid": "1.3.6.1.2.1.1.3.0",
+          "asn1_type": "TimeTicks",
+          "value": 8643000,
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "sysUpTime.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.6.3.1.1.4.1.0",
+          "asn1_type": "ObjectIdentifier",
+          "value": "1.3.6.1.6.3.1.1.5.4",
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "snmpTrapOID.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.1.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "IF-MIB",
+          "object_name": "ifIndex.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.7.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "IF-MIB",
+          "object_name": "ifAdminStatus.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.8.1",
+          "asn1_type": "Integer32",
+          "value": 1,
+          "mib_module": "IF-MIB",
+          "object_name": "ifOperStatus.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.2.2.1.2.1",
+          "asn1_type": "OctetString",
+          "value": "HundredGigE0/0/0/1",
+          "mib_module": "IF-MIB",
+          "object_name": "ifDescr.1",
+          "fidelity": "STANDARD_VERIFIED"
+        }
+      ],
+      "source_device_id": "node-cisco8k-core01",
+      "source_ip": "10.200.0.1",
+      "scenario_id": "service_provider_cisco",
+      "phase": "RECOVER",
+      "non_repeaters": null,
+      "max_repetitions": null
+    },
+    {
+      "version": 1,
+      "community": "netspout-lab",
+      "pdu_type": 167,
+      "request_id": 1223736209,
+      "error_status": 0,
+      "error_index": 0,
+      "varbinds": [
+        {
+          "oid": "1.3.6.1.2.1.1.3.0",
+          "asn1_type": "TimeTicks",
+          "value": 8643500,
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "sysUpTime.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.6.3.1.1.4.1.0",
+          "asn1_type": "ObjectIdentifier",
+          "value": "1.3.6.1.2.1.15.7.1",
+          "mib_module": "SNMPv2-MIB",
+          "object_name": "snmpTrapOID.0",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.15.3.1.14.198.51.100.1",
+          "asn1_type": "OctetString",
+          "value": "b'\\x00\\x00'",
+          "mib_module": "BGP4-MIB",
+          "object_name": "bgpPeerLastError.198.51.100.1",
+          "fidelity": "STANDARD_VERIFIED"
+        },
+        {
+          "oid": "1.3.6.1.2.1.15.3.1.2.198.51.100.1",
+          "asn1_type": "Integer32",
+          "value": 6,
+          "mib_module": "BGP4-MIB",
+          "object_name": "bgpPeerState.198.51.100.1",
+          "fidelity": "STANDARD_VERIFIED"
+        }
+      ],
+      "source_device_id": "node-cisco8k-core01",
+      "source_ip": "10.200.0.1",
+      "scenario_id": "service_provider_cisco",
+      "phase": "VALIDATE",
+      "non_repeaters": null,
+      "max_repetitions": null
+    }
+  ],
+  "snmp_e2e_scorecard": {
+    "run_id": "NS-20260929-6f40774b",
+    "scenario_id": "service_provider_cisco",
+    "device_id": "cisco-asr9k-pe1",
+    "seed": 42,
+    "external_trap_receiver": "/usr/sbin/snmptrapd",
+    "external_poller": "net-snmp-cli (/usr/bin/snmpget, /usr/bin/snmpgetnext, /usr/bin/snmpwalk, /usr/bin/snmpbulkwalk)",
+    "target_index": "idx_network_ops",
+    "sourcetypes": [
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
+    ],
+    "telemetry_semantics": "NATIVE TRANSPORT / MODELED DEVICE STATE",
+    "generated_notifications": 8,
+    "encoded_notifications": 8,
+    "sent_notifications": 8,
+    "traps_generated": 4,
+    "traps_sent": 4,
+    "informs_generated": 4,
+    "informs_sent": 4,
+    "informs_acknowledged": 4,
+    "traps_receiver_observed": 4,
+    "informs_receiver_observed": 4,
+    "receiver_observed_notifications": 8,
+    "polling_requests": 290,
+    "polling_responses": 290,
+    "get_requests": 4,
+    "getnext_requests": 260,
+    "getbulk_requests": 26,
+    "walk_oids_observed": 127,
+    "normalized_records": 326,
+    "normalized_trap_records": 8,
+    "normalized_poll_records": 318,
+    "duplicate_records_suppressed": 0,
+    "malformed_records_dropped": 0,
+    "splunk_dispatched_records": 326,
+    "splunk_dispatch_failures": 0,
+    "splunk_observed_records": 326,
+    "splunk_observed_trap_records": 8,
+    "splunk_observed_poll_records": 318,
+    "observation_completeness_pct": 100.0,
+    "snmp_receiver_observed_status": "YES",
+    "splunk_dispatched_status": "YES",
+    "splunk_observed_status": "YES",
+    "phases_verified": [
+      "BASELINE",
+      "DEGRADE",
+      "FAILOVER",
+      "RECOVERY"
+    ],
+    "trap_poll_coherence": true,
+    "coherence_details": {
+      "coherent": true,
+      "checks": {
+        "baseline_if_up": true,
+        "baseline_bgp_est": true,
+        "degrade_if_down_matches_linkDown_trap": true,
+        "degrade_if_errors_elevated": true,
+        "failover_bgp_idle_matches_bgpBackwardTransition_trap": true,
+        "failover_backup_route_active": true,
+        "recovery_if_up_matches_linkUp_trap": true,
+        "recovery_bgp_est_matches_bgpEstablished_trap": true,
+        "recovery_primary_route_restored": true
+      }
+    },
+    "validation_result": "PASS",
+    "validation_checks": [
+      {
+        "check_id": "run_correlation_isolation",
+        "passed": true,
+        "foreign_records": 0,
+        "matched_records": 326
+      },
+      {
+        "check_id": "all_four_phases_present",
+        "passed": true,
+        "expected_phases": [
+          "BASELINE",
+          "DEGRADE",
+          "FAILOVER",
+          "RECOVERY"
+        ],
+        "observed_phases": [
+          "BASELINE",
+          "DEGRADE",
+          "FAILOVER",
+          "RECOVERY"
+        ]
+      },
+      {
+        "check_id": "required_notifications_observed",
+        "passed": true,
+        "observed_trap_oids": [
+          "1.3.6.1.2.1.15.7.1",
+          "1.3.6.1.2.1.15.7.2",
+          "1.3.6.1.6.3.1.1.5.3",
+          "1.3.6.1.6.3.1.1.5.4"
+        ],
+        "observed_pdu_types": [
+          "InformRequest",
+          "SNMPv2-Trap"
+        ]
+      },
+      {
+        "check_id": "trap_poll_state_coherence",
+        "passed": true,
+        "details": {
+          "baseline_if_up": true,
+          "baseline_bgp_est": true,
+          "degrade_if_down_matches_linkDown_trap": true,
+          "degrade_if_errors_elevated": true,
+          "failover_bgp_idle_matches_bgpBackwardTransition_trap": true,
+          "failover_backup_route_active": true,
+          "recovery_if_up_matches_linkUp_trap": true,
+          "recovery_bgp_est_matches_bgpEstablished_trap": true,
+          "recovery_primary_route_restored": true
+        }
+      }
+    ],
+    "evidence_stage": "VALIDATED",
+    "stage_history": [
+      "GENERATED",
+      "ENCODED",
+      "SENT",
+      "ACKNOWLEDGED",
+      "RECEIVER_OBSERVED",
+      "SPLUNK_DISPATCHED",
+      "SPLUNK_OBSERVED",
+      "VALIDATED"
+    ],
+    "stage_classification": {
+      "GENERATED": "YES",
+      "ENCODED": "YES",
+      "SENT": "YES",
+      "ACKNOWLEDGED": "YES",
+      "RECEIVER_OBSERVED": "YES",
+      "SPLUNK_DISPATCHED": "YES",
+      "SPLUNK_OBSERVED": "YES",
+      "VALIDATED": "YES"
+    },
+    "investigation_queries": {
+      "all_snmp_evidence_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase sourcetype snmp_pdu_type snmp_request_id snmp_trap_name snmp_oid_name snmp_value snmp_collector",
+      "trap_inform_evidence_spl": "search index=idx_network_ops sourcetype=\"netspout:snmp:trap\" netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase snmp_pdu_type snmp_request_id snmp_trap_name snmp_trap_oid snmp_oid_name snmp_value sys_uptime",
+      "polling_evidence_spl": "search index=idx_network_ops sourcetype=\"netspout:snmp:poll\" netspout_run_id=\"NS-20260929-6f40774b\" | table _time netspout_phase snmp_pdu_type snmp_oid_name snmp_oid snmp_value snmp_value_type",
+      "timeline_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" | stats count as evidence_count values(sourcetype) as sourcetypes values(snmp_pdu_type) as pdu_types values(snmp_trap_name) as notifications by netspout_phase",
+      "interface_state_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" (snmp_oid=\"1.3.6.1.2.1.2.2.1.8.1\" OR snmp_oid=\"1.3.6.1.2.1.2.2.1.14.1\" OR snmp_trap_oid=\"1.3.6.1.6.3.1.1.5.3\" OR snmp_trap_oid=\"1.3.6.1.6.3.1.1.5.4\") | table _time netspout_phase sourcetype snmp_pdu_type snmp_trap_name snmp_oid_name snmp_value",
+      "bgp_state_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" (snmp_oid=\"1.3.6.1.2.1.15.3.1.2.198.51.100.1\" OR snmp_oid=\"1.3.6.1.2.1.15.3.1.14.198.51.100.1\" OR snmp_oid=\"1.3.6.1.2.1.15.3.1.2.198.51.100.2\" OR snmp_trap_oid=\"1.3.6.1.2.1.15.7.2\" OR snmp_trap_oid=\"1.3.6.1.2.1.15.7.1\") | table _time netspout_phase sourcetype snmp_pdu_type snmp_trap_name snmp_oid_name snmp_value",
+      "notification_vs_poll_correlation_spl": "search index=idx_network_ops (sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\") netspout_run_id=\"NS-20260929-6f40774b\" | stats count(eval(sourcetype=\"netspout:snmp:trap\")) as notification_count count(eval(sourcetype=\"netspout:snmp:poll\")) as poll_count values(snmp_trap_name) as notifications values(eval(if(sourcetype=\"netspout:snmp:poll\", snmp_oid_name.\"=\".snmp_value, null()))) as polled_states by netspout_phase"
+    },
+    "errors": []
+  }
+}

@@ -48,6 +48,23 @@ CORE_MODULES = [
     "snmp_splunk_e2e.py"
 ]
 
+GNMI_SUBPACKAGE_FILES = [
+    "gnmi/__init__.py",
+    "gnmi/vendor_profiles.py",
+    "gnmi/state_store.py",
+    "gnmi/path_parser.py",
+    "gnmi/encoding.py",
+    "gnmi/sensor_registry.py",
+    "gnmi/subscription.py",
+    "gnmi/server.py",
+    "gnmi/proto/__init__.py",
+    "gnmi/proto/gnmi_ext.proto",
+    "gnmi/proto/gnmi.proto",
+    "gnmi/proto/gnmi_ext_pb2.py",
+    "gnmi/proto/gnmi_pb2.py",
+    "gnmi/proto/gnmi_pb2_grpc.py",
+]
+
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
 VENDOR_STATIC_JSON = os.path.join(REPO_ROOT, "netspout", "appserver", "static", "vendor_catalog.json")
 
@@ -70,7 +87,7 @@ def verify_sources() -> bool:
 
     # 1. Verify canonical files exist
     print("\n>> 1. Verifying Canonical Core (src/netspout_core/)...")
-    for mod in CORE_MODULES + ["__init__.py"]:
+    for mod in CORE_MODULES + ["__init__.py"] + GNMI_SUBPACKAGE_FILES:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         if not os.path.exists(src_path):
             print(f"  [FAIL] Missing canonical module: {src_path}")
@@ -81,7 +98,7 @@ def verify_sources() -> bool:
 
     # 2. Verify packaged copies in netspout_core are byte-for-byte identical
     print("\n>> 2. Verifying Packaged Splunk Core (netspout/bin/netspout_core/)...")
-    for mod in CORE_MODULES + ["__init__.py"]:
+    for mod in CORE_MODULES + ["__init__.py"] + GNMI_SUBPACKAGE_FILES:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         pkg_path = os.path.join(SPLUNK_CORE_DIR, mod)
         if not os.path.exists(pkg_path):
@@ -99,6 +116,23 @@ def verify_sources() -> bool:
             all_passed = False
         else:
             print(f"  [PASS] {mod} matches canonical SHA-256 ({h_src[:12]}...)")
+
+    # 2b. Verify backend/app/gnmi subpackage copies are byte-for-byte identical
+    print("\n>> 2b. Verifying Backend gNMI Subpackage (backend/app/gnmi/)...")
+    for rel_file in GNMI_SUBPACKAGE_FILES:
+        src_path = os.path.join(SRC_CORE_DIR, rel_file)
+        b_path = os.path.join(BACKEND_APP_DIR, rel_file)
+        if not os.path.exists(b_path):
+            print(f"  [FAIL] Missing backend gNMI subpackage file: {b_path}")
+            all_passed = False
+            continue
+        h_src = sha256_file(src_path)
+        h_b = sha256_file(b_path)
+        if h_src != h_b:
+            print(f"  [FAIL] Drift detected in backend/app/{rel_file}!")
+            all_passed = False
+        else:
+            print(f"  [PASS] backend/app/{rel_file} matches canonical SHA-256 ({h_src[:12]}...)")
 
     # 3. Verify netspout/bin/ copies carry generated header and match canonical code
     print("\n>> 3. Verifying Splunk Bin Generated Copies (netspout/bin/)...")

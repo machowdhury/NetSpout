@@ -1,0 +1,40 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-12-BENCHMARK",
+  "max_active_streams_configured": 32,
+  "min_sample_interval_ns": 500000000,
+  "benchmarks": [
+    {
+      "concurrent_streams": 1,
+      "initial_sync_completed": 1,
+      "total_setup_and_sync_ms": 0.92,
+      "avg_per_stream_ms": 0.92,
+      "process_max_rss_mb": 63.59,
+      "deadlocks_or_dropped_streams": 0
+    },
+    {
+      "concurrent_streams": 8,
+      "initial_sync_completed": 8,
+      "total_setup_and_sync_ms": 5.91,
+      "avg_per_stream_ms": 0.74,
+      "process_max_rss_mb": 63.59,
+      "deadlocks_or_dropped_streams": 0
+    },
+    {
+      "concurrent_streams": 16,
+      "initial_sync_completed": 16,
+      "total_setup_and_sync_ms": 11.12,
+      "avg_per_stream_ms": 0.69,
+      "process_max_rss_mb": 63.59,
+      "deadlocks_or_dropped_streams": 0
+    },
+    {
+      "concurrent_streams": 32,
+      "initial_sync_completed": 32,
+      "total_setup_and_sync_ms": 23.5,
+      "avg_per_stream_ms": 0.73,
+      "process_max_rss_mb": 63.59,
+      "deadlocks_or_dropped_streams": 0
+    }
+  ]
+}

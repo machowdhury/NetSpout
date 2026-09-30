@@ -1,0 +1,133 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-08-VENDOR-NATIVE",
+  "phase": "DEGRADE",
+  "vendors": {
+    "CISCO_IOS_XR": {
+      "target_device": "node-cisco8k",
+      "native_path": "Cisco-IOS-XR-qos-ma-oper:/qos/interface-table/interface[interface-name=HundredGigE0/0/0/0]/output/service-policy-names/service-policy-instance/statistics",
+      "gnmic_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k -e json_ietf get --path Cisco-IOS-XR-qos-ma-oper:/qos/interface-table/interface[interface-name=HundredGigE0/0/0/0]/output/service-policy-names/service-policy-instance/statistics --format json",
+        "returncode": 0,
+        "elapsed_ms": 41.58,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "Cisco-IOS-XR-qos-ma-oper:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "qos/interface-table/interface[interface-name=HundredGigE0/0/0/0]/output/service-policy-names/service-policy-instance/statistics",
+                "values": {
+                  "qos/interface-table/interface/output/service-policy-names/service-policy-instance/statistics": {
+                    "queue-current-size-bytes": "14850000",
+                    "tail-drop-packets": "4820",
+                    "transmit-bytes": 91324200000
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.775932 7424548 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "CISCO_IOS_XE": {
+      "target_device": "node-cat-leaf",
+      "native_path": "Cisco-IOS-XE-interfaces-oper:/interfaces/interface[name=FortyGigE1/0/1]/statistics",
+      "gnmic_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cat-leaf -e json_ietf get --path Cisco-IOS-XE-interfaces-oper:/interfaces/interface[name=FortyGigE1/0/1]/statistics --format json",
+        "returncode": 0,
+        "elapsed_ms": 28.8,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "Cisco-IOS-XE-interfaces-oper:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/statistics",
+                "values": {
+                  "interfaces/interface/statistics": {
+                    "in-errors": "502",
+                    "in-octets": "98654200000",
+                    "name": "FortyGigE1/0/1",
+                    "oper-status": "if-oper-state-no-pass",
+                    "out-octets": "91324200000"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.816424 7424601 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "ARISTA_EOS": {
+      "target_device": "node-arista-spine",
+      "native_path": "eos_native:/Sysdb/hardware/counter/Lanz/intf[intf=Ethernet1/1]/queueStatus",
+      "gnmic_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-arista-spine -e json_ietf get --path eos_native:/Sysdb/hardware/counter/Lanz/intf[intf=Ethernet1/1]/queueStatus --format json",
+        "returncode": 0,
+        "elapsed_ms": 25.64,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "eos_native:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "Sysdb/hardware/counter/Lanz[intf=Ethernet1/1]/queueStatus",
+                "values": {
+                  "Sysdb/hardware/counter/Lanz/queueStatus": {
+                    "intfName": "Ethernet1/1",
+                    "outDiscards": "4820",
+                    "queueLengthBytes": "14850000"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.845197 7424656 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "JUNIPER_JUNOS": {
+      "target_device": "node-juniper-ptx",
+      "native_path": "junos:/junos/system/linecard/qmon[interface=et-0/0/0]",
+      "gnmic_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-juniper-ptx -e json_ietf get --path junos:/junos/system/linecard/qmon[interface=et-0/0/0] --format json",
+        "returncode": 0,
+        "elapsed_ms": 23.43,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "junos:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "junos/system/linecard/qmon[interface=et-0/0/0]",
+                "values": {
+                  "junos/system/linecard/qmon": {
+                    "allocated-buffer-size": "14850000",
+                    "interface": "et-0/0/0",
+                    "tail-drop-packets": "4820"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.870977 7424712 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    }
+  }
+}

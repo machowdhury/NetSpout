@@ -1,0 +1,188 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-05",
+  "mode": "POLL",
+  "target": "node-cisco8k",
+  "phase_polls": [
+    {
+      "phase": "BASELINE",
+      "interface_state": {
+        "name": "HundredGigE0/0/0/0",
+        "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+        "admin-status": "UP",
+        "oper-status": "UP",
+        "mtu": 9192,
+        "high-speed": 100000,
+        "counters": {
+          "in-octets": "98504200000",
+          "out-octets": "91204200000",
+          "in-unicast-pkts": "954200",
+          "out-unicast-pkts": "914200",
+          "in-errors": "0",
+          "out-errors": "0",
+          "in-fcs-errors": "0",
+          "in-discards": "0",
+          "out-discards": "0",
+          "carrier-transitions": "1"
+        }
+      },
+      "bgp_state": {
+        "neighbor-address": "10.100.1.2",
+        "peer-as": 65002,
+        "description": "Juniper-PTX10K-PE01",
+        "session-state": "ESTABLISHED",
+        "established-transitions": "1",
+        "last-established": "1727726330000000000",
+        "prefixes": {
+          "received": 1462,
+          "installed": 1462,
+          "sent": 862
+        },
+        "messages": {
+          "sent": {
+            "update": 1422
+          },
+          "received": {
+            "update": 1462
+          }
+        }
+      },
+      "sync_response": true
+    },
+    {
+      "phase": "DEGRADE",
+      "interface_state": {
+        "name": "HundredGigE0/0/0/0",
+        "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+        "admin-status": "UP",
+        "oper-status": "DOWN",
+        "mtu": 9192,
+        "high-speed": 100000,
+        "counters": {
+          "in-octets": "98654700000",
+          "out-octets": "91324650000",
+          "in-unicast-pkts": "966600",
+          "out-unicast-pkts": "925580",
+          "in-errors": "514",
+          "out-errors": "21",
+          "in-fcs-errors": "332",
+          "in-discards": "4970",
+          "out-discards": "2485",
+          "carrier-transitions": "2"
+        }
+      },
+      "bgp_state": {
+        "neighbor-address": "10.100.1.2",
+        "peer-as": 65002,
+        "description": "Juniper-PTX10K-PE01",
+        "session-state": "IDLE",
+        "established-transitions": "2",
+        "last-established": "1727726341000000000",
+        "prefixes": {
+          "received": 0,
+          "installed": 0,
+          "sent": 0
+        },
+        "messages": {
+          "sent": {
+            "update": 1427
+          },
+          "received": {
+            "update": 1467
+          }
+        }
+      },
+      "sync_response": true
+    },
+    {
+      "phase": "FAILOVER",
+      "interface_state": {
+        "name": "HundredGigE0/0/0/0",
+        "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+        "admin-status": "UP",
+        "oper-status": "DOWN",
+        "mtu": 9192,
+        "high-speed": 100000,
+        "counters": {
+          "in-octets": "98654200000",
+          "out-octets": "91324200000",
+          "in-unicast-pkts": "966200",
+          "out-unicast-pkts": "925200",
+          "in-errors": "502",
+          "out-errors": "19",
+          "in-fcs-errors": "324",
+          "in-discards": "4820",
+          "out-discards": "2410",
+          "carrier-transitions": "2"
+        }
+      },
+      "bgp_state": {
+        "neighbor-address": "10.100.1.2",
+        "peer-as": 65002,
+        "description": "Juniper-PTX10K-PE01",
+        "session-state": "IDLE",
+        "established-transitions": "2",
+        "last-established": "1727726347000000000",
+        "prefixes": {
+          "received": 0,
+          "installed": 0,
+          "sent": 0
+        },
+        "messages": {
+          "sent": {
+            "update": 1427
+          },
+          "received": {
+            "update": 1467
+          }
+        }
+      },
+      "sync_response": true
+    },
+    {
+      "phase": "RECOVERY",
+      "interface_state": {
+        "name": "HundredGigE0/0/0/0",
+        "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+        "admin-status": "UP",
+        "oper-status": "UP",
+        "mtu": 9192,
+        "high-speed": 100000,
+        "counters": {
+          "in-octets": "124541700000",
+          "out-octets": "116839600000",
+          "in-unicast-pkts": "1322700",
+          "out-unicast-pkts": "1271500",
+          "in-errors": "502",
+          "out-errors": "19",
+          "in-fcs-errors": "324",
+          "in-discards": "4820",
+          "out-discards": "2410",
+          "carrier-transitions": "3"
+        }
+      },
+      "bgp_state": {
+        "neighbor-address": "10.100.1.2",
+        "peer-as": 65002,
+        "description": "Juniper-PTX10K-PE01",
+        "session-state": "ESTABLISHED",
+        "established-transitions": "3",
+        "last-established": "1727726378000000000",
+        "prefixes": {
+          "received": 1462,
+          "installed": 1462,
+          "sent": 862
+        },
+        "messages": {
+          "sent": {
+            "update": 1968
+          },
+          "received": {
+            "update": 2028
+          }
+        }
+      },
+      "sync_response": true
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-06",
+  "mode": "STREAM/SAMPLE",
+  "sample_interval_ns": 500000000,
+  "events": [
+    {
+      "sequence": 0,
+      "type": "initial_sync_update",
+      "timestamp_ns": 1727726390000000000,
+      "counters": {
+        "in-octets": "98504200000",
+        "out-octets": "91204200000",
+        "in-unicast-pkts": "954200",
+        "out-unicast-pkts": "914200",
+        "in-errors": "0",
+        "out-errors": "0",
+        "in-fcs-errors": "0",
+        "in-discards": "0",
+        "out-discards": "0",
+        "carrier-transitions": "1"
+      }
+    },
+    {
+      "sequence": 1,
+      "type": "sync_response",
+      "sync_response": true
+    },
+    {
+      "sequence": 2,
+      "type": "periodic_sample_update",
+      "timestamp_ns": 1727726391000000000,
+      "counters": {
+        "in-octets": "98516700000",
+        "out-octets": "91216000000",
+        "in-unicast-pkts": "963700",
+        "out-unicast-pkts": "923300",
+        "in-errors": "0",
+        "out-errors": "0",
+        "in-fcs-errors": "0",
+        "in-discards": "0",
+        "out-discards": "0",
+        "carrier-transitions": "1"
+      }
+    },
+    {
+      "sequence": 3,
+      "type": "periodic_sample_update",
+      "timestamp_ns": 1727726392000000000,
+      "counters": {
+        "in-octets": "98529200000",
+        "out-octets": "91227800000",
+        "in-unicast-pkts": "973200",
+        "out-unicast-pkts": "932400",
+        "in-errors": "0",
+        "out-errors": "0",
+        "in-fcs-errors": "0",
+        "in-discards": "0",
+        "out-discards": "0",
+        "carrier-transitions": "1"
+      }
+    },
+    {
+      "sequence": 4,
+      "type": "periodic_sample_update",
+      "timestamp_ns": 1727726393000000000,
+      "counters": {
+        "in-octets": "98541700000",
+        "out-octets": "91239600000",
+        "in-unicast-pkts": "982700",
+        "out-unicast-pkts": "941500",
+        "in-errors": "0",
+        "out-errors": "0",
+        "in-fcs-errors": "0",
+        "in-discards": "0",
+        "out-discards": "0",
+        "carrier-transitions": "1"
+      }
+    }
+  ]
+}

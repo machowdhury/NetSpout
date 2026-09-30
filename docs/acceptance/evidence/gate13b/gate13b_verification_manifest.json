@@ -1,0 +1,84 @@
+{
+  "gate": "13B",
+  "title": "Native gNMI Server + OpenConfig Core Engine Protocol Verification",
+  "gnmi_version": "0.10.0",
+  "transport_stack": "TCP -> HTTP/2 -> gRPC -> gNMI Protobuf",
+  "bind_endpoint": "127.0.0.1:57400",
+  "external_clients_verified": {
+    "gnmic": "0.49.0 (/opt/homebrew/bin/gnmic)",
+    "pygnmi": "0.8.15 (pygnmi.client.gNMIclient)"
+  },
+  "vendors_verified": [
+    "CISCO_IOS_XR (node-cisco8k, cisco-asr9k-pe1)",
+    "CISCO_IOS_XE (node-cat-leaf)",
+    "ARISTA_EOS (node-arista-spine)",
+    "JUNIPER_JUNOS (node-juniper-ptx)"
+  ],
+  "rpcs_verified": {
+    "Capabilities": "VERIFIED",
+    "Get": "VERIFIED (ALL, CONFIG, STATE, OPERATIONAL)",
+    "Subscribe_ONCE": "VERIFIED",
+    "Subscribe_POLL": "VERIFIED",
+    "Subscribe_STREAM_SAMPLE": "VERIFIED (500ms floor)",
+    "Subscribe_STREAM_ON_CHANGE": "VERIFIED (event-driven phase transitions)",
+    "Set": "DISABLED_BY_POLICY (StatusCode.UNIMPLEMENTED)"
+  },
+  "evidence_stages": {
+    "SCENARIO_STATE_GENERATED": "VERIFIED",
+    "GNMI_SERVER_LISTENING": "VERIFIED",
+    "GNMI_CAPABILITIES_VERIFIED": "VERIFIED",
+    "GNMI_GET_VERIFIED": "VERIFIED",
+    "GNMI_SUBSCRIBE_ONCE_VERIFIED": "VERIFIED",
+    "GNMI_SUBSCRIBE_POLL_VERIFIED": "VERIFIED",
+    "GNMI_SUBSCRIBE_STREAM_SAMPLE_VERIFIED": "VERIFIED",
+    "GNMI_SUBSCRIBE_STREAM_ON_CHANGE_VERIFIED": "VERIFIED",
+    "EXTERNAL_CLIENT_DECODED": "VERIFIED",
+    "SPLUNK_DISPATCHED": "NOT VERIFIED (Deferred to Gate 13D)",
+    "SPLUNK_OBSERVED": "NOT VERIFIED (Deferred to Gate 13D)"
+  },
+  "server_status_summary": {
+    "running": true,
+    "endpoint": "127.0.0.1:57400",
+    "gNMI_version": "0.10.0",
+    "scenario_phase": "RECOVERY",
+    "config": {
+      "bind_address": "127.0.0.1",
+      "bind_port": 57400,
+      "allow_non_loopback": false,
+      "security_mode": "INSECURE_LOCAL_LAB",
+      "require_metadata_auth": false,
+      "username": "netspout-lab",
+      "password": "***REDACTED***",
+      "default_target": "node-cisco8k",
+      "max_concurrent_connections": 16,
+      "max_active_streams": 32,
+      "max_paths_per_request": 64,
+      "max_queue_size_per_stream": 256,
+      "min_sample_interval_ns": 500000000,
+      "default_sample_interval_ns": 5000000000,
+      "clamp_sample_interval": false,
+      "max_message_bytes": 4194304,
+      "tls_configured": false,
+      "tls_server_key_pem": null
+    },
+    "diagnostics": {
+      "capabilities_requests": 16,
+      "get_requests": 26,
+      "set_requests_rejected": 0,
+      "subscribe_once_requests": 4,
+      "subscribe_poll_requests": 1,
+      "subscribe_stream_requests": 59,
+      "active_streams": 0,
+      "peak_active_streams": 32,
+      "notifications_emitted": 131,
+      "sync_responses_emitted": 67,
+      "auth_failures": 1,
+      "invalid_argument_errors": 0,
+      "not_found_errors": 2,
+      "unimplemented_errors": 0,
+      "resource_exhausted_errors": 0,
+      "clamped_sample_intervals": 0,
+      "slow_consumer_drops": 0
+    }
+  }
+}

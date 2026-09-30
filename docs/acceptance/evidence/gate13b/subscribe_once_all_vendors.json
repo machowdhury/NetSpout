@@ -1,0 +1,47 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-04",
+  "mode": "ONCE",
+  "vendors": {
+    "CISCO_IOS_XR": {
+      "target_device": "node-cisco8k",
+      "gnmic_once_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k -e json_ietf subscribe --mode once --path /interfaces/interface[name=HundredGigE0/0/0/0]/state --path /system/state --format json",
+        "returncode": 0,
+        "elapsed_ms": 30.18,
+        "stdout": "{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-cisco8k\",\n  \"updates\": [\n    {\n      \"Path\": \"interfaces/interface[name=HundredGigE0/0/0/0]/state\",\n      \"values\": {\n        \"interfaces/interface/state\": {\n          \"admin-status\": \"UP\",\n          \"counters\": {\n            \"carrier-transitions\": \"1\",\n            \"in-discards\": \"0\",\n            \"in-errors\": \"0\",\n            \"in-fcs-errors\": \"0\",\n            \"in-octets\": \"98504200000\",\n            \"in-unicast-pkts\": \"954200\",\n            \"out-discards\": \"0\",\n            \"out-errors\": \"0\",\n            \"out-octets\": \"91204200000\",\n            \"out-unicast-pkts\": \"914200\"\n          },\n          \"description\": \"Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link\",\n          \"high-speed\": 100000,\n          \"mtu\": 9192,\n          \"name\": \"HundredGigE0/0/0/0\",\n          \"oper-status\": \"UP\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-cisco8k\",\n  \"updates\": [\n    {\n      \"Path\": \"system/state\",\n      \"values\": {\n        \"system/state\": {\n          \"boot-time\": \"1727553600000000000\",\n          \"current-datetime\": \"2026-09-29T18:00:00Z\",\n          \"domain-name\": \"netspout.lab.internal\",\n          \"hostname\": \"Cisco-8000-Core01\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"sync-response\": true\n}",
+        "stderr": "I0929 20:38:45.895071 7424766 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "CISCO_IOS_XE": {
+      "target_device": "node-cat-leaf",
+      "gnmic_once_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cat-leaf -e json_ietf subscribe --mode once --path /interfaces/interface[name=FortyGigE1/0/1]/state --path /system/state --format json",
+        "returncode": 0,
+        "elapsed_ms": 23.49,
+        "stdout": "{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-cat-leaf\",\n  \"updates\": [\n    {\n      \"Path\": \"interfaces/interface[name=FortyGigE1/0/1]/state\",\n      \"values\": {\n        \"interfaces/interface/state\": {\n          \"admin-status\": \"UP\",\n          \"counters\": {\n            \"carrier-transitions\": \"1\",\n            \"in-discards\": \"0\",\n            \"in-errors\": \"0\",\n            \"in-fcs-errors\": \"0\",\n            \"in-octets\": \"98504200000\",\n            \"in-unicast-pkts\": \"954200\",\n            \"out-discards\": \"0\",\n            \"out-errors\": \"0\",\n            \"out-octets\": \"91204200000\",\n            \"out-unicast-pkts\": \"914200\"\n          },\n          \"description\": \"Catalyst-9600-Leaf FortyGigE1/0/1 Core Link\",\n          \"high-speed\": 100000,\n          \"mtu\": 9192,\n          \"name\": \"FortyGigE1/0/1\",\n          \"oper-status\": \"UP\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-cat-leaf\",\n  \"updates\": [\n    {\n      \"Path\": \"system/state\",\n      \"values\": {\n        \"system/state\": {\n          \"boot-time\": \"1727553600000000000\",\n          \"current-datetime\": \"2026-09-29T18:00:00Z\",\n          \"domain-name\": \"netspout.lab.internal\",\n          \"hostname\": \"Catalyst-9600-Leaf\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"sync-response\": true\n}",
+        "stderr": "I0929 20:38:45.924568 7424810 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "ARISTA_EOS": {
+      "target_device": "node-arista-spine",
+      "gnmic_once_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-arista-spine -e json_ietf subscribe --mode once --path /interfaces/interface[name=Ethernet1/1]/state --path /system/state --format json",
+        "returncode": 0,
+        "elapsed_ms": 22.76,
+        "stdout": "{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-arista-spine\",\n  \"updates\": [\n    {\n      \"Path\": \"interfaces/interface[name=Ethernet1/1]/state\",\n      \"values\": {\n        \"interfaces/interface/state\": {\n          \"admin-status\": \"UP\",\n          \"counters\": {\n            \"carrier-transitions\": \"1\",\n            \"in-discards\": \"0\",\n            \"in-errors\": \"0\",\n            \"in-fcs-errors\": \"0\",\n            \"in-octets\": \"98504200000\",\n            \"in-unicast-pkts\": \"954200\",\n            \"out-discards\": \"0\",\n            \"out-errors\": \"0\",\n            \"out-octets\": \"91204200000\",\n            \"out-unicast-pkts\": \"914200\"\n          },\n          \"description\": \"Arista-7280R-Spine Ethernet1/1 Core Link\",\n          \"high-speed\": 100000,\n          \"mtu\": 9192,\n          \"name\": \"Ethernet1/1\",\n          \"oper-status\": \"UP\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-arista-spine\",\n  \"updates\": [\n    {\n      \"Path\": \"system/state\",\n      \"values\": {\n        \"system/state\": {\n          \"boot-time\": \"1727553600000000000\",\n          \"current-datetime\": \"2026-09-29T18:00:00Z\",\n          \"domain-name\": \"netspout.lab.internal\",\n          \"hostname\": \"Arista-7280R-Spine\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"sync-response\": true\n}",
+        "stderr": "I0929 20:38:45.948248 7424862 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    },
+    "JUNIPER_JUNOS": {
+      "target_device": "node-juniper-ptx",
+      "gnmic_once_result": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-juniper-ptx -e json_ietf subscribe --mode once --path /interfaces/interface[name=et-0/0/0]/state --path /system/state --format json",
+        "returncode": 0,
+        "elapsed_ms": 25.86,
+        "stdout": "{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-juniper-ptx\",\n  \"updates\": [\n    {\n      \"Path\": \"interfaces/interface[name=et-0/0/0]/state\",\n      \"values\": {\n        \"interfaces/interface/state\": {\n          \"admin-status\": \"UP\",\n          \"counters\": {\n            \"carrier-transitions\": \"1\",\n            \"in-discards\": \"0\",\n            \"in-errors\": \"0\",\n            \"in-fcs-errors\": \"0\",\n            \"in-octets\": \"98504200000\",\n            \"in-unicast-pkts\": \"954200\",\n            \"out-discards\": \"0\",\n            \"out-errors\": \"0\",\n            \"out-octets\": \"91204200000\",\n            \"out-unicast-pkts\": \"914200\"\n          },\n          \"description\": \"Juniper-PTX10K-PE01 et-0/0/0 Core Link\",\n          \"high-speed\": 100000,\n          \"mtu\": 9192,\n          \"name\": \"et-0/0/0\",\n          \"oper-status\": \"UP\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"source\": \"127.0.0.1:57400\",\n  \"subscription-name\": \"default-1790728725\",\n  \"timestamp\": 1727726390000000000,\n  \"time\": \"2024-09-30T15:59:50-04:00\",\n  \"prefix\": \"openconfig:/\",\n  \"target\": \"node-juniper-ptx\",\n  \"updates\": [\n    {\n      \"Path\": \"system/state\",\n      \"values\": {\n        \"system/state\": {\n          \"boot-time\": \"1727553600000000000\",\n          \"current-datetime\": \"2026-09-29T18:00:00Z\",\n          \"domain-name\": \"netspout.lab.internal\",\n          \"hostname\": \"Juniper-PTX10K-PE01\"\n        }\n      }\n    }\n  ]\n}\n{\n  \"sync-response\": true\n}",
+        "stderr": "I0929 20:38:45.971260 7424928 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      }
+    }
+  }
+}

@@ -1,0 +1,1388 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-02 / T13B-03 / T13B-08",
+  "scenario_id": "openconfig_mdt_streaming",
+  "phase": "DEGRADE",
+  "vendors": {
+    "CISCO_IOS_XR": {
+      "target_device": "node-cisco8k",
+      "gnmic_json_ietf": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k -e json_ietf get --format json --path /interfaces/interface[name=HundredGigE0/0/0/0]/state --path /interfaces/interface[name=HundredGigE0/0/0/0]/subinterfaces/subinterface[index=0]/ipv4/addresses/address[ip=*]/state --path /lldp/interfaces/interface[name=HundredGigE0/0/0/0]/neighbors/neighbor[id=*]/state --path /lacp/interfaces/interface[name=Bundle-Ether10]/members/member[interface=HundredGigE0/0/0/0]/state --path /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.2]/state --path /network-instances/network-instance[name=default]/afts/ipv4-unicast/ipv4-entries/ipv4-entry[prefix=10.100.0.0/16]/state --path /qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state --path /components/component[name=Chassis-0]/state --path /components/component[name=Transceiver-HundredGigE0/0/0/0]/transceiver/state --path /system/state --path /system/cpus/cpu[index=0]/state --path /system/memory/state",
+        "returncode": 0,
+        "elapsed_ms": 38.53,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state",
+                "values": {
+                  "interfaces/interface/state": {
+                    "admin-status": "UP",
+                    "counters": {
+                      "carrier-transitions": "2",
+                      "in-discards": "4820",
+                      "in-errors": "502",
+                      "in-fcs-errors": "324",
+                      "in-octets": "98654200000",
+                      "in-unicast-pkts": "966200",
+                      "out-discards": "2410",
+                      "out-errors": "19",
+                      "out-octets": "91324200000",
+                      "out-unicast-pkts": "925200"
+                    },
+                    "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+                    "high-speed": 100000,
+                    "mtu": 9192,
+                    "name": "HundredGigE0/0/0/0",
+                    "oper-status": "DOWN"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/subinterfaces/subinterface[index=0]/ipv4/addresses/address[ip=10.100.1.1]/state",
+                "values": {
+                  "interfaces/interface/subinterfaces/subinterface/ipv4/addresses/address/state": {
+                    "ip": "10.100.1.1",
+                    "prefix-length": 30
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "lldp/interfaces/interface[name=HundredGigE0/0/0/0]/neighbors/neighbor[id=nbr-1]/state",
+                "values": {
+                  "lldp/interfaces/interface/neighbors/neighbor/state": {
+                    "id": "nbr-1",
+                    "management-address": "10.100.1.2",
+                    "port-description": "Link to Juniper-PTX10K-PE01 (et-0/0/0)",
+                    "port-id": "et-0/0/0",
+                    "system-name": "Juniper-PTX10K-PE01"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "lacp/interfaces/interface[name=Bundle-Ether10]/members/member[interface=HundredGigE0/0/0/0]/state",
+                "values": {
+                  "lacp/interfaces/interface/members/member/state": {
+                    "activity": "ACTIVE",
+                    "aggregatable": true,
+                    "collecting": false,
+                    "distributing": false,
+                    "interface": "HundredGigE0/0/0/0",
+                    "oper-key": 10,
+                    "partner-id": "00:1c:73:aa:bb:cc"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.2]/state",
+                "values": {
+                  "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state": {
+                    "description": "Juniper-PTX10K-PE01",
+                    "established-transitions": "2",
+                    "last-established": "1727726340000000000",
+                    "messages": {
+                      "received": {
+                        "update": 1467
+                      },
+                      "sent": {
+                        "update": 1427
+                      }
+                    },
+                    "neighbor-address": "10.100.1.2",
+                    "peer-as": 65002,
+                    "prefixes": {
+                      "installed": 0,
+                      "received": 0,
+                      "sent": 0
+                    },
+                    "session-state": "IDLE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/afts/ipv4-unicast/ipv4-entries/ipv4-entry[prefix=10.100.0.0/16]/state",
+                "values": {
+                  "network-instances/network-instance/afts/ipv4-unicast/ipv4-entries/ipv4-entry/state": {
+                    "ecmp-paths": 1,
+                    "egress-interface": "Bundle-Ether10",
+                    "next-hop": "10.100.2.1",
+                    "next-hop-group": 201,
+                    "octets-forwarded": "98654200000",
+                    "packets-forwarded": "966200",
+                    "prefix": "10.100.0.0/16"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state",
+                "values": {
+                  "qos/interfaces/interface/output/queues/queue/state": {
+                    "dropped-octets": "4935680",
+                    "dropped-pkts": "4820",
+                    "max-queue-len": "14850000",
+                    "name": "BE-0",
+                    "transmit-octets": "91324200000",
+                    "transmit-pkts": "925200"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "components/component[name=Chassis-0]/state",
+                "values": {
+                  "components/component/state": {
+                    "name": "Chassis-0",
+                    "oper-status": "ACTIVE",
+                    "temperature": {
+                      "instant": 63.8
+                    },
+                    "type": "CHASSIS",
+                    "used-power": 1120
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "components/component[name=Transceiver-HundredGigE0/0/0/0]/transceiver/state",
+                "values": {
+                  "components/component/transceiver/state": {
+                    "input-power": {
+                      "instant": -24.8
+                    },
+                    "interface": "HundredGigE0/0/0/0",
+                    "laser-bias-current": {
+                      "instant": 68.2
+                    },
+                    "osnr": {
+                      "instant": 11.2
+                    },
+                    "output-power": {
+                      "instant": -4.1
+                    },
+                    "pre-fec-ber": {
+                      "instant": 0.0014
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "system/state",
+                "values": {
+                  "system/state": {
+                    "boot-time": "1727553600000000000",
+                    "current-datetime": "2026-09-29T18:00:00Z",
+                    "domain-name": "netspout.lab.internal",
+                    "hostname": "Cisco-8000-Core01"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "system/cpus/cpu[index=0]/state",
+                "values": {
+                  "system/cpus/cpu/state": {
+                    "index": 0,
+                    "kernel": {
+                      "instant": 24
+                    },
+                    "total": {
+                      "instant": 88
+                    },
+                    "user": {
+                      "instant": 64
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "system/memory/state",
+                "values": {
+                  "system/memory/state": {
+                    "physical": "34359738368",
+                    "reserved": "21474836480"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:44.631482 7424031 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "gnmic_proto": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k -e proto get --format json --path /interfaces/interface[name=HundredGigE0/0/0/0]/state",
+        "returncode": 0,
+        "elapsed_ms": 71.9,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cisco8k",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/name",
+                "values": {
+                  "interfaces/interface/state/name": "HundredGigE0/0/0/0"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/description",
+                "values": {
+                  "interfaces/interface/state/description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/admin-status",
+                "values": {
+                  "interfaces/interface/state/admin-status": "UP"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/oper-status",
+                "values": {
+                  "interfaces/interface/state/oper-status": "DOWN"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/mtu",
+                "values": {
+                  "interfaces/interface/state/mtu": 9192
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/high-speed",
+                "values": {
+                  "interfaces/interface/state/high-speed": 100000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/in-octets",
+                "values": {
+                  "interfaces/interface/state/counters/in-octets": 98654200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/out-octets",
+                "values": {
+                  "interfaces/interface/state/counters/out-octets": 91324200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/in-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/in-unicast-pkts": 966200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/out-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/out-unicast-pkts": 925200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/in-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-errors": 502
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/out-errors",
+                "values": {
+                  "interfaces/interface/state/counters/out-errors": 19
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/in-fcs-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-fcs-errors": 324
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/in-discards",
+                "values": {
+                  "interfaces/interface/state/counters/in-discards": 4820
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/out-discards",
+                "values": {
+                  "interfaces/interface/state/counters/out-discards": 2410
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state/counters/carrier-transitions",
+                "values": {
+                  "interfaces/interface/state/counters/carrier-transitions": 2
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:44.712054 7424074 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "pygnmi_json_ietf_sample": {
+        "notification": [
+          {
+            "timestamp": 1727726400000000000,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+              {
+                "path": "interfaces/interface[name=HundredGigE0/0/0/0]/state",
+                "val": {
+                  "name": "HundredGigE0/0/0/0",
+                  "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+                  "admin-status": "UP",
+                  "oper-status": "DOWN",
+                  "mtu": 9192,
+                  "high-speed": 100000,
+                  "counters": {
+                    "in-octets": "98654200000",
+                    "out-octets": "91324200000",
+                    "in-unicast-pkts": "966200",
+                    "out-unicast-pkts": "925200",
+                    "in-errors": "502",
+                    "out-errors": "19",
+                    "in-fcs-errors": "324",
+                    "in-discards": "4820",
+                    "out-discards": "2410",
+                    "carrier-transitions": "2"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "CISCO_IOS_XE": {
+      "target_device": "node-cat-leaf",
+      "gnmic_json_ietf": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cat-leaf -e json_ietf get --format json --path /interfaces/interface[name=FortyGigE1/0/1]/state --path /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.2.1]/state --path /qos/interfaces/interface[interface-id=FortyGigE1/0/1]/output/queues/queue[name=BE-0]/state --path /components/component[name=Transceiver-FortyGigE1/0/1]/transceiver/state --path /system/state",
+        "returncode": 0,
+        "elapsed_ms": 41.23,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state",
+                "values": {
+                  "interfaces/interface/state": {
+                    "admin-status": "UP",
+                    "counters": {
+                      "carrier-transitions": "2",
+                      "in-discards": "4820",
+                      "in-errors": "502",
+                      "in-fcs-errors": "324",
+                      "in-octets": "98654200000",
+                      "in-unicast-pkts": "966200",
+                      "out-discards": "2410",
+                      "out-errors": "19",
+                      "out-octets": "91324200000",
+                      "out-unicast-pkts": "925200"
+                    },
+                    "description": "Catalyst-9600-Leaf FortyGigE1/0/1 Core Link",
+                    "high-speed": 100000,
+                    "mtu": 9192,
+                    "name": "FortyGigE1/0/1",
+                    "oper-status": "DOWN"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.2.1]/state",
+                "values": {
+                  "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state": {
+                    "description": "Arista-7280R-Spine",
+                    "established-transitions": "2",
+                    "last-established": "1727726340000000000",
+                    "messages": {
+                      "received": {
+                        "update": 1467
+                      },
+                      "sent": {
+                        "update": 1427
+                      }
+                    },
+                    "neighbor-address": "10.100.2.1",
+                    "peer-as": 65003,
+                    "prefixes": {
+                      "installed": 0,
+                      "received": 0,
+                      "sent": 0
+                    },
+                    "session-state": "IDLE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "qos/interfaces/interface[interface-id=FortyGigE1/0/1]/output/queues/queue[name=BE-0]/state",
+                "values": {
+                  "qos/interfaces/interface/output/queues/queue/state": {
+                    "dropped-octets": "4935680",
+                    "dropped-pkts": "4820",
+                    "max-queue-len": "14850000",
+                    "name": "BE-0",
+                    "transmit-octets": "91324200000",
+                    "transmit-pkts": "925200"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "components/component[name=Transceiver-FortyGigE1/0/1]/transceiver/state",
+                "values": {
+                  "components/component/transceiver/state": {
+                    "input-power": {
+                      "instant": -24.8
+                    },
+                    "interface": "FortyGigE1/0/1",
+                    "laser-bias-current": {
+                      "instant": 68.2
+                    },
+                    "osnr": {
+                      "instant": 11.2
+                    },
+                    "output-power": {
+                      "instant": -4.1
+                    },
+                    "pre-fec-ber": {
+                      "instant": 0.0014
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "system/state",
+                "values": {
+                  "system/state": {
+                    "boot-time": "1727553600000000000",
+                    "current-datetime": "2026-09-29T18:00:00Z",
+                    "domain-name": "netspout.lab.internal",
+                    "hostname": "Catalyst-9600-Leaf"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": ""
+      },
+      "gnmic_proto": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cat-leaf -e proto get --format json --path /interfaces/interface[name=FortyGigE1/0/1]/state",
+        "returncode": 0,
+        "elapsed_ms": 28.78,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-cat-leaf",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/name",
+                "values": {
+                  "interfaces/interface/state/name": "FortyGigE1/0/1"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/description",
+                "values": {
+                  "interfaces/interface/state/description": "Catalyst-9600-Leaf FortyGigE1/0/1 Core Link"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/admin-status",
+                "values": {
+                  "interfaces/interface/state/admin-status": "UP"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/oper-status",
+                "values": {
+                  "interfaces/interface/state/oper-status": "DOWN"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/mtu",
+                "values": {
+                  "interfaces/interface/state/mtu": 9192
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/high-speed",
+                "values": {
+                  "interfaces/interface/state/high-speed": 100000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/in-octets",
+                "values": {
+                  "interfaces/interface/state/counters/in-octets": 98654200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/out-octets",
+                "values": {
+                  "interfaces/interface/state/counters/out-octets": 91324200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/in-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/in-unicast-pkts": 966200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/out-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/out-unicast-pkts": 925200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/in-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-errors": 502
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/out-errors",
+                "values": {
+                  "interfaces/interface/state/counters/out-errors": 19
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/in-fcs-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-fcs-errors": 324
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/in-discards",
+                "values": {
+                  "interfaces/interface/state/counters/in-discards": 4820
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/out-discards",
+                "values": {
+                  "interfaces/interface/state/counters/out-discards": 2410
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=FortyGigE1/0/1]/state/counters/carrier-transitions",
+                "values": {
+                  "interfaces/interface/state/counters/carrier-transitions": 2
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:44.985109 7424234 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "pygnmi_json_ietf_sample": {
+        "notification": [
+          {
+            "timestamp": 1727726400000000000,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+              {
+                "path": "interfaces/interface[name=FortyGigE1/0/1]/state",
+                "val": {
+                  "name": "FortyGigE1/0/1",
+                  "description": "Catalyst-9600-Leaf FortyGigE1/0/1 Core Link",
+                  "admin-status": "UP",
+                  "oper-status": "DOWN",
+                  "mtu": 9192,
+                  "high-speed": 100000,
+                  "counters": {
+                    "in-octets": "98654200000",
+                    "out-octets": "91324200000",
+                    "in-unicast-pkts": "966200",
+                    "out-unicast-pkts": "925200",
+                    "in-errors": "502",
+                    "out-errors": "19",
+                    "in-fcs-errors": "324",
+                    "in-discards": "4820",
+                    "out-discards": "2410",
+                    "carrier-transitions": "2"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ARISTA_EOS": {
+      "target_device": "node-arista-spine",
+      "gnmic_json_ietf": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-arista-spine -e json_ietf get --format json --path /interfaces/interface[name=Ethernet1/1]/state --path /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.2]/state --path /network-instances/network-instance[name=default]/evpn/state --path /qos/interfaces/interface[interface-id=Ethernet1/1]/output/queues/queue[name=BE-0]/state --path /components/component[name=Transceiver-Ethernet1/1]/transceiver/state --path /system/state",
+        "returncode": 0,
+        "elapsed_ms": 39.35,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state",
+                "values": {
+                  "interfaces/interface/state": {
+                    "admin-status": "UP",
+                    "counters": {
+                      "carrier-transitions": "2",
+                      "in-discards": "4820",
+                      "in-errors": "502",
+                      "in-fcs-errors": "324",
+                      "in-octets": "98654200000",
+                      "in-unicast-pkts": "966200",
+                      "out-discards": "2410",
+                      "out-errors": "19",
+                      "out-octets": "91324200000",
+                      "out-unicast-pkts": "925200"
+                    },
+                    "description": "Arista-7280R-Spine Ethernet1/1 Core Link",
+                    "high-speed": 100000,
+                    "mtu": 9192,
+                    "name": "Ethernet1/1",
+                    "oper-status": "DOWN"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.2]/state",
+                "values": {
+                  "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state": {
+                    "description": "Juniper-PTX10K-PE01",
+                    "established-transitions": "2",
+                    "last-established": "1727726340000000000",
+                    "messages": {
+                      "received": {
+                        "update": 1467
+                      },
+                      "sent": {
+                        "update": 1427
+                      }
+                    },
+                    "neighbor-address": "10.100.1.2",
+                    "peer-as": 65002,
+                    "prefixes": {
+                      "installed": 0,
+                      "received": 0,
+                      "sent": 0
+                    },
+                    "session-state": "IDLE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/evpn/state",
+                "values": {
+                  "network-instances/network-instance/evpn/state": {
+                    "type2-mac-ip-routes": 480,
+                    "type5-ip-prefix-routes": 120,
+                    "vni-id": 10100,
+                    "vtep-status": "DEGRADED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "qos/interfaces/interface[interface-id=Ethernet1/1]/output/queues/queue[name=BE-0]/state",
+                "values": {
+                  "qos/interfaces/interface/output/queues/queue/state": {
+                    "dropped-octets": "4935680",
+                    "dropped-pkts": "4820",
+                    "max-queue-len": "14850000",
+                    "name": "BE-0",
+                    "transmit-octets": "91324200000",
+                    "transmit-pkts": "925200"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "components/component[name=Transceiver-Ethernet1/1]/transceiver/state",
+                "values": {
+                  "components/component/transceiver/state": {
+                    "input-power": {
+                      "instant": -24.8
+                    },
+                    "interface": "Ethernet1/1",
+                    "laser-bias-current": {
+                      "instant": 68.2
+                    },
+                    "osnr": {
+                      "instant": 11.2
+                    },
+                    "output-power": {
+                      "instant": -4.1
+                    },
+                    "pre-fec-ber": {
+                      "instant": 0.0014
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "system/state",
+                "values": {
+                  "system/state": {
+                    "boot-time": "1727553600000000000",
+                    "current-datetime": "2026-09-29T18:00:00Z",
+                    "domain-name": "netspout.lab.internal",
+                    "hostname": "Arista-7280R-Spine"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.220313 7424303 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "gnmic_proto": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-arista-spine -e proto get --format json --path /interfaces/interface[name=Ethernet1/1]/state",
+        "returncode": 0,
+        "elapsed_ms": 27.28,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-arista-spine",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/name",
+                "values": {
+                  "interfaces/interface/state/name": "Ethernet1/1"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/description",
+                "values": {
+                  "interfaces/interface/state/description": "Arista-7280R-Spine Ethernet1/1 Core Link"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/admin-status",
+                "values": {
+                  "interfaces/interface/state/admin-status": "UP"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/oper-status",
+                "values": {
+                  "interfaces/interface/state/oper-status": "DOWN"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/mtu",
+                "values": {
+                  "interfaces/interface/state/mtu": 9192
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/high-speed",
+                "values": {
+                  "interfaces/interface/state/high-speed": 100000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/in-octets",
+                "values": {
+                  "interfaces/interface/state/counters/in-octets": 98654200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/out-octets",
+                "values": {
+                  "interfaces/interface/state/counters/out-octets": 91324200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/in-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/in-unicast-pkts": 966200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/out-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/out-unicast-pkts": 925200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/in-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-errors": 502
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/out-errors",
+                "values": {
+                  "interfaces/interface/state/counters/out-errors": 19
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/in-fcs-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-fcs-errors": 324
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/in-discards",
+                "values": {
+                  "interfaces/interface/state/counters/in-discards": 4820
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/out-discards",
+                "values": {
+                  "interfaces/interface/state/counters/out-discards": 2410
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=Ethernet1/1]/state/counters/carrier-transitions",
+                "values": {
+                  "interfaces/interface/state/counters/carrier-transitions": 2
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.257676 7424356 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "pygnmi_json_ietf_sample": {
+        "notification": [
+          {
+            "timestamp": 1727726400000000000,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+              {
+                "path": "interfaces/interface[name=Ethernet1/1]/state",
+                "val": {
+                  "name": "Ethernet1/1",
+                  "description": "Arista-7280R-Spine Ethernet1/1 Core Link",
+                  "admin-status": "UP",
+                  "oper-status": "DOWN",
+                  "mtu": 9192,
+                  "high-speed": 100000,
+                  "counters": {
+                    "in-octets": "98654200000",
+                    "out-octets": "91324200000",
+                    "in-unicast-pkts": "966200",
+                    "out-unicast-pkts": "925200",
+                    "in-errors": "502",
+                    "out-errors": "19",
+                    "in-fcs-errors": "324",
+                    "in-discards": "4820",
+                    "out-discards": "2410",
+                    "carrier-transitions": "2"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "JUNIPER_JUNOS": {
+      "target_device": "node-juniper-ptx",
+      "gnmic_json_ietf": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-juniper-ptx -e json_ietf get --format json --path /interfaces/interface[name=et-0/0/0]/state --path /network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.1]/state --path /qos/interfaces/interface[interface-id=et-0/0/0]/output/queues/queue[name=BE-0]/state --path /components/component[name=Transceiver-et-0/0/0]/transceiver/state --path /system/state",
+        "returncode": 0,
+        "elapsed_ms": 52.43,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state",
+                "values": {
+                  "interfaces/interface/state": {
+                    "admin-status": "UP",
+                    "counters": {
+                      "carrier-transitions": "2",
+                      "in-discards": "4820",
+                      "in-errors": "502",
+                      "in-fcs-errors": "324",
+                      "in-octets": "98654200000",
+                      "in-unicast-pkts": "966200",
+                      "out-discards": "2410",
+                      "out-errors": "19",
+                      "out-octets": "91324200000",
+                      "out-unicast-pkts": "925200"
+                    },
+                    "description": "Juniper-PTX10K-PE01 et-0/0/0 Core Link",
+                    "high-speed": 100000,
+                    "mtu": 9192,
+                    "name": "et-0/0/0",
+                    "oper-status": "DOWN"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.1]/state",
+                "values": {
+                  "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state": {
+                    "description": "Cisco-8000-Core01",
+                    "established-transitions": "2",
+                    "last-established": "1727726340000000000",
+                    "messages": {
+                      "received": {
+                        "update": 1467
+                      },
+                      "sent": {
+                        "update": 1427
+                      }
+                    },
+                    "neighbor-address": "10.100.1.1",
+                    "peer-as": 65001,
+                    "prefixes": {
+                      "installed": 0,
+                      "received": 0,
+                      "sent": 0
+                    },
+                    "session-state": "IDLE"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "qos/interfaces/interface[interface-id=et-0/0/0]/output/queues/queue[name=BE-0]/state",
+                "values": {
+                  "qos/interfaces/interface/output/queues/queue/state": {
+                    "dropped-octets": "4935680",
+                    "dropped-pkts": "4820",
+                    "max-queue-len": "14850000",
+                    "name": "BE-0",
+                    "transmit-octets": "91324200000",
+                    "transmit-pkts": "925200"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "components/component[name=Transceiver-et-0/0/0]/transceiver/state",
+                "values": {
+                  "components/component/transceiver/state": {
+                    "input-power": {
+                      "instant": -24.8
+                    },
+                    "interface": "et-0/0/0",
+                    "laser-bias-current": {
+                      "instant": 68.2
+                    },
+                    "osnr": {
+                      "instant": 11.2
+                    },
+                    "output-power": {
+                      "instant": -4.1
+                    },
+                    "pre-fec-ber": {
+                      "instant": 0.0014
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "system/state",
+                "values": {
+                  "system/state": {
+                    "boot-time": "1727553600000000000",
+                    "current-datetime": "2026-09-29T18:00:00Z",
+                    "domain-name": "netspout.lab.internal",
+                    "hostname": "Juniper-PTX10K-PE01"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.489414 7424414 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "gnmic_proto": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-juniper-ptx -e proto get --format json --path /interfaces/interface[name=et-0/0/0]/state",
+        "returncode": 0,
+        "elapsed_ms": 27.96,
+        "stdout": [
+          {
+            "source": "127.0.0.1:57400",
+            "timestamp": 1727726400000000000,
+            "time": "2024-09-30T16:00:00-04:00",
+            "prefix": "openconfig:/",
+            "target": "node-juniper-ptx",
+            "updates": [
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/name",
+                "values": {
+                  "interfaces/interface/state/name": "et-0/0/0"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/description",
+                "values": {
+                  "interfaces/interface/state/description": "Juniper-PTX10K-PE01 et-0/0/0 Core Link"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/admin-status",
+                "values": {
+                  "interfaces/interface/state/admin-status": "UP"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/oper-status",
+                "values": {
+                  "interfaces/interface/state/oper-status": "DOWN"
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/mtu",
+                "values": {
+                  "interfaces/interface/state/mtu": 9192
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/high-speed",
+                "values": {
+                  "interfaces/interface/state/high-speed": 100000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/in-octets",
+                "values": {
+                  "interfaces/interface/state/counters/in-octets": 98654200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/out-octets",
+                "values": {
+                  "interfaces/interface/state/counters/out-octets": 91324200000
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/in-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/in-unicast-pkts": 966200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/out-unicast-pkts",
+                "values": {
+                  "interfaces/interface/state/counters/out-unicast-pkts": 925200
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/in-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-errors": 502
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/out-errors",
+                "values": {
+                  "interfaces/interface/state/counters/out-errors": 19
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/in-fcs-errors",
+                "values": {
+                  "interfaces/interface/state/counters/in-fcs-errors": 324
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/in-discards",
+                "values": {
+                  "interfaces/interface/state/counters/in-discards": 4820
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/out-discards",
+                "values": {
+                  "interfaces/interface/state/counters/out-discards": 2410
+                }
+              },
+              {
+                "Path": "interfaces/interface[name=et-0/0/0]/state/counters/carrier-transitions",
+                "values": {
+                  "interfaces/interface/state/counters/carrier-transitions": 2
+                }
+              }
+            ]
+          }
+        ],
+        "stderr": "I0929 20:38:45.540897 7424479 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+      },
+      "pygnmi_json_ietf_sample": {
+        "notification": [
+          {
+            "timestamp": 1727726400000000000,
+            "prefix": null,
+            "alias": null,
+            "atomic": false,
+            "update": [
+              {
+                "path": "interfaces/interface[name=et-0/0/0]/state",
+                "val": {
+                  "name": "et-0/0/0",
+                  "description": "Juniper-PTX10K-PE01 et-0/0/0 Core Link",
+                  "admin-status": "UP",
+                  "oper-status": "DOWN",
+                  "mtu": 9192,
+                  "high-speed": 100000,
+                  "counters": {
+                    "in-octets": "98654200000",
+                    "out-octets": "91324200000",
+                    "in-unicast-pkts": "966200",
+                    "out-unicast-pkts": "925200",
+                    "in-errors": "502",
+                    "out-errors": "19",
+                    "in-fcs-errors": "324",
+                    "in-discards": "4820",
+                    "out-discards": "2410",
+                    "carrier-transitions": "2"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

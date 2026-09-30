@@ -1,0 +1,89 @@
+{
+  "gate": "13B",
+  "controlled_failures": {
+    "A_set_rpc_rejected": {
+      "test_id": "T13B-NEG-01",
+      "expected_status": "UNIMPLEMENTED",
+      "observed_status": "UNIMPLEMENTED",
+      "message": "NetSpout gNMI target is read-only; Set RPC is disabled by security policy."
+    },
+    "B_malformed_path": {
+      "test_id": "T13B-NEG-02",
+      "expected_status": "INVALID_ARGUMENT",
+      "observed_status": "INVALID_ARGUMENT"
+    },
+    "C_unsupported_path_and_target": {
+      "test_id": "T13B-NEG-03",
+      "expected_status": "NOT_FOUND",
+      "observed_status": "NOT_FOUND",
+      "gnmic_cli_proof": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure get --path /openconfig-nonexistent/foo/bar",
+        "returncode": 1,
+        "elapsed_ms": 63.91,
+        "stdout": "",
+        "stderr": "I0929 20:38:47.652812 7425059 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(12, generation: 1)\nI0929 20:38:47.652862 7425059 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(11, generation: 1)\nI0929 20:38:47.652864 7425059 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\ntarget \"127.0.0.1:57400\" Get request failed: \"127.0.0.1:57400\" GetRequest failed: rpc error: code = NotFound desc = \"UNSUPPORTED_PATH: OpenConfig path '/openconfig-nonexistent/foo/bar' is not supported\"\nError: one or more requests failed"
+      }
+    },
+    "C2_foreign_vendor_origin": {
+      "test_id": "T13B-NEG-04",
+      "expected_status": "NOT_FOUND",
+      "observed_status": "NOT_FOUND",
+      "gnmic_cli_proof": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k get --path eos_native:/Sysdb/hardware/counter/Lanz/intf[intf=Ethernet1/1]/queueStatus",
+        "returncode": 1,
+        "elapsed_ms": 25.23,
+        "stdout": "",
+        "stderr": "I0929 20:38:47.694986 7425113 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(12, generation: 1)\nI0929 20:38:47.695021 7425113 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(11, generation: 1)\nI0929 20:38:47.695022 7425113 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\ntarget \"127.0.0.1:57400\" Get request failed: \"127.0.0.1:57400\" GetRequest failed: rpc error: code = NotFound desc = FOREIGN_VENDOR_ORIGIN / MODEL_NOT_SUPPORTED: Origin 'eos_native' is not supported by target 'node-cisco8k' (CISCO_IOS_XR). Supported origins: ['openconfig', 'Cisco-IOS-XR-infra-statsd-oper', 'Cisco-IOS-XR-pfi-im-cmd-oper', 'Cisco-IOS-XR-ipv4-bgp-oper', 'Cisco-IOS-XR-qos-ma-oper', 'Cisco-IOS-XR-controller-optics-oper', 'Cisco-IOS-XR-wdsysmon-fd-oper', 'Cisco-IOS-XR-plat-chas-invmgr-oper', 'Cisco-IOS-XR-ethernet-lldp-oper', 'Cisco-IOS-XR-bundlemgr-oper', 'Cisco-IOS-XR-fib-common-oper']\nError: one or more requests failed"
+      }
+    },
+    "D_sample_interval_below_500ms_floor": {
+      "test_id": "T13B-NEG-05",
+      "requested_interval_ns": 100000000,
+      "min_floor_ns": 500000000,
+      "reject_mode_status": "INVALID_ARGUMENT",
+      "clamp_mode_clamped_to_ns": 500000000
+    },
+    "E_authentication_failure": {
+      "test_id": "T13B-NEG-06",
+      "expected_status": "UNAUTHENTICATED",
+      "observed_status": "UNAUTHENTICATED",
+      "gnmic_cli_proof": {
+        "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -u invalid-user -p wrong-secret capabilities",
+        "returncode": 1,
+        "elapsed_ms": 22.23,
+        "stdout": "",
+        "stderr": "I0929 20:38:47.720223 7425179 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(12, generation: 1)\nI0929 20:38:47.720248 7425179 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(11, generation: 1)\nI0929 20:38:47.720249 7425179 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\ntarget \"127.0.0.1:57400\", capabilities request failed: \"127.0.0.1:57400\" CapabilitiesRequest failed: rpc error: code = Unauthenticated desc = UNAUTHENTICATED: Invalid or missing gNMI metadata credentials.\nError: one or more requests failed"
+      }
+    },
+    "F_excessive_paths_per_request": {
+      "test_id": "T13B-NEG-07a",
+      "requested_paths": 65,
+      "max_paths_per_request": 64,
+      "observed_status": "INVALID_ARGUMENT"
+    },
+    "G_excessive_concurrent_streams": {
+      "test_id": "T13B-NEG-07b",
+      "max_active_streams": 32,
+      "observed_status_on_overflow": "RESOURCE_EXHAUSTED"
+    },
+    "H_slow_consumer_queue_overflow": {
+      "test_id": "T13B-NEG-08c",
+      "observed_status": "RESOURCE_EXHAUSTED",
+      "reason": "STREAM_QUEUE_OVERFLOW"
+    },
+    "I_non_loopback_bind_rejected": {
+      "test_id": "T13B-NEG-08b",
+      "bind_address": "0.0.0.0",
+      "allow_non_loopback": false,
+      "observed_exception": "ValueError: NON_LOOPBACK_BIND_REJECTED"
+    },
+    "J_unsupported_encoding_bytes_ascii": {
+      "test_id": "T13B-NEG-08a",
+      "encodings_tested": [
+        "BYTES",
+        "ASCII"
+      ],
+      "observed_status": "UNIMPLEMENTED"
+    }
+  }
+}

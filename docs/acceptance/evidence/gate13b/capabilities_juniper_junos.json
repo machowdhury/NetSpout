@@ -1,0 +1,173 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-01",
+  "vendor_profile": "JUNIPER_JUNOS",
+  "target_device": "node-juniper-ptx",
+  "endpoint": "127.0.0.1:57400",
+  "gnmic_cli_verification": {
+    "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-juniper-ptx capabilities --format json",
+    "returncode": 0,
+    "elapsed_ms": 41.39,
+    "stdout": {
+      "version": "0.10.0",
+      "supported-models": [
+        {
+          "name": "openconfig-interfaces",
+          "organization": "OpenConfig working group",
+          "version": "2022-10-25"
+        },
+        {
+          "name": "openconfig-if-ip",
+          "organization": "OpenConfig working group",
+          "version": "2022-05-10"
+        },
+        {
+          "name": "openconfig-if-aggregate",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-28"
+        },
+        {
+          "name": "openconfig-lacp",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-28"
+        },
+        {
+          "name": "openconfig-lldp",
+          "organization": "OpenConfig working group",
+          "version": "2022-05-10"
+        },
+        {
+          "name": "openconfig-network-instance",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-15"
+        },
+        {
+          "name": "openconfig-bgp",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-20"
+        },
+        {
+          "name": "openconfig-aft",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-16"
+        },
+        {
+          "name": "openconfig-qos",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-13"
+        },
+        {
+          "name": "openconfig-platform",
+          "organization": "OpenConfig working group",
+          "version": "2022-12-20"
+        },
+        {
+          "name": "openconfig-platform-transceiver",
+          "organization": "OpenConfig working group",
+          "version": "2022-07-28"
+        },
+        {
+          "name": "openconfig-terminal-device",
+          "organization": "OpenConfig working group",
+          "version": "2022-07-28"
+        },
+        {
+          "name": "openconfig-system",
+          "organization": "OpenConfig working group",
+          "version": "2022-10-19"
+        },
+        {
+          "name": "junos-telemetry-interface",
+          "organization": "Juniper Networks, Inc.",
+          "version": "23.4R1"
+        }
+      ],
+      "encodings": [
+        "JSON",
+        "PROTO",
+        "JSON_IETF"
+      ]
+    },
+    "stderr": "I0929 20:38:44.382102 7423957 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+  },
+  "pygnmi_client_verification": {
+    "supported_models": [
+      {
+        "name": "openconfig-interfaces",
+        "organization": "OpenConfig working group",
+        "version": "2022-10-25"
+      },
+      {
+        "name": "openconfig-if-ip",
+        "organization": "OpenConfig working group",
+        "version": "2022-05-10"
+      },
+      {
+        "name": "openconfig-if-aggregate",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-28"
+      },
+      {
+        "name": "openconfig-lacp",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-28"
+      },
+      {
+        "name": "openconfig-lldp",
+        "organization": "OpenConfig working group",
+        "version": "2022-05-10"
+      },
+      {
+        "name": "openconfig-network-instance",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-15"
+      },
+      {
+        "name": "openconfig-bgp",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-20"
+      },
+      {
+        "name": "openconfig-aft",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-16"
+      },
+      {
+        "name": "openconfig-qos",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-13"
+      },
+      {
+        "name": "openconfig-platform",
+        "organization": "OpenConfig working group",
+        "version": "2022-12-20"
+      },
+      {
+        "name": "openconfig-platform-transceiver",
+        "organization": "OpenConfig working group",
+        "version": "2022-07-28"
+      },
+      {
+        "name": "openconfig-terminal-device",
+        "organization": "OpenConfig working group",
+        "version": "2022-07-28"
+      },
+      {
+        "name": "openconfig-system",
+        "organization": "OpenConfig working group",
+        "version": "2022-10-19"
+      },
+      {
+        "name": "junos-telemetry-interface",
+        "organization": "Juniper Networks, Inc.",
+        "version": "23.4R1"
+      }
+    ],
+    "supported_encodings": [
+      "json",
+      "proto",
+      "json_ietf"
+    ],
+    "gnmi_version": "0.10.0"
+  }
+}

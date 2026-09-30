@@ -1,0 +1,263 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-01",
+  "vendor_profile": "CISCO_IOS_XR",
+  "target_device": "node-cisco8k",
+  "endpoint": "127.0.0.1:57400",
+  "gnmic_cli_verification": {
+    "command": "/opt/homebrew/bin/gnmic -a 127.0.0.1:57400 --insecure -H x-netspout-target=node-cisco8k capabilities --format json",
+    "returncode": 0,
+    "elapsed_ms": 184.21,
+    "stdout": {
+      "version": "0.10.0",
+      "supported-models": [
+        {
+          "name": "openconfig-interfaces",
+          "organization": "OpenConfig working group",
+          "version": "2022-10-25"
+        },
+        {
+          "name": "openconfig-if-ip",
+          "organization": "OpenConfig working group",
+          "version": "2022-05-10"
+        },
+        {
+          "name": "openconfig-if-aggregate",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-28"
+        },
+        {
+          "name": "openconfig-lacp",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-28"
+        },
+        {
+          "name": "openconfig-lldp",
+          "organization": "OpenConfig working group",
+          "version": "2022-05-10"
+        },
+        {
+          "name": "openconfig-network-instance",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-15"
+        },
+        {
+          "name": "openconfig-bgp",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-20"
+        },
+        {
+          "name": "openconfig-aft",
+          "organization": "OpenConfig working group",
+          "version": "2022-06-16"
+        },
+        {
+          "name": "openconfig-qos",
+          "organization": "OpenConfig working group",
+          "version": "2022-09-13"
+        },
+        {
+          "name": "openconfig-platform",
+          "organization": "OpenConfig working group",
+          "version": "2022-12-20"
+        },
+        {
+          "name": "openconfig-platform-transceiver",
+          "organization": "OpenConfig working group",
+          "version": "2022-07-28"
+        },
+        {
+          "name": "openconfig-terminal-device",
+          "organization": "OpenConfig working group",
+          "version": "2022-07-28"
+        },
+        {
+          "name": "openconfig-system",
+          "organization": "OpenConfig working group",
+          "version": "2022-10-19"
+        },
+        {
+          "name": "Cisco-IOS-XR-infra-statsd-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-pfi-im-cmd-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-ipv4-bgp-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-qos-ma-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-controller-optics-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-wdsysmon-fd-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-plat-chas-invmgr-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-ethernet-lldp-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-bundlemgr-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        },
+        {
+          "name": "Cisco-IOS-XR-fib-common-oper",
+          "organization": "Cisco Systems, Inc.",
+          "version": "7.9.1"
+        }
+      ],
+      "encodings": [
+        "JSON",
+        "PROTO",
+        "JSON_IETF"
+      ]
+    },
+    "stderr": "I0929 20:38:43.500180 7423732 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)"
+  },
+  "pygnmi_client_verification": {
+    "supported_models": [
+      {
+        "name": "openconfig-interfaces",
+        "organization": "OpenConfig working group",
+        "version": "2022-10-25"
+      },
+      {
+        "name": "openconfig-if-ip",
+        "organization": "OpenConfig working group",
+        "version": "2022-05-10"
+      },
+      {
+        "name": "openconfig-if-aggregate",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-28"
+      },
+      {
+        "name": "openconfig-lacp",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-28"
+      },
+      {
+        "name": "openconfig-lldp",
+        "organization": "OpenConfig working group",
+        "version": "2022-05-10"
+      },
+      {
+        "name": "openconfig-network-instance",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-15"
+      },
+      {
+        "name": "openconfig-bgp",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-20"
+      },
+      {
+        "name": "openconfig-aft",
+        "organization": "OpenConfig working group",
+        "version": "2022-06-16"
+      },
+      {
+        "name": "openconfig-qos",
+        "organization": "OpenConfig working group",
+        "version": "2022-09-13"
+      },
+      {
+        "name": "openconfig-platform",
+        "organization": "OpenConfig working group",
+        "version": "2022-12-20"
+      },
+      {
+        "name": "openconfig-platform-transceiver",
+        "organization": "OpenConfig working group",
+        "version": "2022-07-28"
+      },
+      {
+        "name": "openconfig-terminal-device",
+        "organization": "OpenConfig working group",
+        "version": "2022-07-28"
+      },
+      {
+        "name": "openconfig-system",
+        "organization": "OpenConfig working group",
+        "version": "2022-10-19"
+      },
+      {
+        "name": "Cisco-IOS-XR-infra-statsd-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-pfi-im-cmd-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-ipv4-bgp-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-qos-ma-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-controller-optics-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-wdsysmon-fd-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-plat-chas-invmgr-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-ethernet-lldp-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-bundlemgr-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      },
+      {
+        "name": "Cisco-IOS-XR-fib-common-oper",
+        "organization": "Cisco Systems, Inc.",
+        "version": "7.9.1"
+      }
+    ],
+    "supported_encodings": [
+      "json",
+      "proto",
+      "json_ietf"
+    ],
+    "gnmi_version": "0.10.0"
+  }
+}

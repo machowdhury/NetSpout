@@ -52,6 +52,23 @@ CORE_MODULES = [
     "snmp_splunk_e2e.py"
 ]
 
+GNMI_SUBPACKAGE_FILES = [
+    "gnmi/__init__.py",
+    "gnmi/vendor_profiles.py",
+    "gnmi/state_store.py",
+    "gnmi/path_parser.py",
+    "gnmi/encoding.py",
+    "gnmi/sensor_registry.py",
+    "gnmi/subscription.py",
+    "gnmi/server.py",
+    "gnmi/proto/__init__.py",
+    "gnmi/proto/gnmi_ext.proto",
+    "gnmi/proto/gnmi.proto",
+    "gnmi/proto/gnmi_ext_pb2.py",
+    "gnmi/proto/gnmi_pb2.py",
+    "gnmi/proto/gnmi_pb2_grpc.py",
+]
+
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
 VENDOR_STATIC_JSON = os.path.join(REPO_ROOT, "netspout", "appserver", "static", "vendor_catalog.json")
 
@@ -81,6 +98,21 @@ def sync_core():
         dst_path = os.path.join(SPLUNK_CORE_DIR, mod)
         shutil.copy2(src_path, dst_path)
         print(f"  [CORE_COPY] {mod} -> netspout/bin/netspout_core/{mod}")
+
+    # 2b. Sync gnmi/ subpackage into netspout/bin/netspout_core/gnmi/ and backend/app/gnmi/
+    for rel_file in GNMI_SUBPACKAGE_FILES:
+        src_path = os.path.join(SRC_CORE_DIR, rel_file)
+        if not os.path.exists(src_path):
+            print(f"❌ Error: Missing canonical gNMI subpackage file {src_path}")
+            sys.exit(1)
+        for dst_root, label in [
+            (SPLUNK_CORE_DIR, "netspout/bin/netspout_core"),
+            (BACKEND_APP_DIR, "backend/app"),
+        ]:
+            dst_path = os.path.join(dst_root, rel_file)
+            os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+            shutil.copy2(src_path, dst_path)
+            print(f"  [GNMI_COPY] {rel_file} -> {label}/{rel_file}")
 
     # 3. Generate packaged copies in netspout/bin/ with auto-generated header
     for mod in CORE_MODULES:

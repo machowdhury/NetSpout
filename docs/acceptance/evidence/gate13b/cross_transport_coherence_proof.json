@@ -1,0 +1,199 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-10",
+  "device_id": "cisco-asr9k-pe1",
+  "phases": {
+    "BASELINE": {
+      "gnmi_openconfig": {
+        "oper_status": "UP",
+        "in_octets": 98504200000,
+        "out_octets": 91204200000,
+        "in_errors": 0,
+        "bgp_session_state": "ESTABLISHED"
+      },
+      "snmp_mib_oid_store": {
+        "sysUpTime.0": 8639000,
+        "ifOperStatus.1": 1,
+        "ifHCInOctets.1": 98504200000,
+        "ifHCOutOctets.1": 91204200000,
+        "ifInErrors.1": 0,
+        "bgpPeerState.198.51.100.1": 6
+      },
+      "syslog_events": [
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "BASELINE",
+          "mnemonic": "LINK-3-UPDOWN",
+          "interface": "HundredGigE0/0/0/0",
+          "oper_status": "UP",
+          "message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to up"
+        },
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "BASELINE",
+          "mnemonic": "BGP-5-ADJCHANGE",
+          "neighbor": "10.255.0.2",
+          "session_state": "ESTABLISHED",
+          "message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Up"
+        }
+      ],
+      "netflow_ipfix_summary": {
+        "exporter_device_id": "cisco-asr9k-pe1",
+        "phase": "BASELINE",
+        "input_snmp": 1,
+        "in_bytes_total": 98504200000,
+        "in_pkts_total": 954200,
+        "out_bytes_total": 91204200000,
+        "out_pkts_total": 914200,
+        "active_next_hop": "10.255.0.2",
+        "forwarded_packets": 1078400,
+        "forwarded_octets": 102704620000
+      },
+      "mathematical_parity_verified": true
+    },
+    "DEGRADE": {
+      "gnmi_openconfig": {
+        "oper_status": "DOWN",
+        "in_octets": 98654200000,
+        "out_octets": 91324200000,
+        "in_errors": 502,
+        "bgp_session_state": "IDLE"
+      },
+      "snmp_mib_oid_store": {
+        "sysUpTime.0": 8640000,
+        "ifOperStatus.1": 2,
+        "ifHCInOctets.1": 98654200000,
+        "ifHCOutOctets.1": 91324200000,
+        "ifInErrors.1": 502,
+        "bgpPeerState.198.51.100.1": 1
+      },
+      "syslog_events": [
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "DEGRADE",
+          "mnemonic": "LINK-3-UPDOWN",
+          "interface": "HundredGigE0/0/0/0",
+          "oper_status": "DOWN",
+          "message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to down"
+        },
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "DEGRADE",
+          "mnemonic": "BGP-5-ADJCHANGE",
+          "neighbor": "10.255.0.2",
+          "session_state": "IDLE",
+          "message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Down Hold Timer Expired"
+        }
+      ],
+      "netflow_ipfix_summary": {
+        "exporter_device_id": "cisco-asr9k-pe1",
+        "phase": "DEGRADE",
+        "input_snmp": 1,
+        "in_bytes_total": 98654200000,
+        "in_pkts_total": 966200,
+        "out_bytes_total": 91324200000,
+        "out_pkts_total": 925200,
+        "active_next_hop": "10.255.0.3",
+        "forwarded_packets": 1200400,
+        "forwarded_octets": 105454620000
+      },
+      "mathematical_parity_verified": true
+    },
+    "FAILOVER": {
+      "gnmi_openconfig": {
+        "oper_status": "DOWN",
+        "in_octets": 98654200000,
+        "out_octets": 91324200000,
+        "in_errors": 502,
+        "bgp_session_state": "IDLE"
+      },
+      "snmp_mib_oid_store": {
+        "sysUpTime.0": 8640500,
+        "ifOperStatus.1": 2,
+        "ifHCInOctets.1": 98654200000,
+        "ifHCOutOctets.1": 91324200000,
+        "ifInErrors.1": 502,
+        "bgpPeerState.198.51.100.1": 1
+      },
+      "syslog_events": [
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "FAILOVER",
+          "mnemonic": "LINK-3-UPDOWN",
+          "interface": "HundredGigE0/0/0/0",
+          "oper_status": "DOWN",
+          "message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to down"
+        },
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "FAILOVER",
+          "mnemonic": "BGP-5-ADJCHANGE",
+          "neighbor": "10.255.0.2",
+          "session_state": "IDLE",
+          "message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Down Hold Timer Expired"
+        }
+      ],
+      "netflow_ipfix_summary": {
+        "exporter_device_id": "cisco-asr9k-pe1",
+        "phase": "FAILOVER",
+        "input_snmp": 1,
+        "in_bytes_total": 98654200000,
+        "in_pkts_total": 966200,
+        "out_bytes_total": 91324200000,
+        "out_pkts_total": 925200,
+        "active_next_hop": "10.255.0.3",
+        "forwarded_packets": 1750400,
+        "forwarded_octets": 141458400000
+      },
+      "mathematical_parity_verified": true
+    },
+    "RECOVERY": {
+      "gnmi_openconfig": {
+        "oper_status": "UP",
+        "in_octets": 124504200000,
+        "out_octets": 116804200000,
+        "in_errors": 502,
+        "bgp_session_state": "ESTABLISHED"
+      },
+      "snmp_mib_oid_store": {
+        "sysUpTime.0": 8643500,
+        "ifOperStatus.1": 1,
+        "ifHCInOctets.1": 124504200000,
+        "ifHCOutOctets.1": 116804200000,
+        "ifInErrors.1": 502,
+        "bgpPeerState.198.51.100.1": 6
+      },
+      "syslog_events": [
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "RECOVERY",
+          "mnemonic": "LINK-3-UPDOWN",
+          "interface": "HundredGigE0/0/0/0",
+          "oper_status": "UP",
+          "message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to up"
+        },
+        {
+          "device_id": "cisco-asr9k-pe1",
+          "phase": "RECOVERY",
+          "mnemonic": "BGP-5-ADJCHANGE",
+          "neighbor": "10.255.0.2",
+          "session_state": "ESTABLISHED",
+          "message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Up"
+        }
+      ],
+      "netflow_ipfix_summary": {
+        "exporter_device_id": "cisco-asr9k-pe1",
+        "phase": "RECOVERY",
+        "input_snmp": 1,
+        "in_bytes_total": 124504200000,
+        "in_pkts_total": 1294200,
+        "out_bytes_total": 116804200000,
+        "out_pkts_total": 1244200,
+        "active_next_hop": "10.255.0.2",
+        "forwarded_packets": 2138400,
+        "forwarded_octets": 171008400000
+      },
+      "mathematical_parity_verified": true
+    }
+  }
+}

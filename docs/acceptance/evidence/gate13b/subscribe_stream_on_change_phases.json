@@ -1,0 +1,41 @@
+{
+  "gate": "13B",
+  "test_id": "T13B-07",
+  "mode": "STREAM/ON_CHANGE",
+  "events": [
+    {
+      "phase": "BASELINE (initial)",
+      "path": "interfaces/interface/state/oper-status",
+      "val": "UP"
+    },
+    {
+      "phase": "BASELINE (initial)",
+      "path": "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",
+      "val": "ESTABLISHED"
+    },
+    {
+      "phase": "BASELINE",
+      "sync_response": true
+    },
+    {
+      "phase": "DEGRADE",
+      "path": "interfaces/interface/state/oper-status",
+      "val": "DOWN"
+    },
+    {
+      "phase": "DEGRADE",
+      "path": "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",
+      "val": "IDLE"
+    },
+    {
+      "phase": "RECOVERY",
+      "path": "interfaces/interface/state/oper-status",
+      "val": "UP"
+    },
+    {
+      "phase": "RECOVERY",
+      "path": "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state/session-state",
+      "val": "ESTABLISHED"
+    }
+  ]
+}

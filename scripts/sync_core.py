@@ -61,6 +61,7 @@ GNMI_SUBPACKAGE_FILES = [
     "gnmi/sensor_registry.py",
     "gnmi/subscription.py",
     "gnmi/server.py",
+    "gnmi/collector_pipeline.py",
     "gnmi/proto/__init__.py",
     "gnmi/proto/gnmi_ext.proto",
     "gnmi/proto/gnmi.proto",

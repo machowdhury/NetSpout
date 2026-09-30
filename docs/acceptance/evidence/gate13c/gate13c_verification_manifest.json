@@ -1,0 +1,81 @@
+{
+  "gate": "13C",
+  "title": "External gNMI Collector & Telemetry Pipeline Integration Verification Manifest",
+  "baseline_commit": "495d324191307fb7a662f3dc9c97e6ecd9baba6e",
+  "external_collector": "gnmic",
+  "collector_version": "0.49.0",
+  "vendors_tested": {
+    "CISCO_IOS_XR": "PASS (OpenConfig + Cisco-IOS-XR-*-oper)",
+    "CISCO_IOS_XE": "PASS (OpenConfig + Cisco-IOS-XE-*-oper)",
+    "ARISTA_EOS": "PASS (OpenConfig + eos_native)",
+    "JUNIPER_JUNOS": "PASS (OpenConfig + junos JTI)"
+  },
+  "subscriptions_verified": {
+    "ONCE": "PASS",
+    "POLL": "PASS",
+    "STREAM_SAMPLE": "PASS",
+    "STREAM_ON_CHANGE": "PASS"
+  },
+  "pipeline_accounting": {
+    "records_published": 58,
+    "records_collector_observed": 58,
+    "records_normalized": 384,
+    "highest_evidence_stage": "NORMALIZED",
+    "splunk_dispatched": false,
+    "splunk_observed": false,
+    "splunk_e2e_verified": "NO (Deferred to Gate 13D)"
+  },
+  "provenance_summary": {
+    "total_canonical_sensors": 34,
+    "provenance_verified_count": 34,
+    "fabricated_vendor_paths_found": 0
+  },
+  "performance_summary": {
+    "simultaneous_subscriptions": 4,
+    "total_wall_time_sec": 1.556,
+    "normalization_wall_time_sec": 0.0218,
+    "total_raw_updates": 168,
+    "total_normalized_records": 1761,
+    "telemetry_updates_per_sec": 107.99,
+    "collector_records_per_sec": 1131.99,
+    "normalization_throughput_records_per_sec": 80782.29,
+    "p50_normalization_latency_ms": 0.1042,
+    "p95_normalization_latency_ms": 0.2035,
+    "cpu_percent": 20.54,
+    "memory_rss_mb": 53.05,
+    "reconnect_time_ms": 576.2
+  },
+  "reconnect_summary": {
+    "reconnect_succeeded": true,
+    "reconnect_time_ms": 576.2,
+    "unfiltered_accounting": {
+      "original_count": 3,
+      "duplicate_count": 1,
+      "suppressed_count": 0,
+      "retained_count": 3,
+      "suppress_duplicates_enabled": false,
+      "sample_deduplication_key": "bfcccc17f330c089376201f7",
+      "deduplication_key_formula": "sha256(device_id|gnmi_origin|gnmi_path|timestamp|canonical_value_json)[:24]"
+    },
+    "deduplicated_accounting": {
+      "original_count": 3,
+      "duplicate_count": 1,
+      "suppressed_count": 1,
+      "retained_count": 2,
+      "suppress_duplicates_enabled": true,
+      "sample_deduplication_key": "bfcccc17f330c089376201f7",
+      "deduplication_key_formula": "sha256(device_id|gnmi_origin|gnmi_path|timestamp|canonical_value_json)[:24]"
+    }
+  },
+  "evidence_checksums_sha256": {
+    "collector_configuration.json": "51103f63c352d737061cb3dccbceb6ee98c11f7d5a6ceac50b3cbf85c336e3c4",
+    "raw_collector_output.json": "287756cffb197354961028f3e4b86af6f64bd6165df789303f1e054d14d1aad6",
+    "normalized_output.json": "65431a3da3fbbf57d86582be97436580b3834e5c0f234a046f08b43f57ee32ca",
+    "subscription_evidence.json": "8960505e95934a4ec3336b24af4440a72b35b35c8a79c56ccb3c0b8acfdf1b0d",
+    "multi_vendor_evidence.json": "8fcf1b3325865e04d38dcef5f5071fd01566f660a21e7763a2b55dd774fc2934",
+    "cross_transport_coherence_evidence.json": "629e2eae2bd23821fc48821e6f8d35168925d14b85b27404590f2bde963d9ee5",
+    "failure_evidence.json": "b391a0735f0e5861c7a264c00489d7b493b488170da16c89b06fc13478a3a818",
+    "reconnect_evidence.json": "c7bd0707f9db6b69e0337324c09b1f84618dc513e4fb015aa008d9c51798bbed",
+    "performance_summary.json": "9bdac7c08bcce990a3d1a1d0e6fc9784647fef3d658900a00f3d43b84e219861"
+  }
+}

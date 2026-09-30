@@ -1,0 +1,47 @@
+{
+  "gate": "13C",
+  "external_collector": "gnmic",
+  "collector_binary": "/opt/homebrew/bin/gnmic",
+  "collector_version": "0.49.0",
+  "secondary_verifier": "pygnmi (gNMIclient over gRPC)",
+  "transport_stack": "TCP -> HTTP/2 -> gRPC -> gNMI Protobuf (v0.10.0)",
+  "server_config_redacted": {
+    "bind_address": "127.0.0.1",
+    "bind_port": 57400,
+    "allow_non_loopback": false,
+    "security_mode": "INSECURE_LOCAL_LAB",
+    "require_metadata_auth": false,
+    "username": "netspout-lab",
+    "password": "***REDACTED***",
+    "default_target": "node-cisco8k",
+    "max_concurrent_connections": 16,
+    "max_active_streams": 32,
+    "max_paths_per_request": 64,
+    "max_queue_size_per_stream": 256,
+    "min_sample_interval_ns": 500000000,
+    "default_sample_interval_ns": 5000000000,
+    "clamp_sample_interval": false,
+    "max_message_bytes": 4194304,
+    "tls_configured": false,
+    "tls_server_key_pem": null
+  },
+  "supported_vendor_profiles": [
+    "CISCO_IOS_XR",
+    "CISCO_IOS_XE",
+    "ARISTA_EOS",
+    "JUNIPER_JUNOS"
+  ],
+  "supported_subscription_modes": [
+    "ONCE",
+    "POLL",
+    "STREAM/SAMPLE",
+    "STREAM/ON_CHANGE"
+  ],
+  "selected_scenarios": {
+    "openconfig_mdt_streaming": "4-vendor canonical OpenConfig + vendor-native streaming topology (Cisco IOS XR, Cisco IOS XE, Arista EOS, Juniper Junos).",
+    "service_provider_cisco": "Cross-transport state coherence linking gNMI, SNMPv2c, Syslog, and NetFlow/IPFIX on cisco-asr9k-pe1.",
+    "cisco_aci_microburst": "High-resolution QoS queue occupancy and tail-drop surge during DEGRADE.",
+    "mixed_backbone_optical": "Coherent optical transceiver DOM (Rx/Tx dBm, laser bias, pre-FEC BER, OSNR) degradation and recovery."
+  },
+  "tshark_loopback_note": "On macOS unprivileged user environment, /dev/bpf0 is permission-restricted without root ChmodBPF; protocol diagnostics are captured directly via gnmic --log gRPC trace output and server gRPC diagnostics without claiming PCAP protobuf dissection."
+}

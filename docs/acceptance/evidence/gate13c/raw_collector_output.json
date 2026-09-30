@@ -1,0 +1,473 @@
+{
+  "gate": "13C",
+  "collector": "gnmic v0.49.0",
+  "wire_payload_purity_verification": {
+    "wire_payload_pure": true,
+    "inspected_notifications": 81,
+    "inspected_updates": 58,
+    "forbidden_keys_checked": [
+      "netspout_device_id",
+      "netspout_event_id",
+      "netspout_phase",
+      "netspout_run_id",
+      "netspout_scenario_id"
+    ],
+    "violations": []
+  },
+  "gnmic_grpc_log_diagnostics_excerpt": "I0929 21:12:20.837689 7527244 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"gnmic version\" version=0.49.0 commit=Homebrew date=2026-09-16T19:22:11Z gitURL=https://github.com/openconfig/gnmic docs=https://gnmic.openconfig.net\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"using config file\" path=\"\"\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"starting output\" type=file\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"initialized file output\" output=file name=default-stdout config=\"{\\\"Name\\\":\\\"default-stdout\\\",\\\"FileName\\\":\\\"\\\",\\\"FileType\\\":\\\"stdout\\\",\\\"Format\\\":\\\"json\\\",\\\"Multiline\\\":true,\\\"Indent\\\":\\\"  \\\",\\\"Separator\\\":\\\"\\\\n\\\",\\\"SplitEvents\\\":false,\\\"OverrideTimestamps\\\":false,\\\"AddTarget\\\":\\\"\\\",\\\"TargetTemplate\\\":\\\"\\\",\\\"EventProcessors\\\":null,\\\"MsgTemplate\\\":\\\"\\\",\\\"ConcurrencyLimit\\\":1,\\\"EnableMetrics\\\":false,\\\"Debug\\\":false,\\\"CalculateLatency\\\":false,\\\"Rotation\\\":null}\"\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"subscribing to target\" target=127.0.0.1:57400\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"target gNMI client created\" target=127.0.0.1:57400\ntime=2026-09-29T21:12:20.858-04:00 level=INFO msg=\"sending gNMI SubscribeRequest\" target=127.0.0.1:57400 subscribe=\"subscribe:{prefix:{target:\\\"node-cisco8k\\\"} subscription:{path:{elem:{name:\\\"system\\\"} elem:{name:\\\"state\\\"}}} mode:ONCE encoding:JSON_IETF}\" mode=ONCE encoding=JSON_IETF\ntime=2026-09-29T21:12:20.860-04:00 level=INFO msg=\"subscription closed stream (EOF)\" target=127.0.0.1:57400 subscription=default-1790730740\n",
+  "total_raw_notifications_captured": 81,
+  "raw_notifications_sample": [
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/state",
+          "values": {
+            "interfaces/interface/state": {
+              "admin-status": "UP",
+              "counters": {
+                "carrier-transitions": "1",
+                "in-discards": "0",
+                "in-errors": "0",
+                "in-fcs-errors": "0",
+                "in-octets": "98504200000",
+                "in-unicast-pkts": "954200",
+                "out-discards": "0",
+                "out-errors": "0",
+                "out-octets": "91204200000",
+                "out-unicast-pkts": "914200"
+              },
+              "description": "Cisco-8000-Core01 HundredGigE0/0/0/0 Core Link",
+              "high-speed": 100000,
+              "mtu": 9192,
+              "name": "HundredGigE0/0/0/0",
+              "oper-status": "UP"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "interfaces/interface[name=HundredGigE0/0/0/0]/subinterfaces/subinterface[index=0]/ipv4/addresses/address[ip=10.100.1.1]/state",
+          "values": {
+            "interfaces/interface/subinterfaces/subinterface/ipv4/addresses/address/state": {
+              "ip": "10.100.1.1",
+              "prefix-length": 30
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "lldp/interfaces/interface[name=HundredGigE0/0/0/0]/neighbors/neighbor[id=nbr-1]/state",
+          "values": {
+            "lldp/interfaces/interface/neighbors/neighbor/state": {
+              "id": "nbr-1",
+              "management-address": "10.100.1.2",
+              "port-description": "Link to Juniper-PTX10K-PE01 (et-0/0/0)",
+              "port-id": "et-0/0/0",
+              "system-name": "Juniper-PTX10K-PE01"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "lacp/interfaces/interface[name=Bundle-Ether10]/members/member[interface=HundredGigE0/0/0/0]/state",
+          "values": {
+            "lacp/interfaces/interface/members/member/state": {
+              "activity": "ACTIVE",
+              "aggregatable": true,
+              "collecting": true,
+              "distributing": true,
+              "interface": "HundredGigE0/0/0/0",
+              "oper-key": 10,
+              "partner-id": "00:1c:73:aa:bb:cc"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.100.1.2]/state",
+          "values": {
+            "network-instances/network-instance/protocols/protocol/bgp/neighbors/neighbor/state": {
+              "description": "Juniper-PTX10K-PE01",
+              "established-transitions": "1",
+              "last-established": "1727726330000000000",
+              "messages": {
+                "received": {
+                  "update": 1462
+                },
+                "sent": {
+                  "update": 1422
+                }
+              },
+              "neighbor-address": "10.100.1.2",
+              "peer-as": 65002,
+              "prefixes": {
+                "installed": 1462,
+                "received": 1462,
+                "sent": 862
+              },
+              "session-state": "ESTABLISHED"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "network-instances/network-instance[name=default]/afts/ipv4-unicast/ipv4-entries/ipv4-entry[prefix=0.0.0.0/0]/state",
+          "values": {
+            "network-instances/network-instance/afts/ipv4-unicast/ipv4-entries/ipv4-entry/state": {
+              "ecmp-paths": 2,
+              "egress-interface": "HundredGigE0/0/0/0",
+              "next-hop": "10.100.1.2",
+              "next-hop-group": 100,
+              "octets-forwarded": "102704620000",
+              "packets-forwarded": "1078400",
+              "prefix": "0.0.0.0/0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state",
+          "values": {
+            "qos/interfaces/interface/output/queues/queue/state": {
+              "dropped-octets": "0",
+              "dropped-pkts": "0",
+              "max-queue-len": "64000",
+              "name": "BE-0",
+              "transmit-octets": "91204200000",
+              "transmit-pkts": "914200"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "components/component[name=Chassis-0]/state",
+          "values": {
+            "components/component/state": {
+              "name": "Chassis-0",
+              "oper-status": "ACTIVE",
+              "temperature": {
+                "instant": 41.2
+              },
+              "type": "CHASSIS",
+              "used-power": 840
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "components/component[name=Transceiver-HundredGigE0/0/0/0]/transceiver/state",
+          "values": {
+            "components/component/transceiver/state": {
+              "input-power": {
+                "instant": -6.2
+              },
+              "interface": "HundredGigE0/0/0/0",
+              "laser-bias-current": {
+                "instant": 38.5
+              },
+              "osnr": {
+                "instant": 28.5
+              },
+              "output-power": {
+                "instant": 1.4
+              },
+              "pre-fec-ber": {
+                "instant": 1e-09
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "system/state",
+          "values": {
+            "system/state": {
+              "boot-time": "1727553600000000000",
+              "current-datetime": "2026-09-29T18:00:00Z",
+              "domain-name": "netspout.lab.internal",
+              "hostname": "Cisco-8000-Core01"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "system/cpus/cpu[index=0]/state",
+          "values": {
+            "system/cpus/cpu/state": {
+              "index": 0,
+              "kernel": {
+                "instant": 6
+              },
+              "total": {
+                "instant": 18
+              },
+              "user": {
+                "instant": 12
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "openconfig:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "system/memory/state",
+          "values": {
+            "system/memory/state": {
+              "physical": "34359738368",
+              "reserved": "6871947673"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-infra-statsd-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "infra-statistics/interfaces/interface[interface-name=HundredGigE0/0/0/0]/latest/generic-counters",
+          "values": {
+            "infra-statistics/interfaces/interface/latest/generic-counters": {
+              "bytes-received": "98504200000",
+              "bytes-sent": "91204200000",
+              "carrier-transitions": "1",
+              "input-drops": 0,
+              "input-errors": 0,
+              "packets-received": "954200",
+              "packets-sent": "914200"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-pfi-im-cmd-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "interfaces/interface-xr/interface[interface-name=HundredGigE0/0/0/0]",
+          "values": {
+            "interfaces/interface-xr/interface": {
+              "interface-name": "HundredGigE0/0/0/0",
+              "line-state": "im-state-up",
+              "mtu": 9192,
+              "state": "im-state-up"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-ipv4-bgp-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "bgp/instances/instance[instance-name=default]/instance-active/default-vrf/neighbors/neighbor[neighbor-address=10.100.1.2]",
+          "values": {
+            "bgp/instances/instance/instance-active/default-vrf/neighbors/neighbor": {
+              "connection-state": "bgp-st-estab",
+              "neighbor-address": "10.100.1.2",
+              "prefixes-accepted": 1462
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-qos-ma-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "qos/interface-table/interface[interface-name=HundredGigE0/0/0/0]/output/service-policy-names/service-policy-instance/statistics",
+          "values": {
+            "qos/interface-table/interface/output/service-policy-names/service-policy-instance/statistics": {
+              "queue-current-size-bytes": "64000",
+              "tail-drop-packets": "0",
+              "transmit-bytes": 91204200000
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-controller-optics-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "optics-oper/optics-ports/optics-port[name=HundredGigE0/0/0/0]/optics-info",
+          "values": {
+            "optics-oper/optics-ports/optics-port/optics-info": {
+              "laser-bias-current": 38.5,
+              "receive-power": -620,
+              "transmit-power": 140
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    },
+    {
+      "source": "127.0.0.1:57400",
+      "subscription-name": "default-1790730740",
+      "timestamp": 1727726390000000000,
+      "time": "2024-09-30T15:59:50-04:00",
+      "prefix": "Cisco-IOS-XR-wdsysmon-fd-oper:/",
+      "target": "node-cisco8k",
+      "updates": [
+        {
+          "Path": "system-monitoring/cpu-utilization[node-name=0/RP0/CPU0]",
+          "values": {
+            "system-monitoring/cpu-utilization": {
+              "total-cpu-five-minute": 18,
+              "total-cpu-one-minute": 18
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sync-response": true
+    }
+  ]
+}

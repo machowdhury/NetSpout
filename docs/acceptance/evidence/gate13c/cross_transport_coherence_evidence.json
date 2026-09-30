@@ -1,0 +1,95 @@
+{
+  "scenario_id": "service_provider_cisco",
+  "target_device": "cisco-asr9k-pe1",
+  "all_phases_coherent": true,
+  "phases": {
+    "BASELINE": {
+      "coherent": true,
+      "interface_coherence": {
+        "gnmi_oper_status": "UP",
+        "snmp_ifOperStatus_1": 1,
+        "syslog_mnemonic": "LINK-3-UPDOWN",
+        "syslog_message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to up",
+        "gnmi_in_octets": 98504200000,
+        "snmp_ifHCInOctets_1": 98504200000,
+        "netflow_in_bytes_total": 98504200000,
+        "gnmi_in_errors": 0,
+        "snmp_ifInErrors_1": 0
+      },
+      "routing_bgp_coherence": {
+        "gnmi_bgp_session_state": "ESTABLISHED",
+        "snmp_bgpPeerState": 6,
+        "syslog_mnemonic": "BGP-5-ADJCHANGE",
+        "syslog_message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Up",
+        "gnmi_aft_next_hop": "10.255.0.2",
+        "netflow_active_next_hop": "10.255.0.2"
+      }
+    },
+    "DEGRADE": {
+      "coherent": true,
+      "interface_coherence": {
+        "gnmi_oper_status": "DOWN",
+        "snmp_ifOperStatus_1": 2,
+        "syslog_mnemonic": "LINK-3-UPDOWN",
+        "syslog_message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to down",
+        "gnmi_in_octets": 98654200000,
+        "snmp_ifHCInOctets_1": 98654200000,
+        "netflow_in_bytes_total": 98654200000,
+        "gnmi_in_errors": 502,
+        "snmp_ifInErrors_1": 502
+      },
+      "routing_bgp_coherence": {
+        "gnmi_bgp_session_state": "IDLE",
+        "snmp_bgpPeerState": 1,
+        "syslog_mnemonic": "BGP-5-ADJCHANGE",
+        "syslog_message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Down Hold Timer Expired",
+        "gnmi_aft_next_hop": "10.255.0.3",
+        "netflow_active_next_hop": "10.255.0.3"
+      }
+    },
+    "FAILOVER": {
+      "coherent": true,
+      "interface_coherence": {
+        "gnmi_oper_status": "DOWN",
+        "snmp_ifOperStatus_1": 2,
+        "syslog_mnemonic": "LINK-3-UPDOWN",
+        "syslog_message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to down",
+        "gnmi_in_octets": 98654200000,
+        "snmp_ifHCInOctets_1": 98654200000,
+        "netflow_in_bytes_total": 98654200000,
+        "gnmi_in_errors": 502,
+        "snmp_ifInErrors_1": 502
+      },
+      "routing_bgp_coherence": {
+        "gnmi_bgp_session_state": "IDLE",
+        "snmp_bgpPeerState": 1,
+        "syslog_mnemonic": "BGP-5-ADJCHANGE",
+        "syslog_message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Down Hold Timer Expired",
+        "gnmi_aft_next_hop": "10.255.0.3",
+        "netflow_active_next_hop": "10.255.0.3"
+      }
+    },
+    "RECOVERY": {
+      "coherent": true,
+      "interface_coherence": {
+        "gnmi_oper_status": "UP",
+        "snmp_ifOperStatus_1": 1,
+        "syslog_mnemonic": "LINK-3-UPDOWN",
+        "syslog_message": "%LINK-3-UPDOWN: Interface HundredGigE0/0/0/0, changed state to up",
+        "gnmi_in_octets": 124504200000,
+        "snmp_ifHCInOctets_1": 124504200000,
+        "netflow_in_bytes_total": 124504200000,
+        "gnmi_in_errors": 502,
+        "snmp_ifInErrors_1": 502
+      },
+      "routing_bgp_coherence": {
+        "gnmi_bgp_session_state": "ESTABLISHED",
+        "snmp_bgpPeerState": 6,
+        "syslog_mnemonic": "BGP-5-ADJCHANGE",
+        "syslog_message": "%BGP-5-ADJCHANGE: neighbor 10.255.0.2 Up",
+        "gnmi_aft_next_hop": "10.255.0.2",
+        "netflow_active_next_hop": "10.255.0.2"
+      }
+    }
+  }
+}

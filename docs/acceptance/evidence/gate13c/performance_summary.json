@@ -1,0 +1,15 @@
+{
+  "simultaneous_subscriptions": 4,
+  "total_wall_time_sec": 1.556,
+  "normalization_wall_time_sec": 0.0218,
+  "total_raw_updates": 168,
+  "total_normalized_records": 1761,
+  "telemetry_updates_per_sec": 107.99,
+  "collector_records_per_sec": 1131.99,
+  "normalization_throughput_records_per_sec": 80782.29,
+  "p50_normalization_latency_ms": 0.1042,
+  "p95_normalization_latency_ms": 0.2035,
+  "cpu_percent": 20.54,
+  "memory_rss_mb": 53.05,
+  "reconnect_time_ms": 576.2
+}

@@ -1,0 +1,215 @@
+{
+  "gate": "13C",
+  "controlled_failures": {
+    "A_collector_unavailable": {
+      "server_published_possible": true,
+      "collector_received": false,
+      "normalized": false,
+      "ledger": {
+        "run_id": "NS-GATE13C-RUN",
+        "scenario_id": "openconfig_mdt_streaming",
+        "phase": "BASELINE",
+        "highest_verified_stage": "SERVER_PUBLISHED",
+        "stages": {
+          "GENERATED": {
+            "verified": true,
+            "count": 1
+          },
+          "SERVER_PUBLISHED": {
+            "verified": true,
+            "count": 1
+          },
+          "COLLECTOR_RECEIVED": {
+            "verified": false,
+            "count": 0
+          },
+          "NORMALIZED": {
+            "verified": false,
+            "count": 0
+          },
+          "SPLUNK_DISPATCHED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "SPLUNK_OBSERVED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "VALIDATED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          }
+        },
+        "error_stage": "COLLECTOR_RECEIVED",
+        "error_message": "Collector binary not found: [Errno 2] No such file or directory: '/nonexistent/gnmic_binary'"
+      }
+    },
+    "B_gnmi_server_unavailable": {
+      "returncode": 1,
+      "collector_received": false,
+      "fabricated_records": 0,
+      "stderr_excerpt": "I0929 21:12:27.365325 7528131 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:54895: connect: connection refused\"\nError: one or more requests failed\n",
+      "ledger": {
+        "run_id": "NS-GATE13C-RUN",
+        "scenario_id": "openconfig_mdt_streaming",
+        "phase": "BASELINE",
+        "highest_verified_stage": "NONE",
+        "stages": {
+          "GENERATED": {
+            "verified": false,
+            "count": 0
+          },
+          "SERVER_PUBLISHED": {
+            "verified": false,
+            "count": 0
+          },
+          "COLLECTOR_RECEIVED": {
+            "verified": false,
+            "count": 0
+          },
+          "NORMALIZED": {
+            "verified": false,
+            "count": 0
+          },
+          "SPLUNK_DISPATCHED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "SPLUNK_OBSERVED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "VALIDATED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          }
+        },
+        "error_stage": "COLLECTOR_RECEIVED",
+        "error_message": "I0929 21:12:27.365325 7528131 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unavailable desc = connection error: desc = \"transport: Error while dialing: dial tcp 127.0.0.1:54895: connect: connection refused\"\nError: one or more requests failed"
+      }
+    },
+    "C_authentication_failure": {
+      "returncode": 1,
+      "collector_received": false,
+      "stderr_excerpt": "I0929 21:12:27.415462 7528258 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(3, generation: 1)\nI0929 21:12:27.415499 7528258 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unauthenticated desc = UNAUTHENTICATED: Invalid or missi",
+      "ledger": {
+        "run_id": "NS-GATE13C-RUN",
+        "scenario_id": "openconfig_mdt_streaming",
+        "phase": "BASELINE",
+        "highest_verified_stage": "NONE",
+        "stages": {
+          "GENERATED": {
+            "verified": false,
+            "count": 0
+          },
+          "SERVER_PUBLISHED": {
+            "verified": false,
+            "count": 0
+          },
+          "COLLECTOR_RECEIVED": {
+            "verified": false,
+            "count": 0
+          },
+          "NORMALIZED": {
+            "verified": false,
+            "count": 0
+          },
+          "SPLUNK_DISPATCHED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "SPLUNK_OBSERVED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "VALIDATED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          }
+        },
+        "error_stage": "COLLECTOR_RECEIVED",
+        "error_message": "I0929 21:12:27.415462 7528258 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(3, generation: 1)\nI0929 21:12:27.415499 7528258 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unauthenticated desc = UNAUTHENTICATED: Invalid or missing gNMI metadata credentials.\nError: one or more requests failed"
+      }
+    },
+    "D_tls_validation_failure": {
+      "returncode": 1,
+      "collector_received": false,
+      "stderr_excerpt": "I0929 21:12:27.615042 7528368 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(3, generation: 1)\nI0929 21:12:27.615070 7528368 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unavailable desc = connection error: desc = \"transport: ",
+      "ledger": {
+        "run_id": "NS-GATE13C-RUN",
+        "scenario_id": "openconfig_mdt_streaming",
+        "phase": "BASELINE",
+        "highest_verified_stage": "NONE",
+        "stages": {
+          "GENERATED": {
+            "verified": false,
+            "count": 0
+          },
+          "SERVER_PUBLISHED": {
+            "verified": false,
+            "count": 0
+          },
+          "COLLECTOR_RECEIVED": {
+            "verified": false,
+            "count": 0
+          },
+          "NORMALIZED": {
+            "verified": false,
+            "count": 0
+          },
+          "SPLUNK_DISPATCHED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "SPLUNK_OBSERVED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          },
+          "VALIDATED": {
+            "verified": false,
+            "count": 0,
+            "note": "Deferred to Gate 13D"
+          }
+        },
+        "error_stage": "COLLECTOR_RECEIVED",
+        "error_message": "I0929 21:12:27.615042 7528368 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(3, generation: 1)\nI0929 21:12:27.615070 7528368 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unavailable desc = connection error: desc = \"transport: authentication handshake failed: tls: failed to verify certificate: x509: \u201c127.0.0.1\u201d certificate is not trusted\"\nError: one or more requests failed"
+      }
+    },
+    "E_unsupported_path_and_foreign_origin": {
+      "fabricated_path_returncode": 1,
+      "fabricated_path_collector_received": false,
+      "fabricated_path_stderr": "I0929 21:12:27.670477 7528465 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = NotFound desc = \"UNSUPPORTED_PATH: OpenConfig path '/openconfig-fabricated/nonexistent/state' is not supported\"\nError: one or more requests failed\n",
+      "foreign_origin_returncode": 1,
+      "foreign_origin_collector_received": false,
+      "foreign_origin_stderr": "I0929 21:12:27.691511 7528530 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = NotFound desc = FOREIGN_VENDOR_ORIGIN / MODEL_NOT_SUPPORTED: Origin 'eos_native' is not supported by target 'node-cisco8k' (CISCO_IOS_XR). Supported origins: ['openconfi"
+    },
+    "F_subscription_interruption": {
+      "reconnect_succeeded": true,
+      "reconnect_time_ms": 576.2,
+      "post_interruption_updates_received": true
+    },
+    "G_invalid_unsupported_encoding": {
+      "requested_encoding": "ascii",
+      "returncode": 1,
+      "collector_received": false,
+      "stderr_excerpt": "I0929 21:12:27.713494 7528586 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\nrpc error: code = Unimplemented desc = UNSUPPORTED_ENCODING: Encoding enum 3 is not supported; supported encodings are JSON_IETF (4), PROTO (2), and JSON (0).\nError: one or more requests "
+    },
+    "H_excessive_sampling_request": {
+      "requested_sample_interval": "100ms",
+      "minimum_floor": "500ms",
+      "collector_received": false,
+      "stderr_excerpt": "I0929 21:12:27.735528 7528642 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\n\nI0929 21:12:28.350937 7528710 ev_poll_posix.cc:587] FD from fork parent still in poll list: fd(6, generation: 1)\ntime=2026-09-29T21:12:28.384-04:00 level=INFO msg=\"gnmic version\" version=0.49.0 commit=Homebrew date=2026-09-16T19:22:11Z gitURL=https://github.com/openconfig/gnmic docs=ht"
+    }
+  }
+}

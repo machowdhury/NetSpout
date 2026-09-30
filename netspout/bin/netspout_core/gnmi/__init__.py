@@ -56,6 +56,21 @@ from .subscription import (
     canonical_payload_fingerprint,
     split_prefix_and_relative,
 )
+from .collector_pipeline import (
+    SENSOR_PROVENANCE_CATALOG,
+    CollectorExecutionResult,
+    ExternalGnmiCollector,
+    GnmiCollectorPipelineLedger,
+    GnmiPipelineEvidenceStage,
+    GnmiTelemetryNormalizer,
+    NormalizedGnmiTelemetryRecord,
+    audit_sensor_provenance_registry,
+    parse_concatenated_json_objects,
+    run_collector_performance_benchmark,
+    run_reconnect_and_duplication_experiment,
+    verify_cross_transport_coherence_via_collector,
+    verify_wire_payload_purity,
+)
 from .vendor_profiles import (
     GNMI_SEMVER,
     OPENCONFIG_CORE_DEVICES,

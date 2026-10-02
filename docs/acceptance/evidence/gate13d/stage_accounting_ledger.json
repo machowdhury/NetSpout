@@ -2,9 +2,9 @@
   "cisco_aci_microburst": {
     "error_message": null,
     "error_stage": null,
-    "highest_verified_stage": "VALIDATED",
+    "highest_verified_stage": "NORMALIZED",
     "phase": "COMPLETE",
-    "run_id": "run-13d-cisco_ac-71031243",
+    "run_id": "run-13d-cisco_ac-20cceede",
     "scenario_id": "cisco_aci_microburst",
     "stages": {
       "COLLECTOR_RECEIVED": {
@@ -24,25 +24,28 @@
         "verified": true
       },
       "SPLUNK_DISPATCHED": {
-        "count": 168,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "SPLUNK_OBSERVED": {
-        "count": 168,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "VALIDATED": {
-        "count": 6,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       }
     }
   },
   "multivendor_gnmi_e2e": {
     "error_message": null,
     "error_stage": null,
-    "highest_verified_stage": "VALIDATED",
+    "highest_verified_stage": "NORMALIZED",
     "phase": "COMPLETE",
-    "run_id": "run-13d-multivendor-befcab88",
+    "run_id": "run-13d-multivendor-0e3dae69",
     "scenario_id": "multivendor_gnmi_e2e",
     "stages": {
       "COLLECTOR_RECEIVED": {
@@ -62,25 +65,28 @@
         "verified": true
       },
       "SPLUNK_DISPATCHED": {
-        "count": 459,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "SPLUNK_OBSERVED": {
-        "count": 459,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "VALIDATED": {
-        "count": 5,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       }
     }
   },
   "openconfig_mdt_streaming": {
     "error_message": null,
     "error_stage": null,
-    "highest_verified_stage": "VALIDATED",
+    "highest_verified_stage": "NORMALIZED",
     "phase": "COMPLETE",
-    "run_id": "run-13d-openconf-2c78482f",
+    "run_id": "run-13d-openconf-ba8409c1",
     "scenario_id": "openconfig_mdt_streaming",
     "stages": {
       "COLLECTOR_RECEIVED": {
@@ -100,25 +106,28 @@
         "verified": true
       },
       "SPLUNK_DISPATCHED": {
-        "count": 434,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "SPLUNK_OBSERVED": {
-        "count": 434,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "VALIDATED": {
-        "count": 6,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       }
     }
   },
   "service_provider_cisco": {
     "error_message": null,
     "error_stage": null,
-    "highest_verified_stage": "VALIDATED",
+    "highest_verified_stage": "NORMALIZED",
     "phase": "COMPLETE",
-    "run_id": "run-13d-service_-3ebec096",
+    "run_id": "run-13d-service_-17cc23bd",
     "scenario_id": "service_provider_cisco",
     "stages": {
       "COLLECTOR_RECEIVED": {
@@ -138,16 +147,19 @@
         "verified": true
       },
       "SPLUNK_DISPATCHED": {
-        "count": 602,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "SPLUNK_OBSERVED": {
-        "count": 602,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       },
       "VALIDATED": {
-        "count": 10,
-        "verified": true
+        "count": 0,
+        "note": "Deferred to Gate 13D",
+        "verified": false
       }
     }
   }

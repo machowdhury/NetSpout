@@ -57,11 +57,11 @@ Select an operational failure scenario or security detection use case from the s
 Inspect the scenario story, multi-hop topology, affected device entities, lifecycle phases, telemetry provenance, and clear fidelity badges (`NATIVE TRANSPORT` vs `MODELED DEVICE STATE`).
 
 ### Step 3 — CONNECT
-One-click preflight verification checks all external prerequisites for the chosen scenario:
-- Splunk HEC health (`https://127.0.0.1:8888/services/collector/health`)
-- Splunk REST search API (`https://127.0.0.1:8889/services/search/jobs/export`)
+One-click preflight verification checks all prerequisites for the chosen scenario:
+- Splunk HEC health (`https://127.0.0.1:8088/services/collector/health`)
+- Splunk REST search API (`https://127.0.0.1:8089/services/search/jobs/export`)
 - Target event index (`idx_network_ops`) & metric index (`cisco_mdt_metrics`)
-- External collector binaries (`gnmic`, `snmptrapd`, Net-SNMP tools)
+- Embedded telemetry pipelines (Native gNMI server, SNMP agent, Flow encoders, Syslog engine)
 - Local socket bind permissions on loopback (`127.0.0.1`)
 
 ### Step 4 — RUN
@@ -73,40 +73,62 @@ Audit the complete evidence ledger, inspect copyable SPL and `| mstats` investig
 
 ---
 
-## ⚡ Quickstart
+## ⚡ 1-Click Zero-Touch Quickstart (Docker)
 
-### Prerequisites
-- Python 3.10+ (macOS / Linux)
-- Node.js 18+ (for building frontend)
-- Splunk Enterprise 9.0+ or Splunk Cloud (running locally or remotely)
-- Optional external collectors for native modes:
-  - `gnmic` (v0.40+): `brew install gnmic` (macOS) or `curl -sL https://gnmic.openconfig.net/install.sh | sudo bash`
-  - Net-SNMP (`snmpget`, `snmptrapd`): standard on macOS/Linux
+NetSpout is completely self-contained. You do **not** need to install or configure external collectors (`gnmic`, `snmptrapd`, `goflow2`, `telegraf`, `SC4S`, etc.) — all telemetry generation, encoding, and ingestion pipelines are built right into the platform.
 
-### 1. Clone & Set Up NetSpout
+### Step 1: Clone the Repository
 ```bash
 git clone https://github.com/machowdhury/NetSpout.git
 cd NetSpout
 ```
 
-### 2. Configure Splunk Credentials
-Set your Splunk environment variables or use the defaults:
+### Step 2: Launch with Docker Compose
 ```bash
-export NETSPOUT_HEC_URL="https://127.0.0.1:8888/services/collector/event"
-export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
-export NETSPOUT_SPLUNK_USER="admin"
-export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
+docker compose up -d
 ```
 
-### 3. Launch NetSpout Server
+### Step 3: Open in Browser
+- **Splunk Enterprise Web**: [`http://localhost:8000`](http://localhost:8000)
+  - Username: `admin`
+  - Password: `SplunkPassword123!`
+  - Pre-installed App: **NetSpout Telemetry Generator** (`/en-US/app/netspout/guided_onboarding`)
+- **NetSpout Standalone NOC Web UI**: [`http://localhost:8081`](http://localhost:8081)
+- **Pre-provisioned Splunk HEC Endpoint**: `https://localhost:8088/services/collector` (Token: `00000000-0000-0000-0000-000000000000`)
+- **Splunk REST Management API**: `https://localhost:8089`
+
+---
+
+## 💻 Alternative: Bare-Metal / Local Python Development
+
+For local development or testing without Docker:
+
+### Prerequisites
+- Python 3.10+ (macOS / Linux)
+- Node.js 18+ (for compiling frontend)
+- Splunk Enterprise 9.0+ or Splunk Cloud
+
+### 1. Set Up Environment & Install Dependencies
 ```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
+
+### 2. Configure Splunk Credentials
+```bash
+export NETSPOUT_HEC_URL="https://127.0.0.1:8088/services/collector/event"
+export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
+export NETSPOUT_SPLUNK_USER="admin"
+export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
+```
+
+### 3. Launch NetSpout Backend
+```bash
 python3 run.py
 ```
-*Access the Web UI at `http://localhost:8081` or `http://localhost:8000`.*
+*Access the Standalone Web UI at `http://localhost:8081`.*
 
 ---
 

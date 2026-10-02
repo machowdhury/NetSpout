@@ -1025,7 +1025,7 @@ require([
   function sendIngestion(sourcetype, index, content, host, ip, count) {
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
-    var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
+    var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
     var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
     var sslVerify = cfg.ssl_verify || false;
 

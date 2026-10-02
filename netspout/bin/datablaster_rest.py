@@ -86,7 +86,7 @@ RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 DEFAULT_CONFIG = {
-    "hec_url": "https://127.0.0.1:8888/services/collector",
+    "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_token": "00000000-0000-0000-0000-000000000000",
     "ssl_verify": False,
     "target_eps": 1000,
@@ -644,7 +644,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
         stored_cfg = get_stored_config()
-        hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8888/services/collector")).strip()
+        hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8088/services/collector")).strip()
         token = str(params.get("token") or stored_cfg.get("hec_token", "00000000-0000-0000-0000-000000000000")).strip()
         ssl_verify = bool(params.get("ssl_verify", False))
         session_key = str(params.get("session_key") or params.get("sessionKey", ""))
@@ -691,7 +691,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
 
     # HEC Destination URL Validation
     stored_cfg = get_stored_config()
-    default_hec = stored_cfg.get("hec_url", "https://127.0.0.1:8888/services/collector")
+    default_hec = stored_cfg.get("hec_url", "https://127.0.0.1:8088/services/collector")
     hec = str(params.get("hec", default_hec)).strip()
     if not RE_URL.match(hec):
         raise ValueError(f"Invalid HEC destination URL: {hec}. Must start with http:// or https://")
@@ -1253,7 +1253,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 fp.write(sample_content + "\n")
             
             lines = [l for l in sample_content.splitlines() if l.strip()]
-            hec_url = clean.get("hec") or "https://127.0.0.1:8888/services/collector"
+            hec_url = clean.get("hec") or "https://127.0.0.1:8088/services/collector"
             token = clean.get("token") or "00000000-0000-0000-0000-000000000000"
             ssl_verify = clean.get("ssl_verify", False)
             

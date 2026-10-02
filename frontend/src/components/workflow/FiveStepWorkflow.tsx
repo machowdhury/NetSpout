@@ -32,7 +32,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
   const [connection, setConnection] = useState<PipelineConnection>({
     type: 'splunk_hec',
     name: 'Splunk HEC (HTTP Event Collector)',
-    endpoint: 'https://127.0.0.1:8888/services/collector',
+    endpoint: 'https://127.0.0.1:8088/services/collector',
     token: '00000000-0000-0000-0000-000000000000',
     index: 'idx_network_ops',
     status: 'CONFIGURED',

@@ -1952,7 +1952,7 @@
   {
     "id": "nutanixpc-syslog-colon",
     "sample_file": "nutanixpc-syslog.yml",
-    "sample_path": "netspout/appserver/static/samples/nutanixpc-syslog/nutanixpc-syslog.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-syslog-colon/nutanixpc-syslog.yml",
     "sourcetype": "nutanixpc:syslog",
     "vendor_id": "nutanix",
     "category": "Nutanix PC",
@@ -1982,7 +1982,7 @@
   {
     "id": "nutanixpc-vms-colon",
     "sample_file": "nutanixpc-vms.yml",
-    "sample_path": "netspout/appserver/static/samples/nutanixpc-vms/nutanixpc-vms.yml",
+    "sample_path": "netspout/appserver/static/samples/nutanixpc-vms-colon/nutanixpc-vms.yml",
     "sourcetype": "nutanixpc:vms",
     "vendor_id": "nutanix",
     "category": "Nutanix PC",

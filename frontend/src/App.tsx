@@ -85,7 +85,7 @@ export const App: React.FC = () => {
   const [launchScenarioSignal, setLaunchScenarioSignal] = useState<{ scenarioId: string; timestamp: number } | null>(null);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
-    hec_url: 'https://127.0.0.1:8888/services/collector',
+    hec_url: 'https://127.0.0.1:8088/services/collector',
     hec_token: '00000000-0000-0000-0000-000000000000',
     hec_index: 'idx_network_ops',
     syslog_enabled: true,
@@ -670,7 +670,7 @@ export const App: React.FC = () => {
           onClearLogs={handleClearLogs}
           isRunning={isRunning}
           onTogglePlay={handleTogglePlay}
-          hecTarget={transportConfig.hec_url ? transportConfig.hec_url.replace(/^https?:\/\//, '').replace(/\/services\/collector$/, '') : '127.0.0.1:8888'}
+          hecTarget={transportConfig.hec_url ? transportConfig.hec_url.replace(/^https?:\/\//, '').replace(/\/services\/collector$/, '') : '127.0.0.1:8088'}
           hecIndex={transportConfig.hec_index || 'idx_network_ops'}
         />
       </div>

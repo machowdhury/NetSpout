@@ -194,13 +194,17 @@ class NodeHardware(BaseModel):
     interfaces: List[NetworkInterface] = Field(default_factory=list)
 
 
+DEFAULT_SPLUNK_HEC_PORT: int = 8088
+DEFAULT_SPLUNK_HEC_URL: str = "https://127.0.0.1:8088/services/collector"
+
+
 # =========================================================================
 # Multi-Pipeline Telemetry Transport Configuration
 # =========================================================================
 class TelemetryTransportConfig(BaseModel):
     # 1. Splunk HEC Pipeline
     hec_enabled: bool = True
-    hec_url: str = "https://127.0.0.1:8888/services/collector"
+    hec_url: str = DEFAULT_SPLUNK_HEC_URL
     hec_token: str = "00000000-0000-0000-0000-000000000000"
     hec_index: str = "idx_network_ops"
     hec_metric_index: str = "cisco_mdt_metrics"
@@ -223,7 +227,7 @@ class TelemetryTransportConfig(BaseModel):
         super().__init__(**data)
         if self.default_index and (not self.hec_index or self.hec_index == "idx_network_ops"):
             self.hec_index = self.default_index
-        if self.hec_endpoint and (not self.hec_url or self.hec_url == "https://127.0.0.1:8888/services/collector"):
+        if self.hec_endpoint and (not self.hec_url or self.hec_url in (DEFAULT_SPLUNK_HEC_URL, "https://127.0.0.1:8888/services/collector")):
             self.hec_url = self.hec_endpoint
     
     # 2. OpenTelemetry (OTel) Collector Pipeline (OTLP HTTP)

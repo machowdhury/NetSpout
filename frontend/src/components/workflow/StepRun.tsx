@@ -43,9 +43,10 @@ export const StepRun: React.FC<StepRunProps> = ({
   const scorecard = runState.manifest?.snmp_e2e_scorecard;
 
   const spl = runState.splunk_search_query || (runState.run_id ? `index=idx_network_ops netspout_run_id="${runState.run_id}"` : '');
-  const splunkSearchUrl = `http://localhost:8800/en-US/app/netspout/search?q=search%20${encodeURIComponent(spl || 'index=idx_network_ops')}`;
+  const splunkBase = typeof window !== 'undefined' && (window.location.port === '8000' || window.location.port === '8800') ? '' : 'http://localhost:8000';
+  const splunkSearchUrl = `${splunkBase}/en-US/app/netspout/search?q=search%20${encodeURIComponent(spl || 'index=idx_network_ops')}`;
   const metricQuery = runState.splunk_metric_query;
-  const splunkMetricUrl = metricQuery ? `http://localhost:8800/en-US/app/netspout/search?q=${encodeURIComponent(metricQuery)}` : '';
+  const splunkMetricUrl = metricQuery ? `${splunkBase}/en-US/app/netspout/search?q=${encodeURIComponent(metricQuery)}` : '';
 
   const handleCopyRunId = () => {
     if (runState.run_id) {

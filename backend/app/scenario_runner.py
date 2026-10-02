@@ -2578,12 +2578,16 @@ class ScenarioRunner:
         Supports both standard SPL searches and | mstats metric queries.
         Returns: (count, error_message)
         """
-        hec_url = (transport.hec_url if transport else None) or "https://127.0.0.1:8888/services/collector"
+        hec_url = (transport.hec_url if transport else None) or "https://127.0.0.1:8088/services/collector"
         rest_candidates = []
-        if ":8888" in hec_url:
-            rest_candidates.append(hec_url.replace(":8888", ":8889").replace("/services/collector", "/services/search/jobs/export"))
-        elif ":8088" in hec_url:
+        if ":8088" in hec_url:
             rest_candidates.append(hec_url.replace(":8088", ":8089").replace("/services/collector", "/services/search/jobs/export"))
+            rest_candidates.append(hec_url.replace(":8088", ":8889").replace("/services/collector", "/services/search/jobs/export"))
+        elif ":8888" in hec_url:
+            rest_candidates.append(hec_url.replace(":8888", ":8889").replace("/services/collector", "/services/search/jobs/export"))
+            rest_candidates.append(hec_url.replace(":8888", ":8089").replace("/services/collector", "/services/search/jobs/export"))
+        rest_candidates.append("https://127.0.0.1:8089/services/search/jobs/export")
+        rest_candidates.append("https://localhost:8089/services/search/jobs/export")
         rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
         rest_candidates.append("https://localhost:8889/services/search/jobs/export")
 

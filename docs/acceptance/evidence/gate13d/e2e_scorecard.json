@@ -1,7 +1,7 @@
 {
-  "all_controlled_failures_verified": true,
-  "cross_transport_coherence_run_id": "run-13d-xtrans-5db85b91",
-  "cross_transport_coherent": true,
+  "all_controlled_failures_verified": false,
+  "cross_transport_coherence_run_id": "run-13d-xtrans-fd26214e",
+  "cross_transport_coherent": false,
   "external_collector": "/opt/homebrew/bin/gnmic (v0.49.0)",
   "gate": "13D",
   "scenarios": {
@@ -10,36 +10,39 @@
         "duplicate_records_suppressed": 40,
         "normalized_event_records": 56,
         "normalized_metric_records": 112,
-        "observation_completeness_pct": 100.0,
-        "splunk_dispatch_failures": 0,
-        "splunk_dispatched_events": 56,
-        "splunk_dispatched_metrics": 112,
-        "splunk_observed_events": 56,
-        "splunk_observed_metrics": 112
+        "observation_completeness_pct": 0.0,
+        "splunk_dispatch_failures": 168,
+        "splunk_dispatched_events": 0,
+        "splunk_dispatched_metrics": 0,
+        "splunk_observed_events": 0,
+        "splunk_observed_metrics": 0
       },
       "encodings_used": [
         "JSON_IETF"
       ],
-      "errors": [],
-      "highest_verified_stage": "VALIDATED",
+      "errors": [
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>"
+      ],
+      "highest_verified_stage": "NORMALIZED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-cisco_ac-71031243\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-71031243\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-71031243\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-71031243\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-71031243\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-71031243\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-71031243\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-71031243\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-71031243\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-71031243\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-cisco_ac-20cceede\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-20cceede\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-20cceede\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-20cceede\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-20cceede\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-20cceede\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-20cceede\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-20cceede\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-20cceede\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-20cceede\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
-        "highest_verified_stage": "VALIDATED",
+        "highest_verified_stage": "NORMALIZED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-cisco_ac-71031243",
+        "run_id": "run-13d-cisco_ac-20cceede",
         "scenario_id": "cisco_aci_microburst",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -59,16 +62,19 @@
             "verified": true
           },
           "SPLUNK_DISPATCHED": {
-            "count": 168,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "SPLUNK_OBSERVED": {
-            "count": 168,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "VALIDATED": {
-            "count": 6,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           }
         }
       },
@@ -79,17 +85,17 @@
         "RECOVERY"
       ],
       "query_execution_summary": {
-        "q1_run_overview_spl": 4,
-        "q2_phase_progression_spl": 4,
-        "q3_interface_state_transition_spl": 12,
+        "q1_run_overview_spl": 0,
+        "q2_phase_progression_spl": 0,
+        "q3_interface_state_transition_spl": 0,
         "q4_bgp_neighbor_transition_spl": 0,
-        "q5_qos_congestion_drops_mstats": 32,
+        "q5_qos_congestion_drops_mstats": 0,
         "q6_optical_signal_degradation_mstats": 0,
-        "q7_system_cpu_memory_health_mstats": 4,
-        "q8_vendor_comparison_spl": 1,
-        "q9_metric_catalog_mstats": 108
+        "q7_system_cpu_memory_health_mstats": 0,
+        "q8_vendor_comparison_spl": 0,
+        "q9_metric_catalog_mstats": 0
       },
-      "run_id": "run-13d-cisco_ac-71031243",
+      "run_id": "run-13d-cisco_ac-20cceede",
       "scenario_id": "cisco_aci_microburst",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -102,9 +108,9 @@
         "GENERATED": 4,
         "NORMALIZED": 168,
         "SERVER_PUBLISHED": 24,
-        "SPLUNK_DISPATCHED": 168,
-        "SPLUNK_OBSERVED": 168,
-        "VALIDATED": 6
+        "SPLUNK_DISPATCHED": 0,
+        "SPLUNK_OBSERVED": 0,
+        "VALIDATED": 0
       },
       "subscription_modes": [
         "ONCE"
@@ -126,100 +132,83 @@
         }
       ],
       "validation": {
-        "failed_rules": 0,
-        "passed_rules": 6,
+        "failed_rules": 6,
+        "passed_rules": 0,
         "results": [
           {
             "evidence": {
-              "matched_count": 8
+              "matched_count": 0
             },
             "expected_value": 3,
-            "message": "Observed 8 event(s) matching criteria (expected >= 3)",
-            "observed_value": 8,
+            "message": "Observed 0 event(s) matching criteria (expected >= 3)",
+            "observed_value": 0,
             "rule_id": "R13D-ACI-01",
             "rule_name": "QoS Queue State Container Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_metric_count": 4
+              "matched_metric_count": 0
             },
             "expected_value": 3,
-            "message": "Observed 4 metric observation(s) (expected >= 3)",
-            "observed_value": 4,
+            "message": "Observed 0 metric observation(s) (expected >= 3)",
+            "observed_value": 0,
             "rule_id": "R13D-ACI-02",
             "rule_name": "QoS Queue Depth Metric Presence in cisco_mdt_metrics",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
-            "evidence": {
-              "mode": "peak_and_recover",
-              "phase_values": {
-                "BASELINE": 64000.0,
-                "DEGRADE": 14850000.0,
-                "FAILOVER": 420000.0,
-                "RECOVERY": 68000.0
-              }
-            },
+            "evidence": null,
             "expected_value": [
               "BASELINE",
               "DEGRADE",
               "RECOVERY"
             ],
-            "message": "Metric progression across ['BASELINE', 'DEGRADE', 'RECOVERY']: {'BASELINE': 64000.0, 'DEGRADE': 14850000.0, 'FAILOVER': 420000.0, 'RECOVERY': 68000.0} -> PASS",
-            "observed_value": {
-              "BASELINE": 64000.0,
-              "DEGRADE": 14850000.0,
-              "FAILOVER": 420000.0,
-              "RECOVERY": 68000.0
-            },
+            "message": "Metric progression missing required phase(s): ['BASELINE', 'DEGRADE', 'RECOVERY']",
+            "observed_value": {},
             "rule_id": "R13D-ACI-03",
             "rule_name": "Microburst Queue Depth Progression (BASELINE -> DEGRADE -> RECOVERY)",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_values": [
-                5120.0
-              ]
+              "matched_values": []
             },
             "expected_value": 1000.0,
-            "message": "Metric threshold (> 1000.0) matched 1 observation(s)",
-            "observed_value": 5120.0,
+            "message": "Metric threshold (> 1000.0) matched 0 observation(s)",
+            "observed_value": null,
             "rule_id": "R13D-ACI-04",
             "rule_name": "Cisco Native QoS Tail-Drop Packet Surge During Microburst",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_values": [
-                68000.0
-              ]
+              "matched_values": []
             },
             "expected_value": 100000.0,
-            "message": "Metric threshold (< 100000.0) matched 1 observation(s)",
-            "observed_value": 68000.0,
+            "message": "Metric threshold (< 100000.0) matched 0 observation(s)",
+            "observed_value": null,
             "rule_id": "R13D-ACI-05",
             "rule_name": "Recovery Phase Queue Congestion Clearance",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "event_count": 56,
-              "metric_count": 112
+              "event_count": 0,
+              "metric_count": 0
             },
             "expected_value": "BOTH",
-            "message": "Destination check (BOTH): event_count=56, metric_count=112 (min=3)",
+            "message": "Destination check (BOTH): event_count=0, metric_count=0 (min=3)",
             "observed_value": {
-              "event_count": 56,
-              "metric_count": 112
+              "event_count": 0,
+              "metric_count": 0
             },
             "rule_id": "R13D-ACI-06",
             "rule_name": "Dual Destination Verification (Event Index + Metric Index)",
-            "status": "PASS"
+            "status": "FAIL"
           }
         ],
-        "status": "PASS",
+        "status": "FAIL",
         "total_rules": 6
       },
       "vendor_profiles": [
@@ -232,27 +221,27 @@
         "duplicate_records_suppressed": 120,
         "normalized_event_records": 213,
         "normalized_metric_records": 246,
-        "observation_completeness_pct": 100.0,
-        "splunk_dispatch_failures": 0,
-        "splunk_dispatched_events": 213,
-        "splunk_dispatched_metrics": 246,
-        "splunk_observed_events": 213,
-        "splunk_observed_metrics": 246
+        "observation_completeness_pct": 99.0,
+        "splunk_dispatch_failures": 459,
+        "splunk_dispatched_events": 0,
+        "splunk_dispatched_metrics": 0,
+        "splunk_observed_events": 0,
+        "splunk_observed_metrics": 0
       },
       "encodings_used": [
         "JSON_IETF"
       ],
       "errors": [],
-      "highest_verified_stage": "VALIDATED",
+      "highest_verified_stage": "NORMALIZED",
       "investigation_queries": {
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-multivendor-befcab88\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target"
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-multivendor-0e3dae69\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
-        "highest_verified_stage": "VALIDATED",
+        "highest_verified_stage": "NORMALIZED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-multivendor-befcab88",
+        "run_id": "run-13d-multivendor-0e3dae69",
         "scenario_id": "multivendor_gnmi_e2e",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -272,16 +261,19 @@
             "verified": true
           },
           "SPLUNK_DISPATCHED": {
-            "count": 459,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "SPLUNK_OBSERVED": {
-            "count": 459,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "VALIDATED": {
-            "count": 5,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           }
         }
       },
@@ -291,9 +283,9 @@
         "RECOVERY"
       ],
       "query_execution_summary": {
-        "q8_vendor_comparison_spl": 4
+        "q8_vendor_comparison_spl": 0
       },
-      "run_id": "run-13d-multivendor-befcab88",
+      "run_id": "run-13d-multivendor-0e3dae69",
       "scenario_id": "multivendor_gnmi_e2e",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -306,9 +298,9 @@
         "GENERATED": 3,
         "NORMALIZED": 459,
         "SERVER_PUBLISHED": 72,
-        "SPLUNK_DISPATCHED": 459,
-        "SPLUNK_OBSERVED": 459,
-        "VALIDATED": 5
+        "SPLUNK_DISPATCHED": 0,
+        "SPLUNK_OBSERVED": 0,
+        "VALIDATED": 0
       },
       "subscription_modes": [
         "ONCE"
@@ -326,70 +318,70 @@
       },
       "unsupported_telemetry_declarations": [],
       "validation": {
-        "failed_rules": 0,
-        "passed_rules": 5,
+        "failed_rules": 5,
+        "passed_rules": 0,
         "results": [
           {
             "evidence": {
-              "matched_count": 54
+              "matched_count": 0
             },
             "expected_value": 2,
-            "message": "Observed 54 event(s) matching criteria (expected >= 2)",
-            "observed_value": 54,
+            "message": "Observed 0 event(s) matching criteria (expected >= 2)",
+            "observed_value": 0,
             "rule_id": "R13D-MV-01",
             "rule_name": "Cisco IOS XR Vendor Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_count": 51
+              "matched_count": 0
             },
             "expected_value": 2,
-            "message": "Observed 51 event(s) matching criteria (expected >= 2)",
-            "observed_value": 51,
+            "message": "Observed 0 event(s) matching criteria (expected >= 2)",
+            "observed_value": 0,
             "rule_id": "R13D-MV-02",
             "rule_name": "Cisco IOS XE Vendor Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_count": 54
+              "matched_count": 0
             },
             "expected_value": 2,
-            "message": "Observed 54 event(s) matching criteria (expected >= 2)",
-            "observed_value": 54,
+            "message": "Observed 0 event(s) matching criteria (expected >= 2)",
+            "observed_value": 0,
             "rule_id": "R13D-MV-03",
             "rule_name": "Arista EOS Vendor Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_count": 54
+              "matched_count": 0
             },
             "expected_value": 2,
-            "message": "Observed 54 event(s) matching criteria (expected >= 2)",
-            "observed_value": 54,
+            "message": "Observed 0 event(s) matching criteria (expected >= 2)",
+            "observed_value": 0,
             "rule_id": "R13D-MV-04",
             "rule_name": "Juniper Junos Vendor Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "event_count": 213,
-              "metric_count": 246
+              "event_count": 0,
+              "metric_count": 0
             },
             "expected_value": "BOTH",
-            "message": "Destination check (BOTH): event_count=213, metric_count=246 (min=8)",
+            "message": "Destination check (BOTH): event_count=0, metric_count=0 (min=8)",
             "observed_value": {
-              "event_count": 213,
-              "metric_count": 246
+              "event_count": 0,
+              "metric_count": 0
             },
             "rule_id": "R13D-MV-05",
             "rule_name": "Multi-Vendor Dual Destination Verification",
-            "status": "PASS"
+            "status": "FAIL"
           }
         ],
-        "status": "PASS",
+        "status": "FAIL",
         "total_rules": 5
       },
       "vendor_profiles": [
@@ -405,37 +397,43 @@
         "duplicate_records_suppressed": 40,
         "normalized_event_records": 185,
         "normalized_metric_records": 249,
-        "observation_completeness_pct": 100.0,
-        "splunk_dispatch_failures": 0,
-        "splunk_dispatched_events": 185,
-        "splunk_dispatched_metrics": 249,
-        "splunk_observed_events": 185,
-        "splunk_observed_metrics": 249
+        "observation_completeness_pct": 0.0,
+        "splunk_dispatch_failures": 434,
+        "splunk_dispatched_events": 0,
+        "splunk_dispatched_metrics": 0,
+        "splunk_observed_events": 0,
+        "splunk_observed_metrics": 0
       },
       "encodings_used": [
         "JSON_IETF",
         "PROTO"
       ],
-      "errors": [],
-      "highest_verified_stage": "VALIDATED",
+      "errors": [
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>"
+      ],
+      "highest_verified_stage": "NORMALIZED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-openconf-2c78482f\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-2c78482f\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-2c78482f\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-2c78482f\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-2c78482f\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-2c78482f\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-2c78482f\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-2c78482f\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-2c78482f\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-2c78482f\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-openconf-ba8409c1\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-ba8409c1\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-ba8409c1\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-ba8409c1\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-ba8409c1\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-ba8409c1\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-ba8409c1\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-ba8409c1\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-ba8409c1\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-ba8409c1\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
-        "highest_verified_stage": "VALIDATED",
+        "highest_verified_stage": "NORMALIZED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-openconf-2c78482f",
+        "run_id": "run-13d-openconf-ba8409c1",
         "scenario_id": "openconfig_mdt_streaming",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -455,16 +453,19 @@
             "verified": true
           },
           "SPLUNK_DISPATCHED": {
-            "count": 434,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "SPLUNK_OBSERVED": {
-            "count": 434,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "VALIDATED": {
-            "count": 6,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           }
         }
       },
@@ -475,17 +476,17 @@
         "RECOVERY"
       ],
       "query_execution_summary": {
-        "q1_run_overview_spl": 4,
-        "q2_phase_progression_spl": 4,
-        "q3_interface_state_transition_spl": 19,
-        "q4_bgp_neighbor_transition_spl": 7,
-        "q5_qos_congestion_drops_mstats": 20,
-        "q6_optical_signal_degradation_mstats": 20,
-        "q7_system_cpu_memory_health_mstats": 28,
-        "q8_vendor_comparison_spl": 1,
-        "q9_metric_catalog_mstats": 152
+        "q1_run_overview_spl": 0,
+        "q2_phase_progression_spl": 0,
+        "q3_interface_state_transition_spl": 0,
+        "q4_bgp_neighbor_transition_spl": 0,
+        "q5_qos_congestion_drops_mstats": 0,
+        "q6_optical_signal_degradation_mstats": 0,
+        "q7_system_cpu_memory_health_mstats": 0,
+        "q8_vendor_comparison_spl": 0,
+        "q9_metric_catalog_mstats": 0
       },
-      "run_id": "run-13d-openconf-2c78482f",
+      "run_id": "run-13d-openconf-ba8409c1",
       "scenario_id": "openconfig_mdt_streaming",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -498,9 +499,9 @@
         "GENERATED": 7,
         "NORMALIZED": 434,
         "SERVER_PUBLISHED": 71,
-        "SPLUNK_DISPATCHED": 434,
-        "SPLUNK_OBSERVED": 434,
-        "VALIDATED": 6
+        "SPLUNK_DISPATCHED": 0,
+        "SPLUNK_OBSERVED": 0,
+        "VALIDATED": 0
       },
       "subscription_modes": [
         "ONCE",
@@ -517,48 +518,35 @@
       },
       "unsupported_telemetry_declarations": [],
       "validation": {
-        "failed_rules": 0,
-        "passed_rules": 6,
+        "failed_rules": 6,
+        "passed_rules": 0,
         "results": [
           {
             "evidence": {
-              "matched_count": 185
+              "matched_count": 0
             },
             "expected_value": 10,
-            "message": "Observed 185 event(s) matching criteria (expected >= 10)",
-            "observed_value": 185,
+            "message": "Observed 0 event(s) matching criteria (expected >= 10)",
+            "observed_value": 0,
             "rule_id": "R13D-OC-01",
             "rule_name": "OpenConfig Event Presence in idx_network_ops",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_metric_count": 4
+              "matched_metric_count": 0
             },
             "expected_value": 3,
-            "message": "Observed 4 metric observation(s) (expected >= 3)",
-            "observed_value": 4,
+            "message": "Observed 0 metric observation(s) (expected >= 3)",
+            "observed_value": 0,
             "rule_id": "R13D-OC-02",
             "rule_name": "OpenConfig Keyed Interface Counter Path Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_steps": 3,
-              "observed_sequence": [
-                [
-                  "BASELINE",
-                  "UP"
-                ],
-                [
-                  "FAILOVER",
-                  "DOWN"
-                ],
-                [
-                  "RECOVERY",
-                  "UP"
-                ]
-              ],
+              "matched_steps": 0,
+              "observed_sequence": [],
               "total_steps": 3
             },
             "expected_value": [
@@ -575,77 +563,51 @@
                 "UP"
               ]
             ],
-            "message": "State transition sequence confirmed (3/3 steps matched)",
-            "observed_value": [
-              [
-                "BASELINE",
-                "UP"
-              ],
-              [
-                "FAILOVER",
-                "DOWN"
-              ],
-              [
-                "RECOVERY",
-                "UP"
-              ]
-            ],
+            "message": "State transition sequence incomplete (0/3 steps matched)",
+            "observed_value": [],
             "rule_id": "R13D-OC-03",
             "rule_name": "OpenConfig Interface State Transition Sequence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
-            "evidence": {
-              "mode": "peak_and_recover",
-              "phase_values": {
-                "BASELINE": 18.0,
-                "DEGRADE": 88.0,
-                "FAILOVER": 46.0,
-                "RECOVERY": 21.0
-              }
-            },
+            "evidence": null,
             "expected_value": [
               "BASELINE",
               "DEGRADE",
               "RECOVERY"
             ],
-            "message": "Metric progression across ['BASELINE', 'DEGRADE', 'RECOVERY']: {'BASELINE': 18.0, 'DEGRADE': 88.0, 'FAILOVER': 46.0, 'RECOVERY': 21.0} -> PASS",
-            "observed_value": {
-              "BASELINE": 18.0,
-              "DEGRADE": 88.0,
-              "FAILOVER": 46.0,
-              "RECOVERY": 21.0
-            },
+            "message": "Metric progression missing required phase(s): ['BASELINE', 'DEGRADE', 'RECOVERY']",
+            "observed_value": {},
             "rule_id": "R13D-OC-04",
             "rule_name": "OpenConfig System CPU Metric Progression (Peak on Degrade, Recover on Recovery)",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": null,
             "expected_value": "ESTABLISHED",
-            "message": "State transition to ESTABLISHED confirmed",
-            "observed_value": "ESTABLISHED",
+            "message": "State transition to ESTABLISHED not observed",
+            "observed_value": null,
             "rule_id": "R13D-OC-05",
             "rule_name": "OpenConfig Recovery State Confirmation",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "event_count": 185,
-              "metric_count": 192
+              "event_count": 0,
+              "metric_count": 0
             },
             "expected_value": "BOTH",
-            "message": "Destination check (BOTH): event_count=185, metric_count=192 (min=5)",
+            "message": "Destination check (BOTH): event_count=0, metric_count=0 (min=5)",
             "observed_value": {
-              "event_count": 185,
-              "metric_count": 192
+              "event_count": 0,
+              "metric_count": 0
             },
             "rule_id": "R13D-OC-06",
             "rule_name": "OpenConfig Dual Store Verification",
-            "status": "PASS"
+            "status": "FAIL"
           }
         ],
-        "status": "PASS",
+        "status": "FAIL",
         "total_rules": 6
       },
       "vendor_profiles": [
@@ -658,37 +620,45 @@
         "duplicate_records_suppressed": 80,
         "normalized_event_records": 221,
         "normalized_metric_records": 381,
-        "observation_completeness_pct": 100.0,
-        "splunk_dispatch_failures": 0,
-        "splunk_dispatched_events": 221,
-        "splunk_dispatched_metrics": 381,
-        "splunk_observed_events": 221,
-        "splunk_observed_metrics": 381
+        "observation_completeness_pct": 0.0,
+        "splunk_dispatch_failures": 602,
+        "splunk_dispatched_events": 0,
+        "splunk_dispatched_metrics": 0,
+        "splunk_observed_events": 0,
+        "splunk_observed_metrics": 0
       },
       "encodings_used": [
         "JSON_IETF",
         "PROTO"
       ],
-      "errors": [],
-      "highest_verified_stage": "VALIDATED",
+      "errors": [
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>",
+        "HEC dispatch exception: <urlopen error [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1082)>"
+      ],
+      "highest_verified_stage": "NORMALIZED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-3ebec096\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-17cc23bd\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-17cc23bd\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-17cc23bd\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-17cc23bd\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-17cc23bd\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-17cc23bd\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-17cc23bd\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-17cc23bd\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-17cc23bd\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-17cc23bd\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
-        "highest_verified_stage": "VALIDATED",
+        "highest_verified_stage": "NORMALIZED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-service_-3ebec096",
+        "run_id": "run-13d-service_-17cc23bd",
         "scenario_id": "service_provider_cisco",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -708,16 +678,19 @@
             "verified": true
           },
           "SPLUNK_DISPATCHED": {
-            "count": 602,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "SPLUNK_OBSERVED": {
-            "count": 602,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           },
           "VALIDATED": {
-            "count": 10,
-            "verified": true
+            "count": 0,
+            "note": "Deferred to Gate 13D",
+            "verified": false
           }
         }
       },
@@ -728,17 +701,17 @@
         "RECOVERY"
       ],
       "query_execution_summary": {
-        "q1_run_overview_spl": 4,
-        "q2_phase_progression_spl": 4,
-        "q3_interface_state_transition_spl": 31,
-        "q4_bgp_neighbor_transition_spl": 15,
-        "q5_qos_congestion_drops_mstats": 32,
-        "q6_optical_signal_degradation_mstats": 32,
-        "q7_system_cpu_memory_health_mstats": 36,
-        "q8_vendor_comparison_spl": 1,
-        "q9_metric_catalog_mstats": 204
+        "q1_run_overview_spl": 0,
+        "q2_phase_progression_spl": 0,
+        "q3_interface_state_transition_spl": 0,
+        "q4_bgp_neighbor_transition_spl": 0,
+        "q5_qos_congestion_drops_mstats": 0,
+        "q6_optical_signal_degradation_mstats": 0,
+        "q7_system_cpu_memory_health_mstats": 0,
+        "q8_vendor_comparison_spl": 0,
+        "q9_metric_catalog_mstats": 0
       },
-      "run_id": "run-13d-service_-3ebec096",
+      "run_id": "run-13d-service_-17cc23bd",
       "scenario_id": "service_provider_cisco",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -751,9 +724,9 @@
         "GENERATED": 7,
         "NORMALIZED": 602,
         "SERVER_PUBLISHED": 95,
-        "SPLUNK_DISPATCHED": 602,
-        "SPLUNK_OBSERVED": 602,
-        "VALIDATED": 10
+        "SPLUNK_DISPATCHED": 0,
+        "SPLUNK_OBSERVED": 0,
+        "VALIDATED": 0
       },
       "subscription_modes": [
         "ONCE",
@@ -770,59 +743,46 @@
       },
       "unsupported_telemetry_declarations": [],
       "validation": {
-        "failed_rules": 0,
-        "passed_rules": 10,
+        "failed_rules": 10,
+        "passed_rules": 0,
         "results": [
           {
             "evidence": {
-              "matched_count": 221
+              "matched_count": 0
             },
             "expected_value": 4,
-            "message": "Observed 221 event(s) matching criteria (expected >= 4)",
-            "observed_value": 221,
+            "message": "Observed 0 event(s) matching criteria (expected >= 4)",
+            "observed_value": 0,
             "rule_id": "R13D-SPC-01",
             "rule_name": "Cisco IOS XR Vendor Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_count": 7
+              "matched_count": 0
             },
             "expected_value": 3,
-            "message": "Observed 7 event(s) matching criteria (expected >= 3)",
-            "observed_value": 7,
+            "message": "Observed 0 event(s) matching criteria (expected >= 3)",
+            "observed_value": 0,
             "rule_id": "R13D-SPC-02",
             "rule_name": "Primary Interface Keyed gNMI Path Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_count": 55
+              "matched_count": 0
             },
             "expected_value": 4,
-            "message": "Observed 55 event(s) matching criteria (expected >= 4)",
-            "observed_value": 55,
+            "message": "Observed 0 event(s) matching criteria (expected >= 4)",
+            "observed_value": 0,
             "rule_id": "R13D-SPC-03",
             "rule_name": "Failover Phase Event Presence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_steps": 3,
-              "observed_sequence": [
-                [
-                  "BASELINE",
-                  "UP"
-                ],
-                [
-                  "FAILOVER",
-                  "DOWN"
-                ],
-                [
-                  "RECOVERY",
-                  "UP"
-                ]
-              ],
+              "matched_steps": 0,
+              "observed_sequence": [],
               "total_steps": 3
             },
             "expected_value": [
@@ -839,42 +799,16 @@
                 "UP"
               ]
             ],
-            "message": "State transition sequence confirmed (3/3 steps matched)",
-            "observed_value": [
-              [
-                "BASELINE",
-                "UP"
-              ],
-              [
-                "FAILOVER",
-                "DOWN"
-              ],
-              [
-                "RECOVERY",
-                "UP"
-              ]
-            ],
+            "message": "State transition sequence incomplete (0/3 steps matched)",
+            "observed_value": [],
             "rule_id": "R13D-SPC-04",
             "rule_name": "Primary Interface State Sequence (UP -> DOWN -> UP)",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_steps": 3,
-              "observed_sequence": [
-                [
-                  "BASELINE",
-                  "ESTABLISHED"
-                ],
-                [
-                  "FAILOVER",
-                  "IDLE"
-                ],
-                [
-                  "RECOVERY",
-                  "ESTABLISHED"
-                ]
-              ],
+              "matched_steps": 0,
+              "observed_sequence": [],
               "total_steps": 3
             },
             "expected_value": [
@@ -891,42 +825,16 @@
                 "ESTABLISHED"
               ]
             ],
-            "message": "State transition sequence confirmed (3/3 steps matched)",
-            "observed_value": [
-              [
-                "BASELINE",
-                "ESTABLISHED"
-              ],
-              [
-                "FAILOVER",
-                "IDLE"
-              ],
-              [
-                "RECOVERY",
-                "ESTABLISHED"
-              ]
-            ],
+            "message": "State transition sequence incomplete (0/3 steps matched)",
+            "observed_value": [],
             "rule_id": "R13D-SPC-05",
             "rule_name": "Primary BGP Neighbor State Sequence (ESTABLISHED -> IDLE -> ESTABLISHED)",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_steps": 3,
-              "observed_sequence": [
-                [
-                  "BASELINE",
-                  "bgp-st-estab"
-                ],
-                [
-                  "FAILOVER",
-                  "bgp-st-idle"
-                ],
-                [
-                  "RECOVERY",
-                  "bgp-st-estab"
-                ]
-              ],
+              "matched_steps": 0,
+              "observed_sequence": [],
               "total_steps": 3
             },
             "expected_value": [
@@ -943,75 +851,60 @@
                 "bgp-st-estab"
               ]
             ],
-            "message": "State transition sequence confirmed (3/3 steps matched)",
-            "observed_value": [
-              [
-                "BASELINE",
-                "bgp-st-estab"
-              ],
-              [
-                "FAILOVER",
-                "bgp-st-idle"
-              ],
-              [
-                "RECOVERY",
-                "bgp-st-estab"
-              ]
-            ],
+            "message": "State transition sequence incomplete (0/3 steps matched)",
+            "observed_value": [],
             "rule_id": "R13D-SPC-06",
             "rule_name": "Cisco XR Native BGP Connection State Sequence",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_metric_count": 4
+              "matched_metric_count": 0
             },
             "expected_value": 2,
-            "message": "Observed 4 metric observation(s) (expected >= 2)",
-            "observed_value": 4,
+            "message": "Observed 0 metric observation(s) (expected >= 2)",
+            "observed_value": 0,
             "rule_id": "R13D-SPC-07",
             "rule_name": "Metrics Store Presence in cisco_mdt_metrics",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "matched_values": [
-                634.0
-              ]
+              "matched_values": []
             },
             "expected_value": 100.0,
-            "message": "Metric threshold (> 100.0) matched 1 observation(s)",
-            "observed_value": 634.0,
+            "message": "Metric threshold (> 100.0) matched 0 observation(s)",
+            "observed_value": null,
             "rule_id": "R13D-SPC-08",
             "rule_name": "Interface Error Counter Surge During Degrade/Failover",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": null,
             "expected_value": "UP",
-            "message": "State transition to UP confirmed",
-            "observed_value": "UP",
+            "message": "State transition to UP not observed",
+            "observed_value": null,
             "rule_id": "R13D-SPC-09",
             "rule_name": "Recovery State Confirmation (Primary Interface UP & BGP ESTABLISHED)",
-            "status": "PASS"
+            "status": "FAIL"
           },
           {
             "evidence": {
-              "event_count": 221,
-              "metric_count": 324
+              "event_count": 0,
+              "metric_count": 0
             },
             "expected_value": "BOTH",
-            "message": "Destination check (BOTH): event_count=221, metric_count=324 (min=5)",
+            "message": "Destination check (BOTH): event_count=0, metric_count=0 (min=5)",
             "observed_value": {
-              "event_count": 221,
-              "metric_count": 324
+              "event_count": 0,
+              "metric_count": 0
             },
             "rule_id": "R13D-SPC-10",
             "rule_name": "Dual Destination Verification (Event Index + Metric Index)",
-            "status": "PASS"
+            "status": "FAIL"
           }
         ],
-        "status": "PASS",
+        "status": "FAIL",
         "total_rules": 10
       },
       "vendor_profiles": [

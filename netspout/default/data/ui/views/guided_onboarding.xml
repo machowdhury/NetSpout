@@ -677,7 +677,7 @@
                 <label style="display: block; color: #f8fafc; font-size: 12px; font-weight: 600; margin-bottom: 10px;">
                   Select Emission Volume:
                 </label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
                   <div class="volume-card" data-volume="1" style="background: #0f172a; border: 2px solid #0284c7; border-radius: 6px; padding: 14px; cursor: pointer; text-align: center;">
                     <b style="color: #f8fafc; font-size: 14px; display: block;">1 Event</b>
                     <span style="color: #38bdf8; font-size: 11px;">Single Probe / Verification</span>
@@ -689,6 +689,13 @@
                   <div class="volume-card" data-volume="500" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 14px; cursor: pointer; text-align: center;">
                     <b style="color: #f8fafc; font-size: 14px; display: block;">500 Events</b>
                     <span style="color: #94a3b8; font-size: 11px;">Production Stress Burst</span>
+                  </div>
+                  <div class="volume-card" id="volume-card-custom" data-volume="custom" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 12px 14px; cursor: pointer; text-align: center;">
+                    <b style="color: #f8fafc; font-size: 13px; display: block;">Exact Count (N)</b>
+                    <div style="margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                      <input type="number" id="input-custom-volume" min="1" max="100000" placeholder="e.g. 25" style="width: 75px; background: #1e293b; border: 1px solid #475569; color: #38bdf8; font-size: 12px; font-weight: bold; border-radius: 4px; padding: 2px 6px; text-align: center;" />
+                      <span style="color: #94a3b8; font-size: 10px;">events</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -711,7 +718,7 @@
                       <span style="color: #cbd5e1; font-size: 11px; font-weight: 600;">HEC Endpoint</span>
                       <span id="wizard-badge-hec" style="font-size: 10px; background: #334155; color: #94a3b8; padding: 1px 6px; border-radius: 2px;">READY</span>
                     </div>
-                    <span style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">Port 8888 Collector</span>
+                    <span style="color: #94a3b8; font-size: 10px; display: block; margin-top: 4px;">Port 8088 Collector</span>
                   </div>
 
                   <div id="wizard-check-token" style="background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 10px;">

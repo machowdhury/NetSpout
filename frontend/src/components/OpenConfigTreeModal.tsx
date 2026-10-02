@@ -224,7 +224,7 @@ export const OpenConfigTreeModal: React.FC<OpenConfigTreeModalProps> = ({
     };
 
     try {
-      await fetch("http://127.0.0.1:8888/services/collector", {
+      await fetch("http://127.0.0.1:8088/services/collector", {
         method: "POST",
         headers: {
           "Authorization": "Splunk 00000000-0000-0000-0000-000000000000",

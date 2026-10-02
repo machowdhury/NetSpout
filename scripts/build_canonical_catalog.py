@@ -1235,7 +1235,7 @@ canonical_protocols = [
         "id": "hec_event",
         "name": "Splunk HTTP Event Collector (Events)",
         "transport": "HTTP/HTTPS",
-        "default_port": 8888,
+        "default_port": 8088,
         "format": "JSON {\"time\": ts, \"event\": {...}, \"sourcetype\": ..., \"index\": ...}",
         "generation_mode": "SYNTHETIC",
         "sourcetypes": ["cisco:catalyst:security:events", "cisco:ise:syslog"]
@@ -1244,7 +1244,7 @@ canonical_protocols = [
         "id": "hec_metric",
         "name": "Splunk HTTP Event Collector (Metrics)",
         "transport": "HTTP/HTTPS",
-        "default_port": 8888,
+        "default_port": 8088,
         "format": "JSON {\"time\": ts, \"event\": \"metric\", \"fields\": {\"metric_name:...\": val}}",
         "generation_mode": "SYNTHETIC",
         "sourcetypes": ["sc4snmp:metric", "cisco_mdt_metrics"]

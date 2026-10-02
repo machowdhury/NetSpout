@@ -1,0 +1,2 @@
+		Invalid key in stanza [package] in /opt/splunk/etc/apps/Cyber_Intelligence-TA/default/app.conf, line 26: version (value: 6.4.2).
+		Invalid key in stanza [add_on_settings] in /opt/splunk/etc/apps/TA-extrahop_addon/default/ta_extrahop_addon_settings.conf, line 6: local_instance_management_port (value: 8089).

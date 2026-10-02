@@ -88,9 +88,9 @@ from .vendor_profiles import (
 )
 
 
-DEFAULT_SPLUNK_HEC_URL = "https://127.0.0.1:8888/services/collector/event"
+DEFAULT_SPLUNK_HEC_URL = "https://127.0.0.1:8088/services/collector/event"
 DEFAULT_SPLUNK_HEC_TOKEN = "00000000-0000-0000-0000-000000000000"
-DEFAULT_SPLUNK_REST_SEARCH_URL = "https://127.0.0.1:8889/services/search/jobs/export"
+DEFAULT_SPLUNK_REST_SEARCH_URL = "https://127.0.0.1:8089/services/search/jobs/export"
 DEFAULT_SPLUNK_USER = "admin"
 DEFAULT_SPLUNK_PASSWORD = "SplunkPassword123!"
 DEFAULT_EVENT_INDEX = "idx_network_ops"
@@ -851,54 +851,62 @@ class GnmiSplunkBridge:
         deadline = time.monotonic() + max_wait_sec
         last_results: List[Dict[str, Any]] = []
 
+        candidate_urls = [self.rest_search_url]
+        if ":8089" in self.rest_search_url:
+            candidate_urls.append(self.rest_search_url.replace(":8089", ":8889"))
+        elif ":8889" in self.rest_search_url:
+            candidate_urls.append(self.rest_search_url.replace(":8889", ":8089"))
+
         while time.monotonic() < deadline:
-            req = urllib.request.Request(self.rest_search_url, data=data, method="POST")
-            req.add_header("Authorization", auth_header)
-            rows: List[Dict[str, Any]] = []
-            try:
-                with urllib.request.urlopen(req, context=ctx, timeout=6.0) as resp:
-                    for raw_line in resp.read().decode("utf-8", errors="replace").splitlines():
-                        line = raw_line.strip()
-                        if not line:
-                            continue
-                        obj = json.loads(line)
-                        if "result" in obj and isinstance(obj["result"], dict):
-                            raw_res = obj["result"]
-                            norm_row: Dict[str, Any] = {}
-                            raw_str = raw_res.get("_raw")
-                            if isinstance(raw_str, str) and raw_str.strip().startswith("{"):
-                                try:
-                                    parsed_raw = json.loads(raw_str)
-                                    if isinstance(parsed_raw, dict):
-                                        norm_row.update(parsed_raw)
-                                except Exception:
-                                    pass
+            for url in candidate_urls:
+                ctx = self._ssl_ctx() if url.startswith("https") else None
+                req = urllib.request.Request(url, data=data, method="POST")
+                req.add_header("Authorization", auth_header)
+                rows: List[Dict[str, Any]] = []
+                try:
+                    with urllib.request.urlopen(req, context=ctx, timeout=6.0) as resp:
+                        for raw_line in resp.read().decode("utf-8", errors="replace").splitlines():
+                            line = raw_line.strip()
+                            if not line:
+                                continue
+                            obj = json.loads(line)
+                            if "result" in obj and isinstance(obj["result"], dict):
+                                raw_res = obj["result"]
+                                norm_row: Dict[str, Any] = {}
+                                raw_str = raw_res.get("_raw")
+                                if isinstance(raw_str, str) and raw_str.strip().startswith("{"):
+                                    try:
+                                        parsed_raw = json.loads(raw_str)
+                                        if isinstance(parsed_raw, dict):
+                                            norm_row.update(parsed_raw)
+                                    except Exception:
+                                        pass
 
-                            for rk, rv in raw_res.items():
-                                if (
-                                    isinstance(rv, list)
-                                    and len(rv) > 1
-                                    and not rk.startswith("_")
-                                    and len({str(x) for x in rv}) == 1
-                                ):
-                                    norm_row[rk] = rv[0]
-                                else:
-                                    norm_row[rk] = rv
+                                for rk, rv in raw_res.items():
+                                    if (
+                                        isinstance(rv, list)
+                                        and len(rv) > 1
+                                        and not rk.startswith("_")
+                                        and len({str(x) for x in rv}) == 1
+                                    ):
+                                        norm_row[rk] = rv[0]
+                                    else:
+                                        norm_row[rk] = rv
 
-                            norm_row["origin_evidence_stage"] = str(
-                                norm_row.get("origin_evidence_stage")
-                                or GnmiPipelineEvidenceStage.NORMALIZED.value
-                            )
-                            norm_row["current_evidence_stage"] = (
-                                GnmiPipelineEvidenceStage.SPLUNK_OBSERVED.value
-                            )
-                            rows.append(norm_row)
-                last_results = rows
-                if len(rows) >= min_expected:
-                    return rows
-            except Exception:
-                pass
-            time.sleep(0.35)
+                                norm_row["origin_evidence_stage"] = str(
+                                    norm_row.get("origin_evidence_stage")
+                                    or GnmiPipelineEvidenceStage.NORMALIZED.value
+                                )
+                                norm_row["current_evidence_stage"] = (
+                                    GnmiPipelineEvidenceStage.SPLUNK_OBSERVED.value
+                                )
+                                rows.append(norm_row)
+                    last_results = rows
+                    if len(rows) >= min_expected:
+                        return rows
+                except Exception:
+                    pass
+                time.sleep(0.35)
 
         return last_results
 
@@ -2505,8 +2513,8 @@ def run_gnmi_preflight_check(
     Executes Gate 13E / UX Step 3 customer-usable Native gNMI/OpenConfig preflight checks:
       1. External gnmic collector binary (/opt/homebrew/bin/gnmic or in PATH)
       2. Local TCP bind capability for native gNMI server (127.0.0.1 ephemeral/50051)
-      3. Splunk HEC reachability (https://127.0.0.1:8888/services/collector/health or /event)
-      4. Splunk REST search reachability (https://127.0.0.1:8889/services/search/jobs/export)
+      3. Splunk HEC reachability (https://127.0.0.1:8088/services/collector/health or /event)
+      4. Splunk REST search reachability (https://127.0.0.1:8089/services/search/jobs/export)
       5. Target event index availability (idx_network_ops)
       6. Target metric index availability (cisco_mdt_metrics)
     """
@@ -2583,16 +2591,28 @@ def run_gnmi_preflight_check(
     hec_ok = False
     hec_detail = ""
     health_url = hec_url.rsplit("/", 1)[0] + "/health"
-    ctx = bridge._ssl_ctx() if health_url.startswith("https") else None
-    try:
-        req = urllib.request.Request(health_url, method="GET")
-        with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
-            hec_ok = resp.status == 200
-            hec_detail = f"Splunk HEC healthy at {health_url} (HTTP {resp.status})"
-    except Exception as exc:
-        hec_ok = False
-        hec_detail = f"Splunk HEC unreachable at {health_url}: {exc}"
-        remediations.append("Verify Splunk HEC is running and reachable on port 8888.")
+    health_candidates = [health_url]
+    if ":8088" in health_url:
+        health_candidates.append(health_url.replace(":8088", ":8888"))
+    elif ":8888" in health_url:
+        health_candidates.append(health_url.replace(":8888", ":8088"))
+
+    last_exc = None
+    for h_cand in health_candidates:
+        ctx = bridge._ssl_ctx() if h_cand.startswith("https") else None
+        try:
+            req = urllib.request.Request(h_cand, method="GET")
+            with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
+                if resp.status in (200, 400, 401):
+                    hec_ok = True
+                    hec_detail = f"Splunk HEC reachable at {h_cand} (HTTP {resp.status})"
+                    break
+        except Exception as exc:
+            last_exc = exc
+
+    if not hec_ok:
+        hec_detail = f"Splunk HEC unreachable at {health_url}: {last_exc}"
+        remediations.append("Verify Splunk HEC is running and reachable on port 8088.")
 
     checks.append(
         {

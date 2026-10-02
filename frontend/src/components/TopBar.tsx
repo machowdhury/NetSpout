@@ -124,7 +124,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   const activeSourcetype = getScenarioSourcetype(scenario);
   const hecTargetHost = transportConfig?.hec_url 
     ? transportConfig.hec_url.replace(/^https?:\/\//, '').replace(/\/services\/collector$/, '')
-    : '127.0.0.1:8888';
+    : '127.0.0.1:8088';
   const targetIndex = transportConfig?.hec_index || 'idx_network_ops';
   const currentEps = isRunning ? (1000 / speedMs).toFixed(1) : '0';
 

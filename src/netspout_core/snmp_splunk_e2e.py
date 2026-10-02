@@ -1110,9 +1110,9 @@ class SnmpSplunkBridge:
 
     def __init__(
         self,
-        hec_url: str = "https://127.0.0.1:8888/services/collector/event",
+        hec_url: str = "https://127.0.0.1:8088/services/collector/event",
         hec_token: Optional[str] = None,
-        rest_search_url: str = "https://127.0.0.1:8889/services/search/jobs/export",
+        rest_search_url: str = "https://127.0.0.1:8089/services/search/jobs/export",
         rest_username: Optional[str] = None,
         rest_password: Optional[str] = None,
         index: str = "idx_network_ops",
@@ -1231,39 +1231,47 @@ class SnmpSplunkBridge:
         deadline = time.monotonic() + max_wait_sec
         last_results: List[Dict[str, Any]] = []
 
+        candidate_urls = [self.rest_search_url]
+        if ":8089" in self.rest_search_url:
+            candidate_urls.append(self.rest_search_url.replace(":8089", ":8889"))
+        elif ":8889" in self.rest_search_url:
+            candidate_urls.append(self.rest_search_url.replace(":8889", ":8089"))
+
         while time.monotonic() < deadline:
-            req = urllib.request.Request(self.rest_search_url, data=data, method="POST")
-            req.add_header("Authorization", auth_header)
-            rows: List[Dict[str, Any]] = []
-            try:
-                with urllib.request.urlopen(req, context=ctx, timeout=5.0) as resp:
-                    for raw_line in resp.read().decode("utf-8", errors="replace").splitlines():
-                        line = raw_line.strip()
-                        if not line:
-                            continue
-                        obj = json.loads(line)
-                        if "result" in obj and isinstance(obj["result"], dict):
-                            norm_row: Dict[str, Any] = {}
-                            for rk, rv in obj["result"].items():
-                                if (
-                                    isinstance(rv, list)
-                                    and len(rv) > 1
-                                    and not rk.startswith("_")
-                                    and len({str(x) for x in rv}) == 1
-                                ):
-                                    norm_row[rk] = rv[0]
-                                else:
-                                    norm_row[rk] = rv
-                            if "netspout_run_id" in norm_row or "snmp_pdu_type" in norm_row:
-                                norm_row["origin_evidence_stage"] = str(
-                                    norm_row.get("origin_evidence_stage")
-                                    or SnmpEvidenceStage.RECEIVER_OBSERVED.value
-                                )
-                                norm_row["current_evidence_stage"] = (
-                                    SnmpEvidenceStage.SPLUNK_OBSERVED.value
-                                )
-                            rows.append(norm_row)
-                last_results = rows
+            for url in candidate_urls:
+                ctx = self._ssl_ctx() if url.startswith("https") else None
+                req = urllib.request.Request(url, data=data, method="POST")
+                req.add_header("Authorization", auth_header)
+                rows: List[Dict[str, Any]] = []
+                try:
+                    with urllib.request.urlopen(req, context=ctx, timeout=5.0) as resp:
+                        for raw_line in resp.read().decode("utf-8", errors="replace").splitlines():
+                            line = raw_line.strip()
+                            if not line:
+                                continue
+                            obj = json.loads(line)
+                            if "result" in obj and isinstance(obj["result"], dict):
+                                norm_row: Dict[str, Any] = {}
+                                for rk, rv in obj["result"].items():
+                                    if (
+                                        isinstance(rv, list)
+                                        and len(rv) > 1
+                                        and not rk.startswith("_")
+                                        and len({str(x) for x in rv}) == 1
+                                    ):
+                                        norm_row[rk] = rv[0]
+                                    else:
+                                        norm_row[rk] = rv
+                                if "netspout_run_id" in norm_row or "snmp_pdu_type" in norm_row:
+                                    norm_row["origin_evidence_stage"] = str(
+                                        norm_row.get("origin_evidence_stage")
+                                        or SnmpEvidenceStage.RECEIVER_OBSERVED.value
+                                    )
+                                    norm_row["current_evidence_stage"] = (
+                                        SnmpEvidenceStage.SPLUNK_OBSERVED.value
+                                    )
+                                rows.append(norm_row)
+                    last_results = rows
                 if len(rows) >= min_expected:
                     return rows
             except Exception:
@@ -2143,16 +2151,16 @@ def _resolve_binary(name: str, search_dirs: List[str]) -> Optional[str]:
 
 def run_snmp_preflight_check(
     index: str = "idx_network_ops",
-    hec_url: str = "https://127.0.0.1:8888/services/collector/event",
-    rest_search_url: str = "https://127.0.0.1:8889/services/search/jobs/export",
+    hec_url: str = "https://127.0.0.1:8088/services/collector/event",
+    rest_search_url: str = "https://127.0.0.1:8089/services/search/jobs/export",
 ) -> Dict[str, Any]:
     """
     Executes Gate 12F Section 8 customer-usable Native SNMP preflight and readiness checks:
       1. Net-SNMP CLI binaries (`/usr/bin/snmpget`, `/usr/bin/snmpgetnext`, `/usr/bin/snmpwalk`, `/usr/bin/snmpbulkwalk`)
       2. `snmptrapd` binary (`/usr/sbin/snmptrapd`)
       3. Local UDP bind capability for ephemeral SNMP trap receiver & agent ports
-      4. Splunk HEC reachability (`https://127.0.0.1:8888/services/collector/health` or `/event`)
-      5. Splunk REST search reachability (`https://127.0.0.1:8889/services/search/jobs/export`)
+      4. Splunk HEC reachability (`https://127.0.0.1:8088/services/collector/health` or `/event`)
+      5. Splunk REST search reachability (`https://127.0.0.1:8089/services/search/jobs/export`)
       6. Target index availability (`idx_network_ops`)
     """
     checks: List[Dict[str, Any]] = []
@@ -2227,16 +2235,28 @@ def run_snmp_preflight_check(
     hec_ok = False
     hec_detail = ""
     health_url = hec_url.rsplit("/", 1)[0] + "/health"
-    ctx = bridge._ssl_ctx() if health_url.startswith("https") else None
-    try:
-        req = urllib.request.Request(health_url, method="GET")
-        with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
-            hec_ok = resp.status == 200
-            hec_detail = f"Splunk HEC healthy at {health_url} (HTTP {resp.status})"
-    except Exception as exc:
-        hec_ok = False
-        hec_detail = f"Splunk HEC unreachable at {health_url}: {exc}"
-        remediations.append("Verify Splunk HEC is running and reachable on port 8888.")
+    health_candidates = [health_url]
+    if ":8088" in health_url:
+        health_candidates.append(health_url.replace(":8088", ":8888"))
+    elif ":8888" in health_url:
+        health_candidates.append(health_url.replace(":8888", ":8088"))
+
+    last_exc = None
+    for h_cand in health_candidates:
+        ctx = bridge._ssl_ctx() if h_cand.startswith("https") else None
+        try:
+            req = urllib.request.Request(h_cand, method="GET")
+            with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
+                if resp.status in (200, 400, 401):
+                    hec_ok = True
+                    hec_detail = f"Splunk HEC reachable at {h_cand} (HTTP {resp.status})"
+                    break
+        except Exception as exc:
+            last_exc = exc
+
+    if not hec_ok:
+        hec_detail = f"Splunk HEC unreachable at {health_url}: {last_exc}"
+        remediations.append("Verify Splunk HEC is running and reachable on port 8088.")
 
     checks.append(
         {

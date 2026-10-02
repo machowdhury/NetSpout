@@ -36,7 +36,7 @@ class CollectorEvidenceAdapter:
         self,
         goflow_metrics_url: str = "http://127.0.0.1:8080/metrics",
         forwarder_status_url: str = "http://127.0.0.1:8082",
-        splunk_hec_url: str = "https://127.0.0.1:8888/services/collector/health"
+        splunk_hec_url: str = "https://127.0.0.1:8088/services/collector/health"
     ):
         self.goflow_metrics_url = goflow_metrics_url
         self.forwarder_status_url = forwarder_status_url.rstrip("/")
@@ -197,16 +197,30 @@ class CollectorEvidenceAdapter:
 
         # 3. Check Splunk HEC connectivity
         splunk_ok = False
-        try:
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            req = urllib.request.Request(self.splunk_hec_url)
-            with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
-                if resp.status in (200, 400, 401):
-                    splunk_ok = True
-                    health.hec_connectivity = True
-        except Exception:
+        candidate_hec = [self.splunk_hec_url]
+        if ":8088" in self.splunk_hec_url:
+            candidate_hec.append(self.splunk_hec_url.replace(":8088", ":8888"))
+        elif ":8888" in self.splunk_hec_url:
+            candidate_hec.append(self.splunk_hec_url.replace(":8888", ":8088"))
+        for u in list(candidate_hec):
+            if u.startswith("https:"):
+                candidate_hec.append(u.replace("https:", "http:"))
+
+        for curl in candidate_hec:
+            try:
+                ctx = ssl.create_default_context() if curl.startswith("https") else None
+                if ctx:
+                    ctx.check_hostname = False
+                    ctx.verify_mode = ssl.CERT_NONE
+                req = urllib.request.Request(curl)
+                with urllib.request.urlopen(req, timeout=timeout, context=ctx) as resp:
+                    if resp.status in (200, 400, 401):
+                        splunk_ok = True
+                        health.hec_connectivity = True
+                        break
+            except Exception:
+                pass
+        if not splunk_ok:
             health.hec_connectivity = False
 
         health.details = {
@@ -294,18 +308,33 @@ class CollectorEvidenceAdapter:
 
         # Check 5: Splunk HEC Reachability
         hec_up = False
-        try:
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-            req = urllib.request.Request(self.splunk_hec_url)
-            with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
-                hec_up = (resp.status in (200, 400, 401))
-        except Exception:
-            pass
+        candidate_hec_urls = [self.splunk_hec_url]
+        if ":8088" in self.splunk_hec_url:
+            candidate_hec_urls.append(self.splunk_hec_url.replace(":8088", ":8888"))
+        elif ":8888" in self.splunk_hec_url:
+            candidate_hec_urls.append(self.splunk_hec_url.replace(":8888", ":8088"))
+        for u in list(candidate_hec_urls):
+            if u.startswith("https:"):
+                candidate_hec_urls.append(u.replace("https:", "http:"))
+
+        active_hec_url = self.splunk_hec_url
+        for curl in candidate_hec_urls:
+            try:
+                ctx = ssl.create_default_context() if curl.startswith("https") else None
+                if ctx:
+                    ctx.check_hostname = False
+                    ctx.verify_mode = ssl.CERT_NONE
+                req = urllib.request.Request(curl)
+                with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
+                    if resp.status in (200, 400, 401):
+                        hec_up = True
+                        active_hec_url = curl
+                        break
+            except Exception:
+                pass
         results["checks"]["splunk_hec"] = {
             "status": "PASS" if hec_up else "FAIL",
-            "url": self.splunk_hec_url,
+            "url": active_hec_url,
             "index": cfg.splunk_index,
             "sourcetype": cfg.splunk_sourcetype
         }

@@ -1,0 +1,10 @@
+{
+  "filename": "netspout.spl",
+  "size_bytes": 1782301,
+  "size_mb": 1.7,
+  "sha256": "ab9f43a00e057beadf1af261803b97083bc889434e8980d31aec822426f10609",
+  "total_files": 709,
+  "has_inputs_spec": true,
+  "has_canonical_core": true,
+  "has_frontend_dist": true
+}

@@ -2342,7 +2342,7 @@ require([
 
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
-    var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
+    var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
     var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
     var sslVerify = cfg.ssl_verify || false;
 
@@ -2359,7 +2359,7 @@ require([
     .then(function(r) { return r.json(); })
     .then(function(res) {
       if (res.status === 'success' || (res.result && res.result.indexOf('HEC is healthy') !== -1)) {
-        hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (PORT 8888)');
+        hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (PORT 8088)');
         tokenBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('VALID / AUTHORIZED');
       } else {
         hecBadge.css({ 'background': '#7f1d1d', 'color': '#f87171' }).text('UNREACHABLE / STANDALONE');
@@ -2388,7 +2388,7 @@ require([
 
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
-    var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
+    var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
     var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
     var targetIndex = wizardState.targetIndex || "idx_security_fw";
 
@@ -2723,11 +2723,32 @@ require([
       updateActiveIndexDisplay();
     });
 
-    // Volume Selector Cards
-    $(document).on('click', '.volume-card', function() {
-      $('.volume-card').css('border', '1px solid #334155');
-      $(this).css('border', '2px solid #0284c7');
-      wizardState.volume = parseInt($(this).data('volume'), 10) || 1;
+    // Volume Selector Cards & Custom Input
+    $(document).on('click', '.volume-card', function(e) {
+      if ($(this).attr('id') === 'volume-card-custom' || $(this).data('volume') === 'custom') {
+        $('.volume-card').css('border', '1px solid #334155');
+        $('#volume-card-custom').css('border', '2px solid #0284c7');
+        var customVal = parseInt($('#input-custom-volume').val(), 10);
+        if (!customVal || customVal < 1) {
+          customVal = 25;
+          $('#input-custom-volume').val(25);
+        }
+        wizardState.volume = customVal;
+        $('#input-custom-volume').focus();
+      } else {
+        $('.volume-card').css('border', '1px solid #334155');
+        $(this).css('border', '2px solid #0284c7');
+        wizardState.volume = parseInt($(this).data('volume'), 10) || 1;
+      }
+    });
+
+    $(document).on('input change', '#input-custom-volume', function() {
+      var val = parseInt($(this).val(), 10);
+      if (val && val > 0) {
+        $('.volume-card').css('border', '1px solid #334155');
+        $('#volume-card-custom').css('border', '2px solid #0284c7');
+        wizardState.volume = val;
+      }
     });
 
     // Preflight Test Button

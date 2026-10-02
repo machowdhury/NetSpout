@@ -58,23 +58,28 @@ class TestGate11cNativeE2E(unittest.TestCase):
             "latest_time": "now"
         }).encode("utf-8")
 
-        req = urllib.request.Request("https://127.0.0.1:8889/services/search/jobs/export", data=data, method="POST")
-        req.add_header("Authorization", "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh")
+        candidate_urls = [
+            "https://127.0.0.1:8089/services/search/jobs/export",
+            "https://127.0.0.1:8889/services/search/jobs/export",
+        ]
 
         start = time.time()
         while time.time() - start < max_wait_sec:
-            results = []
-            try:
-                with urllib.request.urlopen(req, context=ctx, timeout=5) as resp:
-                    for line in resp.read().decode("utf-8").splitlines():
-                        if line.strip():
-                            obj = json.loads(line)
-                            if "result" in obj:
-                                results.append(obj["result"])
-                if results:
-                    return results
-            except Exception:
-                pass
+            for url in candidate_urls:
+                results = []
+                try:
+                    req = urllib.request.Request(url, data=data, method="POST")
+                    req.add_header("Authorization", "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh")
+                    with urllib.request.urlopen(req, context=ctx, timeout=5) as resp:
+                        for line in resp.read().decode("utf-8").splitlines():
+                            if line.strip():
+                                obj = json.loads(line)
+                                if "result" in obj:
+                                    results.append(obj["result"])
+                    if results:
+                        return results
+                except Exception:
+                    pass
             time.sleep(0.5)
         return []
 

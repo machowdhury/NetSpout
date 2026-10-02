@@ -16,7 +16,7 @@ export const LogTerminal: React.FC<LogTerminalProps> = ({
   onClearLogs,
   isRunning,
   onTogglePlay,
-  hecTarget = '127.0.0.1:8888',
+  hecTarget = '127.0.0.1:8088',
   hecIndex = 'idx_network_ops'
 }) => {
   const terminalRef = useRef<HTMLDivElement>(null);

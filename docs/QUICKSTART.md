@@ -1,22 +1,12 @@
 # NetSpout — Quickstart Guide
 
-This guide walks you through installing NetSpout, verifying preflight prerequisites, executing your first multi-protocol network simulation, and investigating evidence in Splunk.
+This guide walks you through launching NetSpout in 1 click, verifying preflight prerequisites, executing your first multi-protocol network simulation, and investigating evidence in Splunk.
 
 ---
 
-## 1. System Requirements
+## 1. Zero-Touch 1-Click Setup (Recommended)
 
-- **Operating System:** macOS (Sonoma/Sequoia) or Linux (Ubuntu 22.04+, RHEL 9+)
-- **Python:** 3.10, 3.11, or 3.12 (Python 3.14 compatible)
-- **Node.js:** 18+ (only needed if building frontend from source)
-- **Splunk:** Splunk Enterprise 9.0+ or Splunk Cloud
-- **Optional Tools (for Native Transport modes):**
-  - `gnmic` (v0.40+): `brew install gnmic` or `curl -sL https://gnmic.openconfig.net/install.sh | sudo bash`
-  - Net-SNMP tools: `/usr/bin/snmpget`, `/usr/sbin/snmptrapd` (included by default on macOS/Linux)
-
----
-
-## 2. Fast Setup (5 Minutes)
+NetSpout is completely self-contained. It embeds all necessary collectors, encoders, and state engines. You do **not** need to install or run external collectors like `gnmic`, `snmptrapd`, `goflow2`, `telegraf`, or `SC4S`.
 
 ### Step 1: Clone the Repository
 ```bash
@@ -24,33 +14,47 @@ git clone https://github.com/machowdhury/NetSpout.git
 cd NetSpout
 ```
 
-### Step 2: Install Python Dependencies
+### Step 2: Start NetSpout & Splunk
+```bash
+docker compose up -d
+```
+
+### Step 3: Access Web Interfaces
+- **Splunk Enterprise**: [`http://localhost:8000`](http://localhost:8000) (Login: `admin` / `SplunkPassword123!`)
+  - The NetSpout app is pre-installed at `/en-US/app/netspout/guided_onboarding`.
+  - The HEC token `00000000-0000-0000-0000-000000000000` is pre-provisioned.
+- **NetSpout Standalone NOC UI**: [`http://localhost:8081`](http://localhost:8081)
+- **Splunk HEC Port**: `8088` (`https://localhost:8088/services/collector`)
+- **Splunk Management Port**: `8089` (`https://localhost:8089`)
+
+---
+
+## 2. Alternative: Bare-Metal / Local Python Setup
+
+If you prefer running NetSpout locally without Docker:
+
+### Prerequisites
+- macOS (Sonoma/Sequoia) or Linux (Ubuntu 22.04+, RHEL 9+)
+- Python 3.10+ (compatible up to 3.14)
+- Splunk Enterprise 9.0+ or Splunk Cloud
+
+### Setup Steps
 ```bash
 cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
 
-### Step 3: Configure Splunk Connection
-NetSpout interacts with Splunk via the HTTP Event Collector (HEC) and the Splunk REST search API. Set your environment variables:
-
-```bash
-# Splunk HEC Settings (Port 8888 or 8088 depending on your instance)
-export NETSPOUT_HEC_URL="https://127.0.0.1:8888/services/collector/event"
+# Configure Splunk Connection (Canonical Ports)
+export NETSPOUT_HEC_URL="https://127.0.0.1:8088/services/collector/event"
 export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
-
-# Splunk REST Search Settings (Port 8889 or 8089)
 export NETSPOUT_SPLUNK_USER="admin"
 export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
-```
 
-### Step 4: Start NetSpout
-```bash
+# Launch NetSpout Backend
 python3 run.py
 ```
-Open your browser to:
-👉 `http://localhost:8081` (or `http://localhost:8000`)
+Open browser to `http://localhost:8081`.
 
 ---
 

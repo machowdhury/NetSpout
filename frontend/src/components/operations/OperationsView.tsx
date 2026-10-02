@@ -76,7 +76,7 @@ export const OperationsView: React.FC = () => {
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Splunk Web & HEC</span>
             <Activity className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-xl font-bold text-white">8800 / 8888</div>
+          <div className="text-xl font-bold text-white">8000 / 8088</div>
           <p className="text-xs text-slate-400 flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>Container Responsive</span>

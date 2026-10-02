@@ -1,5 +1,5 @@
 {
-  "all_9_controlled_failures_verified": true,
+  "all_9_controlled_failures_verified": false,
   "failure_A_server_unavailable": {
     "collector_received": false,
     "highest_verified_stage": "NONE",
@@ -58,10 +58,10 @@
   },
   "failure_H_metric_destination_failure": {
     "destination_validation_status": "FAIL",
-    "event_dispatched": 6,
+    "event_dispatched": 0,
     "metric_dispatched": 0,
-    "metric_failed": 12,
-    "passed_negative_check": true
+    "metric_failed": 18,
+    "passed_negative_check": false
   },
   "failure_I_duplicate_collector_records": {
     "duplicate_records_suppressed": 17,

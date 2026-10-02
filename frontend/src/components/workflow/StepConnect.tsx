@@ -340,24 +340,6 @@ export const StepConnect: React.FC<StepConnectProps> = ({
           <button
             onClick={() => onUpdateConnection({
               ...connection,
-              endpoint: 'https://127.0.0.1:8888/services/collector',
-              token: '00000000-0000-0000-0000-000000000000',
-              index: 'idx_network_ops',
-              allow_insecure_tls: true
-            })}
-            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
-              connection.endpoint?.includes('8888')
-                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
-                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
-            }`}
-          >
-            <div className="font-bold text-slate-200">Bundled Docker Splunk</div>
-            <div className="text-[10px] text-slate-500 mt-0.5">https://127.0.0.1:8888</div>
-          </button>
-
-          <button
-            onClick={() => onUpdateConnection({
-              ...connection,
               endpoint: 'https://127.0.0.1:8088/services/collector',
               token: '00000000-0000-0000-0000-000000000000',
               index: 'idx_network_ops',
@@ -369,8 +351,26 @@ export const StepConnect: React.FC<StepConnectProps> = ({
                 : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
             }`}
           >
-            <div className="font-bold text-slate-200">Local Splunk Enterprise</div>
+            <div className="font-bold text-slate-200">Standard Splunk HEC</div>
             <div className="text-[10px] text-slate-500 mt-0.5">https://127.0.0.1:8088</div>
+          </button>
+
+          <button
+            onClick={() => onUpdateConnection({
+              ...connection,
+              endpoint: 'https://127.0.0.1:8888/services/collector',
+              token: '00000000-0000-0000-0000-000000000000',
+              index: 'idx_network_ops',
+              allow_insecure_tls: true
+            })}
+            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
+              connection.endpoint?.includes('8888')
+                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
+                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+            }`}
+          >
+            <div className="font-bold text-slate-200">Alternative Port 8888</div>
+            <div className="text-[10px] text-slate-500 mt-0.5">https://127.0.0.1:8888</div>
           </button>
 
           <button
@@ -465,7 +465,7 @@ export const StepConnect: React.FC<StepConnectProps> = ({
 
           <div className="pt-2 flex items-center justify-between border-t border-slate-800/80">
             <span className="text-xs text-slate-500">
-              Docker local default: <code className="text-slate-400">https://127.0.0.1:8888/services/collector</code>
+              Standard Splunk default: <code className="text-slate-400">https://127.0.0.1:8088/services/collector</code>
             </span>
 
             <button

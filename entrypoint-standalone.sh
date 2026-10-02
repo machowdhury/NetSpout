@@ -5,6 +5,15 @@ echo "==========================================================================
 echo "⚡ NetSpout Standalone: Booting Splunk Enterprise + Fast Simulation Engine"
 echo "=========================================================================="
 
+# Ensure HEC & Indexes local configuration is present in app directory
+mkdir -p /opt/splunk/etc/apps/netspout/local
+if [ ! -f "/opt/splunk/etc/apps/netspout/local/inputs.conf" ] && [ -f "/opt/splunk/etc/apps/netspout/default/inputs.conf" ]; then
+    cp /opt/splunk/etc/apps/netspout/default/inputs.conf /opt/splunk/etc/apps/netspout/local/inputs.conf
+fi
+if [ ! -f "/opt/splunk/etc/apps/netspout/local/indexes.conf" ] && [ -f "/opt/splunk/etc/apps/netspout/default/indexes.conf" ]; then
+    cp /opt/splunk/etc/apps/netspout/default/indexes.conf /opt/splunk/etc/apps/netspout/local/indexes.conf
+fi
+
 # Start the Fast Simulation Companion Service in the background
 if [ -d "/opt/netspout-backend" ]; then
     echo ">> Starting NetSpout Fast Simulation Engine on port ${FAST_SIMULATION_PORT:-8081}..."

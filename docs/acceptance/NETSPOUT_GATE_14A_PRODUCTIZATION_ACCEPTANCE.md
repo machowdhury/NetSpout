@@ -23,7 +23,7 @@ Under **Gate 14A**, all acceptance findings were systematically audited, remedia
 | **Documentation Onboarding** | Medium | Quickstart required external collectors & manual Python | Rewritten around 1-click `git clone && docker compose up -d` zero-touch workflow | **PASS** (Primary quickstart verified) |
 | **Custom Event Volume UX** | Low | Guided Onboarding lacked exact numeric count input | Added custom exact count (N) card and dynamic numeric input field in SimpleXML + JS | **PASS** (Arbitrary exact N events supported) |
 
-**Final Product Release Verdict**: **ACCEPTED FOR RELEASE** (`netspout.spl` v1.0.0, SHA-256: `ab9f43a00e057beadf1af261803b97083bc889434e8980d31aec822426f10609`).
+**Final Product Release Verdict**: **ACCEPTED FOR RELEASE** (`netspout.spl` v1.0.0, SHA-256: `47b559e9a5bf6f162b718e285262c76b6b5a5715f2ec6b9987364781a3ffad8f`).
 
 ---
 
@@ -178,7 +178,7 @@ The release package has been generated and validated against the single source o
 - **Release Archive**: `netspout.spl`
 - **File Size**: `1,782,311 bytes` (1.70 MB — well within Splunk Cloud 5MB limits)
 - **Total Member Files**: `709`
-- **SHA-256 Checksum**: `ab9f43a00e057beadf1af261803b97083bc889434e8980d31aec822426f10609`
+- **SHA-256 Checksum**: `47b559e9a5bf6f162b718e285262c76b6b5a5715f2ec6b9987364781a3ffad8f`
 - **Docker Image**: `netspout:standalone-test` (Splunk 10.2 + NetSpout App + Fast Sim Engine)
 - **Top-Level Root**: `docker compose up -d` (Zero-touch instant startup)
 

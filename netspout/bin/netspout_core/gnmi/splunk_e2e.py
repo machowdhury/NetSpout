@@ -738,25 +738,43 @@ class GnmiSplunkBridge:
                 continue
 
             body = ("\n".join(lines) + "\n").encode("utf-8")
-            req = urllib.request.Request(self.hec_url, data=body, method="POST")
-            req.add_header("Authorization", f"Splunk {self.hec_token}")
-            req.add_header("Content-Type", "application/json")
-            try:
-                with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
-                    if resp.status == 200:
-                        dispatched += len(valid_batch)
-                        for rec in valid_batch:
-                            rec.current_evidence_stage = GnmiPipelineEvidenceStage.SPLUNK_DISPATCHED.value
-                            if rec.store_type == "METRIC":
-                                metric_dispatched += 1
-                            else:
-                                event_dispatched += 1
-                    else:
-                        failed += len(valid_batch)
-                        errors.append(f"HEC HTTP {resp.status}")
-            except Exception as exc:
+            candidate_urls = [self.hec_url]
+            if ":8088" in self.hec_url:
+                candidate_urls.append(self.hec_url.replace(":8088", ":8888"))
+            elif ":8888" in self.hec_url:
+                candidate_urls.append(self.hec_url.replace(":8888", ":8088"))
+            for u in list(candidate_urls):
+                if u.startswith("https:"):
+                    candidate_urls.append(u.replace("https:", "http:"))
+
+            success = False
+            last_exc = None
+            for curl in candidate_urls:
+                ctx = self._ssl_ctx() if curl.startswith("https") else None
+                req = urllib.request.Request(curl, data=body, method="POST")
+                req.add_header("Authorization", f"Splunk {self.hec_token}")
+                req.add_header("Content-Type", "application/json")
+                try:
+                    with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
+                        if resp.status == 200:
+                            self.hec_url = curl
+                            dispatched += len(valid_batch)
+                            for rec in valid_batch:
+                                rec.current_evidence_stage = GnmiPipelineEvidenceStage.SPLUNK_DISPATCHED.value
+                                if rec.store_type == "METRIC":
+                                    metric_dispatched += 1
+                                else:
+                                    event_dispatched += 1
+                            success = True
+                            break
+                        else:
+                            last_exc = f"HEC HTTP {resp.status}"
+                except Exception as exc:
+                    last_exc = f"HEC dispatch exception: {exc}"
+            if not success:
                 failed += len(valid_batch)
-                errors.append(f"HEC dispatch exception: {exc}")
+                if last_exc:
+                    errors.append(str(last_exc))
 
         elapsed_ms = round((time.perf_counter() - t0) * 1000.0, 2)
         return {
@@ -792,28 +810,37 @@ class GnmiSplunkBridge:
                 "failed": len(payloads),
                 "errors": ["Simulated Splunk unavailability"],
             }
-        ctx = self._ssl_ctx() if self.hec_url.startswith("https") else None
+        candidate_urls = [self.hec_url]
+        if ":8088" in self.hec_url:
+            candidate_urls.append(self.hec_url.replace(":8088", ":8888"))
+        elif ":8888" in self.hec_url:
+            candidate_urls.append(self.hec_url.replace(":8888", ":8088"))
+        for u in list(candidate_urls):
+            if u.startswith("https:"):
+                candidate_urls.append(u.replace("https:", "http:"))
+
         body = ("\n".join(json.dumps(p) for p in payloads) + "\n").encode("utf-8")
-        req = urllib.request.Request(self.hec_url, data=body, method="POST")
-        req.add_header("Authorization", f"Splunk {self.hec_token}")
-        req.add_header("Content-Type", "application/json")
-        try:
-            with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
-                if resp.status == 200:
-                    return {"attempted": len(payloads), "dispatched": len(payloads), "failed": 0, "errors": []}
-                return {
-                    "attempted": len(payloads),
-                    "dispatched": 0,
-                    "failed": len(payloads),
-                    "errors": [f"HEC HTTP {resp.status}"],
-                }
-        except Exception as exc:
-            return {
-                "attempted": len(payloads),
-                "dispatched": 0,
-                "failed": len(payloads),
-                "errors": [str(exc)],
-            }
+        last_exc = None
+        for curl in candidate_urls:
+            ctx = self._ssl_ctx() if curl.startswith("https") else None
+            req = urllib.request.Request(curl, data=body, method="POST")
+            req.add_header("Authorization", f"Splunk {self.hec_token}")
+            req.add_header("Content-Type", "application/json")
+            try:
+                with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
+                    if resp.status == 200:
+                        self.hec_url = curl
+                        return {"attempted": len(payloads), "dispatched": len(payloads), "failed": 0, "errors": []}
+                    last_exc = f"HEC HTTP {resp.status}"
+            except Exception as exc:
+                last_exc = str(exc)
+
+        return {
+            "attempted": len(payloads),
+            "dispatched": 0,
+            "failed": len(payloads),
+            "errors": [str(last_exc)] if last_exc else [],
+        }
 
     def execute_spl_search(
         self,

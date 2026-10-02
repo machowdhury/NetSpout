@@ -16,6 +16,7 @@ from enum import Enum
 import hashlib
 import json
 import os
+import re
 import resource
 import shutil
 import subprocess
@@ -82,6 +83,30 @@ class GnmiCollectorPipelineLedger:
 
     @property
     def highest_verified_stage(self) -> str:
+        if (
+            self.validated
+            and self.validated_count > 0
+            and self.splunk_observed
+            and self.splunk_dispatched
+            and self.normalized
+            and self.collector_received
+        ):
+            return GnmiPipelineEvidenceStage.VALIDATED.value
+        if (
+            self.splunk_observed
+            and self.splunk_observed_count > 0
+            and self.splunk_dispatched
+            and self.normalized
+            and self.collector_received
+        ):
+            return GnmiPipelineEvidenceStage.SPLUNK_OBSERVED.value
+        if (
+            self.splunk_dispatched
+            and self.splunk_dispatched_count > 0
+            and self.normalized
+            and self.collector_received
+        ):
+            return GnmiPipelineEvidenceStage.SPLUNK_DISPATCHED.value
         if self.normalized and self.normalized_count > 0 and self.collector_received:
             return GnmiPipelineEvidenceStage.NORMALIZED.value
         if self.collector_received and self.collector_received_count > 0:
@@ -93,6 +118,15 @@ class GnmiCollectorPipelineLedger:
         return "NONE"
 
     def to_dict(self) -> Dict[str, Any]:
+        norm_ok = bool(
+            self.normalized
+            and self.normalized_count > 0
+            and self.collector_received
+            and self.collector_received_count > 0
+        )
+        disp_ok = bool(norm_ok and self.splunk_dispatched and self.splunk_dispatched_count > 0)
+        obs_ok = bool(disp_ok and self.splunk_observed and self.splunk_observed_count > 0)
+        val_ok = bool(obs_ok and self.validated and self.validated_count > 0)
         return {
             "run_id": self.run_id,
             "scenario_id": self.scenario_id,
@@ -112,29 +146,45 @@ class GnmiCollectorPipelineLedger:
                     "count": self.collector_received_count,
                 },
                 "NORMALIZED": {
-                    "verified": bool(
-                        self.normalized
-                        and self.normalized_count > 0
-                        and self.collector_received
-                        and self.collector_received_count > 0
-                    ),
+                    "verified": norm_ok,
                     "count": self.normalized_count if self.collector_received else 0,
                 },
-                "SPLUNK_DISPATCHED": {
-                    "verified": False,
-                    "count": 0,
-                    "note": "Deferred to Gate 13D",
-                },
-                "SPLUNK_OBSERVED": {
-                    "verified": False,
-                    "count": 0,
-                    "note": "Deferred to Gate 13D",
-                },
-                "VALIDATED": {
-                    "verified": False,
-                    "count": 0,
-                    "note": "Deferred to Gate 13D",
-                },
+                "SPLUNK_DISPATCHED": (
+                    {
+                        "verified": True,
+                        "count": self.splunk_dispatched_count,
+                    }
+                    if disp_ok
+                    else {
+                        "verified": False,
+                        "count": 0,
+                        "note": "Deferred to Gate 13D",
+                    }
+                ),
+                "SPLUNK_OBSERVED": (
+                    {
+                        "verified": True,
+                        "count": self.splunk_observed_count,
+                    }
+                    if obs_ok
+                    else {
+                        "verified": False,
+                        "count": 0,
+                        "note": "Deferred to Gate 13D",
+                    }
+                ),
+                "VALIDATED": (
+                    {
+                        "verified": True,
+                        "count": self.validated_count,
+                    }
+                    if val_ok
+                    else {
+                        "verified": False,
+                        "count": 0,
+                        "note": "Deferred to Gate 13D",
+                    }
+                ),
             },
             "error_stage": self.error_stage,
             "error_message": self.error_message,
@@ -485,6 +535,13 @@ _RFC7951_INT64_LEAVES: Set[str] = {
     "outDiscards",
     "queueLengthBytes",
     "allocated-buffer-size",
+    "ibytes",
+    "obytes",
+    "ipackets",
+    "opackets",
+    "type2MacIpRoutes",
+    "type2-mac-ip-routes",
+    "type5-ip-prefix-routes",
 }
 
 _LEAF_UNITS: Dict[str, str] = {
@@ -494,6 +551,8 @@ _LEAF_UNITS: Dict[str, str] = {
     "bytes-sent": "bytes",
     "inOctets": "bytes",
     "outOctets": "bytes",
+    "ibytes": "bytes",
+    "obytes": "bytes",
     "octets-forwarded": "bytes",
     "transmit-octets": "bytes",
     "transmit-bytes": "bytes",
@@ -509,6 +568,8 @@ _LEAF_UNITS: Dict[str, str] = {
     "packets-received": "packets",
     "packets-sent": "packets",
     "inUcastPkts": "packets",
+    "ipackets": "packets",
+    "opackets": "packets",
     "packets-forwarded": "packets",
     "in-errors": "packets",
     "out-errors": "packets",
@@ -667,16 +728,20 @@ class GnmiTelemetryNormalizer:
         if eff_origin != "openconfig" and len(candidates) == 1:
             return candidates[0]
 
-        for cand in candidates:
-            # Strip predicates for structural comparison
+        path_elems = [
+            seg
+            for seg in re.sub(r"\[[^\]]*\]", "", gnmi_path).strip("/").split("/")
+            if seg
+        ]
+        sorted_candidates = sorted(
+            candidates,
+            key=lambda s: len(re.sub(r"\[[^\]]*\]", "", s.path).strip("/").split("/")),
+            reverse=True,
+        )
+        for cand in sorted_candidates:
             cand_elems = [
-                seg.split("[", 1)[0]
-                for seg in cand.path.strip("/").split("/")
-                if seg
-            ]
-            path_elems = [
-                seg.split("[", 1)[0]
-                for seg in gnmi_path.strip("/").split("/")
+                seg
+                for seg in re.sub(r"\[[^\]]*\]", "", cand.path).strip("/").split("/")
                 if seg
             ]
             if len(path_elems) >= len(cand_elems) and path_elems[: len(cand_elems)] == cand_elems:

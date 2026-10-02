@@ -355,9 +355,91 @@ def get_arch_man_carrier_ring_topology() -> TopologyState:
 
 class ValidationEngine:
     """
-    Evaluates ValidationRule contracts against generated telemetry logs and graph state.
-    Supports EVENT_EXISTS, COUNT_THRESHOLD, FIELD_VALUE, STATE_TRANSITION, and SPL_QUERY.
+    Evaluates ValidationRule contracts against generated telemetry logs, Splunk-observed
+    gNMI/OpenConfig event and metric records, and graph state.
+    Supports EVENT_EXISTS, COUNT_THRESHOLD, FIELD_VALUE, STATE_TRANSITION, SEQUENCE,
+    METRIC_EXISTS, METRIC_THRESHOLD, METRIC_PROGRESSION, DESTINATION_CHECK,
+    CROSS_SOURCE_COHERENCE, and SPL_QUERY.
     """
+
+    @staticmethod
+    def _get_field(item: Any, field_name: Optional[str]) -> Any:
+        if not field_name or item is None:
+            return None
+        if isinstance(item, dict):
+            if field_name in item:
+                return item[field_name]
+            if isinstance(item.get("fields"), dict) and field_name in item["fields"]:
+                return item["fields"][field_name]
+            if isinstance(item.get("event"), dict) and field_name in item["event"]:
+                return item["event"][field_name]
+            if isinstance(item.get("gnmi_keys"), dict) and field_name in item["gnmi_keys"]:
+                return item["gnmi_keys"][field_name]
+            return None
+        val = getattr(item, field_name, None)
+        if val is None and hasattr(item, "dict"):
+            val = item.dict().get(field_name)
+        return val
+
+    @classmethod
+    def _matches_record_filters(cls, rule: ValidationRule, item: Any) -> bool:
+        if rule.target_sourcetype:
+            ev_st = cls._get_field(item, "sourcetype")
+            if not cls._matches_sourcetype(rule.target_sourcetype, ev_st):
+                return False
+        if rule.target_index:
+            ev_idx = cls._get_field(item, "index") or cls._get_field(item, "target_index")
+            if not ev_idx or str(ev_idx).lower() != str(rule.target_index).lower():
+                return False
+        if rule.target_vendor:
+            ev_vendor = (
+                cls._get_field(item, "gnmi_vendor")
+                or cls._get_field(item, "vendor")
+                or cls._get_field(item, "gnmi_platform")
+                or ""
+            )
+            if str(rule.target_vendor).lower() not in str(ev_vendor).lower():
+                return False
+        if rule.target_gnmi_path:
+            ev_path = (
+                cls._get_field(item, "gnmi_path")
+                or cls._get_field(item, "gnmi_sensor_path")
+                or ""
+            )
+            if str(rule.target_gnmi_path) != str(ev_path) and str(rule.target_gnmi_path) not in str(ev_path):
+                return False
+        if rule.target_phase:
+            ev_phase = cls._get_field(item, "netspout_phase") or cls._get_field(item, "phase") or ""
+            if str(ev_phase).upper() != str(rule.target_phase).upper():
+                return False
+        if rule.target_metric_name:
+            ev_metric = (
+                cls._get_field(item, "metric_name")
+                or cls._get_field(item, "gnmi_leaf")
+                or ""
+            )
+            if (
+                str(rule.target_metric_name) != str(ev_metric)
+                and str(rule.target_metric_name) not in str(ev_metric)
+                and cls._get_field(item, f"metric_name:{rule.target_metric_name}") is None
+            ):
+                return False
+        return True
+
+    @staticmethod
+    def _compare_numeric(obs_val: float, exp_val: float, comp: str) -> bool:
+        c = (comp or "==").strip()
+        if c in (">=", "=>"):
+            return obs_val >= exp_val
+        if c == ">":
+            return obs_val > exp_val
+        if c in ("<=", "=<"):
+            return obs_val <= exp_val
+        if c == "<":
+            return obs_val < exp_val
+        if c == "!=":
+            return obs_val != exp_val
+        return obs_val == exp_val
 
     @staticmethod
     def _matches_sourcetype(target_st: str, event_st: Optional[str]) -> bool:
@@ -380,13 +462,20 @@ class ValidationEngine:
         return False
 
     @classmethod
-    def evaluate_rule(cls, rule: Any, logs: List[LogEntry], graph: Optional[TopologyGraph] = None) -> ValidationResult:
+    def evaluate_rule(
+        cls,
+        rule: Any,
+        logs: List[Any],
+        graph: Optional[TopologyGraph] = None,
+        metrics: Optional[List[Any]] = None,
+    ) -> ValidationResult:
         rule_id = rule.get("id", "unknown") if isinstance(rule, dict) else getattr(rule, "id", "unknown")
         rule_name = rule.get("name", "unknown") if isinstance(rule, dict) else getattr(rule, "name", "unknown")
         try:
             if isinstance(rule, dict):
                 rule = ValidationRule(**rule)
             r_type = rule.type.value if hasattr(rule.type, "value") else str(rule.type)
+            all_metrics = list(metrics or [])
 
             # -----------------------------------------------------------------
             # 1. EVENT_EXISTS
@@ -394,20 +483,17 @@ class ValidationEngine:
             if r_type == "EVENT_EXISTS":
                 matching = []
                 for l in logs:
-                    st_match = True
-                    if rule.target_sourcetype:
-                        st_match = cls._matches_sourcetype(rule.target_sourcetype, l.sourcetype)
+                    if not cls._matches_record_filters(rule, l):
+                        continue
                     field_match = True
                     if rule.target_field:
-                        val = getattr(l, rule.target_field, None)
-                        if val is None and hasattr(l, "dict"):
-                            val = l.dict().get(rule.target_field)
+                        val = cls._get_field(l, rule.target_field)
                         if rule.expected_value is not None:
                             val_s = str(val).lower() if val is not None else ""
                             exp_s = str(rule.expected_value).lower()
                             comp = rule.comparison or "=="
                             match = False
-                            if comp == "in":
+                            if comp in ("in", "contains"):
                                 match = (val_s in exp_s or exp_s in val_s)
                             elif comp == "==":
                                 match = (val_s == exp_s)
@@ -419,11 +505,13 @@ class ValidationEngine:
                                 match = True
                             if not match:
                                 field_match = False
-                    if st_match and field_match:
+                        elif val is None:
+                            field_match = False
+                    if field_match:
                         matching.append(l)
 
                 count = len(matching)
-                min_c = rule.min_count or 1
+                min_c = rule.min_count if rule.min_count is not None else 1
                 passed = (count >= min_c)
                 return ValidationResult(
                     rule_id=rule.id,
@@ -441,17 +529,14 @@ class ValidationEngine:
             elif r_type == "COUNT_THRESHOLD":
                 matching = []
                 for l in logs:
-                    st_match = True
-                    if rule.target_sourcetype:
-                        st_match = cls._matches_sourcetype(rule.target_sourcetype, l.sourcetype)
+                    if not cls._matches_record_filters(rule, l):
+                        continue
                     field_match = True
                     if rule.target_field:
-                        val = getattr(l, rule.target_field, None)
-                        if val is None and hasattr(l, "dict"):
-                            val = l.dict().get(rule.target_field)
+                        val = cls._get_field(l, rule.target_field)
                         if rule.expected_value is not None and str(val).lower() != str(rule.expected_value).lower():
                             field_match = False
-                    if st_match and field_match:
+                    if field_match:
                         matching.append(l)
 
                 count = len(matching)
@@ -495,9 +580,9 @@ class ValidationEngine:
             # -----------------------------------------------------------------
             elif r_type == "FIELD_VALUE":
                 for l in logs:
-                    val = getattr(l, rule.target_field or "", None)
-                    if val is None and hasattr(l, "dict"):
-                        val = l.dict().get(rule.target_field)
+                    if not cls._matches_record_filters(rule, l):
+                        continue
+                    val = cls._get_field(l, rule.target_field)
                     if val is not None and str(val).lower() == str(rule.expected_value).lower():
                         return ValidationResult(
                             rule_id=rule.id,
@@ -517,24 +602,75 @@ class ValidationEngine:
                 )
 
             # -----------------------------------------------------------------
-            # 4. STATE_TRANSITION
+            # 4. STATE_TRANSITION & SEQUENCE
             # -----------------------------------------------------------------
-            elif r_type == "STATE_TRANSITION":
+            elif r_type in ("STATE_TRANSITION", "SEQUENCE"):
+                target_f = rule.target_field or "gnmi_value" if (rule.target_gnmi_path or rule.expected_sequence) else (rule.target_field or "status")
+                filtered = [l for l in logs if cls._matches_record_filters(rule, l)]
+
+                if rule.expected_sequence:
+                    phase_rank = {"BASELINE": 0, "DEGRADE": 1, "FAILOVER": 2, "RECOVERY": 3}
+                    filtered = sorted(
+                        filtered,
+                        key=lambda x: phase_rank.get(
+                            str(cls._get_field(x, "netspout_phase") or cls._get_field(x, "phase") or "").upper(),
+                            99,
+                        ),
+                    )
+                    observed_seq: List[Any] = []
+                    seq_idx = 0
+                    for item in filtered:
+                        if seq_idx >= len(rule.expected_sequence):
+                            break
+                        expected_step = rule.expected_sequence[seq_idx]
+                        ev_val = cls._get_field(item, target_f)
+                        ev_phase = cls._get_field(item, "netspout_phase") or cls._get_field(item, "phase")
+                        if isinstance(expected_step, dict):
+                            exp_p = expected_step.get("phase")
+                            exp_v = expected_step.get("value")
+                            p_ok = (exp_p is None) or (str(ev_phase).upper() == str(exp_p).upper())
+                            v_ok = (exp_v is None) or (str(ev_val).lower() == str(exp_v).lower())
+                            if p_ok and v_ok:
+                                observed_seq.append({"phase": ev_phase, "value": ev_val})
+                                seq_idx += 1
+                        elif isinstance(expected_step, (list, tuple)) and len(expected_step) == 2:
+                            exp_p, exp_v = expected_step[0], expected_step[1]
+                            if str(ev_phase).upper() == str(exp_p).upper() and str(ev_val).lower() == str(exp_v).lower():
+                                observed_seq.append((ev_phase, ev_val))
+                                seq_idx += 1
+                        else:
+                            if ev_val is not None and str(ev_val).lower() == str(expected_step).lower():
+                                observed_seq.append(ev_val)
+                                seq_idx += 1
+
+                    passed = (seq_idx == len(rule.expected_sequence))
+                    return ValidationResult(
+                        rule_id=rule.id,
+                        rule_name=rule.name,
+                        status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                        message=f"State transition sequence {'confirmed' if passed else 'incomplete'} ({seq_idx}/{len(rule.expected_sequence)} steps matched)",
+                        observed_value=observed_seq,
+                        expected_value=rule.expected_sequence,
+                        evidence={"matched_steps": seq_idx, "total_steps": len(rule.expected_sequence), "observed_sequence": observed_seq},
+                    )
+
                 observed_status = None
                 passed = False
-                target_f = rule.target_field or "status"
                 exp_val = str(rule.expected_value).lower()
 
-                # Check in event sequence
-                for l in logs:
-                    val = getattr(l, target_f, None)
-                    if val and str(val).lower() == exp_val:
+                # Check in filtered event sequence
+                for l in filtered:
+                    val = cls._get_field(l, target_f)
+                    if val is not None and str(val).lower() == exp_val:
                         passed = True
                         observed_status = val
                         break
 
-                # Check in graph nodes/edges
-                if not passed and graph:
+                # Check in graph nodes/edges only when not filtering on Splunk gNMI path/phase
+                is_strict_splunk_rule = bool(
+                    rule.target_gnmi_path or rule.target_phase or rule.target_index or rule.target_vendor
+                )
+                if not passed and graph and not is_strict_splunk_rule:
                     nodes = getattr(graph, "nodes_by_id", {})
                     for n in nodes.values():
                         val = getattr(n, target_f, None)
@@ -550,8 +686,7 @@ class ValidationEngine:
                                 observed_status = val
                                 break
 
-                # Fallback for recovered state when nominal restoration completed
-                if not passed and exp_val in ("restored", "normal", "up") and graph:
+                if not passed and exp_val in ("restored", "normal", "up") and graph and not is_strict_splunk_rule:
                     passed = True
                     observed_status = "restored"
 
@@ -565,7 +700,190 @@ class ValidationEngine:
                 )
 
             # -----------------------------------------------------------------
-            # 5. SPL_QUERY
+            # 5. METRIC_EXISTS
+            # -----------------------------------------------------------------
+            elif r_type == "METRIC_EXISTS":
+                candidates = all_metrics if all_metrics else logs
+                matching = []
+                for m in candidates:
+                    if not cls._matches_record_filters(rule, m):
+                        continue
+                    val = (
+                        cls._get_field(m, rule.target_field or "_value")
+                        or cls._get_field(m, "gnmi_numeric_value")
+                        or cls._get_field(m, "avg_val")
+                        or cls._get_field(m, "max_val")
+                        or cls._get_field(m, "latest_val")
+                    )
+                    if val is not None:
+                        matching.append(m)
+                count = len(matching)
+                min_c = rule.min_count if rule.min_count is not None else 1
+                passed = (count >= min_c)
+                return ValidationResult(
+                    rule_id=rule.id,
+                    rule_name=rule.name,
+                    status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                    message=f"Observed {count} metric observation(s) (expected >= {min_c})",
+                    observed_value=count,
+                    expected_value=min_c,
+                    evidence={"matched_metric_count": count},
+                )
+
+            # -----------------------------------------------------------------
+            # 6. METRIC_THRESHOLD & METRIC_PROGRESSION
+            # -----------------------------------------------------------------
+            elif r_type in ("METRIC_THRESHOLD", "METRIC_PROGRESSION"):
+                candidates = all_metrics if all_metrics else logs
+                filtered = [m for m in candidates if cls._matches_record_filters(rule, m)]
+                val_field = rule.target_field or "gnmi_numeric_value"
+
+                def _extract_num(item: Any) -> Optional[float]:
+                    for fk in (val_field, "_value", "max_val", "avg_val", "latest_val", "gnmi_numeric_value", "gnmi_value"):
+                        raw = cls._get_field(item, fk)
+                        if raw is not None:
+                            try:
+                                return float(raw)
+                            except (ValueError, TypeError):
+                                continue
+                    return None
+
+                if r_type == "METRIC_PROGRESSION" or rule.expected_sequence:
+                    # Evaluate phase-by-phase numeric progression (e.g. BASELINE < DEGRADE > RECOVERY or monotonic counter increase)
+                    phase_vals: Dict[str, float] = {}
+                    for m in filtered:
+                        ph = str(cls._get_field(m, "netspout_phase") or cls._get_field(m, "phase") or "").upper()
+                        num = _extract_num(m)
+                        if ph and num is not None:
+                            phase_vals[ph] = max(phase_vals.get(ph, num), num)
+
+                    seq = rule.expected_sequence or ["BASELINE", "DEGRADE", "RECOVERY"]
+                    missing_phases = [str(p).upper() for p in seq if str(p).upper() not in phase_vals]
+                    if missing_phases:
+                        return ValidationResult(
+                            rule_id=rule.id,
+                            rule_name=rule.name,
+                            status=ValidationStatus.FAIL,
+                            message=f"Metric progression missing required phase(s): {missing_phases}",
+                            observed_value=phase_vals,
+                            expected_value=seq,
+                        )
+                    passed = True
+                    mode = (rule.comparison or "peak_and_recover").lower()
+                    if mode in ("monotonic_increase", ">", ">="):
+                        for idx in range(len(seq) - 1):
+                            p_cur = str(seq[idx]).upper()
+                            p_nxt = str(seq[idx + 1]).upper()
+                            if not (phase_vals[p_nxt] > phase_vals[p_cur]):
+                                passed = False
+                    else:
+                        # Peak during fault/degrade and drop on recovery
+                        p_first = str(seq[0]).upper()
+                        p_mid = str(seq[1]).upper() if len(seq) > 1 else p_first
+                        p_last = str(seq[-1]).upper()
+                        if len(seq) >= 3:
+                            passed = (phase_vals[p_mid] > phase_vals[p_first]) and (phase_vals[p_last] < phase_vals[p_mid])
+                        elif len(seq) == 2:
+                            passed = phase_vals[p_last] > phase_vals[p_first]
+
+                    return ValidationResult(
+                        rule_id=rule.id,
+                        rule_name=rule.name,
+                        status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                        message=f"Metric progression across {seq}: {phase_vals} -> {'PASS' if passed else 'FAIL'}",
+                        observed_value=phase_vals,
+                        expected_value=seq,
+                        evidence={"phase_values": phase_vals, "mode": mode},
+                    )
+
+                # Standard threshold evaluation
+                exp_num = float(rule.expected_value) if rule.expected_value is not None else 0.0
+                comp = rule.comparison or ">="
+                matched_vals: List[float] = []
+                for m in filtered:
+                    num = _extract_num(m)
+                    if num is not None and cls._compare_numeric(num, exp_num, comp):
+                        matched_vals.append(num)
+
+                passed = len(matched_vals) >= (rule.min_count or 1)
+                return ValidationResult(
+                    rule_id=rule.id,
+                    rule_name=rule.name,
+                    status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                    message=f"Metric threshold ({comp} {exp_num}) matched {len(matched_vals)} observation(s)",
+                    observed_value=matched_vals[0] if matched_vals else None,
+                    expected_value=exp_num,
+                    evidence={"matched_values": matched_vals},
+                )
+
+            # -----------------------------------------------------------------
+            # 7. DESTINATION_CHECK (Event Index vs Metric Index)
+            # -----------------------------------------------------------------
+            elif r_type == "DESTINATION_CHECK":
+                exp_store = str(rule.expected_value or "BOTH").upper()
+                event_obs = [
+                    l for l in logs
+                    if (cls._get_field(l, "store_type") == "EVENT" or cls._get_field(l, "sourcetype") == "netspout:gnmi:event" or cls._get_field(l, "index") == "idx_network_ops")
+                    and cls._matches_record_filters(rule, l)
+                ]
+                metric_pool = all_metrics if all_metrics else logs
+                metric_obs = [
+                    m for m in metric_pool
+                    if (
+                        cls._get_field(m, "store_type") == "METRIC"
+                        or cls._get_field(m, "sourcetype") == "netspout:gnmi:metric"
+                        or cls._get_field(m, "index") == "cisco_mdt_metrics"
+                        or cls._get_field(m, "avg_val") is not None
+                        or cls._get_field(m, "max_val") is not None
+                    )
+                    and cls._matches_record_filters(rule, m)
+                ]
+                min_c = rule.min_count if rule.min_count is not None else 1
+                if exp_store == "EVENT":
+                    passed = len(event_obs) >= min_c
+                elif exp_store == "METRIC":
+                    passed = len(metric_obs) >= min_c
+                else:
+                    passed = (len(event_obs) >= min_c) and (len(metric_obs) >= min_c)
+                return ValidationResult(
+                    rule_id=rule.id,
+                    rule_name=rule.name,
+                    status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                    message=f"Destination check ({exp_store}): event_count={len(event_obs)}, metric_count={len(metric_obs)} (min={min_c})",
+                    observed_value={"event_count": len(event_obs), "metric_count": len(metric_obs)},
+                    expected_value=exp_store,
+                    evidence={"event_count": len(event_obs), "metric_count": len(metric_obs)},
+                )
+
+            # -----------------------------------------------------------------
+            # 8. CROSS_SOURCE_COHERENCE
+            # -----------------------------------------------------------------
+            elif r_type == "CROSS_SOURCE_COHERENCE":
+                req_sources = rule.required_sources or ["netspout:gnmi:event", "netspout:snmp:trap", "cisco:ios:syslog", "netflow:collector"]
+                filtered = [l for l in logs if cls._matches_record_filters(rule, l)]
+                observed_sources: Dict[str, int] = {}
+                for req_s in req_sources:
+                    cnt = 0
+                    for item in filtered:
+                        st = str(cls._get_field(item, "sourcetype") or "")
+                        fam = str(cls._get_field(item, "telemetry_family") or "")
+                        if cls._matches_sourcetype(req_s, st) or req_s.lower() == fam.lower() or req_s.lower() in st.lower():
+                            cnt += 1
+                    observed_sources[req_s] = cnt
+                missing = [s for s, c in observed_sources.items() if c < (rule.min_count or 1)]
+                passed = len(missing) == 0
+                return ValidationResult(
+                    rule_id=rule.id,
+                    rule_name=rule.name,
+                    status=ValidationStatus.PASS if passed else ValidationStatus.FAIL,
+                    message=f"Cross-source coherence: {observed_sources} (missing={missing})",
+                    observed_value=observed_sources,
+                    expected_value=req_sources,
+                    evidence={"observed_sources": observed_sources, "missing_sources": missing},
+                )
+
+            # -----------------------------------------------------------------
+            # 9. SPL_QUERY
             # -----------------------------------------------------------------
             elif r_type == "SPL_QUERY":
                 if not rule.spl_query:
@@ -617,8 +935,14 @@ class ValidationEngine:
             )
 
     @classmethod
-    def evaluate_all(cls, rules: List[ValidationRule], logs: List[LogEntry], graph: Optional[TopologyGraph] = None) -> List[ValidationResult]:
-        return [cls.evaluate_rule(r, logs, graph) for r in rules]
+    def evaluate_all(
+        cls,
+        rules: List[ValidationRule],
+        logs: List[Any],
+        graph: Optional[TopologyGraph] = None,
+        metrics: Optional[List[Any]] = None,
+    ) -> List[ValidationResult]:
+        return [cls.evaluate_rule(r, logs, graph, metrics=metrics) for r in rules]
 
 
 # =========================================================================

@@ -1,0 +1,468 @@
+{
+  "coherence_validation": {
+    "evidence": {
+      "missing_sources": [],
+      "observed_sources": {
+        "cisco:ios:syslog": 8,
+        "netflow:collector": 4,
+        "netspout:gnmi:event": 212,
+        "netspout:snmp:poll": 4,
+        "netspout:snmp:trap": 3
+      }
+    },
+    "expected_value": [
+      "netspout:gnmi:event",
+      "netspout:snmp:poll",
+      "netspout:snmp:trap",
+      "cisco:ios:syslog",
+      "netflow:collector"
+    ],
+    "message": "Cross-source coherence: {'netspout:gnmi:event': 212, 'netspout:snmp:poll': 4, 'netspout:snmp:trap': 3, 'cisco:ios:syslog': 8, 'netflow:collector': 4} (missing=[])",
+    "observed_value": {
+      "cisco:ios:syslog": 8,
+      "netflow:collector": 4,
+      "netspout:gnmi:event": 212,
+      "netspout:snmp:poll": 4,
+      "netspout:snmp:trap": 3
+    },
+    "rule_id": "R13D-XTRANS-01",
+    "rule_name": "Cross-Transport Telemetry Coherence (gNMI + SNMP + Syslog + NetFlow)",
+    "status": "PASS"
+  },
+  "companion_dispatched": 19,
+  "cross_transport_coherent": true,
+  "device_id": "cisco-asr9k-pe1",
+  "gnmi_scorecard": {
+    "dual_store_breakdown": {
+      "duplicate_records_suppressed": 80,
+      "normalized_event_records": 212,
+      "normalized_metric_records": 324,
+      "observation_completeness_pct": 100.0,
+      "splunk_dispatch_failures": 0,
+      "splunk_dispatched_events": 212,
+      "splunk_dispatched_metrics": 324,
+      "splunk_observed_events": 212,
+      "splunk_observed_metrics": 324
+    },
+    "encodings_used": [
+      "JSON_IETF"
+    ],
+    "errors": [],
+    "highest_verified_stage": "VALIDATED",
+    "investigation_queries": {
+      "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+      "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+      "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+      "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+      "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+      "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+      "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+      "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+      "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+      "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-xtrans-4ac0d0a3\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+    },
+    "ledger": {
+      "error_message": null,
+      "error_stage": null,
+      "highest_verified_stage": "VALIDATED",
+      "phase": "COMPLETE",
+      "run_id": "run-13d-xtrans-4ac0d0a3",
+      "scenario_id": "service_provider_cisco",
+      "stages": {
+        "COLLECTOR_RECEIVED": {
+          "count": 80,
+          "verified": true
+        },
+        "GENERATED": {
+          "count": 4,
+          "verified": true
+        },
+        "NORMALIZED": {
+          "count": 536,
+          "verified": true
+        },
+        "SERVER_PUBLISHED": {
+          "count": 80,
+          "verified": true
+        },
+        "SPLUNK_DISPATCHED": {
+          "count": 536,
+          "verified": true
+        },
+        "SPLUNK_OBSERVED": {
+          "count": 536,
+          "verified": true
+        },
+        "VALIDATED": {
+          "count": 10,
+          "verified": true
+        }
+      }
+    },
+    "phases_executed": [
+      "BASELINE",
+      "DEGRADE",
+      "FAILOVER",
+      "RECOVERY"
+    ],
+    "query_execution_summary": {
+      "q1_run_overview_spl": 4,
+      "q2_phase_progression_spl": 4,
+      "q3_interface_state_transition_spl": 28,
+      "q4_bgp_neighbor_transition_spl": 12,
+      "q5_qos_congestion_drops_mstats": 32,
+      "q6_optical_signal_degradation_mstats": 32,
+      "q7_system_cpu_memory_health_mstats": 36,
+      "q8_vendor_comparison_spl": 1,
+      "q9_metric_catalog_mstats": 204
+    },
+    "run_id": "run-13d-xtrans-4ac0d0a3",
+    "scenario_id": "service_provider_cisco",
+    "splunk_destinations": {
+      "event_index": "idx_network_ops",
+      "event_sourcetype": "netspout:gnmi:event",
+      "metric_index": "cisco_mdt_metrics",
+      "metric_sourcetype": "netspout:gnmi:metric"
+    },
+    "stage_counts": {
+      "COLLECTOR_RECEIVED": 80,
+      "GENERATED": 4,
+      "NORMALIZED": 536,
+      "SERVER_PUBLISHED": 80,
+      "SPLUNK_DISPATCHED": 536,
+      "SPLUNK_OBSERVED": 536,
+      "VALIDATED": 10
+    },
+    "subscription_modes": [
+      "ONCE"
+    ],
+    "target_devices": [
+      "cisco-asr9k-pe1"
+    ],
+    "transport_truth": {
+      "collector_side": "Splunk HEC over HTTPS",
+      "device_side": "Native gNMI over gRPC/HTTP2",
+      "telemetry_semantics": "NATIVE TRANSPORT / MODELED DEVICE STATE"
+    },
+    "unsupported_telemetry_declarations": [],
+    "validation": {
+      "failed_rules": 0,
+      "passed_rules": 10,
+      "results": [
+        {
+          "evidence": {
+            "matched_count": 212
+          },
+          "expected_value": 4,
+          "message": "Observed 212 event(s) matching criteria (expected >= 4)",
+          "observed_value": 212,
+          "rule_id": "R13D-SPC-01",
+          "rule_name": "Cisco IOS XR Vendor Event Presence",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_count": 4
+          },
+          "expected_value": 3,
+          "message": "Observed 4 event(s) matching criteria (expected >= 3)",
+          "observed_value": 4,
+          "rule_id": "R13D-SPC-02",
+          "rule_name": "Primary Interface Keyed gNMI Path Presence",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_count": 53
+          },
+          "expected_value": 4,
+          "message": "Observed 53 event(s) matching criteria (expected >= 4)",
+          "observed_value": 53,
+          "rule_id": "R13D-SPC-03",
+          "rule_name": "Failover Phase Event Presence",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_steps": 3,
+            "observed_sequence": [
+              [
+                "BASELINE",
+                "UP"
+              ],
+              [
+                "FAILOVER",
+                "DOWN"
+              ],
+              [
+                "RECOVERY",
+                "UP"
+              ]
+            ],
+            "total_steps": 3
+          },
+          "expected_value": [
+            [
+              "BASELINE",
+              "UP"
+            ],
+            [
+              "FAILOVER",
+              "DOWN"
+            ],
+            [
+              "RECOVERY",
+              "UP"
+            ]
+          ],
+          "message": "State transition sequence confirmed (3/3 steps matched)",
+          "observed_value": [
+            [
+              "BASELINE",
+              "UP"
+            ],
+            [
+              "FAILOVER",
+              "DOWN"
+            ],
+            [
+              "RECOVERY",
+              "UP"
+            ]
+          ],
+          "rule_id": "R13D-SPC-04",
+          "rule_name": "Primary Interface State Sequence (UP -> DOWN -> UP)",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_steps": 3,
+            "observed_sequence": [
+              [
+                "BASELINE",
+                "ESTABLISHED"
+              ],
+              [
+                "FAILOVER",
+                "IDLE"
+              ],
+              [
+                "RECOVERY",
+                "ESTABLISHED"
+              ]
+            ],
+            "total_steps": 3
+          },
+          "expected_value": [
+            [
+              "BASELINE",
+              "ESTABLISHED"
+            ],
+            [
+              "FAILOVER",
+              "IDLE"
+            ],
+            [
+              "RECOVERY",
+              "ESTABLISHED"
+            ]
+          ],
+          "message": "State transition sequence confirmed (3/3 steps matched)",
+          "observed_value": [
+            [
+              "BASELINE",
+              "ESTABLISHED"
+            ],
+            [
+              "FAILOVER",
+              "IDLE"
+            ],
+            [
+              "RECOVERY",
+              "ESTABLISHED"
+            ]
+          ],
+          "rule_id": "R13D-SPC-05",
+          "rule_name": "Primary BGP Neighbor State Sequence (ESTABLISHED -> IDLE -> ESTABLISHED)",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_steps": 3,
+            "observed_sequence": [
+              [
+                "BASELINE",
+                "bgp-st-estab"
+              ],
+              [
+                "FAILOVER",
+                "bgp-st-idle"
+              ],
+              [
+                "RECOVERY",
+                "bgp-st-estab"
+              ]
+            ],
+            "total_steps": 3
+          },
+          "expected_value": [
+            [
+              "BASELINE",
+              "bgp-st-estab"
+            ],
+            [
+              "FAILOVER",
+              "bgp-st-idle"
+            ],
+            [
+              "RECOVERY",
+              "bgp-st-estab"
+            ]
+          ],
+          "message": "State transition sequence confirmed (3/3 steps matched)",
+          "observed_value": [
+            [
+              "BASELINE",
+              "bgp-st-estab"
+            ],
+            [
+              "FAILOVER",
+              "bgp-st-idle"
+            ],
+            [
+              "RECOVERY",
+              "bgp-st-estab"
+            ]
+          ],
+          "rule_id": "R13D-SPC-06",
+          "rule_name": "Cisco XR Native BGP Connection State Sequence",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_metric_count": 4
+          },
+          "expected_value": 2,
+          "message": "Observed 4 metric observation(s) (expected >= 2)",
+          "observed_value": 4,
+          "rule_id": "R13D-SPC-07",
+          "rule_name": "Metrics Store Presence in cisco_mdt_metrics",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "matched_values": [
+              526.0
+            ]
+          },
+          "expected_value": 100.0,
+          "message": "Metric threshold (> 100.0) matched 1 observation(s)",
+          "observed_value": 526.0,
+          "rule_id": "R13D-SPC-08",
+          "rule_name": "Interface Error Counter Surge During Degrade/Failover",
+          "status": "PASS"
+        },
+        {
+          "evidence": null,
+          "expected_value": "UP",
+          "message": "State transition to UP confirmed",
+          "observed_value": "UP",
+          "rule_id": "R13D-SPC-09",
+          "rule_name": "Recovery State Confirmation (Primary Interface UP & BGP ESTABLISHED)",
+          "status": "PASS"
+        },
+        {
+          "evidence": {
+            "event_count": 212,
+            "metric_count": 324
+          },
+          "expected_value": "BOTH",
+          "message": "Destination check (BOTH): event_count=212, metric_count=324 (min=5)",
+          "observed_value": {
+            "event_count": 212,
+            "metric_count": 324
+          },
+          "rule_id": "R13D-SPC-10",
+          "rule_name": "Dual Destination Verification (Event Index + Metric Index)",
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS",
+      "total_rules": 10
+    },
+    "vendor_profiles": [
+      "CISCO_IOS_XR"
+    ],
+    "wire_payload_pure": true
+  },
+  "phases_verified": [
+    "BASELINE",
+    "DEGRADE",
+    "FAILOVER",
+    "RECOVERY"
+  ],
+  "run_id": "run-13d-xtrans-4ac0d0a3",
+  "scenario_id": "service_provider_cisco",
+  "timeline_by_phase": [
+    {
+      "current_evidence_stage": "SPLUNK_OBSERVED",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "netspout_phase": "BASELINE",
+      "origin_evidence_stage": "NORMALIZED",
+      "records": "57",
+      "source_count": "4",
+      "sourcetypes": [
+        "cisco:ios:syslog",
+        "netflow:collector",
+        "netspout:gnmi:event",
+        "netspout:snmp:poll"
+      ]
+    },
+    {
+      "current_evidence_stage": "SPLUNK_OBSERVED",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "netspout_phase": "DEGRADE",
+      "origin_evidence_stage": "NORMALIZED",
+      "records": "58",
+      "source_count": "5",
+      "sourcetypes": [
+        "cisco:ios:syslog",
+        "netflow:collector",
+        "netspout:gnmi:event",
+        "netspout:snmp:poll",
+        "netspout:snmp:trap"
+      ]
+    },
+    {
+      "current_evidence_stage": "SPLUNK_OBSERVED",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "netspout_phase": "FAILOVER",
+      "origin_evidence_stage": "NORMALIZED",
+      "records": "58",
+      "source_count": "5",
+      "sourcetypes": [
+        "cisco:ios:syslog",
+        "netflow:collector",
+        "netspout:gnmi:event",
+        "netspout:snmp:poll",
+        "netspout:snmp:trap"
+      ]
+    },
+    {
+      "current_evidence_stage": "SPLUNK_OBSERVED",
+      "netspout_device_id": "cisco-asr9k-pe1",
+      "netspout_phase": "RECOVERY",
+      "origin_evidence_stage": "NORMALIZED",
+      "records": "58",
+      "source_count": "5",
+      "sourcetypes": [
+        "cisco:ios:syslog",
+        "netflow:collector",
+        "netspout:gnmi:event",
+        "netspout:snmp:poll",
+        "netspout:snmp:trap"
+      ]
+    }
+  ],
+  "total_cross_transport_events_observed": 231
+}

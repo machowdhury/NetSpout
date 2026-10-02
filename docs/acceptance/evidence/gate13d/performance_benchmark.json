@@ -1,0 +1,29 @@
+{
+  "benchmark_run_id": "run-13d-perf-63cc6320",
+  "collector_binary": "/opt/homebrew/bin/gnmic (v0.49.0)",
+  "collector_receive_latency_ms": 49.66,
+  "collector_receive_to_normalized_latency_ms": 3.205,
+  "end_to_end_completion_time_ms": 1889.777,
+  "guardrails_enforced": {
+    "bounded_hec_batch_size": 100,
+    "bounded_splunk_search_timeout_sec": 8.0,
+    "loopback_only_bind": "127.0.0.1",
+    "min_sample_interval_ms": 500
+  },
+  "ingestion_counts": {
+    "dispatch_errors": 0,
+    "duplicate_records_suppressed": 20,
+    "event_records_dispatched": 53,
+    "event_records_observed": 53,
+    "metric_records_dispatched": 81,
+    "metric_series_observed": 49,
+    "total_records_dispatched": 134
+  },
+  "normalized_to_splunk_hec_dispatch_latency_ms": 17.946,
+  "resource_usage": {
+    "cpu_system_sec": 0.0164,
+    "cpu_user_sec": 0.0331,
+    "max_rss_mb": 73.97
+  },
+  "splunk_dispatch_to_searchable_observation_latency_ms": 1816.689
+}

@@ -523,10 +523,14 @@ class ScenarioPhase(str, Enum):
 class ValidationType(str, Enum):
     EVENT_EXISTS = "EVENT_EXISTS"
     FIELD_VALUE = "FIELD_VALUE"
+    METRIC_EXISTS = "METRIC_EXISTS"
     METRIC_THRESHOLD = "METRIC_THRESHOLD"
+    METRIC_PROGRESSION = "METRIC_PROGRESSION"
     STATE_TRANSITION = "STATE_TRANSITION"
     COUNT_THRESHOLD = "COUNT_THRESHOLD"
     SEQUENCE = "SEQUENCE"
+    DESTINATION_CHECK = "DESTINATION_CHECK"
+    CROSS_SOURCE_COHERENCE = "CROSS_SOURCE_COHERENCE"
     SPL_QUERY = "SPL_QUERY"
 
 
@@ -543,9 +547,16 @@ class ValidationRule(BaseModel):
     type: ValidationType = ValidationType.EVENT_EXISTS
     description: str = ""
     target_sourcetype: Optional[str] = None
+    target_index: Optional[str] = None
+    target_vendor: Optional[str] = None
+    target_gnmi_path: Optional[str] = None
+    target_phase: Optional[str] = None
+    target_metric_name: Optional[str] = None
     target_field: Optional[str] = None
     expected_value: Optional[Any] = None
-    comparison: str = "=="  # "==", "!=", ">=", "<=", "in", "contains"
+    expected_sequence: Optional[List[Any]] = None
+    required_sources: Optional[List[str]] = None
+    comparison: str = "=="  # "==", "!=", ">=", "<=", ">", "<", "in", "contains"
     min_count: Optional[int] = 1
     spl_query: Optional[str] = None
 

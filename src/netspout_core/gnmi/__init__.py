@@ -71,6 +71,16 @@ from .collector_pipeline import (
     verify_cross_transport_coherence_via_collector,
     verify_wire_payload_purity,
 )
+from .splunk_e2e import (
+    UNSUPPORTED_TELEMETRY_CATALOG,
+    GnmiSplunkAdapter,
+    GnmiSplunkBridge,
+    GnmiSplunkE2EOrchestrator,
+    GnmiSplunkE2EScorecard,
+    GnmiSplunkRecord,
+    build_gnmi_investigation_queries,
+    build_scenario_validation_rules,
+)
 from .vendor_profiles import (
     GNMI_SEMVER,
     OPENCONFIG_CORE_DEVICES,
@@ -142,4 +152,12 @@ __all__ = [
     "GnmiServerDiagnostics",
     "NativeGnmiServicer",
     "NativeGnmiServer",
+    "UNSUPPORTED_TELEMETRY_CATALOG",
+    "GnmiSplunkRecord",
+    "GnmiSplunkAdapter",
+    "GnmiSplunkBridge",
+    "GnmiSplunkE2EScorecard",
+    "GnmiSplunkE2EOrchestrator",
+    "build_gnmi_investigation_queries",
+    "build_scenario_validation_rules",
 ]

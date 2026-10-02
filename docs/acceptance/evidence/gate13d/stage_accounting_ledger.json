@@ -1,0 +1,154 @@
+{
+  "cisco_aci_microburst": {
+    "error_message": null,
+    "error_stage": null,
+    "highest_verified_stage": "VALIDATED",
+    "phase": "COMPLETE",
+    "run_id": "run-13d-cisco_ac-cf76c2c9",
+    "scenario_id": "cisco_aci_microburst",
+    "stages": {
+      "COLLECTOR_RECEIVED": {
+        "count": 24,
+        "verified": true
+      },
+      "GENERATED": {
+        "count": 4,
+        "verified": true
+      },
+      "NORMALIZED": {
+        "count": 168,
+        "verified": true
+      },
+      "SERVER_PUBLISHED": {
+        "count": 24,
+        "verified": true
+      },
+      "SPLUNK_DISPATCHED": {
+        "count": 168,
+        "verified": true
+      },
+      "SPLUNK_OBSERVED": {
+        "count": 168,
+        "verified": true
+      },
+      "VALIDATED": {
+        "count": 6,
+        "verified": true
+      }
+    }
+  },
+  "multivendor_gnmi_e2e": {
+    "error_message": null,
+    "error_stage": null,
+    "highest_verified_stage": "VALIDATED",
+    "phase": "COMPLETE",
+    "run_id": "run-13d-multivendor-4a0d442d",
+    "scenario_id": "multivendor_gnmi_e2e",
+    "stages": {
+      "COLLECTOR_RECEIVED": {
+        "count": 72,
+        "verified": true
+      },
+      "GENERATED": {
+        "count": 3,
+        "verified": true
+      },
+      "NORMALIZED": {
+        "count": 459,
+        "verified": true
+      },
+      "SERVER_PUBLISHED": {
+        "count": 72,
+        "verified": true
+      },
+      "SPLUNK_DISPATCHED": {
+        "count": 459,
+        "verified": true
+      },
+      "SPLUNK_OBSERVED": {
+        "count": 459,
+        "verified": true
+      },
+      "VALIDATED": {
+        "count": 5,
+        "verified": true
+      }
+    }
+  },
+  "openconfig_mdt_streaming": {
+    "error_message": null,
+    "error_stage": null,
+    "highest_verified_stage": "VALIDATED",
+    "phase": "COMPLETE",
+    "run_id": "run-13d-openconf-a67167c7",
+    "scenario_id": "openconfig_mdt_streaming",
+    "stages": {
+      "COLLECTOR_RECEIVED": {
+        "count": 122,
+        "verified": true
+      },
+      "GENERATED": {
+        "count": 7,
+        "verified": true
+      },
+      "NORMALIZED": {
+        "count": 434,
+        "verified": true
+      },
+      "SERVER_PUBLISHED": {
+        "count": 71,
+        "verified": true
+      },
+      "SPLUNK_DISPATCHED": {
+        "count": 434,
+        "verified": true
+      },
+      "SPLUNK_OBSERVED": {
+        "count": 434,
+        "verified": true
+      },
+      "VALIDATED": {
+        "count": 6,
+        "verified": true
+      }
+    }
+  },
+  "service_provider_cisco": {
+    "error_message": null,
+    "error_stage": null,
+    "highest_verified_stage": "VALIDATED",
+    "phase": "COMPLETE",
+    "run_id": "run-13d-service_-495d6851",
+    "scenario_id": "service_provider_cisco",
+    "stages": {
+      "COLLECTOR_RECEIVED": {
+        "count": 146,
+        "verified": true
+      },
+      "GENERATED": {
+        "count": 7,
+        "verified": true
+      },
+      "NORMALIZED": {
+        "count": 602,
+        "verified": true
+      },
+      "SERVER_PUBLISHED": {
+        "count": 95,
+        "verified": true
+      },
+      "SPLUNK_DISPATCHED": {
+        "count": 602,
+        "verified": true
+      },
+      "SPLUNK_OBSERVED": {
+        "count": 602,
+        "verified": true
+      },
+      "VALIDATED": {
+        "count": 10,
+        "verified": true
+      }
+    }
+  }
+}

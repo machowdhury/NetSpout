@@ -1,0 +1,72 @@
+{
+  "all_9_controlled_failures_verified": true,
+  "failure_A_server_unavailable": {
+    "collector_received": false,
+    "highest_verified_stage": "NONE",
+    "normalized": false,
+    "passed_negative_check": true,
+    "returncode": 1,
+    "splunk_dispatched": false,
+    "splunk_observed": false
+  },
+  "failure_B_collector_unavailable": {
+    "collector_received": false,
+    "error_message": "Collector binary not found: [Errno 2] No such file or directory: '/nonexistent/bin/gnmic_missing'",
+    "passed_negative_check": true,
+    "returncode": 127,
+    "splunk_dispatched": false,
+    "splunk_observed": false
+  },
+  "failure_C_splunk_unavailable": {
+    "collector_received": true,
+    "highest_verified_stage": "NORMALIZED",
+    "normalized": true,
+    "normalized_count": 5,
+    "passed_negative_check": true,
+    "splunk_dispatched": false,
+    "splunk_failed_count": 5,
+    "splunk_observed": false
+  },
+  "failure_D_invalid_auth": {
+    "collector_received": false,
+    "normalized": false,
+    "passed_negative_check": true,
+    "returncode": 1,
+    "splunk_dispatched": false,
+    "splunk_observed": false
+  },
+  "failure_E_unsupported_path": {
+    "collector_received": false,
+    "normalized_count": 0,
+    "passed_negative_check": true,
+    "returncode": 1,
+    "splunk_dispatched": false
+  },
+  "failure_F_missing_correlation_phase": {
+    "adapted_records": 0,
+    "dropped_missing_correlation": 5,
+    "input_records": 5,
+    "passed_negative_check": true,
+    "validation_status": "FAIL"
+  },
+  "failure_G_missing_vendor_field": {
+    "adapted_records": 0,
+    "dropped_missing_vendor": 5,
+    "input_records": 5,
+    "passed_negative_check": true,
+    "validation_status": "FAIL"
+  },
+  "failure_H_metric_destination_failure": {
+    "destination_validation_status": "FAIL",
+    "event_dispatched": 6,
+    "metric_dispatched": 0,
+    "metric_failed": 12,
+    "passed_negative_check": true
+  },
+  "failure_I_duplicate_collector_records": {
+    "duplicate_records_suppressed": 17,
+    "passed_negative_check": true,
+    "raw_input_count": 34,
+    "unique_adapted_count": 17
+  }
+}

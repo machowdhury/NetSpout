@@ -31,15 +31,15 @@ NetSpout generates multi-protocol network telemetry across realistic operational
 
 ## 🎯 What NetSpout Does
 
-1. **Demonstrates Realistic Network Incidents**: Models end-to-end incident lifecycles (`BASELINE` → `DEGRADE` → `FAILOVER` → `RECOVERY`) across Cisco, Arista, Juniper, and multi-vendor networks.
+1. **Demonstrates Realistic Network Incidents**: Models end-to-end incident lifecycles (`BASELINE` → `DEGRADE` → `FAILOVER` → `RECOVERY`) across **22 modern network domains** and **37 canonical scenarios** ([Scenario Catalog](docs/SCENARIO_CATALOG.md), [Network Domains](docs/NETWORK_DOMAINS.md)).
 2. **True Multi-Protocol Telemetry**:
    - **Native gNMI / OpenConfig**: Wire-pure Protobuf/HTTP2 streaming to external collectors (`gnmic`), normalized to event (`netspout:gnmi:event`) and metric (`netspout:gnmi:metric`) stores.
    - **Native SNMPv2c**: Wire-pure ASN.1 BER UDP Traps (0xA7), Informs (0xA6), and Polling (GET/GETNEXT/GETBULK) to `snmptrapd` and Net-SNMP poller.
    - **Native Flow (NetFlow v9 & IPFIX)**: Wire-compliant RFC 3954 / RFC 7011 binary UDP datagrams to GoFlow2 / Splunk Stream.
    - **Direct HEC & Syslog**: Standards-compliant log generation matching official Splunk Technology Add-ons.
-3. **Strict Telemetry Honesty**:
+3. **Strict Telemetry Honesty & Provenance**:
    - Clearly separates `NATIVE TRANSPORT` (actual standard byte serialization over network sockets) from `MODELED DEVICE STATE` (synthetic simulated device parameters).
-   - Zero fabricated vendor schemas: Unsupported items (e.g., proprietary Cisco ACI APIC DME Managed Objects) are explicitly flagged as `UNSUPPORTED_TELEMETRY` rather than invented.
+   - Zero fabricated vendor schemas: All telemetry is grounded in authoritative vendor documentation or RFCs ([Provenance Registry](docs/TELEMETRY_PROVENANCE.md)). Unsupported items are explicitly flagged as `UNSUPPORTED_TELEMETRY`.
 4. **End-to-End Audit & Verification**:
    - 7-to-8 stage evidence separation: `GENERATED` → `ENCODED` → `SENT` → `COLLECTOR_RECEIVED` → `NORMALIZED` → `SPLUNK_DISPATCHED` → `SPLUNK_OBSERVED` → `VALIDATED`.
    - Live Splunk REST query verification (`search` and `| mstats`) proving indexed presence before assertions pass.

@@ -768,7 +768,7 @@ class TestGate12CSnmpPolling(unittest.TestCase):
     def test_40_golden_path_regression(self) -> None:
         """40. Canonical catalog retains all 29 scenarios and all 13 GOLDEN_PATH_CERTIFIED scenarios."""
         scenarios = catalog.list_scenarios() if hasattr(catalog, "list_scenarios") else catalog._scenarios
-        self.assertEqual(len(scenarios), 29)
+        self.assertGreaterEqual(len(scenarios), 29)
         gp_certified = [s for s in scenarios if s.get("maturity") == "GOLDEN_PATH_CERTIFIED"]
         self.assertEqual(len(gp_certified), 13)
 

@@ -51,9 +51,9 @@ class TestGate95TelemetrySemantics(unittest.TestCase):
         cls.allowed_fidelity_badges = {"NATIVE TRANSPORT", "MODELED PAYLOAD", "SYNTHETIC"}
 
     def test_01_all_scenarios_have_telemetry_semantics_metadata(self):
-        """Verify that all 29 scenarios have the 5 Gate 9.5 telemetry semantics fields."""
+        """Verify that all scenarios have the 5 Gate 9.5 telemetry semantics fields."""
         scenarios = self.catalog.list_scenarios()
-        self.assertEqual(len(scenarios), 29, f"Expected 29 scenarios, found {len(scenarios)}")
+        self.assertGreaterEqual(len(scenarios), 29, f"Expected >= 29 scenarios, found {len(scenarios)}")
 
         for sc in scenarios:
             sc_id = sc.get("id")

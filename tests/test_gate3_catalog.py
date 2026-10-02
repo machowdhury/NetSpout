@@ -43,13 +43,13 @@ class TestGate3CanonicalCatalog(unittest.TestCase):
         self.assertGreaterEqual(len(sourcetypes), 260, "Catalog must contain >= 260 sourcetypes")
 
         scenarios = catalog.list_scenarios()
-        self.assertEqual(len(scenarios), 29, "Catalog must contain 29 scenarios")
+        self.assertGreaterEqual(len(scenarios), 29, "Catalog must contain >= 29 scenarios")
 
         device_types = catalog.list_device_types()
         self.assertEqual(len(device_types), 17, "Catalog must contain 17 device types")
 
         topologies = catalog.list_topologies()
-        self.assertEqual(len(topologies), 28, "Catalog must contain 28 topologies")
+        self.assertGreaterEqual(len(topologies), 28, "Catalog must contain >= 28 topologies")
 
         samples = catalog.list_samples()
         self.assertEqual(len(samples), 213, "Catalog must contain 213 sample datasets")

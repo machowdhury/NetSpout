@@ -5548,5 +5548,110 @@
     "deprecated_aliases": [],
     "is_benchmark_197": false,
     "status": "active"
+  },
+  {
+    "id": "cisco-ios-mpls",
+    "splunk_sourcetype": "cisco:ios:mpls",
+    "display_name": "Cisco IOS-XR / XE MPLS LDP",
+    "vendor_id": "cisco_ios",
+    "category": "NETWORK_OPERATIONS",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SYNTHETIC",
+    "protocol": "syslog",
+    "sample_file": null,
+    "required_ta": "Splunk_TA_cisco-ios",
+    "aliases": [
+      "cisco-ios-mpls",
+      "cisco:ios:mpls"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": true,
+    "status": "active"
+  },
+  {
+    "id": "cisco-ios-srv6",
+    "splunk_sourcetype": "cisco:ios:srv6",
+    "display_name": "Cisco IOS-XR SRv6 and TI-LFA",
+    "vendor_id": "cisco_ios",
+    "category": "NETWORK_OPERATIONS",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SYNTHETIC",
+    "protocol": "syslog",
+    "sample_file": null,
+    "required_ta": "Splunk_TA_cisco-ios",
+    "aliases": [
+      "cisco-ios-srv6",
+      "cisco:ios:srv6"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": true,
+    "status": "active"
+  },
+  {
+    "id": "cisco-nexus-evpn",
+    "splunk_sourcetype": "cisco:nexus:evpn",
+    "display_name": "Cisco Nexus NX-OS BGP EVPN VXLAN",
+    "vendor_id": "cisco_ios",
+    "category": "NETWORK_OPERATIONS",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SYNTHETIC",
+    "protocol": "syslog",
+    "sample_file": null,
+    "required_ta": "Splunk_TA_cisco-nexus",
+    "aliases": [
+      "cisco-nexus-evpn",
+      "cisco:nexus:evpn"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": true,
+    "status": "active"
+  },
+  {
+    "id": "arista-eos-lanz",
+    "splunk_sourcetype": "arista:eos:lanz",
+    "display_name": "Arista EOS Latency Analyzer (LANZ)",
+    "vendor_id": "arista_eos",
+    "category": "NETWORK_OPERATIONS",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SYNTHETIC",
+    "protocol": "syslog",
+    "sample_file": null,
+    "required_ta": "Splunk_TA_arista",
+    "aliases": [
+      "arista-eos-lanz",
+      "arista:eos:lanz"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": true,
+    "status": "active"
+  },
+  {
+    "id": "nvidia-spectrum-telemetry",
+    "splunk_sourcetype": "nvidia:spectrum:telemetry",
+    "display_name": "NVIDIA Spectrum Lossless PFC/ECN",
+    "vendor_id": "arista_eos",
+    "category": "DATACENTER",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "SYNTHETIC",
+    "protocol": "syslog",
+    "sample_file": null,
+    "required_ta": "Splunk_TA_nvidia",
+    "aliases": [
+      "nvidia-spectrum-telemetry",
+      "nvidia:spectrum:telemetry"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": true,
+    "status": "active"
   }
 ]

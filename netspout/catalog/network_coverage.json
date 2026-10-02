@@ -1,0 +1,537 @@
+[
+  {
+    "domain_id": "LAN",
+    "name": "Enterprise LAN",
+    "description": "Campus local area switching, 802.1Q VLAN trunking, STP/RSTP topology changes, and port security.",
+    "status": "OPERATIONAL",
+    "maturity": "E2E_VALIDATED",
+    "scenarios": [
+      "arch_lan_campus_access",
+      "pure_cisco_enterprise",
+      "cisco_campus_rogue",
+      "normal_traffic"
+    ],
+    "topologies": [
+      "arch_lan_campus_access",
+      "cisco_campus_core",
+      "normal_enterprise_lan"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "netflow_v9",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "cisco:ios",
+      "netspout:netflow:v9"
+    ]
+  },
+  {
+    "domain_id": "WLAN",
+    "name": "Wireless LAN (WLAN)",
+    "description": "Enterprise Wi-Fi 6E/7 infrastructure, Catalyst 9800 / Meraki access points, client roaming, and RF interference.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_wlan_meraki_catalyst",
+      "wireless_connected_core_cisco",
+      "wireless_connected_core_mixed"
+    ],
+    "topologies": [
+      "arch_wlan_meraki_catalyst",
+      "wlan_core_cisco",
+      "wlan_core_mixed"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "meraki:security",
+      "cisco:wlc",
+      "cisco:ios:syslog"
+    ]
+  },
+  {
+    "domain_id": "CAN",
+    "name": "Campus Area Network (CAN)",
+    "description": "Multi-building fiber interconnects, redundant core routing, and Cisco Catalyst Center / DNA-C assurance.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_can_multi_building"
+    ],
+    "topologies": [
+      "arch_can_multi_building"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:catalyst:networkhealth",
+      "cisco:ios:syslog",
+      "cisco:ise:trustsec:sgt"
+    ]
+  },
+  {
+    "domain_id": "WAN",
+    "name": "Wide Area Network (WAN)",
+    "description": "Carrier transit links, BGP route flapping, MPLS provider interconnects, and DWDM optical interfaces.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_wan_global_backbone"
+    ],
+    "topologies": [
+      "arch_wan_global_backbone"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "ipfix",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "cisco:ios",
+      "netspout:ipfix"
+    ]
+  },
+  {
+    "domain_id": "SDWAN",
+    "name": "Software-Defined WAN (SD-WAN)",
+    "description": "Cisco Catalyst SD-WAN / Viptela BFD tunnel loss, SLA jitter/latency brownout, and app-aware route failover.",
+    "status": "OPERATIONAL",
+    "maturity": "GOLDEN_PATH_CERTIFIED",
+    "scenarios": [
+      "cisco_sdwan_brownout",
+      "sdwan_connected_core"
+    ],
+    "topologies": [
+      "cisco_sdwan_fabric",
+      "sdwan_core_backbone"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "ipfix",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:sdwan:viptela",
+      "cisco:sdwan:bfd",
+      "cisco:sdwan:approute"
+    ]
+  },
+  {
+    "domain_id": "VPN",
+    "name": "Virtual Private Network (VPN)",
+    "description": "Remote workforce AnyConnect / Secure Client, IPsec IKEv2 Phase 1/2 tunnel flaps, and posture validation.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_vpn_remote_workforce"
+    ],
+    "topologies": [
+      "arch_vpn_remote_workforce"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:asa",
+      "cisco:ise:syslog",
+      "cisco:ios:syslog"
+    ]
+  },
+  {
+    "domain_id": "SASE_SSE",
+    "name": "SASE / Security Service Edge (SSE)",
+    "description": "Cloud security gateway, CASB inspection, ZTNA authentication degradation, and synthetic endpoint probing.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "mixed_sase_degradation"
+    ],
+    "topologies": [
+      "mixed_sase_cloud"
+    ],
+    "supported_transports": [
+      "syslog",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "pan:threat",
+      "pan:traffic",
+      "fortinet:fgt:traffic"
+    ]
+  },
+  {
+    "domain_id": "SP",
+    "name": "Service Provider Core & Edge",
+    "description": "Carrier-grade routing (Cisco 8000, NCS 5500, Juniper PTX, Nokia 7750), multi-chassis core, and multi-AS transit.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "service_provider_cisco",
+      "service_provider_mixed"
+    ],
+    "topologies": [
+      "service_provider_cisco_core",
+      "service_provider_mixed_core"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "ipfix",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "juniper:junos:syslog",
+      "nokia:sros:syslog"
+    ]
+  },
+  {
+    "domain_id": "MPLS_LDP",
+    "name": "MPLS & LDP Core",
+    "description": "Label Distribution Protocol (LDP) adjacency loss, MPLS-TE tunnel re-routing, and targeted LDP peering failures.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "mpls_ldp_lsp_failure"
+    ],
+    "topologies": [
+      "mpls_core_ring"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "ipfix",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:mpls",
+      "cisco:ios:syslog",
+      "netspout:ipfix"
+    ]
+  },
+  {
+    "domain_id": "SR_SRV6",
+    "name": "Segment Routing (SR-MPLS / SRv6)",
+    "description": "Segment Routing over IPv6 (SRv6), SID allocation, TI-LFA sub-50ms fast reroute, and Micro-SID telemetry.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "srv6_tilfa_fast_reroute"
+    ],
+    "topologies": [
+      "srv6_metro_fabric"
+    ],
+    "supported_transports": [
+      "syslog",
+      "gnmi",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:srv6",
+      "cisco:ios:syslog",
+      "cisco:ios:mdt:metric"
+    ]
+  },
+  {
+    "domain_id": "MAN_OPTICAL",
+    "name": "Metropolitan Area Network (MAN) & Optical",
+    "description": "Carrier Ethernet G.8032 ring protection switching, DWDM EDFA amplifier optical power shifts, and ROADM attenuation.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_man_carrier_ring",
+      "mixed_backbone_optical"
+    ],
+    "topologies": [
+      "arch_man_carrier_ring",
+      "mixed_optical_backbone"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "juniper:junos:syslog"
+    ]
+  },
+  {
+    "domain_id": "DC_CLOS",
+    "name": "Data Center Leaf-Spine (Clos Fabric)",
+    "description": "Spine-leaf IP fabric, ECMP hashing imbalances, queue buffer microbursts, and Arista EOS LANZ telemetry.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "dc_leaf_spine_microburst"
+    ],
+    "topologies": [
+      "dc_leaf_spine_clos"
+    ],
+    "supported_transports": [
+      "syslog",
+      "gnmi",
+      "hec",
+      "ipfix"
+    ],
+    "primary_sourcetypes": [
+      "arista:eos:lanz",
+      "arista:eos:syslog",
+      "netspout:ipfix"
+    ]
+  },
+  {
+    "domain_id": "EVPN_VXLAN",
+    "name": "BGP EVPN & VXLAN Overlay",
+    "description": "Network virtualization overlay, BGP EVPN Type-2 MAC/IP advertisement, VTEP reachability, and MAC mobility loops.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "evpn_vxlan_mac_mobility"
+    ],
+    "topologies": [
+      "evpn_vxlan_overlay"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:nexus:evpn",
+      "cisco:nxos:syslog"
+    ]
+  },
+  {
+    "domain_id": "CISCO_ACI",
+    "name": "Cisco Application Centric Infrastructure (ACI)",
+    "description": "APIC SDN policy-driven data center switching, endpoint groups (EPG), microburst traffic, and fabric health scoring.",
+    "status": "OPERATIONAL",
+    "maturity": "FORMAT_VALIDATED",
+    "scenarios": [
+      "cisco_aci_microburst"
+    ],
+    "topologies": [
+      "cisco_aci_spine_leaf"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:aci",
+      "cisco:nexus",
+      "cisco:nxos"
+    ]
+  },
+  {
+    "domain_id": "CLOUD_HYBRID",
+    "name": "Cloud & Hybrid Connectivity",
+    "description": "AWS Direct Connect, Azure ExpressRoute, cloud interconnect gateways, and VPC transit routing flaps.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_epn_isolated_intranet",
+      "arch_gan_subsea_cloud"
+    ],
+    "topologies": [
+      "arch_epn_isolated_intranet",
+      "arch_gan_subsea_cloud"
+    ],
+    "supported_transports": [
+      "syslog",
+      "hec",
+      "netflow_v9"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "netspout:netflow:v9"
+    ]
+  },
+  {
+    "domain_id": "SECURITY",
+    "name": "Network Security & Threat Operations",
+    "description": "SYN flood DDoS mitigation, lateral movement ransomware detection, SQL injection, and perimeter breach response.",
+    "status": "OPERATIONAL",
+    "maturity": "E2E_VALIDATED",
+    "scenarios": [
+      "ddos_attack",
+      "lateral_movement",
+      "sql_injection",
+      "mixed_edge_breach"
+    ],
+    "topologies": [
+      "edge_security_dmz",
+      "corp_security_lan",
+      "datacenter_app_tier",
+      "mixed_enterprise_edge"
+    ],
+    "supported_transports": [
+      "syslog",
+      "netflow_v9",
+      "ipfix",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:asa",
+      "pan:traffic",
+      "pan:threat",
+      "fortinet:fgt:traffic"
+    ]
+  },
+  {
+    "domain_id": "SAN_NAS",
+    "name": "Storage Area Network (SAN & NAS)",
+    "description": "Cisco MDS Fibre Channel fabric, NVMe-oF latency spikes, NetApp ONTAP NFS/SMB throttling, and storage port errors.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_san_fibre_channel",
+      "arch_nas_storage_cluster"
+    ],
+    "topologies": [
+      "arch_san_fibre_channel",
+      "arch_nas_storage_cluster"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:mds:san:fc",
+      "netapp:ontap:syslog",
+      "cisco:ios:syslog"
+    ]
+  },
+  {
+    "domain_id": "SYSTEM_AREA",
+    "name": "System Area Network & HPC Interconnect",
+    "description": "High-performance computing cluster interconnect, dual-redundant low-latency fabric, and node heartbeat failover.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "cluster_interconnect_failover"
+    ],
+    "topologies": [
+      "hpc_cluster_mesh"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:nexus",
+      "cisco:ios:syslog"
+    ]
+  },
+  {
+    "domain_id": "POLAN",
+    "name": "Passive Optical LAN (POLAN)",
+    "description": "Enterprise GPON / XGS-PON, optical line terminal (OLT) feeder fiber attenuation, and optical network terminal (ONT) link loss.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "polan_olt_fiber_attenuation"
+    ],
+    "topologies": [
+      "polan_enterprise_campus"
+    ],
+    "supported_transports": [
+      "syslog",
+      "snmp",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "netspout:snmp:poll"
+    ]
+  },
+  {
+    "domain_id": "INTENT_BASED",
+    "name": "Intent-Based Networking (IBN)",
+    "description": "Cisco Catalyst Center / Software-Defined Access (SDA) intent drift, automated SLA assurance, and policy reconciliation.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "intent_policy_divergence"
+    ],
+    "topologies": [
+      "intent_catalyst_center"
+    ],
+    "supported_transports": [
+      "syslog",
+      "hec",
+      "gnmi"
+    ],
+    "primary_sourcetypes": [
+      "cisco:catalyst:networkhealth",
+      "cisco:ios:syslog"
+    ]
+  },
+  {
+    "domain_id": "AI_LOSSLESS",
+    "name": "AI Lossless Fabric (RoCEv2 / InfiniBand)",
+    "description": "GPU cluster backend fabric, RoCEv2 incast congestion, Priority Flow Control (PFC) pauses, and ECN early marking.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "ai_fabric_rocev2_incast"
+    ],
+    "topologies": [
+      "ai_lossless_fabric"
+    ],
+    "supported_transports": [
+      "syslog",
+      "gnmi",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "nvidia:spectrum:telemetry",
+      "arista:eos:lanz"
+    ]
+  },
+  {
+    "domain_id": "EDGE_AI",
+    "name": "Edge AI & IoT Sensor Mesh",
+    "description": "Distributed edge gateways, IoT Bluetooth mesh nodes, intermittent wireless sensor connectivity, and telemetry batching.",
+    "status": "OPERATIONAL",
+    "maturity": "CONTRACTED",
+    "scenarios": [
+      "arch_pan_iot_mesh"
+    ],
+    "topologies": [
+      "arch_pan_iot_mesh"
+    ],
+    "supported_transports": [
+      "syslog",
+      "hec"
+    ],
+    "primary_sourcetypes": [
+      "cisco:ios:syslog",
+      "meraki:security"
+    ]
+  }
+]

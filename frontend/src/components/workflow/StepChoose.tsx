@@ -43,7 +43,8 @@ export const StepChoose: React.FC<StepChooseProps> = ({
       const matchesCat = 
         selectedCategory === 'ALL' || 
         uc.category.toUpperCase() === selectedCategory ||
-        (selectedCategory === 'CAMPUS' && uc.category.toUpperCase() === 'CAMPUS_LAN');
+        uc.domain?.toUpperCase() === selectedCategory ||
+        (selectedCategory === 'CAMPUS' && (uc.category.toUpperCase() === 'CAMPUS_LAN' || uc.domain?.toUpperCase() === 'CAMPUS_LAN'));
 
       const q = searchQuery.toLowerCase().trim();
       const matchesQuery = !q || (

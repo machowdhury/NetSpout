@@ -1,0 +1,173 @@
+{
+  "run_id": "run-13e-acc-mv-001",
+  "scenario_id": "multivendor_gnmi_e2e",
+  "target_devices": [
+    "node-cisco8k",
+    "node-cat-leaf",
+    "node-arista-spine",
+    "node-juniper-ptx"
+  ],
+  "vendor_profiles": [
+    "CISCO_IOS_XR",
+    "CISCO_IOS_XE",
+    "ARISTA_EOS",
+    "JUNIPER_JUNOS"
+  ],
+  "phases_executed": [
+    "BASELINE",
+    "FAILOVER",
+    "RECOVERY"
+  ],
+  "subscription_modes": [
+    "ONCE"
+  ],
+  "encodings_used": [
+    "JSON_IETF"
+  ],
+  "transport_truth": {
+    "device_side": "Native gNMI over gRPC/HTTP2",
+    "collector_side": "Splunk HEC over HTTPS",
+    "telemetry_semantics": "NATIVE TRANSPORT / MODELED DEVICE STATE"
+  },
+  "splunk_destinations": {
+    "event_index": "idx_network_ops",
+    "event_sourcetype": "netspout:gnmi:event",
+    "metric_index": "cisco_mdt_metrics",
+    "metric_sourcetype": "netspout:gnmi:metric"
+  },
+  "stage_counts": {
+    "GENERATED": 3,
+    "SERVER_PUBLISHED": 72,
+    "COLLECTOR_RECEIVED": 72,
+    "NORMALIZED": 459,
+    "SPLUNK_DISPATCHED": 459,
+    "SPLUNK_OBSERVED": 1644,
+    "VALIDATED": 5
+  },
+  "dual_store_breakdown": {
+    "normalized_event_records": 213,
+    "normalized_metric_records": 246,
+    "splunk_dispatched_events": 213,
+    "splunk_dispatched_metrics": 246,
+    "splunk_observed_events": 763,
+    "splunk_observed_metrics": 881,
+    "duplicate_records_suppressed": 120,
+    "splunk_dispatch_failures": 0,
+    "observation_completeness_pct": 100.0
+  },
+  "wire_payload_pure": true,
+  "highest_verified_stage": "VALIDATED",
+  "ledger": {
+    "run_id": "run-13e-acc-mv-001",
+    "scenario_id": "multivendor_gnmi_e2e",
+    "phase": "COMPLETE",
+    "highest_verified_stage": "VALIDATED",
+    "stages": {
+      "GENERATED": {
+        "verified": true,
+        "count": 3
+      },
+      "SERVER_PUBLISHED": {
+        "verified": true,
+        "count": 72
+      },
+      "COLLECTOR_RECEIVED": {
+        "verified": true,
+        "count": 72
+      },
+      "NORMALIZED": {
+        "verified": true,
+        "count": 459
+      },
+      "SPLUNK_DISPATCHED": {
+        "verified": true,
+        "count": 459
+      },
+      "SPLUNK_OBSERVED": {
+        "verified": true,
+        "count": 1644
+      },
+      "VALIDATED": {
+        "verified": true,
+        "count": 5
+      }
+    },
+    "error_stage": null,
+    "error_message": null
+  },
+  "validation": {
+    "status": "PASS",
+    "total_rules": 5,
+    "passed_rules": 5,
+    "failed_rules": 0,
+    "results": [
+      {
+        "rule_id": "R13D-MV-01",
+        "rule_name": "Cisco IOS XR Vendor Event Presence",
+        "status": "PASS",
+        "message": "Observed 198 event(s) matching criteria (expected >= 2)",
+        "observed_value": 198,
+        "expected_value": 2,
+        "evidence": {
+          "matched_count": 198
+        }
+      },
+      {
+        "rule_id": "R13D-MV-02",
+        "rule_name": "Cisco IOS XE Vendor Event Presence",
+        "status": "PASS",
+        "message": "Observed 187 event(s) matching criteria (expected >= 2)",
+        "observed_value": 187,
+        "expected_value": 2,
+        "evidence": {
+          "matched_count": 187
+        }
+      },
+      {
+        "rule_id": "R13D-MV-03",
+        "rule_name": "Arista EOS Vendor Event Presence",
+        "status": "PASS",
+        "message": "Observed 198 event(s) matching criteria (expected >= 2)",
+        "observed_value": 198,
+        "expected_value": 2,
+        "evidence": {
+          "matched_count": 198
+        }
+      },
+      {
+        "rule_id": "R13D-MV-04",
+        "rule_name": "Juniper Junos Vendor Event Presence",
+        "status": "PASS",
+        "message": "Observed 180 event(s) matching criteria (expected >= 2)",
+        "observed_value": 180,
+        "expected_value": 2,
+        "evidence": {
+          "matched_count": 180
+        }
+      },
+      {
+        "rule_id": "R13D-MV-05",
+        "rule_name": "Multi-Vendor Dual Destination Verification",
+        "status": "PASS",
+        "message": "Destination check (BOTH): event_count=763, metric_count=246 (min=8)",
+        "observed_value": {
+          "event_count": 763,
+          "metric_count": 246
+        },
+        "expected_value": "BOTH",
+        "evidence": {
+          "event_count": 763,
+          "metric_count": 246
+        }
+      }
+    ]
+  },
+  "unsupported_telemetry_declarations": [],
+  "investigation_queries": {
+    "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-mv-001\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target"
+  },
+  "query_execution_summary": {
+    "q8_vendor_comparison_spl": 4
+  },
+  "errors": []
+}

@@ -353,8 +353,8 @@
       "origin_evidence_stage": "NORMALIZED"
     }
   ],
-  "cisco_aci_microburst_run_id": "run-13d-cisco_ac-cf76c2c9",
-  "service_provider_cisco_run_id": "run-13d-service_-495d6851",
+  "cisco_aci_microburst_run_id": "run-13d-cisco_ac-bc95d339",
+  "service_provider_cisco_run_id": "run-13d-service_-fb2001d5",
   "spc_mstats_outputs": {
     "q5_qos_congestion_drops_mstats": [
       {
@@ -451,7 +451,7 @@
         "gnmi_leaf": "dropped-octets",
         "gnmi_path": "/qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state/dropped-octets",
         "gnmi_target": "cisco-asr9k-pe1",
-        "latest_val": "6778880",
+        "latest_val": "6164480",
         "max_val": "6778880.000000",
         "netspout_phase": "DEGRADE",
         "origin_evidence_stage": "NORMALIZED"
@@ -462,7 +462,7 @@
         "gnmi_leaf": "dropped-pkts",
         "gnmi_path": "/qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state/dropped-pkts",
         "gnmi_target": "cisco-asr9k-pe1",
-        "latest_val": "6620",
+        "latest_val": "5570",
         "max_val": "6620.000000",
         "netspout_phase": "DEGRADE",
         "origin_evidence_stage": "NORMALIZED"
@@ -517,7 +517,7 @@
         "gnmi_leaf": "transmit-octets",
         "gnmi_path": "/qos/interfaces/interface[interface-id=HundredGigE0/0/0/0]/output/queues/queue[name=BE-0]/state/transmit-octets",
         "gnmi_target": "cisco-asr9k-pe1",
-        "latest_val": "91329600000",
+        "latest_val": "91327800000",
         "max_val": "91329600000.000000",
         "netspout_phase": "DEGRADE",
         "origin_evidence_stage": "NORMALIZED"

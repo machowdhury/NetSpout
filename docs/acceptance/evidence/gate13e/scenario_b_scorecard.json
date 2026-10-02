@@ -1,0 +1,253 @@
+{
+  "run_id": "run-13e-acc-oc-001",
+  "scenario_id": "openconfig_mdt_streaming",
+  "target_devices": [
+    "node-cisco8k"
+  ],
+  "vendor_profiles": [
+    "CISCO_IOS_XR"
+  ],
+  "phases_executed": [
+    "BASELINE",
+    "DEGRADE",
+    "FAILOVER",
+    "RECOVERY"
+  ],
+  "subscription_modes": [
+    "ONCE",
+    "STREAM/SAMPLE",
+    "STREAM/ON_CHANGE"
+  ],
+  "encodings_used": [
+    "JSON_IETF",
+    "PROTO"
+  ],
+  "transport_truth": {
+    "device_side": "Native gNMI over gRPC/HTTP2",
+    "collector_side": "Splunk HEC over HTTPS",
+    "telemetry_semantics": "NATIVE TRANSPORT / MODELED DEVICE STATE"
+  },
+  "splunk_destinations": {
+    "event_index": "idx_network_ops",
+    "event_sourcetype": "netspout:gnmi:event",
+    "metric_index": "cisco_mdt_metrics",
+    "metric_sourcetype": "netspout:gnmi:metric"
+  },
+  "stage_counts": {
+    "GENERATED": 7,
+    "SERVER_PUBLISHED": 71,
+    "COLLECTOR_RECEIVED": 122,
+    "NORMALIZED": 434,
+    "SPLUNK_DISPATCHED": 434,
+    "SPLUNK_OBSERVED": 1302,
+    "VALIDATED": 6
+  },
+  "dual_store_breakdown": {
+    "normalized_event_records": 185,
+    "normalized_metric_records": 249,
+    "splunk_dispatched_events": 185,
+    "splunk_dispatched_metrics": 249,
+    "splunk_observed_events": 555,
+    "splunk_observed_metrics": 747,
+    "duplicate_records_suppressed": 40,
+    "splunk_dispatch_failures": 0,
+    "observation_completeness_pct": 100.0
+  },
+  "wire_payload_pure": true,
+  "highest_verified_stage": "VALIDATED",
+  "ledger": {
+    "run_id": "run-13e-acc-oc-001",
+    "scenario_id": "openconfig_mdt_streaming",
+    "phase": "COMPLETE",
+    "highest_verified_stage": "VALIDATED",
+    "stages": {
+      "GENERATED": {
+        "verified": true,
+        "count": 7
+      },
+      "SERVER_PUBLISHED": {
+        "verified": true,
+        "count": 71
+      },
+      "COLLECTOR_RECEIVED": {
+        "verified": true,
+        "count": 122
+      },
+      "NORMALIZED": {
+        "verified": true,
+        "count": 434
+      },
+      "SPLUNK_DISPATCHED": {
+        "verified": true,
+        "count": 434
+      },
+      "SPLUNK_OBSERVED": {
+        "verified": true,
+        "count": 1302
+      },
+      "VALIDATED": {
+        "verified": true,
+        "count": 6
+      }
+    },
+    "error_stage": null,
+    "error_message": null
+  },
+  "validation": {
+    "status": "PASS",
+    "total_rules": 6,
+    "passed_rules": 6,
+    "failed_rules": 0,
+    "results": [
+      {
+        "rule_id": "R13D-OC-01",
+        "rule_name": "OpenConfig Event Presence in idx_network_ops",
+        "status": "PASS",
+        "message": "Observed 555 event(s) matching criteria (expected >= 10)",
+        "observed_value": 555,
+        "expected_value": 10,
+        "evidence": {
+          "matched_count": 555
+        }
+      },
+      {
+        "rule_id": "R13D-OC-02",
+        "rule_name": "OpenConfig Keyed Interface Counter Path Presence",
+        "status": "PASS",
+        "message": "Observed 4 metric observation(s) (expected >= 3)",
+        "observed_value": 4,
+        "expected_value": 3,
+        "evidence": {
+          "matched_metric_count": 4
+        }
+      },
+      {
+        "rule_id": "R13D-OC-03",
+        "rule_name": "OpenConfig Interface State Transition Sequence",
+        "status": "PASS",
+        "message": "State transition sequence confirmed (3/3 steps matched)",
+        "observed_value": [
+          [
+            "BASELINE",
+            "UP"
+          ],
+          [
+            "FAILOVER",
+            "DOWN"
+          ],
+          [
+            "RECOVERY",
+            "UP"
+          ]
+        ],
+        "expected_value": [
+          [
+            "BASELINE",
+            "UP"
+          ],
+          [
+            "FAILOVER",
+            "DOWN"
+          ],
+          [
+            "RECOVERY",
+            "UP"
+          ]
+        ],
+        "evidence": {
+          "matched_steps": 3,
+          "total_steps": 3,
+          "observed_sequence": [
+            [
+              "BASELINE",
+              "UP"
+            ],
+            [
+              "FAILOVER",
+              "DOWN"
+            ],
+            [
+              "RECOVERY",
+              "UP"
+            ]
+          ]
+        }
+      },
+      {
+        "rule_id": "R13D-OC-04",
+        "rule_name": "OpenConfig System CPU Metric Progression (Peak on Degrade, Recover on Recovery)",
+        "status": "PASS",
+        "message": "Metric progression across ['BASELINE', 'DEGRADE', 'RECOVERY']: {'BASELINE': 18.0, 'DEGRADE': 88.0, 'FAILOVER': 46.0, 'RECOVERY': 21.0} -> PASS",
+        "observed_value": {
+          "BASELINE": 18.0,
+          "DEGRADE": 88.0,
+          "FAILOVER": 46.0,
+          "RECOVERY": 21.0
+        },
+        "expected_value": [
+          "BASELINE",
+          "DEGRADE",
+          "RECOVERY"
+        ],
+        "evidence": {
+          "phase_values": {
+            "BASELINE": 18.0,
+            "DEGRADE": 88.0,
+            "FAILOVER": 46.0,
+            "RECOVERY": 21.0
+          },
+          "mode": "peak_and_recover"
+        }
+      },
+      {
+        "rule_id": "R13D-OC-05",
+        "rule_name": "OpenConfig Recovery State Confirmation",
+        "status": "PASS",
+        "message": "State transition to ESTABLISHED confirmed",
+        "observed_value": "ESTABLISHED",
+        "expected_value": "ESTABLISHED",
+        "evidence": null
+      },
+      {
+        "rule_id": "R13D-OC-06",
+        "rule_name": "OpenConfig Dual Store Verification",
+        "status": "PASS",
+        "message": "Destination check (BOTH): event_count=555, metric_count=192 (min=5)",
+        "observed_value": {
+          "event_count": 555,
+          "metric_count": 192
+        },
+        "expected_value": "BOTH",
+        "evidence": {
+          "event_count": 555,
+          "metric_count": 192
+        }
+      }
+    ]
+  },
+  "unsupported_telemetry_declarations": [],
+  "investigation_queries": {
+    "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-oc-001\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+    "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-oc-001\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+    "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-oc-001\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+    "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-oc-001\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+    "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13e-acc-oc-001\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+    "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13e-acc-oc-001\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+    "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13e-acc-oc-001\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+    "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13e-acc-oc-001\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+    "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13e-acc-oc-001\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase",
+    "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13e-acc-oc-001\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id"
+  },
+  "query_execution_summary": {
+    "q1_run_overview_spl": 4,
+    "q2_phase_progression_spl": 4,
+    "q3_interface_state_transition_spl": 76,
+    "q4_bgp_neighbor_transition_spl": 28,
+    "q5_qos_congestion_drops_mstats": 20,
+    "q6_optical_signal_degradation_mstats": 20,
+    "q7_system_cpu_memory_health_mstats": 28,
+    "q8_vendor_comparison_spl": 1,
+    "q9_metric_catalog_mstats": 152
+  },
+  "errors": []
+}

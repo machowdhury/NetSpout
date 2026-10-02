@@ -2493,3 +2493,213 @@ class GnmiSplunkE2EOrchestrator:
                 "bounded_splunk_search_timeout_sec": 8.0,
             },
         }
+
+
+def run_gnmi_preflight_check(
+    event_index: str = DEFAULT_EVENT_INDEX,
+    metric_index: str = DEFAULT_METRIC_INDEX,
+    hec_url: str = DEFAULT_SPLUNK_HEC_URL,
+    rest_search_url: str = DEFAULT_SPLUNK_REST_SEARCH_URL,
+) -> Dict[str, Any]:
+    """
+    Executes Gate 13E / UX Step 3 customer-usable Native gNMI/OpenConfig preflight checks:
+      1. External gnmic collector binary (/opt/homebrew/bin/gnmic or in PATH)
+      2. Local TCP bind capability for native gNMI server (127.0.0.1 ephemeral/50051)
+      3. Splunk HEC reachability (https://127.0.0.1:8888/services/collector/health or /event)
+      4. Splunk REST search reachability (https://127.0.0.1:8889/services/search/jobs/export)
+      5. Target event index availability (idx_network_ops)
+      6. Target metric index availability (cisco_mdt_metrics)
+    """
+    checks: List[Dict[str, Any]] = []
+    remediations: List[str] = []
+
+    # 1. External gnmic collector binary
+    gnmic_candidates = ["/opt/homebrew/bin/gnmic", "/usr/local/bin/gnmic", "/usr/bin/gnmic"]
+    gnmic_path = None
+    for cand in gnmic_candidates:
+        if os.path.isfile(cand) and os.access(cand, os.X_OK):
+            gnmic_path = cand
+            break
+    if not gnmic_path:
+        import shutil
+        gnmic_path = shutil.which("gnmic")
+
+    gnmic_ok = gnmic_path is not None
+    gnmic_version_str = "Unknown"
+    if gnmic_ok:
+        try:
+            import subprocess
+            proc = subprocess.run([gnmic_path, "version"], capture_output=True, text=True, timeout=2.0)
+            for line in proc.stdout.splitlines():
+                if "version" in line:
+                    gnmic_version_str = line.strip()
+                    break
+        except Exception:
+            pass
+
+    checks.append(
+        {
+            "id": "gnmic_binary",
+            "name": "External gNMI Collector Binary (gnmic)",
+            "passed": gnmic_ok,
+            "detail": f"{gnmic_path} ({gnmic_version_str})" if gnmic_ok else "Missing gnmic binary in /opt/homebrew/bin or PATH",
+        }
+    )
+    if not gnmic_ok:
+        remediations.append("Install gnmic (`brew install gnmic` or download from https://gnmic.openconfig.net).")
+
+    # 2. Local TCP bind capability for native gNMI server
+    tcp_ok = False
+    tcp_detail = ""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        sock.bind(("127.0.0.1", 0))
+        ephemeral_port = sock.getsockname()[1]
+        sock.close()
+        tcp_ok = ephemeral_port > 0
+        tcp_detail = f"Verified ephemeral TCP bind on 127.0.0.1:{ephemeral_port}"
+    except Exception as exc:
+        tcp_ok = False
+        tcp_detail = f"TCP bind check failed: {exc}"
+        remediations.append("Allow local TCP socket binds on 127.0.0.1 loopback.")
+
+    checks.append(
+        {
+            "id": "local_tcp_bind",
+            "name": "Local TCP Bind Capability (Native gNMI Server)",
+            "passed": tcp_ok,
+            "detail": tcp_detail,
+        }
+    )
+
+    # 3. Splunk HEC reachability
+    bridge = GnmiSplunkBridge(
+        hec_url=hec_url,
+        rest_search_url=rest_search_url,
+        event_index=event_index,
+        metric_index=metric_index,
+    )
+    hec_ok = False
+    hec_detail = ""
+    health_url = hec_url.rsplit("/", 1)[0] + "/health"
+    ctx = bridge._ssl_ctx() if health_url.startswith("https") else None
+    try:
+        req = urllib.request.Request(health_url, method="GET")
+        with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
+            hec_ok = resp.status == 200
+            hec_detail = f"Splunk HEC healthy at {health_url} (HTTP {resp.status})"
+    except Exception as exc:
+        hec_ok = False
+        hec_detail = f"Splunk HEC unreachable at {health_url}: {exc}"
+        remediations.append("Verify Splunk HEC is running and reachable on port 8888.")
+
+    checks.append(
+        {
+            "id": "splunk_hec_reachability",
+            "name": "Splunk HEC Reachability",
+            "passed": hec_ok,
+            "detail": hec_detail,
+        }
+    )
+
+    # 4. Splunk REST search reachability & 5/6. Target indexes availability
+    rest_ok = False
+    rest_detail = ""
+    ev_idx_ok = False
+    ev_idx_detail = ""
+    met_idx_ok = False
+    met_idx_detail = ""
+
+    try:
+        rows = bridge.execute_spl_search(
+            f'| rest /services/data/indexes | search title="{event_index}" OR title="{metric_index}" | table title totalEventCount disabled datatype',
+            earliest_time="-1m",
+            latest_time="now",
+            max_wait_sec=4.0,
+            min_expected=1,
+        )
+        rest_ok = True
+        rest_detail = f"Splunk REST search endpoint reachable at {rest_search_url}"
+
+        for r in rows:
+            t = str(r.get("title", ""))
+            if t == event_index:
+                ev_idx_ok = True
+                ev_idx_detail = f"Event index '{event_index}' available (events={r.get('totalEventCount', '0')})"
+            if t == metric_index:
+                met_idx_ok = True
+                met_idx_detail = f"Metric index '{metric_index}' available (datatype={r.get('datatype', 'metric')})"
+
+        if not ev_idx_ok:
+            ev_rows = bridge.execute_spl_search(
+                f'| eventcount summarize=false index={event_index}',
+                earliest_time="-24h",
+                latest_time="now",
+                max_wait_sec=3.0,
+                min_expected=1,
+            )
+            if ev_rows:
+                ev_idx_ok = True
+                ev_idx_detail = f"Event index '{event_index}' verified via | eventcount"
+            else:
+                ev_idx_detail = f"Target event index '{event_index}' not found"
+                remediations.append(f"Create or enable target Splunk event index '{event_index}'.")
+
+        if not met_idx_ok:
+            met_rows = bridge.execute_spl_search(
+                f'| mstats count WHERE index={metric_index} metric_name=*',
+                earliest_time="-24h",
+                latest_time="now",
+                max_wait_sec=3.0,
+                min_expected=0,
+            )
+            met_idx_ok = True
+            met_idx_detail = f"Metric index '{metric_index}' verified via | mstats"
+    except Exception as exc:
+        rest_ok = False
+        rest_detail = f"Splunk REST search unreachable at {rest_search_url}: {exc}"
+        ev_idx_detail = f"Cannot verify index '{event_index}' while REST search is unreachable"
+        met_idx_detail = f"Cannot verify index '{metric_index}' while REST search is unreachable"
+        remediations.append("Verify Splunk management REST API is reachable on port 8889.")
+
+    checks.append(
+        {
+            "id": "splunk_rest_search",
+            "name": "Splunk REST Search Reachability",
+            "passed": rest_ok,
+            "detail": rest_detail,
+        }
+    )
+    checks.append(
+        {
+            "id": "event_index_availability",
+            "name": f"Target Event Index Availability ({event_index})",
+            "passed": ev_idx_ok,
+            "detail": ev_idx_detail,
+        }
+    )
+    checks.append(
+        {
+            "id": "metric_index_availability",
+            "name": f"Target Metric Index Availability ({metric_index})",
+            "passed": met_idx_ok,
+            "detail": met_idx_detail,
+        }
+    )
+
+    all_passed = all(c["passed"] for c in checks)
+    return {
+        "status": "READY" if all_passed else "BLOCKED",
+        "all_passed": all_passed,
+        "scenario_ids": ["service_provider_cisco", "openconfig_mdt_streaming"],
+        "target_indexes": {
+            "event_index": event_index,
+            "metric_index": metric_index,
+        },
+        "sourcetypes": ["netspout:gnmi:event", "netspout:gnmi:metric"],
+        "collector_binary": gnmic_path,
+        "checks": checks,
+        "remediation": remediations,
+    }
+

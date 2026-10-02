@@ -1,9 +1,9 @@
 {
-  "benchmark_run_id": "run-13d-perf-63cc6320",
+  "benchmark_run_id": "run-13d-perf-2412c86e",
   "collector_binary": "/opt/homebrew/bin/gnmic (v0.49.0)",
-  "collector_receive_latency_ms": 49.66,
-  "collector_receive_to_normalized_latency_ms": 3.205,
-  "end_to_end_completion_time_ms": 1889.777,
+  "collector_receive_latency_ms": 92.375,
+  "collector_receive_to_normalized_latency_ms": 3.307,
+  "end_to_end_completion_time_ms": 2000.01,
   "guardrails_enforced": {
     "bounded_hec_batch_size": 100,
     "bounded_splunk_search_timeout_sec": 8.0,
@@ -19,11 +19,11 @@
     "metric_series_observed": 49,
     "total_records_dispatched": 134
   },
-  "normalized_to_splunk_hec_dispatch_latency_ms": 17.946,
+  "normalized_to_splunk_hec_dispatch_latency_ms": 17.886,
   "resource_usage": {
-    "cpu_system_sec": 0.0164,
-    "cpu_user_sec": 0.0331,
-    "max_rss_mb": 73.97
+    "cpu_system_sec": 0.0167,
+    "cpu_user_sec": 0.0321,
+    "max_rss_mb": 104.2
   },
-  "splunk_dispatch_to_searchable_observation_latency_ms": 1816.689
+  "splunk_dispatch_to_searchable_observation_latency_ms": 1884.144
 }

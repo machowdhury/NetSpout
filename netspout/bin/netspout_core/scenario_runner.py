@@ -3190,18 +3190,22 @@ class ScenarioRunner:
         else:
             manifest.overall_validation = ValidationStatus.PASS.value
 
-        # Gate 11B, Gate 12B, Gate 12D & Gate 12F: Native Transport Execution (Mode B / E2E)
-        if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False):
+        # Gate 11B, Gate 12B, Gate 12D, Gate 12F & Gate 13E: Native Transport Execution (Mode B / E2E)
+        if getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False) or getattr(request, "native_gnmi_e2e", False):
             raw_proto = (getattr(request, "native_protocol", None) or "").upper()
             pdu_mode_req = getattr(request, "native_snmp_pdu_mode", None)
-            is_snmp_run = (
-                scenario_id == "service_provider_cisco"
-                and (not raw_proto or "SNMP" in raw_proto or pdu_mode_req is not None or getattr(request, "native_snmp_e2e", False))
-            ) or ("SNMP" in raw_proto)
+            is_gnmi_run = getattr(request, "native_gnmi_e2e", False) or ("GNMI" in raw_proto) or (scenario_id == "openconfig_mdt_streaming")
+            is_snmp_run = not is_gnmi_run and (
+                (
+                    scenario_id == "service_provider_cisco"
+                    and (not raw_proto or "SNMP" in raw_proto or pdu_mode_req is not None or getattr(request, "native_snmp_e2e", False))
+                ) or ("SNMP" in raw_proto)
+            )
 
             if is_snmp_run and scenario_id == "service_provider_cisco":
                 canonical_device_id = "cisco-asr9k-pe1"
                 manifest.affected_devices = [canonical_device_id]
+
 
                 try:
                     from netspout_core.snmp_engine import snmp_engine
@@ -3365,6 +3369,38 @@ class ScenarioRunner:
                         simulated_device_ids=[canonical_device_id],
                     )
                     manifest.companion_manifest = companion
+            elif is_gnmi_run:
+                try:
+                    from netspout_core.gnmi.splunk_e2e import GnmiSplunkE2EOrchestrator
+                except ImportError:
+                    try:
+                        from app.gnmi.splunk_e2e import GnmiSplunkE2EOrchestrator
+                    except ImportError:
+                        from gnmi.splunk_e2e import GnmiSplunkE2EOrchestrator
+
+                gnmi_orch = GnmiSplunkE2EOrchestrator(
+                    event_index=target_idx or "idx_network_ops",
+                    metric_index="cisco_mdt_metrics",
+                )
+                scorecard, e2e_artifacts = gnmi_orch.run_scenario_e2e(
+                    scenario_id=scenario_id,
+                    run_id=run_id,
+                    seed=request.seed if request.seed is not None else 42,
+                )
+                manifest.gnmi_e2e_scorecard = scorecard
+                manifest.gnmi_collector_result = e2e_artifacts.get("collector_result")
+                manifest.gnmi_normalized_records = e2e_artifacts.get("normalized_records", [])
+                manifest.actual_generated_counts["netspout:gnmi:event"] = scorecard.splunk_dispatched_events
+                manifest.actual_generated_counts["netspout:gnmi:metric"] = scorecard.splunk_dispatched_metrics
+                manifest.observed_count = scorecard.splunk_observed_total
+                manifest.event_observed_count = scorecard.splunk_observed_events
+                manifest.metric_observed_count = scorecard.splunk_observed_metrics
+                manifest.observation_completeness_pct = scorecard.observation_completeness_pct
+                manifest.observation_status = "VERIFIED" if scorecard.splunk_observed_total > 0 else "FAILED"
+                manifest.destination_validation = scorecard.validation_status
+                manifest.overall_validation = scorecard.validation_status
+                manifest.splunk_search_query = scorecard.investigation_queries.get("q1_event_overview", manifest.splunk_search_query)
+                manifest.splunk_metric_query = scorecard.investigation_queries.get("q4_metric_overview", manifest.splunk_metric_query)
             else:
                 flow_records = self.extract_canonical_flow_records(scenario_id, self.run_logs[run_id])
                 manifest.native_flow_records = flow_records
@@ -3422,6 +3458,8 @@ class ScenarioRunner:
                     )
                     manifest.companion_manifest = companion
 
+
+
         manifest.end_time = time.time()
         manifest.duration_sec = round(manifest.end_time - start_time, 3)
 
@@ -3443,18 +3481,21 @@ class ScenarioRunner:
             )
 
         native_e2e = bool(getattr(request, "native_snmp_e2e", False))
+        native_gnmi_e2e = bool(getattr(request, "native_gnmi_e2e", False))
         raw_proto = getattr(request, "native_protocol", None)
         pdu_mode = getattr(request, "native_snmp_pdu_mode", None)
+        raw_proto_up = str(raw_proto).upper() if raw_proto else ""
+        is_gnmi_run = native_gnmi_e2e or ("GNMI" in raw_proto_up) or (scenario_id == "openconfig_mdt_streaming")
 
         if req_mode == "NATIVE_TRANSPORT":
-            if not raw_proto and not pdu_mode and not native_e2e:
+            if not raw_proto and not pdu_mode and not native_e2e and not native_gnmi_e2e:
                 raise ValueError(
                     "Missing required native transport configuration: when transport_mode='NATIVE_TRANSPORT', "
-                    "at least one of 'native_protocol', 'native_snmp_pdu_mode', or 'native_snmp_e2e=True' must be "
+                    "at least one of 'native_protocol', 'native_snmp_pdu_mode', 'native_snmp_e2e=True', or 'native_gnmi_e2e=True' must be "
                     "specified. Refusing silent downgrade to Mode A."
                 )
 
-        if req_mode == "NATIVE_TRANSPORT" or native_e2e:
+        if req_mode == "NATIVE_TRANSPORT" or native_e2e or native_gnmi_e2e:
             if scenario_id == "service_provider_cisco":
                 if raw_proto:
                     proto_up = str(raw_proto).upper()
@@ -3464,6 +3505,9 @@ class ScenarioRunner:
                         "SNMPV2C_TRAP",
                         "SNMPV2C_INFORM",
                         "SNMPV2C_MIXED",
+                        "GNMI",
+                        "GNMI_E2E",
+                        "OPENCONFIG",
                     }
                     if proto_up not in allowed_snmp_protos:
                         raise ValueError(
@@ -3488,6 +3532,13 @@ class ScenarioRunner:
                 comm = getattr(request, "native_snmp_community", None)
                 if comm is not None and not str(comm).strip():
                     raise ValueError("Invalid native_snmp_community: community string cannot be empty.")
+            elif is_gnmi_run:
+                allowed_gnmi_scenarios = {"service_provider_cisco", "openconfig_mdt_streaming"}
+                if scenario_id not in allowed_gnmi_scenarios:
+                    raise ValueError(
+                        f"Native gNMI transport is not supported for scenario '{scenario_id}'. "
+                        f"Supported scenarios: {sorted(allowed_gnmi_scenarios)}."
+                    )
             else:
                 if native_e2e or (raw_proto and "SNMP" in str(raw_proto).upper()):
                     raise ValueError(
@@ -3498,6 +3549,7 @@ class ScenarioRunner:
                     raise ValueError(
                         f"Unsupported native_protocol '{raw_proto}' for scenario '{scenario_id}'."
                     )
+
 
     @staticmethod
     def extract_canonical_flow_records(scenario_id: str, logs: List[LogEntry]) -> List[FlowRecord]:

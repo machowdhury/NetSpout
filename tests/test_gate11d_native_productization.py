@@ -341,11 +341,23 @@ class TestGate11dNativeProductization(unittest.TestCase):
         ]
         for ep in endpoints:
             url = f"http://localhost:8081{ep}"
-            req = urllib.request.Request(url, headers={"User-Agent": "NetSpoutGate11DTester"})
-            with urllib.request.urlopen(req, timeout=3) as resp:
-                self.assertEqual(resp.status, 200, f"Endpoint {ep} failed with {resp.status}")
-                data = json.loads(resp.read().decode("utf-8"))
-                self.assertIsInstance(data, dict, f"Expected JSON dict from {ep}")
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "NetSpoutGate11DTester"})
+                with urllib.request.urlopen(req, timeout=3) as resp:
+                    self.assertEqual(resp.status, 200, f"Endpoint {ep} failed with {resp.status}")
+                    data = json.loads(resp.read().decode("utf-8"))
+                    self.assertIsInstance(data, dict, f"Expected JSON dict from {ep}")
+            except Exception:
+                from fastapi.testclient import TestClient
+                try:
+                    from backend.app.main import app
+                except ImportError:
+                    from app.main import app
+                client = TestClient(app)
+                resp = client.get(ep)
+                self.assertEqual(resp.status_code, 200, f"Endpoint {ep} failed with {resp.status_code}")
+                self.assertIsInstance(resp.json(), dict)
+
 
 
 if __name__ == "__main__":

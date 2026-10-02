@@ -1,205 +1,173 @@
 # NetSpout ⚡
 
-**Network Telemetry Generator, Simulation Canvas & Live SPL Playground for Splunk**
+**Carrier-Grade Network Telemetry Generator, Simulation Canvas & Live Incident Verification Platform for Splunk**
 
 [![Splunk Enterprise](https://img.shields.io/badge/Splunk_Enterprise-9.0%2B_|_Cloud-ed5b26.svg?logo=splunk&logoColor=white)](https://www.splunk.com/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-machowdhury%2FNetSpout-181717.svg?logo=github&logoColor=white)](https://github.com/machowdhury/NetSpout)
+[![Release](https://img.shields.io/badge/Release-1.0.0--rc1-emerald.svg)](https://github.com/machowdhury/NetSpout/releases)
 
-NetSpout is a tool that sends realistic network logs, syslogs, and metrics directly into your Splunk instance. 
+NetSpout generates multi-protocol network telemetry across realistic operational failure and security incident scenarios, streaming evidence into Splunk without requiring physical network equipment or simulated virtual machines.
 
-Normally, if you want to test network alerts, build NOC dashboards, or practice writing SPL searches, you need expensive routers, switches, and firewalls running in a real lab. NetSpout solves this problem: it generates realistic network events (Cisco, Palo Alto, Fortinet, Arista, Juniper, and more) and sends them to Splunk over the HTTP Event Collector (HEC) or Syslog in real time.
-
----
-
-## 🎯 What You Can Do With NetSpout
-
-1. **Test Splunk Searches & Alerts**: Generate real network failure scenarios (like BGP flaps, interface drops, or rogue access points) to see if your alerts fire properly.
-2. **Build & Demo Dashboards**: Populate empty Splunk indexes with rich, realistic network data matching standard Splunk CIM (Common Information Model) data models.
-3. **Trace Multi-Hop Paths**: Watch traffic and logs flow across multiple hops (user → switch → firewall → router → cloud).
-4. **Practice SPL**: Run queries directly against your live Splunk server using our built-in library of 108 production network queries.
-
----
-
-## 🧭 How to Use NetSpout (The 4 Main Tools)
-
-NetSpout has 4 main panels. Here is a simple, step-by-step guide on how to use each one:
-
-### 1. Guided Telemetry Onboarding Wizard
-> **Best for:** Quickly blasting a batch of sample logs into Splunk or streaming a continuous test scenario.
-
-* **Step 1: Choose Your Mode**
-  * Pick **Batch Ingestion** if you want to instantly send a set number of events (e.g. 50 or 500 events) to test a query.
-  * Pick **Continuous Scenario Stream** if you want ongoing traffic to test real-time dashboards.
-* **Step 2: Pick Your Device & Vendor**
-  * Select from 30 enterprise vendors (Cisco IOS-XE, Catalyst Center, Cisco SD-WAN, Cisco ISE, Cisco Duo, Palo Alto Networks, Fortinet FortiGate, Arista EOS, Juniper Junos, etc.).
-* **Step 3: Choose a Scenario Preset**
-  * Pick a prebuilt scenario like *BGP Flapping*, *Firewall Port Scan Blocked*, *802.1X Wireless Quarantine*, or *Optical Power Loss*.
-* **Step 4: Send to Splunk**
-  * Verify your Splunk HEC URL and target index (defaults to `idx_network_ops` or `main`).
-  * Click **Blast Events to Splunk** (or **Start Streaming**). NetSpout immediately pushes the events to your Splunk HTTP Event Collector.
+```text
+                    SCENARIO / NETWORK STATE
+                              │
+                              ▼
+                     ScenarioStateStore
+                              │
+        ┌─────────────┬───────┼─────────┬─────────────┐
+        │             │       │         │             │
+      SYSLOG         SNMP    gNMI    NetFlow/IPFIX   HEC
+        │             │       │         │             │
+        └─────────────┴───────┼─────────┴─────────────┘
+                              │
+                        Collectors / Splunk
+                              │
+                              ▼
+                    Investigation / Validation
+```
 
 ---
 
-### 2. Scenario Builder & Path Emitter
-> **Best for:** Seeing how a single network transaction or threat moves across multiple network hops.
+## 🎯 What NetSpout Does
 
-In real networks, an event rarely happens on just one device. When a user connects to a server, logs are generated across switches, firewalls, and routers.
-
-* **Step 1: Pick a Scenario**
-  * Choose from 22 prebuilt path scenarios in the dropdown (e.g. *Campus 802.1X Auth Flow*, *Data Center Leaf-Spine Microburst*, or *SD-WAN Brownout Failover*).
-* **Step 2: Inspect the Animated Path**
-  * NetSpout displays an interactive diagram showing each hop in the network path (e.g. `Client` → `Catalyst 9300` → `Catalyst 9800 WLC` → `Cisco ISE` → `Firepower NGFW`).
-* **Step 3: Click "Stream Path to Splunk"**
-  * NetSpout will emit synchronized logs for every device in the path with matching IP addresses, MAC addresses, and timestamps.
-* **Step 4: Stop Anytime**
-  * Click **Stop Streaming** when you have collected enough data.
-
----
-
-### 3. SPL Playground
-> **Best for:** Learning and testing real Splunk searches against your actual Splunk index.
-
-* **Step 1: Browse the Query Library**
-  * Browse or filter 108 ready-to-use production search queries organized by category (BGP Routing, Firewall Drops, Transceiver Light Levels, Identity Quarantines, DNS Security, etc.).
-* **Step 2: Load Query into Editor**
-  * Click any query card to automatically load the SPL into the search editor. You can edit the query text or adjust time ranges whenever you want.
-* **Step 3: Run the Search**
-  * Click **Execute Search (Splunk REST API)**. NetSpout sends the query directly to your live Splunkd REST API (`/services/search/jobs`), tracks search progress, and pulls down the actual results.
-* **Step 4: View Results**
-  * **Table View**: Browse rows and columns with sorting.
-  * **Raw Events / CIM View**: Inspect individual raw events and verify extracted fields like `action`, `src_ip`, `dest_ip`, `vendor`, and `sourcetype`.
+1. **Demonstrates Realistic Network Incidents**: Models end-to-end incident lifecycles (`BASELINE` → `DEGRADE` → `FAILOVER` → `RECOVERY`) across Cisco, Arista, Juniper, and multi-vendor networks.
+2. **True Multi-Protocol Telemetry**:
+   - **Native gNMI / OpenConfig**: Wire-pure Protobuf/HTTP2 streaming to external collectors (`gnmic`), normalized to event (`netspout:gnmi:event`) and metric (`netspout:gnmi:metric`) stores.
+   - **Native SNMPv2c**: Wire-pure ASN.1 BER UDP Traps (0xA7), Informs (0xA6), and Polling (GET/GETNEXT/GETBULK) to `snmptrapd` and Net-SNMP poller.
+   - **Native Flow (NetFlow v9 & IPFIX)**: Wire-compliant RFC 3954 / RFC 7011 binary UDP datagrams to GoFlow2 / Splunk Stream.
+   - **Direct HEC & Syslog**: Standards-compliant log generation matching official Splunk Technology Add-ons.
+3. **Strict Telemetry Honesty**:
+   - Clearly separates `NATIVE TRANSPORT` (actual standard byte serialization over network sockets) from `MODELED DEVICE STATE` (synthetic simulated device parameters).
+   - Zero fabricated vendor schemas: Unsupported items (e.g., proprietary Cisco ACI APIC DME Managed Objects) are explicitly flagged as `UNSUPPORTED_TELEMETRY` rather than invented.
+4. **End-to-End Audit & Verification**:
+   - 7-to-8 stage evidence separation: `GENERATED` → `ENCODED` → `SENT` → `COLLECTOR_RECEIVED` → `NORMALIZED` → `SPLUNK_DISPATCHED` → `SPLUNK_OBSERVED` → `VALIDATED`.
+   - Live Splunk REST query verification (`search` and `| mstats`) proving indexed presence before assertions pass.
 
 ---
 
-### 4. NetSpout Canvas & Telemetry Orchestrator
-> **Best for:** Designing visual network topologies, injecting live faults, and monitoring real-time telemetry.
+## 🧭 The 5-Step Customer Workflow
 
-* **Visual Canvas**:
-  * Drag and drop routers, switches, access points, and firewalls onto the canvas.
-  * Use the **Link Tool** to draw cables between device interfaces (e.g. `TenGigE1/0/1` to `TenGigE1/0/2`).
-* **Live Transmission Status**:
-  * Look at the top bar to verify the active transmission status:
-    `HEC: 127.0.0.1:8888 -> idx_network_ops`
-* **Pause & Resume Controls**:
-  * Click **Pause Telemetry** to freeze event emission. A sticky banner lets you know the stream is paused so you can inspect current events without them scrolling away.
-  * Click **Resume Telemetry** to resume sending live events.
-* **Telemetry Tools Menu**:
-  * Click the **Telemetry Tools ▾** dropdown in the top header to:
-    * Toggle the **Live Log Drawer** at the bottom of the screen.
-    * Export or Import your topology JSON.
-    * Adjust generation frequency and packet rates.
-* **Injecting Faults**:
-  * Click on any router, switch, or cable and click **Cut Link** or **Simulate Port Down**.
-  * The canvas immediately changes state and sends realistic `%LINK-3-UPDOWN`, `%LINEPROTO-5-UPDOWN`, and BGP neighbor drop logs to Splunk.
+NetSpout guides users through a clean 5-step operational workflow:
+
+### Step 1 — CHOOSE
+Select an operational failure scenario or security detection use case from the scenario catalog. Filter by vendor, domain, difficulty, or telemetry transport method (Syslog, SNMP, gNMI, Flow, HEC).
+
+### Step 2 — PREVIEW
+Inspect the scenario story, multi-hop topology, affected device entities, lifecycle phases, telemetry provenance, and clear fidelity badges (`NATIVE TRANSPORT` vs `MODELED DEVICE STATE`).
+
+### Step 3 — CONNECT
+One-click preflight verification checks all external prerequisites for the chosen scenario:
+- Splunk HEC health (`https://127.0.0.1:8888/services/collector/health`)
+- Splunk REST search API (`https://127.0.0.1:8889/services/search/jobs/export`)
+- Target event index (`idx_network_ops`) & metric index (`cisco_mdt_metrics`)
+- External collector binaries (`gnmic`, `snmptrapd`, Net-SNMP tools)
+- Local socket bind permissions on loopback (`127.0.0.1`)
+
+### Step 4 — RUN
+Execute the lifecycle progression with real-time phase updates:
+`BASELINE established` → `DEGRADE triggered` → `Collector observed` → `Splunk indexed` → `FAILOVER` → `RECOVERY`.
+
+### Step 5 — PROVE
+Audit the complete evidence ledger, inspect copyable SPL and `| mstats` investigation queries, review contract validation rules, and export companion run manifests.
 
 ---
 
 ## ⚡ Quickstart
 
 ### Prerequisites
-- Docker (optional, for all-in-one local setup) OR a running Splunk Enterprise / Splunk Cloud instance.
-- Python 3.11+ (if running backend locally)
-- Node.js 18+ (if running frontend locally)
+- Python 3.10+ (macOS / Linux)
+- Node.js 18+ (for building frontend)
+- Splunk Enterprise 9.0+ or Splunk Cloud (running locally or remotely)
+- Optional external collectors for native modes:
+  - `gnmic` (v0.40+): `brew install gnmic` (macOS) or `curl -sL https://gnmic.openconfig.net/install.sh | sudo bash`
+  - Net-SNMP (`snmpget`, `snmptrapd`): standard on macOS/Linux
 
-### Quick Run with Docker
-Run a complete environment with Splunk Enterprise + NetSpout in one command:
+### 1. Clone & Set Up NetSpout
 ```bash
-docker run -d \
-  --name splunk-netspout-standalone \
-  -p 8000:8000 \
-  -p 8088:8088 \
-  -p 8089:8089 \
-  -p 8081:8081 \
-  -e SPLUNK_START_ARGS="--accept-license" \
-  -e SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
-  -e SPLUNK_PASSWORD="SplunkPassword123!" \
-  netspout:standalone
+git clone https://github.com/machowdhury/NetSpout.git
+cd NetSpout
 ```
 
-Access points:
-- **Splunk Web**: `http://localhost:8000` (User: `admin`, Password: `SplunkPassword123!`)
-- **NetSpout Web UI**: `http://localhost:8081`
-- **Splunk HEC Endpoint**: `https://localhost:8088/services/collector`
+### 2. Configure Splunk Credentials
+Set your Splunk environment variables or use the defaults:
+```bash
+export NETSPOUT_HEC_URL="https://127.0.0.1:8888/services/collector/event"
+export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
+export NETSPOUT_SPLUNK_USER="admin"
+export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
+```
 
-### Running From Source
-1. **Start the Backend**:
-   ```bash
-   cd backend
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   python3 run.py
-   ```
-   *The backend starts at `http://localhost:8000` (or configured port).*
-
-2. **Start the Frontend**:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   *Open `http://localhost:5173` in your browser.*
+### 3. Launch NetSpout Server
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 run.py
+```
+*Access the Web UI at `http://localhost:8081` or `http://localhost:8000`.*
 
 ---
 
-## 🔌 Supported Vendors & Splunk Sourcetypes
+## 📦 Splunk App Packaging
 
-NetSpout emits real log formats matching the official Splunk Technology Add-ons (TAs):
+NetSpout is packaged as a standard self-contained Splunk Enterprise application package (`netspout.spl`):
 
-| Vendor | Device / Technology | Target Splunk Sourcetype | Recommended Splunk Add-on |
-| :--- | :--- | :--- | :--- |
-| **Cisco Systems** | Cisco IOS / IOS-XE Switches & Routers | `cisco:ios:syslog` | [Splunk Add-on for Cisco IOS](https://splunkbase.splunk.com/app/1467) |
-| **Cisco Systems** | Catalyst Center (DNA Center) | `cisco:catalyst:devicehealth` | [Splunk Add-on for Cisco Catalyst Center](https://splunkbase.splunk.com/app/5580) |
-| **Cisco Systems** | Cisco SD-WAN (Viptela) | `cisco:sdwan:linkhealth` | [Cisco SD-WAN Add-on for Splunk](https://splunkbase.splunk.com/app/7538) |
-| **Cisco Systems** | Identity Services Engine (ISE) | `cisco:ise:syslog` | [Splunk Add-on for Cisco ISE](https://splunkbase.splunk.com/app/1924) |
-| **Cisco Systems** | Secure Firewall (FTD / ASA) | `cisco:asa`, `cisco:sfw:estreamer` | [Cisco Security Cloud Add-on](https://splunkbase.splunk.com/app/6259) |
-| **Cisco Systems** | Duo Security MFA | `cisco:duo:auth` | [Splunk Add-on for Cisco Duo Security](https://splunkbase.splunk.com/app/3466) |
-| **Cisco Systems** | Meraki Cloud Managed WLAN | `meraki:accesspoints` | [Cisco Meraki Add-on for Splunk](https://splunkbase.splunk.com/app/6043) |
-| **Palo Alto Networks** | PAN-OS Next-Gen Firewall | `pan:traffic`, `pan:threat` | [Palo Alto Networks Add-on for Splunk](https://splunkbase.splunk.com/app/2757) |
-| **Fortinet** | FortiGate Next-Gen Firewall | `fortinet:fortigate:traffic` | [Fortinet FortiGate Add-on for Splunk](https://splunkbase.splunk.com/app/2800) |
-| **Arista Networks** | EOS Data Center Switching | `arista:eos:syslog` | [Arista Networks EOS Add-on](https://splunkbase.splunk.com/app/3350) |
-| **Juniper Networks** | Junos OS Routing & Switching | `juniper:junos:syslog` | [Splunk Add-on for Juniper](https://splunkbase.splunk.com/app/2855) |
-| **F5 Networks** | BIG-IP Local Traffic Manager | `f5:bigip:traffic` | [F5 BIG-IP Add-on for Splunk](https://splunkbase.splunk.com/app/2680) |
-| **Zscaler** | Zscaler Internet Access (ZIA) | `zscaler:web` | [Zscaler Add-on for Splunk](https://splunkbase.splunk.com/app/4363) |
+```bash
+# Build the production React frontend bundle
+python3 scripts/build_frontend.py
+
+# Package the release .spl archive
+python3 scripts/build_splunk_package.py
+```
+
+The resulting `netspout.spl` archive can be installed via Splunk Web (**Manage Apps → Install app from file**) or uncompressed directly into `$SPLUNK_HOME/etc/apps/netspout`.
 
 ---
 
-## 🔍 Example SPL Searches
+## 🔍 Canonical Splunk Investigation Queries
 
-Once NetSpout is sending data into your Splunk index, try these searches in the **SPL Playground** or in Splunk Web:
-
-### 1. View All Ingested Network Events by Sourcetype
+### Native gNMI Telemetry Events (`idx_network_ops`)
 ```spl
-index=idx_network_ops
-| stats count by sourcetype, host
-| sort -count
+search index=idx_network_ops sourcetype="netspout:gnmi:event" netspout_run_id="$RUN_ID"
+| table _time netspout_phase gnmi_target gnmi_origin gnmi_path gnmi_leaf gnmi_value
 ```
 
-### 2. Find BGP Adjacency Flaps & State Changes
+### Model-Driven Telemetry Metrics (`cisco_mdt_metrics`)
 ```spl
-index=idx_network_ops (sourcetype="cisco:ios:syslog" OR sourcetype="arista:eos:syslog" OR sourcetype="juniper:junos:syslog") ("%BGP-5-ADJCHANGE" OR "HoldTimer" OR "DAMP")
-| stats count, latest(_raw) as latest_event by host
-| sort -count
+| mstats avg(_value) WHERE index=cisco_mdt_metrics netspout_run_id="$RUN_ID" metric_name=* BY metric_name span=1s
 ```
 
-### 3. Blocked Firewall Connections by Vendor and Port
+### Native SNMPv2c Traps & Informs (`idx_network_ops`)
 ```spl
-index=idx_network_ops (sourcetype="cisco:asa" OR sourcetype="pan:traffic" OR sourcetype="fortinet:fortigate:traffic") action="blocked" OR action="deny" OR action="dropped"
-| stats count by vendor, dest_port, src_ip
-| sort -count
-| head 20
+search index=idx_network_ops sourcetype="netspout:snmp:trap" netspout_run_id="$RUN_ID"
+| table _time netspout_phase snmp_pdu_type snmp_trap_name snmp_oid_name snmp_value sys_uptime
+```
+
+### Cross-Protocol Incident Correlation
+```spl
+search index=idx_network_ops netspout_run_id="$RUN_ID" (sourcetype="netspout:gnmi:event" OR sourcetype="netspout:snmp:trap" OR sourcetype="cisco:ios:syslog")
+| stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id
 ```
 
 ---
 
-## ⚡ Native Flow Telemetry (NetFlow v9 & IPFIX)
+## 📚 Documentation Suite
 
-In addition to direct HEC and Syslog modes, NetSpout supports **Native Flow Transport (Mode B)**, emitting wire-compliant RFC 3954 (NetFlow v9) and RFC 7011 (IPFIX) binary UDP datagrams to real network flow collectors (e.g. GoFlow2, Splunk Stream).
+- [Quickstart Guide](docs/QUICKSTART.md): Step-by-step installation, collector setup, and first run.
+- [Troubleshooting & Diagnostics](docs/TROUBLESHOOTING.md): Preflight failure fixes, collector debugging, and Splunk HEC validation.
+- [Known Limitations](docs/LIMITATIONS.md): Unsupported protocol scopes, loopback bindings, and telemetry honesty declarations.
+- [Future Roadmap](docs/ROADMAP.md): Post-1.0 goals including OTLP streaming, NETCONF/RESTCONF, and AI fabric topologies.
+- [Gate 13E Acceptance Report](docs/acceptance/NETSPOUT_GATE_13E_GNMI_CUSTOMER_ACCEPTANCE.md): Independent customer verification evidence and evaluation.
 
-- **Fidelity Badge:** `NATIVE TRANSPORT` (standards-compliant binary UDP serialization).
-- **Collector Stack:** Pre-packaged, unprivileged GoFlow2 container environment in `deploy/collector/`.
-- **Quickstart Guide:** For step-by-step setup, configuration, and troubleshooting instructions, see the [Native Flow Quickstart Guide](docs/guides/NATIVE_FLOW_QUICKSTART.md).
+---
+
+## 🛡️ Security & Privacy Notice
+
+- **Loopback Only**: All native simulated servers (gNMI gRPC, SNMP agent, UDP listeners) bind strictly to `127.0.0.1` by default.
+- **Read-Only / Simulation Bound**: gNMI `SetRequest` is disabled; SNMP `SetRequest` is explicitly rejected with `noAccess`.
+- **Zero Secrets Committed**: Default HEC tokens and passwords are standard lab placeholders; environment variables override all credentials.
 
 ---
 
@@ -209,4 +177,3 @@ In addition to direct HEC and Syslog modes, NetSpout supports **Native Flow Tran
 - **Contributor**: [machowdhury](https://github.com/machowdhury)
 - **Project Repository**: [https://github.com/machowdhury/NetSpout](https://github.com/machowdhury/NetSpout)
 - **License**: Apache-2.0
-

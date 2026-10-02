@@ -1,0 +1,14 @@
+{
+  "release_candidate": "1.0.0-rc1",
+  "scenario_id": "service_provider_cisco",
+  "protocols_verified": [
+    "Syslog",
+    "SNMPv2c",
+    "gNMI/OpenConfig",
+    "Flow"
+  ],
+  "snmp_status": "PASS",
+  "gnmi_status": "PASS",
+  "total_elapsed_sec": 18.3,
+  "timestamp": 1790901530.181921
+}

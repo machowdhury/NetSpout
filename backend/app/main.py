@@ -1083,6 +1083,8 @@ def run_scenario_contract(
     native_snmp_timeout_ms: Optional[int] = 1500
     native_snmp_max_retries: Optional[int] = 2
     native_snmp_e2e: bool = False
+    native_gnmi_e2e: bool = False
+    native_gnmi_target_device: Optional[str] = None
 
     if payload:
         seed = payload.get("seed", seed)
@@ -1120,6 +1122,10 @@ def run_scenario_contract(
             native_snmp_max_retries = int(payload["native_snmp_max_retries"])
         if "native_snmp_e2e" in payload:
             native_snmp_e2e = bool(payload["native_snmp_e2e"])
+        if "native_gnmi_e2e" in payload:
+            native_gnmi_e2e = bool(payload["native_gnmi_e2e"])
+        if "native_gnmi_target_device" in payload:
+            native_gnmi_target_device = payload["native_gnmi_target_device"]
 
     req = ScenarioRunRequest(
         scenario_id=scenario_id,
@@ -1138,6 +1144,8 @@ def run_scenario_contract(
         native_snmp_timeout_ms=native_snmp_timeout_ms,
         native_snmp_max_retries=native_snmp_max_retries,
         native_snmp_e2e=native_snmp_e2e,
+        native_gnmi_e2e=native_gnmi_e2e,
+        native_gnmi_target_device=native_gnmi_target_device,
     )
     try:
         manifest = scenario_runner.run_scenario(req)
@@ -1160,6 +1168,26 @@ def post_native_snmp_preflight(payload: Optional[Dict[str, Any]] = None):
     from app.snmp_splunk_e2e import run_snmp_preflight_check
     idx = (payload or {}).get("index", "idx_network_ops") or "idx_network_ops"
     return run_snmp_preflight_check(index=idx)
+
+
+# =========================================================================
+# Native gNMI Subsystem Endpoints (Gate 13E Productization)
+# =========================================================================
+@app.get("/api/native-gnmi/preflight")
+def get_native_gnmi_preflight(
+    event_index: str = "idx_network_ops",
+    metric_index: str = "cisco_mdt_metrics",
+):
+    from app.gnmi.splunk_e2e import run_gnmi_preflight_check
+    return run_gnmi_preflight_check(event_index=event_index, metric_index=metric_index)
+
+
+@app.post("/api/native-gnmi/preflight")
+def post_native_gnmi_preflight(payload: Optional[Dict[str, Any]] = None):
+    from app.gnmi.splunk_e2e import run_gnmi_preflight_check
+    ev_idx = (payload or {}).get("event_index", "idx_network_ops") or "idx_network_ops"
+    met_idx = (payload or {}).get("metric_index", "cisco_mdt_metrics") or "cisco_mdt_metrics"
+    return run_gnmi_preflight_check(event_index=ev_idx, metric_index=met_idx)
 
 
 # =========================================================================

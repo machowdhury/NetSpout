@@ -43,6 +43,21 @@ export interface NativeSnmpCapabilities {
   semantic_statement: string;
 }
 
+export interface NativeGnmiCapabilities {
+  protocol: string;
+  subscription_modes: string[];
+  encoding: string;
+  yang_models: string[];
+  external_tooling: string[];
+  splunk_sourcetypes: string[];
+  event_index: string;
+  metric_index: string;
+  canonical_device_id: string;
+  transport_fidelity: string;
+  device_state_fidelity: string;
+  semantic_statement: string;
+}
+
 export interface UseCase {
   id: string;
   scenario_id: string;
@@ -68,6 +83,8 @@ export interface UseCase {
   telemetry_notes?: string;
   native_snmp_supported?: boolean;
   native_snmp_capabilities?: NativeSnmpCapabilities | null;
+  native_gnmi_supported?: boolean;
+  native_gnmi_capabilities?: NativeGnmiCapabilities | null;
   telemetry_requirements?: string[];
   affected_entities?: string[];
   timing_claim?: string;
@@ -94,6 +111,7 @@ export interface PipelineConnection {
   native_snmp_e2e?: boolean;
   native_snmp_pdu_mode?: 'TRAP' | 'INFORM' | 'MIXED';
   native_snmp_community?: string;
+  native_gnmi_e2e?: boolean;
 }
 
 export interface ValidationResultItem {
@@ -173,6 +191,7 @@ export interface WorkflowRunState {
   manifest: any | null;
   snmp_e2e_scorecard?: any | null;
   native_snmp_result?: any | null;
+  gnmi_e2e_scorecard?: any | null;
   transport_mode?: string;
   native_protocol?: string;
   validation_results: ValidationResultItem[];

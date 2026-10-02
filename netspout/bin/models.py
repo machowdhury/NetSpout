@@ -767,6 +767,9 @@ class RunManifest(BaseModel):
     snmp_e2e_scorecard: Optional[Any] = None
     snmp_normalized_events: List[Any] = Field(default_factory=list)
     snmp_polling_evidence: Optional[Any] = None
+    gnmi_e2e_scorecard: Optional[Any] = None
+    gnmi_collector_result: Optional[Any] = None
+    gnmi_normalized_records: List[Any] = Field(default_factory=list)
 
 
 class ScenarioRunRequest(BaseModel):
@@ -788,6 +791,8 @@ class ScenarioRunRequest(BaseModel):
     native_snmp_max_retries: int = 2
     native_snmp_e2e: bool = False
     native_snmp_agent_port: Optional[int] = None
+    native_gnmi_e2e: bool = False
+    native_gnmi_target_device: Optional[str] = None
 
 
 class FlowRecord(BaseModel):

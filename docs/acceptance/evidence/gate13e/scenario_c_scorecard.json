@@ -41,7 +41,7 @@
     "COLLECTOR_RECEIVED": 72,
     "NORMALIZED": 459,
     "SPLUNK_DISPATCHED": 459,
-    "SPLUNK_OBSERVED": 1644,
+    "SPLUNK_OBSERVED": 1143,
     "VALIDATED": 5
   },
   "dual_store_breakdown": {
@@ -49,8 +49,8 @@
     "normalized_metric_records": 246,
     "splunk_dispatched_events": 213,
     "splunk_dispatched_metrics": 246,
-    "splunk_observed_events": 763,
-    "splunk_observed_metrics": 881,
+    "splunk_observed_events": 426,
+    "splunk_observed_metrics": 717,
     "duplicate_records_suppressed": 120,
     "splunk_dispatch_failures": 0,
     "observation_completeness_pct": 100.0
@@ -85,7 +85,7 @@
       },
       "SPLUNK_OBSERVED": {
         "verified": true,
-        "count": 1644
+        "count": 1143
       },
       "VALIDATED": {
         "verified": true,
@@ -105,58 +105,58 @@
         "rule_id": "R13D-MV-01",
         "rule_name": "Cisco IOS XR Vendor Event Presence",
         "status": "PASS",
-        "message": "Observed 198 event(s) matching criteria (expected >= 2)",
-        "observed_value": 198,
+        "message": "Observed 108 event(s) matching criteria (expected >= 2)",
+        "observed_value": 108,
         "expected_value": 2,
         "evidence": {
-          "matched_count": 198
+          "matched_count": 108
         }
       },
       {
         "rule_id": "R13D-MV-02",
         "rule_name": "Cisco IOS XE Vendor Event Presence",
         "status": "PASS",
-        "message": "Observed 187 event(s) matching criteria (expected >= 2)",
-        "observed_value": 187,
+        "message": "Observed 102 event(s) matching criteria (expected >= 2)",
+        "observed_value": 102,
         "expected_value": 2,
         "evidence": {
-          "matched_count": 187
+          "matched_count": 102
         }
       },
       {
         "rule_id": "R13D-MV-03",
         "rule_name": "Arista EOS Vendor Event Presence",
         "status": "PASS",
-        "message": "Observed 198 event(s) matching criteria (expected >= 2)",
-        "observed_value": 198,
+        "message": "Observed 108 event(s) matching criteria (expected >= 2)",
+        "observed_value": 108,
         "expected_value": 2,
         "evidence": {
-          "matched_count": 198
+          "matched_count": 108
         }
       },
       {
         "rule_id": "R13D-MV-04",
         "rule_name": "Juniper Junos Vendor Event Presence",
         "status": "PASS",
-        "message": "Observed 180 event(s) matching criteria (expected >= 2)",
-        "observed_value": 180,
+        "message": "Observed 108 event(s) matching criteria (expected >= 2)",
+        "observed_value": 108,
         "expected_value": 2,
         "evidence": {
-          "matched_count": 180
+          "matched_count": 108
         }
       },
       {
         "rule_id": "R13D-MV-05",
         "rule_name": "Multi-Vendor Dual Destination Verification",
         "status": "PASS",
-        "message": "Destination check (BOTH): event_count=763, metric_count=246 (min=8)",
+        "message": "Destination check (BOTH): event_count=426, metric_count=246 (min=8)",
         "observed_value": {
-          "event_count": 763,
+          "event_count": 426,
           "metric_count": 246
         },
         "expected_value": "BOTH",
         "evidence": {
-          "event_count": 763,
+          "event_count": 426,
           "metric_count": 246
         }
       }

@@ -5,11 +5,12 @@ import {
   BarChart3, ChevronDown, Wrench, Check 
 } from 'lucide-react';
 import type { ScenarioType, EcosystemMode, TelemetryTransportConfig } from '../types/topology';
+import type { AppViewMode } from '../types/workflow';
 import { SCENARIOS } from '../presets/defaultTopologies';
 
 interface TopBarProps {
-  appMode?: 'workflow' | 'advanced' | 'operations';
-  onSelectAppMode?: (mode: 'workflow' | 'advanced' | 'operations') => void;
+  appMode?: AppViewMode;
+  onSelectAppMode?: (mode: AppViewMode) => void;
   ecosystemMode: EcosystemMode;
   onSelectEcosystemMode: (mode: EcosystemMode) => void;
   scenario: ScenarioType;
@@ -190,6 +191,16 @@ export const TopBar: React.FC<TopBarProps> = ({
             }`}
           >
             Use Cases (5-Step)
+          </button>
+          <button
+            onClick={() => onSelectAppMode && onSelectAppMode('generator')}
+            className={`px-3 py-1 text-xs font-semibold rounded-md transition cursor-pointer ${
+              appMode === 'generator'
+                ? 'bg-cyan-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Telemetry Generator
           </button>
           <button
             onClick={() => onSelectAppMode && onSelectAppMode('advanced')}

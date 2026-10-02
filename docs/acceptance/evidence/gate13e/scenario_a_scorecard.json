@@ -39,7 +39,7 @@
     "COLLECTOR_RECEIVED": 146,
     "NORMALIZED": 602,
     "SPLUNK_DISPATCHED": 602,
-    "SPLUNK_OBSERVED": 1806,
+    "SPLUNK_OBSERVED": 1204,
     "VALIDATED": 10
   },
   "dual_store_breakdown": {
@@ -47,8 +47,8 @@
     "normalized_metric_records": 381,
     "splunk_dispatched_events": 221,
     "splunk_dispatched_metrics": 381,
-    "splunk_observed_events": 663,
-    "splunk_observed_metrics": 1143,
+    "splunk_observed_events": 442,
+    "splunk_observed_metrics": 762,
     "duplicate_records_suppressed": 80,
     "splunk_dispatch_failures": 0,
     "observation_completeness_pct": 100.0
@@ -83,7 +83,7 @@
       },
       "SPLUNK_OBSERVED": {
         "verified": true,
-        "count": 1806
+        "count": 1204
       },
       "VALIDATED": {
         "verified": true,
@@ -103,33 +103,33 @@
         "rule_id": "R13D-SPC-01",
         "rule_name": "Cisco IOS XR Vendor Event Presence",
         "status": "PASS",
-        "message": "Observed 663 event(s) matching criteria (expected >= 4)",
-        "observed_value": 663,
+        "message": "Observed 442 event(s) matching criteria (expected >= 4)",
+        "observed_value": 442,
         "expected_value": 4,
         "evidence": {
-          "matched_count": 663
+          "matched_count": 442
         }
       },
       {
         "rule_id": "R13D-SPC-02",
         "rule_name": "Primary Interface Keyed gNMI Path Presence",
         "status": "PASS",
-        "message": "Observed 21 event(s) matching criteria (expected >= 3)",
-        "observed_value": 21,
+        "message": "Observed 14 event(s) matching criteria (expected >= 3)",
+        "observed_value": 14,
         "expected_value": 3,
         "evidence": {
-          "matched_count": 21
+          "matched_count": 14
         }
       },
       {
         "rule_id": "R13D-SPC-03",
         "rule_name": "Failover Phase Event Presence",
         "status": "PASS",
-        "message": "Observed 165 event(s) matching criteria (expected >= 4)",
-        "observed_value": 165,
+        "message": "Observed 110 event(s) matching criteria (expected >= 4)",
+        "observed_value": 110,
         "expected_value": 4,
         "evidence": {
-          "matched_count": 165
+          "matched_count": 110
         }
       },
       {
@@ -325,14 +325,14 @@
         "rule_id": "R13D-SPC-10",
         "rule_name": "Dual Destination Verification (Event Index + Metric Index)",
         "status": "PASS",
-        "message": "Destination check (BOTH): event_count=663, metric_count=324 (min=5)",
+        "message": "Destination check (BOTH): event_count=442, metric_count=324 (min=5)",
         "observed_value": {
-          "event_count": 663,
+          "event_count": 442,
           "metric_count": 324
         },
         "expected_value": "BOTH",
         "evidence": {
-          "event_count": 663,
+          "event_count": 442,
           "metric_count": 324
         }
       }
@@ -354,8 +354,8 @@
   "query_execution_summary": {
     "q1_run_overview_spl": 4,
     "q2_phase_progression_spl": 4,
-    "q3_interface_state_transition_spl": 124,
-    "q4_bgp_neighbor_transition_spl": 60,
+    "q3_interface_state_transition_spl": 93,
+    "q4_bgp_neighbor_transition_spl": 45,
     "q5_qos_congestion_drops_mstats": 32,
     "q6_optical_signal_degradation_mstats": 32,
     "q7_system_cpu_memory_health_mstats": 36,

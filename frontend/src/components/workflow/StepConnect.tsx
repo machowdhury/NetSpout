@@ -331,6 +331,86 @@ export const StepConnect: React.FC<StepConnectProps> = ({
         })}
       </div>
 
+      {/* Splunk Destination Preset Selector */}
+      <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+        <label className="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono">
+          Splunk Destination Environment (1-Click Presets)
+        </label>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <button
+            onClick={() => onUpdateConnection({
+              ...connection,
+              endpoint: 'https://127.0.0.1:8888/services/collector',
+              token: '00000000-0000-0000-0000-000000000000',
+              index: 'idx_network_ops',
+              allow_insecure_tls: true
+            })}
+            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
+              connection.endpoint?.includes('8888')
+                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
+                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+            }`}
+          >
+            <div className="font-bold text-slate-200">Bundled Docker Splunk</div>
+            <div className="text-[10px] text-slate-500 mt-0.5">https://127.0.0.1:8888</div>
+          </button>
+
+          <button
+            onClick={() => onUpdateConnection({
+              ...connection,
+              endpoint: 'https://127.0.0.1:8088/services/collector',
+              token: '00000000-0000-0000-0000-000000000000',
+              index: 'idx_network_ops',
+              allow_insecure_tls: true
+            })}
+            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
+              connection.endpoint?.includes('8088')
+                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
+                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+            }`}
+          >
+            <div className="font-bold text-slate-200">Local Splunk Enterprise</div>
+            <div className="text-[10px] text-slate-500 mt-0.5">https://127.0.0.1:8088</div>
+          </button>
+
+          <button
+            onClick={() => onUpdateConnection({
+              ...connection,
+              endpoint: 'https://splunk-core.lab.internal:8088/services/collector',
+              token: '',
+              index: 'idx_network_ops',
+              allow_insecure_tls: false
+            })}
+            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
+              connection.endpoint?.includes('splunk-core')
+                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
+                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+            }`}
+          >
+            <div className="font-bold text-slate-200">Remote Splunk Server</div>
+            <div className="text-[10px] text-slate-500 mt-0.5">Custom FQDN / Cluster</div>
+          </button>
+
+          <button
+            onClick={() => onUpdateConnection({
+              ...connection,
+              endpoint: 'https://http-inputs-prd.splunkcloud.com/services/collector',
+              token: '',
+              index: 'netops_logs',
+              allow_insecure_tls: false
+            })}
+            className={`p-2.5 rounded-lg border text-left font-mono transition text-xs ${
+              connection.endpoint?.includes('splunkcloud')
+                ? 'bg-cyan-950/60 border-cyan-500 text-cyan-200 shadow-sm'
+                : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+            }`}
+          >
+            <div className="font-bold text-slate-200">Splunk Cloud Platform</div>
+            <div className="text-[10px] text-slate-500 mt-0.5">*.splunkcloud.com</div>
+          </button>
+        </div>
+      </div>
+
       {/* Connection Parameter Form & Health Verification */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-y-auto">
         <div className="lg:col-span-2 p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">

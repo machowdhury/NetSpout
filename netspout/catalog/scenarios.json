@@ -5048,7 +5048,14 @@
         "description": "Asserts LDP recovery is logged."
       }
     ],
-    "code": "MPLS-01"
+    "code": "MPLS-01",
+    "attack_vector": "Targeted LDP TCP port 646 keepalive starvation or physical link flap",
+    "defense_mechanism": "Fast label withdrawal, RSVP-TE backup LSP detour, and IGP loop-free alternate convergence",
+    "timing_claim": "<50ms convergence",
+    "timing_value": 48.0,
+    "timing_unit": "ms",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled sub-50ms MPLS fast reroute convergence time."
   },
   {
     "id": "srv6_tilfa_fast_reroute",
@@ -5148,7 +5155,14 @@
         "description": "Verifies SRv6 restoration record."
       }
     ],
-    "code": "SRV6-01"
+    "code": "SRV6-01",
+    "attack_vector": "Carrier metro transit fiber cut triggering SRv6 SID unreachable condition",
+    "defense_mechanism": "IS-IS Topology-Independent Loop-Free Alternate (TI-LFA) post-convergence path calculation",
+    "timing_claim": "<50ms repair",
+    "timing_value": 35.0,
+    "timing_unit": "ms",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled hardware TI-LFA SID encapsulation and fast reroute repair time."
   },
   {
     "id": "dc_leaf_spine_microburst",
@@ -5252,7 +5266,14 @@
         "description": "Asserts congestion cleared."
       }
     ],
-    "code": "DC-CLOS-01"
+    "code": "DC-CLOS-01",
+    "attack_vector": "Incast synchronized burst traffic overflowing shared switch buffer pool",
+    "defense_mechanism": "Dynamic buffer allocation thresholding, Arista LANZ queue watermark alert, and WRED",
+    "timing_claim": "<10us microburst duration",
+    "timing_value": 8.5,
+    "timing_unit": "us",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled hardware buffer queue occupancy peak before tail-drop."
   },
   {
     "id": "evpn_vxlan_mac_mobility",
@@ -5354,7 +5375,14 @@
         "description": "Asserts fabric recovery."
       }
     ],
-    "code": "EVPN-01"
+    "code": "EVPN-01",
+    "attack_vector": "Spanning Tree loop or VM dual-homed misconfiguration causing MAC flapping across VTEPs",
+    "defense_mechanism": "BGP EVPN MAC mobility sequence number increment and automated host freeze suppression",
+    "timing_claim": "180s freeze suppression timer",
+    "timing_value": 180.0,
+    "timing_unit": "s",
+    "timing_classification": "MODELED",
+    "timing_notes": "RFC 7432 MAC mobility hold-down timer."
   },
   {
     "id": "cluster_interconnect_failover",
@@ -5454,7 +5482,14 @@
         "description": "Asserts cluster recovery event."
       }
     ],
-    "code": "SAN-HPC-01"
+    "code": "SAN-HPC-01",
+    "attack_vector": "Cluster interconnect primary link degradation causing node heartbeat timeout",
+    "defense_mechanism": "Dual-ring heartbeat quorum failover and secondary interface bonding promotion",
+    "timing_claim": "<2s heartbeat timeout",
+    "timing_value": 1.5,
+    "timing_unit": "s",
+    "timing_classification": "MODELED",
+    "timing_notes": "Modeled Corosync/HPC interconnect quorum heartbeat window."
   },
   {
     "id": "polan_olt_fiber_attenuation",
@@ -5556,7 +5591,14 @@
         "description": "Asserts POLAN restoration logged."
       }
     ],
-    "code": "POLAN-01"
+    "code": "POLAN-01",
+    "attack_vector": "Feeder optical fiber macrobend attenuation causing received optical power degradation",
+    "defense_mechanism": "Dynamic optical budget monitoring, Dying Gasp ONT trap dispatch, and redundant PON switchover",
+    "timing_claim": "<3dB margin threshold",
+    "timing_value": 3.0,
+    "timing_unit": "dB",
+    "timing_classification": "MODELED",
+    "timing_notes": "ITU-T G.984 optical path loss threshold monitoring."
   },
   {
     "id": "intent_policy_divergence",
@@ -5658,7 +5700,14 @@
         "description": "Asserts compliance recovery."
       }
     ],
-    "code": "IBN-01"
+    "code": "IBN-01",
+    "attack_vector": "Out-of-band CLI configuration drift diverging from Catalyst Center intent",
+    "defense_mechanism": "Automated SDA telemetry compliance scanning and idempotent rollback reconciliation",
+    "timing_claim": "60s compliance audit interval",
+    "timing_value": 60.0,
+    "timing_unit": "s",
+    "timing_classification": "MODELED",
+    "timing_notes": "Periodic intent assurance audit interval."
   },
   {
     "id": "ai_fabric_rocev2_incast",
@@ -5762,6 +5811,13 @@
         "description": "Asserts lossless recovery logged."
       }
     ],
-    "code": "AI-FAB-01"
+    "code": "AI-FAB-01",
+    "attack_vector": "Distributed All-to-All GPU gradient exchange creating RoCEv2 buffer incast",
+    "defense_mechanism": "IEEE 802.1Qbb Priority Flow Control (PFC) pauses and RFC 3168 ECN marking to throttle senders",
+    "timing_claim": "<15us PFC pause response",
+    "timing_value": 12.0,
+    "timing_unit": "us",
+    "timing_classification": "MODELED",
+    "timing_notes": "Lossless fabric PFC pause generation latency threshold."
   }
 ]

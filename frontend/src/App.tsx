@@ -15,6 +15,7 @@ import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import { FiveStepWorkflow } from './components/workflow/FiveStepWorkflow';
 import { OperationsView } from './components/operations/OperationsView';
+import { GeneratorModesView } from './components/generator/GeneratorModesView';
 import type { AppViewMode } from './types/workflow';
 import type {
   TopologyState,
@@ -628,6 +629,10 @@ export const App: React.FC = () => {
             onOpenCanvas={() => setAppMode('advanced')}
             launchScenarioSignal={launchScenarioSignal}
           />
+        </div>
+      ) : appMode === 'generator' ? (
+        <div className="flex-1 flex overflow-hidden">
+          <GeneratorModesView />
         </div>
       ) : appMode === 'operations' ? (
         <div className="flex-1 flex overflow-hidden">

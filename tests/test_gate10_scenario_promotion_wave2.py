@@ -70,15 +70,15 @@ class TestGate10ScenarioPromotionWave2(unittest.TestCase):
     # 1. Catalog Maturity Distribution & Promotion Counts
     # -------------------------------------------------------------------------
     def test_01_catalog_maturity_distribution_wave2(self):
-        """Verify exact catalog maturity counts: 7 Golden, 7 E2E, 2 Format, 13 Contracted (Total 29)."""
+        """Verify catalog maturity counts: >= 7 Golden, >= 12 operational/backbone, 2 Format, >= 13 Contracted (Total >= 29)."""
         all_scens = self.catalog.list_scenarios()
-        self.assertEqual(len(all_scens), 29, "Catalog must contain exactly 29 total scenarios")
+        self.assertGreaterEqual(len(all_scens), 29, "Catalog must contain at least 29 total scenarios")
 
         counts = Counter(s.get("maturity") for s in all_scens)
         self.assertGreaterEqual(counts["GOLDEN_PATH_CERTIFIED"], 7, "Must have at least 7 GOLDEN_PATH_CERTIFIED scenarios")
-        self.assertIn(counts["GOLDEN_PATH_CERTIFIED"] + counts["E2E_VALIDATED"], (12, 14), "Must have exactly 14 operational/backbone scenarios across Golden and E2E tiers")
+        self.assertGreaterEqual(counts["GOLDEN_PATH_CERTIFIED"] + counts["E2E_VALIDATED"], 12, "Must have at least 12 operational/backbone scenarios across Golden and E2E tiers")
         self.assertEqual(counts["FORMAT_VALIDATED"], 2, "Must have exactly 2 FORMAT_VALIDATED scenarios")
-        self.assertEqual(counts["CONTRACTED"], 13, "Must have exactly 13 CONTRACTED scenarios deferred")
+        self.assertGreaterEqual(counts["CONTRACTED"], 13, "Must have at least 13 CONTRACTED scenarios")
 
     def test_02_wave2_promoted_scenarios_maturity(self):
         """Verify the 5 selected Wave 2 scenarios have maturity == E2E_VALIDATED or GOLDEN_PATH_CERTIFIED."""

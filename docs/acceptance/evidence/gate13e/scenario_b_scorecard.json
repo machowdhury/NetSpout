@@ -39,7 +39,7 @@
     "COLLECTOR_RECEIVED": 122,
     "NORMALIZED": 434,
     "SPLUNK_DISPATCHED": 434,
-    "SPLUNK_OBSERVED": 1302,
+    "SPLUNK_OBSERVED": 1117,
     "VALIDATED": 6
   },
   "dual_store_breakdown": {
@@ -47,7 +47,7 @@
     "normalized_metric_records": 249,
     "splunk_dispatched_events": 185,
     "splunk_dispatched_metrics": 249,
-    "splunk_observed_events": 555,
+    "splunk_observed_events": 370,
     "splunk_observed_metrics": 747,
     "duplicate_records_suppressed": 40,
     "splunk_dispatch_failures": 0,
@@ -83,7 +83,7 @@
       },
       "SPLUNK_OBSERVED": {
         "verified": true,
-        "count": 1302
+        "count": 1117
       },
       "VALIDATED": {
         "verified": true,
@@ -103,11 +103,11 @@
         "rule_id": "R13D-OC-01",
         "rule_name": "OpenConfig Event Presence in idx_network_ops",
         "status": "PASS",
-        "message": "Observed 555 event(s) matching criteria (expected >= 10)",
-        "observed_value": 555,
+        "message": "Observed 370 event(s) matching criteria (expected >= 10)",
+        "observed_value": 370,
         "expected_value": 10,
         "evidence": {
-          "matched_count": 555
+          "matched_count": 370
         }
       },
       {
@@ -212,14 +212,14 @@
         "rule_id": "R13D-OC-06",
         "rule_name": "OpenConfig Dual Store Verification",
         "status": "PASS",
-        "message": "Destination check (BOTH): event_count=555, metric_count=192 (min=5)",
+        "message": "Destination check (BOTH): event_count=370, metric_count=192 (min=5)",
         "observed_value": {
-          "event_count": 555,
+          "event_count": 370,
           "metric_count": 192
         },
         "expected_value": "BOTH",
         "evidence": {
-          "event_count": 555,
+          "event_count": 370,
           "metric_count": 192
         }
       }
@@ -241,8 +241,8 @@
   "query_execution_summary": {
     "q1_run_overview_spl": 4,
     "q2_phase_progression_spl": 4,
-    "q3_interface_state_transition_spl": 76,
-    "q4_bgp_neighbor_transition_spl": 28,
+    "q3_interface_state_transition_spl": 57,
+    "q4_bgp_neighbor_transition_spl": 21,
     "q5_qos_congestion_drops_mstats": 20,
     "q6_optical_signal_degradation_mstats": 20,
     "q7_system_cpu_memory_health_mstats": 28,

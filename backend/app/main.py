@@ -1229,6 +1229,93 @@ def get_native_flow_diagnostics():
         "prometheus_metrics": prom,
         "recent_flows_count": len(adapter.get_recent_flows())
     }
+# =========================================================================
+# Self-Contained Telemetry Pipelines Health & Lifecycle (Gate 14+)
+# =========================================================================
+@app.get("/api/health/pipelines")
+def get_pipelines_health():
+    from app.embedded_pipelines import embedded_pipelines
+    return embedded_pipelines.get_health()
+
+
+# =========================================================================
+# Generation Modes (Modes B, C, D) & Catalog Navigation
+# =========================================================================
+@app.post("/api/generate/single-event")
+def post_generate_single_event(payload: Dict[str, Any]):
+    from app.generator_modes import generator_service
+    vendor_id = payload.get("vendor_id", "cisco_ios")
+    sourcetype = payload.get("sourcetype", "cisco:ios:syslog")
+    event_name = payload.get("event_name")
+    dispatch = bool(payload.get("dispatch", False))
+    index = payload.get("index", "idx_network_ops")
+    return generator_service.generate_single_event(
+        vendor_id=vendor_id,
+        sourcetype=sourcetype,
+        event_name=event_name,
+        dispatch=dispatch,
+        index=index
+    )
+
+
+@app.post("/api/generate/sourcetype")
+def post_generate_sourcetype_batch(payload: Dict[str, Any]):
+    from app.generator_modes import generator_service
+    vendor_id = payload.get("vendor_id", "cisco_ios")
+    sourcetype = payload.get("sourcetype", "cisco:ios:syslog")
+    count = int(payload.get("count", 10))
+    rate_eps = int(payload.get("rate_eps", 10))
+    dispatch = bool(payload.get("dispatch", False))
+    index = payload.get("index", "idx_network_ops")
+    return generator_service.generate_sourcetype_batch(
+        vendor_id=vendor_id,
+        sourcetype=sourcetype,
+        count=count,
+        rate_eps=rate_eps,
+        dispatch=dispatch,
+        index=index
+    )
+
+
+@app.post("/api/generate/data-source")
+def post_generate_data_source(payload: Dict[str, Any]):
+    from app.generator_modes import generator_service
+    vendor_id = payload.get("vendor_id", "cisco_ios")
+    product = payload.get("product", "IOS XR")
+    transport = payload.get("transport", "syslog")
+    count = int(payload.get("count", 25))
+    rate_eps = int(payload.get("rate_eps", 10))
+    dispatch = bool(payload.get("dispatch", False))
+    index = payload.get("index", "idx_network_ops")
+    return generator_service.generate_data_source(
+        vendor_id=vendor_id,
+        product=product,
+        transport=transport,
+        count=count,
+        rate_eps=rate_eps,
+        dispatch=dispatch,
+        index=index
+    )
+
+
+@app.get("/api/catalog/domains")
+def get_catalog_domains():
+    import json
+    domains_path = os.path.join(os.path.dirname(__file__), "catalog_data", "network_coverage.json")
+    if os.path.exists(domains_path):
+        with open(domains_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+@app.get("/api/catalog/provenance")
+def get_catalog_provenance():
+    import json
+    prov_path = os.path.join(os.path.dirname(__file__), "catalog_data", "telemetry_sources.json")
+    if os.path.exists(prov_path):
+        with open(prov_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
 
 
 # WebSocket Endpoint

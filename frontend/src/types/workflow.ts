@@ -2,7 +2,7 @@ import type { LogEntry } from './topology';
 
 export type WorkflowStep = 'CHOOSE' | 'PREVIEW' | 'CONNECT' | 'RUN' | 'PROVE';
 
-export type AppViewMode = 'workflow' | 'advanced' | 'operations';
+export type AppViewMode = 'workflow' | 'advanced' | 'operations' | 'generator' | 'catalog';
 
 export type PipelineType = 'splunk_hec' | 'syslog' | 'otlp' | 'telegraf';
 

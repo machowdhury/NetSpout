@@ -1,0 +1,17 @@
+{
+  "external_middleware_required": false,
+  "dependencies": {
+    "gnmic": "EMBEDDED_NATIVE",
+    "snmptrapd": "EMBEDDED_NATIVE",
+    "sc4s": "EMBEDDED_NATIVE",
+    "sc4snmp": "EMBEDDED_NATIVE",
+    "goflow2": "EMBEDDED_NATIVE",
+    "telegraf": "EMBEDDED_NATIVE"
+  },
+  "runtime_install_steps": [
+    "git clone",
+    "npm run build",
+    "python -m app.main"
+  ],
+  "status": "SELF_CONTAINED_VERIFIED"
+}

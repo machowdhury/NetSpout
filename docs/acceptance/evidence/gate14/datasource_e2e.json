@@ -1,0 +1,22 @@
+{
+  "mode": "DATA_SOURCE",
+  "status": "GROUNDED",
+  "vendor_id": "cisco_ios",
+  "sourcetype": "cisco:ios",
+  "count_requested": 25,
+  "count_generated": 25,
+  "count_dispatched": 0,
+  "rate_eps": 20,
+  "index": "idx_network_ops",
+  "provenance": {
+    "classification": "VERIFIED_PUBLIC_SAMPLE",
+    "source": "netspout/appserver/static/samples/cisco-ios/cisco-ios.yml"
+  },
+  "sample_preview": [
+    "sourcetype: cisco:ios",
+    "replacement: \"Jan 02 15:04:05\"",
+    "description: Real Network Assurance replay for cisco:ios (main index)"
+  ],
+  "product": "Cisco IOS XR",
+  "transport": "syslog"
+}

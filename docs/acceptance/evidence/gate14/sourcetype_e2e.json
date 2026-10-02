@@ -1,0 +1,20 @@
+{
+  "mode": "SOURCETYPE_BATCH",
+  "status": "GROUNDED",
+  "vendor_id": "arista_eos",
+  "sourcetype": "arista:eos",
+  "count_requested": 10,
+  "count_generated": 10,
+  "count_dispatched": 0,
+  "rate_eps": 10,
+  "index": "idx_network_ops",
+  "provenance": {
+    "classification": "VERIFIED_PUBLIC_SAMPLE",
+    "source": "netspout/appserver/static/samples/arista-eos/arista-eos.yml"
+  },
+  "sample_preview": [
+    "source: arista_eos_syslog",
+    "sourcetype: arista:eos",
+    "sourcetype: arista:eos"
+  ]
+}

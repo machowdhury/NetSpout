@@ -1,0 +1,12 @@
+{
+  "status": "ERROR",
+  "state": "ERROR",
+  "stage": "auth",
+  "reachable": true,
+  "authenticated": false,
+  "event_accepted": false,
+  "target_index": "idx_network_ops",
+  "message": "HEC Authentication Failed: Invalid or unauthorized token.",
+  "detail": "HEC Authentication Failed: Invalid or unauthorized token.",
+  "latency_ms": 4.24
+}

@@ -180,6 +180,9 @@ class TelemetryDispatcher:
                     break
                 last_error = err_str
                 continue
+            except Exception as e:
+                last_error = str(e)
+                continue
 
         self.stats["hec_errors"] += 1
         self.stats["last_error"] = f"HEC error: {last_error}"

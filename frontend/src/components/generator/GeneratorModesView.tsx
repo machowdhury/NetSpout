@@ -254,13 +254,34 @@ export const GeneratorModesView: React.FC = () => {
             </h3>
             {seResult ? (
               <div className="flex-1 flex flex-col space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between text-slate-400 text-[11px] pb-2 border-b border-slate-800">
-                  <span>Event ID: <b className="text-cyan-300">{seResult.event_id}</b></span>
-                  <span>Dispatched: <b className={seResult.dispatched ? "text-emerald-400" : "text-amber-400"}>{seResult.dispatched ? "YES" : "NO (DRY RUN)"}</b></span>
-                </div>
-                <div className="flex-1 p-3 rounded-lg bg-slate-950 border border-slate-800/80 text-emerald-400 overflow-x-auto whitespace-pre-wrap leading-relaxed select-all">
-                  {seResult.raw || JSON.stringify(seResult, null, 2)}
-                </div>
+                {seResult.status === 'TELEMETRY_NOT_GROUNDED' ? (
+                  <div className="p-4 rounded-lg bg-red-950/40 border border-red-500/40 space-y-2">
+                    <div className="flex items-center gap-2 text-red-400 font-bold">
+                      <span className="px-1.5 py-0.5 rounded bg-red-500/20 text-[10px]">ANTI-FABRICATION GUARD</span>
+                      <span>TELEMETRY NOT GROUNDED</span>
+                    </div>
+                    <p className="text-slate-300 text-xs">{seResult.reason}</p>
+                    <div className="text-[11px] text-slate-400">
+                      Provenance Requirement: <span className="text-cyan-300">{seResult.source_requirement}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between text-slate-400 text-[11px] pb-2 border-b border-slate-800">
+                      <span>Event ID: <b className="text-cyan-300">{seResult.event_id}</b></span>
+                      <span>Dispatched: <b className={seResult.dispatched ? "text-emerald-400" : "text-amber-400"}>{seResult.dispatched ? "YES" : "NO (DRY RUN)"}</b></span>
+                    </div>
+                    {seResult.provenance && (
+                      <div className="flex items-center justify-between p-2 rounded bg-cyan-950/20 border border-cyan-800/40 text-[10px] text-slate-300">
+                        <span>Classification: <b className="text-cyan-300">{seResult.provenance.classification}</b></span>
+                        <span className="truncate max-w-[240px]" title={seResult.provenance.source}>Source: {seResult.provenance.source}</span>
+                      </div>
+                    )}
+                    <div className="flex-1 p-3 rounded-lg bg-slate-950 border border-slate-800/80 text-emerald-400 overflow-x-auto whitespace-pre-wrap leading-relaxed select-all">
+                      {seResult.raw || JSON.stringify(seResult, null, 2)}
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-slate-500 gap-2 p-8 border border-dashed border-slate-800 rounded-xl">
@@ -373,20 +394,41 @@ export const GeneratorModesView: React.FC = () => {
             </h3>
             {stResult ? (
               <div className="flex-1 flex flex-col space-y-3 font-mono text-xs">
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px]">
-                  <div>Requested: <b className="text-cyan-300">{stResult.count_requested}</b></div>
-                  <div>Generated: <b className="text-emerald-400">{stResult.count_generated}</b></div>
-                  <div>Dispatched: <b className="text-cyan-300">{stResult.count_dispatched}</b></div>
-                  <div>Index: <b className="text-slate-300">{stResult.index}</b></div>
-                </div>
-                <div className="flex-1 p-3 rounded-lg bg-slate-950 border border-slate-800/80 text-slate-300 overflow-x-auto space-y-2 text-[11px]">
-                  <div className="text-slate-500 font-bold uppercase">Sample Previews:</div>
-                  {stResult.sample_preview?.map((sm: string, idx: number) => (
-                    <div key={idx} className="p-2 rounded bg-slate-900 border border-slate-800 text-emerald-400">
-                      {sm}
+                {stResult.status === 'TELEMETRY_NOT_GROUNDED' ? (
+                  <div className="p-4 rounded-lg bg-red-950/40 border border-red-500/40 space-y-2">
+                    <div className="flex items-center gap-2 text-red-400 font-bold">
+                      <span className="px-1.5 py-0.5 rounded bg-red-500/20 text-[10px]">ANTI-FABRICATION GUARD</span>
+                      <span>TELEMETRY NOT GROUNDED</span>
                     </div>
-                  ))}
-                </div>
+                    <p className="text-slate-300 text-xs">{stResult.reason}</p>
+                    <div className="text-[11px] text-slate-400">
+                      Provenance Requirement: <span className="text-cyan-300">{stResult.source_requirement}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-slate-950 border border-slate-800 text-[11px]">
+                      <div>Requested: <b className="text-cyan-300">{stResult.count_requested}</b></div>
+                      <div>Generated: <b className="text-emerald-400">{stResult.count_generated}</b></div>
+                      <div>Dispatched: <b className="text-cyan-300">{stResult.count_dispatched}</b></div>
+                      <div>Index: <b className="text-slate-300">{stResult.index}</b></div>
+                    </div>
+                    {stResult.provenance && (
+                      <div className="flex items-center justify-between p-2 rounded bg-cyan-950/20 border border-cyan-800/40 text-[10px] text-slate-300">
+                        <span>Classification: <b className="text-cyan-300">{stResult.provenance.classification}</b></span>
+                        <span className="truncate max-w-[240px]" title={stResult.provenance.source}>Source: {stResult.provenance.source}</span>
+                      </div>
+                    )}
+                    <div className="flex-1 p-3 rounded-lg bg-slate-950 border border-slate-800/80 text-slate-300 overflow-x-auto space-y-2 text-[11px]">
+                      <div className="text-slate-500 font-bold uppercase">Sample Previews:</div>
+                      {stResult.sample_preview?.map((sm: string, idx: number) => (
+                        <div key={idx} className="p-2 rounded bg-slate-900 border border-slate-800 text-emerald-400">
+                          {sm}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-slate-500 gap-2 p-8 border border-dashed border-slate-800 rounded-xl">

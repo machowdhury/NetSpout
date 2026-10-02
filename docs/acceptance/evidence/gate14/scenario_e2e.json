@@ -1,0 +1,310 @@
+{
+  "run_id": "NS-20261002-1ca1c46f",
+  "scenario_id": "cisco_sdwan_brownout",
+  "scenario_name": "Enterprise WAN Circuit Brownout & App Route Failover",
+  "topology_id": "cisco_sdwan",
+  "scenario_maturity": "GOLDEN_PATH_CERTIFIED",
+  "seed": null,
+  "time_mode": "TEST",
+  "transport_mode": "DIRECT_TO_SPLUNK",
+  "native_protocol": null,
+  "start_time": 1790906991.796693,
+  "end_time": 1790906993.826122,
+  "duration_sec": 2.029,
+  "phases_executed": [
+    "INITIALIZE",
+    "BASELINE",
+    "DEGRADE",
+    "FAILOVER",
+    "RECOVER",
+    "VALIDATE",
+    "COMPLETE"
+  ],
+  "affected_devices": [
+    "edge-branch-mpls",
+    "vedge-branch-01",
+    "vedge-hub-01"
+  ],
+  "expected_sourcetypes": [
+    "cisco:sdwan:linkhealth",
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:thousandeyes:path-vis",
+    "cisco:thousandeyes:metric"
+  ],
+  "actual_generated_counts": {
+    "cisco:sdwan:linkhealth": 4,
+    "cisco:thousandeyes:metric": 2,
+    "cisco:sdwan:BGP-5-ADJCHANGE": 2
+  },
+  "total_events_generated": 8,
+  "ground_truth_records": [
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "INITIALIZE",
+      "timestamp": 1790906991.796992,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [
+        "vedge-branch-01",
+        "node-mpls-provider",
+        "node-dia-internet",
+        "vedge-hub-01",
+        "node-te-agent"
+      ],
+      "affected_edges": [
+        "edge-branch-mpls",
+        "edge-branch-dia",
+        "edge-mpls-hub",
+        "edge-dia-hub",
+        "edge-hub-te"
+      ],
+      "expected_observations": [
+        "Nodes active"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "BASELINE",
+      "timestamp": 1790906991.7970061,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "BFD jitter < 10ms",
+        "0% packet loss"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "DEGRADE",
+      "timestamp": 1790906991.820769,
+      "intentional_fault": {
+        "type": "link_degradation",
+        "target_edge": "edge-branch-mpls",
+        "loss_pct": 14.5,
+        "latency_ms": 185.0
+      },
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [
+        "edge-branch-mpls"
+      ],
+      "expected_observations": [
+        "BFD latency violation detected",
+        "Path quality score drops"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "FAILOVER",
+      "timestamp": 1790906991.836799,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "cisco:sdwan:approute reroute event",
+        "Secondary tunnel active"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "RECOVER",
+      "timestamp": 1790906991.851928,
+      "intentional_fault": null,
+      "intentional_recovery": {
+        "type": "full_restoration",
+        "status": "restored"
+      },
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "BFD alarms cleared",
+        "Traffic returns to primary"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "VALIDATE",
+      "timestamp": 1790906991.8658528,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "All tunnels healthy"
+      ],
+      "expected_secondary_effects": []
+    },
+    {
+      "run_id": "NS-20261002-1ca1c46f",
+      "scenario_id": "cisco_sdwan_brownout",
+      "phase": "COMPLETE",
+      "timestamp": 1790906991.865993,
+      "intentional_fault": null,
+      "intentional_recovery": null,
+      "affected_nodes": [],
+      "affected_edges": [],
+      "expected_observations": [
+        "Scenario lifecycle complete"
+      ],
+      "expected_secondary_effects": []
+    }
+  ],
+  "validation_results": [
+    {
+      "rule_id": "sdwan-val-01",
+      "rule_name": "SD-WAN Sourcetypes Present",
+      "status": "PASS",
+      "message": "Count 4 >= 1 -> PASS",
+      "observed_value": 4,
+      "expected_value": 1,
+      "evidence": {
+        "count": 4,
+        "comparison": ">="
+      }
+    },
+    {
+      "rule_id": "sdwan-val-02",
+      "rule_name": "AppRoute Failover Action",
+      "status": "PASS",
+      "message": "Observed 6 event(s) matching criteria (expected >= 1)",
+      "observed_value": 6,
+      "expected_value": 1,
+      "evidence": {
+        "matched_count": 6
+      }
+    },
+    {
+      "rule_id": "sdwan-val-03",
+      "rule_name": "Link Health Transition",
+      "status": "PASS",
+      "message": "State transition to restored confirmed",
+      "observed_value": "restored",
+      "expected_value": "restored",
+      "evidence": null
+    }
+  ],
+  "overall_validation": "PASS",
+  "dispatch_results": {
+    "evt-b9a42868": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-eeb628d3": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-55e2142b": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-5b9ca110": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-a1297a67": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-c7ffedee": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-d89f0a3c": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    },
+    "evt-e1222bc3": {
+      "hec": {
+        "success": true,
+        "message": "HEC HTTP 200: {\"text\":\"Success\",\"code\":0}"
+      }
+    }
+  },
+  "dispatch_attempted": 8,
+  "dispatch_succeeded": 8,
+  "dispatch_failed": 0,
+  "observed_count": 8,
+  "observation_status": "VERIFIED",
+  "destination_validation": "PASS",
+  "splunk_search_query": "search index=idx_network_ops netspout_run_id=\"NS-20261002-1ca1c46f\"",
+  "splunk_metric_query": null,
+  "event_observed_count": 8,
+  "metric_observed_count": 0,
+  "observation_completeness_pct": 100.0,
+  "evidence_summary": {
+    "run_id": "NS-20261002-1ca1c46f",
+    "scenario_id": "cisco_sdwan_brownout",
+    "destinations": [
+      {
+        "destination_id": "splunk_event_idx_network_ops",
+        "name": "Splunk Event Index (idx_network_ops)",
+        "telemetry_type": "EVENT",
+        "target_index": "idx_network_ops",
+        "query_mechanism": "SPL_SEARCH",
+        "query": "search index=idx_network_ops netspout_run_id=\"NS-20261002-1ca1c46f\"",
+        "observed_count": 8,
+        "expected_count": 8,
+        "status": "PASS",
+        "role": "REQUIRED",
+        "errors": []
+      }
+    ],
+    "total_generated": 8,
+    "total_dispatched": 8,
+    "total_observed": 8,
+    "event_observed_count": 8,
+    "event_expected_count": 8,
+    "metric_observed_count": 0,
+    "metric_expected_count": 0,
+    "observation_completeness_pct": 100.0,
+    "observation_status": "COMPLETE",
+    "contract_validation": "NOT_RUN",
+    "required_evidence_satisfied": true,
+    "errors": []
+  },
+  "timing_claim": null,
+  "timing_value": null,
+  "timing_unit": null,
+  "timing_classification": "NOT_APPLICABLE",
+  "timing_notes": null,
+  "errors": [],
+  "native_transport_result": null,
+  "companion_manifest": null,
+  "native_flow_records": [],
+  "native_snmp_result": null,
+  "native_snmp_pdus": [],
+  "snmp_e2e_scorecard": null,
+  "snmp_normalized_events": [],
+  "snmp_polling_evidence": null,
+  "gnmi_e2e_scorecard": null,
+  "gnmi_collector_result": null,
+  "gnmi_normalized_records": []
+}

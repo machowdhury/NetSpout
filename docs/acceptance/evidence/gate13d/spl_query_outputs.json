@@ -1,6 +1,6 @@
 {
-  "cross_transport_run_id": "run-13d-xtrans-22d12c0e",
-  "multivendor_run_id": "run-13d-multivendor-0b2f1335",
+  "cross_transport_run_id": "run-13d-xtrans-5db85b91",
+  "multivendor_run_id": "run-13d-multivendor-befcab88",
   "outputs": {
     "q10_cross_source_correlation_spl": [
       {
@@ -253,7 +253,7 @@
     ],
     "q3_interface_state_transition_spl": [
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.035 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -265,7 +265,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.035 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -277,7 +277,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.035 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -288,7 +288,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.035 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -300,7 +300,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.034 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -312,7 +312,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.579 GMT",
+        "_time": "2026-10-02 02:11:19.034 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -323,7 +323,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.552 GMT",
+        "_time": "2026-10-02 02:11:19.006 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "Cisco-IOS-XR-pfi-im-cmd-oper",
@@ -335,7 +335,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.550 GMT",
+        "_time": "2026-10-02 02:11:19.004 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -347,7 +347,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.549 GMT",
+        "_time": "2026-10-02 02:11:19.003 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -359,7 +359,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.549 GMT",
+        "_time": "2026-10-02 02:11:19.003 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -370,7 +370,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.549 GMT",
+        "_time": "2026-10-02 02:11:19.003 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -382,7 +382,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.549 GMT",
+        "_time": "2026-10-02 02:11:19.003 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -394,7 +394,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.549 GMT",
+        "_time": "2026-10-02 02:11:19.003 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -405,7 +405,19 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.066 GMT",
+        "current_evidence_stage": "SPLUNK_OBSERVED",
+        "gnmi_leaf": "state",
+        "gnmi_origin": "Cisco-IOS-XR-pfi-im-cmd-oper",
+        "gnmi_path": "/interfaces/interface-xr/interface[interface-name=HundredGigE0/0/0/0]/state",
+        "gnmi_target": "cisco-asr9k-pe1",
+        "gnmi_value": "im-state-down",
+        "interface_name": "HundredGigE0/0/0/0",
+        "netspout_phase": "FAILOVER",
+        "origin_evidence_stage": "NORMALIZED"
+      },
+      {
+        "_time": "2026-10-02 02:11:19.064 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -417,7 +429,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.064 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -429,7 +441,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.064 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -440,7 +452,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.064 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -452,7 +464,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.063 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -464,7 +476,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.608 GMT",
+        "_time": "2026-10-02 02:11:19.063 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -475,7 +487,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.581 GMT",
+        "_time": "2026-10-02 02:11:19.037 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "Cisco-IOS-XR-pfi-im-cmd-oper",
@@ -487,7 +499,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.637 GMT",
+        "_time": "2026-10-02 02:11:19.094 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "Cisco-IOS-XR-pfi-im-cmd-oper",
@@ -499,7 +511,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.635 GMT",
+        "_time": "2026-10-02 02:11:19.092 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -511,7 +523,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.635 GMT",
+        "_time": "2026-10-02 02:11:19.092 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -523,7 +535,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.635 GMT",
+        "_time": "2026-10-02 02:11:19.092 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -534,7 +546,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.635 GMT",
+        "_time": "2026-10-02 02:11:19.092 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -546,7 +558,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.635 GMT",
+        "_time": "2026-10-02 02:11:19.091 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "admin-status",
         "gnmi_origin": "openconfig",
@@ -558,7 +570,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.634 GMT",
+        "_time": "2026-10-02 02:11:19.091 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "state",
         "gnmi_origin": "openconfig",
@@ -569,19 +581,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.610 GMT",
-        "current_evidence_stage": "SPLUNK_OBSERVED",
-        "gnmi_leaf": "state",
-        "gnmi_origin": "Cisco-IOS-XR-pfi-im-cmd-oper",
-        "gnmi_path": "/interfaces/interface-xr/interface[interface-name=HundredGigE0/0/0/0]/state",
-        "gnmi_target": "cisco-asr9k-pe1",
-        "gnmi_value": "im-state-down",
-        "interface_name": "HundredGigE0/0/0/0",
-        "netspout_phase": "FAILOVER",
-        "origin_evidence_stage": "NORMALIZED"
-      },
-      {
-        "_time": "2026-10-02 01:32:06.982 GMT",
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -593,7 +593,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:06.981 GMT",
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -605,7 +605,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:06.981 GMT",
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "oper-status",
         "gnmi_origin": "openconfig",
@@ -619,7 +619,7 @@
     ],
     "q4_bgp_neighbor_transition_spl": [
       {
-        "_time": "2026-10-02 01:32:04.580 GMT",
+        "_time": "2026-10-02 02:11:19.036 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -631,7 +631,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.580 GMT",
+        "_time": "2026-10-02 02:11:19.036 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -643,7 +643,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.552 GMT",
+        "_time": "2026-10-02 02:11:19.006 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "connection-state",
         "gnmi_origin": "Cisco-IOS-XR-ipv4-bgp-oper",
@@ -655,7 +655,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.551 GMT",
+        "_time": "2026-10-02 02:11:19.005 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -667,7 +667,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.550 GMT",
+        "_time": "2026-10-02 02:11:19.004 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -679,43 +679,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.637 GMT",
-        "current_evidence_stage": "SPLUNK_OBSERVED",
-        "gnmi_leaf": "connection-state",
-        "gnmi_origin": "Cisco-IOS-XR-ipv4-bgp-oper",
-        "gnmi_path": "/bgp/instances/instance[instance-name=default]/instance-active/default-vrf/neighbors/neighbor[neighbor-address=10.255.0.2]/connection-state",
-        "gnmi_target": "cisco-asr9k-pe1",
-        "gnmi_value": "bgp-st-estab",
-        "neighbor_address": "10.255.0.2",
-        "netspout_phase": "RECOVERY",
-        "origin_evidence_stage": "NORMALIZED"
-      },
-      {
-        "_time": "2026-10-02 01:32:04.636 GMT",
-        "current_evidence_stage": "SPLUNK_OBSERVED",
-        "gnmi_leaf": "session-state",
-        "gnmi_origin": "openconfig",
-        "gnmi_path": "/network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.255.0.3]/state/session-state",
-        "gnmi_target": "cisco-asr9k-pe1",
-        "gnmi_value": "ESTABLISHED",
-        "neighbor_address": "10.255.0.3",
-        "netspout_phase": "RECOVERY",
-        "origin_evidence_stage": "NORMALIZED"
-      },
-      {
-        "_time": "2026-10-02 01:32:04.636 GMT",
-        "current_evidence_stage": "SPLUNK_OBSERVED",
-        "gnmi_leaf": "session-state",
-        "gnmi_origin": "openconfig",
-        "gnmi_path": "/network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.255.0.2]/state/session-state",
-        "gnmi_target": "cisco-asr9k-pe1",
-        "gnmi_value": "ESTABLISHED",
-        "neighbor_address": "10.255.0.2",
-        "netspout_phase": "RECOVERY",
-        "origin_evidence_stage": "NORMALIZED"
-      },
-      {
-        "_time": "2026-10-02 01:32:04.610 GMT",
+        "_time": "2026-10-02 02:11:19.066 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "connection-state",
         "gnmi_origin": "Cisco-IOS-XR-ipv4-bgp-oper",
@@ -727,7 +691,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.609 GMT",
+        "_time": "2026-10-02 02:11:19.065 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -739,7 +703,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.609 GMT",
+        "_time": "2026-10-02 02:11:19.064 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -751,7 +715,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:04.581 GMT",
+        "_time": "2026-10-02 02:11:19.037 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "connection-state",
         "gnmi_origin": "Cisco-IOS-XR-ipv4-bgp-oper",
@@ -763,7 +727,43 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:06.982 GMT",
+        "_time": "2026-10-02 02:11:19.094 GMT",
+        "current_evidence_stage": "SPLUNK_OBSERVED",
+        "gnmi_leaf": "connection-state",
+        "gnmi_origin": "Cisco-IOS-XR-ipv4-bgp-oper",
+        "gnmi_path": "/bgp/instances/instance[instance-name=default]/instance-active/default-vrf/neighbors/neighbor[neighbor-address=10.255.0.2]/connection-state",
+        "gnmi_target": "cisco-asr9k-pe1",
+        "gnmi_value": "bgp-st-estab",
+        "neighbor_address": "10.255.0.2",
+        "netspout_phase": "RECOVERY",
+        "origin_evidence_stage": "NORMALIZED"
+      },
+      {
+        "_time": "2026-10-02 02:11:19.093 GMT",
+        "current_evidence_stage": "SPLUNK_OBSERVED",
+        "gnmi_leaf": "session-state",
+        "gnmi_origin": "openconfig",
+        "gnmi_path": "/network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.255.0.3]/state/session-state",
+        "gnmi_target": "cisco-asr9k-pe1",
+        "gnmi_value": "ESTABLISHED",
+        "neighbor_address": "10.255.0.3",
+        "netspout_phase": "RECOVERY",
+        "origin_evidence_stage": "NORMALIZED"
+      },
+      {
+        "_time": "2026-10-02 02:11:19.093 GMT",
+        "current_evidence_stage": "SPLUNK_OBSERVED",
+        "gnmi_leaf": "session-state",
+        "gnmi_origin": "openconfig",
+        "gnmi_path": "/network-instances/network-instance[name=default]/protocols/protocol[identifier=BGP][name=BGP]/bgp/neighbors/neighbor[neighbor-address=10.255.0.2]/state/session-state",
+        "gnmi_target": "cisco-asr9k-pe1",
+        "gnmi_value": "ESTABLISHED",
+        "neighbor_address": "10.255.0.2",
+        "netspout_phase": "RECOVERY",
+        "origin_evidence_stage": "NORMALIZED"
+      },
+      {
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -775,7 +775,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:06.981 GMT",
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -787,7 +787,7 @@
         "origin_evidence_stage": "NORMALIZED"
       },
       {
-        "_time": "2026-10-02 01:32:06.982 GMT",
+        "_time": "2026-10-02 02:11:21.457 GMT",
         "current_evidence_stage": "SPLUNK_OBSERVED",
         "gnmi_leaf": "session-state",
         "gnmi_origin": "openconfig",
@@ -889,16 +889,16 @@
     ]
   },
   "queries": {
-    "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-1633ac4d\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-    "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-1633ac4d\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-    "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-1633ac4d\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-    "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-1633ac4d\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-    "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-1633ac4d\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-    "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-1633ac4d\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-    "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-1633ac4d\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-    "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-1633ac4d\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-    "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-1633ac4d\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-    "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-1633ac4d\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+    "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-3ebec096\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+    "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+    "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+    "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+    "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+    "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+    "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+    "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+    "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-3ebec096\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+    "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-3ebec096\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
   },
-  "service_provider_cisco_run_id": "run-13d-service_-1633ac4d"
+  "service_provider_cisco_run_id": "run-13d-service_-3ebec096"
 }

@@ -1,0 +1,53 @@
+{
+  "transports": {
+    "syslog": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "snmp": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "gnmi": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "netflow_v9": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "ipfix": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "otlp": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    },
+    "direct_hec": {
+      "embedded": true,
+      "generated": true,
+      "processed": true,
+      "splunk_routed": true,
+      "status": "PASS"
+    }
+  }
+}

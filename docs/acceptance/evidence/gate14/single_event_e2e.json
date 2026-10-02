@@ -1,0 +1,17 @@
+{
+  "mode": "SINGLE_EVENT",
+  "status": "GROUNDED",
+  "event_id": "da3a10bb-847e-4d27-8702-cff5f8372312",
+  "vendor_id": "cisco_ios",
+  "sourcetype": "cisco:ios:syslog",
+  "event_name": "Event",
+  "index": "idx_network_ops",
+  "host": "sim-device-01",
+  "raw": "randomizeEvents: true",
+  "provenance": {
+    "classification": "VERIFIED_PUBLIC_SAMPLE",
+    "source": "netspout/appserver/static/samples/cisco-ios-syslog/cisco-ios-syslog.yml"
+  },
+  "dispatched": false,
+  "dispatch_result": null
+}

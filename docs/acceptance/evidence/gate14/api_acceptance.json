@@ -1,0 +1,14 @@
+{
+  "POST /api/generate/scenario": 200,
+  "POST /api/generate/data-source": 200,
+  "POST /api/generate/sourcetype": 200,
+  "POST /api/generate/single-event": 200,
+  "GET /api/health/pipelines": 200,
+  "GET /api/catalog/vendors": 200,
+  "GET /api/catalog/sourcetypes": 200,
+  "GET /api/catalog/scenarios": 200,
+  "GET /api/catalog/domains": 200,
+  "GET /api/catalog/provenance": 200,
+  "POST /api/splunk/test": 200,
+  "status": "ALL_HTTP_200_OK"
+}

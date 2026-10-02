@@ -1298,6 +1298,40 @@ def post_generate_data_source(payload: Dict[str, Any]):
     )
 
 
+@app.post("/api/generate/scenario")
+def post_generate_scenario_canonical(payload: Dict[str, Any]):
+    """Canonical alias for scenario execution matching Section 17 API requirements."""
+    scenario_id = payload.get("scenario_id") or payload.get("scenario", "cisco_sdwan_brownout")
+    return run_scenario_contract(scenario_id=scenario_id, payload=payload)
+
+
+@app.get("/api/catalog/vendors")
+def get_catalog_vendors_canonical():
+    """Canonical vendor list matching Section 17 API requirements."""
+    from app.catalog import catalog
+    return catalog.list_vendors()
+
+
+@app.get("/api/catalog/sourcetypes")
+def get_catalog_sourcetypes_canonical():
+    """Canonical sourcetype list matching Section 17 API requirements."""
+    from app.catalog import catalog
+    return catalog.list_sourcetypes(include_deprecated=True)
+
+
+@app.get("/api/catalog/scenarios")
+def get_catalog_scenarios_canonical():
+    """Canonical scenario list matching Section 17 API requirements."""
+    from app.catalog import catalog
+    return catalog.list_scenarios()
+
+
+@app.post("/api/splunk/test")
+async def post_splunk_test_canonical(req: Union[ConnectionTestPayload, PipelineTestRequest, Dict[str, Any]]):
+    """Canonical Splunk connection test endpoint matching Section 17 API requirements."""
+    return await test_connection_endpoint(req)
+
+
 @app.get("/api/catalog/domains")
 def get_catalog_domains():
     import json

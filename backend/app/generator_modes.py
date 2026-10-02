@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.log_engine import SplunkLogEngine
+from netspout_core.vendor_catalog import get_vendor_by_id
 from netspout_core.models import (
     EcosystemMode,
     LogEntry,
@@ -37,114 +38,120 @@ from netspout_core.telemetry_dispatcher import dispatcher
 logger = logging.getLogger("netspout.generator_modes")
 
 
-def _find_samples_dir() -> Optional[str]:
+def _find_samples_dirs() -> List[str]:
     candidates = [
-        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "samples"),
-        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "samples"),
         os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "appserver", "static", "samples"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "samples"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "samples"),
         "/opt/splunk/etc/apps/netspout/appserver/static/samples"
     ]
-    for c in candidates:
-        if os.path.isdir(c):
-            return c
-    return None
+    return [c for c in candidates if os.path.isdir(c)]
 
 
 class TelemetryGeneratorService:
     """
     Unified Telemetry Generation Engine for Modes B, C, and D.
     (Mode A is handled via ScenarioRunner).
+    Enforces strict anti-fabrication principles and source provenance tracking.
     """
 
     def __init__(self, catalog: Optional[NetSpoutCatalog] = None):
         self.catalog = catalog or NetSpoutCatalog()
-        self.samples_dir = _find_samples_dir()
-        self._parsed_samples_cache: Dict[str, List[str]] = {}
+        self.samples_dirs = _find_samples_dirs()
+        self._parsed_samples_cache: Dict[str, Tuple[List[str], str, Optional[str]]] = {}
+        self._repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
-    def _get_sample_events(self, sourcetype: str) -> List[str]:
+    def get_grounded_samples(self, sourcetype: str, vendor_id: Optional[str] = None) -> Tuple[List[str], str, Optional[str]]:
+        """
+        Retrieves authentic vendor telemetry samples and provenance.
+        Returns:
+            (events_list, provenance_classification, source_reference)
+        If not grounded, returns:
+            ([], 'UNSUPPORTED_TELEMETRY', reason)
+        """
         if sourcetype in self._parsed_samples_cache:
             return self._parsed_samples_cache[sourcetype]
 
-        st_meta = self.catalog.get_sourcetype(sourcetype)
         events: List[str] = []
+        prov_class = "UNSUPPORTED_TELEMETRY"
+        source_ref: Optional[str] = None
 
-        if self.samples_dir and st_meta and st_meta.get("sample_file"):
-            sample_file_name = st_meta["sample_file"]
-            sample_id = st_meta.get("id") or sourcetype.replace(":", "-")
-            candidates = [
-                os.path.join(self.samples_dir, sample_file_name),
-                os.path.join(self.samples_dir, sample_id, sample_file_name),
-                os.path.join(self.samples_dir, sourcetype.replace(":", "_") + ".sample"),
-                os.path.join(self.samples_dir, sourcetype.replace(":", "_") + ".log"),
-            ]
-            for cand in candidates:
-                if os.path.isfile(cand):
-                    try:
-                        with open(cand, "r", encoding="utf-8", errors="replace") as f:
-                            for line in f:
-                                line_str = line.strip()
-                                if "_raw:" in line_str:
-                                    parts = line_str.split("_raw:", 1)
-                                    val = parts[1].strip()
-                                    if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
-                                        val = val[1:-1]
-                                    if val:
-                                        events.append(val)
-                                elif not line_str.startswith("#") and not line_str.startswith("-") and not line_str.endswith(":") and len(line_str) > 20:
-                                    events.append(line_str)
-                        if events:
-                            break
-                    except Exception as e:
-                        logger.debug(f"Failed parsing sample file {cand}: {e}")
+        # 1. Check samples registered in catalog._samples
+        for sm in self.catalog._samples:
+            if sm.get("sourcetype") == sourcetype:
+                cand_path = os.path.join(self._repo_root, sm.get("sample_path", ""))
+                if os.path.isfile(cand_path):
+                    parsed = self._parse_sample_file(cand_path)
+                    if parsed:
+                        events = parsed
+                        prov_class = "VERIFIED_PUBLIC_SAMPLE"
+                        source_ref = sm.get("sample_path")
+                        break
 
-        # Fallback to realistic synthetic generation if no static sample file is found
+        # 2. Check catalog sourcetype definition & sample directories
         if not events:
-            events = self._generate_fallback_synthetic_events(sourcetype)
+            st_meta = self.catalog.get_sourcetype(sourcetype)
+            if st_meta:
+                sf = st_meta.get("sample_file")
+                sid = st_meta.get("id")
+                for sd in self.samples_dirs:
+                    candidates = [
+                        os.path.join(sd, sf) if sf else "",
+                        os.path.join(sd, sid, sf) if sid and sf else "",
+                        os.path.join(sd, sid, sid + ".yml") if sid else "",
+                        os.path.join(sd, sid, sid + ".sample") if sid else "",
+                        os.path.join(sd, sourcetype.replace(":", "_") + ".sample"),
+                        os.path.join(sd, sourcetype.replace(":", "_") + ".log"),
+                    ]
+                    for c in candidates:
+                        if c and os.path.isfile(c):
+                            parsed = self._parse_sample_file(c)
+                            if parsed:
+                                events = parsed
+                                prov_class = "VERIFIED_PUBLIC_SAMPLE"
+                                source_ref = c
+                                break
+                    if events:
+                        break
 
-        self._parsed_samples_cache[sourcetype] = events
+                # 3. Check vendor catalog embedded samples
+                if not events:
+                    vid = vendor_id or st_meta.get("vendor_id")
+                    if vid:
+                        v_obj = get_vendor_by_id(vid)
+                        if v_obj and v_obj.get("sample_events"):
+                            ses = list(v_obj["sample_events"].values())
+                            if ses:
+                                events = ses
+                                prov_class = "VENDOR_DOCUMENTED"
+                                source_ref = f"vendor_catalog:{vid}"
+
+        if not events:
+            prov_class = "UNSUPPORTED_TELEMETRY"
+            source_ref = f"No verified public sample or documented vendor contract exists for sourcetype '{sourcetype}'"
+
+        result = (events, prov_class, source_ref)
+        self._parsed_samples_cache[sourcetype] = result
+        return result
+
+    def _parse_sample_file(self, file_path: str) -> List[str]:
+        events = []
+        try:
+            with open(file_path, "r", encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    line_str = line.strip()
+                    if "_raw:" in line_str:
+                        parts = line_str.split("_raw:", 1)
+                        val = parts[1].strip()
+                        if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+                            val = val[1:-1]
+                        if val:
+                            events.append(val)
+                    elif not line_str.startswith("#") and not line_str.startswith("-") and not line_str.endswith(":") and len(line_str) > 20:
+                        events.append(line_str)
+        except Exception as e:
+            logger.debug(f"Failed parsing sample file {file_path}: {e}")
         return events
-
-    def _generate_fallback_synthetic_events(self, sourcetype: str) -> List[str]:
-        now_syslog = SplunkLogEngine.current_timestamp_syslog()
-        dummy_node = Node(id="sim-gw-01", name="sim-gw-01", type=NodeType.ROUTER, vendor="cisco_ios")
-
-        if "cisco:ios" in sourcetype or "cisco:xr" in sourcetype:
-            return [
-                f"{now_syslog} sim-gw-01 %ROUTING-6-BGP_NEIGHBOR_UP: BGP neighbor 198.51.100.2 AS 65001 state changed to ESTABLISHED",
-                f"{now_syslog} sim-gw-01 %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up",
-                f"{now_syslog} sim-gw-01 %OSPF-5-ADJCHANGE: Process 1, Nbr 10.254.1.1 on GigabitEthernet0/0/0 from LOADING to FULL, Done",
-                f"{now_syslog} sim-gw-01 %SYS-5-CONFIG_I: Configured from console by netops on vty0 (10.0.1.50)",
-                f"{now_syslog} sim-gw-01 %ENV-4-FAN_SPEED: Chassis cooling fan 1 RPM at 7200, within normal operating envelope"
-            ]
-        elif "arista:eos" in sourcetype:
-            return [
-                f"{now_syslog} sw-arista-01 Rib: %ROUTING-6-BGP_NEIGHBOR_UP: BGP neighbor 10.254.1.2 AS 64512 state changed from OPENCONFIRM to ESTABLISHED",
-                f"{now_syslog} sw-arista-01 Lineproto: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet1/1, changed state to up",
-                f"{now_syslog} sw-arista-01 Ebgp: %BGP-5-ADJCHANGE: neighbor 198.51.100.1 Up (VRF default)",
-                f"{now_syslog} sw-arista-01 Sand: %SAND-6-PFC_WATCHDOG_RECOVERED: Priority-flow-control watchdog recovered on Ethernet1/1 priority 3"
-            ]
-        elif "pan:" in sourcetype or "paloalto" in sourcetype:
-            return [
-                f"1,{time.strftime('%Y/%m/%d %H:%M:%S')},001801000000,TRAFFIC,allow,2304,198.51.100.42,10.0.1.10,0.0.0.0,0.0.0.0,OUTSIDE_IN,user-guest,ssl,vsys1,outside,inside,ethernet1/1,ethernet1/2,default,2026/10/01 21:00:00,1024,1,443,12450,0,0,0x400000,tcp,allow,1420,720,700,12,2026/10/01 21:00:00,14,any,0,12345678,0x0,United States,10.0.0.0-10.255.255.255,1,11,client-rst,0,0,0,0,,pa-fw-01,from-policy",
-                f"1,{time.strftime('%Y/%m/%d %H:%M:%S')},001801000000,THREAT,vulnerability,2304,198.51.100.99,10.0.1.50,0.0.0.0,0.0.0.0,OUTSIDE_IN,unknown,web-browsing,vsys1,outside,inside,ethernet1/1,ethernet1/2,default,2026/10/01 21:00:00,1025,1,80,33412,0,0,0x400000,tcp,alert,0,0,0,0,2026/10/01 21:00:00,0,any,0,12345679,0x0,United States,10.0.0.0-10.255.255.255,1,11,alert,Apache Log4j RCE (CVE-2021-44228),high,client-to-server,pa-fw-01,from-policy"
-            ]
-        elif "cisco:asa" in sourcetype:
-            entry = SplunkLogEngine.format_cisco_asa_log(
-                device=dummy_node,
-                src_ip="198.51.100.45",
-                dest_ip="10.0.1.10",
-                src_port=49210,
-                dest_port=443,
-                proto="TCP",
-                action="permitted",
-                signature="OUTSIDE_IN",
-                status="normal"
-            )
-            return [entry.raw_log]
-        else:
-            return [
-                f"{now_syslog} generic-node-01 SystemEvent: sourcetype={sourcetype} status=normal action=streamed event_id={uuid.uuid4().hex[:8]}"
-            ]
 
     def generate_single_event(
         self,
@@ -157,10 +164,22 @@ class TelemetryGeneratorService:
     ) -> Dict[str, Any]:
         """
         MODE D: Generate exactly one precision event.
+        Guarantees zero fabricated vendor telemetry.
         """
-        samples = self._get_sample_events(sourcetype)
-        raw_event = random.choice(samples) if samples else f"timestamp={time.time()} sourcetype={sourcetype} event=single_event"
+        samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
+        if not samples:
+            return {
+                "mode": "SINGLE_EVENT",
+                "status": "TELEMETRY_NOT_GROUNDED",
+                "error": "UNSUPPORTED_TELEMETRY",
+                "vendor_id": vendor_id,
+                "sourcetype": sourcetype,
+                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "provenance_status": prov_class,
+                "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
+            }
 
+        raw_event = random.choice(samples)
         event_id = str(uuid.uuid4())
         target_index = index or "idx_network_ops"
         target_host = "sim-device-01"
@@ -196,6 +215,7 @@ class TelemetryGeneratorService:
 
         return {
             "mode": "SINGLE_EVENT",
+            "status": "GROUNDED",
             "event_id": event_id,
             "vendor_id": vendor_id,
             "sourcetype": sourcetype,
@@ -203,6 +223,10 @@ class TelemetryGeneratorService:
             "index": target_index,
             "host": target_host,
             "raw": raw_event,
+            "provenance": {
+                "classification": prov_class,
+                "source": source_ref
+            },
             "dispatched": dispatch,
             "dispatch_result": dispatch_result
         }
@@ -220,8 +244,21 @@ class TelemetryGeneratorService:
     ) -> Dict[str, Any]:
         """
         MODE C: Generate a batch of events for a specific sourcetype / event family.
+        Guarantees zero fabricated vendor telemetry.
         """
-        samples = self._get_sample_events(sourcetype)
+        samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
+        if not samples:
+            return {
+                "mode": "SOURCETYPE_BATCH",
+                "status": "TELEMETRY_NOT_GROUNDED",
+                "error": "UNSUPPORTED_TELEMETRY",
+                "vendor_id": vendor_id,
+                "sourcetype": sourcetype,
+                "reason": f"No authoritative vendor log schema or verified sample exists for sourcetype '{sourcetype}'.",
+                "provenance_status": prov_class,
+                "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
+            }
+
         total_generated = 0
         dispatched_count = 0
         events_generated: List[str] = []
@@ -234,7 +271,7 @@ class TelemetryGeneratorService:
         )
 
         for i in range(count):
-            base_sample = random.choice(samples) if samples else f"time={time.time()} st={sourcetype} seq={i}"
+            base_sample = random.choice(samples)
             ev_id = str(uuid.uuid4())
             events_generated.append(base_sample)
             total_generated += 1
@@ -266,6 +303,7 @@ class TelemetryGeneratorService:
 
         return {
             "mode": "SOURCETYPE_BATCH",
+            "status": "GROUNDED",
             "vendor_id": vendor_id,
             "sourcetype": sourcetype,
             "count_requested": count,
@@ -273,6 +311,10 @@ class TelemetryGeneratorService:
             "count_dispatched": dispatched_count,
             "rate_eps": rate_eps,
             "index": target_index,
+            "provenance": {
+                "classification": prov_class,
+                "source": source_ref
+            },
             "sample_preview": events_generated[:3]
         }
 
@@ -299,7 +341,7 @@ class TelemetryGeneratorService:
             sourcetypes = [f"{vendor_id}:{product.lower()}"]
 
         chosen_st = sourcetypes[0]
-        return self.generate_sourcetype_batch(
+        res = self.generate_sourcetype_batch(
             vendor_id=vendor_id,
             sourcetype=chosen_st,
             count=count,
@@ -308,6 +350,11 @@ class TelemetryGeneratorService:
             transport_config=transport_config,
             index=index
         )
+        res["mode"] = "DATA_SOURCE"
+        res["product"] = product
+        res["transport"] = transport
+        return res
 
 
 generator_service = TelemetryGeneratorService()
+

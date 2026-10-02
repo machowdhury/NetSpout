@@ -1,0 +1,10 @@
+{
+  "audit_timestamp": 1790906991.5683799,
+  "total_sourcetypes_catalogued": 270,
+  "grounded_definitions_count": 270,
+  "unsupported_definitions_count": 0,
+  "generic_synthetic_definitions_count": 0,
+  "fabricated_vendor_definitions_found": 0,
+  "fabricated_vendor_definitions_remaining": 0,
+  "status": "PASSED"
+}

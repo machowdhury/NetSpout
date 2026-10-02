@@ -1,0 +1,61 @@
+{
+  "status": "HEALTHY",
+  "pipelines": {
+    "syslog": {
+      "state": "INITIALIZED",
+      "type": "Embedded RFC 5424/3164 Syslog Receiver",
+      "host": "127.0.0.1",
+      "port": 1514,
+      "captured_count": 0
+    },
+    "snmp": {
+      "state": "INITIALIZED",
+      "type": "Embedded SimulatedSnmpAgent + SNMPv2c BER Encoder/Decoder",
+      "capabilities": [
+        "GET",
+        "GETNEXT",
+        "GETBULK",
+        "TRAP",
+        "INFORM"
+      ]
+    },
+    "gnmi": {
+      "state": "READY",
+      "type": "Embedded Native gNMI Server (gRPC/HTTP2/Protobuf)",
+      "capabilities": [
+        "Capabilities",
+        "Get",
+        "Subscribe ONCE",
+        "Subscribe POLL",
+        "STREAM"
+      ]
+    },
+    "flow": {
+      "state": "INITIALIZED",
+      "type": "Embedded NetFlow v9 & IPFIX Binary UDP Encoder",
+      "capabilities": [
+        "RFC 3954 (NetFlow v9)",
+        "RFC 7011 (IPFIX)"
+      ]
+    },
+    "otlp": {
+      "state": "READY",
+      "type": "Embedded OTLP HTTP /v1/logs & /v1/metrics Dispatcher",
+      "capabilities": [
+        "OTLP/HTTP JSON",
+        "Resource Attributes",
+        "Scope Logs"
+      ],
+      "dispatched_count": 0
+    },
+    "hec": {
+      "state": "CONFIGURED",
+      "type": "Splunk HTTP Event Collector (Event & Metric Store Dispatcher)",
+      "capabilities": [
+        "Tokenized Authentication",
+        "Dual-Store Event/Metric Routing"
+      ],
+      "dispatched_count": 0
+    }
+  }
+}

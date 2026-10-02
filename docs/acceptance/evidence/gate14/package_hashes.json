@@ -1,0 +1,13 @@
+{
+  "package_name": "netspout.spl",
+  "package_size_bytes": 1801368,
+  "sha256": "8f30e6d8416d8c915aca5ce5220abef775859eb4160a72fd7748b799b11cb15a",
+  "regression_tests": {
+    "total": 402,
+    "passed": 402,
+    "failed": 0,
+    "errors": 0,
+    "pass_rate": "100%"
+  },
+  "status": "VERIFIED"
+}

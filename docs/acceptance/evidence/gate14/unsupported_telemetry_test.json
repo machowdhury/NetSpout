@@ -1,0 +1,10 @@
+{
+  "mode": "SINGLE_EVENT",
+  "status": "TELEMETRY_NOT_GROUNDED",
+  "error": "UNSUPPORTED_TELEMETRY",
+  "vendor_id": "fictitious_vendor",
+  "sourcetype": "fake:nonexistent:log",
+  "reason": "No authoritative vendor log schema or verified sample exists for sourcetype 'fake:nonexistent:log'.",
+  "provenance_status": "UNSUPPORTED_TELEMETRY",
+  "source_requirement": "Must be documented in vendor specification or catalog/telemetry_sources.json"
+}

@@ -15,7 +15,8 @@ exporters:
   splunk_hec:
     token: "00000000-0000-0000-0000-000000000000"
     endpoint: "https://splunk-netspout:8088/services/collector"
-    insecure_skip_verify: true
+    tls:
+      insecure_skip_verify: true
     source: "otel:collector"
     sourcetype: "otel:telemetry"
     index: "cisco_mdt_metrics"

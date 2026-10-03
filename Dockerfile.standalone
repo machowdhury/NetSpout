@@ -29,6 +29,7 @@ RUN microdnf update -y && \
         grpcio>=1.59.0 \
         protobuf>=4.25.0 \
         cryptography>=41.0.0 && \
+    ln -sf /usr/bin/python3.13 /usr/bin/python3 && \
     microdnf clean all
 
 # Copy NetSpout Splunk App directly into Splunk apps directory

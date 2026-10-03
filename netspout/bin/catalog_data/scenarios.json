@@ -4083,7 +4083,9 @@
     "generation_mode": "SCENARIO_DERIVED",
     "sourcetypes": [
       "cisco:ios:mdt:metric",
-      "cisco:ios:syslog"
+      "cisco:ios:syslog",
+      "netspout:snmp:trap",
+      "netspout:snmp:poll"
     ],
     "default_topology_id": "service_provider_cisco",
     "topology_id": "service_provider_cisco",
@@ -4094,13 +4096,14 @@
     ],
     "telemetry_requirements": [
       "syslog",
-      "gnmi"
+      "gnmi",
+      "snmp"
     ],
     "generation_modes": [
       "SCENARIO_DERIVED"
     ],
     "affected_entities": [
-      "service_provider_cisco"
+      "cisco-asr9k-pe1"
     ],
     "expected_observations": [
       "High-frequency carrier flap causing BGP route withdrawal"
@@ -4122,6 +4125,52 @@
     "timing_unit": "ms",
     "timing_classification": "MODELED",
     "timing_notes": "Modeled sub-50ms local data-plane protection prior to BGP control-plane convergence. NetSpout models this protocol behavior and does not claim empirical hardware packet measurements.",
+    "native_snmp_supported": true,
+    "native_snmp_capabilities": {
+      "protocol": "Native SNMPv2c (RFC 3416 / RFC 1905 ASN.1 BER over UDP)",
+      "pdu_types": [
+        "SNMPv2-Trap",
+        "InformRequest",
+        "GetRequest",
+        "GetNextRequest",
+        "GetBulkRequest",
+        "Response"
+      ],
+      "notifications": [
+        "IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)",
+        "BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)",
+        "IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)",
+        "BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)"
+      ],
+      "polling_operations": [
+        "GET",
+        "GETNEXT",
+        "GETBULK",
+        "Walk"
+      ],
+      "mibs": [
+        "SNMPv2-MIB",
+        "IF-MIB",
+        "IP-MIB",
+        "BGP4-MIB"
+      ],
+      "external_tooling": [
+        "/usr/sbin/snmptrapd",
+        "/usr/bin/snmpget",
+        "/usr/bin/snmpgetnext",
+        "/usr/bin/snmpwalk",
+        "/usr/bin/snmpbulkwalk"
+      ],
+      "splunk_sourcetypes": [
+        "netspout:snmp:trap",
+        "netspout:snmp:poll"
+      ],
+      "splunk_index": "idx_network_ops",
+      "canonical_device_id": "cisco-asr9k-pe1",
+      "transport_fidelity": "NATIVE TRANSPORT",
+      "device_state_fidelity": "MODELED DEVICE STATE",
+      "semantic_statement": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required."
+    },
     "phases": [
       {
         "phase": "BASELINE",

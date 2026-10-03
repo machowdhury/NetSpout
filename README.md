@@ -97,6 +97,9 @@ docker compose up -d
 - **Pre-provisioned Splunk HEC Endpoint**: `https://localhost:8088/services/collector` (Token: `00000000-0000-0000-0000-000000000000`)
 - **Splunk REST Management API**: `https://localhost:8089`
 
+> [!NOTE]
+> The above default credentials apply strictly to the isolated `DEMO` profile. For production or external environments, set `NETSPOUT_PROFILE=secure` and supply dedicated secrets. See [docs/SECURITY.md](docs/SECURITY.md).
+
 ---
 
 ## 💻 Alternative: Bare-Metal / Local Python Development

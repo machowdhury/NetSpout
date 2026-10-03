@@ -143,6 +143,9 @@ export const TopBar: React.FC<TopBarProps> = ({
             <span className="text-[10px] bg-violet-950/80 text-violet-300 px-1.5 py-0.2 rounded border border-violet-700/60 font-mono font-bold">
               v2.0
             </span>
+            <span className="text-[10px] bg-amber-950/90 text-amber-300 px-1.5 py-0.2 rounded border border-amber-600/70 font-mono font-bold tracking-tight">
+              DEMO / LOCAL LAB
+            </span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono">
             <span className={`inline-block w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-400 shadow-[0_0_6px_#10B981]' : 'bg-rose-500'}`} />

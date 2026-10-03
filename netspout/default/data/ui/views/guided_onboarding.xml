@@ -32,14 +32,16 @@
       <html>
         <div style="padding: 10px 0;">
 
-          <!-- Wizard Stepper Navigation Header -->
           <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 14px 20px; margin-bottom: 24px;">
             <div style="display: flex; align-items: center; gap: 12px;">
               <span style="font-size: 22px;">🧙</span>
               <div>
-                <h2 style="color: #f8fafc; margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em;">
-                  Guided Telemetry Onboarding Wizard
-                </h2>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h2 style="color: #f8fafc; margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.01em;">
+                    Guided Telemetry Onboarding Wizard
+                  </h2>
+                  <span style="background: #78350f; color: #fde68a; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid #b45309; font-family: monospace;">DEMO / LOCAL LAB</span>
+                </div>
                 <p style="color: #94a3b8; margin: 2px 0 0 0; font-size: 11px;">
                   Configure ingestion mode, target index storage, test preflight readiness, and blast events into Splunk.
                 </p>

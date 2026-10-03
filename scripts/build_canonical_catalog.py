@@ -320,6 +320,44 @@ for st in sorted(all_sourcetype_names):
 
     canonical_sourcetypes.append(st_obj)
 
+# Gate 12F (F-12E-02): Register canonical native SNMP sourcetypes (is_benchmark_197: False)
+canonical_sourcetypes.append({
+    "id": "netspout-snmp-trap",
+    "splunk_sourcetype": "netspout:snmp:trap",
+    "display_name": "NetSpout Native SNMPv2c Traps & Informs",
+    "vendor_id": "cisco_ios",
+    "category": "Carrier / Core Routing Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "NATIVE_TRANSPORT",
+    "protocol": "snmp",
+    "sample_file": None,
+    "required_ta": None,
+    "aliases": ["netspout-snmp-trap", "netspout:snmp:trap"],
+    "deprecated_aliases": [],
+    "is_benchmark_197": False,
+    "status": "active"
+})
+canonical_sourcetypes.append({
+    "id": "netspout-snmp-poll",
+    "splunk_sourcetype": "netspout:snmp:poll",
+    "display_name": "NetSpout Native SNMPv2c Polling Events",
+    "vendor_id": "cisco_ios",
+    "category": "Carrier / Core Routing Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "NATIVE_TRANSPORT",
+    "protocol": "snmp",
+    "sample_file": None,
+    "required_ta": None,
+    "aliases": ["netspout-snmp-poll", "netspout:snmp:poll"],
+    "deprecated_aliases": [],
+    "is_benchmark_197": False,
+    "status": "active"
+})
+
 canonical_sourcetypes.sort(key=lambda x: x["splunk_sourcetype"])
 
 # -----------------------------------------------------------------------------
@@ -926,11 +964,60 @@ for sid, name, code, eco, desc, attack, defense, st_block in scen_blocks:
     elif sid == "service_provider_cisco":
         scen_obj["difficulty"] = "INTERMEDIATE"
         scen_obj["vendor_scope"] = ["cisco_ios"]
-        scen_obj["telemetry_requirements"] = ["syslog", "gnmi"]
+        scen_obj["telemetry_requirements"] = ["syslog", "gnmi", "snmp"]
         scen_obj["sourcetypes"] = [
             "cisco:ios:mdt:metric",
-            "cisco:ios:syslog"
+            "cisco:ios:syslog",
+            "netspout:snmp:trap",
+            "netspout:snmp:poll"
         ]
+        scen_obj["affected_entities"] = ["cisco-asr9k-pe1"]
+        scen_obj["native_snmp_supported"] = True
+        scen_obj["native_snmp_capabilities"] = {
+            "protocol": "Native SNMPv2c (RFC 3416 / RFC 1905 ASN.1 BER over UDP)",
+            "pdu_types": [
+                "SNMPv2-Trap",
+                "InformRequest",
+                "GetRequest",
+                "GetNextRequest",
+                "GetBulkRequest",
+                "Response"
+            ],
+            "notifications": [
+                "IF-MIB::linkDown (1.3.6.1.6.3.1.1.5.3)",
+                "BGP4-MIB::bgpBackwardTransition (1.3.6.1.2.1.15.7.2)",
+                "IF-MIB::linkUp (1.3.6.1.6.3.1.1.5.4)",
+                "BGP4-MIB::bgpEstablished (1.3.6.1.2.1.15.7.1)"
+            ],
+            "polling_operations": [
+                "GET",
+                "GETNEXT",
+                "GETBULK",
+                "Walk"
+            ],
+            "mibs": [
+                "SNMPv2-MIB",
+                "IF-MIB",
+                "IP-MIB",
+                "BGP4-MIB"
+            ],
+            "external_tooling": [
+                "/usr/sbin/snmptrapd",
+                "/usr/bin/snmpget",
+                "/usr/bin/snmpgetnext",
+                "/usr/bin/snmpwalk",
+                "/usr/bin/snmpbulkwalk"
+            ],
+            "splunk_sourcetypes": [
+                "netspout:snmp:trap",
+                "netspout:snmp:poll"
+            ],
+            "splunk_index": "idx_network_ops",
+            "canonical_device_id": "cisco-asr9k-pe1",
+            "transport_fidelity": "NATIVE TRANSPORT",
+            "device_state_fidelity": "MODELED DEVICE STATE",
+            "semantic_statement": "Native SNMPv2c packets are emitted and consumed using standards-compliant ASN.1 BER over UDP. Device state is modeled by NetSpout; no physical Cisco router is required."
+        }
         scen_obj["phases"] = [
             {"phase": "BASELINE", "name": "Core Transit BGP & MDT Nominal", "duration_ticks": 2, "description": "Cisco 8000 and ASR 9000 routers maintain stable eBGP peerings and stream real-time MDT interface telemetry.", "expected_observations": ["BGP peer established", "Nominal transit traffic flow"]},
             {"phase": "FAULT", "name": "Carrier Transport Flap & BGP Collapse", "duration_ticks": 3, "description": "Upstream carrier circuit flaps repeatedly, causing BGP hold-timer expiration and neighbor adjacency drop.", "expected_observations": ["%ROUTING-BGP-5-ADJCHANGE neighbor Down", "MDT ingress drop", "status=degraded"]},

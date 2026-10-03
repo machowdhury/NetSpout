@@ -22,10 +22,13 @@ docker compose up -d
 ### Step 3: Access Web Interfaces
 - **Splunk Enterprise**: [`http://localhost:8000`](http://localhost:8000) (Login: `admin` / `SplunkPassword123!`)
   - The NetSpout app is pre-installed at `/en-US/app/netspout/guided_onboarding`.
-  - The HEC token `00000000-0000-0000-0000-000000000000` is pre-provisioned.
-- **NetSpout Standalone NOC UI**: [`http://localhost:8081`](http://localhost:8081)
+  - The HEC token `00000000-0000-0000-0000-000000000000` is pre-provisioned for the local `DEMO` profile.
+- **NetSpout Standalone NOC UI**: [`http://localhost:8081`](http://localhost:8081) (Visibly badged as `DEMO / LOCAL LAB`).
 - **Splunk HEC Port**: `8088` (`https://localhost:8088/services/collector`)
 - **Splunk Management Port**: `8089` (`https://localhost:8089`)
+
+> [!NOTE]
+> The above credentials are exclusively for the local `DEMO` profile. For production or shared environments, switch to `NETSPOUT_PROFILE=secure` and supply dedicated secrets. See [docs/SECURITY.md](SECURITY.md) for details.
 
 ---
 

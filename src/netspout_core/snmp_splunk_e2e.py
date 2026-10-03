@@ -1110,19 +1110,21 @@ class SnmpSplunkBridge:
 
     def __init__(
         self,
-        hec_url: str = "https://127.0.0.1:8088/services/collector/event",
+        hec_url: Optional[str] = None,
         hec_token: Optional[str] = None,
-        rest_search_url: str = "https://127.0.0.1:8089/services/search/jobs/export",
+        rest_search_url: Optional[str] = None,
         rest_username: Optional[str] = None,
         rest_password: Optional[str] = None,
         index: str = "idx_network_ops",
         simulate_splunk_unavailable: bool = False,
     ):
-        self.hec_url = hec_url
+        self.hec_url = hec_url or os.environ.get("NETSPOUT_HEC_URL", "https://127.0.0.1:8088/services/collector/event")
         self.hec_token = hec_token or os.environ.get(
             "NETSPOUT_HEC_TOKEN", "00000000-0000-0000-0000-000000000000"
         )
-        self.rest_search_url = rest_search_url
+        self.rest_search_url = rest_search_url or os.environ.get(
+            "NETSPOUT_REST_SEARCH_URL", os.environ.get("NETSPOUT_REST_URL", "https://127.0.0.1:8089/services/search/jobs/export")
+        )
         self.rest_username = rest_username or os.environ.get("NETSPOUT_SPLUNK_USER", "admin")
         self.rest_password = rest_password or os.environ.get(
             "NETSPOUT_SPLUNK_PASSWORD", "SplunkPassword123!"
@@ -1162,25 +1164,38 @@ class SnmpSplunkBridge:
                 "stage": SnmpEvidenceStage.RECEIVER_OBSERVED.value,
             }
 
-        ctx = self._ssl_ctx() if self.hec_url.startswith("https") else None
+        candidate_urls = [self.hec_url]
+        if ":8088" in self.hec_url:
+            candidate_urls.append(self.hec_url.replace(":8088", ":8888"))
+        elif ":8888" in self.hec_url:
+            candidate_urls.append(self.hec_url.replace(":8888", ":8088"))
+
         for ev in events:
             payload = ev.to_hec_payload()
             body = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(self.hec_url, data=body, method="POST")
-            req.add_header("Authorization", f"Splunk {self.hec_token}")
-            req.add_header("Content-Type", "application/json")
-            try:
-                with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
-                    if resp.status == 200:
-                        dispatched += 1
-                        ev.evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
-                        ev.current_evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
-                    else:
-                        failed += 1
-                        errors.append(f"HEC returned HTTP {resp.status}")
-            except Exception as exc:
+            event_dispatched = False
+            last_err = ""
+            for h_url in candidate_urls:
+                ctx = self._ssl_ctx() if h_url.startswith("https") else None
+                req = urllib.request.Request(h_url, data=body, method="POST")
+                req.add_header("Authorization", f"Splunk {self.hec_token}")
+                req.add_header("Content-Type", "application/json")
+                try:
+                    with urllib.request.urlopen(req, context=ctx, timeout=timeout_sec) as resp:
+                        if resp.status == 200:
+                            dispatched += 1
+                            ev.evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
+                            ev.current_evidence_stage = SnmpEvidenceStage.SPLUNK_DISPATCHED.value
+                            event_dispatched = True
+                            self.hec_url = h_url
+                            break
+                        else:
+                            last_err = f"HEC returned HTTP {resp.status}"
+                except Exception as exc:
+                    last_err = f"HEC dispatch error: {exc}"
+            if not event_dispatched:
                 failed += 1
-                errors.append(f"HEC dispatch error: {exc}")
+                errors.append(last_err)
 
         return {
             "attempted": len(events),
@@ -1272,10 +1287,10 @@ class SnmpSplunkBridge:
                                     )
                                 rows.append(norm_row)
                     last_results = rows
-                if len(rows) >= min_expected:
-                    return rows
-            except Exception:
-                pass
+                    if len(rows) >= min_expected:
+                        return rows
+                except Exception:
+                    pass
             time.sleep(0.4)
 
         return last_results

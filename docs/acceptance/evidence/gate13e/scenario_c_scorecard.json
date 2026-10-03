@@ -41,7 +41,7 @@
     "COLLECTOR_RECEIVED": 72,
     "NORMALIZED": 459,
     "SPLUNK_DISPATCHED": 459,
-    "SPLUNK_OBSERVED": 459,
+    "SPLUNK_OBSERVED": 705,
     "VALIDATED": 5
   },
   "dual_store_breakdown": {
@@ -50,7 +50,7 @@
     "splunk_dispatched_events": 213,
     "splunk_dispatched_metrics": 246,
     "splunk_observed_events": 213,
-    "splunk_observed_metrics": 246,
+    "splunk_observed_metrics": 492,
     "duplicate_records_suppressed": 120,
     "splunk_dispatch_failures": 0,
     "observation_completeness_pct": 100.0
@@ -85,7 +85,7 @@
       },
       "SPLUNK_OBSERVED": {
         "verified": true,
-        "count": 459
+        "count": 705
       },
       "VALIDATED": {
         "verified": true,

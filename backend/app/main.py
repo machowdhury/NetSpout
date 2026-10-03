@@ -1230,6 +1230,24 @@ def get_native_flow_diagnostics():
         "recent_flows_count": len(adapter.get_recent_flows())
     }
 # =========================================================================
+# Deployment Profile (Demo vs Secure / External)
+# =========================================================================
+@app.get("/api/profile")
+def get_deployment_profile_info():
+    from app.models import get_deployment_profile, DeploymentProfile
+    profile = get_deployment_profile()
+    return {
+        "profile": profile.value,
+        "label": "DEMO / LOCAL LAB" if profile == DeploymentProfile.DEMO else "SECURE / EXTERNAL",
+        "description": (
+            "Isolated demonstration environment with pre-configured disposable test credentials."
+            if profile == DeploymentProfile.DEMO
+            else "Hardened profile with user-managed secrets and strict credentials enforcement."
+        ),
+    }
+
+
+# =========================================================================
 # Self-Contained Telemetry Pipelines Health & Lifecycle (Gate 14+)
 # =========================================================================
 @app.get("/api/health/pipelines")

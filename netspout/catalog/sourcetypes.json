@@ -4492,6 +4492,48 @@
     "status": "active"
   },
   {
+    "id": "netspout-snmp-poll",
+    "splunk_sourcetype": "netspout:snmp:poll",
+    "display_name": "NetSpout Native SNMPv2c Polling Events",
+    "vendor_id": "cisco_ios",
+    "category": "Carrier / Core Routing Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "NATIVE_TRANSPORT",
+    "protocol": "snmp",
+    "sample_file": null,
+    "required_ta": null,
+    "aliases": [
+      "netspout-snmp-poll",
+      "netspout:snmp:poll"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": false,
+    "status": "active"
+  },
+  {
+    "id": "netspout-snmp-trap",
+    "splunk_sourcetype": "netspout:snmp:trap",
+    "display_name": "NetSpout Native SNMPv2c Traps & Informs",
+    "vendor_id": "cisco_ios",
+    "category": "Carrier / Core Routing Telemetry",
+    "data_kind": "event",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "NATIVE_TRANSPORT",
+    "protocol": "snmp",
+    "sample_file": null,
+    "required_ta": null,
+    "aliases": [
+      "netspout-snmp-trap",
+      "netspout:snmp:trap"
+    ],
+    "deprecated_aliases": [],
+    "is_benchmark_197": false,
+    "status": "active"
+  },
+  {
     "id": "nginx-plus-kv",
     "splunk_sourcetype": "nginx:plus:kv",
     "display_name": "Nginx Plus Kv",

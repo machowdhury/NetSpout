@@ -194,6 +194,61 @@ class NodeHardware(BaseModel):
     interfaces: List[NetworkInterface] = Field(default_factory=list)
 
 
+import os
+
+class DeploymentProfile(str, Enum):
+    DEMO = "demo"
+    SECURE = "secure"
+
+DEMO_HEC_TOKEN: str = "00000000-0000-0000-0000-000000000000"
+DEMO_SPLUNK_PASSWORD: str = "SplunkPassword123!"
+
+def get_deployment_profile() -> DeploymentProfile:
+    val = os.environ.get("NETSPOUT_PROFILE", "demo").strip().lower()
+    if val in ("secure", "external", "prod", "production"):
+        return DeploymentProfile.SECURE
+    return DeploymentProfile.DEMO
+
+def resolve_hec_token(requested_token: Optional[str] = None) -> str:
+    """
+    Resolves the active HEC token according to deployment profile:
+    - In DEMO mode: defaults to DEMO_HEC_TOKEN if none provided.
+    - In SECURE mode: requires user-provided or environment token, rejecting the demo token.
+    """
+    token = requested_token or os.environ.get("NETSPOUT_HEC_TOKEN")
+    profile = get_deployment_profile()
+    if profile == DeploymentProfile.SECURE:
+        if not token:
+            raise ValueError("SECURE profile requires user-supplied HEC token via NETSPOUT_HEC_TOKEN or config.")
+        if token == DEMO_HEC_TOKEN:
+            raise ValueError("SECURE profile rejects disposable DEMO_HEC_TOKEN. Please provide a secure production token.")
+        return token
+    return token or DEMO_HEC_TOKEN
+
+def resolve_splunk_password(requested_password: Optional[str] = None) -> str:
+    """
+    Resolves the Splunk management password according to deployment profile.
+    """
+    pwd = requested_password or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")
+    profile = get_deployment_profile()
+    if profile == DeploymentProfile.SECURE:
+        if not pwd:
+            raise ValueError("SECURE profile requires user-supplied Splunk password via NETSPOUT_SPLUNK_PASSWORD.")
+        if pwd == DEMO_SPLUNK_PASSWORD:
+            raise ValueError("SECURE profile rejects disposable DEMO_SPLUNK_PASSWORD. Please provide a secure production password.")
+        return pwd
+    return pwd or DEMO_SPLUNK_PASSWORD
+
+def mask_secret(secret: Optional[str]) -> str:
+    """
+    Safely masks tokens and passwords for logs and UI display.
+    """
+    if not secret:
+        return ""
+    if len(secret) <= 8:
+        return "********"
+    return secret[:4] + "****" + secret[-4:]
+
 DEFAULT_SPLUNK_HEC_PORT: int = 8088
 DEFAULT_SPLUNK_HEC_URL: str = "https://127.0.0.1:8088/services/collector"
 
@@ -205,7 +260,7 @@ class TelemetryTransportConfig(BaseModel):
     # 1. Splunk HEC Pipeline
     hec_enabled: bool = True
     hec_url: str = DEFAULT_SPLUNK_HEC_URL
-    hec_token: str = "00000000-0000-0000-0000-000000000000"
+    hec_token: str = DEMO_HEC_TOKEN
     hec_index: str = "idx_network_ops"
     hec_metric_index: str = "cisco_mdt_metrics"
     hec_ssl_verify: bool = False
@@ -224,6 +279,11 @@ class TelemetryTransportConfig(BaseModel):
             data["hec_index"] = data["index"]
         if "token" in data and ("hec_token" not in data or not data["hec_token"]):
             data["hec_token"] = data["token"]
+        if "hec_token" not in data or not data["hec_token"]:
+            try:
+                data["hec_token"] = resolve_hec_token()
+            except ValueError:
+                data["hec_token"] = ""
         super().__init__(**data)
         if self.default_index and (not self.hec_index or self.hec_index == "idx_network_ops"):
             self.hec_index = self.default_index

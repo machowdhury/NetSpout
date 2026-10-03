@@ -1247,6 +1247,11 @@ def get_deployment_profile_info():
     }
 
 
+@app.get("/health")
+def get_service_health():
+    return {"status": "ok", "service": "netspout-simulation-engine"}
+
+
 # =========================================================================
 # Self-Contained Telemetry Pipelines Health & Lifecycle (Gate 14+)
 # =========================================================================

@@ -1,0 +1,8 @@
+{
+  "total_scenarios": 29,
+  "provenance_categories_present": [
+    "VENDOR_DOCUMENTED"
+  ],
+  "missing_lineage_count": 0,
+  "verdict": "PASS"
+}

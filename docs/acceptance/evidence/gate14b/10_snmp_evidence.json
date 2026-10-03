@@ -1,0 +1,13 @@
+{
+  "operations": [
+    "GET",
+    "GETNEXT",
+    "GETBULK",
+    "WALK",
+    "TRAP",
+    "INFORM"
+  ],
+  "snmp_version": "SNMPv2c",
+  "trap_observed": 1,
+  "mibs_loaded": 333
+}

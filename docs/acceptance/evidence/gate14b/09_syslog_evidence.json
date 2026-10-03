@@ -1,0 +1,8 @@
+{
+  "udp_sent": 1,
+  "udp_observed": 1,
+  "tcp_sent": 1,
+  "tcp_observed": 1,
+  "rfc5424_supported": true,
+  "rfc3164_supported": true
+}

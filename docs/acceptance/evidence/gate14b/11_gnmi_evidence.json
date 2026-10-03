@@ -1,0 +1,18 @@
+{
+  "modes": [
+    "Capabilities",
+    "Get",
+    "Subscribe ONCE",
+    "Subscribe POLL",
+    "STREAM/SAMPLE",
+    "STREAM/ON_CHANGE"
+  ],
+  "vendors_supported": [
+    "Cisco IOS XR",
+    "Cisco IOS XE",
+    "Arista EOS",
+    "Juniper Junos"
+  ],
+  "wire_pollution_detected": false,
+  "metric_index_verified": true
+}

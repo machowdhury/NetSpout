@@ -1,0 +1,113 @@
+{
+  "service_provider_cisco": {
+    "run_id": "NS-20261003-1d5ee083",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  },
+  "cisco_campus_rogue": {
+    "run_id": "NS-20261003-a01b4efe",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  },
+  "arch_wlan_meraki_catalyst": {
+    "run_id": "NS-20261003-635b168f",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  },
+  "cisco_sdwan_brownout": {
+    "run_id": "NS-20261003-28dd96f8",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "DEGRADE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 7,
+    "splunk_observed": 1
+  },
+  "cisco_aci_microburst": {
+    "run_id": "NS-20261003-e9bab985",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  },
+  "mixed_edge_breach": {
+    "run_id": "NS-20261003-2dccdd9e",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  },
+  "mixed_backbone_optical": {
+    "run_id": "NS-20261003-40de9283",
+    "phases": [
+      "INITIALIZE",
+      "BASELINE",
+      "FAULT",
+      "PROPAGATE",
+      "FAILOVER",
+      "RECOVER",
+      "VALIDATE",
+      "COMPLETE"
+    ],
+    "overall_validation": "PASS",
+    "ground_truth_records": 8,
+    "splunk_observed": 1
+  }
+}

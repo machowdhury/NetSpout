@@ -1,0 +1,6 @@
+{
+  "valid_auth_status": 200,
+  "invalid_auth_status": 403,
+  "unreachable_dest_handled": true,
+  "tls_enforced": true
+}

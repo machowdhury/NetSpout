@@ -186,13 +186,15 @@ class EmbeddedPipelineManager:
             flow_state = "INITIALIZED"
 
         # 5. OTLP dispatcher check
-        from netspout_core.telemetry_dispatcher import dispatcher
-        otlp_count = dispatcher.stats.get("otel_dispatched", 0)
-        otlp_state = "STREAMING" if otlp_count > 0 else "READY"
-
-        # 6. HEC destination check
-        hec_count = dispatcher.stats.get("hec_dispatched", 0)
-        hec_state = "STREAMING" if hec_count > 0 else "CONFIGURED"
+        try:
+            from netspout_core.telemetry_dispatcher import dispatcher
+            otlp_count = dispatcher.stats.get("otel_dispatched", 0)
+            otlp_state = "STREAMING" if otlp_count > 0 else "READY"
+            hec_count = dispatcher.stats.get("hec_dispatched", 0)
+            hec_state = "STREAMING" if hec_count > 0 else "CONFIGURED"
+        except Exception:
+            otlp_state = "READY"
+            hec_state = "CONFIGURED"
 
         overall_status = "HEALTHY" if all(s in ("READY", "LISTENING", "STREAMING", "CONFIGURED", "INITIALIZED") for s in [syslog_state, snmp_state, gnmi_state, flow_state, otlp_state, hec_state]) else "DEGRADED"
 

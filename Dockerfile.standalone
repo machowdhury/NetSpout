@@ -32,18 +32,26 @@ RUN microdnf update -y && \
     ln -sf /usr/bin/python3.13 /usr/bin/python3 && \
     microdnf clean all
 
-# Copy NetSpout Splunk App directly into Splunk apps directory
+# Synchronize default Splunk apps from /opt/splunk-etc into /opt/splunk/etc
+RUN cp -rn /opt/splunk-etc/* /opt/splunk/etc/ || true
+
+# Copy NetSpout Splunk App into both /opt/splunk-etc/apps and /opt/splunk/etc/apps
+COPY netspout /opt/splunk-etc/apps/netspout
+COPY netspout.spl /opt/splunk-etc/apps/netspout.spl
 COPY netspout /opt/splunk/etc/apps/netspout
 COPY netspout.spl /opt/splunk/etc/apps/netspout.spl
 
-# Copy Companion Fast Simulation Engine
+# Copy Companion Fast Simulation Engine and Core Libraries
 COPY backend /opt/netspout-backend
+COPY src /opt/netspout-src
 
 # Pre-configure HEC and Indexes for zero-touch instant boot
-RUN mkdir -p /opt/splunk/etc/apps/netspout/local
+RUN mkdir -p /opt/splunk-etc/apps/netspout/local /opt/splunk/etc/apps/netspout/local
+COPY docker/standalone/inputs.conf /opt/splunk-etc/apps/netspout/local/inputs.conf
+COPY docker/standalone/indexes.conf /opt/splunk-etc/apps/netspout/local/indexes.conf
 COPY docker/standalone/inputs.conf /opt/splunk/etc/apps/netspout/local/inputs.conf
 COPY docker/standalone/indexes.conf /opt/splunk/etc/apps/netspout/local/indexes.conf
-RUN chown -R splunk:splunk /opt/splunk/etc/apps/netspout /opt/netspout-backend
+RUN chown -R splunk:splunk /opt/splunk /opt/splunk-etc /opt/netspout-backend
 
 # Set up custom startup wrapper
 COPY entrypoint-standalone.sh /sbin/entrypoint-standalone.sh

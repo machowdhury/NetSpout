@@ -1,0 +1,11 @@
+{
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+  "architecture": "arm64",
+  "docker_version": "Docker version 29.7.2, build a7dcaa6",
+  "docker_compose_version": "Docker Compose version v5.5.1",
+  "splunk_version": "10.2.7 (Manifest c0bff5b0fac3)",
+  "git_commit": "e86d39aaf7a5f3ce3cfbad94e0d6b94c6129a65f",
+  "git_branch": "main",
+  "git_status": " M Dockerfile.standalone\n M backend/app/embedded_pipelines.py\n M backend/run.py\n M docker/standalone/inputs.conf\n M docs/SECURITY.md\n M docs/acceptance/evidence/gate13d/cisco_aci_microburst_splunk.json\n M docs/acceptance/evidence/gate13d/cross_transport_coherence_splunk.json\n M docs/acceptance/evidence/gate13d/e2e_scorecard.json\n M docs/acceptance/evidence/gate13d/mstats_query_outputs.json\n M docs/acceptance/evidence/gate13d/multivendor_splunk_verification.json\n M docs/acceptance/evidence/gate13d/openconfig_mdt_streaming_splunk.json\n M docs/acceptance/evidence/gate13d/performance_benchmark.json\n M docs/acceptance/evidence/gate13d/service_provider_cisco_splunk_events.json\n M docs/acceptance/evidence/gate13d/service_provider_cisco_splunk_metrics.json\n M docs/acceptance/evidence/gate13d/spl_query_outputs.json\n M docs/acceptance/evidence/gate13d/stage_accounting_ledger.json\n M docs/acceptance/evidence/gate13e/scenario_a_scorecard.json\n M docs/acceptance/evidence/gate13e/scenario_b_scorecard.json\n M docs/acceptance/evidence/gate13e/scenario_c_scorecard.json\n M entrypoint-standalone.sh\n M netspout/bin/embedded_pipelines.py\n M netspout/default/inputs.conf\n?? docs/acceptance/evidence/gate14b/\n?? scripts/verify_gate14b_certification.py"
+}

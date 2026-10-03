@@ -1,0 +1,10 @@
+{
+  "netspout_run_id": "NS-CERT-RUN-1790989296",
+  "fault_correlation_id": "FAULT-BGP-LEAK-1790989296",
+  "correlated_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:gnmi:event",
+    "netspout:snmp:trap"
+  ],
+  "operational_story_coherent": true
+}

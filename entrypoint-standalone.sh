@@ -5,6 +5,12 @@ echo "==========================================================================
 echo "⚡ NetSpout Standalone: Booting Splunk Enterprise + Fast Simulation Engine"
 echo "=========================================================================="
 
+# Ensure all default Splunk apps and configurations are synchronized
+if [ ! -d "/opt/splunk/etc/apps/splunk_httpinput" ] && [ -d "/opt/splunk-etc/apps" ]; then
+    echo ">> Synchronizing default Splunk apps from /opt/splunk-etc to /opt/splunk/etc..."
+    cp -rn /opt/splunk-etc/* /opt/splunk/etc/ 2>/dev/null || true
+fi
+
 # Ensure HEC & Indexes local configuration is present in app directory
 mkdir -p /opt/splunk/etc/apps/netspout/local
 if [ ! -f "/opt/splunk/etc/apps/netspout/local/inputs.conf" ] && [ -f "/opt/splunk/etc/apps/netspout/default/inputs.conf" ]; then

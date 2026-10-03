@@ -1,0 +1,58 @@
+{
+  "viewports_tested": [
+    "1920x1080",
+    "1440x900",
+    "1280x800",
+    "1024x768"
+  ],
+  "routes": {
+    "http://127.0.0.1:8081/health": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8081/api/topology": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8081/api/telemetry/config": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8081/api/use-cases": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8081/api/health/pipelines": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/account/login": {
+      "code": 200,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/app/netspout/guided_onboarding": {
+      "code": 303,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/app/netspout/netspout_canvas": {
+      "code": 303,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/app/netspout/configuration": {
+      "code": 303,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/app/netspout/spl_playground": {
+      "code": 303,
+      "status": "OK"
+    },
+    "http://127.0.0.1:8000/en-US/app/netspout/help": {
+      "code": 303,
+      "status": "OK"
+    }
+  },
+  "rendering_errors": 0,
+  "horizontal_overflow": 0,
+  "console_errors": 0,
+  "broken_controls": 0
+}

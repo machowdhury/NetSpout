@@ -1,0 +1,14 @@
+{
+  "netflow_v9": {
+    "template_flowset": true,
+    "data_flowset": true,
+    "encoded_bytes": 140
+  },
+  "ipfix": {
+    "template_set": true,
+    "data_set": true,
+    "observation_domain": 202,
+    "encoded_bytes": 152
+  },
+  "embedded_collection_verified": true
+}

@@ -1,0 +1,10 @@
+{
+  "total_scenarios": 29,
+  "total_vendors": 36,
+  "total_sourcetypes": 265,
+  "total_mibs": 347,
+  "total_dashboards": 15,
+  "spl_package_size_bytes": 1786138,
+  "spl_package_size_mb": 1.7,
+  "spl_sha256": "c0e9e02fe6433cac455d6a6467c44d7f6ff367933f04edb99e867a81a4a27a72"
+}

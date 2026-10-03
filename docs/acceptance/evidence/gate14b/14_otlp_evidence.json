@@ -1,0 +1,8 @@
+{
+  "endpoint": "http://127.0.0.1:4318/v1/logs",
+  "otlp_status_code": 200,
+  "logs_supported": true,
+  "metrics_supported": true,
+  "traces_supported": false,
+  "transports": "HTTP JSON / Protobuf"
+}

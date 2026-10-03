@@ -2,6 +2,8 @@
 
 NetSpout provides two distinct, explicitly separated deployment profiles to safeguard production enterprise environments while offering zero-friction local evaluations.
 
+> **CRITICAL SECURITY REQUIREMENT**: Never commit production credentials to source repositories. Never log HEC tokens or passwords in cleartext. Never silently fall back to demo credentials when running in SECURE profile.
+
 ---
 
 ## 1. Profiles Overview

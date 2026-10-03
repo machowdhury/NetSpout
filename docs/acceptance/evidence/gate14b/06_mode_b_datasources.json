@@ -1,0 +1,32 @@
+{
+  "cisco": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  },
+  "arista": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  },
+  "juniper": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  },
+  "palo_alto": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  },
+  "fortinet": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  },
+  "f5": {
+    "dispatched": 1,
+    "observed": 1,
+    "provenance_status": "VENDOR_DOCUMENTED"
+  }
+}

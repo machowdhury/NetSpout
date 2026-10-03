@@ -1,0 +1,58 @@
+{
+  "splunk_unavailable": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "invalid_hec_token": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "destination_unreachable": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "embedded_collector_unavailable": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "malformed_event": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "unsupported_sourcetype": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "unsupported_vendor_telemetry": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "malformed_snmp_packet": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "gnmi_authentication_failure": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "unsupported_gnmi_path": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "flow_collector_unavailable": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "duplicate_replayed_event": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "pipeline_backpressure": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  },
+  "missing_correlation_metadata": {
+    "handled_honestly": true,
+    "false_observation_prevented": true
+  }
+}

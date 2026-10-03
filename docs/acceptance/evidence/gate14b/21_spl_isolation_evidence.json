@@ -1,0 +1,30 @@
+{
+  "app_display": "WARNING: Server Certificate Hostname Validation is disabled. Please see server.conf/[sslConfig]/cliVerifyServerName for details.\nnetspout                       CONFIGURED          ENABLED             VISIBLE             ",
+  "rest_handler_response": {
+    "status": "online",
+    "app": "netspout",
+    "version": "2.0.0",
+    "active_faults": 0,
+    "mibs_catalog_count": 333,
+    "pipeline_stats": {
+      "hec_dispatched": 0,
+      "otel_dispatched": 0,
+      "telegraf_dispatched": 0,
+      "syslog_dispatched": 0,
+      "hec_errors": 0,
+      "otel_errors": 0,
+      "telegraf_errors": 0,
+      "syslog_errors": 0,
+      "last_error": null,
+      "last_active": null
+    },
+    "timestamp": 1790989399.7102556
+  },
+  "btool_returncode": 0,
+  "btool_stdout": "",
+  "ui_status_code": 303,
+  "hec_single_status": 200,
+  "hec_ten_status": 200,
+  "single_observed_count": 1,
+  "ten_observed_count": 10
+}

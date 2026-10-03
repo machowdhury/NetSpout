@@ -1,0 +1,11 @@
+{
+  "build_time_sec": 45.2,
+  "startup_time_sec": 2.26,
+  "time_to_netspout_ui_sec": 3.29,
+  "time_to_splunk_hec_sec": 60.81,
+  "time_to_splunk_login_sec": 60.87,
+  "time_to_splunk_web_sec": 64.9,
+  "time_to_first_generated_event_sec": 64.91,
+  "time_to_first_splunk_observed_event_sec": 67.91,
+  "all_containers_healthy": true
+}

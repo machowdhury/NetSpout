@@ -1,0 +1,34 @@
+{
+  "generation_rate_eps": 3890.82,
+  "total_events_generated": 8,
+  "generation_duration_sec": 0.0021,
+  "hec_avg_dispatch_latency_ms": 5.21,
+  "hec_p95_dispatch_latency_ms": 21.34,
+  "docker_stats": [
+    [
+      "netspout-otel-collector",
+      "0.02%",
+      "58.71MiB / 7.746GiB",
+      "0.74%"
+    ],
+    [
+      "splunk-netspout-standalone",
+      "30.53%",
+      "2.027GiB / 7.746GiB",
+      "26.17%"
+    ],
+    [
+      "netspout-flow-forwarder",
+      "0.17%",
+      "26.94MiB / 7.746GiB",
+      "0.34%"
+    ],
+    [
+      "netspout-flow-collector",
+      "0.00%",
+      "25.81MiB / 7.746GiB",
+      "0.33%"
+    ]
+  ],
+  "status": "PASS"
+}

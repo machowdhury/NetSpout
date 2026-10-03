@@ -1,6 +1,6 @@
 {
   "all_controlled_failures_verified": true,
-  "cross_transport_coherence_run_id": "run-13d-xtrans-abd92d08",
+  "cross_transport_coherence_run_id": "run-13d-xtrans-e82cc6b6",
   "cross_transport_coherent": true,
   "external_collector": "/opt/homebrew/bin/gnmic (v0.49.0)",
   "gate": "13D",
@@ -23,23 +23,23 @@
       "errors": [],
       "highest_verified_stage": "VALIDATED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-cisco_ac-d97f364b\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-d97f364b\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-d97f364b\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-d97f364b\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-d97f364b\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-d97f364b\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-d97f364b\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-d97f364b\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-d97f364b\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-d97f364b\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-cisco_ac-76578343\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-76578343\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-76578343\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-76578343\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-76578343\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-76578343\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-76578343\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-76578343\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-cisco_ac-76578343\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-cisco_ac-76578343\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
         "highest_verified_stage": "VALIDATED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-cisco_ac-d97f364b",
+        "run_id": "run-13d-cisco_ac-76578343",
         "scenario_id": "cisco_aci_microburst",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -89,7 +89,7 @@
         "q8_vendor_comparison_spl": 1,
         "q9_metric_catalog_mstats": 108
       },
-      "run_id": "run-13d-cisco_ac-d97f364b",
+      "run_id": "run-13d-cisco_ac-76578343",
       "scenario_id": "cisco_aci_microburst",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -245,14 +245,14 @@
       "errors": [],
       "highest_verified_stage": "VALIDATED",
       "investigation_queries": {
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-multivendor-c893d38b\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target"
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-multivendor-8fca6bb7\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
         "highest_verified_stage": "VALIDATED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-multivendor-c893d38b",
+        "run_id": "run-13d-multivendor-8fca6bb7",
         "scenario_id": "multivendor_gnmi_e2e",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -293,7 +293,7 @@
       "query_execution_summary": {
         "q8_vendor_comparison_spl": 4
       },
-      "run_id": "run-13d-multivendor-c893d38b",
+      "run_id": "run-13d-multivendor-8fca6bb7",
       "scenario_id": "multivendor_gnmi_e2e",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -419,23 +419,23 @@
       "errors": [],
       "highest_verified_stage": "VALIDATED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-openconf-31e9b4d3\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-31e9b4d3\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-31e9b4d3\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-31e9b4d3\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-31e9b4d3\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-31e9b4d3\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-31e9b4d3\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-31e9b4d3\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-31e9b4d3\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-31e9b4d3\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-openconf-53d3f311\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-53d3f311\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-53d3f311\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-53d3f311\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-53d3f311\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-53d3f311\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-53d3f311\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-53d3f311\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-openconf-53d3f311\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-openconf-53d3f311\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
         "highest_verified_stage": "VALIDATED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-openconf-31e9b4d3",
+        "run_id": "run-13d-openconf-53d3f311",
         "scenario_id": "openconfig_mdt_streaming",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -485,7 +485,7 @@
         "q8_vendor_comparison_spl": 1,
         "q9_metric_catalog_mstats": 152
       },
-      "run_id": "run-13d-openconf-31e9b4d3",
+      "run_id": "run-13d-openconf-53d3f311",
       "scenario_id": "openconfig_mdt_streaming",
       "splunk_destinations": {
         "event_index": "idx_network_ops",
@@ -672,23 +672,23 @@
       "errors": [],
       "highest_verified_stage": "VALIDATED",
       "investigation_queries": {
-        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-197c60cd\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
-        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-197c60cd\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
-        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-197c60cd\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
-        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-197c60cd\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
-        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-197c60cd\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
-        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-197c60cd\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-197c60cd\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
-        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-197c60cd\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
-        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-197c60cd\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
-        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-197c60cd\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
+        "q10_cross_source_correlation_spl": "search index=idx_network_ops netspout_run_id=\"run-13d-service_-60d71d59\" (sourcetype=\"netspout:gnmi:event\" OR sourcetype=\"netspout:snmp:trap\" OR sourcetype=\"netspout:snmp:poll\" OR sourcetype=\"cisco:ios:syslog\" OR sourcetype=\"netflow:collector\") | stats count as records dc(sourcetype) as source_count values(sourcetype) as sourcetypes by netspout_phase netspout_device_id",
+        "q1_run_overview_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-60d71d59\" | stats count as event_count dc(gnmi_path) as unique_paths values(gnmi_vendor) as vendors values(gnmi_platform) as platforms values(collector_mode) as modes by netspout_phase",
+        "q2_phase_progression_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-60d71d59\" is_leaf=\"true\" | stats count as state_leaf_events values(gnmi_leaf) as observed_leaves values(gnmi_origin) as origins by netspout_phase gnmi_target",
+        "q3_interface_state_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-60d71d59\" telemetry_category=\"interface\" (gnmi_leaf=\"oper-status\" OR gnmi_leaf=\"admin-status\" OR gnmi_leaf=\"state\" OR gnmi_leaf=\"oper-state\") | table _time netspout_phase gnmi_target gnmi_origin interface_name gnmi_path gnmi_leaf gnmi_value",
+        "q4_bgp_neighbor_transition_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-60d71d59\" telemetry_category=\"bgp\" (gnmi_leaf=\"session-state\" OR gnmi_leaf=\"connection-state\") | table _time netspout_phase gnmi_target gnmi_origin neighbor_address gnmi_path gnmi_leaf gnmi_value",
+        "q5_qos_congestion_drops_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val latest(_value) as latest_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-60d71d59\" telemetry_category=\"qos\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q6_optical_signal_degradation_mstats": "| mstats min(_value) as min_dbm avg(_value) as avg_dbm latest(_value) as latest_dbm WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-60d71d59\" telemetry_category=\"optics\" BY netspout_phase gnmi_target gnmi_leaf gnmi_path",
+        "q7_system_cpu_memory_health_mstats": "| mstats max(_value) as max_val avg(_value) as avg_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-60d71d59\" (telemetry_category=\"system\" OR telemetry_category=\"environment\") BY netspout_phase gnmi_target telemetry_category gnmi_leaf gnmi_unit",
+        "q8_vendor_comparison_spl": "search index=idx_network_ops sourcetype=\"netspout:gnmi:event\" netspout_run_id=\"run-13d-service_-60d71d59\" | stats count as event_count dc(gnmi_sensor_id) as sensor_count values(gnmi_origin) as origins values(gnmi_os_version) as os_versions by gnmi_vendor gnmi_platform gnmi_model gnmi_target",
+        "q9_metric_catalog_mstats": "| mstats count(_value) as metric_samples min(_value) as min_val max(_value) as max_val WHERE index=cisco_mdt_metrics metric_name=* netspout_run_id=\"run-13d-service_-60d71d59\" BY telemetry_category gnmi_leaf gnmi_unit gnmi_platform netspout_phase"
       },
       "ledger": {
         "error_message": null,
         "error_stage": null,
         "highest_verified_stage": "VALIDATED",
         "phase": "COMPLETE",
-        "run_id": "run-13d-service_-197c60cd",
+        "run_id": "run-13d-service_-60d71d59",
         "scenario_id": "service_provider_cisco",
         "stages": {
           "COLLECTOR_RECEIVED": {
@@ -738,7 +738,7 @@
         "q8_vendor_comparison_spl": 1,
         "q9_metric_catalog_mstats": 204
       },
-      "run_id": "run-13d-service_-197c60cd",
+      "run_id": "run-13d-service_-60d71d59",
       "scenario_id": "service_provider_cisco",
       "splunk_destinations": {
         "event_index": "idx_network_ops",

@@ -46,7 +46,9 @@ CORE_MODULES = [
     "snmp_ber.py",
     "transport_native_snmp.py",
     "snmp_agent.py",
-    "snmp_splunk_e2e.py"
+    "snmp_splunk_e2e.py",
+    "embedded_pipelines.py",
+    "generator_modes.py",
 ]
 
 GNMI_SUBPACKAGE_FILES = [

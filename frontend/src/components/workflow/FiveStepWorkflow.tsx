@@ -214,7 +214,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
         const logRes = await fetch(`/api/scenarios/runs/${manifest.run_id}/logs?limit=50`);
         const logData = await logRes.json();
         logs = logData.logs || [];
-      } catch (e) {}
+      } catch {}
 
       // If Native SNMP E2E normalized events exist, prepend them into the live terminal stream so the operator sees real SNMP traps/polls
       if (Array.isArray(manifest.snmp_normalized_events) && manifest.snmp_normalized_events.length > 0) {
@@ -250,7 +250,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
               destValidation = obsData.destination_validation ?? destValidation;
               if (observationStatus === 'VERIFIED') break;
             }
-          } catch (e) {}
+          } catch {}
         }
       }
 
@@ -334,7 +334,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
   const handleStopRun = async () => {
     try {
       await fetch('/api/scenarios/run/stop', { method: 'POST' });
-    } catch (e) {}
+    } catch {}
     setRunState(prev => ({ ...prev, status: 'stopped', phase: 'COMPLETE' }));
   };
 

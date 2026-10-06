@@ -35,18 +35,25 @@ class TestGate5UX(unittest.TestCase):
         self.assertIn("./assets/index-", content)
 
     def test_02_canonical_navigation(self):
-        """2. Verify canonical 3-mode navigation: Workflow (5-step), Advanced (Canvas), Operations."""
+        """2. Verify unified navigation plus retained legacy workflow/canvas controls."""
         topbar_path = os.path.join(FRONTEND_DIR, "src/components/TopBar.tsx")
         app_path = os.path.join(FRONTEND_DIR, "src/App.tsx")
+        navigation_path = os.path.join(FRONTEND_DIR, "src/app/navigation.ts")
         with open(topbar_path) as f:
             tb = f.read()
         with open(app_path) as f:
             app = f.read()
+        with open(navigation_path) as f:
+            navigation = f.read()
         self.assertIn("Use Cases (5-Step)", tb)
         self.assertIn("Canvas Orchestrator", tb)
         self.assertIn("Operations", tb)
-        self.assertIn("appMode === 'workflow'", app)
-        self.assertIn("appMode === 'operations'", app)
+        self.assertIn("<AppShell", app)
+        self.assertIn("'/generate/scenarios'", app)
+        self.assertIn("'/build/scenario-builder'", app)
+        self.assertIn("Quick Generate", navigation)
+        self.assertIn("Pipeline Health", navigation)
+        self.assertIn("Security Intelligence", navigation)
 
     def test_03_use_cases_from_canonical_metadata(self):
         """3. Verify use cases load from canonical metadata with expected categories."""
@@ -203,10 +210,14 @@ class TestGate5UX(unittest.TestCase):
 
     def test_18_no_primary_horizontal_overflow(self):
         """18. Verify viewport layout uses overflow-hidden and constrained flex bounds."""
-        app_path = os.path.join(FRONTEND_DIR, "src/App.tsx")
-        with open(app_path) as f:
+        styles_path = os.path.join(FRONTEND_DIR, "src/index.css")
+        with open(styles_path) as f:
             content = f.read()
-        self.assertIn("h-screen w-screen overflow-hidden", content)
+        self.assertIn(".product-shell", content)
+        self.assertIn("width: 100vw", content)
+        self.assertIn("height: 100vh", content)
+        self.assertIn("overflow: hidden", content)
+        self.assertIn("minmax(0, 1fr)", content)
 
     def test_19_deprecated_sourcetype_aliases_hidden(self):
         """19. Verify deprecated aliases from aliases.json are not rendered as primary use cases."""

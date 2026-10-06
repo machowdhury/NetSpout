@@ -1,0 +1,9 @@
+.git
+.github
+.cursor
+.venv
+**/__pycache__
+**/*.pyc
+frontend/node_modules
+frontend/dist
+docs/acceptance/images

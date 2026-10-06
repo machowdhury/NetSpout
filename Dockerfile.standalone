@@ -3,12 +3,20 @@
 # Includes:
 #   - Splunk Enterprise 10.2 pre-configured
 #   - NetSpout Splunk App with Dark NOC Canvas UI
-#   - Pre-configured HEC on port 8088 (Token: 00000000-0000-0000-0000-000000000000)
+#   - Pre-configured HEC on port 8088 (credential supplied at runtime)
 #   - Pre-configured cisco_mdt_metrics (500GB Metric Index tier)
 #   - Pre-configured Event Indexes (idx_network_ops, idx_security_fw, etc.)
 #   - 333 SC4SNMP MIBs and OpenConfig YANG Schema Engine
 #   - Universal Multi-Pipeline Telemetry Dispatcher (HEC, OTel, Telegraf, Syslog)
 # =========================================================================
+
+FROM --platform=$BUILDPLATFORM node:22-bookworm-slim AS frontend-build
+
+WORKDIR /build/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
 
 FROM --platform=linux/amd64 splunk/splunk:10.2
 
@@ -44,6 +52,7 @@ COPY netspout.spl /opt/splunk/etc/apps/netspout.spl
 # Copy Companion Fast Simulation Engine and Core Libraries
 COPY backend /opt/netspout-backend
 COPY src /opt/netspout-src
+COPY --from=frontend-build /build/frontend/dist /opt/frontend/dist
 
 # Pre-configure HEC and Indexes for zero-touch instant boot
 RUN mkdir -p /opt/splunk-etc/apps/netspout/local /opt/splunk/etc/apps/netspout/local
@@ -60,7 +69,6 @@ RUN chmod +x /sbin/entrypoint-standalone.sh
 # Environment variables for zero-prompt Splunk license acceptance
 ENV SPLUNK_START_ARGS="--accept-license" \
     SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
-    SPLUNK_PASSWORD="SplunkPassword123!" \
     SPLUNK_HEC_PORT="8088" \
     SPLUNK_ROLE="splunk_standalone" \
     SPLUNK_HOME_OWNERSHIP_ENFORCEMENT="false" \

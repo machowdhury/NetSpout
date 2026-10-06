@@ -794,7 +794,15 @@ class UnifiedGenerationService:
             return "UNSUPPORTED"
         if "RESEARCH_REQUIRED" in states:
             return "RESEARCH_REQUIRED"
-        if states == {"VERIFIED"}:
+        pack_state = next(
+            (
+                pack.verification_state.value
+                for pack in self.registry.packs
+                if any(item.scenario_id == scenario.scenario_id for item in pack.scenarios)
+            ),
+            "RESEARCH_REQUIRED",
+        )
+        if states == {"VERIFIED"} and pack_state == "VERIFIED":
             return "VERIFIED"
         return "PARTIALLY_VERIFIED"
 

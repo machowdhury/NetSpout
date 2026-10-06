@@ -13,9 +13,8 @@ import { VendorAddonsModal } from './components/VendorAddonsModal';
 import { SPLPlaygroundModal } from './components/SPLPlaygroundModal';
 import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
-import { FiveStepWorkflow } from './components/workflow/FiveStepWorkflow';
 import { PipelineHealthView } from './components/operations/PipelineHealthView';
-import { GeneratorModesView } from './components/generator/GeneratorModesView';
+import { GenerationLab } from './components/generation/GenerationLab';
 import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
@@ -140,7 +139,7 @@ export const App: React.FC = () => {
   const [showUseCaseModal, setShowUseCaseModal] = useState<boolean>(false);
   const [showMetricsModal, setShowMetricsModal] = useState<boolean>(false);
   const [splInitialQuery, setSplInitialQuery] = useState<string | undefined>(undefined);
-  const [launchScenarioSignal, setLaunchScenarioSignal] = useState<{ scenarioId: string; timestamp: number } | null>(null);
+  const [, setLaunchScenarioSignal] = useState<{ scenarioId: string; timestamp: number } | null>(null);
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'https://127.0.0.1:8088/services/collector',
@@ -707,25 +706,11 @@ export const App: React.FC = () => {
     }
 
     if (route === '/generate/quick') {
-      return (
-        <div className="legacy-view">
-          <GeneratorModesView />
-        </div>
-      );
+      return <GenerationLab experienceMode={experienceMode} initialMode="DATA_SOURCE" />;
     }
 
     if (route === '/generate/scenarios' || route === '/observe/live-runs') {
-      return (
-        <div className="legacy-view">
-          <FiveStepWorkflow
-            onOpenCanvas={() => {
-              setExperienceMode('advanced');
-              navigate('/build/scenario-builder');
-            }}
-            launchScenarioSignal={launchScenarioSignal}
-          />
-        </div>
-      );
+      return <GenerationLab experienceMode={experienceMode} initialMode="SCENARIO" />;
     }
 
     if (route === '/observe/pipeline-health') {

@@ -1,0 +1,270 @@
+import type { CatalogSource, VerificationState } from './catalog';
+
+export type GenerationMode = 'SCENARIO' | 'DATA_SOURCE' | 'SOURCETYPE' | 'SINGLE_EVENT';
+export type GenerationStep = 'CHOOSE' | 'PREVIEW' | 'CONFIGURE' | 'RUN' | 'OBSERVE' | 'INVESTIGATE';
+
+export interface GenerationModeDefinition {
+  id: GenerationMode;
+  label: string;
+  description: string;
+}
+
+export interface TopologyZone {
+  zone_id: string;
+  label: string;
+}
+
+export interface TopologyNode {
+  node_id: string;
+  technology_id: string;
+  zone_id: string;
+  role: string;
+  source_ids: string[];
+}
+
+export interface TopologyRelationship {
+  relationship_id: string;
+  source_node_id: string;
+  target_node_id: string;
+  relationship_type: string;
+}
+
+export interface TelemetryPath {
+  path_id: string;
+  source_id: string;
+  producer_node_id: string;
+  observer_node_id: string | null;
+}
+
+export interface TimelineStep {
+  step_id: string;
+  stage: string;
+  description: string;
+  state_changes: Record<string, string>;
+  incident_ids: string[];
+}
+
+export interface GenerationScenario {
+  scenario_id: string;
+  title: string;
+  description: string;
+  story: string;
+  difficulty: string;
+  expected_duration_minutes: number;
+  learning_objectives: string[];
+  business_impact: string;
+  prerequisites: string[];
+  technology_ids: string[];
+  source_ids: string[];
+  entities: string[];
+  zones: TopologyZone[];
+  nodes: TopologyNode[];
+  relationships: TopologyRelationship[];
+  telemetry_paths: TelemetryPath[];
+  incident_path: string[];
+  runtime_state_keys: string[];
+  timeline: TimelineStep[];
+  expected_evidence: string[];
+  investigation_recipe_ids: string[];
+  integration_recommendation_ids: string[];
+  production_replication_guidance: string[];
+  composition_id: string | null;
+  verification_state: VerificationState;
+  maturity: string;
+  source_count: number;
+  integration_count: number;
+  runnable: boolean;
+}
+
+export interface GenerationSource extends CatalogSource {
+  generation: {
+    runnable: boolean;
+    state: string;
+    reason: string;
+  };
+}
+
+export interface GenerationSourcetype {
+  name: string;
+  authority: 'SPLUNK_DOCUMENTED' | 'NETSPOUT_DEFINED';
+  source_id: string;
+  vendor: string;
+  product: string;
+  source: string;
+  verification_state: VerificationState;
+  provenance: string[];
+  integration_ids: string[];
+  cim_mappings: Array<{ name: string; verification_state: VerificationState; evidence_ids: string[] }>;
+  runnable: boolean;
+  generation_controls: string[];
+}
+
+export interface EventFamily {
+  event_family_id: string;
+  label: string;
+  source_id: string;
+  sourcetype: string;
+  runnable: boolean;
+  count: number;
+}
+
+export interface GenerationTransport {
+  transport_id: string;
+  component: string;
+  protocol: string;
+  signals: string[];
+  compatible_source_ids: string[];
+  verification_state: VerificationState;
+  implemented: boolean;
+  evidence_ids: string[];
+  notes: string;
+}
+
+export interface GenerationDestination {
+  destination_id: string;
+  destination_type: string;
+  accepted_transport_ids: string[];
+  verification_state: VerificationState;
+  evidence_ids: string[];
+  label: string;
+  configured: boolean;
+}
+
+export interface IntegrationReadiness {
+  recommendation_id: string;
+  source_id: string;
+  integration_id: string | null;
+  requirement: 'REQUIRED' | 'RECOMMENDED' | 'NOT_REQUIRED' | 'RESEARCH_REQUIRED';
+  evidence_ids: string[];
+  notes: string;
+  name: string;
+  publisher: string | null;
+  support_state: string;
+  detected: boolean;
+  evidence: Array<{ evidence_id: string; title: string; publisher: string; reference: string }>;
+}
+
+export interface InvestigationRecipe {
+  recipe_id: string;
+  title: string;
+  portability: 'PRODUCTION_PORTABLE' | 'NETSPOUT_SPECIFIC';
+  spl: string;
+  source_ids: string[];
+  required_fields: string[];
+  cim_requirements: string[];
+  netspout_only_fields: string[];
+  evidence_ids: string[];
+}
+
+export interface GenerationCapabilities {
+  schema_version: string;
+  workflow: GenerationStep[];
+  modes: GenerationModeDefinition[];
+  sources: GenerationSource[];
+  scenarios: GenerationScenario[];
+  sourcetypes: GenerationSourcetype[];
+  event_families: EventFamily[];
+  transports: GenerationTransport[];
+  destinations: GenerationDestination[];
+  integration_recommendations: IntegrationReadiness[];
+  investigations: InvestigationRecipe[];
+  raw_preview_policy: string;
+}
+
+export interface GenerationRequest {
+  mode: GenerationMode;
+  selection_id: string;
+  transport_id: string;
+  destination_id: string;
+  count: number;
+  rate_eps: number;
+  duration_seconds?: number;
+  scenario_parameters: Record<string, string | number | boolean>;
+}
+
+export interface GeneratedEvent {
+  event_id: string;
+  source_id: string;
+  contract_id: string;
+  provenance: string[];
+  transport_id: string;
+  sourcetype: string;
+  sourcetype_authority: string;
+  phase: string;
+  raw: string;
+}
+
+export interface GenerationPreview {
+  mode: GenerationMode;
+  selection_id: string;
+  scenario: GenerationScenario | null;
+  sources: GenerationSource[];
+  bindings: Array<{
+    source_id: string;
+    generator_id: string;
+    transport_id: string;
+    destination_id: string;
+    validator_ids: string[];
+  }>;
+  integration_readiness: IntegrationReadiness[];
+  investigations: InvestigationRecipe[];
+  raw_preview: GeneratedEvent[];
+  preview_notice: string;
+  native_contract: CatalogSource['native_contract'];
+  splunk_contract: CatalogSource['splunk_contract'];
+  netspout_contract: CatalogSource['netspout_contract'];
+  known_limitations: string[];
+}
+
+export interface PreflightCheck {
+  check_id: string;
+  label: string;
+  state: 'PASS' | 'WARN' | 'BLOCK';
+  detail: string;
+}
+
+export interface GenerationPreflight {
+  state: 'READY' | 'READY_WITH_WARNINGS' | 'BLOCKED';
+  checks: PreflightCheck[];
+  source_ids: string[];
+  generator_ids: string[];
+  transport_id: string;
+  destination_id: string;
+}
+
+export interface EvidenceStage {
+  stage: string;
+  state: 'NOT_ATTEMPTED' | 'PROVEN' | 'PENDING' | 'NOT_AVAILABLE' | 'FAILED';
+  count: number;
+  detail: string;
+}
+
+export interface GenerationRun {
+  run_id: string;
+  mode: GenerationMode;
+  selection_id: string;
+  scenario_id: string | null;
+  source_ids: string[];
+  generator_ids: string[];
+  transport_id: string;
+  destination_id: string;
+  started_at: string;
+  completed_at: string | null;
+  current_phase: string;
+  status: string;
+  events: GeneratedEvent[];
+  evidence: EvidenceStage[];
+  integration_readiness: IntegrationReadiness[];
+  investigations: InvestigationRecipe[];
+  limitations: string[];
+}
+
+export interface InvestigationResult {
+  run_id: string;
+  recipe_id: string;
+  portability: string;
+  query: string;
+  status: 'SUCCEEDED' | 'FAILED';
+  result_count: number;
+  detail: string;
+}

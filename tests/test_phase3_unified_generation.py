@@ -80,6 +80,10 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
             capabilities["scenarios"][0]["composition_id"],
             "compose-rfc5424-link-state-local",
         )
+        self.assertEqual(
+            capabilities["scenarios"][0]["verification_state"],
+            "PARTIALLY_VERIFIED",
+        )
 
     def test_02_preview_exposes_three_contracts_and_modeled_raw_event(self):
         preview = self.service.preview(

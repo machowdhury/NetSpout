@@ -218,10 +218,12 @@ test.beforeEach(async ({ page }) => {
     },
   };
 
-  for (const [endpoint, body] of Object.entries(catalogResponses)) {
-    await page.route(`**${endpoint}`, async (route) => {
-      await route.fulfill({ contentType: 'application/json', body: JSON.stringify(body) });
-    });
+  if (process.env.PLAYWRIGHT_LIVE_CATALOG !== '1') {
+    for (const [endpoint, body] of Object.entries(catalogResponses)) {
+      await page.route(`**${endpoint}`, async (route) => {
+        await route.fulfill({ contentType: 'application/json', body: JSON.stringify(body) });
+      });
+    }
   }
 });
 

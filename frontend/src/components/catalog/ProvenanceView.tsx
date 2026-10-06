@@ -159,6 +159,9 @@ function AdvancedProvenance({
           <div><dt>Schema classification</dt><dd><ProvenanceBadge state={netspout.schema_classification} /></dd></div>
           <div><dt>Generator</dt><dd><code>{netspout.generator ?? missingLabel(netspout.verification_state)}</code></dd></div>
           <div><dt>Validator</dt><dd><code>{netspout.validator ?? 'NOT CONFIGURED'}</code></dd></div>
+          <div><dt>Runtime status</dt><dd><StatusBadge status={netspout.runtime_status} /></dd></div>
+          <div><dt>Maturity</dt><dd><StatusBadge status={netspout.maturity} /></dd></div>
+          <div><dt>Transports</dt><dd><ValueList values={netspout.transports} empty={missingLabel(netspout.verification_state)} /></dd></div>
           <div><dt>Generation modes</dt><dd><ValueList values={netspout.generation_modes} empty={missingLabel(netspout.verification_state)} /></dd></div>
           <div><dt>Modeled fields</dt><dd><ValueList values={netspout.modeled_fields} empty={missingLabel(netspout.verification_state, true)} code /></dd></div>
           <div><dt>Structural fields</dt><dd><ValueList values={netspout.structural_fields} empty={missingLabel(netspout.verification_state, true)} code /></dd></div>

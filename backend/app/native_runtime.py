@@ -90,12 +90,14 @@ def build_shared_enterprise_state_plan(
     entity_id: str,
     seed: int,
     interface_id: str = "HundredGigE0/0/0/1",
+    state_profile_scenario_id: Optional[str] = None,
 ) -> SharedEnterpriseStatePlan:
     store = ScenarioStateStore(
         run_id=run_id,
         scenario_id=scenario_id,
         seed=seed,
         initial_phase=PHASES[0],
+        state_profile_scenario_id=state_profile_scenario_id,
     )
     snapshots = tuple(
         store.get_snapshot(entity_id, phase=phase, tick=index)

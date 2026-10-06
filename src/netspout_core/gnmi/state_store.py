@@ -312,10 +312,14 @@ class ScenarioStateStore:
         scenario_id: str = "openconfig_mdt_streaming",
         seed: int = 42,
         initial_phase: str = "BASELINE",
+        state_profile_scenario_id: Optional[str] = None,
     ):
         self._lock = threading.RLock()
         self.run_id = run_id
         self.scenario_id = scenario_id
+        self.state_profile_scenario_id = (
+            state_profile_scenario_id or scenario_id
+        )
         self.seed = int(seed)
         self._phase = normalize_phase(initial_phase)
         self._tick = 0
@@ -396,7 +400,8 @@ class ScenarioStateStore:
         if target_cfg is None:
             raise KeyError(f"Unknown target device: {device_id}")
         if (
-            self.scenario_id == "test-correlated-interface-degradation"
+            self.state_profile_scenario_id
+            == "test-correlated-interface-degradation"
             and device_id == "cisco-asr9k-pe1"
         ):
             correlated_interface = "HundredGigE0/0/0/1"

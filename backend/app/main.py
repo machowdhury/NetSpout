@@ -29,8 +29,17 @@ from app.models import (
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
 from app.unified_generation import (
+    GenerationMode,
     UnifiedGenerationRequest,
     UnifiedGenerationService,
+)
+from app.scenario_studio import (
+    CustomSourceDraft,
+    SampleAnalysisRequest,
+    ScenarioStudioService,
+    StudioDraftRequest,
+    StudioRunRequest,
+    StudioScenarioPack,
 )
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
@@ -42,7 +51,8 @@ app = FastAPI(title="NetSpout Telemetry & Simulation API", version="2.0.0")
 # Enable CORS for frontend development server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[],
+    allow_origin_regex=r"https?://(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,6 +61,10 @@ app.add_middleware(
 # Global Simulation State
 scenario_runner = ScenarioRunner()
 unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
+scenario_studio_service = ScenarioStudioService(
+    catalog=unified_generation_service.catalog,
+    generation_service=unified_generation_service,
+)
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -1338,6 +1352,127 @@ def investigate_unified_generation_run(run_id: str, recipe_id: str):
         )
     except KeyError:
         raise HTTPException(status_code=404, detail="Generation run not found")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Scenario Studio & Private Custom Source Packs (Phase 6)
+# =========================================================================
+@app.get("/api/studio")
+def get_scenario_studio_home():
+    return scenario_studio_service.home()
+
+
+@app.post("/api/studio/samples/analyze")
+def analyze_studio_sample(payload: SampleAnalysisRequest):
+    return scenario_studio_service.analyze_sample(payload).model_dump(mode="json")
+
+
+@app.post("/api/studio/custom-sources/validate")
+def validate_studio_custom_source(payload: CustomSourceDraft):
+    return scenario_studio_service.validate_custom_source(payload)
+
+
+@app.post("/api/studio/drafts")
+def create_studio_draft(payload: StudioDraftRequest):
+    try:
+        return scenario_studio_service.create_draft(payload).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.get("/api/studio/packs")
+def list_studio_packs():
+    return [
+        scenario_studio_service.summarize(item)
+        for item in scenario_studio_service.list_packs()
+    ]
+
+
+@app.get("/api/studio/packs/{pack_id}")
+def get_studio_pack(pack_id: str):
+    pack = scenario_studio_service.get_pack(pack_id)
+    if not pack:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    return pack.model_dump(mode="json")
+
+
+@app.post("/api/studio/packs/validate")
+def validate_studio_pack(payload: StudioScenarioPack):
+    return scenario_studio_service.validate_pack(payload).model_dump(mode="json")
+
+
+@app.post("/api/studio/packs")
+def save_studio_pack(payload: StudioScenarioPack):
+    try:
+        return scenario_studio_service.save_pack(payload).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.delete("/api/studio/packs/{pack_id}")
+def delete_studio_pack(pack_id: str):
+    if not scenario_studio_service.delete_pack(pack_id):
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    return {"deleted": True, "pack_id": pack_id}
+
+
+@app.get("/api/studio/packs/{pack_id}/export-gate")
+def get_studio_export_gate(pack_id: str, public: bool = False):
+    try:
+        return scenario_studio_service.export_gate(pack_id, public=public)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+
+
+@app.post("/api/studio/packs/{pack_id}/run")
+def run_studio_pack(pack_id: str, payload: StudioRunRequest):
+    pack = scenario_studio_service.get_pack(pack_id)
+    if not pack:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    report = scenario_studio_service.validate_pack(pack)
+    if not report.valid:
+        raise HTTPException(
+            status_code=409,
+            detail="Studio pack validation is BLOCKED: {}".format(
+                "; ".join(report.errors)
+            ),
+        )
+    for parameter in pack.parameters:
+        value = payload.parameters.get(parameter.parameter_id, parameter.default)
+        error = parameter.validate_value(value)
+        if error:
+            raise HTTPException(
+                status_code=409,
+                detail="{} {}".format(parameter.parameter_id, error),
+            )
+    _, composition = scenario_studio_service.compile_pack(pack)
+    binding = composition.source_bindings[0]
+    scenario_parameters = dict(payload.parameters)
+    scenario_parameters.update(
+        {
+            "seed": payload.seed,
+            "entity_id": pack.entities[0].entity_id,
+            "studio_shared_state": True,
+        }
+    )
+    try:
+        run = unified_generation_service.run(
+            UnifiedGenerationRequest(
+                mode=GenerationMode.SCENARIO,
+                selection_id=pack.scenario_id,
+                transport_id=(
+                    binding.destination_transport_id or binding.transport_id
+                ),
+                destination_id=binding.destination_id,
+                count=1,
+                rate_eps=10,
+                scenario_parameters=scenario_parameters,
+            ),
+            _unified_transport_config(),
+        )
+        return run.model_dump(mode="json")
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
 

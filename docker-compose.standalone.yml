@@ -14,18 +14,19 @@ services:
     environment:
       - SPLUNK_START_ARGS=--accept-license
       - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
-      - SPLUNK_PASSWORD=SplunkPassword123!
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?Set SPLUNK_PASSWORD before starting NetSpout}
       - SPLUNK_HEC_PORT=8088
       - SPLUNK_ROLE=splunk_standalone
       - FAST_SIMULATION_PORT=8081
       - SPLUNK_HEC_URL=https://localhost:8088/services/collector
-      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting NetSpout}
       - OTEL_ENDPOINT=http://otel-collector:4318
+      - NETSPOUT_STUDIO_DIR=/opt/splunk/var/lib/netspout/studio
     ports:
       - "8000:8000"       # Splunk Web UI (Dark NOC Canvas & Dashboards)
       - "8088:8088"       # Splunk HEC (HTTP Event Collector)
       - "8089:8089"       # Splunk Management REST API
-      - "8081:8081"       # NetSpout Fast Simulation REST & WebSocket Engine
+      - "127.0.0.1:8081:8081" # Local-only Studio, simulation REST, and WebSocket API
       - "514:514/udp"     # Syslog UDP Ingestion / Emitter
       - "514:514/tcp"     # Syslog TCP Ingestion / Emitter
     volumes:

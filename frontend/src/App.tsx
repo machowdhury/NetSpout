@@ -16,6 +16,7 @@ import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import { PipelineHealthView } from './components/operations/PipelineHealthView';
 import { GenerationLab } from './components/generation/GenerationLab';
 import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
+import { ScenarioStudio } from './components/studio/ScenarioStudio';
 import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
@@ -62,6 +63,7 @@ const BACKEND_WS = `${BACKEND_ORIGIN.replace(/^http/, 'ws')}/ws/logs`;
 const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
   '/generate/quick': 'generator',
   '/generate/scenarios': 'workflow',
+  '/build/studio': 'advanced',
   '/build/scenario-builder': 'advanced',
   '/observe/live-runs': 'workflow',
   '/observe/pipeline-health': 'operations',
@@ -728,6 +730,10 @@ export const App: React.FC = () => {
 
     if (route === '/catalog/splunk-integrations') {
       return <SplunkIntegrationsView mode={experienceMode} />;
+    }
+
+    if (route === '/build/studio') {
+      return <ScenarioStudio experienceMode={experienceMode} />;
     }
 
     if (route === '/build/scenario-builder') {

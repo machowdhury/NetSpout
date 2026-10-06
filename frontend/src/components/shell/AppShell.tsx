@@ -13,6 +13,7 @@ import {
   Search,
   Settings2,
   Shield,
+  Sparkles,
   Workflow,
   X,
   Zap,
@@ -39,6 +40,7 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   search: Search,
   settings: Settings2,
   shield: Shield,
+  studio: Sparkles,
   workflow: Workflow,
   zap: Zap,
 };

@@ -332,7 +332,7 @@ test('supports Choose through Investigate with truthful stage distinctions', asy
   await page.getByRole('button', { name: /^Configure/ }).click();
   await screenshot(page, 'phase3-04-configure.png');
   await page.getByRole('button', { name: 'Run Preflight' }).click();
-  await expect(page.getByText('READY WITH WARNINGS')).toBeVisible();
+  await expect(page.getByTestId('preflight-panel').getByText('READY WITH WARNINGS')).toBeVisible();
   await screenshot(page, 'phase3-05-preflight.png');
 
   await page.getByRole('button', { name: /Continue to Run/ }).click();

@@ -32,6 +32,7 @@ from netspout_core.pack_contracts import (
     GuidedScenarioManifest,
     IntegrationRecommendation,
     InvestigationRecipe,
+    PackDefinition,
     PackRegistry,
     StrictModel,
 )
@@ -177,6 +178,13 @@ class UnifiedGenerationService:
     VALIDATOR_ID = "validator-rfc5424-structure"
     EVENT_FAMILY_ID = "modeled-link-state"
     SCENARIO_ID = "rfc5424-link-state-lifecycle"
+    STANDALONE_NATIVE_SOURCE_IDS = {
+        "ietf-syslog-rfc5424",
+        "ietf-snmpv2c-ifmib",
+        "openconfig-gnmi-interfaces",
+        "ietf-netflow-v9",
+        "ietf-ipfix",
+    }
 
     def __init__(
         self,
@@ -204,6 +212,76 @@ class UnifiedGenerationService:
             "netspout_core.native_runtime.NativeRuntimeFacade.run_flow": None,
             "netspout_core.native_runtime.NativeRuntimeFacade.run_otel": NativeChannel.OTEL,
         }
+        self._studio_search_scopes: Dict[str, Tuple[str, str]] = {}
+
+    def register_private_pack(
+        self,
+        pack: PackDefinition,
+        composition: CompositionDefinition,
+        *,
+        generator_adapters: Optional[Dict[str, Callable[..., GeneratedEvent]]] = None,
+        validator_adapters: Optional[Dict[str, Callable[[str], bool]]] = None,
+        search_scopes: Optional[Dict[str, Tuple[str, str]]] = None,
+    ) -> None:
+        """Register one validated local/private pack through explicit allow lists."""
+
+        replaced_packs = [
+            item for item in self.registry.packs if item.pack_id == pack.pack_id
+        ]
+        replaced_scenario_ids = {
+            scenario.scenario_id
+            for replaced in replaced_packs
+            for scenario in replaced.scenarios
+        }
+        payload = self.registry.model_dump(mode="json")
+        payload["packs"] = [
+            item for item in payload["packs"] if item["pack_id"] != pack.pack_id
+        ]
+        payload["compositions"] = [
+            item
+            for item in payload["compositions"]
+            if item["composition_id"] != composition.composition_id
+            and item["scenario_id"] != composition.scenario_id
+            and item["scenario_id"] not in replaced_scenario_ids
+        ]
+        payload["packs"].append(pack.model_dump(mode="json"))
+        payload["compositions"].append(composition.model_dump(mode="json"))
+        registry = PackRegistry.model_validate(payload)
+        registry.validate_against_catalog(self.catalog._telemetry_catalog)
+        self.registry = registry
+        for replaced in replaced_packs:
+            for generator in replaced.generators:
+                self._generator_adapters.pop(generator.generator_id, None)
+            for validator in replaced.validators:
+                self._validator_adapters.pop(validator.validator_id, None)
+            for source in replaced.sources:
+                self._studio_search_scopes.pop(source.source.source_id, None)
+        self._generator_adapters.update(generator_adapters or {})
+        self._validator_adapters.update(validator_adapters or {})
+        self._studio_search_scopes.update(search_scopes or {})
+
+    def unregister_private_pack(self, pack_id: str, scenario_id: str) -> None:
+        """Remove a private pack and every runtime adapter it registered."""
+        removed = [item for item in self.registry.packs if item.pack_id == pack_id]
+        payload = self.registry.model_dump(mode="json")
+        payload["packs"] = [
+            item for item in payload["packs"] if item["pack_id"] != pack_id
+        ]
+        payload["compositions"] = [
+            item
+            for item in payload["compositions"]
+            if item["scenario_id"] != scenario_id
+        ]
+        registry = PackRegistry.model_validate(payload)
+        registry.validate_against_catalog(self.catalog._telemetry_catalog)
+        self.registry = registry
+        for definition in removed:
+            for generator in definition.generators:
+                self._generator_adapters.pop(generator.generator_id, None)
+            for validator in definition.validators:
+                self._validator_adapters.pop(validator.validator_id, None)
+            for source in definition.sources:
+                self._studio_search_scopes.pop(source.source.source_id, None)
 
     def capabilities(
         self,
@@ -216,6 +294,12 @@ class UnifiedGenerationService:
             item["source_id"]: item
             for item in self.catalog.list_telemetry_sources()
         }
+        sources.update(
+            {
+                item.source.source_id: item.source.model_dump(mode="json")
+                for item in resources["source_entries"]
+            }
+        )
         evidence = {
             item["evidence_id"]: item for item in self.catalog.list_catalog_evidence()
         }
@@ -234,12 +318,9 @@ class UnifiedGenerationService:
             for item in resources["investigations"]
         }
 
-        bound_ids = {
-            item.source_id for item in self.registry.catalog_source_bindings
-        }
         source_views = []
         for source_id, source in sources.items():
-            runnable = source_id in bound_ids and self._source_is_runnable(source)
+            runnable = self._source_is_runnable(source)
             source_views.append(
                 {
                     **source,
@@ -465,6 +546,7 @@ class UnifiedGenerationService:
                     phase=phase,
                     ordinal=index,
                     event_family=resolved["event_family"],
+                    scenario_parameters=request.scenario_parameters,
                 )
                 for index, phase in enumerate(phases[:3])
             ]
@@ -707,12 +789,30 @@ class UnifiedGenerationService:
                 )
             )
             correlated_results: Dict[NativeChannel, ChannelRunResult] = {}
-            if scenario_id == "test-correlated-interface-degradation":
+            native_channels = {
+                self._channel_for_binding(item) for item in native_bindings
+            }
+            if (
+                scenario_id == "test-correlated-interface-degradation"
+                or (
+                    scenario_id.startswith("studio-")
+                    and {
+                        NativeChannel.SNMP,
+                        NativeChannel.GNMI,
+                    }.issubset(native_channels)
+                )
+            ):
+                state_profile_scenario_id = (
+                    "test-correlated-interface-degradation"
+                    if scenario_id.startswith("studio-")
+                    else scenario_id
+                )
                 state_plan = build_shared_enterprise_state_plan(
                     run_id=run_id,
                     scenario_id=scenario_id,
                     entity_id=entity_id,
                     seed=seed,
+                    state_profile_scenario_id=state_profile_scenario_id,
                 )
                 correlated = runtime.run_correlated(
                     run_id,
@@ -758,10 +858,17 @@ class UnifiedGenerationService:
                     phase=phase,
                     ordinal=index,
                     event_family=resolved["event_family"],
+                    scenario_parameters=request.scenario_parameters,
                 )
                 generated += 1
                 events.append(event)
-                if self._validator_adapters[self.VALIDATOR_ID](event.raw):
+                validator_ids = resolved["bindings"][0].get("validator_ids") or [
+                    self.VALIDATOR_ID
+                ]
+                if all(
+                    self._validator_adapters[validator_id](event.raw)
+                    for validator_id in validator_ids
+                ):
                     valid += 1
                 entry = self._to_log_entry(event, run_id, resolved.get("scenario_id"))
                 result = self.dispatcher.dispatch_log(entry, transport_config)
@@ -912,7 +1019,21 @@ class UnifiedGenerationService:
             raise KeyError(run_id)
         if run.channel_results:
             return self._observe_native_run(run, transport_config)
-        observed, detail = self._search_splunk(run_id, transport_config)
+        if len(run.source_ids) == 1 and run.source_ids[0] in self._studio_search_scopes:
+            observed, search_error = self._search_splunk_for_source(
+                run_id, run.source_ids[0], transport_config
+            )
+            detail = (
+                "Authenticated source-scoped Splunk search proved indexed observation."
+                if observed > 0
+                else (
+                    "Search succeeded; indexing observation is still pending."
+                    if search_error is None
+                    else "Splunk observation unavailable: {}".format(search_error)
+                )
+            )
+        else:
+            observed, detail = self._search_splunk(run_id, transport_config)
         authenticated = not detail.startswith("Splunk observation unavailable:")
         updated = []
         for stage in run.evidence:
@@ -1656,6 +1777,13 @@ class UnifiedGenerationService:
         }
 
     def _source_is_runnable(self, source: Dict[str, Any]) -> bool:
+        source_id = source["source_id"]
+        bindings = [
+            binding
+            for composition in self.registry.compositions
+            for binding in composition.source_bindings
+            if binding.source_id == source_id
+        ]
         return (
             source["verification_state"]
             not in {
@@ -1664,8 +1792,18 @@ class UnifiedGenerationService:
             }
             and source["netspout_contract"]["runtime_status"]
             in {"READY", "AVAILABLE"}
-            and source["source_id"]
-            in {item.source_id for item in self.registry.catalog_source_bindings}
+            and (
+                self._source_has_native_binding(source_id)
+                or (
+                    bool(bindings)
+                    and all(
+                        binding.runtime_adapter_ref in self._native_adapter_channels
+                        if binding.runtime_adapter_ref
+                        else binding.generator_id in self._generator_adapters
+                        for binding in bindings
+                    )
+                )
+            )
         )
 
     def _require_runnable_source(self, source: Dict[str, Any]) -> None:
@@ -1676,6 +1814,8 @@ class UnifiedGenerationService:
             raise ValueError(self._blocked_reason(source))
 
     def _source_has_native_binding(self, source_id: str) -> bool:
+        if source_id not in self.STANDALONE_NATIVE_SOURCE_IDS:
+            return False
         if source_id not in {
             item.source_id for item in self.registry.catalog_source_bindings
         }:
@@ -1693,12 +1833,10 @@ class UnifiedGenerationService:
             VerificationState.UNSUPPORTED.value,
         }:
             return False
-        return any(
-            binding.source_id == source_id
-            and binding.runtime_adapter_ref in self._native_adapter_channels
-            for composition in self.registry.compositions
-            for binding in composition.source_bindings
-        )
+        return source["netspout_contract"]["runtime_status"] in {
+            "READY",
+            "AVAILABLE",
+        }
 
     def _blocked_state(self, source: Dict[str, Any]) -> str:
         if source["verification_state"] == "UNSUPPORTED":
@@ -1755,7 +1893,12 @@ class UnifiedGenerationService:
         return request.count
 
     def _generate_rfc5424_event(
-        self, run_id: str, phase: str, ordinal: int, event_family: str
+        self,
+        run_id: str,
+        phase: str,
+        ordinal: int,
+        event_family: str,
+        scenario_parameters: Optional[Dict[str, Any]] = None,
     ) -> GeneratedEvent:
         event_id = str(uuid.uuid4())
         phase_values = {
@@ -1960,11 +2103,19 @@ class UnifiedGenerationService:
             "ietf-netflow-v9": "netflow:collector",
             "ietf-ipfix": "netflow:collector",
         }
-        sourcetype = runtime_sourcetypes.get(source_id)
+        studio_scope = self._studio_search_scopes.get(source_id)
+        index_name = (
+            studio_scope[0] if studio_scope else transport_config.hec_index
+        )
+        sourcetype = (
+            studio_scope[1]
+            if studio_scope
+            else runtime_sourcetypes.get(source_id)
+        )
         if not sourcetype:
             sourcetype = claims[0].get("name") if claims else None
         terms = [
-            'index="{}"'.format(transport_config.hec_index),
+            'index="{}"'.format(index_name),
             'netspout_run_id="{}"'.format(run_id),
         ]
         if sourcetype:

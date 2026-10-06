@@ -14,7 +14,10 @@ Authoritative source for:
 import os
 import json
 import re
+from collections import Counter
 from typing import Dict, List, Any, Optional, Tuple, Set
+
+from netspout_core.catalog_contracts import TelemetryCatalog
 
 
 def _find_catalog_dir() -> str:
@@ -53,6 +56,7 @@ class NetSpoutCatalog:
         self._samples: List[Dict[str, Any]] = []
         self._protocols: List[Dict[str, Any]] = []
         self._aliases: Dict[str, Dict[str, Any]] = {}
+        self._telemetry_catalog: Optional[TelemetryCatalog] = None
 
         self._vendors_by_id: Dict[str, Dict[str, Any]] = {}
         self._sourcetypes_by_st: Dict[str, Dict[str, Any]] = {}
@@ -81,6 +85,9 @@ class NetSpoutCatalog:
         self._samples = _read_json("samples.json")
         self._protocols = _read_json("telemetry_protocols.json")
         self._aliases = _read_json("aliases.json")
+        self._telemetry_catalog = TelemetryCatalog.model_validate(
+            _read_json("telemetry_catalog.json")
+        )
 
         # Build fast lookup indexes
         for v in self._vendors:
@@ -111,6 +118,23 @@ class NetSpoutCatalog:
 
         for pr in self._protocols:
             self._protocols_by_id[pr["id"]] = pr
+
+        scenario_ids = set(self._scenarios_by_id)
+        for source in self._telemetry_catalog.sources:
+            unknown = sorted(set(source.netspout_contract.scenario_ids) - scenario_ids)
+            if unknown:
+                raise ValueError(
+                    "Telemetry source '{}' references unknown scenarios: {}".format(
+                        source.source_id, ", ".join(unknown)
+                    )
+                )
+        for manifest in self._telemetry_catalog.source_manifests:
+            if manifest.scenario_id not in scenario_ids:
+                raise ValueError(
+                    "Source manifest '{}' references unknown scenario '{}'".format(
+                        manifest.manifest_id, manifest.scenario_id
+                    )
+                )
 
     # -------------------------------------------------------------------------
     # Vendors API
@@ -344,6 +368,104 @@ class NetSpoutCatalog:
 
     def list_protocols(self) -> List[Dict[str, Any]]:
         return list(self._protocols)
+
+    # -------------------------------------------------------------------------
+    # Authoritative Telemetry Contract Catalog
+    # -------------------------------------------------------------------------
+    def get_telemetry_catalog(self) -> Dict[str, Any]:
+        return self._telemetry_catalog.model_dump(mode="json", by_alias=True)
+
+    def list_telemetry_sources(
+        self,
+        domain: Optional[str] = None,
+        verification_state: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        sources = self._telemetry_catalog.sources
+        if domain:
+            sources = [source for source in sources if domain in source.domains]
+        if verification_state:
+            sources = [
+                source
+                for source in sources
+                if source.verification_state.value == verification_state
+            ]
+        return [
+            source.model_dump(mode="json", by_alias=True) for source in sources
+        ]
+
+    def get_telemetry_source(self, source_id: str) -> Optional[Dict[str, Any]]:
+        for source in self._telemetry_catalog.sources:
+            if source.source_id == source_id:
+                return source.model_dump(mode="json", by_alias=True)
+        return None
+
+    def list_splunk_integrations(self) -> List[Dict[str, Any]]:
+        return [
+            integration.model_dump(mode="json", by_alias=True)
+            for integration in self._telemetry_catalog.integrations
+        ]
+
+    def get_splunk_integration(
+        self, integration_id: str
+    ) -> Optional[Dict[str, Any]]:
+        for integration in self._telemetry_catalog.integrations:
+            if integration.integration_id == integration_id:
+                return integration.model_dump(mode="json", by_alias=True)
+        return None
+
+    def list_catalog_evidence(self) -> List[Dict[str, Any]]:
+        return [
+            evidence.model_dump(mode="json", by_alias=True)
+            for evidence in self._telemetry_catalog.evidence
+        ]
+
+    def list_source_manifests(
+        self, scenario_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        manifests = self._telemetry_catalog.source_manifests
+        if scenario_id:
+            manifests = [
+                manifest
+                for manifest in manifests
+                if manifest.scenario_id == scenario_id
+            ]
+        return [
+            manifest.model_dump(mode="json", by_alias=True)
+            for manifest in manifests
+        ]
+
+    def get_telemetry_catalog_summary(self) -> Dict[str, Any]:
+        sources = self._telemetry_catalog.sources
+        verification = Counter(
+            source.verification_state.value for source in sources
+        )
+        provenance = Counter(
+            state.value for source in sources for state in source.provenance
+        )
+        domains = Counter(domain for source in sources for domain in source.domains)
+        sourcetypes = [
+            claim
+            for source in sources
+            for claim in source.splunk_contract.sourcetypes
+        ]
+        return {
+            "schema_version": self._telemetry_catalog.schema_version,
+            "catalog_version": self._telemetry_catalog.catalog_version,
+            "source_count": len(sources),
+            "integration_count": len(self._telemetry_catalog.integrations),
+            "evidence_count": len(self._telemetry_catalog.evidence),
+            "source_manifest_count": len(
+                self._telemetry_catalog.source_manifests
+            ),
+            "verification_counts": dict(sorted(verification.items())),
+            "provenance_counts": dict(sorted(provenance.items())),
+            "domain_counts": dict(sorted(domains.items())),
+            "sourcetype_counts": dict(
+                sorted(
+                    Counter(claim.authority.value for claim in sourcetypes).items()
+                )
+            ),
+        }
 
     # -------------------------------------------------------------------------
     # Aliases API

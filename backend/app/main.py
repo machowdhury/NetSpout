@@ -1367,12 +1367,73 @@ def get_catalog_domains():
 
 @app.get("/api/catalog/provenance")
 def get_catalog_provenance():
+    """Legacy provenance list retained for compatibility."""
     import json
     prov_path = os.path.join(os.path.dirname(__file__), "catalog_data", "telemetry_sources.json")
     if os.path.exists(prov_path):
         with open(prov_path, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
+
+
+@app.get("/api/catalog/telemetry")
+def get_telemetry_catalog():
+    """Strict Native/Splunk/NetSpout telemetry contract catalog."""
+    from app.catalog import catalog
+    return catalog.get_telemetry_catalog()
+
+
+@app.get("/api/catalog/summary")
+def get_telemetry_catalog_summary():
+    from app.catalog import catalog
+    return catalog.get_telemetry_catalog_summary()
+
+
+@app.get("/api/catalog/sources")
+def get_telemetry_sources(
+    domain: Optional[str] = None,
+    verification_state: Optional[str] = None,
+):
+    from app.catalog import catalog
+    return catalog.list_telemetry_sources(
+        domain=domain, verification_state=verification_state
+    )
+
+
+@app.get("/api/catalog/sources/{source_id}")
+def get_telemetry_source(source_id: str):
+    from app.catalog import catalog
+    source = catalog.get_telemetry_source(source_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail="Telemetry source not found")
+    return source
+
+
+@app.get("/api/catalog/integrations")
+def get_splunk_integrations():
+    from app.catalog import catalog
+    return catalog.list_splunk_integrations()
+
+
+@app.get("/api/catalog/integrations/{integration_id}")
+def get_splunk_integration(integration_id: str):
+    from app.catalog import catalog
+    integration = catalog.get_splunk_integration(integration_id)
+    if integration is None:
+        raise HTTPException(status_code=404, detail="Splunk integration not found")
+    return integration
+
+
+@app.get("/api/catalog/evidence")
+def get_catalog_evidence():
+    from app.catalog import catalog
+    return catalog.list_catalog_evidence()
+
+
+@app.get("/api/catalog/source-manifests")
+def get_source_manifests(scenario_id: Optional[str] = None):
+    from app.catalog import catalog
+    return catalog.list_source_manifests(scenario_id=scenario_id)
 
 
 # WebSocket Endpoint

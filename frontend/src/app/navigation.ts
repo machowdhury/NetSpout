@@ -163,7 +163,6 @@ export const NAVIGATION: NavigationGroup[] = [
         label: 'Splunk Integrations',
         route: '/catalog/splunk-integrations',
         icon: 'database',
-        availability: 'RESEARCH REQUIRED',
       },
     ],
   },

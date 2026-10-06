@@ -30,11 +30,15 @@ const statusTone: Record<string, string> = {
   RECEIVING: 'status-badge--success',
   STREAMING: 'status-badge--success',
   AVAILABLE: 'status-badge--success',
+  VERIFIED: 'status-badge--success',
   CONFIGURED: 'status-badge--info',
   BETA: 'status-badge--info',
   PARTIAL: 'status-badge--warning',
+  'PARTIALLY VERIFIED': 'status-badge--warning',
   STARTING: 'status-badge--warning',
   DEGRADED: 'status-badge--warning',
+  DEPRECATED: 'status-badge--warning',
+  'LAB ONLY': 'status-badge--warning',
   PLANNED: 'status-badge--neutral',
   INITIALIZED: 'status-badge--neutral',
   STOPPED: 'status-badge--neutral',
@@ -62,24 +66,59 @@ export type ProvenanceState =
   | 'DATASET VERIFIED'
   | 'NETSPOUT SCHEMA'
   | 'MODELED VALUE'
+  | 'VENDOR_DOCUMENTED'
+  | 'STANDARD_DOCUMENTED'
+  | 'VERIFIED_PUBLIC_SAMPLE'
+  | 'SPLUNK_DOCUMENTED'
+  | 'DATASET_VERIFIED'
+  | 'NETSPOUT_SCHEMA'
+  | 'MODELED_PAYLOAD'
+  | 'MODELED_VALUE'
+  | 'INFERRED'
+  | 'VERIFIED'
+  | 'PARTIALLY_VERIFIED'
   | 'RESEARCH REQUIRED'
+  | 'RESEARCH_REQUIRED'
+  | 'UNSUPPORTED_TELEMETRY'
   | 'UNSUPPORTED';
 
+const provenanceLabels: Partial<Record<ProvenanceState, string>> = {
+  VENDOR_DOCUMENTED: 'VENDOR DOCUMENTED',
+  STANDARD_DOCUMENTED: 'STANDARD DOCUMENTED',
+  VERIFIED_PUBLIC_SAMPLE: 'VERIFIED PUBLIC SAMPLE',
+  SPLUNK_DOCUMENTED: 'SPLUNK DOCUMENTED',
+  DATASET_VERIFIED: 'DATASET VERIFIED',
+  NETSPOUT_SCHEMA: 'NETSPOUT SCHEMA',
+  MODELED_PAYLOAD: 'MODELED PAYLOAD',
+  MODELED_VALUE: 'MODELED VALUE',
+  INFERRED: 'INFERRED',
+  PARTIALLY_VERIFIED: 'PARTIALLY VERIFIED',
+  RESEARCH_REQUIRED: 'RESEARCH REQUIRED',
+  UNSUPPORTED_TELEMETRY: 'UNSUPPORTED TELEMETRY',
+};
+
 export function ProvenanceBadge({ state }: { state: ProvenanceState }) {
-  const verified = state.endsWith('VERIFIED');
+  const displayLabel = provenanceLabels[state] ?? state;
+  const normalized = state.replaceAll(' ', '_');
+  const verified =
+    normalized === 'VERIFIED' ||
+    normalized.endsWith('_VERIFIED') ||
+    normalized.endsWith('_DOCUMENTED') ||
+    normalized === 'VERIFIED_PUBLIC_SAMPLE';
   return (
     <span
+      data-value={state}
       className={`provenance-badge ${
         verified
           ? 'provenance-badge--verified'
-          : state === 'RESEARCH REQUIRED'
+          : normalized === 'RESEARCH_REQUIRED'
             ? 'provenance-badge--research'
-            : state === 'UNSUPPORTED'
+            : normalized.startsWith('UNSUPPORTED')
               ? 'provenance-badge--unsupported'
               : 'provenance-badge--modeled'
       }`}
     >
-      {state}
+      {displayLabel}
     </span>
   );
 }

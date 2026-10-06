@@ -17,6 +17,8 @@ import { FiveStepWorkflow } from './components/workflow/FiveStepWorkflow';
 import { PipelineHealthView } from './components/operations/PipelineHealthView';
 import { GeneratorModesView } from './components/generator/GeneratorModesView';
 import { HomeView } from './components/home/HomeView';
+import { ProvenanceView } from './components/catalog/ProvenanceView';
+import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
 import { useHashRoute } from './app/useHashRoute';
@@ -99,18 +101,6 @@ const ROUTE_STATES: Partial<
     description:
       'Splunk Security Content, Sigma, ATT&CK, and YARA mappings must be researched before claims are shown.',
     phase: 'PHASE 5',
-  },
-  '/catalog/provenance': {
-    maturity: 'PARTIAL',
-    description:
-      'Existing provenance records remain available to the backend; the unified catalog experience arrives in Phase 2.',
-    phase: 'PHASE 2',
-  },
-  '/catalog/splunk-integrations': {
-    maturity: 'RESEARCH REQUIRED',
-    description:
-      'Only verified official Splunk integrations will be promoted into this catalog.',
-    phase: 'PHASE 2',
   },
   '/system/connections': {
     maturity: 'PARTIAL',
@@ -740,6 +730,14 @@ export const App: React.FC = () => {
 
     if (route === '/observe/pipeline-health') {
       return <PipelineHealthView />;
+    }
+
+    if (route === '/catalog/provenance') {
+      return <ProvenanceView mode={experienceMode} />;
+    }
+
+    if (route === '/catalog/splunk-integrations') {
+      return <SplunkIntegrationsView mode={experienceMode} />;
     }
 
     if (route === '/build/scenario-builder') {

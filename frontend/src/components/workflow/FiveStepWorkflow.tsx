@@ -33,15 +33,15 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
     type: 'splunk_hec',
     name: 'Splunk HEC (HTTP Event Collector)',
     endpoint: 'https://127.0.0.1:8088/services/collector',
-    token: '00000000-0000-0000-0000-000000000000',
+    token: '',
     index: 'idx_network_ops',
-    status: 'CONFIGURED',
+    status: 'DISCONNECTED',
     allow_insecure_tls: true,
     transport_mode: 'DIRECT_TO_SPLUNK',
     native_protocol: 'SNMPV2C_E2E',
     native_snmp_e2e: true,
     native_snmp_pdu_mode: 'MIXED',
-    native_snmp_community: 'netspout-lab'
+    native_snmp_community: ''
   });
 
   const [runState, setRunState] = useState<WorkflowRunState>({
@@ -74,7 +74,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
       native_protocol: isSnmp ? 'SNMPV2C_E2E' : undefined,
       native_snmp_e2e: isSnmp,
       native_snmp_pdu_mode: isSnmp ? 'MIXED' : undefined,
-      native_snmp_community: 'netspout-lab'
+      native_snmp_community: ''
     }));
   };
 
@@ -182,7 +182,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
       transport_mode: isNativeMode ? 'NATIVE_TRANSPORT' : 'DIRECT_TO_SPLUNK',
       transport_config: {
         hec_endpoint: connection.endpoint,
-        hec_token: connection.token || '00000000-0000-0000-0000-000000000000',
+        hec_token: connection.token || '',
         default_index: connection.index || 'idx_network_ops',
         hec_ssl_verify: !connection.allow_insecure_tls,
         hec_allow_insecure_tls: Boolean(connection.allow_insecure_tls)
@@ -193,7 +193,7 @@ export const FiveStepWorkflow: React.FC<FiveStepWorkflowProps> = ({ onOpenCanvas
       requestBody.native_protocol = connection.native_protocol || 'SNMPV2C_E2E';
       requestBody.native_snmp_e2e = connection.native_snmp_e2e ?? true;
       requestBody.native_snmp_pdu_mode = connection.native_snmp_pdu_mode || 'MIXED';
-      requestBody.native_snmp_community = connection.native_snmp_community || 'netspout-lab';
+      requestBody.native_snmp_community = connection.native_snmp_community || '';
     } else if (isNativeMode) {
       requestBody.native_protocol = connection.native_protocol || 'IPFIX';
     }

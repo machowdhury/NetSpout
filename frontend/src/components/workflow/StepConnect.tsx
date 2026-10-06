@@ -68,12 +68,12 @@ export const StepConnect: React.FC<StepConnectProps> = ({
           onUpdateConnection({
             ...connection,
             status: 'REACHABLE',
-            latency_ms: 3,
+            latency_ms: typeof data.latency_ms === 'number' ? data.latency_ms : undefined,
             last_verified: new Date().toLocaleTimeString()
           });
         }
       }
-    } catch (e) {
+    } catch {
       // ignore offline
     } finally {
       setRunningPreflight(false);
@@ -96,7 +96,7 @@ export const StepConnect: React.FC<StepConnectProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           endpoint: connection.endpoint,
-          token: connection.token || '00000000-0000-0000-0000-000000000000',
+          token: connection.token || '',
           index: connection.index || 'idx_network_ops',
           allow_insecure_tls: connection.allow_insecure_tls ?? true
         })
@@ -104,7 +104,7 @@ export const StepConnect: React.FC<StepConnectProps> = ({
       const data = await res.json();
       const reportedState = data.state || data.status;
       if (res.ok && (reportedState === 'REACHABLE' || reportedState === 'VERIFIED' || data.success)) {
-        const latency = data.latency_ms || 4;
+        const latency = typeof data.latency_ms === 'number' ? data.latency_ms : undefined;
         const status = (reportedState === 'VERIFIED' ? 'VERIFIED' : 'REACHABLE') as ConnectionHealth;
         setTestResult({
           status: status,
@@ -341,7 +341,7 @@ export const StepConnect: React.FC<StepConnectProps> = ({
             onClick={() => onUpdateConnection({
               ...connection,
               endpoint: 'https://127.0.0.1:8088/services/collector',
-              token: '00000000-0000-0000-0000-000000000000',
+              token: '',
               index: 'idx_network_ops',
               allow_insecure_tls: true
             })}
@@ -359,7 +359,7 @@ export const StepConnect: React.FC<StepConnectProps> = ({
             onClick={() => onUpdateConnection({
               ...connection,
               endpoint: 'https://127.0.0.1:8888/services/collector',
-              token: '00000000-0000-0000-0000-000000000000',
+              token: '',
               index: 'idx_network_ops',
               allow_insecure_tls: true
             })}
@@ -443,8 +443,9 @@ export const StepConnect: React.FC<StepConnectProps> = ({
               <label className="text-xs font-medium text-slate-400">HEC Authorization Token</label>
               <input
                 type="password"
-                value={connection.token || '00000000-0000-0000-0000-000000000000'}
+                value={connection.token || ''}
                 onChange={(e) => onUpdateConnection({ ...connection, token: e.target.value })}
+                placeholder="Required for HEC dispatch"
                 className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-slate-100 font-mono focus:outline-none focus:border-cyan-500"
               />
             </div>

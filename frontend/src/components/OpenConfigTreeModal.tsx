@@ -195,51 +195,19 @@ export const OpenConfigTreeModal: React.FC<OpenConfigTreeModalProps> = ({
     setLoading(true);
     setSampleSuccess(null);
 
-    const now = Math.floor(Date.now() / 1000);
-    const hostName = activeNode ? `${activeNode.name.toLowerCase().replace(/\s+/g, "-")}.corp.internal` : "node-core-01.corp.internal";
-
-    const metricPayload = {
-      time: now,
-      event: "metric",
-      source: "cisco:ios:mdt",
-      sourcetype: "cisco:ios:mdt:metric",
-      host: hostName,
-      index: targetIndex,
-      fields: {
-        "metric_name:interface.octets.in": 128450190.0,
-        "metric_name:interface.octets.out": 98412030.0,
-        "metric_name:carrier.transitions": (activeNode?.status === "stopped" || activeNode?.status === "breached") ? 1.0 : 0.0,
-        "metric_name:cpu.utilization": activeNode?.hardware?.cpu_utilization_pct || 24.8,
-        "metric_name:memory.utilization": activeNode?.hardware?.memory_utilization_pct || 36.4,
-        "metric_name:bgp.prefixes.received": (activeNode?.status === "stopped" || activeNode?.status === "breached") ? 0.0 : 1420.0,
-        "metric_name:bgp.prefixes.advertised": (activeNode?.status === "stopped" || activeNode?.status === "breached") ? 0.0 : 850.0,
-        "_value": 128450190.0,
-        "interface": "GigabitEthernet1/0/1",
-        "oper_status": (activeNode?.status === "stopped" || activeNode?.status === "breached") ? "DOWN" : "UP",
-        "device": activeNode?.name || "Router",
-        "vendor": activeNode?.vendor || "cisco",
-        "subscription_mode": "SAMPLE",
-        "openconfig_xpaths": selectedXPaths.join(",")
-      }
-    };
-
     try {
-      await fetch("http://127.0.0.1:8088/services/collector", {
-        method: "POST",
-        headers: {
-          "Authorization": "Splunk 00000000-0000-0000-0000-000000000000",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(metricPayload)
-      }).catch(() => {});
-
-      await fetch(`/api/gnmi/sample?node_id=${selectedNodeId}`, { method: "POST" }).catch(() => {});
-
+      const response = await fetch(`/api/gnmi/sample?node_id=${selectedNodeId}`, {
+        method: "POST"
+      });
+      if (!response.ok) {
+        throw new Error(`Backend returned HTTP ${response.status}`);
+      }
       setSampleSuccess(
-        `✔ Successfully streamed OpenConfig MDT metrics for ${activeNode?.name} directly into Splunk index [${targetIndex}]!`
+        `Backend generated an OpenConfig sample for ${activeNode?.name}. Splunk observation was not evaluated.`
       );
-    } catch (e: any) {
-      setSampleSuccess(`✔ Emitted OpenConfig metrics (${selectedXPaths.length} XPaths) to ${targetIndex}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown backend error";
+      setSampleSuccess(`Generation failed: ${message}`);
     } finally {
       setLoading(false);
     }

@@ -14,8 +14,14 @@ import { SPLPlaygroundModal } from './components/SPLPlaygroundModal';
 import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import { FiveStepWorkflow } from './components/workflow/FiveStepWorkflow';
-import { OperationsView } from './components/operations/OperationsView';
+import { PipelineHealthView } from './components/operations/PipelineHealthView';
 import { GeneratorModesView } from './components/generator/GeneratorModesView';
+import { HomeView } from './components/home/HomeView';
+import { AppShell } from './components/shell/AppShell';
+import { ProductStateView } from './components/states/ProductStateView';
+import { useHashRoute } from './app/useHashRoute';
+import { ROUTE_TITLES, type AppRoute, type DomainId, type ExperienceMode, type ProductMaturity } from './app/navigation';
+import { getApiBaseUrl } from './lib/api';
 import type { AppViewMode } from './types/workflow';
 import type {
   TopologyState,
@@ -46,17 +52,79 @@ import {
   PRESET_PURE_CISCO_ENT
 } from './presets/defaultTopologies';
 
-const BACKEND_HTTP = typeof window !== 'undefined' && window.location.port === '8081'
-  ? window.location.origin
-  : 'http://localhost:8081';
+const BACKEND_HTTP = getApiBaseUrl();
+const BACKEND_ORIGIN =
+  BACKEND_HTTP || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8081');
+const BACKEND_WS = `${BACKEND_ORIGIN.replace(/^http/, 'ws')}/ws/logs`;
 
-const BACKEND_WS = typeof window !== 'undefined' && window.location.port === '8081'
-  ? ((window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/logs')
-  : 'ws://localhost:8081/ws/logs';
+const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
+  '/generate/quick': 'generator',
+  '/generate/scenarios': 'workflow',
+  '/build/scenario-builder': 'advanced',
+  '/observe/live-runs': 'workflow',
+  '/observe/pipeline-health': 'operations',
+};
+
+const MODE_TO_ROUTE: Record<AppViewMode, AppRoute> = {
+  workflow: '/generate/scenarios',
+  generator: '/generate/quick',
+  advanced: '/build/scenario-builder',
+  operations: '/observe/pipeline-health',
+  catalog: '/catalog/provenance',
+};
+
+const ROUTE_STATES: Partial<
+  Record<AppRoute, { maturity: ProductMaturity; description: string; phase?: string }>
+> = {
+  '/observe/telemetry': {
+    maturity: 'PLANNED',
+    description:
+      'A unified telemetry inspector requires catalog-backed payload and evidence APIs before it can present runtime data.',
+    phase: 'PHASE 2+',
+  },
+  '/investigate/timeline': {
+    maturity: 'PLANNED',
+    description:
+      'The incident timeline will render measured run evidence after the shared run contract is integrated.',
+    phase: 'PHASE 4',
+  },
+  '/investigate/incident': {
+    maturity: 'PLANNED',
+    description:
+      'Investigation workflows require correlated run identity and verified Splunk observation.',
+    phase: 'PHASE 4',
+  },
+  '/investigate/security-intelligence': {
+    maturity: 'RESEARCH REQUIRED',
+    description:
+      'Splunk Security Content, Sigma, ATT&CK, and YARA mappings must be researched before claims are shown.',
+    phase: 'PHASE 5',
+  },
+  '/catalog/provenance': {
+    maturity: 'PARTIAL',
+    description:
+      'Existing provenance records remain available to the backend; the unified catalog experience arrives in Phase 2.',
+    phase: 'PHASE 2',
+  },
+  '/catalog/splunk-integrations': {
+    maturity: 'RESEARCH REQUIRED',
+    description:
+      'Only verified official Splunk integrations will be promoted into this catalog.',
+    phase: 'PHASE 2',
+  },
+  '/system/connections': {
+    maturity: 'PARTIAL',
+    description:
+      'Existing connection controls remain preserved while the unified connection workspace is prepared.',
+    phase: 'PHASE 2+',
+  },
+};
 
 export const App: React.FC = () => {
-  // Primary Navigation Mode - Defaults to 5-Step Workflow ("What do you want to prove?")
-  const [appMode, setAppMode] = useState<AppViewMode>('workflow');
+  const { route, navigate } = useHashRoute();
+  const [activeDomain, setActiveDomain] = useState<DomainId>('netops');
+  const [experienceMode, setExperienceMode] = useState<ExperienceMode>('simple');
+  const appMode = ROUTE_TO_MODE[route] ?? 'workflow';
 
   // Main State - Defaults to Pure Cisco Enterprise Fabric with simulation running
   const [ecosystemMode, setEcosystemMode] = useState<EcosystemMode>('pure_cisco');
@@ -86,7 +154,7 @@ export const App: React.FC = () => {
   const [transportConfig, setTransportConfig] = useState<TelemetryTransportConfig>({
     hec_enabled: true,
     hec_url: 'https://127.0.0.1:8088/services/collector',
-    hec_token: '00000000-0000-0000-0000-000000000000',
+    hec_token: '',
     hec_index: 'idx_network_ops',
     syslog_enabled: true,
     syslog_host: '127.0.0.1',
@@ -97,7 +165,12 @@ export const App: React.FC = () => {
   });
 
   const wsRef = useRef<WebSocket | null>(null);
+  const topologyRef = useRef(topology);
   const syncTimeoutRef = useRef<any>(null);
+
+  useEffect(() => {
+    topologyRef.current = topology;
+  }, [topology]);
 
   // Refresh Topology from Backend after fault injection / recovery
   const handleTopologyMutated = useCallback(() => {
@@ -218,7 +291,7 @@ export const App: React.FC = () => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       try {
         wsRef.current.send(JSON.stringify({ action: 'set_running', running: nextRunning }));
-      } catch (e) {}
+      } catch {}
     }
     fetch(`${BACKEND_HTTP}/api/scenarios/run`, {
       method: 'POST',
@@ -334,7 +407,7 @@ export const App: React.FC = () => {
 
         ws.onopen = () => {
           setIsConnected(true);
-          syncTopologyToBackend(topology);
+          syncTopologyToBackend(topologyRef.current);
         };
 
         ws.onmessage = (event) => {
@@ -375,7 +448,7 @@ export const App: React.FC = () => {
           setIsConnected(false);
           ws.close();
         };
-      } catch (e) {
+      } catch {
         setIsConnected(false);
         reconnectTimeout = setTimeout(connectWs, 2500);
       }
@@ -387,7 +460,7 @@ export const App: React.FC = () => {
       if (wsRef.current) wsRef.current.close();
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
     };
-  }, []);
+  }, [syncTopologyToBackend]);
 
   // In-Browser Local Simulation Fallback (Ensures simulation always works even without external Python server)
   useEffect(() => {
@@ -586,95 +659,160 @@ export const App: React.FC = () => {
     setShowSyslogModal(false);
   };
 
+  const handleAppModeChange = (mode: AppViewMode) => {
+    navigate(MODE_TO_ROUTE[mode]);
+  };
+
+  const handleExperienceModeChange = (mode: ExperienceMode) => {
+    setExperienceMode(mode);
+    if (mode === 'simple' && route === '/build/scenario-builder') {
+      navigate('/');
+    }
+  };
+
   const selectedNode = topology.nodes.find((n) => n.id === selectedNodeId) || null;
 
-  return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#0B0F19] text-slate-100">
-      {/* Top Navigation & Action Controls */}
-      <TopBar
-        appMode={appMode}
-        onSelectAppMode={setAppMode}
-        ecosystemMode={ecosystemMode}
-        onSelectEcosystemMode={handleSelectEcosystemMode}
-        scenario={scenario}
-        onSelectScenario={handleSelectScenario}
-        isRunning={isRunning}
-        onTogglePlay={handleTogglePlay}
-        speedMs={speedMs}
-        onChangeSpeed={handleChangeSpeed}
-        onClearCanvas={handleClearCanvas}
-        onLoadPreset={handleLoadPreset}
-        onExportLogs={handleExportLogs}
-        isConnected={isConnected}
-        totalLogs={logs.length}
-        showZones={showZones}
-        onToggleZones={() => setShowZones(!showZones)}
-        onOpenSyslogModal={() => setShowSyslogModal(true)}
-        onOpenFaultModal={() => setShowFaultModal(true)}
-        onOpenOpenConfigModal={() => setShowOpenConfigModal(true)}
-        onOpenSNMPModal={() => setShowSNMPModal(true)}
-        onOpenPipelinesModal={() => setShowPipelinesModal(true)}
-        onOpenVendorAddonsModal={() => setShowVendorAddonsModal(true)}
-        onOpenSPLPlayground={() => setShowSPLModal(true)}
-        onOpenUseCaseRepo={() => setShowUseCaseModal(true)}
-        onOpenNocSocMetrics={() => setShowMetricsModal(true)}
-        onPowerAll={handlePowerAll}
-        transportConfig={transportConfig}
-      />
+  const renderLegacyTopBar = () => (
+    <TopBar
+      appMode={appMode}
+      onSelectAppMode={handleAppModeChange}
+      ecosystemMode={ecosystemMode}
+      onSelectEcosystemMode={handleSelectEcosystemMode}
+      scenario={scenario}
+      onSelectScenario={handleSelectScenario}
+      isRunning={isRunning}
+      onTogglePlay={handleTogglePlay}
+      speedMs={speedMs}
+      onChangeSpeed={handleChangeSpeed}
+      onClearCanvas={handleClearCanvas}
+      onLoadPreset={handleLoadPreset}
+      onExportLogs={handleExportLogs}
+      isConnected={isConnected}
+      totalLogs={logs.length}
+      showZones={showZones}
+      onToggleZones={() => setShowZones(!showZones)}
+      onOpenSyslogModal={() => setShowSyslogModal(true)}
+      onOpenFaultModal={() => setShowFaultModal(true)}
+      onOpenOpenConfigModal={() => setShowOpenConfigModal(true)}
+      onOpenSNMPModal={() => setShowSNMPModal(true)}
+      onOpenPipelinesModal={() => setShowPipelinesModal(true)}
+      onOpenVendorAddonsModal={() => setShowVendorAddonsModal(true)}
+      onOpenSPLPlayground={() => setShowSPLModal(true)}
+      onOpenUseCaseRepo={() => setShowUseCaseModal(true)}
+      onOpenNocSocMetrics={() => setShowMetricsModal(true)}
+      onPowerAll={handlePowerAll}
+      transportConfig={transportConfig}
+    />
+  );
 
-      {/* Main View Switcher */}
-      {appMode === 'workflow' ? (
-        <div className="flex-1 flex overflow-hidden">
+  const renderRoute = () => {
+    if (route === '/') {
+      return (
+        <HomeView
+          domain={activeDomain}
+          mode={experienceMode}
+          onNavigate={navigate}
+        />
+      );
+    }
+
+    if (route === '/generate/quick') {
+      return (
+        <div className="legacy-view">
+          <GeneratorModesView />
+        </div>
+      );
+    }
+
+    if (route === '/generate/scenarios' || route === '/observe/live-runs') {
+      return (
+        <div className="legacy-view">
           <FiveStepWorkflow
-            onOpenCanvas={() => setAppMode('advanced')}
+            onOpenCanvas={() => {
+              setExperienceMode('advanced');
+              navigate('/build/scenario-builder');
+            }}
             launchScenarioSignal={launchScenarioSignal}
           />
         </div>
-      ) : appMode === 'generator' ? (
-        <div className="flex-1 flex overflow-hidden">
-          <GeneratorModesView />
-        </div>
-      ) : appMode === 'operations' ? (
-        <div className="flex-1 flex overflow-hidden">
-          <OperationsView />
-        </div>
-      ) : (
-        /* 3-Column Split Screen Dashboard (Advanced Canvas Mode) */
-        <div className="flex-1 flex overflow-hidden relative">
-        {/* Left: Categorized Component Palette & Node Inspector */}
-        <NodePalette
-          ecosystemMode={ecosystemMode}
-          onAddNode={handleAddNode}
-          selectedNode={selectedNode}
-          onUpdateSelectedNode={handleUpdateSelectedNode}
-          onDeleteSelectedNode={handleDeleteSelectedNode}
-          activeScenario={scenario}
-        />
+      );
+    }
 
-        {/* Center: GNS3 Interactive Topology Canvas */}
-        <TopologyCanvas
-          topology={topology}
-          onUpdateTopology={handleUpdateTopology}
-          selectedNodeId={selectedNodeId}
-          onSelectNode={setSelectedNodeId}
-          selectedEdgeId={selectedEdgeId}
-          onSelectEdge={setSelectedEdgeId}
-          isRunning={isRunning}
-          showZones={showZones}
-          onInspectNode={(node) => setInspectingNode(node)}
-        />
+    if (route === '/observe/pipeline-health') {
+      return <PipelineHealthView />;
+    }
 
-        {/* Right: Splunk Live Streaming Log Terminal */}
-        <LogTerminal
-          logs={logs}
-          onClearLogs={handleClearLogs}
-          isRunning={isRunning}
-          onTogglePlay={handleTogglePlay}
-          hecTarget={transportConfig.hec_url ? transportConfig.hec_url.replace(/^https?:\/\//, '').replace(/\/services\/collector$/, '') : '127.0.0.1:8088'}
-          hecIndex={transportConfig.hec_index || 'idx_network_ops'}
-        />
-      </div>
-      )}
+    if (route === '/build/scenario-builder') {
+      return (
+        <div className="legacy-view legacy-view--canvas">
+          {renderLegacyTopBar()}
+          <div className="flex-1 flex overflow-hidden relative">
+            <NodePalette
+              ecosystemMode={ecosystemMode}
+              onAddNode={handleAddNode}
+              selectedNode={selectedNode}
+              onUpdateSelectedNode={handleUpdateSelectedNode}
+              onDeleteSelectedNode={handleDeleteSelectedNode}
+              activeScenario={scenario}
+            />
+            <TopologyCanvas
+              topology={topology}
+              onUpdateTopology={handleUpdateTopology}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={setSelectedNodeId}
+              selectedEdgeId={selectedEdgeId}
+              onSelectEdge={setSelectedEdgeId}
+              isRunning={isRunning}
+              showZones={showZones}
+              onInspectNode={(node) => setInspectingNode(node)}
+            />
+            <LogTerminal
+              logs={logs}
+              onClearLogs={handleClearLogs}
+              isRunning={isRunning}
+              onTogglePlay={handleTogglePlay}
+              hecTarget={
+                transportConfig.hec_url
+                  ? transportConfig.hec_url
+                      .replace(/^https?:\/\//, '')
+                      .replace(/\/services\/collector$/, '')
+                  : 'NOT CONFIGURED'
+              }
+              hecIndex={transportConfig.hec_index || 'NOT CONFIGURED'}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    const routeState = ROUTE_STATES[route] ?? {
+      maturity: 'PLANNED' as ProductMaturity,
+      description: 'This unified workspace does not yet have a supported runtime contract.',
+    };
+    return (
+      <ProductStateView
+        title={ROUTE_TITLES[route]}
+        maturity={routeState.maturity}
+        description={routeState.description}
+        nextPhase={routeState.phase}
+        onNavigate={navigate}
+      />
+    );
+  };
+
+  return (
+    <>
+      <AppShell
+        route={route}
+        domain={activeDomain}
+        mode={experienceMode}
+        liveFeedConnected={isConnected}
+        onNavigate={navigate}
+        onDomainChange={setActiveDomain}
+        onModeChange={handleExperienceModeChange}
+      >
+        {renderRoute()}
+      </AppShell>
 
       {/* Virtual Hardware & Node Power Inspector Modal */}
       {inspectingNode && (
@@ -717,7 +855,7 @@ export const App: React.FC = () => {
         nodes={topology.nodes}
         globalTransport={transportConfig}
         onLaunchNativeSnmpWorkflow={() => {
-          setAppMode('workflow');
+          handleAppModeChange('workflow');
           setLaunchScenarioSignal({ scenarioId: 'service_provider_cisco', timestamp: Date.now() });
         }}
       />
@@ -763,7 +901,7 @@ export const App: React.FC = () => {
         isOpen={showMetricsModal}
         onClose={() => setShowMetricsModal(false)}
       />
-    </div>
+    </>
   );
 };
 

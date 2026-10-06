@@ -33,7 +33,7 @@ logger = logging.getLogger("netspout.collector.evidence")
 
 class CollectorEvidenceAdapter:
     """
-    Independent evidence adapter for the external flow collector tier.
+    Independent evidence adapter for the bundled flow collector tier.
     Provides verifiable proof of collector health, packet reception,
     template learning, and record decoding before Splunk indexing.
     """
@@ -46,6 +46,42 @@ class CollectorEvidenceAdapter:
         self.goflow_metrics_url = goflow_metrics_url
         self.forwarder_status_url = forwarder_status_url.rstrip("/")
         self.splunk_hec_url = splunk_hec_url
+
+    def register_correlation(
+        self,
+        observation_domain_id: int,
+        run_id: str,
+        scenario_id: str,
+        entity_id: str,
+        phase: str,
+        timeout: float = 3.0,
+    ) -> Dict[str, Any]:
+        """Register out-of-band metadata for decoded flow observations.
+
+        Correlation is attached only after collector decode; native NetFlow/IPFIX
+        packets remain unchanged.
+        """
+        payload = json.dumps(
+            {
+                "observation_domain_id": int(observation_domain_id),
+                "netspout_run_id": run_id,
+                "netspout_scenario_id": scenario_id,
+                "netspout_device_id": entity_id,
+                "netspout_phase": phase,
+            }
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            f"{self.forwarder_status_url}/correlations",
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            if response.status != 200:
+                raise RuntimeError(
+                    f"flow correlation registration returned HTTP {response.status}"
+                )
+            return json.loads(response.read().decode("utf-8"))
 
     def get_prometheus_metrics(self, timeout: float = 3.0) -> Dict[str, Any]:
         """

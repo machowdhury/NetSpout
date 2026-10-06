@@ -21,11 +21,15 @@ import resource
 import shutil
 import subprocess
 import tempfile
+import threading
 import time
 import uuid
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
+import grpc
+
 from .path_parser import ParsedGnmiPath, parse_xpath_string
+from .proto import gnmi_pb2, gnmi_pb2_grpc
 from .sensor_registry import (
     CANONICAL_SENSORS,
     SensorDefinition,
@@ -39,6 +43,12 @@ from .vendor_profiles import (
     get_vendor_profile,
     resolve_target_device,
 )
+
+# The canonical proto uses the singular Capability* message names.  The server
+# retains upstream gNMI's plural constructor spelling, so provide a runtime-only
+# compatibility alias without modifying generated protobuf sources.
+if not hasattr(gnmi_pb2, "CapabilitiesResponse"):
+    gnmi_pb2.CapabilitiesResponse = gnmi_pb2.CapabilityResponse
 
 
 # =========================================================================
@@ -982,6 +992,372 @@ class CollectorExecutionResult:
             "normalized_records": [r.to_dict() for r in self.normalized_records],
             "stderr_excerpt": (self.stderr or "")[:600],
         }
+
+
+class InternalGrpcGnmiCollector:
+    """Bundled Python gRPC collector for the canonical read-only gNMI server."""
+
+    collector_version = "bundled-python-grpc"
+
+    def __init__(
+        self,
+        host: str = "127.0.0.1",
+        port: int = 57400,
+        normalizer: Optional[GnmiTelemetryNormalizer] = None,
+        timeout_sec: float = 6.0,
+    ) -> None:
+        self.host = host
+        self.port = int(port)
+        self.normalizer = normalizer or GnmiTelemetryNormalizer()
+        self.timeout_sec = float(timeout_sec)
+
+    @staticmethod
+    def _path_text(path: gnmi_pb2.Path) -> str:
+        parts = []
+        for elem in path.elem:
+            keys = "".join(f"[{key}={elem.key[key]}]" for key in sorted(elem.key))
+            parts.append(f"{elem.name}{keys}")
+        return "/" + "/".join(parts) if parts else "/"
+
+    @staticmethod
+    def _typed_value(value: gnmi_pb2.TypedValue) -> Any:
+        field = value.WhichOneof("value")
+        if field in ("json_val", "json_ietf_val"):
+            return json.loads(getattr(value, field).decode("utf-8"))
+        if field == "bytes_val":
+            return bytes(value.bytes_val).decode("utf-8", errors="replace")
+        if field == "leaflist_val":
+            return [InternalGrpcGnmiCollector._typed_value(item) for item in value.leaflist_val.element]
+        if field is None:
+            return None
+        return getattr(value, field)
+
+    @classmethod
+    def response_to_raw_notification(
+        cls,
+        response: gnmi_pb2.SubscribeResponse,
+        default_target: str,
+    ) -> Dict[str, Any]:
+        """Convert a protobuf response to the normalizer's neutral collector shape."""
+        if response.sync_response:
+            return {"sync-response": True}
+        if not response.HasField("update"):
+            raise ValueError("SubscribeResponse contains neither update nor sync_response")
+
+        notification = response.update
+        prefix_path = cls._path_text(notification.prefix)
+        origin = notification.prefix.origin or "openconfig"
+        raw: Dict[str, Any] = {
+            "timestamp": int(notification.timestamp),
+            "prefix": f"{origin}:{prefix_path}",
+            "target": notification.prefix.target or default_target,
+            "updates": [],
+        }
+        for update in notification.update:
+            path_text = cls._path_text(update.path)
+            raw["updates"].append(
+                {
+                    "Path": path_text,
+                    "values": {path_text: cls._typed_value(update.val)},
+                }
+            )
+        return raw
+
+    @staticmethod
+    def _encoding_enum(encoding: str) -> int:
+        normalized = encoding.upper().replace("-", "_")
+        try:
+            return int(getattr(gnmi_pb2, normalized))
+        except (AttributeError, TypeError, ValueError) as exc:
+            raise ValueError(f"Unsupported gNMI encoding {encoding!r}") from exc
+
+    @staticmethod
+    def _proto_path(path: str, target: str = "") -> gnmi_pb2.Path:
+        parsed = parse_xpath_string(path, target=target)
+        return parsed.to_proto_path(include_target=bool(target), include_origin=True)
+
+    def _stub(self) -> Tuple[grpc.Channel, gnmi_pb2_grpc.gNMIStub]:
+        channel = grpc.insecure_channel(f"{self.host}:{self.port}")
+        return channel, gnmi_pb2_grpc.gNMIStub(channel)
+
+    def _subscription_request(
+        self,
+        target: str,
+        paths: List[str],
+        encoding: str,
+        mode: int,
+        item_mode: int = gnmi_pb2.TARGET_DEFINED,
+        sample_interval_ns: int = 0,
+    ) -> gnmi_pb2.SubscribeRequest:
+        subscriptions = [
+            gnmi_pb2.Subscription(
+                path=self._proto_path(path),
+                mode=item_mode,
+                sample_interval=sample_interval_ns,
+            )
+            for path in paths
+        ]
+        return gnmi_pb2.SubscribeRequest(
+            subscribe=gnmi_pb2.SubscriptionList(
+                prefix=gnmi_pb2.Path(target=target),
+                mode=mode,
+                encoding=self._encoding_enum(encoding),
+                subscription=subscriptions,
+            )
+        )
+
+    def _result(
+        self,
+        *,
+        target: str,
+        raw_notifications: List[Dict[str, Any]],
+        run_id: str,
+        scenario_id: str,
+        phase: str,
+        encoding: str,
+        subscription_mode: str,
+        elapsed_ms: float,
+        error: Optional[BaseException] = None,
+        include_leaf_records: bool = True,
+        suppress_duplicates: bool = False,
+    ) -> CollectorExecutionResult:
+        update_notifications = [item for item in raw_notifications if "updates" in item]
+        sync_count = sum(item.get("sync-response") is True for item in raw_notifications)
+        records, dedup, latencies = self.normalizer.normalize_gnmic_notifications(
+            raw_notifications=update_notifications,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            default_phase=phase,
+            subscription_mode=subscription_mode,
+            encoding=encoding,
+            default_target=target,
+            include_leaf_records=include_leaf_records,
+            suppress_duplicates=suppress_duplicates,
+        )
+        ok = error is None and bool(update_notifications) and sync_count > 0
+        error_text = None if error is None else str(error)
+        ledger = GnmiCollectorPipelineLedger(
+            run_id=run_id,
+            scenario_id=scenario_id,
+            phase=phase,
+            generated=bool(update_notifications),
+            generated_count=len(update_notifications),
+            server_published=bool(update_notifications),
+            server_published_count=len(update_notifications),
+            collector_received=ok,
+            collector_received_count=len(update_notifications) if ok else 0,
+            normalized=ok and bool(records),
+            normalized_count=len(records) if ok else 0,
+            error_stage=None if ok else "COLLECTOR_RECEIVED",
+            error_message=None if ok else (error_text or "Subscription completed without updates and sync_response"),
+        )
+        return CollectorExecutionResult(
+            collector_name="netspout-python-grpc",
+            collector_binary="internal://netspout-python-grpc",
+            collector_version=self.collector_version,
+            command=["internal-grpc", "subscribe", subscription_mode.lower()],
+            returncode=0 if ok else 1,
+            elapsed_ms=elapsed_ms,
+            stdout="",
+            stderr=error_text or "",
+            raw_notifications=raw_notifications,
+            sync_response_observed=sync_count > 0,
+            sync_response_count=sync_count,
+            normalized_records=records,
+            deduplication_summary=dedup,
+            normalization_latencies_ms=latencies,
+            ledger=ledger,
+        )
+
+    def collect_once(
+        self,
+        target: str,
+        paths: List[str],
+        run_id: str = "NS-GATE13C-RUN",
+        scenario_id: str = "openconfig_mdt_streaming",
+        phase: str = "BASELINE",
+        encoding: str = "json_ietf",
+        prefix: Optional[str] = None,
+        include_leaf_records: bool = True,
+        suppress_duplicates: bool = False,
+        **_: Any,
+    ) -> CollectorExecutionResult:
+        """Execute actual Capabilities, Get, and Subscribe ONCE RPCs."""
+        started = time.perf_counter()
+        raw: List[Dict[str, Any]] = []
+        error: Optional[BaseException] = None
+        channel: Optional[grpc.Channel] = None
+        try:
+            if not paths:
+                raise ValueError("At least one subscription path is required")
+            channel, stub = self._stub()
+            metadata = (("x-netspout-target", target),)
+            stub.Capabilities(gnmi_pb2.CapabilityRequest(), metadata=metadata, timeout=self.timeout_sec)
+            stub.Get(
+                gnmi_pb2.GetRequest(
+                    path=[self._proto_path(paths[0])],
+                    encoding=self._encoding_enum(encoding),
+                ),
+                metadata=metadata,
+                timeout=self.timeout_sec,
+            )
+            request = self._subscription_request(
+                target=target,
+                paths=paths,
+                encoding=encoding,
+                mode=gnmi_pb2.SubscriptionList.ONCE,
+            )
+            for response in stub.Subscribe(iter([request]), metadata=metadata, timeout=self.timeout_sec):
+                raw.append(self.response_to_raw_notification(response, target))
+        except (grpc.RpcError, ValueError, json.JSONDecodeError) as exc:
+            error = exc
+        finally:
+            if channel is not None:
+                channel.close()
+        return self._result(
+            target=target,
+            raw_notifications=raw,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            phase=phase,
+            encoding=encoding,
+            subscription_mode="ONCE",
+            elapsed_ms=round((time.perf_counter() - started) * 1000.0, 2),
+            error=error,
+            include_leaf_records=include_leaf_records,
+            suppress_duplicates=suppress_duplicates,
+        )
+
+    def _collect_stream(
+        self,
+        *,
+        target: str,
+        paths: List[str],
+        state_store: ScenarioStateStore,
+        action: Callable[[], None],
+        run_id: str,
+        scenario_id: str,
+        phase: str,
+        encoding: str,
+        item_mode: int,
+        sample_interval_ns: int,
+        mode_name: str,
+        include_leaf_records: bool,
+    ) -> CollectorExecutionResult:
+        started = time.perf_counter()
+        raw: List[Dict[str, Any]] = []
+        errors: List[BaseException] = []
+        channel, stub = self._stub()
+        request = self._subscription_request(
+            target, paths, encoding, gnmi_pb2.SubscriptionList.STREAM, item_mode, sample_interval_ns
+        )
+        call = stub.Subscribe(
+            iter([request]),
+            metadata=(("x-netspout-target", target),),
+            timeout=self.timeout_sec,
+        )
+
+        def consume() -> None:
+            try:
+                for response in call:
+                    raw.append(self.response_to_raw_notification(response, target))
+            except grpc.RpcError as exc:
+                if exc.code() != grpc.StatusCode.CANCELLED:
+                    errors.append(exc)
+
+        consumer = threading.Thread(target=consume, daemon=True)
+        consumer.start()
+        try:
+            time.sleep(0.2)
+            action()
+        finally:
+            time.sleep(0.2)
+            call.cancel()
+            consumer.join(timeout=1.0)
+            channel.close()
+        return self._result(
+            target=target,
+            raw_notifications=raw,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            phase=phase,
+            encoding=encoding,
+            subscription_mode=mode_name,
+            elapsed_ms=round((time.perf_counter() - started) * 1000.0, 2),
+            error=errors[0] if errors else None,
+            include_leaf_records=include_leaf_records,
+        )
+
+    def collect_stream_sample(
+        self,
+        target: str,
+        paths: List[str],
+        state_store: ScenarioStateStore,
+        sample_interval: str = "500ms",
+        sample_ticks: int = 3,
+        tick_sleep_sec: float = 0.55,
+        run_id: str = "NS-GATE13C-RUN",
+        scenario_id: str = "openconfig_mdt_streaming",
+        phase: str = "BASELINE",
+        encoding: str = "json_ietf",
+        include_leaf_records: bool = True,
+    ) -> CollectorExecutionResult:
+        if not sample_interval.endswith("ms"):
+            raise ValueError("Internal collector sample_interval must be expressed in milliseconds")
+        interval_ns = int(sample_interval[:-2]) * 1_000_000
+
+        def advance() -> None:
+            for _index in range(sample_ticks):
+                state_store.advance_tick(1)
+                time.sleep(tick_sleep_sec)
+
+        return self._collect_stream(
+            target=target,
+            paths=paths,
+            state_store=state_store,
+            action=advance,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            phase=phase,
+            encoding=encoding,
+            item_mode=gnmi_pb2.SAMPLE,
+            sample_interval_ns=interval_ns,
+            mode_name="STREAM/SAMPLE",
+            include_leaf_records=include_leaf_records,
+        )
+
+    def collect_stream_on_change(
+        self,
+        target: str,
+        paths: List[str],
+        state_store: ScenarioStateStore,
+        phase_sequence: Tuple[str, ...] = ("DEGRADE", "FAILOVER", "RECOVERY"),
+        run_id: str = "NS-GATE13C-RUN",
+        scenario_id: str = "openconfig_mdt_streaming",
+        encoding: str = "json_ietf",
+        include_leaf_records: bool = True,
+    ) -> CollectorExecutionResult:
+        state_store.set_phase("BASELINE", advance_tick=False)
+
+        def transition() -> None:
+            for next_phase in phase_sequence:
+                state_store.set_phase(next_phase)
+                time.sleep(0.25)
+
+        return self._collect_stream(
+            target=target,
+            paths=paths,
+            state_store=state_store,
+            action=transition,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            phase="BASELINE",
+            encoding=encoding,
+            item_mode=gnmi_pb2.ON_CHANGE,
+            sample_interval_ns=0,
+            mode_name="STREAM/ON_CHANGE",
+            include_leaf_records=include_leaf_records,
+        )
 
 
 class ExternalGnmiCollector:

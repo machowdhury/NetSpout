@@ -24,6 +24,12 @@ interface TopologyPreviewProps {
 const stateStage = (run: GenerationRun | null | undefined, stage: string) =>
   run?.evidence.find((item) => item.stage === stage);
 
+const channelStage = (run: GenerationRun | null | undefined, sourceIds: string[], stage: string) => {
+  const matching = run?.channel_results?.filter((item) => sourceIds.includes(item.source_id)) ?? [];
+  if (matching.length === 0) return null;
+  return matching.reduce((total, channel) => total + (channel.evidence.find((item) => item.stage === stage)?.count ?? 0), 0);
+};
+
 export function TopologyPreview({
   scenario,
   activePhase,
@@ -136,18 +142,31 @@ export function TopologyPreview({
                 ? model.nodes.find((item) => item.node.node_id === path.observer_node_id)
                 : null;
               if (!source || !target) return null;
-              const observed = stateStage(run, 'SPLUNK_OBSERVED')?.state === 'PROVEN';
+              const channel = run?.channel_results?.find((item) => item.source_id === path.source_id);
+              const observed = channel?.evidence.find((item) => item.stage === 'SPLUNK_OBSERVED')?.state === 'PROVEN'
+                || (!channel && stateStage(run, 'SPLUNK_OBSERVED')?.state === 'PROVEN');
+              const nativeTransport = channel?.source_transport_id ?? path.protocol ?? 'DECLARED';
+              const destinationTransport = channel?.destination_transport_id;
               return (
-                <g key={path.path_id} className={`generation-topology__telemetry-path ${lens === 'INCIDENT' ? 'is-dimmed' : ''} ${observed ? 'is-observed' : ''}`}>
+                <g key={path.path_id} className={`generation-topology__telemetry-path ${channel ? 'is-native' : ''} ${destinationTransport ? 'has-destination' : ''} ${lens === 'INCIDENT' ? 'is-dimmed' : ''} ${observed ? 'is-observed' : ''}`}>
                   <line
-                    className="generation-topology__telemetry"
+                    className="generation-topology__telemetry generation-topology__telemetry--native"
                     x1={source.x}
                     y1={source.y + 8}
                     x2={target.x}
                     y2={target.y + 8}
                   />
+                  {destinationTransport && (
+                    <line
+                      className="generation-topology__telemetry generation-topology__telemetry--destination"
+                      x1={(source.x + target.x) / 2}
+                      y1={(source.y + target.y) / 2 + 8}
+                      x2={target.x}
+                      y2={target.y + 8}
+                    />
+                  )}
                   <text className="generation-topology__path-label" x={(source.x + target.x) / 2} y={(source.y + target.y) / 2 + 22}>
-                    {path.label ?? path.source_id} · {path.protocol ?? 'DECLARED'}
+                    {path.label ?? path.source_id} · {nativeTransport}{destinationTransport ? ` → ${destinationTransport}` : ''}
                   </text>
                 </g>
               );
@@ -211,8 +230,8 @@ export function TopologyPreview({
                 <div><dt>Role</dt><dd>{selectedNode.node.role}</dd></div>
                 <div><dt>Technology</dt><dd>{selectedNode.node.technology_id}</dd></div>
                 <div><dt>State</dt><dd>{selectedNode.state}</dd></div>
-                <div><dt>Generated</dt><dd>{selectedNode.generated}</dd></div>
-                <div><dt>Splunk observed</dt><dd>{stateStage(run, 'SPLUNK_OBSERVED')?.count ?? 0}</dd></div>
+                <div><dt>Generated</dt><dd>{run ? selectedNode.generated : 'NOT RUN'}</dd></div>
+                <div><dt>Splunk observed</dt><dd>{channelStage(run, selectedNode.node.source_ids, 'SPLUNK_OBSERVED') ?? stateStage(run, 'SPLUNK_OBSERVED')?.count ?? 'NOT REPORTED'}</dd></div>
               </dl>
               {selectedNode.node.description && <p>{selectedNode.node.description}</p>}
               {selectedNode.node.source_ids.map((sourceId) => {
@@ -234,6 +253,9 @@ export function TopologyPreview({
                 <div><dt>Source</dt><dd>{selectedRelationship.source.node.label ?? selectedRelationship.source.node.node_id}</dd></div>
                 <div><dt>Destination</dt><dd>{selectedRelationship.target.node.label ?? selectedRelationship.target.node.node_id}</dd></div>
                 <div><dt>Protocol</dt><dd>{selectedRelationship.relationship.protocol ?? 'NOT DECLARED'}</dd></div>
+                {run?.channel_results?.filter((channel) => selectedRelationship.relationship.telemetry_source_ids?.includes(channel.source_id)).map((channel) => (
+                  <div key={channel.source_id}><dt>Transport path</dt><dd>{channel.source_transport_id} → {channel.receiver_component_id ?? 'publisher'} → {channel.destination_transport_id}</dd></div>
+                ))}
                 <div><dt>State</dt><dd>{model.activeStep?.stage ?? 'NOT RUN'}</dd></div>
               </dl>
               <p>{selectedRelationship.relationship.purpose ?? 'No operational purpose is declared.'}</p>
@@ -247,7 +269,8 @@ export function TopologyPreview({
 
       <div className="generation-topology__legend">
         <span><i className="legend-line legend-line--relationship" /> Operational path</span>
-        <span><i className="legend-line legend-line--telemetry" /> Telemetry path</span>
+        <span><i className="legend-line legend-line--telemetry" /> Native protocol path</span>
+        <span><i className="legend-line legend-line--destination" /> HEC destination path</span>
         <span><i className="legend-line legend-line--incident" /> Incident path</span>
         <span>State is expressed by label, shape and restrained color</span>
       </div>

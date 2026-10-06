@@ -21,21 +21,25 @@ const DEFAULT_STEPS: GuidedStep[] = ['UNDERSTAND', 'PREPARE', 'RUN', 'OBSERVE', 
 
 const badge = (value: string) => value.replaceAll('_', ' ');
 
-function requestFor(scenario: GenerationScenario): GenerationRequest {
+function requestFor(
+  scenario: GenerationScenario,
+  nativeLifecycle: boolean,
+): GenerationRequest {
   return {
     mode: 'SCENARIO',
     selection_id: scenario.scenario_id,
     transport_id: 'transport-local-hec',
     destination_id: 'destination-local-docker-splunk',
-    count: scenario.timeline.length,
+    count: nativeLifecycle ? 1 : scenario.timeline.length,
     rate_eps: 10,
-    duration_seconds: 1,
+    duration_seconds: nativeLifecycle ? undefined : 1,
     scenario_parameters: { intensity: 1 },
   };
 }
 
 export function GuidedScenarioLab({ experienceMode }: { experienceMode: ExperienceMode }) {
   const [capabilities, setCapabilities] = useState<GenerationCapabilities | null>(null);
+  const [selectedScenarioId, setSelectedScenarioId] = useState('');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [view, setView] = useState<GuidedView>('HOME');
   const [completed, setCompleted] = useState<Set<GuidedStep>>(new Set());
@@ -56,12 +60,31 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
 
   useEffect(() => {
     generationApi.capabilities()
-      .then(setCapabilities)
+      .then((value) => {
+        setCapabilities(value);
+        setSelectedScenarioId(
+          value.scenarios.find((item) => item.runnable)?.scenario_id ?? '',
+        );
+      })
       .catch((error: unknown) => setLoadError(error instanceof Error ? error.message : 'Scenario capabilities unavailable'));
   }, []);
 
-  const scenario = capabilities?.scenarios.find((item) => item.runnable) ?? null;
-  const request = useMemo(() => (scenario ? requestFor(scenario) : null), [scenario]);
+  const scenario = capabilities?.scenarios.find(
+    (item) => item.scenario_id === selectedScenarioId && item.runnable,
+  ) ?? null;
+  const request = useMemo(
+    () => (
+      scenario
+        ? requestFor(
+          scenario,
+          capabilities?.native_runtime?.scenario_ids?.includes(
+            scenario.scenario_id,
+          ) ?? false,
+        )
+        : null
+    ),
+    [capabilities, scenario],
+  );
   const steps = (capabilities?.guided_workflow ?? DEFAULT_STEPS) as GuidedStep[];
   const sources = capabilities?.sources.filter((source) => scenario?.source_ids.includes(source.source_id)) ?? [];
   const investigations = useMemo(
@@ -193,19 +216,44 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
       {actionError && <div className="generation-alert generation-alert--error" role="alert">{actionError}</div>}
 
       {view === 'HOME' && (
-        <ScenarioHome
-          scenario={scenario}
-          sources={sources}
-          busy={busy}
-          onStart={() => start(false)}
-          onAdvanced={() => start(true)}
-          lens={lens}
-          onLens={setLens}
-          selectedNodeId={selectedNodeId}
-          selectedRelationshipId={selectedRelationshipId}
-          onNode={setSelectedNodeId}
-          onRelationship={setSelectedRelationshipId}
-        />
+        <>
+          <label className="guided-scenario-picker">
+            <span>Choose guided scenario</span>
+            <select
+              aria-label="Choose guided scenario"
+              value={selectedScenarioId}
+              onChange={(event) => {
+                setSelectedScenarioId(event.target.value);
+                setCompleted(new Set());
+                setPreview(null);
+                setPreflight(null);
+                setRun(null);
+                setLens('OVERVIEW');
+              }}
+            >
+              {capabilities.scenarios
+                .filter((item) => item.runnable)
+                .map((item) => (
+                  <option key={item.scenario_id} value={item.scenario_id}>
+                    {item.title}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <ScenarioHome
+            scenario={scenario}
+            sources={sources}
+            busy={busy}
+            onStart={() => start(false)}
+            onAdvanced={() => start(true)}
+            lens={lens}
+            onLens={setLens}
+            selectedNodeId={selectedNodeId}
+            selectedRelationshipId={selectedRelationshipId}
+            onNode={setSelectedNodeId}
+            onRelationship={setSelectedRelationshipId}
+          />
+        </>
       )}
 
       {view === 'UNDERSTAND' && preview && (
@@ -249,8 +297,8 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
         <section className="guided-workspace" aria-labelledby="prepare-heading">
           <SectionHeading eyebrow="Guided lab · Prepare" title="Prepare the lab environment" id="prepare-heading" />
           <div className="guided-readiness-summary">
-            <div><span>Transport</span><strong>{request.transport_id}</strong></div>
-            <div><span>Destination</span><strong>{request.destination_id}</strong></div>
+            <div><span>Telemetry channels</span><strong>{preview.bindings.map((item) => (item.source_transport_id ?? item.transport_id).replace(/^transport-native-/, '')).join(' · ')}</strong></div>
+            <div><span>Splunk readiness</span><strong>{preview.integration_readiness.every((item) => item.detected || item.requirement !== 'REQUIRED') ? 'READY' : 'ACTION REQUIRED'}</strong></div>
             <div><span>Integrations</span><strong>{preview.integration_readiness.length} declared</strong></div>
           </div>
           <div className="guided-preflight">
@@ -289,7 +337,7 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
             <div className="guided-run-strip">
               <div><span>Run ID</span><code>{run.run_id}</code></div>
               <div><span>Status</span><strong>{run.status}</strong></div>
-              <div><span>Generated</span><strong>{run.events.length}</strong></div>
+              <div><span>Channels</span><strong>{run.channel_results?.length || run.source_ids.length}</strong></div>
               <div><span>Current phase</span><strong>{run.current_phase}</strong></div>
             </div>
           )}
@@ -327,21 +375,22 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
           {selectedNodeId && (
             <div className="guided-evidence-focus" role="status">
               Evidence focus: <strong>{scenario.nodes.find((node) => node.node_id === selectedNodeId)?.label ?? selectedNodeId}</strong>
-              <span>{run.events.filter((event) => scenario.nodes.find((node) => node.node_id === selectedNodeId)?.source_ids.includes(event.source_id)).length} related generated events</span>
+              <span>{channelCountForNode(run, scenario, selectedNodeId, 'GENERATED')} generated observations reported by selected channels</span>
             </div>
           )}
           <div className="guided-evidence-grid">
-            {run.evidence.map((item) => (
+            {(run.channel_results?.length
+              ? run.channel_results.flatMap((channel) => channel.evidence.map((item) => ({ ...item, channel: channel.channel, sourceId: channel.source_id })))
+              : run.evidence.map((item) => ({ ...item, channel: 'RUN', sourceId: run.source_ids[0] }))).map((item, index) => (
               <button
                 type="button"
-                key={item.stage}
+                key={`${item.channel}-${item.stage}-${index}`}
                 onClick={() => {
-                  const sourceId = run.source_ids[0];
-                  const node = scenario.nodes.find((candidate) => candidate.source_ids.includes(sourceId));
+                  const node = scenario.nodes.find((candidate) => candidate.source_ids.includes(item.sourceId));
                   setSelectedNodeId(node?.node_id ?? null);
                 }}
               >
-                <span>{item.stage.replaceAll('_', ' ')}</span>
+                <span>{item.channel} · {item.stage.replaceAll('_', ' ')}</span>
                 <strong>{item.count}</strong>
                 <Status value={item.state} />
                 <small>{item.detail}</small>
@@ -566,13 +615,14 @@ function InteractiveTimeline({ scenario, run, activePhase, onPhase }: { scenario
     <div className="guided-timeline" aria-label="Scenario timeline">
       {scenario.timeline.map((step, index) => {
         const event = run?.events.find((item) => item.phase === step.stage);
+        const isCurrent = run?.current_phase === step.stage;
         const stateChanges = { ...step.state_changes, ...(step.entity_state_changes ?? {}) };
         return (
-          <button type="button" key={step.step_id} className={activePhase === step.stage ? 'is-active' : event ? 'is-complete' : ''} onClick={() => onPhase(step.stage, Object.keys(stateChanges)[0])}>
+          <button type="button" key={step.step_id} className={activePhase === step.stage || isCurrent ? 'is-active' : event ? 'is-complete' : ''} onClick={() => onPhase(step.stage, Object.keys(stateChanges)[0])}>
             <span>{index + 1}</span>
             <strong>{step.stage}</strong>
             <small>{step.description}</small>
-            <em>{event ? '1 event generated' : 'Not executed'}</em>
+            <em>{event ? 'Backend event available' : isCurrent ? 'Current backend phase' : 'No phase event returned'}</em>
           </button>
         );
       })}
@@ -677,7 +727,12 @@ function ValidationStep({ scenario, run, onBack, onComplete }: { scenario: Gener
 }
 
 function CompletionSummary({ scenario, run, investigationCount, onReplay, busy, experienceMode }: { scenario: GenerationScenario; run: GenerationRun; investigationCount: number; onReplay: () => void; busy: boolean; experienceMode: ExperienceMode }) {
-  const observed = run.evidence.find((item) => item.stage === 'SPLUNK_OBSERVED')?.count ?? 0;
+  const observed = run.channel_results?.length
+    ? run.channel_results.reduce((total, channel) => total + (channel.evidence.find((item) => item.stage === 'SPLUNK_OBSERVED')?.count ?? 0), 0)
+    : run.evidence.find((item) => item.stage === 'SPLUNK_OBSERVED')?.count ?? 0;
+  const generated = run.channel_results?.length
+    ? run.channel_results.reduce((total, channel) => total + (channel.evidence.find((item) => item.stage === 'GENERATED')?.count ?? 0), 0)
+    : run.events.length;
   return (
     <section className="guided-complete" aria-labelledby="complete-heading">
       <span className="guided-complete__mark" aria-hidden>✓</span>
@@ -686,7 +741,7 @@ function CompletionSummary({ scenario, run, investigationCount, onReplay, busy, 
       <p>You ran the modeled incident, connected its entity and timeline, searched Splunk, and validated the declared evidence conditions.</p>
       <div className="guided-complete__proof">
         <div><span>Run</span><code>{run.run_id}</code></div>
-        <div><span>Evidence generated</span><strong>{run.events.length}</strong></div>
+        <div><span>Evidence generated</span><strong>{generated}</strong></div>
         <div><span>Splunk observed</span><strong>{observed}</strong></div>
         <div><span>Investigations completed</span><strong>{investigationCount}</strong></div>
       </div>
@@ -699,6 +754,21 @@ function CompletionSummary({ scenario, run, investigationCount, onReplay, busy, 
       <button type="button" className="generation-primary" onClick={onReplay} disabled={busy}>{busy ? 'Creating new run…' : 'Replay scenario'}</button>
     </section>
   );
+}
+
+function channelCountForNode(
+  run: GenerationRun,
+  scenario: GenerationScenario,
+  nodeId: string,
+  stage: string,
+) {
+  const sourceIds = scenario.nodes.find((node) => node.node_id === nodeId)?.source_ids ?? [];
+  if (run.channel_results?.length) {
+    return run.channel_results
+      .filter((channel) => sourceIds.includes(channel.source_id))
+      .reduce((total, channel) => total + (channel.evidence.find((item) => item.stage === stage)?.count ?? 0), 0);
+  }
+  return run.events.filter((event) => sourceIds.includes(event.source_id)).length;
 }
 
 function SectionHeading({ eyebrow, title, id }: { eyebrow: string; title: string; id: string }) {

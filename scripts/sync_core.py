@@ -40,6 +40,7 @@ CORE_MODULES = [
     "catalog_contracts.py",
     "pack_contracts.py",
     "unified_generation.py",
+    "native_runtime.py",
     "vendor_catalog.py",
     "exporter_session.py",
     "netflow_v9_encoder.py",

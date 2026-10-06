@@ -34,7 +34,7 @@ import resource
 import socket
 import ssl
 import time
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -70,6 +70,7 @@ from .collector_pipeline import (
     SENSOR_PROVENANCE_CATALOG,
     CollectorExecutionResult,
     ExternalGnmiCollector,
+    InternalGrpcGnmiCollector,
     GnmiCollectorPipelineLedger,
     GnmiPipelineEvidenceStage,
     GnmiTelemetryNormalizer,
@@ -1401,9 +1402,13 @@ class GnmiSplunkE2EOrchestrator:
         event_index: str = DEFAULT_EVENT_INDEX,
         metric_index: str = DEFAULT_METRIC_INDEX,
         splunk_bridge: Optional[GnmiSplunkBridge] = None,
+        collector_factory: Callable[..., Any] = InternalGrpcGnmiCollector,
+        state_plan: Optional[Any] = None,
     ) -> None:
         self.event_index = event_index
         self.metric_index = metric_index
+        self.collector_factory = collector_factory
+        self.state_plan = state_plan
         self.splunk_bridge = splunk_bridge or GnmiSplunkBridge(
             event_index=event_index,
             metric_index=metric_index,
@@ -1423,14 +1428,25 @@ class GnmiSplunkE2EOrchestrator:
         and `ValidationEngine`.
         """
         active_run_id = run_id or f"run-13d-{scenario_id[:8]}-{uuid.uuid4().hex[:8]}"
-        state_store = ScenarioStateStore(run_id=active_run_id, scenario_id=scenario_id, seed=seed)
+        fixture_scenario_id = (
+            "service_provider_cisco"
+            if self.state_plan is not None
+            else scenario_id
+        )
+        state_store = (
+            self.state_plan.state_store
+            if self.state_plan is not None
+            else ScenarioStateStore(
+                run_id=active_run_id, scenario_id=scenario_id, seed=seed
+            )
+        )
         normalizer = GnmiTelemetryNormalizer()
         adapter = GnmiSplunkAdapter(
             event_index=self.event_index,
             metric_index=self.metric_index,
         )
 
-        if scenario_id == "service_provider_cisco":
+        if fixture_scenario_id == "service_provider_cisco":
             target_device = "cisco-asr9k-pe1"
             primary_bgp_peer = "10.255.0.2"
             vendor_profiles = ["CISCO_IOS_XR"]
@@ -1460,7 +1476,7 @@ class GnmiSplunkE2EOrchestrator:
             state_store=state_store,
         )
         port = srv.start()
-        collector = ExternalGnmiCollector(
+        collector = self.collector_factory(
             host="127.0.0.1",
             port=port,
             normalizer=normalizer,
@@ -1479,7 +1495,10 @@ class GnmiSplunkE2EOrchestrator:
         try:
             # 1. Phase-by-phase ONCE collection across all scenario phases
             for ph in phases:
-                state_store.set_phase(ph, advance_tick=True)
+                if self.state_plan is not None:
+                    self.state_plan.activate(ph)
+                else:
+                    state_store.set_phase(ph, advance_tick=True)
                 generated_mutations += 1
                 res_once = collector.collect_once(
                     target=target_device,
@@ -1625,7 +1644,7 @@ class GnmiSplunkE2EOrchestrator:
             query_summary[q_name] = len(q_rows)
 
         # 6. Evaluate Validation Rules against Splunk-Observed Records
-        rules = build_scenario_validation_rules(scenario_id)
+        rules = build_scenario_validation_rules(fixture_scenario_id)
         val_results = ValidationEngine.evaluate_all(rules, obs_events, metrics=obs_metrics)
         passed_rules = sum(1 for r in val_results if r.status == ValidationStatus.PASS)
         failed_rules = len(val_results) - passed_rules
@@ -1707,6 +1726,33 @@ class GnmiSplunkE2EOrchestrator:
             "splunk_observed_metrics": obs_metrics,
             "query_outputs": query_outputs,
         }
+        if self.state_plan is not None:
+            interface_path = (
+                f"/interfaces/interface[name={self.state_plan.interface_id}]"
+                "/state/oper-status"
+            )
+            artifacts["shared_state_store"] = self.state_plan.state_store
+            artifacts["shared_simulation_clock"] = self.state_plan.clock
+            artifacts["correlated_state_trace"] = [
+                {
+                    "phase": phase,
+                    "timestamp_ns": self.state_plan.timestamp_ns(phase),
+                    "entity_id": target_device,
+                    "interface_id": self.state_plan.interface_id,
+                    "native_interface_id": self.state_plan.interface_id,
+                    "if_index": self.state_plan.snmp_if_index,
+                    "oper_status": next(
+                        (
+                            str(record.value).upper()
+                            for record in all_normalized
+                            if record.netspout_phase == phase
+                            and record.gnmi_path == interface_path
+                        ),
+                        None,
+                    ),
+                }
+                for phase in self.state_plan.phases
+            ]
         return scorecard, artifacts
 
     def run_multivendor_e2e(
@@ -1788,7 +1834,7 @@ class GnmiSplunkE2EOrchestrator:
             state_store=state_store,
         )
         port = srv.start()
-        collector = ExternalGnmiCollector(
+        collector = self.collector_factory(
             host="127.0.0.1",
             port=port,
             normalizer=normalizer,
@@ -2436,7 +2482,7 @@ class GnmiSplunkE2EOrchestrator:
             state_store=state_store,
         )
         port = srv.start()
-        collector = ExternalGnmiCollector(
+        collector = self.collector_factory(
             host="127.0.0.1",
             port=port,
             normalizer=normalizer,
@@ -2538,17 +2584,97 @@ def run_gnmi_preflight_check(
 ) -> Dict[str, Any]:
     """
     Executes Gate 13E / UX Step 3 customer-usable Native gNMI/OpenConfig preflight checks:
-      1. External gnmic collector binary (/opt/homebrew/bin/gnmic or in PATH)
-      2. Local TCP bind capability for native gNMI server (127.0.0.1 ephemeral/50051)
-      3. Splunk HEC reachability (https://127.0.0.1:8088/services/collector/health or /event)
-      4. Splunk REST search reachability (https://127.0.0.1:8089/services/search/jobs/export)
-      5. Target event index availability (idx_network_ops)
-      6. Target metric index availability (cisco_mdt_metrics)
+      1. Bundled Python gRPC/protobuf subscriber imports
+      2. Actual local Capabilities/Get/Subscribe ONCE smoke execution
+      3. Optional external gnmic verifier discovery (never blocking)
+      4. Local TCP bind capability for native gNMI server
+      5. Splunk HEC and REST reachability
+      6. Target event and metric index availability
     """
     checks: List[Dict[str, Any]] = []
     remediations: List[str] = []
 
-    # 1. External gnmic collector binary
+    # 1. Bundled internal subscriber imports
+    internal_import_ok = False
+    internal_import_detail = ""
+    try:
+        import grpc as grpc_runtime
+        from .proto import gnmi_pb2 as bundled_gnmi_pb2
+        from .proto import gnmi_pb2_grpc as bundled_gnmi_pb2_grpc
+
+        internal_import_ok = all(
+            (
+                grpc_runtime is not None,
+                hasattr(bundled_gnmi_pb2, "CapabilityRequest"),
+                hasattr(bundled_gnmi_pb2_grpc, "gNMIStub"),
+            )
+        )
+        internal_import_detail = "grpc and bundled canonical gNMI protobuf stubs imported"
+    except Exception as exc:
+        internal_import_detail = f"Internal subscriber imports failed: {exc}"
+        remediations.append("Install the packaged Python grpc/protobuf runtime dependencies.")
+    checks.append(
+        {
+            "id": "internal_gnmi_subscriber_imports",
+            "name": "Bundled Python gNMI Subscriber Imports",
+            "passed": internal_import_ok,
+            "detail": internal_import_detail,
+        }
+    )
+
+    # 2. Actual local Capabilities/Get/Subscribe smoke execution.
+    smoke_store = ScenarioStateStore(
+        run_id="preflight-local-smoke",
+        scenario_id="openconfig_mdt_streaming",
+        seed=0,
+    )
+    smoke_server = NativeGnmiServer(
+        NativeGnmiServerConfig(bind_address="127.0.0.1", bind_port=0),
+        state_store=smoke_store,
+    )
+    smoke_ok = False
+    smoke_detail = ""
+    try:
+        smoke_port = smoke_server.start()
+        smoke_result = InternalGrpcGnmiCollector(
+            host="127.0.0.1",
+            port=smoke_port,
+        ).collect_once(
+            target="node-cisco8k",
+            paths=["/system/state"],
+            run_id="preflight-local-smoke",
+            scenario_id="openconfig_mdt_streaming",
+        )
+        smoke_diag = smoke_server.diagnostics.snapshot()
+        smoke_ok = bool(
+            smoke_result.returncode == 0
+            and smoke_result.sync_response_observed
+            and smoke_result.raw_notifications
+            and smoke_diag.get("capabilities_requests", 0) >= 1
+            and smoke_diag.get("get_requests", 0) >= 1
+            and smoke_diag.get("subscribe_once_requests", 0) >= 1
+        )
+        smoke_detail = (
+            "Local gRPC Capabilities/Get/Subscribe ONCE succeeded"
+            if smoke_ok
+            else f"Local gRPC smoke did not complete: {smoke_result.stderr or smoke_result.ledger.error_message}"
+        )
+    except Exception as exc:
+        smoke_detail = f"Local gRPC smoke failed: {exc}"
+    finally:
+        smoke_server.stop()
+    if not smoke_ok:
+        remediations.append("Verify the bundled gRPC/protobuf runtime can bind and execute on loopback.")
+    checks.append(
+        {
+            "id": "internal_gnmi_rpc_smoke",
+            "name": "Local gNMI Capabilities/Get/Subscribe Smoke",
+            "passed": smoke_ok,
+            "detail": smoke_detail,
+        }
+    )
+
+    # 3. External gnmic is an optional independent verifier.
     gnmic_candidates = ["/opt/homebrew/bin/gnmic", "/usr/local/bin/gnmic", "/usr/bin/gnmic"]
     gnmic_path = None
     for cand in gnmic_candidates:
@@ -2574,16 +2700,20 @@ def run_gnmi_preflight_check(
 
     checks.append(
         {
-            "id": "gnmic_binary",
-            "name": "External gNMI Collector Binary (gnmic)",
-            "passed": gnmic_ok,
-            "detail": f"{gnmic_path} ({gnmic_version_str})" if gnmic_ok else "Missing gnmic binary in /opt/homebrew/bin or PATH",
+            "id": "optional_gnmic_verifier",
+            "name": "Optional Independent gNMI Verifier (gnmic)",
+            "passed": True,
+            "optional": True,
+            "available": gnmic_ok,
+            "detail": (
+                f"{gnmic_path} ({gnmic_version_str})"
+                if gnmic_ok
+                else "Not installed; supported runtime uses the bundled Python gRPC subscriber"
+            ),
         }
     )
-    if not gnmic_ok:
-        remediations.append("Install gnmic (`brew install gnmic` or download from https://gnmic.openconfig.net).")
 
-    # 2. Local TCP bind capability for native gNMI server
+    # 4. Local TCP bind capability for native gNMI server
     tcp_ok = False
     tcp_detail = ""
     try:
@@ -2745,7 +2875,8 @@ def run_gnmi_preflight_check(
             "metric_index": metric_index,
         },
         "sourcetypes": ["netspout:gnmi:event", "netspout:gnmi:metric"],
-        "collector_binary": gnmic_path,
+        "collector_binary": "internal://netspout-python-grpc",
+        "optional_gnmic_binary": gnmic_path,
         "checks": checks,
         "remediation": remediations,
     }

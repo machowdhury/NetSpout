@@ -21,6 +21,7 @@ from netspout_core.pack_contracts import PackRegistry
 FIXTURE_PATH = os.path.join(
     REPO_ROOT, "tests", "fixtures", "packs", "phase2b_architecture_gate.json"
 )
+EXTENSION_CATALOG_PATH = os.path.join(REPO_ROOT, "catalog", "extension_packs.json")
 
 
 def _evidence(evidence_id, provenance):
@@ -535,7 +536,7 @@ class TestPhase2BExtensibility(unittest.TestCase):
         self.assertEqual(catalog.get_telemetry_catalog_summary()["source_count"], 10)
         registry = catalog.get_extension_pack_registry()
         self.assertEqual(len(registry["packs"]), 3)
-        self.assertEqual(len(registry["compositions"]), 1)
+        self.assertEqual(len(registry["compositions"]), 2)
         self.assertEqual(
             registry["catalog_source_bindings"][0]["source_id"],
             "ietf-syslog-rfc5424",
@@ -764,6 +765,111 @@ class TestPhase2BExtensibility(unittest.TestCase):
             "SplunkLogEngine",
         ]:
             self.assertNotIn(forbidden, contracts)
+
+    def test_17_native_source_and_destination_transports_are_distinct(self):
+        with open(EXTENSION_CATALOG_PATH, "r", encoding="utf-8") as catalog_file:
+            raw = json.load(catalog_file)
+        registry = PackRegistry.model_validate(raw)
+        composition = next(
+            item
+            for item in registry.compositions
+            if item.composition_id
+            == "compose-test-correlated-interface-degradation-local"
+        )
+
+        self.assertEqual(len(composition.source_bindings), 2)
+        self.assertEqual(
+            {item.source_id for item in composition.source_bindings},
+            {"ietf-snmpv2c-ifmib", "openconfig-gnmi-interfaces"},
+        )
+        for binding in composition.source_bindings:
+            self.assertTrue(binding.required)
+            self.assertTrue(binding.transport_id.startswith("transport-native-"))
+            self.assertEqual(
+                binding.destination_transport_id,
+                "transport-local-hec",
+            )
+            self.assertNotEqual(
+                binding.transport_id,
+                binding.destination_transport_id,
+            )
+            self.assertEqual(
+                binding.destination_id,
+                "destination-local-docker-splunk",
+            )
+            self.assertTrue(binding.runtime_adapter_ref)
+            self.assertTrue(binding.receiver_component_id)
+
+    def test_18_invalid_native_and_destination_transports_fail_closed(self):
+        with open(EXTENSION_CATALOG_PATH, "r", encoding="utf-8") as catalog_file:
+            raw = json.load(catalog_file)
+        composition_index = next(
+            index
+            for index, item in enumerate(raw["compositions"])
+            if item["composition_id"]
+            == "compose-test-correlated-interface-degradation-local"
+        )
+
+        native_transport_as_destination = copy.deepcopy(raw)
+        binding = native_transport_as_destination["compositions"][composition_index][
+            "source_bindings"
+        ][0]
+        binding["destination_transport_id"] = binding["transport_id"]
+        with self.assertRaises(ValidationError):
+            PackRegistry.model_validate(native_transport_as_destination)
+
+        unknown_native = copy.deepcopy(raw)
+        unknown_native["compositions"][composition_index]["source_bindings"][0][
+            "transport_id"
+        ] = "transport-missing-native"
+        with self.assertRaisesRegex(ValidationError, "unknown values"):
+            PackRegistry.model_validate(unknown_native)
+
+        unknown_destination = copy.deepcopy(raw)
+        unknown_destination["compositions"][composition_index]["source_bindings"][0][
+            "destination_transport_id"
+        ] = "transport-missing-destination"
+        with self.assertRaisesRegex(ValidationError, "unknown values"):
+            PackRegistry.model_validate(unknown_destination)
+
+    def test_19_correlated_scenario_uses_reserved_identity_and_receiver_paths(self):
+        with open(EXTENSION_CATALOG_PATH, "r", encoding="utf-8") as catalog_file:
+            raw = json.load(catalog_file)
+        registry = PackRegistry.model_validate(raw)
+        scenario = next(
+            item
+            for item in registry._resources()["scenarios"]
+            if item.scenario_id == "test-correlated-interface-degradation"
+        )
+
+        self.assertEqual(
+            set(scenario.source_ids),
+            {
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces",
+            },
+        )
+        self.assertEqual(
+            scenario.entities,
+            ["cisco-asr9k-pe1", "HundredGigE0/0/0/1"],
+        )
+        self.assertEqual(
+            [step.stage.value for step in scenario.timeline],
+            ["BASELINE", "DEGRADE", "FAILOVER", "RECOVERY"],
+        )
+        self.assertTrue(
+            all(
+                path.observer_node_id.startswith("bundled-")
+                for path in scenario.telemetry_paths
+            )
+        )
+        self.assertEqual(
+            {path.source_id for path in scenario.telemetry_paths},
+            {"ietf-snmpv2c-ifmib", "openconfig-gnmi-interfaces"},
+        )
+        scenario_text = json.dumps(scenario.model_dump(mode="json"))
+        self.assertNotIn("bundled-syslog-receiver", scenario_text)
+        self.assertNotIn("bundled-ipfix-collector", scenario_text)
 
 
 if __name__ == "__main__":

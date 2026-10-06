@@ -182,20 +182,11 @@ test.beforeEach(async ({ page }) => {
     await route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({
-        status: 'DEGRADED',
-        pipelines: {
-          syslog: {
-            state: 'LISTENING',
-            type: 'Embedded RFC 5424/3164 Syslog Receiver',
-            host: '127.0.0.1',
-            port: 1514,
-            captured_count: 0,
-          },
-          gnmi: {
-            state: 'NOT AVAILABLE',
-            type: 'Native gNMI Server',
-          },
-        },
+        components: [
+          { component: 'syslog_receiver', state: 'RUNNING', detail: 'Receiver is listening.', channel: 'SYSLOG' },
+          { component: 'gnmi_subscriber', state: 'NOT_CONFIGURED', detail: 'Subscriber is not configured.', channel: 'GNMI' },
+          { component: 'splunk_hec', state: 'REACHABLE', detail: 'HEC health succeeded.', channel: null },
+        ],
       }),
     });
   });

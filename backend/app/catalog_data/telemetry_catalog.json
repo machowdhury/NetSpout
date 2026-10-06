@@ -463,7 +463,7 @@
           "MODE_B",
           "MODE_D"
         ],
-        "runtime_status": "DEGRADED",
+        "runtime_status": "AVAILABLE",
         "maturity": "PARTIAL",
         "evidence_ids": [
           "EVID-NETSPOUT-RUNTIME"
@@ -562,7 +562,7 @@
           "MODE_C",
           "MODE_D"
         ],
-        "runtime_status": "STOPPED",
+        "runtime_status": "AVAILABLE",
         "maturity": "PARTIAL",
         "evidence_ids": [
           "EVID-NETSPOUT-RUNTIME"
@@ -659,7 +659,7 @@
           "MODE_C",
           "MODE_D"
         ],
-        "runtime_status": "STOPPED",
+        "runtime_status": "AVAILABLE",
         "maturity": "PARTIAL",
         "evidence_ids": [
           "EVID-NETSPOUT-RUNTIME"
@@ -776,7 +776,7 @@
           "MODE_C",
           "MODE_D"
         ],
-        "runtime_status": "DEGRADED",
+        "runtime_status": "AVAILABLE",
         "maturity": "PARTIAL",
         "evidence_ids": [
           "EVID-NETSPOUT-RUNTIME"

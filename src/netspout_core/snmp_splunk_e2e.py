@@ -1311,11 +1311,13 @@ class SnmpSplunkE2EOrchestrator:
         device_id: str = "cisco-asr9k-pe1",
         seed: int = 42,
         splunk_bridge: Optional[SnmpSplunkBridge] = None,
+        state_plan: Optional[Any] = None,
     ):
         self.scenario_id = "service_provider_cisco"
         self.index = index
         self.device_id = device_id
         self.seed = int(seed)
+        self.state_plan = state_plan
         self.splunk_bridge = splunk_bridge or SnmpSplunkBridge(index=index)
 
     def execute_e2e_run(
@@ -1538,6 +1540,9 @@ class SnmpSplunkE2EOrchestrator:
                 phase="BASELINE",
                 seed=self.seed,
                 device_id=self.device_id,
+                state_store=(
+                    self.state_plan.state_store if self.state_plan is not None else None
+                ),
             ) as agent:
                 poller = ExternalNetSnmpPoller(
                     host="127.0.0.1",
@@ -1547,6 +1552,8 @@ class SnmpSplunkE2EOrchestrator:
                     retries=1,
                 )
                 for phase_name in phases_to_poll:
+                    if self.state_plan is not None:
+                        self.state_plan.activate(phase_name)
                     agent.set_phase(phase_name)
                     # 1. External snmpget of key phase OIDs
                     get_res = poller.snmpget(PHASE_POLL_OIDS)
@@ -1629,6 +1636,11 @@ class SnmpSplunkE2EOrchestrator:
         # -----------------------------------------------------------------
         # STAGE 6: Splunk HEC Dispatch (`SPLUNK_DISPATCHED`)
         # -----------------------------------------------------------------
+        if self.state_plan is not None:
+            for event in normalized_events:
+                event.timestamp = self.state_plan.timestamp_seconds(
+                    event.netspout_phase
+                )
         if normalized_events:
             disp_res = self.splunk_bridge.dispatch_events(normalized_events)
             scorecard.splunk_dispatched_records = disp_res["dispatched"]
@@ -1727,6 +1739,31 @@ class SnmpSplunkE2EOrchestrator:
         }
 
         raw_artifacts["normalized_events"] = normalized_events
+        if self.state_plan is not None:
+            raw_artifacts["shared_state_store"] = self.state_plan.state_store
+            raw_artifacts["shared_simulation_clock"] = self.state_plan.clock
+            raw_artifacts["correlated_state_trace"] = [
+                {
+                    "phase": phase,
+                    "timestamp_ns": self.state_plan.timestamp_ns(phase),
+                    "entity_id": self.device_id,
+                    "interface_id": self.state_plan.interface_id,
+                    "native_interface_id": self.state_plan.snmp_wire_interface_id,
+                    "if_index": self.state_plan.snmp_if_index,
+                    "oper_status": next(
+                        (
+                            "UP" if str(event.snmp_value) == "1" else "DOWN"
+                            for event in normalized_events
+                            if event.sourcetype == "netspout:snmp:poll"
+                            and event.netspout_phase == phase
+                            and event.snmp_oid
+                            == "1.3.6.1.2.1.2.2.1.8.1"
+                        ),
+                        None,
+                    ),
+                }
+                for phase in self.state_plan.phases
+            ]
         return scorecard, raw_artifacts
 
     @staticmethod

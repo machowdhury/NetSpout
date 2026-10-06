@@ -9,22 +9,22 @@ import {
   type TableColumn,
 } from '../ui/SystemPrimitives';
 
-interface PipelineDetail {
-  state?: string;
-  type?: string;
-  host?: string;
-  port?: number;
-  captured_count?: number;
-  dispatched_count?: number;
-}
+type ComponentState = 'RUNNING' | 'REACHABLE' | 'READY' | 'DEGRADED' | 'FAILED' | 'NOT_CONFIGURED';
 
 interface HealthResponse {
-  pipelines?: Record<string, PipelineDetail>;
+  components: Array<{
+    component: string;
+    state: ComponentState;
+    detail: string;
+    channel: string | null;
+  }>;
 }
 
 interface PipelineRow {
-  id: string;
-  detail: PipelineDetail;
+  component: string;
+  state: ComponentState;
+  detail: string;
+  channel: string | null;
 }
 
 export function PipelineHealthView() {
@@ -55,56 +55,35 @@ export function PipelineHealthView() {
   }, [reloadKey]);
 
   const rows = useMemo<PipelineRow[]>(
-    () =>
-      Object.entries(health?.pipelines ?? {}).map(([id, detail]) => ({
-        id,
-        detail,
-      })),
+    () => health?.components ?? [],
     [health],
   );
 
   const columns: TableColumn<PipelineRow>[] = [
     {
-      key: 'pipeline',
-      header: 'Pipeline',
+      key: 'component',
+      header: 'Component',
       render: (row) => (
         <div>
-          <strong>{row.id === 'otlp' ? 'OTel Collector / OTLP' : row.id.toUpperCase()}</strong>
-          <span className="table-subtext">{row.detail.type ?? 'Type not reported'}</span>
+          <strong>{row.component.replaceAll('_', ' ')}</strong>
+          <span className="table-subtext">{row.channel ?? 'Shared destination service'}</span>
         </div>
       ),
     },
     {
       key: 'runtime',
       header: 'Runtime',
-      render: (row) => <StatusBadge status={row.detail.state ?? 'NOT AVAILABLE'} />,
+      render: (row) => <StatusBadge status={row.state} />,
     },
     {
-      key: 'endpoint',
-      header: 'Endpoint',
-      render: (row) =>
-        row.detail.host && row.detail.port ? (
-          <code>
-            {row.detail.host}:{row.detail.port}
-          </code>
-        ) : (
-          <span className="muted-value">NOT REPORTED</span>
-        ),
+      key: 'channel',
+      header: 'Protocol channel',
+      render: (row) => row.channel ?? <span className="muted-value">DESTINATION</span>,
     },
     {
-      key: 'receiver',
-      header: 'Receiver observed',
-      render: (row) =>
-        typeof row.detail.captured_count === 'number' ? (
-          row.detail.captured_count
-        ) : (
-          <span className="muted-value">N/A</span>
-        ),
-    },
-    {
-      key: 'splunk',
-      header: 'Splunk observed',
-      render: () => <span className="muted-value">NOT MEASURED</span>,
+      key: 'detail',
+      header: 'Diagnostic',
+      render: (row) => <span>{row.detail}</span>,
     },
   ];
 
@@ -132,7 +111,7 @@ export function PipelineHealthView() {
             message={`The backend request failed: ${error}`}
           />
         )}
-        {!loading && !error && rows.some((row) => row.detail.state === 'DEGRADED') && (
+        {!loading && !error && rows.some((row) => ['DEGRADED', 'FAILED'].includes(row.state)) && (
           <StatePanel
             kind="degraded"
             message="At least one pipeline explicitly reports a degraded state."
@@ -142,15 +121,15 @@ export function PipelineHealthView() {
           <TechnicalTable
             columns={columns}
             rows={rows}
-            getRowKey={(row) => row.id}
+            getRowKey={(row) => `${row.component}-${row.channel ?? 'shared'}`}
             emptyMessage="No pipeline records were returned by the backend."
           />
         )}
       </Panel>
       <StatePanel
         kind="unavailable"
-        title="Splunk observation is separate"
-        message="This endpoint does not provide search-backed Splunk observation. Those cells remain NOT MEASURED instead of inheriting generated or dispatched counts."
+        title="Health is component-scoped"
+        message="Runtime readiness and reachability do not imply generated, receiver, collector, or Splunk observation counts. Run evidence reports those separately."
       />
     </div>
   );

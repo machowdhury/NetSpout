@@ -44,7 +44,7 @@ class TestNetFlowV9Encoder(unittest.TestCase):
         self.assertEqual(len(fs), 48, "Single-record Data FlowSet must be 48 bytes (4 header + 43 rec + 1 pad)")
 
     def test_build_packet_header_and_sequence(self):
-        """Verifies NetFlow v9 20-byte header and cumulative flow record sequence tracking."""
+        """Verifies the header and RFC 3954 export-packet sequence tracking."""
         pkt1 = NetFlowV9Encoder.build_packet(
             session=self.session,
             data_records=[self.valid_record],
@@ -67,7 +67,11 @@ class TestNetFlowV9Encoder(unittest.TestCase):
             data_records=[self.valid_record, rec2],
             include_template=False
         )
-        self.assertEqual(self.session.sequence_number, 3, "Sequence number should increment by record count (1 + 2 = 3)")
+        self.assertEqual(
+            self.session.sequence_number,
+            2,
+            "Sequence number should increment once for each export packet",
+        )
 
         # Dissect second packet
         decoded = ReferenceNetFlowV9Decoder.decode_packet(pkt2)

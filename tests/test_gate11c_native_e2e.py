@@ -14,7 +14,9 @@ Covers:
   - HEC independence (no direct HEC shortcut)
 """
 
+import base64
 import json
+import os
 import ssl
 import time
 import unittest
@@ -38,6 +40,15 @@ class TestGate11cNativeE2E(unittest.TestCase):
         cls.healthy, cls.health_details = cls.adapter.check_health()
         if not cls.healthy:
             raise unittest.SkipTest("Collector infrastructure not reachable on 127.0.0.1:8080/8082")
+        password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get(
+            "SPLUNK_PASSWORD"
+        )
+        if not password:
+            raise unittest.SkipTest("Runtime Splunk search credential is not configured")
+        username = os.environ.get("NETSPOUT_SPLUNK_USER", "admin")
+        cls.splunk_authorization = "Basic " + base64.b64encode(
+            f"{username}:{password}".encode("utf-8")
+        ).decode("ascii")
 
     def setUp(self):
         self.adapter.clear_buffer()
@@ -69,7 +80,7 @@ class TestGate11cNativeE2E(unittest.TestCase):
                 results = []
                 try:
                     req = urllib.request.Request(url, data=data, method="POST")
-                    req.add_header("Authorization", "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh")
+                    req.add_header("Authorization", self.splunk_authorization)
                     with urllib.request.urlopen(req, context=ctx, timeout=5) as resp:
                         for line in resp.read().decode("utf-8").splitlines():
                             if line.strip():

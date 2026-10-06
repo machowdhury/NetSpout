@@ -416,6 +416,7 @@ def build_service_provider_cisco_oid_store(
     phase: str = "BASELINE",
     seed: int = 42,
     device_id: str = "cisco-asr9k-pe1",
+    state_snapshot: Optional[Any] = None,
 ) -> SnmpOidStore:
     """
     Constructs the deterministic, phase-coherent OID store for `service_provider_cisco`
@@ -886,6 +887,26 @@ def build_service_provider_cisco_oid_store(
         _add(f"1.3.6.1.2.1.15.3.1.18.{pip}", f"bgpPeerHoldTime.{pip}", "Integer32", peer["hold_time"], "BGP4-MIB", "1.3.6.1.2.1.15.3.1.18")
         _add(f"1.3.6.1.2.1.15.3.1.19.{pip}", f"bgpPeerKeepAlive.{pip}", "Integer32", peer["keepalive"], "BGP4-MIB", "1.3.6.1.2.1.15.3.1.19")
 
+    if state_snapshot is not None:
+        # The bounded correlated scenario orders the existing
+        # HundredGigE0/0/0/1 target interface first, matching the
+        # evidence-backed IF-MIB ifIndex.1 wire identity exactly.
+        shared_if = next(iter(state_snapshot.interfaces.values()))
+        projected_values = {
+            "1.3.6.1.2.1.1.3.0": state_snapshot.system.sys_uptime_centisec,
+            "1.3.6.1.2.1.2.2.1.7.1": shared_if.snmp_admin_status,
+            "1.3.6.1.2.1.2.2.1.8.1": shared_if.snmp_oper_status,
+            "1.3.6.1.2.1.2.2.1.14.1": shared_if.counters.in_errors,
+            "1.3.6.1.2.1.2.2.1.20.1": shared_if.counters.out_errors,
+            "1.3.6.1.2.1.31.1.1.1.6.1": shared_if.counters.in_octets,
+            "1.3.6.1.2.1.31.1.1.1.10.1": shared_if.counters.out_octets,
+        }
+        for oid, value in projected_values.items():
+            entry = store._entries_by_oid[oid]
+            entry.value = value
+            entry.phase = state_snapshot.phase
+        store.phase = state_snapshot.phase
+
     return store
 
 
@@ -951,6 +972,7 @@ class SimulatedSnmpAgent:
         bind_port: int = DEFAULT_AGENT_BIND_PORT,
         community: str = DEFAULT_AGENT_COMMUNITY,
         oid_store: Optional[SnmpOidStore] = None,
+        state_store: Optional[Any] = None,
         scenario_id: str = "service_provider_cisco",
         phase: str = "BASELINE",
         seed: int = 42,
@@ -973,6 +995,7 @@ class SimulatedSnmpAgent:
         self.phase = normalize_scenario_phase(phase)
         self.seed = int(seed)
         self.device_id = device_id
+        self.state_store = state_store
 
         self.max_repetitions_default = min(
             max(1, int(max_repetitions_default)), HARD_MAX_GETBULK_REPETITIONS
@@ -1001,9 +1024,7 @@ class SimulatedSnmpAgent:
         self.oid_store: SnmpOidStore = (
             oid_store
             if oid_store is not None
-            else build_service_provider_cisco_oid_store(
-                phase=self.phase, seed=self.seed, device_id=self.device_id
-            )
+            else self._build_phase_store(self.phase)
         )
 
         self._sock: Optional[socket.socket] = None
@@ -1071,12 +1092,21 @@ class SimulatedSnmpAgent:
         scenario phase (BASELINE, DEGRADE, FAILOVER, or RECOVERY).
         """
         norm_phase = normalize_scenario_phase(phase)
-        new_store = build_service_provider_cisco_oid_store(
-            phase=norm_phase, seed=self.seed, device_id=self.device_id
-        )
+        new_store = self._build_phase_store(norm_phase)
         with self._lock:
             self.phase = norm_phase
             self.oid_store = new_store
+
+    def _build_phase_store(self, phase: str) -> SnmpOidStore:
+        snapshot = None
+        if self.state_store is not None:
+            snapshot = self.state_store.get_snapshot(self.device_id, phase=phase)
+        return build_service_provider_cisco_oid_store(
+            phase=phase,
+            seed=self.seed,
+            device_id=self.device_id,
+            state_snapshot=snapshot,
+        )
 
     def start(self) -> int:
         if self._running:

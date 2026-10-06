@@ -10,7 +10,7 @@ services:
     restart: "no"
 
   netspout-flow-collector:
-    image: netsampler/goflow2:v2.2.5
+    image: netsampler/goflow2:v2.2.5@sha256:780f95c076bd3eb94d578d3f11c93ad289997edebdd8e48c9ce4801d160f238a
     user: "100:65533"
     container_name: netspout-flow-collector
     cap_drop:
@@ -35,6 +35,12 @@ services:
     depends_on:
       init-volume:
         condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/store"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -54,7 +60,7 @@ services:
       - no-new-privileges:true
     environment:
       - SPLUNK_HEC_URL=https://host.docker.internal:8888/services/collector/event
-      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
+      - SPLUNK_HEC_TOKEN_FILE=/run/secrets/splunk-inputs.conf
       - SPLUNK_INDEX=idx_network_ops
       - SPLUNK_SOURCETYPE=netflow:collector
       - FLOW_FILE=/flows/flows.json
@@ -65,11 +71,18 @@ services:
       - "127.0.0.1:8082:8082"
     volumes:
       - netspout_flow_data:/flows
+      - ../../docker/standalone/inputs.conf:/run/secrets/splunk-inputs.conf:ro
     depends_on:
       init-volume:
         condition: service_completed_successfully
       netspout-flow-collector:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8082/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
     logging:
       driver: "json-file"

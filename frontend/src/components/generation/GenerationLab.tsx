@@ -70,15 +70,16 @@ function requestFor(
   durationSeconds: number,
   transportId: string,
   destinationId: string,
+  nativeLifecycle: boolean,
 ): GenerationRequest {
   return {
     mode,
     selection_id: selectionId,
     transport_id: transportId,
     destination_id: destinationId,
-    count: mode === 'SINGLE_EVENT' ? 1 : count,
+    count: mode === 'SINGLE_EVENT' || nativeLifecycle ? 1 : count,
     rate_eps: rateEps,
-    duration_seconds: durationSeconds,
+    duration_seconds: nativeLifecycle ? undefined : durationSeconds,
     scenario_parameters: mode === 'SCENARIO' ? { intensity: 1 } : {},
   };
 }
@@ -116,7 +117,13 @@ export function GenerationLab({
         if (!active) return;
         setCapabilities(value);
         setSelectionId(selectionForMode(value, initialMode));
-        setTransportId(value.transports[0]?.transport_id ?? '');
+        setTransportId(
+          value.transports.find(
+            (item) => item.transport_id === 'transport-local-hec',
+          )?.transport_id
+          ?? value.transports[0]?.transport_id
+          ?? '',
+        );
         setDestinationId(value.destinations[0]?.destination_id ?? '');
         setLoading(false);
       })
@@ -129,8 +136,28 @@ export function GenerationLab({
   }, [initialMode]);
 
   const generationRequest = useMemo(
-    () => requestFor(mode, selectionId, count, rateEps, durationSeconds, transportId, destinationId),
-    [mode, selectionId, count, rateEps, durationSeconds, transportId, destinationId],
+    () => {
+      const nativeLifecycle = mode === 'SCENARIO'
+        ? capabilities?.native_runtime?.scenario_ids?.includes(selectionId) ?? false
+        : mode === 'DATA_SOURCE'
+          ? capabilities?.native_runtime?.source_ids?.includes(selectionId) ?? false
+          : mode === 'SOURCETYPE'
+            ? capabilities?.native_runtime?.source_ids?.includes(
+              capabilities.sourcetypes.find((item) => item.name === selectionId)?.source_id ?? '',
+            ) ?? false
+            : false;
+      return requestFor(
+        mode,
+        selectionId,
+        count,
+        rateEps,
+        durationSeconds,
+        transportId,
+        destinationId,
+        nativeLifecycle,
+      );
+    },
+    [capabilities, mode, selectionId, count, rateEps, durationSeconds, transportId, destinationId],
   );
 
   const selectedScenario = capabilities?.scenarios.find((scenario) => scenario.scenario_id === selectionId)
@@ -292,6 +319,7 @@ export function GenerationLab({
       {step === 'PREVIEW' && preview && (
         <PreviewStep
           preview={preview}
+          capabilities={capabilities}
           experienceMode={experienceMode}
           rawVisible={rawVisible}
           onRawToggle={() => setRawVisible((value) => !value)}
@@ -327,6 +355,7 @@ export function GenerationLab({
           scenario={selectedScenario}
           request={generationRequest}
           run={run}
+          experienceMode={experienceMode}
           busy={busy}
           onRun={execute}
           onBack={() => setStep('CONFIGURE')}
@@ -337,6 +366,7 @@ export function GenerationLab({
       {step === 'OBSERVE' && run && (
         <ObserveStep
           run={run}
+          experienceMode={experienceMode}
           busy={busy}
           onRefresh={observe}
           onBack={() => setStep('RUN')}
@@ -554,6 +584,7 @@ function SourceChoice({ source, selected, onSelect }: { source: GenerationSource
 
 function PreviewStep({
   preview,
+  capabilities,
   experienceMode,
   rawVisible,
   onRawToggle,
@@ -561,6 +592,7 @@ function PreviewStep({
   onContinue,
 }: {
   preview: GenerationPreview;
+  capabilities: GenerationCapabilities;
   experienceMode: ExperienceMode;
   rawVisible: boolean;
   onRawToggle: () => void;
@@ -568,6 +600,16 @@ function PreviewStep({
   onContinue: () => void;
 }) {
   const source = preview.sources[0];
+  const channels = preview.bindings.map((binding) => {
+    const sourceTransport = binding.source_transport_id ?? binding.transport_id;
+    const destinationTransport = binding.destination_transport_id ?? binding.transport_id;
+    return {
+      ...binding,
+      sourceTransport,
+      destinationTransport,
+      capability: sourceTransport.replace(/^transport-native-/, '').replaceAll('-', ' '),
+    };
+  });
   return (
     <section className="generation-workspace" aria-labelledby="preview-heading">
       <div className="generation-section-heading">
@@ -591,18 +633,28 @@ function PreviewStep({
       )}
 
       <div className="generation-panel">
-        <div className="generation-panel__header"><h4>What will be generated</h4><span>{preview.bindings.length} validated binding</span></div>
+        <div className="generation-panel__header"><h4>Selected telemetry channels</h4><span>{preview.bindings.length} validated channel{preview.bindings.length === 1 ? '' : 's'}</span></div>
         <div className="generation-table-wrap">
           <table className="generation-table">
-            <thead><tr><th>Source</th><th>Generator</th><th>Transport</th><th>Splunk</th><th>Provenance</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Channel</th>
+                {experienceMode === 'advanced' && <th>Source-native transport</th>}
+                {experienceMode === 'advanced' && <th>Receiver / collector</th>}
+                <th>Splunk readiness</th>
+                {experienceMode === 'advanced' && <th>Destination transport</th>}
+                {experienceMode === 'advanced' && <th>Encoding / protocol</th>}
+              </tr>
+            </thead>
             <tbody>
-              {preview.bindings.map((binding) => (
+              {channels.map((binding) => (
                 <tr key={binding.source_id}>
-                  <td><strong>{source.telemetry_source}</strong><code>{binding.source_id}</code></td>
-                  <td><code>{binding.generator_id}</code></td>
-                  <td><code>{binding.transport_id}</code></td>
-                  <td>{source.splunk_contract.sourcetypes.map((item) => <code key={item.name}>{item.name} · {item.authority}</code>)}</td>
-                  <td><div className="generation-inline-badges">{source.provenance.map((item) => <StateLabel key={item} value={item} />)}</div></td>
+                  <td><strong>{preview.sources.find((item) => item.source_id === binding.source_id)?.telemetry_source ?? binding.source_id}</strong><code>{binding.capability}</code></td>
+                  {experienceMode === 'advanced' && <td><code>{binding.sourceTransport}</code></td>}
+                  {experienceMode === 'advanced' && <td><code>{binding.receiver_component_id ?? 'DIRECT PUBLISHER'}</code></td>}
+                  <td><StateLabel value={preview.integration_readiness.every((item) => item.detected || item.requirement !== 'REQUIRED') ? 'READY' : 'DEGRADED'} /></td>
+                  {experienceMode === 'advanced' && <td><code>{binding.destinationTransport}</code></td>}
+                  {experienceMode === 'advanced' && <td><code>{preview.sources.find((item) => item.source_id === binding.source_id)?.native_contract.format ?? 'DECLARED BY SOURCE CONTRACT'}</code></td>}
                 </tr>
               ))}
             </tbody>
@@ -627,9 +679,10 @@ function PreviewStep({
 
       <div className="generation-panel">
         <div className="generation-panel__header">
-          <div><h4>Raw Event Preview</h4><span>{preview.preview_notice}</span></div>
-          <button type="button" className="generation-secondary" onClick={onRawToggle}><Eye /> {rawVisible ? 'Hide' : 'Preview Raw Event'}</button>
+          <div><h4>Raw / decoded observation</h4><span>{preview.preview_notice}</span></div>
+          {preview.raw_preview.length > 0 && <button type="button" className="generation-secondary" onClick={onRawToggle}><Eye /> {rawVisible ? 'Hide' : 'Preview Raw Event'}</button>}
         </div>
+        {preview.raw_preview.length === 0 && <div className="generation-empty">No raw preview was returned. Native payloads are shown only after the backend observes or decodes them.</div>}
         {rawVisible && (
           <div className="raw-preview">
             <div>
@@ -642,6 +695,22 @@ function PreviewStep({
           </div>
         )}
       </div>
+
+      {experienceMode === 'advanced' && (
+        <div className="generation-panel">
+          <div className="generation-panel__header"><h4>Runtime health and diagnostics</h4><span>Secret-free component evidence</span></div>
+          <div className="preflight-list">
+            {(capabilities.native_runtime?.component_health ?? []).map((component) => (
+              <article key={`${component.component}-${component.channel ?? 'shared'}`}>
+                {['RUNNING', 'REACHABLE', 'READY'].includes(component.state) ? <CheckCircle2 /> : <CircleAlert />}
+                <div><strong>{component.component.replaceAll('_', ' ')}</strong><span>{component.channel ?? 'Destination'} · {component.detail}</span></div>
+                <StateLabel value={component.state} />
+              </article>
+            ))}
+            {(capabilities.native_runtime?.component_health.length ?? 0) === 0 && <div className="generation-empty">No runtime component diagnostics were returned.</div>}
+          </div>
+        </div>
+      )}
 
       {experienceMode === 'advanced' && (
         <div className="generation-contract-grid">
@@ -721,7 +790,7 @@ function ConfigureStep({
             )}
           </div>
         </div>
-        <div className="generation-panel">
+        {experienceMode === 'advanced' ? <div className="generation-panel">
           <div className="generation-panel__header"><h4>Delivery</h4><span>Transport and destination remain distinct</span></div>
           <div className="generation-form-grid">
             <label>Transport
@@ -736,7 +805,11 @@ function ConfigureStep({
             </label>
           </div>
           <a href="#/system/connections">Manage connection in Connection Center</a>
-        </div>
+        </div> : <div className="generation-panel generation-simple-readiness">
+          <div className="generation-panel__header"><h4>Splunk readiness</h4><span>Recommended destination</span></div>
+          <p>The selected scenario uses its validated channel bindings and configured Splunk destination. Internal endpoints and credentials stay in Connection Center.</p>
+          <StateLabel value={preflight?.state ?? 'PREFLIGHT REQUIRED'} />
+        </div>}
       </div>
 
       <div className="generation-panel" data-testid="preflight-panel">
@@ -772,6 +845,7 @@ function RunStep({
   scenario,
   request,
   run,
+  experienceMode,
   busy,
   onRun,
   onBack,
@@ -780,6 +854,7 @@ function RunStep({
   scenario: GenerationScenario | null;
   request: GenerationRequest;
   run: GenerationRun | null;
+  experienceMode: ExperienceMode;
   busy: boolean;
   onRun: () => void;
   onBack: () => void;
@@ -804,7 +879,7 @@ function RunStep({
             <div><span>Run ID</span><code>{run.run_id}</code></div>
             <div><span>Started</span><code>{run.started_at}</code></div>
             <div><span>Current phase</span><strong>{run.current_phase}</strong></div>
-            <div><span>Events</span><strong>{run.events.length}</strong></div>
+            <div><span>Channels</span><strong>{run.channel_results?.length || run.source_ids.length}</strong></div>
           </div>
           {scenario && (
             <>
@@ -820,7 +895,7 @@ function RunStep({
               <TopologyPreview scenario={scenario} activePhase={run.current_phase} />
             </>
           )}
-          <EvidenceSummary run={run} />
+          <EvidenceSummary run={run} advanced={experienceMode === 'advanced'} />
         </>
       )}
       <div className="generation-actions">
@@ -832,8 +907,43 @@ function RunStep({
   );
 }
 
-function EvidenceSummary({ run }: { run: GenerationRun }) {
+function ChannelEvidence({ run, advanced }: { run: GenerationRun; advanced: boolean }) {
+  if (!run.channel_results?.length) return null;
   return (
+    <div className="generation-panel">
+      <div className="generation-panel__header"><h4>Channel results</h4><span>Backend-reported counts only</span></div>
+      <div className="channel-result-grid">
+        {run.channel_results.map((channel) => {
+          const generated = channel.evidence.find((item) => item.stage === 'GENERATED');
+          const receiver = channel.evidence.find((item) => ['RECEIVER_OBSERVED', 'ACKNOWLEDGED', 'COLLECTOR_RECEIVED', 'COLLECTOR_OBSERVED'].includes(item.stage));
+          const splunk = channel.evidence.find((item) => item.stage === 'SPLUNK_OBSERVED');
+          return (
+            <article key={`${channel.source_id}-${channel.channel}`}>
+              <header><strong>{channel.channel}</strong><StateLabel value={channel.status} /></header>
+              <dl>
+                <div><dt>Generated</dt><dd>{generated?.count ?? 'NOT REPORTED'}</dd></div>
+                <div><dt>{receiver?.stage.replaceAll('_', ' ') ?? 'Receiver / collector'}</dt><dd>{receiver?.count ?? 'NOT REPORTED'}</dd></div>
+                <div><dt>Splunk observed</dt><dd>{splunk?.count ?? 'NOT REPORTED'}</dd></div>
+              </dl>
+              {advanced && (
+                <>
+                  <p><code>{channel.source_transport_id}</code> → <code>{channel.receiver_component_id ?? 'publisher'}</code> → <code>{channel.destination_transport_id}</code></p>
+                  <div className="channel-evidence-stages">{channel.evidence.map((item) => <span key={item.stage}>{item.stage}: {item.count} · {item.state}</span>)}</div>
+                  {channel.errors.length > 0 && <small>{channel.errors.join('; ')}</small>}
+                </>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function EvidenceSummary({ run, advanced = true }: { run: GenerationRun; advanced?: boolean }) {
+  return (
+    <>
+    <ChannelEvidence run={run} advanced={advanced} />
     <div className="generation-panel">
       <div className="generation-panel__header"><h4>Execution Evidence</h4><span>Stages are intentionally distinct</span></div>
       <div className="evidence-stage-grid">
@@ -847,10 +957,11 @@ function EvidenceSummary({ run }: { run: GenerationRun }) {
         ))}
       </div>
     </div>
+    </>
   );
 }
 
-function ObserveStep({ run, busy, onRefresh, onBack, onInvestigate }: { run: GenerationRun; busy: boolean; onRefresh: () => void; onBack: () => void; onInvestigate: () => void }) {
+function ObserveStep({ run, experienceMode, busy, onRefresh, onBack, onInvestigate }: { run: GenerationRun; experienceMode: ExperienceMode; busy: boolean; onRefresh: () => void; onBack: () => void; onInvestigate: () => void }) {
   const bySource = run.source_ids.map((sourceId) => ({
     sourceId,
     events: run.events.filter((event) => event.source_id === sourceId),
@@ -861,7 +972,7 @@ function ObserveStep({ run, busy, onRefresh, onBack, onInvestigate }: { run: Gen
         <div><span>Step 5</span><h3 id="observe-heading">Observe evidence</h3></div>
         <button type="button" className="generation-secondary" disabled={busy} onClick={onRefresh}><Activity /> {busy ? 'Searching Splunk…' : 'Refresh Splunk Observation'}</button>
       </div>
-      <EvidenceSummary run={run} />
+      <EvidenceSummary run={run} advanced={experienceMode === 'advanced'} />
       <div className="generation-panel">
         <div className="generation-panel__header"><h4>Evidence by Source</h4><span>Runtime counts only</span></div>
         <div className="evidence-source-list">

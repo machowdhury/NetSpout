@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # =========================================================================
   # NetSpout Standalone: All-In-One Container (Splunk Enterprise + NetSpout App + Fast Sim Backend)
@@ -14,14 +12,19 @@ services:
     environment:
       - SPLUNK_START_ARGS=--accept-license
       - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
-      - SPLUNK_PASSWORD=SplunkPassword123!
+      - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?Set SPLUNK_PASSWORD before starting NetSpout}
       - SPLUNK_HEC_PORT=8088
       - SPLUNK_ROLE=splunk_standalone
       - SPLUNK_HOME_OWNERSHIP_ENFORCEMENT=false
       - FAST_SIMULATION_PORT=8081
-      - SPLUNK_HEC_URL=https://localhost:8088/services/collector
-      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
+      - SPLUNK_HEC_URL=https://splunk-netspout:8088/services/collector
       - OTEL_ENDPOINT=http://otel-collector:4318
+      - NETSPOUT_COLLECTOR_HOST=netspout-flow-collector
+      - NETSPOUT_GOFLOW_METRICS_URL=http://netspout-flow-collector:8080/metrics
+      - NETSPOUT_FLOW_FORWARDER_STATUS_URL=http://netspout-flow-forwarder:8082
+      - NETSPOUT_REST_SEARCH_URL=https://splunk-netspout:8089/services/search/jobs/export
+      - NETSPOUT_SPLUNK_USER=admin
+      - NETSPOUT_SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?Set SPLUNK_PASSWORD before starting NetSpout}
     ports:
       - "8000:8000"       # Splunk Web UI (Dark NOC Canvas & Dashboards)
       - "8088:8088"       # Splunk HEC (HTTP Event Collector)
@@ -33,7 +36,7 @@ services:
       - splunk_data:/opt/splunk/var
       - splunk_etc:/opt/splunk/etc
     healthcheck:
-      test: ["CMD-SHELL", "curl -k -s https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"' || curl -s http://localhost:8081/health || exit 1"]
+      test: ["CMD-SHELL", "curl -fkSs https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"'"]
       interval: 15s
       timeout: 10s
       retries: 10
@@ -46,18 +49,111 @@ services:
   # OpenTelemetry Collector (Contrib) - Optional Universal Receiver & Pipeline
   # =========================================================================
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.96.0
+    build:
+      context: .
+      dockerfile: Dockerfile.standalone
+      target: otel-collector-health
     container_name: netspout-otel-collector
     hostname: otel-collector
-    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    command:
+      - --config=/etc/otelcol-contrib/config.yaml
+      - --config=/etc/otelcol-contrib/health.yaml
     volumes:
       - ./otel-collector-config.standalone.yaml:/etc/otelcol-contrib/config.yaml:ro
     ports:
       - "4317:4317"       # OTLP gRPC receiver
       - "4318:4318"       # OTLP HTTP receiver
       - "8889:8889"       # Prometheus metrics exporter
+      - "127.0.0.1:13133:13133" # Collector health extension
     depends_on:
-      - splunk-netspout
+      splunk-netspout:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:13133/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - netspout-net
+
+  flow-volume-init:
+    image: busybox:1.36
+    command: ["sh", "-c", "chmod 777 /flows && touch /flows/flows.json && chmod 666 /flows/flows.json"]
+    volumes:
+      - netspout_flow_data:/flows
+    restart: "no"
+    networks:
+      - netspout-net
+
+  netspout-flow-collector:
+    image: netsampler/goflow2:v2.2.5@sha256:780f95c076bd3eb94d578d3f11c93ad289997edebdd8e48c9ce4801d160f238a
+    user: "100:65533"
+    command:
+      - -listen
+      - netflow://:2055,netflow://:4739
+      - -format
+      - json
+      - -transport
+      - file
+      - -transport.file
+      - /flows/flows.json
+    ports:
+      - "127.0.0.1:2055:2055/udp"
+      - "127.0.0.1:4739:4739/udp"
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - netspout_flow_data:/flows
+    depends_on:
+      flow-volume-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/metrics"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    networks:
+      - netspout-net
+
+  netspout-flow-forwarder:
+    build:
+      context: ./deploy/collector
+      dockerfile: Dockerfile.forwarder
+    user: "10001:10001"
+    environment:
+      - SPLUNK_HEC_URL=https://splunk-netspout:8088/services/collector/event
+      - SPLUNK_HEC_TOKEN_FILE=/run/secrets/splunk-inputs.conf
+      - SPLUNK_INDEX=idx_network_ops
+      - SPLUNK_SOURCETYPE=netflow:collector
+      - FLOW_FILE=/flows/flows.json
+      - STATUS_PORT=8082
+    ports:
+      - "127.0.0.1:8082:8082"
+    volumes:
+      - netspout_flow_data:/flows
+      - ./docker/standalone/inputs.conf:/run/secrets/splunk-inputs.conf:ro
+    depends_on:
+      netspout-flow-collector:
+        condition: service_healthy
+      splunk-netspout:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8082/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
     restart: unless-stopped
     networks:
       - netspout-net
@@ -68,6 +164,8 @@ networks:
 
 volumes:
   splunk_data:
-    name: netspout_splunk_data
+    name: ${NETSPOUT_SPLUNK_DATA_VOLUME:-netspout_splunk_data}
   splunk_etc:
-    name: netspout_splunk_etc
+    name: ${NETSPOUT_SPLUNK_ETC_VOLUME:-netspout_splunk_etc}
+  netspout_flow_data:
+    name: ${NETSPOUT_FLOW_DATA_VOLUME:-netspout_flow_data}

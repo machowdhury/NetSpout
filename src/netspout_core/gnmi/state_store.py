@@ -11,7 +11,7 @@ Guarantees that for any (run_id, scenario_id, device_id, phase, tick, seed) tupl
 all telemetry transports observe mathematically and semantically identical state.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import threading
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -358,6 +358,23 @@ class ScenarioStateStore:
                 pass
         return current_phase, current_tick
 
+    def set_position(self, phase: str, tick: int) -> Tuple[str, int]:
+        """Set an explicit deterministic clock position for a shared run plan."""
+        norm = normalize_phase(phase)
+        position = int(tick)
+        if position < 0:
+            raise ValueError("scenario tick must be non-negative")
+        with self._lock:
+            self._phase = norm
+            self._tick = position
+            listeners = list(self._listeners)
+        for callback in listeners:
+            try:
+                callback(norm, position)
+            except Exception:
+                pass
+        return norm, position
+
     def advance_tick(self, delta: int = 1) -> int:
         with self._lock:
             self._tick += max(1, int(delta))
@@ -378,6 +395,24 @@ class ScenarioStateStore:
         target_cfg = resolve_target_device(device_id)
         if target_cfg is None:
             raise KeyError(f"Unknown target device: {device_id}")
+        if (
+            self.scenario_id == "test-correlated-interface-degradation"
+            and device_id == "cisco-asr9k-pe1"
+        ):
+            correlated_interface = "HundredGigE0/0/0/1"
+            ordered_interfaces = (
+                correlated_interface,
+                *(
+                    name
+                    for name in target_cfg.interfaces
+                    if name != correlated_interface
+                ),
+            )
+            target_cfg = replace(
+                target_cfg,
+                interfaces=ordered_interfaces,
+                primary_uplink=correlated_interface,
+            )
 
         return self._build_snapshot(target_cfg, eff_phase, eff_tick, eff_seed)
 

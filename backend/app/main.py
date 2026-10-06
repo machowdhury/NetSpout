@@ -1263,8 +1263,11 @@ def get_service_health():
 # =========================================================================
 @app.get("/api/health/pipelines")
 def get_pipelines_health():
-    from app.embedded_pipelines import embedded_pipelines
-    return embedded_pipelines.get_health()
+    return {
+        "components": unified_generation_service.runtime_health(
+            _unified_transport_config()
+        )
+    }
 
 
 # =========================================================================
@@ -1278,7 +1281,7 @@ def _unified_transport_config() -> TelemetryTransportConfig:
 
 @app.get("/api/generation/capabilities")
 def get_unified_generation_capabilities():
-    return unified_generation_service.capabilities()
+    return unified_generation_service.capabilities(_unified_transport_config())
 
 
 @app.post("/api/generation/preview")

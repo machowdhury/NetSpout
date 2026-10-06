@@ -197,6 +197,30 @@ export interface GenerationDestination {
   configured: boolean;
 }
 
+export type RuntimeHealthState =
+  | 'RUNNING'
+  | 'REACHABLE'
+  | 'READY'
+  | 'DEGRADED'
+  | 'FAILED'
+  | 'NOT_CONFIGURED';
+
+export interface RuntimeCapability {
+  channel: string;
+  level: string;
+  source_transport: string;
+  destination_transport: string;
+  evidence_stages: string[];
+  note: string;
+}
+
+export interface RuntimeComponentHealth {
+  component: string;
+  state: RuntimeHealthState;
+  detail: string;
+  channel: string | null;
+}
+
 export interface IntegrationReadiness {
   recommendation_id: string;
   source_id: string;
@@ -241,6 +265,12 @@ export interface GenerationCapabilities {
   destinations: GenerationDestination[];
   integration_recommendations: IntegrationReadiness[];
   investigations: InvestigationRecipe[];
+  native_runtime?: {
+    capabilities: RuntimeCapability[];
+    component_health: RuntimeComponentHealth[];
+    source_ids?: string[];
+    scenario_ids?: string[];
+  };
   raw_preview_policy: string;
 }
 
@@ -267,18 +297,26 @@ export interface GeneratedEvent {
   raw: string;
 }
 
+export interface SourceBinding {
+  source_id: string;
+  generator_id: string;
+  /** Backend legacy field; represents the source-native transport. */
+  transport_id: string;
+  source_transport_id?: string;
+  destination_transport_id?: string;
+  destination_id: string;
+  validator_ids: string[];
+  required?: boolean;
+  runtime_adapter_ref?: string | null;
+  receiver_component_id?: string | null;
+}
+
 export interface GenerationPreview {
   mode: GenerationMode;
   selection_id: string;
   scenario: GenerationScenario | null;
   sources: GenerationSource[];
-  bindings: Array<{
-    source_id: string;
-    generator_id: string;
-    transport_id: string;
-    destination_id: string;
-    validator_ids: string[];
-  }>;
+  bindings: SourceBinding[];
   integration_readiness: IntegrationReadiness[];
   investigations: InvestigationRecipe[];
   raw_preview: GeneratedEvent[];
@@ -312,6 +350,24 @@ export interface EvidenceStage {
   detail: string;
 }
 
+export interface ChannelResult {
+  source_id: string;
+  channel: string;
+  required: boolean;
+  runtime_adapter_ref: string;
+  receiver_component_id: string | null;
+  source_transport_id: string;
+  destination_transport_id: string;
+  run_id: string;
+  scenario_id: string;
+  entity_id: string;
+  seed: number;
+  clock_state: string;
+  status: string;
+  evidence: EvidenceStage[];
+  errors: string[];
+}
+
 export interface ScenarioValidationResult {
   validation_id: string;
   label: string;
@@ -336,6 +392,7 @@ export interface GenerationRun {
   status: string;
   events: GeneratedEvent[];
   evidence: EvidenceStage[];
+  channel_results: ChannelResult[];
   validation?: ScenarioValidationResult[];
   integration_readiness: IntegrationReadiness[];
   investigations: InvestigationRecipe[];

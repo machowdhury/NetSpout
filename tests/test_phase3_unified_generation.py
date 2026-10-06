@@ -69,19 +69,35 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
             item for item in capabilities["sources"] if item["generation"]["runnable"]
         ]
         self.assertEqual(
-            [item["source_id"] for item in runnable], ["ietf-syslog-rfc5424"]
+            {item["source_id"] for item in runnable},
+            {
+                "ietf-syslog-rfc5424",
+                "ietf-snmpv2c-ifmib",
+                "ietf-netflow-v9",
+                "ietf-ipfix",
+                "openconfig-gnmi-interfaces",
+            },
         )
         self.assertEqual(
-            [item["name"] for item in capabilities["sourcetypes"] if item["runnable"]],
-            ["netspout:rfc5424"],
+            {
+                item["name"]
+                for item in capabilities["sourcetypes"]
+                if item["runnable"]
+            },
+            {"netspout:rfc5424", "openconfig:gnmi:telemetry"},
         )
-        self.assertEqual(len(capabilities["scenarios"]), 1)
+        self.assertGreaterEqual(len(capabilities["scenarios"]), 1)
+        legacy_scenario = next(
+            item
+            for item in capabilities["scenarios"]
+            if item["scenario_id"] == "rfc5424-link-state-lifecycle"
+        )
         self.assertEqual(
-            capabilities["scenarios"][0]["composition_id"],
+            legacy_scenario["composition_id"],
             "compose-rfc5424-link-state-local",
         )
         self.assertEqual(
-            capabilities["scenarios"][0]["verification_state"],
+            legacy_scenario["verification_state"],
             "PARTIALLY_VERIFIED",
         )
 

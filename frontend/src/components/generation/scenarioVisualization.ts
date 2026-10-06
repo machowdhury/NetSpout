@@ -90,7 +90,11 @@ export function buildScenarioVisualization(
         y,
         state: states.get(node.node_id) ?? (run ? 'NORMAL' : 'UNKNOWN'),
         incident: scenario.incident_path.includes(node.node_id),
-        generated: run?.events.filter((event) => node.source_ids.includes(event.source_id)).length ?? 0,
+        generated: run?.channel_results?.length
+          ? run.channel_results
+            .filter((channel) => node.source_ids.includes(channel.source_id))
+            .reduce((total, channel) => total + (channel.evidence.find((item) => item.stage === 'GENERATED')?.count ?? 0), 0)
+          : run?.events.filter((event) => node.source_ids.includes(event.source_id)).length ?? 0,
       });
     });
   });

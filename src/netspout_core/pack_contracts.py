@@ -80,6 +80,8 @@ class ValidationStage(str, Enum):
 
 class ScenarioStage(str, Enum):
     BASELINE = "BASELINE"
+    DEGRADE = "DEGRADE"
+    FAILOVER = "FAILOVER"
     PRECURSOR = "PRECURSOR"
     INCIDENT = "INCIDENT"
     IMPACT = "IMPACT"
@@ -580,7 +582,11 @@ class SourceBinding(StrictModel):
     source_id: str
     generator_id: str
     transport_id: str
+    destination_transport_id: Optional[str] = None
     destination_id: str
+    runtime_adapter_ref: Optional[str] = None
+    receiver_component_id: Optional[str] = None
+    required: bool = True
     validator_ids: List[str] = Field(default_factory=list)
 
 
@@ -769,6 +775,13 @@ class PackRegistry(StrictModel):
             for binding in composition.source_bindings:
                 _require_refs([binding.generator_id], generator_ids, binding.source_id, "generator")
                 _require_refs([binding.transport_id], transport_ids, binding.source_id, "transport")
+                if binding.destination_transport_id:
+                    _require_refs(
+                        [binding.destination_transport_id],
+                        transport_ids,
+                        binding.source_id,
+                        "destination transport",
+                    )
                 _require_refs(
                     [binding.destination_id],
                     destination_ids,
@@ -808,10 +821,15 @@ class PackRegistry(StrictModel):
                     not in transports[binding.transport_id].compatible_source_ids
                 ):
                     raise ValueError("transport does not declare the bound source")
-                if binding.transport_id not in destinations[
+                destination_transport_id = (
+                    binding.destination_transport_id or binding.transport_id
+                )
+                if destination_transport_id not in destinations[
                     binding.destination_id
                 ].accepted_transport_ids:
-                    raise ValueError("destination does not accept the bound transport")
+                    raise ValueError(
+                        "destination does not accept the bound destination transport"
+                    )
         return self
 
     def _resources(self):

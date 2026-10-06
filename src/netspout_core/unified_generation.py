@@ -12,13 +12,20 @@ import urllib.request
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from pydantic import Field, model_validator
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.catalog_contracts import VerificationState
 from netspout_core.models import LogEntry, TelemetryTransportConfig
+from netspout_core.native_runtime import (
+    build_shared_enterprise_state_plan,
+    ChannelRunResult,
+    HealthState,
+    NativeChannel,
+    NativeRuntimeFacade,
+)
 from netspout_core.pack_contracts import (
     CompositionDefinition,
     evaluate_guided_scenario_completeness,
@@ -113,6 +120,31 @@ class GeneratedEvent(StrictModel):
     raw: str
 
 
+class ChannelEvidenceResult(StrictModel):
+    stage: str
+    state: EvidenceState
+    count: int = 0
+    detail: str
+
+
+class UnifiedChannelResult(StrictModel):
+    source_id: str
+    channel: str
+    required: bool
+    runtime_adapter_ref: str
+    receiver_component_id: Optional[str] = None
+    source_transport_id: str
+    destination_transport_id: str
+    run_id: str
+    scenario_id: str
+    entity_id: str
+    seed: int
+    clock_state: str
+    status: str
+    evidence: List[ChannelEvidenceResult]
+    errors: List[str] = Field(default_factory=list)
+
+
 class UnifiedGenerationRun(StrictModel):
     run_id: str
     mode: GenerationMode
@@ -128,6 +160,7 @@ class UnifiedGenerationRun(StrictModel):
     status: str
     events: List[GeneratedEvent]
     evidence: List[EvidenceStageResult]
+    channel_results: List[UnifiedChannelResult] = Field(default_factory=list)
     validation: List[ScenarioValidationResult] = Field(default_factory=list)
     integration_readiness: List[Dict[str, Any]]
     investigations: List[Dict[str, Any]]
@@ -137,6 +170,7 @@ class UnifiedGenerationRun(StrictModel):
 class UnifiedGenerationService:
     """Resolve validated declarations, then invoke only allow-listed adapters."""
 
+    DISABLED_CORRELATED_SCENARIOS: Dict[str, str] = {}
     SOURCETYPE = "netspout:rfc5424"
     SOURCE_ID = "ietf-syslog-rfc5424"
     GENERATOR_ID = "generator-rfc5424-modeled"
@@ -148,9 +182,11 @@ class UnifiedGenerationService:
         self,
         catalog: Optional[NetSpoutCatalog] = None,
         dispatcher: Optional[TelemetryDispatcher] = None,
+        native_runtime_factory: Optional[Callable[..., NativeRuntimeFacade]] = None,
     ):
         self.catalog = catalog or NetSpoutCatalog()
         self.dispatcher = dispatcher or TelemetryDispatcher()
+        self.native_runtime_factory = native_runtime_factory or NativeRuntimeFacade
         self.registry = PackRegistry.model_validate(
             self.catalog.get_extension_pack_registry()
         )
@@ -161,8 +197,20 @@ class UnifiedGenerationService:
         self._validator_adapters = {
             self.VALIDATOR_ID: self._validate_rfc5424,
         }
+        self._native_adapter_channels = {
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog": NativeChannel.SYSLOG,
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp": NativeChannel.SNMP,
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_gnmi": NativeChannel.GNMI,
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_flow": None,
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_otel": NativeChannel.OTEL,
+        }
 
-    def capabilities(self) -> Dict[str, Any]:
+    def capabilities(
+        self,
+        transport_config: Optional[TelemetryTransportConfig] = None,
+        *,
+        include_runtime_health: bool = False,
+    ) -> Dict[str, Any]:
         resources = self.registry._resources()
         sources = {
             item["source_id"]: item
@@ -213,6 +261,10 @@ class UnifiedGenerationService:
         }
         for scenario in resources["scenarios"]:
             composition = compositions.get(scenario.scenario_id)
+            disabled_reason = self.DISABLED_CORRELATED_SCENARIOS.get(
+                scenario.scenario_id
+            )
+            executable = composition is not None and disabled_reason is None
             scenario_verification = self._scenario_verification(scenario, sources)
             provenance_available = all(
                 bool(sources.get(source_id, {}).get("evidence_ids"))
@@ -223,20 +275,29 @@ class UnifiedGenerationService:
                 {
                     **scenario.model_dump(mode="json"),
                     "composition_id": (
-                        composition.composition_id if composition else None
+                        composition.composition_id if executable else None
                     ),
-                    "verification_state": scenario_verification,
+                    "verification_state": (
+                        "RESEARCH_REQUIRED"
+                        if disabled_reason
+                        else scenario_verification
+                    ),
                     "maturity": self._scenario_pack_maturity(scenario.scenario_id),
                     "source_count": len(scenario.source_ids),
                     "integration_count": len(
                         scenario.integration_recommendation_ids
                     ),
-                    "runnable": composition is not None,
+                    "runnable": executable,
+                    "blocked_reason": disabled_reason,
                     "guided_completeness": evaluate_guided_scenario_completeness(
                         scenario,
-                        executable=composition is not None,
+                        executable=executable,
                         provenance_available=provenance_available,
-                        verification_state=VerificationState(scenario_verification),
+                        verification_state=VerificationState(
+                            "RESEARCH_REQUIRED"
+                            if disabled_reason
+                            else scenario_verification
+                        ),
                     ),
                 }
             )
@@ -274,6 +335,50 @@ class UnifiedGenerationService:
                         "generation_controls": ["count", "rate_eps", "duration_seconds"],
                     }
                 )
+
+        runtime = self.native_runtime_factory(
+            transport_config or TelemetryTransportConfig(),
+            dispatcher=self.dispatcher,
+        )
+        native_capabilities = [
+            {
+                "channel": channel.value,
+                "level": capability.level.value,
+                "source_transport": capability.source_transport,
+                "destination_transport": capability.destination_transport,
+                "evidence_stages": list(capability.evidence_stages),
+                "note": capability.note,
+            }
+            for channel, capability in runtime.capabilities().items()
+        ]
+        component_health = (
+            [self._component_health_view(item) for item in runtime.health()]
+            if include_runtime_health
+            else []
+        )
+        native_source_ids = sorted(
+            {
+                "ietf-syslog-rfc5424",
+                "ietf-netflow-v9",
+                "ietf-ipfix",
+                *(
+                    binding.source_id
+                    for composition in self.registry.compositions
+                    for binding in composition.source_bindings
+                    if binding.runtime_adapter_ref in self._native_adapter_channels
+                ),
+            }
+        )
+        native_scenario_ids = sorted(
+            {
+                composition.scenario_id
+                for composition in self.registry.compositions
+                if any(
+                    binding.runtime_adapter_ref in self._native_adapter_channels
+                    for binding in composition.source_bindings
+                )
+            }
+        )
 
         return {
             "schema_version": "1.0.0",
@@ -332,6 +437,12 @@ class UnifiedGenerationService:
             "destinations": destinations,
             "integration_recommendations": list(recommendations.values()),
             "investigations": list(investigations.values()),
+            "native_runtime": {
+                "capabilities": native_capabilities,
+                "component_health": component_health,
+                "source_ids": native_source_ids,
+                "scenario_ids": native_scenario_ids,
+            },
             "raw_preview_policy": (
                 "Generated preview values are fictional and modeled; structural "
                 "fields follow the cited RFC 5424 contract."
@@ -342,15 +453,21 @@ class UnifiedGenerationService:
         resolved = self._resolve(request)
         run_id = "preview-00000000"
         phases = resolved["phases"]
-        preview_events = [
-            self._generator_adapters[resolved["generator_ids"][0]](
-                run_id=run_id,
-                phase=phase,
-                ordinal=index,
-                event_family=resolved["event_family"],
-            )
-            for index, phase in enumerate(phases[:3])
-        ]
+        is_native = any(
+            binding.get("runtime_adapter_ref")
+            for binding in resolved["bindings"]
+        )
+        preview_events = []
+        if not is_native:
+            preview_events = [
+                self._generator_adapters[resolved["generator_ids"][0]](
+                    run_id=run_id,
+                    phase=phase,
+                    ordinal=index,
+                    event_family=resolved["event_family"],
+                )
+                for index, phase in enumerate(phases[:3])
+            ]
         source = resolved["sources"][0]
         return {
             "mode": request.mode.value,
@@ -364,8 +481,11 @@ class UnifiedGenerationService:
                 event.model_dump(mode="json") for event in preview_events
             ],
             "preview_notice": (
-                "Preview values are fictional modeled values. The event structure "
-                "and provenance are identified separately."
+                "Native binary or receiver-bound telemetry is not fabricated in "
+                "preview; execute the run to collect receiver evidence."
+                if is_native
+                else "Preview values are fictional modeled values. The event "
+                "structure and provenance are identified separately."
             ),
             "native_contract": source["native_contract"],
             "splunk_contract": source["splunk_contract"],
@@ -400,7 +520,10 @@ class UnifiedGenerationService:
             ),
         ]
         transport_ok = request.transport_id in {
-            item["transport_id"] for item in self.capabilities()["transports"]
+            item["transport_id"]
+            for item in self.capabilities(
+                include_runtime_health=False
+            )["transports"]
         }
         checks.append(
             PreflightCheck(
@@ -411,7 +534,10 @@ class UnifiedGenerationService:
             )
         )
         destination_ok = request.destination_id in {
-            item["destination_id"] for item in self.capabilities()["destinations"]
+            item["destination_id"]
+            for item in self.capabilities(
+                include_runtime_health=False
+            )["destinations"]
         }
         checks.append(
             PreflightCheck(
@@ -425,11 +551,68 @@ class UnifiedGenerationService:
         checks.append(
             PreflightCheck(
                 check_id="destination-reachable",
-                label="Splunk destination reachable",
+                label="Splunk HEC reachable",
                 state="PASS" if hec_ok else "BLOCK",
                 detail=hec_detail,
             )
         )
+        native_bindings = [
+            item for item in resolved["bindings"] if item.get("runtime_adapter_ref")
+        ]
+        search_ok, search_detail = self._check_splunk_search(transport_config)
+        checks.append(
+            PreflightCheck(
+                check_id="splunk-search-authenticated",
+                label="Authenticated Splunk search",
+                state=(
+                    "PASS"
+                    if search_ok
+                    else ("BLOCK" if native_bindings else "WARN")
+                ),
+                detail=search_detail,
+            )
+        )
+        if native_bindings:
+            runtime = self.native_runtime_factory(
+                transport_config, dispatcher=self.dispatcher
+            )
+            channels = [self._channel_for_binding(item) for item in native_bindings]
+            runtime_preflight = runtime.preflight(channels)
+            components_by_channel = {
+                item.channel.value: item
+                for item in runtime_preflight.components
+                if item.channel is not None
+            }
+            for binding in native_bindings:
+                channel = self._channel_for_binding(binding)
+                component = components_by_channel.get(channel.value)
+                ready = bool(
+                    component
+                    and component.state
+                    in {
+                        HealthState.RUNNING,
+                        HealthState.REACHABLE,
+                        HealthState.READY,
+                    }
+                )
+                required = bool(binding.get("required", True))
+                checks.append(
+                    PreflightCheck(
+                        check_id="native-" + binding["source_id"],
+                        label=binding.get("receiver_component_id")
+                        or channel.value,
+                        state=(
+                            "PASS"
+                            if ready
+                            else ("BLOCK" if required else "WARN")
+                        ),
+                        detail=(
+                            component.detail
+                            if component
+                            else "No runtime readiness evidence was returned."
+                        ),
+                    )
+                )
         for recommendation in resolved["integration_readiness"]:
             requirement = recommendation["requirement"]
             detected = recommendation["detected"]
@@ -480,6 +663,7 @@ class UnifiedGenerationService:
         run_id = str(uuid.uuid4())
         started_at = _utc_now()
         events: List[GeneratedEvent] = []
+        channel_results: List[UnifiedChannelResult] = []
         sent = 0
         generated = 0
         valid = 0
@@ -487,39 +671,119 @@ class UnifiedGenerationService:
         phases = resolved["phases"]
         pacing = 1.0 / float(request.rate_eps)
 
-        for index, phase in enumerate(phases):
-            event = self._generator_adapters[resolved["generator_ids"][0]](
-                run_id=run_id,
-                phase=phase,
-                ordinal=index,
-                event_family=resolved["event_family"],
+        native_bindings = [
+            item for item in resolved["bindings"] if item.get("runtime_adapter_ref")
+        ]
+        if native_bindings:
+            runtime = self.native_runtime_factory(
+                transport_config, dispatcher=self.dispatcher
             )
-            generated += 1
-            events.append(event)
-            if self._validator_adapters[self.VALIDATOR_ID](event.raw):
-                valid += 1
-            entry = self._to_log_entry(event, run_id, resolved.get("scenario_id"))
-            result = self.dispatcher.dispatch_log(entry, transport_config)
-            hec_result = result.get("hec")
-            if hec_result and hec_result.get("success"):
-                sent += 1
-            else:
-                message = (
-                    hec_result.get("message")
-                    if isinstance(hec_result, dict)
-                    else "HEC dispatch was not attempted"
+            scenario_id = resolved.get("scenario_id") or request.selection_id
+            entity_id = str(
+                request.scenario_parameters.get("entity_id")
+                or self._scenario_entity_id(resolved.get("scenario"))
+            )
+            if len(native_bindings) == 1 and not resolved.get("scenario_id"):
+                source_id = native_bindings[0]["source_id"]
+                native_identity = {
+                    "openconfig-gnmi-interfaces": (
+                        "openconfig_mdt_streaming",
+                        "node-cisco8k",
+                    ),
+                    "ietf-snmpv2c-ifmib": (
+                        "service_provider_cisco",
+                        "cisco-asr9k-pe1",
+                    ),
+                }.get(source_id)
+                if native_identity:
+                    scenario_id, default_entity_id = native_identity
+                    entity_id = str(
+                        request.scenario_parameters.get("entity_id")
+                        or default_entity_id
+                    )
+            seed = int(
+                request.scenario_parameters.get(
+                    "seed", uuid.UUID(run_id).int % 2147483647
                 )
-                dispatch_errors.append(str(message))
-            if index < len(phases) - 1 and pacing > 0:
-                time.sleep(min(pacing, 0.25))
-
-        evidence = self._initial_evidence(
-            generated=generated,
-            sent=sent,
-            valid=valid,
-            dispatch_errors=dispatch_errors,
-        )
-        status = "COMPLETED" if sent == generated else "DEGRADED"
+            )
+            correlated_results: Dict[NativeChannel, ChannelRunResult] = {}
+            if scenario_id == "test-correlated-interface-degradation":
+                state_plan = build_shared_enterprise_state_plan(
+                    run_id=run_id,
+                    scenario_id=scenario_id,
+                    entity_id=entity_id,
+                    seed=seed,
+                )
+                correlated = runtime.run_correlated(
+                    run_id,
+                    seed,
+                    scenario_id=scenario_id,
+                    entity_id=entity_id,
+                    state_plan=state_plan,
+                )
+                correlated_results = correlated.channels
+            for binding in native_bindings:
+                channel = self._channel_for_binding(binding)
+                native_result = correlated_results.get(channel)
+                if native_result is None:
+                    native_result = self._execute_native_binding(
+                        runtime,
+                        binding,
+                        run_id=run_id,
+                        scenario_id=scenario_id,
+                        entity_id=entity_id,
+                        seed=seed,
+                        single_event=request.mode == GenerationMode.SINGLE_EVENT,
+                        event_family=resolved["event_family"],
+                    )
+                channel_results.append(
+                    self._channel_result_view(
+                        binding, native_result, started_at
+                    )
+                )
+            evidence = self._native_global_evidence(channel_results)
+            required_results = [
+                item for item in channel_results if item.required
+            ]
+            status = (
+                "COMPLETED"
+                if required_results
+                and all(item.status == "COMPLETED" for item in required_results)
+                else "DEGRADED"
+            )
+        else:
+            for index, phase in enumerate(phases):
+                event = self._generator_adapters[resolved["generator_ids"][0]](
+                    run_id=run_id,
+                    phase=phase,
+                    ordinal=index,
+                    event_family=resolved["event_family"],
+                )
+                generated += 1
+                events.append(event)
+                if self._validator_adapters[self.VALIDATOR_ID](event.raw):
+                    valid += 1
+                entry = self._to_log_entry(event, run_id, resolved.get("scenario_id"))
+                result = self.dispatcher.dispatch_log(entry, transport_config)
+                hec_result = result.get("hec")
+                if hec_result and hec_result.get("success"):
+                    sent += 1
+                else:
+                    message = (
+                        hec_result.get("message")
+                        if isinstance(hec_result, dict)
+                        else "HEC dispatch was not attempted"
+                    )
+                    dispatch_errors.append(str(message))
+                if index < len(phases) - 1 and pacing > 0:
+                    time.sleep(min(pacing, 0.25))
+            evidence = self._initial_evidence(
+                generated=generated,
+                sent=sent,
+                valid=valid,
+                dispatch_errors=dispatch_errors,
+            )
+            status = "COMPLETED" if sent == generated else "DEGRADED"
         run = UnifiedGenerationRun(
             run_id=run_id,
             mode=request.mode,
@@ -535,16 +799,25 @@ class UnifiedGenerationService:
             status=status,
             events=events,
             evidence=evidence,
+            channel_results=channel_results,
             validation=self._validation_results(
-                resolved.get("scenario"), evidence
+                resolved.get("scenario"), evidence, channel_results
             ),
             integration_readiness=resolved["integration_readiness"],
             investigations=resolved["investigations"],
-            limitations=[
-                "HEC acceptance proves dispatch, not indexed Splunk observation.",
-                "Receiver observation is not independently available for this HEC path.",
-                "No CIM mapping is claimed for the NetSpout-defined sourcetype.",
-            ],
+            limitations=(
+                [
+                    "Native channel success is limited to its independently proven evidence stages.",
+                    "HEC acceptance does not prove indexed Splunk observation.",
+                    "Authenticated observation is evaluated separately per channel.",
+                ]
+                if native_bindings
+                else [
+                    "HEC acceptance proves dispatch, not indexed Splunk observation.",
+                    "Receiver observation is not independently available for this HEC path.",
+                    "No CIM mapping is claimed for the NetSpout-defined sourcetype.",
+                ]
+            ),
         )
         self.runs[run_id] = run
         return run
@@ -560,7 +833,9 @@ class UnifiedGenerationService:
         return next(
             (
                 item
-                for item in self.capabilities()["scenarios"]
+                for item in self.capabilities(
+                    include_runtime_health=False
+                )["scenarios"]
                 if item["scenario_id"] == run.scenario_id
             ),
             None,
@@ -570,13 +845,33 @@ class UnifiedGenerationService:
         self,
         scenario: Optional[Dict[str, Any]],
         evidence: List[EvidenceStageResult],
+        channel_results: Optional[List[UnifiedChannelResult]] = None,
     ) -> List[ScenarioValidationResult]:
         if not scenario:
             return []
         evidence_by_stage = {item.stage: item for item in evidence}
         results = []
         for expectation in scenario.get("validation_expectations", []):
-            observed = evidence_by_stage.get(expectation["evidence_stage"])
+            source_id = expectation.get("source_id")
+            if source_id and channel_results:
+                channel = next(
+                    (
+                        item
+                        for item in channel_results
+                        if item.source_id == source_id
+                    ),
+                    None,
+                )
+                observed = next(
+                    (
+                        item
+                        for item in (channel.evidence if channel else [])
+                        if item.stage == expectation["evidence_stage"]
+                    ),
+                    None,
+                )
+            else:
+                observed = evidence_by_stage.get(expectation["evidence_stage"])
             expected_state = expectation["expected_state"]
             matched = observed is not None and observed.state.value == expected_state
             results.append(
@@ -615,7 +910,10 @@ class UnifiedGenerationService:
         run = self.runs.get(run_id)
         if not run:
             raise KeyError(run_id)
+        if run.channel_results:
+            return self._observe_native_run(run, transport_config)
         observed, detail = self._search_splunk(run_id, transport_config)
+        authenticated = not detail.startswith("Splunk observation unavailable:")
         updated = []
         for stage in run.evidence:
             if stage.stage == "SPLUNK_OBSERVED":
@@ -625,7 +923,11 @@ class UnifiedGenerationService:
                         state=(
                             EvidenceState.PROVEN
                             if observed > 0
-                            else EvidenceState.PENDING
+                            else (
+                                EvidenceState.PENDING
+                                if authenticated
+                                else EvidenceState.FAILED
+                            )
                         ),
                         count=observed,
                         detail=detail,
@@ -638,7 +940,11 @@ class UnifiedGenerationService:
                         state=(
                             EvidenceState.PROVEN
                             if observed > 0
-                            else EvidenceState.PENDING
+                            else (
+                                EvidenceState.PENDING
+                                if authenticated
+                                else EvidenceState.FAILED
+                            )
                         ),
                         count=observed,
                         detail=(
@@ -651,11 +957,157 @@ class UnifiedGenerationService:
             else:
                 updated.append(stage)
         run.evidence = updated
+        for channel_result in run.channel_results:
+            channel_count, channel_error = self._search_splunk_for_source(
+                run.run_id, channel_result.source_id, transport_config
+            )
+            channel_authenticated = channel_error is None
+            channel_result.evidence = [
+                (
+                    ChannelEvidenceResult(
+                        stage=item.stage,
+                        state=(
+                            EvidenceState.PROVEN
+                            if channel_count > 0
+                            else (
+                                EvidenceState.PENDING
+                                if channel_authenticated
+                                else EvidenceState.FAILED
+                            )
+                        ),
+                        count=channel_count,
+                        detail=(
+                            "Authenticated Splunk search proved channel observation."
+                            if channel_count > 0
+                            else (
+                                "Authenticated search succeeded; channel observation is pending."
+                                if channel_authenticated
+                                else "Splunk observation unavailable: {}".format(
+                                    channel_error
+                                )
+                            )
+                        ),
+                    )
+                    if item.stage == "SPLUNK_OBSERVED"
+                    else item
+                )
+                for item in channel_result.evidence
+            ]
         scenario = self._scenario_for_run(run)
-        run.validation = self._validation_results(scenario, updated)
-        if observed > 0:
+        run.validation = self._validation_results(
+            scenario, updated, run.channel_results
+        )
+        channels_observed = (
+            not run.channel_results
+            or all(
+                any(
+                    item.stage == "SPLUNK_OBSERVED"
+                    and item.state == EvidenceState.PROVEN
+                    for item in result.evidence
+                )
+                for result in run.channel_results
+                if result.required
+            )
+        )
+        if observed > 0 and channels_observed:
             run.status = "OBSERVED"
         self.runs[run_id] = run
+        return run
+
+    def _observe_native_run(
+        self,
+        run: UnifiedGenerationRun,
+        transport_config: TelemetryTransportConfig,
+    ) -> UnifiedGenerationRun:
+        for channel_result in run.channel_results:
+            channel_failed = channel_result.status == "FAILED"
+            channel_count, channel_error = self._search_splunk_for_source(
+                run.run_id, channel_result.source_id, transport_config
+            )
+            channel_authenticated = channel_error is None
+            channel_result.evidence = [
+                (
+                    ChannelEvidenceResult(
+                        stage=item.stage,
+                        state=(
+                            EvidenceState.PROVEN
+                            if channel_count > 0
+                            else (
+                                EvidenceState.PENDING
+                                if channel_authenticated
+                                else EvidenceState.FAILED
+                            )
+                        ),
+                        count=channel_count,
+                        detail=(
+                            "Source-scoped authenticated search proved observation."
+                            if channel_count > 0
+                            else (
+                                "Source-scoped search succeeded; observation is pending."
+                                if channel_authenticated
+                                else "Splunk observation unavailable: {}".format(
+                                    channel_error
+                                )
+                            )
+                        ),
+                    )
+                    if item.stage == "SPLUNK_OBSERVED"
+                    else item
+                )
+                for item in channel_result.evidence
+            ]
+            if channel_count > 0 and not channel_failed:
+                channel_result.status = "OBSERVED"
+
+        required = [item for item in run.channel_results if item.required]
+        observed_evidence = [
+            next(
+                (
+                    evidence
+                    for evidence in result.evidence
+                    if evidence.stage == "SPLUNK_OBSERVED"
+                ),
+                None,
+            )
+            for result in required
+        ]
+        all_observed = bool(required) and all(
+            item is not None
+            and item.state == EvidenceState.PROVEN
+            and result.status != "FAILED"
+            for result, item in zip(required, observed_evidence)
+        )
+        observed_count = sum(item.count for item in observed_evidence if item)
+        run.evidence = [
+            (
+                EvidenceStageResult(
+                    stage=item.stage,
+                    state=(
+                        EvidenceState.PROVEN
+                        if all_observed
+                        else EvidenceState.PENDING
+                    ),
+                    count=observed_count,
+                    detail=(
+                        "Every required source proved indexed observation."
+                        if all_observed
+                        else "No cross-credit: every required source must prove "
+                        "its own indexed observation."
+                    ),
+                )
+                if item.stage
+                in {"SPLUNK_OBSERVED", "SOURCETYPE_VERIFIED", "FIELDS_VERIFIED"}
+                else item
+            )
+            for item in run.evidence
+        ]
+        scenario = self._scenario_for_run(run)
+        run.validation = self._validation_results(
+            scenario, run.evidence, run.channel_results
+        )
+        if all_observed:
+            run.status = "OBSERVED"
+        self.runs[run.run_id] = run
         return run
 
     def run_investigation(
@@ -690,7 +1142,7 @@ class UnifiedGenerationService:
         }
 
     def _resolve(self, request: UnifiedGenerationRequest) -> Dict[str, Any]:
-        capabilities = self.capabilities()
+        capabilities = self.capabilities(include_runtime_health=False)
         scenarios = {
             item["scenario_id"]: item for item in capabilities["scenarios"]
         }
@@ -705,22 +1157,31 @@ class UnifiedGenerationService:
         event_family = self.EVENT_FAMILY_ID
 
         if request.mode == GenerationMode.SCENARIO:
+            disabled_reason = self.DISABLED_CORRELATED_SCENARIOS.get(
+                request.selection_id
+            )
+            if disabled_reason:
+                raise ValueError(disabled_reason)
             scenario = scenarios.get(request.selection_id)
             composition = compositions.get(request.selection_id)
             if not scenario or not composition:
                 raise ValueError("scenario is not backed by a validated composition")
             source_ids = scenario["source_ids"]
             phases = [item["stage"] for item in scenario["timeline"]]
-            generator_ids = [
-                item.generator_id for item in composition.source_bindings
+            bindings = [
+                item.model_dump(mode="json")
+                for item in composition.source_bindings
             ]
+            generator_ids = [item["generator_id"] for item in bindings]
         elif request.mode == GenerationMode.DATA_SOURCE:
             source = source_by_id.get(request.selection_id)
             if not source:
                 raise ValueError("unknown catalog source")
             self._require_runnable_source(source)
             source_ids = [source["source_id"]]
-            generator_ids = [self.GENERATOR_ID]
+            bindings = [self._binding_for_source(source["source_id"], request)]
+            self._enforce_native_cardinality(request, bindings)
+            generator_ids = [bindings[0]["generator_id"]]
             phases = ["GENERATE"] * self._bounded_count(request)
         elif request.mode == GenerationMode.SOURCETYPE:
             claim = next(
@@ -731,10 +1192,15 @@ class UnifiedGenerationService:
                 ),
                 None,
             )
-            if not claim or not claim["runnable"]:
+            if not claim or not (
+                claim["runnable"]
+                or self._source_has_native_binding(claim["source_id"])
+            ):
                 raise ValueError("sourcetype is not available for generation")
             source_ids = [claim["source_id"]]
-            generator_ids = [self.GENERATOR_ID]
+            bindings = [self._binding_for_source(claim["source_id"], request)]
+            self._enforce_native_cardinality(request, bindings)
+            generator_ids = [bindings[0]["generator_id"]]
             phases = ["GENERATE"] * self._bounded_count(request)
         else:
             family = next(
@@ -745,18 +1211,50 @@ class UnifiedGenerationService:
                 ),
                 None,
             )
-            if not family or not family["runnable"]:
+            source_id = family["source_id"] if family else request.selection_id
+            source = source_by_id.get(source_id)
+            if family and not family["runnable"]:
                 raise ValueError("event family is not available for generation")
-            source_ids = [family["source_id"]]
-            generator_ids = [self.GENERATOR_ID]
+            if not source:
+                claim = next(
+                    (
+                        item
+                        for item in capabilities["sourcetypes"]
+                        if item["name"] == request.selection_id
+                    ),
+                    None,
+                )
+                source_id = claim["source_id"] if claim else source_id
+                source = source_by_id.get(source_id)
+            if not source:
+                raise ValueError("event family is not available for generation")
+            self._require_runnable_source(source)
+            source_ids = [source_id]
+            bindings = [self._binding_for_source(source_id, request)]
+            if bindings[0].get("runtime_adapter_ref"):
+                raise ValueError(
+                    "SINGLE_EVENT is unavailable for native lifecycle adapters; "
+                    "no exact one-PDU/update implementation is declared"
+                )
+            generator_ids = [bindings[0]["generator_id"]]
             phases = ["SINGLE_EVENT"]
 
-        if request.transport_id != "transport-local-hec":
-            raise ValueError("transport is not supported by this runtime binding")
-        if request.destination_id != "destination-local-docker-splunk":
-            raise ValueError("destination is not supported by this runtime binding")
-        for generator_id in generator_ids:
-            if generator_id not in self._generator_adapters:
+        for binding in bindings:
+            destination_transport = (
+                binding.get("destination_transport_id")
+                or binding["transport_id"]
+            )
+            if request.transport_id != destination_transport:
+                raise ValueError(
+                    "transport is not supported by this destination binding"
+                )
+            if request.destination_id != binding["destination_id"]:
+                raise ValueError("destination is not supported by this runtime binding")
+            adapter_ref = binding.get("runtime_adapter_ref")
+            if adapter_ref:
+                if adapter_ref not in self._native_adapter_channels:
+                    raise ValueError("runtime adapter is not allow-listed")
+            elif binding["generator_id"] not in self._generator_adapters:
                 raise ValueError("generator is not allow-listed")
         sources = [source_by_id[source_id] for source_id in source_ids]
         for source in sources:
@@ -787,22 +1285,7 @@ class UnifiedGenerationService:
             "generator_ids": generator_ids,
             "phases": phases,
             "event_family": event_family,
-            "bindings": (
-                [
-                    item.model_dump(mode="json")
-                    for item in composition.source_bindings
-                ]
-                if composition
-                else [
-                    {
-                        "source_id": source_ids[0],
-                        "generator_id": generator_ids[0],
-                        "transport_id": request.transport_id,
-                        "destination_id": request.destination_id,
-                        "validator_ids": [self.VALIDATOR_ID],
-                    }
-                ]
-            ),
+            "bindings": bindings,
             "integration_readiness": [
                 recommendation_by_id[item] for item in recommendation_ids
             ],
@@ -810,6 +1293,341 @@ class UnifiedGenerationService:
                 investigation_by_id[item] for item in investigation_ids
             ],
         }
+
+    def _binding_for_source(
+        self, source_id: str, request: UnifiedGenerationRequest
+    ) -> Dict[str, Any]:
+        standalone_native = {
+            self.SOURCE_ID: {
+                "source_id": self.SOURCE_ID,
+                "generator_id": "generator-rfc5424-modeled",
+                "transport_id": "transport-native-syslog-udp",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog"
+                ),
+                "receiver_component_id": "bundled-syslog-receiver",
+                "required": True,
+                "validator_ids": ["validator-native-receiver-boundary"],
+            },
+            "ietf-snmpv2c-ifmib": {
+                "source_id": "ietf-snmpv2c-ifmib",
+                "generator_id": "generator-native-snmp-ifmib",
+                "transport_id": "transport-native-snmp-udp",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp"
+                ),
+                "receiver_component_id": "bundled-snmp-receiver",
+                "required": True,
+                "validator_ids": ["validator-native-receiver-boundary"],
+            },
+            "openconfig-gnmi-interfaces": {
+                "source_id": "openconfig-gnmi-interfaces",
+                "generator_id": "generator-native-gnmi-interfaces",
+                "transport_id": "transport-native-gnmi-grpc",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_gnmi"
+                ),
+                "receiver_component_id": "bundled-gnmi-subscriber",
+                "required": True,
+                "validator_ids": ["validator-native-receiver-boundary"],
+            },
+            "ietf-netflow-v9": {
+                "source_id": "ietf-netflow-v9",
+                "generator_id": "generator-native-netflow-v9",
+                "transport_id": "transport-native-netflow-v9-udp",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_flow"
+                ),
+                "receiver_component_id": "bundled-netflow-v9-collector",
+                "required": True,
+                "validator_ids": ["validator-native-receiver-boundary"],
+            },
+            "ietf-ipfix": {
+                "source_id": "ietf-ipfix",
+                "generator_id": "generator-native-ipfix",
+                "transport_id": "transport-native-ipfix-udp",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_flow"
+                ),
+                "receiver_component_id": "bundled-ipfix-collector",
+                "required": True,
+                "validator_ids": ["validator-native-receiver-boundary"],
+            },
+        }.get(source_id)
+        standalone_matches = bool(
+            standalone_native
+            and request.destination_id == standalone_native["destination_id"]
+            and request.transport_id
+            == standalone_native["destination_transport_id"]
+        )
+        native_single_lifecycle = (
+            request.mode in (GenerationMode.DATA_SOURCE, GenerationMode.SOURCETYPE)
+            and request.count == 1
+            and request.duration_seconds is None
+        )
+        if native_single_lifecycle and standalone_matches:
+            return standalone_native
+
+        candidates = [
+            item.model_dump(mode="json")
+            for composition in self.registry.compositions
+            for item in composition.source_bindings
+            if item.source_id == source_id
+            and item.destination_id == request.destination_id
+            and (
+                item.destination_transport_id or item.transport_id
+            )
+            == request.transport_id
+        ]
+        if not candidates:
+            if standalone_matches:
+                return standalone_native
+            raise ValueError(
+                "source has no catalog binding for the selected destination transport"
+            )
+        if source_id == self.SOURCE_ID:
+            candidates.sort(key=lambda item: bool(item.get("runtime_adapter_ref")))
+        return candidates[0]
+
+    @staticmethod
+    def _enforce_native_cardinality(
+        request: UnifiedGenerationRequest, bindings: List[Dict[str, Any]]
+    ) -> None:
+        if any(item.get("runtime_adapter_ref") for item in bindings):
+            if request.duration_seconds is not None or request.count != 1:
+                raise ValueError(
+                    "Native lifecycle adapters support exactly one lifecycle run; "
+                    "count must be 1 and duration_seconds must be omitted"
+                )
+
+    def _channel_for_binding(self, binding: Dict[str, Any]) -> NativeChannel:
+        adapter_ref = binding.get("runtime_adapter_ref")
+        if adapter_ref not in self._native_adapter_channels:
+            raise ValueError("runtime adapter is not allow-listed")
+        channel = self._native_adapter_channels[adapter_ref]
+        if channel is not None:
+            return channel
+        source_transport = binding["transport_id"]
+        if source_transport == "transport-native-netflow-v9-udp":
+            return NativeChannel.NETFLOW_V9
+        if source_transport == "transport-native-ipfix-udp":
+            return NativeChannel.IPFIX
+        raise ValueError("flow runtime adapter has an unsupported source transport")
+
+    def _execute_native_binding(
+        self,
+        runtime: NativeRuntimeFacade,
+        binding: Dict[str, Any],
+        *,
+        run_id: str,
+        scenario_id: str,
+        entity_id: str,
+        seed: int,
+        single_event: bool,
+        event_family: str,
+    ) -> ChannelRunResult:
+        channel = self._channel_for_binding(binding)
+        adapter_ref = binding["runtime_adapter_ref"]
+        if adapter_ref.endswith(".run_syslog"):
+            phase = "SINGLE_EVENT" if single_event else "BASELINE"
+            payload = self._generate_rfc5424_event(
+                run_id, phase, 0, event_family
+            ).raw
+            return runtime.run_syslog(
+                run_id, scenario_id, entity_id, seed, payload
+            )
+        if adapter_ref.endswith(".run_snmp"):
+            return runtime.run_snmp(run_id, scenario_id, entity_id, seed)
+        if adapter_ref.endswith(".run_gnmi"):
+            return runtime.run_gnmi(run_id, scenario_id, entity_id, seed)
+        if adapter_ref.endswith(".run_flow"):
+            return runtime.run_flow(
+                channel, run_id, scenario_id, entity_id, seed
+            )
+        if adapter_ref.endswith(".run_otel"):
+            return runtime.run_otel(
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                {"resourceLogs": []},
+            )
+        raise ValueError("runtime adapter is not allow-listed")
+
+    def _channel_result_view(
+        self,
+        binding: Dict[str, Any],
+        result: ChannelRunResult,
+        clock_state: str,
+    ) -> UnifiedChannelResult:
+        return UnifiedChannelResult(
+            source_id=binding["source_id"],
+            channel=result.channel.value,
+            required=bool(binding.get("required", True)),
+            runtime_adapter_ref=binding["runtime_adapter_ref"],
+            receiver_component_id=binding.get("receiver_component_id"),
+            source_transport_id=binding["transport_id"],
+            destination_transport_id=(
+                binding.get("destination_transport_id")
+                or binding["transport_id"]
+            ),
+            run_id=result.run_id,
+            scenario_id=result.scenario_id,
+            entity_id=result.entity_id,
+            seed=result.seed,
+            clock_state=clock_state,
+            status="COMPLETED" if result.success else "FAILED",
+            evidence=[
+                ChannelEvidenceResult(
+                    stage=item.stage,
+                    state=(
+                        EvidenceState.PROVEN
+                        if item.proven
+                        else (
+                            EvidenceState.PENDING
+                            if item.stage == "SPLUNK_OBSERVED"
+                            else EvidenceState.FAILED
+                        )
+                    ),
+                    count=item.count,
+                    detail=item.detail,
+                )
+                for item in result.evidence
+            ],
+            errors=result.errors,
+        )
+
+    def _native_global_evidence(
+        self, channel_results: List[UnifiedChannelResult]
+    ) -> List[EvidenceStageResult]:
+        required = [item for item in channel_results if item.required]
+        generated_evidence = [
+            next(
+                (
+                    evidence
+                    for evidence in result.evidence
+                    if evidence.stage == "GENERATED"
+                ),
+                None,
+            )
+            for result in required
+        ]
+        generated_proven = bool(required) and all(
+            item is not None and item.state == EvidenceState.PROVEN
+            for item in generated_evidence
+        )
+        generated = sum(item.count for item in generated_evidence if item)
+        return [
+            EvidenceStageResult(
+                stage="GENERATED",
+                state=(
+                    EvidenceState.PROVEN
+                    if generated_proven
+                    else EvidenceState.FAILED
+                ),
+                count=generated,
+                detail=(
+                    "PROVEN only when every required channel proves its own "
+                    "GENERATED stage."
+                ),
+            ),
+            EvidenceStageResult(
+                stage="SPLUNK_OBSERVED",
+                state=EvidenceState.PENDING,
+                count=0,
+                detail="Run authenticated per-channel observation searches after indexing.",
+            ),
+            EvidenceStageResult(
+                stage="SOURCETYPE_VERIFIED",
+                state=EvidenceState.PENDING,
+                count=0,
+                detail="Awaiting authenticated indexed observation.",
+            ),
+            EvidenceStageResult(
+                stage="FIELDS_VERIFIED",
+                state=EvidenceState.PENDING,
+                count=0,
+                detail="Awaiting authenticated indexed observation.",
+            ),
+        ]
+
+    @staticmethod
+    def _scenario_entity_id(scenario: Optional[Dict[str, Any]]) -> str:
+        if scenario:
+            nodes = scenario.get("nodes") or []
+            producer = next(
+                (
+                    item
+                    for item in nodes
+                    if item.get("source_ids")
+                ),
+                None,
+            )
+            if producer:
+                return str(producer.get("entity_id") or producer["node_id"])
+            entities = scenario.get("entities") or []
+            if entities:
+                return str(entities[0])
+        return "netspout-test-entity"
+
+    @staticmethod
+    def _component_health_view(component: Any) -> Dict[str, Any]:
+        return {
+            "component": component.component,
+            "state": component.state.value,
+            "detail": component.detail,
+            "channel": component.channel.value if component.channel else None,
+        }
+
+    def runtime_health(
+        self, transport_config: TelemetryTransportConfig
+    ) -> List[Dict[str, Any]]:
+        runtime = self.native_runtime_factory(
+            transport_config, dispatcher=self.dispatcher
+        )
+        health = [
+            self._component_health_view(item) for item in runtime.health()
+            if item.component != "destination"
+        ]
+        hec_ok, hec_detail = self._check_hec(transport_config)
+        search_ok, search_detail = self._check_splunk_search(transport_config)
+        health.extend(
+            [
+                {
+                    "component": "splunk_hec",
+                    "state": (
+                        HealthState.REACHABLE.value
+                        if hec_ok
+                        else HealthState.FAILED.value
+                    ),
+                    "detail": hec_detail,
+                    "channel": None,
+                },
+                {
+                    "component": "splunk_search",
+                    "state": (
+                        HealthState.READY.value
+                        if search_ok
+                        else HealthState.NOT_CONFIGURED.value
+                        if "not configured" in search_detail
+                        else HealthState.FAILED.value
+                    ),
+                    "detail": search_detail,
+                    "channel": None,
+                },
+            ]
+        )
+        return health
 
     def _recommendation_view(
         self,
@@ -851,8 +1669,36 @@ class UnifiedGenerationService:
         )
 
     def _require_runnable_source(self, source: Dict[str, Any]) -> None:
-        if not self._source_is_runnable(source):
+        if not (
+            self._source_is_runnable(source)
+            or self._source_has_native_binding(source["source_id"])
+        ):
             raise ValueError(self._blocked_reason(source))
+
+    def _source_has_native_binding(self, source_id: str) -> bool:
+        if source_id not in {
+            item.source_id for item in self.registry.catalog_source_bindings
+        }:
+            return False
+        source = next(
+            (
+                item
+                for item in self.catalog.list_telemetry_sources()
+                if item["source_id"] == source_id
+            ),
+            None,
+        )
+        if not source or source["verification_state"] in {
+            VerificationState.RESEARCH_REQUIRED.value,
+            VerificationState.UNSUPPORTED.value,
+        }:
+            return False
+        return any(
+            binding.source_id == source_id
+            and binding.runtime_adapter_ref in self._native_adapter_channels
+            for composition in self.registry.compositions
+            for binding in composition.source_bindings
+        )
 
     def _blocked_state(self, source: Dict[str, Any]) -> str:
         if source["verification_state"] == "UNSUPPORTED":
@@ -1099,16 +1945,61 @@ class UnifiedGenerationService:
             return count, "Authenticated Splunk search proved indexed observation."
         return 0, "Search succeeded; indexing observation is still pending."
 
+    def _search_splunk_for_source(
+        self,
+        run_id: str,
+        source_id: str,
+        transport_config: TelemetryTransportConfig,
+    ) -> Tuple[int, Optional[str]]:
+        source = self.catalog.get_telemetry_source(source_id) or {}
+        claims = source.get("splunk_contract", {}).get("sourcetypes", [])
+        runtime_sourcetypes = {
+            "ietf-syslog-rfc5424": "netspout:rfc5424",
+            "ietf-snmpv2c-ifmib": "netspout:snmp:*",
+            "openconfig-gnmi-interfaces": "netspout:gnmi:event",
+            "ietf-netflow-v9": "netflow:collector",
+            "ietf-ipfix": "netflow:collector",
+        }
+        sourcetype = runtime_sourcetypes.get(source_id)
+        if not sourcetype:
+            sourcetype = claims[0].get("name") if claims else None
+        terms = [
+            'index="{}"'.format(transport_config.hec_index),
+            'netspout_run_id="{}"'.format(run_id),
+        ]
+        if sourcetype:
+            terms.append('sourcetype="{}"'.format(sourcetype))
+        else:
+            return 0, "source has no declared sourcetype scope"
+        query = "search {} | stats count".format(" ".join(terms))
+        return self._execute_splunk_search(query, transport_config)
+
+    def _check_splunk_search(
+        self, transport_config: TelemetryTransportConfig
+    ) -> Tuple[bool, str]:
+        _, error = self._execute_splunk_search(
+            "| makeresults | stats count", transport_config
+        )
+        if error:
+            return False, "Authenticated Splunk search failed: {}".format(error)
+        return True, "Authenticated Splunk search succeeded."
+
     def _execute_splunk_search(
         self, query: str, transport_config: TelemetryTransportConfig
     ) -> Tuple[int, Optional[str]]:
         password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get(
             "SPLUNK_PASSWORD"
         )
-        username = os.environ.get("NETSPOUT_SPLUNK_USERNAME", "admin")
+        username = (
+            os.environ.get("NETSPOUT_SPLUNK_USERNAME")
+            or os.environ.get("NETSPOUT_SPLUNK_USER")
+            or "admin"
+        )
         if not password:
             return 0, "authenticated Splunk search is not configured"
-        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL")
+        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL") or os.environ.get(
+            "NETSPOUT_REST_SEARCH_URL"
+        )
         if not endpoint:
             endpoint = transport_config.hec_url.replace(
                 ":8088", ":8089"

@@ -1,8 +1,14 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "2026.10-phase4",
+  "registry_version": "2026.10-phase5",
   "catalog_evidence_ids": [
     "EVID-IETF-RFC5424",
+    "EVID-IETF-RFC3416",
+    "EVID-IETF-RFC2863",
+    "EVID-IETF-RFC3954",
+    "EVID-IETF-RFC7011-7012",
+    "EVID-OPENCONFIG-GNMI",
+    "EVID-OPENCONFIG-INTERFACES",
     "EVID-NETSPOUT-CONTRACT-SCHEMA",
     "EVID-NETSPOUT-RUNTIME"
   ],
@@ -21,7 +27,92 @@
         "validator-rfc5424-structure"
       ],
       "compatible_transport_ids": [
+        "transport-native-syslog-udp",
         "transport-local-hec"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-snmpv2c-ifmib",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-snmp-ifmib"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-snmp-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "openconfig-gnmi-interfaces",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-gnmi-interfaces"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-gnmi-grpc"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-netflow-v9",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-netflow-v9"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-netflow-v9-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-ipfix",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-ipfix"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-ipfix-udp"
       ],
       "raw_fidelity": {
         "preserve_native_raw": true,
@@ -59,6 +150,69 @@
             "EVID-IETF-RFC5424",
             "EVID-NETSPOUT-RUNTIME"
           ]
+        },
+        {
+          "generator_id": "generator-native-snmp-ifmib",
+          "implementation_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp",
+          "source_ids": [
+            "ietf-snmpv2c-ifmib"
+          ],
+          "signals": [
+            "METRICS",
+            "EVENTS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC3416",
+            "EVID-IETF-RFC2863",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-gnmi-interfaces",
+          "implementation_ref": "netspout_core.gnmi.sensor_registry.TelemetrySensorRegistry",
+          "source_ids": [
+            "openconfig-gnmi-interfaces"
+          ],
+          "signals": [
+            "METRICS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-OPENCONFIG-GNMI",
+            "EVID-OPENCONFIG-INTERFACES",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-netflow-v9",
+          "implementation_ref": "netspout_core.netflow_v9_encoder",
+          "source_ids": [
+            "ietf-netflow-v9"
+          ],
+          "signals": [
+            "FLOWS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC3954",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-ipfix",
+          "implementation_ref": "netspout_core.ipfix_encoder",
+          "source_ids": [
+            "ietf-ipfix"
+          ],
+          "signals": [
+            "FLOWS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC7011-7012",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
         }
       ],
       "validators": [
@@ -79,9 +233,123 @@
             "EVID-IETF-RFC5424",
             "EVID-NETSPOUT-CONTRACT-SCHEMA"
           ]
+        },
+        {
+          "validator_id": "validator-native-receiver-boundary",
+          "implementation_ref": "netspout_core.native_runtime.NativeRuntimeFacade",
+          "source_ids": [
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces",
+            "ietf-netflow-v9",
+            "ietf-ipfix"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "RECEIVER_OBSERVED",
+            "SPLUNK_OBSERVED"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
         }
       ],
       "transports": [
+        {
+          "transport_id": "transport-native-syslog-udp",
+          "component": "Bundled EmbeddedSyslogServer receiver",
+          "protocol": "RFC 5424 Syslog over UDP",
+          "signals": [
+            "LOGS",
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native UDP terminates at the bundled receiver before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-snmp-udp",
+          "component": "Bundled SNMP receiver/poller bridge",
+          "protocol": "SNMPv2c over UDP",
+          "signals": [
+            "METRICS",
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-snmpv2c-ifmib"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC3416",
+            "EVID-IETF-RFC2863",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native SNMP terminates at the bundled receiver/poller bridge before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-gnmi-grpc",
+          "component": "Bundled gNMI subscriber bridge",
+          "protocol": "gNMI Subscribe over gRPC",
+          "signals": [
+            "METRICS"
+          ],
+          "compatible_source_ids": [
+            "openconfig-gnmi-interfaces"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-OPENCONFIG-GNMI",
+            "EVID-OPENCONFIG-INTERFACES",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native gNMI terminates at the bundled subscriber bridge before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-netflow-v9-udp",
+          "component": "Bundled GoFlow2 collector and forwarder",
+          "protocol": "NetFlow v9 over UDP",
+          "signals": [
+            "FLOWS"
+          ],
+          "compatible_source_ids": [
+            "ietf-netflow-v9"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC3954",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native flow export terminates at the bundled collector before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-ipfix-udp",
+          "component": "Bundled GoFlow2 collector and forwarder",
+          "protocol": "IPFIX over UDP",
+          "signals": [
+            "FLOWS"
+          ],
+          "compatible_source_ids": [
+            "ietf-ipfix"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC7011-7012",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native IPFIX terminates at the bundled collector before separate HEC delivery."
+        },
         {
           "transport_id": "transport-local-hec",
           "component": "NetSpout telemetry dispatcher",
@@ -90,7 +358,11 @@
             "EVENTS"
           ],
           "compatible_source_ids": [
-            "ietf-syslog-rfc5424"
+            "ietf-syslog-rfc5424",
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces",
+            "ietf-netflow-v9",
+            "ietf-ipfix"
           ],
           "verification_state": "PARTIALLY_VERIFIED",
           "implemented": true,
@@ -174,6 +446,38 @@
           ],
           "evidence_ids": [
             "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "recipe_id": "investigate-correlated-interface-degradation",
+          "title": "Correlate standards-based interface degradation evidence",
+          "objective": "Reconstruct one test interface degradation from independent native receiver observations.",
+          "question": "Do SNMP and gNMI observations describe the same bounded interface lifecycle?",
+          "expected_finding": "Receiver-observed records share the test run, entity, interface, and ordered lifecycle while retaining their distinct native evidence boundaries.",
+          "explanation": "Correlation fields are NetSpout lab metadata added after native receipt; they do not claim a vendor-defined cross-protocol schema.",
+          "hint": "Confirm receiver observation for each source before comparing the correlated phase and interface fields.",
+          "portability": "NETSPOUT_SPECIFIC",
+          "spl": "search index=idx_network_ops netspout_scenario_id=\"test-correlated-interface-degradation\" netspout_run_id=\"$run_id$\" (sourcetype=\"netspout:snmp:*\" OR sourcetype=\"netspout:gnmi:event\") | eval correlated_interface=if(like(sourcetype,\"netspout:snmp:%\"),\"HundredGigE0/0/0/1\",interface_name) | stats values(netspout_phase) values(correlated_interface) by sourcetype netspout_device_id",
+          "source_ids": [
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces"
+          ],
+          "required_fields": [
+            "netspout_scenario_id",
+            "netspout_run_id",
+            "netspout_phase",
+            "netspout_device_id",
+            "sourcetype"
+          ],
+          "cim_requirements": [],
+          "netspout_only_fields": [
+            "netspout_scenario_id",
+            "netspout_run_id",
+            "netspout_phase"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
           ]
         }
       ],
@@ -566,6 +870,399 @@
             "Replace the NetSpout-defined sourcetype and run identifier with the production integration's verified parsing contract."
           ],
           "curated_layout_ref": null
+        },
+        {
+          "scenario_id": "test-correlated-interface-degradation",
+          "title": "Test Enterprise Interface Degradation",
+          "description": "A bounded native scenario correlating SNMP and gNMI from one shared enterprise state plan.",
+          "story": "The primary uplink on cisco-asr9k-pe1 degrades, fails over, and recovers while native SNMP and gNMI independently observe the shared state.",
+          "domain": "NETOPS",
+          "category": "OPERATIONAL_RESILIENCE",
+          "technical_description": "The evidence-backed service_provider_cisco target cisco-asr9k-pe1 and existing interface HundredGigE0/0/0/1 drive both native paths. SNMP uses its existing IF-MIB ifIndex.1 wire identity and gNMI uses the matching existing OpenConfig interface path.",
+          "difficulty": "INTERMEDIATE",
+          "expected_duration_minutes": 5,
+          "learning_objectives": [
+            "Separate source-native transport evidence from destination HEC delivery.",
+            "Correlate one interface lifecycle without assuming vendor-specific field semantics."
+          ],
+          "skills_practiced": [
+            "Cross-source timeline correlation",
+            "Receiver-boundary evidence interpretation"
+          ],
+          "expected_outcome": "The user identifies one shared test interface lifecycle and verifies each native receiver boundary independently of HEC delivery.",
+          "baseline_description": "The fictional test uplink begins within its modeled healthy bounds.",
+          "incident_description": "Modeled error and utilization indicators rise, the test interface degrades, and the same interface later recovers.",
+          "discovery_prompt": "Determine whether all required native channels observed the same test entity and interface lifecycle.",
+          "learning_hints": [
+            "A successful UDP send does not prove collector receipt.",
+            "Treat NetSpout correlation fields as lab-only metadata."
+          ],
+          "business_impact": "Models reduced application reachability through one fictional enterprise uplink without asserting production or vendor behavior.",
+          "prerequisites": [
+            "Bundled native receivers and local Docker Splunk destination configured for test use"
+          ],
+          "technology_ids": [
+            "snmpv2-ifmib",
+            "openconfig-gnmi",
+            "splunk-hec"
+          ],
+          "source_ids": [
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces"
+          ],
+          "entities": [
+            "cisco-asr9k-pe1",
+            "HundredGigE0/0/0/1"
+          ],
+          "zones": [
+            {
+              "zone_id": "test-enterprise-zone",
+              "label": "Reserved Test Enterprise"
+            },
+            {
+              "zone_id": "bundled-receiver-zone",
+              "label": "Bundled Native Receivers"
+            },
+            {
+              "zone_id": "destination-zone",
+              "label": "HEC Destination"
+            }
+          ],
+          "nodes": [
+            {
+              "node_id": "cisco-asr9k-pe1",
+              "technology_id": "standards-test-device",
+              "zone_id": "test-enterprise-zone",
+              "role": "fictional-enterprise-edge",
+              "label": "TEST Enterprise Edge 01",
+              "entity_id": "cisco-asr9k-pe1",
+              "description": "Evidence-backed service_provider_cisco target hosting interface HundredGigE0/0/0/1.",
+              "source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ]
+            },
+            {
+              "node_id": "bundled-snmp-receiver",
+              "technology_id": "snmpv2-ifmib",
+              "zone_id": "bundled-receiver-zone",
+              "role": "receiver-poller",
+              "label": "Bundled SNMP Receiver",
+              "entity_id": "test-component-snmp-receiver",
+              "description": "Terminates the source-native SNMP/UDP test path.",
+              "source_ids": []
+            },
+            {
+              "node_id": "bundled-gnmi-subscriber",
+              "technology_id": "openconfig-gnmi",
+              "zone_id": "bundled-receiver-zone",
+              "role": "subscriber",
+              "label": "Bundled gNMI Subscriber",
+              "entity_id": "test-component-gnmi-subscriber",
+              "description": "Terminates the source-native gNMI Subscribe test path.",
+              "source_ids": []
+            },
+            {
+              "node_id": "bundled-hec-forwarder",
+              "technology_id": "splunk-hec",
+              "zone_id": "destination-zone",
+              "role": "destination-forwarder",
+              "label": "Bundled HEC Forwarder",
+              "entity_id": "test-component-hec-forwarder",
+              "description": "Begins the destination transport after native receiver observation.",
+              "source_ids": []
+            },
+            {
+              "node_id": "test-local-splunk",
+              "technology_id": "splunk-hec",
+              "zone_id": "destination-zone",
+              "role": "splunk",
+              "label": "TEST Local Splunk",
+              "entity_id": "test-local-splunk.invalid",
+              "description": "Reserved local test destination; no production identity is represented.",
+              "source_ids": []
+            }
+          ],
+          "relationships": [
+            {
+              "relationship_id": "edge-native-snmp-to-receiver",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-snmp-receiver",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "SNMPv2c/UDP",
+              "purpose": "Deliver source-native IF-MIB observations to the bundled receiver/poller.",
+              "telemetry_source_ids": [
+                "ietf-snmpv2c-ifmib"
+              ],
+              "incident_relevance": "Carries IF-MIB state for HundredGigE0/0/0/1 through ifIndex.1."
+            },
+            {
+              "relationship_id": "edge-native-gnmi-to-subscriber",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-gnmi-subscriber",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "gNMI Subscribe/gRPC",
+              "purpose": "Publish OpenConfig interface state to the bundled subscriber.",
+              "telemetry_source_ids": [
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": "Carries OpenConfig state for HundredGigE0/0/0/1."
+            },
+            {
+              "relationship_id": "snmp-receiver-to-hec-forwarder",
+              "source_node_id": "bundled-snmp-receiver",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt SNMP record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "ietf-snmpv2c-ifmib"
+              ],
+              "incident_relevance": null
+            },
+            {
+              "relationship_id": "gnmi-subscriber-to-hec-forwarder",
+              "source_node_id": "bundled-gnmi-subscriber",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt gNMI record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": null
+            },
+            {
+              "relationship_id": "hec-forwarder-to-splunk",
+              "source_node_id": "bundled-hec-forwarder",
+              "target_node_id": "test-local-splunk",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver post-receipt records to the configured local Splunk destination.",
+              "telemetry_source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": null
+            }
+          ],
+          "telemetry_paths": [
+            {
+              "path_id": "native-snmp-receiver-path",
+              "source_id": "ietf-snmpv2c-ifmib",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-snmp-receiver",
+              "label": "Source-native SNMP receiver boundary",
+              "protocol": "SNMPv2c/UDP"
+            },
+            {
+              "path_id": "native-gnmi-subscriber-path",
+              "source_id": "openconfig-gnmi-interfaces",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-gnmi-subscriber",
+              "label": "Source-native gNMI subscriber boundary",
+              "protocol": "gNMI Subscribe/gRPC"
+            }
+          ],
+          "incident_path": [
+            "cisco-asr9k-pe1"
+          ],
+          "incident_summary": "One reserved test interface on one fictional enterprise entity degrades and recovers.",
+          "runtime_state_keys": [
+            "normal",
+            "degraded",
+            "affected",
+            "observed",
+            "recovered"
+          ],
+          "timeline": [
+            {
+              "step_id": "test-baseline",
+              "stage": "BASELINE",
+              "description": "HundredGigE0/0/0/1 is within modeled healthy bounds.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "normal"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "normal"
+              },
+              "telemetry_state_changes": {
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "Each native channel emits baseline evidence for the same test interface."
+              ],
+              "evidence_source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "test-degrade",
+              "stage": "DEGRADE",
+              "description": "The shared interface error counters increase and oper state degrades.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "degraded"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "degraded"
+              },
+              "telemetry_state_changes": {
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "Native SNMP and gNMI observations are projected from the same shared snapshot."
+              ],
+              "evidence_source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "test-failover",
+              "stage": "FAILOVER",
+              "description": "The modeled test interface crosses its degradation threshold.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "affected"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "affected"
+              },
+              "telemetry_state_changes": {
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "SNMP IF-MIB and gNMI OpenConfig state agree on the bounded interface condition."
+              ],
+              "evidence_source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": [
+                "test-interface-degradation"
+              ]
+            },
+            {
+              "step_id": "test-recovery",
+              "stage": "RECOVERY",
+              "description": "The modeled test interface returns to healthy bounds.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "recovered"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "recovered"
+              },
+              "telemetry_state_changes": {
+                "ietf-snmpv2c-ifmib": "OBSERVED",
+                "openconfig-gnmi-interfaces": "OBSERVED"
+              },
+              "expected_observations": [
+                "All required native channels complete the same test run and interface lifecycle."
+              ],
+              "evidence_source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            }
+          ],
+          "incidents": [
+            {
+              "incident_id": "test-interface-degradation",
+              "source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "assertion": "Native SNMP and gNMI corroborate one modeled degradation of cisco-asr9k-pe1 HundredGigE0/0/0/1.",
+              "corroboration_required": true
+            }
+          ],
+          "parameters": [
+            {
+              "parameter_id": "intensity",
+              "value_type": "integer",
+              "changes_modeled_values_only": true
+            }
+          ],
+          "integration_recommendation_ids": [],
+          "expected_evidence": [
+            "Receiver-observed SNMP and gNMI evidence sharing one run, entity, interface, ordered clock, and state lifecycle.",
+            "Separate HEC destination-delivery evidence after each native receiver boundary."
+          ],
+          "investigation_recipe_ids": [
+            "investigate-correlated-interface-degradation"
+          ],
+          "investigation_steps": [
+            {
+              "step_id": "correlate-test-interface",
+              "recipe_id": "investigate-correlated-interface-degradation",
+              "title": "Correlate the test interface lifecycle",
+              "question": "Did native SNMP and gNMI observe the shared interface lifecycle, including recovery?",
+              "expected_finding": "Both native paths agree with the shared ordered state plan and precede separate HEC destination evidence.",
+              "explanation": "The source protocols remain distinct; the shared enterprise store drives their native values.",
+              "hint": "Check receiver-observed stages before Splunk-observed stages.",
+              "node_ids": [
+                "cisco-asr9k-pe1",
+                "bundled-snmp-receiver",
+                "bundled-gnmi-subscriber",
+                "test-local-splunk"
+              ],
+              "source_ids": [
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ]
+            }
+          ],
+          "validation_expectations": [
+            {
+              "validation_id": "test-snmp-receiver-observed",
+              "label": "Bundled SNMP receiver observed the native PDU",
+              "evidence_stage": "RECEIVER_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-snmpv2c-ifmib"
+            },
+            {
+              "validation_id": "test-gnmi-subscriber-observed",
+              "label": "Bundled gNMI subscriber observed the native update",
+              "evidence_stage": "COLLECTOR_RECEIVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "openconfig-gnmi-interfaces"
+            },
+            {
+              "validation_id": "test-hec-destination-observed",
+              "label": "Local Splunk observed post-receipt HEC delivery",
+              "evidence_stage": "SPLUNK_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED"
+            }
+          ],
+          "visualization": {
+            "mode": "AUTOMATIC",
+            "direction": "LEFT_TO_RIGHT",
+            "curated_layout_ref": null
+          },
+          "replay_policy": {
+            "creates_new_run_id": true,
+            "preserves_history": true,
+            "reset_to_step": "RUN"
+          },
+          "troubleshooting_steps": [
+            "Verify each bundled native receiver independently before checking HEC delivery.",
+            "Do not promote UDP send evidence to receiver observation."
+          ],
+          "cim_validation": [],
+          "production_replication_guidance": [
+            "Replace reserved test identities and NetSpout-only correlation fields with evidence-verified production contracts.",
+            "Validate source-specific Splunk parsing separately; this scenario does not prescribe vendor semantics."
+          ],
+          "curated_layout_ref": null
         }
       ],
       "investigations": [],
@@ -586,6 +1283,7 @@
           "source_id": "ietf-syslog-rfc5424",
           "generator_id": "generator-rfc5424-modeled",
           "transport_id": "transport-local-hec",
+          "destination_transport_id": "transport-local-hec",
           "destination_id": "destination-local-docker-splunk",
           "validator_ids": [
             "validator-rfc5424-structure"
@@ -594,6 +1292,44 @@
       ],
       "investigation_recipe_ids": [
         "investigate-rfc5424-run"
+      ]
+    },
+    {
+      "composition_id": "compose-test-correlated-interface-degradation-local",
+      "scenario_id": "test-correlated-interface-degradation",
+      "pack_ids": [
+        "netspout-rfc5424-scenario"
+      ],
+      "source_bindings": [
+        {
+          "source_id": "ietf-snmpv2c-ifmib",
+          "generator_id": "generator-native-snmp-ifmib",
+          "transport_id": "transport-native-snmp-udp",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp",
+          "receiver_component_id": "bundled-snmp-receiver",
+          "required": true,
+          "validator_ids": [
+            "validator-native-receiver-boundary"
+          ]
+        },
+        {
+          "source_id": "openconfig-gnmi-interfaces",
+          "generator_id": "generator-native-gnmi-interfaces",
+          "transport_id": "transport-native-gnmi-grpc",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_gnmi",
+          "receiver_component_id": "bundled-gnmi-subscriber",
+          "required": true,
+          "validator_ids": [
+            "validator-native-receiver-boundary"
+          ]
+        }
+      ],
+      "investigation_recipe_ids": [
+        "investigate-correlated-interface-degradation"
       ]
     }
   ]

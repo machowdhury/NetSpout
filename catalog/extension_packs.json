@@ -154,7 +154,7 @@
           "recipe_id": "investigate-rfc5424-run",
           "title": "Trace the modeled link-state lifecycle",
           "portability": "NETSPOUT_SPECIFIC",
-          "spl": "index=idx_network_ops sourcetype=\"netspout:rfc5424\" netspout_run_id=\"$run_id$\" | sort 0 _time",
+          "spl": "search index=idx_network_ops sourcetype=\"netspout:rfc5424\" netspout_run_id=\"$run_id$\" | sort 0 _time",
           "source_ids": [
             "ietf-syslog-rfc5424"
           ],

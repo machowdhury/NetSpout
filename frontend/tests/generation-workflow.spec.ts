@@ -136,7 +136,7 @@ const recipe = {
   recipe_id: 'investigate-rfc5424-run',
   title: 'Trace the modeled link-state lifecycle',
   portability: 'NETSPOUT_SPECIFIC',
-  spl: 'index=idx_network_ops sourcetype="netspout:rfc5424" netspout_run_id="$run_id$" | sort 0 _time',
+  spl: 'search index=idx_network_ops sourcetype="netspout:rfc5424" netspout_run_id="$run_id$" | sort 0 _time',
   source_ids: ['ietf-syslog-rfc5424'],
   required_fields: ['netspout_run_id'],
   cim_requirements: [],
@@ -337,7 +337,13 @@ test('supports Choose through Investigate with truthful stage distinctions', asy
 
   await page.getByRole('button', { name: /Continue to Run/ }).click();
   await page.getByRole('button', { name: 'Run', exact: true }).click();
-  await expect(page.getByText(run.run_id)).toBeVisible();
+  if (process.env.PLAYWRIGHT_LIVE_GENERATION === '1') {
+    await expect(page.locator('.generation-run-metadata code').first()).toHaveText(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    );
+  } else {
+    await expect(page.getByText(run.run_id)).toBeVisible();
+  }
   await screenshot(page, 'phase3-06-live-run.png');
 
   await page.getByRole('button', { name: /Observe Evidence/ }).click();
@@ -348,9 +354,9 @@ test('supports Choose through Investigate with truthful stage distinctions', asy
 
   await page.getByRole('button', { name: /^Investigate/ }).click();
   await expect(page.getByText('NETSPOUT SPECIFIC')).toBeVisible();
-  await screenshot(page, 'phase3-08-investigate.png');
   await page.getByRole('button', { name: 'Run in Splunk' }).click();
   await expect(page.getByText(/SUCCEEDED/)).toBeVisible();
+  await screenshot(page, 'phase3-08-investigate.png');
 });
 
 test('renders all generation modes and unsupported state without hard-coded inputs', async ({ page }) => {
@@ -371,6 +377,7 @@ test('renders all generation modes and unsupported state without hard-coded inpu
   await page.getByRole('button', { name: /Supply chain platform/ }).click();
   await expect(page.getByText('UNSUPPORTED TELEMETRY')).toBeVisible();
   await expect(page.getByRole('button', { name: /^Preview/ })).toBeDisabled();
+  await page.locator('.generation-alert--blocked').scrollIntoViewIfNeeded();
   await screenshot(page, 'phase3-14-unsupported-state.png');
 });
 
@@ -382,6 +389,7 @@ test('advanced mode reveals contracts and responsive layout remains usable', asy
   await expect(page.getByRole('heading', { name: 'Native Contract' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Splunk Contract' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'NetSpout Contract' })).toBeVisible();
+  await page.getByRole('heading', { name: 'Native Contract' }).scrollIntoViewIfNeeded();
   await screenshot(page, 'phase3-13-advanced-mode.png');
 
   await page.setViewportSize({ width: 390, height: 844 });

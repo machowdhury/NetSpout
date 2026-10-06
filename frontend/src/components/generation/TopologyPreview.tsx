@@ -53,6 +53,7 @@ export function TopologyPreview({ scenario, activePhase }: TopologyPreviewProps)
           const source = positions.get(relationship.source_node_id);
           const target = positions.get(relationship.target_node_id);
           if (!source || !target) return null;
+          const isVertical = Math.abs(source.x - target.x) < 20;
           return (
             <g key={relationship.relationship_id}>
               <line
@@ -64,8 +65,8 @@ export function TopologyPreview({ scenario, activePhase }: TopologyPreviewProps)
               />
               <text
                 className="generation-topology__edge-label"
-                x={(source.x + target.x) / 2}
-                y={(source.y + target.y) / 2 - 7}
+                x={(source.x + target.x) / 2 + (isVertical ? 50 : 0)}
+                y={(source.y + target.y) / 2 + (isVertical ? 3 : -7)}
               >
                 {relationship.relationship_type}
               </text>

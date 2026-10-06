@@ -21,6 +21,7 @@ from netspout_core.catalog_contracts import VerificationState
 from netspout_core.models import LogEntry, TelemetryTransportConfig
 from netspout_core.pack_contracts import (
     CompositionDefinition,
+    evaluate_guided_scenario_completeness,
     GuidedScenarioManifest,
     IntegrationRecommendation,
     InvestigationRecipe,
@@ -91,6 +92,15 @@ class EvidenceStageResult(StrictModel):
     detail: str
 
 
+class ScenarioValidationResult(StrictModel):
+    validation_id: str
+    label: str
+    evidence_stage: str
+    requirement: str
+    state: EvidenceState
+    detail: str
+
+
 class GeneratedEvent(StrictModel):
     event_id: str
     source_id: str
@@ -118,6 +128,7 @@ class UnifiedGenerationRun(StrictModel):
     status: str
     events: List[GeneratedEvent]
     evidence: List[EvidenceStageResult]
+    validation: List[ScenarioValidationResult] = Field(default_factory=list)
     integration_readiness: List[Dict[str, Any]]
     investigations: List[Dict[str, Any]]
     limitations: List[str]
@@ -202,19 +213,31 @@ class UnifiedGenerationService:
         }
         for scenario in resources["scenarios"]:
             composition = compositions.get(scenario.scenario_id)
+            scenario_verification = self._scenario_verification(scenario, sources)
+            provenance_available = all(
+                bool(sources.get(source_id, {}).get("evidence_ids"))
+                and bool(sources.get(source_id, {}).get("provenance"))
+                for source_id in scenario.source_ids
+            )
             scenario_views.append(
                 {
                     **scenario.model_dump(mode="json"),
                     "composition_id": (
                         composition.composition_id if composition else None
                     ),
-                    "verification_state": self._scenario_verification(scenario, sources),
+                    "verification_state": scenario_verification,
                     "maturity": self._scenario_pack_maturity(scenario.scenario_id),
                     "source_count": len(scenario.source_ids),
                     "integration_count": len(
                         scenario.integration_recommendation_ids
                     ),
                     "runnable": composition is not None,
+                    "guided_completeness": evaluate_guided_scenario_completeness(
+                        scenario,
+                        executable=composition is not None,
+                        provenance_available=provenance_available,
+                        verification_state=VerificationState(scenario_verification),
+                    ),
                 }
             )
 
@@ -261,6 +284,14 @@ class UnifiedGenerationService:
                 "RUN",
                 "OBSERVE",
                 "INVESTIGATE",
+            ],
+            "guided_workflow": [
+                "UNDERSTAND",
+                "PREPARE",
+                "RUN",
+                "OBSERVE",
+                "INVESTIGATE",
+                "VALIDATE",
             ],
             "modes": [
                 {
@@ -504,6 +535,9 @@ class UnifiedGenerationService:
             status=status,
             events=events,
             evidence=evidence,
+            validation=self._validation_results(
+                resolved.get("scenario"), evidence
+            ),
             integration_readiness=resolved["integration_readiness"],
             investigations=resolved["investigations"],
             limitations=[
@@ -517,6 +551,61 @@ class UnifiedGenerationService:
 
     def get_run(self, run_id: str) -> Optional[UnifiedGenerationRun]:
         return self.runs.get(run_id)
+
+    def _scenario_for_run(
+        self, run: UnifiedGenerationRun
+    ) -> Optional[Dict[str, Any]]:
+        if not run.scenario_id:
+            return None
+        return next(
+            (
+                item
+                for item in self.capabilities()["scenarios"]
+                if item["scenario_id"] == run.scenario_id
+            ),
+            None,
+        )
+
+    def _validation_results(
+        self,
+        scenario: Optional[Dict[str, Any]],
+        evidence: List[EvidenceStageResult],
+    ) -> List[ScenarioValidationResult]:
+        if not scenario:
+            return []
+        evidence_by_stage = {item.stage: item for item in evidence}
+        results = []
+        for expectation in scenario.get("validation_expectations", []):
+            observed = evidence_by_stage.get(expectation["evidence_stage"])
+            expected_state = expectation["expected_state"]
+            matched = observed is not None and observed.state.value == expected_state
+            results.append(
+                ScenarioValidationResult(
+                    validation_id=expectation["validation_id"],
+                    label=expectation["label"],
+                    evidence_stage=expectation["evidence_stage"],
+                    requirement=expectation["requirement"],
+                    state=(
+                        EvidenceState.PROVEN
+                        if matched
+                        else (
+                            observed.state
+                            if observed is not None
+                            else EvidenceState.NOT_AVAILABLE
+                        )
+                    ),
+                    detail=(
+                        "Expected evidence condition was proven."
+                        if matched
+                        else (
+                            observed.detail
+                            if observed is not None
+                            else "The scenario has no runtime evidence for this condition."
+                        )
+                    ),
+                )
+            )
+        return results
 
     def observe(
         self,
@@ -562,6 +651,8 @@ class UnifiedGenerationService:
             else:
                 updated.append(stage)
         run.evidence = updated
+        scenario = self._scenario_for_run(run)
+        run.validation = self._validation_results(scenario, updated)
         if observed > 0:
             run.status = "OBSERVED"
         self.runs[run_id] = run

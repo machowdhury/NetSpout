@@ -15,6 +15,7 @@ import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import { PipelineHealthView } from './components/operations/PipelineHealthView';
 import { GenerationLab } from './components/generation/GenerationLab';
+import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
 import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
@@ -709,7 +710,11 @@ export const App: React.FC = () => {
       return <GenerationLab experienceMode={experienceMode} initialMode="DATA_SOURCE" />;
     }
 
-    if (route === '/generate/scenarios' || route === '/observe/live-runs') {
+    if (route === '/generate/scenarios') {
+      return <GuidedScenarioLab experienceMode={experienceMode} />;
+    }
+
+    if (route === '/observe/live-runs') {
       return <GenerationLab experienceMode={experienceMode} initialMode="SCENARIO" />;
     }
 

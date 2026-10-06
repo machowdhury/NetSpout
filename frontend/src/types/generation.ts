@@ -20,6 +20,11 @@ export interface TopologyNode {
   zone_id: string;
   role: string;
   source_ids: string[];
+  label?: string | null;
+  entity_id?: string | null;
+  description?: string | null;
+  vendor?: string | null;
+  product?: string | null;
 }
 
 export interface TopologyRelationship {
@@ -27,6 +32,10 @@ export interface TopologyRelationship {
   source_node_id: string;
   target_node_id: string;
   relationship_type: string;
+  protocol?: string | null;
+  purpose?: string | null;
+  telemetry_source_ids?: string[];
+  incident_relevance?: string | null;
 }
 
 export interface TelemetryPath {
@@ -34,6 +43,8 @@ export interface TelemetryPath {
   source_id: string;
   producer_node_id: string;
   observer_node_id: string | null;
+  label?: string | null;
+  protocol?: string | null;
 }
 
 export interface TimelineStep {
@@ -41,7 +52,40 @@ export interface TimelineStep {
   stage: string;
   description: string;
   state_changes: Record<string, string>;
+  entity_state_changes?: Record<string, string>;
+  telemetry_state_changes?: Record<string, string>;
+  expected_observations?: string[];
+  evidence_source_ids?: string[];
   incident_ids: string[];
+}
+
+export interface GuidedInvestigationStep {
+  step_id: string;
+  recipe_id: string;
+  title: string;
+  question: string;
+  expected_finding: string;
+  explanation: string;
+  hint: string | null;
+  node_ids: string[];
+  source_ids: string[];
+}
+
+export interface ScenarioValidationExpectation {
+  validation_id: string;
+  label: string;
+  evidence_stage: string;
+  expected_state: string;
+  requirement: 'REQUIRED' | 'INFORMATIONAL';
+  source_id: string | null;
+}
+
+export interface GuidedCompleteness {
+  state: 'READY' | 'PARTIAL' | 'RESEARCH_REQUIRED' | 'UNSUPPORTED';
+  passed: number;
+  total: number;
+  checks: Record<string, boolean>;
+  production_guidance_available: boolean;
 }
 
 export interface GenerationScenario {
@@ -49,9 +93,18 @@ export interface GenerationScenario {
   title: string;
   description: string;
   story: string;
+  domain?: string | null;
+  category?: string | null;
+  technical_description?: string | null;
   difficulty: string;
   expected_duration_minutes: number;
   learning_objectives: string[];
+  skills_practiced?: string[];
+  expected_outcome?: string | null;
+  baseline_description?: string | null;
+  incident_description?: string | null;
+  discovery_prompt?: string | null;
+  learning_hints?: string[];
   business_impact: string;
   prerequisites: string[];
   technology_ids: string[];
@@ -62,10 +115,23 @@ export interface GenerationScenario {
   relationships: TopologyRelationship[];
   telemetry_paths: TelemetryPath[];
   incident_path: string[];
+  incident_summary?: string | null;
   runtime_state_keys: string[];
   timeline: TimelineStep[];
   expected_evidence: string[];
   investigation_recipe_ids: string[];
+  investigation_steps?: GuidedInvestigationStep[];
+  validation_expectations?: ScenarioValidationExpectation[];
+  visualization?: {
+    mode: 'AUTOMATIC' | 'CURATED';
+    direction: 'LEFT_TO_RIGHT' | 'TOP_TO_BOTTOM';
+    curated_layout_ref: string | null;
+  };
+  replay_policy?: {
+    creates_new_run_id: boolean;
+    preserves_history: boolean;
+    reset_to_step: string;
+  } | null;
   integration_recommendation_ids: string[];
   production_replication_guidance: string[];
   composition_id: string | null;
@@ -74,6 +140,7 @@ export interface GenerationScenario {
   source_count: number;
   integration_count: number;
   runnable: boolean;
+  guided_completeness?: GuidedCompleteness;
 }
 
 export interface GenerationSource extends CatalogSource {
@@ -147,6 +214,11 @@ export interface IntegrationReadiness {
 export interface InvestigationRecipe {
   recipe_id: string;
   title: string;
+  objective?: string | null;
+  question?: string | null;
+  expected_finding?: string | null;
+  explanation?: string | null;
+  hint?: string | null;
   portability: 'PRODUCTION_PORTABLE' | 'NETSPOUT_SPECIFIC';
   spl: string;
   source_ids: string[];
@@ -159,6 +231,7 @@ export interface InvestigationRecipe {
 export interface GenerationCapabilities {
   schema_version: string;
   workflow: GenerationStep[];
+  guided_workflow?: Array<'UNDERSTAND' | 'PREPARE' | 'RUN' | 'OBSERVE' | 'INVESTIGATE' | 'VALIDATE'>;
   modes: GenerationModeDefinition[];
   sources: GenerationSource[];
   scenarios: GenerationScenario[];
@@ -239,6 +312,15 @@ export interface EvidenceStage {
   detail: string;
 }
 
+export interface ScenarioValidationResult {
+  validation_id: string;
+  label: string;
+  evidence_stage: string;
+  requirement: 'REQUIRED' | 'INFORMATIONAL';
+  state: 'NOT_ATTEMPTED' | 'PROVEN' | 'PENDING' | 'NOT_AVAILABLE' | 'FAILED';
+  detail: string;
+}
+
 export interface GenerationRun {
   run_id: string;
   mode: GenerationMode;
@@ -254,6 +336,7 @@ export interface GenerationRun {
   status: string;
   events: GeneratedEvent[];
   evidence: EvidenceStage[];
+  validation?: ScenarioValidationResult[];
   integration_readiness: IntegrationReadiness[];
   investigations: InvestigationRecipe[];
   limitations: string[];

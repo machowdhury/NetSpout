@@ -87,6 +87,23 @@ class ScenarioStage(str, Enum):
     RECOVERY = "RECOVERY"
 
 
+class ScenarioExperienceState(str, Enum):
+    READY = "READY"
+    PARTIAL = "PARTIAL"
+    RESEARCH_REQUIRED = "RESEARCH_REQUIRED"
+    UNSUPPORTED = "UNSUPPORTED"
+
+
+class VisualizationMode(str, Enum):
+    AUTOMATIC = "AUTOMATIC"
+    CURATED = "CURATED"
+
+
+class ValidationRequirement(str, Enum):
+    REQUIRED = "REQUIRED"
+    INFORMATIONAL = "INFORMATIONAL"
+
+
 class RawFidelityPolicy(StrictModel):
     preserve_native_raw: bool
     modeled_values_may_change: bool = True
@@ -205,6 +222,11 @@ class IntegrationRecommendation(StrictModel):
 class InvestigationRecipe(StrictModel):
     recipe_id: str
     title: str
+    objective: Optional[str] = None
+    question: Optional[str] = None
+    expected_finding: Optional[str] = None
+    explanation: Optional[str] = None
+    hint: Optional[str] = None
     portability: SplPortability
     spl: str
     source_ids: List[str]
@@ -234,6 +256,11 @@ class TopologyNode(StrictModel):
     zone_id: str
     role: str
     source_ids: List[str] = Field(default_factory=list)
+    label: Optional[str] = None
+    entity_id: Optional[str] = None
+    description: Optional[str] = None
+    vendor: Optional[str] = None
+    product: Optional[str] = None
 
 
 class TopologyZone(StrictModel):
@@ -246,6 +273,10 @@ class TopologyRelationship(StrictModel):
     source_node_id: str
     target_node_id: str
     relationship_type: str
+    protocol: Optional[str] = None
+    purpose: Optional[str] = None
+    telemetry_source_ids: List[str] = Field(default_factory=list)
+    incident_relevance: Optional[str] = None
 
 
 class TelemetryPath(StrictModel):
@@ -253,6 +284,8 @@ class TelemetryPath(StrictModel):
     source_id: str
     producer_node_id: str
     observer_node_id: Optional[str] = None
+    label: Optional[str] = None
+    protocol: Optional[str] = None
 
 
 class IncidentEvidence(StrictModel):
@@ -273,7 +306,56 @@ class TimelineStep(StrictModel):
     stage: ScenarioStage
     description: str
     state_changes: Dict[str, str] = Field(default_factory=dict)
+    entity_state_changes: Dict[str, str] = Field(default_factory=dict)
+    telemetry_state_changes: Dict[str, str] = Field(default_factory=dict)
+    expected_observations: List[str] = Field(default_factory=list)
+    evidence_source_ids: List[str] = Field(default_factory=list)
     incident_ids: List[str] = Field(default_factory=list)
+
+
+class GuidedInvestigationStep(StrictModel):
+    step_id: str
+    recipe_id: str
+    title: str
+    question: str
+    expected_finding: str
+    explanation: str
+    hint: Optional[str] = None
+    node_ids: List[str] = Field(default_factory=list)
+    source_ids: List[str] = Field(default_factory=list)
+
+
+class ScenarioValidationExpectation(StrictModel):
+    validation_id: str
+    label: str
+    evidence_stage: str
+    expected_state: str = "PROVEN"
+    requirement: ValidationRequirement = ValidationRequirement.REQUIRED
+    source_id: Optional[str] = None
+
+
+class ScenarioVisualization(StrictModel):
+    mode: VisualizationMode = VisualizationMode.AUTOMATIC
+    direction: str = Field(default="LEFT_TO_RIGHT", pattern=r"^(LEFT_TO_RIGHT|TOP_TO_BOTTOM)$")
+    curated_layout_ref: Optional[str] = None
+
+    @model_validator(mode="after")
+    def require_curated_layout(self):
+        if self.mode == VisualizationMode.CURATED and not self.curated_layout_ref:
+            raise ValueError("curated visualization requires a layout reference")
+        return self
+
+
+class ReplayPolicy(StrictModel):
+    creates_new_run_id: bool = True
+    preserves_history: bool = True
+    reset_to_step: str = "RUN"
+
+    @model_validator(mode="after")
+    def preserve_run_boundaries(self):
+        if not self.creates_new_run_id or not self.preserves_history:
+            raise ValueError("scenario replay must create a new run and preserve history")
+        return self
 
 
 class ScenarioParameter(StrictModel):
@@ -293,9 +375,18 @@ class GuidedScenarioManifest(StrictModel):
     title: str
     description: str
     story: str
+    domain: Optional[str] = None
+    category: Optional[str] = None
+    technical_description: Optional[str] = None
     difficulty: str
     expected_duration_minutes: int = Field(ge=1)
     learning_objectives: List[str]
+    skills_practiced: List[str] = Field(default_factory=list)
+    expected_outcome: Optional[str] = None
+    baseline_description: Optional[str] = None
+    incident_description: Optional[str] = None
+    discovery_prompt: Optional[str] = None
+    learning_hints: List[str] = Field(default_factory=list)
     business_impact: str
     prerequisites: List[str] = Field(default_factory=list)
     technology_ids: List[str]
@@ -306,6 +397,7 @@ class GuidedScenarioManifest(StrictModel):
     relationships: List[TopologyRelationship]
     telemetry_paths: List[TelemetryPath]
     incident_path: List[str]
+    incident_summary: Optional[str] = None
     runtime_state_keys: List[str]
     timeline: List[TimelineStep]
     incidents: List[IncidentEvidence]
@@ -313,6 +405,12 @@ class GuidedScenarioManifest(StrictModel):
     integration_recommendation_ids: List[str] = Field(default_factory=list)
     expected_evidence: List[str]
     investigation_recipe_ids: List[str] = Field(default_factory=list)
+    investigation_steps: List[GuidedInvestigationStep] = Field(default_factory=list)
+    validation_expectations: List[ScenarioValidationExpectation] = Field(
+        default_factory=list
+    )
+    visualization: ScenarioVisualization = Field(default_factory=ScenarioVisualization)
+    replay_policy: Optional[ReplayPolicy] = None
     troubleshooting_steps: List[str] = Field(default_factory=list)
     cim_validation: List[str] = Field(default_factory=list)
     production_replication_guidance: List[str] = Field(default_factory=list)
@@ -327,6 +425,11 @@ class GuidedScenarioManifest(StrictModel):
         _unique_values(self.relationships, "relationship_id", self.scenario_id)
         _unique_values(self.telemetry_paths, "path_id", self.scenario_id)
         _unique_values(self.timeline, "step_id", self.scenario_id)
+        _unique_values(self.investigation_steps, "step_id", self.scenario_id)
+        _unique_values(
+            self.validation_expectations, "validation_id", self.scenario_id
+        )
+        _require_refs(self.incident_path, node_ids, self.scenario_id, "node")
         for node in self.nodes:
             _require_refs([node.zone_id], zone_ids, node.node_id, "zone")
             _require_refs(node.source_ids, source_ids, node.node_id, "source")
@@ -336,6 +439,12 @@ class GuidedScenarioManifest(StrictModel):
                 node_ids,
                 relationship.relationship_id,
                 "node",
+            )
+            _require_refs(
+                relationship.telemetry_source_ids,
+                source_ids,
+                relationship.relationship_id,
+                "source",
             )
         for path in self.telemetry_paths:
             _require_refs([path.source_id], source_ids, path.path_id, "source")
@@ -347,10 +456,94 @@ class GuidedScenarioManifest(StrictModel):
             _require_refs(incident.source_ids, source_ids, incident.incident_id, "source")
         for step in self.timeline:
             _require_refs(step.incident_ids, incident_ids, step.step_id, "incident")
+            _require_refs(
+                step.entity_state_changes.keys(), node_ids, step.step_id, "node"
+            )
+            _require_refs(
+                step.telemetry_state_changes.keys(),
+                source_ids,
+                step.step_id,
+                "source",
+            )
+            _require_refs(
+                step.evidence_source_ids, source_ids, step.step_id, "source"
+            )
+        for step in self.investigation_steps:
+            _require_refs(step.node_ids, node_ids, step.step_id, "node")
+            _require_refs(step.source_ids, source_ids, step.step_id, "source")
+        for expectation in self.validation_expectations:
+            if expectation.source_id:
+                _require_refs(
+                    [expectation.source_id],
+                    source_ids,
+                    expectation.validation_id,
+                    "source",
+                )
         stage_order = [list(ScenarioStage).index(item.stage) for item in self.timeline]
         if stage_order != sorted(stage_order):
             raise ValueError("scenario timeline stages must be chronological")
         return self
+
+
+def evaluate_guided_scenario_completeness(
+    scenario: GuidedScenarioManifest,
+    *,
+    executable: bool,
+    provenance_available: bool,
+    verification_state: VerificationState,
+) -> Dict[str, object]:
+    """Evaluate guided-lab readiness without promoting scenario verification."""
+
+    checks = {
+        "story": bool(
+            scenario.story
+            and scenario.technical_description
+            and scenario.baseline_description
+            and scenario.incident_description
+        ),
+        "environment": bool(
+            scenario.entities
+            and scenario.technology_ids
+            and scenario.zones
+            and scenario.nodes
+        ),
+        "topology": bool(scenario.nodes and scenario.zones and scenario.relationships),
+        "telemetry_manifest": bool(
+            scenario.source_ids
+            and scenario.telemetry_paths
+            and scenario.expected_evidence
+        ),
+        "prerequisites": bool(scenario.prerequisites),
+        "execution": executable,
+        "evidence": bool(scenario.expected_evidence),
+        "investigation": bool(
+            scenario.investigation_recipe_ids and scenario.investigation_steps
+        ),
+        "expected_findings": bool(
+            scenario.investigation_steps
+            and all(step.expected_finding for step in scenario.investigation_steps)
+        ),
+        "validation": bool(scenario.validation_expectations),
+        "replay_reset": scenario.replay_policy is not None,
+        "provenance": provenance_available,
+    }
+    if verification_state == VerificationState.UNSUPPORTED:
+        state = ScenarioExperienceState.UNSUPPORTED
+    elif verification_state == VerificationState.RESEARCH_REQUIRED:
+        state = ScenarioExperienceState.RESEARCH_REQUIRED
+    elif all(checks.values()) and verification_state == VerificationState.VERIFIED:
+        state = ScenarioExperienceState.READY
+    else:
+        state = ScenarioExperienceState.PARTIAL
+    return {
+        "state": state.value,
+        "passed": sum(1 for value in checks.values() if value),
+        "total": len(checks),
+        "checks": checks,
+        "production_guidance_available": bool(
+            scenario.production_replication_guidance
+        ),
+    }
 
 
 class IndustryAssociation(StrictModel):
@@ -525,6 +718,12 @@ class PackRegistry(StrictModel):
             )
             _require_refs(
                 item.investigation_recipe_ids,
+                recipe_ids,
+                item.scenario_id,
+                "investigation recipe",
+            )
+            _require_refs(
+                [step.recipe_id for step in item.investigation_steps],
                 recipe_ids,
                 item.scenario_id,
                 "investigation recipe",

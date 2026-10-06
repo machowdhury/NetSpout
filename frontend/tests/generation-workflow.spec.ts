@@ -317,7 +317,7 @@ test.beforeEach(async ({ page }) => {
 
 test('supports Choose through Investigate with truthful stage distinctions', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/#/generate/scenarios');
+  await page.goto('/#/observe/live-runs');
   await expect(page.getByRole('heading', { name: 'Choose what to generate' })).toBeVisible();
   await screenshot(page, 'phase3-01-choose-scenario.png');
   await screenshot(page, 'phase3-12-simple-mode.png');
@@ -383,7 +383,7 @@ test('renders all generation modes and unsupported state without hard-coded inpu
 
 test('advanced mode reveals contracts and responsive layout remains usable', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/#/generate/scenarios');
+  await page.goto('/#/observe/live-runs');
   await page.getByRole('button', { name: 'Advanced', exact: true }).click();
   await page.getByRole('button', { name: /^Preview/ }).click();
   await expect(page.getByRole('heading', { name: 'Native Contract' })).toBeVisible();

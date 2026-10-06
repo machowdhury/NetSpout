@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "2026.10-phase3",
+  "registry_version": "2026.10-phase4",
   "catalog_evidence_ids": [
     "EVID-IETF-RFC5424",
     "EVID-NETSPOUT-CONTRACT-SCHEMA",
@@ -132,7 +132,7 @@
     },
     {
       "pack_id": "netspout-rfc5424-investigation",
-      "pack_version": "1.0.0",
+      "pack_version": "1.1.0",
       "kind": "INVESTIGATION",
       "display_name": "RFC 5424 Lab Investigation",
       "maturity": "BETA",
@@ -153,6 +153,11 @@
         {
           "recipe_id": "investigate-rfc5424-run",
           "title": "Trace the modeled link-state lifecycle",
+          "objective": "Find the current run and reconstruct its ordered link-state lifecycle.",
+          "question": "Which modeled entity changed state, and did Splunk observe the complete lifecycle?",
+          "expected_finding": "Six events for one run show the fictional edge router progressing from baseline through recovery.",
+          "explanation": "The run identifier is NetSpout-specific correlation metadata. The ordered phase field connects each event to the same modeled enterprise-state transition.",
+          "hint": "Start by confirming one run identifier and then compare event order by time and phase.",
           "portability": "NETSPOUT_SPECIFIC",
           "spl": "search index=idx_network_ops sourcetype=\"netspout:rfc5424\" netspout_run_id=\"$run_id$\" | sort 0 _time",
           "source_ids": [
@@ -176,7 +181,7 @@
     },
     {
       "pack_id": "netspout-rfc5424-scenario",
-      "pack_version": "1.0.0",
+      "pack_version": "1.1.0",
       "kind": "SCENARIO",
       "display_name": "Modeled Link-State Lifecycle",
       "maturity": "BETA",
@@ -199,11 +204,27 @@
           "title": "Modeled Link-State Lifecycle",
           "description": "A standards-structured lab scenario showing an interface transition from baseline through recovery.",
           "story": "A fictional branch uplink deteriorates, goes down, is detected, and returns to service.",
+          "domain": "NETOPS",
+          "category": "OPERATIONAL_RESILIENCE",
+          "technical_description": "One modeled interface lifecycle is encoded as six RFC 5424 structured messages and delivered to the configured local Splunk destination over the declared HEC lab path.",
           "difficulty": "BEGINNER",
           "expected_duration_minutes": 1,
           "learning_objectives": [
             "Distinguish generated, sent, and Splunk-observed evidence.",
             "Follow one correlated incident through ordered lifecycle phases."
+          ],
+          "skills_practiced": [
+            "Timeline reconstruction",
+            "Evidence-stage interpretation",
+            "Run-scoped Splunk investigation"
+          ],
+          "expected_outcome": "The user proves that all six modeled lifecycle events were generated, dispatched, indexed with the expected sourcetype, and correlated to one run.",
+          "baseline_description": "The fictional branch user depends on an edge-router uplink that begins in a healthy modeled state.",
+          "incident_description": "The modeled uplink degrades and transitions down, affecting the fictional user path before recovering.",
+          "discovery_prompt": "Determine which entity changed state and whether Splunk observed the complete modeled lifecycle.",
+          "learning_hints": [
+            "Compare generated and Splunk-observed counts before interpreting the timeline.",
+            "Use the run identifier only for this NetSpout lab; it is not a production field."
           ],
           "business_impact": "Demonstrates how loss of a branch uplink can interrupt application reachability.",
           "prerequisites": [
@@ -237,6 +258,9 @@
               "technology_id": "generic-user",
               "zone_id": "branch-zone",
               "role": "user",
+              "label": "Branch User",
+              "entity_id": "fictional-branch-user",
+              "description": "A fictional user whose application path depends on the modeled uplink.",
               "source_ids": []
             },
             {
@@ -244,6 +268,9 @@
               "technology_id": "rfc5424",
               "zone_id": "branch-zone",
               "role": "router",
+              "label": "Edge Router",
+              "entity_id": "fictional-edge-router",
+              "description": "A neutral modeled router entity producing RFC 5424 lifecycle evidence.",
               "source_ids": [
                 "ietf-syslog-rfc5424"
               ]
@@ -253,6 +280,9 @@
               "technology_id": "splunk-hec",
               "zone_id": "observability-zone",
               "role": "splunk",
+              "label": "Local Splunk",
+              "entity_id": "local-splunk-destination",
+              "description": "The configured local lab destination used for indexed observation.",
               "source_ids": []
             }
           ],
@@ -261,13 +291,22 @@
               "relationship_id": "branch-to-router",
               "source_node_id": "branch-user",
               "target_node_id": "edge-router",
-              "relationship_type": "application-path"
+              "relationship_type": "depends-on",
+              "purpose": "The fictional user path depends on edge-router reachability.",
+              "telemetry_source_ids": [],
+              "incident_relevance": "User impact follows loss of the modeled uplink."
             },
             {
               "relationship_id": "router-to-splunk",
               "source_node_id": "edge-router",
               "target_node_id": "splunk-local",
-              "relationship_type": "telemetry-delivery"
+              "relationship_type": "forwards-telemetry-to",
+              "protocol": "HEC",
+              "purpose": "Deliver modeled RFC 5424 events through the declared lab transport.",
+              "telemetry_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_relevance": null
             }
           ],
           "telemetry_paths": [
@@ -275,14 +314,19 @@
               "path_id": "rfc5424-to-splunk",
               "source_id": "ietf-syslog-rfc5424",
               "producer_node_id": "edge-router",
-              "observer_node_id": "splunk-local"
+              "observer_node_id": "splunk-local",
+              "label": "RFC 5424 events",
+              "protocol": "HEC"
             }
           ],
           "incident_path": [
-            "edge-router"
+            "edge-router",
+            "branch-user"
           ],
+          "incident_summary": "The modeled uplink state change propagates from the edge router to the fictional user's application path.",
           "runtime_state_keys": [
             "normal",
+            "active",
             "degraded",
             "affected",
             "recovering",
@@ -296,6 +340,19 @@
               "state_changes": {
                 "edge-router": "normal"
               },
+              "entity_state_changes": {
+                "edge-router": "normal",
+                "branch-user": "normal"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "One baseline event describes the modeled healthy state."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": []
             },
             {
@@ -305,6 +362,18 @@
               "state_changes": {
                 "edge-router": "degraded"
               },
+              "entity_state_changes": {
+                "edge-router": "degraded"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "A precursor event marks increasing modeled error indicators."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": []
             },
             {
@@ -314,6 +383,18 @@
               "state_changes": {
                 "edge-router": "affected"
               },
+              "entity_state_changes": {
+                "edge-router": "affected"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "The edge-router event reports the modeled interface-down transition."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": [
                 "modeled-link-state-change"
               ]
@@ -325,6 +406,18 @@
               "state_changes": {
                 "branch-user": "affected"
               },
+              "entity_state_changes": {
+                "branch-user": "affected"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "The timeline associates user-path impact with the same modeled incident."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": [
                 "modeled-link-state-change"
               ]
@@ -336,6 +429,18 @@
               "state_changes": {
                 "splunk-local": "normal"
               },
+              "entity_state_changes": {
+                "splunk-local": "active"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "OBSERVED"
+              },
+              "expected_observations": [
+                "Authenticated search should find the run after indexing completes."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": [
                 "modeled-link-state-change"
               ]
@@ -348,6 +453,19 @@
                 "edge-router": "recovered",
                 "branch-user": "recovered"
               },
+              "entity_state_changes": {
+                "edge-router": "recovered",
+                "branch-user": "recovered"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "OBSERVED"
+              },
+              "expected_observations": [
+                "The final event reports the modeled return to service."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
               "incident_ids": []
             }
           ],
@@ -377,6 +495,68 @@
           "investigation_recipe_ids": [
             "investigate-rfc5424-run"
           ],
+          "investigation_steps": [
+            {
+              "step_id": "find-modeled-lifecycle",
+              "recipe_id": "investigate-rfc5424-run",
+              "title": "Find and order the modeled lifecycle",
+              "question": "Which modeled entity changed state, and did Splunk observe every lifecycle phase?",
+              "expected_finding": "Six events for the fictional edge router share one run identifier and progress from BASELINE through RECOVERY.",
+              "explanation": "The events are separate observations of one modeled enterprise-state transition. The NetSpout run identifier scopes this lab only.",
+              "hint": "Confirm the result count first, then inspect phase order.",
+              "node_ids": [
+                "edge-router",
+                "splunk-local"
+              ],
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ]
+            }
+          ],
+          "validation_expectations": [
+            {
+              "validation_id": "generated-events",
+              "label": "Expected raw events generated",
+              "evidence_stage": "GENERATED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "transport-sent",
+              "label": "Declared transport accepted every event",
+              "evidence_stage": "SENT",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "splunk-observed",
+              "label": "Splunk observed the run",
+              "evidence_stage": "SPLUNK_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "sourcetype-observed",
+              "label": "Expected NetSpout-defined sourcetype observed",
+              "evidence_stage": "SOURCETYPE_VERIFIED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            }
+          ],
+          "visualization": {
+            "mode": "AUTOMATIC",
+            "direction": "LEFT_TO_RIGHT",
+            "curated_layout_ref": null
+          },
+          "replay_policy": {
+            "creates_new_run_id": true,
+            "preserves_history": true,
+            "reset_to_step": "RUN"
+          },
           "troubleshooting_steps": [
             "Confirm the configured destination passed preflight.",
             "Compare sent count with Splunk-observed count."

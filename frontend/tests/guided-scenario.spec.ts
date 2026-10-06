@@ -260,17 +260,25 @@ test('completes the guided scenario journey and replay', async ({ page }) => {
   await page.getByRole('button', { name: 'Run scenario' }).click();
   await expect(page.getByText(/Run ID/)).toBeVisible();
   await capture(page, 'phase4-09-running-scenario.png');
-  await page.getByRole('button', { name: /INCIDENT.*INCIDENT modeled observation/ }).click();
+  await page.locator('.guided-timeline button').filter({ hasText: 'INCIDENT' }).click();
   await expect(page.locator('[data-node-id="edge-router"]')).toHaveClass(/is-selected/);
   await capture(page, 'phase4-10-active-timeline.png');
 
   await page.getByRole('button', { name: 'Observe evidence' }).click();
-  await page.getByRole('button', { name: 'Refresh Splunk observation' }).click();
-  await expect(page.getByText('Authenticated search proved observation.')).toBeVisible();
+  const refreshObservation = page.getByRole('button', { name: 'Refresh Splunk observation' });
+  const observedEvidence = page.getByText(/Authenticated (?:Splunk search proved (?:indexed )?|search proved )observation\./);
+  for (let attempt = 0; attempt < (process.env.PLAYWRIGHT_LIVE_GUIDED === '1' ? 5 : 1); attempt += 1) {
+    await refreshObservation.click();
+    if (await observedEvidence.isVisible()) break;
+    await page.waitForTimeout(1000);
+  }
+  await expect(observedEvidence).toBeVisible();
+  await expect(refreshObservation).toBeEnabled();
   await expect(page.getByText(/Evidence focus:.*Edge Router/)).toBeVisible();
   await capture(page, 'phase4-11-observe-evidence.png');
 
   await page.getByRole('button', { name: 'Investigate', exact: true }).click();
+  await page.getByRole('heading', { name: scenario.investigation_steps[0].title }).scrollIntoViewIfNeeded();
   await capture(page, 'phase4-12-guided-investigation.png');
   await page.getByRole('button', { name: 'View topology' }).click();
   await expect(page.locator('[data-node-id="edge-router"]')).toHaveClass(/is-selected/);
@@ -297,7 +305,20 @@ test('advanced mode reveals guided runtime detail', async ({ page }) => {
   await page.goto('/#/generate/scenarios');
   await page.getByRole('button', { name: 'Advanced', exact: true }).click();
   await page.getByRole('button', { name: 'Advanced run' }).click();
-  await expect(page.getByRole('heading', { name: 'Prepare the lab environment' })).toBeVisible();
+  await page.getByRole('button', { name: 'Run preflight' }).click();
+  await page.getByRole('button', { name: 'Continue to run' }).click();
+  await page.getByRole('button', { name: 'Run scenario' }).click();
+  await page.getByRole('button', { name: 'Observe evidence' }).click();
+  const refreshObservation = page.getByRole('button', { name: 'Refresh Splunk observation' });
+  await refreshObservation.click();
+  await expect(refreshObservation).toBeEnabled();
+  await page.getByRole('button', { name: 'Investigate', exact: true }).click();
+  await page.getByRole('button', { name: 'Run in Splunk' }).click();
+  await page.getByRole('button', { name: 'Validate learning' }).click();
+  await page.getByRole('button', { name: 'Complete scenario' }).click();
+  const advancedDetail = page.getByText('Advanced run identity');
+  await expect(advancedDetail).toBeVisible();
+  await advancedDetail.scrollIntoViewIfNeeded();
   await capture(page, 'phase4-17-advanced-mode.png');
 });
 

@@ -5,7 +5,8 @@
 - Branch: `feature/figma-v3-unified-telemetry-lab`
 - Exact Phase 6 baseline: `177ad9b95ffffea648c64427064c38f82930d409`
 - Accepted Phase 5 implementation: `d5286325f46c4835cc57af72aefb906c79ee4f44`
-- Phase 6 implementation commit: recorded after implementation commit
+- Phase 6 implementation commit:
+  `1042c47e1265965f5d378794a6d55be256a0c1b6`
 - Report finalization: documentation-only successor commit
 - Phase 7: not started
 

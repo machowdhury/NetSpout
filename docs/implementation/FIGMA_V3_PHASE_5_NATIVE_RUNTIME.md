@@ -4,8 +4,8 @@
 
 - Starting commit: `51cb05a1812d5f29097a7b94dc6cb5767bf4f81a`
 - Branch: `feature/figma-v3-unified-telemetry-lab`
-- Final implementation commit: recorded after final verification
-- Report/evidence finalization commit: this document's commit
+- Final implementation commit: `d5286325f46c4835cc57af72aefb906c79ee4f44`
+- Report/evidence finalization: documentation-only successor commit
 - Phase 6: not started
 
 Phase 5 extends the Phase 3/4 workflow without adding a second native-protocol

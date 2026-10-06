@@ -34,6 +34,7 @@ CORE_MODULES = [
     "noc_soc_metrics.py",
     "catalog.py",
     "catalog_contracts.py",
+    "pack_contracts.py",
     "vendor_catalog.py",
     "exporter_session.py",
     "netflow_v9_encoder.py",

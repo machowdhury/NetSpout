@@ -1,0 +1,37 @@
+{
+  "fixture_only": true,
+  "warning": "Architecture proof only. These identities, contracts, integrations, and scenarios are not production-supported catalog entries.",
+  "technologies": [
+    {"source_id": "fixture-cisco-ios-xe", "vendor": "Cisco", "product": "IOS XE", "telemetry": "syslog"},
+    {"source_id": "fixture-cisco-aci", "vendor": "Cisco", "product": "ACI", "telemetry": "API events"},
+    {"source_id": "fixture-cisco-secure-firewall", "vendor": "Cisco", "product": "Secure Firewall", "telemetry": "security events"},
+    {"source_id": "fixture-palo-alto-firewall", "vendor": "Palo Alto Networks", "product": "Firewall", "telemetry": "security events"},
+    {"source_id": "fixture-microsoft-entra", "vendor": "Microsoft", "product": "Entra ID", "telemetry": "audit events"},
+    {"source_id": "fixture-aws-cloudtrail", "vendor": "AWS", "product": "CloudTrail", "telemetry": "cloud audit events"},
+    {"source_id": "fixture-netflow", "vendor": "Protocol fixture", "product": "NetFlow", "telemetry": "flow records"},
+    {"source_id": "fixture-dns", "vendor": "Protocol fixture", "product": "DNS", "telemetry": "DNS observations"},
+    {"source_id": "fixture-imported-sample", "vendor": "Customer supplied", "product": "Sanitized sample", "telemetry": "sample-derived records"}
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "fixture-cisco-multi-product",
+      "source_ids": ["fixture-cisco-ios-xe", "fixture-cisco-aci", "fixture-cisco-secure-firewall"]
+    },
+    {
+      "scenario_id": "fixture-mixed-vendor",
+      "source_ids": ["fixture-cisco-ios-xe", "fixture-palo-alto-firewall", "fixture-microsoft-entra", "fixture-aws-cloudtrail"]
+    },
+    {
+      "scenario_id": "fixture-flow-dns-incident",
+      "source_ids": ["fixture-netflow", "fixture-dns"]
+    },
+    {
+      "scenario_id": "fixture-transport-neutral",
+      "source_ids": ["fixture-cisco-ios-xe"]
+    }
+  ],
+  "transport_variants": [
+    {"composition_id": "fixture-transport-udp", "transport_id": "fixture-syslog-udp"},
+    {"composition_id": "fixture-transport-tcp", "transport_id": "fixture-syslog-tcp"}
+  ]
+}

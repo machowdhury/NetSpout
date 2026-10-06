@@ -23,6 +23,7 @@ from collections import Counter
 from typing import Dict, List, Any, Optional, Tuple, Set
 
 from netspout_core.catalog_contracts import TelemetryCatalog
+from netspout_core.pack_contracts import PackRegistry
 
 
 def _find_catalog_dir() -> str:
@@ -62,6 +63,7 @@ class NetSpoutCatalog:
         self._protocols: List[Dict[str, Any]] = []
         self._aliases: Dict[str, Dict[str, Any]] = {}
         self._telemetry_catalog: Optional[TelemetryCatalog] = None
+        self._extension_packs: Optional[PackRegistry] = None
 
         self._vendors_by_id: Dict[str, Dict[str, Any]] = {}
         self._sourcetypes_by_st: Dict[str, Dict[str, Any]] = {}
@@ -92,6 +94,9 @@ class NetSpoutCatalog:
         self._aliases = _read_json("aliases.json")
         self._telemetry_catalog = TelemetryCatalog.model_validate(
             _read_json("telemetry_catalog.json")
+        )
+        self._extension_packs = PackRegistry.model_validate(
+            _read_json("extension_packs.json")
         )
 
         # Build fast lookup indexes
@@ -379,6 +384,10 @@ class NetSpoutCatalog:
     # -------------------------------------------------------------------------
     def get_telemetry_catalog(self) -> Dict[str, Any]:
         return self._telemetry_catalog.model_dump(mode="json", by_alias=True)
+
+    def get_extension_pack_registry(self) -> Dict[str, Any]:
+        """Return validated declarative pack metadata without executing pack code."""
+        return self._extension_packs.model_dump(mode="json", by_alias=True)
 
     def list_telemetry_sources(
         self,

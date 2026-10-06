@@ -99,6 +99,7 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
             if claim.authority.value == "NETSPOUT_DEFINED"
         ]
         self.assertEqual({claim.name for claim in claims}, {
+            "netspout:rfc5424",
             "openconfig:gnmi:telemetry",
             "netspout:agentic:activity",
         })
@@ -160,7 +161,7 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
         summary = catalog.get_telemetry_catalog_summary()
         self.assertEqual(summary["source_count"], 10)
         self.assertEqual(summary["sourcetype_counts"]["SPLUNK_DOCUMENTED"], 1)
-        self.assertEqual(summary["sourcetype_counts"]["NETSPOUT_DEFINED"], 2)
+        self.assertEqual(summary["sourcetype_counts"]["NETSPOUT_DEFINED"], 3)
 
     def test_11_unknown_source_and_integration_are_absent(self):
         catalog = NetSpoutCatalog(catalog_dir=os.path.join(REPO_ROOT, "catalog"))

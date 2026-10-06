@@ -201,6 +201,7 @@
       "publisher": "NetSpout",
       "integration_type": "DIRECT_STRUCTURED_INGESTION",
       "supported_source_ids": [
+        "ietf-syslog-rfc5424",
         "openconfig-gnmi-interfaces",
         "netspout-agentic-activity"
       ],
@@ -208,6 +209,13 @@
       "verification_state": "PARTIALLY_VERIFIED",
       "support_state": "LAB_ONLY",
       "sourcetypes": [
+        {
+          "name": "netspout:rfc5424",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
         {
           "name": "openconfig:gnmi:telemetry",
           "authority": "NETSPOUT_DEFINED",
@@ -291,15 +299,26 @@
         "verification_state": "PARTIALLY_VERIFIED",
         "input_mechanisms": [
           "TCP network input",
-          "UDP network input"
+          "UDP network input",
+          "NetSpout direct structured ingestion"
         ],
         "integration_ids": [
-          "splunk-native-network-input"
+          "splunk-native-network-input",
+          "netspout-direct-structured-ingestion"
         ],
-        "sourcetypes": [],
+        "sourcetypes": [
+          {
+            "name": "netspout:rfc5424",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
         "cim_mappings": [],
         "evidence_ids": [
-          "EVID-SPLUNK-NETWORK-INPUT"
+          "EVID-SPLUNK-NETWORK-INPUT",
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
         ]
       },
       "netspout_contract": {

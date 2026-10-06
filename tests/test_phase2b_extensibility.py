@@ -530,10 +530,16 @@ class TestPhase2BExtensibility(unittest.TestCase):
         cls.registry = PackRegistry.model_validate(cls.raw_registry)
         cls.resources = cls.registry._resources()
 
-    def test_01_existing_phase2_catalog_and_empty_registry_validate(self):
+    def test_01_existing_phase2_catalog_and_phase3_registry_validate(self):
         catalog = NetSpoutCatalog(catalog_dir=os.path.join(REPO_ROOT, "catalog"))
         self.assertEqual(catalog.get_telemetry_catalog_summary()["source_count"], 10)
-        self.assertEqual(catalog.get_extension_pack_registry()["packs"], [])
+        registry = catalog.get_extension_pack_registry()
+        self.assertEqual(len(registry["packs"]), 3)
+        self.assertEqual(len(registry["compositions"]), 1)
+        self.assertEqual(
+            registry["catalog_source_bindings"][0]["source_id"],
+            "ietf-syslog-rfc5424",
+        )
 
     def test_02_all_five_pack_kinds_are_declarative(self):
         self.assertEqual(

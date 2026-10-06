@@ -1,6 +1,420 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "2026.10-phase2b",
-  "packs": [],
-  "compositions": []
+  "registry_version": "2026.10-phase3",
+  "catalog_evidence_ids": [
+    "EVID-IETF-RFC5424",
+    "EVID-NETSPOUT-CONTRACT-SCHEMA",
+    "EVID-NETSPOUT-RUNTIME"
+  ],
+  "catalog_integration_ids": [
+    "netspout-direct-structured-ingestion"
+  ],
+  "catalog_source_bindings": [
+    {
+      "source_id": "ietf-syslog-rfc5424",
+      "verification_state": "VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-rfc5424-modeled"
+      ],
+      "validator_ids": [
+        "validator-rfc5424-structure"
+      ],
+      "compatible_transport_ids": [
+        "transport-local-hec"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    }
+  ],
+  "packs": [
+    {
+      "pack_id": "netspout-rfc5424-generation",
+      "pack_version": "1.0.0",
+      "kind": "PROTOCOL_TELEMETRY",
+      "display_name": "RFC 5424 Modeled Generation",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [
+        {
+          "generator_id": "generator-rfc5424-modeled",
+          "implementation_ref": "allowlist:rfc5424-modeled",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "signals": [
+            "EVENTS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "validators": [
+        {
+          "validator_id": "validator-rfc5424-structure",
+          "implementation_ref": "allowlist:rfc5424-structure",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "SPLUNK_OBSERVED",
+            "SOURCETYPE_VERIFIED",
+            "FIELDS_VERIFIED"
+          ],
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        }
+      ],
+      "transports": [
+        {
+          "transport_id": "transport-local-hec",
+          "component": "NetSpout telemetry dispatcher",
+          "protocol": "HEC",
+          "signals": [
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Lab delivery path; HEC is not the source's native syslog transport."
+        }
+      ],
+      "destinations": [
+        {
+          "destination_id": "destination-local-docker-splunk",
+          "destination_type": "LOCAL_DOCKER_SPLUNK",
+          "accepted_transport_ids": [
+            "transport-local-hec"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "integration_recommendations": [
+        {
+          "recommendation_id": "recommend-rfc5424-direct-ingestion",
+          "source_id": "ietf-syslog-rfc5424",
+          "integration_id": "netspout-direct-structured-ingestion",
+          "requirement": "REQUIRED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Required only for the NetSpout-defined HEC sourcetype used by this lab workflow."
+        }
+      ],
+      "scenarios": [],
+      "investigations": [],
+      "industries": []
+    },
+    {
+      "pack_id": "netspout-rfc5424-investigation",
+      "pack_version": "1.0.0",
+      "kind": "INVESTIGATION",
+      "display_name": "RFC 5424 Lab Investigation",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [],
+      "validators": [],
+      "transports": [],
+      "destinations": [],
+      "integration_recommendations": [],
+      "scenarios": [],
+      "investigations": [
+        {
+          "recipe_id": "investigate-rfc5424-run",
+          "title": "Trace the modeled link-state lifecycle",
+          "portability": "NETSPOUT_SPECIFIC",
+          "spl": "index=idx_network_ops sourcetype=\"netspout:rfc5424\" netspout_run_id=\"$run_id$\" | sort 0 _time",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "required_fields": [
+            "netspout_phase",
+            "netspout_run_id"
+          ],
+          "cim_requirements": [],
+          "netspout_only_fields": [
+            "netspout_phase",
+            "netspout_run_id"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        }
+      ],
+      "industries": []
+    },
+    {
+      "pack_id": "netspout-rfc5424-scenario",
+      "pack_version": "1.0.0",
+      "kind": "SCENARIO",
+      "display_name": "Modeled Link-State Lifecycle",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [],
+      "validators": [],
+      "transports": [],
+      "destinations": [],
+      "integration_recommendations": [],
+      "scenarios": [
+        {
+          "scenario_id": "rfc5424-link-state-lifecycle",
+          "title": "Modeled Link-State Lifecycle",
+          "description": "A standards-structured lab scenario showing an interface transition from baseline through recovery.",
+          "story": "A fictional branch uplink deteriorates, goes down, is detected, and returns to service.",
+          "difficulty": "BEGINNER",
+          "expected_duration_minutes": 1,
+          "learning_objectives": [
+            "Distinguish generated, sent, and Splunk-observed evidence.",
+            "Follow one correlated incident through ordered lifecycle phases."
+          ],
+          "business_impact": "Demonstrates how loss of a branch uplink can interrupt application reachability.",
+          "prerequisites": [
+            "Configured local Docker Splunk destination"
+          ],
+          "technology_ids": [
+            "rfc5424",
+            "splunk-hec"
+          ],
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "entities": [
+            "Fictional branch user",
+            "Fictional edge router",
+            "Local Splunk"
+          ],
+          "zones": [
+            {
+              "zone_id": "branch-zone",
+              "label": "Fictional Branch"
+            },
+            {
+              "zone_id": "observability-zone",
+              "label": "Observability"
+            }
+          ],
+          "nodes": [
+            {
+              "node_id": "branch-user",
+              "technology_id": "generic-user",
+              "zone_id": "branch-zone",
+              "role": "user",
+              "source_ids": []
+            },
+            {
+              "node_id": "edge-router",
+              "technology_id": "rfc5424",
+              "zone_id": "branch-zone",
+              "role": "router",
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ]
+            },
+            {
+              "node_id": "splunk-local",
+              "technology_id": "splunk-hec",
+              "zone_id": "observability-zone",
+              "role": "splunk",
+              "source_ids": []
+            }
+          ],
+          "relationships": [
+            {
+              "relationship_id": "branch-to-router",
+              "source_node_id": "branch-user",
+              "target_node_id": "edge-router",
+              "relationship_type": "application-path"
+            },
+            {
+              "relationship_id": "router-to-splunk",
+              "source_node_id": "edge-router",
+              "target_node_id": "splunk-local",
+              "relationship_type": "telemetry-delivery"
+            }
+          ],
+          "telemetry_paths": [
+            {
+              "path_id": "rfc5424-to-splunk",
+              "source_id": "ietf-syslog-rfc5424",
+              "producer_node_id": "edge-router",
+              "observer_node_id": "splunk-local"
+            }
+          ],
+          "incident_path": [
+            "edge-router"
+          ],
+          "runtime_state_keys": [
+            "normal",
+            "degraded",
+            "affected",
+            "recovering",
+            "recovered"
+          ],
+          "timeline": [
+            {
+              "step_id": "baseline",
+              "stage": "BASELINE",
+              "description": "The modeled uplink is healthy.",
+              "state_changes": {
+                "edge-router": "normal"
+              },
+              "incident_ids": []
+            },
+            {
+              "step_id": "precursor",
+              "stage": "PRECURSOR",
+              "description": "Modeled error indicators increase.",
+              "state_changes": {
+                "edge-router": "degraded"
+              },
+              "incident_ids": []
+            },
+            {
+              "step_id": "incident",
+              "stage": "INCIDENT",
+              "description": "The modeled uplink transitions down.",
+              "state_changes": {
+                "edge-router": "affected"
+              },
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "impact",
+              "stage": "IMPACT",
+              "description": "The fictional branch application path is unavailable.",
+              "state_changes": {
+                "branch-user": "affected"
+              },
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "detection",
+              "stage": "DETECTION",
+              "description": "Splunk receives the correlated modeled lifecycle.",
+              "state_changes": {
+                "splunk-local": "normal"
+              },
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "recovery",
+              "stage": "RECOVERY",
+              "description": "The modeled uplink returns to service.",
+              "state_changes": {
+                "edge-router": "recovered",
+                "branch-user": "recovered"
+              },
+              "incident_ids": []
+            }
+          ],
+          "incidents": [
+            {
+              "incident_id": "modeled-link-state-change",
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "assertion": "One modeled RFC 5424 source represents the fictional link-state transition.",
+              "corroboration_required": false
+            }
+          ],
+          "parameters": [
+            {
+              "parameter_id": "intensity",
+              "value_type": "integer",
+              "changes_modeled_values_only": true
+            }
+          ],
+          "integration_recommendation_ids": [
+            "recommend-rfc5424-direct-ingestion"
+          ],
+          "expected_evidence": [
+            "Six ordered RFC 5424 events sharing one NetSpout run identifier."
+          ],
+          "investigation_recipe_ids": [
+            "investigate-rfc5424-run"
+          ],
+          "troubleshooting_steps": [
+            "Confirm the configured destination passed preflight.",
+            "Compare sent count with Splunk-observed count."
+          ],
+          "cim_validation": [],
+          "production_replication_guidance": [
+            "Replace the NetSpout-defined sourcetype and run identifier with the production integration's verified parsing contract."
+          ],
+          "curated_layout_ref": null
+        }
+      ],
+      "investigations": [],
+      "industries": []
+    }
+  ],
+  "compositions": [
+    {
+      "composition_id": "compose-rfc5424-link-state-local",
+      "scenario_id": "rfc5424-link-state-lifecycle",
+      "pack_ids": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation",
+        "netspout-rfc5424-scenario"
+      ],
+      "source_bindings": [
+        {
+          "source_id": "ietf-syslog-rfc5424",
+          "generator_id": "generator-rfc5424-modeled",
+          "transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "validator_ids": [
+            "validator-rfc5424-structure"
+          ]
+        }
+      ],
+      "investigation_recipe_ids": [
+        "investigate-rfc5424-run"
+      ]
+    }
+  ]
 }

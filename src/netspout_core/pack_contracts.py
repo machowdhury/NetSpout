@@ -169,6 +169,18 @@ class SourcePackEntry(StrictModel):
         return self
 
 
+class CatalogSourceBinding(StrictModel):
+    """Execution binding for a source owned by the authoritative base catalog."""
+
+    source_id: str
+    verification_state: VerificationState
+    runtime_status: str
+    generator_ids: List[str] = Field(default_factory=list)
+    validator_ids: List[str] = Field(default_factory=list)
+    compatible_transport_ids: List[str] = Field(default_factory=list)
+    raw_fidelity: RawFidelityPolicy
+
+
 class IntegrationRecommendation(StrictModel):
     recommendation_id: str
     source_id: str
@@ -390,6 +402,9 @@ class CompositionDefinition(StrictModel):
 class PackRegistry(StrictModel):
     schema_version: str
     registry_version: str
+    catalog_evidence_ids: List[str] = Field(default_factory=list)
+    catalog_integration_ids: List[str] = Field(default_factory=list)
+    catalog_source_bindings: List[CatalogSourceBinding] = Field(default_factory=list)
     packs: List[PackDefinition]
     compositions: List[CompositionDefinition]
 
@@ -415,11 +430,18 @@ class PackRegistry(StrictModel):
         )
 
         evidence_ids = _unique_values(resources["evidence"], "evidence_id", "packs")
+        evidence_ids.update(self.catalog_evidence_ids)
         source_ids = _unique_values(
             [entry.source for entry in resources["source_entries"]],
             "source_id",
             "packs",
         )
+        catalog_source_ids = _unique_values(
+            self.catalog_source_bindings, "source_id", "catalog source bindings"
+        )
+        if source_ids.intersection(catalog_source_ids):
+            raise ValueError("pack sources cannot duplicate base catalog sources")
+        source_ids.update(catalog_source_ids)
         generator_ids = _unique_values(resources["generators"], "generator_id", "packs")
         validator_ids = _unique_values(resources["validators"], "validator_id", "packs")
         transport_ids = _unique_values(resources["transports"], "transport_id", "packs")
@@ -429,6 +451,7 @@ class PackRegistry(StrictModel):
         integration_ids = _unique_values(
             resources["integrations"], "integration_id", "packs"
         )
+        integration_ids.update(self.catalog_integration_ids)
         recommendation_ids = _unique_values(
             resources["recommendations"], "recommendation_id", "packs"
         )
@@ -464,6 +487,13 @@ class PackRegistry(StrictModel):
             _require_refs(
                 entry.compatible_transport_ids, transport_ids, owner, "transport"
             )
+        for entry in self.catalog_source_bindings:
+            owner = entry.source_id
+            _require_refs(entry.generator_ids, generator_ids, owner, "generator")
+            _require_refs(entry.validator_ids, validator_ids, owner, "validator")
+            _require_refs(
+                entry.compatible_transport_ids, transport_ids, owner, "transport"
+            )
         for item in resources["recommendations"]:
             _require_refs([item.source_id], source_ids, item.recommendation_id, "source")
             if item.integration_id:
@@ -473,13 +503,15 @@ class PackRegistry(StrictModel):
                     item.recommendation_id,
                     "integration",
                 )
-                integration = next(
-                    value
-                    for value in resources["integrations"]
-                    if value.integration_id == item.integration_id
-                )
-                if item.source_id not in integration.supported_source_ids:
-                    raise ValueError("integration recommendation relationship is not explicit")
+                local_integrations = {
+                    value.integration_id: value for value in resources["integrations"]
+                }
+                if item.integration_id in local_integrations:
+                    integration = local_integrations[item.integration_id]
+                    if item.source_id not in integration.supported_source_ids:
+                        raise ValueError(
+                            "integration recommendation relationship is not explicit"
+                        )
             _require_refs(
                 item.evidence_ids, evidence_ids, item.recommendation_id, "evidence"
             )
@@ -508,6 +540,9 @@ class PackRegistry(StrictModel):
         source_entries = {
             item.source.source_id: item for item in resources["source_entries"]
         }
+        source_entries.update(
+            {item.source_id: item for item in self.catalog_source_bindings}
+        )
         generators = {item.generator_id: item for item in resources["generators"]}
         transports = {item.transport_id: item for item in resources["transports"]}
         destinations = {
@@ -543,7 +578,12 @@ class PackRegistry(StrictModel):
                 )
                 _require_refs(binding.validator_ids, validator_ids, binding.source_id, "validator")
                 source = source_entries[binding.source_id]
-                if source.source.verification_state in {
+                source_state = (
+                    source.source.verification_state
+                    if isinstance(source, SourcePackEntry)
+                    else source.verification_state
+                )
+                if source_state in {
                     VerificationState.RESEARCH_REQUIRED,
                     VerificationState.UNSUPPORTED,
                 }:
@@ -591,6 +631,53 @@ class PackRegistry(StrictModel):
             "investigations": [item for pack in self.packs for item in pack.investigations],
             "industries": [item for pack in self.packs for item in pack.industries],
         }
+
+    def validate_against_catalog(self, catalog: TelemetryCatalog) -> None:
+        """Validate all declared base-catalog references against authoritative data."""
+        evidence_ids = {item.evidence_id for item in catalog.evidence}
+        integration_by_id = {
+            item.integration_id: item for item in catalog.integrations
+        }
+        source_by_id = {item.source_id: item for item in catalog.sources}
+        _require_refs(
+            self.catalog_evidence_ids,
+            evidence_ids,
+            self.registry_version,
+            "catalog evidence",
+        )
+        _require_refs(
+            self.catalog_integration_ids,
+            set(integration_by_id),
+            self.registry_version,
+            "catalog integration",
+        )
+        _require_refs(
+            [item.source_id for item in self.catalog_source_bindings],
+            set(source_by_id),
+            self.registry_version,
+            "catalog source",
+        )
+        for binding in self.catalog_source_bindings:
+            source = source_by_id[binding.source_id]
+            if source.verification_state != binding.verification_state:
+                raise ValueError(
+                    "catalog source binding '{}' verification state is stale".format(
+                        binding.source_id
+                    )
+                )
+            if source.netspout_contract.runtime_status != binding.runtime_status:
+                raise ValueError(
+                    "catalog source binding '{}' runtime status is stale".format(
+                        binding.source_id
+                    )
+                )
+        for recommendation in self._resources()["recommendations"]:
+            if recommendation.integration_id in integration_by_id:
+                integration = integration_by_id[recommendation.integration_id]
+                if recommendation.source_id not in integration.supported_source_ids:
+                    raise ValueError(
+                        "catalog integration recommendation relationship is not explicit"
+                    )
 
 
 def _unique_values(items, field: str, owner: str) -> Set[str]:

@@ -98,6 +98,7 @@ class NetSpoutCatalog:
         self._extension_packs = PackRegistry.model_validate(
             _read_json("extension_packs.json")
         )
+        self._extension_packs.validate_against_catalog(self._telemetry_catalog)
 
         # Build fast lookup indexes
         for v in self._vendors:

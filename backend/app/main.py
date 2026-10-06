@@ -23,10 +23,15 @@ from app.models import (
     ZoneAnnotation, NodePowerState, NodeHardware,
     TelemetryTransportConfig, SyslogTestRequest,
     FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest, FaultEventRecord,
-    ScenarioRunRequest, RunManifest, ScenarioContract, ValidationRule, ValidationResult
+    ScenarioRunRequest, RunManifest, ScenarioContract, ValidationRule, ValidationResult,
+    ValidationStatus
 )
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
+from app.unified_generation import (
+    UnifiedGenerationRequest,
+    UnifiedGenerationService,
+)
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
@@ -45,6 +50,7 @@ app.add_middleware(
 
 # Global Simulation State
 scenario_runner = ScenarioRunner()
+unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -1262,7 +1268,79 @@ def get_pipelines_health():
 
 
 # =========================================================================
-# Generation Modes (Modes B, C, D) & Catalog Navigation
+# Unified Generation Experience (Modes A, B, C, and D)
+# =========================================================================
+def _unified_transport_config() -> TelemetryTransportConfig:
+    if current_topology and getattr(current_topology, "global_transport", None):
+        return current_topology.global_transport
+    return TelemetryTransportConfig()
+
+
+@app.get("/api/generation/capabilities")
+def get_unified_generation_capabilities():
+    return unified_generation_service.capabilities()
+
+
+@app.post("/api/generation/preview")
+def preview_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.preview(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/api/generation/preflight")
+def preflight_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.preflight(
+            payload, _unified_transport_config()
+        ).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/api/generation/runs")
+def run_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.run(
+            payload, _unified_transport_config()
+        ).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.get("/api/generation/runs/{run_id}")
+def get_unified_generation_run(run_id: str):
+    run = unified_generation_service.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    return run.model_dump(mode="json")
+
+
+@app.post("/api/generation/runs/{run_id}/observe")
+def observe_unified_generation_run(run_id: str):
+    try:
+        return unified_generation_service.observe(
+            run_id, _unified_transport_config()
+        ).model_dump(mode="json")
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+
+
+@app.post("/api/generation/runs/{run_id}/investigate/{recipe_id}")
+def investigate_unified_generation_run(run_id: str, recipe_id: str):
+    try:
+        return unified_generation_service.run_investigation(
+            run_id, recipe_id, _unified_transport_config()
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Legacy Generation Modes (compatibility surface)
 # =========================================================================
 @app.post("/api/generate/single-event")
 def post_generate_single_event(payload: Dict[str, Any]):

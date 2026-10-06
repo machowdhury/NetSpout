@@ -173,6 +173,18 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
             self.assertIsInstance(source.applicable_industries, list)
             self.assertEqual(len(source.applicable_industries), len(set(source.applicable_industries)))
 
+    def test_13_legacy_addon_view_delegates_to_authoritative_catalog(self):
+        modal_path = os.path.join(
+            REPO_ROOT, "frontend", "src", "components", "VendorAddonsModal.tsx"
+        )
+        with open(modal_path, "r", encoding="utf-8") as modal_file:
+            content = modal_file.read()
+        self.assertIn("/catalog/splunk-integrations", content)
+        self.assertIn("unverified", content)
+        self.assertIn("presentation layer", content)
+        self.assertNotIn("const VENDOR_ADDONS", content)
+        self.assertNotIn("Live CIM Normalization Test", content)
+
 
 if __name__ == "__main__":
     unittest.main()

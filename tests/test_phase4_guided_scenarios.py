@@ -186,7 +186,7 @@ class TestPhase4GuidedScenarios(unittest.TestCase):
         scenario = capabilities["scenarios"][0]
         self.assertEqual(scenario["guided_completeness"]["state"], "PARTIAL")
         self.assertEqual(scenario["guided_completeness"]["passed"], 12)
-        self.assertEqual(len(service.registry.packs), 3)
+        self.assertEqual(len(service.registry.packs), 4)
 
     def test_12_scenario_uses_neutral_metadata_and_no_vendor_renderer_key(self):
         data = self.scenario.model_dump(mode="json")

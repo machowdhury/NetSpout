@@ -734,6 +734,8 @@ class NativeRuntimeFacade:
         seed: int,
         raw_payload: str,
         *,
+        phase: str = "BASELINE",
+        sourcetype: str = "netspout:rfc5424",
         receive_timeout: float = 1.0,
     ) -> ChannelRunResult:
         server = self._syslog_server_factory(host="127.0.0.1", port=0)
@@ -778,10 +780,10 @@ class NativeRuntimeFacade:
                 node_type="router",
                 node_id=entity_id,
                 vendor="cisco",
-                sourcetype="netspout:rfc5424",
+                sourcetype=sourcetype,
                 netspout_run_id=run_id,
                 netspout_scenario_id=scenario_id,
-                netspout_phase=PHASES[0],
+                netspout_phase=phase,
                 netspout_device_id=entity_id,
             )
             evidence.append(Evidence("NORMALIZED", True, "Correlation was added after receiver observation; raw_log is unchanged.", 1))

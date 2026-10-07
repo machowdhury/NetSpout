@@ -20,6 +20,7 @@ import { ScenarioStudio } from './components/studio/ScenarioStudio';
 import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
+import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
 import { useHashRoute } from './app/useHashRoute';
@@ -726,6 +727,10 @@ export const App: React.FC = () => {
 
     if (route === '/catalog/provenance') {
       return <ProvenanceView mode={experienceMode} />;
+    }
+
+    if (route === '/catalog/cisco-coverage') {
+      return <CiscoCoverageView />;
     }
 
     if (route === '/catalog/splunk-integrations') {

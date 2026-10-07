@@ -161,6 +161,33 @@ class DestinationDefinition(StrictModel):
     evidence_ids: List[str] = Field(default_factory=list)
 
 
+class DeclarativeTemplateProfile(StrictModel):
+    """Data-only native payload template interpreted by an allow-listed renderer."""
+
+    profile_id: str
+    source_id: str
+    format: str
+    sourcetype: str
+    template: str
+    structural_fields: List[str]
+    modeled_fields: List[str]
+    derived_fields: List[str] = Field(default_factory=list)
+    supported_state_keys: List[str] = Field(default_factory=list)
+    phase_values: Dict[str, Dict[str, str]] = Field(default_factory=dict)
+    evidence_ids: List[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def protect_native_structure(self):
+        structural = set(self.structural_fields)
+        modeled = set(self.modeled_fields)
+        derived = set(self.derived_fields)
+        if structural.intersection(modeled | derived) or modeled.intersection(derived):
+            raise ValueError("declarative template field classes must be disjoint")
+        if not self.template or "{" not in self.template:
+            raise ValueError("declarative native templates require placeholders")
+        return self
+
+
 class SourcePackEntry(StrictModel):
     source: TelemetrySource
     generator_ids: List[str] = Field(default_factory=list)
@@ -416,6 +443,8 @@ class GuidedScenarioManifest(StrictModel):
     troubleshooting_steps: List[str] = Field(default_factory=list)
     cim_validation: List[str] = Field(default_factory=list)
     production_replication_guidance: List[str] = Field(default_factory=list)
+    troubleshooting_operation_ids: List[str] = Field(default_factory=list)
+    production_guide_id: Optional[str] = None
     curated_layout_ref: Optional[str] = None
 
     @model_validator(mode="after")
@@ -570,6 +599,9 @@ class PackDefinition(StrictModel):
     validators: List[ValidatorDefinition] = Field(default_factory=list)
     transports: List[TransportCapability] = Field(default_factory=list)
     destinations: List[DestinationDefinition] = Field(default_factory=list)
+    declarative_templates: List[DeclarativeTemplateProfile] = Field(
+        default_factory=list
+    )
     integration_recommendations: List[IntegrationRecommendation] = Field(
         default_factory=list
     )
@@ -585,6 +617,7 @@ class SourceBinding(StrictModel):
     destination_transport_id: Optional[str] = None
     destination_id: str
     runtime_adapter_ref: Optional[str] = None
+    payload_profile_id: Optional[str] = None
     receiver_component_id: Optional[str] = None
     required: bool = True
     validator_ids: List[str] = Field(default_factory=list)
@@ -644,6 +677,9 @@ class PackRegistry(StrictModel):
         generator_ids = _unique_values(resources["generators"], "generator_id", "packs")
         validator_ids = _unique_values(resources["validators"], "validator_id", "packs")
         transport_ids = _unique_values(resources["transports"], "transport_id", "packs")
+        template_ids = _unique_values(
+            resources["declarative_templates"], "profile_id", "packs"
+        )
         destination_ids = _unique_values(
             resources["destinations"], "destination_id", "packs"
         )
@@ -679,6 +715,9 @@ class PackRegistry(StrictModel):
             _require_refs(
                 item.evidence_ids, evidence_ids, item.destination_id, "evidence"
             )
+        for item in resources["declarative_templates"]:
+            _require_refs([item.source_id], source_ids, item.profile_id, "source")
+            _require_refs(item.evidence_ids, evidence_ids, item.profile_id, "evidence")
         for entry in resources["source_entries"]:
             owner = entry.source.source_id
             _require_refs(entry.generator_ids, generator_ids, owner, "generator")
@@ -789,6 +828,13 @@ class PackRegistry(StrictModel):
                     "destination",
                 )
                 _require_refs(binding.validator_ids, validator_ids, binding.source_id, "validator")
+                if binding.payload_profile_id:
+                    _require_refs(
+                        [binding.payload_profile_id],
+                        template_ids,
+                        binding.source_id,
+                        "declarative template",
+                    )
                 source = source_entries[binding.source_id]
                 source_state = (
                     source.source.verification_state
@@ -841,6 +887,9 @@ class PackRegistry(StrictModel):
             "validators": [item for pack in self.packs for item in pack.validators],
             "transports": [item for pack in self.packs for item in pack.transports],
             "destinations": [item for pack in self.packs for item in pack.destinations],
+            "declarative_templates": [
+                item for pack in self.packs for item in pack.declarative_templates
+            ],
             "recommendations": [
                 item for pack in self.packs for item in pack.integration_recommendations
             ],

@@ -6,6 +6,7 @@
 """Catalog-driven orchestration for the Phase 3 unified generation experience."""
 
 import base64
+import inspect
 import json
 import os
 import re
@@ -27,6 +28,7 @@ from netspout_core.models import LogEntry, TelemetryTransportConfig
 from netspout_core.native_runtime import (
     build_shared_enterprise_state_plan,
     ChannelRunResult,
+    Evidence,
     HealthState,
     NativeChannel,
     NativeRuntimeFacade,
@@ -827,6 +829,27 @@ class UnifiedGenerationService:
                     state_plan=state_plan,
                 )
                 correlated_results = correlated.channels
+                syslog_binding = next(
+                    (
+                        item
+                        for item in native_bindings
+                        if self._channel_for_binding(item) is NativeChannel.SYSLOG
+                        and item.get("payload_profile_id")
+                    ),
+                    None,
+                )
+                if syslog_binding is not None:
+                    correlated_results[NativeChannel.SYSLOG] = (
+                        self._run_declarative_syslog_lifecycle(
+                            runtime,
+                            syslog_binding,
+                            run_id=run_id,
+                            scenario_id=scenario_id,
+                            entity_id=entity_id,
+                            seed=seed,
+                            state_plan=state_plan,
+                        )
+                    )
             for binding in native_bindings:
                 channel = self._channel_for_binding(binding)
                 native_result = correlated_results.get(channel)
@@ -1550,6 +1573,158 @@ class UnifiedGenerationService:
             return NativeChannel.IPFIX
         raise ValueError("flow runtime adapter has an unsupported source transport")
 
+    def _declarative_profile(self, profile_id: str):
+        matches = [
+            profile
+            for pack in self.registry.packs
+            for profile in pack.declarative_templates
+            if profile.profile_id == profile_id
+        ]
+        if len(matches) != 1:
+            raise ValueError("declarative payload profile is missing or ambiguous")
+        return matches[0]
+
+    def _render_declarative_payload(
+        self,
+        profile_id: str,
+        *,
+        phase: str,
+        ordinal: int,
+        seed: int,
+        entity_id: str,
+        interface_id: str,
+    ) -> str:
+        profile = self._declarative_profile(profile_id)
+        phase_values = profile.phase_values.get(phase)
+        if phase_values is None:
+            raise ValueError(
+                "declarative payload profile does not define the requested phase"
+            )
+        timestamp = datetime.fromtimestamp(seed + ordinal, timezone.utc).strftime(
+            "%b %d %H:%M:%S.000"
+        )
+        values = {
+            "node_id": entity_id,
+            "timestamp": timestamp,
+            "process_id": str(100 + (seed % 800)),
+            "interface_id": interface_id,
+            **phase_values,
+        }
+        try:
+            return profile.template.format_map(values)
+        except KeyError as exc:
+            raise ValueError(
+                "declarative payload profile references an unbound field"
+            ) from exc
+
+    def _run_declarative_syslog_lifecycle(
+        self,
+        runtime: NativeRuntimeFacade,
+        binding: Dict[str, Any],
+        *,
+        run_id: str,
+        scenario_id: str,
+        entity_id: str,
+        seed: int,
+        state_plan,
+    ) -> ChannelRunResult:
+        profile_id = str(binding["payload_profile_id"])
+        profile = self._declarative_profile(profile_id)
+        results: List[ChannelRunResult] = []
+        raw_events: List[Dict[str, str]] = []
+        for ordinal, snapshot in enumerate(state_plan.snapshots):
+            raw = self._render_declarative_payload(
+                profile_id,
+                phase=snapshot.phase,
+                ordinal=ordinal,
+                seed=seed,
+                entity_id=entity_id,
+                interface_id=state_plan.interface_id,
+            )
+            result = self._invoke_native_syslog(
+                runtime,
+                run_id=run_id,
+                scenario_id=scenario_id,
+                entity_id=entity_id,
+                seed=seed,
+                raw=raw,
+                phase=snapshot.phase,
+                sourcetype=profile.sourcetype,
+            )
+            results.append(result)
+            raw_events.append({"phase": snapshot.phase, "raw": raw})
+        errors = [error for result in results for error in result.errors]
+        evidence: List[Evidence] = []
+        for stage in (
+            "GENERATED",
+            "UDP_SENT",
+            "RECEIVER_OBSERVED",
+            "NORMALIZED",
+            "SPLUNK_DISPATCHED",
+            "SPLUNK_OBSERVED",
+        ):
+            stage_items = [
+                item
+                for result in results
+                for item in result.evidence
+                if item.stage == stage
+            ]
+            if stage_items:
+                evidence.append(
+                    Evidence(
+                        stage,
+                        all(item.proven for item in stage_items),
+                        (
+                            f"{len(stage_items)} declarative lifecycle records "
+                            f"evaluated for {stage}."
+                        ),
+                        sum(item.count for item in stage_items),
+                    )
+                )
+        return ChannelRunResult(
+            channel=NativeChannel.SYSLOG,
+            run_id=run_id,
+            scenario_id=scenario_id,
+            entity_id=entity_id,
+            seed=seed,
+            phases=tuple(snapshot.phase for snapshot in state_plan.snapshots),
+            evidence=evidence,
+            success=all(result.success for result in results),
+            source_transport=results[0].source_transport,
+            destination_transport=results[0].destination_transport,
+            raw_artifacts={
+                "lifecycle_events": raw_events,
+                "shared_state_store": state_plan.state_store,
+                "shared_simulation_clock": state_plan.clock,
+            },
+            errors=errors,
+        )
+
+    @staticmethod
+    def _invoke_native_syslog(
+        runtime,
+        *,
+        run_id: str,
+        scenario_id: str,
+        entity_id: str,
+        seed: int,
+        raw: str,
+        phase: str,
+        sourcetype: str,
+    ) -> ChannelRunResult:
+        parameters = inspect.signature(runtime.run_syslog).parameters
+        if "phase" in parameters and "sourcetype" in parameters:
+            return runtime.run_syslog(
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                raw,
+                phase=phase,
+                sourcetype=sourcetype,
+            )
+        return runtime.run_syslog(run_id, scenario_id, entity_id, seed, raw)
+
     def _execute_native_binding(
         self,
         runtime: NativeRuntimeFacade,
@@ -1566,11 +1741,31 @@ class UnifiedGenerationService:
         adapter_ref = binding["runtime_adapter_ref"]
         if adapter_ref.endswith(".run_syslog"):
             phase = "SINGLE_EVENT" if single_event else "BASELINE"
-            payload = self._generate_rfc5424_event(
-                run_id, phase, 0, event_family
-            ).raw
-            return runtime.run_syslog(
-                run_id, scenario_id, entity_id, seed, payload
+            profile_id = binding.get("payload_profile_id")
+            if profile_id:
+                payload = self._render_declarative_payload(
+                    profile_id,
+                    phase=phase,
+                    ordinal=0,
+                    seed=seed,
+                    entity_id=entity_id,
+                    interface_id="HundredGigE0/0/0/1",
+                )
+                sourcetype = self._declarative_profile(profile_id).sourcetype
+            else:
+                payload = self._generate_rfc5424_event(
+                    run_id, phase, 0, event_family
+                ).raw
+                sourcetype = self.SOURCETYPE
+            return self._invoke_native_syslog(
+                runtime,
+                run_id=run_id,
+                scenario_id=scenario_id,
+                entity_id=entity_id,
+                seed=seed,
+                raw=payload,
+                phase=phase,
+                sourcetype=sourcetype,
             )
         if adapter_ref.endswith(".run_snmp"):
             return runtime.run_snmp(run_id, scenario_id, entity_id, seed)

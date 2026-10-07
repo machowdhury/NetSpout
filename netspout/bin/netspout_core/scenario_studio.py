@@ -1139,6 +1139,16 @@ class ScenarioStudioService:
         )
         state_errors = []
         custom_by_id = {item.source_id: item for item in pack.custom_sources}
+        supported_state_inputs = {
+            source_id: set(state_keys)
+            for source_id, state_keys in _SAFE_STATE_INPUTS.items()
+        }
+        if self.generation_service:
+            for registry_pack in self.generation_service.registry.packs:
+                for profile in registry_pack.declarative_templates:
+                    supported_state_inputs.setdefault(profile.source_id, set()).update(
+                        profile.supported_state_keys
+                    )
         for transition in pack.timeline:
             if any(item not in pack.source_ids for item in transition.source_ids):
                 state_errors.append(
@@ -1170,7 +1180,7 @@ class ScenarioStudioService:
                                     source_id, value.state_key
                                 )
                             )
-                    elif value.state_key not in _SAFE_STATE_INPUTS.get(
+                    elif value.state_key not in supported_state_inputs.get(
                         source_id, set()
                     ):
                         state_errors.append(

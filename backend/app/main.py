@@ -41,6 +41,7 @@ from app.scenario_studio import (
     StudioRunRequest,
     StudioScenarioPack,
 )
+from app.vendor_coverage import VendorCoverageService
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
@@ -64,6 +65,14 @@ unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
 scenario_studio_service = ScenarioStudioService(
     catalog=unified_generation_service.catalog,
     generation_service=unified_generation_service,
+)
+_coverage_catalog = unified_generation_service.catalog.get_telemetry_catalog()
+vendor_coverage_service = VendorCoverageService(
+    registry=unified_generation_service.registry,
+    source_ids={item["source_id"] for item in _coverage_catalog["sources"]},
+    integration_ids={
+        item["integration_id"] for item in _coverage_catalog["integrations"]
+    },
 )
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
@@ -1644,6 +1653,20 @@ def get_splunk_integration(integration_id: str):
 def get_catalog_evidence():
     from app.catalog import catalog
     return catalog.list_catalog_evidence()
+
+
+@app.get("/api/coverage/cisco")
+def get_cisco_coverage():
+    """Evidence-backed Cisco coverage projection over catalog and Pack state."""
+    return vendor_coverage_service.view()
+
+
+@app.get("/api/coverage/cisco/products/{product_id}")
+def get_cisco_coverage_product(product_id: str):
+    product = vendor_coverage_service.product(product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Coverage product not found")
+    return product
 
 
 @app.get("/api/catalog/source-manifests")

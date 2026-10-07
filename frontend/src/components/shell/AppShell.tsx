@@ -36,6 +36,7 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   home: Home,
   inspect: Search,
   layers: Layers3,
+  network: Network,
   pulse: Gauge,
   search: Search,
   settings: Settings2,

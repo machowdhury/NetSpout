@@ -196,7 +196,7 @@ class TestUnifiedNativeGeneration(unittest.TestCase):
             native_runtime_factory=factory,
         )
 
-    def test_correlated_composition_is_enabled_for_snmp_and_gnmi_only(self):
+    def test_correlated_composition_is_enabled_for_three_evidence_backed_channels(self):
         factory = RuntimeFactory()
         service = self._service(factory)
         capabilities = service.capabilities()
@@ -209,7 +209,11 @@ class TestUnifiedNativeGeneration(unittest.TestCase):
         self.assertIsNone(scenario["blocked_reason"])
         self.assertEqual(
             scenario["source_ids"],
-            ["ietf-snmpv2c-ifmib", "openconfig-gnmi-interfaces"],
+            [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces",
+            ],
         )
         self.assertIn(
             self.request.selection_id,
@@ -226,7 +230,7 @@ class TestUnifiedNativeGeneration(unittest.TestCase):
         ):
             run = service.run(self.request, self.transport)
         self.assertEqual(
-            {item.channel for item in run.channel_results}, {"SNMP", "GNMI"}
+            {item.channel for item in run.channel_results}, {"SYSLOG", "SNMP", "GNMI"}
         )
         self.assertEqual(
             {call[3] for call in factory.instances[-1].calls},

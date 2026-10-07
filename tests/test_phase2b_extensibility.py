@@ -533,9 +533,9 @@ class TestPhase2BExtensibility(unittest.TestCase):
 
     def test_01_existing_phase2_catalog_and_phase3_registry_validate(self):
         catalog = NetSpoutCatalog(catalog_dir=os.path.join(REPO_ROOT, "catalog"))
-        self.assertEqual(catalog.get_telemetry_catalog_summary()["source_count"], 10)
+        self.assertEqual(catalog.get_telemetry_catalog_summary()["source_count"], 11)
         registry = catalog.get_extension_pack_registry()
-        self.assertEqual(len(registry["packs"]), 3)
+        self.assertEqual(len(registry["packs"]), 4)
         self.assertEqual(len(registry["compositions"]), 2)
         self.assertEqual(
             registry["catalog_source_bindings"][0]["source_id"],
@@ -777,10 +777,14 @@ class TestPhase2BExtensibility(unittest.TestCase):
             == "compose-test-correlated-interface-degradation-local"
         )
 
-        self.assertEqual(len(composition.source_bindings), 2)
+        self.assertEqual(len(composition.source_bindings), 3)
         self.assertEqual(
             {item.source_id for item in composition.source_bindings},
-            {"ietf-snmpv2c-ifmib", "openconfig-gnmi-interfaces"},
+            {
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces",
+            },
         )
         for binding in composition.source_bindings:
             self.assertTrue(binding.required)
@@ -845,6 +849,7 @@ class TestPhase2BExtensibility(unittest.TestCase):
         self.assertEqual(
             set(scenario.source_ids),
             {
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces",
             },
@@ -865,10 +870,14 @@ class TestPhase2BExtensibility(unittest.TestCase):
         )
         self.assertEqual(
             {path.source_id for path in scenario.telemetry_paths},
-            {"ietf-snmpv2c-ifmib", "openconfig-gnmi-interfaces"},
+            {
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces",
+            },
         )
         scenario_text = json.dumps(scenario.model_dump(mode="json"))
-        self.assertNotIn("bundled-syslog-receiver", scenario_text)
+        self.assertIn("bundled-syslog-receiver", scenario_text)
         self.assertNotIn("bundled-ipfix-collector", scenario_text)
 
 

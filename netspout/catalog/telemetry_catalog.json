@@ -111,6 +111,51 @@
       "notes": "Vendor documentation family; individual message identifiers still require per-message verification."
     },
     {
+      "evidence_id": "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+      "title": "Cisco 8000 IOS XR Implementing System Logging",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-monitoring/25xx/configuration/guide/b-system-monitoring-cg-cisco8k-25xx/implementing-system-logging.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines the IOS XR node, timestamp, process/PID, category-group-severity-mnemonic, and message-text structure. Applicability is limited to documented Cisco 8000 IOS XR releases."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-LINK-UPDOWN",
+      "title": "Cisco 8000 Logging Services Commands",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-monitoring/b-system-monitoring-cr-cisco8k/logging_services_commands.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents concrete PKT_INFRA-LINK-3-UPDOWN interface state messages and the IOS XR logging format command."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES",
+      "title": "Telemetry Configuration Guide for Cisco 8000 Series Routers, IOS XR Release 7.11.x",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/telemetry/711x/configuration/guide/b-telemetry-cg-8000-711x.pdf",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents gNMI and the openconfig-interfaces:interfaces/interface sensor path for Cisco 8000 IOS XR 7.11.x; no universal release claim is made."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-SNMP-IFMIB",
+      "title": "Cisco 8000 IOS XR Configuring Simple Network Management Protocol",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-management/710x/configuration/guide/b-system-management-cg-8k-710x/configuring-simple-network-management-protocol.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents IOS XR SNMP support and identifies IF-MIB as a supported interfaces MIB for Cisco 8000 IOS XR 7.10.x."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+      "title": "Cisco Enterprise Networking Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7538",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Splunkbase identifies app 7538, publisher Cisco Systems, and supported Cisco network devices including ASR platforms. Specific IOS XR sourcetypes and CIM mappings are not asserted by this evidence."
+    },
+    {
       "evidence_id": "EVID-NETSPOUT-CONTRACT-SCHEMA",
       "title": "NetSpout telemetry contract schema",
       "publisher": "NetSpout",
@@ -196,12 +241,33 @@
       "notes": "The evidence page explicitly marks app 1467 deprecated and recommends app 7538. App 7538 is not promoted here until separately cataloged."
     },
     {
+      "integration_id": "splunkbase-cisco-enterprise-networking-7538",
+      "name": "Cisco Enterprise Networking Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [
+        "cisco-ios-syslog",
+        "cisco-ios-xr-interface-syslog"
+      ],
+      "splunkbase_id": "7538",
+      "verification_state": "VERIFIED",
+      "support_state": "SUPPORTED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+      ],
+      "notes": "The product/source relationship is documented. Sourcetype, field extraction, and CIM behavior remain research required until the add-on is installed and validated."
+    },
+    {
       "integration_id": "netspout-direct-structured-ingestion",
       "name": "NetSpout direct structured ingestion",
       "publisher": "NetSpout",
       "integration_type": "DIRECT_STRUCTURED_INGESTION",
       "supported_source_ids": [
         "ietf-syslog-rfc5424",
+        "cisco-ios-xr-interface-syslog",
         "openconfig-gnmi-interfaces",
         "netspout-agentic-activity"
       ],
@@ -211,6 +277,13 @@
       "sourcetypes": [
         {
           "name": "netspout:rfc5424",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "name": "netspout:cisco:iosxr:syslog",
           "authority": "NETSPOUT_DEFINED",
           "evidence_ids": [
             "EVID-NETSPOUT-CONTRACT-SCHEMA"
@@ -1026,6 +1099,129 @@
       "known_limitations": [
         "Splunkbase app 1467 is deprecated and must not be recommended as current.",
         "Only cisco:ios is claimed from current evidence; cisco:ios:syslog is not promoted as official."
+      ]
+    },
+    {
+      "source_id": "cisco-ios-xr-interface-syslog",
+      "vendor": "Cisco",
+      "product": "Cisco 8000 Series IOS XR",
+      "product_family": "Service Provider Routing",
+      "domains": [
+        "netops"
+      ],
+      "telemetry_source": "IOS XR interface state syslog",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "VENDOR_DOCUMENTED",
+        "SPLUNK_DOCUMENTED",
+        "MODELED_PAYLOAD"
+      ],
+      "evidence_ids": [
+        "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+        "EVID-CISCO-IOSXR-LINK-UPDOWN",
+        "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-cisco-ios-xr-interface-syslog",
+        "verification_state": "VERIFIED",
+        "format": "IOS XR node-id, timestamp, process/PID, PKT_INFRA-LINK severity/mnemonic, and message text",
+        "schema": "%PKT_INFRA-LINK-3-UPDOWN : Interface <interface>, changed state to <state>",
+        "transports": [
+          {
+            "protocol": "Syslog UDP",
+            "default_port": 514,
+            "encoding": "UTF-8 text"
+          }
+        ],
+        "structural_fields": [
+          "PKT_INFRA",
+          "LINK",
+          "severity 3",
+          "UPDOWN",
+          "Interface ... changed state to ..."
+        ],
+        "evidence_ids": [
+          "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+          "EVID-CISCO-IOSXR-LINK-UPDOWN"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-cisco-ios-xr-interface-syslog",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "input_mechanisms": [
+          "Cisco Enterprise Networking Add-on relationship",
+          "NetSpout local HEC observation"
+        ],
+        "integration_ids": [
+          "splunkbase-cisco-enterprise-networking-7538",
+          "netspout-direct-structured-ingestion"
+        ],
+        "sourcetypes": [
+          {
+            "name": "netspout:cisco:iosxr:syslog",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-cisco-ios-xr-interface-syslog",
+        "verification_state": "VERIFIED",
+        "schema_classification": "MODELED_PAYLOAD",
+        "generator": "allowlist:declarative-native-template",
+        "validator": "validator-ios-xr-interface-syslog",
+        "transports": [
+          "Syslog UDP",
+          "HEC"
+        ],
+        "modeled_fields": [
+          "node_id",
+          "interface_id",
+          "operational_state"
+        ],
+        "structural_fields": [
+          "message category",
+          "group",
+          "severity",
+          "mnemonic",
+          "message structure"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [
+          "MODE_C"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "GOLDEN",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "_raw",
+          "host",
+          "sourcetype"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_phase"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "Only the documented PKT_INFRA-LINK-3-UPDOWN message is generated.",
+        "The Cisco add-on relationship is established, but its IOS XR sourcetype, extracted fields, and CIM behavior are not runtime validated.",
+        "The netspout:cisco:iosxr:syslog sourcetype is NetSpout-defined and is not represented as an official Splunk sourcetype."
       ]
     },
     {

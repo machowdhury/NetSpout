@@ -9,11 +9,17 @@
     "EVID-IETF-RFC7011-7012",
     "EVID-OPENCONFIG-GNMI",
     "EVID-OPENCONFIG-INTERFACES",
+    "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+    "EVID-CISCO-IOSXR-LINK-UPDOWN",
+    "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES",
+    "EVID-CISCO-IOSXR-SNMP-IFMIB",
+    "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
     "EVID-NETSPOUT-CONTRACT-SCHEMA",
     "EVID-NETSPOUT-RUNTIME"
   ],
   "catalog_integration_ids": [
-    "netspout-direct-structured-ingestion"
+    "netspout-direct-structured-ingestion",
+    "splunkbase-cisco-enterprise-networking-7538"
   ],
   "catalog_source_bindings": [
     {
@@ -29,6 +35,27 @@
       "compatible_transport_ids": [
         "transport-native-syslog-udp",
         "transport-local-hec"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "cisco-ios-xr-interface-syslog",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-declarative-native-template"
+      ],
+      "validator_ids": [
+        "validator-ios-xr-interface-syslog"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-syslog-udp"
       ],
       "raw_fidelity": {
         "preserve_native_raw": true,
@@ -265,12 +292,14 @@
             "EVENTS"
           ],
           "compatible_source_ids": [
-            "ietf-syslog-rfc5424"
+            "ietf-syslog-rfc5424",
+            "cisco-ios-xr-interface-syslog"
           ],
           "verification_state": "PARTIALLY_VERIFIED",
           "implemented": true,
           "evidence_ids": [
             "EVID-IETF-RFC5424",
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
             "EVID-NETSPOUT-RUNTIME"
           ],
           "notes": "Source-native UDP terminates at the bundled receiver before separate HEC delivery."
@@ -450,15 +479,16 @@
         },
         {
           "recipe_id": "investigate-correlated-interface-degradation",
-          "title": "Correlate standards-based interface degradation evidence",
-          "objective": "Reconstruct one test interface degradation from independent native receiver observations.",
-          "question": "Do SNMP and gNMI observations describe the same bounded interface lifecycle?",
-          "expected_finding": "Receiver-observed records share the test run, entity, interface, and ordered lifecycle while retaining their distinct native evidence boundaries.",
+          "title": "Correlate Cisco IOS XR interface degradation evidence",
+          "objective": "Reconstruct one interface degradation from three independent native receiver observations.",
+          "question": "Do IOS XR syslog, IF-MIB SNMP, and OpenConfig gNMI describe the same bounded interface lifecycle?",
+          "expected_finding": "Receiver-observed records share the test run, entity, interface, and ordered lifecycle while retaining distinct native evidence boundaries.",
           "explanation": "Correlation fields are NetSpout lab metadata added after native receipt; they do not claim a vendor-defined cross-protocol schema.",
           "hint": "Confirm receiver observation for each source before comparing the correlated phase and interface fields.",
           "portability": "NETSPOUT_SPECIFIC",
-          "spl": "search index=idx_network_ops netspout_scenario_id=\"test-correlated-interface-degradation\" netspout_run_id=\"$run_id$\" (sourcetype=\"netspout:snmp:*\" OR sourcetype=\"netspout:gnmi:event\") | eval correlated_interface=if(like(sourcetype,\"netspout:snmp:%\"),\"HundredGigE0/0/0/1\",interface_name) | stats values(netspout_phase) values(correlated_interface) by sourcetype netspout_device_id",
+          "spl": "search index=idx_network_ops netspout_scenario_id=\"test-correlated-interface-degradation\" netspout_run_id=\"$run_id$\" (sourcetype=\"netspout:cisco:iosxr:syslog\" OR sourcetype=\"netspout:snmp:*\" OR sourcetype=\"netspout:gnmi:event\") | stats values(netspout_phase) by sourcetype netspout_device_id",
           "source_ids": [
+            "cisco-ios-xr-interface-syslog",
             "ietf-snmpv2c-ifmib",
             "openconfig-gnmi-interfaces"
           ],
@@ -873,12 +903,12 @@
         },
         {
           "scenario_id": "test-correlated-interface-degradation",
-          "title": "Test Enterprise Interface Degradation",
-          "description": "A bounded native scenario correlating SNMP and gNMI from one shared enterprise state plan.",
-          "story": "The primary uplink on cisco-asr9k-pe1 degrades, fails over, and recovers while native SNMP and gNMI independently observe the shared state.",
+          "title": "Cisco IOS XR Interface Degradation — Golden Scenario",
+          "description": "An evidence-bounded Cisco 8000 IOS XR scenario correlating documented interface syslog, IF-MIB SNMP, and OpenConfig gNMI from one shared enterprise state plan.",
+          "story": "The primary uplink on a fictional Cisco 8000 IOS XR edge degrades and recovers while native syslog, SNMP, and gNMI independently describe the same interface state.",
           "domain": "NETOPS",
           "category": "OPERATIONAL_RESILIENCE",
-          "technical_description": "The evidence-backed service_provider_cisco target cisco-asr9k-pe1 and existing interface HundredGigE0/0/0/1 drive both native paths. SNMP uses its existing IF-MIB ifIndex.1 wire identity and gNMI uses the matching existing OpenConfig interface path.",
+          "technical_description": "The fictional Cisco 8000 IOS XR target and HundredGigE0/0/0/1 drive three native paths. Syslog uses only the documented PKT_INFRA-LINK-3-UPDOWN structure, SNMP uses IF-MIB ifIndex.1, and gNMI uses the documented OpenConfig interfaces path.",
           "difficulty": "INTERMEDIATE",
           "expected_duration_minutes": 5,
           "learning_objectives": [
@@ -902,11 +932,13 @@
             "Bundled native receivers and local Docker Splunk destination configured for test use"
           ],
           "technology_ids": [
+            "cisco-ios-xr-syslog",
             "snmpv2-ifmib",
             "openconfig-gnmi",
             "splunk-hec"
           ],
           "source_ids": [
+            "cisco-ios-xr-interface-syslog",
             "ietf-snmpv2c-ifmib",
             "openconfig-gnmi-interfaces"
           ],
@@ -938,9 +970,20 @@
               "entity_id": "cisco-asr9k-pe1",
               "description": "Evidence-backed service_provider_cisco target hosting interface HundredGigE0/0/0/1.",
               "source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ]
+            },
+            {
+              "node_id": "bundled-syslog-receiver",
+              "technology_id": "syslog-udp",
+              "zone_id": "bundled-receiver-zone",
+              "role": "receiver",
+              "label": "Bundled Syslog Receiver",
+              "entity_id": "test-component-syslog-receiver",
+              "description": "Terminates the native IOS XR syslog UDP path before HEC delivery.",
+              "source_ids": []
             },
             {
               "node_id": "bundled-snmp-receiver",
@@ -985,6 +1028,18 @@
           ],
           "relationships": [
             {
+              "relationship_id": "edge-native-syslog-to-receiver",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-syslog-receiver",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "Syslog/UDP",
+              "purpose": "Deliver documented IOS XR interface state messages to the bundled receiver.",
+              "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog"
+              ],
+              "incident_relevance": "Carries PKT_INFRA-LINK-3-UPDOWN state for HundredGigE0/0/0/1."
+            },
+            {
               "relationship_id": "edge-native-snmp-to-receiver",
               "source_node_id": "cisco-asr9k-pe1",
               "target_node_id": "bundled-snmp-receiver",
@@ -1007,6 +1062,18 @@
                 "openconfig-gnmi-interfaces"
               ],
               "incident_relevance": "Carries OpenConfig state for HundredGigE0/0/0/1."
+            },
+            {
+              "relationship_id": "syslog-receiver-to-hec-forwarder",
+              "source_node_id": "bundled-syslog-receiver",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt syslog record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog"
+              ],
+              "incident_relevance": null
             },
             {
               "relationship_id": "snmp-receiver-to-hec-forwarder",
@@ -1040,6 +1107,7 @@
               "protocol": "HEC",
               "purpose": "Deliver post-receipt records to the configured local Splunk destination.",
               "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
@@ -1047,6 +1115,14 @@
             }
           ],
           "telemetry_paths": [
+            {
+              "path_id": "native-ios-xr-syslog-path",
+              "source_id": "cisco-ios-xr-interface-syslog",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-syslog-receiver",
+              "label": "Source-native IOS XR syslog receiver boundary",
+              "protocol": "Syslog/UDP"
+            },
             {
               "path_id": "native-snmp-receiver-path",
               "source_id": "ietf-snmpv2c-ifmib",
@@ -1087,6 +1163,7 @@
                 "cisco-asr9k-pe1": "normal"
               },
               "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
                 "ietf-snmpv2c-ifmib": "ACTIVE",
                 "openconfig-gnmi-interfaces": "ACTIVE"
               },
@@ -1094,6 +1171,7 @@
                 "Each native channel emits baseline evidence for the same test interface."
               ],
               "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
@@ -1110,6 +1188,7 @@
                 "cisco-asr9k-pe1": "degraded"
               },
               "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
                 "ietf-snmpv2c-ifmib": "ACTIVE",
                 "openconfig-gnmi-interfaces": "ACTIVE"
               },
@@ -1117,6 +1196,7 @@
                 "Native SNMP and gNMI observations are projected from the same shared snapshot."
               ],
               "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
@@ -1133,6 +1213,7 @@
                 "cisco-asr9k-pe1": "affected"
               },
               "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
                 "ietf-snmpv2c-ifmib": "ACTIVE",
                 "openconfig-gnmi-interfaces": "ACTIVE"
               },
@@ -1140,6 +1221,7 @@
                 "SNMP IF-MIB and gNMI OpenConfig state agree on the bounded interface condition."
               ],
               "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
@@ -1158,6 +1240,7 @@
                 "cisco-asr9k-pe1": "recovered"
               },
               "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "OBSERVED",
                 "ietf-snmpv2c-ifmib": "OBSERVED",
                 "openconfig-gnmi-interfaces": "OBSERVED"
               },
@@ -1165,6 +1248,7 @@
                 "All required native channels complete the same test run and interface lifecycle."
               ],
               "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
@@ -1175,10 +1259,11 @@
             {
               "incident_id": "test-interface-degradation",
               "source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ],
-              "assertion": "Native SNMP and gNMI corroborate one modeled degradation of cisco-asr9k-pe1 HundredGigE0/0/0/1.",
+              "assertion": "Documented IOS XR syslog, IF-MIB SNMP, and OpenConfig gNMI corroborate one modeled degradation of cisco-asr9k-pe1 HundredGigE0/0/0/1.",
               "corroboration_required": true
             }
           ],
@@ -1191,7 +1276,7 @@
           ],
           "integration_recommendation_ids": [],
           "expected_evidence": [
-            "Receiver-observed SNMP and gNMI evidence sharing one run, entity, interface, ordered clock, and state lifecycle.",
+            "Receiver-observed syslog, SNMP, and gNMI evidence sharing one run, entity, interface, ordered clock, and state lifecycle.",
             "Separate HEC destination-delivery evidence after each native receiver boundary."
           ],
           "investigation_recipe_ids": [
@@ -1202,23 +1287,33 @@
               "step_id": "correlate-test-interface",
               "recipe_id": "investigate-correlated-interface-degradation",
               "title": "Correlate the test interface lifecycle",
-              "question": "Did native SNMP and gNMI observe the shared interface lifecycle, including recovery?",
-              "expected_finding": "Both native paths agree with the shared ordered state plan and precede separate HEC destination evidence.",
+              "question": "Did IOS XR syslog, native SNMP, and gNMI observe the shared interface lifecycle, including recovery?",
+              "expected_finding": "All three native paths agree with the shared ordered state plan and precede separate HEC destination evidence.",
               "explanation": "The source protocols remain distinct; the shared enterprise store drives their native values.",
               "hint": "Check receiver-observed stages before Splunk-observed stages.",
               "node_ids": [
                 "cisco-asr9k-pe1",
+                "bundled-syslog-receiver",
                 "bundled-snmp-receiver",
                 "bundled-gnmi-subscriber",
                 "test-local-splunk"
               ],
               "source_ids": [
+                "cisco-ios-xr-interface-syslog",
                 "ietf-snmpv2c-ifmib",
                 "openconfig-gnmi-interfaces"
               ]
             }
           ],
           "validation_expectations": [
+            {
+              "validation_id": "test-syslog-receiver-observed",
+              "label": "Bundled syslog receiver observed the documented IOS XR message",
+              "evidence_stage": "RECEIVER_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "cisco-ios-xr-interface-syslog"
+            },
             {
               "validation_id": "test-snmp-receiver-observed",
               "label": "Bundled SNMP receiver observed the native PDU",
@@ -1259,12 +1354,153 @@
           ],
           "cim_validation": [],
           "production_replication_guidance": [
-            "Replace reserved test identities and NetSpout-only correlation fields with evidence-verified production contracts.",
-            "Validate source-specific Splunk parsing separately; this scenario does not prescribe vendor semantics."
+            "Collect IOS XR syslog, IF-MIB SNMP, and OpenConfig interface telemetry using Cisco-supported production configuration.",
+            "Install and validate the Cisco Enterprise Networking Add-on where required; its sourcetype and CIM behavior remain unvalidated here.",
+            "Replace reserved test identities and NetSpout-only correlation fields with production entity mappings."
           ],
+          "troubleshooting_operation_ids": [
+            "cisco-ios-xr-show-interfaces"
+          ],
+          "production_guide_id": "guide-cisco-ios-xr-interface-degradation",
           "curated_layout_ref": null
         }
       ],
+      "investigations": [],
+      "industries": []
+    },
+    {
+      "pack_id": "cisco-ios-xr-coverage",
+      "pack_version": "1.0.0",
+      "kind": "VENDOR_PRODUCT",
+      "display_name": "Cisco 8000 IOS XR Coverage",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation",
+        "netspout-rfc5424-scenario"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [
+        {
+          "generator_id": "generator-declarative-native-template",
+          "implementation_ref": "allowlist:declarative-native-template",
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "signals": [
+            "LOGS",
+            "EVENTS"
+          ],
+          "verification_state": "VERIFIED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "validators": [
+        {
+          "validator_id": "validator-ios-xr-interface-syslog",
+          "implementation_ref": "allowlist:declarative-native-template-validator",
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "RECEIVER_OBSERVED",
+            "SPLUNK_OBSERVED"
+          ],
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN"
+          ]
+        }
+      ],
+      "transports": [],
+      "destinations": [],
+      "declarative_templates": [
+        {
+          "profile_id": "template-cisco-ios-xr-link-updown",
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "format": "IOS XR interface state syslog",
+          "sourcetype": "netspout:cisco:iosxr:syslog",
+          "template": "{node_id}:{timestamp} : ifmgr[{process_id}]: %PKT_INFRA-LINK-3-UPDOWN : Interface {interface_id}, changed state to {operational_state}",
+          "structural_fields": [
+            "PKT_INFRA",
+            "LINK",
+            "3",
+            "UPDOWN"
+          ],
+          "modeled_fields": [
+            "node_id",
+            "interface_id",
+            "operational_state"
+          ],
+          "derived_fields": [
+            "timestamp",
+            "process_id"
+          ],
+          "supported_state_keys": [
+            "interface.status"
+          ],
+          "phase_values": {
+            "BASELINE": {
+              "operational_state": "Up"
+            },
+            "DEGRADE": {
+              "operational_state": "Up"
+            },
+            "FAILOVER": {
+              "operational_state": "Down"
+            },
+            "RECOVERY": {
+              "operational_state": "Up"
+            }
+          },
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN"
+          ]
+        }
+      ],
+      "integration_recommendations": [
+        {
+          "recommendation_id": "recommend-cisco-enterprise-networking-7538-ios-xr",
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "integration_id": "splunkbase-cisco-enterprise-networking-7538",
+          "requirement": "RECOMMENDED",
+          "evidence_ids": [
+            "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+          ],
+          "notes": "The relationship is documented; sourcetype and CIM behavior remain runtime-unvalidated."
+        },
+        {
+          "recommendation_id": "research-ios-xr-snmp-splunk-integration",
+          "source_id": "ietf-snmpv2c-ifmib",
+          "integration_id": null,
+          "requirement": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SNMP-IFMIB"
+          ],
+          "notes": "No official Splunk integration relationship is asserted."
+        },
+        {
+          "recommendation_id": "research-ios-xr-gnmi-splunk-integration",
+          "source_id": "openconfig-gnmi-interfaces",
+          "integration_id": null,
+          "requirement": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES"
+          ],
+          "notes": "No official Splunk integration relationship is asserted."
+        }
+      ],
+      "scenarios": [],
       "investigations": [],
       "industries": []
     }
@@ -1298,9 +1534,24 @@
       "composition_id": "compose-test-correlated-interface-degradation-local",
       "scenario_id": "test-correlated-interface-degradation",
       "pack_ids": [
-        "netspout-rfc5424-scenario"
+        "netspout-rfc5424-scenario",
+        "cisco-ios-xr-coverage"
       ],
       "source_bindings": [
+        {
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "generator_id": "generator-declarative-native-template",
+          "transport_id": "transport-native-syslog-udp",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog",
+          "payload_profile_id": "template-cisco-ios-xr-link-updown",
+          "receiver_component_id": "bundled-syslog-receiver",
+          "required": true,
+          "validator_ids": [
+            "validator-ios-xr-interface-syslog"
+          ]
+        },
         {
           "source_id": "ietf-snmpv2c-ifmib",
           "generator_id": "generator-native-snmp-ifmib",

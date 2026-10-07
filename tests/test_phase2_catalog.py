@@ -35,8 +35,8 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
 
     def test_01_catalog_schema_validates(self):
         catalog = self.validate()
-        self.assertEqual(len(catalog.sources), 10)
-        self.assertEqual(len(catalog.integrations), 4)
+        self.assertEqual(len(catalog.sources), 11)
+        self.assertEqual(len(catalog.integrations), 5)
         self.assertEqual(len(catalog.source_manifests), 3)
 
     def test_02_invalid_provenance_is_rejected(self):
@@ -100,6 +100,7 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
         ]
         self.assertEqual({claim.name for claim in claims}, {
             "netspout:rfc5424",
+            "netspout:cisco:iosxr:syslog",
             "openconfig:gnmi:telemetry",
             "netspout:agentic:activity",
         })
@@ -159,9 +160,9 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
             1,
         )
         summary = catalog.get_telemetry_catalog_summary()
-        self.assertEqual(summary["source_count"], 10)
+        self.assertEqual(summary["source_count"], 11)
         self.assertEqual(summary["sourcetype_counts"]["SPLUNK_DOCUMENTED"], 1)
-        self.assertEqual(summary["sourcetype_counts"]["NETSPOUT_DEFINED"], 3)
+        self.assertEqual(summary["sourcetype_counts"]["NETSPOUT_DEFINED"], 4)
 
     def test_11_unknown_source_and_integration_are_absent(self):
         catalog = NetSpoutCatalog(catalog_dir=os.path.join(REPO_ROOT, "catalog"))

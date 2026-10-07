@@ -71,6 +71,7 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
         self.assertEqual(
             {item["source_id"] for item in runnable},
             {
+                "cisco-ios-xr-interface-syslog",
                 "ietf-syslog-rfc5424",
                 "ietf-snmpv2c-ifmib",
                 "ietf-netflow-v9",
@@ -84,7 +85,11 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 for item in capabilities["sourcetypes"]
                 if item["runnable"]
             },
-            {"netspout:rfc5424", "openconfig:gnmi:telemetry"},
+            {
+                "netspout:rfc5424",
+                "netspout:cisco:iosxr:syslog",
+                "openconfig:gnmi:telemetry",
+            },
         )
         self.assertGreaterEqual(len(capabilities["scenarios"]), 1)
         legacy_scenario = next(

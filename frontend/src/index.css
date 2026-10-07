@@ -2257,3 +2257,62 @@
   .studio-validation-list > div,
   .studio-finding { grid-template-columns: 1fr; }
 }
+
+/* Phase 7 vendor-neutral coverage projection */
+.coverage-workspace { display: grid; gap: 18px; min-height: 100%; color: var(--ns-text); }
+.coverage-header, .coverage-product-header, .coverage-trust { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.coverage-header { padding: 22px; border: 1px solid var(--ns-border); border-radius: 16px; background: radial-gradient(circle at 88% 12%, rgba(8,127,140,.12), transparent 32%), var(--ns-surface); }
+.coverage-header h1, .coverage-product-header h2 { margin: 4px 0; }
+.coverage-header p, .coverage-product-header p { max-width: 760px; margin: 0; color: var(--ns-text-muted); }
+.coverage-summary { display: grid; grid-template-columns: repeat(3,minmax(90px,1fr)); gap: 8px; }
+.coverage-summary div { min-width: 100px; padding: 10px; border: 1px solid var(--ns-border); border-radius: 10px; background: var(--ns-surface-subtle); }
+.coverage-summary strong, .coverage-summary span { display: block; }
+.coverage-summary strong { font-size: 1.25rem; }
+.coverage-summary span { margin-top: 3px; color: var(--ns-text-muted); font-size: .7rem; text-transform: uppercase; }
+.coverage-layout { display: grid; grid-template-columns: minmax(220px,270px) minmax(0,1fr); gap: 16px; }
+.coverage-products { max-height: calc(100vh - 250px); overflow: auto; padding: 12px; border: 1px solid var(--ns-border); border-radius: 14px; background: var(--ns-surface); }
+.coverage-products section + section { margin-top: 16px; }
+.coverage-products h3 { margin: 0 0 6px; color: var(--ns-text-muted); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+.coverage-products button, .coverage-tabs button, .coverage-source-card { border: 1px solid transparent; color: inherit; font: inherit; cursor: pointer; }
+.coverage-products button { display: flex; justify-content: space-between; width: 100%; padding: 8px; border-radius: 8px; background: transparent; text-align: left; }
+.coverage-products button:hover, .coverage-products button.is-selected { border-color: var(--ns-border-strong); background: var(--ns-accent-soft); }
+.coverage-products small { color: var(--ns-text-muted); font-size: .61rem; }
+.coverage-layout > main { min-width: 0; }
+.coverage-product-header { padding: 16px 18px; border: 1px solid var(--ns-border); border-radius: 14px 14px 0 0; background: var(--ns-surface); }
+.coverage-tabs { display: flex; gap: 4px; padding: 8px; border: 1px solid var(--ns-border); border-top: 0; background: var(--ns-surface); }
+.coverage-tabs button { padding: 8px 12px; border-radius: 8px; background: transparent; text-transform: capitalize; }
+.coverage-tabs button.is-active { border-color: var(--ns-accent); background: var(--ns-accent-soft); }
+.coverage-overview, .coverage-golden, .coverage-production { display: grid; gap: 14px; padding-top: 14px; }
+.coverage-source-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 8px; }
+.coverage-source-list h3 { grid-column: 1/-1; margin: 0; }
+.coverage-source-card { display: grid; gap: 6px; padding: 12px; border-color: var(--ns-border); border-radius: 10px; background: var(--ns-surface); text-align: left; }
+.coverage-source-card--selected { border-color: var(--ns-accent); }
+.coverage-source-card small { color: var(--ns-text-muted); }
+.coverage-contract-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin-top: 14px; }
+.coverage-contract-grid > article { min-width: 0; padding: 14px; border: 1px solid var(--ns-border); border-radius: 12px; background: var(--ns-surface); }
+.coverage-contract-grid h3 { margin: 0 0 10px; }
+.coverage-contract-grid dl { display: grid; gap: 10px; }
+.coverage-contract-grid dt { color: var(--ns-text-muted); font-size: .7rem; text-transform: uppercase; }
+.coverage-contract-grid dd { margin: 3px 0 0; overflow-wrap: anywhere; }
+.coverage-contract-evidence { grid-column: 1/-1; }
+.coverage-evidence { padding: 10px 0; border-top: 1px solid var(--ns-border); }
+.coverage-evidence span, .coverage-evidence a { display: flex; align-items: center; gap: 4px; color: var(--ns-text-muted); font-size: .75rem; }
+.coverage-list { display: grid; gap: 5px; margin: 5px 0 0; padding-left: 18px; }
+.coverage-hero-card { padding: 22px; border: 1px solid rgba(23,114,69,.4); border-radius: 14px; background: linear-gradient(135deg,#eefaf4,var(--ns-surface)); }
+.coverage-flow, .coverage-channel-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(110px,1fr)); gap: 8px; }
+.coverage-flow div, .coverage-channel-grid article { padding: 12px; border: 1px solid var(--ns-border); border-radius: 10px; background: var(--ns-surface); text-align: center; }
+.coverage-channel-grid article { display: grid; justify-items: center; gap: 6px; }
+.coverage-actions { display: flex; gap: 8px; }
+.coverage-production article { display: grid; gap: 8px; }
+.coverage-production code { padding: 10px; border-radius: 8px; background: var(--ns-nav); color: #d1fae5; }
+.coverage-guide-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+.coverage-guide-grid h3 { margin: 0; }
+.coverage-trust { justify-content: center; padding: 12px; color: var(--ns-text-muted); }
+
+@media (max-width: 980px) {
+  .coverage-header { align-items: flex-start; flex-direction: column; }
+  .coverage-layout { grid-template-columns: 1fr; }
+  .coverage-products { max-height: 260px; }
+  .coverage-contract-grid { grid-template-columns: 1fr; }
+  .coverage-contract-evidence { grid-column: auto; }
+}

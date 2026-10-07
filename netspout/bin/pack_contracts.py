@@ -414,6 +414,48 @@ class ScenarioParameter(StrictModel):
         return self
 
 
+class ScenarioKpiDefinition(StrictModel):
+    kpi_id: str
+    label: str
+    analytic_id: str
+    required_source_ids: List[str]
+    required_fields: List[str]
+    interpretation_limit: str
+
+
+class DetectionValidationPack(StrictModel):
+    detection_id: str
+    objective: str
+    threat_behavior: str
+    mitre_attack_ids: List[str] = Field(default_factory=list)
+    required_source_ids: List[str]
+    required_fields: List[str]
+    spl: str
+    portability: SplPortability
+    baseline_expected_result: str
+    incident_expected_result: str
+    false_positive_controls: List[str]
+    blind_spots: List[str]
+    validation_outcome: str
+    evidence_ids: List[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def keep_detection_claims_bounded(self):
+        if not self.false_positive_controls or not self.blind_spots:
+            raise ValueError(
+                "detection validation requires false-positive controls and blind spots"
+            )
+        if self.validation_outcome not in {
+            "CONTRACT_VALIDATED",
+            "RUNTIME_VALIDATED",
+            "SPLUNK_VALIDATED",
+            "RESEARCH_REQUIRED",
+            "BLOCKED",
+        }:
+            raise ValueError("unknown detection validation outcome")
+        return self
+
+
 class GuidedScenarioManifest(StrictModel):
     scenario_id: str
     title: str
@@ -461,6 +503,13 @@ class GuidedScenarioManifest(StrictModel):
     troubleshooting_operation_ids: List[str] = Field(default_factory=list)
     production_guide_id: Optional[str] = None
     curated_layout_ref: Optional[str] = None
+    security_behavior_stages: List[str] = Field(default_factory=list)
+    kpi_definitions: List[ScenarioKpiDefinition] = Field(default_factory=list)
+    detection_validation: List[DetectionValidationPack] = Field(default_factory=list)
+    false_positive_controls: List[str] = Field(default_factory=list)
+    known_blind_spots: List[str] = Field(default_factory=list)
+    expected_findings: List[str] = Field(default_factory=list)
+    scenario_maturity: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_graph_and_timeline(self):
@@ -525,6 +574,17 @@ class GuidedScenarioManifest(StrictModel):
                     expectation.validation_id,
                     "source",
                 )
+        for kpi in self.kpi_definitions:
+            _require_refs(
+                kpi.required_source_ids, source_ids, kpi.kpi_id, "source"
+            )
+        for detection in self.detection_validation:
+            _require_refs(
+                detection.required_source_ids,
+                source_ids,
+                detection.detection_id,
+                "source",
+            )
         stage_order = [list(ScenarioStage).index(item.stage) for item in self.timeline]
         if stage_order != sorted(stage_order):
             raise ValueError("scenario timeline stages must be chronological")

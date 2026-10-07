@@ -108,6 +108,35 @@ const scenario = {
   integration_count: 1,
   runnable: true,
   guided_completeness: { state: 'PARTIAL', passed: 12, total: 12, checks: {}, production_guidance_available: true },
+  security_behavior_stages: ['NORMAL', 'PRECURSOR', 'SUSPICIOUS_ACTIVITY', 'CONFIRMED_BEHAVIOR', 'IMPACT', 'RECOVERY'],
+  kpi_definitions: [{
+    kpi_id: 'periodicity',
+    label: 'Periodicity',
+    analytic_id: 'periodicity',
+    required_source_ids: ['ietf-syslog-rfc5424'],
+    required_fields: ['timestamp_ms', 'dest_ip'],
+    interpretation_limit: 'A regular interval is an indicator, not a malicious verdict.',
+  }],
+  detection_validation: [{
+    detection_id: 'detect-periodic-contact',
+    objective: 'Identify repeated destination contact.',
+    threat_behavior: 'BEACONING_INDICATOR',
+    mitre_attack_ids: ['T1071.004'],
+    required_source_ids: ['ietf-syslog-rfc5424'],
+    required_fields: ['timestamp_ms', 'dest_ip'],
+    spl: 'search index=idx_network_ops netspout_run_id="$run_id$" | stats count',
+    portability: 'NETSPOUT_SPECIFIC',
+    baseline_expected_result: 'Below condition.',
+    incident_expected_result: 'Meets condition.',
+    false_positive_controls: ['Compare with monitoring heartbeats.'],
+    blind_spots: ['Timing does not reveal command content.'],
+    validation_outcome: 'CONTRACT_VALIDATED',
+    evidence_ids: ['EVID-NETSPOUT'],
+  }],
+  false_positive_controls: ['Compare with monitoring heartbeats.'],
+  known_blind_spots: ['Timing does not reveal command content.'],
+  expected_findings: ['A modeled periodic deviation is observable.'],
+  scenario_maturity: 'FORMAT_VALIDATED',
 };
 
 const recipe = {
@@ -225,6 +254,22 @@ async function installMocks(page: Page) {
 test.beforeEach(async ({ page }) => {
   await installMocks(page);
   await page.setViewportSize({ width: 1440, height: 1000 });
+});
+
+test('shows evidence-gated security analytics and detection limitations', async ({ page }) => {
+  await page.goto('/#/generate/scenarios');
+  await page.getByRole('button', { name: 'Start guided lab' }).click();
+  await expect(page.getByLabel('Security behavior progression')).toContainText(
+    'SUSPICIOUS ACTIVITY',
+  );
+  await expect(page.getByText('Evidence-gated analytics')).toBeVisible();
+  await expect(page.getByText('A regular interval is an indicator, not a malicious verdict.')).toBeVisible();
+  if (process.env.NETSPOUT_SCREENSHOT_ROOT) {
+    await page.screenshot({
+      path: artifactPath('guided-scenario', 'phase9-security-understand.png'),
+      fullPage: true,
+    });
+  }
 });
 
 test('completes the guided scenario journey and replay', async ({ page }) => {

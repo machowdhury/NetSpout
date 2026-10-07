@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase9",
+  "evidence": [
+    {
+      "evidence_id": "EVID-P9-IETF-RFC1035",
+      "title": "Domain Names - Implementation and Specification",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc1035",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines DNS message headers, questions, resource records, name encoding, and response code 3 (Name Error)."
+    },
+    {
+      "evidence_id": "EVID-P9-IANA-SPECIAL-PURPOSE",
+      "title": "IPv4 Special-Purpose Address Registry and Special-Use Domain Names",
+      "publisher": "IANA",
+      "reference": "https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "NetSpout uses documentation address blocks and special-use names only."
+    },
+    {
+      "evidence_id": "EVID-P9-MITRE-NETWORK-DOS",
+      "title": "MITRE ATT&CK T1498 Network Denial of Service",
+      "publisher": "MITRE",
+      "reference": "https://attack.mitre.org/techniques/T1498/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Behavior taxonomy only; it does not define telemetry or prove denial of service."
+    },
+    {
+      "evidence_id": "EVID-P9-MITRE-DNS",
+      "title": "MITRE ATT&CK T1071.004 DNS",
+      "publisher": "MITRE",
+      "reference": "https://attack.mitre.org/techniques/T1071/004/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Behavior taxonomy for DNS used as an application-layer protocol."
+    },
+    {
+      "evidence_id": "EVID-P9-MITRE-NETWORK-DISCOVERY",
+      "title": "MITRE ATT&CK T1046 Network Service Discovery",
+      "publisher": "MITRE",
+      "reference": "https://attack.mitre.org/techniques/T1046/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Behavior taxonomy only; flow attempts do not prove successful lateral movement."
+    },
+    {
+      "evidence_id": "EVID-P9-MITRE-EXFIL-ALT-PROTOCOL",
+      "title": "MITRE ATT&CK T1048 Exfiltration Over Alternative Protocol",
+      "publisher": "MITRE",
+      "reference": "https://attack.mitre.org/techniques/T1048/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Behavior taxonomy only; the lab emits synthetic indicators and performs no exfiltration."
+    },
+    {
+      "evidence_id": "EVID-P9-NETSPOUT-RUNTIME",
+      "title": "NetSpout Phase 9 deterministic security runtime",
+      "publisher": "NetSpout",
+      "reference": "docs/implementation/FIGMA_V3_PHASE_9_NETWORK_SECURITY_ANALYTICS.md",
+      "provenance": "NETSPOUT_SCHEMA",
+      "verification_state": "VERIFIED",
+      "notes": "Implementation and test evidence; fresh destination observation remains an independent maturity gate."
+    }
+  ],
+  "references": [
+    {
+      "scenario_id": "SEC-P9-A-TRAFFIC-FLOOD",
+      "title": "Controlled Traffic Flood Indicators",
+      "family": "TRAFFIC_FLOOD",
+      "sources": ["ietf-ipfix"],
+      "mitre": ["T1498"],
+      "analytics": ["flow-rate", "destination-concentration", "byte-packet-distribution"],
+      "detection_id": "detect-flow-rate-concentration",
+      "objective": "Identify a bounded rise in flow rate and destination concentration without claiming service denial.",
+      "false_positive": "Approved load and performance tests can produce the same observations.",
+      "blind_spot": "Sampled flow export may understate packet rate and cannot prove availability impact."
+    },
+    {
+      "scenario_id": "SEC-P9-B-DNS-ANOMALY",
+      "title": "DNS Diversity and NXDOMAIN Indicators",
+      "family": "DNS_ANOMALY",
+      "sources": ["ietf-dns-rfc1035"],
+      "mitre": ["T1071.004"],
+      "analytics": ["dns-query-rate", "dns-nxdomain-rate", "domain-diversity"],
+      "detection_id": "detect-dns-rate-nxdomain-diversity",
+      "objective": "Identify a modeled rise in DNS query diversity and NXDOMAIN responses.",
+      "false_positive": "Software discovery, search suffixes, and mistyped names can create NXDOMAIN bursts.",
+      "blind_spot": "Entropy and NXDOMAIN volume alone do not prove malware or a DGA."
+    },
+    {
+      "scenario_id": "SEC-P9-C-BEACONING",
+      "title": "Periodic External Communication Indicators",
+      "family": "BEACONING",
+      "sources": ["ietf-dns-rfc1035", "ietf-ipfix"],
+      "mitre": ["T1071.004"],
+      "analytics": ["periodicity", "cross-source-temporal-correlation"],
+      "detection_id": "detect-periodic-destination-contact",
+      "objective": "Identify repeated destination contact with controlled jitter and DNS association.",
+      "false_positive": "Monitoring agents and update services often use periodic heartbeats.",
+      "blind_spot": "Encrypted flow timing does not reveal command content."
+    },
+    {
+      "scenario_id": "SEC-P9-D-INTERNAL-RECON",
+      "title": "Internal Reconnaissance Indicators",
+      "family": "INTERNAL_RECON",
+      "sources": ["ietf-ipfix"],
+      "mitre": ["T1046"],
+      "analytics": ["destination-diversity", "port-diversity", "flow-rate"],
+      "detection_id": "detect-internal-destination-port-diversity",
+      "objective": "Identify a bounded rise in internal destination and port diversity.",
+      "false_positive": "Approved vulnerability scanners and inventory tools can produce similar flows.",
+      "blind_spot": "Connection attempts do not prove successful lateral movement."
+    },
+    {
+      "scenario_id": "SEC-P9-E-DNS-TUNNEL",
+      "title": "DNS Tunneling and Exfiltration Indicators",
+      "family": "DNS_TUNNEL_INDICATORS",
+      "sources": ["ietf-dns-rfc1035", "ietf-ipfix"],
+      "mitre": ["T1071.004", "T1048"],
+      "analytics": ["dns-query-rate", "domain-diversity", "cross-source-temporal-correlation"],
+      "detection_id": "detect-dns-subdomain-volume",
+      "objective": "Identify synthetic long-subdomain and DNS-flow indicators without performing or claiming exfiltration.",
+      "false_positive": "CDNs, tracking identifiers, and service discovery can use long diverse labels.",
+      "blind_spot": "The lab carries benign synthetic labels and cannot confirm exfiltration."
+    },
+    {
+      "scenario_id": "SEC-P9-F-CROSS-SOURCE",
+      "title": "Cross-Source DNS, Beaconing, and Reconnaissance Incident",
+      "family": "CROSS_SOURCE_INCIDENT",
+      "sources": ["ietf-dns-rfc1035", "ietf-ipfix"],
+      "mitre": ["T1071.004", "T1046"],
+      "analytics": ["periodicity", "destination-diversity", "port-diversity", "cross-source-temporal-correlation"],
+      "detection_id": "detect-cross-source-security-sequence",
+      "objective": "Correlate DNS, periodic external communication, and internal reconnaissance indicators from one deterministic incident.",
+      "false_positive": "Monitoring followed by approved scanning can resemble the sequence.",
+      "blind_spot": "No endpoint execution, identity evidence, attribution, or compromise confirmation is modeled."
+    }
+  ]
+}

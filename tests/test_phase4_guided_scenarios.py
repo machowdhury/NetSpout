@@ -186,7 +186,7 @@ class TestPhase4GuidedScenarios(unittest.TestCase):
         scenario = capabilities["scenarios"][0]
         self.assertEqual(scenario["guided_completeness"]["state"], "PARTIAL")
         self.assertEqual(scenario["guided_completeness"]["passed"], 12)
-        self.assertEqual(len(service.registry.packs), 5)
+        self.assertEqual(len(service.registry.packs), 6)
         self.assertIn(
             "cisco-phase8c-domain-references",
             {item.pack_id for item in service.registry.packs},

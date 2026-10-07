@@ -281,6 +281,25 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
               {(scenario.learning_hints ?? []).map((hint) => <li key={hint}>{hint}</li>)}
             </ul>
           )}
+          {!!scenario.security_behavior_stages?.length && (
+            <div className="guided-readiness-summary" aria-label="Security behavior progression">
+              {scenario.security_behavior_stages.map((stage) => (
+                <div key={stage}><span>Behavior state</span><strong>{badge(stage)}</strong></div>
+              ))}
+            </div>
+          )}
+          {!!scenario.kpi_definitions?.length && (
+            <div className="guided-preflight">
+              <div className="guided-section-title"><h4>Evidence-gated analytics</h4><span>Applied only when required fields exist</span></div>
+              {scenario.kpi_definitions.map((kpi) => (
+                <div className="guided-check" key={kpi.kpi_id}>
+                  <span aria-hidden>ƒ</span>
+                  <div><strong>{kpi.label}</strong><small>{kpi.required_fields.join(' · ')} — {kpi.interpretation_limit}</small></div>
+                  <Status value="DECLARED" />
+                </div>
+              ))}
+            </div>
+          )}
           <TopologyPanel
             scenario={scenario}
             sources={sources}
@@ -722,8 +741,21 @@ function ValidationStep({ scenario, run, onBack, onComplete }: { scenario: Gener
             <Status value={item.state} />
           </div>
         ))}
-        <div><span aria-hidden>—</span><div><strong>CIM</strong><small>No CIM relationship is declared for this NetSpout-defined sourcetype.</small></div><Status value="NOT VALIDATED" /></div>
-        <div><span aria-hidden>—</span><div><strong>Detection</strong><small>No detection object is configured for this scenario.</small></div><Status value="NOT CONFIGURED" /></div>
+        <div><span aria-hidden>—</span><div><strong>CIM</strong><small>{scenario.cim_validation?.join(' ') || 'No CIM relationship is declared for this scenario.'}</small></div><Status value="NOT VALIDATED" /></div>
+        {scenario.detection_validation?.length ? scenario.detection_validation.map((detection) => (
+          <div key={detection.detection_id}>
+            <span aria-hidden>{detection.validation_outcome === 'SPLUNK_VALIDATED' ? '✓' : '—'}</span>
+            <div>
+              <strong>{detection.detection_id}</strong>
+              <small>{detection.objective} MITRE: {detection.mitre_attack_ids.join(', ') || 'not mapped'}</small>
+              <small>False-positive control: {detection.false_positive_controls.join(' ')}</small>
+              <small>Blind spot: {detection.blind_spots.join(' ')}</small>
+            </div>
+            <Status value={detection.validation_outcome} />
+          </div>
+        )) : (
+          <div><span aria-hidden>—</span><div><strong>Detection</strong><small>No detection object is configured for this scenario.</small></div><Status value="NOT CONFIGURED" /></div>
+        )}
       </div>
       <div className="guided-validation-summary">
         <span>Expected outcome</span>

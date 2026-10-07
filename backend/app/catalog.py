@@ -25,6 +25,9 @@ from typing import Dict, List, Any, Optional, Tuple, Set
 from netspout_core.catalog_contracts import TelemetryCatalog
 from netspout_core.pack_contracts import PackRegistry
 from netspout_core.phase8c_reference_packs import extend_registry
+from netspout_core.phase9_security_packs import (
+    extend_registry as extend_phase9_registry,
+)
 
 
 def _find_catalog_dir() -> str:
@@ -101,6 +104,11 @@ class NetSpoutCatalog:
         if phase8c_specification:
             extension_registry = extend_registry(
                 extension_registry, phase8c_specification
+            )
+        phase9_specification = _read_json("phase9_security_packs.json")
+        if phase9_specification:
+            extension_registry = extend_phase9_registry(
+                extension_registry, phase9_specification
             )
         self._extension_packs = PackRegistry.model_validate(extension_registry)
         self._extension_packs.validate_against_catalog(self._telemetry_catalog)

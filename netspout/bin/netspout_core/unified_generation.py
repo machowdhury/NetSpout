@@ -41,6 +41,10 @@ from netspout_core.pack_contracts import (
     StrictModel,
 )
 from netspout_core.telemetry_dispatcher import TelemetryDispatcher
+from netspout_core.security_state import (
+    SUPPORTED_SECURITY_SCENARIOS,
+    build_security_incident_plan,
+)
 
 
 class GenerationMode(str, Enum):
@@ -189,6 +193,7 @@ class UnifiedGenerationService:
         "openconfig-gnmi-interfaces",
         "ietf-netflow-v9",
         "ietf-ipfix",
+        "ietf-dns-rfc1035",
     }
 
     def __init__(
@@ -214,6 +219,7 @@ class UnifiedGenerationService:
             "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog": NativeChannel.SYSLOG,
             "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp": NativeChannel.SNMP,
             "netspout_core.native_runtime.NativeRuntimeFacade.run_gnmi": NativeChannel.GNMI,
+            "netspout_core.native_runtime.NativeRuntimeFacade.run_dns": NativeChannel.DNS,
             "netspout_core.native_runtime.NativeRuntimeFacade.run_flow": None,
             "netspout_core.native_runtime.NativeRuntimeFacade.run_otel": NativeChannel.OTEL,
         }
@@ -447,6 +453,7 @@ class UnifiedGenerationService:
                 "ietf-syslog-rfc5424",
                 "ietf-netflow-v9",
                 "ietf-ipfix",
+                "ietf-dns-rfc1035",
                 *(
                     binding.source_id
                     for composition in self.registry.compositions
@@ -853,6 +860,7 @@ class UnifiedGenerationService:
                         seed=seed,
                         single_event=request.mode == GenerationMode.SINGLE_EVENT,
                         event_family=resolved["event_family"],
+                        scenario_parameters=request.scenario_parameters,
                     )
                 channel_results.append(
                     self._channel_result_view(
@@ -1517,6 +1525,19 @@ class UnifiedGenerationService:
                 "required": True,
                 "validator_ids": ["validator-native-receiver-boundary"],
             },
+            "ietf-dns-rfc1035": {
+                "source_id": "ietf-dns-rfc1035",
+                "generator_id": "generator-native-dns-rfc1035",
+                "transport_id": "transport-native-dns-udp",
+                "destination_transport_id": "transport-local-hec",
+                "destination_id": "destination-local-docker-splunk",
+                "runtime_adapter_ref": (
+                    "netspout_core.native_runtime.NativeRuntimeFacade.run_dns"
+                ),
+                "receiver_component_id": "bundled-dns-loopback-receiver",
+                "required": True,
+                "validator_ids": ["validator-native-dns-boundary"],
+            },
         }.get(source_id)
         standalone_matches = bool(
             standalone_native
@@ -1773,6 +1794,7 @@ class UnifiedGenerationService:
         seed: int,
         single_event: bool,
         event_family: str,
+        scenario_parameters: Optional[Dict[str, Any]] = None,
     ) -> ChannelRunResult:
         channel = self._channel_for_binding(binding)
         adapter_ref = binding["runtime_adapter_ref"]
@@ -1818,7 +1840,48 @@ class UnifiedGenerationService:
             return runtime.run_snmp(run_id, scenario_id, entity_id, seed)
         if adapter_ref.endswith(".run_gnmi"):
             return runtime.run_gnmi(run_id, scenario_id, entity_id, seed)
+        if adapter_ref.endswith(".run_dns"):
+            observations = None
+            security_profile = str(
+                (scenario_parameters or {}).get(
+                    "security_profile_scenario_id", scenario_id
+                )
+            )
+            if security_profile in SUPPORTED_SECURITY_SCENARIOS:
+                observations = build_security_incident_plan(
+                    security_profile,
+                    seed,
+                    run_id=run_id,
+                    intensity=int((scenario_parameters or {}).get("intensity", 1)),
+                ).dns
+            return runtime.run_dns(
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                observations=observations,
+            )
         if adapter_ref.endswith(".run_flow"):
+            security_profile = str(
+                (scenario_parameters or {}).get(
+                    "security_profile_scenario_id", scenario_id
+                )
+            )
+            if security_profile in SUPPORTED_SECURITY_SCENARIOS:
+                records = build_security_incident_plan(
+                    security_profile,
+                    seed,
+                    run_id=run_id,
+                    intensity=int((scenario_parameters or {}).get("intensity", 1)),
+                ).flows
+                return runtime.run_flow(
+                    channel,
+                    run_id,
+                    scenario_id,
+                    entity_id,
+                    seed,
+                    records=records,
+                )
             return runtime.run_flow(
                 channel, run_id, scenario_id, entity_id, seed
             )
@@ -2372,6 +2435,7 @@ class UnifiedGenerationService:
             "openconfig-gnmi-interfaces": "netspout:gnmi:event",
             "ietf-netflow-v9": "netflow:collector",
             "ietf-ipfix": "netflow:collector",
+            "ietf-dns-rfc1035": "netspout:dns:wire",
         }
         studio_scope = self._studio_search_scopes.get(source_id)
         index_name = (

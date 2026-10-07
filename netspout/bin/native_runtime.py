@@ -30,6 +30,13 @@ from netspout_core.exporter_session import ExporterSession
 from netspout_core.models import FlowRecord, LogEntry, TelemetryTransportConfig
 from netspout_core.telemetry_dispatcher import TelemetryDispatcher
 from netspout_core.transport_native_flow import NativeFlowTransport
+from netspout_core.dns_wire import execute_loopback_exchange, message_view
+from netspout_core.security_state import (
+    DnsBehavior,
+    SecurityStage,
+    build_security_incident_plan,
+    security_plan_summary,
+)
 from netspout_core.gnmi.state_store import (
     CANONICAL_PHASES,
     DeviceStateSnapshot,
@@ -125,6 +132,7 @@ class NativeChannel(str, Enum):
     SYSLOG = "SYSLOG"
     SNMP = "SNMP"
     GNMI = "GNMI"
+    DNS = "DNS"
     NETFLOW_V9 = "NETFLOW_V9"
     IPFIX = "IPFIX"
     OTEL = "OTEL"
@@ -304,6 +312,23 @@ class NativeRuntimeFacade:
                 "GnmiSplunkBridge -> configured HEC/search destination",
                 ("GENERATED", "SERVER_PUBLISHED", "COLLECTOR_RECEIVED", "NORMALIZED", "SPLUNK_DISPATCHED", "SPLUNK_OBSERVED", "VALIDATED"),
             ),
+            NativeChannel.DNS: ChannelCapability(
+                NativeChannel.DNS,
+                CapabilityLevel.SUPPORTED,
+                "RFC 1035 DNS query/response over bounded loopback UDP",
+                "Bundled DNS observer -> configured HEC destination",
+                (
+                    "GENERATED",
+                    "ENCODED",
+                    "UDP_SENT",
+                    "RECEIVER_OBSERVED",
+                    "RESPONSE_OBSERVED",
+                    "NORMALIZED",
+                    "SPLUNK_DISPATCHED",
+                    "SPLUNK_OBSERVED",
+                ),
+                "The NetSpout-defined normalized event is distinct from resolver, authoritative, and security-product logs.",
+            ),
             NativeChannel.NETFLOW_V9: self._flow_capability(NativeChannel.NETFLOW_V9),
             NativeChannel.IPFIX: self._flow_capability(NativeChannel.IPFIX),
             NativeChannel.OTEL: ChannelCapability(
@@ -337,7 +362,12 @@ class NativeRuntimeFacade:
         receiver_probes = {
             item.channel: item
             for item in self.preflight(
-                [NativeChannel.SYSLOG, NativeChannel.SNMP, NativeChannel.GNMI]
+                [
+                    NativeChannel.SYSLOG,
+                    NativeChannel.SNMP,
+                    NativeChannel.GNMI,
+                    NativeChannel.DNS,
+                ]
             ).components
             if item.channel is not None
         }
@@ -390,6 +420,12 @@ class NativeRuntimeFacade:
                 receiver_probes[NativeChannel.GNMI].state,
                 receiver_probes[NativeChannel.GNMI].detail,
                 NativeChannel.GNMI,
+            ),
+            ComponentHealth(
+                "dns_loopback_receiver",
+                receiver_probes[NativeChannel.DNS].state,
+                receiver_probes[NativeChannel.DNS].detail,
+                NativeChannel.DNS,
             ),
             ComponentHealth("netflow_v9_runtime", flow_state, flow_detail, NativeChannel.NETFLOW_V9),
             ComponentHealth("ipfix_runtime", flow_state, flow_detail, NativeChannel.IPFIX),
@@ -488,6 +524,38 @@ class NativeRuntimeFacade:
             finally:
                 if server is not None:
                     server.stop()
+        if NativeChannel.DNS in requested:
+            try:
+                exchange = execute_loopback_exchange(
+                    transaction_id=1,
+                    qname="preflight.example",
+                    answer_ip="198.51.100.80",
+                )
+                ready = (
+                    exchange.receiver_query.qname == "preflight.example"
+                    and exchange.client_response.answer_ip == "198.51.100.80"
+                )
+                checks.append(
+                    ComponentHealth(
+                        "bundled-dns-loopback-receiver",
+                        HealthState.READY if ready else HealthState.FAILED,
+                        (
+                            "RFC 1035 query and response completed over loopback UDP."
+                            if ready
+                            else "DNS loopback exchange did not validate."
+                        ),
+                        NativeChannel.DNS,
+                    )
+                )
+            except Exception as exc:
+                checks.append(
+                    ComponentHealth(
+                        "bundled-dns-loopback-receiver",
+                        HealthState.FAILED,
+                        "DNS loopback check failed: {}".format(type(exc).__name__),
+                        NativeChannel.DNS,
+                    )
+                )
         if any(c in (NativeChannel.NETFLOW_V9, NativeChannel.IPFIX) for c in requested):
             try:
                 raw = self._collector_adapter().run_preflight_check()
@@ -938,6 +1006,161 @@ class NativeRuntimeFacade:
         except Exception as exc:
             return self._result(channel, run_id, scenario_id, entity_id, seed, evidence, {}, False, [str(exc)])
 
+    def run_dns(
+        self,
+        run_id: str,
+        scenario_id: str,
+        entity_id: str,
+        seed: int,
+        observations: Optional[Sequence[DnsBehavior]] = None,
+    ) -> ChannelRunResult:
+        plan = None
+        if observations is None:
+            if scenario_id == "ietf-dns-rfc1035":
+                observations = (
+                    DnsBehavior(
+                        timestamp_ms=1_700_000_000_000 + (seed % 10_000) * 1_000,
+                        stage=SecurityStage.NORMAL,
+                        client_ip="192.0.2.25",
+                        resolver_ip="192.0.2.53",
+                        qname="service.example",
+                        answer_ip="198.51.100.80",
+                    ),
+                )
+            else:
+                plan = build_security_incident_plan(
+                    scenario_id, seed, run_id=run_id
+                )
+                observations = plan.dns
+        bounded = list(observations)
+        evidence = [
+            Evidence(
+                "GENERATED",
+                bool(bounded),
+                "DNS observations were derived from one deterministic security plan.",
+                len(bounded),
+            )
+        ]
+        if not bounded:
+            return self._result(
+                NativeChannel.DNS,
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                evidence,
+                {"security_plan": security_plan_summary(plan) if plan else {}},
+                False,
+                ["security plan contains no DNS observations"],
+            )
+        exchanges = []
+        dispatches = []
+        errors = []
+        try:
+            for ordinal, item in enumerate(bounded):
+                exchange = execute_loopback_exchange(
+                    transaction_id=(seed + ordinal) & 0xFFFF,
+                    qname=item.qname,
+                    qtype=item.qtype,
+                    rcode=item.rcode,
+                    answer_ip=item.answer_ip,
+                )
+                normalized = {
+                    "timestamp_ms": item.timestamp_ms,
+                    "source_family": "dns",
+                    "client_ip": item.client_ip,
+                    "resolver_ip": item.resolver_ip,
+                    "query": exchange.receiver_query.qname,
+                    "query_type": exchange.receiver_query.qtype,
+                    "response_code": exchange.client_response.rcode,
+                    "answer": exchange.client_response.answer_ip,
+                    "attack_related": item.attack_related,
+                    "netspout_run_id": run_id,
+                    "netspout_scenario_id": scenario_id,
+                    "netspout_phase": item.stage.value,
+                }
+                raw = json.dumps(normalized, sort_keys=True, separators=(",", ":"))
+                log = LogEntry(
+                    timestamp=str(item.timestamp_ms / 1000.0),
+                    device_id=entity_id,
+                    src_ip=item.client_ip,
+                    dest_ip=item.resolver_ip,
+                    protocol="DNS/UDP",
+                    duration="0",
+                    action="observed",
+                    signature="rfc1035-dns-observation",
+                    status="modeled-indicator" if item.attack_related else "normal",
+                    raw_log=raw,
+                    node_type="dns-resolver",
+                    node_id=entity_id,
+                    vendor="ietf",
+                    sourcetype="netspout:dns:wire",
+                    netspout_run_id=run_id,
+                    netspout_scenario_id=scenario_id,
+                    netspout_phase=item.stage.value,
+                    netspout_device_id=entity_id,
+                )
+                dispatch = self.dispatcher.dispatch_log(
+                    log, self._hec_destination_config()
+                )
+                dispatches.append(dispatch)
+                exchanges.append(
+                    {
+                        "query": message_view(exchange.receiver_query),
+                        "response": message_view(exchange.client_response),
+                        "query_wire_hex": exchange.query_wire.hex(),
+                        "response_wire_hex": exchange.response_wire.hex(),
+                        "normalized": normalized,
+                    }
+                )
+            accepted = sum(
+                any(
+                    isinstance(value, Mapping) and value.get("success") is True
+                    for value in dispatch.values()
+                )
+                for dispatch in dispatches
+            )
+            count = len(exchanges)
+            evidence.extend(
+                [
+                    Evidence("ENCODED", count == len(bounded), "RFC 1035 messages encoded.", count),
+                    Evidence("UDP_SENT", count == len(bounded), "Loopback OS accepted DNS datagrams.", count),
+                    Evidence("RECEIVER_OBSERVED", count == len(bounded), "Bundled receiver parsed every DNS query.", count),
+                    Evidence("RESPONSE_OBSERVED", count == len(bounded), "Client parsed every matching DNS response.", count),
+                    Evidence("NORMALIZED", count == len(bounded), "Wire observations were normalized into a separate NetSpout-defined event.", count),
+                    Evidence("SPLUNK_DISPATCHED", accepted == count, "Configured Splunk destination acknowledged DNS dispatches." if accepted == count else "One or more DNS dispatches were not acknowledged.", accepted),
+                    Evidence("SPLUNK_OBSERVED", False, "Awaiting source-scoped authenticated Splunk search.", 0),
+                ]
+            )
+            return self._result(
+                NativeChannel.DNS,
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                evidence,
+                {
+                    "exchanges": exchanges,
+                    "destination_results": dispatches,
+                    "security_plan": security_plan_summary(plan) if plan else {},
+                },
+                accepted == count,
+                errors,
+            )
+        except Exception as exc:
+            errors.append(str(exc))
+            return self._result(
+                NativeChannel.DNS,
+                run_id,
+                scenario_id,
+                entity_id,
+                seed,
+                evidence,
+                {"exchanges": exchanges},
+                False,
+                errors,
+            )
+
     def _search_flow_observation(self, run_id: str) -> Tuple[int, str]:
         try:
             credentials = self._destination_credentials()
@@ -1183,6 +1406,7 @@ class NativeRuntimeFacade:
             NativeChannel.SYSLOG: ("RFC5424/3164 UDP -> EmbeddedSyslogServer", "TelemetryDispatcher -> configured destination"),
             NativeChannel.SNMP: ("native SNMPv2c -> bundled receiver/poller", "SnmpSplunkBridge -> configured HEC/search destination"),
             NativeChannel.GNMI: ("native gNMI gRPC target -> bundled subscriber", "GnmiSplunkBridge -> configured HEC/search destination"),
+            NativeChannel.DNS: ("RFC 1035 loopback UDP -> bundled observer", "TelemetryDispatcher -> configured destination"),
             NativeChannel.OTEL: ("OTLP/HTTP sender", "configured OTLP endpoint"),
         }
         source, destination = source_destination[channel]

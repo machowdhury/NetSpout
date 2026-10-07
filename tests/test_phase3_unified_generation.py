@@ -76,6 +76,7 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 "ietf-snmpv2c-ifmib",
                 "ietf-netflow-v9",
                 "ietf-ipfix",
+                "ietf-dns-rfc1035",
                 "openconfig-gnmi-interfaces",
                 "cisco-ios-xe-interface-syslog",
                 "cisco-nx-os-interface-syslog",
@@ -94,6 +95,7 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 "netspout:cisco:iosxe:syslog",
                 "netspout:cisco:nxos:syslog",
                 "netspout:cisco:asa:syslog",
+                "netspout:dns:wire",
                 "openconfig:gnmi:telemetry",
             },
         )

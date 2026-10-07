@@ -1474,6 +1474,14 @@ def run_studio_pack(pack_id: str, payload: StudioRunRequest):
             "seed": payload.seed,
             "entity_id": pack.entities[0].entity_id,
             "studio_shared_state": True,
+            **(
+                {
+                    "security_profile_scenario_id": pack.cloned_from_scenario_id,
+                }
+                if pack.cloned_from_scenario_id
+                and pack.cloned_from_scenario_id.startswith("SEC-P9-")
+                else {}
+            ),
         }
     )
     try:

@@ -88,6 +88,32 @@ export interface GuidedCompleteness {
   production_guidance_available: boolean;
 }
 
+export interface ScenarioKpiDefinition {
+  kpi_id: string;
+  label: string;
+  analytic_id: string;
+  required_source_ids: string[];
+  required_fields: string[];
+  interpretation_limit: string;
+}
+
+export interface DetectionValidationPack {
+  detection_id: string;
+  objective: string;
+  threat_behavior: string;
+  mitre_attack_ids: string[];
+  required_source_ids: string[];
+  required_fields: string[];
+  spl: string;
+  portability: 'PRODUCTION_PORTABLE' | 'NETSPOUT_SPECIFIC';
+  baseline_expected_result: string;
+  incident_expected_result: string;
+  false_positive_controls: string[];
+  blind_spots: string[];
+  validation_outcome: string;
+  evidence_ids: string[];
+}
+
 export interface GenerationScenario {
   scenario_id: string;
   title: string;
@@ -134,6 +160,7 @@ export interface GenerationScenario {
   } | null;
   integration_recommendation_ids: string[];
   production_replication_guidance: string[];
+  cim_validation?: string[];
   composition_id: string | null;
   verification_state: VerificationState;
   maturity: string;
@@ -141,6 +168,13 @@ export interface GenerationScenario {
   integration_count: number;
   runnable: boolean;
   guided_completeness?: GuidedCompleteness;
+  security_behavior_stages?: string[];
+  kpi_definitions?: ScenarioKpiDefinition[];
+  detection_validation?: DetectionValidationPack[];
+  false_positive_controls?: string[];
+  known_blind_spots?: string[];
+  expected_findings?: string[];
+  scenario_maturity?: string | null;
 }
 
 export interface GenerationSource extends CatalogSource {

@@ -12,6 +12,7 @@ from scripts.artifact_isolation import (
     ARTIFACT_ROOT_ENV,
     artifact_dir,
     artifact_root,
+    protected_roots,
     snapshot_changes,
     snapshot_files,
 )
@@ -77,9 +78,22 @@ class TestPhase8BArtifactIsolation(unittest.TestCase):
                 manifest["classification"],
                 "CURRENT_RUN_EVIDENCE",
             )
+            self.assertEqual(
+                Path(manifest["studio_root"]).resolve(),
+                (
+                    run_root / "outputs" / "runtime" / "scenario-studio"
+                ).resolve(),
+            )
             self.assertTrue(
                 (run_root / "artifact-isolation-manifest.json").is_file()
             )
+
+    def test_static_vendor_catalog_mirror_is_protected(self):
+        protected = protected_roots(self.root)
+        self.assertIn(
+            self.root / "netspout/appserver/static/vendor_catalog.json",
+            protected,
+        )
 
     def test_guarded_run_fails_when_a_protected_fixture_changes(self):
         with tempfile.TemporaryDirectory() as directory:

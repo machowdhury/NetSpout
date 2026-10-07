@@ -20,9 +20,9 @@ screenshots.
 - Starting local/remote synchronization: `0 0`
 - Starting worktree: clean
 - Accepted HEAD ancestry: verified
-- Protected accepted tree: **608 tracked files**
+- Protected accepted tree: **609 tracked files**
 - Accepted tree manifest SHA-256:
-  `afcf664273ec76d2a3b4fb74f1a064dd64b005af242ee9b2b219da6d70299a3e`
+  `bcbc61af90f69d31d03fa7d6e40da3ffce80c34dd0d5377538cd31b96538830b`
 
 The digest is over `git ls-tree -r` output for all protected roots at the
 accepted Phase 8 commit, including path, mode, object type, and Git blob ID.
@@ -61,6 +61,7 @@ Guarded roots:
 - `netspout/catalog`
 - `netspout/bin/catalog_data`
 - `netspout/bin/netspout_core/catalog_data`
+- `netspout/appserver/static/vendor_catalog.json`
 - `docs/acceptance`
 - `docs/implementation/images`
 
@@ -100,7 +101,8 @@ No default test path resolves into a tracked accepted-evidence directory.
   detection.
 - `scripts/run_isolated_tests.py` wraps arbitrary test commands, injects
   `NETSPOUT_TEST_ARTIFACT_ROOT`, disables Python bytecode output, records a
-  current-run manifest, and returns exit code 86 if protected state changes.
+  current-run manifest, isolates `NETSPOUT_STUDIO_DIR` below the current-run
+  root, and returns exit code 86 if protected state changes.
 - The wrapper compares both file content and scoped Git status before and
   after execution. It reports mutation and leaves investigation/restoration
   explicit.
@@ -111,6 +113,11 @@ No default test path resolves into a tracked accepted-evidence directory.
   evidence directories.
 - `.artifacts/` is ignored so current-run evidence cannot be accidentally
   committed as accepted evidence.
+
+Canonical catalog builders and `scripts/sync_core.py` remain intentional source
+generators rather than test-output writers. Their destinations are protected
+by guarded test execution; deliberate catalog regeneration remains a reviewed
+development action.
 
 Intentional promotion of a current-run artifact requires a separate reviewed
 copy/change; there is no environment switch that silently targets historical
@@ -134,8 +141,8 @@ accepted evidence.
 
 ## Validation
 
-- Artifact-isolation regression: **8 passed**
-- Phase 7 + Phase 8 + Phase 8B focused backend: **40 passed**
+- Artifact-isolation regression: **9 passed**
+- Phase 7 + Phase 8 + Phase 8B focused backend: **41 passed**
 - Guarded Playwright screenshot smoke: **4 passed**
 - Guarded full frontend: **22 passed, 4 expected skips**
 - Frontend build: passed
@@ -145,6 +152,8 @@ accepted evidence.
 - Guarded stable broad backend: **476 tests: 471 passed, 1 skipped, 4
   inherited Gate 12F failures**; protected files remained **608 → 608** with
   zero mutations.
+- Final expanded guard validation, including the static vendor-catalog mirror
+  and isolated Studio state: **41 passed**, **609 → 609**, zero mutations.
 - `git diff --check`: passed
 
 Representative current-run manifests:
@@ -153,6 +162,7 @@ Representative current-run manifests:
 - `.artifacts/phase8b/backend-focused-final/artifact-isolation-manifest.json`
 - `.artifacts/phase8b/live-phase8/artifact-isolation-manifest.json`
 - `.artifacts/phase8b/backend-broad-final/artifact-isolation-manifest.json`
+- `.artifacts/phase8b/followup-focused-final/artifact-isolation-manifest.json`
 
 Every final accepted guarded validation run reported zero mutation of protected
 roots. An earlier broad run was deliberately rejected by the guard because the

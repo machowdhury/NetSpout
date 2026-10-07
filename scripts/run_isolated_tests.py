@@ -46,6 +46,8 @@ def run_guarded(
     )
     output_root = run_root / "outputs"
     output_root.mkdir(parents=True, exist_ok=True)
+    studio_root = output_root / "runtime" / "scenario-studio"
+    studio_root.mkdir(parents=True, exist_ok=True)
 
     protected = protected_roots(root)
     before = snapshot_files(protected)
@@ -54,6 +56,7 @@ def run_guarded(
         **os.environ,
         ARTIFACT_ROOT_ENV: str(output_root),
         "NETSPOUT_TEST_RUN_ID": run_id,
+        "NETSPOUT_STUDIO_DIR": str(studio_root),
         "PYTHONDONTWRITEBYTECODE": "1",
     }
     completed = subprocess.run(list(command), cwd=root, env=env, check=False)
@@ -67,6 +70,7 @@ def run_guarded(
         "classification": "CURRENT_RUN_EVIDENCE",
         "command": list(command),
         "artifact_root": str(output_root),
+        "studio_root": str(studio_root),
         "protected_roots": [str(path) for path in protected],
         "protected_file_count_before": len(before),
         "protected_file_count_after": len(after),

@@ -21,6 +21,7 @@ export const testArtifactRoot = () => {
       'netspout/catalog',
       'netspout/bin/catalog_data',
       'netspout/bin/netspout_core/catalog_data',
+      'netspout/appserver/static/vendor_catalog.json',
       'docs/acceptance',
       'docs/implementation/images',
     ].map((item) => path.join(repository, item));

@@ -22,6 +22,7 @@ PROTECTED_RELATIVE_ROOTS = (
     Path("netspout/catalog"),
     Path("netspout/bin/catalog_data"),
     Path("netspout/bin/netspout_core/catalog_data"),
+    Path("netspout/appserver/static/vendor_catalog.json"),
     Path("docs/acceptance"),
     Path("docs/implementation/images"),
 )

@@ -174,4 +174,93 @@ test('hands a runnable Golden reference to Scenario Studio', async ({ page }) =>
   await expect(page).toHaveURL(/#\/build\/studio$/);
   await expect(page.getByTestId('studio-environment-builder')).toBeVisible();
   await expect(page.getByText('Catalog definition-only draft')).toHaveCount(0);
+  if (process.env.NETSPOUT_SCREENSHOT_ROOT) {
+    fs.mkdirSync(process.env.NETSPOUT_SCREENSHOT_ROOT, { recursive: true });
+    await page.screenshot({
+      path: path.join(process.env.NETSPOUT_SCREENSHOT_ROOT, '29-scenario-studio-runnable-clone.png'),
+      fullPage: true,
+    });
+  }
+});
+
+test('captures the Phase 8C visual review inventory', async ({ page }) => {
+  test.skip(!process.env.NETSPOUT_SCREENSHOT_ROOT, 'Current-run screenshot capture not requested.');
+  const output = process.env.NETSPOUT_SCREENSHOT_ROOT as string;
+  fs.mkdirSync(output, { recursive: true });
+  await page.route('**/api/cisco100', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(catalog) }));
+  await page.route('**/api/generation/capabilities', () => {});
+  await page.setViewportSize({ width: 1600, height: 1050 });
+  await page.goto('/#/catalog/cisco-100');
+
+  const capturePage = async (name: string) => page.screenshot({
+    path: path.join(output, name),
+    fullPage: true,
+  });
+  const capturePanel = async (title: string, name: string) => {
+    const panel = page.locator('.technical-panel').filter({ hasText: title }).first();
+    await expect(panel).toBeVisible();
+    await panel.screenshot({ path: path.join(output, name) });
+  };
+  const selectReference = async (scenarioId: string) => {
+    await page.getByTestId('cisco100-reference-readiness')
+      .getByRole('button', { name: new RegExp(scenarioId) }).click();
+    await expect(page.getByTestId('cisco100-scenario-detail')).toContainText(scenarioId);
+  };
+
+  await capturePage('01-domain-depth-overview.png');
+  await page.getByTestId('cisco100-reference-readiness').screenshot({
+    path: path.join(output, '02-five-domain-reference-readiness.png'),
+  });
+
+  await selectReference('C100-ENT-001');
+  await capturePage('03-enterprise-reference.png');
+  await capturePanel('Scenario topology', '04-enterprise-topology.png');
+
+  await selectReference('C100-SP-001');
+  await capturePage('05-service-provider-reference.png');
+  await capturePanel('Scenario topology', '06-service-provider-topology.png');
+  await capturePanel('Telemetry and contracts', '07-service-provider-native-splunk-contracts.png');
+  await capturePanel('Evidence Inspector', '08-service-provider-evidence.png');
+  await capturePanel('Investigation Pack', '09-service-provider-investigation.png');
+  await capturePanel('Troubleshooting guidance', '10-service-provider-troubleshooting.png');
+  await capturePanel('Take This to Production', '11-service-provider-production.png');
+
+  await selectReference('C100-DC-001');
+  await capturePage('12-data-center-reference.png');
+  await capturePanel('Scenario topology', '13-data-center-topology.png');
+  await capturePanel('Telemetry and contracts', '14-data-center-contracts.png');
+  await capturePanel('Evidence Inspector', '15-data-center-evidence-runtime.png');
+  await capturePanel('Investigation Pack', '16-data-center-investigation.png');
+
+  await selectReference('C100-SEC-001');
+  await capturePage('17-security-reference.png');
+  await capturePanel('Scenario topology', '18-security-topology.png');
+  await capturePanel('Telemetry and contracts', '19-security-native-splunk-contracts.png');
+  await capturePanel('Evidence Inspector', '20-security-evidence-runtime.png');
+  await capturePanel('Investigation Pack', '21-security-investigation.png');
+
+  await selectReference('C100-CRI-002');
+  await capturePage('22-cross-domain-reference.png');
+  await capturePanel('Scenario topology', '23-cross-domain-causal-topology.png');
+  await capturePanel('Shared enterprise state and simulation clock', '24-cross-domain-propagation.png');
+  await capturePanel('Telemetry and contracts', '25-cross-domain-contracts-cim.png');
+  await capturePanel('Investigation Pack', '26-cross-domain-correlation.png');
+  await capturePanel('Take This to Production', '27-cross-domain-production.png');
+
+  const unresolved = scenarios.find(
+    (item: { maturity: string }) => item.maturity === 'RESEARCH_REQUIRED',
+  );
+  expect(unresolved).toBeTruthy();
+  await page.getByRole('button', { name: new RegExp(unresolved.scenario_id) }).last().click();
+  const blocked = page.getByText('Research required — generation blocked').locator('..');
+  await expect(blocked).toBeVisible();
+  await blocked.screenshot({ path: path.join(output, '28-research-required-fail-closed.png') });
+
+  await page.getByRole('button', { name: 'matrix', exact: true }).click();
+  await page.getByTestId('cisco100-matrix').screenshot({
+    path: path.join(output, '30-cisco-100-maturity-matrix.png'),
+  });
+  await page.getByRole('button', { name: 'Readiness & Evidence Debt', exact: true }).click();
+  await capturePage('31-final-domain-depth-and-evidence-debt.png');
 });

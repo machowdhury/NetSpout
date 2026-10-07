@@ -1138,7 +1138,7 @@ class SnmpSplunkBridge:
             rest_password
             or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")
             or os.environ.get("SPLUNK_PASSWORD")
-            or "SplunkPassword123!"
+            or ""
         )
         self.index = index
         self.simulate_splunk_unavailable = simulate_splunk_unavailable

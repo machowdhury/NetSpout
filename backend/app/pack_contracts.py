@@ -101,6 +101,11 @@ class ScenarioExperienceState(str, Enum):
     UNSUPPORTED = "UNSUPPORTED"
 
 
+class CompositionExecutionMode(str, Enum):
+    SINGLE_EVENT = "SINGLE_EVENT"
+    SHARED_STATE_LIFECYCLE = "SHARED_STATE_LIFECYCLE"
+
+
 class VisualizationMode(str, Enum):
     AUTOMATIC = "AUTOMATIC"
     CURATED = "CURATED"
@@ -179,6 +184,7 @@ class DeclarativeTemplateProfile(StrictModel):
     derived_fields: List[str] = Field(default_factory=list)
     supported_state_keys: List[str] = Field(default_factory=list)
     phase_values: Dict[str, Dict[str, str]] = Field(default_factory=dict)
+    phase_templates: Dict[str, str] = Field(default_factory=dict)
     evidence_ids: List[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -190,6 +196,10 @@ class DeclarativeTemplateProfile(StrictModel):
             raise ValueError("declarative template field classes must be disjoint")
         if not self.template or "{" not in self.template:
             raise ValueError("declarative native templates require placeholders")
+        if any("{" not in value for value in self.phase_templates.values()):
+            raise ValueError(
+                "declarative phase templates require placeholders"
+            )
         return self
 
 
@@ -624,6 +634,8 @@ class SourceBinding(StrictModel):
     runtime_adapter_ref: Optional[str] = None
     payload_profile_id: Optional[str] = None
     receiver_component_id: Optional[str] = None
+    runtime_entity_id: Optional[str] = None
+    runtime_interface_id: Optional[str] = None
     required: bool = True
     validator_ids: List[str] = Field(default_factory=list)
 
@@ -634,6 +646,39 @@ class CompositionDefinition(StrictModel):
     pack_ids: List[str]
     source_bindings: List[SourceBinding]
     investigation_recipe_ids: List[str] = Field(default_factory=list)
+    execution_mode: CompositionExecutionMode = (
+        CompositionExecutionMode.SINGLE_EVENT
+    )
+    state_profile_scenario_id: Optional[str] = None
+    state_entity_id: Optional[str] = None
+    state_interface_id: Optional[str] = None
+    correlate_native_channels: bool = False
+
+    @model_validator(mode="after")
+    def validate_execution_contract(self):
+        shared_state = (
+            self.execution_mode
+            == CompositionExecutionMode.SHARED_STATE_LIFECYCLE
+        )
+        state_fields = (
+            self.state_profile_scenario_id,
+            self.state_entity_id,
+            self.state_interface_id,
+        )
+        if shared_state and not all(state_fields):
+            raise ValueError(
+                "shared-state lifecycle compositions require profile, entity, "
+                "and interface identifiers"
+            )
+        if not shared_state and any(state_fields):
+            raise ValueError(
+                "single-event compositions cannot declare shared-state identifiers"
+            )
+        if self.correlate_native_channels and not shared_state:
+            raise ValueError(
+                "native channel correlation requires a shared-state lifecycle"
+            )
+        return self
 
 
 class PackRegistry(StrictModel):

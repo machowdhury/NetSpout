@@ -1,11 +1,13 @@
 """Catalog-driven orchestration for the Phase 3 unified generation experience."""
 
 import base64
+import hashlib
 import inspect
 import json
 import os
 import re
 import ssl
+from string import Formatter
 import time
 import urllib.error
 import urllib.parse
@@ -145,6 +147,7 @@ class UnifiedChannelResult(StrictModel):
     clock_state: str
     status: str
     evidence: List[ChannelEvidenceResult]
+    raw_artifact_digests: List[Dict[str, str]] = Field(default_factory=list)
     errors: List[str] = Field(default_factory=list)
 
 
@@ -763,8 +766,10 @@ class UnifiedGenerationService:
                 transport_config, dispatcher=self.dispatcher
             )
             scenario_id = resolved.get("scenario_id") or request.selection_id
+            execution = resolved.get("composition_execution") or {}
             entity_id = str(
                 request.scenario_parameters.get("entity_id")
+                or execution.get("state_entity_id")
                 or self._scenario_entity_id(resolved.get("scenario"))
             )
             if len(native_bindings) == 1 and not resolved.get("scenario_id"):
@@ -791,70 +796,60 @@ class UnifiedGenerationService:
                 )
             )
             correlated_results: Dict[NativeChannel, ChannelRunResult] = {}
-            native_channels = {
-                self._channel_for_binding(item) for item in native_bindings
-            }
-            if (
-                scenario_id == "test-correlated-interface-degradation"
-                or (
-                    scenario_id.startswith("studio-")
-                    and {
-                        NativeChannel.SNMP,
-                        NativeChannel.GNMI,
-                    }.issubset(native_channels)
-                )
-            ):
-                state_profile_scenario_id = (
-                    "test-correlated-interface-degradation"
-                    if scenario_id.startswith("studio-")
-                    else scenario_id
+            state_plan = None
+            if execution.get("execution_mode") == "SHARED_STATE_LIFECYCLE":
+                state_interface_id = str(
+                    request.scenario_parameters.get("interface_id")
+                    or execution["state_interface_id"]
                 )
                 state_plan = build_shared_enterprise_state_plan(
                     run_id=run_id,
                     scenario_id=scenario_id,
                     entity_id=entity_id,
                     seed=seed,
-                    state_profile_scenario_id=state_profile_scenario_id,
-                )
-                correlated = runtime.run_correlated(
-                    run_id,
-                    seed,
-                    scenario_id=scenario_id,
-                    entity_id=entity_id,
-                    state_plan=state_plan,
-                )
-                correlated_results = correlated.channels
-                syslog_binding = next(
-                    (
-                        item
-                        for item in native_bindings
-                        if self._channel_for_binding(item) is NativeChannel.SYSLOG
-                        and item.get("payload_profile_id")
+                    interface_id=state_interface_id,
+                    state_profile_scenario_id=str(
+                        execution["state_profile_scenario_id"]
                     ),
-                    None,
                 )
-                if syslog_binding is not None:
-                    correlated_results[NativeChannel.SYSLOG] = (
-                        self._run_declarative_syslog_lifecycle(
-                            runtime,
-                            syslog_binding,
-                            run_id=run_id,
-                            scenario_id=scenario_id,
-                            entity_id=entity_id,
-                            seed=seed,
-                            state_plan=state_plan,
-                        )
+                if execution.get("correlate_native_channels"):
+                    correlated = runtime.run_correlated(
+                        run_id,
+                        seed,
+                        scenario_id=scenario_id,
+                        entity_id=entity_id,
+                        state_plan=state_plan,
                     )
+                    correlated_results = correlated.channels
             for binding in native_bindings:
                 channel = self._channel_for_binding(binding)
-                native_result = correlated_results.get(channel)
+                binding_entity_id = str(
+                    binding.get("runtime_entity_id") or entity_id
+                )
+                native_result = None
+                if (
+                    state_plan is not None
+                    and channel is NativeChannel.SYSLOG
+                    and binding.get("payload_profile_id")
+                ):
+                    native_result = self._run_declarative_syslog_lifecycle(
+                        runtime,
+                        binding,
+                        run_id=run_id,
+                        scenario_id=scenario_id,
+                        entity_id=binding_entity_id,
+                        seed=seed,
+                        state_plan=state_plan,
+                    )
+                if native_result is None:
+                    native_result = correlated_results.get(channel)
                 if native_result is None:
                     native_result = self._execute_native_binding(
                         runtime,
                         binding,
                         run_id=run_id,
                         scenario_id=scenario_id,
-                        entity_id=entity_id,
+                        entity_id=binding_entity_id,
                         seed=seed,
                         single_event=request.mode == GenerationMode.SINGLE_EVENT,
                         event_family=resolved["event_family"],
@@ -1430,6 +1425,21 @@ class UnifiedGenerationService:
             "phases": phases,
             "event_family": event_family,
             "bindings": bindings,
+            "composition_execution": (
+                {
+                    "execution_mode": composition.execution_mode.value,
+                    "state_profile_scenario_id": (
+                        composition.state_profile_scenario_id
+                    ),
+                    "state_entity_id": composition.state_entity_id,
+                    "state_interface_id": composition.state_interface_id,
+                    "correlate_native_channels": (
+                        composition.correlate_native_channels
+                    ),
+                }
+                if composition
+                else None
+            ),
             "integration_readiness": [
                 recommendation_by_id[item] for item in recommendation_ids
             ],
@@ -1602,15 +1612,29 @@ class UnifiedGenerationService:
             "node_id": entity_id,
             "timestamp": timestamp,
             "process_id": str(100 + (seed % 800)),
+            "event_ordinal": str(ordinal + 1),
             "interface_id": interface_id,
             **phase_values,
         }
         try:
-            return profile.template.format_map(values)
+            template = profile.phase_templates.get(phase, profile.template)
+            return template.format_map(values)
         except KeyError as exc:
             raise ValueError(
                 "declarative payload profile references an unbound field"
             ) from exc
+
+    @staticmethod
+    def _validate_declarative_payload(profile, raw: str, phase: str) -> bool:
+        template = profile.phase_templates.get(phase, profile.template)
+        pattern_parts = []
+        for literal, field_name, _format_spec, _conversion in Formatter().parse(
+            template
+        ):
+            pattern_parts.append(re.escape(literal))
+            if field_name is not None:
+                pattern_parts.append(r".+?")
+        return re.fullmatch("".join(pattern_parts), raw) is not None
 
     def _run_declarative_syslog_lifecycle(
         self,
@@ -1625,29 +1649,47 @@ class UnifiedGenerationService:
     ) -> ChannelRunResult:
         profile_id = str(binding["payload_profile_id"])
         profile = self._declarative_profile(profile_id)
+        interface_id = str(
+            binding.get("runtime_interface_id") or state_plan.interface_id
+        )
         results: List[ChannelRunResult] = []
         raw_events: List[Dict[str, str]] = []
-        for ordinal, snapshot in enumerate(state_plan.snapshots):
-            raw = self._render_declarative_payload(
-                profile_id,
-                phase=snapshot.phase,
-                ordinal=ordinal,
-                seed=seed,
-                entity_id=entity_id,
-                interface_id=state_plan.interface_id,
-            )
-            result = self._invoke_native_syslog(
-                runtime,
-                run_id=run_id,
-                scenario_id=scenario_id,
-                entity_id=entity_id,
-                seed=seed,
-                raw=raw,
-                phase=snapshot.phase,
-                sourcetype=profile.sourcetype,
-            )
-            results.append(result)
-            raw_events.append({"phase": snapshot.phase, "raw": raw})
+        event_ordinal = 0
+        for snapshot in state_plan.snapshots:
+            phase_values = profile.phase_values.get(snapshot.phase, {})
+            event_count = int(phase_values.get("_event_count", "1"))
+            if event_count < 1 or event_count > 100:
+                raise ValueError(
+                    "declarative lifecycle event count must be between 1 and 100"
+                )
+            for _ in range(event_count):
+                raw = self._render_declarative_payload(
+                    profile_id,
+                    phase=snapshot.phase,
+                    ordinal=event_ordinal,
+                    seed=seed,
+                    entity_id=entity_id,
+                    interface_id=interface_id,
+                )
+                if not self._validate_declarative_payload(
+                    profile, raw, snapshot.phase
+                ):
+                    raise ValueError(
+                        "rendered declarative payload failed its phase structure"
+                    )
+                result = self._invoke_native_syslog(
+                    runtime,
+                    run_id=run_id,
+                    scenario_id=scenario_id,
+                    entity_id=entity_id,
+                    seed=seed,
+                    raw=raw,
+                    phase=snapshot.phase,
+                    sourcetype=profile.sourcetype,
+                )
+                results.append(result)
+                raw_events.append({"phase": snapshot.phase, "raw": raw})
+                event_ordinal += 1
         errors = [error for result in results for error in result.errors]
         evidence: List[Evidence] = []
         for stage in (
@@ -1738,15 +1780,25 @@ class UnifiedGenerationService:
             phase = "SINGLE_EVENT" if single_event else "BASELINE"
             profile_id = binding.get("payload_profile_id")
             if profile_id:
+                profile = self._declarative_profile(profile_id)
                 payload = self._render_declarative_payload(
                     profile_id,
                     phase=phase,
                     ordinal=0,
                     seed=seed,
                     entity_id=entity_id,
-                    interface_id="HundredGigE0/0/0/1",
+                    interface_id=str(
+                        binding.get("runtime_interface_id")
+                        or "HundredGigE0/0/0/1"
+                    ),
                 )
-                sourcetype = self._declarative_profile(profile_id).sourcetype
+                if not self._validate_declarative_payload(
+                    profile, payload, phase
+                ):
+                    raise ValueError(
+                        "rendered declarative payload failed its phase structure"
+                    )
+                sourcetype = profile.sourcetype
             else:
                 payload = self._generate_rfc5424_event(
                     run_id, phase, 0, event_family
@@ -1786,6 +1838,17 @@ class UnifiedGenerationService:
         result: ChannelRunResult,
         clock_state: str,
     ) -> UnifiedChannelResult:
+        lifecycle_events = result.raw_artifacts.get("lifecycle_events", [])
+        raw_artifact_digests = [
+            {
+                "phase": str(item["phase"]),
+                "sha256": hashlib.sha256(
+                    str(item["raw"]).encode("utf-8")
+                ).hexdigest(),
+            }
+            for item in lifecycle_events
+            if isinstance(item, dict) and "phase" in item and "raw" in item
+        ]
         return UnifiedChannelResult(
             source_id=binding["source_id"],
             channel=result.channel.value,
@@ -1820,6 +1883,7 @@ class UnifiedGenerationService:
                 )
                 for item in result.evidence
             ],
+            raw_artifact_digests=raw_artifact_digests,
             errors=result.errors,
         )
 
@@ -2290,6 +2354,17 @@ class UnifiedGenerationService:
         transport_config: TelemetryTransportConfig,
     ) -> Tuple[int, Optional[str]]:
         source = self.catalog.get_telemetry_source(source_id) or {}
+        if not source:
+            source_entry = next(
+                (
+                    item
+                    for item in self.registry._resources()["source_entries"]
+                    if item.source.source_id == source_id
+                ),
+                None,
+            )
+            if source_entry is not None:
+                source = source_entry.source.model_dump(mode="json")
         claims = source.get("splunk_contract", {}).get("sourcetypes", [])
         runtime_sourcetypes = {
             "ietf-syslog-rfc5424": "netspout:rfc5424",

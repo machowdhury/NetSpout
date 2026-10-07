@@ -39,6 +39,7 @@ CORE_MODULES = [
     "catalog.py",
     "catalog_contracts.py",
     "pack_contracts.py",
+    "phase8c_reference_packs.py",
     "unified_generation.py",
     "native_runtime.py",
     "scenario_studio.py",

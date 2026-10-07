@@ -21,6 +21,14 @@ const maturityOrder = [
   'BLOCKED',
 ] as const;
 
+const referenceScenarioIds = [
+  'C100-ENT-001',
+  'C100-SP-001',
+  'C100-DC-001',
+  'C100-SEC-001',
+  'C100-CRI-002',
+] as const;
+
 function options(values: string[]) {
   return [...new Set(values)].sort();
 }
@@ -318,6 +326,22 @@ export function Cisco100View() {
 
   const selected = filtered.find((item) => item.scenario_id === selectedId) ?? filtered[0] ?? null;
   const all = catalog.scenarios;
+  const references = referenceScenarioIds
+    .map((scenarioId) => all.find((item) => item.scenario_id === scenarioId))
+    .filter((item): item is Cisco100Scenario => Boolean(item));
+  const showReference = (scenarioId: string) => {
+    setView('browser');
+    setQuery('');
+    setDomain('');
+    setTechnology('');
+    setTelemetry('');
+    setProtocol('');
+    setIntegration('');
+    setMaturity('');
+    setCategory('');
+    setDifficulty('');
+    setSelectedId(scenarioId);
+  };
 
   return (
     <div className="c100-workspace" data-testid="cisco100-dashboard">
@@ -340,6 +364,27 @@ export function Cisco100View() {
             <span>{name}</span><strong>{count}</strong>
           </button>
         ))}
+      </section>
+
+      <section className="c100-reference-strip" aria-label="Multi-domain reference readiness" data-testid="cisco100-reference-readiness">
+        <header>
+          <div>
+            <span className="eyebrow">Evidence-backed reference depth</span>
+            <strong>One truthful reference per Cisco 100 domain</strong>
+          </div>
+          <small>Runtime and Splunk indicators reflect recorded evidence, not catalog intent.</small>
+        </header>
+        <div>
+          {references.map((scenario) => (
+            <button type="button" key={scenario.scenario_id} onClick={() => showReference(scenario.scenario_id)}>
+              <span>{scenario.domain}</span>
+              <strong>{scenario.scenario_id}</strong>
+              <StatusBadge status={scenario.maturity.replaceAll('_', ' ')} />
+              <small>{scenario.evidence_references.length} evidence ref{scenario.evidence_references.length === 1 ? '' : 's'}</small>
+              <small>Runtime {scenario.runtime_validation.length ? 'recorded' : 'pending'} · Splunk {scenario.splunk_validation.length ? 'recorded' : 'pending'}</small>
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="c100-maturity-grid" data-testid="cisco100-maturity">

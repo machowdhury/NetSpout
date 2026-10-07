@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "classification": "ACCEPTED_PHASE8C_EVIDENCE_SUMMARY",
+  "validated_at_utc": "2026-10-07T18:18:02Z",
+  "source_current_run": ".artifacts/phase8c/live-20261007T-phase8c-r4",
+  "source_evidence_sha256": "c5a861e21a55b9fc3af125d056c0a62f456ffd62e83293d64f6153929aead6ba",
+  "artifact_isolation_manifest_sha256": "7a44bfaa33e0dd1698585396b4bf80ece355c677546377dffb0ee7929e7807c6",
+  "artifact_isolation": {
+    "protected_file_count_before": 619,
+    "protected_file_count_after": 619,
+    "mutations": {},
+    "test_exit_code": 0
+  },
+  "environment": {
+    "destination": "Local Docker Splunk Enterprise",
+    "index": "idx_network_ops",
+    "credential_source": "Environment/configuration only; not serialized",
+    "tls_scope": "Existing localhost self-signed lab endpoint; certificate verification disabled for this bounded run only"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "C100-ENT-001",
+      "run_id": "0c231643-702e-4a64-8a6e-dd255f17d83e",
+      "source_ids": ["cisco-ios-xe-interface-syslog"],
+      "generated": 4,
+      "receiver_observed": 4,
+      "splunk_observed": 4,
+      "sourcetype_verified": true,
+      "fields_verified": true,
+      "investigation_status": "SUCCEEDED",
+      "investigation_result_count": 1
+    },
+    {
+      "scenario_id": "C100-DC-001",
+      "run_id": "87f5d14b-7743-4c61-aece-80a2cad52b3a",
+      "source_ids": ["cisco-nx-os-interface-syslog"],
+      "generated": 4,
+      "receiver_observed": 4,
+      "splunk_observed": 4,
+      "sourcetype_verified": true,
+      "fields_verified": true,
+      "investigation_status": "SUCCEEDED",
+      "investigation_result_count": 1
+    },
+    {
+      "scenario_id": "C100-SEC-001",
+      "run_id": "b9bea1e2-8e31-472e-983d-0da54b5279f9",
+      "source_ids": ["cisco-asa-connection-syslog"],
+      "generated": 11,
+      "receiver_observed": 11,
+      "splunk_observed": 11,
+      "sourcetype_verified": true,
+      "fields_verified": true,
+      "investigation_status": "SUCCEEDED",
+      "investigation_result_count": 1
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "run_id": "69be0f6f-1e93-40af-b3b3-f56a9a86766e",
+      "source_ids": [
+        "cisco-ios-xe-interface-syslog",
+        "cisco-ios-xr-interface-syslog"
+      ],
+      "generated": 8,
+      "receiver_observed": 8,
+      "splunk_observed": 8,
+      "sourcetype_verified": true,
+      "fields_verified": true,
+      "investigation_status": "SUCCEEDED",
+      "investigation_result_count": 1,
+      "correlation_note": "Both source-native families used one run and ordered shared state clock while retaining independent entities, interfaces, raw structures, and source-scoped Splunk searches."
+    }
+  ],
+  "result": {
+    "all_runtime_completed": true,
+    "all_splunk_observed": true,
+    "all_investigations_succeeded": true
+  },
+  "limitations": [
+    "Sourcetypes are NETSPOUT_DEFINED lab contracts.",
+    "No official Cisco add-on field extraction or CIM mapping was validated.",
+    "The run proves the local NetSpout receiver-to-HEC chain, not production device behavior.",
+    "ASA connection creation is not itself evidence of malicious intent."
+  ]
+}

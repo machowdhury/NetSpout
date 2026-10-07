@@ -67,9 +67,9 @@ class TestPhase8Cisco100Factory(unittest.TestCase):
 
     def test_actual_maturity_counts_are_computed(self):
         summary = self.catalog.summary()
-        self.assertEqual(summary["maturity"]["CANDIDATE"], 74)
+        self.assertEqual(summary["maturity"]["CANDIDATE"], 70)
         self.assertEqual(summary["maturity"]["RESEARCH_REQUIRED"], 25)
-        self.assertEqual(summary["maturity"]["GOLDEN"], 1)
+        self.assertEqual(summary["maturity"]["GOLDEN"], 5)
         for maturity in (
             "RESEARCHED",
             "CONTRACTED",
@@ -83,7 +83,7 @@ class TestPhase8Cisco100Factory(unittest.TestCase):
 
     def test_direct_candidate_to_golden_promotion_fails(self):
         with self.assertRaisesRegex(ValueError, "advance exactly one evidence gate"):
-            self.service.validate_promotion("C100-ENT-001", ScenarioMaturity.GOLDEN)
+            self.service.validate_promotion("C100-ENT-002", ScenarioMaturity.GOLDEN)
 
     def test_contracted_to_splunk_validated_promotion_fails(self):
         payload = json.loads(self.path.read_text(encoding="utf-8"))
@@ -145,7 +145,7 @@ class TestPhase8Cisco100Factory(unittest.TestCase):
             "test-correlated-interface-degradation",
         )
         self.assertEqual(
-            decision["delegation"], "PHASE_4_GUIDED_SCENARIO_EXPERIENCE"
+            decision["delegation"], "GUIDED_SCENARIO_EXPERIENCE"
         )
 
     def test_one_contract_set_is_reused_without_copying(self):
@@ -302,7 +302,7 @@ class TestPhase8Cisco100Factory(unittest.TestCase):
 
     def test_api_rejects_invalid_promotion(self):
         response = self.client.post(
-            "/api/cisco100/scenarios/C100-ENT-001/promotions/GOLDEN"
+            "/api/cisco100/scenarios/C100-ENT-002/promotions/GOLDEN"
         )
         self.assertEqual(response.status_code, 409)
         self.assertIn("advance exactly one evidence gate", response.json()["detail"])

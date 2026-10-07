@@ -1,0 +1,189 @@
+{
+  "catalog_version": "2026.10-phase8c",
+  "promotions": [
+    {
+      "scenario_id": "C100-ENT-001",
+      "telemetry_sources": ["cisco-ios-xe-interface-syslog"],
+      "native_transports": ["Syslog/UDP"],
+      "source_contracts": ["native-cisco-ios-xe-interface-syslog"],
+      "product_packs": ["cisco-phase8c-domain-references"],
+      "splunk_integrations": [],
+      "sourcetypes": ["netspout:cisco:iosxe:syslog"],
+      "cim_relationships": {"Network_Traffic": "NOT_ESTABLISHED"},
+      "evidence_references": ["EVID-P8C-CISCO-IOSXE-LINK-SYSLOG", "EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME"],
+      "investigation_pack": {
+        "status": "READY",
+        "recipe_ids": ["investigate-c100-ent-001-reference"],
+        "questions": ["Did the documented IOS XE link-state body reach the native receiver and Splunk?"],
+        "expected_findings": ["The interface reports down during FAILOVER and up during RECOVERY."],
+        "spl_classifications": ["NETSPOUT_SPECIFIC"]
+      },
+      "troubleshooting_pack": {
+        "status": "READY",
+        "operation_ids": ["ios-xe-show-interfaces-gigabitethernet"],
+        "research_required": []
+      },
+      "production_portability": {
+        "status": "PARTIAL",
+        "guide_id": "guide-phase8c-ios-xe-campus-link",
+        "production_portable_spl": ["index=<network_index> \"%LINK-3-UPDOWN\" | stats count by host"],
+        "netspout_specific_spl": ["index=idx_network_ops sourcetype=\"netspout:cisco:iosxe:syslog\" | stats count by netspout_phase"],
+        "requirements": ["Use Cisco-supported IOS XE logging configuration and validate the deployed Splunk parsing contract."],
+        "known_gaps": ["Official current add-on sourcetype, extractions, and CIM mapping were not established."]
+      },
+      "maturity": "GOLDEN",
+      "validation_state": "LIVE_VALIDATED",
+      "research_gaps": [],
+      "limitations": ["Only the documented LINK-3-UPDOWN body is vendor-backed; outer framing and the sourcetype are NetSpout-defined."],
+      "runtime_scenario_id": "C100-ENT-001",
+      "execution_enabled": true,
+      "shared_state": true,
+      "guided_experience": true,
+      "topology_available": true,
+      "replay_supported": true,
+      "format_validation": ["Strict declarative template validation preserves the documented message body."],
+      "runtime_validation": ["Phase 8C accepted summary: 4/4 generated records observed at the native receiver."],
+      "splunk_validation": ["Phase 8C accepted summary: 4/4 records found by authenticated source-scoped Splunk search."]
+    },
+    {
+      "scenario_id": "C100-DC-001",
+      "telemetry_sources": ["cisco-nx-os-interface-syslog"],
+      "native_transports": ["Syslog/UDP"],
+      "source_contracts": ["native-cisco-nx-os-interface-syslog"],
+      "product_packs": ["cisco-phase8c-domain-references"],
+      "splunk_integrations": [],
+      "sourcetypes": ["netspout:cisco:nxos:syslog"],
+      "cim_relationships": {"Network_Traffic": "NOT_ESTABLISHED"},
+      "evidence_references": ["EVID-P8C-CISCO-NXOS-LINK-SYSLOG", "EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME"],
+      "investigation_pack": {
+        "status": "READY",
+        "recipe_ids": ["investigate-c100-dc-001-reference"],
+        "questions": ["Did the Nexus link failure and recovery retain documented ETHPORT structures?"],
+        "expected_findings": ["The fabric interface reports IF_DOWN_LINK_FAILURE and later IF_UP in Layer3."],
+        "spl_classifications": ["NETSPOUT_SPECIFIC"]
+      },
+      "troubleshooting_pack": {
+        "status": "READY",
+        "operation_ids": ["nx-os-show-interface", "nx-os-show-logging-logfile"],
+        "research_required": []
+      },
+      "production_portability": {
+        "status": "PARTIAL",
+        "guide_id": "guide-phase8c-nx-os-fabric-link",
+        "production_portable_spl": ["index=<network_index> (\"%ETHPORT-5-IF_DOWN_LINK_FAILURE\" OR \"%ETHPORT-5-IF_UP\") | stats count by host"],
+        "netspout_specific_spl": ["index=idx_network_ops sourcetype=\"netspout:cisco:nxos:syslog\" | stats count by netspout_phase"],
+        "requirements": ["Use Cisco-supported NX-OS logging configuration and validate production field extraction."],
+        "known_gaps": ["Official current add-on sourcetype and CIM mapping were not established."]
+      },
+      "maturity": "GOLDEN",
+      "validation_state": "LIVE_VALIDATED",
+      "research_gaps": [],
+      "limitations": ["Link messages establish interface state, not application impact or root cause."],
+      "runtime_scenario_id": "C100-DC-001",
+      "execution_enabled": true,
+      "shared_state": true,
+      "guided_experience": true,
+      "topology_available": true,
+      "replay_supported": true,
+      "format_validation": ["Phase-specific templates match documented ETHPORT down and up structures."],
+      "runtime_validation": ["Phase 8C accepted summary: 4/4 generated records observed at the native receiver."],
+      "splunk_validation": ["Phase 8C accepted summary: 4/4 records found by authenticated source-scoped Splunk search."]
+    },
+    {
+      "scenario_id": "C100-SEC-001",
+      "telemetry_sources": ["cisco-asa-connection-syslog"],
+      "native_transports": ["Syslog/UDP"],
+      "source_contracts": ["native-cisco-asa-connection-syslog"],
+      "product_packs": ["cisco-phase8c-domain-references"],
+      "splunk_integrations": [],
+      "sourcetypes": ["netspout:cisco:asa:syslog"],
+      "cim_relationships": {"Network_Traffic": "NOT_ESTABLISHED"},
+      "evidence_references": ["EVID-P8C-CISCO-ASA-302013-302014", "EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME"],
+      "investigation_pack": {
+        "status": "READY",
+        "recipe_ids": ["investigate-c100-sec-001-reference"],
+        "questions": ["Did connection creation volume rise, and was a teardown observed without inferring attack intent?"],
+        "expected_findings": ["The modeled phase counts rise from baseline to FAILOVER and include a 302014 teardown in RECOVERY."],
+        "spl_classifications": ["NETSPOUT_SPECIFIC"]
+      },
+      "troubleshooting_pack": {
+        "status": "READY",
+        "operation_ids": ["asa-show-conn", "asa-show-logging"],
+        "research_required": []
+      },
+      "production_portability": {
+        "status": "PARTIAL",
+        "guide_id": "guide-phase8c-asa-connection-burst",
+        "production_portable_spl": ["index=<security_index> (\"%ASA-6-302013\" OR \"%ASA-6-302014\") | timechart count by host"],
+        "netspout_specific_spl": ["index=idx_network_ops sourcetype=\"netspout:cisco:asa:syslog\" | stats count by netspout_phase"],
+        "requirements": ["Use Cisco-supported ASA logging configuration and establish a production baseline before alerting on rate."],
+        "known_gaps": ["Official Splunk sourcetype, field extraction, CIM mapping, and attack threshold were not established."]
+      },
+      "maturity": "GOLDEN",
+      "validation_state": "LIVE_VALIDATED",
+      "research_gaps": [],
+      "limitations": ["ASA 302013 indicates connection creation, not malicious behavior; all addresses are reserved test addresses."],
+      "runtime_scenario_id": "C100-SEC-001",
+      "execution_enabled": true,
+      "shared_state": true,
+      "guided_experience": true,
+      "topology_available": true,
+      "replay_supported": true,
+      "format_validation": ["Documented 302013 and 302014 structures are selected by lifecycle phase."],
+      "runtime_validation": ["Phase 8C accepted summary: 11/11 generated records observed at the native receiver."],
+      "splunk_validation": ["Phase 8C accepted summary: 11/11 records found by authenticated source-scoped Splunk search."]
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "telemetry_sources": ["cisco-ios-xe-interface-syslog", "cisco-ios-xr-interface-syslog"],
+      "native_transports": ["Syslog/UDP"],
+      "source_contracts": ["composition-phase8c-ios-xe-ios-xr-syslog-lifecycle"],
+      "product_packs": ["cisco-phase8c-domain-references", "cisco-ios-xr-coverage"],
+      "splunk_integrations": [],
+      "sourcetypes": ["netspout:cisco:iosxe:syslog", "netspout:cisco:iosxr:syslog"],
+      "cim_relationships": {"Network_Traffic": "NOT_ESTABLISHED"},
+      "evidence_references": ["EVID-P8C-CISCO-IOSXE-LINK-SYSLOG", "EVID-CISCO-IOSXR-LINK-UPDOWN", "EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME"],
+      "investigation_pack": {
+        "status": "READY",
+        "recipe_ids": ["investigate-c100-cri-002-reference"],
+        "questions": ["Did the IOS XE operations edge and IOS XR carrier edge transition on the same ordered clock?"],
+        "expected_findings": ["Both independent source structures report the bounded link lifecycle under one run identifier."],
+        "spl_classifications": ["NETSPOUT_SPECIFIC"]
+      },
+      "troubleshooting_pack": {
+        "status": "READY",
+        "operation_ids": ["ios-xe-show-interfaces-gigabitethernet", "cisco-ios-xr-show-interfaces"],
+        "research_required": []
+      },
+      "production_portability": {
+        "status": "PARTIAL",
+        "guide_id": "guide-phase8c-correlated-operations-link",
+        "production_portable_spl": ["index=<network_index> (\"%LINK-3-UPDOWN\" OR \"%PKT_INFRA-LINK-3-UPDOWN\") | stats values(_raw) by host"],
+        "netspout_specific_spl": ["index=idx_network_ops (sourcetype=\"netspout:cisco:iosxe:syslog\" OR sourcetype=\"netspout:cisco:iosxr:syslog\") | stats count by sourcetype, netspout_phase"],
+        "requirements": ["Normalize production entities and clocks before correlating independently collected domains."],
+        "known_gaps": ["No production cross-domain correlation, official sourcetype, or CIM mapping is claimed."]
+      },
+      "maturity": "GOLDEN",
+      "validation_state": "LIVE_VALIDATED",
+      "research_gaps": [],
+      "limitations": ["Correlation is driven by a shared lab clock; it does not prove production causality."],
+      "runtime_scenario_id": "C100-CRI-002",
+      "execution_enabled": true,
+      "shared_state": true,
+      "guided_experience": true,
+      "topology_available": true,
+      "replay_supported": true,
+      "format_validation": ["Both vendor-documented message families pass their independent structural validators."],
+      "runtime_validation": ["Phase 8C accepted summary: 8/8 records across two source-native families observed at the native receiver under one shared run clock."],
+      "splunk_validation": ["Phase 8C accepted summary: 8/8 records found by independent authenticated source-scoped Splunk searches."]
+    }
+  ],
+  "shared_assets": [
+    {
+      "asset_id": "phase8c-shared-declarative-syslog-lifecycle",
+      "asset_type": "MULTI_DOMAIN_RUNTIME",
+      "scenario_ids": ["C100-ENT-001", "C100-SP-001", "C100-DC-001", "C100-SEC-001", "C100-CRI-002"],
+      "evidence_ids": ["EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME"]
+    }
+  ]
+}

@@ -1581,7 +1581,12 @@
       ],
       "investigation_recipe_ids": [
         "investigate-correlated-interface-degradation"
-      ]
+      ],
+      "execution_mode": "SHARED_STATE_LIFECYCLE",
+      "state_profile_scenario_id": "test-correlated-interface-degradation",
+      "state_entity_id": "cisco-asr9k-pe1",
+      "state_interface_id": "HundredGigE0/0/0/1",
+      "correlate_native_channels": true
     }
   ]
 }

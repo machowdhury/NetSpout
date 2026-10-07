@@ -35,6 +35,7 @@ CORE_MODULES = [
     "catalog.py",
     "catalog_contracts.py",
     "pack_contracts.py",
+    "phase8c_reference_packs.py",
     "unified_generation.py",
     "vendor_catalog.py",
     "exporter_session.py",

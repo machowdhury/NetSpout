@@ -2274,6 +2274,17 @@
 .c100-domain-strip button.is-active { color: var(--ns-accent-strong); background: var(--ns-accent-soft); border-color: var(--ns-accent); }
 .c100-domain-strip span { font-size: 9px; line-height: 1.3; }
 .c100-domain-strip strong { font: 18px var(--ns-font-mono); }
+.c100-reference-strip { display: grid; gap: 8px; padding: 12px; background: var(--ns-surface); border: 1px solid var(--ns-border); }
+.c100-reference-strip > header { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+.c100-reference-strip > header div { display: grid; gap: 3px; }
+.c100-reference-strip > header strong { font-size: 11px; }
+.c100-reference-strip > header small { max-width: 420px; color: var(--ns-text-muted); font-size: 8px; text-align: right; }
+.c100-reference-strip > div { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; }
+.c100-reference-strip button { display: grid; gap: 5px; min-width: 0; padding: 10px; color: var(--ns-text); text-align: left; background: var(--ns-surface-subtle); border: 1px solid var(--ns-border); }
+.c100-reference-strip button:hover { background: var(--ns-accent-soft); border-color: var(--ns-accent); }
+.c100-reference-strip button > span:first-child { min-height: 24px; color: var(--ns-text-muted); font-size: 8px; line-height: 1.4; }
+.c100-reference-strip button > strong { font: 10px var(--ns-font-mono); }
+.c100-reference-strip button > small { color: var(--ns-text-muted); font-size: 7px; line-height: 1.4; }
 .c100-maturity-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 1px; background: var(--ns-border); border: 1px solid var(--ns-border); }
 .c100-maturity-grid button { display: grid; min-height: 51px; place-items: center; padding: 7px 3px; color: var(--ns-text-muted); background: var(--ns-surface); border: 0; }
 .c100-maturity-grid button.is-active { color: var(--ns-accent-strong); background: var(--ns-accent-soft); box-shadow: inset 0 -3px var(--ns-accent); }
@@ -2347,6 +2358,7 @@
 
 @media (max-width: 1100px) {
   .c100-domain-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .c100-reference-strip > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .c100-maturity-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .c100-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .c100-browser { grid-template-columns: 240px minmax(0, 1fr); }
@@ -2358,6 +2370,9 @@
   .c100-detail__grid,
   .c100-debt { grid-template-columns: 1fr; }
   .c100-scenarios { max-height: 350px; border-right: 0; border-bottom: 1px solid var(--ns-border); }
+  .c100-reference-strip > header { align-items: start; flex-direction: column; }
+  .c100-reference-strip > header small { text-align: left; }
+  .c100-reference-strip > div { grid-template-columns: 1fr; }
   .c100-filters { grid-template-columns: 1fr 1fr; }
   .c100-timeline,
   .c100-production,

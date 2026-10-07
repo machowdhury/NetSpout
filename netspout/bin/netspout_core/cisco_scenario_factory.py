@@ -344,6 +344,67 @@ class ScenarioFactoryCatalog(StrictModel):
         }
 
 
+def _apply_scenario_promotions(
+    catalog_payload: Dict[str, Any], promotion_payload: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Overlay reviewed maturity evidence without rewriting the 100 definitions."""
+    promoted = {
+        item["scenario_id"]: item
+        for item in promotion_payload.get("promotions", [])
+    }
+    known_ids = {
+        item["scenario_id"] for item in catalog_payload.get("scenarios", [])
+    }
+    unknown_ids = sorted(set(promoted) - known_ids)
+    if unknown_ids:
+        raise ValueError(
+            "Phase 8C promotion references unknown scenarios: {}".format(
+                ", ".join(unknown_ids)
+            )
+        )
+    for scenario in catalog_payload.get("scenarios", []):
+        overlay = promoted.get(scenario["scenario_id"])
+        if overlay:
+            scenario.update(
+                {key: value for key, value in overlay.items() if key != "scenario_id"}
+            )
+    catalog_payload["research_queue"] = [
+        item
+        for item in catalog_payload.get("research_queue", [])
+        if item["scenario_id"] not in promoted
+    ]
+    for scenario_id, overlay in promoted.items():
+        for index, gap in enumerate(overlay.get("research_gaps", []), start=1):
+            catalog_payload["research_queue"].append(
+                {
+                    "research_id": "RQ-P8C-{}-{:02d}".format(
+                        scenario_id, index
+                    ),
+                    "scenario_id": scenario_id,
+                    "product": " / ".join(
+                        next(
+                            item["technologies"]
+                            for item in catalog_payload["scenarios"]
+                            if item["scenario_id"] == scenario_id
+                        )
+                    ),
+                    "source": "PHASE8C_CURRENT_RUN",
+                    "missing_claim": gap,
+                    "required_evidence_type": (
+                        "Guarded native receiver and authenticated Splunk evidence"
+                    ),
+                    "blocking_gate": "RUNTIME_VALIDATED",
+                    "priority": "HIGH",
+                    "status": "OPEN",
+                }
+            )
+    catalog_payload["shared_assets"].extend(
+        promotion_payload.get("shared_assets", [])
+    )
+    catalog_payload["catalog_version"] = promotion_payload["catalog_version"]
+    return catalog_payload
+
+
 class CiscoScenarioFactoryService:
     """Read, validate, filter, and trace scenario-definition dependencies."""
 
@@ -362,8 +423,19 @@ class CiscoScenarioFactoryService:
                 if packaged.is_file()
                 else root / "catalog" / "cisco_100_scenarios.json"
             )
-        with Path(catalog_path).open("r", encoding="utf-8") as handle:
-            self.catalog = ScenarioFactoryCatalog.model_validate(json.load(handle))
+        catalog_path = Path(catalog_path)
+        with catalog_path.open("r", encoding="utf-8") as handle:
+            catalog_payload = json.load(handle)
+        promotion_path = catalog_path.with_name(
+            "phase8c_scenario_promotions.json"
+        )
+        if promotion_path.is_file():
+            with promotion_path.open("r", encoding="utf-8") as handle:
+                promotion_payload = json.load(handle)
+            catalog_payload = _apply_scenario_promotions(
+                catalog_payload, promotion_payload
+            )
+        self.catalog = ScenarioFactoryCatalog.model_validate(catalog_payload)
         self._by_id = {item.scenario_id: item for item in self.catalog.scenarios}
         self._dependency_index = self._build_dependency_index()
 
@@ -527,7 +599,7 @@ class CiscoScenarioFactoryService:
         return {
             "scenario_id": scenario_id,
             "runtime_scenario_id": scenario.runtime_scenario_id,
-            "delegation": "PHASE_4_GUIDED_SCENARIO_EXPERIENCE",
+            "delegation": "GUIDED_SCENARIO_EXPERIENCE",
         }
 
     def coverage_matrix(self) -> List[Dict[str, Any]]:

@@ -1119,15 +1119,21 @@ class SnmpSplunkBridge:
         simulate_splunk_unavailable: bool = False,
     ):
         self.hec_url = hec_url or os.environ.get("NETSPOUT_HEC_URL", "https://127.0.0.1:8088/services/collector/event")
-        self.hec_token = hec_token or os.environ.get(
-            "NETSPOUT_HEC_TOKEN", "00000000-0000-0000-0000-000000000000"
+        self.hec_token = (
+            hec_token
+            or os.environ.get("NETSPOUT_HEC_TOKEN")
+            or os.environ.get("SPLUNK_HEC_TOKEN")
+            or "00000000-0000-0000-0000-000000000000"
         )
         self.rest_search_url = rest_search_url or os.environ.get(
             "NETSPOUT_REST_SEARCH_URL", os.environ.get("NETSPOUT_REST_URL", "https://127.0.0.1:8089/services/search/jobs/export")
         )
         self.rest_username = rest_username or os.environ.get("NETSPOUT_SPLUNK_USER", "admin")
-        self.rest_password = rest_password or os.environ.get(
-            "NETSPOUT_SPLUNK_PASSWORD", "SplunkPassword123!"
+        self.rest_password = (
+            rest_password
+            or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")
+            or os.environ.get("SPLUNK_PASSWORD")
+            or "SplunkPassword123!"
         )
         self.index = index
         self.simulate_splunk_unavailable = simulate_splunk_unavailable

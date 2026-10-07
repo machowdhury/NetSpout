@@ -3,6 +3,7 @@ import type { ComponentType, ReactNode } from 'react';
 import {
   Activity,
   BadgeCheck,
+  BookOpen,
   Clock3,
   Database,
   Gauge,
@@ -31,6 +32,7 @@ import { StatusBadge } from '../ui/SystemPrimitives';
 const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   activity: Activity,
   badge: BadgeCheck,
+  catalog: BookOpen,
   clock: Clock3,
   database: Database,
   home: Home,

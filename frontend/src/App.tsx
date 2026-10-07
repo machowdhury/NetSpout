@@ -21,6 +21,7 @@ import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
 import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
+import { Cisco100View } from './components/catalog/Cisco100View';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
 import { useHashRoute } from './app/useHashRoute';
@@ -731,6 +732,10 @@ export const App: React.FC = () => {
 
     if (route === '/catalog/cisco-coverage') {
       return <CiscoCoverageView />;
+    }
+
+    if (route === '/catalog/cisco-100') {
+      return <Cisco100View />;
     }
 
     if (route === '/catalog/splunk-integrations') {

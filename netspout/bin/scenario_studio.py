@@ -339,6 +339,11 @@ class StudioScenarioPack(StrictModel):
     contract_fingerprints: Dict[str, str] = Field(default_factory=dict)
     layout_hints: Dict[str, Dict[str, float]] = Field(default_factory=dict)
     cloned_from_scenario_id: Optional[str] = None
+    definition_only: bool = False
+    source_definition_id: Optional[str] = None
+    definition_contract_ids: List[str] = Field(default_factory=list)
+    definition_contract_fingerprint: Optional[str] = None
+    execution_blockers: List[str] = Field(default_factory=list)
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 
@@ -354,6 +359,22 @@ class StudioScenarioPack(StrictModel):
             )
         if self.privacy_status != PrivacyStatus.SANITIZED:
             raise ValueError("unresolved privacy findings cannot enter a scenario pack")
+        if self.definition_only:
+            if self.source_ids:
+                raise ValueError(
+                    "definition-only drafts cannot acquire executable source bindings"
+                )
+            if not self.source_definition_id or not self.execution_blockers:
+                raise ValueError(
+                    "definition-only drafts require source identity and execution blockers"
+                )
+            expected = _fingerprint(
+                json.dumps(sorted(self.definition_contract_ids), separators=(",", ":"))
+            )
+            if self.definition_contract_fingerprint != expected:
+                raise ValueError(
+                    "definition-only structural contract fingerprint changed"
+                )
         return self
 
 
@@ -1043,6 +1064,90 @@ class ScenarioStudioService:
             cloned_from_scenario_id=scenario_id,
         )
 
+    def clone_definition(self, definition: Dict[str, Any]) -> StudioScenarioPack:
+        """Create a non-executable private draft from a maturity-gated definition."""
+        scenario_id = str(definition["scenario_id"])
+        zone_labels = list(dict.fromkeys(definition.get("zones") or ["Private Lab"]))
+        zones = [
+            TopologyZone(zone_id=_slug(label), label=label)
+            for label in zone_labels
+        ]
+        default_zone = zones[0].zone_id
+        entities = [
+            StudioEntity(
+                entity_id=entity_id,
+                label=entity_id,
+                entity_type="scenario-entity",
+                zone_id=default_zone,
+            )
+            for entity_id in definition.get("entities", [])
+        ]
+        relationships = []
+        if len(entities) >= 2:
+            relationships = [
+                StudioRelationship(
+                    relationship_id="definition-relationship-{}".format(index),
+                    source_entity_id=entities[0].entity_id,
+                    target_entity_id=entities[1].entity_id,
+                    relationship_type=description,
+                )
+                for index, description in enumerate(
+                    definition.get("relationships", []), start=1
+                )
+            ]
+        baseline = [
+            StudioStateValue(
+                state_key=key,
+                entity_id=entities[0].entity_id,
+                value=value,
+            )
+            for key, value in definition.get("enterprise_state", {}).items()
+        ]
+        timeline = [
+            StudioTransition(
+                transition_id="{}-{}".format(
+                    str(item["stage"]).lower(), index
+                ),
+                stage=ScenarioStage(str(item["stage"])),
+                offset_seconds=item["offset_seconds"],
+                title=str(item["stage"]).replace("_", " ").title(),
+                state_changes=[
+                    StudioStateValue(
+                        state_key=key,
+                        entity_id=entities[0].entity_id,
+                        value=value,
+                    )
+                    for key, value in item.get("state_changes", {}).items()
+                ],
+                source_ids=[],
+            )
+            for index, item in enumerate(definition.get("timeline", []), start=1)
+        ]
+        contract_ids = sorted(definition.get("source_contracts", []))
+        return StudioScenarioPack(
+            pack_id="private-{}-definition".format(_slug(scenario_id)),
+            scenario_id="studio-{}-definition".format(_slug(scenario_id)),
+            title="{} — Private Definition".format(definition["title"]),
+            description=definition["technical_objective"],
+            story=definition["story"],
+            creation_path=CreationPath.CLONE_SCENARIO,
+            source_ids=[],
+            zones=zones,
+            entities=entities,
+            relationships=relationships,
+            baseline=baseline,
+            timeline=timeline,
+            cloned_from_scenario_id=scenario_id,
+            definition_only=True,
+            source_definition_id=scenario_id,
+            definition_contract_ids=contract_ids,
+            definition_contract_fingerprint=_fingerprint(
+                json.dumps(contract_ids, separators=(",", ":"))
+            ),
+            execution_blockers=definition.get("research_gaps")
+            or ["Executable source contracts are not established"],
+        )
+
     def validate_pack(
         self, pack: StudioScenarioPack
     ) -> StudioValidationReport:
@@ -1078,9 +1183,17 @@ class ScenarioStudioService:
 
         record(
             "sources",
-            bool(pack.source_ids)
-            and all(item in available_sources for item in pack.source_ids),
-            "Every selected source must exist in the catalog or this private pack.",
+            (
+                pack.definition_only
+                and not pack.source_ids
+                or bool(pack.source_ids)
+                and all(item in available_sources for item in pack.source_ids)
+            ),
+            (
+                "Definition-only drafts remain non-executable until source contracts mature."
+                if pack.definition_only
+                else "Every selected source must exist in the catalog or this private pack."
+            ),
         )
         record(
             "source-path-boundary",
@@ -1323,11 +1436,12 @@ class ScenarioStudioService:
                     handle.write("\n")
                     handle.flush()
                     os.fsync(handle.fileno())
-                self._register(stored)
+                if not stored.definition_only:
+                    self._register(stored)
                 try:
                     os.replace(temporary, path)
                 except Exception:
-                    if self.generation_service:
+                    if self.generation_service and not stored.definition_only:
                         self.generation_service.unregister_private_pack(
                             stored.pack_id, stored.scenario_id
                         )
@@ -1358,7 +1472,7 @@ class ScenarioStudioService:
             pack = self._packs.get(pack_id)
             if not pack:
                 return False
-            if self.generation_service:
+            if self.generation_service and not pack.definition_only:
                 self.generation_service.unregister_private_pack(
                     pack.pack_id, pack.scenario_id
                 )
@@ -1579,7 +1693,8 @@ class ScenarioStudioService:
                 payload = json.loads(path.read_text(encoding="utf-8"))
                 pack = StudioScenarioPack.model_validate(payload)
                 self._packs[pack.pack_id] = pack
-                self._register(pack)
+                if not pack.definition_only:
+                    self._register(pack)
             except Exception:
                 # A corrupt private pack must not block application startup.
                 self.load_diagnostics.append(
@@ -1969,6 +2084,9 @@ class ScenarioStudioService:
             "redistribution": pack.redistribution.value,
             "source_count": len(pack.source_ids),
             "custom_source_count": len(pack.custom_sources),
+            "definition_only": pack.definition_only,
+            "source_definition_id": pack.source_definition_id,
+            "execution_enabled": not pack.definition_only,
             "updated_at": pack.updated_at,
         }
 

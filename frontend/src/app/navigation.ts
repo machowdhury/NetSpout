@@ -28,6 +28,7 @@ export type AppRoute =
   | '/investigate/incident'
   | '/investigate/security-intelligence'
   | '/catalog/provenance'
+  | '/catalog/cisco-100'
   | '/catalog/cisco-coverage'
   | '/catalog/splunk-integrations'
   | '/system/connections';
@@ -165,6 +166,7 @@ export const NAVIGATION: NavigationGroup[] = [
   {
     label: 'Catalog',
     items: [
+      { label: 'Cisco 100', route: '/catalog/cisco-100', icon: 'catalog' },
       { label: 'Cisco Coverage', route: '/catalog/cisco-coverage', icon: 'network' },
       { label: 'Provenance', route: '/catalog/provenance', icon: 'badge' },
       {

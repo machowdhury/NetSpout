@@ -164,6 +164,11 @@ export interface StudioScenarioPack {
   contract_fingerprints: Record<string, string>;
   layout_hints: Record<string, Record<string, number>>;
   cloned_from_scenario_id: string | null;
+  definition_only?: boolean;
+  source_definition_id?: string | null;
+  definition_contract_ids?: string[];
+  definition_contract_fingerprint?: string | null;
+  execution_blockers?: string[];
   created_at: string | null;
   updated_at: string | null;
 }

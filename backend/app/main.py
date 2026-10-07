@@ -42,6 +42,7 @@ from app.scenario_studio import (
     StudioScenarioPack,
 )
 from app.vendor_coverage import VendorCoverageService
+from app.cisco_scenario_factory import CiscoScenarioFactoryService, ScenarioMaturity
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
@@ -74,6 +75,7 @@ vendor_coverage_service = VendorCoverageService(
         item["integration_id"] for item in _coverage_catalog["integrations"]
     },
 )
+cisco_scenario_factory_service = CiscoScenarioFactoryService()
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -1440,6 +1442,14 @@ def run_studio_pack(pack_id: str, payload: StudioRunRequest):
     pack = scenario_studio_service.get_pack(pack_id)
     if not pack:
         raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    if pack.definition_only:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Studio definition draft is non-executable: "
+                + "; ".join(pack.execution_blockers)
+            ),
+        )
     report = scenario_studio_service.validate_pack(pack)
     if not report.valid:
         raise HTTPException(
@@ -1667,6 +1677,80 @@ def get_cisco_coverage_product(product_id: str):
     if product is None:
         raise HTTPException(status_code=404, detail="Coverage product not found")
     return product
+
+
+@app.get("/api/cisco100")
+def get_cisco_100(
+    domain: Optional[str] = None,
+    product: Optional[str] = None,
+    technology: Optional[str] = None,
+    telemetry_source: Optional[str] = None,
+    protocol: Optional[str] = None,
+    integration: Optional[str] = None,
+    maturity: Optional[str] = None,
+    category: Optional[str] = None,
+    difficulty: Optional[str] = None,
+):
+    """Filter the evidence-gated Cisco 100 definition catalog."""
+    return cisco_scenario_factory_service.view(
+        domain=domain,
+        product=product,
+        technology=technology,
+        telemetry_source=telemetry_source,
+        protocol=protocol,
+        integration=integration,
+        maturity=maturity,
+        category=category,
+        difficulty=difficulty,
+    )
+
+
+@app.get("/api/cisco100/matrix")
+def get_cisco_100_matrix():
+    return {"rows": cisco_scenario_factory_service.coverage_matrix()}
+
+
+@app.get("/api/cisco100/dependencies/{dependency_id}")
+def get_cisco_100_dependency_impact(dependency_id: str):
+    return cisco_scenario_factory_service.affected_scenarios(dependency_id)
+
+
+@app.get("/api/cisco100/scenarios/{scenario_id}")
+def get_cisco_100_scenario(scenario_id: str):
+    result = cisco_scenario_factory_service.scenario(scenario_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    return result
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/promotions/{target}")
+def validate_cisco_100_promotion(scenario_id: str, target: ScenarioMaturity):
+    try:
+        return cisco_scenario_factory_service.validate_promotion(scenario_id, target)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/execute")
+def execute_cisco_100_scenario(scenario_id: str):
+    try:
+        return cisco_scenario_factory_service.execution_decision(scenario_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/studio-draft")
+def clone_cisco_100_definition_to_studio(scenario_id: str):
+    result = cisco_scenario_factory_service.scenario(scenario_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    return scenario_studio_service.clone_definition(result["scenario"]).model_dump(
+        mode="json"
+    )
 
 
 @app.get("/api/catalog/source-manifests")

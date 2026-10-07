@@ -169,7 +169,7 @@ function toScenario(pack: StudioScenarioPack): GenerationScenario {
     maturity: pack.maturity,
     source_count: pack.source_ids.length,
     integration_count: 0,
-    runnable: true,
+    runnable: !pack.definition_only,
   };
 }
 
@@ -199,6 +199,17 @@ export function ScenarioStudio({ experienceMode }: { experienceMode: ExperienceM
   useEffect(() => {
     // oxlint-disable-next-line react/set-state-in-effect -- synchronizes local UI with the local Studio API
     refresh().catch((reason) => setError(String(reason)));
+    const imported = window.sessionStorage.getItem('netspout-studio-import-draft');
+    if (imported) {
+      window.sessionStorage.removeItem('netspout-studio-import-draft');
+      try {
+        // oxlint-disable-next-line react/set-state-in-effect -- consumes an explicit cross-view handoff
+        setDraft(JSON.parse(imported) as StudioScenarioPack);
+        setScreen('ENVIRONMENT');
+      } catch {
+        setError('The imported scenario definition draft could not be read.');
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -661,6 +672,12 @@ export function ScenarioStudio({ experienceMode }: { experienceMode: ExperienceM
         <StudioEditorShell screen={screen} onStep={setScreen}>
           <div data-testid="studio-environment-builder">
             <StudioHeading eyebrow="ENVIRONMENT" title="Define modeled entities" detail="Addresses and labels are modeled values; contracts remain immutable." />
+            {draft.definition_only && (
+              <div className="studio-definition-blocker" role="status">
+                <strong>Catalog definition-only draft</strong>
+                <span>Modeled state and topology may be edited and saved privately. Execution remains blocked until evidence gates establish source contracts and runtime support.</span>
+              </div>
+            )}
             <div className="studio-entity-grid">
               {draft.entities.map((entity, index) => (
                 <article className="studio-entity-card" key={entity.entity_id}>
@@ -922,7 +939,13 @@ export function ScenarioStudio({ experienceMode }: { experienceMode: ExperienceM
               <StatusBadge status={saved.redistribution} />
             </div>
           )}
-          <button type="button" className="button-primary" disabled={!saved || busy} onClick={runSaved}>
+          {saved?.definition_only && (
+            <div className="studio-definition-blocker" role="status">
+              <strong>Definition-only draft — execution blocked</strong>
+              <span>{saved.execution_blockers?.join(' · ')}</span>
+            </div>
+          )}
+          <button type="button" className="button-primary" disabled={!saved || busy || saved.definition_only} onClick={runSaved}>
             Run Draft Scenario <Play />
           </button>
           {run && (

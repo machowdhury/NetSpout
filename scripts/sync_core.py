@@ -43,6 +43,7 @@ CORE_MODULES = [
     "native_runtime.py",
     "scenario_studio.py",
     "vendor_coverage.py",
+    "cisco_scenario_factory.py",
     "vendor_catalog.py",
     "exporter_session.py",
     "netflow_v9_encoder.py",

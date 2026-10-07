@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 import sys
+import tempfile
 import unittest
 import uuid
 from unittest.mock import patch
@@ -26,6 +27,7 @@ from netspout_core.native_runtime import (
     PHASES,
     PreflightResult,
 )
+from netspout_core.scenario_studio import ScenarioStudioService, StudioStateValue
 from netspout_core.unified_generation import (
     GenerationMode,
     UnifiedGenerationRequest,
@@ -306,6 +308,78 @@ class TestPhase8CMultiDomainValidation(unittest.TestCase):
             self.assertNotIn(scenario_id, source)
         for vendor_marker in ("%LINK-3-UPDOWN", "%ETHPORT-", "%ASA-"):
             self.assertNotIn(vendor_marker, source)
+
+    def test_non_enterprise_golden_studio_clone_save_reload_and_run(self):
+        with tempfile.TemporaryDirectory() as directory:
+            studio = ScenarioStudioService(
+                catalog=self.catalog,
+                generation_service=self.service,
+                storage_dir=directory,
+            )
+            draft = studio.clone_scenario("C100-DC-001")
+            fingerprints = dict(draft.contract_fingerprints)
+            changed = draft.timeline[0].model_copy(
+                update={
+                    "state_changes": [
+                        StudioStateValue(
+                            state_key="interface.status",
+                            entity_id=draft.entities[0].entity_id,
+                            value="UP",
+                        )
+                    ]
+                }
+            )
+            draft = draft.model_copy(
+                update={"timeline": [changed, *draft.timeline[1:]]}
+            )
+            saved = studio.save_pack(draft)
+            reloaded = ScenarioStudioService(
+                catalog=self.catalog,
+                generation_service=self.service,
+                storage_dir=directory,
+            )
+            loaded = reloaded.get_pack(saved.pack_id)
+            self.assertIsNotNone(loaded)
+            self.assertFalse(loaded.definition_only)
+            self.assertEqual(loaded.contract_fingerprints, fingerprints)
+            self.assertEqual(loaded.timeline[0].state_changes[0].value, "UP")
+            tampered = loaded.model_copy(
+                update={
+                    "contract_fingerprints": {
+                        **loaded.contract_fingerprints,
+                        "cisco-nx-os-interface-syslog": "tampered",
+                    }
+                }
+            )
+            self.assertFalse(reloaded.validate_pack(tampered).valid)
+            _, composition = reloaded.compile_pack(loaded)
+            binding = composition.source_bindings[0]
+            with patch.object(
+                self.service, "_check_hec", return_value=(True, "HTTP 200")
+            ), patch.object(
+                self.service,
+                "_check_splunk_search",
+                return_value=(True, "authenticated"),
+            ):
+                run = self.service.run(
+                    UnifiedGenerationRequest(
+                        mode=GenerationMode.SCENARIO,
+                        selection_id=loaded.scenario_id,
+                        transport_id=(
+                            binding.destination_transport_id
+                            or binding.transport_id
+                        ),
+                        destination_id=binding.destination_id,
+                        scenario_parameters={
+                            "seed": 73,
+                            "entity_id": loaded.entities[0].entity_id,
+                            "studio_shared_state": True,
+                        },
+                    ),
+                    self.transport,
+                )
+            self.assertEqual(run.status, "COMPLETED")
+            self.assertTrue(run.channel_results)
 
 
 if __name__ == "__main__":

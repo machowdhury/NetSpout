@@ -1748,9 +1748,17 @@ def clone_cisco_100_definition_to_studio(scenario_id: str):
     result = cisco_scenario_factory_service.scenario(scenario_id)
     if result is None:
         raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
-    return scenario_studio_service.clone_definition(result["scenario"]).model_dump(
-        mode="json"
-    )
+    definition = result["scenario"]
+    runtime_scenario_id = definition.get("runtime_scenario_id")
+    if definition.get("execution_enabled") and runtime_scenario_id:
+        try:
+            draft = scenario_studio_service.clone_scenario(runtime_scenario_id)
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error))
+        draft.cloned_from_scenario_id = scenario_id
+        draft.title = "{} — Private Clone".format(definition["title"])
+        return draft.model_dump(mode="json")
+    return scenario_studio_service.clone_definition(definition).model_dump(mode="json")
 
 
 @app.get("/api/catalog/source-manifests")

@@ -1726,6 +1726,42 @@ class ScenarioStudioService:
                 result[source_id] = _fingerprint(
                     json.dumps(contract, sort_keys=True, separators=(",", ":"))
                 )
+                continue
+            if not self.generation_service:
+                continue
+            for registry_pack in self.generation_service.registry.packs:
+                entry = next(
+                    (
+                        item
+                        for item in registry_pack.sources
+                        if item.source.source_id == source_id
+                    ),
+                    None,
+                )
+                if entry is None:
+                    continue
+                contract = {
+                    "source": entry.source.model_dump(mode="json"),
+                    "generators": [
+                        item.model_dump(mode="json")
+                        for item in registry_pack.generators
+                        if item.generator_id in entry.generator_ids
+                    ],
+                    "validators": [
+                        item.model_dump(mode="json")
+                        for item in registry_pack.validators
+                        if item.validator_id in entry.validator_ids
+                    ],
+                    "declarative_templates": [
+                        item.model_dump(mode="json")
+                        for item in registry_pack.declarative_templates
+                        if item.source_id == source_id
+                    ],
+                }
+                result[source_id] = _fingerprint(
+                    json.dumps(contract, sort_keys=True, separators=(",", ":"))
+                )
+                break
         return result
 
     def _existing_binding(self, source_id: str) -> SourceBinding:

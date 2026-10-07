@@ -275,11 +275,13 @@ function ScenarioDetail({ scenario }: { scenario: Cisco100Scenario }) {
         {canRun
           ? <a className="button button--primary" href="#/generate/scenarios">Open Guided Scenario</a>
           : <button className="button button--primary" type="button" disabled>Generation blocked at {scenario.maturity}</button>}
-        {canRun
-          ? <a className="button button--quiet" href="#/build/studio">Open Scenario Studio</a>
-          : <button className="button button--quiet" type="button" disabled={cloning} onClick={cloneDefinition}>
-              {cloning ? 'Preparing private draft…' : 'Clone definition in Scenario Studio'}
-            </button>}
+        <button className="button button--quiet" type="button" disabled={cloning} onClick={cloneDefinition}>
+          {cloning
+            ? 'Preparing private draft…'
+            : canRun
+              ? 'Clone runnable reference in Scenario Studio'
+              : 'Clone definition in Scenario Studio'}
+        </button>
       </div>
       {cloneError && <StatePanel kind="error" message={cloneError} />}
     </section>

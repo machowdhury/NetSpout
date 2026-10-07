@@ -97,3 +97,75 @@ test('shows truthful readiness for all five domain references', async ({ page })
   );
   await expect(page.getByText(/302013 indicates connection creation/i)).toBeVisible();
 });
+
+test('hands a runnable Golden reference to Scenario Studio', async ({ page }) => {
+  await page.route('**/api/cisco100', (route) =>
+    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(catalog) }));
+  await page.route('**/api/cisco100/scenarios/C100-DC-001/studio-draft', (route) =>
+    route.fulfill({ json: {
+      pack_id: 'private-c100-dc-001-clone',
+      scenario_id: 'studio-c100-dc-001-clone',
+      title: 'Nexus Fabric Uplink Degradation — Private Clone',
+      description: 'A runnable private clone.',
+      story: 'A fictional Nexus uplink degrades and recovers.',
+      creation_path: 'CLONE_SCENARIO',
+      maturity: 'DRAFT',
+      privacy_status: 'SANITIZED',
+      provenance: 'NETSPOUT-GENERATED',
+      redistribution: 'PRIVATE',
+      source_ids: ['cisco-nx-os-interface-syslog'],
+      custom_sources: [],
+      zones: [{ zone_id: 'lab', label: 'Private Lab' }],
+      entities: [{
+        entity_id: 'nexus-9000-leaf01',
+        label: 'Nexus 9000 Leaf 01',
+        entity_type: 'switch',
+        zone_id: 'lab',
+        attributes: {},
+        x: null,
+        y: null,
+      }],
+      relationships: [],
+      baseline: [],
+      timeline: [{
+        transition_id: 'baseline',
+        stage: 'BASELINE',
+        offset_seconds: 0,
+        title: 'Baseline',
+        state_changes: [],
+        source_ids: ['cisco-nx-os-interface-syslog'],
+      }],
+      parameters: [],
+      correlation_mappings: [],
+      investigations: [],
+      contract_fingerprints: { 'cisco-nx-os-interface-syslog': 'fixture-fingerprint' },
+      layout_hints: {},
+      cloned_from_scenario_id: 'C100-DC-001',
+      definition_only: false,
+      source_definition_id: null,
+      definition_contract_ids: [],
+      definition_contract_fingerprint: null,
+      execution_blockers: [],
+      created_at: null,
+      updated_at: null,
+    } }));
+  await page.route('**/api/studio', (route) =>
+    route.fulfill({ json: {
+      creation_paths: [],
+      import_notice: 'Private test workspace.',
+      sources: [],
+      scenarios: [],
+      private_packs: [],
+    } }));
+
+  await page.goto('/#/catalog/cisco-100');
+  const readiness = page.getByTestId('cisco100-reference-readiness');
+  await readiness.getByRole('button', { name: /C100-DC-001/ }).click();
+  await page.getByRole('button', {
+    name: 'Clone runnable reference in Scenario Studio',
+  }).click();
+
+  await expect(page).toHaveURL(/#\/build\/studio$/);
+  await expect(page.getByTestId('studio-environment-builder')).toBeVisible();
+  await expect(page.getByText('Catalog definition-only draft')).toHaveCount(0);
+});

@@ -274,6 +274,20 @@ class TestPhase8Cisco100Factory(unittest.TestCase):
         self.assertEqual(response.json()["source_ids"], [])
         self.assertTrue(response.json()["execution_blockers"])
 
+    def test_golden_definition_clones_its_executable_runtime_contract(self):
+        response = self.client.post(
+            "/api/cisco100/scenarios/C100-DC-001/studio-draft"
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        draft = response.json()
+        self.assertFalse(draft["definition_only"])
+        self.assertEqual(draft["cloned_from_scenario_id"], "C100-DC-001")
+        self.assertEqual(
+            draft["source_ids"], ["cisco-nx-os-interface-syslog"]
+        )
+        self.assertTrue(draft["contract_fingerprints"])
+        self.assertTrue(draft["timeline"])
+
     def test_cim_is_independent_and_not_promoted(self):
         for scenario in self.catalog.scenarios:
             self.assertNotIn(

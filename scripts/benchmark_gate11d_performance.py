@@ -13,6 +13,7 @@ import urllib.parse
 import urllib.request
 from typing import Dict, Any, List
 
+from artifact_isolation import artifact_dir
 from netspout_core.models import FlowRecord
 from netspout_core.exporter_session import ExporterSession
 from netspout_core.collector_evidence import CollectorEvidenceAdapter
@@ -151,8 +152,7 @@ def main():
         bench_results.append(res)
         time.sleep(0.5)
 
-    out_file = "docs/acceptance/gate11d_performance_benchmark.json"
-    os.makedirs(os.path.dirname(out_file), exist_ok=True)
+    out_file = artifact_dir("gate11d", "evidence") / "gate11d_performance_benchmark.json"
     with open(out_file, "w") as f:
         json.dump({
             "timestamp": time.time(),

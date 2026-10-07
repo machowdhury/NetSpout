@@ -28,6 +28,8 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 
+from artifact_isolation import artifact_dir
+
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(REPO_ROOT, "src")
 if SRC_DIR not in sys.path:
@@ -461,7 +463,7 @@ def run_e2e_verification() -> Dict[str, Any]:
     print("==========================================================================")
 
     # Save verification JSON artifact
-    out_file = os.path.join(REPO_ROOT, "docs/acceptance/gate11c_e2e_verification_results.json")
+    out_file = artifact_dir("gate11c", "evidence") / "gate11c_e2e_verification_results.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     print(f"Results written to: {out_file}\n")

@@ -1,6 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mkdir } from 'node:fs/promises';
-import path from 'node:path';
+import { artifactPath } from './artifact-paths';
 
 const source = {
   source_id: 'ietf-syslog-rfc5424',
@@ -305,10 +304,11 @@ async function installMocks(page: Page) {
   await page.route('**/health', (route) => route.fulfill({ json: { status: 'ok' } }));
 }
 
-const screenshotDir = path.resolve(process.cwd(), '../docs/implementation/images');
 const screenshot = async (page: Page, name: string) => {
-  await mkdir(screenshotDir, { recursive: true });
-  await page.screenshot({ path: path.join(screenshotDir, name), fullPage: true });
+  await page.screenshot({
+    path: artifactPath('generation-workflow', name),
+    fullPage: true,
+  });
 };
 
 test.beforeEach(async ({ page }) => {
@@ -327,7 +327,9 @@ test('supports Choose through Investigate with truthful stage distinctions', asy
   await screenshot(page, 'phase3-02-scenario-preview.png');
   await page.getByRole('button', { name: /Preview Raw Event/ }).click();
   await expect(page.getByText('edge-router.example.invalid')).toBeVisible();
-  await page.locator('[data-testid="scenario-topology"]').screenshot({ path: path.join(screenshotDir, 'phase3-03-scenario-topology.png') });
+  await page.locator('[data-testid="scenario-topology"]').screenshot({
+    path: artifactPath('generation-workflow', 'phase3-03-scenario-topology.png'),
+  });
 
   await page.getByRole('button', { name: /^Configure/ }).click();
   await screenshot(page, 'phase3-04-configure.png');

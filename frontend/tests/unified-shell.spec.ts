@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { access, mkdir } from 'node:fs/promises';
-import path from 'node:path';
+import { access } from 'node:fs/promises';
+import { artifactPath } from './artifact-paths';
 
 const evidence = [
   {
@@ -255,9 +255,10 @@ test('renders responsive navigation without replacing Phase 1 evidence', async (
   await page.goto('/#/');
   await page.setViewportSize({ width: 1440, height: 1000 });
 
-  const evidenceDir = path.resolve(process.cwd(), '../docs/implementation/images');
-  await mkdir(evidenceDir, { recursive: true });
-  const phaseOneEvidence = path.join(evidenceDir, 'phase1-unified-shell.png');
+  const phaseOneEvidence = artifactPath(
+    'unified-shell',
+    'phase1-unified-shell.png',
+  );
   await access(phaseOneEvidence).catch(async () => {
     await page.screenshot({ path: phaseOneEvidence, fullPage: true });
   });
@@ -316,10 +317,8 @@ test('captures Phase 2 catalog provenance evidence', async ({ page }) => {
   await page.getByRole('button', { name: 'Advanced', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Native Contract' })).toBeVisible();
 
-  const evidenceDir = path.resolve(process.cwd(), '../docs/implementation/images');
-  await mkdir(evidenceDir, { recursive: true });
   await page.screenshot({
-    path: path.join(evidenceDir, 'phase2-catalog-provenance.png'),
+    path: artifactPath('unified-shell', 'phase2-catalog-provenance.png'),
     fullPage: true,
   });
 });

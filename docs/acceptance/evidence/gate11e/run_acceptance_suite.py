@@ -31,8 +31,13 @@ from typing import Any, Dict, List, Optional, Tuple
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
 SRC_DIR = os.path.join(REPO_ROOT, "src")
-EVIDENCE_DIR = os.path.join(REPO_ROOT, "docs", "acceptance", "evidence", "gate11e")
-os.makedirs(EVIDENCE_DIR, exist_ok=True)
+SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
+if SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, SCRIPTS_DIR)
+
+from artifact_isolation import artifact_dir
+
+EVIDENCE_DIR = str(artifact_dir("gate11e", "evidence"))
 
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
@@ -577,6 +582,7 @@ def main():
         for binding in bindings
     )
 
+    configured_password = os.environ.get("SPLUNK_PASSWORD", "")
     security_checks = {
         "collector_user_non_root": collector_user in ("100", "100:65533", "flow"),
         "forwarder_user_non_root": forwarder_user in ("10001", "10001:10001", "netspout"),
@@ -584,7 +590,10 @@ def main():
         "no_new_privileges": any("no-new-privileges:true" in opt for opt in collector_no_new_privs),
         "loopback_binding_only": loopback_only,
         "public_destination_protection_default": not NativeFlowConfig().allow_public_export,
-        "secret_hygiene": "SplunkPassword123!" not in json.dumps(scorecard["splunk_investigation"])
+        "secret_hygiene": (
+            not configured_password
+            or configured_password not in json.dumps(scorecard["splunk_investigation"])
+        ),
     }
     scorecard["security"] = security_checks
     print(f"   Collector Non-Root: {security_checks['collector_user_non_root']} ({collector_user})")
@@ -627,7 +636,7 @@ def main():
 
     scorecard["determination"] = "PASS" if all_pass else "FAIL"
 
-    scorecard_path = os.path.join(REPO_ROOT, "docs", "acceptance", "gate11e_native_flow_scorecard.json")
+    scorecard_path = os.path.join(EVIDENCE_DIR, "gate11e_native_flow_scorecard.json")
     with open(scorecard_path, "w") as f:
         json.dump(scorecard, f, indent=2)
 

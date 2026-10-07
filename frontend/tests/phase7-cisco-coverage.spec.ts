@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { artifactPath } from './artifact-paths';
 
 const repoRoot = path.resolve(process.cwd(), '..');
-const imageDir = path.join(repoRoot, 'docs', 'implementation', 'images');
 const catalog = JSON.parse(
   fs.readFileSync(path.join(repoRoot, 'catalog', 'vendor_coverage.json'), 'utf8'),
 );
@@ -18,7 +18,7 @@ catalog.summary = {
 };
 
 async function capture(page: Page, name: string, locator?: ReturnType<Page['locator']>) {
-  const target = path.join(imageDir, name);
+  const target = artifactPath('phase7-cisco-coverage', name);
   if (locator) {
     await locator.screenshot({ path: target });
   } else {

@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
+import { artifactPath } from './artifact-paths';
 
 const repoRoot = path.resolve(process.cwd(), '..');
-const imageDir = path.join(repoRoot, 'docs', 'implementation', 'images');
 const source = JSON.parse(
   fs.readFileSync(path.join(repoRoot, 'catalog', 'cisco_100_scenarios.json'), 'utf8'),
 );
@@ -48,7 +48,10 @@ const catalog = {
 };
 
 const image = (number: number, name: string) =>
-  path.join(imageDir, `phase8-${String(number).padStart(2, '0')}-${name}.png`);
+  artifactPath(
+    'phase8-cisco100',
+    `phase8-${String(number).padStart(2, '0')}-${name}.png`,
+  );
 
 async function capture(page: Page, number: number, name: string, selector?: string) {
   if (selector) {

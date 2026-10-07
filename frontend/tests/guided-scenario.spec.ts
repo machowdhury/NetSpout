@@ -1,11 +1,11 @@
 import { expect, test, type Page } from '@playwright/test';
-import { mkdir } from 'node:fs/promises';
-import path from 'node:path';
+import { artifactPath } from './artifact-paths';
 
-const screenshotDir = path.resolve(process.cwd(), '../docs/implementation/images');
 const capture = async (page: Page, name: string) => {
-  await mkdir(screenshotDir, { recursive: true });
-  await page.screenshot({ path: path.join(screenshotDir, name), fullPage: true });
+  await page.screenshot({
+    path: artifactPath('guided-scenario', name),
+    fullPage: true,
+  });
 };
 
 const source = {
@@ -249,7 +249,9 @@ test('completes the guided scenario journey and replay', async ({ page }) => {
   await page.getByRole('button', { name: 'Start guided lab' }).click();
   await expect(page.getByRole('heading', { name: 'Understand the modeled incident' })).toBeVisible();
   await capture(page, 'phase4-02-guided-understand.png');
-  await page.locator('[data-testid="scenario-topology"]').screenshot({ path: path.join(screenshotDir, 'phase4-03-automatic-topology.png') });
+  await page.locator('[data-testid="scenario-topology"]').screenshot({
+    path: artifactPath('guided-scenario', 'phase4-03-automatic-topology.png'),
+  });
 
   await page.getByRole('button', { name: 'Prepare environment' }).click();
   await page.getByRole('button', { name: 'Run preflight' }).click();

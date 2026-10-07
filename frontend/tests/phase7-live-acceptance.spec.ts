@@ -1,12 +1,9 @@
 import { expect, test } from '@playwright/test';
-import path from 'node:path';
+import { artifactPath } from './artifact-paths';
 
 const live = process.env.NETSPOUT_PHASE7_LIVE === '1';
-const image = (name: string) => path.resolve(
-  process.cwd(),
-  '../docs/implementation/images',
-  `phase7-${name}.png`,
-);
+const image = (name: string) =>
+  artifactPath('phase7-live-acceptance', `phase7-${name}.png`);
 
 test('captures the live Docker Studio clone and completion journey', async ({ page }) => {
   test.skip(!live, 'Set NETSPOUT_PHASE7_LIVE=1 against the running Docker stack.');

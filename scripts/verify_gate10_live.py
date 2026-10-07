@@ -37,7 +37,14 @@ def execute_splunk_rest_query(query: str, max_results: int = 10) -> list:
     ctx.verify_mode = ssl.CERT_NONE
 
     import base64
-    auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+    username = os.environ.get("SPLUNK_USERNAME", "")
+    password = os.environ.get("SPLUNK_PASSWORD", "")
+    if not username or not password:
+        print("    [WARN] SPLUNK_USERNAME/SPLUNK_PASSWORD are not configured")
+        return []
+    auth_header = "Basic " + base64.b64encode(
+        f"{username}:{password}".encode("utf-8")
+    ).decode("ascii")
 
     clean_query = query.strip()
     if not clean_query.startswith("search ") and not clean_query.startswith("|"):
@@ -77,7 +84,7 @@ def main():
     transport = TelemetryTransportConfig(
         hec_enabled=True,
         hec_url="https://127.0.0.1:8888/services/collector",
-        hec_token="00000000-0000-0000-0000-000000000000",
+        hec_token=os.environ.get("SPLUNK_HEC_TOKEN", ""),
         hec_index="idx_network_ops",
         hec_metric_index="cisco_mdt_metrics",
         hec_allow_insecure_tls=True
@@ -161,7 +168,7 @@ def main():
     bad_transport = TelemetryTransportConfig(
         hec_enabled=True,
         hec_url="https://127.0.0.1:19999/services/collector",  # Unreachable port
-        hec_token="00000000-0000-0000-0000-000000000000",
+        hec_token=os.environ.get("SPLUNK_HEC_TOKEN", ""),
         hec_index="idx_network_ops",
         hec_allow_insecure_tls=True
     )

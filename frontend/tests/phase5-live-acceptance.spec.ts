@@ -1,13 +1,10 @@
-import path from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
+import { artifactPath } from './artifact-paths';
 
 const live = process.env.NETSPOUT_PHASE5_LIVE === '1';
 const healthCapture = process.env.NETSPOUT_PHASE5_HEALTH_CAPTURE;
-const image = (name: string) => path.resolve(
-  process.cwd(),
-  '../docs/implementation/images',
-  `phase5-${name}.png`,
-);
+const image = (name: string) =>
+  artifactPath('phase5-live-acceptance', `phase5-${name}.png`);
 
 async function shot(page: Page, name: string) {
   await page.screenshot({ path: image(name), fullPage: true });

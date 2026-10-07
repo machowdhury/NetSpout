@@ -16,6 +16,7 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/test-results/
 frontend/playwright-report/
+.artifacts/
 *.local
 
 # Splunk App Symlinks

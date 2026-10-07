@@ -1,6 +1,8 @@
 import { expect, test, type Page, type Route } from '@playwright/test';
+import { artifactPath } from './artifact-paths';
 
-const image = (name: string) => `../docs/implementation/images/phase6-${name}.png`;
+const image = (name: string) =>
+  artifactPath('phase6-scenario-studio', `phase6-${name}.png`);
 
 const source = {
   source_id: 'ietf-syslog-rfc5424',

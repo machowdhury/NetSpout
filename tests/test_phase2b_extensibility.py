@@ -535,8 +535,12 @@ class TestPhase2BExtensibility(unittest.TestCase):
         catalog = NetSpoutCatalog(catalog_dir=os.path.join(REPO_ROOT, "catalog"))
         self.assertEqual(catalog.get_telemetry_catalog_summary()["source_count"], 11)
         registry = catalog.get_extension_pack_registry()
-        self.assertEqual(len(registry["packs"]), 4)
-        self.assertEqual(len(registry["compositions"]), 2)
+        self.assertEqual(len(registry["packs"]), 5)
+        self.assertEqual(len(registry["compositions"]), 6)
+        self.assertIn(
+            "cisco-phase8c-domain-references",
+            {item["pack_id"] for item in registry["packs"]},
+        )
         self.assertEqual(
             registry["catalog_source_bindings"][0]["source_id"],
             "ietf-syslog-rfc5424",

@@ -186,7 +186,11 @@ class TestPhase4GuidedScenarios(unittest.TestCase):
         scenario = capabilities["scenarios"][0]
         self.assertEqual(scenario["guided_completeness"]["state"], "PARTIAL")
         self.assertEqual(scenario["guided_completeness"]["passed"], 12)
-        self.assertEqual(len(service.registry.packs), 4)
+        self.assertEqual(len(service.registry.packs), 5)
+        self.assertIn(
+            "cisco-phase8c-domain-references",
+            {item.pack_id for item in service.registry.packs},
+        )
 
     def test_12_scenario_uses_neutral_metadata_and_no_vendor_renderer_key(self):
         data = self.scenario.model_dump(mode="json")

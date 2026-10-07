@@ -77,6 +77,9 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 "ietf-netflow-v9",
                 "ietf-ipfix",
                 "openconfig-gnmi-interfaces",
+                "cisco-ios-xe-interface-syslog",
+                "cisco-nx-os-interface-syslog",
+                "cisco-asa-connection-syslog",
             },
         )
         self.assertEqual(
@@ -88,6 +91,9 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
             {
                 "netspout:rfc5424",
                 "netspout:cisco:iosxr:syslog",
+                "netspout:cisco:iosxe:syslog",
+                "netspout:cisco:nxos:syslog",
+                "netspout:cisco:asa:syslog",
                 "openconfig:gnmi:telemetry",
             },
         )

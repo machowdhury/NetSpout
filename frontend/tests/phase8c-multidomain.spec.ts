@@ -80,6 +80,7 @@ test('shows truthful readiness for all five domain references', async ({ page })
       contentType: 'application/json',
       body: JSON.stringify(catalog),
     }));
+  await page.route('**/api/generation/capabilities', () => {});
   await page.goto('/#/catalog/cisco-100');
 
   const readiness = page.getByTestId('cisco100-reference-readiness');
@@ -96,6 +97,11 @@ test('shows truthful readiness for all five domain references', async ({ page })
     'EVID-P8C-CISCO-ASA-302013-302014',
   );
   await expect(page.getByText(/302013 indicates connection creation/i)).toBeVisible();
+  await page.getByRole('button', { name: 'Open Guided Scenario' }).click();
+  await expect(page).toHaveURL(/#\/generate\/scenarios$/);
+  await expect.poll(() => page.evaluate(
+    () => window.sessionStorage.getItem('netspout-guided-scenario-id'),
+  )).toBe('C100-SEC-001');
 });
 
 test('hands a runnable Golden reference to Scenario Studio', async ({ page }) => {

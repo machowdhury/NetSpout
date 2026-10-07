@@ -147,6 +147,14 @@ function ScenarioDetail({ scenario }: { scenario: Cisco100Scenario }) {
   const visualization = useMemo(() => toVisualizationScenario(scenario), [scenario]);
   const [cloneError, setCloneError] = useState('');
   const [cloning, setCloning] = useState(false);
+  const openGuidedReference = () => {
+    if (!scenario.runtime_scenario_id) return;
+    window.sessionStorage.setItem(
+      'netspout-guided-scenario-id',
+      scenario.runtime_scenario_id,
+    );
+    window.location.hash = '/generate/scenarios';
+  };
   const cloneDefinition = async () => {
     setCloning(true);
     setCloneError('');
@@ -273,7 +281,7 @@ function ScenarioDetail({ scenario }: { scenario: Cisco100Scenario }) {
 
       <div className="c100-actions">
         {canRun
-          ? <a className="button button--primary" href="#/generate/scenarios">Open Guided Scenario</a>
+          ? <button className="button button--primary" type="button" onClick={openGuidedReference}>Open Guided Scenario</button>
           : <button className="button button--primary" type="button" disabled>Generation blocked at {scenario.maturity}</button>}
         <button className="button button--quiet" type="button" disabled={cloning} onClick={cloneDefinition}>
           {cloning

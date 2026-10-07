@@ -62,8 +62,16 @@ export function GuidedScenarioLab({ experienceMode }: { experienceMode: Experien
     generationApi.capabilities()
       .then((value) => {
         setCapabilities(value);
+        const requestedScenarioId = window.sessionStorage.getItem(
+          'netspout-guided-scenario-id',
+        );
+        window.sessionStorage.removeItem('netspout-guided-scenario-id');
         setSelectedScenarioId(
-          value.scenarios.find((item) => item.runnable)?.scenario_id ?? '',
+          value.scenarios.find(
+            (item) => item.runnable && item.scenario_id === requestedScenarioId,
+          )?.scenario_id
+          ?? value.scenarios.find((item) => item.runnable)?.scenario_id
+          ?? '',
         );
       })
       .catch((error: unknown) => setLoadError(error instanceof Error ? error.message : 'Scenario capabilities unavailable'));

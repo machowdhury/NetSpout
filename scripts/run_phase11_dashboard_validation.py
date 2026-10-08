@@ -139,6 +139,29 @@ def main() -> int:
             "run_id": run.run_id,
             "status": run.status,
             "all_required_splunk_observed": observed(run),
+            "required_sources": [
+                {
+                    "source_id": channel.source_id,
+                    "status": channel.status,
+                    "splunk_observed": any(
+                        evidence.stage == "SPLUNK_OBSERVED"
+                        and evidence.state == EvidenceState.PROVEN
+                        for evidence in channel.evidence
+                    ),
+                    "evidence": [
+                        {
+                            "stage": evidence.stage,
+                            "state": evidence.state.value,
+                            "count": evidence.count,
+                            "detail": evidence.detail,
+                        }
+                        for evidence in channel.evidence
+                    ],
+                    "errors": channel.errors,
+                }
+                for channel in run.channel_results
+                if channel.required
+            ],
             "preflight": preflight.model_dump(mode="json"),
         }
 
@@ -180,11 +203,20 @@ def main() -> int:
                 failures.append("{}: {}".format(panel.panel_id, error))
             else:
                 panel_results[panel.panel_id] = rows
+        runtime_result = runtime_results[item["runtime_scenario_id"]]
+        source_observations = {
+            source["source_id"]: bool(source.get("splunk_observed"))
+            for source in runtime_result.get("required_sources", [])
+        }
         evidence = dashboard_service.validate(
             pack,
             panel_results,
             evidence_refs=["run:{}".format(run.run_id)],
             execution_failures=failures,
+            source_coverage_validated=bool(
+                runtime_result.get("all_required_splunk_observed")
+            ),
+            source_observations=source_observations,
         )
         exported = dashboard_service.export_dashboard_studio(pack)
         dashboards.append(

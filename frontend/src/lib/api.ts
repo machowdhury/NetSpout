@@ -12,11 +12,8 @@ export function getApiBaseUrl(): string {
   const configured = configuredApiBase();
   if (configured) return configured.replace(/\/$/, '');
 
-  if (window.location.port === '8081') return window.location.origin;
   if (window.location.port === '5173') return '';
-
-  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return `${protocol}//${window.location.hostname}:8081`;
+  return window.location.origin;
 }
 
 export function apiUrl(path: string): string {

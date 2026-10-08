@@ -123,6 +123,16 @@ class TestPhase5NativeRuntime(unittest.TestCase):
             capabilities[NativeChannel.SYSLOG].destination_transport,
         )
 
+    def test_destination_credentials_accept_canonical_splunk_rest_url(self):
+        environment = dict(self.environment)
+        expected = environment.pop("NETSPOUT_REST_SEARCH_URL")
+        environment["NETSPOUT_SPLUNK_REST_URL"] = expected
+        facade = NativeRuntimeFacade(self.config, environment)
+        self.assertEqual(
+            facade._destination_credentials()["rest_search_url"],
+            expected,
+        )
+
     def test_health_does_not_promote_imports_or_configuration_to_healthy(self):
         facade = NativeRuntimeFacade(self.config, self.environment)
         health = facade.health()

@@ -1380,6 +1380,19 @@ class DashboardLiveValidationRequest(BaseModel):
     index: str = "idx_network_ops"
 
 
+class DashboardVisualValidationRequest(BaseModel):
+    run_id: str
+    evidence_ref: str
+    export_validated: bool
+    browser_rendered: bool
+    scenario_run_binding: bool
+    source_coverage_validated: bool
+    visualization_compatible: bool
+    drilldowns_tested: bool
+    inspector_tested: bool
+    responsive_tested: bool
+
+
 @app.get("/api/dashboards")
 def get_dashboard_catalog():
     return dashboard_recipe_service.catalog_summary()
@@ -1434,7 +1447,53 @@ def validate_dashboard_pack(
         panel_results,
         evidence_refs=["run:{}".format(payload.run_id)],
         execution_failures=failures,
+        source_coverage_validated=bool(
+            [channel for channel in run.channel_results if channel.required]
+        )
+        and all(
+            any(
+                item.stage == "SPLUNK_OBSERVED"
+                and getattr(item.state, "value", item.state) == "PROVEN"
+                for item in channel.evidence
+            )
+            for channel in run.channel_results
+            if channel.required
+        ),
+        source_observations={
+            channel.source_id: any(
+                item.stage == "SPLUNK_OBSERVED"
+                and getattr(item.state, "value", item.state) == "PROVEN"
+                for item in channel.evidence
+            )
+            for channel in run.channel_results
+            if channel.required
+        },
     )
+    return evidence.model_dump(mode="json")
+
+
+@app.post("/api/dashboards/{dashboard_id}/validate-visual")
+def validate_dashboard_visuals(
+    dashboard_id: str, payload: DashboardVisualValidationRequest
+):
+    try:
+        evidence = dashboard_recipe_service.mark_visual_validation(
+            dashboard_id=dashboard_id,
+            run_id=payload.run_id,
+            evidence_ref=payload.evidence_ref,
+            export_validated=payload.export_validated,
+            validation_checks={
+                "browser_rendered": payload.browser_rendered,
+                "scenario_run_binding": payload.scenario_run_binding,
+                "source_coverage_validated": payload.source_coverage_validated,
+                "visualization_compatible": payload.visualization_compatible,
+                "drilldowns_tested": payload.drilldowns_tested,
+                "inspector_tested": payload.inspector_tested,
+                "responsive_tested": payload.responsive_tested,
+            },
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
     return evidence.model_dump(mode="json")
 
 

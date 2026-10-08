@@ -188,8 +188,11 @@ class DashboardValidationEvidence(StrictModel):
     maturity: DashboardMaturity
     spl_validated: bool
     data_validated: bool
+    source_coverage_validated: Optional[bool] = None
+    source_observations: Dict[str, bool] = Field(default_factory=dict)
     visually_validated: bool = False
     export_validated: bool = False
+    visual_checks: Dict[str, bool] = Field(default_factory=dict)
     observed_fields: List[str] = Field(default_factory=list)
     panel_results: Dict[str, Dict[str, Any]] = Field(default_factory=dict)
     failures: List[str] = Field(default_factory=list)
@@ -788,6 +791,8 @@ class DashboardRecipeService:
         panel_results: Dict[str, List[Dict[str, Any]]],
         evidence_refs: Optional[List[str]] = None,
         execution_failures: Optional[List[str]] = None,
+        source_coverage_validated: Optional[bool] = None,
+        source_observations: Optional[Dict[str, bool]] = None,
     ) -> DashboardValidationEvidence:
         failures = list(execution_failures or [])
         observed_fields: Set[str] = set()
@@ -839,6 +844,8 @@ class DashboardRecipeService:
             maturity=maturity,
             spl_validated=spl_validated,
             data_validated=data_validated,
+            source_coverage_validated=source_coverage_validated,
+            source_observations=source_observations or {},
             observed_fields=sorted(observed_fields),
             panel_results=summaries,
             failures=failures,
@@ -853,7 +860,18 @@ class DashboardRecipeService:
         run_id: str,
         evidence_ref: str,
         export_validated: bool,
+        validation_checks: Optional[Dict[str, bool]] = None,
     ) -> DashboardValidationEvidence:
+        required_checks = {
+            "browser_rendered",
+            "scenario_run_binding",
+            "source_coverage_validated",
+            "visualization_compatible",
+            "drilldowns_tested",
+            "inspector_tested",
+            "responsive_tested",
+        }
+        checks = dict(validation_checks or {})
         records = [
             item
             for item in self.evidence_store.list_for(dashboard_id)
@@ -863,9 +881,44 @@ class DashboardRecipeService:
             raise ValueError("data validation is required before visual validation")
         evidence = records[-1].model_copy(deep=True)
         evidence.recorded_at = _utc_now()
-        evidence.visually_validated = True
         evidence.export_validated = export_validated
+        if evidence.source_coverage_validated is not True:
+            checks["source_coverage_validated"] = False
+        evidence.visual_checks = checks
         evidence.evidence_refs.append(evidence_ref)
+        missing_checks = sorted(required_checks - set(checks))
+        failed_checks = sorted(
+            name
+            for name in required_checks
+            if name in checks and not checks[name]
+        )
+        if missing_checks or failed_checks:
+            details = []
+            if missing_checks:
+                details.append(
+                    "missing checks: {}".format(", ".join(missing_checks))
+                )
+            if failed_checks:
+                details.append(
+                    "failed checks: {}".format(", ".join(failed_checks))
+                )
+            evidence.visually_validated = False
+            evidence.maturity = DashboardMaturity.DATA_VALIDATED
+            evidence.failures.append(
+                "visual validation incomplete ({})".format("; ".join(details))
+            )
+            self.evidence_store.save(evidence)
+            raise ValueError(
+                "visual validation evidence is incomplete ({})".format(
+                    "; ".join(details)
+                )
+            )
+        evidence.failures = [
+            failure
+            for failure in evidence.failures
+            if not failure.startswith("visual validation incomplete")
+        ]
+        evidence.visually_validated = True
         evidence.maturity = (
             DashboardMaturity.DASHBOARD_READY
             if export_validated

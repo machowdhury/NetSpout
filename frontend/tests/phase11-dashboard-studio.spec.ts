@@ -163,7 +163,8 @@ test('filters the gallery and explains research-required scenarios', async ({ pa
   await page.getByLabel('Search dashboards').fill('DNS');
   await expect(page.locator('.dashboard-card')).toHaveCount(2);
   await page.getByLabel('Search dashboards').fill('Link State');
-  await expect(page.getByTestId('dashboard-gallery').getByRole('button', { name: 'Research required' })).toBeDisabled();
+  await page.getByRole('button', { name: 'View missing evidence' }).click();
+  await expect(page.getByTestId('dashboard-research-required')).toContainText('No fallback event');
   await page.screenshot({ path: artifactPath('phase11-dashboard', '01-gallery-research-state.png'), fullPage: true });
 });
 
@@ -193,8 +194,11 @@ test('runs NOC, Engineer, Evidence, drilldown, inspector, export, and wallboard 
   await page.getByRole('tab', { name: 'EVIDENCE' }).click();
   await expect(page.getByText('evidence chain', { exact: true })).toBeVisible();
   const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export JSON' }).click();
+  await page.getByRole('button', { name: 'Export / Deploy' }).click();
+  await expect(page.getByRole('dialog', { name: 'Dashboard export and deployment preview' })).toBeVisible();
+  await page.getByRole('button', { name: 'Download JSON' }).click();
   expect((await download).suggestedFilename()).toContain('dashboard-studio.json');
+  await page.getByLabel('Close export preview').click();
 
   await page.getByRole('button', { name: 'NOC wallboard' }).click();
   await expect(page.getByRole('button', { name: 'Exit wallboard' })).toBeVisible();

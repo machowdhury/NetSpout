@@ -588,7 +588,11 @@ class NativeRuntimeFacade:
         values = {
             "hec_url": str(cfg.hec_url or ""),
             "hec_token": str(cfg.hec_token or ""),
-            "rest_search_url": self.environment.get("NETSPOUT_REST_SEARCH_URL") or self.environment.get("NETSPOUT_REST_URL", ""),
+            "rest_search_url": (
+                self.environment.get("NETSPOUT_SPLUNK_REST_URL")
+                or self.environment.get("NETSPOUT_REST_SEARCH_URL")
+                or self.environment.get("NETSPOUT_REST_URL", "")
+            ),
             "rest_username": self.environment.get("NETSPOUT_SPLUNK_USER", ""),
             "rest_password": self.environment.get("NETSPOUT_SPLUNK_PASSWORD", ""),
         }

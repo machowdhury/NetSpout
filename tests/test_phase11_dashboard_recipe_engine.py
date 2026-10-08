@@ -184,7 +184,60 @@ def test_visual_validation_requires_data_validation(service):
             "missing-run",
             "screenshot:missing",
             export_validated=True,
+            validation_checks={
+                "browser_rendered": True,
+                "scenario_run_binding": True,
+                "source_coverage_validated": True,
+                "visualization_compatible": True,
+                "drilldowns_tested": True,
+                "inspector_tested": True,
+                "responsive_tested": True,
+            },
         )
+
+
+def test_visual_validation_requires_complete_browser_evidence(service):
+    pack = service.generate(
+        "scenario-c100-ent-001",
+        run_id="phase11-visual-run",
+    )
+    panel_results = {
+        panel.panel_id: [{field: "1" for field in panel.expected_shape}]
+        for panel in pack.panels
+        if panel.executable
+    }
+    service.validate(
+        pack,
+        panel_results,
+        source_coverage_validated=True,
+    )
+    with pytest.raises(ValueError, match="visual validation evidence is incomplete"):
+        service.mark_visual_validation(
+            pack.dashboard_id,
+            pack.run_id,
+            "screenshot-manifest:incomplete",
+            export_validated=True,
+            validation_checks={"browser_rendered": True},
+        )
+
+    result = service.mark_visual_validation(
+        pack.dashboard_id,
+        pack.run_id,
+        "screenshot-manifest:phase11b",
+        export_validated=True,
+        validation_checks={
+            "browser_rendered": True,
+            "scenario_run_binding": True,
+            "source_coverage_validated": True,
+            "visualization_compatible": True,
+            "drilldowns_tested": True,
+            "inspector_tested": True,
+            "responsive_tested": True,
+        },
+    )
+    assert result.maturity == DashboardMaturity.DASHBOARD_READY
+    assert all(result.visual_checks.values())
+    assert result.failures == []
 
 
 def test_export_adapter_produces_valid_dashboard_studio_json(service):
@@ -276,6 +329,23 @@ def test_api_catalog_pack_export_and_run_binding():
         json={"run_id": "missing-run"},
     )
     assert response.status_code == 404
+
+    response = client.post(
+        "/api/dashboards/scenario-c100-ent-001/validate-visual",
+        json={
+            "run_id": "missing-run",
+            "evidence_ref": "screenshot-manifest:missing",
+            "export_validated": True,
+            "browser_rendered": True,
+            "scenario_run_binding": True,
+            "source_coverage_validated": True,
+            "visualization_compatible": True,
+            "drilldowns_tested": True,
+            "inspector_tested": True,
+            "responsive_tested": True,
+        },
+    )
+    assert response.status_code == 409
 
 
 def test_gate13e_hec_readiness_retries_connection_refusal_with_bounds():

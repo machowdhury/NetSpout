@@ -28,6 +28,11 @@ from netspout_core.phase8c_reference_packs import extend_registry
 from netspout_core.phase9_security_packs import (
     extend_registry as extend_phase9_registry,
 )
+from netspout_core.industry_packs import (
+    IndustryPackService,
+    IndustryRegistry,
+    extend_registry as extend_industry_registry,
+)
 
 
 def _find_catalog_dir() -> str:
@@ -68,6 +73,8 @@ class NetSpoutCatalog:
         self._aliases: Dict[str, Dict[str, Any]] = {}
         self._telemetry_catalog: Optional[TelemetryCatalog] = None
         self._extension_packs: Optional[PackRegistry] = None
+        self._industry_registry: Optional[IndustryRegistry] = None
+        self._industry_service: Optional[IndustryPackService] = None
 
         self._vendors_by_id: Dict[str, Dict[str, Any]] = {}
         self._sourcetypes_by_st: Dict[str, Dict[str, Any]] = {}
@@ -110,8 +117,20 @@ class NetSpoutCatalog:
             extension_registry = extend_phase9_registry(
                 extension_registry, phase9_specification
             )
+        industry_specification = _read_json("industry_packs.json")
+        if industry_specification:
+            extension_registry = extend_industry_registry(
+                extension_registry, industry_specification
+            )
         self._extension_packs = PackRegistry.model_validate(extension_registry)
         self._extension_packs.validate_against_catalog(self._telemetry_catalog)
+        if industry_specification:
+            self._industry_registry = IndustryRegistry.model_validate(
+                industry_specification
+            )
+            self._industry_service = IndustryPackService(
+                self._industry_registry, self._extension_packs
+            )
 
         # Build fast lookup indexes
         for v in self._vendors:
@@ -402,6 +421,14 @@ class NetSpoutCatalog:
     def get_extension_pack_registry(self) -> Dict[str, Any]:
         """Return validated declarative pack metadata without executing pack code."""
         return self._extension_packs.model_dump(mode="json", by_alias=True)
+
+    def get_industry_pack_service(self) -> IndustryPackService:
+        if self._industry_service is None:
+            raise ValueError("industry packs are unavailable")
+        return self._industry_service
+
+    def get_industry_catalog(self) -> Dict[str, Any]:
+        return self.get_industry_pack_service().catalog()
 
     def list_telemetry_sources(
         self,

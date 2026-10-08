@@ -17,6 +17,7 @@ import { PipelineHealthView } from './components/operations/PipelineHealthView';
 import { GenerationLab } from './components/generation/GenerationLab';
 import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
 import { ScenarioStudio } from './components/studio/ScenarioStudio';
+import { IndustryStudio } from './components/industry/IndustryStudio';
 import { HomeView } from './components/home/HomeView';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
@@ -66,6 +67,7 @@ const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
   '/generate/quick': 'generator',
   '/generate/scenarios': 'workflow',
   '/build/studio': 'advanced',
+  '/build/industry-studio': 'workflow',
   '/build/scenario-builder': 'advanced',
   '/observe/live-runs': 'workflow',
   '/observe/pipeline-health': 'operations',
@@ -744,6 +746,10 @@ export const App: React.FC = () => {
 
     if (route === '/build/studio') {
       return <ScenarioStudio experienceMode={experienceMode} />;
+    }
+
+    if (route === '/build/industry-studio') {
+      return <IndustryStudio experienceMode={experienceMode} />;
     }
 
     if (route === '/build/scenario-builder') {

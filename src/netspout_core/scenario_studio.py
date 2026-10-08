@@ -339,6 +339,9 @@ class StudioScenarioPack(StrictModel):
     definition_contract_ids: List[str] = Field(default_factory=list)
     definition_contract_fingerprint: Optional[str] = None
     execution_blockers: List[str] = Field(default_factory=list)
+    industry_id: Optional[str] = None
+    industry_environment_id: Optional[str] = None
+    business_impact_assumptions: List[str] = Field(default_factory=list)
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 

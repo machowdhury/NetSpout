@@ -20,6 +20,7 @@ export type AppRoute =
   | '/generate/quick'
   | '/generate/scenarios'
   | '/build/studio'
+  | '/build/industry-studio'
   | '/build/scenario-builder'
   | '/observe/live-runs'
   | '/observe/telemetry'
@@ -118,6 +119,11 @@ export const NAVIGATION: NavigationGroup[] = [
         label: 'Scenario Studio',
         route: '/build/studio',
         icon: 'studio',
+      },
+      {
+        label: 'Industry Studio',
+        route: '/build/industry-studio',
+        icon: 'industry',
       },
       {
         label: 'Scenario Builder',

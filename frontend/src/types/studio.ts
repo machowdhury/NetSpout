@@ -169,6 +169,9 @@ export interface StudioScenarioPack {
   definition_contract_ids?: string[];
   definition_contract_fingerprint?: string | null;
   execution_blockers?: string[];
+  industry_id?: string | null;
+  industry_environment_id?: string | null;
+  business_impact_assumptions?: string[];
   created_at: string | null;
   updated_at: string | null;
 }

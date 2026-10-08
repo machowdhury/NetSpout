@@ -41,6 +41,7 @@ from app.scenario_studio import (
     StudioRunRequest,
     StudioScenarioPack,
 )
+from app.industry_packs import IndustrySelection
 from app.vendor_coverage import VendorCoverageService
 from app.cisco_scenario_factory import CiscoScenarioFactoryService, ScenarioMaturity
 from app.graph_engine import TopologyGraph
@@ -67,6 +68,7 @@ scenario_studio_service = ScenarioStudioService(
     catalog=unified_generation_service.catalog,
     generation_service=unified_generation_service,
 )
+industry_pack_service = unified_generation_service.catalog.get_industry_pack_service()
 _coverage_catalog = unified_generation_service.catalog.get_telemetry_catalog()
 vendor_coverage_service = VendorCoverageService(
     registry=unified_generation_service.registry,
@@ -1365,6 +1367,69 @@ def investigate_unified_generation_run(run_id: str, recipe_id: str):
         raise HTTPException(status_code=404, detail="Generation run not found")
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Industry Studio & Cross-Domain Composition (Phase 10)
+# =========================================================================
+@app.get("/api/industries")
+def get_industry_catalog():
+    return industry_pack_service.catalog()
+
+
+@app.get("/api/industries/{industry_id}")
+def get_industry_pack(industry_id: str):
+    industry = industry_pack_service.get(industry_id)
+    if industry is None:
+        raise HTTPException(status_code=404, detail="Industry Pack not found")
+    return industry_pack_service.describe(industry)
+
+
+@app.post("/api/industries/compose")
+def compose_industry_scenario(payload: IndustrySelection):
+    try:
+        return industry_pack_service.compose(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/industries/{industry_id}/studio-draft")
+def clone_industry_scenario_to_studio(
+    industry_id: str, payload: IndustrySelection
+):
+    if payload.industry_id != industry_id:
+        raise HTTPException(status_code=409, detail="industry selection mismatch")
+    try:
+        composition = industry_pack_service.compose(payload)
+        industry = industry_pack_service.get(industry_id)
+        draft = scenario_studio_service.clone_scenario(composition["scenario_id"])
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    environment = next(
+        item
+        for item in industry.environments
+        if item.environment_id == payload.environment_id
+    )
+    draft.industry_id = industry_id
+    draft.industry_environment_id = environment.environment_id
+    declared_assumptions = [
+        assumption
+        for impact in industry.business_impacts
+        for assumption in impact.assumptions
+    ]
+    configured_assumptions = payload.modeled_parameters.get(
+        "impact_assumptions", []
+    )
+    draft.business_impact_assumptions = list(
+        dict.fromkeys(declared_assumptions + configured_assumptions)
+    )
+    draft.title = "{} — {} Private Clone".format(
+        industry.name, environment.name
+    )
+    for entity in draft.entities:
+        entity.attributes["industry_id"] = industry_id
+        entity.attributes["industry_environment_id"] = environment.environment_id
+    return draft.model_dump(mode="json")
 
 
 # =========================================================================

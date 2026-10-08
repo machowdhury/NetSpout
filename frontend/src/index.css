@@ -1400,6 +1400,7 @@
 .generation-stepper button.is-active > span { color: white; background: var(--ns-accent); border-color: var(--ns-accent); }
 .generation-stepper button.is-complete { color: var(--ns-success); }
 .generation-stepper button.is-complete > span { border-color: #8ec2a8; }
+.industry-studio .generation-stepper { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 
 .generation-workspace {
   display: grid;

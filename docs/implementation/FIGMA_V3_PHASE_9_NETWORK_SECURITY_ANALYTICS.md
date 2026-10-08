@@ -122,10 +122,10 @@ Validation executes the corresponding analytics against generated observations a
 
 MITRE ATT&CK is used only as a behavior taxonomy:
 
-- T1498 for network denial-of-service behavior
+- T1498.001 for direct network-flood behavior
 - T1071.004 for DNS use
 - T1046 for network service discovery
-- T1048 for alternative-protocol exfiltration behavior
+- T1048.003 for unencrypted non-C2 exfiltration behavior; the lab models indicators only
 
 ATT&CK is not used as a telemetry contract or proof that the modeled behavior succeeded.
 
@@ -240,6 +240,7 @@ Sanitization is not treated as redistribution permission. No third-party capture
 - DNS normalization is NetSpout-defined and is not interchangeable with resolver, authoritative, or security-product logs.
 - Firewall, identity, and endpoint corroboration is not present because no additional authoritative contract was required or justified.
 - Flow sampling can understate traffic. Flow evidence cannot prove availability impact, successful lateral movement, command content, compromise, attribution, or exfiltration.
+- NetFlow v9 over UDP supplies no native confidentiality, integrity, or peer authentication; Phase 9 confines it to the trusted local lab. Production IPFIX transport must follow current organizational security policy rather than the obsolete TLS/DTLS versions cited by the original RFC.
 - DNS frequency, diversity, entropy-like patterns, long labels, and NXDOMAIN rates are indicators with legitimate alternatives.
 - The existing collector phase-label limitation prevents treating flow phase labels alone as detection proof.
 

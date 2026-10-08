@@ -720,12 +720,16 @@ def _composition(reference: Dict[str, Any]) -> Dict[str, Any]:
 
 def _reference_evidence(reference: Dict[str, Any]) -> List[str]:
     mapping = {
-        "T1498": "EVID-P9-MITRE-NETWORK-DOS",
+        "T1498.001": "EVID-P9-MITRE-NETWORK-DOS",
         "T1071.004": "EVID-P9-MITRE-DNS",
         "T1046": "EVID-P9-MITRE-NETWORK-DISCOVERY",
-        "T1048": "EVID-P9-MITRE-EXFIL-ALT-PROTOCOL",
+        "T1048.003": "EVID-P9-MITRE-EXFIL-ALT-PROTOCOL",
     }
-    evidence = [RUNTIME_EVIDENCE_ID, "EVID-P9-IANA-SPECIAL-PURPOSE"]
+    evidence = [
+        RUNTIME_EVIDENCE_ID,
+        "EVID-P9-IANA-SPECIAL-PURPOSE",
+        "EVID-P9-IANA-SPECIAL-USE-DOMAINS",
+    ]
     if DNS_SOURCE_ID in reference["sources"]:
         evidence.append("EVID-P9-IETF-RFC1035")
     evidence.extend(mapping[item] for item in reference["mitre"])

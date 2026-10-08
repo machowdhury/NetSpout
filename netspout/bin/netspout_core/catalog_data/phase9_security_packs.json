@@ -13,18 +13,27 @@
     },
     {
       "evidence_id": "EVID-P9-IANA-SPECIAL-PURPOSE",
-      "title": "IPv4 Special-Purpose Address Registry and Special-Use Domain Names",
+      "title": "IPv4 Special-Purpose Address Registry",
       "publisher": "IANA",
       "reference": "https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml",
       "provenance": "STANDARD_DOCUMENTED",
       "verification_state": "VERIFIED",
-      "notes": "NetSpout uses documentation address blocks and special-use names only."
+      "notes": "NetSpout uses RFC 5737 documentation address blocks only."
+    },
+    {
+      "evidence_id": "EVID-P9-IANA-SPECIAL-USE-DOMAINS",
+      "title": "Special-Use Domain Names Registry",
+      "publisher": "IANA",
+      "reference": "https://www.iana.org/assignments/special-use-domain-names/special-use-domain-names.xhtml",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "NetSpout uses registered special-use example and invalid names only."
     },
     {
       "evidence_id": "EVID-P9-MITRE-NETWORK-DOS",
-      "title": "MITRE ATT&CK T1498 Network Denial of Service",
+      "title": "MITRE ATT&CK T1498.001 Direct Network Flood",
       "publisher": "MITRE",
-      "reference": "https://attack.mitre.org/techniques/T1498/",
+      "reference": "https://attack.mitre.org/techniques/T1498/001/",
       "provenance": "STANDARD_DOCUMENTED",
       "verification_state": "VERIFIED",
       "notes": "Behavior taxonomy only; it does not define telemetry or prove denial of service."
@@ -49,9 +58,9 @@
     },
     {
       "evidence_id": "EVID-P9-MITRE-EXFIL-ALT-PROTOCOL",
-      "title": "MITRE ATT&CK T1048 Exfiltration Over Alternative Protocol",
+      "title": "MITRE ATT&CK T1048.003 Exfiltration Over Unencrypted Non-C2 Protocol",
       "publisher": "MITRE",
-      "reference": "https://attack.mitre.org/techniques/T1048/",
+      "reference": "https://attack.mitre.org/techniques/T1048/003/",
       "provenance": "STANDARD_DOCUMENTED",
       "verification_state": "VERIFIED",
       "notes": "Behavior taxonomy only; the lab emits synthetic indicators and performs no exfiltration."
@@ -72,7 +81,7 @@
       "title": "Controlled Traffic Flood Indicators",
       "family": "TRAFFIC_FLOOD",
       "sources": ["ietf-ipfix"],
-      "mitre": ["T1498"],
+      "mitre": ["T1498.001"],
       "analytics": ["flow-rate", "destination-concentration", "byte-packet-distribution"],
       "detection_id": "detect-flow-rate-concentration",
       "objective": "Identify a bounded rise in flow rate and destination concentration without claiming service denial.",
@@ -120,7 +129,7 @@
       "title": "DNS Tunneling and Exfiltration Indicators",
       "family": "DNS_TUNNEL_INDICATORS",
       "sources": ["ietf-dns-rfc1035", "ietf-ipfix"],
-      "mitre": ["T1071.004", "T1048"],
+      "mitre": ["T1071.004", "T1048.003"],
       "analytics": ["dns-query-rate", "domain-diversity", "cross-source-temporal-correlation"],
       "detection_id": "detect-dns-subdomain-volume",
       "objective": "Identify synthetic long-subdomain and DNS-flow indicators without performing or claiming exfiltration.",

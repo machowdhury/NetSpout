@@ -129,10 +129,13 @@ def forward_to_splunk(flow: Dict[str, Any]) -> bool:
             return False
 
     flow_time = time.time()
-    if "time_flow_end_ns" in flow and flow["time_flow_end_ns"]:
-        flow_time = float(flow["time_flow_end_ns"]) / 1e9
-    elif "time_received_ns" in flow and flow["time_received_ns"]:
+    # Scenario packets may intentionally model a historical device clock.
+    # Index fresh lab telemetry at collector receipt time so bounded run
+    # searches can observe it, while preserving the device timestamp in _raw.
+    if "time_received_ns" in flow and flow["time_received_ns"]:
         flow_time = float(flow["time_received_ns"]) / 1e9
+    elif "time_flow_end_ns" in flow and flow["time_flow_end_ns"]:
+        flow_time = float(flow["time_flow_end_ns"]) / 1e9
 
     payload = {
         "time": flow_time,
@@ -168,15 +171,26 @@ def forward_to_splunk(flow: Dict[str, Any]) -> bool:
 
         try:
             with urllib.request.urlopen(req, context=ctx, timeout=4.0) as resp:
-                if resp.status == 200:
+                response_body = resp.read(4096).decode("utf-8", errors="replace")
+                try:
+                    response_payload = json.loads(response_body)
+                except json.JSONDecodeError:
+                    response_payload = {}
+                hec_code = response_payload.get("code")
+                if resp.status == 200 and hec_code == 0:
                     with STATE_LOCK:
                         STATE["flows_forwarded"] += 1
                         STATE["last_forward_timestamp"] = time.time()
                         STATE["last_error"] = None
                     return True
                 else:
-                    last_exc = f"HTTP {resp.status}"
-                    if resp.status in (400, 401, 403):
+                    last_exc = (
+                        f"HEC rejected flow: HTTP {resp.status}, "
+                        f"code={hec_code}, text={response_payload.get('text', 'unknown')}"
+                    )
+                    if resp.status in (400, 401, 403) or (
+                        hec_code is not None and hec_code != 0
+                    ):
                         # Client error: do not retry invalid auth or bad request
                         break
         except Exception as exc:

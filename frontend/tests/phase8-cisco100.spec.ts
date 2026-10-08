@@ -62,7 +62,10 @@ async function capture(page: Page, number: number, name: string, selector?: stri
 }
 
 async function selectScenario(page: Page, id: string) {
-  await page.getByRole('button', { name: new RegExp(id) }).click();
+  await page
+    .getByTestId('cisco100-scenario-list')
+    .getByRole('button', { name: new RegExp(id) })
+    .click();
   await expect(page.getByTestId('cisco100-scenario-detail')).toContainText(id);
 }
 

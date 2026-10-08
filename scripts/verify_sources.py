@@ -38,6 +38,7 @@ CORE_MODULES = [
     "phase8c_reference_packs.py",
     "phase9_security_packs.py",
     "industry_packs.py",
+    "dashboard_recipes.py",
     "security_state.py",
     "security_analytics.py",
     "dns_wire.py",

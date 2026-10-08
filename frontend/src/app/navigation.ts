@@ -23,6 +23,7 @@ export type AppRoute =
   | '/build/industry-studio'
   | '/build/scenario-builder'
   | '/observe/live-runs'
+  | '/observe/dashboards'
   | '/observe/telemetry'
   | '/observe/pipeline-health'
   | '/investigate/timeline'
@@ -137,6 +138,7 @@ export const NAVIGATION: NavigationGroup[] = [
     label: 'Observe',
     items: [
       { label: 'Live Runs', route: '/observe/live-runs', icon: 'activity' },
+      { label: 'Dashboard Studio', route: '/observe/dashboards', icon: 'dashboard' },
       {
         label: 'Telemetry Explorer',
         route: '/observe/telemetry',

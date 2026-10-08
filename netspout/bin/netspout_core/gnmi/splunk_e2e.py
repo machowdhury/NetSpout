@@ -90,10 +90,10 @@ from .vendor_profiles import (
 
 
 DEFAULT_SPLUNK_HEC_URL = "https://127.0.0.1:8088/services/collector/event"
-DEFAULT_SPLUNK_HEC_TOKEN = "00000000-0000-0000-0000-000000000000"
+DEFAULT_SPLUNK_HEC_TOKEN = ""
 DEFAULT_SPLUNK_REST_SEARCH_URL = "https://127.0.0.1:8089/services/search/jobs/export"
 DEFAULT_SPLUNK_USER = "admin"
-DEFAULT_SPLUNK_PASSWORD = "SplunkPassword123!"
+DEFAULT_SPLUNK_PASSWORD = ""
 DEFAULT_EVENT_INDEX = "idx_network_ops"
 DEFAULT_METRIC_INDEX = "cisco_mdt_metrics"
 DEFAULT_EVENT_SOURCETYPE = "netspout:gnmi:event"
@@ -657,23 +657,119 @@ class GnmiSplunkBridge:
         metric_index: str = DEFAULT_METRIC_INDEX,
         simulate_splunk_unavailable: bool = False,
         simulate_metric_store_failure: bool = False,
+        readiness_timeout_sec: Optional[float] = None,
     ) -> None:
         self.hec_url = hec_url
-        self.hec_token = hec_token or os.environ.get("NETSPOUT_HEC_TOKEN", DEFAULT_SPLUNK_HEC_TOKEN)
+        self.hec_token = (
+            hec_token
+            or os.environ.get("NETSPOUT_HEC_TOKEN")
+            or os.environ.get("SPLUNK_HEC_TOKEN")
+            or DEFAULT_SPLUNK_HEC_TOKEN
+        )
         self.rest_search_url = rest_search_url
-        self.rest_username = rest_username or os.environ.get("NETSPOUT_SPLUNK_USER", DEFAULT_SPLUNK_USER)
-        self.rest_password = rest_password or os.environ.get("NETSPOUT_SPLUNK_PASSWORD", DEFAULT_SPLUNK_PASSWORD)
+        self.rest_username = (
+            rest_username
+            or os.environ.get("NETSPOUT_SPLUNK_USER")
+            or os.environ.get("SPLUNK_USER")
+            or DEFAULT_SPLUNK_USER
+        )
+        self.rest_password = (
+            rest_password
+            or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")
+            or os.environ.get("SPLUNK_PASSWORD")
+            or DEFAULT_SPLUNK_PASSWORD
+        )
         self.event_index = event_index
         self.metric_index = metric_index
         self.simulate_splunk_unavailable = simulate_splunk_unavailable
         self.simulate_metric_store_failure = simulate_metric_store_failure
+        self.readiness_timeout_sec = (
+            float(os.environ.get("NETSPOUT_SPLUNK_READINESS_TIMEOUT_SEC", "60"))
+            if readiness_timeout_sec is None
+            else max(0.0, readiness_timeout_sec)
+        )
+        self._hec_ready = False
 
     @staticmethod
-    def _ssl_ctx() -> ssl.SSLContext:
+    def _ssl_ctx(url: Optional[str] = None) -> ssl.SSLContext:
         ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        host = urllib.parse.urlparse(url or "").hostname
+        if host in {"127.0.0.1", "localhost", "::1"}:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
         return ctx
+
+    def wait_for_hec_ready(self) -> Dict[str, Any]:
+        """Bounded HEC listener readiness with exponential backoff.
+
+        Docker's process state is not sufficient: splunkd can be running before
+        the HEC listener accepts connections. This probes the listener health
+        endpoint and never sends telemetry until it is ready.
+        """
+        if self.simulate_splunk_unavailable:
+            return {
+                "ready": False,
+                "attempts": 0,
+                "elapsed_ms": 0.0,
+                "error": "Simulated Splunk unavailability",
+            }
+        if self._hec_ready:
+            return {
+                "ready": True,
+                "attempts": 0,
+                "elapsed_ms": 0.0,
+                "error": None,
+            }
+
+        started = time.monotonic()
+        deadline = started + self.readiness_timeout_sec
+        delay = 0.25
+        attempts = 0
+        last_error = "HEC listener did not become ready"
+        event_url = self.hec_url.rstrip("/")
+        if event_url.endswith("/event"):
+            event_url = event_url[: -len("/event")]
+        health_url = "{}/health".format(event_url)
+
+        while True:
+            attempts += 1
+            request = urllib.request.Request(health_url, method="GET")
+            context = self._ssl_ctx(health_url) if health_url.startswith("https") else None
+            try:
+                with urllib.request.urlopen(
+                    request,
+                    context=context,
+                    timeout=min(3.0, max(0.25, self.readiness_timeout_sec)),
+                ) as response:
+                    payload = response.read(512).decode("utf-8", errors="replace")
+                    if response.status == 200 and "HEC is healthy" in payload:
+                        self._hec_ready = True
+                        return {
+                            "ready": True,
+                            "attempts": attempts,
+                            "elapsed_ms": round(
+                                (time.monotonic() - started) * 1000.0, 2
+                            ),
+                            "error": None,
+                        }
+                    last_error = "HEC health returned HTTP {}".format(
+                        response.status
+                    )
+            except Exception as exc:
+                last_error = "{}".format(exc)
+
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return {
+                    "ready": False,
+                    "attempts": attempts,
+                    "elapsed_ms": round(
+                        (time.monotonic() - started) * 1000.0, 2
+                    ),
+                    "error": last_error,
+                }
+            time.sleep(min(delay, remaining))
+            delay = min(delay * 2.0, 3.0)
 
     def dispatch_records(
         self,
@@ -718,7 +814,24 @@ class GnmiSplunkBridge:
                 "stage": GnmiPipelineEvidenceStage.NORMALIZED.value,
             }
 
-        ctx = self._ssl_ctx() if self.hec_url.startswith("https") else None
+        readiness = self.wait_for_hec_ready()
+        if not readiness["ready"]:
+            return {
+                "attempted": attempted,
+                "dispatched": 0,
+                "event_dispatched": 0,
+                "metric_dispatched": 0,
+                "failed": attempted,
+                "errors": [
+                    "HEC readiness failed after {} attempts: {}".format(
+                        readiness["attempts"], readiness["error"]
+                    )
+                ],
+                "elapsed_ms": round((time.perf_counter() - t0) * 1000.0, 2),
+                "stage": GnmiPipelineEvidenceStage.NORMALIZED.value,
+            }
+
+        ctx = self._ssl_ctx(self.hec_url) if self.hec_url.startswith("https") else None
 
         for i in range(0, attempted, max(1, batch_size)):
             batch = records[i : i + max(1, batch_size)]
@@ -744,14 +857,10 @@ class GnmiSplunkBridge:
                 candidate_urls.append(self.hec_url.replace(":8088", ":8888"))
             elif ":8888" in self.hec_url:
                 candidate_urls.append(self.hec_url.replace(":8888", ":8088"))
-            for u in list(candidate_urls):
-                if u.startswith("https:"):
-                    candidate_urls.append(u.replace("https:", "http:"))
-
             success = False
-            last_exc = None
+            attempt_errors = []
             for curl in candidate_urls:
-                ctx = self._ssl_ctx() if curl.startswith("https") else None
+                ctx = self._ssl_ctx(curl) if curl.startswith("https") else None
                 req = urllib.request.Request(curl, data=body, method="POST")
                 req.add_header("Authorization", f"Splunk {self.hec_token}")
                 req.add_header("Content-Type", "application/json")
@@ -769,13 +878,13 @@ class GnmiSplunkBridge:
                             success = True
                             break
                         else:
-                            last_exc = f"HEC HTTP {resp.status}"
+                            attempt_errors.append(f"{curl}: HEC HTTP {resp.status}")
                 except Exception as exc:
-                    last_exc = f"HEC dispatch exception: {exc}"
+                    attempt_errors.append(f"{curl}: {type(exc).__name__}: {exc}")
             if not success:
                 failed += len(valid_batch)
-                if last_exc:
-                    errors.append(str(last_exc))
+                if attempt_errors:
+                    errors.append("; ".join(attempt_errors))
 
         elapsed_ms = round((time.perf_counter() - t0) * 1000.0, 2)
         return {
@@ -811,19 +920,27 @@ class GnmiSplunkBridge:
                 "failed": len(payloads),
                 "errors": ["Simulated Splunk unavailability"],
             }
+        readiness = self.wait_for_hec_ready()
+        if not readiness["ready"]:
+            return {
+                "attempted": len(payloads),
+                "dispatched": 0,
+                "failed": len(payloads),
+                "errors": [
+                    "HEC readiness failed after {} attempts: {}".format(
+                        readiness["attempts"], readiness["error"]
+                    )
+                ],
+            }
         candidate_urls = [self.hec_url]
         if ":8088" in self.hec_url:
             candidate_urls.append(self.hec_url.replace(":8088", ":8888"))
         elif ":8888" in self.hec_url:
             candidate_urls.append(self.hec_url.replace(":8888", ":8088"))
-        for u in list(candidate_urls):
-            if u.startswith("https:"):
-                candidate_urls.append(u.replace("https:", "http:"))
-
         body = ("\n".join(json.dumps(p) for p in payloads) + "\n").encode("utf-8")
-        last_exc = None
+        attempt_errors = []
         for curl in candidate_urls:
-            ctx = self._ssl_ctx() if curl.startswith("https") else None
+            ctx = self._ssl_ctx(curl) if curl.startswith("https") else None
             req = urllib.request.Request(curl, data=body, method="POST")
             req.add_header("Authorization", f"Splunk {self.hec_token}")
             req.add_header("Content-Type", "application/json")
@@ -832,15 +949,15 @@ class GnmiSplunkBridge:
                     if resp.status == 200:
                         self.hec_url = curl
                         return {"attempted": len(payloads), "dispatched": len(payloads), "failed": 0, "errors": []}
-                    last_exc = f"HEC HTTP {resp.status}"
+                    attempt_errors.append(f"{curl}: HEC HTTP {resp.status}")
             except Exception as exc:
-                last_exc = str(exc)
+                attempt_errors.append(f"{curl}: {type(exc).__name__}: {exc}")
 
         return {
             "attempted": len(payloads),
             "dispatched": 0,
             "failed": len(payloads),
-            "errors": [str(last_exc)] if last_exc else [],
+            "errors": ["; ".join(attempt_errors)] if attempt_errors else [],
         }
 
     def execute_spl_search(
@@ -874,7 +991,7 @@ class GnmiSplunkBridge:
 
         auth_bytes = f"{self.rest_username}:{self.rest_password}".encode("utf-8")
         auth_header = "Basic " + base64.b64encode(auth_bytes).decode("ascii")
-        ctx = self._ssl_ctx() if self.rest_search_url.startswith("https") else None
+        ctx = self._ssl_ctx(self.rest_search_url) if self.rest_search_url.startswith("https") else None
 
         deadline = time.monotonic() + max_wait_sec
         last_results: List[Dict[str, Any]] = []
@@ -887,7 +1004,7 @@ class GnmiSplunkBridge:
 
         while time.monotonic() < deadline:
             for url in candidate_urls:
-                ctx = self._ssl_ctx() if url.startswith("https") else None
+                ctx = self._ssl_ctx(url) if url.startswith("https") else None
                 req = urllib.request.Request(url, data=data, method="POST")
                 req.add_header("Authorization", auth_header)
                 rows: List[Dict[str, Any]] = []
@@ -2748,27 +2865,18 @@ def run_gnmi_preflight_check(
     hec_ok = False
     hec_detail = ""
     health_url = hec_url.rsplit("/", 1)[0] + "/health"
-    health_candidates = [health_url]
-    if ":8088" in health_url:
-        health_candidates.append(health_url.replace(":8088", ":8888"))
-    elif ":8888" in health_url:
-        health_candidates.append(health_url.replace(":8888", ":8088"))
-
-    last_exc = None
-    for h_cand in health_candidates:
-        ctx = bridge._ssl_ctx() if h_cand.startswith("https") else None
-        try:
-            req = urllib.request.Request(h_cand, method="GET")
-            with urllib.request.urlopen(req, context=ctx, timeout=3.0) as resp:
-                if resp.status in (200, 400, 401):
-                    hec_ok = True
-                    hec_detail = f"Splunk HEC reachable at {h_cand} (HTTP {resp.status})"
-                    break
-        except Exception as exc:
-            last_exc = exc
-
+    readiness = bridge.wait_for_hec_ready()
+    hec_ok = bool(readiness["ready"])
+    if hec_ok:
+        hec_detail = (
+            "Splunk HEC ready at {} after {} bounded attempt(s)"
+        ).format(health_url, readiness["attempts"])
     if not hec_ok:
-        hec_detail = f"Splunk HEC unreachable at {health_url}: {last_exc}"
+        hec_detail = "Splunk HEC unavailable at {} after {} bounded attempt(s): {}".format(
+            health_url,
+            readiness["attempts"],
+            readiness["error"],
+        )
         remediations.append("Verify Splunk HEC is running and reachable on port 8088.")
 
     checks.append(

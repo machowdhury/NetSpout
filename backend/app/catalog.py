@@ -33,6 +33,8 @@ from netspout_core.industry_packs import (
     IndustryRegistry,
     extend_registry as extend_industry_registry,
 )
+from netspout_core.dashboard_recipes import DashboardRecipeService
+from netspout_core.cisco_scenario_factory import CiscoScenarioFactoryService
 
 
 def _find_catalog_dir() -> str:
@@ -75,6 +77,7 @@ class NetSpoutCatalog:
         self._extension_packs: Optional[PackRegistry] = None
         self._industry_registry: Optional[IndustryRegistry] = None
         self._industry_service: Optional[IndustryPackService] = None
+        self._dashboard_service: Optional[DashboardRecipeService] = None
 
         self._vendors_by_id: Dict[str, Dict[str, Any]] = {}
         self._sourcetypes_by_st: Dict[str, Dict[str, Any]] = {}
@@ -130,6 +133,15 @@ class NetSpoutCatalog:
             )
             self._industry_service = IndustryPackService(
                 self._industry_registry, self._extension_packs
+            )
+        dashboard_specification = _read_json("dashboard_recipes.json")
+        if dashboard_specification:
+            self._dashboard_service = DashboardRecipeService(
+                dashboard_specification,
+                self,
+                self._extension_packs,
+                self._industry_registry,
+                CiscoScenarioFactoryService().catalog.scenarios,
             )
 
         # Build fast lookup indexes
@@ -429,6 +441,14 @@ class NetSpoutCatalog:
 
     def get_industry_catalog(self) -> Dict[str, Any]:
         return self.get_industry_pack_service().catalog()
+
+    def get_dashboard_recipe_service(self) -> DashboardRecipeService:
+        if self._dashboard_service is None:
+            raise ValueError("dashboard recipes are unavailable")
+        return self._dashboard_service
+
+    def get_dashboard_catalog(self) -> Dict[str, Any]:
+        return self.get_dashboard_recipe_service().catalog_summary()
 
     def list_telemetry_sources(
         self,

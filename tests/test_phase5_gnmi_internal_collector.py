@@ -26,6 +26,9 @@ from netspout_core.gnmi.state_store import ScenarioStateStore
 class _HealthResponse:
     status = 200
 
+    def read(self, _limit=-1):
+        return b'{"text":"HEC is healthy","code":17}'
+
     def __enter__(self):
         return self
 

@@ -426,7 +426,7 @@ export function Cisco100View() {
             <SelectFilter label="Difficulty" value={difficulty} values={options(all.map((item) => item.difficulty))} onChange={setDifficulty} />
           </section>
           <div className="c100-browser">
-            <aside className="c100-scenarios">
+            <aside className="c100-scenarios" data-testid="cisco100-scenario-list">
               <header><Filter size={15} /><strong>{filtered.length} definitions</strong></header>
               {filtered.map((scenario) => (
                 <button type="button" key={scenario.scenario_id} className={selected?.scenario_id === scenario.scenario_id ? 'is-selected' : ''} onClick={() => setSelectedId(scenario.scenario_id)}>

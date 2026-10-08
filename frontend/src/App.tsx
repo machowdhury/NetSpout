@@ -14,6 +14,7 @@ import { SPLPlaygroundModal } from './components/SPLPlaygroundModal';
 import { UseCaseRepositoryModal } from './components/UseCaseRepositoryModal';
 import { NocSocMetricsModal } from './components/NocSocMetricsModal';
 import { PipelineHealthView } from './components/operations/PipelineHealthView';
+import { DashboardStudio } from './components/dashboard/DashboardStudio';
 import { GenerationLab } from './components/generation/GenerationLab';
 import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
 import { ScenarioStudio } from './components/studio/ScenarioStudio';
@@ -70,6 +71,7 @@ const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
   '/build/industry-studio': 'workflow',
   '/build/scenario-builder': 'advanced',
   '/observe/live-runs': 'workflow',
+  '/observe/dashboards': 'operations',
   '/observe/pipeline-health': 'operations',
 };
 
@@ -726,6 +728,10 @@ export const App: React.FC = () => {
 
     if (route === '/observe/pipeline-health') {
       return <PipelineHealthView />;
+    }
+
+    if (route === '/observe/dashboards') {
+      return <DashboardStudio />;
     }
 
     if (route === '/catalog/provenance') {

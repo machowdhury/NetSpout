@@ -2525,6 +2525,68 @@ class UnifiedGenerationService:
         except (urllib.error.URLError, TimeoutError, ssl.SSLError, ValueError) as exc:
             return 0, type(exc).__name__
 
+    def execute_bounded_spl(
+        self,
+        query: str,
+        transport_config: TelemetryTransportConfig,
+    ) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+        """Execute a generated dashboard query with strict workload boundaries."""
+
+        lowered = query.lower()
+        if (
+            "netspout_run_id" not in query
+            or "earliest=" not in lowered
+            or "latest=" not in lowered
+        ):
+            return [], "dashboard search is not run and time scoped"
+        if "| join" in lowered or len(query) > 10_000:
+            return [], "dashboard search exceeds the supported workload policy"
+        password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get(
+            "SPLUNK_PASSWORD"
+        )
+        username = (
+            os.environ.get("NETSPOUT_SPLUNK_USERNAME")
+            or os.environ.get("NETSPOUT_SPLUNK_USER")
+            or "admin"
+        )
+        if not password:
+            return [], "authenticated Splunk search is not configured"
+        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL") or os.environ.get(
+            "NETSPOUT_REST_SEARCH_URL"
+        )
+        if not endpoint:
+            endpoint = transport_config.hec_url.replace(
+                ":8088", ":8089"
+            ).replace("/services/collector", "/services/search/jobs/export")
+        auth = base64.b64encode(
+            "{}:{}".format(username, password).encode("utf-8")
+        ).decode("ascii")
+        data = urllib.parse.urlencode(
+            {"search": query, "output_mode": "json"}
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            endpoint, data=data, headers={"Authorization": "Basic " + auth}
+        )
+        rows: List[Dict[str, Any]] = []
+        try:
+            context = self._ssl_context(transport_config)
+            with urllib.request.urlopen(
+                request, timeout=8.0, context=context
+            ) as response:
+                for line in response:
+                    try:
+                        payload = json.loads(line.decode("utf-8"))
+                    except (UnicodeDecodeError, json.JSONDecodeError):
+                        continue
+                    result = payload.get("result")
+                    if isinstance(result, dict):
+                        rows.append(result)
+                    if len(rows) >= 200:
+                        break
+            return rows, None
+        except (urllib.error.URLError, TimeoutError, ssl.SSLError, ValueError) as exc:
+            return [], type(exc).__name__
+
     def _ssl_context(
         self, transport_config: TelemetryTransportConfig
     ) -> ssl.SSLContext:

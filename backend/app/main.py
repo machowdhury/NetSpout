@@ -69,6 +69,9 @@ scenario_studio_service = ScenarioStudioService(
     generation_service=unified_generation_service,
 )
 industry_pack_service = unified_generation_service.catalog.get_industry_pack_service()
+dashboard_recipe_service = (
+    unified_generation_service.catalog.get_dashboard_recipe_service()
+)
 _coverage_catalog = unified_generation_service.catalog.get_telemetry_catalog()
 vendor_coverage_service = VendorCoverageService(
     registry=unified_generation_service.registry,
@@ -1367,6 +1370,87 @@ def investigate_unified_generation_run(run_id: str, recipe_id: str):
         raise HTTPException(status_code=404, detail="Generation run not found")
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Scenario-Aware Dashboard Studio & Recipe Engine (Phase 11)
+# =========================================================================
+class DashboardLiveValidationRequest(BaseModel):
+    run_id: str
+    index: str = "idx_network_ops"
+
+
+@app.get("/api/dashboards")
+def get_dashboard_catalog():
+    return dashboard_recipe_service.catalog_summary()
+
+
+@app.get("/api/dashboards/{dashboard_id}")
+def get_dashboard_pack(
+    dashboard_id: str,
+    run_id: Optional[str] = Query(default=None),
+    index: str = Query(default="idx_network_ops"),
+):
+    try:
+        return dashboard_recipe_service.generate(
+            dashboard_id, run_id=run_id, index=index
+        ).model_dump(mode="json")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/dashboards/{dashboard_id}/validate")
+def validate_dashboard_pack(
+    dashboard_id: str, payload: DashboardLiveValidationRequest
+):
+    run = unified_generation_service.get_run(payload.run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    try:
+        pack = dashboard_recipe_service.generate(
+            dashboard_id, run_id=payload.run_id, index=payload.index
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    if pack.runtime_scenario_id != (run.scenario_id or run.selection_id):
+        raise HTTPException(
+            status_code=409,
+            detail="run does not belong to the selected dashboard scenario",
+        )
+    panel_results: Dict[str, List[Dict[str, Any]]] = {}
+    failures = []
+    for panel in pack.panels:
+        if not panel.executable or not panel.query:
+            continue
+        rows, error = unified_generation_service.execute_bounded_spl(
+            panel.query, _unified_transport_config()
+        )
+        if error:
+            failures.append("{}: {}".format(panel.panel_id, error))
+        else:
+            panel_results[panel.panel_id] = rows
+    evidence = dashboard_recipe_service.validate(
+        pack,
+        panel_results,
+        evidence_refs=["run:{}".format(payload.run_id)],
+        execution_failures=failures,
+    )
+    return evidence.model_dump(mode="json")
+
+
+@app.get("/api/dashboards/{dashboard_id}/export")
+def export_dashboard_pack(
+    dashboard_id: str,
+    run_id: Optional[str] = Query(default=None),
+    index: str = Query(default="idx_network_ops"),
+):
+    try:
+        pack = dashboard_recipe_service.generate(
+            dashboard_id, run_id=run_id, index=index
+        )
+        return dashboard_recipe_service.export_dashboard_studio(pack)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
 
 
 # =========================================================================

@@ -1,0 +1,469 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase12",
+  "recipes": [
+    {
+      "recipe_id": "dashboard-agent-activity",
+      "version": "1.0.0",
+      "family": "Agent Activity",
+      "purpose": "Summarize run-scoped synthetic agent actions and explicit outcomes.",
+      "selectors": [
+        "agentic_ai"
+      ],
+      "required_fields": [
+        "netspout_run_id",
+        "event_type",
+        "action",
+        "outcome"
+      ],
+      "optional_fields": [
+        "protocol_family",
+        "correlation_id"
+      ],
+      "visualization_ids": [
+        "splunk-column",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | stats count as events by event_type action outcome",
+      "expected_shape": {
+        "event_type": "STRING",
+        "action": "STRING",
+        "outcome": "STRING",
+        "events": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "phase",
+          "field": "outcome",
+          "semantics": "Inspect attempted, denied, blocked, modeled, and observed outcomes separately."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED",
+        "SPLUNK_OBSERVED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Run scoped",
+        "Outcome semantics preserved"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-mcp-tool-interactions",
+      "version": "1.0.0",
+      "family": "MCP Tool Interactions",
+      "purpose": "Inspect MCP protocol-shaped methods beside instrumentation outcomes.",
+      "selectors": [
+        "mcp"
+      ],
+      "required_fields": [
+        "protocol_family",
+        "protocol_method",
+        "outcome"
+      ],
+      "optional_fields": [
+        "action",
+        "correlation_id"
+      ],
+      "visualization_ids": [
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | search protocol_family=\"MCP\" | stats count by protocol_method action outcome correlation_id",
+      "expected_shape": {
+        "protocol_method": "STRING",
+        "outcome": "STRING",
+        "count": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "source",
+          "field": "protocol_method",
+          "semantics": "Inspect the official protocol subset without treating audit fields as native MCP."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Protocol and audit namespaces remain distinct"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-a2a-task-delegation",
+      "version": "1.0.0",
+      "family": "A2A Task and Delegation",
+      "purpose": "Trace synthetic A2A task lifecycle and delegation outcomes.",
+      "selectors": [
+        "a2a"
+      ],
+      "required_fields": [
+        "protocol_family",
+        "correlation_id",
+        "outcome"
+      ],
+      "optional_fields": [
+        "netspout_phase",
+        "causal_parent_id"
+      ],
+      "visualization_ids": [
+        "splunk-column",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | search protocol_family=\"A2A\" | stats count values(outcome) as outcomes by correlation_id netspout_phase",
+      "expected_shape": {
+        "correlation_id": "STRING",
+        "outcomes": "STRING_LIST",
+        "count": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "entity",
+          "field": "correlation_id",
+          "semantics": "Trace one task/delegation chain."
+        }
+      ],
+      "evidence_requirements": [
+        "SPLUNK_OBSERVED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Exchange does not imply malicious intent"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-agent-identity-authorization",
+      "version": "1.0.0",
+      "family": "Agent Identity and Authorization",
+      "purpose": "Compare stable synthetic identity and externalized policy outcomes.",
+      "selectors": [
+        "agent_identity"
+      ],
+      "required_fields": [
+        "event_type",
+        "outcome",
+        "correlation_id"
+      ],
+      "optional_fields": [
+        "action",
+        "causal_parent_id"
+      ],
+      "visualization_ids": [
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | table _time netspout_phase event_type action outcome correlation_id causal_parent_id",
+      "expected_shape": {
+        "event_type": "STRING",
+        "outcome": "STRING"
+      },
+      "drilldowns": [
+        {
+          "token": "entity",
+          "field": "correlation_id",
+          "semantics": "Retain session causality while inspecting policy evidence."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "No real identity or credential material"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-prompt-injection-investigation",
+      "version": "1.0.0",
+      "family": "Prompt Injection Investigation",
+      "purpose": "Show lower-trust content boundaries, continuation, and tool-use outcome.",
+      "selectors": [
+        "prompt_injection"
+      ],
+      "required_fields": [
+        "netspout_phase",
+        "action",
+        "outcome"
+      ],
+      "optional_fields": [
+        "protocol_method",
+        "correlation_id"
+      ],
+      "visualization_ids": [
+        "splunk-column",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | stats count by netspout_phase protocol_method action outcome",
+      "expected_shape": {
+        "netspout_phase": "STRING",
+        "outcome": "STRING",
+        "count": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "phase",
+          "field": "netspout_phase",
+          "semantics": "Inspect entry, decision, and consequence separately."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED",
+        "SPLUNK_OBSERVED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Attempt is not represented as compromise"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-policy-decision-timeline",
+      "version": "1.0.0",
+      "family": "Policy Decision Timeline",
+      "purpose": "Order requests, policy evaluations, outcomes, and downstream-action evidence.",
+      "selectors": [
+        "phase12"
+      ],
+      "required_fields": [
+        "netspout_phase",
+        "event_type",
+        "outcome",
+        "causal_parent_id"
+      ],
+      "optional_fields": [
+        "action",
+        "correlation_id"
+      ],
+      "visualization_ids": [
+        "splunk-line",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | sort 0 _time | table _time netspout_phase event_type action outcome correlation_id causal_parent_id",
+      "expected_shape": {
+        "netspout_phase": "STRING",
+        "event_type": "STRING",
+        "outcome": "STRING"
+      },
+      "drilldowns": [
+        {
+          "token": "phase",
+          "field": "outcome",
+          "semantics": "Verify policy result before inspecting any downstream action."
+        }
+      ],
+      "evidence_requirements": [
+        "SPLUNK_OBSERVED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Chronological and run scoped"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-repository-activity",
+      "version": "1.0.0",
+      "family": "Repository Activity",
+      "purpose": "Summarize synthetic repository and automation audit actions.",
+      "selectors": [
+        "repository"
+      ],
+      "required_fields": [
+        "event_type",
+        "action",
+        "outcome"
+      ],
+      "optional_fields": [
+        "correlation_id",
+        "netspout_phase"
+      ],
+      "visualization_ids": [
+        "splunk-column",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | stats count by event_type action outcome netspout_phase",
+      "expected_shape": {
+        "action": "STRING",
+        "outcome": "STRING",
+        "count": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "source",
+          "field": "action",
+          "semantics": "Inspect one synthetic repository action."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "No real repository mutation"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-ci-workflow-changes",
+      "version": "1.0.0",
+      "family": "CI Workflow Changes",
+      "purpose": "Compare synthetic workflow permission requests and policy outcomes.",
+      "selectors": [
+        "ci"
+      ],
+      "required_fields": [
+        "action",
+        "outcome",
+        "correlation_id"
+      ],
+      "optional_fields": [
+        "netspout_phase",
+        "event_type"
+      ],
+      "visualization_ids": [
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | table _time netspout_phase action outcome correlation_id",
+      "expected_shape": {
+        "action": "STRING",
+        "outcome": "STRING"
+      },
+      "drilldowns": [
+        {
+          "token": "phase",
+          "field": "outcome",
+          "semantics": "Verify denied workflow execution remains non-executed."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Review decision remains explicit"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-dependency-risk",
+      "version": "1.0.0",
+      "family": "Dependency Risk",
+      "purpose": "Investigate synthetic dependency-change policy signals without package execution.",
+      "selectors": [
+        "dependency"
+      ],
+      "required_fields": [
+        "event_type",
+        "outcome"
+      ],
+      "optional_fields": [
+        "action",
+        "correlation_id"
+      ],
+      "visualization_ids": [
+        "splunk-single-value",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | stats count as findings values(outcome) as outcomes by correlation_id",
+      "expected_shape": {
+        "findings": "NUMBER",
+        "outcomes": "STRING_LIST"
+      },
+      "drilldowns": [
+        {
+          "token": "entity",
+          "field": "correlation_id",
+          "semantics": "Inspect change, review, and build context."
+        }
+      ],
+      "evidence_requirements": [
+        "SPLUNK_OBSERVED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "No dependency downloaded or executed"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-artifact-provenance",
+      "version": "1.0.0",
+      "family": "Artifact Provenance",
+      "purpose": "Show provenance-validation outcomes and modeled deployment boundaries.",
+      "selectors": [
+        "provenance"
+      ],
+      "required_fields": [
+        "outcome",
+        "correlation_id"
+      ],
+      "optional_fields": [
+        "event_type",
+        "action",
+        "netspout_phase"
+      ],
+      "visualization_ids": [
+        "splunk-column",
+        "splunk-table"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | stats count by outcome correlation_id netspout_phase",
+      "expected_shape": {
+        "outcome": "STRING",
+        "correlation_id": "STRING",
+        "count": "NUMBER"
+      },
+      "drilldowns": [
+        {
+          "token": "phase",
+          "field": "outcome",
+          "semantics": "Distinguish missing provenance from malicious artifact evidence."
+        }
+      ],
+      "evidence_requirements": [
+        "FIELDS_VERIFIED"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Missing attestation is not malicious verdict"
+      ]
+    },
+    {
+      "recipe_id": "dashboard-phase12-causal-correlation",
+      "version": "1.0.0",
+      "family": "Cross-Domain Incident Correlation",
+      "purpose": "Trace one shared causal chain across Phase 12 and runtime entities.",
+      "selectors": [
+        "phase12_cross"
+      ],
+      "required_fields": [
+        "correlation_id",
+        "causal_parent_id",
+        "outcome"
+      ],
+      "optional_fields": [
+        "protocol_family",
+        "event_type",
+        "netspout_phase"
+      ],
+      "visualization_ids": [
+        "splunk-table",
+        "netspout-native-network-graph"
+      ],
+      "query_template": "search index=\"{index}\" {sourcetype_filter} netspout_run_id=\"{run_id}\" earliest=-15m latest=now | spath | sort 0 _time | table _time netspout_phase protocol_family event_type outcome correlation_id causal_parent_id",
+      "expected_shape": {
+        "correlation_id": "STRING",
+        "causal_parent_id": "STRING",
+        "outcome": "STRING"
+      },
+      "drilldowns": [
+        {
+          "token": "entity",
+          "field": "correlation_id",
+          "semantics": "Retain one shared run and causal graph across domains."
+        }
+      ],
+      "evidence_requirements": [
+        "SPLUNK_OBSERVED",
+        "DECLARED_ENTITY_GRAPH"
+      ],
+      "portability": "NETSPOUT_SPECIFIC",
+      "validation_requirements": [
+        "Modeled causality labeled separately from observed evidence"
+      ]
+    }
+  ]
+}

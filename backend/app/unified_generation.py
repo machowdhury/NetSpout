@@ -50,6 +50,10 @@ from netspout_core.security_state import (
     SUPPORTED_SECURITY_SCENARIOS,
     build_security_incident_plan,
 )
+from netspout_core.phase12_security_packs import (
+    phase12_generator_adapters,
+    phase12_validator_adapters,
+)
 
 
 class GenerationMode(str, Enum):
@@ -216,9 +220,11 @@ class UnifiedGenerationService:
         self.runs: Dict[str, UnifiedGenerationRun] = {}
         self._generator_adapters = {
             self.GENERATOR_ID: self._generate_rfc5424_event,
+            **phase12_generator_adapters(),
         }
         self._validator_adapters = {
             self.VALIDATOR_ID: self._validate_rfc5424,
+            **phase12_validator_adapters(),
         }
         self._native_adapter_channels = {
             "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog": NativeChannel.SYSLOG,
@@ -557,13 +563,19 @@ class UnifiedGenerationService:
         )
         preview_events = []
         if not is_native:
+            parameters = {
+                **request.scenario_parameters,
+                "_scenario_id": resolved.get("scenario_id"),
+                "_source_id": resolved["source_ids"][0],
+                "_seed": int(request.scenario_parameters.get("seed", 1200)),
+            }
             preview_events = [
                 self._generator_adapters[resolved["generator_ids"][0]](
                     run_id=run_id,
                     phase=phase,
                     ordinal=index,
                     event_family=resolved["event_family"],
-                    scenario_parameters=request.scenario_parameters,
+                    scenario_parameters=parameters,
                 )
                 for index, phase in enumerate(phases[:3])
             ]
@@ -769,6 +781,13 @@ class UnifiedGenerationService:
         dispatch_errors: List[str] = []
         phases = resolved["phases"]
         pacing = 1.0 / float(request.rate_eps)
+        seed = int(
+            request.scenario_parameters.get(
+                "seed", uuid.UUID(run_id).int % 2147483647
+            )
+        )
+        if seed < 0 or seed > 2147483647:
+            raise ValueError("seed must be between 0 and 2147483647")
 
         native_bindings = [
             item for item in resolved["bindings"] if item.get("runtime_adapter_ref")
@@ -802,11 +821,6 @@ class UnifiedGenerationService:
                         request.scenario_parameters.get("entity_id")
                         or default_entity_id
                     )
-            seed = int(
-                request.scenario_parameters.get(
-                    "seed", uuid.UUID(run_id).int % 2147483647
-                )
-            )
             correlated_results: Dict[NativeChannel, ChannelRunResult] = {}
             state_plan = None
             if execution.get("execution_mode") == "SHARED_STATE_LIFECYCLE":
@@ -883,13 +897,26 @@ class UnifiedGenerationService:
                 else "DEGRADED"
             )
         else:
+            parameters = {
+                **request.scenario_parameters,
+                "_scenario_id": resolved.get("scenario_id"),
+                "_source_id": resolved["source_ids"][0],
+                "_seed": seed,
+            }
             for index, phase in enumerate(phases):
-                event = self._generator_adapters[resolved["generator_ids"][0]](
+                generated_event = self._generator_adapters[resolved["generator_ids"][0]](
                     run_id=run_id,
                     phase=phase,
                     ordinal=index,
                     event_family=resolved["event_family"],
-                    scenario_parameters=request.scenario_parameters,
+                    scenario_parameters=parameters,
+                )
+                event = (
+                    generated_event
+                    if isinstance(generated_event, GeneratedEvent)
+                    else GeneratedEvent.model_validate(
+                        generated_event.model_dump(mode="json")
+                    )
                 )
                 generated += 1
                 events.append(event)
@@ -1050,7 +1077,7 @@ class UnifiedGenerationService:
             raise KeyError(run_id)
         if run.channel_results:
             return self._observe_native_run(run, transport_config)
-        if len(run.source_ids) == 1 and run.source_ids[0] in self._studio_search_scopes:
+        if len(run.source_ids) == 1 and run.source_ids[0] != self.SOURCE_ID:
             observed, search_error = self._search_splunk_for_source(
                 run_id, run.source_ids[0], transport_config
             )
@@ -2278,22 +2305,37 @@ class UnifiedGenerationService:
     def _to_log_entry(
         self, event: GeneratedEvent, run_id: str, scenario_id: Optional[str]
     ) -> LogEntry:
+        phase12 = event.source_id.startswith("phase12-")
         return LogEntry(
             id=event.event_id,
             timestamp=_utc_now(),
-            device_id="edge-router.example.invalid",
+            device_id=(
+                "{}.invalid".format(event.source_id)
+                if phase12
+                else "edge-router.example.invalid"
+            ),
             src_ip="192.0.2.10",
             dest_ip="192.0.2.20",
-            protocol="SYSLOG",
+            protocol="JSON_AUDIT" if phase12 else "SYSLOG",
             duration="0ms",
-            signature="NETSPOUT_MODELED_LINK_STATE",
-            node_type="router",
-            node_id="edge-router",
-            vendor="IETF",
+            signature=(
+                event.contract_id
+                if phase12
+                else "NETSPOUT_MODELED_LINK_STATE"
+            ),
+            node_type="phase12-audit-source" if phase12 else "router",
+            node_id=event.source_id if phase12 else "edge-router",
+            vendor="NetSpout" if phase12 else "IETF",
             sourcetype=event.sourcetype,
             raw_log=event.raw,
-            status="degraded" if event.phase in {"PRECURSOR", "INCIDENT", "IMPACT"} else "normal",
-            action="modeled",
+            status=(
+                "modeled-audit"
+                if phase12
+                else "degraded"
+                if event.phase in {"PRECURSOR", "INCIDENT", "IMPACT"}
+                else "normal"
+            ),
+            action="audited" if phase12 else "modeled",
             netspout_run_id=run_id,
             netspout_scenario_id=scenario_id,
             netspout_phase=event.phase,
@@ -2317,7 +2359,7 @@ class UnifiedGenerationService:
                 stage="ENCODED_PUBLISHED",
                 state=EvidenceState.PROVEN,
                 count=generated,
-                detail="RFC 5424 structural validation completed before dispatch.",
+                detail="Declared source-contract validation completed before dispatch.",
             ),
             EvidenceStageResult(
                 stage="SENT",
@@ -2373,7 +2415,7 @@ class UnifiedGenerationService:
                     else EvidenceState.FAILED
                 ),
                 count=valid,
-                detail="Local validation covers RFC 5424 structure only.",
+                detail="Local validation covers the declared source contract only.",
             ),
         ]
 

@@ -81,6 +81,9 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 "cisco-ios-xe-interface-syslog",
                 "cisco-nx-os-interface-syslog",
                 "cisco-asa-connection-syslog",
+                "phase12-agentic-audit",
+                "phase12-supply-chain-audit",
+                "phase12-cross-domain-audit",
             },
         )
         self.assertEqual(
@@ -97,6 +100,9 @@ class TestPhase3UnifiedGeneration(unittest.TestCase):
                 "netspout:cisco:asa:syslog",
                 "netspout:dns:wire",
                 "openconfig:gnmi:telemetry",
+                "netspout:phase12:agentic",
+                "netspout:phase12:supply_chain",
+                "netspout:phase12:cross_domain",
             },
         )
         self.assertGreaterEqual(len(capabilities["scenarios"]), 1)

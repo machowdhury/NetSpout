@@ -285,6 +285,9 @@ class DashboardRecipeService:
         "ietf-netflow-v9": "netflow:collector",
         "ietf-ipfix": "netflow:collector",
         "ietf-dns-rfc1035": "netspout:dns:wire",
+        "phase12-agentic-audit": "netspout:phase12:agentic",
+        "phase12-supply-chain-audit": "netspout:phase12:supply_chain",
+        "phase12-cross-domain-audit": "netspout:phase12:cross_domain",
     }
 
     def __init__(
@@ -489,6 +492,24 @@ class DashboardRecipeService:
             selectors.add("security")
         if "cross" in domain or "CROSS" in scenario_id or len(source_ids) > 1:
             selectors.add("cross_domain")
+        if scenario_id.startswith("AI-") or "agentic ai" in domain:
+            selectors.update({"phase12", "agentic_ai", "agent_identity"})
+        if scenario_id in {"AI-001", "AI-003"}:
+            selectors.add("prompt_injection")
+        if scenario_id in {"AI-001", "AI-002", "AI-003", "AI-004", "AI-006", "P12-XD-001"}:
+            selectors.add("mcp")
+        if scenario_id in {"AI-005", "AI-006"}:
+            selectors.add("a2a")
+        if scenario_id.startswith("SC-") or "supply chain" in domain:
+            selectors.update({"phase12", "supply_chain", "repository"})
+        if scenario_id == "SC-001":
+            selectors.add("dependency")
+        if scenario_id == "SC-002":
+            selectors.add("ci")
+        if scenario_id in {"SC-003", "SC-005", "P12-XD-002"}:
+            selectors.add("provenance")
+        if scenario_id.startswith("P12-XD-"):
+            selectors.update({"phase12", "phase12_cross", "cross_domain"})
         return selectors
 
     def _eligible(self, context: Dict[str, Any]) -> DashboardEligibility:

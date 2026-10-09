@@ -315,6 +315,29 @@ class StudioInvestigation(StrictModel):
     netspout_only_fields: List[str] = Field(default_factory=list)
 
 
+class StudioExecutionPolicy(StrictModel):
+    """Fail-closed limits for authored Phase 12 scenarios."""
+
+    offline_only: bool = True
+    allow_external_endpoints: bool = False
+    allow_executable_payloads: bool = False
+    max_events: int = Field(default=100, ge=1, le=100)
+    timeout_seconds: int = Field(default=30, ge=1, le=300)
+    allowed_endpoint_schemes: List[str] = Field(default_factory=lambda: ["fixture"])
+
+    @model_validator(mode="after")
+    def enforce_containment(self):
+        if (
+            not self.offline_only
+            or self.allow_external_endpoints
+            or self.allow_executable_payloads
+        ):
+            raise ValueError("Scenario Studio execution must remain offline and non-executable")
+        if any(item not in {"fixture", "memory"} for item in self.allowed_endpoint_schemes):
+            raise ValueError("only local fixture and memory endpoint schemes are allowed")
+        return self
+
+
 class StudioScenarioPack(StrictModel):
     pack_id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{2,63}$")
     scenario_id: str = Field(pattern=r"^[a-z0-9][a-z0-9-]{2,63}$")
@@ -347,6 +370,7 @@ class StudioScenarioPack(StrictModel):
     industry_id: Optional[str] = None
     industry_environment_id: Optional[str] = None
     business_impact_assumptions: List[str] = Field(default_factory=list)
+    execution_policy: StudioExecutionPolicy = Field(default_factory=StudioExecutionPolicy)
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 
@@ -426,6 +450,24 @@ _SAFE_STATE_INPUTS: Dict[str, set] = {
     },
     "ietf-netflow-v9": {"interface.utilization", "flow.intensity"},
     "ietf-ipfix": {"interface.utilization", "flow.intensity"},
+    "phase12-agentic-audit": {
+        "phase12.identity",
+        "phase12.authorization",
+        "phase12.outcome",
+        "phase12.causal_parent",
+    },
+    "phase12-supply-chain-audit": {
+        "phase12.identity",
+        "phase12.authorization",
+        "phase12.outcome",
+        "phase12.causal_parent",
+    },
+    "phase12-cross-domain-audit": {
+        "phase12.identity",
+        "phase12.authorization",
+        "phase12.outcome",
+        "phase12.causal_parent",
+    },
 }
 
 
@@ -1048,6 +1090,32 @@ class ScenarioStudioService:
             for index, item in enumerate(scenario["timeline"])
         ]
         cloned_title = "{} — Private Clone".format(scenario["title"])
+        parameter_defaults = {
+            "intensity": ("integer", 1, [], "Bounded synthetic event intensity."),
+            "policy_mode": (
+                "enum",
+                "enforce",
+                ["enforce", "audit"],
+                "Externalized synthetic policy behavior.",
+            ),
+        }
+        parameters = []
+        for item in scenario.get("parameters", []):
+            parameter_id = item["parameter_id"]
+            value_type, default, enum_values, description = parameter_defaults.get(
+                parameter_id,
+                ("string", "modeled", [], "Modeled value only."),
+            )
+            parameters.append(
+                StudioParameter(
+                    parameter_id=parameter_id,
+                    state_key="phase12.outcome",
+                    value_type=value_type,
+                    default=default,
+                    enum_values=enum_values,
+                    description=description,
+                )
+            )
         return StudioScenarioPack(
             pack_id="private-{}-clone".format(_slug(scenario_id)),
             scenario_id="studio-{}-clone".format(_slug(scenario_id)),
@@ -1061,6 +1129,7 @@ class ScenarioStudioService:
             relationships=relationships,
             baseline=[],
             timeline=timeline,
+            parameters=parameters,
             contract_fingerprints=self._contract_fingerprints(
                 scenario["source_ids"]
             ),
@@ -1344,6 +1413,38 @@ class ScenarioStudioService:
             "; ".join(parameter_errors)
             if parameter_errors
             else "Parameter defaults satisfy declared constraints.",
+        )
+        containment_errors = []
+        unsafe_key = re.compile(
+            r"(password|secret|api[_-]?key|access[_-]?token|private[_-]?key)",
+            re.IGNORECASE,
+        )
+        for entity in pack.entities:
+            for key, value in entity.attributes.items():
+                if unsafe_key.search(key):
+                    containment_errors.append(
+                        "{} attribute {} may contain credential material".format(
+                            entity.entity_id, key
+                        )
+                    )
+                if re.match(r"^(?:https?|ssh|git)://", value, re.IGNORECASE):
+                    containment_errors.append(
+                        "{} contains an external endpoint".format(entity.entity_id)
+                    )
+                if any(token in value for token in ("$(", "`", "&&", "||", "\n#!")):
+                    containment_errors.append(
+                        "{} contains executable payload syntax".format(
+                            entity.entity_id
+                        )
+                    )
+        record(
+            "execution-containment",
+            not containment_errors,
+            (
+                "; ".join(containment_errors)
+                if containment_errors
+                else "Execution remains offline, bounded, and non-executable."
+            ),
         )
         record(
             "privacy",

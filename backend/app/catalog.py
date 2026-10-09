@@ -28,6 +28,9 @@ from netspout_core.phase8c_reference_packs import extend_registry
 from netspout_core.phase9_security_packs import (
     extend_registry as extend_phase9_registry,
 )
+from netspout_core.phase12_security_packs import (
+    extend_registry as extend_phase12_registry,
+)
 from netspout_core.industry_packs import (
     IndustryPackService,
     IndustryRegistry,
@@ -125,6 +128,11 @@ class NetSpoutCatalog:
             extension_registry = extend_industry_registry(
                 extension_registry, industry_specification
             )
+        phase12_specification = _read_json("phase12_security_packs.json")
+        if phase12_specification:
+            extension_registry = extend_phase12_registry(
+                extension_registry, phase12_specification
+            )
         self._extension_packs = PackRegistry.model_validate(extension_registry)
         self._extension_packs.validate_against_catalog(self._telemetry_catalog)
         if industry_specification:
@@ -135,6 +143,16 @@ class NetSpoutCatalog:
                 self._industry_registry, self._extension_packs
             )
         dashboard_specification = _read_json("dashboard_recipes.json")
+        phase12_dashboard_specification = _read_json(
+            "phase12_dashboard_recipes.json"
+        )
+        if dashboard_specification and phase12_dashboard_specification:
+            dashboard_specification["registry_version"] = (
+                phase12_dashboard_specification["registry_version"]
+            )
+            dashboard_specification["recipes"].extend(
+                phase12_dashboard_specification["recipes"]
+            )
         if dashboard_specification:
             self._dashboard_service = DashboardRecipeService(
                 dashboard_specification,

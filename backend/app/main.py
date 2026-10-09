@@ -1683,6 +1683,11 @@ def run_studio_pack(pack_id: str, payload: StudioRunRequest):
             "entity_id": pack.entities[0].entity_id,
             "studio_shared_state": True,
             **(
+                {"reference_scenario_id": pack.cloned_from_scenario_id}
+                if pack.cloned_from_scenario_id
+                else {}
+            ),
+            **(
                 {
                     "security_profile_scenario_id": pack.cloned_from_scenario_id,
                 }

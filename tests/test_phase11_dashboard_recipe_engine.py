@@ -40,6 +40,11 @@ INDUSTRIES = {
     "healthcare",
     "manufacturing",
 }
+PHASE12 = {
+    "AI-001", "AI-002", "AI-003", "AI-004", "AI-005", "AI-006",
+    "SC-001", "SC-002", "SC-003", "SC-004", "SC-005",
+    "P12-XD-001", "P12-XD-002",
+}
 
 
 @pytest.fixture()
@@ -60,19 +65,20 @@ def service():
 
 
 def test_registry_has_reusable_recipe_and_visualization_depth(service):
-    assert 15 <= len(service.registry.recipes) <= 25
-    assert len(service.registry.recipes) == 19
+    assert 25 <= len(service.registry.recipes) <= 35
+    assert len(service.registry.recipes) == 30
     assert len(service.registry.visualizations) == 11
     assert len({item.family for item in service.registry.recipes}) >= 12
 
 
 def test_generic_eligibility_discovers_all_required_references(service):
     catalog = service.catalog_summary()
-    assert len(catalog["dashboards"]) == 16
-    assert catalog["eligible_count"] == 14
+    assert len(catalog["dashboards"]) == 29
+    assert catalog["eligible_count"] == 27
     eligible = [item for item in catalog["dashboards"] if item["state"] == "ELIGIBLE"]
     assert GOLDEN <= {item["scenario_id"] for item in eligible}
     assert SECURITY <= {item["scenario_id"] for item in eligible}
+    assert PHASE12 <= {item["scenario_id"] for item in eligible}
     assert INDUSTRIES == {
         item["industry_id"] for item in eligible if item["industry_id"]
     }
@@ -304,7 +310,7 @@ def test_api_catalog_pack_export_and_run_binding():
     client = TestClient(app)
     response = client.get("/api/dashboards")
     assert response.status_code == 200
-    assert response.json()["eligible_count"] == 14
+    assert response.json()["eligible_count"] == 27
 
     response = client.get(
         "/api/dashboards/scenario-c100-ent-001",

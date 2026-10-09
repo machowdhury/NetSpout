@@ -49,7 +49,7 @@ require([
 
   var defaultCfg = {
     hec_url: "https://127.0.0.1:8888/services/collector",
-    hec_token: "00000000-0000-0000-0000-000000000000",
+    hec_token: "",
     ssl_verify: false,
     target_eps: 1000,
     default_scenario: "scenario_custom_multivendor_enterprise_stack.yml",

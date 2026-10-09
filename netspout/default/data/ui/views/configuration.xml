@@ -48,7 +48,7 @@
                   HEC Authorization Token <span style="color: #ef4444;">*</span>
                 </label>
                 <div style="display: flex; gap: 6px;">
-                  <input type="password" id="cfg-hec-token" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="00000000-0000-0000-0000-000000000000" />
+                  <input type="password" id="cfg-hec-token" autocomplete="off" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="" />
                   <button type="button" id="btn-toggle-token" style="background: #334155; border: 1px solid #475569; color: #cbd5e1; border-radius: 4px; padding: 0 12px; font-size: 11px; cursor: pointer;">
                     Show
                   </button>

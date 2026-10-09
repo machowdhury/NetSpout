@@ -57,7 +57,7 @@ export const LogTerminal: React.FC<LogTerminalProps> = ({
 
     return (
       <div
-        key={`${entry.timestamp}-${Math.random()}`}
+        key={`${entry.timestamp}-${entry.device_id}-${entry.raw_log}`}
         className={`py-1.5 px-2.5 font-mono text-[11px] leading-relaxed border-b border-slate-900/60 hover:bg-slate-900/80 transition-colors flex items-start gap-2.5 ${
           isBreached
             ? 'bg-rose-950/20 text-rose-200 border-l-2 border-l-rose-500'

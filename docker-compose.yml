@@ -13,31 +13,33 @@ services:
       - SPLUNK_START_ARGS=--accept-license
       - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
       - SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?Set SPLUNK_PASSWORD before starting NetSpout}
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting NetSpout}
       - SPLUNK_HEC_PORT=8088
       - SPLUNK_ROLE=splunk_standalone
-      - SPLUNK_HOME_OWNERSHIP_ENFORCEMENT=false
       - FAST_SIMULATION_PORT=8081
       - SPLUNK_HEC_URL=https://splunk-netspout:8088/services/collector
       - OTEL_ENDPOINT=http://otel-collector:4318
       - NETSPOUT_COLLECTOR_HOST=netspout-flow-collector
       - NETSPOUT_GOFLOW_METRICS_URL=http://netspout-flow-collector:8080/metrics
       - NETSPOUT_FLOW_FORWARDER_STATUS_URL=http://netspout-flow-forwarder:8082
+      - NETSPOUT_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting NetSpout}
       - NETSPOUT_REST_SEARCH_URL=https://splunk-netspout:8089/services/search/jobs/export
       - NETSPOUT_SPLUNK_USER=admin
       - NETSPOUT_SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?Set SPLUNK_PASSWORD before starting NetSpout}
       - NETSPOUT_STUDIO_DIR=/opt/splunk/var/lib/netspout/studio
+      - NETSPOUT_CONFIG_DIR=/opt/splunk/var/lib/netspout/config
     ports:
-      - "8000:8000"       # Splunk Web UI (Dark NOC Canvas & Dashboards)
-      - "8088:8088"       # Splunk HEC (HTTP Event Collector)
-      - "8089:8089"       # Splunk Management REST API
+      - "127.0.0.1:8000:8000" # Splunk Web UI
+      - "127.0.0.1:8088:8088" # Splunk HEC
+      - "127.0.0.1:8089:8089" # Splunk Management REST API
       - "127.0.0.1:8081:8081" # Local-only Studio, simulation REST, and WebSocket API
-      - "514:514/udp"     # Syslog UDP Ingestion / Emitter
-      - "514:514/tcp"     # Syslog TCP Ingestion / Emitter
+      - "127.0.0.1:514:514/udp" # Local lab Syslog UDP
+      - "127.0.0.1:514:514/tcp" # Local lab Syslog TCP
     volumes:
       - splunk_data:/opt/splunk/var
       - splunk_etc:/opt/splunk/etc
     healthcheck:
-      test: ["CMD-SHELL", "curl -fkSs https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"'"]
+      test: ["CMD-SHELL", "curl -fkSs https://localhost:8088/services/collector/health | grep -q '\"text\":\"HEC is healthy\"' && curl -fSs http://localhost:8081/health >/dev/null"]
       interval: 15s
       timeout: 10s
       retries: 10
@@ -59,12 +61,14 @@ services:
     command:
       - --config=/etc/otelcol-contrib/config.yaml
       - --config=/etc/otelcol-contrib/health.yaml
+    environment:
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting NetSpout}
     volumes:
       - ./otel-collector-config.standalone.yaml:/etc/otelcol-contrib/config.yaml:ro
     ports:
-      - "4317:4317"       # OTLP gRPC receiver
-      - "4318:4318"       # OTLP HTTP receiver
-      - "8889:8889"       # Prometheus metrics exporter
+      - "127.0.0.1:4317:4317" # Local lab OTLP gRPC receiver
+      - "127.0.0.1:4318:4318" # Local lab OTLP HTTP receiver
+      - "127.0.0.1:8889:8889" # Local lab Prometheus metrics exporter
       - "127.0.0.1:13133:13133" # Collector health extension
     depends_on:
       splunk-netspout:
@@ -80,7 +84,7 @@ services:
       - netspout-net
 
   flow-volume-init:
-    image: busybox:1.36
+    image: busybox:1.36@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
     command: ["sh", "-c", "chmod 777 /flows && touch /flows/flows.json && chmod 666 /flows/flows.json"]
     volumes:
       - netspout_flow_data:/flows
@@ -130,7 +134,8 @@ services:
     user: "10001:10001"
     environment:
       - SPLUNK_HEC_URL=https://splunk-netspout:8088/services/collector/event
-      - SPLUNK_HEC_TOKEN_FILE=/run/secrets/splunk-inputs.conf
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting NetSpout}
+      - SPLUNK_HEC_ALLOW_INSECURE_TLS=true
       - SPLUNK_INDEX=idx_network_ops
       - SPLUNK_SOURCETYPE=netflow:collector
       - FLOW_FILE=/flows/flows.json
@@ -139,7 +144,6 @@ services:
       - "127.0.0.1:8082:8082"
     volumes:
       - netspout_flow_data:/flows
-      - ./docker/standalone/inputs.conf:/run/secrets/splunk-inputs.conf:ro
     depends_on:
       netspout-flow-collector:
         condition: service_healthy

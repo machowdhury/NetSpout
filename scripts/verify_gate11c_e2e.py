@@ -135,7 +135,10 @@ def run_e2e_verification() -> Dict[str, Any]:
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
         h_req = urllib.request.Request("https://127.0.0.1:8888/services/collector/health")
-        h_req.add_header("Authorization", "Splunk 00000000-0000-0000-0000-000000000000")
+        hec_token = os.environ.get("SPLUNK_HEC_TOKEN", "")
+        if not hec_token:
+            raise RuntimeError("SPLUNK_HEC_TOKEN is required for live Gate 11C validation")
+        h_req.add_header("Authorization", f"Splunk {hec_token}")
         with urllib.request.urlopen(h_req, context=ctx, timeout=3) as resp:
             splunk_hec_healthy = (resp.status == 200)
     except Exception as exc:

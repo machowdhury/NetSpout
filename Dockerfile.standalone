@@ -10,7 +10,7 @@
 #   - Universal Multi-Pipeline Telemetry Dispatcher (HEC, OTel, Telegraf, Syslog)
 # =========================================================================
 
-FROM --platform=$BUILDPLATFORM node:22-bookworm-slim AS frontend-build
+FROM --platform=$BUILDPLATFORM node:22-bookworm-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392 AS frontend-build
 
 WORKDIR /build/frontend
 COPY frontend/package.json frontend/package-lock.json ./
@@ -18,11 +18,11 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-FROM otel/opentelemetry-collector-contrib:0.96.0 AS otel-collector-binary
+FROM otel/opentelemetry-collector-contrib:0.96.0@sha256:7ef2a2ff46b9e432321fdd63df104bfeedaf7b4e276950f42c634d0f23521fc4 AS otel-collector-binary
 
 # The upstream collector image is distroless and cannot execute an HTTP
 # healthcheck. This target adds only BusyBox wget and a non-root account.
-FROM alpine:3.20 AS otel-collector-health
+FROM alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc AS otel-collector-health
 COPY --from=otel-collector-binary /otelcol-contrib /otelcol-contrib
 RUN addgroup -g 10001 otel && \
     adduser -D -H -u 10001 -G otel otel && \
@@ -37,7 +37,7 @@ RUN addgroup -g 10001 otel && \
 USER 10001:10001
 ENTRYPOINT ["/otelcol-contrib"]
 
-FROM --platform=linux/amd64 splunk/splunk:10.2
+FROM --platform=linux/amd64 splunk/splunk:10.2@sha256:da47bf2f183fc815f9e36dff3202dd1232bf475c44b2f71b958c54a9a004d6d7
 
 LABEL maintainer="Mahamudul Chowdhury <machowdhury@yahoo.com>"
 LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App by Mahamudul Chowdhury"
@@ -49,13 +49,13 @@ RUN microdnf update -y && \
     microdnf install -y gcc net-snmp net-snmp-utils && \
     python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir \
-        fastapi==0.115.0 \
-        uvicorn==0.30.6 \
-        pydantic==2.8.2 \
-        websockets==12.0 \
+        fastapi==0.143.0 \
+        uvicorn==0.54.0 \
+        pydantic==2.14.0 \
+        websockets==17.2 \
         grpcio==1.84.0 \
         protobuf==7.36.2 \
-        cryptography==41.0.7 && \
+        cryptography==50.0.2 && \
     microdnf clean all
 
 # Synchronize default Splunk apps from /opt/splunk-etc into /opt/splunk/etc
@@ -90,12 +90,14 @@ ENV SPLUNK_START_ARGS="--accept-license" \
     SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
     SPLUNK_HEC_PORT="8088" \
     SPLUNK_ROLE="splunk_standalone" \
-    SPLUNK_HOME_OWNERSHIP_ENFORCEMENT="false" \
     FAST_SIMULATION_PORT="8081"
 
 EXPOSE 8000 8088 8089 8081 514/udp 514/tcp
 
-USER splunk
+# Preserve the upstream image's non-root bootstrap account. Its entrypoint
+# uses narrowly scoped sudo during first-run volume initialization, then runs
+# Splunk as the dedicated splunk account.
+USER ansible
 
 ENTRYPOINT ["/sbin/entrypoint-standalone.sh"]
 CMD ["start-service"]

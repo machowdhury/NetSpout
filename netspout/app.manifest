@@ -15,11 +15,11 @@
       }
     ],
     "releaseDate": null,
-    "description": "NetSpout: Splunk-Native Network Telemetry Simulation, Interactive SPL Playground, OpenConfig MDT Engine, 30-Vendor TA Ecosystem, and NOC/SOC Metric Matrix",
+    "description": "NetSpout: Splunk-integrated telemetry simulation with an external engine, investigation content, dashboards, and bounded validation",
     "classification": {
       "intendedAudience": "IT Operations, Network Engineering, SecOps, SRE",
       "categories": ["IT Operations", "Security, Fraud & Compliance", "Utilities"],
-      "developmentStatus": "Production/Stable"
+      "developmentStatus": "Beta"
     },
     "commonInformationModels": null,
     "license": {

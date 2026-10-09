@@ -154,7 +154,9 @@ def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None,
     """
     # Environment variable fallbacks for secrets and endpoints
     hec_url = hec_url or os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector")
-    hec_token = hec_token or os.environ.get("SPLUNK_HEC_TOKEN", "00000000-0000-0000-0000-000000000000")
+    hec_token = hec_token or os.environ.get("SPLUNK_HEC_TOKEN", "")
+    if not hec_token:
+        raise ValueError("SPLUNK_HEC_TOKEN must be supplied at runtime")
     if target_eps is None:
         target_eps = int(os.environ.get("DATABLASTER_TARGET_EPS", 1000))
 
@@ -514,7 +516,7 @@ def main():
     parser.add_argument("--scenario", required=True, help="Path to scenario YAML file")
     parser.add_argument("--eps", type=int, default=int(os.environ.get("DATABLASTER_TARGET_EPS", 1000)), help="Target Events Per Second (integer)")
     parser.add_argument("--hec", default=os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector"), help="Target Splunk HEC URL")
-    parser.add_argument("--token", default=os.environ.get("SPLUNK_HEC_TOKEN", "00000000-0000-0000-0000-000000000000"), help="Splunk HEC Token GUID")
+    parser.add_argument("--token", default=os.environ.get("SPLUNK_HEC_TOKEN", ""), help="Splunk HEC token supplied at runtime")
     parser.add_argument("--sample", required=False, default=None, help="Optional sample filter")
     parser.add_argument("--async-exec", action="store_true", help="Launch asynchronously and return PID immediately")
     parser.add_argument("--python-stream", action="store_true", help="Run using native Python streaming engine")

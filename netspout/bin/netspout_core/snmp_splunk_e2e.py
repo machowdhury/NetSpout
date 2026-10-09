@@ -1123,12 +1123,12 @@ class SnmpSplunkBridge:
             hec_token
             or os.environ.get("NETSPOUT_HEC_TOKEN")
             or os.environ.get("SPLUNK_HEC_TOKEN")
-            or "00000000-0000-0000-0000-000000000000"
+            or ""
         )
         self.rest_search_url = rest_search_url or os.environ.get(
             "NETSPOUT_REST_SEARCH_URL", os.environ.get("NETSPOUT_REST_URL", "https://127.0.0.1:8089/services/search/jobs/export")
         )
-        self.rest_username = rest_username or os.environ.get("NETSPOUT_SPLUNK_USER", "admin")
+        self.rest_username = rest_username or os.environ.get("NETSPOUT_SPLUNK_USER", "")
         self.rest_password = (
             rest_password
             or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")

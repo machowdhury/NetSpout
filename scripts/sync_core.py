@@ -42,6 +42,7 @@ CORE_MODULES = [
     "phase8c_reference_packs.py",
     "phase9_security_packs.py",
     "phase12_security_packs.py",
+    "release_candidate.py",
     "industry_packs.py",
     "dashboard_recipes.py",
     "security_state.py",

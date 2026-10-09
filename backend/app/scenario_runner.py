@@ -21,6 +21,7 @@ import datetime
 import re
 import json
 import base64
+import os
 import urllib.request
 import urllib.parse
 import ssl
@@ -2591,7 +2592,13 @@ class ScenarioRunner:
         rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
         rest_candidates.append("https://localhost:8889/services/search/jobs/export")
 
-        auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+        search_user = os.environ.get("NETSPOUT_SPLUNK_USER", "").strip()
+        search_password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD", "")
+        if not search_user or not search_password:
+            return 0, "Splunk search credentials are not configured"
+        auth_header = "Basic " + base64.b64encode(
+            f"{search_user}:{search_password}".encode("utf-8")
+        ).decode("ascii")
         ssl_verify = getattr(transport, "hec_ssl_verify", True) if transport else True
         allow_insecure = getattr(transport, "hec_allow_insecure_tls", False) if transport else False
         ctx = ssl.create_default_context()

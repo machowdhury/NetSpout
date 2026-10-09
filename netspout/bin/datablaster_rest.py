@@ -87,8 +87,8 @@ RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 DEFAULT_CONFIG = {
     "hec_url": "https://127.0.0.1:8088/services/collector",
-    "hec_token": "00000000-0000-0000-0000-000000000000",
-    "ssl_verify": False,
+    "hec_token": os.environ.get("SPLUNK_HEC_TOKEN", ""),
+    "ssl_verify": True,
     "target_eps": 1000,
     "idx_network_ops": "idx_network_ops",
     "idx_security_fw": "idx_security_fw",
@@ -645,7 +645,9 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
                 raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
         stored_cfg = get_stored_config()
         hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8088/services/collector")).strip()
-        token = str(params.get("token") or stored_cfg.get("hec_token", "00000000-0000-0000-0000-000000000000")).strip()
+        token = str(params.get("token") or stored_cfg.get("hec_token", "")).strip()
+        if not token:
+            raise ValueError("HEC token is not configured")
         ssl_verify = bool(params.get("ssl_verify", False))
         session_key = str(params.get("session_key") or params.get("sessionKey", ""))
         return {
@@ -697,14 +699,16 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         raise ValueError(f"Invalid HEC destination URL: {hec}. Must start with http:// or https://")
 
     # Token Validation
-    default_tok = stored_cfg.get("hec_token", "00000000-0000-0000-0000-000000000000")
+    default_tok = stored_cfg.get("hec_token", "")
     token = str(params.get("token", default_tok)).strip()
     if not token:
         token = default_tok
     elif not RE_TOKEN.match(token):
         raise ValueError("Invalid HEC Token format. Must be alphanumeric with dashes.")
+    if not token:
+        raise ValueError("HEC token is not configured")
 
-    raw_ssl = params.get("ssl_verify", stored_cfg.get("ssl_verify", False))
+    raw_ssl = params.get("ssl_verify", stored_cfg.get("ssl_verify", True))
     if isinstance(raw_ssl, str):
         ssl_verify = raw_ssl.lower() in ("true", "1", "yes")
     else:
@@ -1254,8 +1258,10 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             
             lines = [l for l in sample_content.splitlines() if l.strip()]
             hec_url = clean.get("hec") or "https://127.0.0.1:8088/services/collector"
-            token = clean.get("token") or "00000000-0000-0000-0000-000000000000"
-            ssl_verify = clean.get("ssl_verify", False)
+            token = clean.get("token") or os.environ.get("SPLUNK_HEC_TOKEN", "")
+            if not token:
+                raise ValueError("HEC token is not configured")
+            ssl_verify = clean.get("ssl_verify", True)
             
             payload_events = []
             is_metric_target = (index_target == "cisco_mdt_metrics" or "metric" in index_target.lower())

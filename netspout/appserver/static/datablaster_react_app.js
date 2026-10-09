@@ -236,7 +236,7 @@
         const stored = localStorage.getItem("datablaster_hec_token");
         if (stored) return stored;
       } catch(e) {}
-      return "00000000-0000-0000-0000-000000000000";
+      return "";
     })();
 
     const [hecUrl, setHecUrl] = useState(defaultHec);
@@ -818,7 +818,7 @@
               value: hecToken,
               onChange: (e) => setHecToken(e.target.value),
               className: "w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500",
-              placeholder: "00000000-0000-0000-0000-000000000000"
+              placeholder: "Enter HEC token"
             })
           ),
 
@@ -2272,7 +2272,7 @@
                                   value: hecToken,
                                   onChange: (e) => setHecToken(e.target.value),
                                   className: "w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:border-cyan-500 focus:outline-none",
-                                  placeholder: "00000000-0000-0000-0000-000000000000"
+                                  placeholder: "Enter HEC token"
                                 })
                               ),
                               e(

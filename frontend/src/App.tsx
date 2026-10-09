@@ -24,6 +24,8 @@ import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
 import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
 import { Cisco100View } from './components/catalog/Cisco100View';
+import { SecuritySourceCatalog } from './components/catalog/SecuritySourceCatalog';
+import { SetupWizard } from './components/setup/SetupWizard';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
 import { useHashRoute } from './app/useHashRoute';
@@ -109,12 +111,6 @@ const ROUTE_STATES: Partial<
     description:
       'Splunk Security Content, Sigma, ATT&CK, and YARA mappings must be researched before claims are shown.',
     phase: 'PHASE 5',
-  },
-  '/system/connections': {
-    maturity: 'PARTIAL',
-    description:
-      'Existing connection controls remain preserved while the unified connection workspace is prepared.',
-    phase: 'PHASE 2+',
   },
 };
 
@@ -748,6 +744,14 @@ export const App: React.FC = () => {
 
     if (route === '/catalog/splunk-integrations') {
       return <SplunkIntegrationsView mode={experienceMode} />;
+    }
+
+    if (route === '/catalog/security-sources') {
+      return <SecuritySourceCatalog mode={experienceMode} />;
+    }
+
+    if (route === '/system/connections') {
+      return <SetupWizard />;
     }
 
     if (route === '/build/studio') {

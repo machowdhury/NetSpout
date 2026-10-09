@@ -40,7 +40,7 @@ export const TelemetryPipelinesModal: React.FC<TelemetryPipelinesModalProps> = (
     telegraf_errors: 0,
     syslog_errors: 0,
     last_error: null,
-    last_active: Date.now()
+    last_active: 0
   });
 
   React.useEffect(() => {

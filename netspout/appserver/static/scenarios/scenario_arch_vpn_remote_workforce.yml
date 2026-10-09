@@ -17,7 +17,7 @@ general:
     outputTemplate: splunkhec
     endpoints:
       - https://127.0.0.1:8088/services/collector
-    splunkHECToken: 00000000-0000-0000-0000-000000000000
+    splunkHECToken: ""
 
 samples:
   - name: arch-vpn-09-telemetry

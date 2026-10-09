@@ -74,7 +74,7 @@ require([
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
+    var token = cfg.hec_token || "";
     var eps = cfg.target_eps || 1000;
 
     log('<span style="color: #0284c7; font-weight: bold;">LAUNCHING SCENARIO:</span> ' + name + ' (' + filename + ') at ' + eps + ' EPS...');

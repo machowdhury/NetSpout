@@ -10,6 +10,7 @@ import time
 import csv
 import io
 import os
+from contextlib import asynccontextmanager
 from typing import List, Dict, Set, Optional, Any, Union
 from pydantic import BaseModel
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
@@ -48,8 +49,27 @@ from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
 from app.fault_injection_engine import fault_engine
+from app.release_candidate import (
+    ReleaseCandidateConfiguration,
+    SecuritySourceCatalog,
+)
 
-app = FastAPI(title="NetSpout Telemetry & Simulation API", version="2.0.0")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    global simulation_task
+    simulation_task = asyncio.create_task(run_simulation_loop())
+    try:
+        yield
+    finally:
+        if simulation_task:
+            simulation_task.cancel()
+
+
+app = FastAPI(
+    title="NetSpout Telemetry & Simulation API",
+    version="2.0.0",
+    lifespan=lifespan,
+)
 
 # Enable CORS for frontend development server
 app.add_middleware(
@@ -81,6 +101,8 @@ vendor_coverage_service = VendorCoverageService(
     },
 )
 cisco_scenario_factory_service = CiscoScenarioFactoryService()
+security_source_catalog = SecuritySourceCatalog()
+release_candidate_configuration = ReleaseCandidateConfiguration()
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -294,18 +316,6 @@ async def run_simulation_loop():
         except Exception as e:
             print(f"Simulation loop error: {e}")
             await asyncio.sleep(1.0)
-
-@app.on_event("startup")
-async def startup_event():
-    global simulation_task
-    simulation_task = asyncio.create_task(run_simulation_loop())
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    global simulation_task
-    if simulation_task:
-        simulation_task.cancel()
-
 
 # REST API Endpoints
 @app.get("/api/status")
@@ -768,6 +778,21 @@ class ConnectionTestPayload(BaseModel):
     config: Optional[TelemetryTransportConfig] = None
 
 
+class SetupConfigurationPayload(BaseModel):
+    deployment_mode: str
+    splunk_deployment_type: str
+    hec_url: str
+    search_url: str
+    auth_method: str
+    search_username: Optional[str] = None
+    hec_token: Optional[str] = None
+    search_secret: Optional[str] = None
+    indexes: List[str]
+    collectors: List[str] = []
+    guided_sample: bool = True
+    allow_insecure_tls: bool = False
+
+
 @app.post("/api/telemetry/test-connection")
 @app.post("/api/telemetry/test-hec")
 @app.post("/api/telemetry/test-pipeline")
@@ -782,7 +807,7 @@ async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTes
             transport = req.config
         else:
             def_url = current_topology.global_transport.hec_url if current_topology and current_topology.global_transport else "https://localhost:8888/services/collector"
-            def_tok = current_topology.global_transport.hec_token if current_topology and current_topology.global_transport else "00000000-0000-0000-0000-000000000000"
+            def_tok = current_topology.global_transport.hec_token if current_topology and current_topology.global_transport else ""
             def_idx = current_topology.global_transport.hec_index if current_topology and current_topology.global_transport else "idx_network_ops"
             transport = TelemetryTransportConfig(
                 hec_url=req.endpoint or req.hec_url or def_url,
@@ -796,7 +821,7 @@ async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTes
         pipeline = d.get("pipeline", "hec")
         transport = TelemetryTransportConfig(
             hec_url=d.get("endpoint") or d.get("hec_url") or "https://localhost:8888/services/collector",
-            hec_token=d.get("token") or d.get("hec_token") or "00000000-0000-0000-0000-000000000000",
+            hec_token=d.get("token") or d.get("hec_token") or "",
             hec_index=d.get("index") or d.get("hec_index") or "idx_network_ops",
             hec_ssl_verify=d.get("ssl_verify", True),
             hec_allow_insecure_tls=d.get("allow_insecure_tls", False)
@@ -1843,6 +1868,56 @@ def get_telemetry_catalog():
 def get_telemetry_catalog_summary():
     from app.catalog import catalog
     return catalog.get_telemetry_catalog_summary()
+
+
+@app.get("/api/security-sources")
+def get_security_source_coverage():
+    return {
+        "summary": security_source_catalog.summary(),
+        "sources": security_source_catalog.list_sources(),
+    }
+
+
+@app.get("/api/security-sources/{coverage_id}")
+def get_security_source_coverage_detail(coverage_id: str):
+    source = security_source_catalog.get_source(coverage_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail="Security source not found")
+    return source
+
+
+@app.get("/api/setup")
+def get_release_candidate_setup():
+    return release_candidate_configuration.load()
+
+
+@app.post("/api/setup")
+def save_release_candidate_setup(payload: SetupConfigurationPayload):
+    try:
+        saved = release_candidate_configuration.save(payload.model_dump())
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    global current_topology
+    current_topology.global_transport.hec_enabled = True
+    current_topology.global_transport.hec_url = saved["hec_url"]
+    current_topology.global_transport.hec_token = (
+        release_candidate_configuration.secrets.hec_token or ""
+    )
+    current_topology.global_transport.hec_index = saved["indexes"][0]
+    current_topology.global_transport.hec_ssl_verify = not saved["allow_insecure_tls"]
+    current_topology.global_transport.hec_allow_insecure_tls = saved["allow_insecure_tls"]
+    return saved
+
+
+@app.post("/api/setup/validate")
+def validate_release_candidate_setup():
+    return release_candidate_configuration.validate_connection()
+
+
+@app.delete("/api/setup")
+def reset_release_candidate_setup():
+    return release_candidate_configuration.reset()
 
 
 @app.get("/api/catalog/sources")

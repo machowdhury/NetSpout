@@ -70,7 +70,7 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
     }
   }, [isOpen]);
 
-  const generateFallbackMibs = () => {
+  function generateFallbackMibs() {
     const modules = ['IF-MIB', 'SNMPv2-MIB', 'IP-MIB', 'TCP-MIB', 'UDP-MIB', 'BGP4-MIB', 'OSPF-MIB', 'ENTITY-MIB', 'CISCO-PROCESS-MIB', 'CISCO-MEMORY-POOL-MIB', 'CISCO-ENVMON-MIB', 'JUNIPER-MIB', 'ARISTA-QUEUE-MIB'];
     const generated: SNMPMibDefinition[] = [];
     modules.forEach((mod) => {
@@ -88,7 +88,7 @@ export const SNMPMibModal: React.FC<SNMPMibModalProps> = ({
       }
     });
     setMibs(generated);
-  };
+  }
 
   const filteredMibs = useMemo(() => {
     return mibs.filter((m) => {

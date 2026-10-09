@@ -2,7 +2,7 @@
 
 **Carrier-Grade Network Telemetry Generator, Simulation Canvas & Live Incident Verification Platform for Splunk**
 
-[![Splunk Enterprise](https://img.shields.io/badge/Splunk_Enterprise-9.0%2B_|_Cloud-ed5b26.svg?logo=splunk&logoColor=white)](https://www.splunk.com/)
+[![Splunk Enterprise](https://img.shields.io/badge/Splunk_Enterprise-9.0%2B-ed5b26.svg?logo=splunk&logoColor=white)](https://www.splunk.com/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-machowdhury%2FNetSpout-181717.svg?logo=github&logoColor=white)](https://github.com/machowdhury/NetSpout)
 [![Release](https://img.shields.io/badge/Release-1.0.0--rc1-emerald.svg)](https://github.com/machowdhury/NetSpout/releases)
@@ -85,20 +85,23 @@ cd NetSpout
 
 ### Step 2: Launch with Docker Compose
 ```bash
+cp .env.example .env
+# Supply unique SPLUNK_PASSWORD and SPLUNK_HEC_TOKEN values in .env.
 docker compose up -d
 ```
 
 ### Step 3: Open in Browser
 - **Splunk Enterprise Web**: [`http://localhost:8000`](http://localhost:8000)
-  - Username: `admin`
-  - Password: `SplunkPassword123!`
+  - Use the administrator name and password supplied through your local `.env`.
   - Pre-installed App: **NetSpout Telemetry Generator** (`/en-US/app/netspout/guided_onboarding`)
 - **NetSpout Standalone NOC Web UI**: [`http://localhost:8081`](http://localhost:8081)
-- **Pre-provisioned Splunk HEC Endpoint**: `https://localhost:8088/services/collector` (Token: `00000000-0000-0000-0000-000000000000`)
+- **Splunk HEC Endpoint**: `https://localhost:8088/services/collector` using the token supplied through `.env`
 - **Splunk REST Management API**: `https://localhost:8089`
 
 > [!NOTE]
-> The above default credentials apply strictly to the isolated `DEMO` profile. For production or external environments, set `NETSPOUT_PROFILE=secure` and supply dedicated secrets. See [docs/SECURITY.md](docs/SECURITY.md).
+> NetSpout has no repository default credentials. Never reuse disposable lab
+> credentials for an external Splunk environment. See
+> [the release-candidate guide](docs/RELEASE_CANDIDATE_GUIDE.md).
 
 ---
 
@@ -122,9 +125,9 @@ pip install -r requirements.txt
 ### 2. Configure Splunk Credentials
 ```bash
 export NETSPOUT_HEC_URL="https://127.0.0.1:8088/services/collector/event"
-export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
+export NETSPOUT_HEC_TOKEN="<provided securely at runtime>"
 export NETSPOUT_SPLUNK_USER="admin"
-export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
+export NETSPOUT_SPLUNK_PASSWORD="<provided securely at runtime>"
 ```
 
 ### 3. Launch NetSpout Backend

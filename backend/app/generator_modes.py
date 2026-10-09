@@ -208,7 +208,6 @@ class TelemetryGeneratorService:
         if dispatch:
             cfg = transport_config or TelemetryTransportConfig(
                 hec_url="https://127.0.0.1:8088/services/collector",
-                hec_token="00000000-0000-0000-0000-000000000000",
                 hec_index=target_index
             )
             dispatch_result = dispatcher.dispatch_log_entry(log_entry, cfg)
@@ -266,7 +265,6 @@ class TelemetryGeneratorService:
 
         cfg = transport_config or TelemetryTransportConfig(
             hec_url="https://127.0.0.1:8088/services/collector",
-            hec_token="00000000-0000-0000-0000-000000000000",
             hec_index=target_index
         )
 

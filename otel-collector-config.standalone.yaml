@@ -13,7 +13,7 @@ processors:
 
 exporters:
   splunk_hec:
-    token: "00000000-0000-0000-0000-000000000000"
+    token: "${env:SPLUNK_HEC_TOKEN}"
     endpoint: "https://splunk-netspout:8088/services/collector"
     tls:
       insecure_skip_verify: true

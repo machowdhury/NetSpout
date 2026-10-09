@@ -11,12 +11,15 @@ import os
 import sys
 import shutil
 import tarfile
+import gzip
 import hashlib
 import subprocess
+import json
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 NETSPOUT_DIR = os.path.join(REPO_ROOT, "netspout")
 SPL_ARCHIVE = os.path.join(REPO_ROOT, "netspout.spl")
+ARTIFACT_MANIFEST = os.path.join(REPO_ROOT, "netspout.spl.manifest.json")
 
 
 def clean_caches(root_dir: str):
@@ -75,13 +78,26 @@ def build_package():
         os.remove(SPL_ARCHIVE)
 
     def tar_filter(tarinfo):
-        # Exclude unwanted files
-        if "__pycache__" in tarinfo.name or ".DS_Store" in tarinfo.name:
+        # Exclude runtime state and normalize metadata for reproducible archives.
+        parts = tarinfo.name.split("/")
+        if (
+            "__pycache__" in tarinfo.name
+            or ".DS_Store" in tarinfo.name
+            or "local" in parts
+            or tarinfo.name.endswith((".pyc", ".pyo"))
+        ):
             return None
+        tarinfo.uid = 0
+        tarinfo.gid = 0
+        tarinfo.uname = ""
+        tarinfo.gname = ""
+        tarinfo.mtime = 0
         return tarinfo
 
-    with tarfile.open(SPL_ARCHIVE, "w:gz") as tar:
-        tar.add(NETSPOUT_DIR, arcname="netspout", filter=tar_filter)
+    with open(SPL_ARCHIVE, "wb") as output:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=output, mtime=0) as compressed:
+            with tarfile.open(fileobj=compressed, mode="w") as tar:
+                tar.add(NETSPOUT_DIR, arcname="netspout", filter=tar_filter)
 
     # 5. Validate Package
     size_bytes = os.path.getsize(SPL_ARCHIVE)
@@ -95,6 +111,28 @@ def build_package():
         has_core = any("netspout/bin/netspout_core/models.py" in m for m in members)
         has_catalog = any("netspout/bin/netspout_core/catalog.py" in m for m in members)
         has_catalog_data = any("netspout/bin/catalog_data/vendors.json" in m for m in members)
+        has_manifest = "netspout/app.manifest" in members
+        has_app_conf = "netspout/default/app.conf" in members
+        has_navigation = "netspout/default/data/ui/nav/default.xml" in members
+        contains_local = any("/local/" in m for m in members)
+
+    if not all((has_core, has_catalog, has_catalog_data, has_manifest, has_app_conf, has_navigation)):
+        raise SystemExit("Release archive is missing mandatory Splunk App files")
+    if contains_local:
+        raise SystemExit("Release archive must not contain local configuration or secrets")
+
+    manifest = {
+        "schema_version": "1.0.0",
+        "artifact": os.path.basename(SPL_ARCHIVE),
+        "sha256": sha256,
+        "size_bytes": size_bytes,
+        "member_count": len(members),
+        "reproducible_metadata_epoch": 0,
+        "contains_local_configuration": False,
+    }
+    with open(ARTIFACT_MANIFEST, "w", encoding="utf-8") as output:
+        json.dump(manifest, output, indent=2, sort_keys=True)
+        output.write("\n")
 
     print("\n>> Archive Verification:")
     print(f"  [PASS] File exists: {SPL_ARCHIVE}")
@@ -104,6 +142,8 @@ def build_package():
     print(f"  [PASS] Canonical core packaged: {has_core}")
     print(f"  [PASS] Canonical catalog packaged: {has_catalog}")
     print(f"  [PASS] Canonical catalog data packaged: {has_catalog_data}")
+    print(f"  [PASS] Supported app layout: {has_manifest and has_app_conf and has_navigation}")
+    print(f"  [PASS] Runtime local/ state excluded: {not contains_local}")
     print(f"  [PASS] SHA-256 Checksum: {sha256}")
     print("==========================================================================")
     print("🎉 Splunk Release Package built successfully!")

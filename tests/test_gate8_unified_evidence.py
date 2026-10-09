@@ -66,10 +66,14 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         self.runner = ScenarioRunner()
         self.dispatcher = TelemetryDispatcher()
         self.catalog = NetSpoutCatalog()
+        hec_url = os.environ.get(
+            "NETSPOUT_HEC_URL",
+            "https://127.0.0.1:8088/services/collector/event",
+        ).removesuffix("/event")
         self.transport = TelemetryTransportConfig(
             hec_enabled=True,
-            hec_url="https://127.0.0.1:8888/services/collector",
-            hec_token="00000000-0000-0000-0000-000000000000",
+            hec_url=hec_url,
+            hec_token=os.environ.get("NETSPOUT_HEC_TOKEN", ""),
             hec_index="idx_network_ops",
             hec_metric_index="cisco_mdt_metrics",
             hec_allow_insecure_tls=True

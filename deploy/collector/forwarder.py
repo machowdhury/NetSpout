@@ -20,6 +20,7 @@ import sys
 import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections import deque
 from typing import Any, Dict, List, Optional
@@ -36,6 +37,10 @@ SPLUNK_HEC_URL = os.environ.get(
     "https://host.docker.internal:8888/services/collector/event"
 )
 SPLUNK_HEC_TOKEN_FILE = os.environ.get("SPLUNK_HEC_TOKEN_FILE", "")
+SPLUNK_HEC_ALLOW_INSECURE_TLS = (
+    os.environ.get("SPLUNK_HEC_ALLOW_INSECURE_TLS", "false").strip().lower()
+    in {"1", "true", "yes"}
+)
 SPLUNK_INDEX = os.environ.get("SPLUNK_INDEX", "idx_network_ops")
 SPLUNK_SOURCETYPE = os.environ.get("SPLUNK_SOURCETYPE", "netflow:collector")
 STATUS_PORT = int(os.environ.get("STATUS_PORT", "8082"))
@@ -112,8 +117,20 @@ def load_hec_token() -> str:
 
 def build_ssl_context() -> ssl.SSLContext:
     ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
+    if SPLUNK_HEC_ALLOW_INSECURE_TLS:
+        hostname = urllib.parse.urlparse(SPLUNK_HEC_URL).hostname
+        if hostname not in {
+            "localhost",
+            "127.0.0.1",
+            "::1",
+            "splunk-netspout",
+            "host.docker.internal",
+        }:
+            raise RuntimeError(
+                "TLS verification may be disabled only for the documented local lab"
+            )
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
     return ctx
 
 

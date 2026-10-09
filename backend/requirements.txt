@@ -1,8 +1,8 @@
-fastapi>=0.110.0
-uvicorn>=0.28.0
-websockets>=12.0
-pydantic>=2.6.0
-grpcio>=1.59.0
-protobuf>=4.25.0
-cryptography>=41.0.0
-pygnmi>=0.8.15
+fastapi==0.143.0
+uvicorn==0.54.0
+websockets==17.2
+pydantic==2.14.0
+grpcio==1.84.0
+protobuf==7.36.2
+cryptography==50.0.2
+pygnmi==0.8.15

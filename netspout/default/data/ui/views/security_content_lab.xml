@@ -1,0 +1,29 @@
+<dashboard version="1.1" theme="dark">
+  <label>Security Content Lab</label>
+  <description>Supported launch integration for the external NetSpout detection-validation engine.</description>
+  <row>
+    <panel>
+      <html>
+        <div style="padding:24px;background:#0b0f19;border:1px solid #334155;border-radius:8px;">
+          <h2 style="color:#f8fafc;margin-top:0;">Splunk Security Content Lab</h2>
+          <p style="color:#cbd5e1;max-width:760px;">
+            Browse pinned Splunk Security Content metadata, inspect dependencies,
+            selectively retrieve bounded Attack Data, and validate read-only SPL.
+            Dataset transfer and simulation run in the external companion engine,
+            never in the Splunk search-head process.
+          </p>
+          <p style="color:#fbbf24;">
+            Configure and authorize the companion engine in Connection Center
+            before replay. Upstream content is untrusted until reviewed.
+          </p>
+          <a href="http://127.0.0.1:8081/#/security-content"
+             target="_blank"
+             rel="noopener noreferrer"
+             style="display:inline-block;background:#0284c7;color:#fff;padding:10px 18px;border-radius:5px;text-decoration:none;font-weight:600;">
+            Open Security Content Lab
+          </a>
+        </div>
+      </html>
+    </panel>
+  </row>
+</dashboard>

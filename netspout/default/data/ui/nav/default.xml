@@ -2,6 +2,7 @@
   <view name="guided_onboarding" default="true" label="Data Onboarding Wizard"/>
   <view name="scenario_builder" label="Scenario Builder"/>
   <view name="netspout_canvas" label="Canvas Orchestrator"/>
+  <view name="security_content_lab" label="Security Content Lab"/>
   <collection label="NetSpout Dashboards">
     <view name="datablaster_dashboard" label="Analytics Overview &amp; Ingestion Telemetry"/>
     <view name="studio_multivendor_enterprise" label="Enterprise 5-Tier Backbone (MV-ENT-001)"/>

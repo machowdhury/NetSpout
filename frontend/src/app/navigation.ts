@@ -29,6 +29,7 @@ export type AppRoute =
   | '/investigate/timeline'
   | '/investigate/incident'
   | '/investigate/security-intelligence'
+  | '/security-content'
   | '/catalog/provenance'
   | '/catalog/security-sources'
   | '/catalog/cisco-100'
@@ -169,6 +170,17 @@ export const NAVIGATION: NavigationGroup[] = [
         route: '/investigate/security-intelligence',
         icon: 'shield',
         availability: 'RESEARCH REQUIRED',
+      },
+    ],
+  },
+  {
+    label: 'Security Content Lab',
+    items: [
+      {
+        label: 'Detection Explorer',
+        route: '/security-content',
+        icon: 'shield',
+        availability: 'BETA',
       },
     ],
   },

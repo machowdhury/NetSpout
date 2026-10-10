@@ -36,6 +36,11 @@ AUTH_METHODS = {"HEC_TOKEN_AND_BASIC_SEARCH", "HEC_TOKEN_AND_SPLUNK_TOKEN"}
 INDEX_NAME_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$")
 
 
+class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 def _catalog_path() -> Path:
     module_dir = Path(__file__).resolve().parent
     candidates = (
@@ -252,10 +257,6 @@ class ReleaseCandidateConfiguration:
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
 
-        class NoRedirectHandler(urllib.request.HTTPRedirectHandler):
-            def redirect_request(self, req, fp, code, msg, headers, newurl):
-                return None
-
         opener = urllib.request.build_opener(
             urllib.request.HTTPHandler(),
             urllib.request.HTTPSHandler(context=context),
@@ -356,3 +357,56 @@ class ReleaseCandidateConfiguration:
             "checks": checks,
             "secret_state": self.secret_state(),
         }
+
+    def execute_read_only_search(
+        self, query: str, *, timeout: float = 8.0, result_limit: int = 200
+    ) -> tuple[List[Dict[str, Any]], Optional[str]]:
+        """Execute bounded SPL against the configured destination without exposing secrets."""
+        config = self.load()
+        if not config.get("configured") or not self.secrets.search_secret:
+            return [], "authenticated Splunk search is not configured"
+        if timeout <= 0 or timeout > 30 or result_limit < 1 or result_limit > 500:
+            return [], "search bounds are outside policy"
+        context = ssl.create_default_context()
+        if config.get("allow_insecure_tls"):
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        if config["auth_method"] == "HEC_TOKEN_AND_SPLUNK_TOKEN":
+            authorization = f"Bearer {self.secrets.search_secret}"
+        else:
+            username = config.get("search_username") or ""
+            encoded = base64.b64encode(
+                f"{username}:{self.secrets.search_secret}".encode("utf-8")
+            ).decode("ascii")
+            authorization = f"Basic {encoded}"
+        request = urllib.request.Request(
+            config["search_url"],
+            data=urllib.parse.urlencode(
+                {"search": query, "output_mode": "json"}
+            ).encode("utf-8"),
+            headers={
+                "Authorization": authorization,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        )
+        opener = urllib.request.build_opener(
+            urllib.request.HTTPHandler(),
+            urllib.request.HTTPSHandler(context=context),
+            NoRedirectHandler(),
+        )
+        rows: List[Dict[str, Any]] = []
+        try:
+            with opener.open(request, timeout=timeout) as response:
+                for line in response:
+                    try:
+                        payload = json.loads(line.decode("utf-8"))
+                    except (UnicodeDecodeError, json.JSONDecodeError):
+                        continue
+                    result = payload.get("result")
+                    if isinstance(result, dict):
+                        rows.append(result)
+                    if len(rows) >= result_limit:
+                        break
+            return rows, None
+        except (urllib.error.URLError, TimeoutError, OSError, ssl.SSLError) as exc:
+            return [], type(exc).__name__

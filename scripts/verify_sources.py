@@ -217,10 +217,23 @@ def verify_sources() -> bool:
         os.path.join(BACKEND_APP_DIR, "catalog_data"),
         os.path.join(REPO_ROOT, "netspout", "catalog")
     ]
+    external_metadata_catalogs = {
+        "phase13a_splunk_security_content.json",
+        "phase13a_security_content_coverage.json",
+    }
+    external_targets = {
+        os.path.join(SPLUNK_BIN_DIR, "catalog_data"),
+        os.path.join(BACKEND_APP_DIR, "catalog_data"),
+    }
     json_files = sorted([f for f in os.listdir(CANONICAL_CATALOG_DIR) if f.endswith(".json")])
     for target in catalog_targets:
         target_rel = os.path.relpath(target, REPO_ROOT)
-        for jf in json_files:
+        expected_files = [
+            jf
+            for jf in json_files
+            if jf not in external_metadata_catalogs or target in external_targets
+        ]
+        for jf in expected_files:
             src_json = os.path.join(CANONICAL_CATALOG_DIR, jf)
             dst_json = os.path.join(target, jf)
             if not os.path.exists(dst_json):
@@ -232,7 +245,7 @@ def verify_sources() -> bool:
             if h_src != h_dst:
                 print(f"  [FAIL] Drift in {target_rel}/{jf}!")
                 all_passed = False
-        print(f"  [PASS] {len(json_files)} catalog JSONs verified in {target_rel}")
+        print(f"  [PASS] {len(expected_files)} catalog JSONs verified in {target_rel}")
 
     # 6. Verify Catalog Schema & Static Vendor JSON Mirror
     print("\n>> 6. Verifying Catalog Schema & Static Vendor JSON Mirror...")

@@ -43,6 +43,7 @@ CORE_MODULES = [
     "phase9_security_packs.py",
     "phase12_security_packs.py",
     "release_candidate.py",
+    "security_content_lab.py",
     "industry_packs.py",
     "dashboard_recipes.py",
     "security_state.py",
@@ -91,6 +92,10 @@ GNMI_SUBPACKAGE_FILES = [
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
 VENDOR_STATIC_JSON = os.path.join(REPO_ROOT, "netspout", "appserver", "static", "vendor_catalog.json")
+EXTERNAL_METADATA_CATALOGS = {
+    "phase13a_splunk_security_content.json",
+    "phase13a_security_content_coverage.json",
+}
 
 GENERATED_HEADER = """# =========================================================================
 # AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
@@ -168,10 +173,20 @@ def sync_core():
         for target in catalog_targets:
             os.makedirs(target, exist_ok=True)
             for jf in json_files:
+                if (
+                    jf in EXTERNAL_METADATA_CATALOGS
+                    and target not in {SPLUNK_BIN_DIR + "/catalog_data", BACKEND_APP_DIR + "/catalog_data"}
+                ):
+                    continue
                 src_json = os.path.join(CANONICAL_CATALOG_DIR, jf)
                 dst_json = os.path.join(target, jf)
                 shutil.copy2(src_json, dst_json)
-            print(f"  [CATALOG_SYNC] {len(json_files)} catalog JSONs -> {os.path.relpath(target, REPO_ROOT)}")
+            copied = sum(
+                jf not in EXTERNAL_METADATA_CATALOGS
+                or target in {SPLUNK_BIN_DIR + "/catalog_data", BACKEND_APP_DIR + "/catalog_data"}
+                for jf in json_files
+            )
+            print(f"  [CATALOG_SYNC] {copied} catalog JSONs -> {os.path.relpath(target, REPO_ROOT)}")
 
     # 6. Generate netspout/appserver/static/vendor_catalog.json from Canonical Catalog
     try:

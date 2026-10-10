@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-10-09T18:44:31Z",
+  "environment": {
+    "distribution": "DOCKER_LAB",
+    "splunk_version": "10.2",
+    "container_image_digest": "sha256:10e75c28c506fea8ccae07c367a5727b37775713b5ada74f2d8b29014fe58c7d",
+    "disposable": true,
+    "production": false
+  },
+  "validations": [
+    {
+      "detection_id": "d36459b1-7901-401a-a67e-44426c15b168",
+      "detection_name": "Cisco Secure Firewall - React Server Components RCE Attempt",
+      "upstream_commit": "1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8",
+      "spl_hash": "eaf625ef1819f60dedfff8938f8638752ad73c70ac6ecfa6f55d2db8a13220f7",
+      "executed_spl_hash": "7de86125adace883855ec0ea55f7a7470d6bb840e6f7491ceed418f754d61dd7",
+      "dataset_id": "f0aeed06-629e-4d1e-9dae-b4687c779668",
+      "dataset_path": "/datasets/cisco_secure_firewall_threat_defense/react2shell/react2shell.log",
+      "dataset_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+      "dataset_sha256": "01c4370bbcd4261c457fc9d7a8ab907f836eb7918b4e841150c77456cee9806a",
+      "run_id": "phase13a-positive-final",
+      "splunk_destination": "AUTHORIZED_DISPOSABLE_DOCKER_LAB",
+      "search_job_id": null,
+      "time_range": "-15m to now",
+      "indexed_event_count": 1,
+      "matched_event_count": 1,
+      "expected_result": "AT_LEAST_ONE_MATCH",
+      "actual_result": "POSITIVE_CASE_VALIDATED",
+      "negative_control": {
+        "run_id": "phase13a-negative-final",
+        "indexed_event_count": 0,
+        "matched_event_count": 0,
+        "actual_result": "NEGATIVE_CASE_VALIDATED"
+      },
+      "required_field_evidence": {
+        "EventType": "IntrusionEvent",
+        "SignatureID": "65554",
+        "signature_id": "65554",
+        "dest": "172.16.3.110",
+        "sourcetype": "cisco:sfw:estreamer"
+      },
+      "adaptations": [
+        "Scoped the reviewed cisco_secure_firewall macro to the authorized index, run ID, sourcetype, and 15-minute window.",
+        "Mapped documented JSON fields to the upstream detection fields.",
+        "Removed display-only security_content_ctime formatting for portable execution.",
+        "Expanded the upstream empty filter macro."
+      ],
+      "status": "VALIDATION_PASSED",
+      "limitations": [
+        "Attack Data replay is curated historical evidence, not NetSpout-native device telemetry.",
+        "This validation does not establish production detection efficacy.",
+        "The shared streaming export client does not expose a durable Splunk search job ID.",
+        "Windows/endpoint and identity/authentication targets remain unvalidated because no evidence-backed compatible source and reviewed executable dependency set was established."
+      ]
+    }
+  ]
+}

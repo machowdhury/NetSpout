@@ -10,6 +10,7 @@ import time
 import csv
 import io
 import os
+import urllib.error
 from contextlib import asynccontextmanager
 from typing import List, Dict, Set, Optional, Any, Union
 from pydantic import BaseModel
@@ -52,6 +53,12 @@ from app.fault_injection_engine import fault_engine
 from app.release_candidate import (
     ReleaseCandidateConfiguration,
     SecuritySourceCatalog,
+)
+from app.security_content_lab import (
+    AttackDataReplayService,
+    DetectionEvidenceStore,
+    DetectionValidationOrchestrator,
+    SecurityContentCatalog,
 )
 
 @asynccontextmanager
@@ -103,6 +110,17 @@ vendor_coverage_service = VendorCoverageService(
 cisco_scenario_factory_service = CiscoScenarioFactoryService()
 security_source_catalog = SecuritySourceCatalog()
 release_candidate_configuration = ReleaseCandidateConfiguration()
+security_content_catalog = SecurityContentCatalog()
+attack_data_replay_service = AttackDataReplayService(
+    security_content_catalog,
+    dispatcher,
+)
+detection_evidence_store = DetectionEvidenceStore()
+detection_validation_orchestrator = DetectionValidationOrchestrator(
+    security_content_catalog,
+    lambda query: release_candidate_configuration.execute_read_only_search(query),
+    detection_evidence_store,
+)
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -791,6 +809,27 @@ class SetupConfigurationPayload(BaseModel):
     collectors: List[str] = []
     guided_sample: bool = True
     allow_insecure_tls: bool = False
+
+
+class AttackDataRetrievePayload(BaseModel):
+    dataset_path: str
+
+
+class AttackDataReplayPayload(BaseModel):
+    local_id: str
+    dataset_path: str
+    index: str
+    timestamp_mode: str = "PRESERVE"
+
+
+class DetectionValidationPayload(BaseModel):
+    detection_id: str
+    run_id: str
+    index: str
+    expected_min_matches: int = 1
+    control: str = "POSITIVE"
+    dataset_or_scenario_id: str
+    indexed_event_count: int
 
 
 @app.post("/api/telemetry/test-connection")
@@ -1884,6 +1923,176 @@ def get_security_source_coverage_detail(coverage_id: str):
     if source is None:
         raise HTTPException(status_code=404, detail="Security source not found")
     return source
+
+
+@app.get("/api/security-content/summary")
+def get_security_content_summary():
+    return security_content_catalog.summary()
+
+
+@app.get("/api/security-content/detections")
+def list_security_content_detections(
+    q: Optional[str] = None,
+    story: Optional[str] = None,
+    technique: Optional[str] = None,
+    data_source: Optional[str] = None,
+    sourcetype: Optional[str] = None,
+    detection_type: Optional[str] = None,
+    product: Optional[str] = None,
+    required_ta: Optional[str] = None,
+    data_model: Optional[str] = None,
+    validation_status: Optional[str] = None,
+    compatibility: Optional[str] = None,
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+):
+    try:
+        return security_content_catalog.list_detections(
+            query=q,
+            story=story,
+            technique=technique,
+            data_source=data_source,
+            sourcetype=sourcetype,
+            detection_type=detection_type,
+            product=product,
+            required_ta=required_ta,
+            data_model=data_model,
+            validation_status=validation_status,
+            compatibility=compatibility,
+            limit=limit,
+            offset=offset,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/detections/{detection_id:path}")
+def get_security_content_detection(detection_id: str):
+    detection = security_content_catalog.get_detection(detection_id)
+    if detection is None:
+        raise HTTPException(status_code=404, detail="Detection not found")
+    return detection
+
+
+@app.get("/api/security-content/stories")
+def list_security_content_stories(
+    q: Optional[str] = None,
+    limit: int = Query(default=200, ge=1, le=500),
+):
+    return security_content_catalog.list_stories(query=q, limit=limit)
+
+
+@app.get("/api/security-content/datasets")
+def list_attack_datasets(
+    q: Optional[str] = None,
+    technique: Optional[str] = None,
+    limit: int = Query(default=200, ge=1, le=500),
+):
+    return security_content_catalog.list_datasets(
+        query=q, technique=technique, limit=limit
+    )
+
+
+@app.get("/api/security-content/mitre")
+def get_security_content_mitre_coverage():
+    return security_content_catalog.mitre_coverage()
+
+
+@app.post("/api/security-content/datasets/retrieve")
+def retrieve_attack_dataset(payload: AttackDataRetrievePayload):
+    try:
+        return attack_data_replay_service.retrieve(payload.dataset_path)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except (ValueError, urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/datasets/preview/{local_id}")
+def preview_attack_dataset(
+    local_id: str,
+    limit: int = Query(default=10, ge=1, le=50),
+):
+    try:
+        return attack_data_replay_service.preview(local_id, limit=limit)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+def _authorized_replay_configuration(index: str) -> Dict[str, Any]:
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    token = release_candidate_configuration.secrets.hec_token
+    if not token:
+        raise HTTPException(status_code=409, detail="HEC credential is unavailable")
+    hec_url = config["hec_url"].rstrip("/")
+    if not hec_url.endswith("/event"):
+        hec_url += "/event"
+    return {
+        "hec_url": hec_url,
+        "hec_token": token,
+        "allow_insecure_tls": bool(config.get("allow_insecure_tls")),
+    }
+
+
+@app.post("/api/security-content/replays")
+def replay_attack_dataset(payload: AttackDataReplayPayload):
+    destination = _authorized_replay_configuration(payload.index)
+    try:
+        return attack_data_replay_service.replay(
+            local_id=payload.local_id,
+            dataset_path=payload.dataset_path,
+            index=payload.index,
+            timestamp_mode=payload.timestamp_mode,
+            **destination,
+        )
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/replays/{run_id}")
+def get_attack_data_replay(run_id: str):
+    try:
+        return attack_data_replay_service.get_run(run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/api/security-content/replays/{run_id}/cancel")
+def cancel_attack_data_replay(run_id: str):
+    try:
+        return attack_data_replay_service.cancel(run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/api/security-content/validations")
+def validate_security_content_detection(payload: DetectionValidationPayload):
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    if payload.expected_min_matches < 0 or payload.expected_min_matches > 100:
+        raise HTTPException(status_code=422, detail="Expected match bound is outside policy")
+    try:
+        return detection_validation_orchestrator.validate(**payload.model_dump())
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/validations")
+def list_security_content_validations():
+    return detection_evidence_store.list()
 
 
 @app.get("/api/setup")

@@ -26,6 +26,7 @@ import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
 import { Cisco100View } from './components/catalog/Cisco100View';
 import { SecuritySourceCatalog } from './components/catalog/SecuritySourceCatalog';
 import { SetupWizard } from './components/setup/SetupWizard';
+import { SecurityContentLab } from './components/security/SecurityContentLab';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
 import { useHashRoute } from './app/useHashRoute';
@@ -748,6 +749,10 @@ export const App: React.FC = () => {
 
     if (route === '/catalog/security-sources') {
       return <SecuritySourceCatalog mode={experienceMode} />;
+    }
+
+    if (route === '/security-content') {
+      return <SecurityContentLab mode={experienceMode} />;
     }
 
     if (route === '/system/connections') {

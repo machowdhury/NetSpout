@@ -1111,7 +1111,10 @@ def stop_simulation() -> Dict[str, Any]:
                 break
             time.sleep(0.1)
         else:
-            os.killpg(pid, signal.SIGKILL)
+            try:
+                os.killpg(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         for p_file in [PID_FILE]:
             if os.path.exists(p_file):
                 try:

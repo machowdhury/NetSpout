@@ -44,6 +44,11 @@ def resolve_binary() -> str:
     return "python_engine"
 
 
+class NoStreamableEventsError(ValueError):
+    """Raised when a scenario file yields no streamable events."""
+    pass
+
+
 def sanitize_input(val: str, pattern: str, name: str) -> str:
     """Validate string against regex pattern."""
     if not re.match(pattern, val):
@@ -341,13 +346,8 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
             sys.stderr.write(f"[BLASTER-PY] Scenario parse warning: Operation failed\n")
 
     if not events_to_stream:
-        events_to_stream = [
-            {"index": "idx_network_ops", "sourcetype": "cisco:ios", "source": "cisco:syslog", "host": "core-sw01.corp.internal", "raw": "$SYSLOG_TS$ core-sw01 Interface GigabitEthernet0/1 up"},
-            {"index": "idx_network_ops", "sourcetype": "juniper:junos", "source": "juniper:syslog", "host": "edge-junos.corp.internal", "raw": "$SYSLOG_TS$ edge-junos RPD_BGP_NEIGHBOR_STATE_CHANGED: BGP neighbor 198.51.100.1 state changed from Established to Idle"},
-            {"index": "idx_security_fw", "sourcetype": "pan:traffic", "source": "pan:firewall", "host": "pa-5450-edge.corp.internal", "raw": "1,$ISO_TS$,001801000001,TRAFFIC,drop,2304,$ISO_TS$,10.0.1.10,198.51.100.23,0.0.0.0,0.0.0.0,Rule-Deny,src-user,dst-user,ssl,vsys1,untrust,trust,ethernet1/1,ethernet1/2,Log-Forward,2026/09/18 22:00:00,1001,1,443,443,0,0,0x0,tcp,deny,120,120,0,1,2026/09/18 22:00:00,0,any,0,293847291,0x0,10.0.0.0-10.255.255.255,US,1,1,0,aged-out,0,0,0,0,,pa-5450-edge,from-policy"},
-            {"index": "idx_security_fw", "sourcetype": "fortinet:fortigate", "source": "fortinet:firewall", "host": "fgt-edge-01.corp.internal", "raw": "date=2026-09-18 time=22:00:00 devname=\"FGT-EDGE-01\" devid=\"FGT37E1234567890\" eventtime=1789768000 tz=\"-0400\" logid=\"0000000013\" type=\"traffic\" subtype=\"forward\" level=\"notice\" vd=\"root\" srcip=10.100.5.42 srcport=51234 srcintf=\"port1\" dstip=198.51.100.50 dstport=443 dstintf=\"port2\" sessionid=987654 proto=6 action=\"accept\" policyid=1 policytype=\"policy\" service=\"HTTPS\" trandisp=\"snat\" transip=203.0.113.10 transport=51234 duration=45 sentbyte=1420 rcvdbyte=8920 sentpkt=12 rcvdpkt=18 appcat=\"unscanned\""},
-            {"index": "idx_performance_metrics", "sourcetype": "arista:telemetry:json", "source": "arista:telemetry", "host": "dc1-spine01.corp.internal", "raw": "{\"timestamp\": \"$ISO_TS$\", \"device\": \"dc1-spine01\", \"vendor\": \"Arista\", \"roce.pfc_rx_frames\": 1420, \"buffer_pool.shared_bytes_used_pct\": 94.2}"}
-        ]
+        basename = os.path.basename(scenario_file)
+        raise NoStreamableEventsError(f"Scenario '{basename}' has no streamable events")
 
     ctx = ssl.create_default_context()
     if get_stored_config().get("ssl_verify", True) is False:
@@ -452,6 +452,9 @@ def _main():
     if args.python_stream:
         try:
             run_python_streamer(args.scenario, args.hec, args.token, args.eps)
+        except NoStreamableEventsError as e:
+            sys.stderr.write(f"{str(e)}\n")
+            sys.exit(2)
         finally:
             if os.path.basename(args.scenario).startswith("canvas_custom_") and os.path.dirname(args.scenario) == resolve_run_dir():
                 os.unlink(args.scenario)
@@ -487,6 +490,9 @@ def _main():
     if binary_path == "python_engine" or get_stored_config().get("ssl_verify", True) is not False:
         try:
             run_python_streamer(scenario_file, args.hec, args.token, args.eps)
+        except NoStreamableEventsError as e:
+            sys.stderr.write(f"{str(e)}\n")
+            sys.exit(2)
         finally:
             if os.path.basename(scenario_file).startswith("canvas_custom_") and os.path.dirname(scenario_file) == resolve_run_dir():
                 os.unlink(scenario_file)

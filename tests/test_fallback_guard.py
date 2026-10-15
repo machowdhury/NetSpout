@@ -12,7 +12,7 @@ for directory in (ROOT / 'backend', ROOT / 'src'):
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.models import ScenarioRunRequest
-from netspout_core.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
+from netspout_core.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS, catalog_instance
 
 SUPPORTED = frozenset((
     'arch_lan_campus_access', 'arch_man_carrier_ring', 'arch_vpn_remote_workforce',
@@ -73,15 +73,29 @@ class TestFallbackGuard(unittest.TestCase):
                         if ast.unparse(child.func.value) in ('scen_id', 'top_id', 'contract.id'):
                             self.assertNotIn(child.func.attr, ('lower', 'casefold', 'startswith', 'endswith', 'find'))
 
-    def test_catalog_aliases_preserved(self):
-        catalog = NetSpoutCatalog()
-        aliases = json.loads((ROOT / 'catalog/aliases.json').read_text())
-        for alias in aliases:
-            canonical, resolved = catalog.resolve_scenario_id(alias)
-            if resolved and canonical in SUPPORTED:
-                with self.subTest(alias=alias):
-                    manifest = ScenarioRunner().run_scenario(ScenarioRunRequest(scenario_id=alias, seed=42))
-                    self.assertEqual(manifest.scenario_id, canonical)
+    def test_scenario_aliases_resolve_before_guard(self):
+        # Inject synthetic SCENARIO_ALIAS entries for testing using patch.dict
+        # to add synthetic entries while keeping the real ones
+        with patch.dict(catalog_instance._aliases, {
+            'zz_d2_alias_supported': {'type': 'SCENARIO_ALIAS', 'canonical_id': 'cisco_sdwan_brownout'},
+            'zz_d2_alias_unsupported': {'type': 'SCENARIO_ALIAS', 'canonical_id': 'sdwan_connected_core'},
+        }, clear=False):
+            # Test that an alias of a supported scenario resolves and runs
+            canonical, resolved = catalog_instance.resolve_scenario_id('zz_d2_alias_supported')
+            self.assertTrue(resolved, "alias should be resolved")
+            self.assertEqual(canonical, 'cisco_sdwan_brownout', "canonical_id should match")
+            runner = ScenarioRunner()
+            manifest = runner.run_scenario(ScenarioRunRequest(scenario_id='zz_d2_alias_supported', seed=42, time_mode='TEST'))
+            self.assertEqual(manifest.scenario_id, 'cisco_sdwan_brownout')
+
+            # Test that an alias of an unsupported scenario is refused
+            canonical2, resolved2 = catalog_instance.resolve_scenario_id('zz_d2_alias_unsupported')
+            self.assertTrue(resolved2, "unsupported alias should be resolved")
+            self.assertEqual(canonical2, 'sdwan_connected_core', "canonical_id should match for unsupported")
+            runner2 = ScenarioRunner()
+            with self.assertRaises(ValueError):
+                runner2.run_scenario(ScenarioRunRequest(scenario_id='zz_d2_alias_unsupported', seed=42, time_mode='TEST'))
+            self.assertEqual(runner2.run_logs, {})
 
     def test_api_refusal(self):
         from fastapi.testclient import TestClient

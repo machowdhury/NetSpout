@@ -129,6 +129,31 @@ accumulated_logs: List[LogEntry] = []
 MAX_LOG_HISTORY: int = 2000
 
 # =========================================================================
+# LIVE SIMULATION GUARD (D3)
+# =========================================================================
+# Only these 10 scenarios have dedicated telemetry in scenario_runner.execute_step
+LIVE_SIMULATION_SCENARIOS = {
+    ScenarioType.NORMAL_TRAFFIC,
+    ScenarioType.DDOS_ATTACK,
+    ScenarioType.SQL_INJECTION,
+    ScenarioType.LATERAL_MOVEMENT,
+    ScenarioType.CISCO_CAMPUS_ROGUE,
+    ScenarioType.CISCO_SDWAN_BROWNOUT,
+    ScenarioType.CISCO_ACI_MICROBURST,
+    ScenarioType.MIXED_EDGE_BREACH,
+    ScenarioType.MIXED_SASE_DEGRADATION,
+    ScenarioType.MIXED_BACKBONE_OPTICAL,
+}
+
+
+def _live_simulation_refusal_detail(scenario_id: str) -> str:
+    return (
+        f"Scenario '{scenario_id}' is not supported by the live-simulation workflow. "
+        "Only scenarios with dedicated telemetry can be used. "
+        f"Use POST /api/scenarios/{scenario_id}/run for native engine scenarios."
+    )
+
+# =========================================================================
 # TOPOLOGY PRESETS
 # =========================================================================
 
@@ -315,7 +340,7 @@ async def run_simulation_loop():
     global accumulated_logs
     while True:
         try:
-            if simulation_running:
+            if simulation_running and active_scenario in LIVE_SIMULATION_SCENARIOS:
                 logs = scenario_runner.execute_step(current_topology, active_scenario)
                 transport = getattr(current_topology, "global_transport", None)
                 for entry in logs:
@@ -369,6 +394,11 @@ async def update_topology(topology: TopologyState):
 @app.post("/api/scenarios/run")
 async def control_simulation(req: SimulationRequest):
     global simulation_running, active_scenario, simulation_interval_ms, active_ecosystem_mode
+    if req.scenario not in LIVE_SIMULATION_SCENARIOS:
+        raise HTTPException(
+            status_code=400,
+            detail=_live_simulation_refusal_detail(req.scenario.value)
+        )
     simulation_running = req.running
     active_scenario = req.scenario
     if req.speed_ms:
@@ -2303,8 +2333,16 @@ async def websocket_logs_endpoint(websocket: WebSocket):
                     simulation_running = bool(data.get("running", True))
                     await manager.broadcast({"type": "simulation_state", "running": simulation_running})
                 elif action == "set_scenario":
-                    active_scenario = ScenarioType(data.get("scenario", "normal_traffic"))
-                    await manager.broadcast({"type": "scenario_state", "scenario": active_scenario})
+                    requested_scenario = ScenarioType(data.get("scenario", "normal_traffic"))
+                    if requested_scenario not in LIVE_SIMULATION_SCENARIOS:
+                        await websocket.send_json({
+                            "type": "scenario_error",
+                            "scenario": requested_scenario.value,
+                            "detail": _live_simulation_refusal_detail(requested_scenario.value)
+                        })
+                    else:
+                        active_scenario = requested_scenario
+                        await manager.broadcast({"type": "scenario_state", "scenario": active_scenario})
                 elif action == "update_topology":
                     current_topology = TopologyState(**data.get("topology", {}))
             except Exception as e:

@@ -29,7 +29,7 @@ from app.models import (
     ValidationStatus
 )
 from app.telemetry_dispatcher import dispatcher
-from app.scenario_runner import ScenarioRunner
+from app.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
 from app.unified_generation import (
     GenerationMode,
     UnifiedGenerationRequest,
@@ -147,10 +147,14 @@ LIVE_SIMULATION_SCENARIOS = {
 
 
 def _live_simulation_refusal_detail(scenario_id: str) -> str:
+    if scenario_id in SUPPORTED_SCENARIO_IDS:
+        return (
+            f"Scenario '{scenario_id}' is not supported by the live-simulation workflow. "
+            "Only scenarios with dedicated telemetry can be used. "
+            f"Use POST /api/scenarios/{scenario_id}/run for native engine scenarios."
+        )
     return (
-        f"Scenario '{scenario_id}' is not supported by the live-simulation workflow. "
-        "Only scenarios with dedicated telemetry can be used. "
-        f"Use POST /api/scenarios/{scenario_id}/run for native engine scenarios."
+        f"Scenario '{scenario_id}' is not available in this release (live-simulation)."
     )
 
 # =========================================================================

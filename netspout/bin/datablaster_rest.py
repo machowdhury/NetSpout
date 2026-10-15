@@ -1095,7 +1095,10 @@ def stop_simulation() -> Dict[str, Any]:
 
     pid = status["pid"]
     try:
-        os.killpg(pid, signal.SIGTERM)
+        try:
+            os.killpg(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
         deadline = time.monotonic() + 6
         while time.monotonic() < deadline:
             try:

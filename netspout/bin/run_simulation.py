@@ -11,6 +11,7 @@ AppInspect & Cloud Vetting Compliant:
 """
 
 import argparse
+import contextlib
 import os
 import re
 import signal
@@ -21,7 +22,7 @@ import json
 import shutil
 import tempfile
 import stat
-from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files
+from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files, get_orchestration_log_path
 
 # App root directory
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,9 +139,16 @@ def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None,
     target_eps = int(target_eps or 1000)
     cmd = [sys.executable, os.path.abspath(__file__), "--scenario", scenario_path,
            "--hec", hec_url, "--eps", str(target_eps)]
-    process = subprocess.Popen(cmd, shell=False, stdin=subprocess.PIPE,
-                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                               text=True, cwd=APP_DIR, start_new_session=True)
+    log_path = get_orchestration_log_path()
+    with open(log_path, "a", encoding="utf-8") as log_handle:   # closed in the parent on success and on error
+        log_handle.write(f"\n=======================================================\n")
+        log_handle.write(f"SESSION START: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}\n")
+        log_handle.write(f"INVOCATION: {' '.join(cmd[:4])} [HEC credentials redacted]\n")
+        log_handle.write(f"=======================================================\n")
+        log_handle.flush()
+        process = subprocess.Popen(cmd, shell=False, stdin=subprocess.PIPE,
+                                   stdout=log_handle, stderr=subprocess.STDOUT,
+                                   text=True, cwd=APP_DIR, start_new_session=True)
     process.stdin.write(json.dumps({"credential": hec_token}))
     process.stdin.close()
     return process.pid
@@ -457,7 +465,8 @@ def _main():
             sys.exit(2)
         finally:
             if os.path.basename(args.scenario).startswith("canvas_custom_") and os.path.dirname(args.scenario) == resolve_run_dir():
-                os.unlink(args.scenario)
+                with contextlib.suppress(FileNotFoundError):
+                    os.unlink(args.scenario)
         sys.exit(0)
 
     # 1. Input sanitization
@@ -495,7 +504,8 @@ def _main():
             sys.exit(2)
         finally:
             if os.path.basename(scenario_file).startswith("canvas_custom_") and os.path.dirname(scenario_file) == resolve_run_dir():
-                os.unlink(scenario_file)
+                with contextlib.suppress(FileNotFoundError):
+                    os.unlink(scenario_file)
         sys.exit(0)
 
     # 3. Prepare Config
@@ -559,7 +569,8 @@ def _main():
         sys.exit(1)
     finally:
         if os.path.basename(scenario_file).startswith("canvas_custom_") and os.path.dirname(scenario_file) == resolve_run_dir():
-            os.unlink(scenario_file)
+            with contextlib.suppress(FileNotFoundError):
+                os.unlink(scenario_file)
         if os.path.exists(active_config):
             try:
                 os.remove(active_config)

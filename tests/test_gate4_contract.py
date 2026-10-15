@@ -397,21 +397,21 @@ class TestGate4Contract(unittest.TestCase):
     # Test 22: Representative Scenarios - Mixed Edge, SNMP, OpenConfig & Security
     # -------------------------------------------------------------------------
     def test_22_representative_other_scenarios(self):
-        """Verify full execution across mixed-edge breach, SNMP storm, OpenConfig MDT, and security scenarios."""
+        """Verify supported scenarios execute and unavailable scenarios are refused."""
         other_scenarios = [
             "mixed_edge_breach",
-            "snmp_fault_storm",
             "openconfig_mdt_streaming",
             "ddos_attack",
             "sql_injection",
-            "lateral_movement",
-            "normal_traffic"
         ]
         for sc in other_scenarios:
             req = ScenarioRunRequest(scenario_id=sc, seed=123, time_mode="TEST")
             manifest = self.runner.run_scenario(req)
             self.assertEqual(manifest.overall_validation, "PASS", f"Scenario {sc} validation failed")
             self.assertGreater(manifest.total_events_generated, 0)
+        for sc in ("snmp_fault_storm", "lateral_movement", "normal_traffic"):
+            with self.assertRaises(ValueError):
+                self.runner.run_scenario(ScenarioRunRequest(scenario_id=sc, seed=123, time_mode="TEST"))
 
 
 if __name__ == "__main__":

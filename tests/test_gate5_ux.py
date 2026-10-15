@@ -107,20 +107,23 @@ class TestGate5UX(unittest.TestCase):
     def test_07_run_starts(self):
         """7. Verify scenario run starts and returns run_id in NS-YYYYMMDD-xxxxxxxx format."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="bgp_route_leak", time_mode="TEST", seed=101)
+        req = ScenarioRunRequest(scenario_id="service_provider_cisco", time_mode="TEST", seed=101)
         manifest = self.runner.run_scenario(req)
         logs = self.runner.get_run_logs(manifest.run_id)
         self.assertTrue(manifest.run_id.startswith("NS-"))
-        self.assertEqual(manifest.scenario_id, "bgp_route_leak")
+        self.assertEqual(manifest.scenario_id, "service_provider_cisco")
         self.assertGreater(len(logs), 0)
 
     def test_08_phase_updates(self):
-        """8. Verify all 9 phases executed in chronological order."""
+        """8. Verify contracted phases execute in canonical lifecycle order."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="bgp_route_leak", time_mode="TEST", seed=102)
+        req = ScenarioRunRequest(scenario_id="service_provider_cisco", time_mode="TEST", seed=102)
         manifest = self.runner.run_scenario(req)
-        expected = ["INITIALIZE", "BASELINE", "DEGRADE", "FAULT", "PROPAGATE", "FAILOVER", "RECOVER", "VALIDATE", "COMPLETE"]
+        from netspout_core.catalog import NetSpoutCatalog
+        expected = list(dict.fromkeys(["INITIALIZE"] + [p.phase.value for p in NetSpoutCatalog().get_scenario_contract("service_provider_cisco").phases] + ["VALIDATE", "COMPLETE"]))
+        lifecycle = ["INITIALIZE", "BASELINE", "DEGRADE", "FAULT", "PROPAGATE", "FAILOVER", "RECOVER", "VALIDATE", "COMPLETE"]
         self.assertEqual(manifest.phases_executed, expected)
+        self.assertEqual(manifest.phases_executed, sorted(manifest.phases_executed, key=lifecycle.index))
 
     def test_09_run_stops(self):
         """9. Verify cooperative scenario stop mechanism."""
@@ -135,16 +138,17 @@ class TestGate5UX(unittest.TestCase):
     def test_10_manifest_displays(self):
         """10. Verify run manifest contains complete audit metadata and ground truth."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="ransomware_lateral", time_mode="TEST", seed=103)
+        req = ScenarioRunRequest(scenario_id="mixed_edge_breach", time_mode="TEST", seed=103)
         manifest = self.runner.run_scenario(req)
         self.assertIsNotNone(manifest.start_time)
         self.assertIsNotNone(manifest.end_time)
-        self.assertGreaterEqual(len(manifest.ground_truth_records), 9)
+        self.assertEqual(len(manifest.ground_truth_records), len(manifest.phases_executed))
+        self.assertGreaterEqual(len(manifest.ground_truth_records), 7)
 
     def test_11_validation_displays(self):
         """11. Verify validation engine outputs rule-by-rule PASS/FAIL status."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="ddos_syn_flood", time_mode="TEST", seed=104)
+        req = ScenarioRunRequest(scenario_id="ddos_attack", time_mode="TEST", seed=104)
         manifest = self.runner.run_scenario(req)
         self.assertIn(manifest.overall_validation, ["PASS", "FAIL"])
         for vr in manifest.validation_results:

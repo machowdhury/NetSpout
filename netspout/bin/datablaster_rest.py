@@ -1103,7 +1103,10 @@ def stop_simulation() -> Dict[str, Any]:
                     os.waitpid(pid, os.WNOHANG)
                 except ChildProcessError:
                     pass
-                os.killpg(pid, 0)
+                try:
+                    os.killpg(pid, 0)
+                except PermissionError:
+                    pass
             except ProcessLookupError:
                 break
             time.sleep(0.1)

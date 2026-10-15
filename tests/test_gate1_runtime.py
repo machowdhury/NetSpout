@@ -172,9 +172,26 @@ class TestGate1RuntimeStabilization(unittest.TestCase):
     def test_05_continuous_streaming_lifecycle(self):
         """Validate continuous streaming handlers: status, duplicate start prevention, stop."""
         import datablaster_rest
+        import tempfile
+        import uuid
+        from unittest.mock import patch
+
+        folder = tempfile.TemporaryDirectory()
+        self.addCleanup(folder.cleanup)
+        fake = "fake-" + uuid.uuid4().hex
+        for fixture in (
+            patch.dict(os.environ, {"SPLUNK_HOME": folder.name}),
+            patch.object(datablaster_rest, "has_netspout_admin",
+                         side_effect=lambda session_key: session_key == "admin"),
+            patch.object(datablaster_rest.HECCredentialStore, "read", return_value=fake),
+            patch.object(datablaster_rest, "get_orchestration_log_path",
+                         return_value=os.path.join(folder.name, "launch.log")),
+        ):
+            fixture.start()
+            self.addCleanup(fixture.stop)
 
         # Test initial status
-        code, status_resp = datablaster_rest.execute_request({"action": "status"})
+        code, status_resp = datablaster_rest.execute_request({"action": "status", "session_key": "admin"})
         self.assertEqual(code, 200)
         self.assertIn("running", status_resp)
 
@@ -191,10 +208,11 @@ class TestGate1RuntimeStabilization(unittest.TestCase):
             }
             code, start_resp = datablaster_rest.execute_request({
                 "action": "start",
+                "session_key": "admin",
                 "scenario": "scenario_acme_full_network_topology.yml",
                 "eps": "100",
                 "hec": "https://127.0.0.1:8888",
-                "token": "00000000-0000-0000-0000-000000000000"
+                "token": fake
             })
             self.assertEqual(code, 200)
             self.assertEqual(start_resp.get("status"), "warning")
@@ -204,7 +222,7 @@ class TestGate1RuntimeStabilization(unittest.TestCase):
 
         # Test stop when not running returns success / no simulation running
         if not status_resp.get("running"):
-            code, stop_resp = datablaster_rest.execute_request({"action": "stop"})
+            code, stop_resp = datablaster_rest.execute_request({"action": "stop", "session_key": "admin"})
             self.assertEqual(code, 200)
             self.assertEqual(stop_resp.get("status"), "success")
 

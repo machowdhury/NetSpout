@@ -19,61 +19,28 @@ import subprocess
 import time
 import json
 import shutil
+import tempfile
+import stat
+from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files
 
 # App root directory
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAMPLES_DIR = os.path.join(APP_DIR, "samples")
 STATIC_SAMPLES_DIR = os.path.join(APP_DIR, "appserver", "static", "samples")
-RUN_DIR = os.path.join(APP_DIR, "var", "run")
-
-# Platform binary mapping matching user specification
-PLATFORM_MAP = {
-    "darwin": [
-        "/Users/mahamudc/Documents/network-sim/data-blaster-mac-2022-03-22",
-        "/Users/mahamudc/Documents/network-sim/data-blaster-mac",
-        "/Users/mahamudc/Documents/network-sim/data-blaster",
-    ],
-    "linux": [
-        "/Users/mahamudc/Documents/network-sim/data-blaster-linux",
-        "/Users/mahamudc/Documents/network-sim/data-blaster",
-    ],
-    "win32": [
-        "/Users/mahamudc/Documents/network-sim/data-blaster-win.exe",
-        "/Users/mahamudc/Documents/network-sim/data-blaster.exe",
-    ],
-}
-
+RUN_DIR = ""
+_PRIVATE_FILES = set()
 
 def resolve_binary() -> str:
-    """Dynamically determine the platform binary matching sys.platform, falling back to python_engine."""
-    platform_key = sys.platform
-    if platform_key.startswith("linux"):
-        platform_key = "linux"
-    elif platform_key == "darwin":
-        platform_key = "darwin"
-    elif platform_key.startswith("win"):
-        platform_key = "win32"
-
-    candidates = list(PLATFORM_MAP.get(platform_key, []))
-    candidates.extend([
-        os.path.join(APP_DIR, "data-blaster"),
-        os.path.join(APP_DIR, "bin", "data-blaster"),
-        os.path.join(APP_DIR, "bin", f"data-blaster-{platform_key}")
-    ])
-    for path in candidates:
-        if os.path.exists(path) and (os.access(path, os.X_OK) or platform_key == "win32"):
-            # Ensure not executing Mach-O on Linux
-            if platform_key == "linux":
-                try:
-                    with open(path, "rb") as bf:
-                        magic = bf.read(4)
-                        if magic.startswith(b"\x7fELF"):
-                            return path
-                except Exception:
-                    pass
-            else:
+    platform_key = "linux" if sys.platform.startswith("linux") else ("darwin" if sys.platform == "darwin" else "win32")
+    for name in ("data-blaster-" + platform_key, "data-blaster"):
+        path = os.path.join(APP_DIR, "bin", name)
+        try:
+            info = os.lstat(path)
+            if (stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid()
+                    and not info.st_mode & 0o022 and os.access(path, os.X_OK)):
                 return path
-
+        except OSError:
+            pass
     return "python_engine"
 
 
@@ -86,64 +53,71 @@ def sanitize_input(val: str, pattern: str, name: str) -> str:
 
 def mask_secret(secret: str) -> str:
     """Mask credentials for safe operational logging."""
-    if not secret:
-        return "********"
-    if len(secret) <= 8:
-        return "********"
-    return f"{secret[:4]}****{secret[-4:]}"
+    return "********"
 
 
 def prepare_scenario_config(scenario_path: str, eps: int, hec_url: str, hec_token: str) -> str:
-    """
-    Prepare an ephemeral scenario configuration file with updated HEC endpoints and token.
-    Uses basic line parsing to avoid external PyYAML dependency if not installed in Splunk python.
-    """
-    os.makedirs(RUN_DIR, exist_ok=True)
-    out_filename = f"active_sim_{int(time.time())}.yml"
-    out_path = os.path.join(RUN_DIR, out_filename)
+    """Build a native configuration from approved scenario data."""
+    import yaml
 
-    with open(scenario_path, "r", encoding="utf-8") as f:
-        lines = f.readlines()
-
+    global RUN_DIR
+    RUN_DIR = resolve_run_dir()
+    resolve_hec_urls(hec_url, get_stored_config())
+    with open(scenario_path, "r", encoding="utf-8") as stream:
+        scenario = yaml.safe_load(stream)
+    if not isinstance(scenario, dict):
+        raise ValueError("Scenario must be a mapping")
     workers = max(1, min(50, int(eps / 100) if eps > 100 else 1))
+    section = "global" if "global" in scenario and "general" not in scenario else "general"
+    original = scenario.get(section, {})
+    if not isinstance(original, dict):
+        original = {}
+    settings = {}
+    for key in ("workerThreads", "globalInterval", "rotInterval", "earliest", "latest", "interval"):
+        value = original.get(key)
+        if (key in original and isinstance(value, (str, int, float, bool, type(None)))
+                and not re.search(r"[a-zA-Z][a-zA-Z0-9+.-]*://", str(value))):
+            settings[key] = value
+    settings.update(generatorWorkers=workers, outputWorkers=workers)
+    output = original.get("output", {})
+    buffer_bytes = output.get("bufferBytes") if isinstance(output, dict) else None
+    settings["output"] = {"outputter": "splunkhec", "outputTemplate": "splunkhec",
+                          "bufferBytes": buffer_bytes if type(buffer_bytes) is int else 4096,
+                          "endpoints": [hec_url], "splunkHECToken": hec_token}
+    document = {section: settings}
+    sample_keys = ("name", "interval", "count", "randomizeEvents", "tokens", "lines", "earliest", "latest")
+    line_keys = ("index", "source", "sourcetype", "host", "_raw", "raw", "_time", "time", "event")
+    if "samples" in scenario:
+        if not isinstance(scenario["samples"], list):
+            raise ValueError("Scenario samples must be a list")
+        samples = []
+        for sample in scenario["samples"]:
+            if not isinstance(sample, dict):
+                raise ValueError("Scenario sample must be a mapping")
+            item = {k: v for k, v in sample.items() if k in sample_keys}
+            if "lines" in item:
+                if not isinstance(item["lines"], list):
+                    raise ValueError("Sample lines must be a list")
+                item["lines"] = [{k: v for k, v in line.items() if k in line_keys}
+                                 if isinstance(line, dict) else line for line in item["lines"]]
+            samples.append(item)
+        document["samples"] = samples
+    if isinstance(scenario.get("tokens"), dict):
+        document["tokens"] = scenario["tokens"]
 
-    new_lines = []
-    endpoints_written = False
-    token_written = False
+    class PlainDumper(yaml.SafeDumper):
+        def ignore_aliases(self, data):
+            return True
 
-    for line in lines:
-        stripped = line.strip()
-        if stripped.startswith("generatorWorkers:"):
-            indent = line[:line.find("generatorWorkers")]
-            new_lines.append(f"{indent}generatorWorkers: {workers}\n")
-            continue
-        if stripped.startswith("outputWorkers:"):
-            indent = line[:line.find("outputWorkers")]
-            new_lines.append(f"{indent}outputWorkers: {workers}\n")
-            continue
-        if stripped.startswith("endpoints:"):
-            indent = line[:line.find("endpoints")]
-            new_lines.append(f"{indent}endpoints:\n")
-            new_lines.append(f"{indent}  - {hec_url}\n")
-            endpoints_written = True
-            continue
-        if stripped.startswith("- http://") or stripped.startswith("- https://"):
-            if endpoints_written:
-                continue
-        if stripped.startswith("splunkHECToken:"):
-            indent = line[:line.find("splunkHECToken")]
-            new_lines.append(f"{indent}splunkHECToken: {hec_token}\n")
-            token_written = True
-            continue
-
-        new_lines.append(line)
-
-    if not token_written and hec_token:
-        new_lines.append(f"    splunkHECToken: {hec_token}\n")
-
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.writelines(new_lines)
-
+    fd, out_path = tempfile.mkstemp(prefix="active_sim_", suffix=".yml", dir=RUN_DIR)
+    try:
+        os.fchmod(fd, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            yaml.dump(document, stream, Dumper=PlainDumper, sort_keys=False, default_flow_style=False)
+    except BaseException:
+        os.unlink(out_path)
+        raise
+    _PRIVATE_FILES.add(out_path)
     return out_path
 
 
@@ -152,91 +126,22 @@ def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None,
     Asynchronously coordinates the execution of cross-vendor streaming scenarios
     ensuring that numeric metrics scale realistically via a temporal degradation curve.
     """
-    # Environment variable fallbacks for secrets and endpoints
-    hec_url = hec_url or os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector")
-    hec_token = hec_token or os.environ.get("SPLUNK_HEC_TOKEN", "")
+    cfg = get_stored_config()
+    hec_url = resolve_hec_urls(hec_url or cfg["hec_url"], cfg)[0]
     if not hec_token:
-        raise ValueError("SPLUNK_HEC_TOKEN must be supplied at runtime")
-    if target_eps is None:
-        target_eps = int(os.environ.get("DATABLASTER_TARGET_EPS", 1000))
-
-    # Enforce strict input data sanitization for AppInspect safety
-    if not re.match(r"^\d+$", str(target_eps)):
-        raise ValueError("Security Violation: Target EPS parameter must be an integer string pattern.")
-        
-    if ".." in scenario_path or not scenario_path.endswith('.yml'):
-        raise ValueError("Security Violation: Unauthorized path traversal attempt detected.")
-
-    print(f"Initializing Multi-Vendor Simulation Engine targeting HEC: {hec_url} (Token: {mask_secret(hec_token)})")
-    print(f"Loading Playbook Matrix Configuration: {os.path.basename(scenario_path)}")
-    
-    # Platform Detection Framework (Maps dynamically across local user structures cleanly)
-    current_os = sys.platform
-    binary_base_path = "/Users/mahamudc/Documents/network-sim"
-    
-    if current_os == "darwin":
-        binary_executable = os.path.join(binary_base_path, "data-blaster-mac-2022-03-22")
-    elif current_os == "linux":
-        binary_executable = os.path.join(binary_base_path, "data-blaster-linux")
-    else:
-        binary_executable = os.path.join(binary_base_path, "data-blaster-win.exe")
-
-    # If the specific platform binary is not directly available, resolve via candidate map
-    if not (os.path.exists(binary_executable) and os.access(binary_executable, os.X_OK)):
-        binary_executable = resolve_binary()
-
-    if binary_executable == "python_engine":
-        cmd = [
-            sys.executable,
-            os.path.abspath(__file__),
-            "--python-stream",
-            "--scenario", scenario_path,
-            "--hec", hec_url,
-            "--token", hec_token,
-            "--eps", str(target_eps)
-        ]
-        process = subprocess.Popen(
-            cmd,
-            shell=False,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            cwd=APP_DIR,
-            start_new_session=True
-        )
-        return process.pid
-
-    # Pre-configure ephemeral config for HEC and worker rates
-    active_config = prepare_scenario_config(scenario_path, int(target_eps), hec_url, hec_token)
-    samples_dir = SAMPLES_DIR if os.path.exists(SAMPLES_DIR) else STATIC_SAMPLES_DIR
-
-    # Construct the explicit arguments array (Shell=False is mandatory for Splunk Cloud deployment)
-    # Uses data-blaster native flags (--config, --url, --splunkHECToken)
-    blast_cmd = [
-        binary_executable,
-        "--config", active_config,
-        "--url", hec_url,
-        "--splunkHECToken", hec_token,
-        "--samplesDir", samples_dir,
-        "--info"
-    ]
-    
-    try:
-        # Spawn execution process asynchronously to prevent web server thread hangs
-        process = subprocess.Popen(
-            blast_cmd,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            cwd=APP_DIR
-        )
-        return process.pid
-    except Exception as e:
-        print(f"Execution Generation Failure: {str(e)}")
-        sys.exit(1)
+        raise ValueError("HEC credential is required")
+    target_eps = int(target_eps or 1000)
+    cmd = [sys.executable, os.path.abspath(__file__), "--scenario", scenario_path,
+           "--hec", hec_url, "--eps", str(target_eps)]
+    process = subprocess.Popen(cmd, shell=False, stdin=subprocess.PIPE,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                               text=True, cwd=APP_DIR, start_new_session=True)
+    process.stdin.write(json.dumps({"credential": hec_token}))
+    process.stdin.close()
+    return process.pid
 
 
-def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: int = 1) -> dict:
+def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: int = 1, ssl_verify: bool = True) -> dict:
     """
     Emits test events/metrics for a single device node directly to Splunk HEC.
     Supports both single event testing and burst testing for individual technologies.
@@ -286,21 +191,17 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
 
     data = json.dumps(payload).encode("utf-8")
 
-    candidate_urls = [hec_url]
-    if ":8888" in hec_url:
-        candidate_urls.append(hec_url.replace(":8888", ":8088"))
-    elif ":8088" in hec_url:
-        candidate_urls.append(hec_url.replace(":8088", ":8888"))
-
+    candidate_urls = resolve_hec_urls(hec_url, get_stored_config())
     ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
+    if not ssl_verify:
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
 
     last_err = None
     for target_url in candidate_urls:
         try:
-            req = urllib.request.Request(target_url, data=data, method="POST")
-            req.add_header("Authorization", f"Splunk {hec_token}")
+            req = hec_request(target_url, data=data, method="POST")
+            req.add_unredirected_header("Authorization", f"Splunk {hec_token}")
             req.add_header("Content-Type", "application/json")
             with urllib.request.urlopen(req, context=ctx, timeout=5) as response:
                 resp_code = response.getcode()
@@ -308,7 +209,7 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
                 return {
                     "status": "success",
                     "code": resp_code,
-                    "response": resp_text,
+                    "response": "HEC responded",
                     "device": device_info.get("name"),
                     "hec_url": target_url
                 }
@@ -316,11 +217,11 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
             return {
                 "status": "error",
                 "code": e.code,
-                "message": e.read().decode("utf-8"),
+                "message": "HEC request failed",
                 "hec_url": target_url
             }
         except Exception as e:
-            last_err = str(e)
+            last_err = "Operation failed"
             continue
 
     return {"status": "error", "message": f"HEC Connection Failed: {last_err or 'unreachable'}"}
@@ -331,7 +232,9 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
     Synthesizes an ephemeral scenario YAML from the visual canvas nodes and links,
     then launches validate_and_stream_mv_scenario asynchronously.
     """
-    os.makedirs(RUN_DIR, exist_ok=True)
+    global RUN_DIR
+    RUN_DIR = resolve_run_dir()
+    cleanup_stale_run_files()
     scenario_id = f"canvas_custom_{int(time.time())}"
     scen_filename = f"{scenario_id}.yml"
     scen_path = os.path.join(RUN_DIR, scen_filename)
@@ -348,9 +251,9 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
     lines_yaml.append('  interval: 1000')
     lines_yaml.append('  workers: 4')
     lines_yaml.append('  endpoints:')
-    lines_yaml.append(f'    - "{hec_url}"')
+    lines_yaml.append(f'    - {json.dumps(hec_url)}')
     lines_yaml.append('  tokens:')
-    lines_yaml.append(f'    - "{hec_token}"')
+    lines_yaml.append('    - ""')
     lines_yaml.append('')
     lines_yaml.append('tokens:')
     lines_yaml.append('  SYSLOG_TS:')
@@ -375,16 +278,15 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
         sourcetype = n.get("sourcetype", "cisco:ios")
         source = n.get("source", f"{n.get('vendor', 'net')}:syslog")
         event_raw = n.get("sampleEvent", f"$SYSLOG_TS$ {host} NetFlow: flow_id=$FLOW_ID$ proto=TCP action=forward status=established")
-        clean_raw = event_raw.replace('"', '\\"') if '"' in event_raw else event_raw
-        lines_yaml.append(f'      - index: {index}')
-        lines_yaml.append(f'        source: {source}')
-        lines_yaml.append(f'        sourcetype: {sourcetype}')
-        lines_yaml.append(f'        host: {host}')
-        lines_yaml.append(f'        _raw: "{clean_raw}"')
+        lines_yaml.append(f'      - index: {json.dumps(index)}')
+        lines_yaml.append(f'        source: {json.dumps(source)}')
+        lines_yaml.append(f'        sourcetype: {json.dumps(sourcetype)}')
+        lines_yaml.append(f'        host: {json.dumps(host)}')
+        lines_yaml.append(f'        _raw: {json.dumps(event_raw)}')
 
     lines_yaml.append('')
 
-    with open(scen_path, "w", encoding="utf-8") as f:
+    with os.fdopen(os.open(scen_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w", encoding="utf-8") as f:
         f.write("\n".join(lines_yaml))
 
     return validate_and_stream_mv_scenario(scen_path, hec_url, hec_token, eps)
@@ -398,6 +300,13 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
     import ssl
     import random
 
+    def decode_value(value):
+        value = value.strip()
+        if value.startswith('"'):
+            return json.loads(value)
+        return value.strip("'")
+
+    resolve_hec_urls(hec_url, get_stored_config())
     events_to_stream = []
     if os.path.exists(scenario_file):
         try:
@@ -409,16 +318,18 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
             curr_host = "core-router.corp.internal"
             for l in lines:
                 ls = l.strip()
+                if ls.startswith("- "):
+                    ls = ls[2:]
                 if ls.startswith("index:"):
-                    curr_index = ls.split(":", 1)[1].strip()
+                    curr_index = decode_value(ls.split(":", 1)[1])
                 elif ls.startswith("sourcetype:"):
-                    curr_st = ls.split(":", 1)[1].strip()
+                    curr_st = decode_value(ls.split(":", 1)[1])
                 elif ls.startswith("source:"):
-                    curr_source = ls.split(":", 1)[1].strip()
+                    curr_source = decode_value(ls.split(":", 1)[1])
                 elif ls.startswith("host:"):
-                    curr_host = ls.split(":", 1)[1].strip()
+                    curr_host = decode_value(ls.split(":", 1)[1])
                 elif ls.startswith("_raw:") or ls.startswith("raw:"):
-                    raw_val = ls.split(":", 1)[1].strip().strip('"').strip("'")
+                    raw_val = decode_value(ls.split(":", 1)[1])
                     events_to_stream.append({
                         "index": curr_index,
                         "sourcetype": curr_st,
@@ -427,7 +338,7 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                         "raw": raw_val
                     })
         except Exception as e:
-            sys.stderr.write(f"[BLASTER-PY] Scenario parse warning: {e}\n")
+            sys.stderr.write(f"[BLASTER-PY] Scenario parse warning: Operation failed\n")
 
     if not events_to_stream:
         events_to_stream = [
@@ -439,8 +350,9 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
         ]
 
     ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE
+    if get_stored_config().get("ssl_verify", True) is False:
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
 
     print(f"[BLASTER-PY] Starting Python Native Simulation Engine ({len(events_to_stream)} templates)...")
     print(f"[BLASTER-PY] Target HEC: {hec_url} (Token: {mask_secret(hec_token)}), EPS: {eps}")
@@ -492,7 +404,7 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                 }))
 
         payload = "\n".join(batch).encode("utf-8")
-        req = urllib.request.Request(
+        req = hec_request(
             hec_url,
             data=payload,
             headers={
@@ -505,26 +417,44 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                 print(f"[BLASTER] Streamed batch of {batch_size} events to {hec_url} (HTTP {resp.status})")
                 sys.stdout.flush()
         except Exception as e:
-            sys.stderr.write(f"[BLASTER-PY-WARN] HEC Send Error: {e}\n")
+            sys.stderr.write(f"[BLASTER-PY-WARN] HEC Send Error: Operation failed\n")
             sys.stderr.flush()
 
         time.sleep(sleep_time)
 
 
-def main():
+def _main():
     parser = argparse.ArgumentParser(description="TA-network-data-blaster Secure Simulation Runner")
     parser.add_argument("--scenario", required=True, help="Path to scenario YAML file")
     parser.add_argument("--eps", type=int, default=int(os.environ.get("DATABLASTER_TARGET_EPS", 1000)), help="Target Events Per Second (integer)")
     parser.add_argument("--hec", default=os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector"), help="Target Splunk HEC URL")
-    parser.add_argument("--token", default=os.environ.get("SPLUNK_HEC_TOKEN", ""), help="Splunk HEC token supplied at runtime")
+    parser.add_argument("--ssl-verify", default="true", choices=["true", "false"])
     parser.add_argument("--sample", required=False, default=None, help="Optional sample filter")
     parser.add_argument("--async-exec", action="store_true", help="Launch asynchronously and return PID immediately")
     parser.add_argument("--python-stream", action="store_true", help="Run using native Python streaming engine")
 
     args = parser.parse_args()
 
+    def stop_runner(signum, frame):
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, stop_runner)
+    signal.signal(signal.SIGINT, stop_runner)
+    args.scenario = resolve_scenario_path(args.scenario, APP_DIR)
+    if (os.path.basename(args.scenario).startswith("canvas_custom_")
+            and os.path.dirname(args.scenario) == os.path.realpath(resolve_run_dir())):
+        _PRIVATE_FILES.add(args.scenario)
+    args.token = json.loads(sys.stdin.read()).get("credential", "")
+    resolve_hec_urls(args.hec, get_stored_config())
+    if not args.token:
+        raise ValueError("HEC credential is required")
+
     if args.python_stream:
-        run_python_streamer(args.scenario, args.hec, args.token, args.eps)
+        try:
+            run_python_streamer(args.scenario, args.hec, args.token, args.eps)
+        finally:
+            if os.path.basename(args.scenario).startswith("canvas_custom_") and os.path.dirname(args.scenario) == resolve_run_dir():
+                os.unlink(args.scenario)
         sys.exit(0)
 
     # 1. Input sanitization
@@ -532,25 +462,7 @@ def main():
         sys.stderr.write(f"[ERROR] Invalid EPS value: {args.eps}. Must be between 1 and 500,000.\n")
         sys.exit(1)
 
-    # Sanitize scenario path (prevent traversal)
-    if ".." in args.scenario or not re.match(r"^[a-zA-Z0-9_\-./]+$", args.scenario):
-        sys.stderr.write(f"[ERROR] Invalid scenario path characters detected.\n")
-        sys.exit(1)
-
     scenario_file = args.scenario
-    if not os.path.isabs(scenario_file):
-        candidate_app = os.path.join(APP_DIR, scenario_file)
-        candidate_scenarios = os.path.join(APP_DIR, "scenarios", os.path.basename(scenario_file))
-        candidate_static = os.path.join(APP_DIR, "appserver", "static", "scenarios", os.path.basename(scenario_file))
-        if os.path.exists(candidate_app):
-            scenario_file = candidate_app
-        elif os.path.exists(candidate_scenarios):
-            scenario_file = candidate_scenarios
-        elif os.path.exists(candidate_static):
-            scenario_file = candidate_static
-        else:
-            sys.stderr.write(f"[ERROR] Scenario file not found: {args.scenario}\n")
-            sys.exit(1)
 
     if args.async_exec:
         pid = validate_and_stream_mv_scenario(scenario_file, args.hec, args.token, args.eps)
@@ -561,7 +473,7 @@ def main():
     try:
         binary_path = resolve_binary()
     except Exception as e:
-        sys.stderr.write(f"[ERROR] {e}\n")
+        sys.stderr.write(f"[ERROR] Operation failed\n")
         sys.exit(1)
 
     print(f"[TA-network-data-blaster] Host OS: {sys.platform}")
@@ -570,23 +482,45 @@ def main():
     print(f"[TA-network-data-blaster] Target EPS: {args.eps}")
     print(f"[TA-network-data-blaster] HEC Endpoint: {args.hec} (Token: {mask_secret(args.token)})")
 
-    if binary_path == "python_engine":
-        run_python_streamer(scenario_file, args.hec, args.token, args.eps)
+    # Native engines do not expose a verified TLS configuration contract.
+    # Use the Python engine while certificate verification is enabled.
+    if binary_path == "python_engine" or get_stored_config().get("ssl_verify", True) is not False:
+        try:
+            run_python_streamer(scenario_file, args.hec, args.token, args.eps)
+        finally:
+            if os.path.basename(scenario_file).startswith("canvas_custom_") and os.path.dirname(scenario_file) == resolve_run_dir():
+                os.unlink(scenario_file)
         sys.exit(0)
 
     # 3. Prepare Config
     try:
         active_config = prepare_scenario_config(scenario_file, args.eps, args.hec, args.token)
     except Exception as e:
-        sys.stderr.write(f"[ERROR] Failed preparing ephemeral config: {e}\n")
+        sys.stderr.write(f"[ERROR] Failed preparing ephemeral config: Operation failed\n")
         sys.exit(1)
 
     samples_dir = SAMPLES_DIR if os.path.exists(SAMPLES_DIR) else STATIC_SAMPLES_DIR
+
+    proc = None
+
+    def terminate(signum, frame):
+        if proc is not None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait()
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, terminate)
+    signal.signal(signal.SIGINT, terminate)
 
     # 4. Execute Native Binary (Strictly shell=False)
     cmd = [
         binary_path,
         "-c", active_config,
+        "--url", args.hec,
         "--samplesDir", samples_dir,
         "--info",
     ]
@@ -607,7 +541,7 @@ def main():
 
         if proc.stdout:
             for line in iter(proc.stdout.readline, ""):
-                print(f"[BLASTER] {line.strip()}")
+                print(f"[BLASTER] {line.strip().replace(args.token, '[redacted]')}")
                 sys.stdout.flush()
 
         proc.wait()
@@ -615,14 +549,29 @@ def main():
         sys.exit(proc.returncode)
 
     except Exception as e:
-        sys.stderr.write(f"[ERROR] Process execution failed: {e}\n")
+        sys.stderr.write(f"[ERROR] Process execution failed: Operation failed\n")
         sys.exit(1)
     finally:
+        if os.path.basename(scenario_file).startswith("canvas_custom_") and os.path.dirname(scenario_file) == resolve_run_dir():
+            os.unlink(scenario_file)
         if os.path.exists(active_config):
             try:
                 os.remove(active_config)
             except OSError:
                 pass
+
+
+def main():
+    _PRIVATE_FILES.clear()
+    try:
+        _main()
+    finally:
+        for path in _PRIVATE_FILES:
+            try:
+                os.unlink(path)
+            except FileNotFoundError:
+                pass
+        _PRIVATE_FILES.clear()
 
 
 if __name__ == "__main__":

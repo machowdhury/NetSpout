@@ -86,8 +86,8 @@ require([
         action: 'start',
         scenario: filename,
         eps: eps,
-        hec: hecUrl,
-        token: token
+
+
       })
     })
     .then(function(r) { return r.json(); })

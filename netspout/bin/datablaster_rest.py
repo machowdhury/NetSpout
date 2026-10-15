@@ -6,7 +6,7 @@ Splunk App TA-datablaster: bin/datablaster_rest.py
 Handles REST calls from Splunk Web UI (/services/datablaster/execute)
 Compatible with Splunk Enterprise & Splunk Cloud Vetting:
 - Strictly enforces shell=False with explicit argument list
-- Enforces strict regex validation on eps, scenario, sample, hec, and token
+- Validates run parameters and server-configured HEC destinations
 - Directs execution logs to $SPLUNK_HOME/var/log/splunk/ta_datablaster_orchestration.log
 - Asynchronously wraps execution calls through bin/run_simulation.py
 """
@@ -19,6 +19,11 @@ import time
 import signal
 import subprocess
 import tempfile
+import stat
+import logging
+import threading
+from contextlib import contextmanager
+from urllib.parse import urlsplit, quote
 import urllib.request
 import urllib.error
 import ssl
@@ -43,41 +48,102 @@ except ImportError:
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN_DIR = os.path.join(APP_DIR, "bin")
 
+class RunFolderError(RuntimeError):
+    pass
+
+
 def resolve_run_dir() -> str:
-    """Dynamically determine writable runtime directory with graceful fallbacks."""
-    candidates = [
-        os.path.join(APP_DIR, "var", "run"),
-    ]
-    splunk_home = os.environ.get("SPLUNK_HOME")
-    if splunk_home:
-        candidates.append(os.path.join(splunk_home, "var", "run", "netspout"))
-    candidates.append(os.path.join(tempfile.gettempdir(), "netspout_run"))
-
-    for path in candidates:
+    """Use only the private Splunk runtime directory."""
+    home = os.environ.get("SPLUNK_HOME")
+    if not home:
+        raise RunFolderError("SPLUNK_HOME is required for the NetSpout run folder")
+    path = os.path.join(home, "var", "run", "netspout")
+    try:
+        if os.path.islink(path):
+            raise OSError("Run folder must not be a symlink")
+        os.makedirs(path, mode=0o700, exist_ok=True)
+        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         try:
-            os.makedirs(path, mode=0o777, exist_ok=True)
-            test_f = os.path.join(path, f".perm_test_{os.getpid()}")
-            with open(test_f, "w") as f:
-                f.write("ok")
-            os.remove(test_f)
-            return path
-        except (OSError, PermissionError):
-            continue
-    return tempfile.gettempdir()
+            if os.fstat(fd).st_uid != os.getuid():
+                raise OSError("Run folder must belong to the current user")
+            os.fchmod(fd, 0o700)
+        finally:
+            os.close(fd)
+    except OSError:
+        raise RunFolderError("Cannot create private NetSpout run folder") from None
+    return path
 
-RUN_DIR = resolve_run_dir()
-PID_FILE = os.path.join(RUN_DIR, "datablaster.pid")
-STATUS_FILE = os.path.join(RUN_DIR, "datablaster_status.json")
-CONFIG_FILE = os.path.join(RUN_DIR, "datablaster_config.json")
+
+# Resolve and validate runtime paths only when an operation needs them.
+RUN_DIR = ""
+PID_FILE = STATUS_FILE = CONFIG_FILE = ""
+
 
 def get_active_run_dir() -> str:
     global RUN_DIR, PID_FILE, STATUS_FILE, CONFIG_FILE
-    if not os.path.exists(RUN_DIR) or not os.access(RUN_DIR, os.W_OK):
-        RUN_DIR = resolve_run_dir()
-        PID_FILE = os.path.join(RUN_DIR, "datablaster.pid")
-        STATUS_FILE = os.path.join(RUN_DIR, "datablaster_status.json")
-        CONFIG_FILE = os.path.join(RUN_DIR, "datablaster_config.json")
+    RUN_DIR = resolve_run_dir()
+    PID_FILE = os.path.join(RUN_DIR, "datablaster.pid")
+    STATUS_FILE = os.path.join(RUN_DIR, "datablaster_status.json")
+    CONFIG_FILE = os.path.join(RUN_DIR, "datablaster_config.json")
     return RUN_DIR
+
+
+MANAGEMENT_URL = "https://127.0.0.1:8089"
+logger = logging.getLogger("netspout.hec")
+
+
+def has_netspout_admin(session_key):
+    # VERIFY-ON-SPLUNK: Confirm current-context entry.content.capabilities is a list.
+    if not session_key:
+        return False
+    try:
+        response, body = rest.simpleRequest(
+            MANAGEMENT_URL + "/services/authentication/current-context?output_mode=json",
+            sessionKey=session_key, method="GET")
+        return int(response.status) == 200 and any(
+            "netspout_admin" in entry.get("content", {}).get("capabilities", [])
+            for entry in json.loads(body).get("entry", []))
+    except Exception:
+        return False
+
+
+class HECCredentialStore:
+    """Access one app-owned Splunk credential using the caller's session."""
+    collection = MANAGEMENT_URL + "/servicesNS/nobody/netspout/storage/passwords"
+    item = collection + "/" + quote("netspout:hec_token:", safe="")
+
+    def __init__(self, session_key):
+        self.session_key = session_key
+
+    def _request(self, url, method="GET", postargs=None):
+        # VERIFY-ON-SPLUNK: Check storage/passwords name, 404, clear_password and update responses.
+        try:
+            response, body = rest.simpleRequest(
+                url + "?output_mode=json", sessionKey=self.session_key,
+                method=method, postargs=postargs, raiseAllErrors=False)
+            return int(response.status), json.loads(body)
+        except Exception:
+            raise RuntimeError("Splunk credential store request failed") from None
+
+    def read(self):
+        code, data = self._request(self.item)
+        if code == 404:
+            return ""
+        if code != 200:
+            raise RuntimeError("Cannot read NetSpout HEC credential")
+        entries = data.get("entry", [])
+        return entries[0].get("content", {}).get("clear_password", "") if entries else ""
+
+    def save(self, value):
+        if not has_netspout_admin(self.session_key):
+            raise PermissionError("netspout_admin capability required")
+        code, _ = self._request(self.item, "POST", {"password": value})
+        if code == 404:
+            code, _ = self._request(self.collection, "POST", {
+                "realm": "netspout", "name": "hec_token", "password": value})
+        if code not in (200, 201):
+            raise RuntimeError("Cannot save NetSpout HEC credential")
+
 
 # Regex validation rules
 RE_EPS = re.compile(r"^\d+$")
@@ -87,7 +153,8 @@ RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 DEFAULT_CONFIG = {
     "hec_url": "https://127.0.0.1:8088/services/collector",
-    "hec_token": os.environ.get("SPLUNK_HEC_TOKEN", ""),
+    "hec_allowed_hosts": ["127.0.0.1", "localhost"],
+    "hec_allowed_ports": [8088],
     "ssl_verify": True,
     "target_eps": 1000,
     "idx_network_ops": "idx_network_ops",
@@ -99,60 +166,199 @@ DEFAULT_CONFIG = {
 }
 
 
-def get_stored_config() -> Dict[str, Any]:
-    """Retrieve saved configuration or fallback to defaults."""
+def write_private_file(path, data):
+    fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+            raise OSError("Private file must be regular and owned by the current user")
+        os.fchmod(fd, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            fd = None
+            stream.write(data)
+    finally:
+        if fd is not None:
+            os.close(fd)
+
+
+def _read_private_file(path):
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        info = os.fstat(fd)
+        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid()
+                or info.st_mode & 0o022):
+            raise OSError("Private file permissions or ownership are invalid")
+        with os.fdopen(fd, "r", encoding="utf-8") as stream:
+            fd = None
+            return stream.read()
+    finally:
+        if fd is not None:
+            os.close(fd)
+
+
+def _write_config(path, cfg):
+    write_private_file(path, json.dumps(cfg, indent=2))
+
+
+def _legacy_config(path, session_key, app_legacy=False):
+    """Restrict legacy copies before attempting a recoverable migration."""
+    fd = None
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+            return {}
+        writable = bool(info.st_mode & 0o022)
+        if writable:
+            os.fchmod(fd, 0o600)
+            os.replace(path, path + ".untrusted-" + str(time.time_ns()))
+            logger.warning("Untrusted legacy configuration set aside; credential should be rotated")
+            return {}
+        with os.fdopen(fd, "r", encoding="utf-8") as stream:
+            fd = None
+            saved = json.load(stream)
+            if not isinstance(saved, dict):
+                return {}
+            if "hec_token" in saved:
+                os.fchmod(stream.fileno(), 0o600)
+        legacy = saved.pop("hec_token", "")
+        if legacy and has_netspout_admin(session_key):
+            try:
+                store = HECCredentialStore(session_key)
+                existing = store.read()
+                if not existing:
+                    store.save(legacy)
+                    logger.warning("Legacy HEC credential migrated; it should be rotated")
+                if app_legacy:
+                    os.unlink(path)
+                else:
+                    _write_config(path, {k: v for k, v in saved.items() if k in DEFAULT_CONFIG})
+            except Exception:
+                logger.warning("Legacy credential migration deferred; credential should be rotated")
+        return {k: v for k, v in saved.items() if k in DEFAULT_CONFIG}
+    except (OSError, ValueError):
+        return {}
+    finally:
+        if fd is not None:
+            os.close(fd)
+
+
+def get_stored_config(session_key="") -> Dict[str, Any]:
+    get_active_run_dir()
     cfg = dict(DEFAULT_CONFIG)
-    if os.path.exists(CONFIG_FILE):
+    _legacy_config(os.path.join(APP_DIR, "var", "run", "datablaster_config.json"),
+                   session_key, app_legacy=True)
+    cfg.update(_legacy_config(CONFIG_FILE, session_key))
+    return cfg
+
+
+_START_LOCK = threading.Lock()
+
+
+@contextmanager
+def simulation_start_lock():
+    import fcntl
+    with _START_LOCK:
+        path = os.path.join(get_active_run_dir(), "datablaster.lock")
+        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
         try:
-            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                saved = json.load(f)
-                cfg.update(saved)
-        except Exception:
-            pass
+            info = os.fstat(fd)
+            if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+                raise OSError("Run lock must be regular and owned by the current user")
+            os.fchmod(fd, 0o600)
+            fcntl.flock(fd, fcntl.LOCK_EX)
+            yield
+        finally:
+            os.close(fd)
+
+
+def resolve_scenario_path(scenario, app_dir=None):
+    app_dir = APP_DIR if app_dir is None else app_dir
+    if ".." in scenario.split(os.sep):
+        raise ValueError("Scenario must be inside an approved scenario folder")
+    roots = [os.path.realpath(os.path.join(app_dir, "scenarios")),
+             os.path.realpath(os.path.join(app_dir, "appserver", "static", "scenarios"))]
+    run_dir = os.path.realpath(resolve_run_dir())
+    candidates = [scenario] if os.path.isabs(scenario) else [
+        os.path.join(root, scenario) for root in roots] + [os.path.join(app_dir, scenario)]
+    for candidate in candidates:
+        resolved = os.path.realpath(candidate)
+        allowed = any(os.path.commonpath([root, resolved]) == root for root in roots)
+        allowed = allowed or (os.path.dirname(resolved) == run_dir
+                              and os.path.basename(resolved).startswith("canvas_custom_"))
+        if allowed and os.path.isfile(resolved):
+            return resolved
+    raise ValueError("Scenario must be inside an approved scenario folder")
+
+
+def cleanup_stale_run_files():
+    folder = get_active_run_dir()
+    for name in os.listdir(folder):
+        if name.startswith(("active_sim_", "canvas_custom_")):
+            try:
+                os.unlink(os.path.join(folder, name))
+            except FileNotFoundError:
+                pass
+
+
+def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any]:
+    if not has_netspout_admin(session_key):
+        raise PermissionError("netspout_admin capability required")
+    cfg = get_stored_config(session_key)
+    if "hec_token" in new_cfg:
+        HECCredentialStore(session_key).save(new_cfg["hec_token"])
+    for key in DEFAULT_CONFIG:
+        if key in new_cfg:
+            cfg[key] = new_cfg[key]
+    resolve_hec_urls(cfg["hec_url"], cfg)
+    if cfg["ssl_verify"] is False:
+        logger.warning("Admin setting disables HEC certificate verification")
+    _write_config(CONFIG_FILE, cfg)
     return cfg
 
 
-def save_stored_config(new_cfg: Dict[str, Any]) -> Dict[str, Any]:
-    """Persist configuration to disk."""
-    active_dir = get_active_run_dir()
-    os.makedirs(active_dir, mode=0o777, exist_ok=True)
-    cfg = get_stored_config()
-    for k in ["hec_url", "hec_token", "ssl_verify", "target_eps", "idx_network_ops", "idx_security_fw", "idx_wireless_ops", "idx_performance_metrics", "cisco_mdt_metrics", "default_scenario"]:
-        if k in new_cfg:
-            cfg[k] = new_cfg[k]
-    with open(CONFIG_FILE, "w", encoding="utf-8") as f:
-        json.dump(cfg, f, indent=2)
+class HECConfigurationError(ValueError):
+    pass
+
+
+def resolve_hec_urls(hec_url: str, cfg=None) -> List[str]:
+    """Return the exact HTTPS URL; enforce destination policy when cfg is supplied.
+
+    Resolution alone needs no runtime files. Execution and request construction
+    must supply the server configuration to validate the destination.
+    """
+    try:
+        parsed = urlsplit(hec_url)
+        valid = (parsed.scheme == "https" and not parsed.username and not parsed.password
+                 and not parsed.fragment and not parsed.query
+                 and parsed.hostname is not None
+                 and (cfg is None or (parsed.hostname in cfg["hec_allowed_hosts"]
+                                      and (parsed.port or 443) in cfg["hec_allowed_ports"])))
+    except (ValueError, KeyError, TypeError):
+        valid = False
+    if not valid:
+        raise HECConfigurationError("HEC destination must use HTTPS and an allowed host and port")
+    return [hec_url]
+
+
+def hec_request(url, **kwargs):
+    """Keep HEC authorization on the original request only."""
+    resolve_hec_urls(url, get_stored_config())
+    headers = dict(kwargs.pop("headers", {}))
+    authorization = headers.pop("Authorization", None)
+    request = urllib.request.Request(url, headers=headers, **kwargs)
+    if authorization is not None:
+        request.add_unredirected_header("Authorization", authorization)
+    return request
+
+
+def public_config(session_key):
+    cfg = get_stored_config(session_key)
+    cfg["hec_token_configured"] = bool(HECCredentialStore(session_key).read())
     return cfg
 
 
-def resolve_hec_urls(hec_url: str) -> List[str]:
-    """Generate candidate HEC URLs handling port 8888 (host) vs 8088 (container) mapping and localhost."""
-    urls: List[str] = []
-    if hec_url:
-        clean = hec_url.strip()
-        urls.append(clean)
-        if ":8888" in clean:
-            urls.append(clean.replace(":8888", ":8088"))
-        elif ":8088" in clean:
-            urls.append(clean.replace(":8088", ":8888"))
-        if "127.0.0.1" in clean:
-            urls.append(clean.replace("127.0.0.1", "localhost"))
-        elif "localhost" in clean:
-            urls.append(clean.replace("localhost", "127.0.0.1"))
-    
-    defaults = [
-        "https://127.0.0.1:8088/services/collector",
-        "https://localhost:8088/services/collector",
-        "https://127.0.0.1:8888/services/collector",
-        "http://127.0.0.1:8088/services/collector"
-    ]
-    for d in defaults:
-        if d not in urls:
-            urls.append(d)
-    return urls
-
-
-def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> Dict[str, Any]:
+def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = True) -> Dict[str, Any]:
     """Test connectivity and authentication against Splunk HEC with selectable SSL verification."""
     import urllib.request
     import urllib.error
@@ -167,13 +373,13 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
-    candidate_urls = resolve_hec_urls(hec_url)
+    candidate_urls = resolve_hec_urls(hec_url, get_stored_config())
 
     last_res = None
     for candidate in candidate_urls:
         t0 = time.time()
         try:
-            req = urllib.request.Request(
+            req = hec_request(
                 candidate,
                 data=b'{"event": "datablaster_probe", "sourcetype": "datablaster:probe", "index": "main"}',
                 headers={
@@ -191,7 +397,7 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
                     "latency_ms": latency,
                     "hec_url": candidate,
                     "ssl_verify": ssl_verify,
-                    "response": body[:200]
+                    "response": "HEC responded"
                 }
         except urllib.error.HTTPError as he:
             latency = round((time.time() - t0) * 1000, 1)
@@ -202,7 +408,7 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
                     "message": f"HEC Authentication Failed: Invalid or unauthorized token (HTTP {he.code}).",
                     "http_status": he.code,
                     "latency_ms": latency,
-                    "details": err_body,
+                    "details": "HEC request failed",
                     "hec_url": candidate
                 }
             elif he.code == 404:
@@ -211,23 +417,23 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
                     "message": f"Endpoint responded with HTTP 404. Verify the HEC path (/services/collector).",
                     "http_status": 404,
                     "latency_ms": latency,
-                    "details": err_body,
+                    "details": "HEC request failed",
                     "hec_url": candidate
                 }
             else:
                 return {
                     "status": "warning",
-                    "message": f"HEC responded with HTTP {he.code}: {he.reason}",
+                    "message": f"HEC responded with HTTP {he.code}: Request failed",
                     "http_status": he.code,
                     "latency_ms": latency,
-                    "details": err_body,
+                    "details": "HEC request failed",
                     "hec_url": candidate
                 }
         except ssl.SSLCertVerificationError as se:
             latency = round((time.time() - t0) * 1000, 1)
             return {
                 "status": "error",
-                "message": f"SSL Certificate Verification Failed: {str(se)}. If using self-signed certs (e.g. local Docker/dev), set ssl_verify = false.",
+                "message": f"SSL Certificate Verification Failed: Certificate verification failed. If using self-signed certs (e.g. local Docker/dev), set ssl_verify = false.",
                 "http_status": 0,
                 "latency_ms": latency,
                 "ssl_error": True,
@@ -237,7 +443,7 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
             latency = round((time.time() - t0) * 1000, 1)
             last_res = {
                 "status": "error",
-                "message": f"Cannot connect to HEC endpoint: {str(e)}",
+                "message": f"Cannot connect to HEC endpoint: Operation failed",
                 "http_status": 0,
                 "latency_ms": latency,
                 "hec_url": candidate
@@ -253,7 +459,7 @@ def test_hec_connection(hec_url: str, token: str, ssl_verify: bool = False) -> D
     }
 
 
-def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = False) -> Dict[str, Any]:
+def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = True) -> Dict[str, Any]:
     """
     Run 5 Comprehensive Preflight Environment Checks:
     1. Target Indexes Availability (idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics, cisco_mdt_metrics, netops_logs)
@@ -286,8 +492,9 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
     missing_indexes = []
 
     ctx_unverified = ssl.create_default_context()
-    ctx_unverified.check_hostname = False
-    ctx_unverified.verify_mode = ssl.CERT_NONE
+    if not ssl_verify:
+        ctx_unverified.check_hostname = False
+        ctx_unverified.verify_mode = ssl.CERT_NONE
 
     # Probe and resolve active HEC URL (handles container vs host port mapping)
     hec_probe = test_hec_connection(hec_url, token, ssl_verify=ssl_verify)
@@ -315,8 +522,8 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
                 "index": idx_name
             }).encode("utf-8")
         
-        req = urllib.request.Request(active_hec_url, data=probe_payload, method="POST")
-        req.add_header("Authorization", f"Splunk {token}")
+        req = hec_request(active_hec_url, data=probe_payload, method="POST")
+        req.add_unredirected_header("Authorization", f"Splunk {token}")
         req.add_header("Content-Type", "application/json")
         
         try:
@@ -328,7 +535,7 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
                     "description": idx["desc"],
                     "available": True,
                     "status": "Available & Ready",
-                    "details": resp_text
+                    "details": "HEC responded"
                 })
         except urllib.error.HTTPError as he:
             err_text = he.read().decode("utf-8") if hasattr(he, "read") else ""
@@ -339,7 +546,7 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
                     "description": idx["desc"],
                     "available": False,
                     "status": "Missing in Splunk",
-                    "details": err_text
+                    "details": "HEC request failed"
                 })
                 missing_indexes.append(idx_name)
             else:
@@ -447,7 +654,7 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
         ctx_strict = ssl.create_default_context()
         ctx_strict.check_hostname = True
         ctx_strict.verify_mode = ssl.CERT_REQUIRED
-        req_strict = urllib.request.Request(
+        req_strict = hec_request(
             active_hec_url,
             data=b'{"event": "ssl_probe", "sourcetype": "datablaster:ssl"}',
             headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"}
@@ -455,9 +662,9 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = Fals
         with urllib.request.urlopen(req_strict, timeout=4, context=ctx_strict) as r_strict:
             ssl_strict_ok = True
     except ssl.SSLCertVerificationError as se:
-        ssl_strict_err = f"Self-Signed / Untrusted CA: {str(se)}"
+        ssl_strict_err = "Certificate verification failed"
     except Exception as e:
-        ssl_strict_err = str(e)
+        ssl_strict_err = "Operation failed"
 
     results["checks"]["ssl_verification"] = {
         "name": "SSL Verification & TLS Certificate Health",
@@ -545,7 +752,7 @@ def create_custom_index(name: str, datatype: str = "event", max_size_mb: int = 5
         except Exception as e:
             try:
                 rest.simpleRequest("/services/data/indexes/_reload", sessionKey=session_key, method="POST")
-                splunk_rest_msg = f"Persisted to local/indexes.conf and triggered index reload ({str(e)})"
+                splunk_rest_msg = f"Persisted to local/indexes.conf and triggered index reload (Operation failed)"
             except Exception:
                 splunk_rest_msg = f"Persisted to local/indexes.conf"
 
@@ -643,13 +850,13 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
                     })
             else:
                 raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
-        stored_cfg = get_stored_config()
-        hec_url = str(params.get("hec") or stored_cfg.get("hec_url", "https://127.0.0.1:8088/services/collector")).strip()
-        token = str(params.get("token") or stored_cfg.get("hec_token", "")).strip()
+        stored_cfg = get_stored_config(params.get("session_key", ""))
+        hec_url = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
+        token = HECCredentialStore(params.get("session_key", "")).read()
         if not token:
             raise ValueError("HEC token is not configured")
-        ssl_verify = bool(params.get("ssl_verify", False))
-        session_key = str(params.get("session_key") or params.get("sessionKey", ""))
+        ssl_verify = stored_cfg.get("ssl_verify", True) is not False
+        session_key = params.get("session_key", "")
         return {
             "action": "blast_hec",
             "hec": hec_url,
@@ -691,57 +898,24 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             "session_key": str(params.get("session_key") or params.get("sessionKey", ""))
         }
 
-    # HEC Destination URL Validation
-    stored_cfg = get_stored_config()
-    default_hec = stored_cfg.get("hec_url", "https://127.0.0.1:8088/services/collector")
-    hec = str(params.get("hec", default_hec)).strip()
-    if not RE_URL.match(hec):
-        raise ValueError(f"Invalid HEC destination URL: {hec}. Must start with http:// or https://")
-
-    # Token Validation
-    default_tok = stored_cfg.get("hec_token", "")
-    token = str(params.get("token", default_tok)).strip()
-    if not token:
-        token = default_tok
-    elif not RE_TOKEN.match(token):
-        raise ValueError("Invalid HEC Token format. Must be alphanumeric with dashes.")
-    if not token:
-        raise ValueError("HEC token is not configured")
-
-    raw_ssl = params.get("ssl_verify", stored_cfg.get("ssl_verify", True))
-    if isinstance(raw_ssl, str):
-        ssl_verify = raw_ssl.lower() in ("true", "1", "yes")
-    else:
-        ssl_verify = bool(raw_ssl)
-
-    if action == "test_hec":
-        return {"action": "test_hec", "hec": hec, "token": token, "ssl_verify": ssl_verify}
-
-    if action == "validate_environment":
-        return {"action": "validate_environment", "hec": hec, "token": token, "ssl_verify": ssl_verify}
-
     if action == "save_config":
         new_config = {}
-        if "hec_url" in params:
-            new_config["hec_url"] = str(params["hec_url"]).strip()
-        elif "hec" in params:
-            new_config["hec_url"] = str(params["hec"]).strip()
-        if "hec_token" in params:
-            new_config["hec_token"] = str(params["hec_token"]).strip()
-        elif "token" in params:
-            new_config["hec_token"] = str(params["token"]).strip()
-        if "ssl_verify" in params:
-            v = params["ssl_verify"]
-            new_config["ssl_verify"] = v.lower() in ("true", "1", "yes") if isinstance(v, str) else bool(v)
-        for k in ["idx_network_ops", "idx_security_fw", "idx_wireless_ops", "idx_performance_metrics", "cisco_mdt_metrics", "default_scenario"]:
-            if k in params:
-                new_config[k] = str(params[k]).strip()
-        if "target_eps" in params:
-            try:
-                new_config["target_eps"] = int(params["target_eps"])
-            except ValueError:
-                pass
-        return {"action": "save_config", "config": new_config}
+        for key in DEFAULT_CONFIG:
+            if key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports") and key in params:
+                new_config[key] = params[key]
+        if "ssl_verify" in new_config:
+            value = new_config["ssl_verify"]
+            new_config["ssl_verify"] = value.lower() in ("true", "1", "yes") if isinstance(value, str) else bool(value)
+        return {"action": action, "config": new_config}
+
+    stored_cfg = get_stored_config(params.get("session_key", ""))
+    hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
+    token = HECCredentialStore(params.get("session_key", "")).read()
+    if not token:
+        raise ValueError("HEC token is not configured")
+    ssl_verify = stored_cfg.get("ssl_verify", True) is not False
+    if action in ("test_hec", "validate_environment"):
+        return {"action": action, "hec": hec, "token": token, "ssl_verify": ssl_verify}
 
     if action in ("onboard_sample", "emit_device_telemetry"):
         sourcetype = str(params.get("sourcetype", "custom:telemetry")).strip()
@@ -750,7 +924,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         host = str(params.get("host", "")).strip()
         ip = str(params.get("ip", "")).strip()
         count = int(params.get("count", 1))
-        ssl_verify = bool(params.get("ssl_verify", False))
+        ssl_verify = stored_cfg.get("ssl_verify", True) is not False
         return {
             "action": "onboard_sample",
             "sourcetype": sourcetype,
@@ -789,7 +963,18 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             try:
                 nodes = json.loads(nodes)
             except Exception:
-                nodes = []
+                raise ValueError("Canvas nodes must be a list of mappings") from None
+        if not isinstance(nodes, list) or len(nodes) > 500:
+            raise ValueError("Canvas nodes must be a list of at most 500 mappings")
+        for node in nodes:
+            if not isinstance(node, dict):
+                raise ValueError("Canvas nodes must be mappings")
+            for field in ("id", "vendor", "host", "index", "source", "sourcetype", "sampleEvent"):
+                if field in node:
+                    value = node[field]
+                    if (not isinstance(value, str) or len(value) > 4096
+                            or any(ord(c) < 32 or c in '\x7f\x85\u2028\u2029"\\' for c in value)):
+                        raise ValueError("Invalid canvas node field")
         links = params.get("links", [])
         if isinstance(links, str):
             try:
@@ -802,7 +987,8 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             "links": links,
             "eps": eps_val,
             "hec": hec,
-            "token": token
+            "token": token,
+        "ssl_verify": ssl_verify
         }
 
     # 1. EPS Validation (integers only)
@@ -820,20 +1006,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if ".." in scenario or not RE_SAFE_PATH.match(scenario):
         raise ValueError(f"Illegal characters or directory traversal in 'scenario': {scenario}")
 
-    # Resolve scenario path safely
-    scenario_path = scenario
-    if not os.path.isabs(scenario_path):
-        candidate_1 = os.path.join(APP_DIR, "scenarios", os.path.basename(scenario))
-        candidate_2 = os.path.join(APP_DIR, "appserver", "static", "scenarios", os.path.basename(scenario))
-        candidate_3 = os.path.join(APP_DIR, scenario)
-        if os.path.exists(candidate_1):
-            scenario_path = candidate_1
-        elif os.path.exists(candidate_2):
-            scenario_path = candidate_2
-        elif os.path.exists(candidate_3):
-            scenario_path = candidate_3
-        else:
-            raise FileNotFoundError(f"Scenario configuration file not found: {scenario}")
+    scenario_path = resolve_scenario_path(scenario)
 
     # 3. Sample Validation (optional)
     sample = params.get("sample")
@@ -848,7 +1021,8 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         "sample": sample,
         "eps": eps_val,
         "hec": hec,
-        "token": token
+        "token": token,
+        "ssl_verify": ssl_verify
     }
 
 
@@ -856,6 +1030,12 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
 def is_process_running(pid: int) -> bool:
     """Check if process is active."""
     try:
+        try:
+            done, _ = os.waitpid(pid, os.WNOHANG)
+            if done:
+                return False
+        except ChildProcessError:
+            pass
         os.kill(pid, 0)
         return True
     except (OSError, ProcessLookupError):
@@ -867,17 +1047,14 @@ def get_current_status() -> Dict[str, Any]:
     active_pid = None
     active_dir = get_active_run_dir()
     pid_candidates = [
-        os.path.join(active_dir, "datablaster.pid"),
-        os.path.join(tempfile.gettempdir(), "datablaster.pid"),
-        os.path.join(tempfile.gettempdir(), "netspout_run", "datablaster.pid")
+        os.path.join(active_dir, "datablaster.pid")
     ]
     for p_file in pid_candidates:
         if os.path.exists(p_file):
             try:
-                with open(p_file, "r") as f:
-                    active_pid = int(f.read().strip())
-                    if active_pid:
-                        break
+                active_pid = int(_read_private_file(p_file).strip())
+                if active_pid:
+                    break
             except (ValueError, IOError):
                 active_pid = None
 
@@ -893,8 +1070,7 @@ def get_current_status() -> Dict[str, Any]:
     metadata = {}
     if os.path.exists(STATUS_FILE):
         try:
-            with open(STATUS_FILE, "r") as f:
-                metadata = json.load(f)
+            metadata = json.loads(_read_private_file(STATUS_FILE))
         except Exception:
             pass
 
@@ -914,15 +1090,26 @@ def stop_simulation() -> Dict[str, Any]:
     """Gracefully terminate active simulation."""
     status = get_current_status()
     if not status["running"] or not status["pid"]:
+        cleanup_stale_run_files()
         return {"status": "success", "message": "No simulation currently running"}
 
     pid = status["pid"]
     try:
-        os.kill(pid, signal.SIGTERM)
-        time.sleep(0.5)
-        if is_process_running(pid):
-            os.kill(pid, signal.SIGKILL)
-        for p_file in [PID_FILE, os.path.join(tempfile.gettempdir(), "datablaster.pid"), os.path.join(tempfile.gettempdir(), "netspout_run", "datablaster.pid")]:
+        os.killpg(pid, signal.SIGTERM)
+        deadline = time.monotonic() + 6
+        while time.monotonic() < deadline:
+            try:
+                try:
+                    os.waitpid(pid, os.WNOHANG)
+                except ChildProcessError:
+                    pass
+                os.killpg(pid, 0)
+            except ProcessLookupError:
+                break
+            time.sleep(0.1)
+        else:
+            os.killpg(pid, signal.SIGKILL)
+        for p_file in [PID_FILE]:
             if os.path.exists(p_file):
                 try:
                     os.remove(p_file)
@@ -930,7 +1117,10 @@ def stop_simulation() -> Dict[str, Any]:
                     pass
         return {"status": "success", "message": f"Terminated process {pid}"}
     except Exception as e:
-        return {"status": "error", "message": f"Failed stopping process {pid}: {str(e)}"}
+        return {"status": "error", "message": f"Failed stopping process {pid}: Operation failed"}
+
+    finally:
+        cleanup_stale_run_files()
 
 
 def read_recent_logs(lines_count: int = 50) -> Dict[str, Any]:
@@ -949,10 +1139,15 @@ def read_recent_logs(lines_count: int = 50) -> Dict[str, Any]:
             "log_path": log_path
         }
     except Exception as e:
-        return {"error": f"Failed reading log: {str(e)}", "lines": []}
+        return {"error": f"Failed reading log: Operation failed", "lines": []}
 
 
-def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
+def start_simulation(run_params):
+    with simulation_start_lock():
+        return _start_simulation_locked(run_params)
+
+
+def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
     """
     Launch bin/run_simulation.py asynchronously with explicit argument list and shell=False.
     """
@@ -965,7 +1160,7 @@ def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
             "pid": status["pid"]
         }
 
-    os.makedirs(RUN_DIR, exist_ok=True)
+    cleanup_stale_run_files()
     run_sim_script = os.path.join(BIN_DIR, "run_simulation.py")
     if not os.path.exists(run_sim_script):
         raise FileNotFoundError(f"Missing automation wrapper: {run_sim_script}")
@@ -976,13 +1171,13 @@ def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
     cmd = [
         sys.executable,
         run_sim_script,
-        "--scenario", clean_params["scenario"],
-        "--eps", str(clean_params["eps"]),
-        "--hec", clean_params["hec"],
-        "--token", clean_params["token"]
+        "--scenario", run_params["scenario"],
+        "--eps", str(run_params["eps"]),
+        "--hec", run_params["hec"],
+        "--ssl-verify", str(run_params.get("ssl_verify", True)).lower()
     ]
-    if clean_params.get("sample"):
-        cmd.extend(["--sample", clean_params["sample"]])
+    if run_params.get("sample"):
+        cmd.extend(["--sample", run_params["sample"]])
 
     # Write audit entry to log
     with open(log_path, "a", encoding="utf-8") as lf:
@@ -999,54 +1194,45 @@ def start_simulation(clean_params: Dict[str, Any]) -> Dict[str, Any]:
             stdout=lf,
             stderr=subprocess.STDOUT,
             cwd=APP_DIR,
-            start_new_session=True
+            start_new_session=True,
+            stdin=subprocess.PIPE, text=True
         )
+        proc.stdin.write(json.dumps({"credential": run_params["token"]}))
+        proc.stdin.close()
 
-    # Record PID with safe multi-path write
     active_dir = get_active_run_dir()
-    for p_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
-        try:
-            os.makedirs(p_dir, mode=0o777, exist_ok=True)
-            with open(os.path.join(p_dir, "datablaster.pid"), "w") as pf:
-                pf.write(str(proc.pid))
-            break
-        except Exception:
-            continue
+    write_private_file(PID_FILE, str(proc.pid))
 
     # Record metadata
     meta = {
         "started_at": time.time(),
-        "scenario": clean_params["scenario"],
-        "sample": clean_params.get("sample"),
-        "eps": clean_params["eps"],
-        "hec": clean_params["hec"],
+        "scenario": run_params["scenario"],
+        "sample": run_params.get("sample"),
+        "eps": run_params["eps"],
+        "hec": run_params["hec"],
         "pid": proc.pid
     }
-    for s_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
-        try:
-            os.makedirs(s_dir, mode=0o777, exist_ok=True)
-            with open(os.path.join(s_dir, "datablaster_status.json"), "w") as sf:
-                json.dump(meta, sf, indent=2)
-            break
-        except Exception:
-            continue
+    write_private_file(STATUS_FILE, json.dumps(meta, indent=2))
 
     return {
         "status": "success",
         "message": f"Simulation launched asynchronously under PID {proc.pid}",
         "pid": proc.pid,
-        "scenario": os.path.basename(clean_params["scenario"]),
-        "eps": clean_params["eps"],
+        "scenario": os.path.basename(run_params["scenario"]),
+        "eps": run_params["eps"],
         "log_path": log_path
     }
 
 
-def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
+def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     """
     Main dispatch entry point for both Splunk REST handler and CLI/test invocation.
     Returns (http_status_code, json_dict).
     """
     try:
+        if not has_netspout_admin(params.get("session_key", "")):
+            return (403, {"status": "error", "message": "netspout_admin capability required"})
+        get_stored_config(params.get("session_key", ""))
         clean = validate_and_sanitize(params)
         action = clean["action"]
 
@@ -1064,7 +1250,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             return (200, res)
 
         elif action == "validate":
-            return (200, {"status": "valid", "sanitized": clean})
+            return (200, {"status": "valid", "sanitized": {k: v for k, v in clean.items() if k != "token"}})
 
         elif action in ("start", "start_simulation", "run_scenario"):
             res = start_simulation(clean)
@@ -1073,47 +1259,37 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
         elif action == "blast_single_device":
             sys.path.insert(0, BIN_DIR)
             import run_simulation
-            res = run_simulation.blast_single_device(clean["device_info"], clean["hec"], clean["token"], clean.get("count", 1))
+            res = run_simulation.blast_single_device(clean["device_info"], clean["hec"], clean["token"], clean.get("count", 1), get_stored_config().get("ssl_verify", True) is not False)
             return (200, res)
 
         elif action == "stream_canvas_topology":
-            sys.path.insert(0, BIN_DIR)
-            import run_simulation
-            pid = run_simulation.stream_custom_canvas_topology(clean["nodes"], clean["links"], clean["hec"], clean["token"], clean["eps"])
-            active_dir = get_active_run_dir()
-            for p_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
-                try:
-                    os.makedirs(p_dir, mode=0o777, exist_ok=True)
-                    with open(os.path.join(p_dir, "datablaster.pid"), "w") as pf:
-                        pf.write(str(pid))
-                    break
-                except Exception:
-                    continue
-            meta = {
-                "started_at": time.time(),
-                "scenario": "custom_canvas_topology",
-                "eps": clean["eps"],
-                "hec": clean["hec"],
-                "pid": pid,
-                "nodes_count": len(clean["nodes"]),
-                "links_count": len(clean["links"])
-            }
-            for s_dir in [active_dir, os.path.join(tempfile.gettempdir(), "netspout_run"), tempfile.gettempdir()]:
-                try:
-                    os.makedirs(s_dir, mode=0o777, exist_ok=True)
-                    with open(os.path.join(s_dir, "datablaster_status.json"), "w") as sf:
-                        json.dump(meta, sf, indent=2)
-                    break
-                except Exception:
-                    continue
-            return (200, {
-                "status": "success",
-                "message": f"Custom canvas topology stream launched under PID {pid}",
-                "pid": pid,
-                "nodes": len(clean["nodes"]),
-                "links": len(clean["links"])
-            })
-
+            with simulation_start_lock():
+                status = get_current_status()
+                if status["running"]:
+                    return (409, {"status": "warning", "pid": status["pid"],
+                                  "message": "Simulation already running. Stop it first."})
+                sys.path.insert(0, BIN_DIR)
+                import run_simulation
+                pid = run_simulation.stream_custom_canvas_topology(clean["nodes"], clean["links"], clean["hec"], clean["token"], clean["eps"])
+                active_dir = get_active_run_dir()
+                write_private_file(PID_FILE, str(pid))
+                meta = {
+                    "started_at": time.time(),
+                    "scenario": "custom_canvas_topology",
+                    "eps": clean["eps"],
+                    "hec": clean["hec"],
+                    "pid": pid,
+                    "nodes_count": len(clean["nodes"]),
+                    "links_count": len(clean["links"])
+                }
+                write_private_file(STATUS_FILE, json.dumps(meta, indent=2))
+                return (200, {
+                    "status": "success",
+                    "message": f"Custom canvas topology stream launched under PID {pid}",
+                    "pid": pid,
+                    "nodes": len(clean["nodes"]),
+                    "links": len(clean["links"])
+                })
         elif action == "blast_hec":
             hec_url = clean["hec"]
             token = clean["token"]
@@ -1142,7 +1318,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
 
             raw_payload = "\n".join(formatted_lines).encode("utf-8")
 
-            target_urls = resolve_hec_urls(hec_url)
+            target_urls = resolve_hec_urls(hec_url, get_stored_config())
 
             ctx = ssl.create_default_context()
             if not ssl_verify:
@@ -1155,7 +1331,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
 
             for url in target_urls:
                 try:
-                    req = urllib.request.Request(
+                    req = hec_request(
                         url,
                         data=raw_payload,
                         headers={
@@ -1178,7 +1354,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                                 ev_copy["index"] = "main"
                                 fallback_lines.append(json.dumps(ev_copy))
                             fallback_payload = "\n".join(fallback_lines).encode("utf-8")
-                            fb_req = urllib.request.Request(
+                            fb_req = hec_request(
                                 url,
                                 data=fallback_payload,
                                 headers={
@@ -1192,12 +1368,12 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                                 target_index = f"main (fallback from {target_index})"
                                 break
                         except Exception as fb_err:
-                            last_err = f"{he} -> {fb_err}"
+                            last_err = f"{he} -> Receiver request failed"
                             continue
-                    last_err = str(he)
+                    last_err = "HEC request failed"
                     continue
                 except Exception as e:
-                    last_err = str(e)
+                    last_err = "Operation failed"
                     continue
 
 
@@ -1206,7 +1382,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                     "status": "success",
                     "message": f"Successfully ingested {len(events)} event(s) via HEC into '{target_index}'!",
                     "events_count": len(events),
-                    "hec_response": resp_data
+                    "hec_response": "HEC responded"
                 })
             else:
                 if session_key and SPLUNK_AVAILABLE:
@@ -1228,11 +1404,11 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                             "events_count": len(events)
                         })
                     except Exception as fb_err:
-                        last_err = f"{last_err} | Fallback receiver error: {fb_err}"
+                        last_err = f"HEC request failed | Fallback receiver error: Receiver request failed"
 
                 return (400, {
                     "status": "error",
-                    "message": f"HEC delivery failed: {last_err}"
+                    "message": f"HEC delivery failed: HEC request failed"
                 })
 
         elif action == "onboard_sample":
@@ -1258,7 +1434,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             
             lines = [l for l in sample_content.splitlines() if l.strip()]
             hec_url = clean.get("hec") or "https://127.0.0.1:8088/services/collector"
-            token = clean.get("token") or os.environ.get("SPLUNK_HEC_TOKEN", "")
+            token = clean.get("token")
             if not token:
                 raise ValueError("HEC token is not configured")
             ssl_verify = clean.get("ssl_verify", True)
@@ -1266,7 +1442,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             payload_events = []
             is_metric_target = (index_target == "cisco_mdt_metrics" or "metric" in index_target.lower())
             host_name = clean.get("host") or f"onboarded-{safe_name}-01"
-            repeat_count = max(1, min(1000, clean.get("count", 1)))
+            repeat_count = max(1, min(1000, int(clean.get("count", 1))))
             
             for _ in range(repeat_count):
                 cur_time = time.time()
@@ -1315,13 +1491,13 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 ctx.check_hostname = False
                 ctx.verify_mode = ssl.CERT_NONE
 
-            target_urls = resolve_hec_urls(hec_url)
+            target_urls = resolve_hec_urls(hec_url, get_stored_config())
             success = False
             resp_text = ""
             last_err = None
             for url in target_urls:
                 try:
-                    req = urllib.request.Request(
+                    req = hec_request(
                         url,
                         data=raw_payload,
                         headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"}
@@ -1334,7 +1510,7 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                     last_err = e
 
             if not success:
-                raise RuntimeError(f"HEC delivery failed across all endpoints: {last_err}")
+                raise RuntimeError(f"HEC delivery failed across all endpoints: HEC request failed")
 
             ingested_count = len(lines) * repeat_count
             
@@ -1345,20 +1521,20 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 "index": index_target,
                 "sample_file": sample_file,
                 "events_count": ingested_count,
-                "hec_response": resp_text
+                "hec_response": "HEC responded"
             })
 
         elif action == "test_hec":
-            res = test_hec_connection(clean["hec"], clean["token"], clean.get("ssl_verify", False))
+            res = test_hec_connection(clean["hec"], clean["token"], clean.get("ssl_verify", True))
             code = 200 if res.get("status") == "success" else (res.get("http_status") or 400)
             return (code, res)
 
         elif action == "validate_environment":
-            res = run_environment_validation(clean["hec"], clean["token"], clean.get("ssl_verify", False))
+            res = run_environment_validation(clean["hec"], clean["token"], clean.get("ssl_verify", True))
             return (200, res)
 
         elif action == "get_config":
-            cfg = get_stored_config()
+            cfg = public_config(params.get("session_key", ""))
             return (200, {"status": "success", "config": cfg})
 
         elif action == "create_index":
@@ -1376,14 +1552,17 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             return (200, res)
 
         elif action == "save_config":
-            cfg = save_stored_config(clean["config"])
+            save_stored_config(clean["config"], params.get("session_key", ""))
+            cfg = public_config(params.get("session_key", ""))
             return (200, {"status": "success", "message": "Configuration saved successfully", "config": cfg})
 
         else:
             return (400, {"status": "error", "message": f"Unknown action: {action}"})
 
+    except (HECConfigurationError, RunFolderError) as error:
+        return (400, {"status": "error", "message": str(error)})
     except Exception as e:
-        return (400, {"status": "error", "message": str(e)})
+        return (400, {"status": "error", "message": "Request failed; check configuration and runtime availability"})
 
 
 # Splunk REST Handler Implementation
@@ -1402,7 +1581,8 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
             request = json.loads(in_string) if in_string else {}
             
             # Extract sessionKey
-            session_key = request.get("sessionKey") or request.get("session_key") or ""
+            session_key = request.get("session", {}).get("authtoken") or request.get("sessionKey") or ""
+            # VERIFY-ON-SPLUNK: Confirm persist requests provide session.authtoken.
 
             # Query parameters (list of [key, value] tuples or dict)
             query_raw = request.get("query", [])
@@ -1430,6 +1610,7 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
             params = {}
             params.update(query_params)
             params.update(body_params)
+            params.pop("sessionKey", None)
             params["session_key"] = session_key
 
             if not params or "action" not in params:
@@ -1443,34 +1624,13 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
         except Exception as e:
             return {
                 "status": 500,
-                "payload": json.dumps({"status": "error", "message": str(e)})
+                "payload": json.dumps({"status": "error", "message": "Request failed; check configuration and runtime availability"})
             }
 
     def handleStream(self, handle, in_string):
         raise NotImplementedError("PersistentServerConnectionApplication.handleStream")
 
 
-# Standalone runner for testing and diagnostics
-if __name__ == "__main__":
-    import argparse
-    cli_parser = argparse.ArgumentParser(description="TA-datablaster REST Handler CLI Test")
-    cli_parser.add_argument("--action", default="status", choices=["start", "stop", "status", "logs", "validate"])
-    cli_parser.add_argument("--scenario", default="scenario_acme_full_network_topology.yml")
-    cli_parser.add_argument("--eps", default="1000")
-    cli_parser.add_argument("--hec", default="https://127.0.0.1:8088/services/collector")
-    cli_parser.add_argument("--token", default="12345678-1234-1234-1234-123456789012")
-    cli_parser.add_argument("--lines", type=int, default=30)
-
-    cli_args = cli_parser.parse_args()
-    req_params = {
-        "action": cli_args.action,
-        "scenario": cli_args.scenario,
-        "eps": cli_args.eps,
-        "hec": cli_args.hec,
-        "token": cli_args.token,
-        "lines": cli_args.lines
-    }
-
-    code, output = execute_request(req_params)
-    print(f"HTTP Status: {code}")
-    print(json.dumps(output, indent=2))
+def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
+    ignored = {"hec", "url", "hec_url", "token", "hec_token"}
+    return _execute_request({key: value for key, value in params.items() if key not in ignored})

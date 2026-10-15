@@ -1037,8 +1037,8 @@ require([
       host: host,
       ip: ip,
       count: count || 1,
-      hec: hecUrl,
-      token: token,
+
+
       ssl_verify: sslVerify
     };
 

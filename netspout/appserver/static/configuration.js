@@ -48,9 +48,9 @@ require([
   }
 
   var defaultCfg = {
-    hec_url: "https://127.0.0.1:8888/services/collector",
-    hec_token: "",
-    ssl_verify: false,
+
+
+    ssl_verify: true,
     target_eps: 1000,
     default_scenario: "scenario_custom_multivendor_enterprise_stack.yml",
     idx_network_ops: "idx_network_ops",
@@ -116,8 +116,11 @@ require([
 
   function applyConfigToForm(c) {
     if (document.getElementById('cfg-hec-url')) document.getElementById('cfg-hec-url').value = c.hec_url || defaultCfg.hec_url;
-    if (document.getElementById('cfg-hec-token')) document.getElementById('cfg-hec-token').value = c.hec_token || defaultCfg.hec_token;
-    if (document.getElementById('cfg-ssl-verify')) document.getElementById('cfg-ssl-verify').value = String(c.ssl_verify !== undefined ? c.ssl_verify : false);
+    var credentialInput = document.getElementById('cfg-hec-token');
+    if (credentialInput) { credentialInput.value = ''; credentialInput.disabled = true; credentialInput.placeholder = c.hec_token_configured ? 'Configured in Splunk credential store' : 'Configure realm netspout, name hec_token in Splunk credential store'; }
+    var destinationInput = document.getElementById('cfg-hec-url');
+    if (destinationInput) { destinationInput.disabled = true; destinationInput.value = c.hec_url || ''; }
+    if (document.getElementById('cfg-ssl-verify')) document.getElementById('cfg-ssl-verify').value = String(c.ssl_verify !== undefined ? c.ssl_verify : true);
     if (document.getElementById('cfg-target-eps')) document.getElementById('cfg-target-eps').value = c.target_eps || defaultCfg.target_eps;
     if (document.getElementById('cfg-default-scenario')) document.getElementById('cfg-default-scenario').value = c.default_scenario || defaultCfg.default_scenario;
     if (document.getElementById('cfg-idx-network')) document.getElementById('cfg-idx-network').value = c.idx_network_ops || defaultCfg.idx_network_ops;
@@ -144,7 +147,7 @@ require([
 
   window.datablasterTestHec = function() {
     var url = (document.getElementById('cfg-hec-url') || {}).value || defaultCfg.hec_url;
-    var tok = (document.getElementById('cfg-hec-token') || {}).value || defaultCfg.hec_token;
+    
     var sslVerify = (document.getElementById('cfg-ssl-verify') || {}).value === 'true';
 
     setBadge('probing', 'Testing HEC...');
@@ -157,7 +160,7 @@ require([
     fetch(getRestUrl(), {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify({ action: 'test_hec', hec: url.trim(), token: tok.trim(), ssl_verify: sslVerify })
+      body: JSON.stringify({ action: 'test_hec', ssl_verify: sslVerify })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -184,7 +187,7 @@ require([
 
   window.datablasterRunPreflight = function() {
     var url = (document.getElementById('cfg-hec-url') || {}).value || defaultCfg.hec_url;
-    var tok = (document.getElementById('cfg-hec-token') || {}).value || defaultCfg.hec_token;
+    
     var sslVerify = (document.getElementById('cfg-ssl-verify') || {}).value === 'true';
 
     setBadge('probing', 'Running Validation...');
@@ -200,8 +203,8 @@ require([
       headers: getHeaders(),
       body: JSON.stringify({
         action: 'validate_environment',
-        hec: url.trim(),
-        token: tok.trim(),
+
+
         ssl_verify: sslVerify
       })
     })
@@ -282,8 +285,8 @@ require([
 
   window.datablasterSaveConfig = function() {
     var cfg = {
-      hec_url: document.getElementById('cfg-hec-url').value.trim(),
-      hec_token: document.getElementById('cfg-hec-token').value.trim(),
+
+
       ssl_verify: document.getElementById('cfg-ssl-verify').value === 'true',
       target_eps: parseInt(document.getElementById('cfg-target-eps').value, 10) || 1000,
       default_scenario: document.getElementById('cfg-default-scenario').value,
@@ -296,8 +299,6 @@ require([
 
     try {
       localStorage.setItem('datablaster_config', JSON.stringify(cfg));
-      localStorage.setItem('datablaster_hec_url', cfg.hec_url);
-      localStorage.setItem('datablaster_hec_token', cfg.hec_token);
       localStorage.setItem('datablaster_ssl_verify', String(cfg.ssl_verify));
     } catch(e) {}
 
@@ -333,7 +334,7 @@ require([
       return;
     }
 
-    var cfg = readFormConfig();
+    var cfg = {ssl_verify: document.getElementById('cfg-ssl-verify').value === 'true'};
     statusMsg.html('<span style="color:#38bdf8;">Saving sample &amp; blasting into HEC...</span>');
 
     fetch(getRestUrl(), {
@@ -344,8 +345,8 @@ require([
         sourcetype: sourcetype,
         index: indexTarget,
         sample_content: content,
-        hec: cfg.hec_url,
-        token: cfg.hec_token,
+
+
         ssl_verify: cfg.ssl_verify
       })
     })
@@ -548,7 +549,13 @@ require([
 
     // Auto-load config
     var local = {};
-    try { local = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
+    try {
+      local = JSON.parse(localStorage.getItem('datablaster_config') || '{}');
+      delete local.hec_token;
+      delete local.token;
+      localStorage.removeItem('datablaster_hec_token');
+      localStorage.setItem('datablaster_config', JSON.stringify(local));
+    } catch(e) {}
 
     fetch(getRestUrl('action=get_config'), { headers: getHeaders() })
     .then(function(r) { return r.json(); })

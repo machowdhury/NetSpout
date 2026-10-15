@@ -430,8 +430,8 @@
       setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "sending" }));
       const blastPayload = {
         action: "blast_single_device",
-        hec: hecUrl,
-        token: hecToken,
+
+
         device_info: {
           name: node.customName,
           vendor: node.vendor,
@@ -490,8 +490,8 @@
 
         const streamPayload = {
           action: "stream_canvas_topology",
-          hec: hecUrl,
-          token: hecToken,
+
+
           eps: targetEps,
           nodes: canvasNodes,
           links: canvasLinks
@@ -510,7 +510,7 @@
       fetch("/services/datablaster/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "test_hec", hec: hecUrl, token: hecToken })
+        body: JSON.stringify({ action: "test_hec" })
       })
       .then(r => r.json())
       .then(data => {

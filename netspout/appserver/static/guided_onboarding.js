@@ -2351,8 +2351,8 @@ require([
       headers: getHeaders(),
       body: JSON.stringify({
         action: 'test_hec',
-        hec: hecUrl,
-        token: token,
+
+
         ssl_verify: sslVerify
       })
     })
@@ -2430,8 +2430,8 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'blast_hec',
-          hec: hecUrl,
-          token: token,
+
+
           events: eventsToSend
         })
       })
@@ -2480,8 +2480,8 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'blast_hec',
-          hec: hecUrl,
-          token: token,
+
+
           events: multiEvents
         })
       })

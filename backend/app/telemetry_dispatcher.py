@@ -714,13 +714,17 @@ class TelemetryDispatcher:
                 }
             if is_metric and not any(k.startswith("metric_name:") for k in hec_payload["fields"]):
                 # fail closed: a metric record without a generated numeric value is never sent (no fabricated value)
-                results["hec"] = {"success": False, "message": "metric record has no numeric values; not dispatched"}
+                results["hec"] = {"success": False, "message": "metric record has no numeric values; not dispatched",
+                                  "state": HEC_FAILED, "http_status": None, "error_class": "not_dispatched"}
                 self.stats["hec_errors"] += 1
+                self.stats["hec_generated"] += 1
+                self.stats["hec_failed"] += 1
             else:
                 ssl_v = getattr(transport, "hec_ssl_verify", True)
                 insec = getattr(transport, "hec_allow_insecure_tls", False)
-                ok, msg = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
-                results["hec"] = {"success": ok, "message": msg}
+                outcome = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
+                ok, msg = outcome
+                results["hec"] = {"success": ok, "message": msg, **hec_outcome_fields(outcome)}
 
         # 2. Syslog Transport (UDP/TCP)
         if transport.syslog_enabled and transport.syslog_host and transport.syslog_port:

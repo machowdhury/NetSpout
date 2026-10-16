@@ -541,40 +541,45 @@ class TelemetryDispatcher:
                 }
 
                 # Extract metric values from raw_log
-                extracted_metric = False
                 if log.raw_log:
                     try:
-                        raw_obj = json.loads(log.raw_log) if isinstance(log.raw_log, str) else log.raw_log
+                        if isinstance(log.raw_log, str):
+                            raw_obj, _ = json.JSONDecoder().raw_decode(log.raw_log.lstrip())
+                        else:
+                            raw_obj = log.raw_log
                         if isinstance(raw_obj, dict):
+                            # Handle fields dict
                             if "fields" in raw_obj and isinstance(raw_obj["fields"], dict):
                                 metric_fields.update(raw_obj["fields"])
-                                extracted_metric = any(k.startswith("metric_name:") for k in raw_obj["fields"])
+                            # Handle data dict
                             if "data" in raw_obj and isinstance(raw_obj["data"], dict):
                                 data = raw_obj["data"]
-                                if "queue_depth_bytes" in data:
-                                    metric_fields["metric_name:queue_depth"] = float(data["queue_depth_bytes"])
-                                    metric_fields["_value"] = float(data["queue_depth_bytes"])
-                                    extracted_metric = True
-                                elif "buffer_utilization_pct" in data:
-                                    metric_fields["metric_name:buffer_utilization"] = float(data["buffer_utilization_pct"])
-                                    metric_fields["_value"] = float(data["buffer_utilization_pct"])
-                                    extracted_metric = True
-                                else:
-                                    for k, v in data.items():
-                                        if isinstance(v, (int, float)):
-                                            metric_fields[f"metric_name:{k}"] = float(v)
-                                            metric_fields["_value"] = float(v)
-                                            extracted_metric = True
-                                            break
+                                for k, v in data.items():
+                                    if isinstance(v, (int, float)) and not isinstance(v, bool):
+                                        name = k
+                                        if name == "queue_depth_bytes":
+                                            name = "queue_depth"
+                                        elif name == "buffer_utilization_pct":
+                                            name = "buffer_utilization"
+                                        metric_fields[f"metric_name:{name}"] = float(v)
+                            # Handle data_gpbkv list
+                            if "data_gpbkv" in raw_obj and isinstance(raw_obj["data_gpbkv"], list):
+                                for entry in raw_obj["data_gpbkv"]:
+                                    if isinstance(entry, dict) and "content" in entry and isinstance(entry["content"], dict):
+                                        content = entry["content"]
+                                        for k, v in content.items():
+                                            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                                                name = k.replace("-", "_")
+                                                metric_fields[f"metric_name:{name}"] = float(v)
+                                        # Set sensor_path from first entry that contributed a value
+                                        if "sensor_path" not in metric_fields and "path" in entry:
+                                            metric_fields["sensor_path"] = str(entry["path"])
+                            # Copy top-level keys
                             for k in ("node_id_str", "sensor_path", "subscription_id"):
                                 if k in raw_obj:
                                     metric_fields[k] = str(raw_obj[k])
                     except Exception:
                         pass
-
-                if not extracted_metric:
-                    metric_fields["metric_name:queue_depth"] = 1250000.0
-                    metric_fields["_value"] = 1250000.0
 
                 if log.netspout_run_id:
                     metric_fields["netspout_run_id"] = log.netspout_run_id
@@ -623,10 +628,15 @@ class TelemetryDispatcher:
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }
-            ssl_v = getattr(transport, "hec_ssl_verify", True)
-            insec = getattr(transport, "hec_allow_insecure_tls", False)
-            ok, msg = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
-            results["hec"] = {"success": ok, "message": msg}
+            if is_metric and not any(k.startswith("metric_name:") for k in hec_payload["fields"]):
+                # fail closed: a metric record without a generated numeric value is never sent (no fabricated value)
+                results["hec"] = {"success": False, "message": "metric record has no numeric values; not dispatched"}
+                self.stats["hec_errors"] += 1
+            else:
+                ssl_v = getattr(transport, "hec_ssl_verify", True)
+                insec = getattr(transport, "hec_allow_insecure_tls", False)
+                ok, msg = self.emit_hec(hec_payload, transport.hec_url, transport.hec_token, ssl_verify=ssl_v, allow_insecure_tls=insec)
+                results["hec"] = {"success": ok, "message": msg}
 
         # 2. Syslog Transport (UDP/TCP)
         if transport.syslog_enabled and transport.syslog_host and transport.syslog_port:

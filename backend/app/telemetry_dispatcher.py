@@ -109,6 +109,46 @@ def _get_snmp_engine():
             return snmp_engine
 
 
+# Lifecycle of one record on the Splunk HEC path. An HTTP 2xx answer with {"code": 0} proves only that the
+# collector ACCEPTED the request; it never proves that the event was indexed or is searchable, so no
+# INDEXED or OBSERVED state is produced here.
+HEC_GENERATED = "GENERATED"      # record built for HEC, not yet sent
+HEC_DISPATCHING = "DISPATCHING"  # POST in flight (stats["hec_dispatching"] counts these)
+HEC_ACCEPTED = "ACCEPTED"        # HEC answered HTTP 2xx with a JSON body whose "code" is 0
+HEC_FAILED = "FAILED"            # not delivered: rejected (4xx, Splunk busy), unreachable, TLS failure or not dispatched
+HEC_UNKNOWN = "UNKNOWN"          # outcome cannot be determined (no answer after sending, ambiguous 5xx, unexpected 2xx)
+HEC_LIFECYCLE_STATES = (HEC_GENERATED, HEC_DISPATCHING, HEC_ACCEPTED, HEC_FAILED, HEC_UNKNOWN)
+
+
+class HecOutcome(tuple):
+    """(success, message) for existing callers, plus the lifecycle evidence of one HEC send.
+
+    success keeps its historical meaning, "an HTTP 2xx answer was received"; only state == ACCEPTED proves that
+    HEC accepted the request. A 2xx with an unexpected body is success=True with state UNKNOWN.
+    """
+
+    def __new__(cls, success, message, state, http_status=None, error_class=None):
+        self = super().__new__(cls, (success, message))
+        self.state, self.http_status, self.error_class = state, http_status, error_class
+        return self
+
+
+def hec_outcome_fields(outcome) -> Dict[str, Any]:
+    """Lifecycle fields for a dispatch result. A plain (success, message) tuple carries no evidence: UNKNOWN."""
+    return {"state": getattr(outcome, "state", HEC_UNKNOWN),
+            "http_status": getattr(outcome, "http_status", None),
+            "error_class": getattr(outcome, "error_class", None)}
+
+
+def _hec_body_code(text: str):
+    try:
+        body = json.loads(text)
+    except ValueError:
+        return None
+    code = body.get("code") if isinstance(body, dict) else None
+    return code if isinstance(code, int) and not isinstance(code, bool) else None
+
+
 class TelemetryDispatcher:
     """
     High-throughput universal telemetry dispatcher with concurrent multi-pipeline routing.
@@ -123,6 +163,11 @@ class TelemetryDispatcher:
             "otel_errors": 0,
             "telegraf_errors": 0,
             "syslog_errors": 0,
+            "hec_generated": 0,
+            "hec_dispatching": 0,
+            "hec_accepted": 0,
+            "hec_failed": 0,
+            "hec_unknown": 0,
             "last_error": None,
             "last_active": None
         }
@@ -138,6 +183,25 @@ class TelemetryDispatcher:
         ssl_verify: bool = True,
         allow_insecure_tls: bool = False
     ) -> Tuple[bool, str]:
+        self.stats["hec_generated"] += 1
+        outcome = self._send_hec(event, hec_url, token, ssl_verify, allow_insecure_tls)
+        if outcome.state == HEC_ACCEPTED:
+            self.stats["hec_accepted"] += 1
+        elif outcome.state == HEC_FAILED:
+            self.stats["hec_failed"] += 1
+        else:
+            self.stats["hec_unknown"] += 1
+        if outcome[0]:
+            self.stats["hec_dispatched"] += 1
+            self.stats["last_active"] = time.time()
+        else:
+            self.stats["hec_errors"] += 1
+            self.stats["last_error"] = f"HEC error: {outcome[1]}"
+        return outcome
+
+    def _send_hec(self, event, hec_url, token, ssl_verify, allow_insecure_tls) -> HecOutcome:
+        # Alternative endpoints are tried only while nothing has reached a collector. Once a request may have
+        # been delivered (no answer, or an answer that cannot be read), it is never re-sent: UNKNOWN.
         candidates = [hec_url]
         if ":8888" in hec_url:
             candidates.append(hec_url.replace(":8888", ":8088"))
@@ -150,15 +214,18 @@ class TelemetryDispatcher:
             for c in list(candidates):
                 candidates.append(c.replace("localhost", "127.0.0.1"))
 
-        last_error = None
+        try:
+            payload = json.dumps(event).encode("utf-8")
+        except (TypeError, ValueError) as e:
+            return HecOutcome(False, f"invalid HEC payload: {e}", HEC_FAILED, None, "invalid_payload")
+        ctx = ssl.create_default_context()
+        if allow_insecure_tls or not ssl_verify:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+
+        last_error, error_class = "no HEC endpoint", "unreachable"
         for cand_url in candidates:
             try:
-                ctx = ssl.create_default_context()
-                if allow_insecure_tls or not ssl_verify:
-                    ctx.check_hostname = False
-                    ctx.verify_mode = ssl.CERT_NONE
-
-                payload = json.dumps(event).encode("utf-8")
                 req = urllib.request.Request(
                     cand_url,
                     data=payload,
@@ -167,31 +234,48 @@ class TelemetryDispatcher:
                         "Content-Type": "application/json"
                     }
                 )
-
+            except ValueError as e:
+                last_error, error_class = f"invalid HEC endpoint: {e}", "invalid_endpoint"
+                continue
+            status = None
+            self.stats["hec_dispatching"] += 1
+            try:
                 with urllib.request.urlopen(req, timeout=2.0, context=ctx) as resp:
+                    status = resp.status
                     resp_text = resp.read().decode("utf-8", errors="replace")
-                    self.stats["hec_dispatched"] += 1
-                    self.stats["last_active"] = time.time()
-                    return True, f"HEC HTTP {resp.status}: {resp_text[:100]}"
-
             except urllib.error.HTTPError as e:
                 err_body = e.read().decode("utf-8", errors="replace") if hasattr(e, "read") else ""
-                last_error = f"HTTP {e.code}: {e.reason} - {err_body[:80]}"
-                break
+                msg = f"HTTP {e.code}: {e.reason} - {err_body[:80]}"
+                if e.code < 500:
+                    cls = "auth_rejected" if e.code in (401, 403) else "request_rejected"
+                    return HecOutcome(False, msg, HEC_FAILED, e.code, cls)
+                if e.code == 503 and _hec_body_code(err_body) == 9:
+                    # Splunk HEC "Server is busy" (code 9): the collector refused the request
+                    return HecOutcome(False, msg, HEC_FAILED, e.code, "collector_busy")
+                # any other 5xx (Splunk 500, proxy 502/504, 503 without the HEC busy body): delivery cannot be ruled out
+                return HecOutcome(False, msg, HEC_UNKNOWN, e.code, "collector_error_uncertain")
             except (ssl.SSLCertVerificationError, urllib.error.URLError) as e:
                 err_str = str(e)
                 if isinstance(e, ssl.SSLCertVerificationError) or "CERTIFICATE_VERIFY_FAILED" in err_str or "certificate verify failed" in err_str:
-                    last_error = f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints."
-                    break
-                last_error = err_str
+                    return HecOutcome(False, f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
+                                      HEC_FAILED, None, "tls_verification")
+                last_error, error_class = err_str, "unreachable"
+                continue
+            except ValueError as e:
+                if status is not None:
+                    return HecOutcome(False, f"unreadable HEC answer: {e}", HEC_UNKNOWN, status, "no_answer_after_send")
+                last_error, error_class = f"invalid HEC endpoint: {e}", "invalid_endpoint"
                 continue
             except Exception as e:
-                last_error = str(e)
-                continue
+                return HecOutcome(False, f"no usable HEC answer after sending: {e}", HEC_UNKNOWN, status, "no_answer_after_send")
+            finally:
+                self.stats["hec_dispatching"] -= 1
+            message = f"HEC HTTP {status}: {resp_text[:100]}"
+            if 200 <= status < 300 and _hec_body_code(resp_text) == 0:
+                return HecOutcome(True, message, HEC_ACCEPTED, status, None)
+            return HecOutcome(True, message, HEC_UNKNOWN, status, "unexpected_response")
 
-        self.stats["hec_errors"] += 1
-        self.stats["last_error"] = f"HEC error: {last_error}"
-        return False, str(last_error)
+        return HecOutcome(False, str(last_error), HEC_FAILED, None, error_class)
 
     # -------------------------------------------------------------------------
     # 2. OpenTelemetry (OTel) Collector Transport (OTLP HTTP)

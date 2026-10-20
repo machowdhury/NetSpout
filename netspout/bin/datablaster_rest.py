@@ -1294,6 +1294,12 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         "--hec", run_params["hec"],
         "--ssl-verify", str(run_params.get("ssl_verify", True)).lower()
     ]
+    if run_params.get("_native_record"):
+        from native_run_monitor import _update_lock_held
+        import run_simulation as runner
+        python_path = run_params.get("ssl_verify", True) or runner.resolve_binary() == "python_engine"
+        _update_lock_held(run_params["_native_record"]["run_id"], lambda r: r.update(
+            correlation="SUPPORTED" if python_path else "UNSUPPORTED"))
     if run_params.get("sample"):
         cmd.extend(["--sample", run_params["sample"]])
 
@@ -1315,7 +1321,8 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
             start_new_session=True,
             stdin=subprocess.PIPE, text=True
         )
-        proc.stdin.write(json.dumps({"credential": run_params["token"]}))
+        proc.stdin.write(json.dumps({"credential": run_params["token"],
+                                 "run_id": (run_params.get("_native_record") or {}).get("run_id")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -1330,7 +1337,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         "hec": run_params["hec"],
         "pid": proc.pid
     }
-    write_private_file(STATUS_FILE, json.dumps(meta, indent=2))
+    __import__("native_run_monitor").publish_status(meta)
 
     return {
         "status": "success",
@@ -1353,7 +1360,9 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
         if params.get("action") == "configure_hec":
             return configure_hec(params)
         get_stored_config(params.get("session_key", ""))
-        clean = validate_and_sanitize(params)
+        clean = params.get("_native_clean") or validate_and_sanitize(params)
+        if params.get("_native_record"):
+            clean["_native_record"] = params["_native_record"]
         action = clean["action"]
 
         if action == "status":
@@ -1379,7 +1388,8 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
         elif action == "blast_single_device":
             sys.path.insert(0, BIN_DIR)
             import run_simulation
-            res = run_simulation.blast_single_device(clean["device_info"], clean["hec"], clean["token"], clean.get("count", 1), get_stored_config().get("ssl_verify", True) is not False)
+            res = run_simulation.blast_single_device(clean["device_info"], clean["hec"], clean["token"], clean.get("count", 1), get_stored_config().get("ssl_verify", True) is not False,
+                run_id=(clean.get("_native_record") or {}).get("run_id"))
             return (200, res)
 
         elif action == "stream_canvas_topology":
@@ -1402,7 +1412,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                     "nodes_count": len(clean["nodes"]),
                     "links_count": len(clean["links"])
                 }
-                write_private_file(STATUS_FILE, json.dumps(meta, indent=2))
+                __import__("native_run_monitor").publish_status(meta)
                 return (200, {
                     "status": "success",
                     "message": f"Custom canvas topology stream launched under PID {pid}",
@@ -1417,6 +1427,10 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
             events = clean["events"]
             session_key = clean.get("session_key", "")
 
+            monitor_record = clean.get("_native_record")
+            if monitor_record:
+                from native_run_monitor import attach
+                events = [attach(e, monitor_record["run_id"]) if isinstance(e, dict) else e for e in events]
             formatted_lines = []
             target_index = "idx_network_ops"
             target_sourcetype = "custom:telemetry"
@@ -1433,7 +1447,8 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                         "event": ev,
                         "time": time.time(),
                         "index": target_index,
-                        "sourcetype": target_sourcetype
+                        "sourcetype": target_sourcetype,
+                        **({"fields": {"netspout_run_id": monitor_record["run_id"]}} if monitor_record else {})
                     }))
 
             raw_payload = "\n".join(formatted_lines).encode("utf-8")
@@ -1472,7 +1487,12 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                             for ev in events:
                                 ev_copy = dict(ev) if isinstance(ev, dict) else {"event": ev}
                                 ev_copy["index"] = "main"
+                                if monitor_record:
+                                    ev_copy = attach(ev_copy, monitor_record["run_id"])
                                 fallback_lines.append(json.dumps(ev_copy))
+                            if monitor_record:
+                                from native_run_monitor import update
+                                update(monitor_record["run_id"], lambda r: r.update(indexes=sorted(set(r["indexes"]) | {"main"})))
                             fallback_payload = "\n".join(fallback_lines).encode("utf-8")
                             fb_req = hec_request(
                                 url,
@@ -1508,6 +1528,9 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 if session_key and SPLUNK_AVAILABLE:
                     try:
                         import splunk.rest
+                        if monitor_record:
+                            from native_run_monitor import update
+                            update(monitor_record["run_id"], lambda r: r.update(correlation="UNSUPPORTED"))
                         for ev in events:
                             st = ev.get("sourcetype", target_sourcetype) if isinstance(ev, dict) else target_sourcetype
                             idx = ev.get("index", target_index) if isinstance(ev, dict) else target_index
@@ -1604,6 +1627,9 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                             "host": host_name,
                             "time": cur_time
                         }))
+            if clean.get("_native_record"):
+                from native_run_monitor import attach
+                payload_events = [json.dumps(attach(json.loads(e), clean["_native_record"]["run_id"])) for e in payload_events]
             raw_payload = "\n".join(payload_events).encode("utf-8")
             
             ctx = ssl.create_default_context()
@@ -1769,7 +1795,39 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
 
 
 def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
+    import native_run_monitor as monitor
+    # Internal run records are never accepted from execution requests.
+    params = {k: v for k, v in params.items() if not k.startswith("_native")}
     if params.get("action") == "configure_hec":
         return _execute_request(params)
-    ignored = {"hec", "url", "hec_url", "token", "hec_token"}
-    return _execute_request({key: value for key, value in params.items() if key not in ignored})
+    ignored = {"hec", "url", "hec_url", "token", "hec_token", "run_id", "netspout_run_id"}
+    action = str(params.get("action", "start")).strip().lower()
+    if action in ("native_runs", "verify_native_run"):
+        if not has_netspout_admin(params.get("session_key", "")):
+            return 403, {"status": "error", "message": "netspout_admin capability required"}
+        try:
+            if action == "native_runs":
+                return 200, {"status": "success", "runs": monitor.history()}
+            return monitor.verification(params.get("run_id"), params.get("session_key", ""))
+        except Exception:
+            return 503, {"status": "error", "message": "Native run history unavailable"}
+    filtered = {key: value for key, value in params.items() if key not in ignored}
+    record = None
+    monitored = {"start", "start_simulation", "run_scenario", "blast_hec", "onboard_sample",
+                 "emit_device_telemetry", "blast_single_device", "stream_canvas_topology"}
+    if action in monitored and has_netspout_admin(params.get("session_key", "")):
+        try:
+            clean = validate_and_sanitize(filtered)
+            record = monitor.begin(clean["action"], clean, params.get("session_key", ""))
+            filtered["_native_record"] = record
+            filtered["_native_clean"] = clean
+        except Exception:
+            return 400, {"status": "error", "message": "Run validation or history initialization failed"}
+    code, response = _execute_request(filtered)
+    if record:
+        try:
+            response["native_run"] = monitor.finish(record, response)
+        except Exception:
+            # Execution may already have happened: never invite a blind retry.
+            response["monitoring_error"] = "Run status unavailable; execution may have occurred"
+    return code, response

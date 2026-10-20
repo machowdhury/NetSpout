@@ -127,7 +127,7 @@ def prepare_scenario_config(scenario_path: str, eps: int, hec_url: str, hec_toke
     return out_path
 
 
-def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None, target_eps=None):
+def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None, target_eps=None, run_id=None):
     """
     Asynchronously coordinates the execution of cross-vendor streaming scenarios
     ensuring that numeric metrics scale realistically via a temporal degradation curve.
@@ -149,12 +149,12 @@ def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None,
         process = subprocess.Popen(cmd, shell=False, stdin=subprocess.PIPE,
                                    stdout=log_handle, stderr=subprocess.STDOUT,
                                    text=True, cwd=APP_DIR, start_new_session=True)
-    process.stdin.write(json.dumps({"credential": hec_token}))
+    process.stdin.write(json.dumps({"credential": hec_token, "run_id": run_id}))
     process.stdin.close()
     return process.pid
 
 
-def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: int = 1, ssl_verify: bool = True) -> dict:
+def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: int = 1, ssl_verify: bool = True, run_id=None) -> dict:
     """
     Emits test events/metrics for a single device node directly to Splunk HEC.
     Supports both single event testing and burst testing for individual technologies.
@@ -202,6 +202,9 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
             "event": event_body
         }
 
+    if run_id:
+        from native_run_monitor import attach
+        payload = attach(payload, run_id)
     data = json.dumps(payload).encode("utf-8")
 
     candidate_urls = resolve_hec_urls(hec_url, get_stored_config())
@@ -306,7 +309,7 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
 
 
 
-def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: int):
+def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: int, run_id=None):
     """Pure-Python synthetic generator fallback when no native compiled binary is present."""
     import urllib.request
     import urllib.error
@@ -411,6 +414,17 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                     "event": raw
                 }))
 
+        if run_id:
+            from native_run_monitor import attach, update
+            batch = [json.dumps(attach(json.loads(e), run_id)) for e in batch]
+            indexes = sorted({json.loads(e)["index"] for e in batch})
+            kinds = {"METRIC" if json.loads(e)["event"] == "metric" else "LOG" for e in batch}
+            def record_scope(r):
+                r["indexes"] = sorted(set(r["indexes"]) | set(indexes))
+                r["counters"]["generated"] = (r["counters"]["generated"] or 0) + len(batch)
+                new = next(iter(kinds)) if len(kinds) == 1 else "MIXED"
+                r["classification"] = new if r["classification"] in ("UNKNOWN", new) else "MIXED"
+            update(run_id, record_scope)
         payload = "\n".join(batch).encode("utf-8")
         req = hec_request(
             hec_url,
@@ -420,14 +434,34 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                 "Content-Type": "application/json"
             }
         )
+        if run_id:
+            def attempted(r):
+                r["counters"]["attempted"] = (r["counters"]["attempted"] or 0) + len(batch)
+            update(run_id, attempted)
+        outcome = "unknown"
         try:
             with urllib.request.urlopen(req, timeout=5, context=ctx) as resp:
+                if run_id:
+                    try:
+                        acknowledgement = json.loads(resp.read())
+                        if (200 <= resp.status < 300 and isinstance(acknowledgement, dict)
+                                and type(acknowledgement.get("code")) is int and acknowledgement["code"] == 0):
+                            outcome = "accepted"
+                    except (ValueError, UnicodeError):
+                        pass
                 print(f"[BLASTER] Streamed batch of {batch_size} events to {hec_url} (HTTP {resp.status})")
                 sys.stdout.flush()
         except Exception as e:
+            if isinstance(e, urllib.error.HTTPError) and 400 <= e.code < 500:
+                outcome = "failed"
             sys.stderr.write(f"[BLASTER-PY-WARN] HEC Send Error: Operation failed\n")
             sys.stderr.flush()
 
+        if run_id:
+            def record_delivery(r):
+                for key in ("accepted", "failed", "unknown"):
+                    r["counters"][key] = (r["counters"][key] or 0) + (len(batch) if key == outcome else 0)
+            update(run_id, record_delivery)
         time.sleep(sleep_time)
 
 
@@ -452,14 +486,20 @@ def _main():
     if (os.path.basename(args.scenario).startswith("canvas_custom_")
             and os.path.dirname(args.scenario) == os.path.realpath(resolve_run_dir())):
         _PRIVATE_FILES.add(args.scenario)
-    args.token = json.loads(sys.stdin.read()).get("credential", "")
+    private_input = json.loads(sys.stdin.read())
+    args.token = private_input.get("credential", "")
+    args.run_id = private_input.get("run_id")
+    if args.run_id:
+        import uuid
+        if str(uuid.UUID(args.run_id)) != args.run_id:
+            raise ValueError("Invalid native run identity")
     resolve_hec_urls(args.hec, get_stored_config())
     if not args.token:
         raise ValueError("HEC credential is required")
 
     if args.python_stream:
         try:
-            run_python_streamer(args.scenario, args.hec, args.token, args.eps)
+            run_python_streamer(args.scenario, args.hec, args.token, args.eps, args.run_id)
         except NoStreamableEventsError as e:
             sys.stderr.write(f"{str(e)}\n")
             sys.exit(2)
@@ -477,7 +517,7 @@ def _main():
     scenario_file = args.scenario
 
     if args.async_exec:
-        pid = validate_and_stream_mv_scenario(scenario_file, args.hec, args.token, args.eps)
+        pid = validate_and_stream_mv_scenario(scenario_file, args.hec, args.token, args.eps, args.run_id)
         print(f"[TA-network-data-blaster] Launched process asynchronously with PID: {pid}")
         sys.exit(0)
 
@@ -498,7 +538,7 @@ def _main():
     # Use the Python engine while certificate verification is enabled.
     if binary_path == "python_engine" or get_stored_config().get("ssl_verify", True) is not False:
         try:
-            run_python_streamer(scenario_file, args.hec, args.token, args.eps)
+            run_python_streamer(scenario_file, args.hec, args.token, args.eps, args.run_id)
         except NoStreamableEventsError as e:
             sys.stderr.write(f"{str(e)}\n")
             sys.exit(2)
@@ -507,6 +547,10 @@ def _main():
                 with contextlib.suppress(FileNotFoundError):
                     os.unlink(scenario_file)
         sys.exit(0)
+
+    if args.run_id:
+        from native_run_monitor import update
+        update(args.run_id, lambda r: r.update(correlation="UNSUPPORTED"))
 
     # 3. Prepare Config
     try:

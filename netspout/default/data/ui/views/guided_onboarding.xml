@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark" script="guided_onboarding.js">
-  <label>Data Onboarding Wizard</label>
+  <label>NetSpout PulseForge Onboarding</label>
   <description>Guided 4-step wizard for single sourcetypes, multi-vendor batch telemetry, or operational scenarios with custom index provisioning and immediate Splunk search validation.</description>
 
   <!-- Consolidated Ingestion & Blast Hub Switcher -->
@@ -83,7 +83,7 @@
                 <span style="font-size: 18px;">💡</span>
                 <div style="font-size: 11px; line-height: 1.5; color: #cbd5e1;">
                   <strong style="color: #60a5fa;">Splunk Technology Add-on (TA) Architecture Note:</strong>
-                  NetSpout purposefully emits <b>100% schema-compliant vendor event formats</b> without bundling dozens of 3rd-party TAs inside the application package. Bundling external TAs causes multi-gigabyte bloat and violates Splunk Cloud AppInspect vetting standards. To enable Common Information Model (CIM) field extractions for ingested events, install the appropriate vendor TA from <a href="https://splunkbase.splunk.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Splunkbase</a> (e.g. <i>Splunk Add-on for Cisco Catalyst Center</i>, <i>Cisco SD-WAN Add-on</i>, <i>Palo Alto Networks Add-on</i>). See the <a href="help" style="color: #38bdf8; text-decoration: underline;">Help Guide</a> for the full mapping directory.
+                  NetSpout PulseForge purposefully emits <b>100% schema-compliant vendor event formats</b> without bundling dozens of 3rd-party TAs inside the application package. Bundling external TAs causes multi-gigabyte bloat and violates Splunk Cloud AppInspect vetting standards. To enable Common Information Model (CIM) field extractions for ingested events, install the appropriate vendor TA from <a href="https://splunkbase.splunk.com/" target="_blank" style="color: #38bdf8; text-decoration: underline;">Splunkbase</a> (e.g. <i>Splunk Add-on for Cisco Catalyst Center</i>, <i>Cisco SD-WAN Add-on</i>, <i>Palo Alto Networks Add-on</i>). See the <a href="help" style="color: #38bdf8; text-decoration: underline;">Help Guide</a> for the full mapping directory.
                 </div>
               </div>
 
@@ -444,8 +444,8 @@
                     </optgroup>
                     <optgroup label="Other">
                       <option value="geo_tokens:generic">geo_tokens:generic — Geo_Tokens</option>
-                      <option value="datablaster:preflight">datablaster:preflight — NetSpout Ingestion Preflight Probe</option>
-                      <option value="datablaster:probe">datablaster:probe — NetSpout Telemetry Canary Probe</option>
+                      <option value="datablaster:preflight">datablaster:preflight — PulseForge Ingestion Preflight Probe</option>
+                      <option value="datablaster:probe">datablaster:probe — PulseForge Telemetry Canary Probe</option>
                       <option value="nokia:sros:syslog">nokia:sros:syslog — Nokia 7750 SR OS Syslog Facility</option>
                       <option value="snmp:trap">snmp:trap — Universal SNMP Trap Receiver Event</option>
                     </optgroup>

@@ -221,7 +221,7 @@ class DataBlasterExecutor:
             return {
                 "status": "already_running",
                 "pid": pid,
-                "message": f"DataBlaster is already actively running with PID {pid}.",
+                "message": f"PulseForge is already actively running with PID {pid}.",
                 "log_file": EXECUTION_LOG_PATH
             }
 
@@ -249,7 +249,7 @@ class DataBlasterExecutor:
 
         timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         log_file.write(f"\n{'='*75}\n")
-        log_file.write(f"[{timestamp}] [LAUNCH] Starting DataBlaster Simulation Engine\n")
+        log_file.write(f"[{timestamp}] [LAUNCH] Starting PulseForge Simulation Engine\n")
         log_file.write(f"Platform   : {sys.platform}\n")
         log_file.write(f"Binary     : {binary_path}\n")
         log_file.write(f"Config     : {sanitized['config_file']}\n")
@@ -278,7 +278,7 @@ class DataBlasterExecutor:
             from datablaster_rest import get_active_run_dir, write_private_file
             write_private_file(os.path.join(get_active_run_dir(), "datablaster.pid"), str(proc.pid))
 
-            logger.info("Spawned DataBlaster daemon process PID: %d", proc.pid)
+            logger.info("Spawned PulseForge daemon process PID: %d", proc.pid)
 
             return {
                 "status": "started",
@@ -289,10 +289,10 @@ class DataBlasterExecutor:
                 "target_hec": sanitized["hec_url"],
                 "config_file": sanitized["config_file"],
                 "log_file": EXECUTION_LOG_PATH,
-                "message": f"DataBlaster successfully launched in background (PID: {proc.pid})."
+                "message": f"PulseForge successfully launched in background (PID: {proc.pid})."
             }
         except Exception as e:
-            logger.error("Failed to start DataBlaster process")
+            logger.error("Failed to start PulseForge process")
             log_file.write(f"[{timestamp}] [ERROR] Failed to start process\n")
             log_file.flush()
             log_file.close()
@@ -307,7 +307,7 @@ class DataBlasterExecutor:
         if not running or not pid:
             return {
                 "status": "not_running",
-                "message": "No active DataBlaster process found to stop."
+                "message": "No active PulseForge process found to stop."
             }
 
         from datablaster_rest import stop_simulation
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     # Test Harness / CLI Interface
     import argparse
 
-    parser = argparse.ArgumentParser(description="TA-datablaster Backend CLI Test Harness")
+    parser = argparse.ArgumentParser(description="NetSpout PulseForge Backend CLI Test Harness")
     parser.add_argument("action", choices=["status", "start", "stop", "logs"], default="status", nargs="?")
     parser.add_argument("--eps", type=int, default=10, help="Target EPS")
     parser.add_argument("--url", default="", help="Splunk HEC URL")

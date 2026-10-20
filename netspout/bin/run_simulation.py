@@ -635,7 +635,7 @@ def run_python_otlp_streamer(path, config, eps, run_id=None):
 
 
 def _main():
-    parser = argparse.ArgumentParser(description="TA-network-data-blaster Secure Simulation Runner")
+    parser = argparse.ArgumentParser(description="NetSpout PulseForge Secure Simulation Runner")
     parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
     parser.add_argument("--eps", type=int, default=int(os.environ.get("DATABLASTER_TARGET_EPS", 1000)), help="Target Events Per Second (integer)")
     parser.add_argument("--hec", default=os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector"), help="Target Splunk HEC URL")
@@ -725,7 +725,7 @@ def _main():
 
     if args.async_exec:
         pid = validate_and_stream_mv_scenario(scenario_file, args.hec, args.token, args.eps, args.run_id)
-        print(f"[TA-network-data-blaster] Launched process asynchronously with PID: {pid}")
+        print(f"[PulseForge] Launched process asynchronously with PID: {pid}")
         sys.exit(0)
 
     # 2. Multi-Platform Binary Selection
@@ -735,11 +735,11 @@ def _main():
         sys.stderr.write(f"[ERROR] Operation failed\n")
         sys.exit(1)
 
-    print(f"[TA-network-data-blaster] Host OS: {sys.platform}")
-    print(f"[TA-network-data-blaster] Using Execution Engine: {binary_path}")
-    print(f"[TA-network-data-blaster] Scenario: {scenario_file}")
-    print(f"[TA-network-data-blaster] Target EPS: {args.eps}")
-    print(f"[TA-network-data-blaster] HEC Endpoint: {args.hec} (Token: {mask_secret(args.token)})")
+    print(f"[PulseForge] Host OS: {sys.platform}")
+    print(f"[PulseForge] Using Execution Engine: {binary_path}")
+    print(f"[PulseForge] Scenario: {scenario_file}")
+    print(f"[PulseForge] Target EPS: {args.eps}")
+    print(f"[PulseForge] HEC Endpoint: {args.hec} (Token: {mask_secret(args.token)})")
 
     # Native engines do not expose a verified TLS configuration contract.
     # Use the Python engine while certificate verification is enabled.
@@ -792,7 +792,7 @@ def _main():
         "--info",
     ]
 
-    print(f"[TA-datablaster] Spawning process (shell=False): {' '.join(cmd[:3])}...")
+    print(f"[PulseForge] Spawning process (shell=False): {' '.join(cmd[:3])}...")
     sys.stdout.flush()
 
     try:
@@ -812,7 +812,7 @@ def _main():
                 sys.stdout.flush()
 
         proc.wait()
-        print(f"[TA-datablaster] Simulation finished with return code {proc.returncode}")
+        print(f"[PulseForge] Simulation finished with return code {proc.returncode}")
         sys.exit(proc.returncode)
 
     except Exception as e:

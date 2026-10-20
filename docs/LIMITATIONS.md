@@ -1,4 +1,4 @@
-# NetSpout — Known Limitations & Scope Boundaries
+# NetSpout PulseForge — Known Limitations & Scope Boundaries
 
 To maintain fidelity and strict engineering honesty, NetSpout explicitly defines what is modeled, what is supported natively, and what is currently outside the release scope.
 

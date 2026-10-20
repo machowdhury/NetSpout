@@ -1,4 +1,4 @@
-# NetSpout ⚡
+# NetSpout PulseForge ⚡
 
 **Carrier-Grade Network Telemetry Generator, Simulation Canvas & Live Incident Verification Platform for Splunk**
 
@@ -29,7 +29,7 @@ NetSpout generates multi-protocol network telemetry across realistic operational
 
 ---
 
-## 🎯 What NetSpout Does
+## 🎯 What NetSpout PulseForge Does
 
 1. **Demonstrates Realistic Network Incidents**: Models end-to-end incident lifecycles (`BASELINE` → `DEGRADE` → `FAILOVER` → `RECOVERY`) across **22 modern network domains** and **37 canonical scenarios** ([Scenario Catalog](docs/SCENARIO_CATALOG.md), [Network Domains](docs/NETWORK_DOMAINS.md)).
 2. **True Multi-Protocol Telemetry**:
@@ -93,7 +93,7 @@ docker compose up -d
 ### Step 3: Open in Browser
 - **Splunk Enterprise Web**: [`http://localhost:8000`](http://localhost:8000)
   - Use the administrator name and password supplied through your local `.env`.
-  - Pre-installed App: **NetSpout Telemetry Generator** (`/en-US/app/netspout/guided_onboarding`)
+  - Pre-installed App: **NetSpout PulseForge** (`/en-US/app/netspout/guided_onboarding`)
 - **NetSpout Standalone NOC Web UI**: [`http://localhost:8081`](http://localhost:8081)
 - **Splunk HEC Endpoint**: `https://localhost:8088/services/collector` using the token supplied through `.env`
 - **Splunk REST Management API**: `https://localhost:8089`
@@ -130,7 +130,7 @@ export NETSPOUT_SPLUNK_USER="admin"
 export NETSPOUT_SPLUNK_PASSWORD="<provided securely at runtime>"
 ```
 
-### 3. Launch NetSpout Backend
+### 3. Launch NetSpout PulseForge Backend
 ```bash
 python3 run.py
 ```

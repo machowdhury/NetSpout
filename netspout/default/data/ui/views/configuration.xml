@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark" script="configuration.js">
-  <label>App Configuration &amp; Setup</label>
+  <label>NetSpout PulseForge Configuration &amp; Setup</label>
   <description>Configure destination Splunk HEC endpoints, security tokens, SSL certificate validation modes, default index targets, and run real-time 5-point preflight environment validation checks.</description>
 
   <row>

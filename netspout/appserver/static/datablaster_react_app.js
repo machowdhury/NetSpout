@@ -598,7 +598,7 @@
           }
         })
         .catch((err) => {
-          console.warn("[Network Data Blaster] Failed to load scenarios manifest:", err);
+          console.warn("[NetSpout PulseForge] Failed to load scenarios manifest:", err);
         });
 
       // Load Samples
@@ -615,12 +615,12 @@
           }
         })
         .catch((err) => {
-          console.warn("[Network Data Blaster] Failed to load samples manifest:", err);
+          console.warn("[NetSpout PulseForge] Failed to load samples manifest:", err);
         });
 
       // Initialize Console Logs
       setConsoleLogs([
-        `[INFO] TA-network-data-blaster initialized at ${new Date().toISOString()}`,
+        `[INFO] NetSpout PulseForge initialized at ${new Date().toISOString()}`,
         `[INFO] Target platform detected: ${navigator.platform}`,
         `[INFO] AppInspect-compliant subprocess runner ready (shell=False)`,
         `[INFO] REST Endpoint configured: /services/datablaster/execute`,
@@ -737,11 +737,11 @@
             e(
               "div",
               { className: "flex items-center gap-2" },
-              e("h1", { className: "text-2xl font-black tracking-tight text-white" }, "Network Data Blaster Studio"),
+              e("h1", { className: "text-2xl font-black tracking-tight text-white" }, "NetSpout PulseForge Studio"),
               e(
                 "span",
                 { className: "px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-mono" },
-                "TA-network-data-blaster v2.4.0"
+                "NetSpout PulseForge"
               ),
               e(
                 "span",
@@ -1512,7 +1512,7 @@
                       "div",
                       { className: "grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-xs font-semibold" },
                       e("div", { className: "p-3 bg-slate-950 rounded-xl border border-slate-800" },
-                        e("div", { className: "text-cyan-400 mb-1" }, "1. DATA-BLASTER"),
+                        e("div", { className: "text-cyan-400 mb-1" }, "1. PULSEFORGE"),
                         e("div", { className: "text-slate-400 text-[11px]" }, "Native Executable (Go)"),
                         e("div", { className: "text-slate-500 text-[10px] mt-1 font-mono" }, "15 Generator Threads")
                       ),
@@ -2241,7 +2241,7 @@
                               "ℹ️ Search Head Deployment Prerequisites"
                             ),
                             e("p", null,
-                              "When running on a Splunk Search Head, Network Data Blaster orchestrates execution while streaming high-velocity payloads over HTTP Event Collector (HEC) directly to indexers. HEC must be enabled and whitelisted for target indexes."
+                              "When running on a Splunk Search Head, NetSpout PulseForge orchestrates execution while streaming high-velocity payloads over HTTP Event Collector (HEC) directly to indexers. HEC must be enabled and whitelisted for target indexes."
                             ),
                             e("div", { className: "flex flex-wrap items-center gap-1.5 pt-1 font-mono text-[11px]" },
                               e("span", { className: "text-slate-400" }, "Required Target Indexes:"),

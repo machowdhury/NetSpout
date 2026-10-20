@@ -1,4 +1,4 @@
-# NetSpout — Quickstart Guide
+# NetSpout PulseForge — Quickstart Guide
 
 This guide walks you through launching NetSpout in 1 click, verifying preflight prerequisites, executing your first multi-protocol network simulation, and investigating evidence in Splunk.
 

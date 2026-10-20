@@ -1907,7 +1907,7 @@ require([
   },
   {
     "id": "datablaster:preflight",
-    "label": "NetSpout Ingestion Preflight Probe",
+    "label": "PulseForge Ingestion Preflight Probe",
     "vendor": "other",
     "category": "Other",
     "index": "idx_network_ops",
@@ -1915,7 +1915,7 @@ require([
   },
   {
     "id": "datablaster:probe",
-    "label": "NetSpout Telemetry Canary Probe",
+    "label": "PulseForge Telemetry Canary Probe",
     "vendor": "other",
     "category": "Other",
     "index": "idx_network_ops",

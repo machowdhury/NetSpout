@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark" script="datablaster_console.js">
-  <label>Data Blaster Console</label>
+  <label>NetSpout PulseForge Run Console</label>
   <description>Executive mission-control console for high-rate network telemetry simulation, live scenario execution dispatch, and infrastructure ingestion metrics.</description>
 
   <!-- Consolidated Ingestion & Blast Hub Switcher -->
@@ -299,7 +299,7 @@
               </div>
             </div>
             <div id="console-log-output" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 10px 12px; font-family: monospace; font-size: 11px; color: #38bdf8; min-height: 120px; max-height: 220px; overflow-y: auto; line-height: 1.5;">
-              <div>[SYSTEM READY] Data Blaster Console initialized. All multi-vendor engines online.</div>
+              <div>[SYSTEM READY] PulseForge Run Console initialized. All multi-vendor engines online.</div>
               <div>[PIPELINE] Target HEC: https://127.0.0.1:8888/services/collector (Auto-fallback to :8088 enabled)</div>
               <div>[INDEXES] idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics verified.</div>
             </div>

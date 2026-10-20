@@ -24,6 +24,9 @@ SPLUNK_CORE_DIR = os.path.join(SPLUNK_BIN_DIR, "netspout_core")
 BACKEND_APP_DIR = os.path.join(REPO_ROOT, "backend", "app")
 
 CORE_MODULES = [
+    "credential_transitions.py",
+    "transport_credential_updates.py",
+    "telemetry_config_api.py",
     "models.py",
     "graph_engine.py",
     "log_engine.py",
@@ -105,17 +108,21 @@ GENERATED_HEADER = """# ========================================================
 """
 
 
-def sync_core():
+def sync_core(modules=None):
+    selected_modules = CORE_MODULES if modules is None else modules
+    if any(mod not in CORE_MODULES for mod in selected_modules):
+        raise ValueError("Unknown core module")
     print(f"⚡ NetSpout: Synchronizing Canonical Core from {SRC_CORE_DIR}...")
     os.makedirs(SPLUNK_CORE_DIR, exist_ok=True)
 
     # 1. Sync __init__.py into SPLUNK_CORE_DIR
     src_init = os.path.join(SRC_CORE_DIR, "__init__.py")
     dst_init = os.path.join(SPLUNK_CORE_DIR, "__init__.py")
-    shutil.copy2(src_init, dst_init)
+    if modules is None:
+        shutil.copy2(src_init, dst_init)
 
     # 2. Sync exact canonical modules into netspout/bin/netspout_core/
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         if not os.path.exists(src_path):
             print(f"❌ Error: Missing canonical module {src_path}")
@@ -125,7 +132,7 @@ def sync_core():
         print(f"  [CORE_COPY] {mod} -> netspout/bin/netspout_core/{mod}")
 
     # 2b. Sync gnmi/ subpackage into netspout/bin/netspout_core/gnmi/ and backend/app/gnmi/
-    for rel_file in GNMI_SUBPACKAGE_FILES:
+    for rel_file in (GNMI_SUBPACKAGE_FILES if modules is None else []):
         src_path = os.path.join(SRC_CORE_DIR, rel_file)
         if not os.path.exists(src_path):
             print(f"❌ Error: Missing canonical gNMI subpackage file {src_path}")
@@ -140,7 +147,7 @@ def sync_core():
             print(f"  [GNMI_COPY] {rel_file} -> {label}/{rel_file}")
 
     # 3. Generate packaged copies in netspout/bin/ with auto-generated header
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         dst_path = os.path.join(SPLUNK_BIN_DIR, mod)
         with open(src_path, "r", encoding="utf-8") as f:
@@ -151,7 +158,7 @@ def sync_core():
         print(f"  [SPLUNK_COPY] netspout/bin/{mod}")
 
     # 4. Generate runtime copies in backend/app/ with auto-generated header
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         dst_path = os.path.join(BACKEND_APP_DIR, mod)
         with open(src_path, "r", encoding="utf-8") as f:
@@ -160,6 +167,10 @@ def sync_core():
         with open(dst_path, "w", encoding="utf-8") as f:
             f.write(header + code)
         print(f"  [BACKEND_COPY] backend/app/{mod}")
+
+    if modules is not None:
+        print("✅ Selected core module synchronization complete.")
+        return
 
     # 5. Sync Canonical Catalog JSON files
     catalog_targets = [
@@ -207,4 +218,8 @@ def sync_core():
 
 
 if __name__ == "__main__":
-    sync_core()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--modules', nargs='+', choices=CORE_MODULES,
+                        help='Sync only selected modules; leave catalogs and other files untouched')
+    sync_core(parser.parse_args().modules)

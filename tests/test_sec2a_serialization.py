@@ -8,6 +8,9 @@ import types
 import unittest
 from unittest.mock import patch
 import builtins
+from netspout_core.transport_credential_updates import (
+    CredentialUpdateError, decode_transport_update, update_shared_transport,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 COPIES = ('src/netspout_core/models.py', 'backend/app/models.py',
@@ -98,12 +101,16 @@ class SerializationChecks:
             async def broadcast_log(_):
                 pass
             ns = dict(TelemetryTransportConfig=m.TelemetryTransportConfig,
+                      TelemetryConfigUpdate=object, CredentialUpdateError=CredentialUpdateError,
+                      update_shared_transport=update_shared_transport,
                       TopologyState=m.TopologyState, current_topology=topology,
                       dispatcher=types.SimpleNamespace(stats={}),
                       manager=types.SimpleNamespace(broadcast_log=broadcast_log))
             exec(compile(ast.Module(body=handlers, type_ignores=[]), main_path, 'exec'), ns)
-            cfg = m.TelemetryTransportConfig(**SECRETS)
-            for name, args in [('set_telemetry_config', (cfg,)), ('get_telemetry_config', ()),
+            class Request:
+                def model_dump(self, **kwargs):
+                    return SECRETS
+            for name, args in [('set_telemetry_config', (Request(),)), ('get_telemetry_config', ()),
                                ('update_topology', (topology,)), ('get_topology', ())]:
                 response = asyncio.run(ns[name](*args))
                 if self.fallback:

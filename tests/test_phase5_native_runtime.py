@@ -147,10 +147,49 @@ class TestPhase5NativeRuntime(unittest.TestCase):
         )
 
     def test_syslog_preserves_raw_wire_payload_then_adds_correlation(self):
+        # In-memory UDP boundary: observations come only from submitted bytes,
+        # not a preseeded successful receipt. This proves no real network receipt.
+        class MemoryReceiver:
+            def __init__(self, host, port):
+                self.messages = []
+                self._udp_sock = SimpleNamespace(getsockname=lambda: (host, 1514))
+
+            def start(self):
+                return True
+
+            def stop(self):
+                pass
+
+            def get_recent_messages(self, limit):
+                return self.messages[-limit:]
+
+        receiver = MemoryReceiver("127.0.0.1", 0)
+        datagrams = []
+
+        class MemoryDatagramSocket:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                pass
+
+            def sendto(self, data, destination):
+                datagrams.append((bytes(data), destination))
+                receiver.messages.append({"raw": data.decode("utf-8"), "source_ip": "127.0.0.1"})
+                return len(data)
+
         dispatcher = FakeDispatcher()
-        facade = NativeRuntimeFacade(self.config, self.environment, dispatcher=dispatcher)
+        factory = Mock(return_value=receiver)
+        facade = NativeRuntimeFacade(self.config, self.environment, dispatcher=dispatcher,
+                                     syslog_server_factory=factory)
         raw = "<165>1 2026-10-06T10:00:00Z pe1 bgp 7 ID47 - neighbor down"
-        result = facade.run_syslog("run-5", "service_provider_cisco", "cisco-asr9k-pe1", 42, raw)
+        self.assertEqual(receiver.get_recent_messages(1), [])
+        with patch("netspout_core.native_runtime.socket.socket", return_value=MemoryDatagramSocket()) as socket_factory:
+            result = facade.run_syslog("run-5", "service_provider_cisco", "cisco-asr9k-pe1", 42, raw)
+        import socket
+        socket_factory.assert_called_once_with(socket.AF_INET, socket.SOCK_DGRAM)
+        factory.assert_called_once_with(host="127.0.0.1", port=0)
+        self.assertEqual(datagrams, [(raw.encode("utf-8"), ("127.0.0.1", 1514))])
 
         stages = {item.stage: item.proven for item in result.evidence}
         self.assertTrue(stages["RECEIVER_OBSERVED"])
@@ -161,6 +200,10 @@ class TestPhase5NativeRuntime(unittest.TestCase):
         normalized = dispatcher.logs[0][0]
         self.assertEqual(normalized.raw_log, raw)
         self.assertEqual(normalized.netspout_run_id, "run-5")
+        self.assertEqual(normalized.sourcetype, "netspout:rfc5424")
+        self.assertEqual(normalized.netspout_scenario_id, "service_provider_cisco")
+        self.assertEqual(normalized.netspout_device_id, "cisco-asr9k-pe1")
+        self.assertEqual(normalized.netspout_phase, "BASELINE")
 
     def test_udp_send_is_never_promoted_to_flow_receipt(self):
         collector = FakeCollector()

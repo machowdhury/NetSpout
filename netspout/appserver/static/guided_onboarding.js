@@ -36,6 +36,14 @@ require([
       ['generated','attempted','accepted','failed','unknown'].forEach(function(k) {
         var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
       });
+      lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.syslog_delivery) {
+        ['attempted','sent','failed','unknown'].forEach(function(key) {
+          var value = run.syslog_delivery[key];
+          lines.push('Syslog local ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Socket send evidence does not establish receiver delivery or Splunk indexing.');
+      }
       lines.push('Splunk indexing: ' + run.verification.state + ' — ' + run.verification.message);
       if (verify.disabled) lines.push('Search verification is unsupported for this correlation path or scope.');
       output.textContent = lines.join('\n');

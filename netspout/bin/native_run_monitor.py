@@ -57,12 +57,15 @@ def valid(record):
                 and all(isinstance(i, str) and INDEX.fullmatch(i) for i in record['indexes'])
                 and record['classification'] in ('LOG', 'METRIC', 'MIXED', 'UNKNOWN')
                 and record['correlation'] in ('SUPPORTED', 'UNSUPPORTED')
-                and isinstance(record['destination'], dict) and record['destination'].get('transport') == 'HEC'
+                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG')
                 and isinstance(record['destination'].get('host'), str)
                 and type(record['destination'].get('port')) is int
                 and isinstance(record['execution'], dict) and isinstance(record['execution'].get('action'), str)
                 and (record.get('pid') is None or (type(record['pid']) is int and record['pid'] > 0))
                 and record['verification']['state'] in STATES
+                and ('syslog_delivery' not in record or (isinstance(record['syslog_delivery'], dict)
+                     and set(record['syslog_delivery']) == {'attempted', 'sent', 'failed', 'unknown'}
+                     and all(v is None or (type(v) is int and v >= 0) for v in record['syslog_delivery'].values())))
                 and set(record['counters']) == set(COUNTERS)
                 and all(v is None or (type(v) is int and v >= 0) for v in record['counters'].values()))
     except (KeyError, TypeError, ValueError, AttributeError):
@@ -171,6 +174,13 @@ def begin(action, clean, session_key=""):
                   indexes=indexes, classification=kind,
                   correlation='SUPPORTED' if action in ('blast_hec', 'onboard_sample', 'blast_single_device') else 'UNSUPPORTED',
                   counters={k: None for k in COUNTERS}, verification={'state': 'NOT_CHECKED', 'message': 'Not checked'})
+    if clean.get('native_transport') == 'syslog':
+        config = clean['syslog']
+        record.update(destination={'transport': 'SYSLOG', 'host': config['syslog_host'],
+                      'port': config['syslog_port'], 'protocol': config['syslog_protocol'],
+                      'format': config['syslog_format']}, classification='LOG', indexes=[],
+                      correlation='UNSUPPORTED',
+                      syslog_delivery=dict(attempted=None, sent=None, failed=None, unknown=None))
     if action == 'blast_hec' and any(isinstance(e, dict) and not e.get('index') for e in events):
         record['correlation'] = 'UNSUPPORTED'
     if action == 'blast_hec':
@@ -235,6 +245,8 @@ def verification(run_id, session_key):
         saved = update(run_id, lambda rec: rec.update(verification=value))
         return 200, {'status': 'success', 'run': saved}
     # A local Splunk search can only verify the local destination.
+    if r['destination']['transport'] == 'SYSLOG':
+        return result('INCONCLUSIVE', 'Syslog run correlation and indexing verification are unsupported')
     if r['destination']['host'] not in ('127.0.0.1', 'localhost', '::1'):
         return result('INCONCLUSIVE', 'Remote destination search is unsupported')
     if r['correlation'] != 'SUPPORTED' or r['classification'] != 'LOG' or not r['indexes']:

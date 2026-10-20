@@ -3,6 +3,25 @@
   <description>Configure destination Splunk HEC endpoints, security tokens, SSL certificate validation modes, default index targets, and run real-time 5-point preflight environment validation checks.</description>
 
   <row>
+    <panel><html>
+      <section id="syslog-settings" style="padding:16px;">
+        <h2>Native scenario destination — Syslog</h2>
+        <p>Choose the output for future native scenario launches. Explicit HEC sample/onboarding actions remain HEC. Syslog supports single-line log scenarios; metric scenarios are rejected.</p>
+        <label>Scenario output <select id="cfg-native-transport"><option value="hec">Splunk HEC</option><option value="syslog">Syslog</option></select></label>
+        <label>Host (IPv4 or DNS) <input id="cfg-syslog-host" type="text" value="127.0.0.1"/></label>
+        <label>Port <input id="cfg-syslog-port" type="number" min="1" max="65535" value="1514"/></label>
+        <label>Transport <select id="cfg-syslog-protocol"><option value="udp">UDP datagram</option><option value="tcp">TCP newline framing</option></select></label>
+        <label>Format <select id="cfg-syslog-format"><option value="rfc5424">RFC5424</option><option value="rfc3164">RFC3164</option></select></label>
+        <label>Facility (0–23) <input id="cfg-syslog-facility" type="number" min="0" max="23" value="16"/></label>
+        <label>Severity (0–7) <input id="cfg-syslog-severity" type="number" min="0" max="7" value="6"/></label>
+        <button id="btn-save-syslog" type="button" disabled="disabled">Save scenario destination</button>
+        <button id="btn-test-syslog" type="button" disabled="disabled">Send one diagnostic to saved destination</button>
+        <pre id="syslog-status" aria-live="polite">Loading saved syslog configuration…</pre>
+        <p>SENT means only that the local socket send completed. Receiver delivery, collector acceptance and Splunk indexing are unverified. TLS, IPv6 and metric forwarding are unsupported.</p>
+      </section>
+    </html></panel>
+  </row>
+  <row>
     <panel>
       <html>
         <div style="padding: 10px 0;">

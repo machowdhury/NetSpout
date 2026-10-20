@@ -13,6 +13,7 @@ Compatible with Splunk Enterprise & Splunk Cloud Vetting:
 
 import os
 import importlib.util
+import ipaddress
 import sys
 import re
 import json
@@ -220,7 +221,96 @@ RE_SAFE_PATH = re.compile(r"^[a-zA-Z0-9_\-./]+$")
 RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
+SYSLOG_DEFAULTS = {
+    "native_transport": "hec",
+    "syslog_host": "127.0.0.1", "syslog_port": 1514,
+    "syslog_protocol": "udp", "syslog_format": "rfc5424",
+    "syslog_facility": 16, "syslog_severity": 6,
+}
+
+
+def validate_syslog_settings(settings):
+    """IPv4/DNS, UDP/TCP only; the existing adapter has no TLS/IPv6 mode."""
+    result = {key: settings.get(key, value) for key, value in SYSLOG_DEFAULTS.items()}
+    host = result["syslog_host"]
+    if not isinstance(host, str) or not host or len(host) > 253:
+        raise ValueError("Invalid syslog settings")
+    try:
+        address = ipaddress.ip_address(host)
+        if address.version != 4 or address.is_unspecified or address.is_multicast or host == "255.255.255.255":
+            raise ValueError("Invalid syslog settings")
+    except ValueError:
+        if (re.fullmatch(r"[0-9.]+", host) or ":" in host or
+                not all(re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
+                        for label in host.rstrip(".").split("."))):
+            raise ValueError("Invalid syslog settings") from None
+    if (result["native_transport"] not in ("hec", "syslog")
+            or result["syslog_protocol"] not in ("udp", "tcp")
+            or result["syslog_format"] not in ("rfc3164", "rfc5424")):
+        raise ValueError("Invalid syslog settings")
+    for key, lower, upper in (("syslog_port", 1, 65535), ("syslog_facility", 0, 23), ("syslog_severity", 0, 7)):
+        value = result[key]
+        if type(value) is not int or not lower <= value <= upper:
+            raise ValueError("Invalid syslog settings")
+    return result
+
+
+def _native_syslog_operation(params):
+    """Native admin-only config and one-send diagnostic; no HEC token needed."""
+    action = params["action"]
+    if not has_netspout_admin(params.get("session_key", "")):
+        return 403, {"status": "error", "message": "netspout_admin capability required"}
+    try:
+        if action == "configure_syslog":
+            if set(params) - (set(SYSLOG_DEFAULTS) | {"action", "session_key"}):
+                raise ValueError("Invalid syslog settings")
+            with simulation_start_lock():
+                get_active_run_dir()
+                try:
+                    saved = json.loads(_read_private_file(CONFIG_FILE))
+                    if not isinstance(saved, dict) or "hec_token" in saved:
+                        raise RuntimeError()
+                except FileNotFoundError:
+                    saved = {}
+                candidate = dict(DEFAULT_CONFIG)
+                candidate.update({k: v for k, v in saved.items() if k in DEFAULT_CONFIG})
+                values = {k: params[k] for k in SYSLOG_DEFAULTS if k in params}
+                candidate.update(validate_syslog_settings(dict(candidate, **values)))
+                _write_config(CONFIG_FILE, candidate)
+            return 200, {"status": "success", "message": "Syslog settings saved", "config": {k: candidate[k] for k in SYSLOG_DEFAULTS}}
+        config = validate_syslog_settings(get_stored_config(params.get("session_key", "")))
+        if action == "get_syslog_config":
+            return 200, {"status": "success", "config": config}
+        if set(params) - {"action", "session_key"}:
+            raise ValueError("Invalid syslog diagnostic fields")
+        response = _syslog_runner_check(config)
+        return (200 if response.get("status") == "success" else 502), response
+    except ValueError:
+        return 400, {"status": "error", "message": "Invalid syslog settings; use IPv4/DNS, port 1–65535, UDP/TCP and RFC3164/RFC5424"}
+    except Exception:
+        return 503, {"status": "error", "message": "Syslog configuration or diagnostic unavailable; delivery is unverified"}
+
+
+def _syslog_runner_check(config, scenario=None):
+    """Run the existing Python runner in its own app import context, bounded."""
+    cmd = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"),
+           "--syslog-preflight" if scenario else "--syslog-diagnostic"]
+    if scenario:
+        cmd += ["--scenario", scenario]
+    completed = subprocess.run(cmd, input=json.dumps({"syslog": config}),
+        text=True, capture_output=True, timeout=10, cwd=APP_DIR)
+    if completed.returncode != 0:
+        if scenario:
+            raise ValueError("Syslog scenario unavailable")
+        raise RuntimeError("Syslog diagnostic unavailable")
+    result = json.loads(completed.stdout)
+    if not isinstance(result, dict) or result.get("status") not in ("success", "error"):
+        raise RuntimeError()
+    return result
+
+
 DEFAULT_CONFIG = {
+    **SYSLOG_DEFAULTS,
     "hec_credential_ref": "",
     "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_allowed_hosts": ["127.0.0.1", "localhost"],
@@ -389,7 +479,7 @@ def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any
         if "hec_token" in new_cfg:
             HECCredentialStore(session_key).save(new_cfg["hec_token"])
         for key in DEFAULT_CONFIG:
-            if key != "hec_credential_ref" and key in new_cfg:
+            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key in new_cfg:
                 cfg[key] = new_cfg[key]
         resolve_hec_urls(cfg["hec_url"], cfg)
         if cfg["ssl_verify"] is False:
@@ -407,7 +497,7 @@ def configure_hec(params):
     session_key = params.get("session_key", "")
     if not has_netspout_admin(session_key):
         return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
-    editable = set(DEFAULT_CONFIG) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
     if set(params) - (editable | {"action", "session_key", "hec_token"}):
         return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
     with simulation_start_lock():
@@ -1043,7 +1133,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
+            if key not in SYSLOG_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
@@ -1051,6 +1141,17 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
         return {"action": action, "config": new_config}
 
     stored_cfg = get_stored_config(params.get("session_key", ""))
+    if action == "start" and stored_cfg.get("native_transport", "hec") == "syslog":
+        config = validate_syslog_settings(stored_cfg)
+        scenario = resolve_scenario_path(str(params.get("scenario") or params.get("scenario_file") or ""))
+        eps = params.get("eps", 1000)
+        if isinstance(eps, bool) or not RE_EPS.fullmatch(str(eps)) or not 1 <= int(eps) <= 500000:
+            raise ValueError("Invalid EPS")
+        checked = _syslog_runner_check(config, scenario)
+        if checked.get("status") != "success":
+            raise ValueError("Unsupported syslog scenario")
+        return {"action": "start", "scenario": scenario, "eps": int(eps), "sample": None,
+                "hec": None, "token": None, "native_transport": "syslog", "syslog": config}
     hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
     token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
     if not token:
@@ -1327,10 +1428,17 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         "--hec", run_params["hec"],
         "--ssl-verify", str(run_params.get("ssl_verify", True)).lower()
     ]
+    is_syslog = run_params.get("native_transport") == "syslog"
+    if is_syslog:
+        cmd = [sys.executable, run_sim_script, "--scenario", run_params["scenario"],
+               "--eps", str(run_params["eps"]), "--native-syslog"]
     if run_params.get("_native_record"):
         _update_lock_held = _native_monitor()._update_lock_held
-        import run_simulation as runner
-        python_path = run_params.get("ssl_verify", True) or runner.resolve_binary() == "python_engine"
+        if is_syslog:
+            python_path = False  # Raw syslog has no searchable run-ID metadata.
+        else:
+            import run_simulation as runner
+            python_path = run_params.get("ssl_verify", True) or runner.resolve_binary() == "python_engine"
         _update_lock_held(run_params["_native_record"]["run_id"], lambda r: r.update(
             correlation="SUPPORTED" if python_path else "UNSUPPORTED"))
     if run_params.get("sample"):
@@ -1355,7 +1463,8 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
             stdin=subprocess.PIPE, text=True
         )
         proc.stdin.write(json.dumps({"credential": run_params["token"],
-                                 "run_id": (run_params.get("_native_record") or {}).get("run_id")}))
+                                 "run_id": (run_params.get("_native_record") or {}).get("run_id"),
+                                 "syslog": run_params.get("syslog")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -1831,6 +1940,8 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     monitor = _native_monitor()
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
+    if params.get("action") in ("configure_syslog", "get_syslog_config", "test_syslog"):
+        return _native_syslog_operation(params)
     if params.get("action") == "configure_hec":
         return _execute_request(params)
     ignored = {"hec", "url", "hec_url", "token", "hec_token", "run_id", "netspout_run_id"}

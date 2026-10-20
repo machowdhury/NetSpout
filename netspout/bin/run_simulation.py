@@ -22,7 +22,7 @@ import json
 import shutil
 import tempfile
 import stat
-from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files, get_orchestration_log_path
+from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files, get_orchestration_log_path, validate_syslog_settings
 
 # App root directory
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -309,20 +309,13 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
 
 
 
-def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: int, run_id=None):
-    """Pure-Python synthetic generator fallback when no native compiled binary is present."""
-    import urllib.request
-    import urllib.error
-    import ssl
-    import random
-
+def load_python_scenario_events(scenario_file, strict=False):
     def decode_value(value):
         value = value.strip()
         if value.startswith('"'):
             return json.loads(value)
         return value.strip("'")
 
-    resolve_hec_urls(hec_url, get_stored_config())
     events_to_stream = []
     if os.path.exists(scenario_file):
         try:
@@ -354,11 +347,26 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
                         "raw": raw_val
                     })
         except Exception as e:
+            if strict:
+                raise ValueError("Invalid syslog scenario template") from None
             sys.stderr.write(f"[BLASTER-PY] Scenario parse warning: Operation failed\n")
 
     if not events_to_stream:
         basename = os.path.basename(scenario_file)
         raise NoStreamableEventsError(f"Scenario '{basename}' has no streamable events")
+
+    return events_to_stream
+
+
+def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: int, run_id=None):
+    """Pure-Python synthetic generator fallback when no native compiled binary is present."""
+    import urllib.request
+    import urllib.error
+    import ssl
+    import random
+
+    resolve_hec_urls(hec_url, get_stored_config())
+    events_to_stream = load_python_scenario_events(scenario_file)
 
     ctx = ssl.create_default_context()
     if get_stored_config().get("ssl_verify", True) is False:
@@ -465,9 +473,77 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
         time.sleep(sleep_time)
 
 
+def validate_syslog_scenario(scenario_file):
+    events = load_python_scenario_events(scenario_file, strict=True)
+    for event in events:
+        if ("metric" in event["index"].lower() or "metric" in event["sourcetype"].lower()
+                or event["sourcetype"] == "cisco:ios:mdt"):
+            raise ValueError("Syslog supports log scenarios only")
+        if any(c in event["raw"] or c in event["host"] for c in ("\r", "\n")):
+            raise ValueError("Syslog requires single-line log records")
+    return events
+
+
+def send_native_syslog(dispatcher, config, raw, hostname="netspout-native"):
+    """Use the existing adapter; a socket send is never receiver/index proof."""
+    ok, _ = dispatcher.emit_syslog(raw_message=raw, host=config["syslog_host"],
+        port=config["syslog_port"], protocol=config["syslog_protocol"],
+        facility=config["syslog_facility"], severity=config["syslog_severity"],
+        hostname=hostname, app_name="netspout", syslog_format=config["syslog_format"])
+    return {"status": "success" if ok else "error", "delivery_state": "SENT" if ok else "UNKNOWN",
+            "message": "Local socket send completed; receiver delivery and indexing unverified" if ok else
+                       "Syslog send failed; delivery outcome unknown",
+            "attempted": 1, "sent": int(ok), "failed": 0, "unknown": int(not ok),
+            "receiver_observed": None, "indexed": None, "indexing_verified": False}
+
+
+def native_syslog_diagnostic(config):
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher
+    return send_native_syslog(TelemetryDispatcher(), config, "NETSPOUT synthetic syslog diagnostic")
+
+
+def run_python_syslog_streamer(scenario_file, config, eps, run_id=None):
+    import random
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher
+    config = validate_syslog_settings(config)
+    events = validate_syslog_scenario(scenario_file)
+    dispatcher = TelemetryDispatcher()
+    print("[SYSLOG] Python log scenario started; receiver delivery and indexing are unverified", flush=True)
+    while True:
+        event = random.choice(events)
+        raw = event["raw"].replace("$SYSLOG_TS$", time.strftime("%b %d %H:%M:%S", time.localtime())).replace(
+            "$ISO_TS$", time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime())).replace("$FLOW_ID$", str(random.randint(10000, 99999)))
+        if run_id:
+            from native_run_monitor import update
+            def generated(r):
+                r["classification"] = "LOG"
+                r["counters"]["generated"] = (r["counters"]["generated"] or 0) + 1
+                r["correlation"] = "UNSUPPORTED"  # Never change vendor wire data for run proof.
+            update(run_id, generated)
+        # Record intent before the socket call; process interruption leaves an
+        # unknown local-send outcome rather than an invented completed send.
+        if run_id:
+            def attempting(r):
+                evidence = {key: ((r.get("syslog_delivery") or {}).get(key) or 0)
+                            for key in ("attempted", "sent", "failed", "unknown")}
+                evidence["attempted"] += 1
+                evidence["unknown"] += 1
+                r["syslog_delivery"] = evidence
+                r["counters"]["attempted"] = evidence["attempted"]
+            update(run_id, attempting)
+        result = send_native_syslog(dispatcher, config, raw, event["host"])
+        if run_id:
+            def delivered(r):
+                if result["sent"]:
+                    r["syslog_delivery"]["sent"] += 1
+                    r["syslog_delivery"]["unknown"] -= 1
+            update(run_id, delivered)
+        time.sleep(1.0 / eps)
+
+
 def _main():
     parser = argparse.ArgumentParser(description="TA-network-data-blaster Secure Simulation Runner")
-    parser.add_argument("--scenario", required=True, help="Path to scenario YAML file")
+    parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
     parser.add_argument("--eps", type=int, default=int(os.environ.get("DATABLASTER_TARGET_EPS", 1000)), help="Target Events Per Second (integer)")
     parser.add_argument("--hec", default=os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector"), help="Target Splunk HEC URL")
     parser.add_argument("--ssl-verify", default="true", choices=["true", "false"])
@@ -475,6 +551,10 @@ def _main():
     parser.add_argument("--async-exec", action="store_true", help="Launch asynchronously and return PID immediately")
     parser.add_argument("--python-stream", action="store_true", help="Run using native Python streaming engine")
 
+    syslog_mode = parser.add_mutually_exclusive_group()
+    syslog_mode.add_argument("--native-syslog", action="store_true")
+    syslog_mode.add_argument("--syslog-diagnostic", action="store_true")
+    syslog_mode.add_argument("--syslog-preflight", action="store_true")
     args = parser.parse_args()
 
     def stop_runner(signum, frame):
@@ -482,10 +562,8 @@ def _main():
 
     signal.signal(signal.SIGTERM, stop_runner)
     signal.signal(signal.SIGINT, stop_runner)
-    args.scenario = resolve_scenario_path(args.scenario, APP_DIR)
-    if (os.path.basename(args.scenario).startswith("canvas_custom_")
-            and os.path.dirname(args.scenario) == os.path.realpath(resolve_run_dir())):
-        _PRIVATE_FILES.add(args.scenario)
+    if not args.syslog_diagnostic:
+        args.scenario = resolve_scenario_path(args.scenario or "", APP_DIR)
     private_input = json.loads(sys.stdin.read())
     args.token = private_input.get("credential", "")
     args.run_id = private_input.get("run_id")
@@ -493,6 +571,24 @@ def _main():
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.syslog_diagnostic or args.syslog_preflight or args.native_syslog:
+        config = validate_syslog_settings(private_input.get("syslog", {}))
+        if args.syslog_diagnostic:
+            print(json.dumps(native_syslog_diagnostic(config)))
+            return
+        args.scenario = resolve_scenario_path(args.scenario or "", APP_DIR)
+        events = validate_syslog_scenario(args.scenario)
+        if args.syslog_preflight:
+            print(json.dumps({"status": "success", "log_templates": len(events)}))
+            return
+        if not 1 <= args.eps <= 500000:
+            raise ValueError("Invalid syslog EPS")
+        run_python_syslog_streamer(args.scenario, config, args.eps, args.run_id)
+        return
+    args.scenario = resolve_scenario_path(args.scenario, APP_DIR)
+    if (os.path.basename(args.scenario).startswith("canvas_custom_")
+            and os.path.dirname(args.scenario) == os.path.realpath(resolve_run_dir())):
+        _PRIVATE_FILES.add(args.scenario)
     resolve_hec_urls(args.hec, get_stored_config())
     if not args.token:
         raise ValueError("HEC credential is required")

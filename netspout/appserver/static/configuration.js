@@ -47,6 +47,52 @@ require([
     return h;
   }
 
+  function initNativeSyslog() {
+    if (!document.getElementById('syslog-settings')) return;
+    var names = ['native_transport','syslog_host','syslog_port','syslog_protocol','syslog_format','syslog_facility','syslog_severity'];
+    var ids = ['cfg-native-transport','cfg-syslog-host','cfg-syslog-port','cfg-syslog-protocol','cfg-syslog-format','cfg-syslog-facility','cfg-syslog-severity'];
+    var status = document.getElementById('syslog-status');
+    var save = document.getElementById('btn-save-syslog'), test = document.getElementById('btn-test-syslog');
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(r) { return r.json().then(function(data) {
+          if (!r.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(config) { names.forEach(function(key, i) { document.getElementById(ids[i]).value = String(config[key]); }); }
+    save.onclick = function() {
+      var payload = {action:'configure_syslog'};
+      names.forEach(function(key, i) { var value = document.getElementById(ids[i]).value;
+        payload[key] = ['syslog_port','syslog_facility','syslog_severity'].indexOf(key) >= 0 ? Number(value) : value;
+      });
+      busy(true); status.textContent = 'Saving destination…';
+      return request(payload).then(function(data) { apply(data.config); status.textContent = 'Destination saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Check settings and reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one synthetic diagnostic to the saved destination…';
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify({action:'test_syslog'})})
+        .then(function(r) { return r.json().then(function(data) {
+          if (!data.delivery_state || [200,502].indexOf(r.status) < 0) throw new Error('unavailable');
+          status.textContent = data.delivery_state + ': ' + data.message + '\nAttempted: ' + data.attempted + ', sent: ' + data.sent + ', failed: ' + data.failed + ', unknown: ' + data.unknown;
+        }); })
+        .catch(function() { status.textContent = 'Diagnostic unavailable. Delivery and indexing are unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_syslog_config'}).then(function(data) { apply(data.config); busy(false); status.textContent = 'Saved settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved syslog settings unavailable.'; });
+  }
+
+  var syslogMountAttempts = 0;
+  function mountSyslogWhenReady() {
+    if (document.getElementById('syslog-settings')) initNativeSyslog();
+    else if (++syslogMountAttempts < 30) setTimeout(mountSyslogWhenReady, 100);
+  }
+  mountSyslogWhenReady();
+
   var defaultCfg = {
     hec_url: "https://127.0.0.1:8088/services/collector",
 

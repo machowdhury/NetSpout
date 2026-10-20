@@ -47,6 +47,58 @@ require([
     return h;
   }
 
+  function initNativeSnmp() {
+    var status = document.getElementById('snmp-status');
+    var save = document.getElementById('btn-save-snmp'), test = document.getElementById('btn-test-snmp');
+    function element(key) { return document.getElementById('cfg-snmp-' + key); }
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(response) { return response.json().then(function(data) {
+          if (diagnostic && [200,502].indexOf(response.status) >= 0 && data.attempted !== undefined) return data;
+          if (!response.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(data) {
+      element('host').value = data.config.snmp_host;
+      element('port').value = data.config.snmp_port;
+      element('message-type').value = data.config.snmp_message_type;
+      element('active').checked = data.native_transport === 'snmp';
+      element('community').value = '';
+      var transport = document.getElementById('cfg-native-transport');
+      if (transport) transport.value = ['otlp','snmp'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
+    }
+    save.onclick = function() {
+      var payload = {action:'configure_snmp',snmp_host:element('host').value,snmp_port:Number(element('port').value),
+        snmp_version:'2c',snmp_protocol:'udp',snmp_message_type:element('message-type').value};
+      if (element('active').checked) payload.native_transport = 'snmp';
+      if (element('community').value) payload.snmp_community = element('community').value;
+      element('community').value = '';
+      busy(true); status.textContent = 'Saving SNMP settings…';
+      return request(payload).then(function(data) { apply(data); status.textContent = 'SNMP settings saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one synthetic SNMP diagnostic…';
+      return request({action:'test_snmp'},true).then(function(data) {
+        status.textContent = data.message + '\n' + ['attempted','sent','acknowledged','failed','unknown'].map(function(k) {
+          return k + ': ' + (data[k] === null || data[k] === undefined ? 'not measured' : data[k]);
+        }).join(', ') + '\nLocal send or inform response is not Splunk indexing proof.';
+      }).catch(function() { status.textContent = 'Diagnostic unavailable. Delivery is unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_snmp_config'}).then(function(data) { apply(data); busy(false); status.textContent = 'Saved SNMP settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved SNMP settings unavailable.'; });
+  }
+  var snmpMountAttempts = 0;
+  function mountSnmpWhenReady() {
+    if (document.getElementById('snmp-settings')) initNativeSnmp();
+    else if (++snmpMountAttempts < 30) setTimeout(mountSnmpWhenReady,100);
+  }
+  mountSnmpWhenReady();
+
   function initNativeOtlp() {
     var status = document.getElementById('otlp-status');
     var save = document.getElementById('btn-save-otlp'), test = document.getElementById('btn-test-otlp');
@@ -65,7 +117,7 @@ require([
       element('active').checked = data.native_transport === 'otlp';
       element('token').value = '';
       var transport = document.getElementById('cfg-native-transport');
-      if (transport) transport.value = data.native_transport === 'otlp' ? '' : data.native_transport;
+      if (transport) transport.value = ['otlp','snmp'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
     }
     save.onclick = function() {
       var payload = {action:'configure_otlp',otlp_transport:'http_json'};
@@ -113,7 +165,7 @@ require([
         }); });
     }
     function apply(config) { names.forEach(function(key, i) {
-      document.getElementById(ids[i]).value = key === 'native_transport' && config[key] === 'otlp' ? '' : String(config[key]);
+      document.getElementById(ids[i]).value = key === 'native_transport' && ['otlp','snmp'].indexOf(config[key]) >= 0 ? '' : String(config[key]);
     }); }
     save.onclick = function() {
       var payload = {action:'configure_syslog'};

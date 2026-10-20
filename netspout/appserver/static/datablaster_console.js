@@ -36,6 +36,13 @@ require([
         var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
       });
       lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.snmp_delivery) {
+        ['attempted','sent','acknowledged','failed','unknown'].forEach(function(key) {
+          var value = run.snmp_delivery[key];
+          lines.push('SNMP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Synthetic SNMPv2c notifications. Local send and inform response are distinct; Splunk indexing verification is unsupported.');
+      }
       if (run.otlp_delivery) {
         ['attempted','acknowledged','rejected','failed','unknown'].forEach(function(key) {
           var value = run.otlp_delivery[key];

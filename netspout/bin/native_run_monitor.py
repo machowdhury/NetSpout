@@ -57,7 +57,7 @@ def valid(record):
                 and all(isinstance(i, str) and INDEX.fullmatch(i) for i in record['indexes'])
                 and record['classification'] in ('LOG', 'METRIC', 'MIXED', 'UNKNOWN')
                 and record['correlation'] in ('SUPPORTED', 'UNSUPPORTED')
-                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG', 'OTLP')
+                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG', 'OTLP', 'SNMP')
                 and isinstance(record['destination'].get('host'), str)
                 and type(record['destination'].get('port')) is int
                 and isinstance(record['execution'], dict) and isinstance(record['execution'].get('action'), str)
@@ -69,6 +69,9 @@ def valid(record):
                 and ('otlp_delivery' not in record or (isinstance(record['otlp_delivery'], dict)
                      and set(record['otlp_delivery']) == {'attempted', 'acknowledged', 'rejected', 'failed', 'unknown'}
                      and all(v is None or (type(v) is int and v >= 0) for v in record['otlp_delivery'].values())))
+                and ('snmp_delivery' not in record or (isinstance(record['snmp_delivery'], dict)
+                     and set(record['snmp_delivery']) == {'attempted','sent','failed','unknown','acknowledged'}
+                     and all(v is None or (type(v) is int and v >= 0) for v in record['snmp_delivery'].values())))
                 and set(record['counters']) == set(COUNTERS)
                 and all(v is None or (type(v) is int and v >= 0) for v in record['counters'].values()))
     except (KeyError, TypeError, ValueError, AttributeError):
@@ -192,6 +195,12 @@ def begin(action, clean, session_key=""):
                       'protocol':'http_json', 'signal':config['otlp_signal']}, indexes=[],
                       classification={'logs':'LOG','metrics':'METRIC','both':'MIXED'}[config['otlp_signal']],
                       correlation='UNSUPPORTED', otlp_delivery={k:None for k in ('attempted','acknowledged','rejected','failed','unknown')})
+    if clean.get('native_transport') == 'snmp':
+        config = clean['snmp']
+        record.update(destination={'transport':'SNMP','host':config['snmp_host'],'port':config['snmp_port'],
+                      'protocol':'udp','version':'2c','message_type':config['snmp_message_type']},indexes=[],
+                      classification='LOG',correlation='UNSUPPORTED',
+                      snmp_delivery={k:None for k in ('attempted','sent','failed','unknown','acknowledged')})
     if action == 'blast_hec' and any(isinstance(e, dict) and not e.get('index') for e in events):
         record['correlation'] = 'UNSUPPORTED'
     if action == 'blast_hec':
@@ -256,6 +265,8 @@ def verification(run_id, session_key):
         saved = update(run_id, lambda rec: rec.update(verification=value))
         return 200, {'status': 'success', 'run': saved}
     # A local Splunk search can only verify the local destination.
+    if r['destination']['transport'] == 'SNMP':
+        return result('INCONCLUSIVE','SNMP indexing verification is unsupported; synthetic correlation varbinds are emitted')
     if r['destination']['transport'] == 'OTLP':
         return result('INCONCLUSIVE', 'OTLP indexing verification is unsupported; correlation attributes are emitted')
     if r['destination']['transport'] == 'SYSLOG':

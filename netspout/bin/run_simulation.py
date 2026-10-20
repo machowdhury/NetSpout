@@ -634,6 +634,115 @@ def run_python_otlp_streamer(path, config, eps, run_id=None):
         time.sleep(1.0 / eps)
 
 
+# Explicitly synthetic OIDs, using the repository's existing 59999 namespace.
+# No claim of a registered vendor MIB or vendor notification fidelity.
+NATIVE_SNMP_OID = "1.3.6.1.4.1.59999.101"
+
+
+def build_native_snmp(event, raw, config, run_id, scenario_id, phase="BASELINE", request_id=1):
+    from netspout_core.models import SnmpTrap, SnmpInform, SnmpVarBind
+    cls = SnmpInform if config["snmp_message_type"] == "inform" else SnmpTrap
+    values = (run_id or "diagnostic", scenario_id, event["host"], phase, raw, event["sourcetype"], event["source"])
+    return cls(community=config["community"], request_id=request_id, sys_uptime=0,
+               trap_oid=NATIVE_SNMP_OID + ".0", source_device_id=event["host"],
+               scenario_id=scenario_id, phase=phase,
+               varbinds=[SnmpVarBind(oid=NATIVE_SNMP_OID + "." + str(i) + ".0",
+                         asn1_type="OctetString", value=value, fidelity="SYNTHETIC")
+                         for i,value in enumerate(values,1)])
+
+
+def validate_snmp_scenario(path, config, run_id=None):
+    from netspout_core.snmp_ber import SnmpBerEncoder
+    events = load_python_scenario_events(path,strict=True)
+    for event in events:
+        if otlp_is_metric(event):
+            raise ValueError("SNMP metric mapping is unsupported")
+        # Bound before startup using the largest timestamp/flow substitutions.
+        raw = event["raw"].replace("$SYSLOG_TS$","Sep 30 23:59:59").replace("$ISO_TS$","2026-12-31T23:59:59.000Z").replace("$FLOW_ID$","99999")
+        SnmpBerEncoder.encode_message(build_native_snmp(event,raw,config,run_id or "0"*36,os.path.basename(path),request_id=2147483647))
+    return events
+
+
+def native_snmp_transport(config):
+    from netspout_core.transport_native_snmp import NativeSnmpTransport
+    # Never fall back to netspout-lab; no implicit retries, even for informs.
+    if not isinstance(config.get("community"),str) or not config["community"]:
+        raise ValueError("SNMP community unavailable")
+    return NativeSnmpTransport(destination_host=config["snmp_host"],destination_port=config["snmp_port"],
+        community=config["community"],trap_rate_pps=50,inform_rate_pps=25,packet_cap=1000,
+        inform_timeout_ms=500,inform_max_retries=0)
+
+
+def send_native_snmp(transport, message, config):
+    from netspout_core.snmp_ber import SnmpBerEncoder
+    result = dict(status="error",attempted=1,sent=0,failed=0,unknown=1,
+                  acknowledged=0 if config["snmp_message_type"] == "inform" else None,
+                  message="SNMP delivery outcome unknown",indexed=None,indexing_verified=False,
+                  receiver_observed=None)
+    try:
+        size = len(SnmpBerEncoder.encode_message(message))
+    except Exception:
+        result.update(failed=1,unknown=0,message="SNMP message could not be encoded")
+        return result
+    try:
+        outcome = transport.send_batch([message])
+        sent = outcome.datagrams_sent == 1 and outcome.bytes_sent == size
+        result["sent"] = int(sent)
+        if outcome.datagrams_attempted == 0:
+            result.update(failed=1,unknown=0,message="SNMP message was not sent")
+        elif config["snmp_message_type"] == "inform":
+            acknowledged = sent and outcome.informs_acknowledged == 1
+            result.update(acknowledged=int(acknowledged),unknown=0 if acknowledged else 1,
+                          status="success" if acknowledged else "error",
+                          message="SNMP inform response matched; indexing unverified" if acknowledged else "SNMP inform acknowledgement unconfirmed")
+        elif sent:
+            result.update(status="success",unknown=0,message="SNMP datagram locally sent; receiver delivery unverified")
+    except Exception:
+        pass  # Adapter errors can contain credentials/bytes; never expose them.
+    return result
+
+
+def native_snmp_diagnostic(config):
+    event = dict(host="netspout-diagnostic",source="pulseforge",sourcetype="netspout:synthetic:snmp")
+    message = build_native_snmp(event,"PulseForge synthetic SNMP diagnostic",config,None,"diagnostic")
+    return send_native_snmp(native_snmp_transport(config),message,config)
+
+
+def run_python_snmp_streamer(path, config, eps, run_id=None):
+    import random
+    events = validate_snmp_scenario(path,config,run_id)
+    transport = native_snmp_transport(config)
+    print("[PulseForge SNMP] Synthetic notifications; indexing verification unsupported",flush=True)
+    for sequence in range(1,1001):
+        event = random.choice(events)
+        raw = event["raw"].replace("$SYSLOG_TS$",time.strftime("%b %d %H:%M:%S",time.localtime())).replace(
+            "$ISO_TS$",time.strftime("%Y-%m-%dT%H:%M:%S.000Z",time.gmtime())).replace("$FLOW_ID$",str(random.randint(10000,99999)))
+        message = build_native_snmp(event,raw,config,run_id,os.path.basename(path),request_id=sequence)
+        if run_id:
+            from native_run_monitor import update
+            def attempting(r):
+                delivery = {k:((r.get("snmp_delivery") or {}).get(k) or 0) for k in ("attempted","sent","failed","unknown")}
+                delivery.update(attempted=delivery["attempted"]+1,unknown=delivery["unknown"]+1,
+                                acknowledged=((r.get("snmp_delivery") or {}).get("acknowledged") or 0) if config["snmp_message_type"] == "inform" else None)
+                r["snmp_delivery"] = delivery
+                r["counters"]["generated"] = (r["counters"]["generated"] or 0)+1
+                r["counters"]["attempted"] = delivery["attempted"]
+            update(run_id,attempting)
+        evidence = send_native_snmp(transport,message,config)
+        if run_id:
+            def delivered(r):
+                r["snmp_delivery"]["unknown"] -= 1
+                for key in ("sent","failed","unknown"):
+                    r["snmp_delivery"][key] += evidence[key]
+                if evidence["acknowledged"] is not None:
+                    r["snmp_delivery"]["acknowledged"] += evidence["acknowledged"]
+                r["counters"]["accepted"] = r["snmp_delivery"]["acknowledged"]
+                r["counters"]["failed"] = r["snmp_delivery"]["failed"]
+                r["counters"]["unknown"] = r["snmp_delivery"]["unknown"]
+            update(run_id,delivered)
+        time.sleep(1.0/eps)
+
+
 def _main():
     parser = argparse.ArgumentParser(description="NetSpout PulseForge Secure Simulation Runner")
     parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
@@ -651,6 +760,9 @@ def _main():
     syslog_mode.add_argument("--native-otlp", action="store_true")
     syslog_mode.add_argument("--otlp-diagnostic", action="store_true")
     syslog_mode.add_argument("--otlp-preflight", action="store_true")
+    syslog_mode.add_argument("--native-snmp",action="store_true")
+    syslog_mode.add_argument("--snmp-preflight",action="store_true")
+    syslog_mode.add_argument("--snmp-diagnostic",action="store_true")
     args = parser.parse_args()
 
     def stop_runner(signum, frame):
@@ -658,7 +770,7 @@ def _main():
 
     signal.signal(signal.SIGTERM, stop_runner)
     signal.signal(signal.SIGINT, stop_runner)
-    if not (args.syslog_diagnostic or args.otlp_diagnostic):
+    if not (args.syslog_diagnostic or args.otlp_diagnostic or args.snmp_diagnostic):
         args.scenario = resolve_scenario_path(args.scenario or "", APP_DIR)
     private_input = json.loads(sys.stdin.read())
     args.token = private_input.get("credential", "")
@@ -667,6 +779,22 @@ def _main():
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.snmp_diagnostic or args.snmp_preflight or args.native_snmp:
+        from datablaster_rest import validate_snmp_settings
+        supplied = private_input.get("snmp", {})
+        config = dict(validate_snmp_settings(supplied),community=supplied.get("community"))
+        native_snmp_transport(config)  # Require explicit runtime credentials.
+        if args.snmp_diagnostic:
+            print(json.dumps(native_snmp_diagnostic(config)))
+            return
+        events = validate_snmp_scenario(args.scenario,config,args.run_id)
+        if args.snmp_preflight:
+            print(json.dumps({"status":"success","templates":len(events)}))
+            return
+        if not 1 <= args.eps <= (25 if config["snmp_message_type"] == "inform" else 50):
+            raise ValueError("Unsupported SNMP rate")
+        run_python_snmp_streamer(args.scenario,config,args.eps,args.run_id)
+        return
     if args.otlp_diagnostic or args.otlp_preflight or args.native_otlp:
         from datablaster_rest import validate_otlp_settings
         supplied = private_input.get("otlp", {})

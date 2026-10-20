@@ -34,7 +34,7 @@ except ImportError:
                         continue
                     if isinstance(v, _FieldDefault):
                         setattr(self, k, v.get_value())
-                    elif not callable(v):
+                    elif not callable(v) and not isinstance(v, property):
                         setattr(self, k, v)
             for k, v in kwargs.items():
                 setattr(self, k, v)

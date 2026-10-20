@@ -4,6 +4,18 @@
 
   <row>
     <panel><html>
+      <section id="snmp-settings" style="padding:16px;">
+        <h2>PulseForge native SNMP destination</h2>
+        <p>SNMPv2c UDP traps or informs, private/loopback IPv4, receiver ports 1024–65535. Community is sent in plaintext on the wire. Synthetic 1.3.6.1.4.1.59999.101 varbinds carry run/scenario/device/phase and original log text; this is not a vendor MIB. Metrics, polling, v1/v3, TLS, DNS/IPv6, arbitrary OID mappings and Splunk indexing verification are unsupported. Maximum 50 traps/s or 25 informs/s, 1000 notifications/run, 1472 bytes/message. Informs wait up to 500 ms without retries.</p>
+        <label>Receiver IPv4 <input id="cfg-snmp-host" type="text" value="127.0.0.1"/></label>
+        <label>UDP port <input id="cfg-snmp-port" type="number" min="1024" max="65535" value="1162"/></label>
+        <label>Message type <select id="cfg-snmp-message-type"><option value="trap">v2c Trap (local send only)</option><option value="inform">v2c Inform (matching response)</option></select></label>
+        <label>New community (blank keeps saved credential) <input id="cfg-snmp-community" type="password" autocomplete="new-password"/></label>
+        <label><input id="cfg-snmp-active" type="checkbox"/>Activate SNMP for future native scenarios</label>
+        <button id="btn-save-snmp" type="button" disabled="disabled">Save SNMP settings</button>
+        <button id="btn-test-snmp" type="button" disabled="disabled">Send one diagnostic to saved receiver</button>
+        <pre id="snmp-status" aria-live="polite">Loading SNMP settings…</pre>
+      </section>
       <section id="otlp-settings" style="padding:16px;">
         <h2>Native OTLP destination</h2>
         <p>HTTP/JSON logs and synthetic metric gauges only. gRPC, protobuf, traces and Splunk indexing verification are unsupported. HTTPS certificates are verified. Collector acknowledgement is not indexing proof.</p>

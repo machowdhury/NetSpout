@@ -221,6 +221,122 @@ RE_SAFE_PATH = re.compile(r"^[a-zA-Z0-9_\-./]+$")
 RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
+SNMP_DEFAULTS = {
+    "snmp_host":"127.0.0.1", "snmp_port":1162, "snmp_version":"2c",
+    "snmp_message_type":"trap", "snmp_protocol":"udp", "snmp_credential_ref":"",
+}
+
+
+def validate_snmp_settings(settings):
+    """Literal private/loopback IPv4 and unprivileged UDP receiver ports only."""
+    result = {k:settings.get(k,v) for k,v in SNMP_DEFAULTS.items()}
+    if (not isinstance(result["snmp_host"],str) or type(result["snmp_port"]) is not int
+            or not 1024 <= result["snmp_port"] <= 65535 or result["snmp_version"] != "2c"
+            or result["snmp_message_type"] not in ("trap","inform") or result["snmp_protocol"] != "udp"):
+        raise ValueError("Invalid SNMP settings")
+    address = ipaddress.ip_address(result["snmp_host"])
+    safe = any(address in ipaddress.ip_network(n) for n in ("127.0.0.0/8","10.0.0.0/8","172.16.0.0/12","192.168.0.0/16","169.254.0.0/16"))
+    if address.version != 4 or not safe or address.is_unspecified or address.is_multicast or str(address).endswith(".255"):
+        raise ValueError("Unsupported SNMP receiver")
+    result["snmp_host"] = str(address)
+    reference = result["snmp_credential_ref"]
+    if not isinstance(reference,str) or (reference and not re.fullmatch(r"snmp_community_v_[0-9a-f]{32}",reference)):
+        raise ValueError("Invalid SNMP credential reference")
+    return result
+
+
+class SNMPCredentialStore(HECCredentialStore):
+    """Separate app-owned, versioned SNMP entries; no HEC or legacy fallback."""
+    def read(self, reference):
+        if not isinstance(reference, str) or not re.fullmatch(r"snmp_community_v_[0-9a-f]{32}", reference):
+            raise ValueError("Invalid SNMP credential reference")
+        code, data = self._request(self.collection + "/" + quote("netspout:" + reference + ":", safe=""))
+        entries = data.get("entry", [])
+        value = entries[0].get("content", {}).get("clear_password", "") if entries else ""
+        if code != 200 or not isinstance(value, str) or not value or len(value.encode("utf-8")) > 255 or any(ord(c) <= 32 or ord(c) >= 127 for c in value):
+            raise RuntimeError("SNMP credential unavailable")
+        return value
+
+    def stage(self, value):
+        if not has_netspout_admin(self.session_key):
+            raise PermissionError("netspout_admin capability required")
+        if not isinstance(value, str) or not value or len(value.encode("utf-8")) > 255 or any(ord(c) <= 32 or ord(c) >= 127 for c in value):
+            raise ValueError("Invalid SNMP credential")
+        reference = "snmp_community_v_" + uuid.uuid4().hex
+        code, _ = self._request(self.collection, "POST", {"realm": "netspout", "name": reference, "password": value})
+        if code not in (200, 201) or self.read(reference) != value:
+            raise RuntimeError("SNMP credential staging failed")
+        return reference
+
+
+def _snmp_snapshot(config, session_key):
+    result = validate_snmp_settings(config)
+    # Empty/cleared references fail closed: never use the adapter's lab default.
+    community = SNMPCredentialStore(session_key).read(result["snmp_credential_ref"])
+    return dict(result, community=community)
+
+
+def _snmp_runner_check(config, scenario=None):
+    command = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"),
+               "--snmp-preflight" if scenario else "--snmp-diagnostic"]
+    if scenario:
+        command += ["--scenario", scenario]
+    completed = subprocess.run(command, input=json.dumps({"snmp": config}), text=True,
+                               capture_output=True, timeout=10, cwd=APP_DIR)
+    if completed.returncode:
+        raise ValueError("SNMP runner unavailable")
+    result = json.loads(completed.stdout)
+    if not isinstance(result, dict) or result.get("status") not in ("success", "error"):
+        raise RuntimeError("SNMP runner unavailable")
+    return result
+
+
+def _native_snmp_operation(params):
+    if not has_netspout_admin(params.get("session_key", "")):
+        return 403, {"status": "error", "message": "netspout_admin capability required"}
+    action = params["action"]
+    try:
+        if action == "configure_snmp":
+            allowed = set(SNMP_DEFAULTS) | {"action", "session_key", "snmp_community", "native_transport"}
+            if set(params) - allowed or ("snmp_community" in params and "snmp_credential_ref" in params):
+                raise ValueError()
+            with simulation_start_lock():
+                get_active_run_dir()
+                try:
+                    saved = json.loads(_read_private_file(CONFIG_FILE))
+                    if not isinstance(saved, dict) or "hec_token" in saved:
+                        raise RuntimeError()
+                except FileNotFoundError:
+                    saved = {}
+                candidate = dict(DEFAULT_CONFIG, **{k:v for k,v in saved.items() if k in DEFAULT_CONFIG})
+                candidate.update({k:params[k] for k in SNMP_DEFAULTS if k in params})
+                if "native_transport" in params:
+                    if params["native_transport"] not in ("hec", "syslog", "otlp", "snmp"):
+                        raise ValueError()
+                    candidate["native_transport"] = params["native_transport"]
+                # Validate all destination options before staging an inactive credential.
+                if "snmp_community" in params:
+                    staged_candidate = dict(candidate, snmp_credential_ref="snmp_community_v_" + "0" * 32)
+                    validate_snmp_settings(staged_candidate)
+                    candidate["snmp_credential_ref"] = SNMPCredentialStore(params["session_key"]).stage(params["snmp_community"])
+                candidate.update(validate_snmp_settings(candidate))
+                _snmp_snapshot(candidate, params["session_key"])
+                _write_config(CONFIG_FILE, candidate)
+            return 200, {"status":"success", "message":"SNMP settings saved", "config":{k:candidate[k] for k in SNMP_DEFAULTS}, "native_transport":candidate["native_transport"]}
+        if set(params) - {"action", "session_key"}:
+            raise ValueError()
+        saved = get_stored_config(params["session_key"])
+        config = validate_snmp_settings(saved)
+        if action == "get_snmp_config":
+            return 200, {"status":"success", "config":config, "native_transport":saved["native_transport"]}
+        response = _snmp_runner_check(_snmp_snapshot(config, params["session_key"]))
+        return (200 if response["status"] == "success" else 502), response
+    except ValueError:
+        return 400, {"status":"error", "message":"Invalid SNMP settings or unsupported scenario"}
+    except Exception:
+        return 503, {"status":"error", "message":"SNMP configuration or diagnostic unavailable"}
+
+
 OTLP_DEFAULTS = {
     "otlp_endpoint": "https://127.0.0.1:4318", "otlp_transport": "http_json",
     "otlp_signal": "logs", "otlp_auth": "none", "otlp_credential_ref": "",
@@ -377,7 +493,7 @@ def validate_syslog_settings(settings):
                 not all(re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
                         for label in host.rstrip(".").split("."))):
             raise ValueError("Invalid syslog settings") from None
-    if (result["native_transport"] not in ("hec", "syslog", "otlp")
+    if (result["native_transport"] not in ("hec", "syslog", "otlp", "snmp")
             or result["syslog_protocol"] not in ("udp", "tcp")
             or result["syslog_format"] not in ("rfc3164", "rfc5424")):
         raise ValueError("Invalid syslog settings")
@@ -449,6 +565,7 @@ def _syslog_runner_check(config, scenario=None):
 DEFAULT_CONFIG = {
     **SYSLOG_DEFAULTS,
     **OTLP_DEFAULTS,
+    **SNMP_DEFAULTS,
     "hec_credential_ref": "",
     "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_allowed_hosts": ["127.0.0.1", "localhost"],
@@ -617,7 +734,7 @@ def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any
         if "hec_token" in new_cfg:
             HECCredentialStore(session_key).save(new_cfg["hec_token"])
         for key in DEFAULT_CONFIG:
-            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key in new_cfg:
+            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key in new_cfg:
                 cfg[key] = new_cfg[key]
         resolve_hec_urls(cfg["hec_url"], cfg)
         if cfg["ssl_verify"] is False:
@@ -635,7 +752,7 @@ def configure_hec(params):
     session_key = params.get("session_key", "")
     if not has_netspout_admin(session_key):
         return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
-    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - set(SNMP_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
     if set(params) - (editable | {"action", "session_key", "hec_token"}):
         return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
     with simulation_start_lock():
@@ -1271,7 +1388,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
+            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
@@ -1300,6 +1417,16 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             raise ValueError("Unsupported OTLP scenario")
         return {"action":"start", "scenario":scenario, "eps":int(eps), "sample":None,
                 "hec":None, "token":None, "native_transport":"otlp", "otlp":config}
+    if action == "start" and stored_cfg.get("native_transport") == "snmp":
+        config = _snmp_snapshot(stored_cfg, params.get("session_key", ""))
+        scenario = resolve_scenario_path(str(params.get("scenario") or params.get("scenario_file") or ""))
+        eps = params.get("eps", 1000)
+        if isinstance(eps, bool) or not RE_EPS.fullmatch(str(eps)) or not 1 <= int(eps) <= (25 if config["snmp_message_type"] == "inform" else 50):
+            raise ValueError("Invalid EPS")
+        if _snmp_runner_check(config, scenario).get("status") != "success":
+            raise ValueError("Unsupported SNMP scenario")
+        return {"action":"start", "scenario":scenario, "eps":int(eps), "sample":None,
+                "hec":None, "token":None, "native_transport":"snmp", "snmp":config}
     hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
     token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
     if not token:
@@ -1583,9 +1710,12 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
     if run_params.get("native_transport") == "otlp":
         cmd = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"), "--scenario", run_params["scenario"],
                "--eps", str(run_params["eps"]), "--native-otlp"]
+    if run_params.get("native_transport") == "snmp":
+        cmd = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"), "--scenario", run_params["scenario"],
+               "--eps", str(run_params["eps"]), "--native-snmp"]
     if run_params.get("_native_record"):
         _update_lock_held = _native_monitor()._update_lock_held
-        if run_params.get("native_transport") == "otlp":
+        if run_params.get("native_transport") in ("otlp", "snmp"):
             python_path = False  # OTLP indexing verification is unsupported.
         elif is_syslog:
             python_path = False  # Raw syslog has no searchable run-ID metadata.
@@ -1617,7 +1747,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         )
         proc.stdin.write(json.dumps({"credential": run_params["token"],
                                  "run_id": (run_params.get("_native_record") or {}).get("run_id"),
-                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp")}))
+                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp"), "snmp": run_params.get("snmp")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -2093,6 +2223,8 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     monitor = _native_monitor()
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
+    if params.get("action") in ("configure_snmp", "get_snmp_config", "test_snmp"):
+        return _native_snmp_operation(params)
     if params.get("action") in ("configure_otlp", "get_otlp_config", "test_otlp"):
         return _native_otlp_operation(params)
     if params.get("action") in ("configure_syslog", "get_syslog_config", "test_syslog"):

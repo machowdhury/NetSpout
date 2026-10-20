@@ -2311,7 +2311,7 @@ require([
   // Dynamic Index Fetcher
   function loadAvailableIndexes(selectIdx) {
     fetch(getRestUrl('action=list_indexes'), { headers: getHeaders() })
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
     .then(function(data) {
       if (data && data.indexes && Array.isArray(data.indexes)) {
         var sel = $('#wizard-target-index-select');
@@ -2356,7 +2356,7 @@ require([
         ssl_verify: sslVerify
       })
     })
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
     .then(function(res) {
       if (res.status === 'success' || (res.result && res.result.indexOf('HEC is healthy') !== -1)) {
         hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (PORT 8088)');
@@ -2435,12 +2435,12 @@ require([
           events: eventsToSend
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + eventsToSend.length + ' event(s) into ' + targetIndex + '!</span>');
+          logOutput('<span style="color: #4ade80;">REQUEST COMPLETED: Delivery unverified for ' + eventsToSend.length + ' event(s); target ' + targetIndex + '!</span>');
           showVerification(targetIndex, [sourcetype]);
         } else {
           logOutput('<span style="color: #f87171;">HEC INGESTION ERROR:</span> ' + (data.message || JSON.stringify(data)));
@@ -2449,8 +2449,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + eventsToSend.length + ' event(s) via internal channel!</span>');
-        showVerification(targetIndex, [sourcetype]);
+        logOutput('Request failed or response unavailable. Delivery UNKNOWN; verify ingestion in Splunk before retrying.');
       });
 
     } else if (wizardState.mode === "multi") {
@@ -2485,12 +2484,12 @@ require([
           events: multiEvents
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + multiEvents.length + ' batch events across ' + sourcetypes.length + ' sourcetypes!</span>');
+          logOutput('<span style="color: #4ade80;">REQUEST COMPLETED: Delivery unverified for ' + multiEvents.length + ' batch events across ' + sourcetypes.length + ' sourcetypes!</span>');
           showVerification(targetIndex, sourcetypes);
         } else {
           logOutput('<span style="color: #f87171;">BATCH ERROR:</span> ' + (data.message || JSON.stringify(data)));
@@ -2499,8 +2498,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + multiEvents.length + ' batch events via internal channel!</span>');
-        showVerification(targetIndex, sourcetypes);
+        logOutput('Request failed or response unavailable. Delivery UNKNOWN; verify ingestion in Splunk before retrying.');
       });
 
     } else if (wizardState.mode === "scenario") {
@@ -2519,12 +2517,12 @@ require([
           target_index: targetIndex
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Scenario executed. Root Cause / Oracle injected into ' + targetIndex + '!</span>');
+          logOutput('<span style="color: #4ade80;">Scenario launch requested. Ingestion unverified for ' + targetIndex + '!</span>');
           var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
           showVerification(targetIndex, sc ? sc.sourcetypes : []);
         } else {
@@ -2534,9 +2532,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Scenario executed via internal orchestrator!</span>');
-        var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
-        showVerification(targetIndex, sc ? sc.sourcetypes : []);
+        logOutput('Scenario launch outcome UNKNOWN. Check server status and Splunk ingestion.');
       });
     }
   }

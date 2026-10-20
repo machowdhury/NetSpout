@@ -1612,36 +1612,53 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                 ctx.verify_mode = ssl.CERT_NONE
 
             target_urls = resolve_hec_urls(hec_url, get_stored_config())
-            success = False
-            resp_text = ""
-            last_err = None
+            count = len(payload_events)
+            state, http_status = "UNKNOWN", None
+            response_received = False
+            attempted = 0
             for url in target_urls:
                 try:
-                    req = hec_request(
-                        url,
-                        data=raw_payload,
-                        headers={"Authorization": f"Splunk {token}", "Content-Type": "application/json"}
-                    )
+                    req = hec_request(url, data=raw_payload, headers={
+                        "Authorization": f"Splunk {token}", "Content-Type": "application/json"})
+                    attempted = count
                     with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
-                        resp_text = resp.read().decode("utf-8", errors="replace")
-                        success = True
-                        break
-                except Exception as e:
-                    last_err = e
-
-            if not success:
-                raise RuntimeError(f"HEC delivery failed across all endpoints: HEC request failed")
-
-            ingested_count = len(lines) * repeat_count
-            
-            return (200, {
-                "status": "success",
-                "message": f"Successfully onboarded sourcetype '{sourcetype}'! Wrote sample to '{os.path.basename(sample_file)}' and indexed {ingested_count} events into '{index_target}'.",
-                "sourcetype": sourcetype,
-                "index": index_target,
-                "sample_file": sample_file,
-                "events_count": ingested_count,
-                "hec_response": "HEC responded"
+                        http_status = resp.status
+                        body = resp.read()
+                        response_received = 200 <= http_status < 300
+                        try:
+                            result = json.loads(body)
+                        except (ValueError, UnicodeError):
+                            result = None
+                        if isinstance(result, dict) and type(result.get("code")) is int:
+                            if 200 <= http_status < 300 and result["code"] == 0:
+                                state = "ACCEPTED"
+                except urllib.error.HTTPError as exc:
+                    http_status = exc.code
+                    # A server failure may occur after some processing.
+                    state = "FAILED" if 400 <= http_status < 500 else "UNKNOWN"
+                except Exception:
+                    state = "UNKNOWN"
+                # Never retry an ambiguous batch: that could duplicate events.
+                break
+            accepted = count if state == "ACCEPTED" else 0
+            failed = count if state == "FAILED" else 0
+            # Preserve the legacy readable-2xx HTTP contract independently of
+            # delivery evidence. HTTP 200 alone never establishes acceptance.
+            return (200 if response_received else 502, {
+                "status": "success" if state == "ACCEPTED" else "error",
+                "message": ("HEC acknowledged the batch; indexing is unverified."
+                            if state == "ACCEPTED" else
+                            "HEC rejected the batch; indexing is unverified."
+                            if state == "FAILED" else
+                            "Delivery outcome is unknown; indexing is unverified."),
+                "sourcetype": sourcetype, "index": index_target,
+                "sample_file": sample_file, "events_count": count,
+                "hec_response": "HEC acknowledged" if accepted else "No acceptance confirmed",
+                "delivery_state": state, "http_status": http_status,
+                "generated": count, "attempted": attempted,
+                "accepted": accepted, "failed": failed,
+                "unknown": attempted - accepted - failed,
+                "indexed": None, "indexing_verified": False
             })
 
         elif action == "test_hec":

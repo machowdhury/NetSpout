@@ -455,7 +455,7 @@
           setTimeout(() => setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "idle" })), 2200);
           setConsoleLogs((prev) => [
             ...prev,
-            `[SINGLE-BLAST] ⚡ Blasted 1 test event from ${node.vendor} (${node.customName}) -> ${node.index} (${node.sourcetype}) [HTTP 200 OK]`
+            `[SINGLE-BLAST] Request completed for ${node.customName}; delivery, HEC acceptance and indexing are unverified.`
           ]);
         })
         .catch(() => {
@@ -463,7 +463,7 @@
           setTimeout(() => setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "idle" })), 2200);
           setConsoleLogs((prev) => [
             ...prev,
-            `[SINGLE-BLAST] ⚡ Blasted 1 test event from ${node.vendor} (${node.customName}) -> ${node.index} (${node.sourcetype}) [Simulated 200 OK]`
+            `[SINGLE-BLAST] Request failed or response unavailable for ${node.customName}; delivery UNKNOWN. No acceptance or indexing confirmed.`
           ]);
         });
     };
@@ -515,13 +515,13 @@
       .then(r => r.json())
       .then(data => {
         if (data.status === "success") {
-          const lat = data.latency_ms || 14;
+          const lat = Number.isFinite(data.latency_ms) ? data.latency_ms : null;
           setPreflightLatency(lat);
           setPreflightStatus("success");
           setConsoleLogs((prev) => [
             ...prev,
-            `[PREFLIGHT] ✅ HEC Endpoint Reachable (${hecUrl}, HTTP 200 OK, latency ${lat}ms)`,
-            `[PREFLIGHT] ✅ Token Authorization verified: ${data.message}`,
+            `[PREFLIGHT] Server reported probe success; HTTP status ${Number.isInteger(data.http_status) ? data.http_status : "unavailable"}, latency ${lat === null ? "unavailable" : lat + "ms"}.`,
+            `[PREFLIGHT] Delivery, HEC acceptance and Splunk indexing are unverified by this console.`,
             `[PREFLIGHT] Ready to construct environment topology.`
           ]);
         } else {
@@ -544,10 +544,10 @@
     // Simulation Execution State
     const [isRunning, setIsRunning] = useState(false);
     const [activePid, setActivePid] = useState(null);
-    const [totalEventsSent, setTotalEventsSent] = useState(148200);
-    const [indexedEvents, setIndexedEvents] = useState(147980);
-    const [currentEps, setCurrentEps] = useState(2485);
-    const [epsHistory, setEpsHistory] = useState([2100, 2350, 2420, 2490, 2480, 2510, 2485]);
+    const [totalEventsSent, setTotalEventsSent] = useState(0);
+    const [indexedEvents, setIndexedEvents] = useState(0);
+    const [currentEps, setCurrentEps] = useState(0);
+    const [epsHistory, setEpsHistory] = useState([]);
     const [consoleLogs, setConsoleLogs] = useState([]);
     const [autoScrollConsole, setAutoScrollConsole] = useState(true);
     const [hostPlatform, setHostPlatform] = useState("Enterprise Linux / Container");
@@ -642,13 +642,13 @@
 
           setCurrentEps(instantEps);
           setTotalEventsSent((prev) => prev + deltaEvents);
-          setIndexedEvents((prev) => prev + deltaIndexed);
+          // No independent indexing evidence is available.
           setEpsHistory((prev) => [...prev.slice(-15), instantEps]);
 
           // Append simulated output event to console
           const logLines = [
-            `[BLASTER] Sent batch: ${deltaEvents} events to ${hecUrl} (HTTP 200 OK, latency: ${(12 + Math.random() * 8).toFixed(1)}ms)`,
-            `[HEC] Indexer ack received: tokens=${deltaIndexed} events committed to ${activeRule.recommendedIndex}`,
+            `[DEMO ONLY] Simulated ${deltaEvents} events; no delivery request was made.`,
+            `[DEMO ONLY] Collector acceptance and indexing are unverified.`,
           ];
           setConsoleLogs((prev) => [...prev.slice(-150), ...logLines]);
         }, 800);
@@ -697,9 +697,9 @@
         ...prev,
         `========================================================================`,
         `[START] Simulation session initiated for scenario: ${activeScenario.filename}`,
-        `[CMD] python3 bin/run_simulation.py --scenario ${activeScenario.filename} --eps ${targetEps} --hec ${hecUrl} --token [REDACTED]`,
-        `[SECURITY] Executing subprocess with shell=False, PID=${fakePid}`,
-        `[LOG] Writing stream to $SPLUNK_HOME/var/log/splunk/ta_datablaster_orchestration.log`,
+        `[DEMO COMMAND, NOT EXECUTED] python3 bin/run_simulation.py --scenario ${activeScenario.filename} --eps ${targetEps} --hec ${hecUrl} --token [REDACTED]`,
+        `[DEMO ONLY] No backend process launched; simulated session ${fakePid}`,
+        `[DEMO ONLY] Browser preview; no server log or delivery evidence.`,
         `========================================================================`,
       ]);
     };
@@ -708,8 +708,8 @@
       setIsRunning(false);
       setConsoleLogs((prev) => [
         ...prev,
-        `[STOP] Termination signal SIGTERM sent to process PID ${activePid}`,
-        `[STATUS] Simulation stopped successfully. Buffer flushed.`,
+        `[DEMO ONLY] Stopped browser preview session ${activePid}`,
+        `[DEMO ONLY] No server process or delivery buffer was managed.`,
       ]);
       setActivePid(null);
     };
@@ -1121,9 +1121,9 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Total Events Sent"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Demo Events (not sent)"),
                       e("div", { className: "text-2xl font-black text-white font-mono tracking-tight" }, totalEventsSent.toLocaleString()),
-                      e("div", { className: "text-[11px] text-cyan-400 mt-1 flex items-center gap-1" }, "▲ Active Stream"),
+                      e("div", { className: "text-[11px] text-cyan-400 mt-1 flex items-center gap-1" }, "Simulation only"),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-cyan-500/10 rounded-full blur-xl" })
                     ),
 
@@ -1131,9 +1131,9 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Indexed Events"),
-                      e("div", { className: "text-2xl font-black text-emerald-400 font-mono tracking-tight" }, indexedEvents.toLocaleString()),
-                      e("div", { className: "text-[11px] text-emerald-500 mt-1" }, "99.85% Ack Rate"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Indexing Evidence"),
+                      e("div", { className: "text-2xl font-black text-emerald-400 font-mono tracking-tight" }, "Not verified"),
+                      e("div", { className: "text-[11px] text-emerald-500 mt-1" }, "No collector acknowledgement"),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-emerald-500/10 rounded-full blur-xl" })
                     ),
 
@@ -1141,7 +1141,7 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Current EPS"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Demo EPS"),
                       e("div", { className: "text-2xl font-black text-amber-400 font-mono tracking-tight" }, currentEps.toLocaleString()),
                       e("div", { className: "text-[11px] text-slate-500 mt-1" }, `Target: ${targetEps.toLocaleString()}`),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-amber-500/10 rounded-full blur-xl" })

@@ -37,15 +37,15 @@
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                   HEC Target URL <span style="color: #ef4444;">*</span>
                 </label>
-                <input type="text" id="cfg-hec-url" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="https://127.0.0.1:8888/services/collector" />
+                <input type="text" id="cfg-hec-url" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="https://127.0.0.1:8088/services/collector" />
                 <p style="color: #64748b; font-size: 11px; margin: 3px 0 0 0;">
-                  Default container mapping: <code>https://127.0.0.1:8888/services/collector</code> (auto-resolves to <code>:8088</code> inside container).
+                  Use the exact HTTPS HEC endpoint. Remote hosts and ports must already be permitted by the server configuration.
                 </p>
               </div>
 
               <div style="margin-bottom: 14px;">
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
-                  HEC Authorization Token <span style="color: #ef4444;">*</span>
+                  HEC Authorization Token (required for initial setup)
                 </label>
                 <div style="display: flex; gap: 6px;">
                   <input type="password" id="cfg-hec-token" autocomplete="off" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="" />
@@ -55,6 +55,7 @@
                 </div>
               </div>
 
+              <p style="color: #94a3b8; font-size: 11px;">Leave the token blank to retain the active token. Tokens are saved only in Splunk's credential store and are never displayed after saving.</p>
               <div style="margin-bottom: 14px;">
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                   SSL Certificate Verification (<code>ssl_verify</code>)

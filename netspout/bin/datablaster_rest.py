@@ -22,6 +22,7 @@ import tempfile
 import stat
 import logging
 import threading
+import uuid
 from contextlib import contextmanager
 from urllib.parse import urlsplit, quote
 import urllib.request
@@ -125,14 +126,49 @@ class HECCredentialStore:
         except Exception:
             raise RuntimeError("Splunk credential store request failed") from None
 
-    def read(self):
-        code, data = self._request(self.item)
+    def read(self, reference=None):
+        # No reference means resolve the active server-owned snapshot. Empty
+        # reference explicitly selects the backwards-compatible fixed entry.
+        if reference is None:
+            get_active_run_dir()
+            try:
+                saved = json.loads(_read_private_file(CONFIG_FILE))
+                reference = saved.get("hec_credential_ref", "")
+            except FileNotFoundError:
+                reference = ""
+            except Exception:
+                raise RuntimeError("Cannot resolve active HEC credential") from None
+        if reference:
+            if not isinstance(reference, str) or not re.fullmatch(r"hec_token_v_[0-9a-f]{32}", reference):
+                raise RuntimeError("Invalid active HEC credential reference")
+            item = self.collection + "/" + quote("netspout:" + reference + ":", safe="")
+        elif reference == "":
+            item = self.item
+        else:
+            raise RuntimeError("Invalid active HEC credential reference")
+        code, data = self._request(item)
         if code == 404:
+            if reference:
+                raise RuntimeError("Active HEC credential is unavailable")
             return ""
         if code != 200:
             raise RuntimeError("Cannot read NetSpout HEC credential")
         entries = data.get("entry", [])
-        return entries[0].get("content", {}).get("clear_password", "") if entries else ""
+        value = entries[0].get("content", {}).get("clear_password", "") if entries else ""
+        if not isinstance(value, str) or (reference and not value):
+            raise RuntimeError("Active HEC credential is unavailable")
+        return value
+
+    def stage(self, value):
+        """Create and verify an inactive entry; never overwrite historical ones."""
+        if not has_netspout_admin(self.session_key):
+            raise PermissionError("netspout_admin capability required")
+        reference = "hec_token_v_" + uuid.uuid4().hex
+        code, _ = self._request(self.collection, "POST", {
+            "realm": "netspout", "name": reference, "password": value})
+        if code not in (200, 201) or self.read(reference) != value:
+            raise RuntimeError("Cannot stage HEC credential")
+        return reference
 
     def save(self, value):
         if not has_netspout_admin(self.session_key):
@@ -152,6 +188,7 @@ RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
 DEFAULT_CONFIG = {
+    "hec_credential_ref": "",
     "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_allowed_hosts": ["127.0.0.1", "localhost"],
     "hec_allowed_ports": [8088],
@@ -197,7 +234,17 @@ def _read_private_file(path):
 
 
 def _write_config(path, cfg):
-    write_private_file(path, json.dumps(cfg, indent=2))
+    # Same-directory replacement publishes one complete, secret-free snapshot.
+    fd, temporary = tempfile.mkstemp(prefix=".hec-config-", dir=os.path.dirname(path))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
+            json.dump(cfg, stream, indent=2)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
 
 def _legacy_config(path, session_key, app_legacy=False):
@@ -304,17 +351,79 @@ def cleanup_stale_run_files():
 def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any]:
     if not has_netspout_admin(session_key):
         raise PermissionError("netspout_admin capability required")
-    cfg = get_stored_config(session_key)
-    if "hec_token" in new_cfg:
-        HECCredentialStore(session_key).save(new_cfg["hec_token"])
-    for key in DEFAULT_CONFIG:
-        if key in new_cfg:
-            cfg[key] = new_cfg[key]
-    resolve_hec_urls(cfg["hec_url"], cfg)
-    if cfg["ssl_verify"] is False:
-        logger.warning("Admin setting disables HEC certificate verification")
-    _write_config(CONFIG_FILE, cfg)
-    return cfg
+    with simulation_start_lock():
+        cfg = get_stored_config(session_key)
+        if "hec_token" in new_cfg:
+            HECCredentialStore(session_key).save(new_cfg["hec_token"])
+        for key in DEFAULT_CONFIG:
+            if key != "hec_credential_ref" and key in new_cfg:
+                cfg[key] = new_cfg[key]
+        resolve_hec_urls(cfg["hec_url"], cfg)
+        if cfg["ssl_verify"] is False:
+            logger.warning("Admin setting disables HEC certificate verification")
+        _write_config(CONFIG_FILE, cfg)
+        return cfg
+
+
+def configure_hec(params):
+    """Stage then publish; orphaned entries are never discovered or activated.
+
+    Existing fixed/versioned credentials are never deleted or rolled back.
+    Only the atomic configuration replacement activates a staged reference.
+    """
+    session_key = params.get("session_key", "")
+    if not has_netspout_admin(session_key):
+        return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
+    editable = set(DEFAULT_CONFIG) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    if set(params) - (editable | {"action", "session_key", "hec_token"}):
+        return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
+    with simulation_start_lock():
+        # Read without invoking historical credential migration or cleanup.
+        cfg = dict(DEFAULT_CONFIG)
+        try:
+            saved = json.loads(_read_private_file(CONFIG_FILE))
+            if not isinstance(saved, dict) or "hec_token" in saved:
+                raise ValueError()
+            cfg.update({k: v for k, v in saved.items() if k in DEFAULT_CONFIG})
+        except FileNotFoundError:
+            pass
+        except Exception:
+            return 503, {"status": "error", "code": "configuration_unavailable", "message": "Cannot load active configuration"}
+        candidate = dict(cfg)
+        candidate.update({k: v for k, v in params.items() if k in editable})
+        token = params.get("hec_token", "")
+        try:
+            resolve_hec_urls(candidate["hec_url"], cfg)
+            if not isinstance(token, str) or (token and not RE_TOKEN.fullmatch(token)):
+                raise ValueError()
+            if type(candidate["ssl_verify"]) is not bool:
+                raise ValueError()
+            eps = candidate["target_eps"]
+            if type(eps) is not int or not 1 <= eps <= 100000:
+                raise ValueError()
+            for key in ("idx_network_ops", "idx_security_fw", "idx_wireless_ops", "idx_performance_metrics", "cisco_mdt_metrics"):
+                if not isinstance(candidate[key], str) or not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_-]*", candidate[key]):
+                    raise ValueError()
+            scenario = candidate["default_scenario"]
+            if not isinstance(scenario, str) or not RE_SAFE_PATH.fullmatch(scenario) or ".." in scenario.split("/"):
+                raise ValueError()
+        except Exception:
+            return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup; use an allowed HTTPS destination and valid settings"}
+        store = HECCredentialStore(session_key)
+        try:
+            if token:
+                candidate["hec_credential_ref"] = store.stage(token)
+            elif not store.read(cfg.get("hec_credential_ref", "")):
+                return 400, {"status": "error", "code": "token_required", "message": "A HEC token is required for initial setup"}
+        except Exception:
+            return 503, {"status": "error", "code": "credential_store_failed", "message": "HEC credential storage failed; active configuration unchanged"}
+        try:
+            _write_config(CONFIG_FILE, candidate)
+        except Exception:
+            return 500, {"status": "error", "code": "publication_failed", "message": "Configuration publication failed; active configuration unchanged"}
+        # No fallible store operations after the commit point.
+        public = dict(candidate, hec_token_configured=True)
+        return 200, {"status": "success", "message": "HEC configuration saved", "config": public}
 
 
 class HECConfigurationError(ValueError):
@@ -354,7 +463,7 @@ def hec_request(url, **kwargs):
 
 def public_config(session_key):
     cfg = get_stored_config(session_key)
-    cfg["hec_token_configured"] = bool(HECCredentialStore(session_key).read())
+    cfg["hec_token_configured"] = bool(HECCredentialStore(session_key).read(cfg.get("hec_credential_ref", "")))
     return cfg
 
 
@@ -852,7 +961,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
                 raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
         stored_cfg = get_stored_config(params.get("session_key", ""))
         hec_url = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
-        token = HECCredentialStore(params.get("session_key", "")).read()
+        token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
         if not token:
             raise ValueError("HEC token is not configured")
         ssl_verify = stored_cfg.get("ssl_verify", True) is not False
@@ -901,7 +1010,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports") and key in params:
+            if key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
@@ -910,7 +1019,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
 
     stored_cfg = get_stored_config(params.get("session_key", ""))
     hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
-    token = HECCredentialStore(params.get("session_key", "")).read()
+    token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
     if not token:
         raise ValueError("HEC token is not configured")
     ssl_verify = stored_cfg.get("ssl_verify", True) is not False
@@ -1241,6 +1350,8 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     try:
         if not has_netspout_admin(params.get("session_key", "")):
             return (403, {"status": "error", "message": "netspout_admin capability required"})
+        if params.get("action") == "configure_hec":
+            return configure_hec(params)
         get_stored_config(params.get("session_key", ""))
         clean = validate_and_sanitize(params)
         action = clean["action"]
@@ -1641,5 +1752,7 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
 
 
 def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
+    if params.get("action") == "configure_hec":
+        return _execute_request(params)
     ignored = {"hec", "url", "hec_url", "token", "hec_token"}
     return _execute_request({key: value for key, value in params.items() if key not in ignored})

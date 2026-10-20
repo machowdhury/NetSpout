@@ -48,6 +48,7 @@ require([
   }
 
   var defaultCfg = {
+    hec_url: "https://127.0.0.1:8088/services/collector",
 
 
     ssl_verify: true,
@@ -117,9 +118,9 @@ require([
   function applyConfigToForm(c) {
     if (document.getElementById('cfg-hec-url')) document.getElementById('cfg-hec-url').value = c.hec_url || defaultCfg.hec_url;
     var credentialInput = document.getElementById('cfg-hec-token');
-    if (credentialInput) { credentialInput.value = ''; credentialInput.disabled = true; credentialInput.placeholder = c.hec_token_configured ? 'Configured in Splunk credential store' : 'Configure realm netspout, name hec_token in Splunk credential store'; }
+    if (credentialInput) { credentialInput.value = ''; credentialInput.disabled = false; credentialInput.placeholder = c.hec_token_configured ? 'Leave blank to retain the existing token' : 'Enter a standard Splunk HEC token'; }
     var destinationInput = document.getElementById('cfg-hec-url');
-    if (destinationInput) { destinationInput.disabled = true; destinationInput.value = c.hec_url || ''; }
+    if (destinationInput) { destinationInput.disabled = false; destinationInput.value = c.hec_url || defaultCfg.hec_url; }
     if (document.getElementById('cfg-ssl-verify')) document.getElementById('cfg-ssl-verify').value = String(c.ssl_verify !== undefined ? c.ssl_verify : true);
     if (document.getElementById('cfg-target-eps')) document.getElementById('cfg-target-eps').value = c.target_eps || defaultCfg.target_eps;
     if (document.getElementById('cfg-default-scenario')) document.getElementById('cfg-default-scenario').value = c.default_scenario || defaultCfg.default_scenario;
@@ -285,8 +286,7 @@ require([
 
   window.datablasterSaveConfig = function() {
     var cfg = {
-
-
+      hec_url: document.getElementById('cfg-hec-url').value.trim(),
       ssl_verify: document.getElementById('cfg-ssl-verify').value === 'true',
       target_eps: parseInt(document.getElementById('cfg-target-eps').value, 10) || 1000,
       default_scenario: document.getElementById('cfg-default-scenario').value,
@@ -297,25 +297,51 @@ require([
       cisco_mdt_metrics: document.getElementById('cfg-idx-mdt').value.trim()
     };
 
-    try {
-      localStorage.setItem('datablaster_config', JSON.stringify(cfg));
-      localStorage.setItem('datablaster_ssl_verify', String(cfg.ssl_verify));
-    } catch(e) {}
+    var input = document.getElementById('cfg-hec-token');
+    var payload = Object.assign({ action: 'configure_hec' }, cfg);
+    if (input.value !== '') payload.hec_token = input.value;
+    var saveButton = document.getElementById('btn-save-config');
+    saveButton.disabled = true;
+    setBadge('probing', 'Saving configuration...');
 
-    fetch(getRestUrl(), {
+    return fetch(getRestUrl(), {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify(Object.assign({ action: 'save_config' }, cfg))
+      body: JSON.stringify(payload)
     })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      showAlert('<b>Configuration Saved:</b> Parameters persisted to backend and browser cache successfully.', true);
-      setBadge('ok', 'Configuration Saved');
+    .then(function(r) {
+      return r.json().then(function(data) {
+        if (!r.ok || !data || data.status !== 'success' || !data.config) {
+          var message = 'Configuration was not saved. Check settings and server availability.';
+          if (r.status === 403) message = 'A Splunk administrator with netspout_admin is required.';
+          else if (data && data.code === 'invalid_setup') message = 'Invalid settings. Use an allowed HTTPS destination and valid values.';
+          else if (data && data.code === 'token_required') message = 'Enter a HEC token for initial setup.';
+          else if (data && data.code === 'credential_store_failed') message = 'Credential storage failed. Active configuration is unchanged.';
+          else if (data && data.code === 'publication_failed') message = 'Configuration publication failed. Active configuration is unchanged.';
+          showAlert(message, false);
+          setBadge('error', 'Not saved');
+          return;
+        }
+        input.value = '';
+        input.type = 'password';
+        applyConfigToForm(data.config);
+        var cached = Object.assign({}, data.config);
+        delete cached.hec_credential_ref;
+        delete cached.hec_token;
+        delete cached.token;
+        try {
+          localStorage.setItem('datablaster_config', JSON.stringify(cached));
+          localStorage.setItem('datablaster_ssl_verify', String(cached.ssl_verify));
+        } catch(e) {}
+        showAlert('HEC configuration saved on the server.', true);
+        setBadge('ok', 'Configuration Saved');
+      });
     })
-    .catch(function(err) {
-      showAlert('Saved to browser cache. Backend notice: ' + err.message, true);
-      setBadge('ok', 'Saved to Cache');
-    });
+    .catch(function() {
+      showAlert('Save status is unknown. Reload server configuration before trying again.', false);
+      setBadge('error', 'Save status unknown');
+    })
+    .finally(function() { saveButton.disabled = false; });
   };
 
   
@@ -560,14 +586,18 @@ require([
     fetch(getRestUrl('action=get_config'), { headers: getHeaders() })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      var c = (data && data.config) ? Object.assign({}, defaultCfg, data.config, local) : Object.assign({}, defaultCfg, local);
+      if (!data || data.status !== 'success' || !data.config) throw new Error('Configuration unavailable');
+      var c = Object.assign({}, defaultCfg, local, data.config);
       applyConfigToForm(c);
-      setBadge('ok', 'Ready');
+      setBadge(c.hec_token_configured ? 'ok' : 'probing', c.hec_token_configured ? 'Ready' : 'HEC setup required');
     })
     .catch(function() {
       var c = Object.assign({}, defaultCfg, local);
       applyConfigToForm(c);
-      setBadge('probing', 'Default Config');
+      document.getElementById('btn-save-config').disabled = true;
+      document.getElementById('cfg-hec-token').disabled = true;
+      document.getElementById('cfg-hec-url').disabled = true;
+      setBadge('error', 'Configuration unavailable');
     });
   }
 

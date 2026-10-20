@@ -149,6 +149,13 @@ def _hec_body_code(text: str):
     return code if isinstance(code, int) and not isinstance(code, bool) else None
 
 
+def _http_summary(pipeline: str, status) -> str:
+    """Public text uses trusted pipeline constants and numeric HTTP status only."""
+    if type(status) is int and 100 <= status <= 599:
+        return f"{pipeline} HTTP {status}"
+    return f"{pipeline} HTTP response"
+
+
 class TelemetryDispatcher:
     """
     High-throughput universal telemetry dispatcher with concurrent multi-pipeline routing.
@@ -196,7 +203,7 @@ class TelemetryDispatcher:
             self.stats["last_active"] = time.time()
         else:
             self.stats["hec_errors"] += 1
-            self.stats["last_error"] = f"HEC error: {outcome[1]}"
+            self.stats["last_error"] = "HEC dispatch failed"
         return outcome
 
     def _send_hec(self, event, hec_url, token, ssl_verify, allow_insecure_tls) -> HecOutcome:
@@ -217,13 +224,13 @@ class TelemetryDispatcher:
         try:
             payload = json.dumps(event).encode("utf-8")
         except (TypeError, ValueError) as e:
-            return HecOutcome(False, f"invalid HEC payload: {e}", HEC_FAILED, None, "invalid_payload")
+            return HecOutcome(False, "HEC invalid payload", HEC_FAILED, None, "invalid_payload")
         ctx = ssl.create_default_context()
         if allow_insecure_tls or not ssl_verify:
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
 
-        last_error, error_class = "no HEC endpoint", "unreachable"
+        last_error, error_class = "HEC endpoint unreachable", "unreachable"
         for cand_url in candidates:
             try:
                 req = urllib.request.Request(
@@ -235,7 +242,7 @@ class TelemetryDispatcher:
                     }
                 )
             except ValueError as e:
-                last_error, error_class = f"invalid HEC endpoint: {e}", "invalid_endpoint"
+                last_error, error_class = "HEC invalid endpoint", "invalid_endpoint"
                 continue
             status = None
             self.stats["hec_dispatching"] += 1
@@ -244,8 +251,12 @@ class TelemetryDispatcher:
                     status = resp.status
                     resp_text = resp.read().decode("utf-8", errors="replace")
             except urllib.error.HTTPError as e:
-                err_body = e.read().decode("utf-8", errors="replace") if hasattr(e, "read") else ""
-                msg = f"HTTP {e.code}: {e.reason} - {err_body[:80]}"
+                # Response content is used only for HEC classification, never public text.
+                try:
+                    err_body = e.read().decode("utf-8", errors="replace")
+                except Exception:
+                    err_body = ""
+                msg = _http_summary("HEC", e.code)
                 if e.code < 500:
                     cls = "auth_rejected" if e.code in (401, 403) else "request_rejected"
                     return HecOutcome(False, msg, HEC_FAILED, e.code, cls)
@@ -257,25 +268,25 @@ class TelemetryDispatcher:
             except (ssl.SSLCertVerificationError, urllib.error.URLError) as e:
                 err_str = str(e)
                 if isinstance(e, ssl.SSLCertVerificationError) or "CERTIFICATE_VERIFY_FAILED" in err_str or "certificate verify failed" in err_str:
-                    return HecOutcome(False, f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
+                    return HecOutcome(False, "HEC TLS verification failed",
                                       HEC_FAILED, None, "tls_verification")
-                last_error, error_class = err_str, "unreachable"
+                last_error, error_class = "HEC endpoint unreachable", "unreachable"
                 continue
             except ValueError as e:
                 if status is not None:
-                    return HecOutcome(False, f"unreadable HEC answer: {e}", HEC_UNKNOWN, status, "no_answer_after_send")
-                last_error, error_class = f"invalid HEC endpoint: {e}", "invalid_endpoint"
+                    return HecOutcome(False, "HEC response unreadable", HEC_UNKNOWN, status, "no_answer_after_send")
+                last_error, error_class = "HEC invalid endpoint", "invalid_endpoint"
                 continue
             except Exception as e:
-                return HecOutcome(False, f"no usable HEC answer after sending: {e}", HEC_UNKNOWN, status, "no_answer_after_send")
+                return HecOutcome(False, "HEC response unavailable", HEC_UNKNOWN, status, "no_answer_after_send")
             finally:
                 self.stats["hec_dispatching"] -= 1
-            message = f"HEC HTTP {status}: {resp_text[:100]}"
+            message = _http_summary("HEC", status)
             if 200 <= status < 300 and _hec_body_code(resp_text) == 0:
                 return HecOutcome(True, message, HEC_ACCEPTED, status, None)
             return HecOutcome(True, message, HEC_UNKNOWN, status, "unexpected_response")
 
-        return HecOutcome(False, str(last_error), HEC_FAILED, None, error_class)
+        return HecOutcome(False, last_error, HEC_FAILED, None, error_class)
 
     # -------------------------------------------------------------------------
     # 2. OpenTelemetry (OTel) Collector Transport (OTLP HTTP)
@@ -310,12 +321,13 @@ class TelemetryDispatcher:
                 resp_text = resp.read().decode("utf-8", errors="replace")
                 self.stats["otel_dispatched"] += 1
                 self.stats["last_active"] = time.time()
-                return True, f"OTel HTTP {resp.status}: {resp_text[:80]}"
+                return True, _http_summary("OTel", resp.status)
 
         except Exception as e:
             self.stats["otel_errors"] += 1
-            self.stats["last_error"] = f"OTel error ({endpoint}): {str(e)}"
-            return False, str(e)
+            message = _http_summary("OTel", e.code) if isinstance(e, urllib.error.HTTPError) else "OTel dispatch failed"
+            self.stats["last_error"] = message
+            return False, message
 
     # -------------------------------------------------------------------------
     # 3. Telegraf Agent Transport (HTTP Influx Line / JSON)
@@ -351,12 +363,13 @@ class TelemetryDispatcher:
                 resp_text = resp.read().decode("utf-8", errors="replace")
                 self.stats["telegraf_dispatched"] += 1
                 self.stats["last_active"] = time.time()
-                return True, f"Telegraf HTTP {resp.status}: {resp_text[:80]}"
+                return True, _http_summary("Telegraf", resp.status)
 
         except Exception as e:
             self.stats["telegraf_errors"] += 1
-            self.stats["last_error"] = f"Telegraf error ({endpoint}): {str(e)}"
-            return False, str(e)
+            message = _http_summary("Telegraf", e.code) if isinstance(e, urllib.error.HTTPError) else "Telegraf dispatch failed"
+            self.stats["last_error"] = message
+            return False, message
 
     # -------------------------------------------------------------------------
     # 4. Direct Syslog Transport (UDP / TCP Socket)
@@ -399,12 +412,12 @@ class TelemetryDispatcher:
 
             self.stats["syslog_dispatched"] += 1
             self.stats["last_active"] = time.time()
-            return True, f"Sent {len(payload_bytes)} bytes to syslog://{host}:{port} ({protocol.upper()})"
+            return True, "Syslog message sent"
 
         except Exception as e:
             self.stats["syslog_errors"] += 1
-            self.stats["last_error"] = f"Syslog error ({host}:{port}): {str(e)}"
-            return False, str(e)
+            self.stats["last_error"] = "Syslog dispatch failed"
+            return False, "Syslog dispatch failed"
 
     # -------------------------------------------------------------------------
     # Multi-Pipeline Broadcaster: OpenConfig MDT Telemetry
@@ -842,7 +855,7 @@ class TelemetryDispatcher:
                 syslog_format=config.syslog_format
             )
 
-        return False, f"Unknown pipeline type: {pipeline}"
+        return False, "Unknown pipeline type"
 
     def test_connection(
         self,
@@ -960,14 +973,14 @@ class TelemetryDispatcher:
                             "authenticated": False,
                             "event_accepted": False,
                             "target_index": config.hec_index or "idx_network_ops",
-                            "message": f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
-                            "detail": f"TLS Verification Failed: {e}. Enable 'Allow self-signed certificate' for lab/development endpoints.",
+                            "message": "HEC TLS verification failed",
+                            "detail": "HEC TLS verification failed",
                             "latency_ms": max(1.0, round((time.time() - start_t) * 1000, 2))
                         }
-                    last_err = err_str
+                    last_err = "HEC endpoint unreachable"
                     continue
                 except Exception as e:
-                    last_err = str(e)
+                    last_err = "HEC endpoint unreachable"
                     continue
 
             if not reachable:
@@ -979,8 +992,8 @@ class TelemetryDispatcher:
                     "authenticated": False,
                     "event_accepted": False,
                     "target_index": config.hec_index or "idx_network_ops",
-                    "message": f"Endpoint unreachable: {last_err or 'Connection timed out or refused.'}",
-                    "detail": f"Endpoint unreachable: {last_err or 'Connection timed out or refused.'}",
+                    "message": "HEC endpoint unreachable",
+                    "detail": "HEC endpoint unreachable",
                     "latency_ms": 0.0
                 }
 
@@ -1014,8 +1027,8 @@ class TelemetryDispatcher:
                     "authenticated": True,
                     "event_accepted": True,
                     "target_index": config.hec_index or "idx_network_ops",
-                    "message": f"Splunk HEC connection verified. Test event accepted ({msg}).",
-                    "detail": f"Splunk HEC connection verified. Test event accepted ({msg}).",
+                    "message": "Splunk HEC connection verified. Test event accepted.",
+                    "detail": "Splunk HEC connection verified. Test event accepted.",
                     "latency_ms": latency_ms or 4.0
                 }
             elif "401" in msg or "403" in msg or "Invalid token" in msg:
@@ -1040,8 +1053,8 @@ class TelemetryDispatcher:
                     "authenticated": True,
                     "event_accepted": False,
                     "target_index": config.hec_index or "idx_network_ops",
-                    "message": f"HEC test event rejected: {msg}",
-                    "detail": f"HEC test event rejected: {msg}",
+                    "message": "HEC test event rejected",
+                    "detail": "HEC test event rejected",
                     "latency_ms": latency_ms or 4.0
                 }
 
@@ -1053,8 +1066,8 @@ class TelemetryDispatcher:
             "authenticated": True,
             "event_accepted": False,
             "target_index": getattr(config, "hec_index", "idx_network_ops"),
-            "message": f"Pipeline '{pipeline}' configured.",
-            "detail": f"Pipeline '{pipeline}' configured.",
+            "message": "Pipeline configured.",
+            "detail": "Pipeline configured.",
             "latency_ms": 1.0
         }
 

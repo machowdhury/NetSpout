@@ -221,6 +221,139 @@ RE_SAFE_PATH = re.compile(r"^[a-zA-Z0-9_\-./]+$")
 RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
+OTLP_DEFAULTS = {
+    "otlp_endpoint": "https://127.0.0.1:4318", "otlp_transport": "http_json",
+    "otlp_signal": "logs", "otlp_auth": "none", "otlp_credential_ref": "",
+}
+
+
+def validate_otlp_settings(settings):
+    from urllib.parse import urlsplit
+    result = {k: settings.get(k, v) for k, v in OTLP_DEFAULTS.items()}
+    endpoint = result["otlp_endpoint"]
+    if not isinstance(endpoint, str) or len(endpoint) > 2048 or any(ord(c) <= 32 or ord(c) == 127 for c in endpoint):
+        raise ValueError("Invalid OTLP settings")
+    url = urlsplit(endpoint)
+    if (url.scheme not in ("https", "http") or not url.hostname or url.username is not None
+            or url.password is not None or url.query or url.fragment or url.path not in ("", "/")
+            or result["otlp_transport"] != "http_json" or result["otlp_signal"] not in ("logs", "metrics", "both")
+            or result["otlp_auth"] not in ("none", "bearer")):
+        raise ValueError("Invalid OTLP settings")
+    host = url.hostname
+    try:
+        address = ipaddress.ip_address(host)
+        if address.is_unspecified or address.is_multicast:
+            raise ValueError("Invalid OTLP host")
+    except ValueError:
+        if (len(host) > 253 or re.fullmatch(r"[0-9.]+", host) or not all(
+                re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
+                for label in host.rstrip(".").split("."))):
+            raise ValueError("Invalid OTLP host") from None
+    if url.port is not None and not 1 <= url.port <= 65535:
+        raise ValueError("Invalid OTLP port")
+    reference = result["otlp_credential_ref"]
+    if not isinstance(reference, str) or (reference and not re.fullmatch(r"otlp_token_v_[0-9a-f]{32}", reference)):
+        raise ValueError("Invalid OTLP reference")
+    if result["otlp_auth"] == "bearer" and (not reference or url.scheme != "https"):
+        raise ValueError("OTLP bearer authentication requires HTTPS and a credential reference")
+    return result
+
+
+class OTLPCredentialStore(HECCredentialStore):
+    """Separate app-owned, versioned OTLP entries; no HEC or legacy fallback."""
+    def read(self, reference):
+        if not isinstance(reference, str) or not re.fullmatch(r"otlp_token_v_[0-9a-f]{32}", reference):
+            raise ValueError("Invalid OTLP credential reference")
+        code, data = self._request(self.collection + "/" + quote("netspout:" + reference + ":", safe=""))
+        entries = data.get("entry", [])
+        value = entries[0].get("content", {}).get("clear_password", "") if entries else ""
+        if code != 200 or not isinstance(value, str) or not value or any(ord(c) <= 32 or ord(c) >= 127 for c in value):
+            raise RuntimeError("OTLP credential unavailable")
+        return value
+
+    def stage(self, value):
+        if not has_netspout_admin(self.session_key):
+            raise PermissionError("netspout_admin capability required")
+        if not isinstance(value, str) or not value or len(value) > 8192 or any(ord(c) <= 32 or ord(c) >= 127 for c in value):
+            raise ValueError("Invalid OTLP credential")
+        reference = "otlp_token_v_" + uuid.uuid4().hex
+        code, _ = self._request(self.collection, "POST", {"realm": "netspout", "name": reference, "password": value})
+        if code not in (200, 201) or self.read(reference) != value:
+            raise RuntimeError("OTLP credential staging failed")
+        return reference
+
+
+def _otlp_snapshot(config, session_key):
+    result = validate_otlp_settings(config)
+    headers = {}
+    if result["otlp_auth"] == "bearer":
+        headers["Authorization"] = "Bearer " + OTLPCredentialStore(session_key).read(result["otlp_credential_ref"])
+    return dict(result, headers=headers)
+
+
+def _otlp_runner_check(config, scenario=None):
+    command = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"),
+               "--otlp-preflight" if scenario else "--otlp-diagnostic"]
+    if scenario:
+        command += ["--scenario", scenario]
+    completed = subprocess.run(command, input=json.dumps({"otlp": config}), text=True,
+                               capture_output=True, timeout=10, cwd=APP_DIR)
+    if completed.returncode:
+        raise ValueError("OTLP runner unavailable")
+    result = json.loads(completed.stdout)
+    if not isinstance(result, dict) or result.get("status") not in ("success", "error"):
+        raise RuntimeError("OTLP runner unavailable")
+    return result
+
+
+def _native_otlp_operation(params):
+    if not has_netspout_admin(params.get("session_key", "")):
+        return 403, {"status": "error", "message": "netspout_admin capability required"}
+    action = params["action"]
+    try:
+        if action == "configure_otlp":
+            allowed = set(OTLP_DEFAULTS) | {"action", "session_key", "otlp_token", "native_transport"}
+            if set(params) - allowed or ("otlp_token" in params and "otlp_credential_ref" in params):
+                raise ValueError()
+            with simulation_start_lock():
+                get_active_run_dir()
+                try:
+                    saved = json.loads(_read_private_file(CONFIG_FILE))
+                    if not isinstance(saved, dict) or "hec_token" in saved:
+                        raise RuntimeError()
+                except FileNotFoundError:
+                    saved = {}
+                candidate = dict(DEFAULT_CONFIG, **{k:v for k,v in saved.items() if k in DEFAULT_CONFIG})
+                candidate.update({k:params[k] for k in OTLP_DEFAULTS if k in params})
+                if "native_transport" in params:
+                    if params["native_transport"] not in ("hec", "syslog", "otlp"):
+                        raise ValueError()
+                    candidate["native_transport"] = params["native_transport"]
+                # Validate all destination options before staging an inactive credential.
+                if "otlp_token" in params:
+                    if candidate["otlp_auth"] != "bearer":
+                        raise ValueError()
+                    staged_candidate = dict(candidate, otlp_credential_ref="otlp_token_v_" + "0" * 32)
+                    validate_otlp_settings(staged_candidate)
+                    candidate["otlp_credential_ref"] = OTLPCredentialStore(params["session_key"]).stage(params["otlp_token"])
+                candidate.update(validate_otlp_settings(candidate))
+                _otlp_snapshot(candidate, params["session_key"])
+                _write_config(CONFIG_FILE, candidate)
+            return 200, {"status":"success", "message":"OTLP settings saved", "config":{k:candidate[k] for k in OTLP_DEFAULTS}, "native_transport":candidate["native_transport"]}
+        if set(params) - {"action", "session_key"}:
+            raise ValueError()
+        saved = get_stored_config(params["session_key"])
+        config = validate_otlp_settings(saved)
+        if action == "get_otlp_config":
+            return 200, {"status":"success", "config":config, "native_transport":saved["native_transport"]}
+        response = _otlp_runner_check(_otlp_snapshot(config, params["session_key"]))
+        return (200 if response["status"] == "success" else 502), response
+    except ValueError:
+        return 400, {"status":"error", "message":"Invalid OTLP settings or unsupported scenario"}
+    except Exception:
+        return 503, {"status":"error", "message":"OTLP configuration or diagnostic unavailable"}
+
+
 SYSLOG_DEFAULTS = {
     "native_transport": "hec",
     "syslog_host": "127.0.0.1", "syslog_port": 1514,
@@ -244,7 +377,7 @@ def validate_syslog_settings(settings):
                 not all(re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
                         for label in host.rstrip(".").split("."))):
             raise ValueError("Invalid syslog settings") from None
-    if (result["native_transport"] not in ("hec", "syslog")
+    if (result["native_transport"] not in ("hec", "syslog", "otlp")
             or result["syslog_protocol"] not in ("udp", "tcp")
             or result["syslog_format"] not in ("rfc3164", "rfc5424")):
         raise ValueError("Invalid syslog settings")
@@ -263,6 +396,10 @@ def _native_syslog_operation(params):
     try:
         if action == "configure_syslog":
             if set(params) - (set(SYSLOG_DEFAULTS) | {"action", "session_key"}):
+                raise ValueError("Invalid syslog settings")
+            # OTLP activation belongs exclusively to configure_otlp. An omitted
+            # selector still preserves an already-active OTLP destination.
+            if "native_transport" in params and params["native_transport"] not in ("hec", "syslog"):
                 raise ValueError("Invalid syslog settings")
             with simulation_start_lock():
                 get_active_run_dir()
@@ -311,6 +448,7 @@ def _syslog_runner_check(config, scenario=None):
 
 DEFAULT_CONFIG = {
     **SYSLOG_DEFAULTS,
+    **OTLP_DEFAULTS,
     "hec_credential_ref": "",
     "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_allowed_hosts": ["127.0.0.1", "localhost"],
@@ -479,7 +617,7 @@ def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any
         if "hec_token" in new_cfg:
             HECCredentialStore(session_key).save(new_cfg["hec_token"])
         for key in DEFAULT_CONFIG:
-            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key in new_cfg:
+            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key in new_cfg:
                 cfg[key] = new_cfg[key]
         resolve_hec_urls(cfg["hec_url"], cfg)
         if cfg["ssl_verify"] is False:
@@ -497,7 +635,7 @@ def configure_hec(params):
     session_key = params.get("session_key", "")
     if not has_netspout_admin(session_key):
         return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
-    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
     if set(params) - (editable | {"action", "session_key", "hec_token"}):
         return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
     with simulation_start_lock():
@@ -1133,7 +1271,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in SYSLOG_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
+            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
@@ -1152,6 +1290,16 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             raise ValueError("Unsupported syslog scenario")
         return {"action": "start", "scenario": scenario, "eps": int(eps), "sample": None,
                 "hec": None, "token": None, "native_transport": "syslog", "syslog": config}
+    if action == "start" and stored_cfg.get("native_transport") == "otlp":
+        config = _otlp_snapshot(stored_cfg, params.get("session_key", ""))
+        scenario = resolve_scenario_path(str(params.get("scenario") or params.get("scenario_file") or ""))
+        eps = params.get("eps", 1000)
+        if isinstance(eps, bool) or not RE_EPS.fullmatch(str(eps)) or not 1 <= int(eps) <= 500000:
+            raise ValueError("Invalid EPS")
+        if _otlp_runner_check(config, scenario).get("status") != "success":
+            raise ValueError("Unsupported OTLP scenario")
+        return {"action":"start", "scenario":scenario, "eps":int(eps), "sample":None,
+                "hec":None, "token":None, "native_transport":"otlp", "otlp":config}
     hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
     token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
     if not token:
@@ -1432,9 +1580,14 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
     if is_syslog:
         cmd = [sys.executable, run_sim_script, "--scenario", run_params["scenario"],
                "--eps", str(run_params["eps"]), "--native-syslog"]
+    if run_params.get("native_transport") == "otlp":
+        cmd = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"), "--scenario", run_params["scenario"],
+               "--eps", str(run_params["eps"]), "--native-otlp"]
     if run_params.get("_native_record"):
         _update_lock_held = _native_monitor()._update_lock_held
-        if is_syslog:
+        if run_params.get("native_transport") == "otlp":
+            python_path = False  # OTLP indexing verification is unsupported.
+        elif is_syslog:
             python_path = False  # Raw syslog has no searchable run-ID metadata.
         else:
             import run_simulation as runner
@@ -1464,7 +1617,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         )
         proc.stdin.write(json.dumps({"credential": run_params["token"],
                                  "run_id": (run_params.get("_native_record") or {}).get("run_id"),
-                                 "syslog": run_params.get("syslog")}))
+                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -1940,6 +2093,8 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     monitor = _native_monitor()
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
+    if params.get("action") in ("configure_otlp", "get_otlp_config", "test_otlp"):
+        return _native_otlp_operation(params)
     if params.get("action") in ("configure_syslog", "get_syslog_config", "test_syslog"):
         return _native_syslog_operation(params)
     if params.get("action") == "configure_hec":

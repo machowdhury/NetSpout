@@ -302,22 +302,7 @@ class TelemetryDispatcher:
         Send OTLP JSON payload to OpenTelemetry Collector /v1/metrics or /v1/logs.
         """
         try:
-            base_url = endpoint.rstrip("/")
-            target_path = "/v1/metrics" if is_metric else "/v1/logs"
-            full_url = f"{base_url}{target_path}" if not base_url.endswith(("/v1/metrics", "/v1/logs")) else base_url
-
-            req_headers = {"Content-Type": "application/json"}
-            if headers:
-                req_headers.update(headers)
-
-            data_bytes = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(full_url, data=data_bytes, headers=req_headers)
-
-            ctx = ssl.create_default_context()
-            ctx.check_hostname = False
-            ctx.verify_mode = ssl.CERT_NONE
-
-            with urllib.request.urlopen(req, timeout=3.0, context=ctx) as resp:
+            with self._otel_request(payload, endpoint, is_metric, headers, verify=False) as resp:
                 resp_text = resp.read().decode("utf-8", errors="replace")
                 self.stats["otel_dispatched"] += 1
                 self.stats["last_active"] = time.time()
@@ -328,6 +313,69 @@ class TelemetryDispatcher:
             message = _http_summary("OTel", e.code) if isinstance(e, urllib.error.HTTPError) else "OTel dispatch failed"
             self.stats["last_error"] = message
             return False, message
+
+    @staticmethod
+    def _otel_request(payload, endpoint, is_metric, headers=None, verify=True):
+        """Shared HTTP/JSON transport for legacy and evidence-aware callers."""
+        base = endpoint.rstrip("/")
+        target = "/v1/metrics" if is_metric else "/v1/logs"
+        url = base if base.endswith(("/v1/metrics", "/v1/logs")) else base + target
+        request_headers = dict(headers or {})
+        request_headers["Content-Type"] = "application/json"
+        request = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=request_headers)
+        context = ssl.create_default_context()
+        if not verify:  # Preserve legacy API policy; native OTLP always verifies TLS.
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        return urllib.request.urlopen(request, timeout=3.0, context=context)
+
+    def emit_otel_result(self, payload, endpoint, is_metric=True, headers=None, record_count=1):
+        """OTLP HTTP/JSON evidence; no response bodies or exception text escape."""
+        if type(record_count) is not int or record_count < 1:
+            raise ValueError("Invalid OTLP record count")
+        result = dict(attempted=record_count, acknowledged=0, rejected=0, failed=0,
+                      unknown=record_count, http_status=None, message="OTLP outcome unknown")
+        try:
+            with self._otel_request(payload, endpoint, is_metric, headers) as response:
+                status = int(response.status)
+                result["http_status"] = status
+                # OTLP HTTP success is 200. Other 2xx responses are ambiguous.
+                if status == 200:
+                    body = response.read(65537)
+                    if len(body) > 65536:
+                        raise ValueError()
+                    data = json.loads(body)
+                    if not isinstance(data, dict):
+                        raise ValueError()
+                    partial = data.get("partialSuccess", {})
+                    if not isinstance(partial, dict):
+                        raise ValueError()
+                    field = "rejectedDataPoints" if is_metric else "rejectedLogRecords"
+                    if set(partial) - {field, "errorMessage"}:
+                        raise ValueError()
+                    value = partial.get(field, 0)
+                    if isinstance(value, str) and value.isascii() and value.isdigit():
+                        value = int(value)
+                    if type(value) is not int or not 0 <= value <= record_count:
+                        raise ValueError()
+                    result.update(acknowledged=record_count-value, rejected=value, unknown=0,
+                                  message="OTLP collector acknowledged records" if not value else "OTLP collector partially rejected records")
+                    self.stats["otel_dispatched"] += 1
+                    self.stats["last_active"] = time.time()
+                    return result
+                result["message"] = "OTLP response did not establish acknowledgement"
+        except urllib.error.HTTPError as error:
+            result["http_status"] = int(error.code)
+            # Retryable/server errors may follow partial processing; do not infer rejection.
+            if error.code in (400, 401, 403, 404, 405, 413, 415, 422):
+                result.update(rejected=record_count, unknown=0, message="OTLP request rejected")
+            else:
+                result["message"] = "OTLP request outcome unknown"
+        except Exception:
+            result["message"] = "OTLP request outcome unknown"
+        self.stats["otel_errors"] += 1
+        self.stats["last_error"] = result["message"]
+        return result
 
     # -------------------------------------------------------------------------
     # 3. Telegraf Agent Transport (HTTP Influx Line / JSON)

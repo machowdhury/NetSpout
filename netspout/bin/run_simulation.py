@@ -541,6 +541,99 @@ def run_python_syslog_streamer(scenario_file, config, eps, run_id=None):
         time.sleep(1.0 / eps)
 
 
+def otlp_is_metric(event):
+    return ("metric" in event["index"].lower() or "metric" in event["sourcetype"].lower()
+            or event["sourcetype"] == "cisco:ios:mdt")
+
+
+def validate_otlp_scenario(path, config):
+    events = load_python_scenario_events(path, strict=True)
+    for event in events:
+        signal = "metrics" if otlp_is_metric(event) else "logs"
+        if config["otlp_signal"] not in (signal, "both"):
+            raise ValueError("Scenario signal is not enabled")
+    return events
+
+
+def build_native_otlp(event, raw, run_id, scenario_id, now=None):
+    """Preserve vendor log bodies; metric templates use native synthetic gauges."""
+    import random
+    now = time.time() if now is None else now
+    attributes = [{"key": key, "value": {"stringValue": str(value)}} for key, value in (
+        ("host.name", event["host"]), ("service.name", "netspout-native"),
+        ("netspout_run_id", run_id or "diagnostic"), ("netspout_scenario_id", scenario_id),
+        ("netspout_device_id", event["host"]), ("netspout_phase", "BASELINE"),
+        ("sourcetype", event["sourcetype"]), ("source", event["source"]))]
+    resource = {"attributes": attributes}
+    stamp = str(int(now * 1e9))
+    if not otlp_is_metric(event):
+        return {"resourceLogs":[{"resource":resource, "scopeLogs":[{
+            "scope":{"name":"netspout.native", "version":"2.0.0"},
+            "logRecords":[{"timeUnixNano":stamp, "body":{"stringValue":raw}, "attributes":attributes}]}]}]}, False, 1
+    # Same generated gauges as the existing native HEC Python streamer; raw
+    # metric templates are not interpreted as measured device values.
+    values = {"cpu.utilization":round(random.uniform(15,85),2),
+              "memory.utilization":round(random.uniform(30,75),2),
+              "interface.octets.in":float(random.randint(1000000,50000000)),
+              "interface.octets.out":float(random.randint(1000000,50000000)),
+              "interface.errors.in":0.0}
+    metrics = [{"name":name,"gauge":{"dataPoints":[{"asDouble":value,
+                "timeUnixNano":stamp,"attributes":attributes}]}} for name,value in values.items()]
+    return {"resourceMetrics":[{"resource":resource,"scopeMetrics":[{
+        "scope":{"name":"netspout.native", "version":"2.0.0"},"metrics":metrics}]}]}, True, len(metrics)
+
+
+def send_native_otlp(dispatcher, config, payload, is_metric, count):
+    result = dispatcher.emit_otel_result(payload, config["otlp_endpoint"], is_metric,
+                                        config.get("headers", {}), record_count=count)
+    return dict(result, status="success" if result["acknowledged"] == count else "error",
+                indexed=None, indexing_verified=False,
+                counter_unit="metric_data_points" if is_metric else "log_records")
+
+
+def native_otlp_diagnostic(config):
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher
+    metric = config["otlp_signal"] == "metrics"
+    event = dict(host="netspout-diagnostic",source="netspout",sourcetype="netspout:metric" if metric else "netspout:log",index="metrics" if metric else "logs")
+    payload, is_metric, count = build_native_otlp(event, "NETSPOUT synthetic OTLP diagnostic", None, "diagnostic")
+    return send_native_otlp(TelemetryDispatcher(),config,payload,is_metric,count)
+
+
+def run_python_otlp_streamer(path, config, eps, run_id=None):
+    import random
+    from netspout_core.telemetry_dispatcher import TelemetryDispatcher
+    events = validate_otlp_scenario(path, config)
+    dispatcher = TelemetryDispatcher()
+    print("[OTLP] Python scenario started; collector acknowledgement is not indexing proof", flush=True)
+    while True:
+        event = random.choice(events)
+        raw = event["raw"].replace("$SYSLOG_TS$",time.strftime("%b %d %H:%M:%S",time.localtime())).replace(
+            "$ISO_TS$",time.strftime("%Y-%m-%dT%H:%M:%S.000Z",time.gmtime())).replace("$FLOW_ID$",str(random.randint(10000,99999)))
+        payload, metric, count = build_native_otlp(event,raw,run_id,os.path.basename(path))
+        if run_id:
+            from native_run_monitor import update
+            def attempting(r):
+                delivery = {k:((r.get("otlp_delivery") or {}).get(k) or 0) for k in ("attempted","acknowledged","rejected","failed","unknown")}
+                delivery["attempted"] += count
+                delivery["unknown"] += count
+                r["otlp_delivery"] = delivery
+                r["classification"] = "MIXED" if config["otlp_signal"] == "both" else "METRIC" if metric else "LOG"
+                r["counters"]["generated"] = (r["counters"]["generated"] or 0) + count
+                r["counters"]["attempted"] = delivery["attempted"]
+            update(run_id,attempting)
+        result = send_native_otlp(dispatcher,config,payload,metric,count)
+        if run_id:
+            def delivered(r):
+                r["otlp_delivery"]["unknown"] -= count
+                for k in ("acknowledged","rejected","failed","unknown"):
+                    r["otlp_delivery"][k] += result[k]
+                r["counters"]["accepted"] = r["otlp_delivery"]["acknowledged"]
+                r["counters"]["failed"] = r["otlp_delivery"]["rejected"] + r["otlp_delivery"]["failed"]
+                r["counters"]["unknown"] = r["otlp_delivery"]["unknown"]
+            update(run_id,delivered)
+        time.sleep(1.0 / eps)
+
+
 def _main():
     parser = argparse.ArgumentParser(description="TA-network-data-blaster Secure Simulation Runner")
     parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
@@ -555,6 +648,9 @@ def _main():
     syslog_mode.add_argument("--native-syslog", action="store_true")
     syslog_mode.add_argument("--syslog-diagnostic", action="store_true")
     syslog_mode.add_argument("--syslog-preflight", action="store_true")
+    syslog_mode.add_argument("--native-otlp", action="store_true")
+    syslog_mode.add_argument("--otlp-diagnostic", action="store_true")
+    syslog_mode.add_argument("--otlp-preflight", action="store_true")
     args = parser.parse_args()
 
     def stop_runner(signum, frame):
@@ -562,7 +658,7 @@ def _main():
 
     signal.signal(signal.SIGTERM, stop_runner)
     signal.signal(signal.SIGINT, stop_runner)
-    if not args.syslog_diagnostic:
+    if not (args.syslog_diagnostic or args.otlp_diagnostic):
         args.scenario = resolve_scenario_path(args.scenario or "", APP_DIR)
     private_input = json.loads(sys.stdin.read())
     args.token = private_input.get("credential", "")
@@ -571,6 +667,21 @@ def _main():
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.otlp_diagnostic or args.otlp_preflight or args.native_otlp:
+        from datablaster_rest import validate_otlp_settings
+        supplied = private_input.get("otlp", {})
+        config = dict(validate_otlp_settings(supplied), headers=supplied.get("headers", {}))
+        if args.otlp_diagnostic:
+            print(json.dumps(native_otlp_diagnostic(config)))
+            return
+        events = validate_otlp_scenario(args.scenario, config)
+        if args.otlp_preflight:
+            print(json.dumps({"status":"success", "templates":len(events)}))
+            return
+        if not 1 <= args.eps <= 500000:
+            raise ValueError("Invalid OTLP EPS")
+        run_python_otlp_streamer(args.scenario,config,args.eps,args.run_id)
+        return
     if args.syslog_diagnostic or args.syslog_preflight or args.native_syslog:
         config = validate_syslog_settings(private_input.get("syslog", {}))
         if args.syslog_diagnostic:

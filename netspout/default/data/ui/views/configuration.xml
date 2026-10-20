@@ -4,10 +4,22 @@
 
   <row>
     <panel><html>
+      <section id="otlp-settings" style="padding:16px;">
+        <h2>Native OTLP destination</h2>
+        <p>HTTP/JSON logs and synthetic metric gauges only. gRPC, protobuf, traces and Splunk indexing verification are unsupported. HTTPS certificates are verified. Collector acknowledgement is not indexing proof.</p>
+        <label>Endpoint base URL <input id="cfg-otlp-endpoint" type="text" value="https://127.0.0.1:4318"/></label>
+        <label>Signals <select id="cfg-otlp-signal"><option value="logs">Logs</option><option value="metrics">Metrics</option><option value="both">Logs and metrics</option></select></label>
+        <label>Authentication <select id="cfg-otlp-auth"><option value="none">None</option><option value="bearer">Bearer token (HTTPS only)</option></select></label>
+        <label>New token (blank preserves saved token) <input id="cfg-otlp-token" type="password" autocomplete="new-password"/></label>
+        <label><input id="cfg-otlp-active" type="checkbox"/>Use OTLP for future native scenarios</label>
+        <button id="btn-save-otlp" type="button" disabled="disabled">Save OTLP settings</button>
+        <button id="btn-test-otlp" type="button" disabled="disabled">Send one diagnostic to saved destination</button>
+        <pre id="otlp-status" aria-live="polite">Loading OTLP settings…</pre>
+      </section>
       <section id="syslog-settings" style="padding:16px;">
         <h2>Native scenario destination — Syslog</h2>
         <p>Choose the output for future native scenario launches. Explicit HEC sample/onboarding actions remain HEC. Syslog supports single-line log scenarios; metric scenarios are rejected.</p>
-        <label>Scenario output <select id="cfg-native-transport"><option value="hec">Splunk HEC</option><option value="syslog">Syslog</option></select></label>
+        <label>Scenario output <select id="cfg-native-transport"><option value="">Keep current scenario output</option><option value="hec">Splunk HEC</option><option value="syslog">Syslog</option></select></label>
         <label>Host (IPv4 or DNS) <input id="cfg-syslog-host" type="text" value="127.0.0.1"/></label>
         <label>Port <input id="cfg-syslog-port" type="number" min="1" max="65535" value="1514"/></label>
         <label>Transport <select id="cfg-syslog-protocol"><option value="udp">UDP datagram</option><option value="tcp">TCP newline framing</option></select></label>

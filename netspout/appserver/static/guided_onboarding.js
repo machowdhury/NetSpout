@@ -37,6 +37,13 @@ require([
         var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
       });
       lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.otlp_delivery) {
+        ['attempted','acknowledged','rejected','failed','unknown'].forEach(function(key) {
+          var value = run.otlp_delivery[key];
+          lines.push('OTLP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Units: log records / metric data points. Collector acknowledgement is not Splunk indexing; OTLP search verification is unsupported.');
+      }
       if (run.syslog_delivery) {
         ['attempted','sent','failed','unknown'].forEach(function(key) {
           var value = run.syslog_delivery[key];

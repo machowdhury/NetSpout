@@ -57,7 +57,7 @@ def valid(record):
                 and all(isinstance(i, str) and INDEX.fullmatch(i) for i in record['indexes'])
                 and record['classification'] in ('LOG', 'METRIC', 'MIXED', 'UNKNOWN')
                 and record['correlation'] in ('SUPPORTED', 'UNSUPPORTED')
-                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG')
+                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG', 'OTLP')
                 and isinstance(record['destination'].get('host'), str)
                 and type(record['destination'].get('port')) is int
                 and isinstance(record['execution'], dict) and isinstance(record['execution'].get('action'), str)
@@ -66,6 +66,9 @@ def valid(record):
                 and ('syslog_delivery' not in record or (isinstance(record['syslog_delivery'], dict)
                      and set(record['syslog_delivery']) == {'attempted', 'sent', 'failed', 'unknown'}
                      and all(v is None or (type(v) is int and v >= 0) for v in record['syslog_delivery'].values())))
+                and ('otlp_delivery' not in record or (isinstance(record['otlp_delivery'], dict)
+                     and set(record['otlp_delivery']) == {'attempted', 'acknowledged', 'rejected', 'failed', 'unknown'}
+                     and all(v is None or (type(v) is int and v >= 0) for v in record['otlp_delivery'].values())))
                 and set(record['counters']) == set(COUNTERS)
                 and all(v is None or (type(v) is int and v >= 0) for v in record['counters'].values()))
     except (KeyError, TypeError, ValueError, AttributeError):
@@ -181,6 +184,14 @@ def begin(action, clean, session_key=""):
                       'format': config['syslog_format']}, classification='LOG', indexes=[],
                       correlation='UNSUPPORTED',
                       syslog_delivery=dict(attempted=None, sent=None, failed=None, unknown=None))
+    if clean.get('native_transport') == 'otlp':
+        config = clean['otlp']
+        endpoint = urlsplit(config['otlp_endpoint'])
+        record.update(destination={'transport':'OTLP', 'host':endpoint.hostname,
+                      'port':endpoint.port or (443 if endpoint.scheme == 'https' else 80),
+                      'protocol':'http_json', 'signal':config['otlp_signal']}, indexes=[],
+                      classification={'logs':'LOG','metrics':'METRIC','both':'MIXED'}[config['otlp_signal']],
+                      correlation='UNSUPPORTED', otlp_delivery={k:None for k in ('attempted','acknowledged','rejected','failed','unknown')})
     if action == 'blast_hec' and any(isinstance(e, dict) and not e.get('index') for e in events):
         record['correlation'] = 'UNSUPPORTED'
     if action == 'blast_hec':
@@ -245,6 +256,8 @@ def verification(run_id, session_key):
         saved = update(run_id, lambda rec: rec.update(verification=value))
         return 200, {'status': 'success', 'run': saved}
     # A local Splunk search can only verify the local destination.
+    if r['destination']['transport'] == 'OTLP':
+        return result('INCONCLUSIVE', 'OTLP indexing verification is unsupported; correlation attributes are emitted')
     if r['destination']['transport'] == 'SYSLOG':
         return result('INCONCLUSIVE', 'Syslog run correlation and indexing verification are unsupported')
     if r['destination']['host'] not in ('127.0.0.1', 'localhost', '::1'):

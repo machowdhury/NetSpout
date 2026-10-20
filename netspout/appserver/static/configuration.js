@@ -47,6 +47,57 @@ require([
     return h;
   }
 
+  function initNativeOtlp() {
+    var status = document.getElementById('otlp-status');
+    var save = document.getElementById('btn-save-otlp'), test = document.getElementById('btn-test-otlp');
+    function element(key) { return document.getElementById('cfg-otlp-' + key); }
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(response) { return response.json().then(function(data) {
+          if (diagnostic && [200,502].indexOf(response.status) >= 0 && data.attempted !== undefined) return data;
+          if (!response.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(data) {
+      ['endpoint','signal','auth'].forEach(function(key) { element(key).value = data.config['otlp_' + key]; });
+      element('active').checked = data.native_transport === 'otlp';
+      element('token').value = '';
+      var transport = document.getElementById('cfg-native-transport');
+      if (transport) transport.value = data.native_transport === 'otlp' ? '' : data.native_transport;
+    }
+    save.onclick = function() {
+      var payload = {action:'configure_otlp',otlp_transport:'http_json'};
+      ['endpoint','signal','auth'].forEach(function(key) { payload['otlp_' + key] = element(key).value; });
+      if (element('active').checked) payload.native_transport = 'otlp';
+      if (element('token').value) payload.otlp_token = element('token').value;
+      element('token').value = '';
+      busy(true); status.textContent = 'Saving OTLP settings…';
+      return request(payload).then(function(data) { apply(data); status.textContent = 'OTLP settings saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one request to the saved OTLP destination…';
+      return request({action:'test_otlp'},true).then(function(data) {
+        status.textContent = data.message + '\nUnit: ' + data.counter_unit + '\n' +
+          ['attempted','acknowledged','rejected','failed','unknown'].map(function(k) {
+            return k + ': ' + (data[k] === null || data[k] === undefined ? 'not measured' : data[k]);
+          }).join(', ') + '\nSplunk indexing: unsupported';
+      }).catch(function() { status.textContent = 'Diagnostic unavailable. Delivery is unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_otlp_config'}).then(function(data) { apply(data); busy(false); status.textContent = 'Saved OTLP settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved OTLP settings unavailable.'; });
+  }
+  var otlpMountAttempts = 0;
+  function mountOtlpWhenReady() {
+    if (document.getElementById('otlp-settings')) initNativeOtlp();
+    else if (++otlpMountAttempts < 30) setTimeout(mountOtlpWhenReady,100);
+  }
+  mountOtlpWhenReady();
+
   function initNativeSyslog() {
     if (!document.getElementById('syslog-settings')) return;
     var names = ['native_transport','syslog_host','syslog_port','syslog_protocol','syslog_format','syslog_facility','syslog_severity'];
@@ -61,10 +112,13 @@ require([
           return data;
         }); });
     }
-    function apply(config) { names.forEach(function(key, i) { document.getElementById(ids[i]).value = String(config[key]); }); }
+    function apply(config) { names.forEach(function(key, i) {
+      document.getElementById(ids[i]).value = key === 'native_transport' && config[key] === 'otlp' ? '' : String(config[key]);
+    }); }
     save.onclick = function() {
       var payload = {action:'configure_syslog'};
       names.forEach(function(key, i) { var value = document.getElementById(ids[i]).value;
+        if (key === 'native_transport' && value === '') return;
         payload[key] = ['syslog_port','syslog_facility','syslog_severity'].indexOf(key) >= 0 ? Number(value) : value;
       });
       busy(true); status.textContent = 'Saving destination…';

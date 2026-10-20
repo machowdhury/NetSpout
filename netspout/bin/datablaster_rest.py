@@ -12,6 +12,7 @@ Compatible with Splunk Enterprise & Splunk Cloud Vetting:
 """
 
 import os
+import importlib.util
 import sys
 import re
 import json
@@ -48,6 +49,38 @@ except ImportError:
 # Paths
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN_DIR = os.path.join(APP_DIR, "bin")
+
+# Only this app-owned helper needs explicit loading under Splunk's mangled
+# persistent-handler module name. Never add the app directory to sys.path.
+_NATIVE_MONITOR_IMPORT_LOCK = threading.Lock()
+
+
+def _native_monitor():
+    """Resolve one helper and bind it to THIS handler module/lock instance."""
+    name = "native_run_monitor"
+    path = os.path.realpath(os.path.join(BIN_DIR, name + ".py"))
+    runtime = sys.modules[__name__]
+    with _NATIVE_MONITOR_IMPORT_LOCK:
+        module = sys.modules.get(name)
+        created = module is None
+        if created:
+            spec = importlib.util.spec_from_file_location(name, path)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("Native monitor unavailable")
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[name] = module
+        elif os.path.realpath(getattr(module, "__file__", "")) != path:
+            raise RuntimeError("Native monitor module identity conflict")
+        try:
+            if created:
+                spec.loader.exec_module(module)
+            module._bind_runtime(runtime)
+        except BaseException:
+            if created and sys.modules.get(name) is module:
+                del sys.modules[name]
+            raise
+        return module
+
 
 class RunFolderError(RuntimeError):
     pass
@@ -1295,7 +1328,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         "--ssl-verify", str(run_params.get("ssl_verify", True)).lower()
     ]
     if run_params.get("_native_record"):
-        from native_run_monitor import _update_lock_held
+        _update_lock_held = _native_monitor()._update_lock_held
         import run_simulation as runner
         python_path = run_params.get("ssl_verify", True) or runner.resolve_binary() == "python_engine"
         _update_lock_held(run_params["_native_record"]["run_id"], lambda r: r.update(
@@ -1337,7 +1370,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         "hec": run_params["hec"],
         "pid": proc.pid
     }
-    __import__("native_run_monitor").publish_status(meta)
+    _native_monitor().publish_status(meta)
 
     return {
         "status": "success",
@@ -1412,7 +1445,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                     "nodes_count": len(clean["nodes"]),
                     "links_count": len(clean["links"])
                 }
-                __import__("native_run_monitor").publish_status(meta)
+                _native_monitor().publish_status(meta)
                 return (200, {
                     "status": "success",
                     "message": f"Custom canvas topology stream launched under PID {pid}",
@@ -1429,7 +1462,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
 
             monitor_record = clean.get("_native_record")
             if monitor_record:
-                from native_run_monitor import attach
+                attach = _native_monitor().attach
                 events = [attach(e, monitor_record["run_id"]) if isinstance(e, dict) else e for e in events]
             formatted_lines = []
             target_index = "idx_network_ops"
@@ -1491,7 +1524,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                                     ev_copy = attach(ev_copy, monitor_record["run_id"])
                                 fallback_lines.append(json.dumps(ev_copy))
                             if monitor_record:
-                                from native_run_monitor import update
+                                update = _native_monitor().update
                                 update(monitor_record["run_id"], lambda r: r.update(indexes=sorted(set(r["indexes"]) | {"main"})))
                             fallback_payload = "\n".join(fallback_lines).encode("utf-8")
                             fb_req = hec_request(
@@ -1529,7 +1562,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                     try:
                         import splunk.rest
                         if monitor_record:
-                            from native_run_monitor import update
+                            update = _native_monitor().update
                             update(monitor_record["run_id"], lambda r: r.update(correlation="UNSUPPORTED"))
                         for ev in events:
                             st = ev.get("sourcetype", target_sourcetype) if isinstance(ev, dict) else target_sourcetype
@@ -1628,7 +1661,7 @@ def _execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                             "time": cur_time
                         }))
             if clean.get("_native_record"):
-                from native_run_monitor import attach
+                attach = _native_monitor().attach
                 payload_events = [json.dumps(attach(json.loads(e), clean["_native_record"]["run_id"])) for e in payload_events]
             raw_payload = "\n".join(payload_events).encode("utf-8")
             
@@ -1795,7 +1828,7 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
 
 
 def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
-    import native_run_monitor as monitor
+    monitor = _native_monitor()
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
     if params.get("action") == "configure_hec":

@@ -5,6 +5,7 @@ import math
 import os
 import re
 import time
+import sys
 import uuid
 from urllib.parse import quote, urlsplit
 
@@ -15,7 +16,31 @@ TTL = 7 * 86400
 MAX_WINDOW = 86400
 
 
+_runtime = None
+
+
+def _bind_runtime(runtime):
+    """Bind a loader-created handler without importing an ordinary-name copy.
+
+    Binding is idempotent for the same module. Refuse a different handler or
+    helper origin, so a second simulation lock cannot silently be selected.
+    """
+    global _runtime
+    expected = os.path.realpath(os.path.join(os.path.dirname(__file__), 'datablaster_rest.py'))
+    ordinary = sys.modules.get('datablaster_rest')
+    if (sys.modules.get(getattr(runtime, '__name__', None)) is not runtime
+            or os.path.realpath(getattr(runtime, '__file__', '')) != expected
+            or (ordinary is not None and ordinary is not runtime)
+            or (_runtime is not None and _runtime is not runtime)):
+        raise RuntimeError('Native monitor runtime identity conflict')
+    _runtime = runtime
+
+
 def api():
+    if _runtime is not None:
+        return _runtime
+    # CLI/Python-streamer processes use the ordinary module, as before. The
+    # persistent handler always binds explicitly before invoking this helper.
     import datablaster_rest
     return datablaster_rest
 

@@ -221,6 +221,72 @@ RE_SAFE_PATH = re.compile(r"^[a-zA-Z0-9_\-./]+$")
 RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
 
+FORWARDING_DEFAULTS = {"forwarding_index":"idx_network_ops", "forwarding_group":""}
+
+
+def _forwarding():
+    """Resolve the stateless spool utility without changing global sys.path."""
+    name = "pulseforge_forwarding"
+    path = os.path.realpath(os.path.join(BIN_DIR, name + ".py"))
+    with _NATIVE_MONITOR_IMPORT_LOCK:
+        module = sys.modules.get(name)
+        if module is not None:
+            if os.path.realpath(getattr(module, "__file__", "")) != path:
+                raise RuntimeError("Forwarding utility identity conflict")
+            return module
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        try:
+            spec.loader.exec_module(module)
+        except BaseException:
+            del sys.modules[name]
+            raise
+        return module
+
+
+def _native_forwarding_operation(params):
+    if not has_netspout_admin(params.get("session_key", "")):
+        return 403, {"status":"error", "message":"netspout_admin capability required"}
+    try:
+        utility = _forwarding()
+        action = params["action"]
+        if action == "configure_forwarding":
+            if set(params) - (set(FORWARDING_DEFAULTS) | {"action","session_key","native_transport"}):
+                raise ValueError()
+            with simulation_start_lock():
+                get_active_run_dir()
+                try:
+                    saved = json.loads(_read_private_file(CONFIG_FILE))
+                    if not isinstance(saved,dict) or "hec_token" in saved:
+                        raise RuntimeError()
+                except FileNotFoundError:
+                    saved = {}
+                candidate = dict(DEFAULT_CONFIG, **{k:v for k,v in saved.items() if k in DEFAULT_CONFIG})
+                candidate.update({k:params[k] for k in FORWARDING_DEFAULTS if k in params})
+                candidate.update(utility.validate(candidate))
+                if candidate["forwarding_group"] != saved.get("forwarding_group", "") and utility.pending_count():
+                    raise ValueError()
+                if "native_transport" in params:
+                    if params["native_transport"] not in ("hec","syslog","otlp","snmp","forwarding"):
+                        raise ValueError()
+                    candidate["native_transport"] = params["native_transport"]
+                _write_config(CONFIG_FILE,candidate)
+            return 200, {"status":"success","message":"Forwarding settings saved; operator input setup is required",
+                         "config":{k:candidate[k] for k in FORWARDING_DEFAULTS},"native_transport":candidate["native_transport"]}
+        if set(params) - {"action","session_key"}:
+            raise ValueError()
+        config = get_stored_config(params["session_key"])
+        if action == "get_forwarding_config":
+            return 200, {"status":"success","config":{k:config[k] for k in FORWARDING_DEFAULTS},"native_transport":config["native_transport"]}
+        result = utility.readiness(config)
+        return (200 if result["status"] == "success" else 503), result
+    except ValueError:
+        return 400, {"status":"error","message":"Invalid forwarding settings or pending spool prevents group change"}
+    except Exception:
+        return 503, {"status":"error","message":"Forwarding configuration unavailable"}
+
+
 SNMP_DEFAULTS = {
     "snmp_host":"127.0.0.1", "snmp_port":1162, "snmp_version":"2c",
     "snmp_message_type":"trap", "snmp_protocol":"udp", "snmp_credential_ref":"",
@@ -493,7 +559,7 @@ def validate_syslog_settings(settings):
                 not all(re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
                         for label in host.rstrip(".").split("."))):
             raise ValueError("Invalid syslog settings") from None
-    if (result["native_transport"] not in ("hec", "syslog", "otlp", "snmp")
+    if (result["native_transport"] not in ("hec", "syslog", "otlp", "snmp", "forwarding")
             or result["syslog_protocol"] not in ("udp", "tcp")
             or result["syslog_format"] not in ("rfc3164", "rfc5424")):
         raise ValueError("Invalid syslog settings")
@@ -566,6 +632,7 @@ DEFAULT_CONFIG = {
     **SYSLOG_DEFAULTS,
     **OTLP_DEFAULTS,
     **SNMP_DEFAULTS,
+    **FORWARDING_DEFAULTS,
     "hec_credential_ref": "",
     "hec_url": "https://127.0.0.1:8088/services/collector",
     "hec_allowed_hosts": ["127.0.0.1", "localhost"],
@@ -734,7 +801,7 @@ def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any
         if "hec_token" in new_cfg:
             HECCredentialStore(session_key).save(new_cfg["hec_token"])
         for key in DEFAULT_CONFIG:
-            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key in new_cfg:
+            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key in new_cfg:
                 cfg[key] = new_cfg[key]
         resolve_hec_urls(cfg["hec_url"], cfg)
         if cfg["ssl_verify"] is False:
@@ -752,7 +819,7 @@ def configure_hec(params):
     session_key = params.get("session_key", "")
     if not has_netspout_admin(session_key):
         return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
-    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - set(SNMP_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - set(SNMP_DEFAULTS) - set(FORWARDING_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
     if set(params) - (editable | {"action", "session_key", "hec_token"}):
         return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
     with simulation_start_lock():
@@ -1388,7 +1455,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
+            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
@@ -1427,6 +1494,21 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
             raise ValueError("Unsupported SNMP scenario")
         return {"action":"start", "scenario":scenario, "eps":int(eps), "sample":None,
                 "hec":None, "token":None, "native_transport":"snmp", "snmp":config}
+    if action == "start" and stored_cfg.get("native_transport") == "forwarding":
+        utility = _forwarding()
+        config = utility.validate(stored_cfg)
+        if utility.readiness(config)["state"] != "READY":
+            raise ValueError("Forwarding input is not ready")
+        scenario = resolve_scenario_path(str(params.get("scenario") or params.get("scenario_file") or ""))
+        eps = params.get("eps",10)
+        if isinstance(eps,bool) or not RE_EPS.fullmatch(str(eps)) or not 1 <= int(eps) <= 100:
+            raise ValueError("Unsupported forwarding rate")
+        command = [sys.executable,os.path.join(BIN_DIR,"run_simulation.py"),"--forwarding-preflight","--scenario",scenario]
+        completed = subprocess.run(command,input=json.dumps({"forwarding":config}),text=True,capture_output=True,timeout=10,cwd=APP_DIR)
+        if completed.returncode or json.loads(completed.stdout).get("status") != "success":
+            raise ValueError("Unsupported forwarding scenario")
+        return {"action":"start","scenario":scenario,"eps":int(eps),"sample":None,"hec":None,"token":None,
+                "native_transport":"forwarding","forwarding":config}
     hec = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
     token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
     if not token:
@@ -1713,9 +1795,11 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
     if run_params.get("native_transport") == "snmp":
         cmd = [sys.executable, os.path.join(BIN_DIR, "run_simulation.py"), "--scenario", run_params["scenario"],
                "--eps", str(run_params["eps"]), "--native-snmp"]
+    if run_params.get("native_transport") == "forwarding":
+        cmd = [sys.executable,run_sim_script,"--scenario",run_params["scenario"],"--eps",str(run_params["eps"]),"--native-forwarding"]
     if run_params.get("_native_record"):
         _update_lock_held = _native_monitor()._update_lock_held
-        if run_params.get("native_transport") in ("otlp", "snmp"):
+        if run_params.get("native_transport") in ("otlp", "snmp", "forwarding"):
             python_path = False  # OTLP indexing verification is unsupported.
         elif is_syslog:
             python_path = False  # Raw syslog has no searchable run-ID metadata.
@@ -1747,7 +1831,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         )
         proc.stdin.write(json.dumps({"credential": run_params["token"],
                                  "run_id": (run_params.get("_native_record") or {}).get("run_id"),
-                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp"), "snmp": run_params.get("snmp")}))
+                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp"), "snmp": run_params.get("snmp"), "forwarding":run_params.get("forwarding")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -2223,6 +2307,8 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     monitor = _native_monitor()
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
+    if params.get("action") in ("configure_forwarding","get_forwarding_config","test_forwarding"):
+        return _native_forwarding_operation(params)
     if params.get("action") in ("configure_snmp", "get_snmp_config", "test_snmp"):
         return _native_snmp_operation(params)
     if params.get("action") in ("configure_otlp", "get_otlp_config", "test_otlp"):

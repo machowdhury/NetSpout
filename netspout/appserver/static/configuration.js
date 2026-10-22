@@ -47,6 +47,49 @@ require([
     return h;
   }
 
+  function initNativeForwarding() {
+    var status = document.getElementById('forwarding-status');
+    var save = document.getElementById('btn-save-forwarding'), test = document.getElementById('btn-test-forwarding');
+    function element(key) { return document.getElementById('cfg-forwarding-' + key); }
+    function busy(value) { save.disabled=value; test.disabled=value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify(payload)}).then(function(response) {
+        return response.json().then(function(data) {
+          if (diagnostic && [200,503].indexOf(response.status)>=0 && data.state) return data;
+          if (!response.ok || data.status!=='success') throw new Error('not confirmed');
+          return data;
+        });
+      });
+    }
+    function apply(data) {
+      element('group').value=data.config.forwarding_group;
+      element('index').value=data.config.forwarding_index;
+      element('active').checked=data.native_transport==='forwarding';
+      var transport=document.getElementById('cfg-native-transport');
+      if(transport) transport.value=['otlp','snmp','forwarding'].indexOf(data.native_transport)>=0?'':data.native_transport;
+    }
+    save.onclick=function() {
+      var payload={action:'configure_forwarding',forwarding_group:element('group').value,forwarding_index:element('index').value};
+      if(element('active').checked) payload.native_transport='forwarding';
+      busy(true);status.textContent='Saving forwarding settings…';
+      return request(payload).then(function(data) {apply(data);status.textContent='Forwarding settings saved. Enable the dedicated Splunk input and existing output group; delivery is unverified.';})
+        .catch(function(){status.textContent='Save not confirmed. Check settings and pending spool before retrying.';}).finally(function(){busy(false);});
+    };
+    test.onclick=function(){
+      busy(true);status.textContent='Checking effective Splunk input and forwarding configuration…';
+      return request({action:'test_forwarding'},true).then(function(data){status.textContent=data.state+': '+data.message+'\nIngestion: not measured; downstream forwarding: not measured.';})
+        .catch(function(){status.textContent='Readiness unavailable. Delivery is unverified.';}).finally(function(){busy(false);});
+    };
+    request({action:'get_forwarding_config'}).then(function(data){apply(data);busy(false);status.textContent='Saved settings loaded. No telemetry published.';})
+      .catch(function(){busy(true);status.textContent='Forwarding settings unavailable.';});
+  }
+  var forwardingMountAttempts=0;
+  function mountForwardingWhenReady(){
+    if(document.getElementById('forwarding-settings')) initNativeForwarding();
+    else if(++forwardingMountAttempts<30) setTimeout(mountForwardingWhenReady,100);
+  }
+  mountForwardingWhenReady();
+
   function initNativeSnmp() {
     var status = document.getElementById('snmp-status');
     var save = document.getElementById('btn-save-snmp'), test = document.getElementById('btn-test-snmp');
@@ -67,7 +110,7 @@ require([
       element('active').checked = data.native_transport === 'snmp';
       element('community').value = '';
       var transport = document.getElementById('cfg-native-transport');
-      if (transport) transport.value = ['otlp','snmp'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
+      if (transport) transport.value = ['otlp','snmp','forwarding'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
     }
     save.onclick = function() {
       var payload = {action:'configure_snmp',snmp_host:element('host').value,snmp_port:Number(element('port').value),
@@ -117,7 +160,7 @@ require([
       element('active').checked = data.native_transport === 'otlp';
       element('token').value = '';
       var transport = document.getElementById('cfg-native-transport');
-      if (transport) transport.value = ['otlp','snmp'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
+      if (transport) transport.value = ['otlp','snmp','forwarding'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
     }
     save.onclick = function() {
       var payload = {action:'configure_otlp',otlp_transport:'http_json'};
@@ -165,7 +208,7 @@ require([
         }); });
     }
     function apply(config) { names.forEach(function(key, i) {
-      document.getElementById(ids[i]).value = key === 'native_transport' && ['otlp','snmp'].indexOf(config[key]) >= 0 ? '' : String(config[key]);
+      document.getElementById(ids[i]).value = key === 'native_transport' && ['otlp','snmp','forwarding'].indexOf(config[key]) >= 0 ? '' : String(config[key]);
     }); }
     save.onclick = function() {
       var payload = {action:'configure_syslog'};

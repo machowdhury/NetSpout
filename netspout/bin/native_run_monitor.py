@@ -57,7 +57,7 @@ def valid(record):
                 and all(isinstance(i, str) and INDEX.fullmatch(i) for i in record['indexes'])
                 and record['classification'] in ('LOG', 'METRIC', 'MIXED', 'UNKNOWN')
                 and record['correlation'] in ('SUPPORTED', 'UNSUPPORTED')
-                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG', 'OTLP', 'SNMP')
+                and isinstance(record['destination'], dict) and record['destination'].get('transport') in ('HEC', 'SYSLOG', 'OTLP', 'SNMP', 'FORWARDING')
                 and isinstance(record['destination'].get('host'), str)
                 and type(record['destination'].get('port')) is int
                 and isinstance(record['execution'], dict) and isinstance(record['execution'].get('action'), str)
@@ -72,6 +72,9 @@ def valid(record):
                 and ('snmp_delivery' not in record or (isinstance(record['snmp_delivery'], dict)
                      and set(record['snmp_delivery']) == {'attempted','sent','failed','unknown','acknowledged'}
                      and all(v is None or (type(v) is int and v >= 0) for v in record['snmp_delivery'].values())))
+                and ('forwarding_delivery' not in record or (isinstance(record['forwarding_delivery'],dict)
+                     and set(record['forwarding_delivery']) == {'published','failed','unknown'}
+                     and all(v is None or (type(v) is int and v >= 0) for v in record['forwarding_delivery'].values())))
                 and set(record['counters']) == set(COUNTERS)
                 and all(v is None or (type(v) is int and v >= 0) for v in record['counters'].values()))
     except (KeyError, TypeError, ValueError, AttributeError):
@@ -201,6 +204,12 @@ def begin(action, clean, session_key=""):
                       'protocol':'udp','version':'2c','message_type':config['snmp_message_type']},indexes=[],
                       classification='LOG',correlation='UNSUPPORTED',
                       snmp_delivery={k:None for k in ('attempted','sent','failed','unknown','acknowledged')})
+    if clean.get('native_transport') == 'forwarding':
+        config = clean['forwarding']
+        record.update(destination={'transport':'FORWARDING','host':'splunk-managed','port':0,
+                      'group':config['forwarding_group']},indexes=[config['forwarding_index']],
+                      classification='LOG',correlation='UNSUPPORTED',
+                      forwarding_delivery={k:None for k in ('published','failed','unknown')})
     if action == 'blast_hec' and any(isinstance(e, dict) and not e.get('index') for e in events):
         record['correlation'] = 'UNSUPPORTED'
     if action == 'blast_hec':
@@ -265,6 +274,8 @@ def verification(run_id, session_key):
         saved = update(run_id, lambda rec: rec.update(verification=value))
         return 200, {'status': 'success', 'run': saved}
     # A local Splunk search can only verify the local destination.
+    if r['destination']['transport'] == 'FORWARDING':
+        return result('INCONCLUSIVE','Spool publication is not ingestion or downstream forwarding proof')
     if r['destination']['transport'] == 'SNMP':
         return result('INCONCLUSIVE','SNMP indexing verification is unsupported; synthetic correlation varbinds are emitted')
     if r['destination']['transport'] == 'OTLP':

@@ -36,6 +36,13 @@ require([
         var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
       });
       lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.forwarding_delivery) {
+        ['published','failed','unknown'].forEach(function(key){
+          var value=run.forwarding_delivery[key];
+          lines.push('Local spool '+key+': '+(value===null||value===undefined?'not measured':value));
+        });
+        lines.push('Splunk pipe handoff, ingestion and downstream forwarding: not measured. Local publication is not delivery proof.');
+      }
       if (run.snmp_delivery) {
         ['attempted','sent','acknowledged','failed','unknown'].forEach(function(key) {
           var value = run.snmp_delivery[key];

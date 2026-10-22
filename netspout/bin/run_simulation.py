@@ -743,6 +743,48 @@ def run_python_snmp_streamer(path, config, eps, run_id=None):
         time.sleep(1.0/eps)
 
 
+def validate_forwarding_scenario(path, config):
+    import pulseforge_forwarding as forwarding
+    events = load_python_scenario_events(path,strict=True)
+    for event in events:
+        if otlp_is_metric(event):
+            raise ValueError("Forwarding metrics are unsupported")
+        record = forwarding.event_record(event,event["raw"],"00000000-0000-0000-0000-000000000000",os.path.basename(path),config["forwarding_index"],time.time())
+        if len(json.dumps(record).encode()) > forwarding.MAX_EVENT_BYTES:
+            raise ValueError("Forwarding event is oversized")
+    return events
+
+
+def run_python_forwarding_streamer(path, config, eps, run_id):
+    import random
+    import pulseforge_forwarding as forwarding
+    from native_run_monitor import update
+    events = validate_forwarding_scenario(path,config)
+    for _ in range(1000):
+        event = random.choice(events)
+        raw = event["raw"].replace("$SYSLOG_TS$",time.strftime("%b %d %H:%M:%S",time.localtime())).replace(
+            "$ISO_TS$",time.strftime("%Y-%m-%dT%H:%M:%S.000Z",time.gmtime())).replace("$FLOW_ID$",str(random.randint(10000,99999)))
+        record = forwarding.event_record(event,raw,run_id,os.path.basename(path),config["forwarding_index"],time.time())
+        def attempting(r):
+            r["counters"]["generated"] = (r["counters"]["generated"] or 0)+1
+            r["counters"]["attempted"] = (r["counters"]["attempted"] or 0)+1
+            values = {k:((r.get("forwarding_delivery") or {}).get(k) or 0) for k in ("published","failed","unknown")}
+            values["unknown"] += 1
+            r["forwarding_delivery"] = values
+        update(run_id,attempting)
+        try:
+            forwarding.publish(record)
+        except Exception:
+            # A filesystem failure can occur after replacement; don't infer loss.
+            print("[PulseForge] Spool publication unconfirmed; run stopped",flush=True)
+            return
+        def published(r):
+            r["forwarding_delivery"]["published"] += 1
+            r["forwarding_delivery"]["unknown"] -= 1
+        update(run_id,published)
+        time.sleep(1.0/eps)
+
+
 def _main():
     parser = argparse.ArgumentParser(description="NetSpout PulseForge Secure Simulation Runner")
     parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
@@ -763,6 +805,8 @@ def _main():
     syslog_mode.add_argument("--native-snmp",action="store_true")
     syslog_mode.add_argument("--snmp-preflight",action="store_true")
     syslog_mode.add_argument("--snmp-diagnostic",action="store_true")
+    syslog_mode.add_argument("--native-forwarding",action="store_true")
+    syslog_mode.add_argument("--forwarding-preflight",action="store_true")
     args = parser.parse_args()
 
     def stop_runner(signum, frame):
@@ -779,6 +823,17 @@ def _main():
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.native_forwarding or args.forwarding_preflight:
+        import pulseforge_forwarding as forwarding
+        config = forwarding.validate(private_input.get("forwarding",{}))
+        events = validate_forwarding_scenario(args.scenario,config)
+        if args.forwarding_preflight:
+            print(json.dumps({"status":"success","templates":len(events)}))
+            return
+        if not args.run_id or not 1 <= args.eps <= 100:
+            raise ValueError("Invalid forwarding run scope")
+        run_python_forwarding_streamer(args.scenario,config,args.eps,args.run_id)
+        return
     if args.snmp_diagnostic or args.snmp_preflight or args.native_snmp:
         from datablaster_rest import validate_snmp_settings
         supplied = private_input.get("snmp", {})

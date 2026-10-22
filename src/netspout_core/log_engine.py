@@ -849,17 +849,21 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         dev_id = device.name or device.id
         sig = signature or f"FortiGate IPS Detection: {attack}"
-        forti_action = "dropped" if action in ("dropped", "blocked") else "pass"
+        # FortiOS 7.2.0 IPS signature event subset (logid 0419016384).
+        # Non-blocking detection is 'detected', not a claim that a session passed.
+        forti_action = "dropped" if action in ("dropped", "blocked") else "detected"
+        # This bounded formatter rejects characters whose native escaping has not
+        # been established, rather than inventing a general FortiOS string codec.
+        if any(c in str(value) for value in (dev_id, attack) for c in ('"', "\\", "\r", "\n")):
+            raise ValueError("Unsupported FortiOS quoted value")
         now_utc = datetime.utcnow()
         raw = (
             f"<189>date={now_utc.strftime('%Y-%m-%d')} time={now_utc.strftime('%H:%M:%S')} "
-            f"devname=\"{dev_id}\" devid=\"FG60ET4619000000\" logid=\"0419016384\" "
-            f"type=\"utm\" subtype=\"ips\" level=\"alert\" severity=\"high\" "
+            f"tz=\"+0000\" devname=\"{dev_id}\" devid=\"FG60ET4619000000\" logid=\"0419016384\" "
+            f"type=\"utm\" subtype=\"ips\" eventtype=\"signature\" level=\"alert\" severity=\"high\" "
             f"srcip={src_ip} srcport={src_port} srcintf=\"port1\" "
             f"dstip={dest_ip} dstport={dest_port} dstintf=\"port2\" proto=6 "
-            f"action=\"{forti_action}\" attack=\"{attack}\" msg=\"IPS: {attack}\" "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" duration={duration_ms}ms "
-            f"action={action} signature=\"{sig}\" status={status}"
+            f"action=\"{forti_action}\" attack=\"{attack}\" msg=\"IPS: {attack}\""
         )
         return LogEntry(
             timestamp=now_ts,

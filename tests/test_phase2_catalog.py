@@ -36,7 +36,7 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
     def test_01_catalog_schema_validates(self):
         catalog = self.validate()
         self.assertEqual(len(catalog.sources), 11)
-        self.assertEqual(len(catalog.integrations), 9)
+        self.assertEqual(len(catalog.integrations), 12)
         self.assertTrue({"splunk-native-network-input", "splunk-otel-hec-exporter",
                          "splunkbase-cisco-network-data-1467",
                          "splunkbase-cisco-enterprise-networking-7538",

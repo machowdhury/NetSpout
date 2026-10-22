@@ -331,4 +331,21 @@
     </section>
   </html></panel></row>
 
+  <row><panel><html>
+    <section id="telecom-incident-packs">
+      <h2>PulseForge Telecommunications &amp; 5G Scenarios</h2>
+      <p>Select a named destination above. Each bounded, seed-42 incident emits 30 logs and up to 10 KPI envelopes (30 OTLP gauge points). All measurements, alarms and operator actions are simulated. No subscriber PII, equipment signaling or remediation is performed. Collector acknowledgement is not indexing proof.</p>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_01_ran_cell.yml" data-name="5G RAN cell degradation">5G RAN cell degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_02_registration_auth.yml" data-name="5G registration/authentication failure">5G registration/authentication failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_03_slice_sla.yml" data-name="5G network slice SLA violation">5G network slice SLA violation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_04_ims_volte.yml" data-name="IMS/VoLTE call-quality degradation">IMS/VoLTE call-quality degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_05_mobile_transport.yml" data-name="Mobile transport/fronthaul congestion">Mobile transport/fronthaul congestion</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_06_broadband_cpe.yml" data-name="Broadband CPE service outage">Broadband CPE service outage</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_07_sdwan_service.yml" data-name="SD-WAN service degradation">SD-WAN service degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_08_roaming_mobility.yml" data-name="Roaming/mobility failure">Roaming/mobility failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_09_core_user_plane.yml" data-name="5G core user-plane degradation">5G core user-plane degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_10_cross_layer.yml" data-name="Cross-layer telecom service outage and SLA impact">Cross-layer telecom service outage and SLA impact</button>
+    </section>
+  </html></panel></row>
+
 </dashboard>

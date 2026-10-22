@@ -504,5 +504,135 @@
       "netspout:network:metric"
     ],
     "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_01_ran_cell",
+    "filename": "scenario_telco_01_ran_cell.yml",
+    "name": "5G RAN cell degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_02_registration_auth",
+    "filename": "scenario_telco_02_registration_auth.yml",
+    "name": "5G registration/authentication failure",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_03_slice_sla",
+    "filename": "scenario_telco_03_slice_sla.yml",
+    "name": "5G network slice SLA violation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_04_ims_volte",
+    "filename": "scenario_telco_04_ims_volte.yml",
+    "name": "IMS/VoLTE call-quality degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_05_mobile_transport",
+    "filename": "scenario_telco_05_mobile_transport.yml",
+    "name": "Mobile transport/fronthaul congestion",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_06_broadband_cpe",
+    "filename": "scenario_telco_06_broadband_cpe.yml",
+    "name": "Broadband CPE service outage",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_07_sdwan_service",
+    "filename": "scenario_telco_07_sdwan_service.yml",
+    "name": "SD-WAN service degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_08_roaming_mobility",
+    "filename": "scenario_telco_08_roaming_mobility.yml",
+    "name": "Roaming/mobility failure",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_09_core_user_plane",
+    "filename": "scenario_telco_09_core_user_plane.yml",
+    "name": "5G core user-plane degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_10_cross_layer",
+    "filename": "scenario_telco_10_cross_layer.yml",
+    "name": "Cross-layer telecom service outage and SLA impact",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
   }
 ]

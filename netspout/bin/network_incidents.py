@@ -9,6 +9,7 @@ import random
 import time
 import uuid
 from pathlib import Path
+import telecom_incidents
 
 SITE = 'campus-east'
 DEVICES = {
@@ -166,7 +167,8 @@ def descriptor(path):
     if 'pulseforge_incident' not in data:
         return None
     if (set(data) != {'pulseforge_incident','seed','version'} or data['version'] != 1
-            or data['pulseforge_incident'] not in CATALOG
+            or (data['pulseforge_incident'] not in CATALOG
+                and data['pulseforge_incident'] not in telecom_incidents.CATALOG)
             or type(data['seed']) is not int or not 0 <= data['seed'] <= 2**32-1):
         raise ValueError('Invalid network incident descriptor')
     return data
@@ -178,6 +180,8 @@ def generate(slug, seed=42, start=1700000000.0, run_id=None, eps=10):
     A supplied start/seed/run ID reproduces exact events. No global RNG is used.
     Timestamps span the actual paced run (not a future simulated wall clock).
     """
+    if slug in telecom_incidents.CATALOG:
+        return telecom_incidents.generate(slug, seed, start, run_id, eps, PHASES)
     row = CATALOG[slug]
     if type(seed) is not int or not 0 <= seed <= 2**32-1 or not math.isfinite(start) or not 1 <= eps <= 500000:
         raise ValueError('Invalid incident execution parameters')

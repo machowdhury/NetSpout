@@ -48,13 +48,14 @@ def root():
     return folder
 
 
-def read_private(path):
+def read_private(path, max_bytes=None):
+    limit=MAX_EVENT_BYTES if max_bytes is None else max_bytes
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     with os.fdopen(fd, 'rb') as stream:
         info = os.fstat(stream.fileno())
-        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077 or info.st_size > MAX_EVENT_BYTES:
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077 or info.st_size > limit:
             raise ValueError('Invalid spool file')
-        return json.loads(stream.read(MAX_EVENT_BYTES + 1))
+        return json.loads(stream.read(limit + 1))
 
 
 @contextmanager
@@ -182,7 +183,7 @@ def pending_count():
 
 
 def active_settings():
-    return validate(read_private(root().parent / 'datablaster_config.json'))
+    return validate(read_private(root().parent / 'datablaster_config.json',max_bytes=524288))
 
 
 def readiness(settings):

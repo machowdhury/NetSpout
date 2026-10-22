@@ -47,6 +47,85 @@ require([
     return h;
   }
 
+  function initDestinationManager() {
+    var root=document.getElementById('destination-manager'), status=document.getElementById('destination-manager-status');
+    var list=document.getElementById('destination-list'), name=document.getElementById('destination-name');
+    var protocol=document.getElementById('destination-protocol'), target=document.getElementById('destination-class');
+    var enabled=document.getElementById('destination-enabled'), fields=document.getElementById('destination-fields');
+    var secret=document.getElementById('destination-credential'), save=document.getElementById('destination-save');
+    var current=null, records=[], selected=null;
+    var schemas={
+      hec:[['hec_url','HTTPS HEC endpoint','text','https://127.0.0.1:8088/services/collector'],['ssl_verify','Verify TLS certificate','bool',true],['idx_network_ops','Log index','text','idx_network_ops'],['cisco_mdt_metrics','Metric index','text','cisco_mdt_metrics']],
+      syslog:[['syslog_host','Receiver host','text','127.0.0.1'],['syslog_port','Port','number',1514],['syslog_protocol','Transport','udp,tcp','udp'],['syslog_format','Format','rfc5424,rfc3164','rfc5424'],['syslog_facility','Facility','number',16],['syslog_severity','Severity','number',6]],
+      otlp:[['otlp_endpoint','HTTP/JSON base endpoint','text','https://127.0.0.1:4318'],['otlp_signal','Signals','logs,metrics,both','logs'],['otlp_auth','Authentication','none,bearer','none']],
+      snmp:[['snmp_host','Receiver IPv4','text','127.0.0.1'],['snmp_port','UDP port','number',1162],['snmp_message_type','SNMPv2c notification','trap,inform','trap']],
+      forwarding:[['forwarding_group','Existing Splunk forwarding group','text',''],['forwarding_index','Event index','text','idx_network_ops']]
+    };
+    function request(payload) {
+      return fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify(payload)}).then(function(r){
+        return r.json().then(function(data){if(!r.ok||data.status!=='success') throw new Error('not confirmed');return data;});
+      });
+    }
+    function renderFields(settings) {
+      fields.textContent=''; secret.value='';
+      schemas[protocol.value].forEach(function(spec){
+        var label=document.createElement('label');label.textContent=spec[1]+' ';
+        var input=document.createElement(spec[2].indexOf(',')>=0?'select':'input');input.id='destination-setting-'+spec[0];
+        if(spec[2].indexOf(',')>=0) spec[2].split(',').forEach(function(value){var o=document.createElement('option');o.value=value;o.textContent=value;input.appendChild(o);});
+        else input.type=spec[2]==='bool'?'checkbox':spec[2];
+        var value=Object.prototype.hasOwnProperty.call(settings,spec[0])?settings[spec[0]]:spec[3];
+        if(spec[2]==='bool') input.checked=value;else input.value=value;
+        label.appendChild(input);fields.appendChild(label);
+      });
+      secret.disabled=['hec','otlp','snmp'].indexOf(protocol.value)<0;
+    }
+    function edit(record) {
+      current=record;protocol.disabled=!!record;protocol.value=record?record.protocol:'hec';
+      name.value=record?record.name:'';target.value=record?record.target_class:'local_splunk';enabled.checked=record?record.enabled:true;
+      renderFields(record?record.settings:{});
+    }
+    function render() {
+      list.textContent='';
+      records.forEach(function(d){
+        var row=document.createElement('div');row.style.cssText='padding:8px;border-bottom:1px solid #64748b';
+        var text=document.createElement('span');text.textContent=d.name+' | '+d.protocol+' | '+d.target_class+' | '+d.signals.join(', ')+' | '+(d.enabled?'enabled':'disabled')+(d.id===selected?' | selected':'')+(d.legacy?' | legacy settings; diagnostic required':'');row.appendChild(text);
+        [['Edit',function(){edit(d);}],[d.id===selected?'Selected':'Use by default',function(){act('select_destination',d.id);}],[d.enabled?'Disable':'Disabled',function(){act('disable_destination',d.id);}],[d.protocol==='forwarding'?'Readiness':'Send one diagnostic',function(){act('diagnose_destination',d.id);}]].forEach(function(item){
+          var b=document.createElement('button');b.type='button';b.textContent=item[0];
+          b.disabled=!d.enabled && item[0]!=='Edit';b.onclick=item[1];row.appendChild(b);
+        });list.appendChild(row);
+      });
+    }
+    function reload() {return request({action:'list_destinations'}).then(function(data){records=data.destinations;selected=data.selected_id;render();});}
+    function act(action,id) {
+      status.textContent='Working…';
+      return request({action:action,destination_id:id}).then(function(data){
+        if(action==='diagnose_destination') {
+          var result=data.result;status.textContent='Diagnostic for '+data.destination.name+'\n'+
+            ['state','status','message','http_status','attempted','sent','acknowledged','rejected','failed','unknown'].filter(function(k){return result[k]!==undefined;}).map(function(k){return k+': '+(result[k]===null?'not measured':result[k]);}).join('\n')+'\nIndexing: not verified';
+        } else {status.textContent='Destination change saved.';return reload();}
+      }).catch(function(){status.textContent='Operation not confirmed. Check settings, credentials and enabled state; no delivery is verified.';});
+    }
+    protocol.onchange=function(){renderFields({});};
+    document.getElementById('destination-new').onclick=function(){edit(null);status.textContent='New destination; no settings saved yet.';};
+    document.getElementById('destination-refresh').onclick=function(){reload().catch(function(){status.textContent='Destination list unavailable.';});};
+    save.onclick=function(){
+      var settings={};schemas[protocol.value].forEach(function(spec){var input=document.getElementById('destination-setting-'+spec[0]);settings[spec[0]]=spec[2]==='bool'?input.checked:spec[2]==='number'?Number(input.value):input.value;});
+      var payload={action:current?'update_destination':'create_destination',name:name.value,protocol:protocol.value,target_class:target.value,enabled:enabled.checked,settings:settings};
+      if(current) payload.destination_id=current.id;
+      if(secret.value) payload.credential=secret.value;secret.value='';save.disabled=true;
+      return request(payload).then(function(){status.textContent='Destination saved.';edit(null);return reload();})
+        .catch(function(){status.textContent='Save not confirmed. Previous settings remain active; reload before retrying.';}).finally(function(){save.disabled=false;});
+    };
+    edit(null);reload().then(function(){status.textContent='Destinations loaded. Diagnostics send only when explicitly invoked.';})
+      .catch(function(){status.textContent='Destination list unavailable; no automatic selection was made.';});
+  }
+  var destinationMountAttempts=0;
+  function mountDestinationManager(){
+    if(document.getElementById('destination-manager')) initDestinationManager();
+    else if(++destinationMountAttempts<30) setTimeout(mountDestinationManager,100);
+  }
+  mountDestinationManager();
+
   function initNativeForwarding() {
     var status = document.getElementById('forwarding-status');
     var save = document.getElementById('btn-save-forwarding'), test = document.getElementById('btn-test-forwarding');

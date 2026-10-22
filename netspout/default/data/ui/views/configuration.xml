@@ -1,9 +1,26 @@
 <dashboard version="1.1" theme="dark" script="configuration.js">
-  <label>NetSpout PulseForge Configuration &amp; Setup</label>
+  <label>NetSpout PulseForge Destination Manager &amp; Setup</label>
   <description>Configure destination Splunk HEC endpoints, security tokens, SSL certificate validation modes, default index targets, and run real-time 5-point preflight environment validation checks.</description>
 
   <row>
     <panel><html>
+      <section id="destination-manager" style="padding:16px;">
+        <h2>NetSpout PulseForge Destination Manager</h2>
+        <p>Named destinations share the existing transport validators and credential store. Local Splunk, Remote Splunk and External Platform describe your target; they do not change protocol support or authorization. Existing allowlists and transport safety policies still apply. Diagnostics explicitly send one synthetic request, except forwarding readiness, which sends no events.</p>
+        <p>HEC supports logs/metrics; OTLP supports HTTP/JSON logs and synthetic gauges; syslog supports logs; SNMP supports synthetic v2c trap/inform events; Splunk-managed forwarding supports log envelopes. No universal delivery acknowledgement exists. Disabled or missing selected destinations block runs. Legacy transport settings remain available below.</p>
+        <button id="destination-refresh" type="button">Refresh destinations</button>
+        <div id="destination-list" aria-live="polite"></div>
+        <h3>Add or edit destination</h3>
+        <button id="destination-new" type="button">New destination</button>
+        <label>Name <input id="destination-name" type="text" maxlength="80"/></label>
+        <label>Protocol <select id="destination-protocol"><option value="hec">HEC</option><option value="syslog">Syslog</option><option value="otlp">OTLP HTTP/JSON</option><option value="snmp">SNMPv2c</option><option value="forwarding">Splunk-managed forwarding</option></select></label>
+        <label>Target <select id="destination-class"><option value="local_splunk">Local Splunk</option><option value="remote_splunk">Remote Splunk</option><option value="external_platform">External Platform</option></select></label>
+        <label><input id="destination-enabled" type="checkbox" checked="checked"/>Enabled</label>
+        <div id="destination-fields"></div>
+        <label>New credential (blank keeps existing; required for initial HEC/SNMP or authenticated OTLP) <input id="destination-credential" type="password" autocomplete="new-password"/></label>
+        <button id="destination-save" type="button">Save destination</button>
+        <pre id="destination-manager-status" aria-live="polite">Loading destinations…</pre>
+      </section>
       <section id="forwarding-settings" style="padding:16px;">
         <h2>PulseForge Splunk-managed forwarding</h2>
         <p>Publishes logs to a private spool drained by the pulseforge_spool modular input. An administrator must enable pulseforge_spool://native in this app's local/inputs.conf and set _TCP_ROUTING to an existing tcpout group. PulseForge never writes outputs.conf. Create the event index at the receiver first. READY means configuration readiness, not connectivity or delivery proof.</p>

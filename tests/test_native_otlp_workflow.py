@@ -339,8 +339,15 @@ vm.runInNewContext(source.slice(start,finish),context);context.initNativeSyslog(
 """
         result=subprocess.run(['node','-e',program,'netspout/appserver/static/configuration.js'],capture_output=True,text=True,timeout=10)
         self.assertEqual(result.returncode,0,result.stderr)
-        xml=Path('netspout/default/data/ui/views/configuration.xml').read_text()
-        self.assertNotIn('<option value="otlp">',xml)
+        import xml.etree.ElementTree as ET
+        root=ET.parse('netspout/default/data/ui/views/configuration.xml').getroot()
+        legacy=root.find('.//select[@id="cfg-native-transport"]')
+        self.assertIsNotNone(legacy)
+        self.assertEqual([option.get('value') for option in legacy.findall('option')],
+                         ['', 'hec', 'syslog'])
+        manager=root.find('.//select[@id="destination-protocol"]')
+        self.assertIsNotNone(manager)
+        self.assertIn('otlp', [option.get('value') for option in manager.findall('option')])
 
     def test_stdlib_only_native_otlp_diagnostic(self):
         code=r"""

@@ -31,6 +31,13 @@ STATIC_SAMPLES_DIR = os.path.join(APP_DIR, "appserver", "static", "samples")
 RUN_DIR = ""
 _PRIVATE_FILES = set()
 
+_RUNTIME_CONFIG = None
+
+
+def runtime_config():
+    return get_stored_config() if _RUNTIME_CONFIG is None else _RUNTIME_CONFIG
+
+
 def resolve_binary() -> str:
     platform_key = "linux" if sys.platform.startswith("linux") else ("darwin" if sys.platform == "darwin" else "win32")
     for name in ("data-blaster-" + platform_key, "data-blaster"):
@@ -68,7 +75,7 @@ def prepare_scenario_config(scenario_path: str, eps: int, hec_url: str, hec_toke
 
     global RUN_DIR
     RUN_DIR = resolve_run_dir()
-    resolve_hec_urls(hec_url, get_stored_config())
+    resolve_hec_urls(hec_url, runtime_config())
     with open(scenario_path, "r", encoding="utf-8") as stream:
         scenario = yaml.safe_load(stream)
     if not isinstance(scenario, dict):
@@ -132,7 +139,7 @@ def validate_and_stream_mv_scenario(scenario_path, hec_url=None, hec_token=None,
     Asynchronously coordinates the execution of cross-vendor streaming scenarios
     ensuring that numeric metrics scale realistically via a temporal degradation curve.
     """
-    cfg = get_stored_config()
+    cfg = runtime_config()
     hec_url = resolve_hec_urls(hec_url or cfg["hec_url"], cfg)[0]
     if not hec_token:
         raise ValueError("HEC credential is required")
@@ -207,7 +214,7 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
         payload = attach(payload, run_id)
     data = json.dumps(payload).encode("utf-8")
 
-    candidate_urls = resolve_hec_urls(hec_url, get_stored_config())
+    candidate_urls = resolve_hec_urls(hec_url, runtime_config())
     ctx = ssl.create_default_context()
     if not ssl_verify:
         ctx.check_hostname = False
@@ -216,7 +223,7 @@ def blast_single_device(device_info: dict, hec_url: str, hec_token: str, count: 
     last_err = None
     for target_url in candidate_urls:
         try:
-            req = hec_request(target_url, data=data, method="POST")
+            req = hec_request(target_url, configuration=runtime_config(), data=data, method="POST")
             req.add_unredirected_header("Authorization", f"Splunk {hec_token}")
             req.add_header("Content-Type", "application/json")
             with urllib.request.urlopen(req, context=ctx, timeout=5) as response:
@@ -365,11 +372,11 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
     import ssl
     import random
 
-    resolve_hec_urls(hec_url, get_stored_config())
+    resolve_hec_urls(hec_url, runtime_config())
     events_to_stream = load_python_scenario_events(scenario_file)
 
     ctx = ssl.create_default_context()
-    if get_stored_config().get("ssl_verify", True) is False:
+    if runtime_config().get("ssl_verify", True) is False:
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
@@ -436,6 +443,7 @@ def run_python_streamer(scenario_file: str, hec_url: str, hec_token: str, eps: i
         payload = "\n".join(batch).encode("utf-8")
         req = hec_request(
             hec_url,
+            configuration=runtime_config(),
             data=payload,
             headers={
                 "Authorization": f"Splunk {hec_token}",
@@ -786,6 +794,7 @@ def run_python_forwarding_streamer(path, config, eps, run_id):
 
 
 def _main():
+    global _RUNTIME_CONFIG
     parser = argparse.ArgumentParser(description="NetSpout PulseForge Secure Simulation Runner")
     parser.add_argument("--scenario", required=False, help="Path to scenario YAML file")
     parser.add_argument("--eps", type=int, default=int(os.environ.get("DATABLASTER_TARGET_EPS", 1000)), help="Target Events Per Second (integer)")
@@ -807,6 +816,7 @@ def _main():
     syslog_mode.add_argument("--snmp-diagnostic",action="store_true")
     syslog_mode.add_argument("--native-forwarding",action="store_true")
     syslog_mode.add_argument("--forwarding-preflight",action="store_true")
+    syslog_mode.add_argument("--named-hec-diagnostic",action="store_true")
     args = parser.parse_args()
 
     def stop_runner(signum, frame):
@@ -814,15 +824,28 @@ def _main():
 
     signal.signal(signal.SIGTERM, stop_runner)
     signal.signal(signal.SIGINT, stop_runner)
-    if not (args.syslog_diagnostic or args.otlp_diagnostic or args.snmp_diagnostic):
+    if not (args.syslog_diagnostic or args.otlp_diagnostic or args.snmp_diagnostic or args.named_hec_diagnostic):
         args.scenario = resolve_scenario_path(args.scenario or "", APP_DIR)
     private_input = json.loads(sys.stdin.read())
+    _RUNTIME_CONFIG = private_input.get("runtime_config")
+    if _RUNTIME_CONFIG is not None and not isinstance(_RUNTIME_CONFIG,dict):
+        raise ValueError("Invalid runtime snapshot")
     args.token = private_input.get("credential", "")
     args.run_id = private_input.get("run_id")
     if args.run_id:
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.named_hec_diagnostic:
+        from netspout_core.telemetry_dispatcher import TelemetryDispatcher, hec_outcome_fields
+        config=runtime_config()
+        endpoint=resolve_hec_urls(config['hec_url'],config)[0]
+        outcome=TelemetryDispatcher().emit_hec({'event':'PulseForge synthetic destination diagnostic',
+            'sourcetype':'netspout:diagnostic','index':config['idx_network_ops']},endpoint,args.token,
+            ssl_verify=config['ssl_verify'],allow_insecure_tls=not config['ssl_verify'])
+        fields=hec_outcome_fields(outcome)
+        print(json.dumps(dict(fields,status='success' if fields['state']=='ACCEPTED' else 'error',message=outcome[1],indexed=None,indexing_verified=False)))
+        return
     if args.native_forwarding or args.forwarding_preflight:
         import pulseforge_forwarding as forwarding
         config = forwarding.validate(private_input.get("forwarding",{}))
@@ -883,7 +906,7 @@ def _main():
     if (os.path.basename(args.scenario).startswith("canvas_custom_")
             and os.path.dirname(args.scenario) == os.path.realpath(resolve_run_dir())):
         _PRIVATE_FILES.add(args.scenario)
-    resolve_hec_urls(args.hec, get_stored_config())
+    resolve_hec_urls(args.hec, runtime_config())
     if not args.token:
         raise ValueError("HEC credential is required")
 
@@ -926,7 +949,7 @@ def _main():
 
     # Native engines do not expose a verified TLS configuration contract.
     # Use the Python engine while certificate verification is enabled.
-    if binary_path == "python_engine" or get_stored_config().get("ssl_verify", True) is not False:
+    if binary_path == "python_engine" or runtime_config().get("ssl_verify", True) is not False:
         try:
             run_python_streamer(scenario_file, args.hec, args.token, args.eps, args.run_id)
         except NoStreamableEventsError as e:

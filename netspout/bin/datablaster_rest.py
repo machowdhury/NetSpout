@@ -17,6 +17,7 @@ import ipaddress
 import sys
 import re
 import json
+import copy
 import time
 import signal
 import subprocess
@@ -220,6 +221,210 @@ RE_EPS = re.compile(r"^\d+$")
 RE_SAFE_PATH = re.compile(r"^[a-zA-Z0-9_\-./]+$")
 RE_URL = re.compile(r"^https?://[a-zA-Z0-9.\-:]+(/.*)?$")
 RE_TOKEN = re.compile(r"^[a-zA-Z0-9\-]+$")
+
+DESTINATION_PROTOCOLS = ('hec','syslog','otlp','snmp','forwarding')
+DESTINATION_CLASSES = ('local_splunk','remote_splunk','external_platform')
+
+
+def _destination_fields(protocol):
+    return {'hec': {'hec_url','ssl_verify','hec_credential_ref','idx_network_ops','idx_security_fw',
+                    'idx_wireless_ops','idx_performance_metrics','cisco_mdt_metrics'},
+            'syslog':set(SYSLOG_DEFAULTS)-{'native_transport'}, 'otlp':set(OTLP_DEFAULTS),
+            'snmp':set(SNMP_DEFAULTS), 'forwarding':set(FORWARDING_DEFAULTS)}[protocol]
+
+
+def _destination_signals(protocol,settings):
+    if protocol=='hec': return ['logs','metrics']
+    if protocol=='otlp': return ['logs','metrics'] if settings['otlp_signal']=='both' else [settings['otlp_signal']]
+    return ['events'] if protocol=='snmp' else ['logs']
+
+
+def _destination_legacy_id(protocol):
+    return str(uuid.uuid5(uuid.NAMESPACE_URL,'netspout:pulseforge:legacy:'+protocol))
+
+
+def _destination_registry(config):
+    registry=config.get('destination_manager')
+    if registry is None:
+        registry={'version':1,'selected_id':_destination_legacy_id(config.get('native_transport','hec')),
+                  'destinations':[dict(id=_destination_legacy_id(p),name='Legacy '+p.upper(),protocol=p,
+                   target_class=('local_splunk' if p=='hec' and urlsplit(config['hec_url']).hostname in ('localhost','127.0.0.1','::1') else 'remote_splunk' if p in ('hec','forwarding') else 'external_platform'),enabled=True,legacy=True,
+                   settings={k:copy.deepcopy(config[k]) for k in _destination_fields(p)}) for p in DESTINATION_PROTOCOLS]}
+    registry=copy.deepcopy(registry)
+    if len(json.dumps(registry).encode())>262144: raise ValueError('Destination registry too large')
+    if (not isinstance(registry,dict) or set(registry)!={'version','selected_id','destinations'}
+            or registry['version']!=1 or not isinstance(registry['destinations'],list)
+            or not 1<=len(registry['destinations'])<=100):
+        raise ValueError('Destination registry unavailable')
+    ids=set()
+    for d in registry['destinations']:
+        if (not isinstance(d,dict) or set(d)!={'id','name','protocol','target_class','enabled','legacy','settings'}
+                or not isinstance(d['id'],str) or str(uuid.UUID(d['id']))!=d['id'] or d['id'] in ids
+                or not isinstance(d['name'],str) or not 1<=len(d['name'])<=80
+                or any(ord(c)<32 for c in d['name']) or d['protocol'] not in DESTINATION_PROTOCOLS
+                or d['target_class'] not in DESTINATION_CLASSES or type(d['enabled']) is not bool
+                or type(d['legacy']) is not bool or not isinstance(d['settings'],dict)
+                or set(d['settings'])!=_destination_fields(d['protocol'])):
+            raise ValueError('Invalid destination registry')
+        for key,prefix in (('hec_credential_ref','hec_token_v_'),('otlp_credential_ref','otlp_token_v_'),('snmp_credential_ref','snmp_community_v_')):
+            if key in d['settings']:
+                value=d['settings'][key]
+                if not isinstance(value,str) or (value and not re.fullmatch(prefix+r'[0-9a-f]{32}',value)):
+                    raise ValueError('Invalid credential reference')
+        ids.add(d['id'])
+    if registry['selected_id'] not in ids:
+        raise ValueError('Selected destination unavailable')
+    return registry
+
+
+def _destination_reconcile(config):
+    """Called before atomic publication; legacy writes update their active profile."""
+    candidate=copy.deepcopy(config)
+    registry=_destination_registry(candidate)
+    selected=next(d for d in registry['destinations'] if d['id']==registry['selected_id'])
+    protocol=candidate.get('native_transport','hec')
+    if selected['protocol']!=protocol:
+        key=_destination_legacy_id(protocol)
+        selected=next((d for d in registry['destinations'] if d['id']==key),None)
+        if selected is None: raise ValueError('Legacy destination unavailable')
+        registry['selected_id']=key
+    for d in registry['destinations']:
+        if d['legacy'] or d['id']==registry['selected_id']:
+            d['settings']={k:copy.deepcopy(candidate[k]) for k in _destination_fields(d['protocol'])}
+    candidate['destination_manager']=registry
+    return candidate
+
+
+def _destination_validate(protocol,settings,config):
+    if set(settings)!=_destination_fields(protocol): raise ValueError('Invalid destination settings')
+    merged=dict(config,**settings)
+    if protocol=='hec':
+        resolve_hec_urls(merged['hec_url'],config)
+        ref=merged['hec_credential_ref']
+        if (type(merged['ssl_verify']) is not bool or not isinstance(ref,str)
+                or (ref and not re.fullmatch(r'hec_token_v_[0-9a-f]{32}',ref))): raise ValueError()
+        for key in _destination_fields('hec')-{'hec_url','ssl_verify','hec_credential_ref'}:
+            if not isinstance(merged[key],str) or not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_-]*',merged[key]): raise ValueError()
+    elif protocol=='syslog': validate_syslog_settings(dict(merged,native_transport='syslog'))
+    elif protocol=='otlp': validate_otlp_settings(merged)
+    elif protocol=='snmp': validate_snmp_settings(merged)
+    else: _forwarding().validate(merged)
+    return merged
+
+
+def _destination_credentials(protocol,settings,session_key):
+    if protocol=='hec':
+        value=HECCredentialStore(session_key).read(settings['hec_credential_ref'])
+        if not value: raise ValueError('HEC credential unavailable')
+    elif protocol=='otlp' and settings['otlp_auth']=='bearer': _otlp_snapshot(settings,session_key)
+    elif protocol=='snmp': _snmp_snapshot(settings,session_key)
+
+
+def _destination_resolve(config,destination_id=None):
+    registry=_destination_registry(config)
+    key=destination_id if destination_id is not None else registry['selected_id']
+    found=next((d for d in registry['destinations'] if d['id']==key),None)
+    if found is None or not found['enabled']: raise ValueError('Destination missing or disabled')
+    merged=_destination_validate(found['protocol'],found['settings'],config)
+    merged['native_transport']=found['protocol']
+    return merged,{k:found[k] for k in ('id','name','protocol','target_class')}
+
+
+def _native_destination_operation(params):
+    session=params.get('session_key','')
+    if not has_netspout_admin(session): return 403,{'status':'error','message':'netspout_admin capability required'}
+    action=params['action']
+    try:
+        if set(params)-{'action','session_key','destination_id','name','protocol','target_class','settings','credential','enabled'}:
+            raise ValueError()
+        if action=='list_destinations':
+            if set(params)-{'action','session_key'}: raise ValueError()
+            registry=_destination_registry(get_stored_config(session))
+            records=[dict(d,signals=_destination_signals(d['protocol'],d['settings'])) for d in registry['destinations']]
+            return 200,{'status':'success','destinations':records,'selected_id':registry['selected_id']}
+        if action=='diagnose_destination':
+            if set(params)-{'action','session_key','destination_id'} or 'destination_id' not in params: raise ValueError()
+            config,identity=_destination_resolve(get_stored_config(session),params['destination_id'])
+            protocol=identity['protocol']
+            if protocol=='hec':
+                _destination_credentials(protocol,config,session)
+                completed=subprocess.run([sys.executable,os.path.join(BIN_DIR,'run_simulation.py'),'--named-hec-diagnostic'],
+                    input=json.dumps({'credential':HECCredentialStore(session).read(config['hec_credential_ref']),
+                                      'runtime_config':{k:v for k,v in config.items() if k!='destination_manager'}}),
+                    text=True,capture_output=True,timeout=10,cwd=APP_DIR)
+                if completed.returncode: raise RuntimeError()
+                result=json.loads(completed.stdout)
+            elif protocol=='syslog': result=_syslog_runner_check(validate_syslog_settings(config))
+            elif protocol=='otlp': result=_otlp_runner_check(_otlp_snapshot(config,session))
+            elif protocol=='snmp': result=_snmp_runner_check(_snmp_snapshot(config,session))
+            else: result=_forwarding().readiness(config)
+            return 200,{'status':'success','destination':identity,'result':result,'indexing_verified':False}
+        with simulation_start_lock():
+            get_active_run_dir()
+            try:
+                saved=json.loads(_read_private_file(CONFIG_FILE))
+                if not isinstance(saved,dict) or 'hec_token' in saved: raise RuntimeError()
+            except FileNotFoundError: saved={}
+            config=copy.deepcopy(DEFAULT_CONFIG)
+            config.update({k:v for k,v in saved.items() if k in DEFAULT_CONFIG})
+            registry=_destination_registry(config)
+            if action=='create_destination':
+                if 'destination_id' in params or len(registry['destinations'])>=100: raise ValueError()
+                protocol=params['protocol']
+                if protocol not in DESTINATION_PROTOCOLS: raise ValueError()
+                d=dict(id=str(uuid.uuid4()),name=params['name'],protocol=protocol,target_class=params['target_class'],
+                       enabled=params.get('enabled',True),legacy=False,
+                       settings={k:copy.deepcopy(DEFAULT_CONFIG[k]) for k in _destination_fields(protocol)})
+                registry['destinations'].append(d)
+            else:
+                d=next((r for r in registry['destinations'] if r['id']==params.get('destination_id')),None)
+                if d is None: raise ValueError()
+            if action in ('create_destination','update_destination'):
+                if 'protocol' in params and params['protocol']!=d['protocol']: raise ValueError()
+                for key in ('name','target_class','enabled'):
+                    if key in params: d[key]=params[key]
+                updates=params.get('settings',{})
+                if not isinstance(updates,dict) or set(updates)-_destination_fields(d['protocol']): raise ValueError()
+                ref={'hec':'hec_credential_ref','otlp':'otlp_credential_ref','snmp':'snmp_credential_ref'}.get(d['protocol'])
+                if 'credential' in params and (ref is None or ref in updates): raise ValueError()
+                if action=='create_destination' and d['protocol']=='hec' and not updates.get('hec_credential_ref') and 'credential' not in params: raise ValueError()
+                d['settings'].update(updates);d['legacy']=False
+                if 'credential' in params and d['protocol']=='otlp' and d['settings']['otlp_auth']!='bearer': raise ValueError()
+                # Validate metadata and complete settings before staging secrets.
+                validation=dict(config,destination_manager=registry)
+                _destination_registry(validation)
+                pending=dict(d['settings'])
+                if 'credential' in params:
+                    if not isinstance(params['credential'],str) or not params['credential']: raise ValueError()
+                    pending[ref]={'hec':'hec_token_v_','otlp':'otlp_token_v_','snmp':'snmp_community_v_'}[d['protocol']]+'0'*32
+                _destination_validate(d['protocol'],pending,config)
+                if 'credential' in params:
+                    store={'hec':HECCredentialStore,'otlp':OTLPCredentialStore,'snmp':SNMPCredentialStore}[d['protocol']](session)
+                    if d['protocol']=='hec' and not RE_TOKEN.fullmatch(params['credential']): raise ValueError()
+                    d['settings'][ref]=store.stage(params['credential'])
+                if d['enabled']: _destination_credentials(d['protocol'],d['settings'],session)
+            elif action=='disable_destination':
+                if set(params)-{'action','session_key','destination_id'}: raise ValueError()
+                d['enabled']=False
+            elif action=='select_destination':
+                if set(params)-{'action','session_key','destination_id'} or not d['enabled']: raise ValueError()
+                _destination_validate(d['protocol'],d['settings'],config)
+                _destination_credentials(d['protocol'],d['settings'],session)
+                registry['selected_id']=d['id']
+            else: raise ValueError()
+            if registry['selected_id']==d['id']:
+                if d['protocol']=='forwarding' and d['settings']['forwarding_group']!=config['forwarding_group'] and _forwarding().pending_count():
+                    raise ValueError('Pending spool blocks routing change')
+                config.update(d['settings']);config['native_transport']=d['protocol']
+            config['destination_manager']=registry
+            _write_config(CONFIG_FILE,config)
+        return 200,{'status':'success','destination':dict(d,signals=_destination_signals(d['protocol'],d['settings'])),
+                    'selected_id':registry['selected_id']}
+    except (ValueError,KeyError,TypeError):
+        return 400,{'status':'error','message':'Invalid, unavailable or disabled destination; previous configuration retained'}
+    except Exception:
+        return 503,{'status':'error','message':'Destination operation unavailable; no delivery is verified'}
+
 
 FORWARDING_DEFAULTS = {"forwarding_index":"idx_network_ops", "forwarding_group":""}
 
@@ -629,6 +834,7 @@ def _syslog_runner_check(config, scenario=None):
 
 
 DEFAULT_CONFIG = {
+    "destination_manager":None,
     **SYSLOG_DEFAULTS,
     **OTLP_DEFAULTS,
     **SNMP_DEFAULTS,
@@ -679,6 +885,8 @@ def _read_private_file(path):
 
 
 def _write_config(path, cfg):
+    if path == CONFIG_FILE and cfg.get("destination_manager") is not None:
+        cfg = _destination_reconcile(cfg)
     # Same-directory replacement publishes one complete, secret-free snapshot.
     fd, temporary = tempfile.mkstemp(prefix=".hec-config-", dir=os.path.dirname(path))
     try:
@@ -801,7 +1009,7 @@ def save_stored_config(new_cfg: Dict[str, Any], session_key="") -> Dict[str, Any
         if "hec_token" in new_cfg:
             HECCredentialStore(session_key).save(new_cfg["hec_token"])
         for key in DEFAULT_CONFIG:
-            if key != "hec_credential_ref" and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key in new_cfg:
+            if key not in ("hec_credential_ref","destination_manager") and key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key in new_cfg:
                 cfg[key] = new_cfg[key]
         resolve_hec_urls(cfg["hec_url"], cfg)
         if cfg["ssl_verify"] is False:
@@ -819,7 +1027,7 @@ def configure_hec(params):
     session_key = params.get("session_key", "")
     if not has_netspout_admin(session_key):
         return 403, {"status": "error", "code": "forbidden", "message": "netspout_admin capability required"}
-    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - set(SNMP_DEFAULTS) - set(FORWARDING_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref"}
+    editable = set(DEFAULT_CONFIG) - set(SYSLOG_DEFAULTS) - set(OTLP_DEFAULTS) - set(SNMP_DEFAULTS) - set(FORWARDING_DEFAULTS) - {"hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref", "destination_manager"}
     if set(params) - (editable | {"action", "session_key", "hec_token"}):
         return 400, {"status": "error", "code": "invalid_setup", "message": "Invalid HEC setup fields"}
     with simulation_start_lock():
@@ -895,9 +1103,9 @@ def resolve_hec_urls(hec_url: str, cfg=None) -> List[str]:
     return [hec_url]
 
 
-def hec_request(url, **kwargs):
+def hec_request(url, configuration=None, **kwargs):
     """Keep HEC authorization on the original request only."""
-    resolve_hec_urls(url, get_stored_config())
+    resolve_hec_urls(url, get_stored_config() if configuration is None else configuration)
     headers = dict(kwargs.pop("headers", {}))
     authorization = headers.pop("Authorization", None)
     request = urllib.request.Request(url, headers=headers, **kwargs)
@@ -1363,7 +1571,7 @@ def get_all_indexes(session_key: str = "") -> Dict[str, Any]:
     }
 
 
-def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
+def validate_and_sanitize(params: Dict[str, Any], stored_cfg_override=None) -> Dict[str, Any]:
     """
     Rigorously validate and sanitize all input parameters to eliminate command injection.
     """
@@ -1404,7 +1612,7 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
                     })
             else:
                 raise ValueError("Parameter 'events' must be a non-empty list of event objects or 'sourcetype' must be provided")
-        stored_cfg = get_stored_config(params.get("session_key", ""))
+        stored_cfg = stored_cfg_override if stored_cfg_override is not None else get_stored_config(params.get("session_key", ""))
         hec_url = resolve_hec_urls(stored_cfg["hec_url"], stored_cfg)[0]
         token = HECCredentialStore(params.get("session_key", "")).read(stored_cfg.get("hec_credential_ref", ""))
         if not token:
@@ -1455,14 +1663,14 @@ def validate_and_sanitize(params: Dict[str, Any]) -> Dict[str, Any]:
     if action == "save_config":
         new_config = {}
         for key in DEFAULT_CONFIG:
-            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref") and key in params:
+            if key not in SYSLOG_DEFAULTS and key not in OTLP_DEFAULTS and key not in SNMP_DEFAULTS and key not in FORWARDING_DEFAULTS and key not in ("hec_url", "hec_allowed_hosts", "hec_allowed_ports", "hec_credential_ref", "destination_manager") and key in params:
                 new_config[key] = params[key]
         if "ssl_verify" in new_config:
             value = new_config["ssl_verify"]
             new_config["ssl_verify"] = value.lower() in ("true", "1", "yes") if isinstance(value, str) else bool(value)
         return {"action": action, "config": new_config}
 
-    stored_cfg = get_stored_config(params.get("session_key", ""))
+    stored_cfg = stored_cfg_override if stored_cfg_override is not None else get_stored_config(params.get("session_key", ""))
     if action == "start" and stored_cfg.get("native_transport", "hec") == "syslog":
         config = validate_syslog_settings(stored_cfg)
         scenario = resolve_scenario_path(str(params.get("scenario") or params.get("scenario_file") or ""))
@@ -1831,7 +2039,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         )
         proc.stdin.write(json.dumps({"credential": run_params["token"],
                                  "run_id": (run_params.get("_native_record") or {}).get("run_id"),
-                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp"), "snmp": run_params.get("snmp"), "forwarding":run_params.get("forwarding")}))
+                                 "syslog": run_params.get("syslog"), "otlp": run_params.get("otlp"), "snmp": run_params.get("snmp"), "forwarding":run_params.get("forwarding"), "runtime_config":run_params.get("_runtime_config")}))
         proc.stdin.close()
 
     active_dir = get_active_run_dir()
@@ -2305,6 +2513,8 @@ class DataBlasterRestHandler(PersistentServerConnectionApplication):
 
 def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
     monitor = _native_monitor()
+    if params.get('action') in ('list_destinations','create_destination','update_destination','disable_destination','select_destination','diagnose_destination'):
+        return _native_destination_operation(params)
     # Internal run records are never accepted from execution requests.
     params = {k: v for k, v in params.items() if not k.startswith("_native")}
     if params.get("action") in ("configure_forwarding","get_forwarding_config","test_forwarding"):
@@ -2334,7 +2544,17 @@ def execute_request(params: Dict[str, Any]) -> Tuple[int, Dict[str, Any]]:
                  "emit_device_telemetry", "blast_single_device", "stream_canvas_topology"}
     if action in monitored and has_netspout_admin(params.get("session_key", "")):
         try:
-            clean = validate_and_sanitize(filtered)
+            if action in ('start','start_simulation','run_scenario'):
+                stored=get_stored_config(params.get('session_key',''))
+                resolved,identity=_destination_resolve(stored,params.get('destination_id'))
+                if resolved['native_transport']=='forwarding' and resolved['forwarding_group']!=stored['forwarding_group']:
+                    raise ValueError('Select this forwarding group as default first')
+                clean=validate_and_sanitize(filtered,resolved)
+                clean['_destination_identity']=identity
+                clean['_runtime_config']={k:v for k,v in resolved.items() if k!='destination_manager'}
+            else:
+                if 'destination_id' in params: raise ValueError('Named destination selection requires a scenario run')
+                clean = validate_and_sanitize(filtered)
             record = monitor.begin(clean["action"], clean, params.get("session_key", ""))
             filtered["_native_record"] = record
             filtered["_native_clean"] = clean

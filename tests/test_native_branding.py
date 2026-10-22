@@ -84,6 +84,16 @@ class NativeBrandingTests(unittest.TestCase):
                 if isinstance(node.value, str):
                     node.value = '<string>'
                 return node
+            def visit_Name(self, node):
+                if node.id == 'runtime_config': node.id = 'get_stored_config'
+                return node
+            def visit_Call(self, node):
+                self.generic_visit(node)
+                if isinstance(node.func, ast.Name) and node.func.id == 'hec_request':
+                    node.keywords = [k for k in node.keywords if k.arg != 'configuration']
+                return node
+        # Approved per-run snapshots replace live reads; destination tests verify
+        # their contents and lifetime. All other existing helper structure stays.
         for name in ('netspout/bin/run_simulation.py', 'netspout/bin/datablaster_executor.py'):
             baseline = subprocess.run(['git', 'show', 'b3b3ad9:' + name], cwd=ROOT,
                 capture_output=True, text=True, check=True, timeout=10).stdout

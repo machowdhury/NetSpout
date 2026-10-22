@@ -283,7 +283,7 @@ let calls=[];
 const context={document:{getElementById:id=>ids[id]||null,createElement:element},window:{addEventListener(){}},
   getRestUrl:()=>'/mock',getHeaders:()=>({}),setTimeout(){},
   fetch:async(url,options)=>{let payload=JSON.parse(options.body);calls.push(payload);
-    return {ok:true,json:async()=>payload.action==='native_runs'?{status:'success',runs:[run]}:
+    return {ok:true,json:async()=>payload.action==='list_destinations'?{status:'success',destinations:[],selected_id:''}:payload.action==='native_runs'?{status:'success',runs:[run]}:
       {status:'success',run:{...run,verification:{state:'VERIFIED',message:'Matching indexed log events found'}}}};}};
 vm.runInNewContext(source.slice(start,finish),context);
 (async()=>{await new Promise(setImmediate);
@@ -292,7 +292,7 @@ vm.runInNewContext(source.slice(start,finish),context);
  assert(output.textContent.includes('accepted: 0')); assert(output.textContent.includes('failed: not measured'));
  assert(output.textContent.includes('NOT_CHECKED')); assert(!output.textContent.includes('VERIFIED'));
  verify.onclick(); await new Promise(setImmediate);
- assert(output.textContent.includes('VERIFIED')); assert(calls[1].run_id==='dummy-server-run');
+ assert(output.textContent.includes('VERIFIED')); assert(calls.find(c=>c.action==='verify_native_run').run_id==='dummy-server-run');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 """
         for name in ('guided_onboarding.js', 'datablaster_console.js'):

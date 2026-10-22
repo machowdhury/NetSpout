@@ -26,6 +26,14 @@ require([
     var output = document.createElement('pre'); output.setAttribute('aria-live', 'polite');
     [title, select, refresh, verify, output].forEach(function(el) { panel.appendChild(el); });
     anchor.parentNode.insertBefore(panel, anchor);
+    var choice=document.createElement('select');choice.id='native-destination-choice';choice.setAttribute('aria-label','Scenario destination');
+    var defaultChoice=document.createElement('option');defaultChoice.value='';defaultChoice.textContent='Server-selected destination';choice.appendChild(defaultChoice);
+    panel.appendChild(choice);
+    fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify({action:'list_destinations'})})
+      .then(function(r){if(!r.ok) throw new Error('unavailable');return r.json();}).then(function(data){
+        (data.destinations||[]).forEach(function(d){var option=document.createElement('option');option.value=d.id;option.textContent=d.name+' ('+d.protocol+', '+(d.enabled?'enabled':'disabled')+')';choice.appendChild(option);});
+        choice.value=data.selected_id||'';
+      }).catch(function(){defaultChoice.textContent='Server-selected destination (list unavailable)';});
     var runs = [];
     function render(run) {
       verify.disabled = !run || run.correlation !== 'SUPPORTED' || run.classification !== 'LOG' || !run.indexes.length;
@@ -36,6 +44,7 @@ require([
       ['generated','attempted','accepted','failed','unknown'].forEach(function(k) {
         var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
       });
+      if(run.named_destination) lines.push('Named destination: '+run.named_destination.name+' ['+run.named_destination.id+'] '+run.named_destination.target_class);
       lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
       if (run.forwarding_delivery) {
         ['published','failed','unknown'].forEach(function(key){
@@ -2614,6 +2623,7 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'run_scenario',
+          destination_id:(document.getElementById('native-destination-choice')||{}).value||undefined,
           scenario: scenarioFile,
           scenario_file: scenarioFile,
           eps: wizardState.volume * 100,

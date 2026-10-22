@@ -210,6 +210,8 @@ def begin(action, clean, session_key=""):
                       'group':config['forwarding_group']},indexes=[config['forwarding_index']],
                       classification='LOG',correlation='UNSUPPORTED',
                       forwarding_delivery={k:None for k in ('published','failed','unknown')})
+    if clean.get('_destination_identity'):
+        record['named_destination']=copy.deepcopy(clean['_destination_identity'])
     if action == 'blast_hec' and any(isinstance(e, dict) and not e.get('index') for e in events):
         record['correlation'] = 'UNSUPPORTED'
     if action == 'blast_hec':

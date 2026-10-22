@@ -16,9 +16,9 @@ samples:
         source: syslog:udp:514
         sourcetype: arista:eos:syslog
         host: "sensor-01.acme.corp"
-        _raw: '<189>1 2026-09-18T21:15:22.000Z switch-leaf-01.acme.local BGP 1420 - %BGP-5-ADJCHANGE: neighbor 10.255.0.2 Gateway Down - peer closed BGP session (remote AS 65001)'
+        _raw: 'May 20 14:00:15 switch-leaf-01.acme.local Ebra: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet22, changed state to down'
       - index: netops_logs
         source: syslog:udp:514
         sourcetype: arista:eos:syslog
         host: "sensor-01.acme.corp"
-        _raw: '<187>1 2026-09-18T21:15:23.000Z switch-spine-02.acme.local OSPF 1421 - %OSPF-5-ADJCHG: Process 1, Nbr 10.255.0.1 on Ethernet2/1 from FULL to DOWN, Neighbor Down: Dead timer expired'
+        _raw: 'May 20 14:00:17 switch-leaf-01.acme.local Ebra: %LINEPROTO-5-UPDOWN: Line protocol on Interface Ethernet22, changed state to up'

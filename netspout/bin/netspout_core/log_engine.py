@@ -472,11 +472,14 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
+        # Cisco prints Ethernet addresses in dotted hexadecimal notation.
+        compact_mac = mac.replace(":", "").replace("-", "").replace(".", "")
+        if len(compact_mac) != 12 or any(c not in "0123456789abcdefABCDEF" for c in compact_mac):
+            raise ValueError("Invalid MAC address")
+        native_mac = ".".join(compact_mac[i:i + 4].lower() for i in (0, 4, 8))
         raw = (
-            f"{now_syslog} {dev_id} %SW_MATM-4-MACFLAP_NOTIF: Host {mac} in vlan {vlan} "
-            f"is flapping between port {port1} and port {port2} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip=10.0.1.1 dest_ip=10.0.1.254 "
-            f"protocol=ETHERNET duration=1ms action={action} signature=\"{signature}\" status={status}"
+            f"{now_syslog} {dev_id} %SW_MATM-4-MACFLAP_NOTIF: Host {native_mac} in vlan {vlan} "
+            f"is flapping between port {port1} and port {port2}."
         )
         return LogEntry(
             timestamp=now_ts,
@@ -967,12 +970,13 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
+        # The documented event reports a path change, not confirmed FRR enforcement.
+        # Legacy callers decorate next hops with display labels; keep those out of raw.
+        from ipaddress import ip_address
+        route = str(ip_address(primary_nh.split()[0]))
         raw = (
-            f"{now_syslog} {dev_id} rpd[2941]: RPD_MPLS_LSP_CHANGE: LSP {lsp_name}: "
-            f"Primary next-hop {primary_nh} DOWN. Switched to Fast-Reroute Bypass next-hop {bypass_nh} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={bypass_nh} protocol=MPLS duration=1ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"{now_syslog} {dev_id} rpd[2941]: RPD_MPLS_LSP_CHANGE: "
+            f"MPLS LSP {lsp_name} change on primary(any) Route  {route}"
         )
         return LogEntry(
             timestamp=now_ts,

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "catalog_version": "2026.10-phase2",
+  "schema_version": "1.1.0",
+  "catalog_version": "2026.10-c1",
   "evidence": [
     {
       "evidence_id": "EVID-IETF-RFC5424",
@@ -172,6 +172,51 @@
       "provenance": "MODELED_PAYLOAD",
       "verification_state": "PARTIALLY_VERIFIED",
       "notes": "Identifies modeled payload implementation separately from native and Splunk documentation."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-MERAKI-5580",
+      "title": "Cisco Meraki Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/5580",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-SECURITY-CLOUD-7404",
+      "title": "Cisco Security Cloud Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7404",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-SECURE-ACCESS-7569",
+      "title": "Cisco Secure Access Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7569",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-UCS-2731",
+      "title": "Splunk Add-on for Cisco UCS",
+      "publisher": "Splunk LLC",
+      "reference": "https://splunkbase.splunk.com/app/2731",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-UCS-SOURCE-SCHEMA",
+      "title": "Splunk Add-on for Cisco UCS documentation",
+      "publisher": "Splunk LLC",
+      "reference": "https://splunk.github.io/splunk-add-on-for-cisco-ucs/print_page/",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Prior research identified cisco:ucs as the sourcetype and object-class values as source, not separate sourcetypes. Documentation/release alignment requires validation."
     }
   ],
   "integrations": [
@@ -196,7 +241,7 @@
     },
     {
       "integration_id": "splunk-otel-hec-exporter",
-      "name": "Splunk Distribution of the OpenTelemetry Collector — HEC exporter",
+      "name": "Splunk Distribution of the OpenTelemetry Collector \u2014 HEC exporter",
       "publisher": "Splunk",
       "integration_type": "COLLECTOR",
       "supported_source_ids": [
@@ -258,7 +303,26 @@
       "evidence_ids": [
         "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
       ],
-      "notes": "The product/source relationship is documented. Sourcetype, field extraction, and CIM behavior remain research required until the add-on is installed and validated."
+      "notes": "The product/source relationship is documented. Sourcetype, field extraction, and CIM behavior remain research required until the add-on is installed and validated.",
+      "profiles": [
+        {
+          "profile_id": "cisco-enterprise-networking-sdwan-catalog",
+          "vendor": "Cisco",
+          "product": "Catalyst SD-WAN",
+          "splunkbase_id": "7538",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7538",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "vendor_id": "cisco_sdwan",
+          "legacy_catalog_default": true,
+          "evidence_ids": [
+            "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+          ],
+          "notes": "Replaces the incorrect Meraki app 5580 association in the legacy vendor projection. Selected release, collection schema and parsing remain unassessed.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ]
     },
     {
       "integration_id": "netspout-direct-structured-ingestion",
@@ -311,6 +375,195 @@
         "EVID-NETSPOUT-RUNTIME"
       ],
       "notes": "NetSpout-defined lab ingestion path. It is not an official Splunk Technical Add-on."
+    },
+    {
+      "integration_id": "splunkbase-cisco-meraki-5580",
+      "name": "Cisco Meraki Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "5580",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-MERAKI-5580"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-meraki-api-catalog",
+          "vendor": "Cisco",
+          "product": "Meraki",
+          "splunkbase_id": "5580",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/5580",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "vendor_id": "cisco_meraki",
+          "legacy_catalog_default": true,
+          "collection_method": "API",
+          "evidence_ids": [
+            "EVID-SPLUNK-MERAKI-5580"
+          ],
+          "notes": "API profile placeholder, not the syslog or webhook schema. Release, sourcetypes and fields require selected-version documentation.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-security-cloud-7404",
+      "name": "Cisco Security Cloud Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "7404",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-SECURITY-CLOUD-7404"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-security-cloud-3x-research",
+          "vendor": "Cisco",
+          "product": "Security Cloud",
+          "splunkbase_id": "7404",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7404",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURITY-CLOUD-7404"
+          ],
+          "notes": "Exact app version is unknown. Do not reuse a 4.x schema for this track.",
+          "publisher": "Cisco Systems, Inc."
+        },
+        {
+          "profile_id": "cisco-security-cloud-4x-research",
+          "vendor": "Cisco",
+          "product": "Security Cloud",
+          "splunkbase_id": "7404",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7404",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURITY-CLOUD-7404"
+          ],
+          "notes": "Exact app version is unknown. Versioned fields, FTD routing and parser behavior remain unassessed.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-secure-access-7569",
+      "name": "Cisco Secure Access Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "7569",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-SECURE-ACCESS-7569"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-secure-access-s3-research",
+          "vendor": "Cisco",
+          "product": "Secure Access",
+          "splunkbase_id": "7569",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7569",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "collection_method": "S3",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURE-ACCESS-7569"
+          ],
+          "notes": "S3 collection is a separate contract from API JSON. Header fields, timestamp semantics and sourcetypes remain unknown.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-ucs-2731",
+      "name": "Splunk Add-on for Cisco UCS",
+      "publisher": "Splunk LLC",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "2731",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-UCS-2731"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-ucs-source-contract-research",
+          "vendor": "Cisco",
+          "product": "UCS",
+          "splunkbase_id": "2731",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/2731",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "collection_method": "API",
+          "sourcetypes": [
+            {
+              "name": "cisco:ucs",
+              "authority": "SPLUNK_DOCUMENTED",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            }
+          ],
+          "requirements": [
+            {
+              "kind": "source",
+              "value": "cisco:ucs:faultInst",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            },
+            {
+              "kind": "source",
+              "value": "cisco:ucs:computeBlade",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            },
+            {
+              "kind": "source",
+              "value": "cisco:ucs:processorEnvStats",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            }
+          ],
+          "evidence_ids": [
+            "EVID-SPLUNK-UCS-2731",
+            "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+          ],
+          "notes": "Documented source/sourcetype distinction only; no selected-version parser validation.",
+          "publisher": "Splunk LLC"
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
     }
   ],
   "sources": [

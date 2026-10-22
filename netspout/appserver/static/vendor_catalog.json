@@ -427,8 +427,8 @@
     "vendor_slug": "cisco_meraki",
     "category": "Cloud-Managed Networking",
     "name": "Cisco Meraki Add-on for Splunk",
-    "splunkbase_id": "2786",
-    "splunkbase_url": "https://splunkbase.splunk.com/app/2786",
+    "splunkbase_id": "5580",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/5580",
     "doc_url": "https://documentation.meraki.com/General_Administration/Monitoring_and_Reporting/Syslog_Event_Types_and_Log_Samples",
     "sourcetypes": [
       "meraki:accesspoints",
@@ -470,9 +470,9 @@
     "vendor": "Cisco Systems",
     "vendor_slug": "cisco_sdwan",
     "category": "SD-WAN & SASE",
-    "name": "Cisco Catalyst SD-WAN Add-on for Splunk",
-    "splunkbase_id": "5580",
-    "splunkbase_url": "https://splunkbase.splunk.com/app/5580",
+    "name": "Cisco Enterprise Networking Add-on for Splunk",
+    "splunkbase_id": "7538",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/7538",
     "doc_url": "https://www.cisco.com/c/en/us/td/docs/routers/sdwan/configuration/syslog/ios-xe-17/syslog-book-xe-17.html",
     "sourcetypes": [
       "cisco:sdwan:AAA-6-METHOD_LIST_STATE",

@@ -35,6 +35,26 @@ if SRC_DIR not in sys.path:
 CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
 os.makedirs(CATALOG_DIR, exist_ok=True)
 
+# Integration profiles live in the existing telemetry catalog, not a parallel registry.
+from netspout_core.catalog_contracts import TelemetryCatalog, project_integration_identities
+
+
+def project_profile_defaults(vendors, catalog_dir):
+    with open(os.path.join(catalog_dir, "telemetry_catalog.json"), encoding="utf-8") as handle:
+        catalog = TelemetryCatalog.model_validate(json.load(handle))
+    return project_integration_identities(vendors, catalog)
+
+
+if "--integration-profiles-only" in sys.argv:
+    # Avoid rebuilding unrelated legacy scenario/sample catalogs for metadata changes.
+    with open(os.path.join(CATALOG_DIR, "vendors.json"), encoding="utf-8") as handle:
+        vendors = project_profile_defaults(json.load(handle), CATALOG_DIR)
+    with open(os.path.join(CATALOG_DIR, "vendors.json"), "w", encoding="utf-8") as handle:
+        json.dump(vendors, handle, indent=2, ensure_ascii=False)
+        handle.write("\n")
+    print("Projected integration profile defaults into catalog/vendors.json")
+    sys.exit(0)
+
 # -----------------------------------------------------------------------------
 # 1. Load Existing Metadata
 # -----------------------------------------------------------------------------
@@ -120,6 +140,7 @@ for v in VENDOR_CATALOG:
     }
     canonical_vendors.append(vendor_obj)
 
+canonical_vendors = project_profile_defaults(canonical_vendors, CATALOG_DIR)
 canonical_vendors.sort(key=lambda x: x["id"])
 
 # -----------------------------------------------------------------------------

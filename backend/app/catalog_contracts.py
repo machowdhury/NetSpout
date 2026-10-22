@@ -5,8 +5,9 @@
 # =========================================================================
 """Strict contracts and guardrails for the authoritative telemetry catalog."""
 
+from datetime import date
 from enum import Enum
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Literal, Optional, Set
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -131,8 +132,108 @@ class TelemetrySource(StrictModel):
     known_limitations: List[str] = Field(default_factory=list)
 
 
+class CoverageState(str, Enum):
+    NOT_ASSESSED = "not_assessed"
+    MISSING = "missing"
+    PARTIAL = "partial"
+    SAMPLE_READY = "sample_ready"
+    SCENARIO_READY = "scenario_ready"
+    INTEGRATION_VERIFIED = "integration_verified"
+
+
+class ProfileField(StrictModel):
+    name: str = Field(min_length=1)
+    data_type: Literal["string", "integer", "number", "boolean", "object", "array"]
+    required: bool = True
+    evidence_ids: List[str] = Field(min_length=1)
+
+
+class ProfileRequirement(StrictModel):
+    """Documented input/search dependencies; presence does not assert compatibility."""
+    kind: Literal["source", "timestamp", "cim_dataset", "eventtype", "tag",
+                  "dashboard", "search", "signal"]
+    value: str = Field(min_length=1)
+    details: Optional[str] = None
+    evidence_ids: List[str] = Field(min_length=1)
+
+
+class ProfileValidation(StrictModel):
+    kind: Literal["sample_schema", "generator", "parser", "field_extraction", "cim", "dashboard"]
+    outcome: Literal["passed", "failed", "inconclusive"]
+    app_version: Optional[str] = None
+    platform: Optional[Literal["splunk_enterprise", "splunk_cloud"]] = None
+    evidence_ids: List[str] = Field(min_length=1)
+
+
+class IntegrationProfile(StrictModel):
+    """Version/method-specific schema assertions within the existing integration registry.
+
+    Evidence is reviewed repository metadata, not a cryptographic attestation.
+    Empty lists and null mean unknown, never an undocumented compatibility claim.
+    """
+    profile_id: str = Field(min_length=1)
+    vendor: str = Field(min_length=1)
+    product: str = Field(min_length=1)
+    vendor_id: Optional[str] = None
+    legacy_catalog_default: bool = False
+    splunkbase_id: Optional[str] = Field(default=None, pattern=r"^[0-9]+$")
+    splunkbase_url: Optional[str] = None
+    publisher: Optional[str] = None
+    integration_type: Literal["app", "add_on", "native_input", "collector", "custom_schema"]
+    app_version: Optional[str] = Field(default=None, min_length=1)
+    documentation_version: Optional[str] = None
+    documentation_date: Optional[date] = None
+    platforms: List[Literal["splunk_enterprise", "splunk_cloud"]] = Field(default_factory=list)
+    domains: List[str] = Field(default_factory=list)
+    collection_method: Optional[str] = None
+    wire_format: Optional[str] = None
+    sourcetypes: List[SourcetypeClaim] = Field(default_factory=list)
+    fields: List[ProfileField] = Field(default_factory=list)
+    requirements: List[ProfileRequirement] = Field(default_factory=list)
+    schema_known: bool = False
+    coverage: CoverageState = CoverageState.NOT_ASSESSED
+    verification_state: VerificationState = VerificationState.RESEARCH_REQUIRED
+    evidence_ids: List[str] = Field(default_factory=list)
+    validations: List[ProfileValidation] = Field(default_factory=list)
+    notes: str = ""
+
+    @model_validator(mode="after")
+    def validate_profile(self):
+        if self.splunkbase_id is not None:
+            expected = "https://splunkbase.splunk.com/app/" + self.splunkbase_id
+            if self.splunkbase_url != expected:
+                raise ValueError("profile app ID and URL must agree")
+        elif self.splunkbase_url is not None:
+            raise ValueError("profile URL requires app ID")
+        if self.legacy_catalog_default and not (self.vendor_id and self.splunkbase_id):
+            raise ValueError("legacy projection requires stable vendor ID and app ID")
+        if (self.fields or self.requirements or self.sourcetypes or self.splunkbase_id) and not self.evidence_ids:
+            raise ValueError("profile claims require evidence")
+        ready = {CoverageState.SAMPLE_READY, CoverageState.SCENARIO_READY,
+                 CoverageState.INTEGRATION_VERIFIED}
+        passed = {v.kind for v in self.validations if v.outcome == "passed"}
+        if self.coverage in ready:
+            if (not self.schema_known or not self.collection_method or not self.wire_format
+                    or "sample_schema" not in passed
+                    or self.verification_state in {VerificationState.RESEARCH_REQUIRED,
+                                                   VerificationState.UNSUPPORTED}):
+                raise ValueError("ready coverage requires established schema and sample validation")
+        if self.coverage == CoverageState.SCENARIO_READY and "generator" not in passed:
+            raise ValueError("scenario readiness requires generator validation")
+        if self.coverage == CoverageState.INTEGRATION_VERIFIED:
+            if not self.app_version or self.verification_state != VerificationState.VERIFIED:
+                raise ValueError("integration verification requires selected app version")
+            for kind in ("parser", "field_extraction"):
+                if not any(v.kind == kind and v.outcome == "passed"
+                           and v.app_version == self.app_version and v.platform in self.platforms
+                           for v in self.validations):
+                    raise ValueError("integration verification requires version/platform-bound parser and field evidence")
+        return self
+
+
 class SplunkIntegration(StrictModel):
     integration_id: str
+    profiles: List[IntegrationProfile] = Field(default_factory=list)
     name: str
     publisher: str
     integration_type: str
@@ -220,7 +321,44 @@ class TelemetryCatalog(StrictModel):
             for claim in source.splunk_contract.sourcetypes:
                 self._validate_sourcetype_claim(claim, evidence_ids, source.source_id)
 
+        profile_ids: Set[str] = set()
+        default_vendors: Set[str] = set()
+        evidence_by_id = {item.evidence_id: item for item in self.evidence}
         for integration in self.integrations:
+            for profile in integration.profiles:
+                if profile.profile_id in profile_ids:
+                    raise ValueError("duplicate integration profile ID")
+                profile_ids.add(profile.profile_id)
+                if profile.splunkbase_id != integration.splunkbase_id:
+                    raise ValueError("profile and integration app identities must agree")
+                if profile.legacy_catalog_default:
+                    if profile.vendor_id in default_vendors:
+                        raise ValueError("multiple legacy defaults for one vendor")
+                    default_vendors.add(profile.vendor_id)
+                _require_references(profile.evidence_ids, evidence_ids, profile.profile_id, "profile evidence")
+                for claim in profile.sourcetypes:
+                    self._validate_sourcetype_claim(claim, evidence_ids, profile.profile_id)
+                for assertion in [*profile.fields, *profile.requirements, *profile.validations]:
+                    _require_references(assertion.evidence_ids, evidence_ids, profile.profile_id, "profile evidence")
+                for assertion in [*profile.fields, *profile.requirements]:
+                    if not any(evidence_by_id[e].verification_state in {
+                            VerificationState.VERIFIED, VerificationState.PARTIALLY_VERIFIED}
+                            and evidence_by_id[e].provenance in {
+                                ProvenanceClassification.VENDOR_DOCUMENTED,
+                                ProvenanceClassification.SPLUNK_DOCUMENTED,
+                                ProvenanceClassification.STANDARD_DOCUMENTED,
+                                ProvenanceClassification.NETSPOUT_SCHEMA,
+                                ProvenanceClassification.DATASET_VERIFIED}
+                            for e in assertion.evidence_ids):
+                        raise ValueError("schema requirements need established evidence, not inferred mappings")
+                for validation in profile.validations:
+                    if validation.outcome == "passed" and validation.kind in {"parser", "field_extraction", "cim", "dashboard"}:
+                        if (not profile.app_version or validation.app_version != profile.app_version
+                                or validation.platform not in profile.platforms
+                                or not any(evidence_by_id[e].provenance == ProvenanceClassification.DATASET_VERIFIED
+                                           and evidence_by_id[e].verification_state == VerificationState.VERIFIED
+                                           for e in validation.evidence_ids)):
+                            raise ValueError("integration validation requires version-bound verified dataset evidence")
             _require_references(
                 integration.supported_source_ids,
                 source_ids,
@@ -313,3 +451,26 @@ LEGACY_PROVENANCE_MAP = {
     "RESEARCH REQUIRED": ProvenanceClassification.RESEARCH_REQUIRED.value,
     "UNSUPPORTED": ProvenanceClassification.UNSUPPORTED_TELEMETRY.value,
 }
+
+
+def project_integration_identities(vendors: list, catalog: TelemetryCatalog) -> list:
+    """Project explicit profile defaults without changing stable vendor identities.
+
+    Used by both full and profile-only canonical generation; never guesses a default
+    from profile ordering. Returns independent records so rejection is non-mutating.
+    """
+    from copy import deepcopy
+    result = deepcopy(vendors)
+    by_id = {vendor["id"]: vendor for vendor in result}
+    for integration in catalog.integrations:
+        for profile in integration.profiles:
+            if not profile.legacy_catalog_default:
+                continue
+            if profile.vendor_id not in by_id:
+                raise ValueError("profile references unknown stable vendor ID")
+            by_id[profile.vendor_id].update(
+                splunk_app_name=integration.name,
+                splunkbase_id=profile.splunkbase_id,
+                splunkbase_url=profile.splunkbase_url,
+            )
+    return result

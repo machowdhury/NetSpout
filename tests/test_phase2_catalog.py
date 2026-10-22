@@ -36,7 +36,12 @@ class TestPhase2TelemetryCatalog(unittest.TestCase):
     def test_01_catalog_schema_validates(self):
         catalog = self.validate()
         self.assertEqual(len(catalog.sources), 11)
-        self.assertEqual(len(catalog.integrations), 5)
+        self.assertEqual(len(catalog.integrations), 9)
+        self.assertTrue({"splunk-native-network-input", "splunk-otel-hec-exporter",
+                         "splunkbase-cisco-network-data-1467",
+                         "splunkbase-cisco-enterprise-networking-7538",
+                         "netspout-direct-structured-ingestion"}.issubset(
+                             {item.integration_id for item in catalog.integrations}))
         self.assertEqual(len(catalog.source_manifests), 3)
 
     def test_02_invalid_provenance_is_rejected(self):

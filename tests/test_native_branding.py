@@ -80,6 +80,16 @@ class NativeBrandingTests(unittest.TestCase):
         # Preserve existing helpers while allowing explicitly approved new
         # protocol routing in _main (covered by native destination CLI tests).
         class NormalizeStrings(ast.NodeTransformer):
+            def visit_FunctionDef(self, node):
+                if node.name == 'prepare_scenario_config':
+                    # The approved incident-only materialization branch is
+                    # covered by IncidentRebuildCompatibilityTests. Continue
+                    # comparing every statement of the legacy rebuild path.
+                    node.body = [statement for statement in node.body if not (
+                        isinstance(statement, ast.If)
+                        and ast.dump(statement.test) == ast.dump(ast.parse(
+                            '"pulseforge_incident" in scenario', mode='eval').body))]
+                return self.generic_visit(node)
             def visit_Constant(self, node):
                 if isinstance(node.value, str):
                     node.value = '<string>'

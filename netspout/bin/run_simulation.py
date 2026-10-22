@@ -80,6 +80,22 @@ def prepare_scenario_config(scenario_path: str, eps: int, hec_url: str, hec_toke
         scenario = yaml.safe_load(stream)
     if not isinstance(scenario, dict):
         raise ValueError("Scenario must be a mapping")
+    if "pulseforge_incident" in scenario:
+        import network_incidents
+        incident = network_incidents.descriptor(scenario_path)
+        if incident is None:
+            raise ValueError("Invalid network incident descriptor")
+        # The legacy samples interface carries logs. Native incident execution
+        # retains its own supported metric path and server-owned run identity.
+        events = network_incidents.select_events(network_incidents.generate(
+            incident["pulseforge_incident"], incident["seed"], eps=eps), "syslog", {})
+        scenario = {"samples": [
+            {"name": incident["pulseforge_incident"] + "_" + str(position),
+             "count": 1, "randomizeEvents": False,
+             "lines": [{"index": event["index"], "source": event["source"],
+                        "sourcetype": event["sourcetype"], "host": event["host"],
+                        "_time": event["time"], "_raw": event["raw"]}]}
+            for position, event in enumerate(events)]}
     workers = max(1, min(50, int(eps / 100) if eps > 100 else 1))
     section = "global" if "global" in scenario and "general" not in scenario else "general"
     original = scenario.get(section, {})
@@ -836,6 +852,12 @@ def _main():
         import uuid
         if str(uuid.UUID(args.run_id)) != args.run_id:
             raise ValueError("Invalid native run identity")
+    if args.scenario:
+        import network_incidents
+        incident = network_incidents.descriptor(args.scenario)
+        if incident is not None:
+            network_incidents.execute(sys.modules[__name__], args, private_input, incident)
+            return
     if args.named_hec_diagnostic:
         from netspout_core.telemetry_dispatcher import TelemetryDispatcher, hec_outcome_fields
         config=runtime_config()

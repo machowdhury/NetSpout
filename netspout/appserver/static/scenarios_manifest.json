@@ -309,5 +309,200 @@
       "aruba:rap:syslog"
     ],
     "totalSourcetypes": 10
+  },
+  {
+    "id": "network_01_campus_link",
+    "filename": "scenario_network_01_campus_link.yml",
+    "name": "Campus link failure/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_02_vlan_trunk",
+    "filename": "scenario_network_02_vlan_trunk.yml",
+    "name": "VLAN/trunk misconfiguration",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_03_stp_storm",
+    "filename": "scenario_network_03_stp_storm.yml",
+    "name": "STP loop/broadcast storm",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_04_wan_brownout",
+    "filename": "scenario_network_04_wan_brownout.yml",
+    "name": "WAN latency/jitter/packet-loss brownout",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_05_dual_isp",
+    "filename": "scenario_network_05_dual_isp.yml",
+    "name": "Dual-ISP failover/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_06_bgp_flap",
+    "filename": "scenario_network_06_bgp_flap.yml",
+    "name": "BGP neighbor flap/route withdrawal",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_07_ospf_adjacency",
+    "filename": "scenario_network_07_ospf_adjacency.yml",
+    "name": "OSPF adjacency failure/reconvergence",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_08_firewall_policy",
+    "filename": "scenario_network_08_firewall_policy.yml",
+    "name": "Firewall policy misconfiguration",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_09_ddos_flood",
+    "filename": "scenario_network_09_ddos_flood.yml",
+    "name": "DDoS/traffic flood/mitigation",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_10_dns_failure",
+    "filename": "scenario_network_10_dns_failure.yml",
+    "name": "DNS resolver failure/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_11_dhcp_exhaustion",
+    "filename": "scenario_network_11_dhcp_exhaustion.yml",
+    "name": "DHCP pool exhaustion/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_12_dc_congestion",
+    "filename": "scenario_network_12_dc_congestion.yml",
+    "name": "Data-center congestion/queue drops",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_13_mtu_pmtud",
+    "filename": "scenario_network_13_mtu_pmtud.yml",
+    "name": "MTU mismatch/PMTUD failure",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_14_wireless_outage",
+    "filename": "scenario_network_14_wireless_outage.yml",
+    "name": "Wireless controller/AP outage",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_15_device_resources",
+    "filename": "scenario_network_15_device_resources.yml",
+    "name": "Device CPU/memory exhaustion",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
   }
 ]

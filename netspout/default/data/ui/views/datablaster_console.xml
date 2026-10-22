@@ -309,4 +309,26 @@
       </html>
     </panel>
   </row>
+  <row><panel><html>
+    <section id="network-incident-packs">
+      <h2>PulseForge Network Incident Packs</h2>
+      <p>Select a named destination above, then launch one bounded incident. Each seed-42 run has 30 ordered logs and up to 10 metric envelopes (30–50 OTLP gauge points). Logs-only destinations receive logs. Delivery evidence is distinct from indexing; use independent ingestion verification where supported. Synthetic vendor-style messages do not claim firmware or vendor TA fidelity.</p>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_01_campus_link.yml" data-name="Campus link failure/recovery">Campus link failure/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_02_vlan_trunk.yml" data-name="VLAN/trunk misconfiguration">VLAN/trunk misconfiguration</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_03_stp_storm.yml" data-name="STP loop/broadcast storm">STP loop/broadcast storm</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_04_wan_brownout.yml" data-name="WAN latency/jitter/packet-loss brownout">WAN latency/jitter/packet-loss brownout</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_05_dual_isp.yml" data-name="Dual-ISP failover/recovery">Dual-ISP failover/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_06_bgp_flap.yml" data-name="BGP neighbor flap/route withdrawal">BGP neighbor flap/route withdrawal</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_07_ospf_adjacency.yml" data-name="OSPF adjacency failure/reconvergence">OSPF adjacency failure/reconvergence</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_08_firewall_policy.yml" data-name="Firewall policy misconfiguration">Firewall policy misconfiguration</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_09_ddos_flood.yml" data-name="DDoS/traffic flood/mitigation">DDoS/traffic flood/mitigation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_10_dns_failure.yml" data-name="DNS resolver failure/recovery">DNS resolver failure/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_11_dhcp_exhaustion.yml" data-name="DHCP pool exhaustion/recovery">DHCP pool exhaustion/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_12_dc_congestion.yml" data-name="Data-center congestion/queue drops">Data-center congestion/queue drops</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_13_mtu_pmtud.yml" data-name="MTU mismatch/PMTUD failure">MTU mismatch/PMTUD failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_14_wireless_outage.yml" data-name="Wireless controller/AP outage">Wireless controller/AP outage</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_15_device_resources.yml" data-name="Device CPU/memory exhaustion">Device CPU/memory exhaustion</button>
+    </section>
+  </html></panel></row>
+
 </dashboard>

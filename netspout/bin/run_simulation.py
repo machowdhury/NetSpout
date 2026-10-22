@@ -332,6 +332,31 @@ def stream_custom_canvas_topology(nodes: list, links: list, hec_url: str, hec_to
 
 
 
+class CiscoFixtureTokenError(ValueError):
+    """An approved ASA/ISE fixture cannot be safely rendered."""
+
+
+def render_cisco_fixture_tokens(raw, host, now=None):
+    """Bounded ASA/ISE token vocabulary; no YAML token interpreter.
+
+    UTC is explicit for synthetic fixture timestamps. Other vendors and the
+    streamer's existing three tokens keep their existing behavior.
+    """
+    now = time.time() if now is None else now
+    stamp = time.gmtime(now)
+    values = {"TS": time.strftime("%b %d %H:%M:%S", stamp),
+              "SYSLOG_TIMESTAMP": time.strftime("%b %d %H:%M:%S", stamp),
+              "ISE_TIMESTAMP": time.strftime("%Y-%m-%d %H:%M:%S", stamp) +
+                               f".{int(now * 1000) % 1000:03d} +00:00",
+              "HOST": host}
+    for name, value in values.items():
+        raw = raw.replace("$" + name + "$", value)
+    remaining = set(re.findall(r"\$([A-Za-z_][A-Za-z0-9_]*)\$", raw))
+    if remaining - {"SYSLOG_TS", "ISO_TS", "FLOW_ID"}:
+        raise CiscoFixtureTokenError("Unresolved ASA/ISE fixture token")
+    return raw
+
+
 def load_python_scenario_events(scenario_file, strict=False):
     def decode_value(value):
         value = value.strip()
@@ -362,6 +387,8 @@ def load_python_scenario_events(scenario_file, strict=False):
                     curr_host = decode_value(ls.split(":", 1)[1])
                 elif ls.startswith("_raw:") or ls.startswith("raw:"):
                     raw_val = decode_value(ls.split(":", 1)[1])
+                    if curr_st in {"cisco:asa", "cisco:asa:syslog", "cisco:ise:syslog"}:
+                        raw_val = render_cisco_fixture_tokens(raw_val, curr_host)
                     events_to_stream.append({
                         "index": curr_index,
                         "sourcetype": curr_st,
@@ -369,6 +396,8 @@ def load_python_scenario_events(scenario_file, strict=False):
                         "host": curr_host,
                         "raw": raw_val
                     })
+        except CiscoFixtureTokenError:
+            raise
         except Exception as e:
             if strict:
                 raise ValueError("Invalid syslog scenario template") from None

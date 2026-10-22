@@ -89,6 +89,23 @@ class NativeBrandingTests(unittest.TestCase):
                         isinstance(statement, ast.If)
                         and ast.dump(statement.test) == ast.dump(ast.parse(
                             '"pulseforge_incident" in scenario', mode='eval').body))]
+                if node.name == 'load_python_scenario_events':
+                    # C2B permits only the canonical ASA/ISE token-render call.
+                    class ApprovedTokenBoundary(ast.NodeTransformer):
+                        def visit_If(self, statement):
+                            expected = ast.parse(
+                                'if curr_st in {"cisco:asa", "cisco:asa:syslog", "cisco:ise:syslog"}:\n'
+                                '    raw_val = render_cisco_fixture_tokens(raw_val, curr_host)').body[0]
+                            if ast.dump(statement) == ast.dump(expected):
+                                return None
+                            return self.generic_visit(statement)
+                        def visit_Try(self, statement):
+                            statement.handlers = [handler for handler in statement.handlers if not (
+                                isinstance(handler.type, ast.Name) and handler.type.id == 'CiscoFixtureTokenError'
+                                and len(handler.body) == 1 and isinstance(handler.body[0], ast.Raise)
+                                and handler.body[0].exc is None)]
+                            return self.generic_visit(statement)
+                    node = ApprovedTokenBoundary().visit(node)
                 return self.generic_visit(node)
             def visit_Constant(self, node):
                 if isinstance(node.value, str):

@@ -2,37 +2,56 @@ samples:
   - name: cisco-asa-syslog-baseline
     interval: 30
     count: 8
-    randomizeEvents: true
+    randomizeEvents: false
+    tokens:
+      - name: TS
+        format: template
+        type: gotimestamp
+        replacement: "Jan 02 15:04:05"
+      - name: HOST
+        format: template
+        type: weightedChoice
+        weightedChoice:
+          - weight: 1
+            choice: fw-cisco-asa-01
     lines:
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:00 fw-cisco-asa-01 : %ASA-6-302013: Built outbound TCP connection 184920 for outside:198.51.100.80/443 to inside:10.20.10.45/52140"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-6-302013: Built outbound TCP connection 184920 for outside:198.51.100.80/443 (198.51.100.80/443) to inside:10.20.10.45/52140 (198.51.100.200/52140)"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:01 fw-cisco-asa-01 : %ASA-6-302014: Teardown TCP connection 184920 for outside:198.51.100.80/443 to inside:10.20.10.45/52140 duration 0:01:30 bytes 48201"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-6-302014: Teardown TCP connection 184920 for outside:198.51.100.80/443 to inside:10.20.10.45/52140 duration 0:01:30 bytes 48201 TCP FINs"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:02 fw-cisco-asa-01 : %ASA-4-106023: Deny udp src outside:203.0.113.14/5353 dst inside:10.20.10.255/5353 by access-group \"outside_in\""
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-4-106023: Deny udp src outside:203.0.113.14/5353 dst inside:10.20.10.255/5353 by access-group \"outside_in\" [0x0, 0x0]"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:03 fw-cisco-asa-01 : %ASA-5-713119: Group = Corp_VPN, Username = alice.sec, IP = 198.51.100.42, PHASE 1 COMPLETED"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-5-713119: Group = Corp_VPN, Username = alice.sec, IP = 198.51.100.42, PHASE 1 COMPLETED"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:04 fw-cisco-asa-01 : %ASA-6-725001: Starting PING process to 10.254.0.1 with 5 packets"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-6-725001: Starting SSL handshake with client outside:198.51.100.42/52140 to 192.0.2.10/443 for TLSv1.2 session."
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:05 fw-cisco-asa-01 : %ASA-1-105005: (Primary) Lost Failover communications with mate on interface LAN/STATE"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-1-105005: (Primary) Lost Failover communications with mate on interface LAN/STATE"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:06 fw-cisco-asa-01 : %ASA-1-105008: (Primary) Testing interface LAN/STATE"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-1-105008: (Primary) Testing interface LAN/STATE"
       - index: idx_security_fw
         source: cisco_asa_syslog
         sourcetype: cisco:asa:syslog
-        _raw: "May 20 14:00:07 fw-cisco-asa-01 : %ASA-1-105009: (Primary) Testing on interface LAN/STATE Passed"
+        host: fw-cisco-asa-01
+        _raw: "$TS$ $HOST$ %ASA-1-105009: (Primary) Testing on interface LAN/STATE Passed"

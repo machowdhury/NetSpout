@@ -13,6 +13,7 @@ Every log entry adheres to Splunk CIM Network Traffic and Security Data Models.
 import time
 import random
 import json
+import zlib
 from datetime import datetime
 from typing import Dict, Any, Optional
 try:
@@ -45,23 +46,49 @@ class SplunkLogEngine:
         action: str,
         signature: str,
         status: str,
-        duration_ms: int = 12
+        duration_ms: int = 12,
+        connection_id: Optional[int] = None,
+        event_type: str = "build",
+        mapped_src: Optional[str] = None,
+        mapped_dest: Optional[str] = None,
+        src_interface: str = "outside",
+        dest_interface: str = "inside",
+        bytes_count: int = 0,
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
         
-        asa_action = "Deny" if action in ("blocked", "dropped") else "Permit"
-        code = "%ASA-4-106023" if asa_action == "Deny" else "%ASA-6-302013"
-        
-        # Raw Cisco ASA Syslog with embedded Splunk KV attributes
-        raw = (
-            f"{now_syslog} {dev_id} {code}: {asa_action} {proto.lower()} src outside:{src_ip}/{src_port} "
-            f"dst inside:{dest_ip}/{dest_port} by access-group \"OUTSIDE_IN\" [0x0, 0x0] "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"src_port={src_port} dest_port={dest_port} protocol={proto} duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
-        )
+        # Cisco ASA 302013/14 (TCP), 302015/16 (UDP), 106023 (deny).
+        # Simulation annotations remain on LogEntry, never inside the vendor body.
+        protocol = proto.upper()
+        if protocol not in {"TCP", "UDP"} or event_type not in {"build", "teardown"}:
+            raise ValueError("Unsupported ASA connection event")
+        if connection_id is None:
+            identity = f"{device.id}|{src_ip}|{src_port}|{dest_ip}|{dest_port}|{protocol}"
+            connection_id = zlib.crc32(identity.encode("utf-8")) & 0x7fffffff
+        if (type(connection_id) is not int or connection_id < 0 or
+                type(bytes_count) is not int or bytes_count < 0 or duration_ms < 0):
+            raise ValueError("Invalid ASA connection counters")
+        source = f"{src_interface}:{src_ip}/{src_port}"
+        destination = f"{dest_interface}:{dest_ip}/{dest_port}"
+        if action in {"blocked", "dropped"}:
+            message = (f'%ASA-4-106023: Deny {protocol.lower()} src {source} '
+                       f'dst {destination} by access-group "OUTSIDE_IN" [0x0, 0x0]')
+        elif event_type == "teardown":
+            code = 302014 if protocol == "TCP" else 302016
+            seconds = int(duration_ms // 1000)
+            duration = f"{seconds // 3600}:{seconds // 60 % 60:02}:{seconds % 60:02}"
+            reason = " TCP FINs" if protocol == "TCP" else ""
+            message = (f"%ASA-6-{code}: Teardown {protocol} connection {connection_id} "
+                       f"for {source} to {destination} duration {duration} bytes {bytes_count}{reason}")
+        else:
+            code = 302013 if protocol == "TCP" else 302015
+            # Identity translation unless explicit mapped socket values are supplied.
+            message = (f"%ASA-6-{code}: Built inbound {protocol} connection {connection_id} "
+                       f"for {source} ({mapped_src or f'{src_ip}/{src_port}'}) "
+                       f"to {destination} ({mapped_dest or f'{dest_ip}/{dest_port}'})")
+        raw = f"{now_syslog} {dev_id} {message}"
 
         return LogEntry(
             timestamp=now_ts,
@@ -337,7 +364,7 @@ class SplunkLogEngine:
         client_mac: str = "00:1A:2B:3C:4D:5E",
         client_ip: str = "10.10.30.50",
         user: str = "corporate_user",
-        auth_status: str = "SUCCESS",
+        auth_status: Optional[str] = None,
         profile: str = "Corporate-Access",
         action: str = "allowed",
         status: str = "normal",
@@ -350,13 +377,29 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         c_mac = kwargs.get("mac_address", client_mac)
         c_prof = kwargs.get("endpoint_profile", profile)
+        outcome = (auth_status or ("FAILED" if action in {"blocked", "dropped"} else "SUCCESS")).upper()
+        if outcome == "PASSED":
+            outcome = "SUCCESS"
+        if outcome not in {"SUCCESS", "FAILED", "FAILURE"}:
+            raise ValueError("Unsupported ISE authentication outcome")
+        success = outcome == "SUCCESS"
+        category = "CISE_Passed_Authentications" if success else "CISE_Failed_Attempts"
+        code = 5200 if success else 5400
+        classification = "Passed-Authentication" if success else "Failed-Attempt"
+        description = "Authentication succeeded" if success else "Authentication failed"
+        response = "AccessAccept" if success else "AccessReject"
+        # Local store timestamp includes numeric timezone; remote transport header
+        # precedes it. Counters may be supplied by a correlated synthetic timeline.
+        local_ts = now_ts.removesuffix(" UTC") + " +00:00"
+        sequence = kwargs.get("sequence_num", 1)
+        if type(sequence) is not int or not 0 <= sequence <= 9999999999:
+            raise ValueError("Invalid ISE sequence")
         raw = (
-            f"{now_syslog} {dev_id} CISE_Failed_Authentications 0000042812 1 0 {now_ts} "
-            f"Event-Timestamp={int(time.time())}, User-Name={user}, Calling-Station-Id={c_mac}, "
-            f"Framed-IP-Address={client_ip}, Audit-Session-Id=0A0101010000005C61, "
-            f"Failure-Reason=Unauthorized_Supplicant, Authorization-Profile={c_prof}, "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={client_ip} dest_ip=10.0.0.1 "
-            f"protocol=RADIUS duration=14ms action={action} signature=\"{signature}\" status={status}"
+            f"<181>{now_syslog} {dev_id} {category} {sequence:010d} 1 0 "
+            f"{local_ts} {sequence:010d} {code} NOTICE {classification}: {description}, "
+            f"User-Name={user}, Calling-Station-ID={c_mac}, Framed-IP-Address={client_ip}, "
+            f"NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles={c_prof}, "
+            f"Response={{RadiusPacketType={response};}}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -373,6 +416,46 @@ class SplunkLogEngine:
             node_id=device.id,
             vendor="cisco_ise",
             sourcetype=sourcetype
+        )
+
+    @staticmethod
+    def format_cisco_ise_coa_log(
+        device: Node,
+        client_mac: str,
+        client_ip: str,
+        user: str,
+        profile: str,
+        action: str,
+        status: str,
+        signature: str,
+        sequence_num: int = 1,
+    ) -> LogEntry:
+        """Simulate Cisco ISE 5205: dynamic authorization succeeded.
+
+        Cisco ISE Syslogs, Passed Authentications, printed pp. 491-492:
+        NOTICE Dynamic-Authorization, not authentication or proof of quarantine.
+        The category groups this event with passed authentications, but the code
+        and message class distinguish it from 5200. No CoA is actually issued.
+        """
+        if type(sequence_num) is not int or not 1 <= sequence_num <= 4294967295:
+            raise ValueError("Invalid ISE CoA sequence")
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        local_ts = now_ts.removesuffix(" UTC") + " +00:00"
+        dev_id = device.name or device.id
+        raw = (
+            f"<181>{SplunkLogEngine.current_timestamp_syslog()} {dev_id} "
+            f"CISE_Passed_Authentications {sequence_num:010d} 1 0 "
+            f"{local_ts} {sequence_num:010d} 5205 NOTICE Dynamic-Authorization: "
+            f"Dynamic Authorization succeeded, User-Name={user}, Calling-Station-ID={client_mac}"
+        )
+        return LogEntry(
+            timestamp=now_ts, device_id=dev_id, src_ip=client_ip,
+            dest_ip=device.ip_address, protocol="RADIUS", duration="14ms",
+            action=action, status=status,
+            signature=(f"{signature} [SIMULATED CoA success; profile={profile}; "
+                       "quarantine enforcement unverified]"),
+            raw_log=raw, node_type=device.type.value, node_id=device.id,
+            vendor="cisco_ise", sourcetype="cisco:ise:syslog",
         )
 
     @staticmethod

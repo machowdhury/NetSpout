@@ -2001,9 +2001,9 @@ class ScenarioRunner:
                     signature="Port Security Violation: Host Flap Threshold Exceeded"
                 ))
             elif phase == ScenarioPhase.FAILOVER.value:
-                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                logs.append(SplunkLogEngine.format_cisco_ise_coa_log(
                     device=fw_node, client_mac="00:1A:2B:3C:4D:5E", client_ip="10.10.20.142",
-                    user="rogue_attacker", auth_status="CONTAINED", profile="Quarantine_Restricted_VLAN",
+                    user="rogue_attacker", profile="Quarantine_Restricted_VLAN",
                     action="blocked", status="blocked", signature="ISE CoA Dynamic Quarantine Profile Enforced"
                 ))
                 logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(

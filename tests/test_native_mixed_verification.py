@@ -15,7 +15,7 @@ class MixedVerificationTests(unittest.TestCase):
     record = fixtures.MonitoringTests.record
     complete = fixtures.MonitoringTests.complete
 
-    def check(self, signals, status=None, datatype='metric', error=False):
+    def check(self, signals, status=None, datatype='metric', error=False, result_messages=None):
         r=self.complete(self.record())
         monitor.update(r['run_id'],lambda x:x.update(classification='MIXED',indexes=['logs','metrics']))
         calls=[]
@@ -26,7 +26,7 @@ class MixedVerificationTests(unittest.TestCase):
                 data={'entry':[{'content':{'datatype':'event' if '/logs?' in url else datatype}}]}
             elif kw.get('method')=='POST':data={'sid':'mixed-job'}
             elif '/results?' in url:
-                data={'results':[dict(netspout_run_id=r['run_id'] if key!='UNRELATED' else str(uuid.uuid4()),netspout_signal=key,count=count) for key,count in signals]}
+                data={'messages':result_messages,'results':[dict(netspout_run_id=r['run_id'] if key!='UNRELATED' else str(uuid.uuid4()),netspout_signal=key,count=count) for key,count in signals]}
             else:data={'entry':[{'content':status or {'isDone':True,'dispatchState':'DONE'}}]}
             return types.SimpleNamespace(status=200),json.dumps(data)
         with patch.object(api.rest,'simpleRequest',side_effect=request):
@@ -43,6 +43,8 @@ class MixedVerificationTests(unittest.TestCase):
         self.assertIn('index="logs"',log);self.assertNotIn('index="metrics"',log)
         self.assertIn('mstats count(_value)',metric);self.assertIn('index="metrics"',metric)
         self.assertNotIn('index="logs"',metric)
+        self.assertIn('netspout_run_id="'+r['run_id']+'"',log)
+        self.assertNotIn('netspout_run_id::',log)
         self.assertEqual(query.count(r['run_id']),2)
         self.assertEqual(query.count('earliest='+str(int(r['started_at']))),2)
         self.assertNotIn('index=*',query)
@@ -71,3 +73,26 @@ class MixedVerificationTests(unittest.TestCase):
                        {'isDone':True,'dispatchState':'DONE','isFinalized':True}):
             value,_,_=self.check([('LOG','30'),('METRIC','30')],status=status)
             self.assertEqual(value['state'],'INCONCLUSIVE')
+
+    def test_only_exact_benign_info_messages_are_allowed(self):
+        messages=[{'type':'INFO','text':'Your timerange was substituted based on your search string'},
+                  {'type':'INFO','text':"[subsearch]: Your timerange was substituted based on your 'where' clause"}]
+        value,_,_=self.check([('LOG','30'),('METRIC','30')],
+            status={'isDone':True,'dispatchState':'DONE','messages':messages},result_messages=messages)
+        self.assertEqual(value['state'],'VERIFIED')
+        for message in ({'type':'WARN','text':messages[0]['text']},
+                        {'type':'INFO','text':'unknown diagnostic'}, {'type':'ERROR','text':'denied'}):
+            value,_,_=self.check([('LOG','30'),('METRIC','30')],result_messages=[message])
+            self.assertEqual(value['state'],'INCONCLUSIVE')
+
+    def test_old_mixed_search_job_is_not_reused(self):
+        original=monitor.update
+        def update(run_id,edit):
+            saved=original(run_id,edit)
+            if saved and saved.get('classification')=='MIXED' and 'search_job' not in saved:
+                original(run_id,lambda x:x.update(search_job={'sid':'old-job','latest':saved['ended_at']}))
+            return saved
+        with patch.object(monitor,'update',side_effect=update):
+            value,calls,_=self.check([('LOG','30'),('METRIC','30')])
+        self.assertEqual(value['state'],'VERIFIED')
+        self.assertTrue(any(kw.get('method')=='POST' for _,kw in calls))

@@ -307,7 +307,67 @@ vm.runInNewContext(source.slice(start,finish),context);
             self.assertNotIn('innerHTML', panel)
             self.assertIn('not measured', panel)
             self.assertIn('verify_native_run', panel)
-            self.assertIn("run.classification !== 'LOG'", panel)
+            self.assertIn("(run.classification !== 'LOG' && run.classification !== 'MIXED')", panel)
+            self.assertIn("run.verification.matching_events", panel)
+            self.assertIn("run.verification.matching_metric_points", panel)
+
+    def test_ui_mixed_run_verify_and_dual_signal_counts(self):
+        program = r"""
+const fs=require('fs'), vm=require('vm'), assert=require('assert');
+const source=fs.readFileSync(process.argv[1], 'utf8');
+const start=source.indexOf('  // Native server-owned run history.');
+const finish=source.indexOf('  mountNativeMonitorWhenReady();', start)+'  mountNativeMonitorWhenReady();'.length;
+const ids={};
+function element(tag){ return {tag, children:[],style:{},value:'',disabled:false,
+  setAttribute(){},appendChild(el){this.children.push(el);if(tag==='select'&&!this.value)this.value=el.value;},
+  insertBefore(el){this.children.push(el);ids[el.id]=el;}}; }
+const parent=element('div'); ids['console-log-output']={parentNode:parent};
+function baseRun(values){ return Object.assign({run_id:'mixed-run',started_at:1,
+  execution:{action:'onboard_sample'},execution_state:'COMPLETED',correlation:'SUPPORTED',
+  indexes:['main'],counters:{generated:60,attempted:60,accepted:60,failed:0,unknown:0}},values); }
+const mixedRun=baseRun({classification:'MIXED',verification:{state:'VERIFIED',
+  message:'Matching indexed logs and metric points found in the recorded run window',
+  matching_events:30,matching_metric_points:30}});
+const metricRun=Object.assign(baseRun({classification:'METRIC',verification:{state:'NOT_CHECKED',message:'Not checked'},
+  matching_events:null}),{run_id:'metric-run'});
+const logRun=Object.assign(baseRun({classification:'LOG',verification:{state:'VERIFIED',
+  message:'Matching indexed log events found in the recorded run window',matching_events:2}}),{run_id:'log-run'});
+const runs=[metricRun, mixedRun, logRun];
+const context={document:{getElementById:id=>ids[id]||null,createElement:element},window:{addEventListener(){}},
+  getRestUrl:()=>'/mock',getHeaders:()=>({}),setTimeout(){},
+  fetch:async(url,options)=>{let payload=JSON.parse(options.body);
+    return {ok:true,json:async()=>payload.action==='list_destinations'?{status:'success',destinations:[],selected_id:''}:
+      payload.action==='native_runs'?{status:'success',runs:runs}:
+      {status:'success',run:mixedRun}};}};
+vm.runInNewContext(source.slice(start,finish),context);
+(async()=>{await new Promise(setImmediate);
+ const panel=ids['native-run-monitor']; assert(panel);
+ const output=panel.children[4], verify=panel.children[3], select=panel.children[1];
+ // Unsupported METRIC classification keeps Verify off; transport-style blocks stay visible.
+ assert(select.value==='metric-run');
+ assert.strictEqual(verify.disabled,true);
+ assert(output.textContent.includes('Search verification is unsupported for this correlation path or scope.'));
+ // Selecting the supported MIXED run enables Verify.
+ select.value='mixed-run'; select.onchange();
+ assert.strictEqual(verify.disabled,false);
+ // Both signal counts render when the server returns them.
+ assert(output.textContent.includes('VERIFIED'));
+ assert(output.textContent.includes('Matching indexed events: 30'));
+ assert(output.textContent.includes('Matching indexed metric points: 30'));
+ // Clicking Verify re-renders from the server response and keeps counts visible.
+ verify.onclick(); await new Promise(setImmediate);
+ assert(output.textContent.includes('Matching indexed metric points: 30'));
+ // LOG-only runs keep prior behavior: event count shown, no metric count line.
+ select.value='log-run'; select.onchange();
+ assert.strictEqual(verify.disabled,false);
+ assert(output.textContent.includes('Matching indexed events: 2'));
+ assert(!output.textContent.includes('Matching indexed metric points'));
+})().catch(e=>{console.error(e);process.exitCode=1;});
+"""
+        for name in ('guided_onboarding.js', 'datablaster_console.js'):
+            result = subprocess.run(['node', '-e', program, str(Path('netspout/appserver/static', name))],
+                capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == '__main__':

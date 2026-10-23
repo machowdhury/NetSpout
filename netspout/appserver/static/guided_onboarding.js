@@ -36,7 +36,9 @@ require([
       }).catch(function(){defaultChoice.textContent='Server-selected destination (list unavailable)';});
     var runs = [];
     function render(run) {
-      verify.disabled = !run || run.correlation !== 'SUPPORTED' || run.classification !== 'LOG' || !run.indexes.length;
+      // Splunk search verification supports LOG and mixed log/metric runs; unsupported
+      // transports, unsupported correlation and unscoped runs keep the Verify action off.
+      verify.disabled = !run || run.correlation !== 'SUPPORTED' || (run.classification !== 'LOG' && run.classification !== 'MIXED') || !run.indexes.length;
       if (!run) { output.textContent = 'No retained native runs. Delivery metrics are not measured.'; return; }
       var lines = ['Run: ' + run.run_id, 'Execution: ' + run.execution_state,
         'Correlation: ' + run.correlation, 'Telemetry: ' + run.classification,
@@ -75,6 +77,10 @@ require([
         lines.push('Socket send evidence does not establish receiver delivery or Splunk indexing.');
       }
       lines.push('Splunk indexing: ' + run.verification.state + ' — ' + run.verification.message);
+      if (run.verification.matching_events !== null && run.verification.matching_events !== undefined)
+        lines.push('Matching indexed events: ' + run.verification.matching_events);
+      if (run.verification.matching_metric_points !== null && run.verification.matching_metric_points !== undefined)
+        lines.push('Matching indexed metric points: ' + run.verification.matching_metric_points);
       if (verify.disabled) lines.push('Search verification is unsupported for this correlation path or scope.');
       output.textContent = lines.join('\n');
     }

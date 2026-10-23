@@ -1,0 +1,52 @@
+<form version="1.1" theme="dark">
+  <label>PulseForge — Network and infrastructure simulation</label>
+  <description>Inspect indexed synthetic incident observations; acceptance and simulated recovery are not indexing proof.  Local indexed data only. Choose the configured event index and server-owned run ID. Remote destinations may have no data here. VERIFIED_HEALTHY is a simulated phase, not independent indexing verification.</description>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="text" token="index">
+      <label>Local event index</label>
+      <default>idx_network_ops</default>
+    </input>
+    <input type="text" token="run_id">
+      <label>Server-owned run ID</label>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Data / field readiness (not delivery proof)</title>
+      <table>
+        <search>
+          <query>search index=$index|s$ (sourcetype="netspout:network:syslog") netspout_run_id=$run_id|s$ | stats count as observed_records count(netspout_run_id) as present_netspout_run_id count(netspout_scenario_id) as present_netspout_scenario_id count(netspout_phase) as present_netspout_phase count(netspout_device_id) as present_netspout_device_id | eval data_status=case(observed_records=0,"MISSING_DATA",present_netspout_run_id=observed_records AND present_netspout_scenario_id=observed_records AND present_netspout_phase=observed_records AND present_netspout_device_id=observed_records,"FIELDS_PRESENT",1=1,"MISSING_FIELDS")</query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Observed records by incident phase</title>
+      <table>
+        <search>
+          <query>search index=$index|s$ (sourcetype="netspout:network:syslog") netspout_run_id=$run_id|s$ | stats count as observed_records by netspout_scenario_id netspout_phase netspout_device_id</query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Indexed observation timeline</title>
+      <table>
+        <search>
+          <query>search index=$index|s$ (sourcetype="netspout:network:syslog") netspout_run_id=$run_id|s$ | sort 0 _time | head 500 | table _time netspout_run_id netspout_scenario_id netspout_phase netspout_device_id _raw</query>
+          <earliest>-24h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">20</option>
+      </table>
+    </panel>
+  </row>
+</form>

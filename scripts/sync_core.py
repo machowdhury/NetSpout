@@ -217,9 +217,33 @@ def sync_core(modules=None):
     print("✅ Canonical Core synchronization complete.")
 
 
+def sync_discovery():
+    """Refresh the existing recipe mirrors and its native browser projection."""
+    import importlib.util
+    path = os.path.join(REPO_ROOT, "scripts", "build_discovery_catalog.py")
+    spec = importlib.util.spec_from_file_location("pulseforge_discovery_build", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for target in (os.path.join(SPLUNK_CORE_DIR, "catalog_data"),
+                   os.path.join(SPLUNK_BIN_DIR, "catalog_data"),
+                   os.path.join(BACKEND_APP_DIR, "catalog_data"),
+                   os.path.join(REPO_ROOT, "netspout", "catalog")):
+        shutil.copy2(os.path.join(CANONICAL_CATALOG_DIR, "dashboard_recipes.json"), target)
+    module.generate()
+    print("✅ Native discovery projection, dashboards and recipe mirrors synchronized.")
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--modules', nargs='+', choices=CORE_MODULES,
                         help='Sync only selected modules; leave catalogs and other files untouched')
-    sync_core(parser.parse_args().modules)
+    parser.add_argument('--discovery', action='store_true',
+                        help='Sync only native discovery projection and recipe catalogs')
+    args = parser.parse_args()
+    if args.discovery:
+        sync_discovery()
+    else:
+        sync_core(args.modules)
+        if args.modules is None:
+            sync_discovery()

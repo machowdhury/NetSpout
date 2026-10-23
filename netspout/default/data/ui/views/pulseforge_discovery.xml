@@ -1,0 +1,20 @@
+<dashboard version="1.1" theme="dark" script="discovery.js" stylesheet="discovery.css">
+  <label>PulseForge Use-case &amp; Dashboard Discovery</label>
+  <description>Search existing scenarios, vendor data contracts, sourcetypes, attributed use-case research and native dashboards. Catalog evidence is separate from local indexing evidence.</description>
+  <row><panel><html>
+    <section id="pf-discovery">
+      <label for="pf-search">Search scenarios, vendors/products, sourcetypes, industries and dashboards</label>
+      <input id="pf-search" type="search" placeholder="Try ISE, BGP, healthcare, telecom or netspout:network"/>
+      <button id="pf-clear" type="button">Clear search and filters</button>
+      <p id="pf-discovery-status" role="status" aria-live="polite">Loading canonical catalog…</p>
+      <div class="pf-discovery-layout">
+        <aside id="pf-filters" aria-label="Catalog categories and filters"></aside>
+        <section aria-label="Search results"><div id="pf-results"></div>
+          <button id="pf-prev" type="button" disabled="disabled">Previous</button>
+          <button id="pf-next" type="button" disabled="disabled">Next</button>
+        </section>
+        <section id="pf-detail" aria-live="polite" aria-label="Selected record details"><p>Select a result to inspect relationships and evidence.</p></section>
+      </div>
+    </section>
+  </html></panel></row>
+</dashboard>

@@ -1,9 +1,15 @@
 <nav search_view="search">
   <view name="guided_onboarding" default="true" label="PulseForge Onboarding"/>
+  <view name="pulseforge_discovery" label="Use Cases &amp; Dashboards"/>
   <view name="scenario_builder" label="Scenario Builder"/>
   <view name="netspout_canvas" label="Canvas Orchestrator"/>
   <view name="security_content_lab" label="Security Content Lab"/>
   <collection label="PulseForge Dashboards">
+    <view name="pulseforge_security" label="Security Simulation"/>
+    <view name="pulseforge_network" label="Network Simulation"/>
+    <view name="pulseforge_application" label="Application Dependencies"/>
+    <view name="pulseforge_telecom" label="Telecom Service Assurance"/>
+
     <view name="datablaster_dashboard" label="Analytics Overview &amp; Ingestion Telemetry"/>
     <view name="studio_multivendor_enterprise" label="Enterprise 5-Tier Backbone (MV-ENT-001)"/>
     <view name="studio_roce_ai_fabric" label="AI Data Center Fabric - RoCE v2 (MV-002)"/>

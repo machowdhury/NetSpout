@@ -80,6 +80,12 @@ class DashboardRecipe(StrictModel):
     recipe_id: str
     version: str = Field(pattern=r"^\d+\.\d+\.\d+$")
     family: str
+    # Optional native discovery metadata; older recipe contracts remain valid.
+    native_view: Optional[str] = Field(default=None, pattern=r"^[a-z][a-z0-9_]*$")
+    title: Optional[str] = None
+    domain: Optional[str] = None
+    industries: List[str] = Field(default_factory=list)
+    required_sourcetypes: List[str] = Field(default_factory=list)
     purpose: str
     selectors: List[str]
     required_fields: List[str]

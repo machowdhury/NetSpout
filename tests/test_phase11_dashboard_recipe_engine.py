@@ -65,8 +65,33 @@ def service():
 
 
 def test_registry_has_reusable_recipe_and_visualization_depth(service):
-    assert 25 <= len(service.registry.recipes) <= 35
-    assert len(service.registry.recipes) == 30
+    original_ids = {
+        "dashboard-operational-summary", "dashboard-incident-timeline",
+        "dashboard-topology-health", "dashboard-evidence-chain",
+        "dashboard-source-detail", "dashboard-investigation-workbench",
+        "dashboard-recovery-validation", "dashboard-routing-health",
+        "dashboard-wan-performance", "dashboard-data-center-fabric",
+        "dashboard-network-traffic", "dashboard-dns-security",
+        "dashboard-beaconing", "dashboard-security-policy",
+        "dashboard-internal-recon", "dashboard-application-service-health",
+        "dashboard-infrastructure-health", "dashboard-business-dependency-impact",
+        "dashboard-cross-domain-incident", "dashboard-agent-activity",
+        "dashboard-mcp-tool-interactions", "dashboard-a2a-task-delegation",
+        "dashboard-agent-identity-authorization", "dashboard-prompt-injection-investigation",
+        "dashboard-policy-decision-timeline", "dashboard-repository-activity",
+        "dashboard-ci-workflow-changes", "dashboard-dependency-risk",
+        "dashboard-artifact-provenance", "dashboard-phase12-causal-correlation",
+    }
+    discovery_ids = {
+        "discovery-security", "discovery-network",
+        "discovery-application", "discovery-telecom",
+    }
+    ids = [recipe.recipe_id for recipe in service.registry.recipes]
+    assert len(original_ids) == 30
+    assert original_ids <= set(ids)
+    assert all(ids.count(recipe_id) == 1 for recipe_id in discovery_ids)
+    assert set(ids) == original_ids | discovery_ids
+    assert len(ids) == len(set(ids)) == 34
     assert len(service.registry.visualizations) == 11
     assert len({item.family for item in service.registry.recipes}) >= 12
 

@@ -48,6 +48,13 @@ except ImportError:
         class BaseRestHandler:
             pass
 
+try:
+    from splunk import ResourceNotFound as _SplunkResourceNotFound
+except ImportError:
+    # Standalone tests have no Splunk SDK; never classify arbitrary errors as 404.
+    class _SplunkResourceNotFound(Exception):
+        pass
+
 # Paths
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BIN_DIR = os.path.join(APP_DIR, "bin")
@@ -158,6 +165,10 @@ class HECCredentialStore:
                 url + "?output_mode=json", sessionKey=self.session_key,
                 method=method, postargs=postargs, raiseAllErrors=False)
             return int(response.status), json.loads(body)
+        except _SplunkResourceNotFound:
+            # Splunk 10.2 raises this even with raiseAllErrors=False. Preserve
+            # read()'s distinction between absent legacy and active credentials.
+            return 404, {}
         except Exception:
             raise RuntimeError("Splunk credential store request failed") from None
 

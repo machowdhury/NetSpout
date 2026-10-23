@@ -343,6 +343,29 @@ def verification(run_id, session_key):
                 isinstance(message, dict) and message.get('type') == 'INFO'
                 and message.get('text') in benign for message in messages))
         sid = cached.get('sid')
+        def read_status(job_sid):
+            # Only a missing search job is a lifecycle artefact: jobs are created
+            # with auto_cancel=60, so Splunk deletes them shortly after completion.
+            response, body = a.rest.simpleRequest(a.MANAGEMENT_URL + '/services/search/jobs/'
+                + quote(job_sid, safe='') + '?output_mode=json', sessionKey=session_key,
+                raiseAllErrors=False, timeout=10)
+            if int(response.status) in (200, 201):
+                return json.loads(body)['entry'][0]['content']
+            if int(response.status) == 404:
+                return None
+            raise RuntimeError()
+        status = None
+        if sid:
+            status = read_status(sid)
+            if status is not None and status.get('dispatchState') in ('CANCELED', 'CANCELLED'):
+                status = None
+            if status is None:
+                # The cached job expired or was cancelled. Invalidate its SID and
+                # start a fresh bounded verification search within this request.
+                # Permission errors, failed dispatches and diagnostics are never
+                # retried and keep the strict failure states below.
+                update(run_id, lambda rec: rec.pop('search_job', None))
+                sid = None
         if not sid:
             job = request('/services/search/jobs?output_mode=json', 'POST', {
                 'search': query, 'exec_mode': 'normal', 'max_time': '10', 'auto_cancel': '60'})
@@ -352,14 +375,17 @@ def verification(run_id, session_key):
                     sid=sid, latest=latest, **({'contract': 'mixed-v2'} if mixed else {}))))
         if not isinstance(sid, str) or not sid or len(sid) > 256:
             raise RuntimeError()
-        path = '/services/search/jobs/' + quote(sid, safe='')
-        status = request(path + '?output_mode=json')['entry'][0]['content']
+        if status is None:
+            # A freshly created job has a guaranteed status entry; a 404 here remains a failure.
+            status = read_status(sid)
+            if status is None:
+                raise RuntimeError()
         if status.get('isFailed') in (True, 1, '1') or status.get('dispatchState') == 'FAILED':
             return result('ERROR', 'Splunk search failed or was denied')
         if (status.get('isDone') not in (True, 1, '1') or status.get('dispatchState') != 'DONE'
                 or status.get('isFinalized') in (True, 1, '1') or has_diagnostics(status.get('messages'))):
             return result('INCONCLUSIVE', 'Search is incomplete or returned diagnostics; check again later')
-        data = request(path + '/results?output_mode=json&count=0')
+        data = request('/services/search/jobs/' + quote(sid, safe='') + '/results?output_mode=json&count=0')
         if has_diagnostics(data.get('messages')) or data.get('preview') in (True, 1, '1') or not isinstance(data.get('results'), list):
             return result('INCONCLUSIVE', 'Search results are incomplete')
         total = 0

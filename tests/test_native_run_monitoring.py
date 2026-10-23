@@ -254,6 +254,145 @@ class MonitoringTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, stderr)
         self.assertEqual(monitor.history()[0]['counters']['generated'], 20)
 
+    def verification_with_jobs(self, r, script):
+        """Run verification with rest.simpleRequest dispatching to script(url, kw)."""
+        calls = []
+        def request(url, **kw):
+            calls.append((url, kw))
+            status, body = script(url, kw)
+            if isinstance(status, int):
+                status = types.SimpleNamespace(status=status)
+            return status, body
+        with patch.object(handler.rest, 'simpleRequest', side_effect=request), \
+             patch.object(handler, 'is_process_running', return_value=True):
+            code, response = monitor.verification(r['run_id'], 'admin')
+        return response, calls
+
+    def log_done_results(self, r):
+        return (types.SimpleNamespace(status=200),
+                json.dumps({'results': [dict(netspout_run_id=r['run_id'], count='2')]}))
+
+    def test_stale_cached_sid_recovers_with_fresh_scoped_search(self):
+        r = self.complete(self.record())
+        monitor.update(r['run_id'], lambda x: x.update(search_job=dict(sid='stale-job', latest=1)))
+        def script(url, kw):
+            if '/jobs/stale-job' in url:
+                # Splunk deleted the auto-cancelled job: lifecycle artefact, not a search failure.
+                return 404, '{}'
+            if kw.get('method') == 'POST':
+                return 200, json.dumps({'sid': 'fresh-job'})
+            if '/results?' in url:
+                return self.log_done_results(r)
+            return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': 'DONE'}}]})
+        response, calls = self.verification_with_jobs(r, script)
+        self.assertEqual(response['run']['verification']['state'], 'VERIFIED')
+        self.assertEqual(response['run']['verification']['matching_events'], 2)
+        self.assertEqual(response['run']['search_job']['sid'], 'fresh-job')
+        posts = [(url, kw) for url, kw in calls if kw.get('method') == 'POST']
+        self.assertEqual(len(posts), 1)
+        # Recovery keeps the strict run-id, index and time-window scope.
+        payload = posts[0][1]['postargs']
+        self.assertIn('netspout_run_id::"' + r['run_id'] + '"', payload['search'])
+        self.assertIn('index="main"', payload['search'])
+        self.assertIn('earliest=' + str(int(r['started_at'])), payload['search'])
+        self.assertNotIn('index=*', payload['search'])
+        self.assertEqual(payload['max_time'], '10')
+        self.assertEqual(payload['auto_cancel'], '60')
+        # Exactly one recovery: 404 status read, fresh job POST, its status and results.
+        self.assertEqual(len(calls), 4)
+
+    def test_cancelled_cached_sid_recovers_like_missing(self):
+        for state in ('CANCELED', 'CANCELLED'):
+            with self.subTest(state=state):
+                r = self.complete(self.record())
+                monitor.update(r['run_id'], lambda x: x.update(search_job=dict(sid='stale-job', latest=1)))
+                fresh = 'fresh-' + state
+                def script(url, kw, state=state, fresh=fresh):
+                    if '/jobs/stale-job' in url:
+                        return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': state}}]})
+                    if kw.get('method') == 'POST':
+                        return 200, json.dumps({'sid': fresh})
+                    if '/results?' in url:
+                        return self.log_done_results(r)
+                    return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': 'DONE'}}]})
+                response, calls = self.verification_with_jobs(r, script)
+                self.assertEqual(response['run']['verification']['state'], 'VERIFIED')
+                self.assertEqual(response['run']['search_job']['sid'], fresh)
+
+    def test_mixed_run_recovers_stale_sid_with_typed_scopes(self):
+        r = self.complete(self.record())
+        monitor.update(r['run_id'], lambda x: x.update(classification='MIXED', indexes=['logs', 'metrics'],
+            search_job=dict(sid='stale-job', latest=1, contract='mixed-v2')))
+        def script(url, kw):
+            if '/jobs/stale-job' in url:
+                return 404, '{}'
+            if '/data/indexes/' in url:
+                kind = 'event' if 'logs' in url else 'metric'
+                return 200, json.dumps({'entry': [{'content': {'datatype': kind}}]})
+            if kw.get('method') == 'POST':
+                return 200, json.dumps({'sid': 'fresh-mixed'})
+            if '/results?' in url:
+                rows = [dict(netspout_run_id=r['run_id'], netspout_signal='LOG', count='30'),
+                        dict(netspout_run_id=r['run_id'], netspout_signal='METRIC', count='30')]
+                return 200, json.dumps({'results': rows})
+            return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': 'DONE'}}]})
+        response, calls = self.verification_with_jobs(r, script)
+        self.assertEqual(response['run']['verification']['state'], 'VERIFIED')
+        self.assertEqual(response['run']['verification']['matching_events'], 30)
+        self.assertEqual(response['run']['verification']['matching_metric_points'], 30)
+        self.assertEqual(response['run']['search_job']['sid'], 'fresh-mixed')
+        self.assertEqual(response['run']['search_job']['contract'], 'mixed-v2')
+        payload = next(kw['postargs'] for _, kw in calls if kw.get('method') == 'POST')
+        self.assertIn('index="logs"', payload['search'])
+        self.assertIn('index="metrics"', payload['search'])
+        self.assertNotIn('index=*', payload['search'])
+
+    def test_verification_failures_on_cached_job_are_never_retried(self):
+        r = self.complete(self.record())
+        cases = [
+            # (name, cached-status reply or None, results reply or None, expected state, expected calls)
+            ('permission-denied', (403, '{}'), None, 'ERROR', 1),
+            ('server-error', (500, '{}'), None, 'ERROR', 1),
+            ('failed-dispatch', (200, '{entry_failed}'), None, 'ERROR', 1),
+            ('preview-results', None, (200, '{preview}'), 'INCONCLUSIVE', 2),
+            ('diagnostics', None, (200, '{diagnostics}'), 'INCONCLUSIVE', 2),
+        ]
+        for name, cached_reply, results_reply, expected, expected_calls in cases:
+            with self.subTest(case=name):
+                def script(url, kw):
+                    if kw.get('method') == 'POST':
+                        return 200, json.dumps({'sid': 'fresh-unexpected'})
+                    if '/results?' in url:
+                        if results_reply is None:
+                            raise AssertionError('unexpected results read for ' + name)
+                        if results_reply[1] == '{preview}':
+                            return 200, json.dumps({'results': [dict(netspout_run_id=r['run_id'], count='2')], 'preview': True})
+                        return 200, json.dumps({'results': [], 'messages': ['warning']})
+                    if cached_reply is not None:
+                        if cached_reply[1] == '{entry_failed}':
+                            return 200, json.dumps({'entry': [{'content': {'isFailed': True, 'dispatchState': 'FAILED'}}]})
+                        return cached_reply[0], cached_reply[1]
+                    return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': 'DONE'}}]})
+                monitor.update(r['run_id'], lambda x: x.update(search_job=dict(sid='stale-job', latest=1)))
+                response, calls = self.verification_with_jobs(r, script)
+                self.assertEqual(response['run']['verification']['state'], expected)
+                # A cached job was present, so verification must not create a new search for these failures.
+                self.assertFalse(any(kw.get('method') == 'POST' for _, kw in calls))
+                self.assertEqual(len(calls), expected_calls)
+
+    def test_valid_cached_job_is_reused_without_new_search(self):
+        r = self.complete(self.record())
+        monitor.update(r['run_id'], lambda x: x.update(search_job=dict(sid='live-job', latest=1)))
+        def script(url, kw):
+            if '/results?' in url:
+                return self.log_done_results(r)
+            return 200, json.dumps({'entry': [{'content': {'isDone': True, 'dispatchState': 'DONE'}}]})
+        response, calls = self.verification_with_jobs(r, script)
+        self.assertEqual(response['run']['verification']['state'], 'VERIFIED')
+        self.assertEqual(response['run']['verification']['matching_events'], 2)
+        self.assertEqual(response['run']['search_job']['sid'], 'live-job')
+        self.assertFalse(any(kw.get('method') == 'POST' for _, kw in calls))
+
     def test_permission_error_and_partial_results(self):
         r = self.complete(self.record())
         with patch.object(handler.rest, 'simpleRequest', return_value=(types.SimpleNamespace(status=403), '{}')):

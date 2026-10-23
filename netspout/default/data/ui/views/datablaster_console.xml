@@ -328,6 +328,12 @@
       <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_13_mtu_pmtud.yml" data-name="MTU mismatch/PMTUD failure">MTU mismatch/PMTUD failure</button>
       <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_14_wireless_outage.yml" data-name="Wireless controller/AP outage">Wireless controller/AP outage</button>
       <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_15_device_resources.yml" data-name="Device CPU/memory exhaustion">Device CPU/memory exhaustion</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_21_partial_pool.yml" data-name="Partial load-balancer pool outage with perimeter demand">Partial load-balancer pool outage with perimeter demand</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_20_backend_link.yml" data-name="Distribution-link loss and backend monitor failure">Distribution-link loss and backend monitor failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_19_ips_service.yml" data-name="IPS attack burst and legitimate-session degradation">IPS attack burst and legitimate-session degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_18_payment_deny.yml" data-name="Perimeter deny burst and payment availability loss">Perimeter deny burst and payment availability loss</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_17_hospital_mac_auth.yml" data-name="Hospital access MAC instability and login retries">Hospital access MAC instability and login retries</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_16_retail_uplink.yml" data-name="Retail branch uplink flap and checkout interruption">Retail branch uplink flap and checkout interruption</button>
     </section>
   </html></panel></row>
 

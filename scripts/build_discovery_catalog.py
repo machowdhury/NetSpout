@@ -39,7 +39,12 @@ def incident_contracts():
             events = producer.generate(slug, 42, 1792497600, '00112233-4455-6677-8899-aabbccddeeff', 10)
             logs = [e for e in events if 'metrics' not in e]
             metrics = [e for e in events if 'metrics' in e]
+            definition = producer.CATALOG.get(slug, ())
+            context = definition[13] if len(definition)>13 else {}
             result[item['id']] = dict(runtime_scenario_id=slug,
+                domain=context.get('domain'), industry=context.get('industry'),
+                modeled_products=context.get('products', []),
+                external_use_cases=context.get('uc', []), proposal=context.get('proposal'),
                 log_sourcetypes=sorted({e['sourcetype'] for e in logs}),
                 metric_sourcetypes=sorted({e['sourcetype'] for e in metrics}),
                 log_fields=sorted(set.intersection(*(set(e['fields']) for e in logs))),
@@ -88,6 +93,7 @@ def build():
         matching=[r for r in recipes if sid in r['selectors']]
         if sid in ('network_08_firewall_policy','network_09_ddos_flood'): domain='Security'
         if sid in ('network_10_dns_failure','network_15_device_resources'): domain='Cloud / application'
+        domain=incidents.get(sid, {}).get('domain') or domain
         matching.sort(key=lambda r:(r['domain']!=domain,r['recipe_id']))
         names=record.get('sourcetypes',c.get('sourcetypes',[]))
         for name in names:
@@ -100,7 +106,7 @@ def build():
                     profiles=[],evidence=[],gaps=['Not vendor-native or TA-verified.' if native else 'Raw format/parser verification not established.'])
             sts[name]['scenario_ids'].append(sid)
         row=dict(kind='scenario',id=sid,title=record.get('name',c.get('display_name',sid)),domain=domain,
-            industries=['Telecommunications' if telco else 'Cross-industry'],
+            industries=[incidents.get(sid, {}).get('industry') or ('Telecommunications' if telco else 'Cross-industry')],
             vendors=sorted({v for name in names for v in sts[name]['vendors']}),
             readiness='Executable custom simulation' if native else 'Legacy / verification pending',
             description=record.get('description',c.get('description','')),sourcetypes=names,
@@ -118,7 +124,7 @@ def build():
                 raise ValueError('Dashboard requires unavailable log sourcetypes')
             if not set(primary['required_fields']) <= set(contract['log_fields']):
                 raise ValueError('Dashboard requires unavailable event fields')
-            row.update(executable=True, incident_contract=contract,
+            row.update(executable=True, incident_contract=contract, modeled_products=contract['modeled_products'],
                        primary_dashboard_id=primary['recipe_id'],
                        required_fields=primary['required_fields'],
                        field_provenance=primary['field_provenance'],
@@ -147,6 +153,7 @@ def build():
         related=[]
         for prefix,num in re.findall(r'\b([NT])(\d{2})\b',cells[4]):
             related += [sid for sid in ids if sid.startswith(('network_' if prefix=='N' else 'telco_')+num+'_')]
+        related += [sid for sid,c in incidents.items() if uid in c.get('external_use_cases', [])]
         entries.append(dict(kind='use_case',id='UC-'+uid,title=title,domain=cells[1].split('/')[0].strip(),
             industries=[cells[1].split('/',1)[1].strip()] if '/' in cells[1] else ['Cross-industry'],
             vendors=[],readiness=cells[7],description=cells[2],required_telemetry=[cells[3]],

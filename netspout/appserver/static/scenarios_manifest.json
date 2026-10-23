@@ -634,5 +634,83 @@
       "netspout:telecom:metric"
     ],
     "totalSourcetypes": 2
+  },
+  {
+    "id": "network_16_retail_uplink",
+    "filename": "scenario_network_16_retail_uplink.yml",
+    "name": "Retail branch uplink flap and checkout interruption",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_17_hospital_mac_auth",
+    "filename": "scenario_network_17_hospital_mac_auth.yml",
+    "name": "Hospital access MAC instability and login retries",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_18_payment_deny",
+    "filename": "scenario_network_18_payment_deny.yml",
+    "name": "Perimeter deny burst and payment availability loss",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_19_ips_service",
+    "filename": "scenario_network_19_ips_service.yml",
+    "name": "IPS attack burst and legitimate-session degradation",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_20_backend_link",
+    "filename": "scenario_network_20_backend_link.yml",
+    "name": "Distribution-link loss and backend monitor failure",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_21_partial_pool",
+    "filename": "scenario_network_21_partial_pool.yml",
+    "name": "Partial load-balancer pool outage with perimeter demand",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
   }
 ]

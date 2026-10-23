@@ -156,7 +156,9 @@ class TelecomTests(unittest.TestCase):
         source=subprocess.run(['git','show','1440113:netspout/bin/network_incidents.py'],capture_output=True,text=True,check=True,timeout=10).stdout
         baseline=types.ModuleType('baseline_network_incidents')
         exec(compile(source,'<checkpoint-network-incidents>','exec'),baseline.__dict__)
-        self.assertEqual(len(pack.CATALOG),15)
+        self.assertEqual(len(baseline.CATALOG),15)
+        self.assertTrue(set(baseline.CATALOG)<=set(pack.CATALOG))
+        self.assertEqual(len(pack.CATALOG),21)
         for slug in baseline.CATALOG:
             self.assertEqual(pack.generate(slug,42,1700000000,RUN,10),baseline.generate(slug,42,1700000000,RUN,10))
 

@@ -64,6 +64,7 @@
       node('p', row.kind + ' • ' + row.id + ' • ' + row.readiness, detail);
       node('p', row.description, detail);
       if (row.required_telemetry) { node('h4', 'Required telemetry (a requirement is not native compatibility)', detail); node('p', row.required_telemetry.join(', '), detail); }
+      if (row.modeled_products && row.modeled_products.length) { node('p', 'Modeled products (custom simulation, not native output): ' + row.modeled_products.join(', '), detail); }
       if (row.formats) { node('p', 'Format: ' + (row.formats.join(', ') || 'Unknown; review required'), detail); }
       if (row.vendors) { node('p', 'Vendor/product: ' + (row.vendors.join(', ') || 'Not established'), detail); }
       if (row.profiles) {

@@ -44,8 +44,8 @@ class IncidentTests(unittest.TestCase):
         import xml.etree.ElementTree as ET
         root=ET.parse(ROOT/'netspout/default/data/ui/views/datablaster_console.xml')
         buttons=root.findall('.//section[@id="network-incident-packs"]/button')
-        self.assertEqual(len(pack.CATALOG),15)
-        self.assertEqual(len(buttons),15)
+        self.assertEqual(len(pack.CATALOG),21)
+        self.assertEqual(len(buttons),21)
         for slug,row in pack.CATALOG.items():
             with self.subTest(scenario=slug):
                 filename='scenario_network_'+slug+'.yml'

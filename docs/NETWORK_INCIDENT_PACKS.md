@@ -387,3 +387,20 @@ index=idx_network_ops netspout_run_id::"RUN_UUID" netspout_scenario_id::"15_devi
 ```spl
 | mstats avg(device.cpu.percent) WHERE index=idx_performance_metrics netspout_run_id="RUN_UUID" netspout_scenario_id="15_device_resources" earliest=RUN_START latest=RUN_END BY netspout_phase netspout_device_id span=1s
 ```
+
+## C7A correlated incident additions
+
+These six packs use the existing custom network log/metric contracts. Products
+are modeled system roles, not vendor-native raw output or TA compatibility.
+All interventions and business probes are simulated; no real payment or patient data.
+
+- 16_retail_uplink — Retail branch uplink flap and checkout interruption: proposal 1; UC 5.1.1, 21.11.1. KPI fields: uplink.down, checkout.failure.percent, session.failure.percent.
+- 17_hospital_mac_auth — Hospital access MAC instability and login retries: proposal 2; UC 5.1.1, 17.1.2. KPI fields: mac.moves.per_minute, authentication.failure.percent, login.latency.ms.
+- 18_payment_deny — Perimeter deny burst and payment availability loss: proposal 5; UC 5.2.2, 21.11.1. KPI fields: policy.denies.per_second, payment.failure.percent, payment.latency.ms.
+- 19_ips_service — IPS attack burst and legitimate-session degradation: proposal 6; UC 5.2.2, 8.1.1. KPI fields: ips.detections.per_second, legitimate.session.failure.percent, service.latency.ms.
+- 20_backend_link — Distribution-link loss and backend monitor failure: proposal 8; UC 5.1.1, 8.1.1. KPI fields: backend.link.down, pool.member.unavailable.percent, application.failure.percent.
+- 21_partial_pool — Partial load-balancer pool outage with perimeter demand: proposal 9; UC 8.1.1. KPI fields: pool.member.unavailable.percent, application.failure.percent, application.latency.ms.
+
+Remaining proposals: 3, 4, 7, 10, 11, 12. Native-message composition remains gated
+by complete selected-family format and field evidence; repaired fixtures alone
+do not establish a whole correlated vendor-native lifecycle. No raw formats are changed.

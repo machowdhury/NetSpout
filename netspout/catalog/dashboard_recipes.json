@@ -899,7 +899,10 @@
       "purpose": "Inspect indexed synthetic incident observations; acceptance and simulated recovery are not indexing proof. ",
       "selectors": [
         "network_08_firewall_policy",
-        "network_09_ddos_flood"
+        "network_09_ddos_flood",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service"
       ],
       "required_fields": [
         "netspout_run_id",
@@ -976,7 +979,13 @@
         "network_12_dc_congestion",
         "network_13_mtu_pmtud",
         "network_14_wireless_outage",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_16_retail_uplink",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "required_fields": [
         "netspout_run_id",
@@ -1040,7 +1049,9 @@
       "purpose": "Inspect indexed synthetic incident observations; acceptance and simulated recovery are not indexing proof. Application dependency signals only; no AWS/Azure/GCP native telemetry.",
       "selectors": [
         "network_10_dns_failure",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "required_fields": [
         "netspout_run_id",

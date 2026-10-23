@@ -17,9 +17,9 @@ class IncidentDashboardCoverageTests(unittest.TestCase):
         cls.recipes={r['recipe_id']:r for r in c5.build.read('catalog/dashboard_recipes.json')['recipes']}
 
     def test_all_25_descriptor_verified_incidents_have_primary(self):
-        self.assertEqual(len(self.incidents),25)
+        self.assertEqual(len(self.incidents),31)
         native=[r for r in self.data['entries'] if r.get('executable')]
-        self.assertEqual(len(native),25)
+        self.assertEqual(len(native),31)
         for row in native:
             with self.subTest(scenario=row['id']):
                 self.assertIn(row['id'],self.incidents)
@@ -97,4 +97,4 @@ class IncidentDashboardCoverageTests(unittest.TestCase):
     def test_build_is_bounded_and_projection_reproducible(self):
         self.assertEqual(self.data,c5.build.build())
         c5.build.generate(check=True)
-        self.assertEqual(self.data['executable_incident_count'],25)
+        self.assertEqual(self.data['executable_incident_count'],31)

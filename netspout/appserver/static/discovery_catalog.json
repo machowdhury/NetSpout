@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "executable_incident_count": 25,
+  "executable_incident_count": 31,
   "provenance": "Generated from canonical catalogs, native manifest and approved research; never edit projection.",
   "entries": [
     {
@@ -814,6 +814,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "01_campus_link",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -850,6 +855,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -914,6 +920,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "02_vlan_trunk",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -948,6 +959,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1012,6 +1024,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "03_stp_storm",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1046,6 +1063,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1110,6 +1128,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "04_wan_brownout",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1144,6 +1167,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1208,6 +1232,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "05_dual_isp",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1242,6 +1271,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1306,6 +1336,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "06_bgp_flap",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1340,6 +1375,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1404,6 +1440,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "07_ospf_adjacency",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1438,6 +1479,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1503,6 +1545,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "08_firewall_policy",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1537,6 +1584,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-security",
       "required_fields": [
         "netspout_run_id",
@@ -1602,6 +1650,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "09_ddos_flood",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1636,6 +1689,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-security",
       "required_fields": [
         "netspout_run_id",
@@ -1701,6 +1755,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "10_dns_failure",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1735,6 +1794,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-application",
       "required_fields": [
         "netspout_run_id",
@@ -1799,6 +1859,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "11_dhcp_exhaustion",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1833,6 +1898,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1897,6 +1963,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "12_dc_congestion",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -1931,6 +2002,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -1995,6 +2067,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "13_mtu_pmtud",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -2029,6 +2106,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -2093,6 +2171,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "14_wireless_outage",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -2127,6 +2210,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-network",
       "required_fields": [
         "netspout_run_id",
@@ -2192,6 +2276,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "15_device_resources",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:network:syslog"
         ],
@@ -2227,6 +2316,7 @@
         ],
         "field_provenance": "netspout/bin/network_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-application",
       "required_fields": [
         "netspout_run_id",
@@ -2291,6 +2381,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_01_ran_cell",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2329,6 +2424,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2399,6 +2495,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_02_registration_auth",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2437,6 +2538,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2507,6 +2609,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_03_slice_sla",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2546,6 +2653,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2616,6 +2724,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_04_ims_volte",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2654,6 +2767,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2724,6 +2838,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_05_mobile_transport",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2762,6 +2881,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2832,6 +2952,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_06_broadband_cpe",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2870,6 +2995,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -2940,6 +3066,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_07_sdwan_service",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -2978,6 +3109,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -3048,6 +3180,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_08_roaming_mobility",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -3087,6 +3224,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -3157,6 +3295,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_09_core_user_plane",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -3195,6 +3338,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -3265,6 +3409,11 @@
       "executable": true,
       "incident_contract": {
         "runtime_scenario_id": "telco_10_cross_layer",
+        "domain": null,
+        "industry": null,
+        "modeled_products": [],
+        "external_use_cases": [],
+        "proposal": null,
         "log_sourcetypes": [
           "netspout:telecom:log"
         ],
@@ -3304,6 +3453,7 @@
         ],
         "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
       },
+      "modeled_products": [],
       "primary_dashboard_id": "discovery-telecom",
       "required_fields": [
         "netspout_run_id",
@@ -3330,6 +3480,724 @@
         "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
         "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
         "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_16_retail_uplink",
+      "title": "Retail branch uplink flap and checkout interruption",
+      "domain": "Network / infrastructure",
+      "industries": [
+        "Retail"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_16_retail_uplink"
+      ],
+      "dashboard_ids": [
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_16_retail_uplink.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "16_retail_uplink",
+        "domain": "Network / infrastructure",
+        "industry": "Retail",
+        "modeled_products": [
+          "Arista EOS",
+          "Cisco ASA"
+        ],
+        "external_use_cases": [
+          "5.1.1",
+          "21.11.1"
+        ],
+        "proposal": 1,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "checkout.failure.percent",
+          "session.failure.percent",
+          "uplink.down"
+        ],
+        "entities": [
+          "access01",
+          "checkout01",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "Arista EOS",
+        "Cisco ASA"
+      ],
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_17_hospital_mac_auth",
+      "title": "Hospital access MAC instability and login retries",
+      "domain": "Security",
+      "industries": [
+        "Healthcare"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_17_hospital_mac_auth"
+      ],
+      "dashboard_ids": [
+        "discovery-security",
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_17_hospital_mac_auth.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "17_hospital_mac_auth",
+        "domain": "Security",
+        "industry": "Healthcare",
+        "modeled_products": [
+          "Cisco IOS XE",
+          "Cisco ISE"
+        ],
+        "external_use_cases": [
+          "5.1.1",
+          "17.1.2"
+        ],
+        "proposal": 2,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "authentication.failure.percent",
+          "login.latency.ms",
+          "mac.moves.per_minute"
+        ],
+        "entities": [
+          "access01",
+          "ise01",
+          "login01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "Cisco IOS XE",
+        "Cisco ISE"
+      ],
+      "primary_dashboard_id": "discovery-security",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_18_payment_deny",
+      "title": "Perimeter deny burst and payment availability loss",
+      "domain": "Security",
+      "industries": [
+        "Financial services"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_18_payment_deny"
+      ],
+      "dashboard_ids": [
+        "discovery-security",
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_18_payment_deny.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "18_payment_deny",
+        "domain": "Security",
+        "industry": "Financial services",
+        "modeled_products": [
+          "Cisco ASA",
+          "Check Point"
+        ],
+        "external_use_cases": [
+          "5.2.2",
+          "21.11.1"
+        ],
+        "proposal": 5,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "payment.failure.percent",
+          "payment.latency.ms",
+          "policy.denies.per_second"
+        ],
+        "entities": [
+          "checkout01",
+          "checkpoint01",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "Cisco ASA",
+        "Check Point"
+      ],
+      "primary_dashboard_id": "discovery-security",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_19_ips_service",
+      "title": "IPS attack burst and legitimate-session degradation",
+      "domain": "Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_19_ips_service"
+      ],
+      "dashboard_ids": [
+        "discovery-security",
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_19_ips_service.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "19_ips_service",
+        "domain": "Security",
+        "industry": "Cross-industry",
+        "modeled_products": [
+          "Fortinet FortiOS",
+          "Cisco ASA"
+        ],
+        "external_use_cases": [
+          "5.2.2",
+          "8.1.1"
+        ],
+        "proposal": 6,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "ips.detections.per_second",
+          "legitimate.session.failure.percent",
+          "service.latency.ms"
+        ],
+        "entities": [
+          "client01",
+          "edge01",
+          "fortigate01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "Fortinet FortiOS",
+        "Cisco ASA"
+      ],
+      "primary_dashboard_id": "discovery-security",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_20_backend_link",
+      "title": "Distribution-link loss and backend monitor failure",
+      "domain": "Cloud / application",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_20_backend_link"
+      ],
+      "dashboard_ids": [
+        "discovery-application",
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_20_backend_link.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "20_backend_link",
+        "domain": "Cloud / application",
+        "industry": "Cross-industry",
+        "modeled_products": [
+          "Arista EOS",
+          "F5 BIG-IP"
+        ],
+        "external_use_cases": [
+          "5.1.1",
+          "8.1.1"
+        ],
+        "proposal": 8,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "application.failure.percent",
+          "backend.link.down",
+          "pool.member.unavailable.percent"
+        ],
+        "entities": [
+          "app_probe01",
+          "dist01",
+          "f5_01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "Arista EOS",
+        "F5 BIG-IP"
+      ],
+      "primary_dashboard_id": "discovery-application",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "network_21_partial_pool",
+      "title": "Partial load-balancer pool outage with perimeter demand",
+      "domain": "Cloud / application",
+      "industries": [
+        "Retail"
+      ],
+      "vendors": [
+        "PulseForge"
+      ],
+      "readiness": "Executable custom simulation",
+      "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "sourcetypes": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "scenario_ids": [
+        "network_21_partial_pool"
+      ],
+      "dashboard_ids": [
+        "discovery-application",
+        "discovery-network"
+      ],
+      "required_telemetry": [
+        "netspout:network:syslog",
+        "netspout:network:metric"
+      ],
+      "gaps": [
+        "Vendor-native telemetry is not established by this custom incident pack."
+      ],
+      "objective": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+      "filename": "scenario_network_21_partial_pool.yml",
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "21_partial_pool",
+        "domain": "Cloud / application",
+        "industry": "Retail",
+        "modeled_products": [
+          "F5 BIG-IP",
+          "Cisco ASA"
+        ],
+        "external_use_cases": [
+          "8.1.1"
+        ],
+        "proposal": 9,
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "contract_kind",
+          "dependency_path",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "modeled_products",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "simulation",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "application.failure.percent",
+          "application.latency.ms",
+          "pool.member.unavailable.percent"
+        ],
+        "entities": [
+          "app_probe01",
+          "edge01",
+          "f5_01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "modeled_products": [
+        "F5 BIG-IP",
+        "Cisco ASA"
+      ],
+      "primary_dashboard_id": "discovery-application",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
         "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
       },
       "telemetry_status": "NOT_CHECKED",
@@ -4409,7 +5277,10 @@
       ],
       "scenario_ids": [
         "network_08_firewall_policy",
-        "network_09_ddos_flood"
+        "network_09_ddos_flood",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service"
       ],
       "dashboard_ids": [
         "discovery-security"
@@ -4476,7 +5347,13 @@
         "network_12_dc_congestion",
         "network_13_mtu_pmtud",
         "network_14_wireless_outage",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_16_retail_uplink",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "dashboard_ids": [
         "discovery-network"
@@ -4530,7 +5407,9 @@
       ],
       "scenario_ids": [
         "network_10_dns_failure",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "dashboard_ids": [
         "discovery-application"
@@ -11820,7 +12699,13 @@
         "network_12_dc_congestion",
         "network_13_mtu_pmtud",
         "network_14_wireless_outage",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_16_retail_uplink",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "dashboard_ids": [
         "discovery-security",
@@ -11867,7 +12752,13 @@
         "network_12_dc_congestion",
         "network_13_mtu_pmtud",
         "network_14_wireless_outage",
-        "network_15_device_resources"
+        "network_15_device_resources",
+        "network_16_retail_uplink",
+        "network_17_hospital_mac_auth",
+        "network_18_payment_deny",
+        "network_19_ips_service",
+        "network_20_backend_link",
+        "network_21_partial_pool"
       ],
       "dashboard_ids": [
         "discovery-security",
@@ -11979,10 +12870,15 @@
       ],
       "sourcetypes": [],
       "scenario_ids": [
-        "network_01_campus_link"
+        "network_01_campus_link",
+        "network_16_retail_uplink",
+        "network_17_hospital_mac_auth",
+        "network_20_backend_link"
       ],
       "dashboard_ids": [
-        "discovery-network"
+        "discovery-application",
+        "discovery-network",
+        "discovery-security"
       ],
       "gaps": [
         "Junos link-state grammar; full IOS release/parser selection",
@@ -12112,7 +13008,9 @@
       ],
       "sourcetypes": [],
       "scenario_ids": [
-        "network_08_firewall_policy"
+        "network_08_firewall_policy",
+        "network_18_payment_deny",
+        "network_19_ips_service"
       ],
       "dashboard_ids": [
         "discovery-network",
@@ -12348,8 +13246,16 @@
         "NGINX/Apache/IIS access logs; F5 monitors"
       ],
       "sourcetypes": [],
-      "scenario_ids": [],
-      "dashboard_ids": [],
+      "scenario_ids": [
+        "network_19_ips_service",
+        "network_20_backend_link",
+        "network_21_partial_pool"
+      ],
+      "dashboard_ids": [
+        "discovery-application",
+        "discovery-network",
+        "discovery-security"
+      ],
       "gaps": [
         "Combined log versus custom nginx:plus:kv contract; no native TA claim",
         "External TA/CIM claims require independent validation: WEB+F5 / Web claimed upstream"
@@ -12493,8 +13399,13 @@
         "ISE posture, auth, CoA lifecycle; client reachability"
       ],
       "sourcetypes": [],
-      "scenario_ids": [],
-      "dashboard_ids": [],
+      "scenario_ids": [
+        "network_17_hospital_mac_auth"
+      ],
+      "dashboard_ids": [
+        "discovery-network",
+        "discovery-security"
+      ],
       "gaps": [
         "Posture event grammar and enforcement evidence; CoA is not enforcement",
         "External TA/CIM claims require independent validation: ISE / none"
@@ -13035,7 +13946,9 @@
       ],
       "sourcetypes": [],
       "scenario_ids": [
-        "network_08_firewall_policy"
+        "network_08_firewall_policy",
+        "network_16_retail_uplink",
+        "network_18_payment_deny"
       ],
       "dashboard_ids": [
         "discovery-network",

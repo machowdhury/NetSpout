@@ -1,6 +1,6 @@
 # C6 executable incident dashboard coverage
 
-25 existing incidents, four reused dashboards, 34 recipe IDs retained. No new
+31 existing incidents, four reused dashboards, 34 recipe IDs retained. No new
 scenario, transport, registry or vendor-native claim. The builder reads the
 committed descriptors and generates bounded preview events without dispatching;
 this establishes output-field provenance, not live data availability.
@@ -90,3 +90,23 @@ Dashboard definitions, generated relationships and producer fields can be checke
 offline. Required data presence, metric dimension retention, search performance,
 rendering, TA extraction and CIM/dashboard-consumer compatibility still require
 separately authorized running-Splunk validation. No such validation occurred.
+
+## C7A additions (proposals 1, 2, 5, 6, 8, 9)
+
+All six are executable custom simulations with modeled product labels, not native
+Arista/Cisco/F5/Fortinet/Check Point events or selected-version TA coverage.
+Dependency paths are declared model relationships, not observed physical paths.
+
+| Scenario ID | Industry | Modeled systems | Primary / related dashboard | External UC IDs |
+|---|---|---|---|---|
+| network_16_retail_uplink | Retail | Arista EOS, Cisco ASA | discovery-network | 5.1.1, 21.11.1 |
+| network_17_hospital_mac_auth | Healthcare | Cisco IOS XE, Cisco ISE | discovery-security, discovery-network | 5.1.1, 17.1.2 |
+| network_18_payment_deny | Financial services | Cisco ASA, Check Point | discovery-security, discovery-network | 5.2.2, 21.11.1 |
+| network_19_ips_service | Cross-industry | Fortinet FortiOS, Cisco ASA | discovery-security, discovery-network | 5.2.2, 8.1.1 |
+| network_20_backend_link | Cross-industry | Arista EOS, F5 BIG-IP | discovery-application, discovery-network | 5.1.1, 8.1.1 |
+| network_21_partial_pool | Retail | F5 BIG-IP, Cisco ASA | discovery-application, discovery-network | 8.1.1 |
+
+Each emits 30 logs and 10 KPI envelopes over 40 paced positions (3.9 seconds at
+10 EPS); logs-only transports omit metrics. User-facing failure/latency metrics
+are simulated gauges. Original 25 incident outputs are compared exactly with
+the prior checkpoint. No new native parsing or live indexing evidence is claimed.

@@ -28,6 +28,15 @@ DEVICES = {
     'isp_a': ('192.0.2.1', 'synthetic_isp_router', 'Ethernet0'),
     'isp_b': ('192.0.2.5', 'synthetic_isp_router', 'Ethernet0'),
 }
+DEVICES.update({
+    'checkout01': ('10.20.110.50', 'synthetic_checkout_probe', 'eth0'),
+    'ise01': ('10.20.0.60', 'modeled_authentication_service', 'eth0'),
+    'login01': ('10.20.110.51', 'synthetic_login_probe', 'eth0'),
+    'checkpoint01': ('10.20.0.61', 'modeled_downstream_firewall', 'eth0'),
+    'fortigate01': ('10.20.0.62', 'modeled_ips', 'eth0'),
+    'f5_01': ('10.20.0.63', 'modeled_load_balancer', 'eth0'),
+    'app_probe01': ('10.20.110.52', 'synthetic_application_probe', 'eth0'),
+})
 LINKS = (
     ('core01','TenGigabitEthernet1/0/1','dist01','TenGigabitEthernet1/1/1'),
     ('core02','TenGigabitEthernet1/0/1','dist01','TenGigabitEthernet1/1/2'),
@@ -153,6 +162,144 @@ DEFINITIONS = [
   'SYS-5-RESOURCE: CPU and memory returning to safe operating range',
   'Control-plane queues drained; adjacency, management and client probes stable'),
 ]
+DEFINITIONS.extend([('16_retail_uplink',
+  'Retail branch uplink flap and checkout interruption',
+  'access01',
+  'uplink.down',
+  0,
+  0.2,
+  1,
+  'Modeled Arista access uplink intermittently down; firewall sessions retry',
+  'Modeled branch uplink down; perimeter sessions cannot carry checkout requests',
+  'Synthetic retail checkout cohort sees unavailable payment path',
+  'Simulated Operator restores modeled uplink; no device operation performed',
+  'Modeled uplink up; new firewall sessions establish',
+  'Synthetic checkout probes recover after transport stability',
+  {'proposal': 1,
+   'uc': ['5.1.1', '21.11.1'],
+   'domain': 'Network / infrastructure',
+   'industry': 'Retail',
+   'observer': 'edge01',
+   'client': 'checkout01',
+   'service': 'retail-checkout',
+   'products': ['Arista EOS', 'Cisco ASA'],
+   'signals': ['uplink observation', 'perimeter session observation', 'checkout probe'],
+   'kpis': [('checkout.failure.percent', 0, 70), ('session.failure.percent', 0, 80)]}),
+ ('17_hospital_mac_auth',
+  'Hospital access MAC instability and login retries',
+  'access01',
+  'mac.moves.per_minute',
+  0,
+  12,
+  60,
+  'Modeled Cisco access MAC movement between two declared ports increases',
+  'Modeled port instability coincides with ISE authentication retries',
+  'Synthetic staff login cohort delayed; no patient identities or clinical actions',
+  'Simulated Operator stabilizes modeled port relationship',
+  'Modeled MAC stable on one port; authentication retries decline',
+  'Synthetic staff login probes return to baseline',
+  {'proposal': 2,
+   'uc': ['5.1.1', '17.1.2'],
+   'domain': 'Security',
+   'industry': 'Healthcare',
+   'observer': 'ise01',
+   'client': 'login01',
+   'service': 'staff-login',
+   'products': ['Cisco IOS XE', 'Cisco ISE'],
+   'signals': ['MAC movement observation', 'authentication observation', 'staff login probe'],
+   'kpis': [('authentication.failure.percent', 0, 65), ('login.latency.ms', 40, 1800)]}),
+ ('18_payment_deny',
+  'Perimeter deny burst and payment availability loss',
+  'edge01',
+  'policy.denies.per_second',
+  0,
+  30,
+  200,
+  'Modeled Cisco ASA deny rate rises on synthetic payment path',
+  'Modeled downstream Check Point observation also denies selected payment flows',
+  'Synthetic authorization probes fail; no real card or account data',
+  'Simulated policy rollback in model only; no firewall change performed',
+  'Modeled permits return; new synthetic payment sessions establish',
+  'Synthetic authorization failure ratio returns to baseline',
+  {'proposal': 5,
+   'uc': ['5.2.2', '21.11.1'],
+   'domain': 'Security',
+   'industry': 'Financial services',
+   'observer': 'checkpoint01',
+   'client': 'checkout01',
+   'service': 'payment-authorize',
+   'products': ['Cisco ASA', 'Check Point'],
+   'signals': ['upstream policy observation', 'downstream policy observation', 'payment probe'],
+   'kpis': [('payment.failure.percent', 0, 85), ('payment.latency.ms', 25, 2200)]}),
+ ('19_ips_service',
+  'IPS attack burst and legitimate-session degradation',
+  'fortigate01',
+  'ips.detections.per_second',
+  0,
+  40,
+  250,
+  'Modeled Fortinet IPS detections increase for a bounded synthetic attack cohort',
+  'Modeled perimeter demand coincides with legitimate session degradation',
+  'Synthetic legitimate-client completion ratio drops; no attack packets emitted',
+  'Simulated filtering intervention reduces modeled attack demand only',
+  'Modeled detections and session failures decline',
+  'Legitimate synthetic service probes stable after recovery',
+  {'proposal': 6,
+   'uc': ['5.2.2', '8.1.1'],
+   'domain': 'Security',
+   'industry': 'Cross-industry',
+   'observer': 'edge01',
+   'client': 'client01',
+   'service': 'enterprise-service',
+   'products': ['Fortinet FortiOS', 'Cisco ASA'],
+   'signals': ['IPS observation', 'legitimate session observation', 'service probe'],
+   'kpis': [('legitimate.session.failure.percent', 0, 45), ('service.latency.ms', 20, 850)]}),
+ ('20_backend_link',
+  'Distribution-link loss and backend monitor failure',
+  'dist01',
+  'backend.link.down',
+  0,
+  0.2,
+  1,
+  'Modeled Arista distribution path flaps before backend health checks fail',
+  'Modeled backend path down; F5 pool member observation becomes unavailable',
+  'Synthetic application dependency degraded; frontend reachability alone is insufficient',
+  'Simulated Operator restores backend path in the dependency model',
+  'Modeled path up; backend monitor recovers after link stability',
+  'Synthetic application probe stable after backend recovery',
+  {'proposal': 8,
+   'uc': ['5.1.1', '8.1.1'],
+   'domain': 'Cloud / application',
+   'industry': 'Cross-industry',
+   'observer': 'f5_01',
+   'client': 'app_probe01',
+   'service': 'application-backend',
+   'products': ['Arista EOS', 'F5 BIG-IP'],
+   'signals': ['backend path observation', 'pool member health observation', 'application probe'],
+   'kpis': [('pool.member.unavailable.percent', 0, 50), ('application.failure.percent', 0, 60)]}),
+ ('21_partial_pool',
+  'Partial load-balancer pool outage with perimeter demand',
+  'f5_01',
+  'pool.member.unavailable.percent',
+  0,
+  10,
+  50,
+  'Modeled F5 pool loses one of two members under fixed synthetic offered load',
+  'Modeled half-capacity pool cannot serve all synthetic perimeter demand',
+  'Synthetic application errors rise while one member remains available',
+  'Simulated Operator restores failed member; no real load balancer operation',
+  'Modeled pool returns to two healthy members; application errors decline',
+  'Synthetic application probes meet baseline with restored pool capacity',
+  {'proposal': 9,
+   'uc': ['8.1.1'],
+   'domain': 'Cloud / application',
+   'industry': 'Retail',
+   'observer': 'edge01',
+   'client': 'app_probe01',
+   'service': 'retail-web',
+   'products': ['F5 BIG-IP', 'Cisco ASA'],
+   'signals': ['pool capacity observation', 'offered session demand', 'application probe'],
+   'kpis': [('application.failure.percent', 0, 35), ('application.latency.ms', 25, 600)]})])
 CATALOG = {row[0]: row for row in DEFINITIONS}
 PHASES = ('BASELINE','WARNING','DEGRADATION','FAILURE','NETWORK_IMPACT',
           'USER_IMPACT','INTERVENTION','RECOVERY','RECONVERGENCE','VERIFIED_HEALTHY')
@@ -187,7 +334,8 @@ def generate(slug, seed=42, start=1700000000.0, run_id=None, eps=10):
         raise ValueError('Invalid incident execution parameters')
     rng = random.Random(seed)
     incident = str(uuid.uuid5(uuid.NAMESPACE_URL, f'netspout:{slug}:{seed}:{run_id or "preview"}'))
-    _, title, primary, metric, healthy, degraded, peak, warning, failure, impact, action, recovery, converge = row
+    _, title, primary, metric, healthy, degraded, peak, warning, failure, impact, action, recovery, converge = row[:13]
+    correlated = row[13] if len(row) > 13 else None
     messages = (f'HEALTH-6-OK: {title} baseline; VLAN 110 gateway and application reachable', warning,
                 f'PROBE-4-DEGRADED: {warning}; loss and latency outside baseline', failure,
                 impact, f'CLIENT-3-IMPACT: {impact}', action, recovery, converge,
@@ -196,16 +344,28 @@ def generate(slug, seed=42, start=1700000000.0, run_id=None, eps=10):
     values = (healthy,degraded,degraded,peak,peak,peak,degraded,degraded,healthy,healthy)
     events=[]
     for phase_index,phase in enumerate(PHASES):
-        for device,message in ((primary,messages[phase_index]),('core02',f'PATH-5-OBSERVE: {messages[phase_index]}'),
+        observations = ((primary,messages[phase_index]),('core02',f'PATH-5-OBSERVE: {messages[phase_index]}'),
                                ('wifi01' if slug=='14_wireless_outage' else 'client01',f'PROBE-5-RESULT: phase={phase}; '+
                                 ('application reachable' if phase_index in (0,8,9) else
                                  'operator action in progress' if phase_index==6 else
-                                 'application degraded; '+impact))):
+                                 'application degraded; '+impact)))
+        if correlated:
+            observations = ((primary,messages[phase_index]),
+                (correlated['observer'],correlated['signals'][1]+': '+messages[phase_index]),
+                (correlated['client'],correlated['signals'][2]+': '+messages[phase_index]))
+        for device,message in observations:
             address,role,interface=DEVICES[device]
             fields=dict(netspout_incident_id=incident,netspout_scenario_id=slug,netspout_site_id=SITE,
                         netspout_device_id=device,netspout_phase=phase,device_ip=address,
                         device_role=role,interface=interface,vlan=110,subnet='10.20.110.0/24',
                         sequence=len(events),severity=levels[phase_index])
+            if correlated:
+                fields.update(simulation='true',contract_kind='pulseforge_custom',
+                    netspout_service_id=correlated['service'],
+                    dependency_path=primary+'>'+correlated['observer']+'>'+correlated['client'],
+                    modeled_products=','.join(correlated['products']),
+                    evidence_kind='simulated_action' if phase_index==6 else 'simulated_observation')
+                message=('SIMULATED Operator action: ' if phase_index==6 else 'SIMULATED ')+message
             if run_id: fields['netspout_run_id']=run_id
             stamp=start+len(events)/eps
             fields['event_time']=stamp
@@ -221,6 +381,10 @@ def generate(slug, seed=42, start=1700000000.0, run_id=None, eps=10):
                            raw='metric',fields=fields,metrics={metric:value,
                            'network.packet_loss.percent':float(0 if phase_index in (0,8,9) else 5 if phase_index in (1,6,7) else 35),
                            'network.latency.ms':float(3 if phase_index in (0,8,9) else 20 if phase_index in (1,6,7) else 160)}))
+        if correlated:
+            factor=(0,.2,.4,1,1,1,.6,.2,0,0)[phase_index]
+            events[-1]['metrics']={metric:value, **{name:float(base+(peak-base)*factor)
+                for name,base,peak in correlated['kpis']}}
         if slug=='01_campus_link':
             events[-1]['metrics'].update({'interface.operational.up':float(phase_index not in (3,4,5,6)),
                                          'interface.input.errors':float((0,18,40,180,180,180,0,0,0,0)[phase_index])})

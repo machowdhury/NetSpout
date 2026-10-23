@@ -22,7 +22,18 @@ import json
 import shutil
 import tempfile
 import stat
-from datablaster_rest import resolve_run_dir, resolve_hec_urls, get_stored_config, hec_request, resolve_scenario_path, cleanup_stale_run_files, get_orchestration_log_path, validate_syslog_settings
+# Persistent REST loading injects its existing runtime before execution. CLI
+# processes retain the ordinary import; never create a second handler in-process.
+if "_NATIVE_REST_RUNTIME" not in globals():
+    import datablaster_rest as _NATIVE_REST_RUNTIME
+resolve_run_dir = _NATIVE_REST_RUNTIME.resolve_run_dir
+resolve_hec_urls = _NATIVE_REST_RUNTIME.resolve_hec_urls
+get_stored_config = _NATIVE_REST_RUNTIME.get_stored_config
+hec_request = _NATIVE_REST_RUNTIME.hec_request
+resolve_scenario_path = _NATIVE_REST_RUNTIME.resolve_scenario_path
+cleanup_stale_run_files = _NATIVE_REST_RUNTIME.cleanup_stale_run_files
+get_orchestration_log_path = _NATIVE_REST_RUNTIME.get_orchestration_log_path
+validate_syslog_settings = _NATIVE_REST_RUNTIME.validate_syslog_settings
 
 # App root directory
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

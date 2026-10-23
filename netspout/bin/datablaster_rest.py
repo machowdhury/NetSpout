@@ -91,6 +91,37 @@ def _native_monitor():
         return module
 
 
+_SIMULATION_RUNNER_IMPORT_LOCK = threading.Lock()
+
+
+def _simulation_runner():
+    """Load the sibling runner once, bound to this persistent handler runtime."""
+    name = "run_simulation"
+    path = os.path.realpath(os.path.join(BIN_DIR, name + ".py"))
+    runtime = sys.modules[__name__]
+    with _SIMULATION_RUNNER_IMPORT_LOCK:
+        module = sys.modules.get(name)
+        created = module is None
+        if created:
+            spec = importlib.util.spec_from_file_location(name, path)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("Simulation runner unavailable")
+            module = importlib.util.module_from_spec(spec)
+            module._NATIVE_REST_RUNTIME = runtime
+            sys.modules[name] = module
+        elif (os.path.realpath(getattr(module, "__file__", "")) != path
+              or getattr(module, "_NATIVE_REST_RUNTIME", None) is not runtime):
+            raise RuntimeError("Simulation runner module identity conflict")
+        try:
+            if created:
+                spec.loader.exec_module(module)
+        except BaseException:
+            if created and sys.modules.get(name) is module:
+                del sys.modules[name]
+            raise
+        return module
+
+
 class RunFolderError(RuntimeError):
     pass
 
@@ -2023,7 +2054,7 @@ def _start_simulation_locked(run_params: Dict[str, Any]) -> Dict[str, Any]:
         elif is_syslog:
             python_path = False  # Raw syslog has no searchable run-ID metadata.
         else:
-            import run_simulation as runner
+            runner = _simulation_runner()
             python_path = run_params.get("ssl_verify", True) or runner.resolve_binary() == "python_engine"
         _update_lock_held(run_params["_native_record"]["run_id"], lambda r: r.update(
             correlation="SUPPORTED" if python_path else "UNSUPPORTED"))

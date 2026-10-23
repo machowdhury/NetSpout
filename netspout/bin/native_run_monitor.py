@@ -271,8 +271,10 @@ def verification(run_id, session_key):
     r = next((r for r in rows if r['run_id'] == run_id), None)
     if r is None:
         return 404, {'status': 'error', 'message': 'Run unavailable'}
-    def result(state, message, count=None):
+    def result(state, message, count=None, metric_points=None):
         value = {'state': state, 'message': message, 'matching_events': count}
+        if metric_points is not None:
+            value['matching_metric_points'] = metric_points
         saved = update(run_id, lambda rec: rec.update(verification=value))
         return 200, {'status': 'success', 'run': saved}
     # A local Splunk search can only verify the local destination.
@@ -286,7 +288,7 @@ def verification(run_id, session_key):
         return result('INCONCLUSIVE', 'Syslog run correlation and indexing verification are unsupported')
     if r['destination']['host'] not in ('127.0.0.1', 'localhost', '::1'):
         return result('INCONCLUSIVE', 'Remote destination search is unsupported')
-    if r['correlation'] != 'SUPPORTED' or r['classification'] != 'LOG' or not r['indexes']:
+    if r['correlation'] != 'SUPPORTED' or r['classification'] not in ('LOG', 'MIXED') or not r['indexes']:
         return result('INCONCLUSIVE', 'Indexing verification unsupported for this output path')
     now = time.time()
     end = min(r['ended_at'] or now, now)
@@ -305,6 +307,28 @@ def verification(run_id, session_key):
             raise RuntimeError()
         return json.loads(body)
     try:
+        mixed = r['classification'] == 'MIXED'
+        if mixed:
+            # Resolve signal scopes from recorded indexes, never live app defaults
+            # or index-name guesses. Ordinary search cannot read metric indexes.
+            scopes = {'event': [], 'metric': []}
+            for index in r['indexes']:
+                metadata = request('/services/data/indexes/' + quote(index, safe='')
+                                   + '?output_mode=json&f=datatype')
+                entries = metadata.get('entry', [])
+                datatype = entries[0].get('content', {}).get('datatype') if len(entries) == 1 else None
+                if datatype not in scopes:
+                    return result('INCONCLUSIVE', 'Recorded index signal types are unavailable')
+                scopes[datatype].append('index="' + index + '"')
+            if not all(scopes.values()):
+                return result('INCONCLUSIVE', 'Mixed run requires recorded log and metric index scopes')
+            bounds = ' earliest=' + str(earliest) + ' latest=' + str(latest)
+            query = ('search (' + ' OR '.join(scopes['event']) + ') netspout_run_id::"' + r['run_id'] + '"'
+                     + bounds + ' | stats count by netspout_run_id | eval netspout_signal="LOG"'
+                     + ' | append [ | mstats count(_value) as count WHERE ('
+                     + ' OR '.join(scopes['metric']) + ') metric_name=* netspout_run_id="'
+                     + r['run_id'] + '"' + bounds + ' BY netspout_run_id'
+                     + ' | eval netspout_signal="METRIC" ]')
         cached = r.get('search_job', {})
         sid = cached.get('sid')
         if not sid:
@@ -326,10 +350,25 @@ def verification(run_id, session_key):
         if data.get('messages') or data.get('preview') in (True, 1, '1') or not isinstance(data.get('results'), list):
             return result('INCONCLUSIVE', 'Search results are incomplete')
         total = 0
+        metric_total = 0
         for row in data['results']:
             if row.get('netspout_run_id') != r['run_id'] or not re.fullmatch(r'\d+', str(row.get('count', ''))):
                 return result('INCONCLUSIVE', 'Search returned unrelated or unusable results')
+            if mixed:
+                signal = row.get('netspout_signal')
+                if signal not in ('LOG', 'METRIC'):
+                    return result('INCONCLUSIVE', 'Search returned unrelated or unusable results')
+                if signal == 'METRIC':
+                    metric_total += int(row['count'])
+                    continue
             total += int(row['count'])
+        if mixed and total > 0 and metric_total > 0:
+            return result('VERIFIED', 'Matching indexed logs and metric points found in the recorded run window',
+                          total, metric_total)
+        if mixed and (total > 0 or metric_total > 0):
+            update(run_id, lambda rec: rec.pop('search_job', None))
+            return result('INCONCLUSIVE', 'Only one signal found; mixed run needs indexed logs and metric points',
+                          total, metric_total)
         if total > 0:
             return result('VERIFIED', 'Matching indexed log events found in the recorded run window', total)
         if r['execution_state'] == 'ACTIVE' or now - end < 60 or cached.get('latest', latest) < latest:

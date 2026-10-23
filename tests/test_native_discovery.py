@@ -50,7 +50,7 @@ class NativeDiscoveryTests(unittest.TestCase):
         registry=DashboardRecipeRegistry.model_validate(self.recipes)
         self.assertEqual(len([r for r in registry.recipes if r.native_view]),4)
         baseline=json.loads(subprocess.check_output(['git','show','HEAD:catalog/dashboard_recipes.json'],cwd=ROOT))
-        self.assertEqual([r for r in self.recipes['recipes'] if not r.get('native_view')],baseline['recipes'])
+        self.assertEqual([r for r in self.recipes['recipes'] if not r.get('native_view')],[r for r in baseline['recipes'] if not r.get('native_view')])
 
     def test_navigation_and_dashboard_queries(self):
         nav=ET.parse(ROOT/'netspout/default/data/ui/nav/default.xml')
@@ -60,18 +60,22 @@ class NativeDiscoveryTests(unittest.TestCase):
             tree=ET.parse(ROOT/'netspout/default/data/ui/views'/ (name+'.xml'))
             if name=='pulseforge_discovery': continue
             for query in tree.iter('query'):
-                self.assertIn('index=$index|s$',query.text)
+                self.assertTrue('index=$index|s$' in query.text or 'index=$metric_index|s$' in query.text)
                 self.assertIn('netspout_run_id=$run_id|s$',query.text)
                 self.assertNotIn('makeresults',query.text)
             self.assertIn('MISSING_FIELDS',ET.tostring(tree.getroot(),encoding='unicode'))
-            self.assertEqual(len(list(tree.iter('earliest'))),3)
+            self.assertEqual(len(list(tree.iter('earliest'))),6 if name=='pulseforge_telecom' else 5)
+            self.assertTrue(all(e.text=='$window$' for e in tree.iter('earliest')))
 
     def test_query_fields_exist_in_incident_producers(self):
         for recipe in self.recipes['recipes']:
             if not recipe.get('native_view'): continue
             for field in recipe['required_fields']:
-                for producer in ('network_incidents.py','telecom_incidents.py'):
-                    self.assertIn(field,(ROOT/'netspout/bin'/producer).read_text())
+                # Telecom-specific fields must exist in their declared producer,
+                # not in the unrelated network producer as well.
+                provenance=recipe['field_provenance'][field]
+                producer=provenance.split(':')[0]
+                self.assertIn(field,(ROOT/producer).read_text())
 
     def test_generated_core_and_catalog_mirrors(self):
         source=(ROOT/'src/netspout_core/dashboard_recipes.py').read_bytes()

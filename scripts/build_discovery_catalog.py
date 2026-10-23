@@ -3,6 +3,7 @@ import argparse
 import json
 from pathlib import Path
 import re
+import sys
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,7 +14,45 @@ def read(path):
     return json.loads((ROOT / path).read_text())
 
 
+def incident_contracts():
+    """Read existing descriptors and bounded producers; never dispatch telemetry."""
+    import importlib.util
+    old_path = list(sys.path)
+    try:
+        sys.path.insert(0, str(ROOT / 'netspout/bin'))
+        spec = importlib.util.spec_from_file_location('discovery_incident_producer', ROOT / 'netspout/bin/network_incidents.py')
+        producer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(producer)
+        result = {}
+        for item in read('netspout/appserver/static/scenarios_manifest.json'):
+            descriptor = ROOT / 'netspout/appserver/static/scenarios' / item['filename']
+            # Only the committed JSON-form incident descriptors are in this gate.
+            text = descriptor.read_text()
+            if not text.lstrip().startswith('{'):
+                continue
+            data = json.loads(text)
+            slug = data.get('pulseforge_incident')
+            if not slug:
+                continue
+            if slug not in producer.CATALOG and slug not in producer.telecom_incidents.CATALOG:
+                raise ValueError('Unrecognized executable incident descriptor')
+            events = producer.generate(slug, 42, 1792497600, '00112233-4455-6677-8899-aabbccddeeff', 10)
+            logs = [e for e in events if 'metrics' not in e]
+            metrics = [e for e in events if 'metrics' in e]
+            result[item['id']] = dict(runtime_scenario_id=slug,
+                log_sourcetypes=sorted({e['sourcetype'] for e in logs}),
+                metric_sourcetypes=sorted({e['sourcetype'] for e in metrics}),
+                log_fields=sorted(set.intersection(*(set(e['fields']) for e in logs))),
+                metric_names=sorted({k for e in metrics for k in e['metrics']}),
+                entities=sorted({e['fields']['netspout_device_id'] for e in events}),
+                field_provenance='netspout/bin/' + ('telecom_incidents.py' if slug.startswith('telco_') else 'network_incidents.py') + ': generate()')
+        return result
+    finally:
+        sys.path[:] = old_path
+
+
 def build():
+    incidents = incident_contracts()
     vendors = read('catalog/vendors.json')
     sources = read('catalog/telemetry_catalog.json')
     profiles = [p for i in sources['integrations'] for p in i.get('profiles', [])]
@@ -43,7 +82,7 @@ def build():
         if sid in ids: raise ValueError('Duplicate scenario ID')
         ids.add(sid)
         c=canonical.get(sid, {})
-        native = sid.startswith(('network_', 'telco_'))
+        native = sid in incidents
         telco = sid.startswith('telco_')
         domain='Telecom' if telco else 'Network / infrastructure' if native else c.get('category', record.get('group','Other'))
         matching=[r for r in recipes if sid in r['selectors']]
@@ -70,6 +109,24 @@ def build():
             gaps=['Vendor-native telemetry is not established by this custom incident pack.'] if native else ['Execution and parser compatibility require separate validation.'],
             objective=c.get('use_case',{}).get('objective',record.get('description','')),
             filename=record.get('filename'),evidence=[])
+        if native:
+            contract = incidents[sid]
+            if not matching:
+                raise ValueError('Executable incident has no primary dashboard')
+            primary = matching[0]
+            if not set(primary['required_sourcetypes']) <= set(contract['log_sourcetypes']):
+                raise ValueError('Dashboard requires unavailable log sourcetypes')
+            if not set(primary['required_fields']) <= set(contract['log_fields']):
+                raise ValueError('Dashboard requires unavailable event fields')
+            row.update(executable=True, incident_contract=contract,
+                       primary_dashboard_id=primary['recipe_id'],
+                       required_fields=primary['required_fields'],
+                       field_provenance=primary['field_provenance'],
+                       telemetry_status='NOT_CHECKED',
+                       prerequisites=['Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.',
+                                      'KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels.'])
+        else:
+            row['executable'] = False  # not assessed by the committed incident gate
         entries.append(row)
     for r in recipes:
         if not set(r['selectors']) <= ids: raise ValueError('Dashboard selector missing from scenario catalog')
@@ -77,8 +134,8 @@ def build():
             industries=r['industries'],vendors=['PulseForge'],readiness='Definition ready / data not checked',
             description=r['purpose'],sourcetypes=r['required_sourcetypes'],scenario_ids=r['selectors'],
             dashboard_ids=[r['recipe_id']],view=r['native_view'],required_fields=r['required_fields'],
-            data_status='NOT_CHECKED',gaps=['Installed Splunk rendering/search and field extraction are unverified.'],evidence=[]))
-        for name in r['required_sourcetypes']:
+            metric_sourcetypes=r.get('metric_sourcetypes', []), field_provenance=r.get('field_provenance', {}), data_status='NOT_CHECKED',gaps=['Installed Splunk rendering/search and field extraction are unverified.'],evidence=[]))
+        for name in r['required_sourcetypes'] + r.get('metric_sourcetypes', []):
             sts[name]['dashboard_ids'].append(r['recipe_id'])
     entries += list(sts.values())
     # Read-only projection of the approved research; no import into schema claims.
@@ -96,30 +153,53 @@ def build():
             sourcetypes=[],scenario_ids=sorted(set(related)),dashboard_ids=sorted({d for s in entries if s['kind']=='scenario' and s['id'] in related for d in s['dashboard_ids']}),
             gaps=[cells[5], 'External TA/CIM claims require independent validation: '+cells[6]],
             evidence=[dict(title='Attributed external UC; research only',reference=url)],behavior=cells[8]))
-    return dict(schema_version=1,provenance='Generated from canonical catalogs, native manifest and approved research; never edit projection.',entries=entries)
+    return dict(schema_version=1, executable_incident_count=len(incidents), provenance='Generated from canonical catalogs, native manifest and approved research; never edit projection.',entries=entries)
 
 
 def dashboard_xml(recipe):
+    contracts = incident_contracts()
+    selected = [contracts[sid] for sid in recipe['selectors']]
     form=ET.Element('form', {'version':'1.1','theme':'dark'})
     ET.SubElement(form,'label').text='PulseForge — '+recipe['title']
-    ET.SubElement(form,'description').text=recipe['purpose']+' Local indexed data only. Choose the configured event index and server-owned run ID. Remote destinations may have no data here. VERIFIED_HEALTHY is a simulated phase, not independent indexing verification.'
+    ET.SubElement(form,'description').text=recipe['purpose']+' Local indexed synthetic data only. KPI panels require HEC metrics and retained dimensions. Empty KPI results mean unavailable data, not zero impact. VERIFIED_HEALTHY is a simulated phase, not indexing verification. Remote destination data is not searched.'
     fs=ET.SubElement(form,'fieldset',{'submitButton':'true','autoRun':'false'})
-    for token,label,default in [('index','Local event index','idx_network_ops'),('run_id','Server-owned run ID',None)]:
+    for token,label,default in [('index','Local event index','idx_network_ops'),('metric_index','Local metrics index','idx_performance_metrics'),('run_id','Server-owned run UUID',None),('entity','Device ID (* means all)','*')]:
         inp=ET.SubElement(fs,'input',{'type':'text','token':token});ET.SubElement(inp,'label').text=label
         if default: ET.SubElement(inp,'default').text=default
-    source=' OR '.join('sourcetype="'+s+'"' for s in recipe['required_sourcetypes'])
-    # |s escapes token values as SPL strings; no arbitrary SPL from URL/input.
-    base='search index=$index|s$ ('+source+') netspout_run_id=$run_id|s$'
+    for token,label,choices in [('scenario_id','Scenario',sorted({c['runtime_scenario_id'] for c in selected})),('log_source','Log sourcetype',recipe['required_sourcetypes'])]:
+        inp=ET.SubElement(fs,'input',{'type':'dropdown','token':token});ET.SubElement(inp,'label').text=label
+        if token=='scenario_id': ET.SubElement(inp,'choice',{'value':'*'}).text='All scenarios in this dashboard'
+        for value in choices: ET.SubElement(inp,'choice',{'value':value}).text=value
+        ET.SubElement(inp,'default').text='*' if token=='scenario_id' else choices[0]
+    timer=ET.SubElement(fs,'input',{'type':'dropdown','token':'window'})
+    ET.SubElement(timer,'label').text='Bounded time range'
+    for value,label in [('-15m','Last 15 minutes'),('-1h','Last hour'),('-24h','Last 24 hours'),('-7d','Last 7 days')]:
+        ET.SubElement(timer,'choice',{'value':value}).text=label
+    ET.SubElement(timer,'default').text='-24h'
+    html=ET.SubElement(ET.SubElement(ET.SubElement(form,'row'),'panel'),'html')
+    ET.SubElement(html,'a',{'href':'pulseforge_discovery?q='+recipe['required_sourcetypes'][0]}).text='Back to discovery — related scenarios and telemetry prerequisites'
+    # Every free-text token is escaped by Splunk's string token filter.
+    source=' OR '.join('sourcetype="'+v+'"' for v in recipe['required_sourcetypes'])
+    scenario=' OR '.join('netspout_scenario_id="'+c['runtime_scenario_id']+'"' for c in selected)
+    base='search index=$index|s$ ('+source+') ('+scenario+') sourcetype=$log_source|s$ netspout_run_id=$run_id|s$ netspout_scenario_id=$scenario_id|s$ netspout_device_id=$entity|s$'
     fields=recipe['required_fields']
     counts=' '.join('count('+f+') as present_'+f for f in fields)
     checks=' AND '.join('present_'+f+'=observed_records' for f in fields)
+    phase_order='BASELINE WARNING DEGRADATION FAILURE NETWORK_IMPACT USER_IMPACT INTERVENTION RECOVERY RECONVERGENCE VERIFIED_HEALTHY'.split()
+    order='case('+','.join('netspout_phase="'+phase+'",'+str(i) for i,phase in enumerate(phase_order))+')'
+    metric_source=' OR '.join('sourcetype="'+v+'"' for v in recipe.get('metric_sourcetypes', []))
+    metric='| mstats avg(_value) as simulated_value WHERE metric_name=* index=$metric_index|s$ ('+metric_source+') ('+scenario+') netspout_run_id=$run_id|s$ netspout_scenario_id=$scenario_id|s$ netspout_device_id=$entity|s$ BY metric_name netspout_scenario_id netspout_phase netspout_device_id span=1s'
     panels=[('Data / field readiness (not delivery proof)',base+' | stats count as observed_records '+counts+' | eval data_status=case(observed_records=0,"MISSING_DATA",'+checks+',"FIELDS_PRESENT",1=1,"MISSING_FIELDS")'),
-            ('Observed records by incident phase',base+' | stats count as observed_records by netspout_scenario_id netspout_phase netspout_device_id'),
-            ('Indexed observation timeline',base+' | sort 0 _time | head 500 | table _time netspout_run_id netspout_scenario_id netspout_phase netspout_device_id _raw')]
+        ('Incident start, duration and affected entities',base+' | stats min(_time) as first_observation max(_time) as last_observation dc(netspout_device_id) as observed_entities min(eval(if(netspout_phase="FAILURE",_time,null()))) as first_failure by netspout_incident_id netspout_scenario_id | eval observed_span_seconds=last_observation-first_observation | convert ctime(first_observation) ctime(last_observation) ctime(first_failure)'),
+        ('Impact and recovery by phase — synthetic severity (lower is worse)',base+' | stats min(severity) as most_severe dc(netspout_device_id) as observed_entities min(_time) as phase_start max(_time) as phase_end by netspout_scenario_id netspout_phase | eval phase_order='+order+' | sort 0 netspout_scenario_id phase_order'),
+        ('Simulated KPI progression — missing rows are not zero',metric+' | eval phase_order='+order+' | sort 0 netspout_scenario_id metric_name phase_order _time'),
+        ('Correlated supporting observations (maximum 500)',base+' | sort 0 _time | head 500 | table _time netspout_incident_id netspout_scenario_id netspout_phase netspout_device_id severity _raw')]
+    if recipe['recipe_id']=='discovery-telecom':
+        panels.insert(3,('Synthetic service/cohort impact — do not sum repeated observer counts',base+' | stats max(affected_synthetic_subscribers) as affected_synthetic_cohort values(netspout_device_id) as observed_devices by netspout_scenario_id netspout_service_id netspout_phase | eval phase_order='+order+' | sort 0 netspout_scenario_id phase_order'))
     for title,query in panels:
         panel=ET.SubElement(ET.SubElement(form,'row'),'panel');ET.SubElement(panel,'title').text=title
         table=ET.SubElement(panel,'table');search=ET.SubElement(table,'search')
-        ET.SubElement(search,'query').text=query;ET.SubElement(search,'earliest').text='-24h';ET.SubElement(search,'latest').text='now'
+        ET.SubElement(search,'query').text=query;ET.SubElement(search,'earliest').text='$window$';ET.SubElement(search,'latest').text='now'
         ET.SubElement(table,'option',{'name':'count'}).text='20'
     ET.indent(form)
     return ET.tostring(form,encoding='unicode')+'\n'

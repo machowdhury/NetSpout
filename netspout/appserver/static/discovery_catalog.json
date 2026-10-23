@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "executable_incident_count": 25,
   "provenance": "Generated from canonical catalogs, native manifest and approved research; never edit projection.",
   "entries": [
     {
@@ -42,7 +43,8 @@
       ],
       "objective": "ACME Bridge Domain Withdrawal (ACI Leaf Outage) - high fidelity simulation scenario",
       "filename": "scenario_acme_bridge_domain_withdrawal.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -87,7 +89,8 @@
       ],
       "objective": "ACME Campus Cross-Domain Visibility (Cat9k + ISE) - high fidelity simulation scenario",
       "filename": "scenario_acme_campus_cross_domain_visibility.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -131,7 +134,8 @@
       ],
       "objective": "ACME Full Enterprise Network Topology (All Domains) - high fidelity simulation scenario",
       "filename": "scenario_acme_full_network_topology.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -164,7 +168,8 @@
       ],
       "objective": "ACME MPLS Backbone Real-Time Assurance (Carrier P/PE) - high fidelity simulation scenario",
       "filename": "scenario_acme_mpls_backbone_realtime.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -197,7 +202,8 @@
       ],
       "objective": "ACME MPLS-to-SRv6 Transition Assurance - high fidelity simulation scenario",
       "filename": "scenario_acme_mpls_to_srv6_transition.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -240,7 +246,8 @@
       ],
       "objective": "ACME SD-WAN Toronto Hub Brownout & Failover - high fidelity simulation scenario",
       "filename": "scenario_acme_sdwan_toronto_degradation.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -274,7 +281,8 @@
       ],
       "objective": "Maple Catalyst Core & Access Assurance - high fidelity simulation scenario",
       "filename": "scenario_maple_catalyst.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -308,7 +316,8 @@
       ],
       "objective": "Maple Intersight Compute & UCS Ingestion - high fidelity simulation scenario",
       "filename": "scenario_maple_intersight.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -342,7 +351,8 @@
       ],
       "objective": "Maple Nutanix Enterprise Cloud Telemetry - high fidelity simulation scenario",
       "filename": "scenario_maple_nutanix.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -377,7 +387,8 @@
       ],
       "objective": "Maple Multi-Layer Security Operations - high fidelity simulation scenario",
       "filename": "scenario_maple_security.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -413,7 +424,8 @@
       ],
       "objective": "Core Campus Switched Fabric Baseline - high fidelity simulation scenario",
       "filename": "scenario_campus.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -446,7 +458,8 @@
       ],
       "objective": "Datacenter Core Backbone Ingestion - high fidelity simulation scenario",
       "filename": "scenario_core.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -492,7 +505,8 @@
       ],
       "objective": "Cross-Platform Disaster Recovery Drill - high fidelity simulation scenario",
       "filename": "scenario_cross_platform_disaster.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -528,7 +542,8 @@
       ],
       "objective": "Meraki Cloud-Managed Branch Assurance - high fidelity simulation scenario",
       "filename": "scenario_meraki_branch_assurance.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -572,7 +587,8 @@
       ],
       "objective": "Enterprise SD-WAN Edge Ingestion - high fidelity simulation scenario",
       "filename": "scenario_sdwan.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -613,7 +629,8 @@
       ],
       "objective": "Wireless LAN Controller & Access Points - high fidelity simulation scenario",
       "filename": "scenario_wireless.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -657,7 +674,8 @@
       ],
       "objective": "Mixed Multi-Domain Synthetic Ingestion - high fidelity simulation scenario",
       "filename": "scenario_mix.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -701,7 +719,8 @@
       ],
       "objective": "Simulates a corporate-wide application degradation event tracing from a wired infrastructure link degradation up to wireless client symptoms.",
       "filename": "scenario_mv_016_cross_domain_slowness.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -756,7 +775,8 @@
       ],
       "objective": "Hierarchical end-to-end enterprise network simulation spanning Cloud SASE (Zscaler/Netskope), Security Edge (Palo Alto), WAN Interconnect (Fortinet), Provider Core (Juniper/Nokia), DC AI Fabric (Arista/NVIDIA/F5), and Campus Core (Aruba/Mist).",
       "filename": "scenario_custom_multivendor_enterprise_stack.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -790,7 +810,73 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_01_campus_link.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "01_campus_link",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "interface.errors.rate",
+          "interface.input.errors",
+          "interface.operational.up",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "dist01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -824,7 +910,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_02_vlan_trunk.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "02_vlan_trunk",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "vlan.discard.rate"
+        ],
+        "entities": [
+          "access01",
+          "client01",
+          "core02"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -858,7 +1008,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_03_stp_storm.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "03_stp_storm",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "broadcast.packets.rate",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "access01",
+          "client01",
+          "core02"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -892,7 +1106,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_04_wan_brownout.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "04_wan_brownout",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "wan.latency.ms"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -926,7 +1204,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_05_dual_isp.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "05_dual_isp",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "wan.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -960,7 +1302,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_06_bgp_flap.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "06_bgp_flap",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "bgp.withdrawn.prefixes",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -994,7 +1400,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_07_ospf_adjacency.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "07_ospf_adjacency",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "ospf.adjacency.down"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "dist01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1029,7 +1499,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_08_firewall_policy.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "08_firewall_policy",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "firewall.denied.sessions.rate",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-security",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1064,7 +1598,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_09_ddos_flood.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "09_ddos_flood",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "security.flood.packets.rate"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-security",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1099,7 +1697,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_10_dns_failure.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "10_dns_failure",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "dns.query.failure.percent",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "dns01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-application",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1133,7 +1795,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_11_dhcp_exhaustion.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "11_dhcp_exhaustion",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "dhcp.pool.utilization.percent",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "dhcp01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1167,7 +1893,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_12_dc_congestion.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "12_dc_congestion",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "interface.queue.drops.rate",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "leaf01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1201,7 +1991,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_13_mtu_pmtud.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "13_mtu_pmtud",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.large_probe.failure.percent",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core02",
+          "edge01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1235,7 +2089,71 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_14_wireless_outage.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "14_wireless_outage",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "network.latency.ms",
+          "network.packet_loss.percent",
+          "wireless.ap.unreachable"
+        ],
+        "entities": [
+          "core02",
+          "wifi01",
+          "wlc01"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-network",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1270,7 +2188,72 @@
       ],
       "objective": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
       "filename": "scenario_network_15_device_resources.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "15_device_resources",
+        "log_sourcetypes": [
+          "netspout:network:syslog"
+        ],
+        "metric_sourcetypes": [
+          "netspout:network:metric"
+        ],
+        "log_fields": [
+          "device_ip",
+          "device_role",
+          "event_time",
+          "interface",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_site_id",
+          "sequence",
+          "severity",
+          "subnet",
+          "vlan"
+        ],
+        "metric_names": [
+          "device.cpu.percent",
+          "device.memory.utilization.percent",
+          "network.latency.ms",
+          "network.packet_loss.percent"
+        ],
+        "entities": [
+          "client01",
+          "core01",
+          "core02"
+        ],
+        "field_provenance": "netspout/bin/network_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-application",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1304,7 +2287,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_01_ran_cell.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_01_ran_cell",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "ran.downlink.bler.percent",
+          "ran.prb.utilization.percent",
+          "ran.user.throughput.mbps"
+        ],
+        "entities": [
+          "du01",
+          "gnb01",
+          "probe01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1338,7 +2395,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_02_registration_auth.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_02_registration_auth",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "authentication.latency.ms",
+          "registration.failure.percent",
+          "registration.success.percent"
+        ],
+        "entities": [
+          "ausf01",
+          "gnb01",
+          "probe01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1372,7 +2503,82 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_03_slice_sla.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_03_slice_sla",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation",
+          "slice_id"
+        ],
+        "metric_names": [
+          "slice.latency.ms",
+          "slice.packet_loss.percent",
+          "slice.throughput.mbps"
+        ],
+        "entities": [
+          "gnb01",
+          "probe01",
+          "upf01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1406,7 +2612,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_04_ims_volte.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_04_ims_volte",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "voice.estimated_mos",
+          "voice.rtp.jitter.ms",
+          "voice.rtp.loss.percent"
+        ],
+        "entities": [
+          "enb01",
+          "ims01",
+          "probe01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1440,7 +2720,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_05_mobile_transport.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_05_mobile_transport",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "fronthaul.one_way_latency.ms",
+          "fronthaul.packet_loss.percent",
+          "fronthaul.queue.utilization.percent"
+        ],
+        "entities": [
+          "du01",
+          "probe01",
+          "transport01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1474,7 +2828,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_06_broadband_cpe.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_06_broadband_cpe",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "broadband.active_sessions",
+          "broadband.probe.failure.percent",
+          "broadband.service.availability.percent"
+        ],
+        "entities": [
+          "bng01",
+          "cpe01",
+          "probe01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1508,7 +2936,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_07_sdwan_service.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_07_sdwan_service",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "sdwan.application.jitter.ms",
+          "sdwan.application.latency.ms",
+          "sdwan.application.loss.percent"
+        ],
+        "entities": [
+          "probe01",
+          "sdwan01",
+          "sdwan02"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1542,7 +3044,82 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_08_roaming_mobility.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_08_roaming_mobility",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation",
+          "target_cell_id"
+        ],
+        "metric_names": [
+          "mobility.handover.failure.percent",
+          "mobility.interruption.ms",
+          "mobility.session.drop.percent"
+        ],
+        "entities": [
+          "amf01",
+          "gnb01",
+          "probe01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1576,7 +3153,81 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_09_core_user_plane.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_09_core_user_plane",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "upf.data.latency.ms",
+          "upf.forwarding.packets_per_second",
+          "upf.packet_drop.percent"
+        ],
+        "entities": [
+          "gnb01",
+          "probe01",
+          "upf01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1610,7 +3261,82 @@
       ],
       "objective": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
       "filename": "scenario_telco_10_cross_layer.yml",
-      "evidence": []
+      "evidence": [],
+      "executable": true,
+      "incident_contract": {
+        "runtime_scenario_id": "telco_10_cross_layer",
+        "log_sourcetypes": [
+          "netspout:telecom:log"
+        ],
+        "metric_sourcetypes": [
+          "netspout:telecom:metric"
+        ],
+        "log_fields": [
+          "affected_synthetic_subscribers",
+          "consumed_sla_budget_seconds",
+          "device_ip",
+          "device_role",
+          "event_time",
+          "evidence_kind",
+          "interface",
+          "netspout_cell_id",
+          "netspout_device_id",
+          "netspout_incident_id",
+          "netspout_phase",
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_service_id",
+          "netspout_site_id",
+          "netspout_subscriber_cohort",
+          "sequence",
+          "severity",
+          "simulation"
+        ],
+        "metric_names": [
+          "telecom.affected.cohort.percent",
+          "telecom.service.availability.percent",
+          "telecom.service.latency.ms"
+        ],
+        "entities": [
+          "gnb01",
+          "transport01",
+          "upf01"
+        ],
+        "field_provenance": "netspout/bin/telecom_incidents.py: generate()"
+      },
+      "primary_dashboard_id": "discovery-telecom",
+      "required_fields": [
+        "netspout_run_id",
+        "netspout_scenario_id",
+        "netspout_phase",
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
+      "telemetry_status": "NOT_CHECKED",
+      "prerequisites": [
+        "Local indexed event data with extracted structured fields; run and scenario IDs must survive collection.",
+        "KPI panels require the configured local Splunk metrics index and HEC metric dimensions. Logs-only destinations cannot supply metric panels."
+      ]
     },
     {
       "kind": "scenario",
@@ -1644,7 +3370,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1676,7 +3403,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1711,7 +3439,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1745,7 +3474,8 @@
       ],
       "objective": "Demonstrate campus LAN access security defense against rogue DHCP servers and ARP poisoning using DHCP Snooping, Dynamic ARP Inspection (DAI), and Cisco ISE TrustSec quarantine.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1781,7 +3511,8 @@
       ],
       "objective": "Demonstrate metro carrier Ethernet protection switching resilience during fiber cut events using ITU-T G.8032 ERPS sub-50ms failover across Nokia, Juniper, and Arista ring nodes.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1814,7 +3545,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1847,7 +3579,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1879,7 +3612,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1914,7 +3648,8 @@
       ],
       "objective": "Demonstrate enterprise remote access defense against credential stuffing and MFA fatigue attacks using Cisco AnyConnect SSL-VPN and Cisco Duo Push fraud alerting.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1949,7 +3684,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -1984,7 +3720,8 @@
       ],
       "objective": "Demonstrate campus Wi-Fi spectral resilience and threat containment across dual-vendor Cisco Catalyst and Meraki infrastructure using CleanAir Dynamic Channel Assignment (DCA) and Air Marshal rogue suppression.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2018,7 +3755,8 @@
       ],
       "objective": "Demonstrate ACI spine-leaf datacenter fabric microburst detection and buffer congestion observability.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2053,7 +3791,8 @@
       ],
       "objective": "Demonstrate campus wireless rogue AP detection, automated containment, and switchport quarantine triage.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2089,7 +3828,8 @@
       ],
       "objective": "Demonstrate detection, isolation, and automated App-Route failover of an enterprise SD-WAN branch circuit suffering brownout degradation, followed by automated recovery.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2125,7 +3865,8 @@
       ],
       "objective": "Demonstrate DDoS volumetric TCP SYN flood detection, F5 Big-IP load balancer VIP protection, and Cisco ASA embryonic connection mitigation.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2160,7 +3901,8 @@
       ],
       "objective": "Demonstrate network security monitoring and defense triage for lateral_movement.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2196,7 +3938,8 @@
       ],
       "objective": "Demonstrate Nokia DWDM optical Loss of Signal detection, Juniper RSVP-TE Fast Reroute sub-50ms failover, and Arista IPFIX flow divert validation.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2236,7 +3979,8 @@
       ],
       "objective": "Demonstrate unified multi-vendor security correlation across Palo Alto, Fortinet, and Cisco firewalls during an external intrusion attempt.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2274,7 +4018,8 @@
       ],
       "objective": "Demonstrate SASE cloud edge TLS inspection bottleneck detection, ThousandEyes synthetic degradation isolation, and SD-WAN cloud breakout prioritization.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2314,7 +4059,8 @@
       ],
       "objective": "Demonstrate unified multi-vendor security correlation across Palo Alto, Fortinet, and Cisco firewalls during an external intrusion attempt.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2355,7 +4101,8 @@
       ],
       "objective": "Demonstrate network security monitoring and defense triage for normal_traffic.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2389,7 +4136,8 @@
       ],
       "objective": "Demonstrate OpenConfig gNMI Model-Driven Telemetry streaming and RFC 7951 JSON-IETF metric ingestion into Splunk metric indexes, with real-time buffer congestion detection and mitigation.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2425,7 +4173,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C).",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2459,7 +4208,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for Separate SD-WAN Environment Connected to Core Backbone (All Cisco).",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2493,7 +4243,8 @@
       ],
       "objective": "Demonstrate tier-1 carrier core routing resilience during optical link flaps using Cisco IOS-XR eBGP peering telemetry and TI-LFA sub-50ms fast reroute.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2529,7 +4280,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750).",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2564,7 +4316,8 @@
       ],
       "objective": "Demonstrate OWASP SQL injection attack detection across NGINX web tier, PostgreSQL database audit log, and Cisco ASA perimeter firewall enforcement.",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2598,7 +4351,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for Enterprise Wireless Connected to Campus Core (All Cisco).",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "scenario",
@@ -2634,7 +4388,8 @@
       ],
       "objective": "Prove operational resilience and telemetry assurance for Enterprise Wireless Connected to Core (Mixed Vendor).",
       "filename": null,
-      "evidence": []
+      "evidence": [],
+      "executable": false
     },
     {
       "kind": "dashboard",
@@ -2664,8 +4419,26 @@
         "netspout_run_id",
         "netspout_scenario_id",
         "netspout_phase",
-        "netspout_device_id"
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
       ],
+      "metric_sourcetypes": [
+        "netspout:network:metric"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
       "data_status": "NOT_CHECKED",
       "gaps": [
         "Installed Splunk rendering/search and field extraction are unverified."
@@ -2713,8 +4486,26 @@
         "netspout_run_id",
         "netspout_scenario_id",
         "netspout_phase",
-        "netspout_device_id"
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
       ],
+      "metric_sourcetypes": [
+        "netspout:network:metric"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
       "data_status": "NOT_CHECKED",
       "gaps": [
         "Installed Splunk rendering/search and field extraction are unverified."
@@ -2749,8 +4540,26 @@
         "netspout_run_id",
         "netspout_scenario_id",
         "netspout_phase",
-        "netspout_device_id"
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity"
       ],
+      "metric_sourcetypes": [
+        "netspout:network:metric"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
       "data_status": "NOT_CHECKED",
       "gaps": [
         "Installed Splunk rendering/search and field extraction are unverified."
@@ -2793,8 +4602,32 @@
         "netspout_run_id",
         "netspout_scenario_id",
         "netspout_phase",
-        "netspout_device_id"
+        "netspout_device_id",
+        "netspout_incident_id",
+        "netspout_site_id",
+        "severity",
+        "netspout_service_id",
+        "affected_synthetic_subscribers",
+        "evidence_kind"
       ],
+      "metric_sourcetypes": [
+        "netspout:telecom:metric"
+      ],
+      "field_provenance": {
+        "netspout_run_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_scenario_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_phase": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_device_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_incident_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_site_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "severity": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "netspout_service_id": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "affected_synthetic_subscribers": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "evidence_kind": "netspout/bin/telecom_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
+        "_time": "HEC event.time from telecom_incidents.py; Splunk indexed timestamp",
+        "metric_name": "Metric keys in telecom_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+      },
       "data_status": "NOT_CHECKED",
       "gaps": [
         "Installed Splunk rendering/search and field extraction are unverified."
@@ -10036,7 +11869,11 @@
         "network_14_wireless_outage",
         "network_15_device_resources"
       ],
-      "dashboard_ids": [],
+      "dashboard_ids": [
+        "discovery-security",
+        "discovery-network",
+        "discovery-application"
+      ],
       "formats": [
         "PulseForge structured simulation"
       ],
@@ -10114,7 +11951,9 @@
         "telco_09_core_user_plane",
         "telco_10_cross_layer"
       ],
-      "dashboard_ids": [],
+      "dashboard_ids": [
+        "discovery-telecom"
+      ],
       "formats": [
         "PulseForge structured simulation"
       ],

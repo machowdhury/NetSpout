@@ -47,7 +47,7 @@
     function link(text, view, parent) { var a = node('a', text, parent); a.href = url('/app/netspout/' + view); return a; }
     var status = doc.getElementById('pf-discovery-status'), list = doc.getElementById('pf-results'),
       detail = doc.getElementById('pf-detail'), input = doc.getElementById('pf-search'),
-      facets = {}, entries = [], currentPage = 0, destinations = null, activeSearch = null;
+      facets = {}, entries = [], currentPage = 0, destinations = null, activeSearch = null, selectedScenario = null;
     function related(label, kind, ids) {
       if (!ids || !ids.length) { node('p', label + ': none established in this slice.', detail); return; }
       node('h4', label, detail);
@@ -58,6 +58,8 @@
     }
     function show(row) {
       if (activeSearch) { activeSearch.cancel(); activeSearch = null; }
+      if (row.kind === 'scenario') { selectedScenario = row.incident_contract || null; }
+      else if (row.kind !== 'dashboard') { selectedScenario = null; }
       detail.textContent = ''; node('h3', row.title, detail);
       node('p', row.kind + ' • ' + row.id + ' • ' + row.readiness, detail);
       node('p', row.description, detail);
@@ -69,12 +71,20 @@
         if (!row.profiles.length) { node('p', 'Selected-version parser verification not established.', detail); }
         row.profiles.forEach(function (p) { node('p', p.profile_id + ' • ' + p.product + ' • candidate version ' + (p.app_version || 'unknown') + ' • ' + p.coverage + ' / ' + p.verification_state, detail); });
       }
+      if (row.required_fields) { node('p', 'Required structured fields: ' + row.required_fields.join(', '), detail); }
+      (row.prerequisites || []).forEach(function (p) { node('p', 'Prerequisite (not checked): ' + p, detail); });
+      if (row.incident_contract) {
+        node('p', 'Runtime scenario ID: ' + row.incident_contract.runtime_scenario_id, detail);
+        node('p', 'Simulated KPI names: ' + row.incident_contract.metric_names.join(', '), detail);
+      }
+      Object.keys(row.field_provenance || {}).forEach(function (field) { node('p', field + ': ' + row.field_provenance[field], detail); });
       (row.gaps || []).forEach(function (gap) { node('p', 'Gap: ' + gap, detail); });
       (row.evidence || []).forEach(function (e) {
         if (/^https:\/\//.test(e.reference || '')) { var a = node('a', e.title || 'Evidence', detail); a.href = e.reference; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
         else { node('p', 'Evidence reference: ' + (e.reference || e.title || 'unknown'), detail); }
       });
       if (row.kind !== 'sourcetype') { related('Sourcetypes', 'sourcetype', row.sourcetypes); }
+      if (row.metric_sourcetypes) { related('Metric sourcetypes (KPI prerequisites)', 'sourcetype', row.metric_sourcetypes); }
       if (row.kind !== 'scenario') { related('Related scenarios', 'scenario', row.scenario_ids); }
       if (row.kind !== 'dashboard') {
         var ds = row.dashboard_ids || [];
@@ -91,7 +101,11 @@
       }
       if (row.kind === 'dashboard') {
         node('p', 'Required fields: ' + row.required_fields.join(', '), detail);
-        link('Open Splunk dashboard', row.view, detail);
+        var openDashboard = link('Open Splunk dashboard', row.view, detail);
+        if (selectedScenario && row.scenario_ids.some(function (sid) { return sid === selectedScenario.runtime_scenario_id || sid === 'network_' + selectedScenario.runtime_scenario_id; })) {
+          openDashboard.href += '?form.scenario_id=' + encodeURIComponent(selectedScenario.runtime_scenario_id);
+        }
+        node('p', 'KPI prerequisites: configured local metrics index, metric sourcetype (' + (row.metric_sourcetypes || []).join(', ') + ') and preserved run/scenario/device/phase dimensions. NOT_CHECKED; log readiness does not prove metric availability.', detail);
         var label = node('label', 'Local event index ', detail), idx = node('input', undefined, label); idx.value = 'idx_network_ops';
         label = node('label', 'Server-owned run UUID ', detail); var run = node('input', undefined, label);
         var state = node('p', 'NOT_CHECKED — local indexed data only; no delivery claim.', detail);
@@ -136,6 +150,7 @@
     doc.getElementById('pf-clear').onclick = function () { input.value = ''; Object.keys(facets).forEach(function (key) { facets[key] = []; }); host.querySelectorAll('input[type=checkbox]').forEach(function (el) { el.checked = false; }); currentPage = 0; render(); };
     win.fetch(url('/static/app/netspout/discovery_catalog.json')).then(function (r) { if (!r.ok) { throw new Error(); } return r.json(); }).then(function (data) {
       entries = data.entries;
+      input.value = new URLSearchParams(win.location.search || '').get('q') || input.value;
       [['domain', 'Browse domains'], ['industries', 'Industry'], ['vendors', 'Vendor / product'], ['readiness', 'Readiness'], ['kind', 'Record type']].forEach(function (pair) {
         var field = pair[0]; facets[field] = [];
         var box = node('details', undefined, doc.getElementById('pf-filters')); node('summary', pair[1], box); box.open = field === 'domain';

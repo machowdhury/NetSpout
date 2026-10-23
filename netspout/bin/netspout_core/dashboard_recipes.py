@@ -86,6 +86,8 @@ class DashboardRecipe(StrictModel):
     domain: Optional[str] = None
     industries: List[str] = Field(default_factory=list)
     required_sourcetypes: List[str] = Field(default_factory=list)
+    metric_sourcetypes: List[str] = Field(default_factory=list)
+    field_provenance: Dict[str, str] = Field(default_factory=dict)
     purpose: str
     selectors: List[str]
     required_fields: List[str]

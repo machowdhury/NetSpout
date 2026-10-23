@@ -51,7 +51,7 @@ const win={document:{getElementById:id=>ids[id],createElement:tag=>new Element(t
  const dash=walk(ids['pf-detail']).find(e=>e.tag==='button'&&e.textContent.includes('Security incident'));
  assert(dash);dash.onclick();
  const open=walk(ids['pf-detail']).find(e=>e.textContent==='Open Splunk dashboard');
- assert.strictEqual(open.href,'/en-US/app/netspout/pulseforge_security');
+ assert.strictEqual(open.href,'/en-US/app/netspout/pulseforge_security?form.scenario_id=08_firewall_policy');
  const inputs=walk(ids['pf-detail']).filter(e=>e.tag==='input');
  inputs[1].value='00112233-4455-6677-8899-aabbccddeeff';
  const check=walk(ids['pf-detail']).find(e=>e.textContent.startsWith('Check local data'));

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-TA-datablaster AppInspect-Compliant Custom REST Handler
-Splunk App TA-datablaster: bin/datablaster_rest.py
+NetSpout PulseForge Custom REST Handler
+Splunk app netspout: bin/datablaster_rest.py (retained loader identity)
 
 Handles REST calls from Splunk Web UI (/services/datablaster/execute)
 Compatible with Splunk Enterprise & Splunk Cloud Vetting:
@@ -1397,7 +1397,7 @@ def run_environment_validation(hec_url: str, token: str, ssl_verify: bool = True
         "installed_count": installed_tas,
         "total": len(vendor_tas),
         "items": ta_checks,
-        "note": "TA-network-data-blaster includes built-in props/transforms extractions so CIM compliance is active even without vendor TAs installed."
+        "note": "NetSpout PulseForge includes built-in props/transforms extractions so CIM compliance is active even without vendor TAs installed."
     }
 
     # CHECK 3: HEC Token Validity & Permissions

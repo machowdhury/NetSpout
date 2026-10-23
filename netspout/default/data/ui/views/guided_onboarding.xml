@@ -444,8 +444,8 @@
                     </optgroup>
                     <optgroup label="Other">
                       <option value="geo_tokens:generic">geo_tokens:generic — Geo_Tokens</option>
-                      <option value="datablaster:preflight">datablaster:preflight — PulseForge Ingestion Preflight Probe</option>
-                      <option value="datablaster:probe">datablaster:probe — PulseForge Telemetry Canary Probe</option>
+                      <option value="datablaster:preflight">PulseForge Ingestion Preflight Probe</option>
+                      <option value="datablaster:probe">PulseForge Telemetry Canary Probe</option>
                       <option value="nokia:sros:syslog">nokia:sros:syslog — Nokia 7750 SR OS Syslog Facility</option>
                       <option value="snmp:trap">snmp:trap — Universal SNMP Trap Receiver Event</option>
                     </optgroup>

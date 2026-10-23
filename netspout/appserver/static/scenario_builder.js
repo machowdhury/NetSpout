@@ -1,5 +1,5 @@
 /*
- * Splunk App: NetSpout (TA-network-data-blaster)
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: scenario_builder.js
  * Scenario Builder, OpenConfig MDT Telemetry Emitter & Path Orchestrator
  */

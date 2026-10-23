@@ -1,6 +1,6 @@
 /**
- * TA-datablaster React + Tailwind CSS Dashboard UI
- * Splunk App: TA-datablaster
+ * NetSpout PulseForge React + Tailwind CSS Dashboard UI
+ * Splunk App: NetSpout PulseForge (netspout)
  * 
  * Compliant with Splunk Web Framework & AppInspect.
  * Implements:
@@ -551,7 +551,7 @@
     const [consoleLogs, setConsoleLogs] = useState([]);
     const [autoScrollConsole, setAutoScrollConsole] = useState(true);
     const [hostPlatform, setHostPlatform] = useState("Enterprise Linux / Container");
-    const [binaryPath, setBinaryPath] = useState("$SPLUNK_HOME/etc/apps/TA-network-data-blaster/bin/data-blaster");
+    const [binaryPath, setBinaryPath] = useState("$SPLUNK_HOME/etc/apps/netspout/bin/data-blaster");
 
     const consoleEndRef = useRef(null);
 
@@ -577,13 +577,15 @@
         })
         .catch(() => {});
       // Determine base path for manifests
-      const appName = window.location.pathname.includes("/TA-network-data-blaster/")
+      const appName = window.location.pathname.includes("/netspout/")
+        ? "netspout"
+        : window.location.pathname.includes("/TA-network-data-blaster/")
         ? "TA-network-data-blaster"
         : window.location.pathname.includes("/network-data-blaster/")
         ? "network-data-blaster"
         : window.location.pathname.includes("/TA-datablaster/")
         ? "TA-datablaster"
-        : "TA-network-data-blaster";
+        : "netspout";
       const basePath = window.location.pathname.includes("/app/")
         ? `/static/app/${appName}/`
         : "./";
@@ -768,7 +770,7 @@
             "div",
             { className: "bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2 hidden md:flex" },
             e("span", { className: "text-slate-400" }, "Host Binary:"),
-            e("span", { className: "font-mono text-cyan-300 font-medium" }, "data-blaster-mac-2022-03-22")
+            e("span", { className: "font-mono text-cyan-300 font-medium" }, "Legacy external engine (unverified)")
           )
         )
       ),
@@ -2669,7 +2671,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_multivendor_enterprise",
+                          href: "/app/netspout/studio_multivendor_enterprise",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "px-3.5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-cyan-500/20 cursor-pointer text-xs"
@@ -2737,7 +2739,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_multivendor_enterprise",
+                          href: "/app/netspout/studio_multivendor_enterprise",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"
@@ -2796,7 +2798,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_roce_ai_fabric",
+                          href: "/app/netspout/studio_roce_ai_fabric",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"
@@ -2855,7 +2857,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_cross_domain_triage",
+                          href: "/app/netspout/studio_cross_domain_triage",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"

@@ -1,5 +1,5 @@
 /*
- * Splunk App: TA-network-data-blaster
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: datablaster_console.js
  * Clean enterprise network engineering interface
  */

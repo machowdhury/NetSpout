@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-TA-datablaster Simulation Execution Wrapper & Multi-Vendor Streaming Engine
-Part of TA-datablaster Splunk App
+NetSpout PulseForge Simulation Execution Wrapper & Multi-Vendor Streaming Engine
+Part of NetSpout PulseForge Splunk app (netspout)
 
 AppInspect & Cloud Vetting Compliant:
 - Uses sys.platform for dynamic native binary resolution.

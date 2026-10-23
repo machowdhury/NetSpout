@@ -1,5 +1,5 @@
 /*
- * Splunk App: NetSpout (TA-network-data-blaster)
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: guided_onboarding.js
  * Guided Onboarding Wizard Controller
  * Author: Mahamudul Chowdhury <machowdhury@yahoo.com>

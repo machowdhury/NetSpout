@@ -1,5 +1,5 @@
 /*
- * Splunk App: NetSpout (TA-network-data-blaster)
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: netspout_canvas.js
  * Canvas & Telemetry Orchestrator Controller
  * Author: Mahamudul Chowdhury <machowdhury@yahoo.com>

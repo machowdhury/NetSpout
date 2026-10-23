@@ -125,7 +125,18 @@ class NativeBrandingTests(unittest.TestCase):
             baseline = subprocess.run(['git', 'show', 'b3b3ad9:' + name], cwd=ROOT,
                 capture_output=True, text=True, check=True, timeout=10).stdout
             old = NormalizeStrings().visit(ast.parse(baseline))
-            new = NormalizeStrings().visit(ast.parse((ROOT / name).read_text()))
+            implementation = ('netspout/bin/pulseforge_executor.py'
+                              if name.endswith('datablaster_executor.py') else name)
+            new = NormalizeStrings().visit(ast.parse((ROOT / implementation).read_text()))
+            if name.endswith('datablaster_executor.py'):
+                # Only the explicit public spelling alias is new; compare every
+                # legacy implementation statement below, including CLI dispatch.
+                new.body = [node for node in new.body if not (
+                    isinstance(node, ast.Assign) and len(node.targets) == 1
+                    and isinstance(node.targets[0], ast.Name)
+                    and node.targets[0].id == 'PulseForgeExecutor'
+                    and isinstance(node.value, ast.Name)
+                    and node.value.id == 'DataBlasterExecutor')]
             if name.endswith('run_simulation.py'):
                 current = {node.name: node for node in new.body if isinstance(node, ast.FunctionDef)}
                 for node in old.body:

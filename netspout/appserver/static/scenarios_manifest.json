@@ -712,5 +712,83 @@
       "netspout:network:metric"
     ],
     "totalSourcetypes": 2
+  },
+  {
+    "id": "network_22_authentication_storm",
+    "filename": "scenario_network_22_authentication_storm.yml",
+    "name": "Campus authentication retry storm at perimeter",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_23_containment_request",
+    "filename": "scenario_network_23_containment_request.yml",
+    "name": "Simulated NAC containment request and service-access change",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_24_policy_disagreement",
+    "filename": "scenario_network_24_policy_disagreement.yml",
+    "name": "Multi-firewall path-policy disagreement",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_25_mpls_recovery",
+    "filename": "scenario_network_25_mpls_recovery.yml",
+    "name": "Primary MPLS path-change observation and branch SLA recovery",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_26_maintenance",
+    "filename": "scenario_network_26_maintenance.yml",
+    "name": "Planned maintenance versus unplanned service outage",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_27_stale_sessions",
+    "filename": "scenario_network_27_stale_sessions.yml",
+    "name": "Authentication recovery with stale perimeter sessions",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
   }
 ]

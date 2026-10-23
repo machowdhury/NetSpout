@@ -17,9 +17,9 @@ class IncidentDashboardCoverageTests(unittest.TestCase):
         cls.recipes={r['recipe_id']:r for r in c5.build.read('catalog/dashboard_recipes.json')['recipes']}
 
     def test_all_25_descriptor_verified_incidents_have_primary(self):
-        self.assertEqual(len(self.incidents),31)
+        self.assertEqual(len(self.incidents),37)
         native=[r for r in self.data['entries'] if r.get('executable')]
-        self.assertEqual(len(native),31)
+        self.assertEqual(len(native),37)
         for row in native:
             with self.subTest(scenario=row['id']):
                 self.assertIn(row['id'],self.incidents)
@@ -87,7 +87,7 @@ class IncidentDashboardCoverageTests(unittest.TestCase):
             self.assertIn('first_failure',spl);self.assertIn('observed_span_seconds',spl)
             self.assertIn('min(severity)',spl);self.assertIn('dc(netspout_device_id)',spl)
             self.assertIn('mstats avg(_value)',spl);self.assertIn('BY metric_name',spl);self.assertIn('WHERE metric_name=*',spl)
-            self.assertIn('phase_order=case(',spl);self.assertIn('severity _raw',spl)
+            self.assertIn('phase_order=case(',spl);self.assertIn('severity maintenance_scope _raw',spl)
             self.assertIn('MISSING_FIELDS',spl);self.assertIn('MISSING_DATA',spl)
             self.assertTrue(any(a.attrib.get('href','').startswith('pulseforge_discovery?q=') for a in root.iter('a')))
             if r['recipe_id']=='discovery-telecom':
@@ -97,4 +97,4 @@ class IncidentDashboardCoverageTests(unittest.TestCase):
     def test_build_is_bounded_and_projection_reproducible(self):
         self.assertEqual(self.data,c5.build.build())
         c5.build.generate(check=True)
-        self.assertEqual(self.data['executable_incident_count'],31)
+        self.assertEqual(self.data['executable_incident_count'],37)

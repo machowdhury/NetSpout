@@ -24,7 +24,7 @@ class NativeDiscoveryTests(unittest.TestCase):
 
     def test_all_native_incidents_have_primary_dashboard(self):
         native=[x for x in self.entries if x['kind']=='scenario' and x['id'].startswith(('network_','telco_'))]
-        self.assertEqual(len(native),31)
+        self.assertEqual(len(native),37)
         self.assertTrue(all(x['dashboard_ids'] for x in native))
         self.assertTrue(all(x['readiness']=='Executable custom simulation' for x in native))
         self.assertEqual(next(x for x in native if x['id']=='network_08_firewall_policy')['dashboard_ids'][0],'discovery-security')

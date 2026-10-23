@@ -404,3 +404,21 @@ All interventions and business probes are simulated; no real payment or patient 
 Remaining proposals: 3, 4, 7, 10, 11, 12. Native-message composition remains gated
 by complete selected-family format and field evidence; repaired fixtures alone
 do not establish a whole correlated vendor-native lifecycle. No raw formats are changed.
+
+## C7B remaining correlated proposals
+
+All twelve proposals are now executable in the owned custom contract. No native
+TA/CIM extraction or actual enforcement is implied. C7A output is unchanged.
+
+- 22_authentication_storm — Campus authentication retry storm at perimeter: proposal 3; UC 17.1.2, 9.3.5.
+- 23_containment_request — Simulated NAC containment request and service-access change: proposal 4; UC 17.1.2.
+- 24_policy_disagreement — Multi-firewall path-policy disagreement: proposal 7; UC 5.2.2.
+- 25_mpls_recovery — Primary MPLS path-change observation and branch SLA recovery: proposal 10; UC 5.1.4, 21.8.2.
+- 26_maintenance — Planned maintenance versus unplanned service outage: proposal 11; UC 5.1.1, 8.1.1.
+- 27_stale_sessions — Authentication recovery with stale perimeter sessions: proposal 12; UC 17.1.8, 5.2.2.
+
+Maintenance seed parity selects planned (odd) or unplanned (even): application
+impact occurs in both, but planned scope has zero modeled unplanned-impact KPI.
+Stale-session authentication failure reaches zero at intervention while service
+failures persist until subsequent cleanup. Containment is modeled request and
+restriction state only; acknowledgement/enforcement are not claimed.

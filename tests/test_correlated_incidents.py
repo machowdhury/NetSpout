@@ -15,7 +15,7 @@ NEW={
 
 class CorrelatedIncidentTests(unittest.TestCase):
     def test_six_registered_executable_descriptors(self):
-        self.assertEqual(len(pack.CATALOG),21)
+        self.assertEqual(len(pack.CATALOG),27)
         for slug,proposal in NEW.items():
             with self.subTest(slug=slug):
                 p=existing.FOLDER/('scenario_network_'+slug+'.yml')
@@ -50,7 +50,7 @@ class CorrelatedIncidentTests(unittest.TestCase):
                 self.assertEqual(len(pack.select_events(events,'otlp',{'otlp_signal':'metrics'})),10)
 
     def test_original_25_outputs_unchanged(self):
-        source=subprocess.check_output(['git','show','HEAD:netspout/bin/network_incidents.py'],cwd=ROOT,text=True)
+        source=subprocess.check_output(['git','show','3699554a68e46a8858bce3ca5190d1b9734c4273:netspout/bin/network_incidents.py'],cwd=ROOT,text=True)
         old=types.ModuleType('previous_incidents');exec(compile(source,'previous_incidents','exec'),old.__dict__)
         original=set(old.CATALOG)|set(old.telecom_incidents.CATALOG)
         self.assertEqual(len(original),25)
@@ -59,7 +59,7 @@ class CorrelatedIncidentTests(unittest.TestCase):
                 self.assertEqual(pack.generate(slug,42,1700000000,existing.RUN,10),old.generate(slug,42,1700000000,existing.RUN,10))
 
     def test_all_31_discovery_and_dashboard_relationships(self):
-        data=discovery.build.build();self.assertEqual(data['executable_incident_count'],31)
+        data=discovery.build.build();self.assertEqual(data['executable_incident_count'],37)
         entries=data['entries'];recipes={r['recipe_id']:r for r in discovery.build.read('catalog/dashboard_recipes.json')['recipes']}
         for slug in NEW:
             row=next(r for r in entries if r['kind']=='scenario' and r['id']=='network_'+slug)

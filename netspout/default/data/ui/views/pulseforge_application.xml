@@ -104,7 +104,7 @@
       <title>Correlated supporting observations (maximum 500)</title>
       <table>
         <search>
-          <query>search index=$index|s$ (sourcetype="netspout:network:syslog") (netspout_scenario_id="10_dns_failure" OR netspout_scenario_id="15_device_resources" OR netspout_scenario_id="20_backend_link" OR netspout_scenario_id="21_partial_pool") sourcetype=$log_source|s$ netspout_run_id=$run_id|s$ netspout_scenario_id=$scenario_id|s$ netspout_device_id=$entity|s$ | sort 0 _time | head 500 | table _time netspout_incident_id netspout_scenario_id netspout_phase netspout_device_id severity _raw</query>
+          <query>search index=$index|s$ (sourcetype="netspout:network:syslog") (netspout_scenario_id="10_dns_failure" OR netspout_scenario_id="15_device_resources" OR netspout_scenario_id="20_backend_link" OR netspout_scenario_id="21_partial_pool") sourcetype=$log_source|s$ netspout_run_id=$run_id|s$ netspout_scenario_id=$scenario_id|s$ netspout_device_id=$entity|s$ | sort 0 _time | head 500 | table _time netspout_incident_id netspout_scenario_id netspout_phase netspout_device_id severity maintenance_scope _raw</query>
           <earliest>$window$</earliest>
           <latest>now</latest>
         </search>

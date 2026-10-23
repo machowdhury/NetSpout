@@ -902,7 +902,11 @@
         "network_09_ddos_flood",
         "network_17_hospital_mac_auth",
         "network_18_payment_deny",
-        "network_19_ips_service"
+        "network_19_ips_service",
+        "network_22_authentication_storm",
+        "network_23_containment_request",
+        "network_24_policy_disagreement",
+        "network_27_stale_sessions"
       ],
       "required_fields": [
         "netspout_run_id",
@@ -985,7 +989,13 @@
         "network_18_payment_deny",
         "network_19_ips_service",
         "network_20_backend_link",
-        "network_21_partial_pool"
+        "network_21_partial_pool",
+        "network_22_authentication_storm",
+        "network_23_containment_request",
+        "network_24_policy_disagreement",
+        "network_25_mpls_recovery",
+        "network_26_maintenance",
+        "network_27_stale_sessions"
       ],
       "required_fields": [
         "netspout_run_id",
@@ -998,7 +1008,8 @@
       ],
       "optional_fields": [
         "netspout_site_id",
-        "severity"
+        "severity",
+        "maintenance_scope"
       ],
       "visualization_ids": [
         "splunk-table"
@@ -1030,7 +1041,8 @@
         "severity": "netspout/bin/network_incidents.py: generate(), event.fields (synthetic; HEC structured fields or equivalent extraction required)",
         "_time": "HEC event.time from network_incidents.py; Splunk indexed timestamp",
         "metric_name": "Metric keys in network_incidents.py generate().metrics; HEC metric_name:<name> fields in network_incidents.py execute()",
-        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()"
+        "_value": "Numeric generate().metrics values; HEC metrics index via network_incidents.py execute()",
+        "maintenance_scope": "netspout/bin/network_incidents.py: generate(), optional planned/unplanned simulation dimension from seed parity"
       }
     },
     {

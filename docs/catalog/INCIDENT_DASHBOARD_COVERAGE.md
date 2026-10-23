@@ -1,6 +1,6 @@
 # C6 executable incident dashboard coverage
 
-31 existing incidents, four reused dashboards, 34 recipe IDs retained. No new
+37 existing incidents, four reused dashboards, 34 recipe IDs retained. No new
 scenario, transport, registry or vendor-native claim. The builder reads the
 committed descriptors and generates bounded preview events without dispatching;
 this establishes output-field provenance, not live data availability.
@@ -110,3 +110,26 @@ Each emits 30 logs and 10 KPI envelopes over 40 paced positions (3.9 seconds at
 10 EPS); logs-only transports omit metrics. User-facing failure/latency metrics
 are simulated gauges. Original 25 incident outputs are compared exactly with
 the prior checkpoint. No new native parsing or live indexing evidence is claimed.
+
+## C7B completion (proposals 3, 4, 7, 10, 11, 12)
+
+All 37 incidents have resolving primary dashboards. Sources remain custom
+`netspout:network:syslog` / `netspout:network:metric` for these additions.
+
+| Stable scenario ID | Industry | Modeled systems | Primary / related dashboards | External UC IDs |
+|---|---|---|---|---|
+| network_22_authentication_storm | Cross-industry | Cisco ISE, Cisco ASA | discovery-security, discovery-network | 17.1.2, 9.3.5 |
+| network_23_containment_request | Healthcare | Cisco ISE, Cisco ASA | discovery-security, discovery-network | 17.1.2 |
+| network_24_policy_disagreement | Financial services | Cisco ASA, Check Point | discovery-security, discovery-network | 5.2.2 |
+| network_25_mpls_recovery | Telecommunications | Juniper Junos, Arista EOS | discovery-network | 5.1.4, 21.8.2 |
+| network_26_maintenance | Retail | Arista EOS, F5 BIG-IP | discovery-network | 5.1.1, 8.1.1 |
+| network_27_stale_sessions | Cross-industry | Cisco ISE, Cisco ASA | discovery-security, discovery-network | 17.1.8, 5.2.2 |
+
+Containment reports modeled requests/restrictions only, not CoA acknowledgement
+or actual enforcement. Odd maintenance seeds mark planned scope: application
+impact remains measurable while modeled unplanned-impact KPI is zero. Even seeds
+mark unplanned scope. `maintenance_scope` is an optional custom field displayed
+in supporting observations; it is not required on other incident records.
+Stale-session authentication recovers at intervention while service failures
+persist until cleanup. All metrics are simulated gauges; original 31 outputs
+are checked exactly against the C7A checkpoint. No new parser/CIM/live validation.

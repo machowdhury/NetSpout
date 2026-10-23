@@ -1037,8 +1037,6 @@ class ScenarioRunner:
             log.netspout_event_id = f"evt-{uuid.uuid4().hex[:8]}"
         if getattr(log, "netspout_ground_truth", None) is None:
             log.netspout_ground_truth = "true" if ground_truth else "false"
-        if log.raw_log and "netspout_run_id=" not in log.raw_log:
-            log.raw_log = f"{log.raw_log} netspout_run_id=\"{log.netspout_run_id}\" netspout_scenario_id=\"{log.netspout_scenario_id}\" netspout_phase=\"{log.netspout_phase}\" netspout_event_id=\"{log.netspout_event_id}\""
         return log
 
     def record_ground_truth(

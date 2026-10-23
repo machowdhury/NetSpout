@@ -55,9 +55,29 @@ def format_rfc5424_message(
     clean_app = app_name.replace(" ", "_") or "network-sim"
     clean_proc = str(procid) or "-"
     clean_msgid = msg_id or "-"
-    
+
     header = f"<{pri}>1 {now_iso} {clean_host} {clean_app} {clean_proc} {clean_msgid} {structured_data} "
+    # Double-header guard: vendor-native payloads already embed a PRI-aware
+    # header at event creation; re-headering them would prepend synthetic
+    # bytes to the byte-exact vendor contract.
+    if message.lstrip().startswith("<"):
+        return message.lstrip()
     return header + message
+
+
+def get_bsd_syslog_timestamp(now=None) -> str:
+    """BSD-syslog timestamp with the RFC 3164 space-padded day convention.
+
+    Args:
+        now: Optional datetime (UTC expected); defaults to now in UTC.
+
+    Returns:
+        str: e.g. 'Oct  6 14:03:27' (day right-aligned to width 2).
+    """
+    if now is None:
+        now = datetime.now(timezone.utc)
+    day = f"{now.day:2d}"
+    return f"{now.strftime('%b')} {day} {now.strftime('%H:%M:%S')}"
 
 
 def format_rfc3164_message(
@@ -72,7 +92,7 @@ def format_rfc3164_message(
     <PRI>Mmm dd hh:mm:ss HOSTNAME APP-NAME: MSG
     """
     pri = (facility * 8) + severity
-    now_bsd = datetime.now().strftime("%b %d %H:%M:%S")
+    now_bsd = get_bsd_syslog_timestamp(datetime.now())
     clean_host = hostname.replace(" ", "_") or "sim-node"
     clean_app = app_name.replace(" ", "_") or "network-sim"
     return f"<{pri}>{now_bsd} {clean_host} {clean_app}: {message}"

@@ -38,7 +38,9 @@ class SplunkLogEngine:
 
     @staticmethod
     def current_timestamp_syslog() -> str:
-        return datetime.utcnow().strftime("%b %d %H:%M:%S")
+        now = datetime.utcnow()
+        day = f"{now.day:2d}"
+        return f"{now.strftime('%b')} {day} {now.strftime('%H:%M:%S')}"
 
     @staticmethod
     def format_cisco_asa_log(
@@ -154,7 +156,6 @@ class SplunkLogEngine:
             vendor="palo_alto",
             sourcetype="pan:traffic"
         )
-
     @staticmethod
     def format_nginx_web_log(
         device: Node,
@@ -217,10 +218,7 @@ class SplunkLogEngine:
 
         raw = (
             f"{now_syslog} {dev_id} local/tmm[1104]: 01070727:3: Pool /Common/web_farm member /Common/{backend_ip}:{backend_port} "
-            f"connection established client={src_ip} vip={dest_ip}:80 target={backend_ip}:{backend_port} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"backend_server={backend_ip}:{backend_port} protocol=TCP duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
+            f"connection established client={src_ip} vip={dest_ip}:80 target={backend_ip}:{backend_port}"
         )
 
         return LogEntry(
@@ -298,10 +296,7 @@ class SplunkLogEngine:
 
         raw = (
             f"{now_syslog} {dev_id} %ROUTING-5-FLOW: Ingress interface {interface} forward packet "
-            f"from {src_ip} to {dest_ip} via BGP-RIB "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"interface={interface} protocol={proto} duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
+            f"from {src_ip} to {dest_ip} via BGP-RIB"
         )
 
         return LogEntry(
@@ -342,9 +337,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %CATALYST_SEC-4-ROGUE_ALERT: Rogue AP detected on campus RF matrix. "
-            f"rogue_mac={rogue_mac} bssid={bssid} ssid=\"{ssid}\" channel={channel} rssi={rssi}dBm "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip=0.0.0.0 dest_ip=255.255.255.255 "
-            f"protocol=802.11 duration=0ms action={action} signature=\"{signature}\" status={status}"
+            f"rogue_mac={rogue_mac} bssid={bssid} ssid=\"{ssid}\" channel={channel} rssi={rssi}dBm"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -518,9 +511,7 @@ class SplunkLogEngine:
         sig = signature or f"Catalyst Security Event: {event_type}"
         raw = (
             f"{now_syslog} {dev_id} %CATALYST_SEC-6-EVENT: event_type=\"{event_type}\" "
-            f"client_mac=\"{client_mac}\" timestamp=\"{now_ts}\" device_id=\"{dev_id}\" "
-            f"src_ip={device.ip_address} dest_ip=255.255.255.255 protocol=802.1X "
-            f"duration=1ms action={action} signature=\"{sig}\" status={status}"
+            f"client_mac=\"{client_mac}\""
         )
         return LogEntry(
             timestamp=now_ts,
@@ -557,10 +548,7 @@ class SplunkLogEngine:
         raw = (
             f"{now_syslog} {dev_id} SDWAN-BFD-SLA[512]: local_color=biz-internet remote_color=mpls "
             f"remote_system_ip={remote_system_ip} latency={latency_ms:.1f}ms jitter={jitter_ms:.1f}ms "
-            f"loss={loss_pct:.1f}% sla_class=VoIP_Gold sla_compliance={sla_status} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={remote_system_ip} protocol=BFD duration=8ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"loss={loss_pct:.1f}% sla_class=VoIP_Gold sla_compliance={sla_status}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -593,10 +581,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %BGP-5-ADJCHANGE: neighbor {neighbor_ip} vpn 10 {state_change} "
-            f"BFD session down; failover to secondary LTE/Broadband transport engaged "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={neighbor_ip} protocol=BGP duration=3ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"BFD session down; failover to secondary LTE/Broadband transport engaged"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -668,10 +653,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %BUFFER_MGR-3-QUEUE_DROP: Ingress queue threshold exceeded on {asic_interface}. "
-            f"buffer_util={buffer_util_pct:.1f}% dropped_packets={dropped_packets} fabricHealthScore={fabric_health} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.255.0.1 protocol=DC-ETHERNET duration=1ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"buffer_util={buffer_util_pct:.1f}% dropped_packets={dropped_packets} fabricHealthScore={fabric_health}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -703,9 +685,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         sig = signature or f"ACI Fabric Health Score: {fabric_health}/100"
         raw = (
-            f"{now_syslog} {dev_id} %ACI-HEALTH-4-SCORE: fabricHealthScore={fabric_health} "
-            f"status={status} timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.255.0.1 protocol=DC-ETHERNET duration=1ms action={action} signature=\"{sig}\""
+            f"{now_syslog} {dev_id} %ACI-HEALTH-4-SCORE: fabricHealthScore={fabric_health}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -840,7 +820,6 @@ class SplunkLogEngine:
             vendor="palo_alto",
             sourcetype="pan:threat"
         )
-
     @staticmethod
     def format_fortinet_ips_log(
         device: Node,
@@ -940,10 +919,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} Base %ROUTING-3-OPTICAL_LOS: Optical DWDM port {port_id} Loss of Signal. "
-            f"RSVP-TE LSP {lsp_name} path failed. Fast Reroute (FRR) facility bypass engaged. "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.200.0.2 protocol=MPLS-RSVP duration=2ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"RSVP-TE LSP {lsp_name} path failed. Fast Reroute (FRR) facility bypass engaged."
         )
         return LogEntry(
             timestamp=now_ts,
@@ -1305,7 +1281,7 @@ class SplunkLogEngine:
         else:
             msg = f"%CATALYST_SEC-5-STATUS: Interface {interface} vlan {vlan_id} security event {event_code}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_code={event_code} interface={interface} rogue_ip={rogue_ip} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1411,7 +1387,7 @@ class SplunkLogEngine:
             sig = signature or f"BGP Routing Event: {event_type}"
             msg = f"%ROUTING-BGP-6-INFO: Peering {neighbor_ip} state={event_type}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1461,7 +1437,7 @@ class SplunkLogEngine:
             sig = signature or f"WLAN Telemetry: {event_type}"
             msg = f"%DOT11-6-INFO: Radio 1 channel={channel} util={util_pct}%"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1508,7 +1484,7 @@ class SplunkLogEngine:
             sig = signature or f"G.8032 ERPS Ring Event: {event_type}"
             msg = f"%ETH_RING-6-INFO: Ring {ring_id} port {port_id} state={event_type}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,

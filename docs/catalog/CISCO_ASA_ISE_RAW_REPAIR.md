@@ -1,10 +1,15 @@
 # Cisco ASA and ISE raw-event repair (C2B)
 
-This batch establishes vendor-source-backed synthetic structures, not TA parser
-compatibility. Candidate validation targets are Splunk Add-on for Cisco ASA,
-Splunkbase **1620 / 6.1.2**, and Splunk Add-on for Cisco Identity Services,
-Splunkbase **1915 / 5.0.0**. Their selected-version parsing configurations have
-not been validated here. No installed-TA, CIM or dashboard verification is claimed.
+This batch establishes vendor-source-backed synthetic structures, not
+generally. Candidate parsing targets are Splunk Add-on for Cisco ASA,
+Splunkbase **1620 / 6.1.2** (still not validated here), and Splunk Add-on for
+Cisco Identity Services, Splunkbase **1915 / 5.0.0**. The ISE add-on has since
+received one bounded **Level D** installed-TA validation on Splunk Enterprise
+10.2.7 for exactly seven records (see
+[CISCO_ISE_TA_1915_LAB_VALIDATION.md](CISCO_ISE_TA_1915_LAB_VALIDATION.md)) —
+not a generally certified or fully covered claim, and no ASA validation of any
+kind is claimed. No installed-TA, CIM or dashboard verification beyond that
+scoped ISE report is claimed here.
 
 ## Pinned format evidence
 
@@ -102,6 +107,16 @@ timestamps, Response balance, token rejection, metadata separation and mirrors.
 These are evidence levels A/B only. C requires selected-version TA parser
 configuration validation; D requires installed-TA tests; E requires independent
 CIM/dashboard consumer checks. None is inferred from a passing generator test.
+
+For the ISE add-on, one bounded Level D result now exists:
+`Splunk_TA_cisco-ise` 5.0.0 installed on Splunk Enterprise 10.2.7 parsed all
+seven tested records (five original RAW corpus lines plus the two generator
+events) with exact `_raw` preservation and lookup enrichment, on a disposable
+index with a scoped HEC token. Boundaries and the support exclusion are in
+[CISCO_ISE_TA_1915_LAB_VALIDATION.md](CISCO_ISE_TA_1915_LAB_VALIDATION.md).
+This does not promote any C1 profile: the catalog gates still require the
+C1-level validation records before any `integration_verified` promotion, and
+none was added.
 
 ## Legacy compatibility and non-authentication CoA completion
 

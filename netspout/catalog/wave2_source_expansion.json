@@ -1,0 +1,186 @@
+{
+ "schema_version": "1.0",
+ "wave": 2,
+ "wave_version": "wave2-2026-10-26",
+ "created_utc": "2026-10-26",
+ "purpose": "Declarative registry of the Wave-2 authentic engine additions: 12 new canonical sourcetypes (searchable via catalog/sourcetypes.json, graduated in the same session) plus full generator support for the existing cisco:sfw:estreamer row.",
+ "invariants_respected": [
+  "cisco:sfw:estreamer already existed as a catalog row - no duplicate row registered; only the generator was added",
+  "event families are NOT counted as unique sourcetypes",
+  "no frozen PAN formatter contracts touched",
+  "netspout correlation metadata never inside RAW"
+ ],
+ "engine_module": "src/netspout_core/wave2_authentic_engine.py",
+ "engine_bindings": "SplunkLogEngine.WAVE2_SOURCE_SOURCETYPES + per-formatter delegable classmethods (src/netspout_core/log_engine.py)",
+ "raw_reference_corpus": "catalog/raw_reference/provenance.json (wave:2 entries), pinned attack_data commit 1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8 (Apache-2.0) plus official vendor schemas",
+ "sources": [
+  {
+   "wave_source_id": "cisco-nvm-flowdata-v2",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:nvm:flowdata:v2",
+   "raw_evidence": ["pinned nvzFlow_v11 record (cisco_nvm_flowdata_v2.head.bin), full-file hashed == declared LFS sha"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_cisco_nvm_v2_log",
+   "event_families": ["nvzFlow_v11 record with endpoint process-identity context"],
+   "event_family_count": 1,
+   "required_ta": "Cisco Security Cloud Observability/NVM Add-on (documented in catalog/sourcetypes.json row)"
+  },
+  {
+   "wave_source_id": "ollama-server",
+   "vendor": "Ollama (local LLM runtime)",
+   "splunk_sourcetype": "ollama:server",
+   "raw_evidence": ["pinned attack_data ollama server logfmt stream (ollama_server.head.bin): time=/level=/source=/msg= with server.go|routes.go|images.go|gpu.go callers"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_ollama_server_log",
+   "event_families": ["server_config", "model_store", "gpu_inventory", "runner_wait"],
+   "event_family_count": 4
+  },
+  {
+   "wave_source_id": "mcp-jsonrpc",
+   "vendor": "Model Context Protocol (agentic AI)",
+   "splunk_sourcetype": "mcp:jsonrpc",
+   "raw_evidence": ["pinned research envelope (mcp_jsonrpc.head.bin): timestamp/host/source/sourcetype/direction/method/id/jsonrpc/params/result/error with server_lifecycle instances"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_mcp_jsonrpc_log",
+   "event_families": ["server_lifecycle", "request", "response", "error"],
+   "event_family_count": 4
+  },
+  {
+   "wave_source_id": "gws-reports-login",
+   "vendor": "Google Workspace",
+   "splunk_sourcetype": "gws:reports:login",
+   "raw_evidence": ["pinned Reports login activity (gws_reports_login.head.bin): kind/id.time/uniqueQualifier/actor/ipAddress/event{name,parameters} singular event object"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_gws_login_log",
+   "event_families": ["login_success", "login_failure", "login_2sv_challenge"],
+   "event_family_count": 3,
+   "evidence_note": "login_failure/2sv families are documented Google Workspace login event names; only login_success byte-evidenced."
+  },
+  {
+   "wave_source_id": "linux-messages",
+   "vendor": "Linux Infrastructure",
+   "splunk_sourcetype": "linux_messages_syslog",
+   "raw_evidence": ["pinned /var/log/messages (linux_messages_syslog.head.bin): RFC3164 'Mon DD hh:mm:ss host tag: msg', kernel lines evidenced"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_linux_messages_log",
+   "event_families": ["kernel_message", "sshd_message", "sudo_message", "service_message"],
+   "event_family_count": 4,
+   "evidence_note": "kernel_message is byte-evidenced; sshd/sudo/systemd are standard documented syslog tags in the same grammar."
+  },
+  {
+   "wave_source_id": "crushftp-sessionlogs",
+   "vendor": "CrushFTP",
+   "splunk_sourcetype": "crushftp:sessionlogs",
+   "raw_evidence": ["pinned SESSION| pipe-delimited records (crushftp_sessionlogs.head.bin) incl. CVE-2025-31161 zip-command READ traffic"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_crushftp_log",
+   "event_families": ["session_command_read", "session_login", "session_transfer"],
+   "event_family_count": 3,
+   "evidence_note": "session_command_read byte-evidenced; login/transfer families use the same SESSION|... document grammar."
+  },
+  {
+   "wave_source_id": "azure-monitor-activity",
+   "vendor": "Microsoft Azure Monitor",
+   "splunk_sourcetype": "azure:monitor:activity",
+   "raw_evidence": ["pinned azure-activity.log schema (azure_monitor_aad.head.bin) - the Activity Log dataset Wave-1 had flagged for correct mapping is now implemented natively"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave2AuthenticEngine.format_azure_activity_log",
+   "event_families": ["admin_action", "alert_action", "service_health"],
+   "event_family_count": 3,
+   "evidence_note": "admin_action byte-evidenced; alert/service_health categories use the same documented record shape."
+  },
+  {
+   "wave_source_id": "aws-vpcflow",
+   "vendor": "Amazon Web Services",
+   "splunk_sourcetype": "aws:cloudwatchlogs:vpcflow",
+   "raw_evidence": ["official AWS VPC Flow Log default format documentation (no pinned fixture available); space-delimited v2 field order incl. SKIPDATA log-status"],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave2AuthenticEngine.format_aws_vpcflow_log",
+   "event_families": ["flow_accept", "flow_reject", "flow_skipdata"],
+   "event_family_count": 3
+  },
+  {
+   "wave_source_id": "wins-xml-defender",
+   "vendor": "Microsoft Windows",
+   "splunk_sourcetype": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "raw_evidence": ["official Microsoft Defender Operational channel schema (Event element with documented EventData names)"],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave2AuthenticEngine.format_windows_defender_xml_log",
+   "event_families": ["detection (1116)", "remediation (1117)", "config_change (5007)"],
+   "event_family_count": 3
+  },
+  {
+   "wave_source_id": "wins-xml-ntlm",
+   "vendor": "Microsoft Windows",
+   "splunk_sourcetype": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "raw_evidence": ["official Microsoft NTLM Operational channel schema (8001/8002/8004)"],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave2AuthenticEngine.format_windows_ntlm_xml_log",
+   "event_families": ["client_request (8001)", "credential_negotiate (8002)", "audit_block (8004)"],
+   "event_family_count": 3
+  },
+  {
+   "wave_source_id": "kube-audit",
+   "vendor": "Kubernetes (CNCF)",
+   "splunk_sourcetype": "kube:audit",
+   "raw_evidence": ["official audit.k8s.io/v1 Event schema (kind/apiVersion/stage/requestURI/verb/objectRef/responseStatus/stageTimestamp)"],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave2AuthenticEngine.format_kube_audit_log",
+   "event_families": ["pod_create", "secret_read", "exec_into_pod"],
+   "event_family_count": 3
+  },
+  {
+   "wave_source_id": "kube-container-falco",
+   "vendor": "Kubernetes (CNCF) / Falco",
+   "splunk_sourcetype": "kube:container:falco",
+   "raw_evidence": ["official Falco default output format '<HH:MM:SS.frac>: <severity> <rule>: (fields)' with shipped rule names"],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave2AuthenticEngine.format_falco_log",
+   "event_families": ["terminal_shell", "sensitive_file_read", "write_below_etc"],
+   "event_family_count": 3
+  },
+  {
+   "wave_source_id": "cisco-sfw-estreamer",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:sfw:estreamer",
+   "raw_evidence": ["pinned cisco_secure_firewall react2shell + static_tundra IntrusionEvent JSON (both byte-verified to declared LFS sha on the ranged excerpt)"],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "existing_catalog_row": true,
+   "generator": "Wave2AuthenticEngine.format_cisco_sfw_estreamer_log",
+   "event_families": ["intrusion_event"],
+   "event_family_count": 1
+  }
+ ],
+ "classification_chain_states": {
+  "DISCOVERED": 13,
+  "AUTHENTIC_RAW_EVIDENCED": 7,
+  "STANDARD_DOCUMENTED": 6,
+  "GENERATOR_IMPLEMENTED": 13,
+  "OFFLINE_VERIFIED": 13,
+  "LIVE_INGEST_VERIFIED": 13,
+  "TA_PARSER_VERIFIED": 0
+ },
+ "live_verification": {
+  "evidence_file": "catalog/raw_reference/wave2_live_raw_equality_results.json",
+  "mechanism": "bounded HEC batch into existing disposable index idx_ta_ise_test via existing token pf-ta-ise-val (no config changes)",
+  "result": "17/17 RAW byte-equality PASS, zero correlation metadata inside _raw (incl. 3 Wave-1 extension families)",
+  "date_utc": "2026-10-26"
+ },
+ "counts_summary": {
+  "new_canonical_sourcetypes": 12,
+  "existing_row_gain": ["cisco:sfw:estreamer"],
+  "event_families_new_engines": 38,
+  "wave1_family_extensions": 13,
+  "scenario_packs": 8
+ },
+ "blocked_skipped": [
+  {
+   "candidate": "zeek / zeek:json",
+   "reason": "zero pinned dependency demand and no reachable pinned RAW fixture in the snapshot at the bounded-fetch constraints; deferred to Wave 3 with dedicated dataset sourcing"
+  },
+  {
+   "candidate": "mscs:azure:audit, CrowdStrike identities, github:cloud:audit, o365:graph:api, kube:container:falco beyond shipped rules (structured JSON output)",
+   "reason": "no pinned fixture or ran out of bounded session budget; STANDARD_DOCUMENTED variants deferred"
+  }
+ ]
+}

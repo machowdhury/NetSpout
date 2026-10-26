@@ -1576,3 +1576,33 @@ try:
 except ImportError:  # pragma: no cover - wave-1 module unavailable
     pass
 
+# ---------------------------------------------------------------------------
+# Wave-2 authentic source expansion (2026-10-26)
+# 12 new vendor-native sourcetypes (Defender/NTLM XML, ollama, MCP, Google
+# Workspace login, Azure Activity Log, AWS VPC Flow, /var/log/messages,
+# Kubernetes audit, Falco, CrushFTP) plus full generator support for the
+# existing cisco:sfw:estreamer row. Same guarantees as Wave-1: RAW is pure
+# vendor-native, correlation metadata stays in LogEntry fields only.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave2_authentic_engine import (
+        Wave2AuthenticEngine as _Wave2Engine,
+        WAVE2_SOURCE_SOURCETYPES as _W2_MAP,
+    )
+
+    SplunkLogEngine.WAVE2_SOURCE_SOURCETYPES = _W2_MAP
+
+    def _w2_delegate(name):
+        engine_method = getattr(_Wave2Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _w2_fmt in _W2_MAP.values():
+        setattr(SplunkLogEngine, _w2_fmt, _w2_delegate(_w2_fmt))
+except ImportError:  # pragma: no cover - wave-2 module unavailable
+    pass
+

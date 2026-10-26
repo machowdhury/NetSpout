@@ -28,7 +28,7 @@ from netspout_core.wave1_authentic_engine import Wave1AuthenticEngine as W1
 DEV = Node(id="wave1-test-node", name="WAVE1-TEST-HOST.corp.local",
            ip_address="10.0.9.9")
 
-EXPECTED_EVENT_FAMILY_TOTAL = 57
+EXPECTED_EVENT_FAMILY_TOTAL = 70
 
 
 def _entries(result):
@@ -46,17 +46,17 @@ class TestWave1CatalogRegistry(unittest.TestCase):
                          len(reg["sources"]))
         total = sum(s["event_family_count"] for s in reg["sources"])
         self.assertEqual(total, EXPECTED_EVENT_FAMILY_TOTAL)
-        self.assertEqual(reg["counts_summary"]["new_event_families"],
+        self.assertEqual(reg["counts_summary"]["event_families"],
                          EXPECTED_EVENT_FAMILY_TOTAL)
         wave_sts = {s["splunk_sourcetype"] for s in reg["sources"]}
         self.assertEqual(wave_sts, set(SplunkLogEngine.WAVE1_SOURCE_SOURCETYPES))
 
-    def test_02_gate3_pinned_counters_unchanged(self):
-        """Catalog growth lives in the wave registry; Gate-3 counters untouched."""
+    def test_02_graduated_pinned_counters(self):
+        """Canonical graduation: 50 vendors / >=280 sourcetypes floor documented."""
         with open(os.path.join(REPO_ROOT, "catalog", "sourcetypes.json")) as fh:
-            self.assertGreaterEqual(len(json.load(fh)), 260)
+            self.assertGreaterEqual(len(json.load(fh)), 280)
         with open(os.path.join(REPO_ROOT, "catalog", "vendors.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 36)
+            self.assertEqual(len(json.load(fh)), 50)
 
     def test_03_provenance_ledger_intact(self):
         prov_path = os.path.join(REPO_ROOT, "catalog", "raw_reference", "provenance.json")
@@ -65,11 +65,16 @@ class TestWave1CatalogRegistry(unittest.TestCase):
         self.assertEqual(prov["pinned_commit"],
                          "1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8")
         self.assertEqual(prov["upstream_license"], "Apache-2.0 (splunk/security_content datasets)")
-        self.assertEqual(len(prov["references"]), 10)
+        self.assertGreaterEqual(len(prov["references"]), 10)
         for ref in prov["references"]:
-            name = ref["sourcetype"].replace(":", "_").replace("/", "_").replace("-", "_")
-            head_path = os.path.join(REPO_ROOT, "catalog", "raw_reference",
-                                     "%s.head.bin" % name)
+            if ref.get("raw_reference_file"):
+                head_path = os.path.join(REPO_ROOT, "catalog",
+                                         "raw_reference",
+                                         ref["raw_reference_file"].split("/")[-1])
+            else:
+                name = ref["sourcetype"].replace(":", "_").replace("/", "_").replace("-", "_")
+                head_path = os.path.join(REPO_ROOT, "catalog", "raw_reference",
+                                         "%s.head.bin" % name)
             with open(head_path, "rb") as fh:
                 data = fh.read()
             self.assertEqual(hashlib.sha256(data).hexdigest(), ref["fetched_sha256"],
@@ -232,7 +237,8 @@ class TestJSONSourceFamilies(unittest.TestCase):
             for key in ("timestamp", "flow_id", "event_type", "src_ip", "dest_ip",
                         "src_port", "dest_port", "proto"):
                 self.assertIn(key, body)
-            self.assertIn(body["event_type"], ("alert", "http", "dns", "flow", "tls"))
+            self.assertIn(body["event_type"],
+                          ("alert", "http", "dns", "flow", "tls", "fileinfo"))
         alert = json.loads(W1.format_suricata_eve_log(
             DEV, "alert", "10.0.9.9", "203.0.113.7", 80).raw_log)
         self.assertIn("alert", alert)

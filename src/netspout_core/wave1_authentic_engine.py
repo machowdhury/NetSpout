@@ -86,6 +86,10 @@ class Wave1AuthenticEngine:
         "group_member_added": (4732, "A member was added to a security-enabled local group"),
         "account_locked_out": (4740, "A user account was locked out"),
         "file_access": (4663, "An attempt was made to access an object"),
+        "process_creation": (4688, "A new process has been created"),
+        "process_terminated": (4689, "A process has exited"),
+        "user_account_changed": (4738, "A user account was changed"),
+        "credential_validation": (4776, "The domain controller attempted to validate the credentials for an account"),  # noqa
     }
 
     @staticmethod
@@ -244,6 +248,46 @@ class Wave1AuthenticEngine:
                 ("HandleId", "0x0"), ("AccessList", "%%4417 %%4418"),
                 ("AccessMask", "0x6"), ("ProcessName", "C:\\Windows\\System32\\rundll32.exe"),
                 ("ProcessId", "0x2:0x345")], 0))
+        elif family == "process_creation":
+            entries.append(emit(4688, [
+                ("SubjectUserSid", "S-1-5-21-1004336348-1177238915-682003330-2645"),
+                ("SubjectUserName", actor_user), ("SubjectDomainName", actor_domain),
+                ("SubjectLogonId", "0x1245A0"),
+                ("NewProcessSid", "S-1-5-21-1004336348-1177238915-682003330-8020"),
+                ("NewProcessName", "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"),
+                ("TokenElevationType", "%%1937"),
+                ("ProcessId", "0x2:0x345"),
+                ("CommandLine", "powershell.exe -enc SQBFAFgAIAAoAE4A"),  # noqa
+                ("TargetUserSid", "S-1-5-21-1004336348-1177238915-682003330-2645"),
+                ("TargetUserName", actor_user), ("TargetDomainName", actor_domain),
+                ("TargetLogonId", "0x1245A0"),
+                ("ParentProcessName", "C:\\Windows\\explorer.exe"),
+                ("MandatoryLabel", "S-1-16-12288"),
+                ("CreatorProcessId", "0x1c44")], 0))
+        elif family == "process_terminated":
+            entries.append(emit(4689, [
+                ("SubjectUserSid", "S-1-5-21-1004336348-1177238915-682003330-2645"),
+                ("SubjectUserName", actor_user), ("SubjectDomainName", actor_domain),
+                ("SubjectLogonId", "0x1245A0"),
+                ("Status", "0x0"), ("ProcessName", "C:\\Windows\\System32\\cmd.exe"),
+                ("ProcessId", "0x1aa8")], 0))
+        elif family == "user_account_changed":
+            entries.append(emit(4738, [
+                ("SubjectUserSid", "S-1-5-21-1004336348-1177238915-682003330-500"),
+                ("SubjectUserName", "netops-admin"),
+                ("SubjectDomainName", actor_domain), ("SubjectLogonId", "0x1B4AB3"),
+                ("TargetUserSid", "S-1-5-21-1004336348-1177238915-682003330-1302"),
+                ("TargetUserName", actor_user), ("TargetDomainName", actor_domain),
+                ("HomeDirectory", "-"), ("PrimaryGroupId", "513"),
+                ("PasswordLastSet", "<never>"), ("SamAccountName", actor_user),
+                ("LockedOut", "-"), ("UserAccountControl", "0x208"),
+                ("UACValue", "520"), ("UserPrincipalName", "-"),
+                ("PasswordNeverExpires", "-")], 0))
+        elif family == "credential_validation":
+            entries.append(emit(4776, [
+                ("TargetUserName", actor_user), ("TargetDomainName", actor_domain),
+                ("Status", "0x0"),
+                ("WorkstationName", host)], 0))
         else:
             entries.append(emit(4624, base, 0))
         return entries
@@ -264,6 +308,17 @@ class Wave1AuthenticEngine:
         "process_access": (10, ["RuleName", "UtcTime", "SourceProcessGUID", "SourceProcessId",
                                 "SourceImage", "TargetProcessGUID", "TargetProcessId",
                                 "TargetImage", "GrantedAccess", "SourceUser", "TargetUser"]),
+        "image_loaded": (7, ["RuleName", "UtcTime", "ProcessGuid", "ProcessId", "Image",
+                             "FileVersion", "Description", "Product", "Company",
+                             "OriginalFileName", "CommandLine", "CurrentDirectory",
+                             "User", "LogonId", "TerminalSessionId", "IntegrityLevel",
+                             "Hashes", "ParentProcessGuid", "ParentProcessId",
+                             "ParentImage", "ParentCommandLine", "ParentUser"]),
+        "create_remote_thread": (8, ["UtcTime", "SourceProcessGUID", "SourceProcessId",
+                                     "SourceImage", "TargetProcessGUID", "TargetProcessId",
+                                     "TargetImage", "NewThreadId", "StartAddress",
+                                     "StartModule", "StartFunction", "SourceUser",
+                                     "TargetUser"]),
     }
 
     @classmethod
@@ -312,6 +367,21 @@ class Wave1AuthenticEngine:
             "TargetProcessGUID": "{11111111-2222-3333-4444-" + guid_suffix + "}",
             "TargetImage": "C:\\Windows\\system32\\lsass.exe",
             "GrantedAccess": "0x388", "SourceUser": user, "TargetUser": user,
+            "FileVersion": "10.0.19041.548",
+            "Description": "Native Runtime Checker",
+            "Product": "Microsoft Windows",
+            "Company": "Microsoft Corporation",
+            "Hashes": "SHA256=BA4038FD20E474C047BE8AAD5BFACDB1BFC1DDBE12F803F473B7918D8D819436",
+            "LogonId": "0x1245A0", "TerminalSessionId": "1",
+            "ParentProcessGuid": "{00000000-0000-0000-0000-" + guid_suffix + "}",
+            "ParentProcessId": "1088",
+            "ParentImage": "C:\\Windows\\System32\\cmd.exe",
+            "ParentCommandLine": "cmd /c systeminfo",
+            "ParentUser": user,
+            "NewThreadId": "5028",
+            "StartAddress": "0x00007FFA0F9B1BD0",
+            "StartModule": "C:\\Windows\\System32\\kernel32.dll",
+            "StartFunction": "LoadLibraryExW",
         }
         ordering = {f: values.get(f) for f in fields}
         pairs = [(name, value) for name, value in ordering.items() if value is not None]
@@ -335,16 +405,30 @@ class Wave1AuthenticEngine:
                                           user: str = "CORP\\netops-admin",
                                           status: str = "normal", signature: str = "powershell",
                                           action: str = "allowed") -> LogEntry:
-        if family not in {"module_logging", "script_block"}:
+        if family not in {"module_logging", "script_block",
+                          "module_session_start", "module_session_stop"}:
             raise ValueError(f"Unsupported powershell family: {family}")
         now = datetime.now(timezone.utc)
         host = host_name or (device.name or device.id)
-        eid = 4103 if family == "module_logging" else 4104
+        eid = 4103 if family == "module_logging" else \
+            4104 if family == "script_block" else \
+            4105 if family == "module_session_start" else 4106
         record = int(_reg("ps|%s" % family), 16) % 900000 + 1000
         data: List[tuple]
         if family == "module_logging":
             data = [("ContextInfo", "        Severity = Informational\r\r\n        Host Name = ConsoleHost\r\r\n        Host Version = 5.1.19041.1237\r\r\n        Host ID = %s\r\r\n        Host Application = C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" % _reg("appid")),  # noqa
                     ("Payload", "CommandInvocation(%s): \"%s\"" % ("Get-ChildItem", "Get-ChildItem")),
+                    ("RunspaceId", _reg("rsid")),
+                    ("PipelineId", "1"), ("Runspace", "DefaultRunspace")]
+        elif family in ("module_session_start", "module_session_stop"):
+            data = [("ContextInfo",
+                     "        Host Name = ConsoleHost\r\r\n        "
+                     "Host Application = C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"),  # noqa
+                    ("Payload", "CommandInvocation(%s): \"%s\"" % (
+                        "Stop-Transcript" if family == "module_session_stop"
+                        else "Start-Transcript",
+                        "Stop-Transcript" if family == "module_session_stop"
+                        else "Start-Transcript")),
                     ("RunspaceId", _reg("rsid")),
                     ("PipelineId", "1"), ("Runspace", "DefaultRunspace")]
         else:
@@ -371,7 +455,7 @@ class Wave1AuthenticEngine:
             raw_log=raw, node_type=device.type.value, node_id=device.id,
             vendor="microsoft_windows", sourcetype=SOURCETYPE_WINDOWS_POWERSHELL)
 
-    WINDOW_XML_FAMILY_COUNT = (9 * 1) + (6 * 1) + 2  # security families (1 event + extra 4672), sysmon, powershell
+    WINDOW_XML_FAMILY_COUNT = (13 * 1) + (8 * 1) + 4  # security families (1 event + extra 4672), sysmon, powershell(4 incl session start/stop)
 
     # ------------------------------------------------------------------
     # CrowdStrike Falcon (JSON)
@@ -379,6 +463,7 @@ class Wave1AuthenticEngine:
     CROWDSTRIKE_FAMILIES = [
         "ProcessRollup2", "DnsRequest", "NetworkConnectIP4",
         "DetectSummaryEvent", "UserLogon",
+        "DmpFileWritten", "FileDeleteInfo", "ProcessHandleOpDetectInfo",
     ]
 
     @classmethod
@@ -443,6 +528,25 @@ class Wave1AuthenticEngine:
                 "ContextProcessId": proc_a, "ConnectionDirection": "0",
                 "ContextTimeStamp": "1658918559.123"},
                 "NetworkConnectIP4"))
+        elif family == "DmpFileWritten":
+            event_pairs.append(emit({
+                "TargetFileName": "\\\\Device\\\\HarddiskVolume2\\\\Windows\\\\Minidump\\\\lsass.dmp",  # noqa
+                "ContextProcessId": proc_a,
+                "ContextTimeStamp": "1658918559.958"},
+                "DmpFileWritten"))
+        elif family == "FileDeleteInfo":
+            event_pairs.append(emit({
+                "TargetFileName": "\\\\Device\\\\HarddiskVolume4\\\\Users\\\\netops\\\\Downloads\\\\payload.exe",  # noqa
+                "ContextProcessId": proc_a,
+                "ContextTimeStamp": "1658918559.959"},
+                "FileDeleteInfo"))
+        elif family == "ProcessHandleOpDetectInfo":
+            event_pairs.append(emit({
+                "SourceProcessId": proc_b, "TargetProcessId": proc_a,
+                "SourceImage": "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+                "Privileges": "SeDebugPrivilege",
+                "ContextTimeStamp": "1658918560.001"},
+                "ProcessHandleOpDetectInfo"))
         elif family == "DetectSummaryEvent":
             event_pairs.append(emit({
                 "DetectName": "Malicious software detected",
@@ -752,7 +856,7 @@ class Wave1AuthenticEngine:
     # ------------------------------------------------------------------
     # Suricata EVE (JSON)
     # ------------------------------------------------------------------
-    SURICATA_FAMILIES = ["alert", "dns_query", "http", "flow", "tls"]
+    SURICATA_FAMILIES = ["alert", "dns_query", "http", "flow", "tls", "fileinfo"]
 
     @classmethod
     def format_suricata_eve_log(cls, device: Node, family: str, src_ip: str,
@@ -798,6 +902,17 @@ class Wave1AuthenticEngine:
             body["dns"] = {"type": "query", "id": int(_reg("dnsid"), 16) % 65000,
                            "rrname": "c2.languages.press", "rrtype": "A",
                            "tx_id": 0}
+        elif family == "fileinfo":
+            body["app_proto"] = "http"
+            body["fileinfo"] = {"filename": "/var/www/uploads/muuu.elf",
+                                "sid": [], "tx_id": 0, "gaps": False,
+                                "sp_hi": 0, "sp_lb": 0,
+                                "magic": "ELF 32-bit LSB executable, Intel 80386, "
+                                         "dynamically linked",
+                                "md5": _hex8("suri") + _reg("suri2") + _reg("suri3") + _reg("suri4"),
+                                "sha256": _hex8("surisha") * 4,
+                                "state": "CLOSED", "stored": False,
+                                "size": 4180}
         elif family == "tls":
             body["event_type"] = "tls"
             body["app_proto"] = "tls"
@@ -895,7 +1010,8 @@ class Wave1AuthenticEngine:
     # Okta (system log JSON) — sourcetype OktaIM2:log
     # ------------------------------------------------------------------
     OKTA_FAMILIES = ["user_session_start", "user_authentication_sso",
-                     "user_authentication_success", "policy_signon_denial"]
+                     "user_authentication_success", "policy_signon_denial",
+                     "suspicious_activity_report"]
 
     @classmethod
     def format_okta_log(cls, device: Node, family: str, src_ip: str,
@@ -912,6 +1028,11 @@ class Wave1AuthenticEngine:
         elif family == "policy_signon_denial":
             event_type, display = "policy.evaluate_signon", "Evaluation of sign-on policy"
             outcome = {"result": "DENY", "reason": "Sign-on policy rule denied access"}
+        elif family == "suspicious_activity_report":
+            event_type, display = ("user.account.report_suspicious_activity_by_enduser",
+                                   "Report suspicious activity by End User")
+            outcome = {"result": "SUCCESS",
+                       "reason": "End user reported suspicious activity"}
         else:
             event_type, display = "user.authentication.sso", "User single sign on to Okta"
             outcome = {"result": "SUCCESS", "reason": "The user's session was established via IdP"}

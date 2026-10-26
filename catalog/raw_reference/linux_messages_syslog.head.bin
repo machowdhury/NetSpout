@@ -1,0 +1,715 @@
+May  6 17:23:50 snapubuntu kernel: [  791.675449] Bluetooth: Core ver 2.22
+May  6 17:23:50 snapubuntu kernel: [  791.675504] NET: Registered PF_BLUETOOTH protocol family
+May  6 17:23:50 snapubuntu kernel: [  791.675506] Bluetooth: HCI device and connection manager initialized
+May  6 17:23:50 snapubuntu kernel: [  791.675511] Bluetooth: HCI socket layer initialized
+May  6 17:23:50 snapubuntu kernel: [  791.675514] Bluetooth: L2CAP socket layer initialized
+May  6 17:23:50 snapubuntu kernel: [  791.675518] Bluetooth: SCO socket layer initialized
+May  6 17:23:50 snapubuntu kernel: [  791.755402] virtio_net virtio2 ens18: entered promiscuous mode
+May  6 17:24:00 snapubuntu kernel: [  801.664268] NET: Registered PF_ALG protocol family
+May  6 17:24:11 snapubuntu kernel: [  812.799104] virtio_net virtio2 ens18: left promiscuous mode
+May  7 06:38:08 snapubuntu kernel: [48448.962926] show_signal_msg: 47 callbacks suppressed
+May  7 06:38:08 snapubuntu kernel: [48448.962930] dbus-daemon[611]: segfault at 0 ip 00005c2a1749cc62 sp 00007ffff32c2af0 error 6 in dbus-daemon[5c2a17493000+23000] likely on CPU 0 (core 0, socket 0)
+May  7 06:38:08 snapubuntu kernel: [48448.962941] Code: 7b 08 0f 84 a0 00 00 00 4d 85 ff 0f 84 97 00 00 00 4d 8b 77 10 8b 35 c9 63 02 00 4c 89 f7 e8 f5 8b ff ff 4c 8b 48 58 49 89 c5 <41> 83 29 01 75 a8 49 8d 79 08 31 d2 4c 89 4c 24 18 48 8d 35 66 40
+May  7 06:38:08 snapubuntu kernel: [48449.196462] rfkill: input handler enabled
+May  7 06:38:08 snapubuntu kernel: [48449.821426] Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+May  7 06:38:08 snapubuntu kernel: [48449.821430] Bluetooth: BNEP filters: protocol multicast
+May  7 06:38:08 snapubuntu kernel: [48449.821434] Bluetooth: BNEP socket layer initialized
+May  7 06:38:12 snapubuntu kernel: [48452.915428] rfkill: input handler disabled
+May  7 06:38:12 snapubuntu kernel: [48452.989986] input: spice vdagent tablet as /devices/virtual/input/input7
+May  7 06:41:46 snapubuntu kernel: [48667.449269] audit: type=1309 audit(1778136105.969:351721): argc=3 a0="rm" a1="-rf" a2="/.cache/gio-modules"
+May  7 06:41:46 snapubuntu kernel: [48667.449276] audit: type=1307 audit(1778136105.969:351721): cwd="/var/snap/snapd-desktop-integration/253"
+May  7 06:42:22 snapubuntu kernel: [48703.161020] audit: type=1302 audit(1778136141.681:369130): item=0 name="/usr/local/sbin/lsb_release" nametype=UNKNOWN cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+May  7 06:42:22 snapubuntu kernel: [48703.161024] audit: type=1327 audit(1778136141.681:369130): proctitle=2F7573722F62696E2F707974686F6E33002F7573722F6C69622F7570646174652D6E6F7469666965722F6170742D636865636B002D2D68756D616E2D7265616461626C65
+May  7 06:42:22 snapubuntu kernel: [48703.161027] audit: type=1300 audit(1778136141.681:369131): arch=c000003e syscall=59 success=no exit=-2 a0=7ccd78ae0ad0 a1=7ccd78ae0b70 a2=7fffdd0ca108 a3=1 items=1 ppid=32200 pid=32562 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="apt-check" exe="/usr/bin/python3.10" subj=unconfined key="process_creation"
+May  7 06:42:22 snapubuntu kernel: [48703.161028] audit: type=1307 audit(1778136141.681:369131): cwd="/tmp"
+May  7 06:42:22 snapubuntu kernel: [48703.161029] audit: type=1302 audit(1778136141.681:369131): item=0 name="/usr/local/bin/lsb_release" nametype=UNKNOWN cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+May  7 06:42:22 snapubuntu kernel: [48703.161030] audit: type=1327 audit(1778136141.681:369131): proctitle=2F7573722F62696E2F707974686F6E33002F7573722F6C69622F7570646174652D6E6F7469666965722F6170742D636865636B002D2D68756D616E2D7265616461626C65
+May  7 06:42:22 snapubuntu kernel: [48703.161032] audit: type=1300 audit(1778136141.681:369132): arch=c000003e syscall=59 success=no exit=-2 a0=7ccd78ae0a50 a1=7ccd78ae0b70 a2=7fffdd0ca108 a3=1 items=1 ppid=32200 pid=32562 auid=4294967295 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=4294967295 comm="apt-check" exe="/usr/bin/python3.10" subj=unconfined key="process_creation"
+May  7 06:42:22 snapubuntu kernel: [48703.161033] audit: type=1307 audit(1778136141.681:369132): cwd="/tmp"
+May  7 06:42:22 snapubuntu kernel: [48703.161034] audit: type=1302 audit(1778136141.681:369132): item=0 name="/usr/sbin/lsb_release" nametype=UNKNOWN cap_fp=0 cap_fi=0 cap_fe=0 cap_fver=0 cap_frootid=0
+May  7 06:42:22 snapubuntu kernel: [48703.161035] audit: type=1327 audit(1778136141.681:369132): proctitle=2F7573722F62696E2F707974686F6E33002F7573722F6C69622F7570646174652D6E6F7469666965722F6170742D636865636B002D2D68756D616E2D7265616461626C65
+May  7 06:48:37 snapubuntu kernel: [49078.841603] loop14: detected capacity change from 0 to 8
+May  7 06:48:46 snapubuntu kernel: [49087.655614] loop14: detected capacity change from 0 to 8
+May  7 13:08:52 snapubuntu kernel: [71893.157015] loop14: detected capacity change from 0 to 136904
+May  7 13:08:55 snapubuntu kernel: [71896.390396] loop15: detected capacity change from 0 to 1160
+May  7 13:09:06 snapubuntu kernel: [71906.857659] loop16: detected capacity change from 0 to 808920
+May  7 13:09:22 snapubuntu kernel: [71923.257275] loop17: detected capacity change from 0 to 1241248
+May  8 13:11:30 snapubuntu kernel: [158450.550651] rfkill: input handler enabled
+May  8 13:12:50 snapubuntu kernel: [    0.000000] Linux version 6.8.0-111-generic (buildd@lcy02-amd64-032) (x86_64-linux-gnu-gcc-12 (Ubuntu 12.3.0-1ubuntu1~22.04.3) 12.3.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #111~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Tue Apr 14 17:13:45 UTC  (Ubuntu 6.8.0-111.111~22.04.1-generic 6.8.12)
+May  8 13:12:50 snapubuntu kernel: [    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-6.8.0-111-generic root=UUID=e10fe988-02f5-4f72-914e-84a0b01c2d20 ro quiet splash vt.handoff=7
+May  8 13:12:50 snapubuntu kernel: [    0.000000] KERNEL supported cpus:
+May  8 13:12:50 snapubuntu kernel: [    0.000000]   Intel GenuineIntel
+May  8 13:12:50 snapubuntu kernel: [    0.000000]   AMD AuthenticAMD
+May  8 13:12:50 snapubuntu kernel: [    0.000000]   Hygon HygonGenuine
+May  8 13:12:50 snapubuntu kernel: [    0.000000]   Centaur CentaurHauls
+May  8 13:12:50 snapubuntu kernel: [    0.000000]   zhaoxin   Shanghai  
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-provided physical RAM map:
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x00000000bffd9fff] usable
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000bffda000-0x00000000bfffffff] reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff] reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000000] BIOS-e820: [mem 0x0000000100000000-0x000000023fffffff] usable
+May  8 13:12:50 snapubuntu kernel: [    0.000000] NX (Execute Disable) protection: active
+May  8 13:12:50 snapubuntu kernel: [    0.000000] APIC: Static calls initialized
+May  8 13:12:50 snapubuntu kernel: [    0.000000] SMBIOS 3.0.0 present.
+May  8 13:12:50 snapubuntu kernel: [    0.000000] DMI: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
+May  8 13:12:50 snapubuntu kernel: [    0.000000] Hypervisor detected: KVM
+May  8 13:12:50 snapubuntu kernel: [    0.000000] kvm-clock: Using msrs 4b564d01 and 4b564d00
+May  8 13:12:50 snapubuntu kernel: [    0.000000] kvm-clock: using sched offset of 4696066711 cycles
+May  8 13:12:50 snapubuntu kernel: [    0.000002] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+May  8 13:12:50 snapubuntu kernel: [    0.000005] tsc: Detected 2611.200 MHz processor
+May  8 13:12:50 snapubuntu kernel: [    0.000749] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+May  8 13:12:50 snapubuntu kernel: [    0.000751] e820: remove [mem 0x000a0000-0x000fffff] usable
+May  8 13:12:50 snapubuntu kernel: [    0.000754] last_pfn = 0x240000 max_arch_pfn = 0x400000000
+May  8 13:12:50 snapubuntu kernel: [    0.000771] MTRR map: 4 entries (3 fixed + 1 variable; max 19), built from 8 variable MTRRs
+May  8 13:12:50 snapubuntu kernel: [    0.000774] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+May  8 13:12:50 snapubuntu kernel: [    0.000796] last_pfn = 0xbffda max_arch_pfn = 0x400000000
+May  8 13:12:50 snapubuntu kernel: [    0.005061] found SMP MP-table at [mem 0x000f5b50-0x000f5b5f]
+May  8 13:12:50 snapubuntu kernel: [    0.005455] RAMDISK: [mem 0x2e547000-0x3329afff]
+May  8 13:12:50 snapubuntu kernel: [    0.005462] ACPI: Early table checksum verification disabled
+May  8 13:12:50 snapubuntu kernel: [    0.005466] ACPI: RSDP 0x00000000000F5900 000014 (v00 BOCHS )
+May  8 13:12:50 snapubuntu kernel: [    0.005470] ACPI: RSDT 0x00000000BFFE31A0 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005474] ACPI: FACP 0x00000000BFFE2F52 000074 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005479] ACPI: DSDT 0x00000000BFFDF040 003F12 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005481] ACPI: FACS 0x00000000BFFDF000 000040
+May  8 13:12:50 snapubuntu kernel: [    0.005483] ACPI: APIC 0x00000000BFFE2FC6 0000B0 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005486] ACPI: SSDT 0x00000000BFFE3076 0000CA (v01 BOCHS  VMGENID  00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005488] ACPI: HPET 0x00000000BFFE3140 000038 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005490] ACPI: WAET 0x00000000BFFE3178 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+May  8 13:12:50 snapubuntu kernel: [    0.005492] ACPI: Reserving FACP table memory at [mem 0xbffe2f52-0xbffe2fc5]
+May  8 13:12:50 snapubuntu kernel: [    0.005493] ACPI: Reserving DSDT table memory at [mem 0xbffdf040-0xbffe2f51]
+May  8 13:12:50 snapubuntu kernel: [    0.005494] ACPI: Reserving FACS table memory at [mem 0xbffdf000-0xbffdf03f]
+May  8 13:12:50 snapubuntu kernel: [    0.005494] ACPI: Reserving APIC table memory at [mem 0xbffe2fc6-0xbffe3075]
+May  8 13:12:50 snapubuntu kernel: [    0.005495] ACPI: Reserving SSDT table memory at [mem 0xbffe3076-0xbffe313f]
+May  8 13:12:50 snapubuntu kernel: [    0.005496] ACPI: Reserving HPET table memory at [mem 0xbffe3140-0xbffe3177]
+May  8 13:12:50 snapubuntu kernel: [    0.005496] ACPI: Reserving WAET table memory at [mem 0xbffe3178-0xbffe319f]
+May  8 13:12:50 snapubuntu kernel: [    0.005674] No NUMA configuration found
+May  8 13:12:50 snapubuntu kernel: [    0.005675] Faking a node at [mem 0x0000000000000000-0x000000023fffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005680] NODE_DATA(0) allocated [mem 0x23ffd1000-0x23fffbfff]
+May  8 13:12:50 snapubuntu kernel: [    0.005801] Zone ranges:
+May  8 13:12:50 snapubuntu kernel: [    0.005802]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005803]   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005804]   Normal   [mem 0x0000000100000000-0x000000023fffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005805]   Device   empty
+May  8 13:12:50 snapubuntu kernel: [    0.005806] Movable zone start for each node
+May  8 13:12:50 snapubuntu kernel: [    0.005808] Early memory node ranges
+May  8 13:12:50 snapubuntu kernel: [    0.005808]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+May  8 13:12:50 snapubuntu kernel: [    0.005810]   node   0: [mem 0x0000000000100000-0x00000000bffd9fff]
+May  8 13:12:50 snapubuntu kernel: [    0.005810]   node   0: [mem 0x0000000100000000-0x000000023fffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005812] Initmem setup node 0 [mem 0x0000000000001000-0x000000023fffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.005983] On node 0, zone DMA: 1 pages in unavailable ranges
+May  8 13:12:50 snapubuntu kernel: [    0.005995] On node 0, zone DMA: 97 pages in unavailable ranges
+May  8 13:12:50 snapubuntu kernel: [    0.022958] On node 0, zone Normal: 38 pages in unavailable ranges
+May  8 13:12:50 snapubuntu kernel: [    0.023476] ACPI: PM-Timer IO Port: 0x608
+May  8 13:12:50 snapubuntu kernel: [    0.023489] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+May  8 13:12:50 snapubuntu kernel: [    0.023512] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+May  8 13:12:50 snapubuntu kernel: [    0.023514] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+May  8 13:12:50 snapubuntu kernel: [    0.023516] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+May  8 13:12:50 snapubuntu kernel: [    0.023517] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+May  8 13:12:50 snapubuntu kernel: [    0.023518] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+May  8 13:12:50 snapubuntu kernel: [    0.023519] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+May  8 13:12:50 snapubuntu kernel: [    0.023522] ACPI: Using ACPI (MADT) for SMP configuration information
+May  8 13:12:50 snapubuntu kernel: [    0.023523] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+May  8 13:12:50 snapubuntu kernel: [    0.023526] smpboot: Allowing 8 CPUs, 0 hotplug CPUs
+May  8 13:12:50 snapubuntu kernel: [    0.023542] kvm-guest: APIC: eoi() replaced with kvm_guest_apic_eoi_write()
+May  8 13:12:50 snapubuntu kernel: [    0.023555] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+May  8 13:12:50 snapubuntu kernel: [    0.023556] PM: hibernation: Registered nosave memory: [mem 0x0009f000-0x000fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.023557] PM: hibernation: Registered nosave memory: [mem 0xbffda000-0xffffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.023559] [mem 0xc0000000-0xfeffbfff] available for PCI devices
+May  8 13:12:50 snapubuntu kernel: [    0.023560] Booting paravirtualized kernel on KVM
+May  8 13:12:50 snapubuntu kernel: [    0.023562] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1910969940391419 ns
+May  8 13:12:50 snapubuntu kernel: [    0.023568] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:8 nr_cpu_ids:8 nr_node_ids:1
+May  8 13:12:50 snapubuntu kernel: [    0.024187] percpu: Embedded 86 pages/cpu s229376 r8192 d114688 u524288
+May  8 13:12:50 snapubuntu kernel: [    0.024191] pcpu-alloc: s229376 r8192 d114688 u524288 alloc=1*2097152
+May  8 13:12:50 snapubuntu kernel: [    0.024193] pcpu-alloc: [0] 0 1 2 3 [0] 4 5 6 7 
+May  8 13:12:50 snapubuntu kernel: [    0.024215] kvm-guest: PV spinlocks enabled
+May  8 13:12:50 snapubuntu kernel: [    0.024217] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.024220] Kernel command line: BOOT_IMAGE=/boot/vmlinuz-6.8.0-111-generic root=UUID=e10fe988-02f5-4f72-914e-84a0b01c2d20 ro quiet splash vt.handoff=7
+May  8 13:12:50 snapubuntu kernel: [    0.024269] Unknown kernel command line parameters "splash", will be passed to user space.
+May  8 13:12:50 snapubuntu kernel: [    0.025299] Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.025814] Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.025918] Fallback order for Node 0: 0 
+May  8 13:12:50 snapubuntu kernel: [    0.025921] Built 1 zonelists, mobility grouping on.  Total pages: 2064090
+May  8 13:12:50 snapubuntu kernel: [    0.025923] Policy zone: Normal
+May  8 13:12:50 snapubuntu kernel: [    0.025929] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+May  8 13:12:50 snapubuntu kernel: [    0.025933] software IO TLB: area num 8.
+May  8 13:12:50 snapubuntu kernel: [    0.052747] Memory: 8044000K/8388064K available (22528K kernel code, 4434K rwdata, 13992K rodata, 4916K init, 4800K bss, 343804K reserved, 0K cma-reserved)
+May  8 13:12:50 snapubuntu kernel: [    0.073834] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=8, Nodes=1
+May  8 13:12:50 snapubuntu kernel: [    0.073897] Kernel/User page tables isolation: enabled
+May  8 13:12:50 snapubuntu kernel: [    0.073944] ftrace: allocating 58286 entries in 228 pages
+May  8 13:12:50 snapubuntu kernel: [    0.083158] ftrace: allocated 228 pages with 4 groups
+May  8 13:12:50 snapubuntu kernel: [    0.084045] Dynamic Preempt: voluntary
+May  8 13:12:50 snapubuntu kernel: [    0.084384] rcu: Preemptible hierarchical RCU implementation.
+May  8 13:12:50 snapubuntu kernel: [    0.084385] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=8.
+May  8 13:12:50 snapubuntu kernel: [    0.084387] 	Trampoline variant of Tasks RCU enabled.
+May  8 13:12:50 snapubuntu kernel: [    0.084387] 	Rude variant of Tasks RCU enabled.
+May  8 13:12:50 snapubuntu kernel: [    0.084387] 	Tracing variant of Tasks RCU enabled.
+May  8 13:12:50 snapubuntu kernel: [    0.084388] rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+May  8 13:12:50 snapubuntu kernel: [    0.084389] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=8
+May  8 13:12:50 snapubuntu kernel: [    0.084567] RCU Tasks: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=8.
+May  8 13:12:50 snapubuntu kernel: [    0.084570] RCU Tasks Rude: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=8.
+May  8 13:12:50 snapubuntu kernel: [    0.084571] RCU Tasks Trace: Setting shift to 3 and lim to 1 rcu_task_cb_adjust=1 rcu_task_cpu_ids=8.
+May  8 13:12:50 snapubuntu kernel: [    0.087093] NR_IRQS: 524544, nr_irqs: 488, preallocated irqs: 16
+May  8 13:12:50 snapubuntu kernel: [    0.087294] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+May  8 13:12:50 snapubuntu kernel: [    0.087373] Console: colour dummy device 80x25
+May  8 13:12:50 snapubuntu kernel: [    0.087374] printk: legacy console [tty0] enabled
+May  8 13:12:50 snapubuntu kernel: [    0.087505] ACPI: Core revision 20230628
+May  8 13:12:50 snapubuntu kernel: [    0.087685] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+May  8 13:12:50 snapubuntu kernel: [    0.087755] APIC: Switch to symmetric I/O mode setup
+May  8 13:12:50 snapubuntu kernel: [    0.087861] x2apic enabled
+May  8 13:12:50 snapubuntu kernel: [    0.088014] APIC: Switched APIC routing to: physical x2apic
+May  8 13:12:50 snapubuntu kernel: [    0.088552] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+May  8 13:12:50 snapubuntu kernel: [    0.088566] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x25a39079a08, max_idle_ns: 440795310461 ns
+May  8 13:12:50 snapubuntu kernel: [    0.088571] Calibrating delay loop (skipped) preset value.. 5222.40 BogoMIPS (lpj=2611200)
+May  8 13:12:50 snapubuntu kernel: [    0.088657] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+May  8 13:12:50 snapubuntu kernel: [    0.088658] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+May  8 13:12:50 snapubuntu kernel: [    0.088661] Spectre V1 : Mitigation: usercopy/swapgs barriers and __user pointer sanitization
+May  8 13:12:50 snapubuntu kernel: [    0.088663] Spectre V2 : Mitigation: Retpolines
+May  8 13:12:50 snapubuntu kernel: [    0.088663] Spectre V2 : Spectre v2 / SpectreRSB: Filling RSB on context switch and VMEXIT
+May  8 13:12:50 snapubuntu kernel: [    0.088664] Speculative Store Bypass: Vulnerable
+May  8 13:12:50 snapubuntu kernel: [    0.088666] MDS: Vulnerable: Clear CPU buffers attempted, no microcode
+May  8 13:12:50 snapubuntu kernel: [    0.088667] MMIO Stale Data: Unknown: No mitigations
+May  8 13:12:50 snapubuntu kernel: [    0.088668] active return thunk: its_return_thunk
+May  8 13:12:50 snapubuntu kernel: [    0.088672] ITS: Mitigation: Aligned branch/return thunks
+May  8 13:12:50 snapubuntu kernel: [    0.088675] x86/fpu: x87 FPU will use FXSAVE
+May  8 13:12:50 snapubuntu kernel: [    0.108293] Freeing SMP alternatives memory: 48K
+May  8 13:12:50 snapubuntu kernel: [    0.108300] pid_max: default: 32768 minimum: 301
+May  8 13:12:50 snapubuntu kernel: [    0.108754] LSM: initializing lsm=lockdown,capability,landlock,yama,apparmor,integrity
+May  8 13:12:50 snapubuntu kernel: [    0.108878] landlock: Up and running.
+May  8 13:12:50 snapubuntu kernel: [    0.108879] Yama: becoming mindful.
+May  8 13:12:50 snapubuntu kernel: [    0.108953] AppArmor: AppArmor initialized
+May  8 13:12:50 snapubuntu kernel: [    0.109126] Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.109137] Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.211885] smpboot: CPU0: Intel QEMU Virtual CPU version 2.5+ (family: 0xf, model: 0x6b, stepping: 0x1)
+May  8 13:12:50 snapubuntu kernel: [    0.212164] Performance Events: unsupported Netburst CPU model 107 no PMU driver, software events only.
+May  8 13:12:50 snapubuntu kernel: [    0.212189] signal: max sigframe size: 1440
+May  8 13:12:50 snapubuntu kernel: [    0.212226] rcu: Hierarchical SRCU implementation.
+May  8 13:12:50 snapubuntu kernel: [    0.212228] rcu: 	Max phase no-delay instances is 400.
+May  8 13:12:50 snapubuntu kernel: [    0.214831] NMI watchdog: Perf NMI watchdog permanently disabled
+May  8 13:12:50 snapubuntu kernel: [    0.214941] smp: Bringing up secondary CPUs ...
+May  8 13:12:50 snapubuntu kernel: [    0.215097] smpboot: x86: Booting SMP configuration:
+May  8 13:12:50 snapubuntu kernel: [    0.215099] .... node  #0, CPUs:      #1 #2 #3 #4 #5 #6 #7
+May  8 13:12:50 snapubuntu kernel: [    0.001269] smpboot: CPU 4 Converting physical 0 to logical die 1
+May  8 13:12:50 snapubuntu kernel: [    0.224625] smp: Brought up 1 node, 8 CPUs
+May  8 13:12:50 snapubuntu kernel: [    0.224632] smpboot: Max logical packages: 2
+May  8 13:12:50 snapubuntu kernel: [    0.224634] smpboot: Total of 8 processors activated (41779.20 BogoMIPS)
+May  8 13:12:50 snapubuntu kernel: [    0.226182] devtmpfs: initialized
+May  8 13:12:50 snapubuntu kernel: [    0.226182] x86/mm: Memory block size: 128MB
+May  8 13:12:50 snapubuntu kernel: [    0.227757] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275000 ns
+May  8 13:12:50 snapubuntu kernel: [    0.227757] futex hash table entries: 2048 (order: 5, 131072 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.228194] pinctrl core: initialized pinctrl subsystem
+May  8 13:12:50 snapubuntu kernel: [    0.228355] PM: RTC time: 13:12:42, date: 2026-05-08
+May  8 13:12:50 snapubuntu kernel: [    0.229546] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.229916] DMA: preallocated 1024 KiB GFP_KERNEL pool for atomic allocations
+May  8 13:12:50 snapubuntu kernel: [    0.230016] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA pool for atomic allocations
+May  8 13:12:50 snapubuntu kernel: [    0.230119] DMA: preallocated 1024 KiB GFP_KERNEL|GFP_DMA32 pool for atomic allocations
+May  8 13:12:50 snapubuntu kernel: [    0.230138] audit: initializing netlink subsys (disabled)
+May  8 13:12:50 snapubuntu kernel: [    0.230152] audit: type=2000 audit(1778245962.797:1): state=initialized audit_enabled=0 res=1
+May  8 13:12:50 snapubuntu kernel: [    0.230627] thermal_sys: Registered thermal governor 'fair_share'
+May  8 13:12:50 snapubuntu kernel: [    0.230629] thermal_sys: Registered thermal governor 'bang_bang'
+May  8 13:12:50 snapubuntu kernel: [    0.230630] thermal_sys: Registered thermal governor 'step_wise'
+May  8 13:12:50 snapubuntu kernel: [    0.230631] thermal_sys: Registered thermal governor 'user_space'
+May  8 13:12:50 snapubuntu kernel: [    0.230632] thermal_sys: Registered thermal governor 'power_allocator'
+May  8 13:12:50 snapubuntu kernel: [    0.230645] cpuidle: using governor ladder
+May  8 13:12:50 snapubuntu kernel: [    0.230649] cpuidle: using governor menu
+May  8 13:12:50 snapubuntu kernel: [    0.230754] acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+May  8 13:12:50 snapubuntu kernel: [    0.231058] PCI: Using configuration type 1 for base access
+May  8 13:12:50 snapubuntu kernel: [    0.231221] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
+May  8 13:12:50 snapubuntu kernel: [    0.231605] HugeTLB: registered 2.00 MiB page size, pre-allocated 0 pages
+May  8 13:12:50 snapubuntu kernel: [    0.231607] HugeTLB: 28 KiB vmemmap can be freed for a 2.00 MiB page
+May  8 13:12:50 snapubuntu kernel: [    0.231763] ACPI: Added _OSI(Module Device)
+May  8 13:12:50 snapubuntu kernel: [    0.231763] ACPI: Added _OSI(Processor Device)
+May  8 13:12:50 snapubuntu kernel: [    0.231763] ACPI: Added _OSI(Processor Aggregator Device)
+May  8 13:12:50 snapubuntu kernel: [    0.235022] ACPI: 2 ACPI AML tables successfully acquired and loaded
+May  8 13:12:50 snapubuntu kernel: [    0.236255] ACPI: _OSC evaluation for CPUs failed, trying _PDC
+May  8 13:12:50 snapubuntu kernel: [    0.236698] ACPI: Interpreter enabled
+May  8 13:12:50 snapubuntu kernel: [    0.236711] ACPI: PM: (supports S0 S3 S4 S5)
+May  8 13:12:50 snapubuntu kernel: [    0.236713] ACPI: Using IOAPIC for interrupt routing
+May  8 13:12:50 snapubuntu kernel: [    0.237042] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+May  8 13:12:50 snapubuntu kernel: [    0.237043] PCI: Using E820 reservations for host bridge windows
+May  8 13:12:50 snapubuntu kernel: [    0.237244] ACPI: Enabled 3 GPEs in block 00 to 0F
+May  8 13:12:50 snapubuntu kernel: [    0.244266] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+May  8 13:12:50 snapubuntu kernel: [    0.244275] acpi PNP0A03:00: _OSC: OS supports [ASPM ClockPM Segments MSI EDR HPX-Type3]
+May  8 13:12:50 snapubuntu kernel: [    0.244278] acpi PNP0A03:00: _OSC: not requesting OS control; OS requires [ExtendedConfig ASPM ClockPM MSI]
+May  8 13:12:50 snapubuntu kernel: [    0.244289] acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+May  8 13:12:50 snapubuntu kernel: [    0.244913] acpiphp: Slot [3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.244938] acpiphp: Slot [9] registered
+May  8 13:12:50 snapubuntu kernel: [    0.244952] acpiphp: Slot [18] registered
+May  8 13:12:50 snapubuntu kernel: [    0.244984] acpiphp: Slot [4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.244997] acpiphp: Slot [6] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245010] acpiphp: Slot [7] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245024] acpiphp: Slot [8] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245039] acpiphp: Slot [10] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245052] acpiphp: Slot [11] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245065] acpiphp: Slot [12] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245078] acpiphp: Slot [13] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245092] acpiphp: Slot [14] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245105] acpiphp: Slot [15] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245118] acpiphp: Slot [16] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245133] acpiphp: Slot [17] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245146] acpiphp: Slot [19] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245159] acpiphp: Slot [20] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245172] acpiphp: Slot [21] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245185] acpiphp: Slot [22] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245198] acpiphp: Slot [23] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245211] acpiphp: Slot [24] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245226] acpiphp: Slot [25] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245239] acpiphp: Slot [26] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245252] acpiphp: Slot [27] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245266] acpiphp: Slot [28] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245279] acpiphp: Slot [29] registered
+May  8 13:12:50 snapubuntu kernel: [    0.245288] PCI host bridge to bus 0000:00
+May  8 13:12:50 snapubuntu kernel: [    0.245292] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+May  8 13:12:50 snapubuntu kernel: [    0.245295] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.245296] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.245298] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.245300] pci_bus 0000:00: root bus resource [mem 0x240000000-0x2bfffffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.245302] pci_bus 0000:00: root bus resource [bus 00-ff]
+May  8 13:12:50 snapubuntu kernel: [    0.245342] pci 0000:00:00.0: [8086:1237] type 00 class 0x060000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.245692] pci 0000:00:01.0: [8086:7000] type 00 class 0x060100 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.246030] pci 0000:00:01.1: [8086:7010] type 00 class 0x010180 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.246594] pci 0000:00:01.1: BAR 4 [io  0xf0e0-0xf0ef]
+May  8 13:12:50 snapubuntu kernel: [    0.246621] pci 0000:00:01.1: BAR 0 [io  0x01f0-0x01f7]: legacy IDE quirk
+May  8 13:12:50 snapubuntu kernel: [    0.246623] pci 0000:00:01.1: BAR 1 [io  0x03f6]: legacy IDE quirk
+May  8 13:12:50 snapubuntu kernel: [    0.246624] pci 0000:00:01.1: BAR 2 [io  0x0170-0x0177]: legacy IDE quirk
+May  8 13:12:50 snapubuntu kernel: [    0.246626] pci 0000:00:01.1: BAR 3 [io  0x0376]: legacy IDE quirk
+May  8 13:12:50 snapubuntu kernel: [    0.246776] pci 0000:00:01.2: [8086:7020] type 00 class 0x0c0300 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.247408] pci 0000:00:01.2: BAR 4 [io  0xf080-0xf09f]
+May  8 13:12:50 snapubuntu kernel: [    0.248263] pci 0000:00:01.3: [8086:7113] type 00 class 0x068000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.248500] pci 0000:00:01.3: quirk: [io  0x0600-0x063f] claimed by PIIX4 ACPI
+May  8 13:12:50 snapubuntu kernel: [    0.248508] pci 0000:00:01.3: quirk: [io  0x0700-0x070f] claimed by PIIX4 SMB
+May  8 13:12:50 snapubuntu kernel: [    0.248673] pci 0000:00:02.0: [1b36:0100] type 00 class 0x030000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.250581] pci 0000:00:02.0: BAR 0 [mem 0xf4000000-0xf7ffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.250591] pci 0000:00:02.0: BAR 1 [mem 0xf8000000-0xfbffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.250598] pci 0000:00:02.0: BAR 2 [mem 0xfc650000-0xfc651fff]
+May  8 13:12:50 snapubuntu kernel: [    0.250604] pci 0000:00:02.0: BAR 3 [io  0xf0a0-0xf0bf]
+May  8 13:12:50 snapubuntu kernel: [    0.250620] pci 0000:00:02.0: ROM [mem 0xfc640000-0xfc64ffff pref]
+May  8 13:12:50 snapubuntu kernel: [    0.250667] pci 0000:00:02.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+May  8 13:12:50 snapubuntu kernel: [    0.250871] pci 0000:00:03.0: [1af4:1002] type 00 class 0x00ff00 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.252576] pci 0000:00:03.0: BAR 0 [io  0xf000-0xf03f]
+May  8 13:12:50 snapubuntu kernel: [    0.252602] pci 0000:00:03.0: BAR 4 [mem 0xfea00000-0xfea03fff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.253794] pci 0000:00:05.0: [1b36:0001] type 01 class 0x060400 conventional PCI bridge
+May  8 13:12:50 snapubuntu kernel: [    0.255945] pci 0000:00:05.0: BAR 0 [mem 0xfc652000-0xfc6520ff 64bit]
+May  8 13:12:50 snapubuntu kernel: [    0.255958] pci 0000:00:05.0: PCI bridge to [bus 01]
+May  8 13:12:50 snapubuntu kernel: [    0.255974] pci 0000:00:05.0:   bridge window [io  0xe000-0xefff]
+May  8 13:12:50 snapubuntu kernel: [    0.255985] pci 0000:00:05.0:   bridge window [mem 0xfc400000-0xfc5fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.256589] pci 0000:00:05.0:   bridge window [mem 0xfe800000-0xfe9fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.257701] pci 0000:00:09.0: [1af4:1003] type 00 class 0x078000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.258576] pci 0000:00:09.0: BAR 0 [io  0xf040-0xf07f]
+May  8 13:12:50 snapubuntu kernel: [    0.258583] pci 0000:00:09.0: BAR 1 [mem 0xfc653000-0xfc653fff]
+May  8 13:12:50 snapubuntu kernel: [    0.258604] pci 0000:00:09.0: BAR 4 [mem 0xfea04000-0xfea07fff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.261180] pci 0000:00:12.0: [1af4:1000] type 00 class 0x020000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.262136] pci 0000:00:12.0: BAR 0 [io  0xf0c0-0xf0df]
+May  8 13:12:50 snapubuntu kernel: [    0.262144] pci 0000:00:12.0: BAR 1 [mem 0xfc654000-0xfc654fff]
+May  8 13:12:50 snapubuntu kernel: [    0.262164] pci 0000:00:12.0: BAR 4 [mem 0xfea08000-0xfea0bfff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.262171] pci 0000:00:12.0: ROM [mem 0xfc600000-0xfc63ffff pref]
+May  8 13:12:50 snapubuntu kernel: [    0.264687] pci 0000:00:1e.0: [1b36:0001] type 01 class 0x060400 conventional PCI bridge
+May  8 13:12:50 snapubuntu kernel: [    0.265577] pci 0000:00:1e.0: BAR 0 [mem 0xfc655000-0xfc6550ff 64bit]
+May  8 13:12:50 snapubuntu kernel: [    0.265586] pci 0000:00:1e.0: PCI bridge to [bus 02]
+May  8 13:12:50 snapubuntu kernel: [    0.265597] pci 0000:00:1e.0:   bridge window [io  0xd000-0xdfff]
+May  8 13:12:50 snapubuntu kernel: [    0.265604] pci 0000:00:1e.0:   bridge window [mem 0xfc200000-0xfc3fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.266576] pci 0000:00:1e.0:   bridge window [mem 0xfe600000-0xfe7fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.266889] pci 0000:00:1f.0: [1b36:0001] type 01 class 0x060400 conventional PCI bridge
+May  8 13:12:50 snapubuntu kernel: [    0.268579] pci 0000:00:1f.0: BAR 0 [mem 0xfc656000-0xfc6560ff 64bit]
+May  8 13:12:50 snapubuntu kernel: [    0.268590] pci 0000:00:1f.0: PCI bridge to [bus 03]
+May  8 13:12:50 snapubuntu kernel: [    0.268601] pci 0000:00:1f.0:   bridge window [io  0xc000-0xcfff]
+May  8 13:12:50 snapubuntu kernel: [    0.268610] pci 0000:00:1f.0:   bridge window [mem 0xfc000000-0xfc1fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.268840] pci 0000:00:1f.0:   bridge window [mem 0xfe400000-0xfe5fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.269290] pci_bus 0000:01: extended config space not accessible
+May  8 13:12:50 snapubuntu kernel: [    0.269663] acpiphp: Slot [1-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269674] acpiphp: Slot [0] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269682] acpiphp: Slot [2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269694] acpiphp: Slot [3-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269704] acpiphp: Slot [4-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269713] acpiphp: Slot [5] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269725] acpiphp: Slot [6-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269734] acpiphp: Slot [7-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269744] acpiphp: Slot [8-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269754] acpiphp: Slot [9-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269764] acpiphp: Slot [10-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269774] acpiphp: Slot [11-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269785] acpiphp: Slot [12-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269794] acpiphp: Slot [13-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269804] acpiphp: Slot [14-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269816] acpiphp: Slot [15-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269828] acpiphp: Slot [16-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269838] acpiphp: Slot [17-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269848] acpiphp: Slot [18-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269859] acpiphp: Slot [19-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269869] acpiphp: Slot [20-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269878] acpiphp: Slot [21-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269890] acpiphp: Slot [22-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269900] acpiphp: Slot [23-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269909] acpiphp: Slot [24-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269919] acpiphp: Slot [25-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269930] acpiphp: Slot [26-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269940] acpiphp: Slot [27-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269949] acpiphp: Slot [28-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269959] acpiphp: Slot [29-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269967] acpiphp: Slot [30] registered
+May  8 13:12:50 snapubuntu kernel: [    0.269975] acpiphp: Slot [31] registered
+May  8 13:12:50 snapubuntu kernel: [    0.270152] pci 0000:01:01.0: [1af4:1004] type 00 class 0x010000 conventional PCI endpoint
+May  8 13:12:50 snapubuntu kernel: [    0.271061] pci 0000:01:01.0: BAR 0 [io  0xe000-0xe03f]
+May  8 13:12:50 snapubuntu kernel: [    0.271067] pci 0000:01:01.0: BAR 1 [mem 0xfc400000-0xfc400fff]
+May  8 13:12:50 snapubuntu kernel: [    0.271080] pci 0000:01:01.0: BAR 4 [mem 0xfe800000-0xfe803fff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.275596] pci 0000:00:05.0: PCI bridge to [bus 01]
+May  8 13:12:50 snapubuntu kernel: [    0.275976] pci_bus 0000:02: extended config space not accessible
+May  8 13:12:50 snapubuntu kernel: [    0.276145] acpiphp: Slot [0-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276157] acpiphp: Slot [1-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276167] acpiphp: Slot [2-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276177] acpiphp: Slot [3-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276187] acpiphp: Slot [4-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276197] acpiphp: Slot [5-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276209] acpiphp: Slot [6-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276219] acpiphp: Slot [7-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276229] acpiphp: Slot [8-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276239] acpiphp: Slot [9-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276249] acpiphp: Slot [10-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276259] acpiphp: Slot [11-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276269] acpiphp: Slot [12-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276283] acpiphp: Slot [13-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276293] acpiphp: Slot [14-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276304] acpiphp: Slot [15-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276314] acpiphp: Slot [16-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276324] acpiphp: Slot [17-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276334] acpiphp: Slot [18-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276344] acpiphp: Slot [19-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276356] acpiphp: Slot [20-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276366] acpiphp: Slot [21-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276377] acpiphp: Slot [22-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276387] acpiphp: Slot [23-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276398] acpiphp: Slot [24-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276408] acpiphp: Slot [25-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276418] acpiphp: Slot [26-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276430] acpiphp: Slot [27-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276445] acpiphp: Slot [28-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276457] acpiphp: Slot [29-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276467] acpiphp: Slot [30-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.276478] acpiphp: Slot [31-2] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281212] pci 0000:00:1e.0: PCI bridge to [bus 02]
+May  8 13:12:50 snapubuntu kernel: [    0.281634] pci_bus 0000:03: extended config space not accessible
+May  8 13:12:50 snapubuntu kernel: [    0.281833] acpiphp: Slot [0-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281846] acpiphp: Slot [1-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281857] acpiphp: Slot [2-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281868] acpiphp: Slot [3-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281878] acpiphp: Slot [4-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281889] acpiphp: Slot [5-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281901] acpiphp: Slot [6-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281912] acpiphp: Slot [7-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281923] acpiphp: Slot [8-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281933] acpiphp: Slot [9-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281944] acpiphp: Slot [10-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281955] acpiphp: Slot [11-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281965] acpiphp: Slot [12-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281975] acpiphp: Slot [13-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281987] acpiphp: Slot [14-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.281997] acpiphp: Slot [15-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282007] acpiphp: Slot [16-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282017] acpiphp: Slot [17-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282028] acpiphp: Slot [18-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282038] acpiphp: Slot [19-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282048] acpiphp: Slot [20-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282060] acpiphp: Slot [21-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282072] acpiphp: Slot [22-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282084] acpiphp: Slot [23-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282094] acpiphp: Slot [24-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282105] acpiphp: Slot [25-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282115] acpiphp: Slot [26-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282126] acpiphp: Slot [27-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282138] acpiphp: Slot [28-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282148] acpiphp: Slot [29-4] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282158] acpiphp: Slot [30-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.282168] acpiphp: Slot [31-3] registered
+May  8 13:12:50 snapubuntu kernel: [    0.286288] pci 0000:00:1f.0: PCI bridge to [bus 03]
+May  8 13:12:50 snapubuntu kernel: [    0.287638] ACPI: PCI: Interrupt link LNKA configured for IRQ 10
+May  8 13:12:50 snapubuntu kernel: [    0.287719] ACPI: PCI: Interrupt link LNKB configured for IRQ 10
+May  8 13:12:50 snapubuntu kernel: [    0.287778] ACPI: PCI: Interrupt link LNKC configured for IRQ 11
+May  8 13:12:50 snapubuntu kernel: [    0.287835] ACPI: PCI: Interrupt link LNKD configured for IRQ 11
+May  8 13:12:50 snapubuntu kernel: [    0.287870] ACPI: PCI: Interrupt link LNKS configured for IRQ 9
+May  8 13:12:50 snapubuntu kernel: [    0.288732] iommu: Default domain type: Translated
+May  8 13:12:50 snapubuntu kernel: [    0.288732] iommu: DMA domain TLB invalidation policy: lazy mode
+May  8 13:12:50 snapubuntu kernel: [    0.288743] SCSI subsystem initialized
+May  8 13:12:50 snapubuntu kernel: [    0.288749] libata version 3.00 loaded.
+May  8 13:12:50 snapubuntu kernel: [    0.288749] ACPI: bus type USB registered
+May  8 13:12:50 snapubuntu kernel: [    0.288749] usbcore: registered new interface driver usbfs
+May  8 13:12:50 snapubuntu kernel: [    0.288749] usbcore: registered new interface driver hub
+May  8 13:12:50 snapubuntu kernel: [    0.288749] usbcore: registered new device driver usb
+May  8 13:12:50 snapubuntu kernel: [    0.288749] pps_core: LinuxPPS API ver. 1 registered
+May  8 13:12:50 snapubuntu kernel: [    0.288749] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+May  8 13:12:50 snapubuntu kernel: [    0.288749] PTP clock support registered
+May  8 13:12:50 snapubuntu kernel: [    0.288749] EDAC MC: Ver: 3.0.0
+May  8 13:12:50 snapubuntu kernel: [    0.289737] NetLabel: Initializing
+May  8 13:12:50 snapubuntu kernel: [    0.289738] NetLabel:  domain hash size = 128
+May  8 13:12:50 snapubuntu kernel: [    0.289738] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
+May  8 13:12:50 snapubuntu kernel: [    0.289757] NetLabel:  unlabeled traffic allowed by default
+May  8 13:12:50 snapubuntu kernel: [    0.289769] mctp: management component transport protocol core
+May  8 13:12:50 snapubuntu kernel: [    0.289769] NET: Registered PF_MCTP protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.289769] PCI: Using ACPI for IRQ routing
+May  8 13:12:50 snapubuntu kernel: [    0.289769] PCI: pci_cache_line_size set to 64 bytes
+May  8 13:12:50 snapubuntu kernel: [    0.289769] e820: reserve RAM buffer [mem 0x0009fc00-0x0009ffff]
+May  8 13:12:50 snapubuntu kernel: [    0.289769] e820: reserve RAM buffer [mem 0xbffda000-0xbfffffff]
+May  8 13:12:50 snapubuntu kernel: [    0.289769] pci 0000:00:02.0: vgaarb: setting as boot VGA device
+May  8 13:12:50 snapubuntu kernel: [    0.289769] pci 0000:00:02.0: vgaarb: bridge control possible
+May  8 13:12:50 snapubuntu kernel: [    0.289769] pci 0000:00:02.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+May  8 13:12:50 snapubuntu kernel: [    0.289769] vgaarb: loaded
+May  8 13:12:50 snapubuntu kernel: [    0.289769] hpet: 3 channels of 0 reserved for per-cpu timers
+May  8 13:12:50 snapubuntu kernel: [    0.289769] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+May  8 13:12:50 snapubuntu kernel: [    0.289769] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+May  8 13:12:50 snapubuntu kernel: [    0.292658] clocksource: Switched to clocksource kvm-clock
+May  8 13:12:50 snapubuntu kernel: [    0.293543] VFS: Disk quotas dquot_6.6.0
+May  8 13:12:50 snapubuntu kernel: [    0.293575] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+May  8 13:12:50 snapubuntu kernel: [    0.293766] AppArmor: AppArmor Filesystem Enabled
+May  8 13:12:50 snapubuntu kernel: [    0.293784] pnp: PnP ACPI init
+May  8 13:12:50 snapubuntu kernel: [    0.293862] pnp 00:02: [dma 2]
+May  8 13:12:50 snapubuntu kernel: [    0.294095] pnp: PnP ACPI: found 4 devices
+May  8 13:12:50 snapubuntu kernel: [    0.301586] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+May  8 13:12:50 snapubuntu kernel: [    0.301761] NET: Registered PF_INET protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.301867] IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.313865] tcp_listen_portaddr_hash hash table entries: 4096 (order: 4, 65536 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.313893] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.313933] TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.314243] TCP bind hash table entries: 65536 (order: 9, 2097152 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.314350] TCP: Hash tables configured (established 65536 bind 65536)
+May  8 13:12:50 snapubuntu kernel: [    0.314452] MPTCP token hash table entries: 8192 (order: 6, 196608 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.314486] UDP hash table entries: 4096 (order: 5, 131072 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.314505] UDP-Lite hash table entries: 4096 (order: 5, 131072 bytes, linear)
+May  8 13:12:50 snapubuntu kernel: [    0.314569] NET: Registered PF_UNIX/PF_LOCAL protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.314575] NET: Registered PF_XDP protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.314586] pci 0000:00:05.0: PCI bridge to [bus 01]
+May  8 13:12:50 snapubuntu kernel: [    0.314607] pci 0000:00:05.0:   bridge window [io  0xe000-0xefff]
+May  8 13:12:50 snapubuntu kernel: [    0.315069] pci 0000:00:05.0:   bridge window [mem 0xfc400000-0xfc5fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.315292] pci 0000:00:05.0:   bridge window [mem 0xfe800000-0xfe9fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.315746] pci 0000:00:1e.0: PCI bridge to [bus 02]
+May  8 13:12:50 snapubuntu kernel: [    0.315753] pci 0000:00:1e.0:   bridge window [io  0xd000-0xdfff]
+May  8 13:12:50 snapubuntu kernel: [    0.316065] pci 0000:00:1e.0:   bridge window [mem 0xfc200000-0xfc3fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.316297] pci 0000:00:1e.0:   bridge window [mem 0xfe600000-0xfe7fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.316755] pci 0000:00:1f.0: PCI bridge to [bus 03]
+May  8 13:12:50 snapubuntu kernel: [    0.316761] pci 0000:00:1f.0:   bridge window [io  0xc000-0xcfff]
+May  8 13:12:50 snapubuntu kernel: [    0.317098] pci 0000:00:1f.0:   bridge window [mem 0xfc000000-0xfc1fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.317314] pci 0000:00:1f.0:   bridge window [mem 0xfe400000-0xfe5fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.318298] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+May  8 13:12:50 snapubuntu kernel: [    0.318300] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.318302] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.318303] pci_bus 0000:00: resource 7 [mem 0xc0000000-0xfebfffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.318304] pci_bus 0000:00: resource 8 [mem 0x240000000-0x2bfffffff window]
+May  8 13:12:50 snapubuntu kernel: [    0.318305] pci_bus 0000:01: resource 0 [io  0xe000-0xefff]
+May  8 13:12:50 snapubuntu kernel: [    0.318306] pci_bus 0000:01: resource 1 [mem 0xfc400000-0xfc5fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.318307] pci_bus 0000:01: resource 2 [mem 0xfe800000-0xfe9fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.318309] pci_bus 0000:02: resource 0 [io  0xd000-0xdfff]
+May  8 13:12:50 snapubuntu kernel: [    0.318310] pci_bus 0000:02: resource 1 [mem 0xfc200000-0xfc3fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.318311] pci_bus 0000:02: resource 2 [mem 0xfe600000-0xfe7fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.318312] pci_bus 0000:03: resource 0 [io  0xc000-0xcfff]
+May  8 13:12:50 snapubuntu kernel: [    0.318313] pci_bus 0000:03: resource 1 [mem 0xfc000000-0xfc1fffff]
+May  8 13:12:50 snapubuntu kernel: [    0.318314] pci_bus 0000:03: resource 2 [mem 0xfe400000-0xfe5fffff 64bit pref]
+May  8 13:12:50 snapubuntu kernel: [    0.318393] pci 0000:00:01.0: PIIX3: Enabling Passive Release
+May  8 13:12:50 snapubuntu kernel: [    0.318400] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+May  8 13:12:50 snapubuntu kernel: [    0.331353] ACPI: \_SB_.LNKD: Enabled at IRQ 11
+May  8 13:12:50 snapubuntu kernel: [    0.343638] pci 0000:00:01.2: quirk_usb_early_handoff+0x0/0x190 took 24631 usecs
+May  8 13:12:50 snapubuntu kernel: [    0.343694] PCI: CLS 0 bytes, default 64
+May  8 13:12:50 snapubuntu kernel: [    0.343721] PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+May  8 13:12:50 snapubuntu kernel: [    0.343722] software IO TLB: mapped [mem 0x00000000bbfda000-0x00000000bffda000] (64MB)
+May  8 13:12:50 snapubuntu kernel: [    0.343758] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x25a39079a08, max_idle_ns: 440795310461 ns
+May  8 13:12:50 snapubuntu kernel: [    0.343820] Trying to unpack rootfs image as initramfs...
+May  8 13:12:50 snapubuntu kernel: [    0.344137] Initialise system trusted keyrings
+May  8 13:12:50 snapubuntu kernel: [    0.344149] Key type blacklist registered
+May  8 13:12:50 snapubuntu kernel: [    0.344379] workingset: timestamp_bits=36 max_order=21 bucket_order=0
+May  8 13:12:50 snapubuntu kernel: [    0.344389] zbud: loaded
+May  8 13:12:50 snapubuntu kernel: [    0.345235] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+May  8 13:12:50 snapubuntu kernel: [    0.345643] fuse: init (API version 7.39)
+May  8 13:12:50 snapubuntu kernel: [    0.345972] integrity: Platform Keyring initialized
+May  8 13:12:50 snapubuntu kernel: [    0.345976] integrity: Machine keyring initialized
+May  8 13:12:50 snapubuntu kernel: [    0.352749] Key type asymmetric registered
+May  8 13:12:50 snapubuntu kernel: [    0.352753] Asymmetric key parser 'x509' registered
+May  8 13:12:50 snapubuntu kernel: [    0.352773] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 243)
+May  8 13:12:50 snapubuntu kernel: [    0.352847] io scheduler mq-deadline registered
+May  8 13:12:50 snapubuntu kernel: [    0.353711] shpchp 0000:00:05.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0.S28_)
+May  8 13:12:50 snapubuntu kernel: [    0.353720] shpchp 0000:00:05.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0)
+May  8 13:12:50 snapubuntu kernel: [    0.353726] shpchp 0000:00:05.0: Cannot get control of SHPC hotplug
+May  8 13:12:50 snapubuntu kernel: [    0.353746] shpchp 0000:00:1e.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0.SF0_)
+May  8 13:12:50 snapubuntu kernel: [    0.353750] shpchp 0000:00:1e.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0)
+May  8 13:12:50 snapubuntu kernel: [    0.353751] shpchp 0000:00:1e.0: Cannot get control of SHPC hotplug
+May  8 13:12:50 snapubuntu kernel: [    0.353770] shpchp 0000:00:1f.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0.SF8_)
+May  8 13:12:50 snapubuntu kernel: [    0.353774] shpchp 0000:00:1f.0: Requesting control of SHPC hotplug via OSHP (\_SB_.PCI0)
+May  8 13:12:50 snapubuntu kernel: [    0.353775] shpchp 0000:00:1f.0: Cannot get control of SHPC hotplug
+May  8 13:12:50 snapubuntu kernel: [    0.353780] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+May  8 13:12:50 snapubuntu kernel: [    0.353897] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+May  8 13:12:50 snapubuntu kernel: [    0.353947] ACPI: button: Power Button [PWRF]
+May  8 13:12:50 snapubuntu kernel: [    0.367244] ACPI: \_SB_.LNKC: Enabled at IRQ 10
+May  8 13:12:50 snapubuntu kernel: [    0.380372] ACPI: \_SB_.LNKA: Enabled at IRQ 10
+May  8 13:12:50 snapubuntu kernel: [    0.393675] ACPI: \_SB_.LNKB: Enabled at IRQ 11
+May  8 13:12:50 snapubuntu kernel: [    0.421362] Free page reporting enabled
+May  8 13:12:50 snapubuntu kernel: [    0.421704] Serial: 8250/16550 driver, 32 ports, IRQ sharing enabled
+May  8 13:12:50 snapubuntu kernel: [    0.430145] Linux agpgart interface v0.103
+May  8 13:12:50 snapubuntu kernel: [    0.433370] loop: module loaded
+May  8 13:12:50 snapubuntu kernel: [    0.433777] virtio_scsi virtio3: 8/0/0 default/read/poll queues
+May  8 13:12:50 snapubuntu kernel: [    0.435455] scsi host0: Virtio SCSI HBA
+May  8 13:12:50 snapubuntu kernel: [    0.463749] scsi 0:0:0:0: Direct-Access     QEMU     QEMU HARDDISK    2.5+ PQ: 0 ANSI: 5
+May  8 13:12:50 snapubuntu kernel: [    0.464196] ata_piix 0000:00:01.1: version 2.13
+May  8 13:12:50 snapubuntu kernel: [    0.464848] scsi host1: ata_piix
+May  8 13:12:50 snapubuntu kernel: [    0.464993] scsi host2: ata_piix
+May  8 13:12:50 snapubuntu kernel: [    0.465049] ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xf0e0 irq 14 lpm-pol 0
+May  8 13:12:50 snapubuntu kernel: [    0.465050] ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xf0e8 irq 15 lpm-pol 0
+May  8 13:12:50 snapubuntu kernel: [    0.465124] ACPI: bus type drm_connector registered
+May  8 13:12:50 snapubuntu kernel: [    0.465433] tun: Universal TUN/TAP device driver, 1.6
+May  8 13:12:50 snapubuntu kernel: [    0.466657] PPP generic driver version 2.4.2
+May  8 13:12:50 snapubuntu kernel: [    0.474070] sd 0:0:0:0: Attached scsi generic sg0 type 0
+May  8 13:12:50 snapubuntu kernel: [    0.474153] sd 0:0:0:0: Power-on or device reset occurred
+May  8 13:12:50 snapubuntu kernel: [    0.474236] sd 0:0:0:0: [sda] 67108864 512-byte logical blocks: (34.4 GB/32.0 GiB)
+May  8 13:12:50 snapubuntu kernel: [    0.474260] sd 0:0:0:0: [sda] Write Protect is off
+May  8 13:12:50 snapubuntu kernel: [    0.474264] sd 0:0:0:0: [sda] Mode Sense: 63 00 00 08
+May  8 13:12:50 snapubuntu kernel: [    0.474314] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+May  8 13:12:50 snapubuntu kernel: [    0.476649]  sda: sda1 sda2 sda3
+May  8 13:12:50 snapubuntu kernel: [    0.476817] sd 0:0:0:0: [sda] Attached SCSI disk
+May  8 13:12:50 snapubuntu kernel: [    0.480255] uhci_hcd 0000:00:01.2: UHCI Host Controller
+May  8 13:12:50 snapubuntu kernel: [    0.480263] uhci_hcd 0000:00:01.2: new USB bus registered, assigned bus number 1
+May  8 13:12:50 snapubuntu kernel: [    0.480285] uhci_hcd 0000:00:01.2: detected 2 ports
+May  8 13:12:50 snapubuntu kernel: [    0.480351] uhci_hcd 0000:00:01.2: irq 11, io port 0x0000f080
+May  8 13:12:50 snapubuntu kernel: [    0.480452] usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 6.08
+May  8 13:12:50 snapubuntu kernel: [    0.480454] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+May  8 13:12:50 snapubuntu kernel: [    0.480455] usb usb1: Product: UHCI Host Controller
+May  8 13:12:50 snapubuntu kernel: [    0.480456] usb usb1: Manufacturer: Linux 6.8.0-111-generic uhci_hcd
+May  8 13:12:50 snapubuntu kernel: [    0.480457] usb usb1: SerialNumber: 0000:00:01.2
+May  8 13:12:50 snapubuntu kernel: [    0.480569] hub 1-0:1.0: USB hub found
+May  8 13:12:50 snapubuntu kernel: [    0.480573] hub 1-0:1.0: 2 ports detected
+May  8 13:12:50 snapubuntu kernel: [    0.480739] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+May  8 13:12:50 snapubuntu kernel: [    0.481200] serio: i8042 KBD port at 0x60,0x64 irq 1
+May  8 13:12:50 snapubuntu kernel: [    0.481204] serio: i8042 AUX port at 0x60,0x64 irq 12
+May  8 13:12:50 snapubuntu kernel: [    0.481331] mousedev: PS/2 mouse device common for all mice
+May  8 13:12:50 snapubuntu kernel: [    0.481457] rtc_cmos 00:03: RTC can wake from S4
+May  8 13:12:50 snapubuntu kernel: [    0.481605] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+May  8 13:12:50 snapubuntu kernel: [    0.481768] rtc_cmos 00:03: registered as rtc0
+May  8 13:12:50 snapubuntu kernel: [    0.481797] rtc_cmos 00:03: setting system clock to 2026-05-08T13:12:42 UTC (1778245962)
+May  8 13:12:50 snapubuntu kernel: [    0.481841] rtc_cmos 00:03: alarms up to one day, y3k, 242 bytes nvram, hpet irqs
+May  8 13:12:50 snapubuntu kernel: [    0.481847] i2c_dev: i2c /dev entries driver
+May  8 13:12:50 snapubuntu kernel: [    0.481863] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+May  8 13:12:50 snapubuntu kernel: [    0.481884] device-mapper: uevent: version 1.0.3
+May  8 13:12:50 snapubuntu kernel: [    0.481934] device-mapper: ioctl: 4.48.0-ioctl (2023-03-01) initialised: dm-devel@redhat.com
+May  8 13:12:50 snapubuntu kernel: [    0.481937] intel_pstate: CPU model not supported
+May  8 13:12:50 snapubuntu kernel: [    0.482159] ledtrig-cpu: registered to indicate activity on CPUs
+May  8 13:12:50 snapubuntu kernel: [    0.482309] [drm] Initialized simpledrm 1.0.0 20200625 for simple-framebuffer.0 on minor 0
+May  8 13:12:50 snapubuntu kernel: [    0.482636] fbcon: Deferring console take-over
+May  8 13:12:50 snapubuntu kernel: [    0.482637] simple-framebuffer simple-framebuffer.0: [drm] fb0: simpledrmdrmfb frame buffer device
+May  8 13:12:50 snapubuntu kernel: [    0.482714] drop_monitor: Initializing network drop monitor service
+May  8 13:12:50 snapubuntu kernel: [    0.482907] NET: Registered PF_INET6 protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.623463] ata2: found unknown device (class 0)
+May  8 13:12:50 snapubuntu kernel: [    0.623774] ata2.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+May  8 13:12:50 snapubuntu kernel: [    0.624543] scsi 2:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+May  8 13:12:50 snapubuntu kernel: [    0.634971] sr 2:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+May  8 13:12:50 snapubuntu kernel: [    0.634974] cdrom: Uniform CD-ROM driver Revision: 3.20
+May  8 13:12:50 snapubuntu kernel: [    0.642915] sr 2:0:0:0: Attached scsi CD-ROM sr0
+May  8 13:12:50 snapubuntu kernel: [    0.642990] sr 2:0:0:0: Attached scsi generic sg1 type 5
+May  8 13:12:50 snapubuntu kernel: [    0.666328] Freeing initrd memory: 79184K
+May  8 13:12:50 snapubuntu kernel: [    0.672685] Segment Routing with IPv6
+May  8 13:12:50 snapubuntu kernel: [    0.672700] In-situ OAM (IOAM) with IPv6
+May  8 13:12:50 snapubuntu kernel: [    0.672733] NET: Registered PF_PACKET protocol family
+May  8 13:12:50 snapubuntu kernel: [    0.672781] Key type dns_resolver registered
+May  8 13:12:50 snapubuntu kernel: [    0.673687] IPI shorthand broadcast: enabled
+May  8 13:12:50 snapubuntu kernel: [    0.675175] sched_clock: Marking stable (674003922, 269968)->(704431630, -30157740)
+May  8 13:12:50 snapubuntu kernel: [    0.675333] registered taskstats version 1
+May  8 13:12:50 snapubuntu kernel: [    0.675660] Loading compiled-in X.509 certificates
+May  8 13:12:50 snapubuntu kernel: [    0.676167] Loaded X.509 cert 'Build time autogenerated kernel key: 2bd467184a53c11d81f879990aa9a2f357479bbd'
+May  8 13:12:50 snapubuntu kernel: [    0.676575] Loaded X.509 cert 'Canonical Ltd. Live Patch Signing 2025 Kmod: d541cef61dc7e793b7eb7e899970a2eef0b5dc8c'
+May  8 13:12:50 snapubuntu kernel: [    0.676966] Loaded X.509 cert 'Canonical Ltd. Live Patch Signing: 14df34d1a87cf37625abec039ef2bf521249b969'
+May  8 13:12:50 snapubuntu kernel: [    0.677360] Loaded X.509 cert 'Canonical Ltd. Kernel Module Signing: 88f752e560a1e0737e31163a466ad7b70a850c19'
+May  8 13:12:50 snapubuntu kernel: [    0.677362] blacklist: Loading compiled-in revocation X.509 certificates
+May  8 13:12:50 snapubuntu kernel: [    0.677384] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing: 61482aa2830d0ab2ad5af10b7250da9033ddcef0'
+May  8 13:12:50 snapubuntu kernel: [    0.677398] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2017): 242ade75ac4a15e50d50c84b0d45ff3eae707a03'
+May  8 13:12:50 snapubuntu kernel: [    0.677409] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (ESM 2018): 365188c1d374d6b07c3c8f240f8ef722433d6a8b'
+May  8 13:12:50 snapubuntu kernel: [    0.677425] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2019): c0746fd6c5da3ae827864651ad66ae47fe24b3e8'
+May  8 13:12:50 snapubuntu kernel: [    0.677436] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v1): a8d54bbb3825cfb94fa13c9f8a594a195c107b8d'
+May  8 13:12:50 snapubuntu kernel: [    0.677448] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v2): 4cf046892d6fd3c9a5b03f98d845f90851dc6a8c'
+May  8 13:12:50 snapubuntu kernel: [    0.677461] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (2021 v3): 100437bb6de6e469b581e61cd66bce3ef4ed53af'
+May  8 13:12:50 snapubuntu kernel: [    0.677471] Loaded X.509 cert 'Canonical Ltd. Secure Boot Signing (Ubuntu Core 2019): c1d57b8f6b743f23ee41f4f7ee292f06eecadfb9'
+May  8 13:12:50 snapubuntu kernel: [    0.681380] Key type .fscrypt registered
+May  8 13:12:50 snapubuntu kernel: [    0.681381] Key type fscrypt-provisioning registered
+May  8 13:12:50 snapubuntu kernel: [    0.694045] Key type encrypted registered
+May  8 13:12:50 snapubuntu kernel: [    0.694050] AppArmor: AppArmor sha256 policy hashing enabled
+May  8 13:12:50 snapubuntu kernel: [    0.694058] ima: No TPM chip found, activating TPM-bypass!
+May  8 13:12:50 snapubuntu kernel: [    0.694065] Loading compiled-in module X.509 certificates
+May  8 13:12:50 snapubuntu kernel: [    0.694404] Loaded X.509 cert 'Build time autogenerated kernel key: 2bd467184a53c11d81f879990aa9a2f357479bbd'
+May  8 13:12:50 snapubuntu kernel: [    0.694406] ima: Allocated hash algorithm: sha256
+May  8 13:12:50 snapubuntu kernel: [    0.694418] ima: No architecture policies found
+May  8 13:12:50 snapubuntu kernel: [    0.694427] evm: Initialising EVM extended attributes:
+May  8 13:12:50 snapubuntu kernel: [    0.694428] evm: security.selinux
+May  8 13:12:50 snapubuntu kernel: [    0.694428] evm: security.SMACK64
+May  8 13:12:50 snapubuntu kernel: [    0.694429] evm: security.SMACK64EXEC
+May  8 13:12:50 snapubuntu kernel: [    0.694430] evm: security.SMACK64TRANSMUTE
+May  8 13:12:50 snapubuntu kernel: [    0.694430] evm: security.SMACK64MMAP
+May  8 13:12:50 snapubuntu kernel: [    0.694431] evm: security.apparmor
+May  8 13:12:50 snapubuntu kernel: [    0.694431] evm: security.ima
+May  8 13:12:50 snapubuntu kernel: [    0.694431] evm: security.capability
+May  8 13:12:50 snapubuntu kernel: [    0.694432] evm: HMAC attrs: 0x1
+May  8 13:12:50 snapubuntu kernel: [    0.694678] PM:   Magic number: 10:141:230
+May  8 13:12:50 snapubuntu kernel: [    0.694753] acpi device:77: hash matches
+May  8 13:12:50 snapubuntu kernel: [    0.694759] acpi device:4a: hash matches
+May  8 13:12:50 snapubuntu kernel: [    0.698429] RAS: Correctable Errors collector initialized.
+May  8 13:12:50 snapubuntu kernel: [    0.698516] clk: Disabling unused clocks
+May  8 13:12:50 snapubuntu kernel: [    0.699989] Freeing unused decrypted memory: 2028K
+May  8 13:12:50 snapubuntu kernel: [    0.700646] Freeing unused kernel image (initmem) memory: 4916K
+May  8 13:12:50 snapubuntu kernel: [    0.700694] Write protecting the kernel read-only data: 36864k
+May  8 13:12:50 snapubuntu kernel: [    0.700904] Freeing unused kernel image (rodata/data gap) memory: 344K
+May  8 13:12:50 snapubuntu kernel: [    0.740886] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+May  8 13:12:50 snapubuntu kernel: [    0.741018] x86/mm: Checking user space page tables
+May  8 13:12:50 snapubuntu kernel: [    0.775470] x86/mm: Checked W+X mappings: passed, no W+X pages found.
+May  8 13:12:50 snapubuntu kernel: [    0.775480] Run /init as init process
+May  8 13:12:50 snapubuntu kernel: [    0.775481]   with arguments:
+May  8 13:12:50 snapubuntu kernel: [    0.775483]     /init
+May  8 13:12:50 snapubuntu kernel: [    0.775483]     splash
+May  8 13:12:50 snapubuntu kernel: [    0.775484]   with environment:
+May  8 13:12:50 snapubuntu kernel: [    0.775485]     HOME=/
+May  8 13:12:50 snapubuntu kernel: [    0.775485]     TERM=linux
+May  8 13:12:50 snapubuntu kernel: [    0.844762] piix4_smbus 0000:00:01.3: SMBus Host Controller at 0x700, revision 0
+May  8 13:12:50 snapubuntu kernel: [    0.852829] input: VirtualPS/2 VMware VMMouse as /devices/platform/i8042/serio1/input/input4
+May  8 13:12:50 snapubuntu kernel: [    0.853528] input: VirtualPS/2 VMware VMMouse as /devices/platform/i8042/serio1/input/input3
+May  8 13:12:50 snapubuntu kernel: [    0.853853] FDC 0 is a S82078B
+May  8 13:12:50 snapubuntu kernel: [    0.857335] virtio_net virtio2 ens18: renamed from eth0
+May  8 13:12:50 snapubuntu kernel: [    0.962183] fbcon: Taking over console
+May  8 13:12:50 snapubuntu kernel: [    0.962943] Console: switching to colour frame buffer device 80x30
+May  8 13:12:50 snapubuntu kernel: [    0.968289] EXT4-fs (sda3): mounted filesystem e10fe988-02f5-4f72-914e-84a0b01c2d20 ro with ordered data mode. Quota mode: none.
+May  8 13:12:50 snapubuntu kernel: [    1.151149] block sda: the capability attribute has been deprecated.
+May  8 13:12:50 snapubuntu kernel: [    1.496305] random: crng init done
+May  8 13:12:50 snapubuntu kernel: [    1.531031] lp: driver loaded but no devices found
+May  8 13:12:50 snapubuntu kernel: [    1.531499] EXT4-fs (sda3): re-mounted e10fe988-02f5-4f72-914e-84a0b01c2d20 r/w.
+May  8 13:12:50 snapubuntu kernel: [    1.533698] ppdev: user-space parallel port driver
+May  8 13:12:50 snapubuntu kernel: [    1.549626] Adding 2097148k swap on /swapfile.  Priority:-2 extents:6 across:2260988k 
+May  8 13:12:50 snapubuntu kernel: [    1.609004] loop0: detected capacity change from 0 to 8
+May  8 13:12:50 snapubuntu kernel: [    1.610882] loop1: detected capacity change from 0 to 152048
+May  8 13:12:50 snapubuntu kernel: [    1.618543] loop2: detected capacity change from 0 to 152056
+May  8 13:12:50 snapubuntu kernel: [    1.626256] loop3: detected capacity change from 0 to 136904
+May  8 13:12:50 snapubuntu kernel: [    1.628134] loop4: detected capacity change from 0 to 556304
+May  8 13:12:50 snapubuntu kernel: [    1.630229] loop5: detected capacity change from 0 to 557016
+May  8 13:12:50 snapubuntu kernel: [    1.631424] loop6: detected capacity change from 0 to 1017816
+May  8 13:12:50 snapubuntu kernel: [    1.632388] loop7: detected capacity change from 0 to 1034424
+May  8 13:12:50 snapubuntu kernel: [    1.633871] loop8: detected capacity change from 0 to 1241248
+May  8 13:12:50 snapubuntu kernel: [    1.640954] loop9: detected capacity change from 0 to 187776
+May  8 13:12:50 snapubuntu kernel: [    1.822304] cryptd: max_cpu_qlen set to 1000
+May  8 13:12:50 snapubuntu kernel: [    1.833704] SSE version of gcm_enc/dec engaged.
+May  8 13:12:50 snapubuntu kernel: [    1.891392] Console: switching to colour dummy device 80x25
+May  8 13:12:50 snapubuntu kernel: [    1.902470] qxl 0000:00:02.0: vgaarb: deactivate vga console
+May  8 13:12:50 snapubuntu kernel: [    1.902503] [drm] Device Version 0.0
+May  8 13:12:50 snapubuntu kernel: [    1.902504] [drm] Compression level 0 log level 0
+May  8 13:12:50 snapubuntu kernel: [    1.902505] [drm] 12286 io pages at offset 0x1000000
+May  8 13:12:50 snapubuntu kernel: [    1.902505] [drm] 16777216 byte draw area at offset 0x0
+May  8 13:12:50 snapubuntu kernel: [    1.902506] [drm] RAM header offset: 0x3ffe000
+May  8 13:12:50 snapubuntu kernel: [    1.902584] [drm] qxl: 16M of VRAM memory size
+May  8 13:12:50 snapubuntu kernel: [    1.902586] [drm] qxl: 63M of IO pages memory ready (VRAM domain)
+May  8 13:12:50 snapubuntu kernel: [    1.902587] [drm] qxl: 64M of Surface memory size
+May  8 13:12:50 snapubuntu kernel: [    1.903901] [drm] slot 0 (main): base 0xf4000000, size 0x03ffe000
+May  8 13:12:50 snapubuntu kernel: [    1.903953] [drm] slot 1 (surfaces): base 0xf8000000, size 0x04000000
+May  8 13:12:50 snapubuntu kernel: [    1.904309] [drm] Initialized qxl 0.1.0 20120117 for 0000:00:02.0 on minor 1
+May  8 13:12:50 snapubuntu kernel: [    1.904876] fbcon: qxldrmfb (fb0) is primary device
+May  8 13:12:50 snapubuntu kernel: [    1.904902] Console: switching to colour frame buffer device 128x48
+May  8 13:12:50 snapubuntu kernel: [    1.904906] qxl 0000:00:02.0: [drm] fb0: qxldrmfb frame buffer device
+May  8 13:12:50 snapubuntu kernel: [    8.477614] process '/opt/sysmon/sysmon' started with executable stack
+May  8 13:12:50 snapubuntu kernel: [    8.910356] set_capacity_and_notify: 7 callbacks suppressed
+May  8 13:12:50 snapubuntu kernel: [    8.910360] loop17: detected capacity change from 0 to 8
+May  8 13:12:54 snapubuntu kernel: [   12.555050] ISO 9660 Extensions: Microsoft Joliet Level 3
+May  8 13:12:54 snapubuntu kernel: [   12.555593] ISO 9660 Extensions: RRIP_1991A
+May  8 13:12:54 snapubuntu kernel: [   12.567976] rfkill: input handler disabled
+May  8 13:12:54 snapubuntu kernel: [   12.730397] input: spice vdagent tablet as /devices/virtual/input/input5
+May  8 13:13:30 snapubuntu kernel: [   47.681782] rfkill: input handler enabled
+May  8 13:13:31 snapubuntu kernel: [   49.365250] rfkill: input handler disabled
+May  8 13:13:31 snapubuntu kernel: [   49.371229] input: spice vdagent tablet as /devices/virtual/input/input6

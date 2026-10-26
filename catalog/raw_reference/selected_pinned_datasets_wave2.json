@@ -1,0 +1,58 @@
+[
+ {
+  "sourcetype": "cisco:nvm:flowdata:v2",
+  "path": "/datasets/attack_techniques/T1059/macos_browser_spawned_script_external_network_connection/nvm_flowdata.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1059/macos_browser_spawned_script_external_network_connection/nvm_flowdata.log",
+  "lfs_sha256": "4d990849f651dea10df286d51673b1d09dc536b03a82df3f9e113b4e8c9ce13c",
+  "declared_size": 1069,
+  "dataset": "436d5044-ae22-475d-9e19-dfc8a2f4e94f"
+ },
+ {
+  "sourcetype": "linux_messages_syslog",
+  "path": "/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+  "lfs_sha256": "9ac4f910e111124407e3c0424fdefc51396b24265e6aae0b97f0c4195218b75a",
+  "declared_size": 72834,
+  "dataset": "46ce8b02-ddf8-4c7a-a25f-688eef5a945d"
+ },
+ {
+  "sourcetype": "gws:reports:login",
+  "path": "/datasets/attack_techniques/T1078.004/gcp_single_factor_auth/gws_login.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1078.004/gcp_single_factor_auth/gws_login.log",
+  "lfs_sha256": "904f9822a9bc726d5e3be035c8fc55dd60cc4a6de8b3a0d39f16496d205fdcc6",
+  "declared_size": 652,
+  "dataset": "09261f80-30d7-4482-92e1-a9e3ecb6abfe"
+ },
+ {
+  "sourcetype": "crushftp:sessionlogs",
+  "path": "/datasets/attack_techniques/T1190/crushftp/crushftp.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1190/crushftp/crushftp.log",
+  "lfs_sha256": "92410bcbef672a8141a4cc4d33f338ba1a46784a75ac8811bf9b366ada374d63",
+  "declared_size": 2295,
+  "dataset": "1e1c1f1c-0b0b-4b0b-8b0b-0b0b0b0b0b0d"
+ },
+ {
+  "sourcetype": "cisco:sfw:estreamer",
+  "path": "/datasets/attack_techniques/T1027.010/oracle_e_business_suite/oracle_e_business_suite.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1027.010/oracle_e_business_suite/oracle_e_business_suite.log",
+  "lfs_sha256": null,
+  "declared_size": null,
+  "dataset": "57776d92-b6db-4bf1-9dd2-e81702059f8e"
+ },
+ {
+  "sourcetype": "mcp:jsonrpc",
+  "path": "/datasets/mcp/mcp.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/mcp/mcp.log",
+  "lfs_sha256": "f5cc046db25fb62df985bf2cea6056d2bdaaf0649e4792e592f1fbe2cf9dffd9",
+  "declared_size": 637913,
+  "dataset": "05814111-ec73-49ea-93aa-4563c90b27e5"
+ },
+ {
+  "sourcetype": "ollama:server",
+  "path": "/datasets/ollama/server.log",
+  "url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/ollama/server.log",
+  "lfs_sha256": "4b147d8d35a897f6e136ed06e5d65e7baa55a9a95407bb0e9d778d5cd91cfa1e",
+  "declared_size": 184655,
+  "dataset": "9d1f6bd1-754a-481c-ad54-5a837f86d12b"
+ }
+]

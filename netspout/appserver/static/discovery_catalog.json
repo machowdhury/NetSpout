@@ -5991,6 +5991,289 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "wave2_ws_credential_compromise_chain",
+      "title": "Windows Credential Compromise Kill Chain (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "CrowdStrike",
+        "Microsoft Windows"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Multi-source Windows workstation compromise chain: failed logons, admin logon, process creation, PowerShell script-block injection, lsass access, Defender detection on solved baseline, and NTLM chase - delivered as authentic vendor-native RAW.",
+      "sourcetypes": [
+        "XmlWinEventLog:Security",
+        "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+        "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+        "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+        "crowdstrike:events:sensor"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "XmlWinEventLog:Security",
+        "crowdstrike:events:sensor"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Realistic Windows attack multi-event sequence across 6 Authentic RAW sources",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_cloud_identity_sso_hunt",
+      "title": "Cross-Cloud Identity SSO Brute Force (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Google Workspace",
+        "Microsoft 365",
+        "Microsoft Azure Monitor",
+        "Okta"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Identity attack-hunting sequence across M365, Azure/Entra ID, and Okta: cross-vendor SSO logon failures, account lockout audit, enterprise-app role assignment, malicious inbox rule; the authentic cross-vendor identity attack path.",
+      "sourcetypes": [
+        "o365:management:activity",
+        "azure:monitor:aad",
+        "azure:monitor:activity",
+        "gws:reports:login",
+        "OktaIM2:log"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "o365:management:activity",
+        "azure:monitor:aad"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Cross-vendor identity hunting across M365+Azure+Oktra+Google",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_aws_recon_escalation",
+      "title": "AWS CloudTrail Recon & Escalation (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "AWS console login failure burst -> AssumeRole -> RunInstances -> policy escalation -> VPC Flow skipdata and outbound blocks; delivered as authentic CloudTrail JSON + VPC Flow records.",
+      "sourcetypes": [
+        "aws:cloudtrail",
+        "aws:cloudwatchlogs:vpcflow"
+      ],
+      "scenario_ids": [
+        "wave2_aws_recon_escalation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "aws:cloudtrail"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "AWS cloud kill chain with CloudTrail + VPC flow",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_linux_auth_anomaly",
+      "title": "Linux Infrastructure Auth Anomaly (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Linux Infrastructure",
+        "Microsoft Windows"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Linux auth anomalies: sshd brute force, auditd USER_AUTH and SYSCALL credentials reads, sudo usage and root process creation - NATIVE auditd + /var/log/messages records.",
+      "sourcetypes": [
+        "auditd",
+        "linux_messages_syslog",
+        "sysmon:linux"
+      ],
+      "scenario_ids": [
+        "wave2_linux_auth_anomaly"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "auditd"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Linux authentication anomaly detection",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_agentic_ai_exfil_attempt",
+      "title": "Agentic AI Runtime Exfiltration Attempt (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Model Context Protocol (agentic AI)",
+        "Ollama (local LLM runtime)",
+        "osquery"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Local Ollama LLM runtime + Model Context Protocol agent: file read tool call attempts against credentials, model load, latency observations; authentic ollama HTTP-log + MCP JSON-RPC RAW.",
+      "sourcetypes": [
+        "ollama:server",
+        "mcp:jsonrpc",
+        "osquery:results"
+      ],
+      "scenario_ids": [
+        "wave2_agentic_ai_exfil_attempt"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "ollama:server",
+        "mcp:jsonrpc"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Agentic AI telemetry observability + data-loss call attempts",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_k8s_container_escape",
+      "title": "Kubernetes Auth Abuse + Container Escape (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Kubernetes & Falco (CNCF)",
+        "Suricata (OISF)"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "K8s audit: clusterrolebindings, exec/attach into pods; Falco syscall detections: shell in container, sensitive file read; kube container stdout.",
+      "sourcetypes": [
+        "kube:audit",
+        "kube:container:falco",
+        "suricata"
+      ],
+      "scenario_ids": [
+        "wave2_k8s_container_escape"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "kube:audit",
+        "kube:container:falco"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "K8s runtime/container security simulations",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_c2_callback_detection",
+      "title": "Network C2 Callback & Discovery Behaviors (Wave-2 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Suricata (OISF)",
+        "osquery"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Suricata EVE alert + DNS + HTTP + TLS sequence against C2 candidate infrastructure, with osquery host rows correlating the process responsible - collides with Security Content hunting use cases.",
+      "sourcetypes": [
+        "suricata",
+        "osquery:results"
+      ],
+      "scenario_ids": [
+        "wave2_c2_callback_detection"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "suricata"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "network C2 detection validated with host process evidence",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave2_bigip_openconfig_itops",
+      "title": "Big-IP ADC & OpenConfig Observability Health (Wave-2 pack)",
+      "domain": "SERVICE_ASSURANCE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems",
+        "CrushFTP",
+        "F5 Networks"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "ITOps/observability narrative: F5 BIG-IP LTM pool health mix, CrushFTP sessions, Cisco NVM v2 endpoint context flows and estreamer anomaly events during a server maintenance window.",
+      "sourcetypes": [
+        "cisco:sfw:estreamer",
+        "cisco:nvm:flowdata:v2",
+        "crushftp:sessionlogs",
+        "f5:bigip:ltm"
+      ],
+      "scenario_ids": [
+        "wave2_bigip_openconfig_itops"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:sfw:estreamer"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "ITOps/observability mixed-source assurance",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -9896,7 +10179,8 @@
         "acme_bridge_domain",
         "full_network_topology",
         "maple_security",
-        "cross_platform_disaster"
+        "cross_platform_disaster",
+        "wave2_bigip_openconfig_itops"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -10360,7 +10644,8 @@
       ],
       "scenario_ids": [
         "ddos_attack",
-        "normal_traffic"
+        "normal_traffic",
+        "wave2_bigip_openconfig_itops"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -13212,6 +13497,656 @@
         "zscaler:zia:web"
       ],
       "scenario_ids": [],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:Security",
+      "title": "XmlWinEventLog:Security",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows Security Audit XML",
+      "sourcetypes": [
+        "XmlWinEventLog:Security"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+      "title": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows Sysmon XML",
+      "sourcetypes": [
+        "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+      "title": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows PowerShell Operational XML",
+      "sourcetypes": [
+        "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "crowdstrike:events:sensor",
+      "title": "crowdstrike:events:sensor",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "CrowdStrike"
+      ],
+      "readiness": "Evidence review required",
+      "description": "CrowdStrike Falcon Sensor Events",
+      "sourcetypes": [
+        "crowdstrike:events:sensor"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "sysmon:linux",
+      "title": "sysmon:linux",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Sysmon for Linux",
+      "sourcetypes": [
+        "sysmon:linux"
+      ],
+      "scenario_ids": [
+        "wave2_linux_auth_anomaly"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "aws:cloudtrail",
+      "title": "aws:cloudtrail",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services"
+      ],
+      "readiness": "Evidence review required",
+      "description": "AWS CloudTrail",
+      "sourcetypes": [
+        "aws:cloudtrail"
+      ],
+      "scenario_ids": [
+        "wave2_aws_recon_escalation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "o365:management:activity",
+      "title": "o365:management:activity",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft 365"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Microsoft 365 Management Activity",
+      "sourcetypes": [
+        "o365:management:activity"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "azure:monitor:aad",
+      "title": "azure:monitor:aad",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Azure Monitor"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Microsoft Entra ID (Azure AD) Monitor",
+      "sourcetypes": [
+        "azure:monitor:aad"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "suricata",
+      "title": "suricata",
+      "domain": "Network Intrusion Detection",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Suricata (OISF)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Suricata EVE JSON",
+      "sourcetypes": [
+        "suricata"
+      ],
+      "scenario_ids": [
+        "wave2_k8s_container_escape",
+        "wave2_c2_callback_detection"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "auditd",
+      "title": "auditd",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Linux Infrastructure"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Linux auditd Records",
+      "sourcetypes": [
+        "auditd"
+      ],
+      "scenario_ids": [
+        "wave2_linux_auth_anomaly"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "OktaIM2:log",
+      "title": "OktaIM2:log",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Okta"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Okta IM2 Logs",
+      "sourcetypes": [
+        "OktaIM2:log"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "osquery:results",
+      "title": "osquery:results",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "osquery"
+      ],
+      "readiness": "Evidence review required",
+      "description": "osquery Results",
+      "sourcetypes": [
+        "osquery:results"
+      ],
+      "scenario_ids": [
+        "wave2_agentic_ai_exfil_attempt",
+        "wave2_c2_callback_detection"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+      "title": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows Defender Operational XML",
+      "sourcetypes": [
+        "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+      "title": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows NTLM Operational XML",
+      "sourcetypes": [
+        "XmlWinEventLog:Microsoft-Windows-NTLM/Operational"
+      ],
+      "scenario_ids": [
+        "wave2_ws_credential_compromise_chain"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "ollama:server",
+      "title": "ollama:server",
+      "domain": "Agentic AI Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Ollama (local LLM runtime)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Ollama Server Logs",
+      "sourcetypes": [
+        "ollama:server"
+      ],
+      "scenario_ids": [
+        "wave2_agentic_ai_exfil_attempt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "mcp:jsonrpc",
+      "title": "mcp:jsonrpc",
+      "domain": "Agentic AI Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Model Context Protocol (agentic AI)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Model Context Protocol JSON-RPC",
+      "sourcetypes": [
+        "mcp:jsonrpc"
+      ],
+      "scenario_ids": [
+        "wave2_agentic_ai_exfil_attempt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "gws:reports:login",
+      "title": "gws:reports:login",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Google Workspace"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Google Workspace Login Reports",
+      "sourcetypes": [
+        "gws:reports:login"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "azure:monitor:activity",
+      "title": "azure:monitor:activity",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Azure Monitor"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Azure Activity Log",
+      "sourcetypes": [
+        "azure:monitor:activity"
+      ],
+      "scenario_ids": [
+        "wave2_cloud_identity_sso_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "aws:cloudwatchlogs:vpcflow",
+      "title": "aws:cloudwatchlogs:vpcflow",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services"
+      ],
+      "readiness": "Evidence review required",
+      "description": "AWS VPC Flow Logs (CloudWatch)",
+      "sourcetypes": [
+        "aws:cloudwatchlogs:vpcflow"
+      ],
+      "scenario_ids": [
+        "wave2_aws_recon_escalation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "linux_messages_syslog",
+      "title": "linux_messages_syslog",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Linux Infrastructure"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Linux /var/log/messages",
+      "sourcetypes": [
+        "linux_messages_syslog"
+      ],
+      "scenario_ids": [
+        "wave2_linux_auth_anomaly"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "kube:audit",
+      "title": "kube:audit",
+      "domain": "Container & Orchestration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Kubernetes & Falco (CNCF)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Kubernetes Audit Log",
+      "sourcetypes": [
+        "kube:audit"
+      ],
+      "scenario_ids": [
+        "wave2_k8s_container_escape"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "kube:container:falco",
+      "title": "kube:container:falco",
+      "domain": "Container & Orchestration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Kubernetes & Falco (CNCF)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Falco Runtime Security Events",
+      "sourcetypes": [
+        "kube:container:falco"
+      ],
+      "scenario_ids": [
+        "wave2_k8s_container_escape"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "crushftp:sessionlogs",
+      "title": "crushftp:sessionlogs",
+      "domain": "File Transfer & Exfiltration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "CrushFTP"
+      ],
+      "readiness": "Evidence review required",
+      "description": "CrushFTP Session Logs",
+      "sourcetypes": [
+        "crushftp:sessionlogs"
+      ],
+      "scenario_ids": [
+        "wave2_bigip_openconfig_itops"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:nvm:flowdata:v2",
+      "title": "cisco:nvm:flowdata:v2",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco NVM Flow Data v2",
+      "sourcetypes": [
+        "cisco:nvm:flowdata:v2"
+      ],
+      "scenario_ids": [
+        "wave2_bigip_openconfig_itops"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],

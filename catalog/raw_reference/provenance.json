@@ -1,6 +1,6 @@
 {
  "manifest": "catalog/raw_reference/provenance.json",
- "purpose": "Authentic RAW format evidence for Wave-1 source expansion. Reference excerpts only; events were never ingested.",
+ "purpose": "Authentic RAW format evidence for Wave-1 + Wave-2 source expansion. Reference excerpts only; events were never ingested.",
  "upstream_publisher": "Splunk Security Content (attack_data repository)",
  "upstream_license": "Apache-2.0 (splunk/security_content datasets)",
  "pinned_commit": "1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8",
@@ -127,6 +127,110 @@
    "fetched_bytes": 23896,
    "fetched_sha256": "e9f580e9d787107b96211d2129d3ed9b9b9dd5a4478bc456acb27a561c945b66",
    "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingest)"
+  },
+  {
+   "sourcetype": "cisco:nvm:flowdata:v2",
+   "upstream_path": "/datasets/attack_techniques/T1059/macos_browser_spawned_script_external_network_connection/nvm_flowdata.log",
+   "upstream_full_sha256_declared": "4d990849f651dea10df286d51673b1d09dc536b03a82df3f9e113b4e8c9ce13c",
+   "upstream_declared_size_bytes": 1069,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1059/macos_browser_spawned_script_external_network_connection/nvm_flowdata.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 1069,
+   "fetched_sha256": "4d990849f651dea10df286d51673b1d09dc536b03a82df3f9e113b4e8c9ce13c",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/cisco_nvm_flowdata_v2.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "linux_messages_syslog",
+   "upstream_path": "/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+   "upstream_full_sha256_declared": "9ac4f910e111124407e3c0424fdefc51396b24265e6aae0b97f0c4195218b75a",
+   "upstream_declared_size_bytes": 72834,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 72834,
+   "fetched_sha256": "9ac4f910e111124407e3c0424fdefc51396b24265e6aae0b97f0c4195218b75a",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/linux_messages_syslog.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "gws:reports:login",
+   "upstream_path": "/datasets/attack_techniques/T1078.004/gcp_single_factor_auth/gws_login.log",
+   "upstream_full_sha256_declared": "904f9822a9bc726d5e3be035c8fc55dd60cc4a6de8b3a0d39f16496d205fdcc6",
+   "upstream_declared_size_bytes": 652,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1078.004/gcp_single_factor_auth/gws_login.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 652,
+   "fetched_sha256": "904f9822a9bc726d5e3be035c8fc55dd60cc4a6de8b3a0d39f16496d205fdcc6",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/gws_reports_login.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "crushftp:sessionlogs",
+   "upstream_path": "/datasets/attack_techniques/T1190/crushftp/crushftp.log",
+   "upstream_full_sha256_declared": "92410bcbef672a8141a4cc4d33f338ba1a46784a75ac8811bf9b366ada374d63",
+   "upstream_declared_size_bytes": 2295,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/attack_techniques/T1190/crushftp/crushftp.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 2295,
+   "fetched_sha256": "92410bcbef672a8141a4cc4d33f338ba1a46784a75ac8811bf9b366ada374d63",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/crushftp_sessionlogs.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "mcp:jsonrpc",
+   "upstream_path": "/datasets/mcp/mcp.log",
+   "upstream_full_sha256_declared": "f5cc046db25fb62df985bf2cea6056d2bdaaf0649e4792e592f1fbe2cf9dffd9",
+   "upstream_declared_size_bytes": 637913,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/mcp/mcp.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 131072,
+   "fetched_sha256": "3de2a8fa34da8aae3443eeaa0562bf8af83b0c4c408803d39a3a50ad0f800f6d",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/mcp_jsonrpc.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "ollama:server",
+   "upstream_path": "/datasets/ollama/server.log",
+   "upstream_full_sha256_declared": "4b147d8d35a897f6e136ed06e5d65e7baa55a9a95407bb0e9d778d5cd91cfa1e",
+   "upstream_declared_size_bytes": 184655,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/ollama/server.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 131072,
+   "fetched_sha256": "954266c34c36995f0202389777b4154e66eb64671450a46744ccb8a2a260c446",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/ollama_server.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "cisco:sfw:estreamer",
+   "upstream_path": "/datasets/cisco_secure_firewall_threat_defense/react2shell/react2shell.log",
+   "upstream_full_sha256_declared": "01c4370bbcd4261c457fc9d7a8ab907f836eb7918b4e841150c77456cee9806a",
+   "upstream_declared_size_bytes": 2331,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/cisco_secure_firewall_threat_defense/react2shell/react2shell.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 2331,
+   "fetched_sha256": "01c4370bbcd4261c457fc9d7a8ab907f836eb7918b4e841150c77456cee9806a",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/cisco_sfw_estreamer_react2shell.head.bin",
+   "wave": 2
+  },
+  {
+   "sourcetype": "cisco:sfw:estreamer",
+   "upstream_path": "/datasets/cisco_secure_firewall_threat_defense/static_tundra/static_tundra.log",
+   "upstream_full_sha256_declared": "37e5b7a2f14d0784ac0005bb6a71f446952e5552599d98bc2d47fcc9830bd45c",
+   "upstream_declared_size_bytes": 4766,
+   "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/4389fa7a4e74a7c083c0fbe448fa2c7c32378981/datasets/cisco_secure_firewall_threat_defense/static_tundra/static_tundra.log",
+   "ranged_fetch": true,
+   "fetched_bytes": 4766,
+   "fetched_sha256": "37e5b7a2f14d0784ac0005bb6a71f446952e5552599d98bc2d47fcc9830bd45c",
+   "fetch_mode": "HTTP Range bytes=0-131071 (bounded evidence excerpt, NOT ingested)",
+   "raw_reference_file": "catalog/raw_reference/cisco_sfw_estreamer_static_tundra.head.bin",
+   "wave": 2
   }
  ]
 }

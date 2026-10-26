@@ -37,10 +37,10 @@ class TestGate3CanonicalCatalog(unittest.TestCase):
     def test_01_catalog_entity_counts(self):
         """Verify canonical catalog entity counts meet or exceed Gate 3 requirements."""
         vendors = catalog.list_vendors()
-        self.assertEqual(len(vendors), 36, "Catalog must contain exactly 36 enterprise vendors")
+        self.assertEqual(len(vendors), 50, "Catalog must contain exactly 50 enterprise vendors (36 legacy + 14 Wave 1/2 authentic expansion)")
 
         sourcetypes = catalog.list_sourcetypes(include_deprecated=True)
-        self.assertGreaterEqual(len(sourcetypes), 260, "Catalog must contain >= 260 sourcetypes")
+        self.assertGreaterEqual(len(sourcetypes), 280, "Catalog must contain >= 280 sourcetypes (265 legacy + 24 Wave 1/2)")
 
         scenarios = catalog.list_scenarios()
         self.assertGreaterEqual(len(scenarios), 29, "Catalog must contain >= 29 scenarios")
@@ -119,8 +119,8 @@ class TestGate3CanonicalCatalog(unittest.TestCase):
 
     def test_05_legacy_vendor_catalog_compatibility(self):
         """Verify vendor_catalog.py wrapper and static vendor_catalog.json match catalog."""
-        self.assertEqual(len(VENDOR_CATALOG), 36)
-        self.assertEqual(len(list_all_vendors()), 36)
+        self.assertEqual(len(VENDOR_CATALOG), 50)
+        self.assertEqual(len(list_all_vendors()), 50)
 
         cisco = get_vendor_by_id("cisco_sdwan")
         self.assertIsNotNone(cisco)
@@ -138,7 +138,7 @@ class TestGate3CanonicalCatalog(unittest.TestCase):
         self.assertTrue(os.path.exists(static_json))
         with open(static_json, "r", encoding="utf-8") as f:
             static_vendors = json.load(f)
-        self.assertEqual(len(static_vendors), 36)
+        self.assertEqual(len(static_vendors), 50)
         self.assertEqual(len(static_vendors), len(VENDOR_CATALOG))
 
     def test_06_generation_mode_classification(self):

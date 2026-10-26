@@ -1,0 +1,198 @@
+{
+ "schema_version": "1.0.0",
+ "wave": "wave1_authentic_source_expansion",
+ "wave_version": "2026.10-wave1",
+ "created_utc": "2026-10-26",
+ "purpose": "Genuinely supported vendor-native RAW generation for the highest-value sourcetypes missing from the canonical 265-row catalog. Registered here (OUTSIDE the Gate-3-pinned counters: vendors stayed exactly 36; sourcetypes floor 260 respected; samples stayed 213) so nothing verified is overwritten and no unique-sourcetype counts are inflated. Graduation into the canonical catalog (vendors.json + sourcetypes.json) is deferred to a dedicated Wave-2 catalog change.",
+ "invariants_respected": {
+  "catalog_vendors": "36 (unchanged)",
+  "catalog_sourcetypes_rows": "265 (unchanged)",
+  "samples_registry_rows": "213 (unchanged)",
+  "telemetry_catalog_sources": "11 (unchanged)",
+  "scenario_rows": "29 (unchanged this wave)",
+  "splashguard": "Frozen PAN formatter contracts untouched; no changes to log_engine legacy formatters."
+ },
+ "engine_module": "src/netspout_core/wave1_authentic_engine.py (mirrored to netspout/bin/netspout_core/)",
+ "engine_bindings": "SplunkLogEngine.WAVE1_SOURCE_SOURCETYPES (12 sourcetype -> formatter map) and delegated format_*_log methods in src/netspout_core/log_engine.py + netspout/bin/netspout_core/log_engine.py",
+ "raw_reference_corpus": "catalog/raw_reference/ (10 pinned splunk/attack_data excerpts + provenance.json + selected_pinned_datasets.json; pinned commit 1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8, Apache-2.0)",
+ "classification_chain_states": {
+  "DISCOVERED": "all entries",
+  "AUTHENTIC_RAW_EVIDENCED": "all entries (pinned upstream dataset or schema-documented official format)",
+  "GENERATOR_IMPLEMENTED": "all entries",
+  "OFFLINE_VERIFIED": "see verification test tests/test_wave1_authentic_expansion.py",
+  "LIVE_INGEST_VERIFIED": "subset marked per-entry after bounded HEC raw-equality run into disposable ix (idx_ta_ise_test, existing pf-ta-ise-val token)",
+  "TA_PARSER_VERIFIED": "0 of 12 - out of scope this wave (no TA installs)"
+ },
+ "pinned_dependency_demand": {
+  "XmlWinEventLog": 2518,
+  "crowdstrike:events:sensor": 496,
+  "sysmon:linux": 262,
+  "o365:management:activity": 156,
+  "aws:cloudtrail": 148,
+  "auditd": 118,
+  "azure:monitor:aad": 96,
+  "suricata": 72,
+  "osquery:results": 42,
+  "OktaIM2:log": 37,
+  "_note": "detection-count surface of the pinned 2181-detection snapshot that motivated each pick"
+ },
+ "sources": [
+  {
+   "wave_source_id": "wins-xml-security",
+   "vendor": "Microsoft Windows",
+   "splunk_sourcetype": "XmlWinEventLog:Security",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "raw_format": "Windows Event XML (<Event xmlns=...><System>...</System><EventData>) with Security channel",
+   "raw_evidence": [
+    "catalog/raw_reference/XmlWinEventLog.head.bin (same Event XML structure, Sysmon channel, pinned attackrange host)",
+    "official Windows Security Auditing event schema (provider Microsoft-Windows-Security-Auditing)"
+   ],
+   "generator": "Wave1AuthenticEngine.format_windows_security_xml_log",
+   "event_families": ["4624 logon_success(+4672 pair)", "4625 logon_failure", "4634 logoff", "4648 explicit_credential", "4672 special_logon", "4720 user_created", "4732 group_member_added", "4740 account_locked_out", "4663 file_access"],
+   "event_family_count": 9,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "wins-xml-sysmon",
+   "vendor": "Microsoft Windows",
+   "splunk_sourcetype": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "required_ta": "Splunk Add-on for Microsoft Windows (Sysmon)",
+   "raw_format": "Windows Event XML, provider Microsoft-Windows-Sysmon",
+   "raw_evidence": ["catalog/raw_reference/XmlWinEventLog.head.bin (exact format + UtcTime 7-digit ms, pinned)"],
+   "generator": "Wave1AuthenticEngine.format_windows_sysmon_xml_log",
+   "event_families": ["EID 1 ProcessCreate", "EID 3 NetworkConnect", "EID 10 ProcessAccess", "EID 11 FileCreate", "EID 13 RegistrySetValue", "EID 22 DnsQuery"],
+   "event_family_count": 6,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "wins-xml-powershell",
+   "vendor": "Microsoft Windows",
+   "splunk_sourcetype": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "required_ta": "Splunk Add-on for Microsoft Windows (PowerShell)",
+   "raw_format": "Windows Event XML, provider Microsoft-Windows-PowerShell, EID 4103/4104",
+   "raw_evidence": ["Windows Event XML structure (pinned corpus) + official PowerShell Operational channel schema"],
+   "generator": "Wave1AuthenticEngine.format_windows_powershell_xml_log",
+   "event_families": ["4103 module_logging", "4104 script_block"],
+   "event_family_count": 2,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "cs-falcon-sensor",
+   "vendor": "CrowdStrike Falcon",
+   "splunk_sourcetype": "crowdstrike:events:sensor",
+   "required_ta": "Splunk Add-on for CrowdStrike FDR (or Falcon telemetry connector)",
+   "raw_format": "Single-line JSON, keys event_simpleName/aip/aid/cid/ComputerName/timestamp",
+   "raw_evidence": ["catalog/raw_reference/crowdstrike_events_sensor.head.bin (full file, sha256 9eb639b8... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_crowdstrike_falcon_sensor_log",
+   "event_families": ["ProcessRollup2", "DnsRequest", "NetworkConnectIP4", "DetectSummaryEvent", "UserLogon"],
+   "event_family_count": 5,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "sysmon-linux",
+   "vendor": "Microsoft Sysmon for Linux",
+   "splunk_sourcetype": "sysmon:linux",
+   "required_ta": "Splunk Add-on for Sysmon on Linux",
+   "raw_format": "Event XML with double-quoted attributes, provider Linux-Sysmon, 9-digit SystemTime",
+   "raw_evidence": ["catalog/raw_reference/sysmon_linux.head.bin (pinned, sha256 84db6134...)"],
+   "generator": "Wave1AuthenticEngine.format_sysmon_linux_log",
+   "event_families": ["EID 1 process_create", "EID 3 network_connect", "EID 11 file_create"],
+   "event_family_count": 3,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "aws-cloudtrail",
+   "vendor": "Amazon AWS",
+   "splunk_sourcetype": "aws:cloudtrail",
+   "required_ta": "Splunk Add-on for AWS",
+   "raw_format": "Single-line CloudTrail JSON (eventVersion/userIdentity/eventTime/...)",
+   "raw_evidence": ["catalog/raw_reference/aws_cloudtrail.head.bin (full file, sha256 0d20787d... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_aws_cloudtrail_log",
+   "event_families": ["ConsoleLogin", "AssumeRole", "RunInstances", "CreateTrail", "UpdateTrail", "PutRolePolicy"],
+   "event_family_count": 6,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "o365-management",
+   "vendor": "Microsoft 365",
+   "splunk_sourcetype": "o365:management:activity",
+   "required_ta": "Splunk Add-on for Microsoft Office 365",
+   "raw_format": "Single-line Management Activity JSON (CreationTime/Operation/RecordType/Workload/UserKey)",
+   "raw_evidence": ["catalog/raw_reference/o365_management_activity.head.bin (field vocabulary incl. LogonError Sso patterns, pinned) + official M365 management activity schema"],
+   "generator": "Wave1AuthenticEngine.format_o365_management_log",
+   "event_families": ["UserLoggedIn", "UserLoginFailed", "MailboxLogin", "New-InboxRule", "FileDownloaded (SharePoint)"],
+   "event_family_count": 5,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "azure-aad",
+   "vendor": "Microsoft Azure",
+   "splunk_sourcetype": "azure:monitor:aad",
+   "required_ta": "Splunk Add-on for Microsoft Cloud Services (azure monitor)",
+   "raw_format": "Single-line JSON {time,resourceId,operationName,category,properties}",
+   "raw_evidence": ["catalog/raw_reference/azure_monitor_aad.head.bin (pinned monitor JSON style) + official Azure Activity/SignIn log schema"],
+   "generator": "Wave1AuthenticEngine.format_azure_monitor_aad_log",
+   "event_families": ["SignInLogs success", "SignInLogs failure (50126)", "AuditLogs user created", "AuditLogs role assigned"],
+   "event_family_count": 4,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "suricata-eve",
+   "vendor": "Suricata (OISF)",
+   "splunk_sourcetype": "suricata",
+   "required_ta": "none commonly (EVE JSON direct HEC/SC4S)",
+   "raw_format": "EVE JSON single-line {timestamp,flow_id,event_type,src_ip,...alert|flow|dns|http|tls}",
+   "raw_evidence": ["catalog/raw_reference/suricata.head.bin (full file, sha256 8dc429a3... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_suricata_eve_log",
+   "event_families": ["alert", "dns query", "http", "flow", "tls"],
+   "event_family_count": 5,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "linux-auditd",
+   "vendor": "Linux auditd",
+   "splunk_sourcetype": "auditd",
+   "required_ta": "Splunk Add-on for Unix and Linux (auditdDecoder)",
+   "raw_format": "auditd text records (type=SYSCALL msg=audit(MM/DD/YYYY hh:mm:ss.mss:serial) : ...), multi-record groups",
+   "raw_evidence": ["catalog/raw_reference/auditd.head.bin (full file, sha256 28f04ee5... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_linux_auditd_log",
+   "event_families": ["SYSCALL execve + EXECVE + PROCTITLE group", "SYSCALL openat group", "USER_AUTH success", "USER_AUTH failure", "USER_CMD"],
+   "event_family_count": 5,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "okta-im2",
+   "vendor": "Okta",
+   "splunk_sourcetype": "OktaIM2:log",
+   "required_ta": "Okta Add-on for Splunk (Orion/IM2)",
+   "raw_format": "Okta System Log JSON (actor/client/authenticationContext/displayMessage/eventType/outcome/published/securityContext)",
+   "raw_evidence": ["catalog/raw_reference/OktaIM2_log.head.bin (full file, sha256 dcea8c35... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_okta_log",
+   "event_families": ["user.session.start", "user.authentication.sso", "user.authentication success variant", "policy.evaluate_signon DENY"],
+   "event_family_count": 4,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  },
+  {
+   "wave_source_id": "osquery-results",
+   "vendor": "osquery",
+   "splunk_sourcetype": "osquery:results",
+   "required_ta": "none commonly (tls/audit result JSON direct)",
+   "raw_format": "osquery diff result JSON (action/calendarTime/unixTime/hostIdentifier/name/columns)",
+   "raw_evidence": ["catalog/raw_reference/osquery_results.head.bin (full file, sha256 2b207c84... pinned)"],
+   "generator": "Wave1AuthenticEngine.format_osquery_results_log",
+   "event_families": ["processes query diff", "open_sockets query diff", "users query diff"],
+   "event_family_count": 3,
+   "classification": ["DISCOVERED", "AUTHENTIC_RAW_EVIDENCED", "GENERATOR_IMPLEMENTED", "OFFLINE_VERIFIED", "LIVE_INGEST_VERIFIED"]
+  }
+ ],
+ "use_case_priorities": {
+  "security_content": "All 12 sourcetypes are direct dependencies of pinned ESCU 6.9.1 detections (counts in pinned_dependency_demand).",
+  "fenre_use_cases": "https://fenre.github.io/splunk-monitoring-use-cases/ - Windows/cloud/identity families map to threat hunting, account compromise and malware/EDR use cases; suricata/auditd map to network malware and Linux hardening use cases."
+ },
+ "event_family_count_total": 57,
+ "counts_summary": {
+  "new_sourcetypes_registered_this_wave": 12,
+  "new_event_families": 57,
+  "new_vendors_reference_registered": 10
+ }
+}

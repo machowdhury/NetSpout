@@ -1,0 +1,129 @@
+{
+ "run_id": "pf-wave1-rawfidelity-1793028581",
+ "index": "idx_ta_ise_test",
+ "posted": 20,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "sec:logon_failure",
+   "sourcetype": "XmlWinEventLog:Security",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "sysmon:process_create",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "ps:script_block",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "cs:ProcessRollup2",
+   "sourcetype": "crowdstrike:events:sensor",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "cs:DetectSummaryEvent",
+   "sourcetype": "crowdstrike:events:sensor",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "sl:process_create",
+   "sourcetype": "sysmon:linux",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "ct:console_login",
+   "sourcetype": "aws:cloudtrail",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "ct:assume_role",
+   "sourcetype": "aws:cloudtrail",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "o365:user_login_failed",
+   "sourcetype": "o365:management:activity",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "o365:file_downloaded",
+   "sourcetype": "o365:management:activity",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "az:sign_in_failure",
+   "sourcetype": "azure:monitor:aad",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "az:audit_user_created",
+   "sourcetype": "azure:monitor:aad",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "sur:alert",
+   "sourcetype": "suricata",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "sur:dns",
+   "sourcetype": "suricata",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "aud:execve",
+   "sourcetype": "auditd",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "aud:auth_fail",
+   "sourcetype": "auditd",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "okta:policy_deny",
+   "sourcetype": "OktaIM2:log",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "okta:session_start",
+   "sourcetype": "OktaIM2:log",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "osq:processes",
+   "sourcetype": "osquery:results",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  },
+  {
+   "label": "osq:open_sockets",
+   "sourcetype": "osquery:results",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no correlation leak"
+  }
+ ],
+ "passes": 20
+}

@@ -1497,3 +1497,82 @@ class SplunkLogEngine:
             sourcetype=sourcetype
         )
 
+
+# ---------------------------------------------------------------------------
+# Wave-1 authentic source expansion (2026-10-26)
+# Genuinely new vendor-native source families (Windows/CrowdStrike/AWS/M365/
+# Azure/Suricata/auditd/Okta/osquery), implemented in a dedicated module with
+# pinned-upstream RAW references. Delegated here so SplunkLogEngine consumers
+# (scenario runners, PulseForge lab harness) can emit them directly.
+# Correlation metadata remains HEC-side only; RAW is vendor-native.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave1_authentic_engine import (
+        Wave1AuthenticEngine as _Wave1Engine,
+        SOURCETYPE_WINDOWS_SECURITY as _W1_ST_SEC,
+        SOURCETYPE_WINDOWS_SYSMON as _W1_ST_SYSMON,
+        SOURCETYPE_WINDOWS_POWERSHELL as _W1_ST_PS,
+        SOURCETYPE_CROWDSTRIKE_SENSOR as _W1_ST_CS,
+        SOURCETYPE_SYSMON_LINUX as _W1_ST_SL,
+        SOURCETYPE_AWS_CLOUDTRAIL as _W1_ST_CT,
+        SOURCETYPE_O365_MANAGEMENT as _W1_ST_O365,
+        SOURCETYPE_AZURE_AAD as _W1_ST_AZ,
+        SOURCETYPE_SURICATA as _W1_ST_SURICATA,
+        SOURCETYPE_AUDITD as _W1_ST_AUDITD,
+        SOURCETYPE_OKTA as _W1_ST_OKTA,
+        SOURCETYPE_OSQUERY as _W1_ST_OSQUERY,
+    )
+
+    WAVE1_SOURCE_SOURCETYPES = {
+        _W1_ST_SEC: "format_windows_security_xml_log",
+        _W1_ST_SYSMON: "format_windows_sysmon_xml_log",
+        _W1_ST_PS: "format_windows_powershell_xml_log",
+        _W1_ST_CS: "format_crowdstrike_falcon_sensor_log",
+        _W1_ST_SL: "format_sysmon_linux_log",
+        _W1_ST_CT: "format_aws_cloudtrail_log",
+        _W1_ST_O365: "format_o365_management_log",
+        _W1_ST_AZ: "format_azure_monitor_aad_log",
+        _W1_ST_SURICATA: "format_suricata_eve_log",
+        _W1_ST_AUDITD: "format_linux_auditd_log",
+        _W1_ST_OKTA: "format_okta_log",
+        _W1_ST_OSQUERY: "format_osquery_results_log",
+    }
+
+    SplunkLogEngine.WAVE1_SOURCE_SOURCETYPES = WAVE1_SOURCE_SOURCETYPES
+
+    def _w1_delegate(name):
+        engine_method = getattr(_Wave1Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    SplunkLogEngine.format_windows_security_xml_log = _w1_delegate(
+        "format_windows_security_xml_log")
+    SplunkLogEngine.format_windows_sysmon_xml_log = _w1_delegate(
+        "format_windows_sysmon_xml_log")
+    SplunkLogEngine.format_windows_powershell_xml_log = _w1_delegate(
+        "format_windows_powershell_xml_log")
+    SplunkLogEngine.format_crowdstrike_falcon_sensor_log = _w1_delegate(
+        "format_crowdstrike_falcon_sensor_log")
+    SplunkLogEngine.format_sysmon_linux_log = _w1_delegate(
+        "format_sysmon_linux_log")
+    SplunkLogEngine.format_aws_cloudtrail_log = _w1_delegate(
+        "format_aws_cloudtrail_log")
+    SplunkLogEngine.format_o365_management_log = _w1_delegate(
+        "format_o365_management_log")
+    SplunkLogEngine.format_azure_monitor_aad_log = _w1_delegate(
+        "format_azure_monitor_aad_log")
+    SplunkLogEngine.format_suricata_eve_log = _w1_delegate(
+        "format_suricata_eve_log")
+    SplunkLogEngine.format_linux_auditd_log = _w1_delegate(
+        "format_linux_auditd_log")
+    SplunkLogEngine.format_okta_log = _w1_delegate(
+        "format_okta_log")
+    SplunkLogEngine.format_osquery_results_log = _w1_delegate(
+        "format_osquery_results_log")
+except ImportError:  # pragma: no cover - wave-1 module unavailable
+    pass
+

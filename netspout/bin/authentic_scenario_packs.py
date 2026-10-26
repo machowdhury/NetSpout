@@ -64,6 +64,9 @@ SCENARIO_PACK_IDS = [
     "wave3_cloudmail_exfil",
     "wave3_vsphere_hostpath_triage",
     "ub1_ot_proxy_host_hunt",
+    "ub2_cloud_identity_mail_hunt",
+    "ub2_ot_edge_routing_observation",
+    "ub2_database_backup_integrity",
 ]
 
 
@@ -140,7 +143,16 @@ def run_scenario_pack(scenario_id: str, run_id: Optional[str] = None,
         return _vsphere_hostpath_triage(run_id, source_ip)
     if scenario_id == "ub1_ot_proxy_host_hunt":
         return _ub1_ot_proxy_host_hunt(run_id, source_ip)
-    raise ValueError(f"Unknown Wave-2 scenario pack: {scenario_id}")
+    if scenario_id.startswith("ub2_"):
+        try:
+            from netspout_core.universe_batch2_engine import run_batch2_scenario
+        except ImportError:
+            try:
+                from app.universe_batch2_engine import run_batch2_scenario
+            except ImportError:
+                from universe_batch2_engine import run_batch2_scenario
+        return run_batch2_scenario(scenario_id, run_id, _tag, source_ip)
+    raise ValueError(f"Unknown authentic scenario pack: {scenario_id}")
 
 
 def run_all_scenario_packs(run_id: Optional[str] = None) -> Dict[str, List[LogEntry]]:

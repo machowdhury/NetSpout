@@ -1846,13 +1846,16 @@ def post_generate_single_event(payload: Dict[str, Any]):
     event_name = payload.get("event_name")
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_single_event(
-        vendor_id=vendor_id,
-        sourcetype=sourcetype,
-        event_name=event_name,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_single_event(
+            vendor_id=vendor_id,
+            sourcetype=sourcetype,
+            event_name=event_name,
+            dispatch=dispatch,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/generate/sourcetype")
@@ -1864,14 +1867,18 @@ def post_generate_sourcetype_batch(payload: Dict[str, Any]):
     rate_eps = int(payload.get("rate_eps", 10))
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_sourcetype_batch(
-        vendor_id=vendor_id,
-        sourcetype=sourcetype,
-        count=count,
-        rate_eps=rate_eps,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_sourcetype_batch(
+            vendor_id=vendor_id,
+            sourcetype=sourcetype,
+            count=count,
+            rate_eps=rate_eps,
+            event_families=payload.get("event_families"),
+            dispatch=dispatch,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/generate/data-source")
@@ -1884,15 +1891,35 @@ def post_generate_data_source(payload: Dict[str, Any]):
     rate_eps = int(payload.get("rate_eps", 10))
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_data_source(
-        vendor_id=vendor_id,
-        product=product,
-        transport=transport,
-        count=count,
-        rate_eps=rate_eps,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_data_source(
+            vendor_id=vendor_id,
+            product=product,
+            transport=transport,
+            count=count,
+            rate_eps=rate_eps,
+            dispatch=dispatch,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/generate/scenario-pack")
+def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
+    """Bounded authentic observation packs; separate from graph scenario contracts."""
+    scenario_id = payload.get('scenario_id')
+    from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
+    if scenario_id in BATCH2_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+        from app.generator_modes import generator_service
+        try:
+            config = payload.get('transport_config')
+            return generator_service.generate_universe_scenario(
+                scenario_id, run_id=payload.get('run_id'), dispatch=bool(payload.get('dispatch', False)),
+                transport_config=TelemetryTransportConfig(**config) if config else None)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+    raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")
 
 
 @app.post("/api/generate/scenario")

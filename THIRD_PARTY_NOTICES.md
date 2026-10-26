@@ -41,3 +41,14 @@ Attack Data payload collection.
 Automated dependency metadata is not legal clearance. License conclusions,
 vendor sample redistribution rights, employer intellectual-property approval,
 and publication authorization require human review before V1.0 release.
+
+Universal Vendor Coverage Batch 2 includes selected public RAW test fixtures
+from `elastic/integrations`, revision
+`37ef1a028f3cc4b049779fa20578f7ee6f3cddbe`. The pinned upstream license notice
+is retained at `catalog/raw_reference/universe_batch2/UPSTREAM_LICENSE.txt`;
+exact paths, hashes and extraction selectors are in `references.json` and
+`catalog/universe_batch2.json`. The default upstream license is Elastic License
+2.0 unless the source subtree provides another notice. These fixtures are not
+Splunk TA packages. Small RouterOS console-log excerpts are attributed to the
+MikroTik Log documentation in `references.json`; they are evidence references,
+not a grant of vendor endorsement or parser certification.

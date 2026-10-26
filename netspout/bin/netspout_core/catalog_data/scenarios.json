@@ -6351,5 +6351,200 @@
   ],
   "raw_evidence": "catalog/raw_reference/universe_batch1/ + provenance.json (universe:batch1 entries)",
   "registry_reference": "catalog/universe_batch1.json"
+ },
+ {
+  "id": "ub2_cloud_identity_mail_hunt",
+  "code": "SEC-UB2-01",
+  "name": "Ub2 Cloud Identity Mail Hunt",
+  "display_name": "Ub2 Cloud Identity Mail Hunt",
+  "category": "SECURITY",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "hashicorp_vault_audit_log",
+   "Confluence:audit log",
+   "proofpoint_tap_siem"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "hashicorp",
+   "atlassian",
+   "proofpoint"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Vault audit: audit_request, audit_response",
+   "Confluence Cloud audit: space_created, group_membership_added",
+   "Targeted Attack Protection SIEM: malware_message_blocked, phishing_message_blocked"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch2.json"
+ },
+ {
+  "id": "ub2_ot_edge_routing_observation",
+  "code": "SEC-UB2-02",
+  "name": "Ub2 Ot Edge Routing Observation",
+  "display_name": "Ub2 Ot Edge Routing Observation",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "traefik:access:json",
+   "claroty:cef",
+   "nginx:access",
+   "mikrotik:routeros"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "traefik",
+   "claroty",
+   "nginx_f5",
+   "mikrotik"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Traefik Proxy access: http_access",
+   "CTD CEF: new_asset, asset_information_change, health",
+   "NGINX combined access log: http_access",
+   "RouterOS console log: administrator_login, ospf_hello_sent"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch2.json"
+ },
+ {
+  "id": "ub2_database_backup_integrity",
+  "code": "SEC-UB2-03",
+  "name": "Ub2 Database Backup Integrity",
+  "display_name": "Ub2 Database Backup Integrity",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "mongodb:log",
+   "veeam_vbr_syslog"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "mongodb",
+   "veeam"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "MongoDB structured server log: server_start, index_build",
+   "Backup & Replication: backup_job_started, backup_job_completed, malware_detected"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch2.json"
  }
 ]

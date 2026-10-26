@@ -1,0 +1,2 @@
+sep/15 09:54:33 system,info,account user admin logged in from 10.1.101.212 via winbox
+11:11:43 route,ospf,debug SEND: Hello Packet 10.255.255.1 -> 224.0.0.5 on lo0

@@ -1,0 +1,3657 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "universe-batch2-2026-10-26",
+ "baseline_commit": "b1ad10ab26adc4bc4c256431f15aae1ba3cc13ad",
+ "baseline_counts": {
+  "vendors": 57,
+  "sourcetypes": 317,
+  "scenarios": 41
+ },
+ "sources": [
+  {
+   "batch_source_id": "vault",
+   "vendor": "hashicorp",
+   "product": "Vault audit",
+   "splunk_sourcetype": "hashicorp_vault_audit_log",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "audit_request",
+    "audit_response"
+   ],
+   "event_family_count": 2,
+   "families": [
+    {
+     "id": "audit_request",
+     "template": {
+      "time": "2020-12-01T20:29:04.356625452Z",
+      "type": "request",
+      "auth": {
+       "client_token": "hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327",
+       "accessor": "hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931",
+       "display_name": "oidc-12349999999999999999",
+       "policies": [
+        "default",
+        "group-admin"
+       ],
+       "token_policies": [
+        "default",
+        "group-admin"
+       ],
+       "metadata": {
+        "account_id": "12349999999999999999",
+        "email": "example@gmail.com",
+        "role": "gmail"
+       },
+       "entity_id": "e4f5c67a-6f7e-789d-ae56-a1fe3ae23046",
+       "token_type": "service",
+       "token_ttl": 3600,
+       "token_issue_time": "2020-12-01T20:28:40Z"
+      },
+      "request": {
+       "id": "cd09708b-11cc-2985-648b-cfe262cf7e50",
+       "operation": "update",
+       "mount_type": "system",
+       "client_token": "hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327",
+       "client_token_accessor": "hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931",
+       "namespace": {
+        "id": "root"
+       },
+       "path": "sys/capabilities-self",
+       "data": {
+        "paths": [
+         "hmac-sha256:fd04b28916cb60f622b1ebce308b339b468f5da93fa735f985f4435049627a27"
+        ]
+       },
+       "remote_address": "67.43.156.13"
+      }
+     },
+     "origin": "vault",
+     "selector": "line:1",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "audit_response",
+     "template": {
+      "time": "2020-12-01T20:29:04.36089379Z",
+      "type": "response",
+      "auth": {
+       "client_token": "hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327",
+       "accessor": "hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931",
+       "display_name": "oidc-12349999999999999999",
+       "policies": [
+        "default",
+        "group-admin"
+       ],
+       "token_policies": [
+        "default",
+        "group-admin"
+       ],
+       "metadata": {
+        "account_id": "12349999999999999999",
+        "email": "example@gmail.com",
+        "role": "gmail"
+       },
+       "entity_id": "e4f5c67a-6f7e-789d-ae56-a1fe3ae23046",
+       "token_type": "service",
+       "token_ttl": 3600,
+       "token_issue_time": "2020-12-01T20:28:40Z"
+      },
+      "request": {
+       "id": "cd09708b-11cc-2985-648b-cfe262cf7e50",
+       "operation": "update",
+       "mount_type": "system",
+       "client_token": "hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327",
+       "client_token_accessor": "hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931",
+       "namespace": {
+        "id": "root"
+       },
+       "path": "sys/capabilities-self",
+       "data": {
+        "paths": [
+         "hmac-sha256:fd04b28916cb60f622b1ebce308b339b468f5da93fa735f985f4435049627a27"
+        ]
+       },
+       "remote_address": "67.43.156.13"
+      },
+      "response": {
+       "mount_type": "system",
+       "data": {
+        "capabilities": [
+         "hmac-sha256:b77b79078c7bad1402a1ec74613454fd85efa203f1aa557fd2a9718cfd4ef367",
+         "hmac-sha256:8d0bb80a69f442489908170e1831503c65b2f9d45a3250eac21fc16840416e5a",
+         "hmac-sha256:c5086738f6225235066f69681e94111d94a45a268e9f0c64c6105073e32e8176",
+         "hmac-sha256:3d439b7d92cbd8123fda8462716af05ae15710c8e2905eaba8d5452fccbad2f2",
+         "hmac-sha256:5622a2d8fedf53e4671d6f371c59e40f3379030815fd4bb4126fdedce5fc87bb"
+        ],
+        "secret/metadata/apps/github-runner/ca-cert": [
+         "hmac-sha256:b77b79078c7bad1402a1ec74613454fd85efa203f1aa557fd2a9718cfd4ef367",
+         "hmac-sha256:8d0bb80a69f442489908170e1831503c65b2f9d45a3250eac21fc16840416e5a",
+         "hmac-sha256:c5086738f6225235066f69681e94111d94a45a268e9f0c64c6105073e32e8176",
+         "hmac-sha256:3d439b7d92cbd8123fda8462716af05ae15710c8e2905eaba8d5452fccbad2f2",
+         "hmac-sha256:5622a2d8fedf53e4671d6f371c59e40f3379030815fd4bb4126fdedce5fc87bb"
+        ]
+       }
+      }
+     },
+     "origin": "vault",
+     "selector": "line:2",
+     "action": "observed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 5093,
+    "name": "HashiCorp Vault App for Splunk",
+    "publisher": "HashiCorp Vault",
+    "version": "1.0.7",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/vault.bin"
+   ]
+  },
+  {
+   "batch_source_id": "traefik",
+   "vendor": "traefik",
+   "product": "Traefik Proxy access",
+   "splunk_sourcetype": "traefik:access:json",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "http_access"
+   ],
+   "event_family_count": 1,
+   "families": [
+    {
+     "id": "http_access",
+     "template": {
+      "BackendAddr": "10.10.10.10:80",
+      "BackendName": "backend-backend-docker",
+      "BackendURL": {
+       "Scheme": "http",
+       "Opaque": "",
+       "User": null,
+       "Host": "10.10.10.20:80",
+       "Path": "",
+       "RawPath": "",
+       "ForceQuery": false,
+       "RawQuery": "",
+       "Fragment": ""
+      },
+      "ClientAddr": "10.10.10.20:12345",
+      "ClientHost": "10.10.10.20",
+      "ClientPort": "12345",
+      "ClientUsername": "-",
+      "DownstreamContentSize": 383,
+      "DownstreamStatus": 200,
+      "DownstreamStatusLine": "200 OK",
+      "Duration": 100000,
+      "FrontendName": "Host-backend-docker-docker-localhost-2",
+      "OriginContentSize": 383,
+      "OriginDuration": 2155389,
+      "OriginStatus": 200,
+      "OriginStatusLine": "200 OK",
+      "Overhead": 879375,
+      "RequestAddr": "backend.docker.docker.localhost",
+      "RequestContentSize": 0,
+      "RequestCount": 27,
+      "RequestHost": "backend.docker.docker.localhost",
+      "RequestLine": "GET / HTTP/1.1",
+      "RequestMethod": "GET",
+      "RequestPath": "/",
+      "RequestPort": "-",
+      "RequestProtocol": "HTTP/1.1",
+      "RetryAttempts": 0,
+      "StartLocal": "2021-03-16T19:08:41.039598834Z",
+      "StartUTC": "2021-03-16T19:08:41.039598834Z",
+      "downstream_Content-Length": "383",
+      "downstream_Content-Type": "text/plain; charset=utf-8",
+      "downstream_Date": "Tue, 16 Mar 2021 19:08:41 GMT",
+      "level": "info",
+      "msg": "",
+      "origin_Content-Length": "383",
+      "origin_Content-Type": "text/plain; charset=utf-8",
+      "origin_Date": "Tue, 16 Mar 2021 19:08:41 GMT",
+      "request_Accept": "*/*",
+      "request_User-Agent": "curl/7.64.1",
+      "time": "2021-03-16T19:08:41Z"
+     },
+     "origin": "traefik",
+     "selector": "line:2",
+     "action": "allowed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 6733,
+    "name": "Add On for Traefik Proxy",
+    "publisher": "Mathieu Hanotaux",
+    "version": "0.102.0",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/traefik.bin"
+   ]
+  },
+  {
+   "batch_source_id": "claroty",
+   "vendor": "claroty",
+   "product": "CTD CEF",
+   "splunk_sourcetype": "claroty:cef",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "new_asset",
+    "asset_information_change",
+    "health"
+   ],
+   "event_family_count": 3,
+   "families": [
+    {
+     "id": "new_asset",
+     "template": "<14> 1 2023-08-15T01:00:00Z Site syslog-Alert-Default - - - CEF:0|Claroty|CTD|4.10.0|Alert/New Asset|New Asset|10|CtdSourceIp=10.1.30.40 CtdDestinationIp=10.1.30.1 CtdSourceMac=00:50:56:b9:e2:ad CtdDestinationMac=00:1d:9c:c0:04:9d CtdSourceHost=EP-1002321 CtdDestinationHost=EP-1002562 CtdTimeGenerated=Aug 14 2023 01:00:00 CtdExternalId=47 CtdDeviceExternalId=Default CtdMessage=New asset Alert: A new plc was detec- ted in the \u201cPLC: Rockwell\u201d zone, which is a non-risky zone. It performed protocol operation communication: 10.1.30.1:Card 2 \\ Addr 255 CtdProtocol=TFTP CtdCategory=Integrity/New Asset CtdSourceAssetType=PLC CtdDestinationAssetType=HMI CtdSourceZone=PLC: Rockwell CtdDestinationZone=HMI: Rockwell CtdAlertLink=http://localhost:4200/detection/alert/31-1 CtdAlertScore=100 CtdAlertTypeId=1001 CtdAlertStatus=Unresolved CtdResolvedAs=Unresolved CtdResolvedBy=Bob CtdAssignedTo=Alice CtdStoryId=87 CtdMitreAttackTacticNames=Command and Control CtdMitreAttackTechniqueIds=T1548 CtdSignatureId=22061 CtdSignatureName=MALWARE-OTHER Alureon - Malicious IFRAME load attempt CtdSignatureCriticality=High CtdSignatureConfidence=100% CtdSignatureTags=Generic Malware CtdSignatureExternalLinks=https://attack.mitre.org/techniques/T1102 CtdSignatureLastUpdatedByClaroty=27 Aug 2023, 14:54 CtdSignaturePoweredBy=Other",
+     "origin": "claroty",
+     "selector": "events[1].event.original",
+     "action": "alerted",
+     "status": "breached"
+    },
+    {
+     "id": "asset_information_change",
+     "template": "<14>1 2023-08-15T01:00:00Z Site syslog-Event-Default - - - CEF:0|Claroty|CTD|4.10.0|Event/Asset Information Change|Asset Information Change|10|CtdSourceIp=10.1.0.40 CtdDestinationIp=10.0.5.2 CtdSourceMac=00:1D:9C:C0:04:9D CtdDestinationMac=FF:FF:FF:FF:FF:FF CtdSourceHost=Endpoint1 CtdDestinationHost=Endpoint2 CtdTimeGenerated=Aug 14 2023 01:00:00 CtdExternalId=150 CtdDeviceExternalId=Default CtdMessage=Information change has been detected on eModel to Model: 1756-ENBT/A CtdProtocol=tftp CtdCategory=Integrity/Asset Information Change CtdSourceAssetType=PLC CtdDestinationAssetType=Endpoint, HMI, PLC, PLC, PLC, HMI CtdSourceZone=PLC: Rockwell CtdDestinationZone=Broadcast/Multicast: Other CtdAlertLink=http://localhost:4200/detection/alert/5-1 CtdAlertId=5 CtdStoryId=3 CtdEventTypeId=4 CtdResolvedAs=Unresolved",
+     "origin": "claroty",
+     "selector": "events[3].event.original",
+     "action": "alerted",
+     "status": "degraded"
+    },
+    {
+     "id": "health",
+     "template": "<134>1 2023-08-15T01:00:00Z Site syslog-HealthCheck-Default - - - CEF:0|Claroty|CTD|4.10.0|HealthCheck|Health|0|CtdRealTime=Aug 14 2023 01:00:00 CtdTimeGenerated=Aug 13 2023 01:00:00 CtdMessage=Successfully ran health monitoring CtdSite=Default CtdCpu=12.21 CtdMem=13.31 CtdUsedOptIcsranger=14.41 CtdUsedVar=15.51 CtdUsedTmp=16.61 CtdUsedEtc=17.71 CtdBusyFd=0.11 CtdBusySda=0.22 CtdBusySdaA=0.33 CtdBusySdaB=0.44 CtdBusySr=0.55 CtdBusyDm=0.66 CtdBusyDmA=0.77 CtdQuBaselineTracker=1 CtdQuBridge=2 CtdQuCentralBridge=3 CtdQuConcluding=4 CtdQuDiodeFeeder=5 CtdQuDissector=6 CtdQuDissectorA=7 CtdQuDissectorNg=8 CtdQuIndicatorService=9 CtdQuLeecher=10 CtdQuMonitor=11 CtdQuNetworkStatistics=12 CtdQuPackets=13 CtdQuPacketsErrors=14 CtdQuPreprocessing=15 CtdQuPreprocessingNg=16 CtdQuPriorityProcessing=17 CtdQuProcessing=18 CtdQuProcessingHigh=19 CtdQuStatisticsNg=20 CtdQuZordonUpdates=21 CtdQueuePurge=22 CtdQuSyslogAlerts=23 CtdQuSyslogEvents=24 CtdQuSyslogInsights=25 CtdRdDissector=26 CtdRdDissectorA=27 CtdRdDissectorNg=28 CtdRdPreprocessing=29 CtdRdPreprocessingNg=30 CtdSvcMariaDb=Down CtdSvcPostgres=Down CtdSvcRedis=Down CtdSvcRabbitMq=Down CtdSvcIcsranger=Down CtdSvcWatchdog=Down CtdSvcFirewalld=Down CtdSvcNetunnel=Down CtdSvcJwthenticator=Down CtdSvcDocker=Down CtdExceptions=31 CtdInputPacketDrops=32 CtdOutputPacketDrops=33 CtdFullOutputPacketDrops=34 CtdDissectorNgPacketDrops=35 CtdTagArtifactsDropsPreprocessor=36 CtdTagArtifactsDropsPreprocessorSum=37 CtdTagArtifactsDropsProcessor=38 CtdTagArtifactsDropsProcessorSum=39 CtdTagArtifactsDropsSniffer=40 CtdTagArtifactsDropsSnifferSum=41 CtdTagArtifactsDropsDissectorPypy=42 CtdTagArtifactsDropsDissectorPypySum=43 CtdCapsaverFolderCleanup=TRUE CtdDissectionCoverage=44 CtdCapsaverUtilzationTest=N/A CtdYaraScannerTest=45 CtdWrkrWorkersStop=46 CtdWrkrWorkersRestart=47 CtdWrkrActiveExecuter={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrSensor={'api': 'Available', 'last_restart': '18 min, 34 sec'} CtdWrkrAuthentication={'api': 'Not Available', 'last_restart': '21 min, 18 sec'} CtdWrkrMailer={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrMitre={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrNotifications={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrProcessor={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrCloudAgent={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrCloudClient={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrScheduler={'api': 'Available', 'last_restart': '21 min, 19 sec'} CtdWrkrknownThreats={'api': 'Available', 'last_restart': '18 min, 58 sec'} CtdWrkrCacher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrInsights={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrActive={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrEnricher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrIndicators={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrIndicatorsApi={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrConcluder={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrPreprocessor={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrLeecher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrSyncManager={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrBridge={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrWebRanger={'api': 'Not Available', 'last_restart': '21 min, 6 sec'} CtdWrkrWebWs={'api': 'Not Available', 'last_restart': '21 min, 1 sec'} CtdWrkrWebAuth={'api': 'Not Available', 'last_restart': '21 min, 1 sec'} CtdWrkrWeb",
+     "origin": "claroty",
+     "selector": "events[4].event.original",
+     "action": "observed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 5450,
+    "name": "Claroty Continuous Threat Detection (CTD) Add-On for Splunk",
+    "publisher": "Claroty",
+    "version": "3.1.0",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/claroty.bin"
+   ]
+  },
+  {
+   "batch_source_id": "mongodb",
+   "vendor": "mongodb",
+   "product": "MongoDB structured server log",
+   "splunk_sourcetype": "mongodb:log",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "server_start",
+    "index_build"
+   ],
+   "event_family_count": 2,
+   "families": [
+    {
+     "id": "server_start",
+     "template": {
+      "t": {
+       "$date": "2021-03-22T21:21:20.349+00:00"
+      },
+      "s": "I",
+      "c": "STORAGE",
+      "id": 4615611,
+      "ctx": "initandlisten",
+      "msg": "MongoDB starting",
+      "attr": {
+       "pid": 1,
+       "port": 27017,
+       "dbPath": "/data/db",
+       "architecture": "64-bit",
+       "host": "6150fe65a89c"
+      }
+     },
+     "origin": "mongodb",
+     "selector": "line:1",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "index_build",
+     "template": {
+      "t": {
+       "$date": "2021-03-22T21:21:26.410+00:00"
+      },
+      "s": "I",
+      "c": "INDEX",
+      "id": 20345,
+      "ctx": "initandlisten",
+      "msg": "Index build: done building",
+      "attr": {
+       "buildUUID": null,
+       "namespace": "admin.system.version",
+       "index": "_id_",
+       "commitTimestamp": {
+        "$timestamp": {
+         "t": 0,
+         "i": 0
+        }
+       }
+      }
+     },
+     "origin": "mongodb",
+     "selector": "line:5",
+     "action": "observed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": null,
+    "name": null,
+    "publisher": null,
+    "version": null,
+    "sourcetype_declared_in_snapshot": false,
+    "authority": "PULSEFORGE_DEFINED_PENDING_TA_MAPPING",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/mongodb.bin"
+   ]
+  },
+  {
+   "batch_source_id": "confluence",
+   "vendor": "atlassian",
+   "product": "Confluence Cloud audit",
+   "splunk_sourcetype": "Confluence:audit log",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "space_created",
+    "group_membership_added"
+   ],
+   "event_family_count": 2,
+   "families": [
+    {
+     "id": "space_created",
+     "template": {
+      "author": {
+       "type": "user",
+       "displayName": "John Jacobs",
+       "operations": null,
+       "isExternalCollaborator": false,
+       "username": "df856b17d84fcf010f11fcfcc6be4267",
+       "userKey": "26971c016361d1f6a3eb8f62461f1e4e",
+       "accountId": "df856b17d84fcf010f11fcfcc6be4267",
+       "accountType": "",
+       "publicName": "Unknown user",
+       "externalCollaborator": false
+      },
+      "remoteAddress": "81.2.69.143",
+      "creationDate": 1643096679092,
+      "summary": "Space created",
+      "description": "",
+      "category": "Spaces",
+      "sysAdmin": false,
+      "superAdmin": false,
+      "affectedObject": {
+       "name": "Service Catalogue",
+       "objectType": "Space"
+      },
+      "changedValues": [
+       {
+        "name": "Space type",
+        "oldValue": "",
+        "newValue": "global",
+        "hiddenOldValue": "",
+        "hiddenNewValue": ""
+       },
+       {
+        "name": "Space status",
+        "oldValue": "",
+        "newValue": "CURRENT",
+        "hiddenOldValue": "",
+        "hiddenNewValue": ""
+       },
+       {
+        "name": "Name",
+        "oldValue": "",
+        "newValue": "Service Catalogue",
+        "hiddenOldValue": "",
+        "hiddenNewValue": ""
+       },
+       {
+        "name": "Space key",
+        "oldValue": "",
+        "newValue": "SC",
+        "hiddenOldValue": "",
+        "hiddenNewValue": ""
+       }
+      ],
+      "associatedObjects": []
+     },
+     "origin": "confluence",
+     "selector": "line:5",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "group_membership_added",
+     "template": {
+      "author": {
+       "type": "user",
+       "displayName": "System",
+       "operations": null,
+       "isExternalCollaborator": false,
+       "accountType": "",
+       "publicName": "Unknown user",
+       "externalCollaborator": false
+      },
+      "remoteAddress": "81.2.69.143",
+      "creationDate": 1642495383045,
+      "summary": "User added to group",
+      "description": "",
+      "category": "Users and groups",
+      "sysAdmin": false,
+      "superAdmin": false,
+      "affectedObject": {
+       "name": "jira-software-users:b8d81944-e737-4da0-94ca-165fa5c0635c",
+       "objectType": "Group"
+      },
+      "changedValues": [],
+      "associatedObjects": [
+       {
+        "name": "ASP",
+        "objectType": "User"
+       }
+      ]
+     },
+     "origin": "confluence",
+     "selector": "line:8",
+     "action": "observed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 8784,
+    "name": "Confluence and Jira Audit Add-on for Splunk",
+    "publisher": "Avotrix Inc",
+    "version": "1.0.15",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/confluence.bin"
+   ]
+  },
+  {
+   "batch_source_id": "nginx",
+   "vendor": "nginx_f5",
+   "product": "NGINX combined access log",
+   "splunk_sourcetype": "nginx:access",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "http_access"
+   ],
+   "event_family_count": 1,
+   "families": [
+    {
+     "id": "http_access",
+     "template": "67.43.156.13 - - [25/Oct/2016:14:49:33 +0200] \"GET / HTTP/1.1\" 200 612 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36\"",
+     "origin": "nginx",
+     "selector": "line:1",
+     "action": "allowed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": null,
+    "name": null,
+    "publisher": null,
+    "version": null,
+    "sourcetype_declared_in_snapshot": false,
+    "authority": "PULSEFORGE_DEFINED_PENDING_TA_MAPPING",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/nginx.bin"
+   ]
+  },
+  {
+   "batch_source_id": "proofpoint",
+   "vendor": "proofpoint",
+   "product": "Targeted Attack Protection SIEM",
+   "splunk_sourcetype": "proofpoint_tap_siem",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "malware_message_blocked",
+    "phishing_message_blocked"
+   ],
+   "event_family_count": 2,
+   "families": [
+    {
+     "id": "malware_message_blocked",
+     "template": {
+      "spamScore": 0,
+      "phishScore": 0,
+      "threatsInfoMap": [
+       {
+        "threatID": "dhgonvjabcdefghijkabcdefghijkabcdefghijkabcdefghijkhlonvjdsabcdefgh",
+        "threatStatus": "active",
+        "classification": "malware",
+        "threatUrl": "https://threatinsight.proofpoint.com/adhgon-vjdsd-efghjikhlon-abcdefghij/threat/email/792e8d28448xxxxxxxxxxxxxxxxx8448c792xxxxx1af132onvjdsvsbnvjd",
+        "threatTime": "2022-01-01T02:03:40.050Z",
+        "threat": "example.com/xyz/",
+        "campaignID": null,
+        "threatType": "url"
+       }
+      ],
+      "messageTime": "2022-01-01T00:45:55.050Z",
+      "impostorScore": 0.0,
+      "malwareScore": 100,
+      "cluster": "pharmtech_hosted",
+      "subject": "Re: Delayed Mail (still being retried)",
+      "quarantineFolder": null,
+      "quarantineRule": null,
+      "policyRoutes": [
+       "default_inbound"
+      ],
+      "modulesRun": [
+       "av",
+       "zerohour",
+       "dkimv",
+       "spf",
+       "spam",
+       "dmarc",
+       "pdr"
+      ],
+      "messageSize": 3102,
+      "headerFrom": "<info@example.com>",
+      "headerReplyTo": null,
+      "fromAddress": [
+       "info@example.com"
+      ],
+      "ccAddresses": [],
+      "replyToAddress": [],
+      "toAddresses": [
+       "mailer-daemon@example.com"
+      ],
+      "xmailer": "Microsoft Outlook 16.0",
+      "messageParts": [
+       {
+        "disposition": "inline",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "text.html",
+        "sandboxStatus": null,
+        "oContentType": "text/html",
+        "contentType": "text/html"
+       }
+      ],
+      "completelyRewritten": false,
+      "id": "401ccabc-1234-123-1234-babc74fce1a4",
+      "QID": "3XXXXgaXXX-1",
+      "GUID": "qxxlnx-xxxxxNxXGxQxWxPxxxxx0",
+      "sender": "info@example.com",
+      "recipient": [
+       "mailer-daemon@example.com"
+      ],
+      "senderIP": "1.128.3.4",
+      "messageID": "<3f208x0sga-1@m0116781.example.com>"
+     },
+     "origin": "proofpoint",
+     "selector": "line:1",
+     "action": "blocked",
+     "status": "breached"
+    },
+    {
+     "id": "phishing_message_blocked",
+     "template": {
+      "spamScore": 100,
+      "phishScore": 100,
+      "threatsInfoMap": [
+       {
+        "threatID": "cfdhgondhgonvjdsdefghjikhlonvjdsvsbnvjd56546ghjikhlonvjdsvsbnvjd",
+        "threatStatus": "active",
+        "classification": "phish",
+        "threatUrl": "https://threatinsight.proofpoint.com/adhgon-vjdsdef-ghjikhlonv-abcdefghij/threat/email/7921af132d1aa6a88fdbdadkhlonvj1a8xxxxxxxxxxxxxxxxxxxxxdkhlonvj1",
+        "threatTime": "2022-01-01T05:02:48.832Z",
+        "threat": "https://example.com/",
+        "campaignID": null,
+        "threatType": "url"
+       },
+       {
+        "threatID": "124563bcdefghijkabcdefghi201256abcdefghijk201256aswe20abc",
+        "threatStatus": "active",
+        "classification": "phish",
+        "threatUrl": "https://threatinsight.proofpoint.com/abcdefgh-1234-1234-1234-1234-abcdefgh/threat/email/85738a8x9x7x1x04x5329xaadc9x425925abdf84089wcwe3x022xx4x19x123",
+        "threatTime": "2022-01-01T00:00:00.000Z",
+        "threat": "example.com",
+        "campaignID": null,
+        "threatType": "url"
+       }
+      ],
+      "messageTime": "2022-01-01T00:25:20.010Z",
+      "impostorScore": 0.0,
+      "malwareScore": 0,
+      "cluster": "pharmtech_hosted",
+      "subject": "Statement From (Trinity Groundwater)",
+      "quarantineFolder": null,
+      "quarantineRule": null,
+      "policyRoutes": [
+       "default_inbound",
+       "allow_relay"
+      ],
+      "modulesRun": [
+       "av",
+       "zerohour",
+       "dkimv",
+       "spf",
+       "spam",
+       "dmarc"
+      ],
+      "messageSize": 111091,
+      "headerFrom": "Laura Schumacher <abc@example.com>",
+      "headerReplyTo": null,
+      "fromAddress": [
+       "abc@example.com"
+      ],
+      "ccAddresses": [],
+      "replyToAddress": [],
+      "toAddresses": [
+       "mail@example.com",
+       "abc@example.com"
+      ],
+      "xmailer": null,
+      "messageParts": [
+       {
+        "disposition": "inline",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "text.html",
+        "sandboxStatus": null,
+        "oContentType": "text/html",
+        "contentType": "text/html"
+       },
+       {
+        "disposition": "inline",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "text.txt",
+        "sandboxStatus": null,
+        "oContentType": "text/plain",
+        "contentType": "text/plain"
+       },
+       {
+        "disposition": "inline",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "text.txt",
+        "sandboxStatus": null,
+        "oContentType": "text/plain",
+        "contentType": "text/plain"
+       },
+       {
+        "disposition": "inline",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "text.html",
+        "sandboxStatus": null,
+        "oContentType": "text/html",
+        "contentType": "text/html"
+       },
+       {
+        "disposition": "attached",
+        "sha256": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+        "md5": "b10a8db164e0754105b7a99be72e3fe5",
+        "filename": "image001.png",
+        "sandboxStatus": null,
+        "oContentType": "image/png",
+        "contentType": "image/png"
+       }
+      ],
+      "completelyRewritten": false,
+      "id": "8f12300-f387-1234-xxxx-a4abcd12347",
+      "QID": "0XX0XXXXaX3XXX-X1",
+      "GUID": "_pxxxxOxQxxXxx4wxjxtx2xxxTxxxYxxx",
+      "sender": "abc@example.com",
+      "recipient": [
+       "mailer-daemon@example.com"
+      ],
+      "senderIP": "175.16.199.1",
+      "messageID": "<77F0EA74-7D6F-453A-AB7F-31B192481AE8@example.com>"
+     },
+     "origin": "proofpoint",
+     "selector": "line:4",
+     "action": "blocked",
+     "status": "breached"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 3681,
+    "name": "Proofpoint TAP Modular Input",
+    "publisher": "Proofpoint Splunk Integrations",
+    "version": "1.4.1",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/proofpoint.bin"
+   ]
+  },
+  {
+   "batch_source_id": "veeam",
+   "vendor": "veeam",
+   "product": "Backup & Replication",
+   "splunk_sourcetype": "veeam_vbr_syslog",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "backup_job_started",
+    "backup_job_completed",
+    "malware_detected"
+   ],
+   "event_family_count": 3,
+   "families": [
+    {
+     "id": "backup_job_started",
+     "template": "[categoryId=0 instanceId=110 JobSessionID=\"c0d93abe-3adf-4397-b762-351b73acf7e1\" JobID=\"c4415b30-de82-4403-8816-ea66636356e8\" JobType=\"0\" Platform=\"0\" Flags=\"1\" SourceType=\"2\" VbrHostName=\"vbr-01.example.local\" VbrVersion=\"13.1.0.411\" Version=\"1\" Description=\"Backup job 'Backup-Job-01' has been started by user EXAMPLE\\alice.johnson.\"]",
+     "origin": "veeam",
+     "selector": "line:13",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "backup_job_completed",
+     "template": "[categoryId=0 instanceId=190 JobSessionID=\"c0d93abe-3adf-4397-b762-351b73acf7e1\" JobID=\"c4415b30-de82-4403-8816-ea66636356e8\" JobResult=\"0\" JobType=\"0\" Platform=\"0\" WillBeRetried=\"False\" JobName=\"Backup-Job-01\" SourceType=\"2\" VbrHostName=\"vbr-01.example.local\" VbrVersion=\"13.1.0.411\" Version=\"1\" Description=\"Backup job 'Backup-Job-01' finished with Success. All objects have been backed up successfully.\"]",
+     "origin": "veeam",
+     "selector": "line:16",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "malware_detected",
+     "template": "[WRN] [categoryId=0 instanceId=41600 DetectionTimeUTC=\"09/15/2026 14:01:18\" OibID=\"ea0e891f-1b7a-5632-b6c6-b603ba31ec5a\" ActivityType=\"AntivirusScan\" UserName=\"SYSTEM\" UserFullInfo=\"<ModifiedUserInfo fullName=\"SYSTEM\" loginType=\"4\" />\" ObjectName=\"vm-web-01\" CreationTimeUTC=\"09/16/2026 08:22:33\" VbrHostName=\"vbr-01\" VbrVersion=\"13.1.1.18\" Version=\"1\" Description=\"Malware detected by Veeam Threat Hunter, see antivirus scan log on mount server [vbr-01] in [FLRSessions\\Windows\\FLR__vm-web-01_\\Antivirus] Volume{3a6975d1-5614-5a29-9e9e-0aac8bb81af3}: Infected for OIB: ea0e891f-1b7a-5632-b6c6-b603ba31ec5a (vm-web-01), rule: Antivirus scan by user: SYSTEM.\"]",
+     "origin": "veeam_malware",
+     "selector": "line:14",
+     "action": "alerted",
+     "status": "breached"
+    }
+   ],
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "ta_metadata": {
+    "uid": 7786,
+    "name": "CCX Splunk Add-on for Veeam VBR",
+    "publisher": "Matthew Orme",
+    "version": "1.0.1",
+    "sourcetype_declared_in_snapshot": true,
+    "authority": "SPLUNKBASE_METADATA",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/veeam.bin",
+    "catalog/raw_reference/universe_batch2/veeam_malware.bin"
+   ]
+  },
+  {
+   "batch_source_id": "mikrotik",
+   "vendor": "mikrotik",
+   "product": "RouterOS console log",
+   "splunk_sourcetype": "mikrotik:routeros",
+   "generator": "format_universe_batch2_log",
+   "event_families": [
+    "administrator_login",
+    "ospf_hello_sent"
+   ],
+   "event_family_count": 2,
+   "families": [
+    {
+     "id": "administrator_login",
+     "template": "sep/15 09:54:33 system,info,account user admin logged in from 10.1.101.212 via winbox",
+     "origin": "mikrotik",
+     "selector": "line:1",
+     "action": "observed",
+     "status": "normal"
+    },
+    {
+     "id": "ospf_hello_sent",
+     "template": "11:11:43 route,ospf,debug SEND: Hello Packet 10.255.255.1 -> 224.0.0.5 on lo0",
+     "origin": "mikrotik",
+     "selector": "line:2",
+     "action": "observed",
+     "status": "normal"
+    }
+   ],
+   "evidence_level": "VENDOR_DOCUMENTED",
+   "ta_metadata": {
+    "uid": 3845,
+    "name": "Technology Add-On for Mikrotik RouterOS",
+    "publisher": "Andreas Roth",
+    "version": "null",
+    "sourcetype_declared_in_snapshot": false,
+    "authority": "PULSEFORGE_DEFINED_PENDING_TA_MAPPING",
+    "parser_verified": false,
+    "blocker": "Installed TA and controlled parser check unavailable; declared sourcetype does not prove input-format compatibility."
+   },
+   "raw_evidence": [
+    "catalog/raw_reference/universe_batch2/mikrotik.bin"
+   ]
+  }
+ ],
+ "scenarios": {
+  "ub2_cloud_identity_mail_hunt": [
+   "vault",
+   "confluence",
+   "proofpoint"
+  ],
+  "ub2_ot_edge_routing_observation": [
+   "mikrotik",
+   "traefik",
+   "claroty",
+   "nginx"
+  ],
+  "ub2_database_backup_integrity": [
+   "mongodb",
+   "veeam"
+  ]
+ },
+ "counts_summary": {
+  "new_canonical_vendors": 9,
+  "new_product_integrations": 9,
+  "new_canonical_sourcetypes": 9,
+  "event_families": 18,
+  "scenario_packs": 3
+ },
+ "candidate_queue": [
+  {
+   "vendor_key": "cisco_other",
+   "app_count": 22,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "proofpoint",
+   "app_count": 11,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "ibm_qradar",
+   "app_count": 10,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "pavo_metrics",
+   "app_count": 9,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "trellix_mcafee",
+   "app_count": 9,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "akamai",
+   "app_count": 8,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "atlassian",
+   "app_count": 8,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "oracle",
+   "app_count": 7,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "tenable",
+   "app_count": 6,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "vectra_ai",
+   "app_count": 6,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "beyondtrust",
+   "app_count": 6,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "manageengine_zoho",
+   "app_count": 6,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "hitachi_vantara",
+   "app_count": 6,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "hashicorp",
+   "app_count": 5,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "ivanti",
+   "app_count": 4,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "servicenow",
+   "app_count": 4,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "slack",
+   "app_count": 4,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "ubiquiti",
+   "app_count": 4,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "elastic",
+   "app_count": 4,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "qualys",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "sailpoint",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "netapp",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "varonis",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "rapid7",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "onelogin",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "sysdig",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "sentinelone",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "pure_storage",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "docusign",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "salesforce",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "eset",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "gitlab",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "bitdefender",
+   "app_count": 3,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "tanium",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "imperva",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "corelight",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "cybereason",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "malwarebytes",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "github",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "zyxel",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "cribl",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "claroty",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "pfsense_netgate",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "commvault",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "barracuda",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "threatconnect",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "cyberark",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "virustotal",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "traefik",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "cilium_isovalent",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "misp_project",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "clickhouse",
+   "app_count": 2,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "ping_identity",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "darktrace",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "mikrotik",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "greynoise",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "kaspersky",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "solarwinds",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "wireguard",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "eclecticiq",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "mongodb",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "veritas",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "trend_micro",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "veeam",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  },
+  {
+   "vendor_key": "hp_enterprise",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "UNASSESSED_OR_EVIDENCE_TA_BLOCKED"
+  },
+  {
+   "vendor_key": "nginx_f5",
+   "app_count": 1,
+   "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED",
+   "batch2_status": "IMPLEMENTED_LIMITED_FAMILIES"
+  }
+ ],
+ "candidate_products": [
+  [
+   "proxmox",
+   3
+  ],
+  [
+   "fortra dlp",
+   2
+  ],
+  [
+   "airlock digital",
+   2
+  ],
+  [
+   "forescout",
+   2
+  ],
+  [
+   "illumio",
+   2
+  ],
+  [
+   "dtex intercept insider risk intelligence and endpoint telemetry",
+   2
+  ],
+  [
+   "netapp storagegrid",
+   2
+  ],
+  [
+   "vulndb",
+   2
+  ],
+  [
+   "tenable",
+   2
+  ],
+  [
+   "observeit (proofpoint) on-prem",
+   2
+  ],
+  [
+   "proofpoint on demand email security",
+   2
+  ],
+  [
+   "servicenow security operations event ingestion",
+   2
+  ],
+  [
+   "threatquotient",
+   2
+  ],
+  [
+   "securityscorecard",
+   2
+  ],
+  [
+   "flashpoint",
+   2
+  ],
+  [
+   "druva",
+   2
+  ],
+  [
+   "armis",
+   2
+  ],
+  [
+   "webex",
+   2
+  ],
+  [
+   "orca security",
+   2
+  ],
+  [
+   "sysdig",
+   2
+  ],
+  [
+   "lansweeper",
+   2
+  ],
+  [
+   "safebreach",
+   2
+  ],
+  [
+   "onelogin",
+   2
+  ],
+  [
+   "cyfirma decyfir",
+   2
+  ],
+  [
+   "clockify",
+   2
+  ],
+  [
+   "google scc",
+   2
+  ],
+  [
+   "ctm360",
+   2
+  ],
+  [
+   "admin ninja",
+   2
+  ],
+  [
+   "picus security",
+   2
+  ],
+  [
+   "vectra xdr",
+   2
+  ],
+  [
+   "browsermon",
+   2
+  ],
+  [
+   "akamai guardicore",
+   2
+  ],
+  [
+   "syscloud",
+   2
+  ],
+  [
+   "auguria skl",
+   2
+  ],
+  [
+   "hitachi vsp one object v3.x",
+   2
+  ],
+  [
+   "insitzes",
+   2
+  ],
+  [
+   "data dictionary",
+   2
+  ],
+  [
+   "hitachi vsp one block",
+   2
+  ],
+  [
+   "netkit",
+   2
+  ],
+  [
+   "scaleway",
+   2
+  ],
+  [
+   "xage",
+   2
+  ],
+  [
+   "ssl certificate monitor",
+   2
+  ],
+  [
+   "perseeva lakeview",
+   2
+  ],
+  [
+   "cef extraction",
+   1
+  ],
+  [
+   "pavo getwatchlist",
+   1
+  ],
+  [
+   "pingfederate",
+   1
+  ],
+  [
+   "uberagent log collector",
+   1
+  ],
+  [
+   "netflow",
+   1
+  ],
+  [
+   "user agents",
+   1
+  ],
+  [
+   "netmotion mobile iq",
+   1
+  ],
+  [
+   "collectd",
+   1
+  ],
+  [
+   "proofpoint - et",
+   1
+  ],
+  [
+   "stormshield network security",
+   1
+  ],
+  [
+   "qualyscloudplatform",
+   1
+  ],
+  [
+   "uberagent indexer",
+   1
+  ],
+  [
+   "pagerduty",
+   1
+  ],
+  [
+   "singapore transport tiwtter monitoring",
+   1
+  ],
+  [
+   "ntp nix",
+   1
+  ],
+  [
+   "ntp win",
+   1
+  ],
+  [
+   "broken hosts",
+   1
+  ],
+  [
+   "insightfinder",
+   1
+  ],
+  [
+   "forescout adaptive response",
+   1
+  ],
+  [
+   "trapx deceptiongrid",
+   1
+  ],
+  [
+   "demisto",
+   1
+  ],
+  [
+   "rirstats",
+   1
+  ],
+  [
+   "darktrace",
+   1
+  ],
+  [
+   "proofpoint tap",
+   1
+  ],
+  [
+   "swimlane",
+   1
+  ],
+  [
+   "bluecat dns edge technical",
+   1
+  ],
+  [
+   "corelight",
+   1
+  ],
+  [
+   "corelightfor",
+   1
+  ],
+  [
+   "hangsout chat webhook",
+   1
+  ],
+  [
+   "servicenow security operations",
+   1
+  ],
+  [
+   "metricator for nmon",
+   1
+  ],
+  [
+   "collectd2",
+   1
+  ],
+  [
+   "metricator hec for nmon",
+   1
+  ],
+  [
+   "smseagle sms alerting",
+   1
+  ],
+  [
+   "ipinfo",
+   1
+  ],
+  [
+   "mimecast",
+   1
+  ],
+  [
+   "sailpoint identity security cloud auditevent",
+   1
+  ],
+  [
+   "zimperium",
+   1
+  ],
+  [
+   "webtools",
+   1
+  ],
+  [
+   "via verde",
+   1
+  ],
+  [
+   "malwarebytes",
+   1
+  ],
+  [
+   "rundeck enterprise",
+   1
+  ],
+  [
+   "entrust identity as a service",
+   1
+  ],
+  [
+   "pavo authentication",
+   1
+  ],
+  [
+   "pavo malware",
+   1
+  ],
+  [
+   "pavo network traffic",
+   1
+  ],
+  [
+   "pavo vulnerabilities",
+   1
+  ],
+  [
+   "pavo web proxies",
+   1
+  ],
+  [
+   "securosys primus hsm",
+   1
+  ],
+  [
+   "varonis",
+   1
+  ],
+  [
+   "synack",
+   1
+  ],
+  [
+   "mvdiff",
+   1
+  ],
+  [
+   "akamai siem",
+   1
+  ],
+  [
+   "vynamic security",
+   1
+  ],
+  [
+   "arcus data uber",
+   1
+  ],
+  [
+   "fail2ban",
+   1
+  ],
+  [
+   "tanium",
+   1
+  ],
+  [
+   "psono password manager",
+   1
+  ],
+  [
+   "jsonar",
+   1
+  ],
+  [
+   "egnyte secure and govern",
+   1
+  ],
+  [
+   "sap process orchestration",
+   1
+  ],
+  [
+   "telemetry privacy",
+   1
+  ],
+  [
+   "prtg input",
+   1
+  ],
+  [
+   "guardium",
+   1
+  ],
+  [
+   "mitre framework",
+   1
+  ],
+  [
+   "xpanse technical",
+   1
+  ],
+  [
+   "mothership",
+   1
+  ],
+  [
+   "ivanti service manager",
+   1
+  ],
+  [
+   "kaspersky",
+   1
+  ],
+  [
+   "ibm datapower",
+   1
+  ],
+  [
+   "crestron",
+   1
+  ],
+  [
+   "pavo intrusion",
+   1
+  ],
+  [
+   "es mothership",
+   1
+  ],
+  [
+   "kiteworks ciso dashboard",
+   1
+  ],
+  [
+   "onapsis",
+   1
+  ],
+  [
+   "whoisxmlapiquery",
+   1
+  ],
+  [
+   "sap api management monitoring",
+   1
+  ],
+  [
+   "apigee api management monitoring",
+   1
+  ],
+  [
+   "snaplogic monitoring",
+   1
+  ],
+  [
+   "dg_arc",
+   1
+  ],
+  [
+   "ivanti security controls",
+   1
+  ],
+  [
+   "assetnote",
+   1
+  ],
+  [
+   "sap cloud integration monitoring",
+   1
+  ],
+  [
+   "cyware ctix",
+   1
+  ],
+  [
+   "racing telemetry",
+   1
+  ],
+  [
+   "syslog priority extractor",
+   1
+  ],
+  [
+   "ibm cics performance analyzer for z/os sample",
+   1
+  ],
+  [
+   "open banking",
+   1
+  ],
+  [
+   "os ticket add on",
+   1
+  ],
+  [
+   "alibaba cloud log service",
+   1
+  ],
+  [
+   "enterprise sap solman",
+   1
+  ],
+  [
+   "jira service desk simple addon",
+   1
+  ],
+  [
+   "uptimerobot input",
+   1
+  ],
+  [
+   "anvilogic",
+   1
+  ],
+  [
+   "slack",
+   1
+  ],
+  [
+   "siemplify",
+   1
+  ],
+  [
+   "sandfly security",
+   1
+  ],
+  [
+   "zerofox",
+   1
+  ],
+  [
+   "lanscope on-premises",
+   1
+  ],
+  [
+   "certmanager",
+   1
+  ],
+  [
+   "cryptosuite",
+   1
+  ],
+  [
+   "bigpanda",
+   1
+  ],
+  [
+   "hashicorp vault",
+   1
+  ],
+  [
+   "rapid7 insightvm",
+   1
+  ],
+  [
+   "code42 insider threats add on",
+   1
+  ],
+  [
+   "gogs",
+   1
+  ],
+  [
+   "slashnext siem",
+   1
+  ],
+  [
+   "pavo dns",
+   1
+  ],
+  [
+   "auth0",
+   1
+  ],
+  [
+   "domaintools",
+   1
+  ],
+  [
+   "pavo endpoint",
+   1
+  ],
+  [
+   "microsoft smtp",
+   1
+  ],
+  [
+   "authentic8 silo",
+   1
+  ],
+  [
+   "cofense triage",
+   1
+  ],
+  [
+   "zabbix",
+   1
+  ],
+  [
+   "red hat advanced cluster security",
+   1
+  ],
+  [
+   "honeydb",
+   1
+  ],
+  [
+   "thehive cortex",
+   1
+  ],
+  [
+   "cenoti",
+   1
+  ],
+  [
+   "proofpoint casb",
+   1
+  ],
+  [
+   "pingaccess",
+   1
+  ],
+  [
+   "databricks",
+   1
+  ],
+  [
+   "ipqualityscore",
+   1
+  ],
+  [
+   "sentinelone",
+   1
+  ],
+  [
+   "technical add on sentinelone",
+   1
+  ],
+  [
+   "input add on for sentinelone",
+   1
+  ],
+  [
+   "claroty continuous threat detection (ctd)",
+   1
+  ],
+  [
+   "orion malware (omw)",
+   1
+  ],
+  [
+   "boomi monitoring",
+   1
+  ],
+  [
+   "akamai mfa",
+   1
+  ],
+  [
+   "fronius",
+   1
+  ],
+  [
+   "acunetix 360",
+   1
+  ],
+  [
+   "netsparker enterprise",
+   1
+  ],
+  [
+   "everpure unified",
+   1
+  ],
+  [
+   "purestorage unified",
+   1
+  ],
+  [
+   "proofpoint isolation",
+   1
+  ],
+  [
+   "pingdirectory",
+   1
+  ],
+  [
+   "n2ws",
+   1
+  ],
+  [
+   "opswat metaaccess",
+   1
+  ],
+  [
+   "jira tracking add on",
+   1
+  ],
+  [
+   "owl diode sender",
+   1
+  ],
+  [
+   "owl diode receiver",
+   1
+  ],
+  [
+   "pfsense",
+   1
+  ],
+  [
+   "beyond identity",
+   1
+  ],
+  [
+   "ionix",
+   1
+  ],
+  [
+   "egnyte collaborate",
+   1
+  ],
+  [
+   "qualys edr",
+   1
+  ],
+  [
+   "cyences",
+   1
+  ],
+  [
+   "docusign monitor dashboards and alerts",
+   1
+  ],
+  [
+   "solace monitoring",
+   1
+  ],
+  [
+   "twilio alertaction",
+   1
+  ],
+  [
+   "twilio",
+   1
+  ],
+  [
+   "miro",
+   1
+  ],
+  [
+   "defender atp status check",
+   1
+  ],
+  [
+   "googlebigquery",
+   1
+  ],
+  [
+   "microsoft graph security score",
+   1
+  ],
+  [
+   "mojimoji",
+   1
+  ],
+  [
+   "linode",
+   1
+  ],
+  [
+   "commvault",
+   1
+  ],
+  [
+   "avanan siem",
+   1
+  ],
+  [
+   "hashicorp cloud platform",
+   1
+  ],
+  [
+   "slack app alert",
+   1
+  ],
+  [
+   "asana",
+   1
+  ],
+  [
+   "axonius",
+   1
+  ],
+  [
+   "cisco cyber vision",
+   1
+  ],
+  [
+   "cisco_cybervision",
+   1
+  ],
+  [
+   "dnslookup",
+   1
+  ],
+  [
+   "automox",
+   1
+  ],
+  [
+   "mandiant advantage",
+   1
+  ],
+  [
+   "restart_it",
+   1
+  ],
+  [
+   "jupiterone",
+   1
+  ],
+  [
+   "jira issue input",
+   1
+  ],
+  [
+   "maxmind geoip2",
+   1
+  ],
+  [
+   "zyxel",
+   1
+  ],
+  [
+   "menlo security",
+   1
+  ],
+  [
+   "securitybridge for sap",
+   1
+  ],
+  [
+   "icmp",
+   1
+  ],
+  [
+   "infoblox gridmanager",
+   1
+  ],
+  [
+   "constella dome",
+   1
+  ],
+  [
+   "cynalytica ics monitoring",
+   1
+  ],
+  [
+   "securelink",
+   1
+  ],
+  [
+   "island",
+   1
+  ],
+  [
+   "luminar iocs and leaked credentials",
+   1
+  ],
+  [
+   "salem",
+   1
+  ],
+  [
+   "splunkdiode sender addon",
+   1
+  ],
+  [
+   "splunkdiode receiver addon",
+   1
+  ],
+  [
+   "spycloud",
+   1
+  ],
+  [
+   "palo_alto_cortex_xdr_endpoint_retriever",
+   1
+  ],
+  [
+   "cisco secure network analytics (stealthwatch)",
+   1
+  ],
+  [
+   "cyware orchestrate",
+   1
+  ],
+  [
+   "cybereason",
+   1
+  ],
+  [
+   "alert_forwarder",
+   1
+  ],
+  [
+   "hatching triage",
+   1
+  ],
+  [
+   "gencon event analysis",
+   1
+  ],
+  [
+   "dragos ot",
+   1
+  ],
+  [
+   "tcpcheck",
+   1
+  ],
+  [
+   "nodezero",
+   1
+  ],
+  [
+   "trinity cyber",
+   1
+  ],
+  [
+   "microsoft 365 defender threat vulnerability",
+   1
+  ],
+  [
+   "certificates expiry",
+   1
+  ],
+  [
+   "elasticspl",
+   1
+  ],
+  [
+   "monday.com",
+   1
+  ],
+  [
+   "dataminr agentic tip",
+   1
+  ],
+  [
+   "risk superhandler",
+   1
+  ],
+  [
+   "claroty xdome",
+   1
+  ],
+  [
+   "vade for m365",
+   1
+  ],
+  [
+   "ibm qradar soar",
+   1
+  ],
+  [
+   "confluent kafka monitoring",
+   1
+  ],
+  [
+   "aishield ai security monitoring",
+   1
+  ],
+  [
+   "lanscope cloud",
+   1
+  ],
+  [
+   "splunkadmins",
+   1
+  ],
+  [
+   "sepio",
+   1
+  ],
+  [
+   "nexpose",
+   1
+  ],
+  [
+   "zero networks",
+   1
+  ],
+  [
+   "bigid audit logs",
+   1
+  ],
+  [
+   "add on for apple unified logging",
+   1
+  ],
+  [
+   "eclecticiq intelligence center",
+   1
+  ],
+  [
+   "aiops sfcc logs",
+   1
+  ],
+  [
+   "salesforce monitoring",
+   1
+  ],
+  [
+   "rst threat feed",
+   1
+  ],
+  [
+   "xm cyber",
+   1
+  ],
+  [
+   "hispasec",
+   1
+  ],
+  [
+   "saviynt events",
+   1
+  ],
+  [
+   "virustotal app",
+   1
+  ],
+  [
+   "wiz",
+   1
+  ],
+  [
+   "digital shadows searchlight",
+   1
+  ],
+  [
+   "lumu",
+   1
+  ],
+  [
+   "domain controller (dc) monitoring",
+   1
+  ],
+  [
+   "ibm maas360",
+   1
+  ],
+  [
+   "ip_fabric",
+   1
+  ],
+  [
+   "fwlog_eventgen",
+   1
+  ],
+  [
+   "apache_access_eventgen",
+   1
+  ],
+  [
+   "squid_proxy_eventgen",
+   1
+  ],
+  [
+   "mailchimp",
+   1
+  ],
+  [
+   "freshdesk",
+   1
+  ],
+  [
+   "bluecat_ipam",
+   1
+  ],
+  [
+   "pingone",
+   1
+  ],
+  [
+   "soc prime ccm",
+   1
+  ],
+  [
+   "liveagent",
+   1
+  ],
+  [
+   "supportbee",
+   1
+  ],
+  [
+   "openai api",
+   1
+  ],
+  [
+   "mural",
+   1
+  ],
+  [
+   "vision one",
+   1
+  ],
+  [
+   "bookstack",
+   1
+  ],
+  [
+   "edgescan",
+   1
+  ],
+  [
+   "microsoft exchange smtp",
+   1
+  ],
+  [
+   "fortidlp",
+   1
+  ],
+  [
+   "analyst1",
+   1
+  ],
+  [
+   "nessus security scans dashboards",
+   1
+  ],
+  [
+   "knowledge object purge master",
+   1
+  ],
+  [
+   "gitlab",
+   1
+  ],
+  [
+   "aiops magento",
+   1
+  ],
+  [
+   "spycloud investigations",
+   1
+  ],
+  [
+   "cisco enterprise networking netflow",
+   1
+  ],
+  [
+   "microsoft public ip generic",
+   1
+  ],
+  [
+   "emby",
+   1
+  ],
+  [
+   "network monitoring",
+   1
+  ],
+  [
+   "ignio integration",
+   1
+  ],
+  [
+   "detection backfill",
+   1
+  ],
+  [
+   "fortindr cloud",
+   1
+  ],
+  [
+   "s3spl",
+   1
+  ],
+  [
+   "beyondtrust privileged remote access",
+   1
+  ],
+  [
+   "conceal",
+   1
+  ],
+  [
+   "conceal add on",
+   1
+  ],
+  [
+   "tripwire enterprise",
+   1
+  ],
+  [
+   "hetrix",
+   1
+  ],
+  [
+   "guard detect",
+   1
+  ],
+  [
+   "transmit security events",
+   1
+  ],
+  [
+   "soc prime attack detective",
+   1
+  ],
+  [
+   "ccx extensions for slack",
+   1
+  ],
+  [
+   "varonis search and reporting",
+   1
+  ],
+  [
+   "ipurl ioc ingestion",
+   1
+  ],
+  [
+   "cyberark next-gen access",
+   1
+  ],
+  [
+   "linked data",
+   1
+  ],
+  [
+   "windows firewall status check",
+   1
+  ],
+  [
+   "windows certificate store",
+   1
+  ],
+  [
+   "green alerts",
+   1
+  ],
+  [
+   "trellix mvision epo",
+   1
+  ],
+  [
+   "mongo audit",
+   1
+  ],
+  [
+   "abuseipdb",
+   1
+  ],
+  [
+   "psnc framework",
+   1
+  ],
+  [
+   "bugfender",
+   1
+  ],
+  [
+   "obsidian security",
+   1
+  ],
+  [
+   "cyberint argos",
+   1
+  ],
+  [
+   "nvd cve fetcher",
+   1
+  ],
+  [
+   "sysdig vm",
+   1
+  ],
+  [
+   "lookout mobile threat defense",
+   1
+  ],
+  [
+   "ansible awx",
+   1
+  ],
+  [
+   "trellix epo saas connector",
+   1
+  ],
+  [
+   "evolven app",
+   1
+  ],
+  [
+   "clickup",
+   1
+  ],
+  [
+   "hubspot",
+   1
+  ],
+  [
+   "o11y (splunk observability)",
+   1
+  ],
+  [
+   "workspaceone",
+   1
+  ],
+  [
+   "oodrive_logs_fetching",
+   1
+  ],
+  [
+   "apto solutions telemetry technical",
+   1
+  ],
+  [
+   "gigamon_deep_observability_app",
+   1
+  ],
+  [
+   "honeywell",
+   1
+  ],
+  [
+   "cybelangel",
+   1
+  ],
+  [
+   "gitlab (saas)",
+   1
+  ],
+  [
+   "snyk",
+   1
+  ],
+  [
+   "mandiant threat intelligence",
+   1
+  ],
+  [
+   "puppet alert orchestrator",
+   1
+  ],
+  [
+   "input control center",
+   1
+  ],
+  [
+   "cyera",
+   1
+  ],
+  [
+   "cyberwatch syslog",
+   1
+  ],
+  [
+   "mesh",
+   1
+  ],
+  [
+   "team cymru scout",
+   1
+  ],
+  [
+   "google threat intelligence",
+   1
+  ],
+  [
+   "rapid7 insightappsec",
+   1
+  ],
+  [
+   "youtube",
+   1
+  ],
+  [
+   "ipgeolocation.io",
+   1
+  ],
+  [
+   "threatworx",
+   1
+  ],
+  [
+   "silent push",
+   1
+  ],
+  [
+   "veritas netbackup flex",
+   1
+  ],
+  [
+   "index health",
+   1
+  ],
+  [
+   "wiz discovered vms",
+   1
+  ],
+  [
+   "manageengine endpoint central",
+   1
+  ],
+  [
+   "manageengine vulnerability manager plus",
+   1
+  ],
+  [
+   "infoblox",
+   1
+  ],
+  [
+   "vade for google workspace",
+   1
+  ],
+  [
+   "mac oui lookup",
+   1
+  ],
+  [
+   "opencti",
+   1
+  ],
+  [
+   "unifi cloud",
+   1
+  ],
+  [
+   "cortex xsoar analytics",
+   1
+  ],
+  [
+   "gigamon cim",
+   1
+  ],
+  [
+   "pingone advanced identity cloud",
+   1
+  ],
+  [
+   "cohesity",
+   1
+  ],
+  [
+   "auvik networks",
+   1
+  ],
+  [
+   "uxm - waterfall visualization",
+   1
+  ],
+  [
+   "uxm - worldmap visualization",
+   1
+  ],
+  [
+   "uxm - indexer",
+   1
+  ],
+  [
+   "nextdns api",
+   1
+  ],
+  [
+   "cisco enterprise networking",
+   1
+  ],
+  [
+   "ip2location ip geolocation",
+   1
+  ],
+  [
+   "splunk add on for ibm ns1",
+   1
+  ],
+  [
+   "alert to mqtt",
+   1
+  ],
+  [
+   "threatmodeler",
+   1
+  ],
+  [
+   "ibm storage defender",
+   1
+  ],
+  [
+   "cloudsek threat intelligence",
+   1
+  ],
+  [
+   "abusech",
+   1
+  ],
+  [
+   "dissect",
+   1
+  ],
+  [
+   "trend micro ddi",
+   1
+  ],
+  [
+   "qumulo",
+   1
+  ],
+  [
+   "trustlogin",
+   1
+  ],
+  [
+   "axur data connector",
+   1
+  ],
+  [
+   "eset cloud protect",
+   1
+  ],
+  [
+   "gdoa_cef",
+   1
+  ],
+  [
+   "swift agi",
+   1
+  ],
+  [
+   "bitdefender gravityzone for splunk dashboard",
+   1
+  ],
+  [
+   "gravityzone",
+   1
+  ],
+  [
+   "trend micro deep security",
+   1
+  ],
+  [
+   "mad",
+   1
+  ],
+  [
+   "reco",
+   1
+  ],
+  [
+   "inputs conf generator - ds",
+   1
+  ],
+  [
+   "inputs conf generator - sh",
+   1
+  ],
+  [
+   "cynerio",
+   1
+  ],
+  [
+   "torq_cases",
+   1
+  ],
+  [
+   "get diag",
+   1
+  ],
+  [
+   "searchlight cyber for splunk - darkiq",
+   1
+  ],
+  [
+   "right-hand cybersecurity hrm",
+   1
+  ],
+  [
+   "prisma cloud audit",
+   1
+  ],
+  [
+   "stocks",
+   1
+  ],
+  [
+   "clickhouse cloud audit",
+   1
+  ],
+  [
+   "databee",
+   1
+  ],
+  [
+   "rootly",
+   1
+  ],
+  [
+   "riskrecon",
+   1
+  ],
+  [
+   "ds management",
+   1
+  ],
+  [
+   "manageengine oputils",
+   1
+  ],
+  [
+   "netapp_cloud_insights_secure",
+   1
+  ],
+  [
+   "bastille",
+   1
+  ],
+  [
+   "stairwell",
+   1
+  ],
+  [
+   "team cymru insights feed",
+   1
+  ],
+  [
+   "splunkbase",
+   1
+  ],
+  [
+   "spex add-on for microsoft m365",
+   1
+  ],
+  [
+   "companies house",
+   1
+  ],
+  [
+   "ncm security central",
+   1
+  ],
+  [
+   "digicert one",
+   1
+  ],
+  [
+   "bloodhound enterprise",
+   1
+  ],
+  [
+   "security threat intel",
+   1
+  ],
+  [
+   "manageengine site24x7",
+   1
+  ],
+  [
+   "elasticsearch",
+   1
+  ],
+  [
+   "microsoft edge for business",
+   1
+  ],
+  [
+   "teamviewer",
+   1
+  ],
+  [
+   "threatmon threat intelligence",
+   1
+  ],
+  [
+   "ermes browser security",
+   1
+  ],
+  [
+   "mandiant digital threat monitoring",
+   1
+  ],
+  [
+   "red hat event driven ansible",
+   1
+  ],
+  [
+   "hunt.io",
+   1
+  ],
+  [
+   "socradar incidents",
+   1
+  ],
+  [
+   "socradar feeds",
+   1
+  ],
+  [
+   "socradar taxii21",
+   1
+  ],
+  [
+   "apto nist dashboarding",
+   1
+  ],
+  [
+   "virustotal",
+   1
+  ],
+  [
+   "security onion",
+   1
+  ],
+  [
+   "proofpoint incidents",
+   1
+  ],
+  [
+   "llm command scoring",
+   1
+  ],
+  [
+   "govslack",
+   1
+  ],
+  [
+   "keeper.io",
+   1
+  ],
+  [
+   "cirrus identity bridge",
+   1
+  ],
+  [
+   "nvd cve",
+   1
+  ],
+  [
+   "armory",
+   1
+  ],
+  [
+   "crogl add on",
+   1
+  ],
+  [
+   "elasticsearch to splunkedgeprocessor",
+   1
+  ],
+  [
+   "nessus cim mapper",
+   1
+  ],
+  [
+   "onetrust_assessments",
+   1
+  ],
+  [
+   "apto solutions on-prem telemetry",
+   1
+  ],
+  [
+   "datalake2splunk v3",
+   1
+  ],
+  [
+   "torq",
+   1
+  ],
+  [
+   "alphalevel alert refinery",
+   1
+  ],
+  [
+   "hpe networking clearpass",
+   1
+  ],
+  [
+   "threat intel enrichment ai",
+   1
+  ],
+  [
+   "netbrain automation",
+   1
+  ],
+  [
+   "1password cli tool",
+   1
+  ],
+  [
+   "get public ip",
+   1
+  ],
+  [
+   "ufdbguard",
+   1
+  ],
+  [
+   "vulncheck exploit intelligence",
+   1
+  ],
+  [
+   "bitbucket",
+   1
+  ],
+  [
+   "manageengine alert action",
+   1
+  ],
+  [
+   "nats",
+   1
+  ],
+  [
+   "suhlabs emass",
+   1
+  ],
+  [
+   "linkshadowndr",
+   1
+  ],
+  [
+   "any.run",
+   1
+  ],
+  [
+   "gemini",
+   1
+  ],
+  [
+   "sectigo audit",
+   1
+  ],
+  [
+   "macos",
+   1
+  ],
+  [
+   "nsf sangfor",
+   1
+  ],
+  [
+   "cribl decrypt",
+   1
+  ],
+  [
+   "guardium api",
+   1
+  ],
+  [
+   "telegram",
+   1
+  ],
+  [
+   "vs code audit",
+   1
+  ],
+  [
+   "send pdf dashboard alert action",
+   1
+  ],
+  [
+   "hitachi hcp classic",
+   1
+  ],
+  [
+   "dropzone ai",
+   1
+  ],
+  [
+   "ransomware",
+   1
+  ],
+  [
+   "trellix epo",
+   1
+  ],
+  [
+   "lcs plug in",
+   1
+  ],
+  [
+   "splunklint",
+   1
+  ],
+  [
+   "alpha level linux",
+   1
+  ],
+  [
+   "alpha level windows",
+   1
+  ],
+  [
+   "vercel drains",
+   1
+  ],
+  [
+   "opencti for splunk enterprise",
+   1
+  ],
+  [
+   "brandefense",
+   1
+  ],
+  [
+   "spaces",
+   1
+  ],
+  [
+   "stig compliance",
+   1
+  ],
+  [
+   "dark web scan by bechtle",
+   1
+  ],
+  [
+   "viavi observer apex",
+   1
+  ],
+  [
+   "smime mailer",
+   1
+  ],
+  [
+   "aviatrix",
+   1
+  ],
+  [
+   "upstream",
+   1
+  ],
+  [
+   "qualibooth",
+   1
+  ],
+  [
+   "csmon",
+   1
+  ],
+  [
+   "maxmind geoip",
+   1
+  ],
+  [
+   "deslicer ai insights",
+   1
+  ],
+  [
+   "cato networks cim",
+   1
+  ],
+  [
+   "cato networks security",
+   1
+  ],
+  [
+   "nucleus user logs",
+   1
+  ],
+  [
+   "spoofsentry",
+   1
+  ],
+  [
+   "ensign_elasticsearch_add on modular_input",
+   1
+  ],
+  [
+   "ensign akamai web security",
+   1
+  ],
+  [
+   "red river zero trust gap analysis",
+   1
+  ],
+  [
+   "elastic search",
+   1
+  ],
+  [
+   "whisper security graph",
+   1
+  ],
+  [
+   "terrace",
+   1
+  ],
+  [
+   "anchore",
+   1
+  ],
+  [
+   "anthropic_compliance_api",
+   1
+  ],
+  [
+   "ad overview",
+   1
+  ],
+  [
+   "shieldworkz ndr",
+   1
+  ],
+  [
+   "confluence and jira audit",
+   1
+  ],
+  [
+   "cryptview",
+   1
+  ],
+  [
+   "usom cti",
+   1
+  ],
+  [
+   "windows_uf_upgrade_parsing",
+   1
+  ],
+  [
+   "windows_uf_upgrade_automation",
+   1
+  ],
+  [
+   "uk open data",
+   1
+  ],
+  [
+   "crytica app for alerting",
+   1
+  ],
+  [
+   "withsecure elements",
+   1
+  ],
+  [
+   "webtools pro",
+   1
+  ],
+  [
+   "cms technical",
+   1
+  ],
+  [
+   "postfix mail",
+   1
+  ],
+  [
+   "whiteboard",
+   1
+  ],
+  [
+   "mars alert forwarding",
+   1
+  ],
+  [
+   "darkstrata threat intelligence",
+   1
+  ],
+  [
+   "uxm - unified timeline visualization",
+   1
+  ],
+  [
+   "sapience core",
+   1
+  ],
+  [
+   "cryptview collector",
+   1
+  ],
+  [
+   "llmgateway",
+   1
+  ],
+  [
+   "missioncontrol inventory",
+   1
+  ],
+  [
+   "carbide",
+   1
+  ],
+  [
+   "vali cyber zerolock",
+   1
+  ],
+  [
+   "keri borealis",
+   1
+  ],
+  [
+   "qualys cloud connector",
+   1
+  ],
+  [
+   "appgate_sdp",
+   1
+  ],
+  [
+   "guardrails",
+   1
+  ],
+  [
+   "rubric protocol",
+   1
+  ],
+  [
+   "flare",
+   1
+  ],
+  [
+   "bxti global relay splunk ta",
+   1
+  ],
+  [
+   "airspace watch",
+   1
+  ],
+  [
+   "carbonio mail",
+   1
+  ],
+  [
+   "attack path intelligence",
+   1
+  ],
+  [
+   "active directory monitoring",
+   1
+  ],
+  [
+   "nordstellar",
+   1
+  ],
+  [
+   "siemens tc",
+   1
+  ],
+  [
+   "posthog activity logs",
+   1
+  ],
+  [
+   "ptnad",
+   1
+  ],
+  [
+   "quantumgenie",
+   1
+  ],
+  [
+   "leakdata exposure monitoring",
+   1
+  ],
+  [
+   "airtable auditlogs",
+   1
+  ],
+  [
+   "statseeker",
+   1
+  ],
+  [
+   "ransomleak",
+   1
+  ],
+  [
+   "macadress",
+   1
+  ],
+  [
+   "invicti platform",
+   1
+  ],
+  [
+   "windows firewall posture",
+   1
+  ],
+  [
+   "trustmodel",
+   1
+  ],
+  [
+   "cip ti feed",
+   1
+  ],
+  [
+   "oracle cloud infrastructure",
+   1
+  ],
+  [
+   "xaidr",
+   1
+  ],
+  [
+   "cyberhaven data security",
+   1
+  ],
+  [
+   "appgate demo",
+   1
+  ],
+  [
+   "wallix bastion",
+   1
+  ],
+  [
+   "vulnerability catalog",
+   1
+  ],
+  [
+   "e2g plant asset integrity",
+   1
+  ],
+  [
+   "genesys cloud",
+   1
+  ],
+  [
+   "openai compliance",
+   1
+  ],
+  [
+   "eol",
+   1
+  ],
+  [
+   "astelia",
+   1
+  ],
+  [
+   "unifi network",
+   1
+  ],
+  [
+   "unifi",
+   1
+  ],
+  [
+   "log10x",
+   1
+  ],
+  [
+   "socradar incidents mssp",
+   1
+  ],
+  [
+   "gitlab self-managed",
+   1
+  ],
+  [
+   "glpi",
+   1
+  ],
+  [
+   "hexnode uem",
+   1
+  ],
+  [
+   "socradar vulnerability",
+   1
+  ],
+  [
+   "phosphorus",
+   1
+  ],
+  [
+   "rovix universal api",
+   1
+  ],
+  [
+   "openai decisions",
+   1
+  ],
+  [
+   "bxti method security",
+   1
+  ],
+  [
+   "ptsandbox",
+   1
+  ],
+  [
+   "openappsec npm",
+   1
+  ],
+  [
+   "smartermail",
+   1
+  ]
+ ],
+ "bounded_deferrals": [
+  {
+   "candidate": "CyberArk PAS",
+   "reason": "Fetched fixture is a custom Elastic JSON syslog template, not default vendor-native CEF; no generator graduated."
+  },
+  {
+   "candidate": "Trellix ePO; Illumio; Proofpoint PDS",
+   "reason": "Existing RAW evidence blockers retained; Proofpoint TAP does not cover PDS."
+  },
+  {
+   "candidate": "Corelight; IBM MQ",
+   "reason": "Selected integration fixture paths unavailable in the bounded lookup; not proof products lack public evidence."
+  },
+  {
+   "candidate": "RouterOS LTE, PPP and 5G core",
+   "reason": "Only documented administrator-login and OSPF hello messages selected; no cellular event-family claim."
+  }
+ ],
+ "live_verification": {
+  "results_file": "catalog/universe_batch2_current_raw_equality_results.json",
+  "status": "PASS",
+  "run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93"
+ },
+ "ta_parser_verification": {
+  "new_verified_sourcetypes": 0,
+  "status": "BLOCKED_NO_CONTROLLED_INSTALLED_TA_CHECKS"
+ },
+ "detection_validation": {
+  "verified_detections": 0,
+  "status": "NOT_PERFORMED"
+ },
+ "limitations": [
+  "Integration fixtures are evidence of native grammar, not production captures.",
+  "RouterOS console records are vendor documented, not remote syslog conformance tests.",
+  "Veeam fixture is native message payload without a record timestamp; current event time is provided in LogEntry/HEC metadata.",
+  "Three sourcetype mappings are PulseForge-defined pending TA mapping; no parser compatibility assumed.",
+  "Complete candidate input retained; limited implemented families do not imply complete vendor/product coverage."
+ ]
+}

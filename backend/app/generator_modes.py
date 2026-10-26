@@ -153,6 +153,54 @@ class TelemetryGeneratorService:
             logger.debug(f"Failed parsing sample file {file_path}: {e}")
         return events
 
+    def _universe_source(self, sourcetype):
+        from netspout_core.universe_batch2_engine import batch_registry
+        from netspout_core.universe_batch1_engine import UNIVERSE_BATCH1_SOURCE_SOURCETYPES
+        source = next((s for s in batch_registry()['sources'] if s['splunk_sourcetype'] == sourcetype), None)
+        if source:
+            return source, 'catalog/universe_batch2.json'
+        if sourcetype in UNIVERSE_BATCH1_SOURCE_SOURCETYPES:
+            path = os.path.join(self.catalog.catalog_dir, 'universe_batch1.json')
+            with open(path) as handle:
+                source = next(s for s in json.load(handle)['sources'] if s['splunk_sourcetype'] == sourcetype)
+            return source, 'catalog/universe_batch1.json'
+        return None, None
+
+    def _universe_entry(self, source, vendor_id, family=None):
+        if source['vendor'] != vendor_id:
+            raise ValueError('Vendor does not own the requested sourcetype')
+        family = family or source['event_families'][0]
+        if family not in source['event_families']:
+            raise ValueError('Unsupported native event family')
+        device = Node(id='source-preview', name='source-preview.example.test',
+                      type=NodeType.WEB_SERVER, ip_address='198.51.100.10')
+        if source.get('batch_source_id') in ('vault','traefik','claroty','mongodb','confluence','nginx','proofpoint','veeam','mikrotik'):
+            entry = SplunkLogEngine.format_universe_batch2_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)
+        else:
+            kwargs = dict(device=device, family=family)
+            if source['splunk_sourcetype'] == 'bluecoat:proxysg:access:file':
+                kwargs['src_ip'] = '192.0.2.10'
+            entry = getattr(SplunkLogEngine, source['generator'])(**kwargs)
+        entry.netspout_event_id = str(uuid.uuid4())
+        entry.netspout_ground_truth = 'synthetic_observation'
+        return entry
+
+    def generate_universe_scenario(self, scenario_id, run_id=None, dispatch=False, transport_config=None):
+        from netspout_core.authentic_scenario_packs import run_scenario_pack
+        from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
+        if scenario_id not in BATCH2_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+            raise ValueError('Unsupported universe scenario')
+        entries = run_scenario_pack(scenario_id, run_id or 'pf-universe-' + str(uuid.uuid4()))
+        results = []
+        if dispatch:
+            if transport_config is None:
+                raise ValueError('Explicit transport configuration required for scenario dispatch')
+            results = [dispatcher.dispatch_log(entry, transport_config) for entry in entries]
+        return dict(mode='SCENARIO', status='GENERATED', scenario_id=scenario_id,
+                    run_id=entries[0].netspout_run_id, count_generated=len(entries),
+                    events=[entry.model_dump() for entry in entries], dispatch_results=results,
+                    dispatched=dispatch)
+
     def generate_single_event(
         self,
         vendor_id: str,
@@ -166,6 +214,16 @@ class TelemetryGeneratorService:
         MODE D: Generate exactly one precision event.
         Guarantees zero fabricated vendor telemetry.
         """
+        source, reference = self._universe_source(sourcetype)
+        if source:
+            entry = self._universe_entry(source, vendor_id, event_name)
+            cfg = transport_config or TelemetryTransportConfig(hec_index=index or 'idx_network_ops')
+            result = dispatcher.dispatch_log(entry, cfg) if dispatch else None
+            return dict(mode='SINGLE_EVENT', status='GROUNDED', event_id=entry.netspout_event_id,
+                        vendor_id=vendor_id, sourcetype=sourcetype, event_name=entry.signature,
+                        index=index or 'idx_network_ops', host=entry.device_id, raw=entry.raw_log,
+                        provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
+                        dispatched=dispatch, dispatch_result=result)
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -210,7 +268,7 @@ class TelemetryGeneratorService:
                 hec_url="https://127.0.0.1:8088/services/collector",
                 hec_index=target_index
             )
-            dispatch_result = dispatcher.dispatch_log_entry(log_entry, cfg)
+            dispatch_result = dispatcher.dispatch_log(log_entry, cfg)
 
         return {
             "mode": "SINGLE_EVENT",
@@ -245,6 +303,22 @@ class TelemetryGeneratorService:
         MODE C: Generate a batch of events for a specific sourcetype / event family.
         Guarantees zero fabricated vendor telemetry.
         """
+        source, reference = self._universe_source(sourcetype)
+        if source:
+            if not 1 <= count <= 1000:
+                raise ValueError('Universe batch count must be between 1 and 1000')
+            families = event_families or source['event_families']
+            if any(f not in source['event_families'] for f in families):
+                raise ValueError('Unsupported native event family')
+            entries = [self._universe_entry(source, vendor_id, families[i % len(families)]) for i in range(count)]
+            cfg = transport_config or TelemetryTransportConfig(hec_index=index or 'idx_network_ops')
+            results = [dispatcher.dispatch_log(entry, cfg) for entry in entries] if dispatch else []
+            successful = sum(bool((r.get('hec') or {}).get('success') or (r.get('syslog') or {}).get('success')) for r in results)
+            return dict(mode='SOURCETYPE_BATCH', status='GROUNDED', vendor_id=vendor_id, sourcetype=sourcetype,
+                        count_requested=count, count_generated=len(entries), count_dispatched=successful,
+                        rate_eps=rate_eps, index=index or 'idx_network_ops', event_families=families,
+                        provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
+                        sample_preview=[entry.raw_log for entry in entries[:3]])
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -295,7 +369,7 @@ class TelemetryGeneratorService:
                     netspout_event_id=ev_id,
                     netspout_ground_truth="true"
                 )
-                res = dispatcher.dispatch_log_entry(entry, cfg)
+                res = dispatcher.dispatch_log(entry, cfg)
                 if res.get("hec", {}).get("success") or res.get("syslog", {}).get("success"):
                     dispatched_count += 1
 

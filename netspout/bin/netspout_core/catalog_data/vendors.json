@@ -2371,5 +2371,239 @@
   "primary_sourcetypes": [
    "nozomi:universal_alert"
   ]
+ },
+ {
+  "id": "hashicorp",
+  "legacy_id": "hashicorp",
+  "name": "HashiCorp",
+  "slug": "hashicorp",
+  "category": "Cloud & Secrets Management",
+  "splunk_app_name": "HashiCorp Vault App for Splunk",
+  "splunkbase_id": "5093",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/5093/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/hashicorp_vault/data_stream/audit/_dev/test/pipeline/test-audit.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "hashicorp_vault_audit_log"
+  ]
+ },
+ {
+  "id": "traefik",
+  "legacy_id": "traefik",
+  "name": "Traefik Labs",
+  "slug": "traefik",
+  "category": "Networking & Observability",
+  "splunk_app_name": "Add On for Traefik Proxy",
+  "splunkbase_id": "6733",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/6733/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/traefik/data_stream/access/_dev/test/pipeline/test-format-json.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "traefik:access:json"
+  ]
+ },
+ {
+  "id": "claroty",
+  "legacy_id": "claroty",
+  "name": "Claroty",
+  "slug": "claroty",
+  "category": "OT & ICS Security",
+  "splunk_app_name": "Claroty Continuous Threat Detection (CTD) Add-On for Splunk",
+  "splunkbase_id": "5450",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/5450/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/claroty_ctd/data_stream/event/_dev/test/pipeline/test-event.json",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "claroty:cef"
+  ]
+ },
+ {
+  "id": "mongodb",
+  "legacy_id": "mongodb",
+  "name": "MongoDB",
+  "slug": "mongodb",
+  "category": "Database Infrastructure",
+  "splunk_app_name": "Mapping pending",
+  "splunkbase_id": "",
+  "splunkbase_url": "",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/mongodb/data_stream/log/_dev/test/pipeline/test-mongodb-ubuntu-4-4-4.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "mongodb:log"
+  ]
+ },
+ {
+  "id": "atlassian",
+  "legacy_id": "atlassian",
+  "name": "Atlassian",
+  "slug": "atlassian",
+  "category": "SaaS Audit",
+  "splunk_app_name": "Confluence and Jira Audit Add-on for Splunk",
+  "splunkbase_id": "8784",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/8784/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/atlassian_confluence/data_stream/audit/_dev/test/pipeline/test-audit-cloud.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "Confluence:audit log"
+  ]
+ },
+ {
+  "id": "nginx_f5",
+  "legacy_id": "nginx_f5",
+  "name": "NGINX (F5)",
+  "slug": "nginx_f5",
+  "category": "Web Observability",
+  "splunk_app_name": "Mapping pending",
+  "splunkbase_id": "",
+  "splunkbase_url": "",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/nginx/data_stream/access/_dev/test/pipeline/test-access.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "nginx:access"
+  ]
+ },
+ {
+  "id": "proofpoint",
+  "legacy_id": "proofpoint",
+  "name": "Proofpoint",
+  "slug": "proofpoint",
+  "category": "Email Security SaaS",
+  "splunk_app_name": "Proofpoint TAP Modular Input",
+  "splunkbase_id": "3681",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/3681/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/proofpoint_tap/data_stream/message_blocked/_dev/test/pipeline/test-message-blocked.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "proofpoint_tap_siem"
+  ]
+ },
+ {
+  "id": "veeam",
+  "legacy_id": "veeam",
+  "name": "Veeam",
+  "slug": "veeam",
+  "category": "Backup Infrastructure",
+  "splunk_app_name": "CCX Splunk Add-on for Veeam VBR",
+  "splunkbase_id": "7786",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/7786/",
+  "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/veeam/data_stream/event/_dev/test/pipeline/test-veeam-event-backup-sample.log",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "veeam_vbr_syslog"
+  ]
+ },
+ {
+  "id": "mikrotik",
+  "legacy_id": "mikrotik",
+  "name": "MikroTik",
+  "slug": "mikrotik",
+  "category": "Carrier & Enterprise Routing",
+  "splunk_app_name": "Technology Add-On for Mikrotik RouterOS",
+  "splunkbase_id": "3845",
+  "splunkbase_url": "https://splunkbase.splunk.com/app/3845/",
+  "doc_url": "https://help.mikrotik.com/docs/spaces/ROS/pages/328094/Log",
+  "supported_device_types": [
+   "router"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "Vendor-native documented payload",
+  "delimiter": "",
+  "timestamp_format": "Source-specific UTC or native console time",
+  "cim_models": [],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "mikrotik:routeros"
+  ]
  }
 ]

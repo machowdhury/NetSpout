@@ -322,6 +322,8 @@ def main():
         "raw_reference/wave2_live_raw_equality_results.json",
         "wave3_live_raw_equality_results.json",
         "universe_batch1_live_raw_equality_results.json",
+        "universe_batch1_current_raw_equality_results.json",
+        "universe_batch2_current_raw_equality_results.json",
     ):
         p = CATALOG / live_file
         if not p.exists():
@@ -332,9 +334,10 @@ def main():
     for w in ("wave1", "wave2", "wave3"):
         reg = json.loads((CATALOG / f"{w}_source_expansion.json").read_text())
         wave_families += sum(s.get("event_family_count", len(s.get("event_families", []))) for s in reg["sources"])
-    if (CATALOG / "universe_batch1.json").exists():
-        ub1 = json.loads((CATALOG / "universe_batch1.json").read_text())
-        wave_families += sum(s.get("event_family_count", len(s.get("event_families", []))) for s in ub1["sources"])
+    for filename in ("universe_batch1.json", "universe_batch2.json"):
+        if (CATALOG / filename).exists():
+            batch = json.loads((CATALOG / filename).read_text())
+            wave_families += sum(source["event_family_count"] for source in batch["sources"])
 
     publishers = sorted({norm_publisher(a.get("author")) for a, _b, _i in classified if a.get("author")} - {None})
     raw_publishers = sorted({a["author"] for a, _b, _i in classified if a.get("author")})
@@ -354,7 +357,7 @@ def main():
         dec = set()
         for _t, sts in (app.get("rel_tags_st") or {}).items():
             dec.update(sts or [])
-        ref = dec & canonical_st_names
+        ref = sorted(dec & canonical_st_names)
         if ref:
             declared_apps += 1
             canonical_st_refs.update(ref)
@@ -434,6 +437,8 @@ def main():
             "catalog/raw_reference/wave2_live_raw_equality_results.json",
             "catalog/wave3_live_raw_equality_results.json",
             "catalog/universe_batch1_live_raw_equality_results.json",
+            "catalog/universe_batch1_current_raw_equality_results.json",
+            "catalog/universe_batch2_current_raw_equality_results.json",
         ],
         "restricted_access_apps": sum(1 for a, _b, _i in classified if a["access"] != "unrestricted"),
         "directory_listing_apps": sum(1 for a, _b, _i in classified if a["is_directory_listing"]),
@@ -452,6 +457,18 @@ def main():
             }
         },
     }
+    registry["live_verification_sources"] = [rel for rel in registry["live_verification_sources"] if (ROOT / rel).is_file()]
+    current_batch1 = CATALOG / 'universe_batch1_current_raw_equality_results.json'
+    if current_batch1.is_file():
+        check = json.loads(current_batch1.read_text())
+        registry['batches']['batch_1']['live_verification'] = f"Current bytes {check['passes']}/{check['posted']} RAW equality PASS; {current_batch1.name}"
+    batch2_path = CATALOG / 'universe_batch2.json'
+    if batch2_path.is_file():
+        batch2 = json.loads(batch2_path.read_text())
+        registry['batches']['batch_2'] = dict(registry='catalog/universe_batch2.json',
+                                            status='OFFLINE_IMPLEMENTED', counts=batch2['counts_summary'],
+                                            live_verification=batch2['live_verification'])
+        registry['candidate_queue_baseline'] = 'catalog/vendor_universe/batch2_candidate_queue_baseline.json'
     DEST.write_text(json.dumps(registry, indent=2))
     print("registry:", DEST.name, DEST.stat().st_size, "bytes")
     print(json.dumps(counts, indent=1))

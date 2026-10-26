@@ -6445,6 +6445,117 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub2_cloud_identity_mail_hunt",
+      "title": "Ub2 Cloud Identity Mail Hunt",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Atlassian",
+        "HashiCorp",
+        "Proofpoint"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "hashicorp_vault_audit_log",
+        "Confluence:audit log",
+        "proofpoint_tap_siem"
+      ],
+      "scenario_ids": [
+        "ub2_cloud_identity_mail_hunt"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "hashicorp_vault_audit_log",
+        "Confluence:audit log",
+        "proofpoint_tap_siem"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub2_ot_edge_routing_observation",
+      "title": "Ub2 Ot Edge Routing Observation",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Claroty",
+        "MikroTik",
+        "NGINX (F5)",
+        "Traefik Labs"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "traefik:access:json",
+        "claroty:cef",
+        "nginx:access",
+        "mikrotik:routeros"
+      ],
+      "scenario_ids": [
+        "ub2_ot_edge_routing_observation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "traefik:access:json",
+        "claroty:cef",
+        "nginx:access",
+        "mikrotik:routeros"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub2_database_backup_integrity",
+      "title": "Ub2 Database Backup Integrity",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "MongoDB",
+        "Veeam"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "mongodb:log",
+        "veeam_vbr_syslog"
+      ],
+      "scenario_ids": [
+        "ub2_database_backup_integrity"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "mongodb:log",
+        "veeam_vbr_syslog"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -15078,6 +15189,249 @@
       ],
       "scenario_ids": [
         "ub1_ot_proxy_host_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "hashicorp_vault_audit_log",
+      "title": "hashicorp_vault_audit_log",
+      "domain": "Cloud & Secrets Management",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "HashiCorp"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Vault audit",
+      "sourcetypes": [
+        "hashicorp_vault_audit_log"
+      ],
+      "scenario_ids": [
+        "ub2_cloud_identity_mail_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "traefik:access:json",
+      "title": "traefik:access:json",
+      "domain": "Networking & Observability",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Traefik Labs"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Traefik Proxy access",
+      "sourcetypes": [
+        "traefik:access:json"
+      ],
+      "scenario_ids": [
+        "ub2_ot_edge_routing_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "claroty:cef",
+      "title": "claroty:cef",
+      "domain": "OT & ICS Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Claroty"
+      ],
+      "readiness": "Evidence review required",
+      "description": "CTD CEF",
+      "sourcetypes": [
+        "claroty:cef"
+      ],
+      "scenario_ids": [
+        "ub2_ot_edge_routing_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "mongodb:log",
+      "title": "mongodb:log",
+      "domain": "Database Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "MongoDB"
+      ],
+      "readiness": "Evidence review required",
+      "description": "MongoDB structured server log",
+      "sourcetypes": [
+        "mongodb:log"
+      ],
+      "scenario_ids": [
+        "ub2_database_backup_integrity"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "Confluence:audit log",
+      "title": "Confluence:audit log",
+      "domain": "SaaS Audit",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Atlassian"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Confluence Cloud audit",
+      "sourcetypes": [
+        "Confluence:audit log"
+      ],
+      "scenario_ids": [
+        "ub2_cloud_identity_mail_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "nginx:access",
+      "title": "nginx:access",
+      "domain": "Web Observability",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "NGINX (F5)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "NGINX combined access log",
+      "sourcetypes": [
+        "nginx:access"
+      ],
+      "scenario_ids": [
+        "ub2_ot_edge_routing_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "proofpoint_tap_siem",
+      "title": "proofpoint_tap_siem",
+      "domain": "Email Security SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Proofpoint"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Targeted Attack Protection SIEM",
+      "sourcetypes": [
+        "proofpoint_tap_siem"
+      ],
+      "scenario_ids": [
+        "ub2_cloud_identity_mail_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "veeam_vbr_syslog",
+      "title": "veeam_vbr_syslog",
+      "domain": "Backup Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Veeam"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Backup & Replication",
+      "sourcetypes": [
+        "veeam_vbr_syslog"
+      ],
+      "scenario_ids": [
+        "ub2_database_backup_integrity"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "mikrotik:routeros",
+      "title": "mikrotik:routeros",
+      "domain": "Carrier & Enterprise Routing",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "MikroTik"
+      ],
+      "readiness": "Evidence review required",
+      "description": "RouterOS console log",
+      "sourcetypes": [
+        "mikrotik:routeros"
+      ],
+      "scenario_ids": [
+        "ub2_ot_edge_routing_observation"
       ],
       "dashboard_ids": [],
       "formats": [],

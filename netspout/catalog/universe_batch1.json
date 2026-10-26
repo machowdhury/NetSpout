@@ -154,5 +154,12 @@
    "candidate": "Trellix ePO / Illumio / Veeam vbr / Proofpoint pds rows",
    "reason": "vendor RAW samples not recoverable from public docs in this batch's bounded evidence window (Splunkbase docs carry no samples; SC4S pages declare sourcetypes only); deferred to a later universe batch"
   }
- ]
+ ],
+ "current_byte_verification": {
+  "results_file": "catalog/universe_batch1_current_raw_equality_results.json",
+  "passes": 7,
+  "posted": 7,
+  "engine_sha256": "deb9c4b5d9d91877120e01e2635c6caca82ba13a7dd534c6353f1db0d4fecb8d",
+  "status": "PASS"
+ }
 }

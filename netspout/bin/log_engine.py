@@ -1681,3 +1681,14 @@ try:
 except ImportError:  # pragma: no cover - batch-1 module unavailable
     pass
 
+
+# Batch 2: exact sourcetype/family dispatch; unsupported families fail closed.
+try:
+    from netspout_core.universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH2_SOURCE_SOURCETYPES = UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch2_log = UniverseBatch2Engine.format_universe_batch2_log

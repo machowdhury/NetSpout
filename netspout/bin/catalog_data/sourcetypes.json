@@ -6640,5 +6640,185 @@
   "deprecated_aliases": [],
   "is_benchmark_197": false,
   "status": "active"
+ },
+ {
+  "id": "hashicorp_vault_audit_log",
+  "splunk_sourcetype": "hashicorp_vault_audit_log",
+  "display_name": "Vault audit",
+  "vendor_id": "hashicorp",
+  "category": "Cloud & Secrets Management",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "HashiCorp Vault App for Splunk",
+  "aliases": [
+   "hashicorp_vault_audit_log"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "traefik-access-json",
+  "splunk_sourcetype": "traefik:access:json",
+  "display_name": "Traefik Proxy access",
+  "vendor_id": "traefik",
+  "category": "Networking & Observability",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Add On for Traefik Proxy",
+  "aliases": [
+   "traefik:access:json"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "claroty-cef",
+  "splunk_sourcetype": "claroty:cef",
+  "display_name": "CTD CEF",
+  "vendor_id": "claroty",
+  "category": "OT & ICS Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Claroty Continuous Threat Detection (CTD) Add-On for Splunk",
+  "aliases": [
+   "claroty:cef"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "mongodb-log",
+  "splunk_sourcetype": "mongodb:log",
+  "display_name": "MongoDB structured server log",
+  "vendor_id": "mongodb",
+  "category": "Database Infrastructure",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending",
+  "aliases": [
+   "mongodb:log"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "confluence-audit-log",
+  "splunk_sourcetype": "Confluence:audit log",
+  "display_name": "Confluence Cloud audit",
+  "vendor_id": "atlassian",
+  "category": "SaaS Audit",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Confluence and Jira Audit Add-on for Splunk",
+  "aliases": [
+   "Confluence:audit log"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "nginx-access",
+  "splunk_sourcetype": "nginx:access",
+  "display_name": "NGINX combined access log",
+  "vendor_id": "nginx_f5",
+  "category": "Web Observability",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending",
+  "aliases": [
+   "nginx:access"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "proofpoint_tap_siem",
+  "splunk_sourcetype": "proofpoint_tap_siem",
+  "display_name": "Targeted Attack Protection SIEM",
+  "vendor_id": "proofpoint",
+  "category": "Email Security SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Proofpoint TAP Modular Input",
+  "aliases": [
+   "proofpoint_tap_siem"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "veeam_vbr_syslog",
+  "splunk_sourcetype": "veeam_vbr_syslog",
+  "display_name": "Backup & Replication",
+  "vendor_id": "veeam",
+  "category": "Backup Infrastructure",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "CCX Splunk Add-on for Veeam VBR",
+  "aliases": [
+   "veeam_vbr_syslog"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "mikrotik-routeros",
+  "splunk_sourcetype": "mikrotik:routeros",
+  "display_name": "RouterOS console log",
+  "vendor_id": "mikrotik",
+  "category": "Carrier & Enterprise Routing",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Technology Add-On for Mikrotik RouterOS",
+  "aliases": [
+   "mikrotik:routeros"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
  }
 ]

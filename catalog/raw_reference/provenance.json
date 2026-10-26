@@ -751,6 +751,116 @@
    "fetch_mode": "public vendor/integration documentation excerpt; no app packages downloaded, no TA installed",
    "excerpt": "Nozomi Networks vendor-native alert JSON (the document's event.original), re-serialized from the documented event",
    "evidence_role": "authentic vendor-native RAW fixture for Universal Vendor Coverage batch-1 generator"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/hashicorp_vault/data_stream/audit/_dev/test/pipeline/test-audit.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/vault.bin",
+   "fetched_bytes": 13583,
+   "fetched_sha256": "25fce9448eb29911a028395f9cef929bf161013b4fd76634e514b1a8239b094a",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/traefik/data_stream/access/_dev/test/pipeline/test-format-json.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/traefik.bin",
+   "fetched_bytes": 7334,
+   "fetched_sha256": "191009a114d44866841eb6672d47acc752ba9769d608ca843988dd285e3d03fe",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/claroty_ctd/data_stream/event/_dev/test/pipeline/test-event.json",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/claroty.bin",
+   "fetched_bytes": 37579,
+   "fetched_sha256": "21e847d22baa638cc9f7191298292672fcb23a2f0306602af495ba136a6f11df",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/mongodb/data_stream/log/_dev/test/pipeline/test-mongodb-ubuntu-4-4-4.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/mongodb.bin",
+   "fetched_bytes": 1834,
+   "fetched_sha256": "a49fcc903c43730cb36583466ae44de76479049d70252a6ac631fb57ab358b44",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/atlassian_confluence/data_stream/audit/_dev/test/pipeline/test-audit-cloud.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/confluence.bin",
+   "fetched_bytes": 24468,
+   "fetched_sha256": "e3a1f84b88cbe2f45781278c8274a3dcf851119db8d6e5051829ff04c296695b",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/nginx/data_stream/access/_dev/test/pipeline/test-access.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/nginx.bin",
+   "fetched_bytes": 3176,
+   "fetched_sha256": "816a60d2906b043ce188b3062a68495c8851156da1af3e8f77e3254d7f7816d3",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/proofpoint_tap/data_stream/message_blocked/_dev/test/pipeline/test-message-blocked.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/proofpoint.bin",
+   "fetched_bytes": 10678,
+   "fetched_sha256": "5cb92d9f951992e8cf11aa0d6f9874baf897349d38456289c3a8ff67b2e70676",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/cyberarkpas/data_stream/audit/_dev/test/pipeline/test-legacysyslog.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/cyberark.bin",
+   "fetched_bytes": 529,
+   "fetched_sha256": "ebbc25c74a0f4fed14ad0a496c399809d39e4885f8d5fa6909848372ff84db2c",
+   "evidence_level": "REJECTED_CUSTOM_ELASTIC_FORMAT",
+   "evidence_role": "Elastic-specific output template, not default vendor-native CEF. No CyberArk generator graduated.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/veeam/data_stream/event/_dev/test/pipeline/test-veeam-event-backup-sample.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/veeam.bin",
+   "fetched_bytes": 8382,
+   "fetched_sha256": "91f1efea747541a8cfb02b2509e328fb15729d2cd88ed986e38e875e54cd937a",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/veeam/data_stream/event/_dev/test/pipeline/test-veeam-event-malware-sample.log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/veeam_malware.bin",
+   "fetched_bytes": 5989,
+   "fetched_sha256": "05ea1ee90928fb98b96288b309e0ecd3afa2b3fc0be38a028f09f0a2a3b53031",
+   "evidence_level": "INTEGRATION_TEST_RAW",
+   "evidence_role": "Public integration test fixture; not a vendor production capture or installed Splunk TA verification.",
+   "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe"
+  },
+  {
+   "batch": "universe_batch2",
+   "documentation_url": "https://help.mikrotik.com/docs/spaces/ROS/pages/328094/Log",
+   "raw_reference_file": "catalog/raw_reference/universe_batch2/mikrotik.bin",
+   "fetched_bytes": 164,
+   "fetched_sha256": "51f52138589ea5a4b78bf654c947ddc15c6987b828d7892d071175d34f393c6a",
+   "evidence_level": "VENDOR_DOCUMENTED",
+   "evidence_role": "Log messages and Topics code blocks; console records only",
+   "pinned_commit": null
   }
  ]
 }

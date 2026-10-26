@@ -205,6 +205,13 @@ def main() -> None:
             },
         ],
     }
+    current_file = REPO_ROOT / 'catalog/universe_batch1_current_raw_equality_results.json'
+    if current_file.is_file():
+        current = json.loads(current_file.read_text())
+        reg['current_byte_verification'] = dict(results_file=str(current_file.relative_to(REPO_ROOT)),
+                                                passes=current['passes'], posted=current['posted'],
+                                                engine_sha256=current['engine_sha256'],
+                                                status='PASS' if current['passes']==current['posted'] else 'FAIL')
     with open(REGISTRY, "w") as f:
         json.dump(reg, f, indent=1)
     print("provenance refs appended:", added)

@@ -1,0 +1,2 @@
+Batch 2: {'new_canonical_vendors': 9, 'new_product_integrations': 9, 'new_canonical_sourcetypes': 9, 'event_families': 18, 'scenario_packs': 3}
+Canonical: 66 vendors, 326 sourcetypes, 44 scenarios

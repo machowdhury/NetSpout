@@ -31,6 +31,7 @@ CORE_MODULES = [
     "graph_engine.py",
     "log_engine.py",
     "universe_batch1_engine.py",
+    "universe_batch2_engine.py",
     "scenario_runner.py",
     "snmp_engine.py",
     "gnmi_engine.py",

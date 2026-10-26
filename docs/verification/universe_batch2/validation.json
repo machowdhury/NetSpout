@@ -1,0 +1,222 @@
+{
+  "baseline_commit": "b1ad10ab26adc4bc4c256431f15aae1ba3cc13ad",
+  "date": "2026-10-26",
+  "focused_test_runs": [
+    {
+      "command": [
+        "PYTHONPATH=src:backend",
+        ".venv-test/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_universe_batch2.py",
+        "tests/test_universe_batch1.py",
+        "tests/test_vendor_universe.py",
+        "tests/test_wave1_authentic_expansion.py",
+        "tests/test_wave2_authentic_expansion.py",
+        "tests/test_wave3_authentic_expansion.py",
+        "tests/test_native_discovery.py",
+        "tests/test_gate2_canonical.py",
+        "tests/test_gate3_catalog.py",
+        "tests/test_gate6_integrity.py",
+        "tests/test_raw_content_preservation.py",
+        "tests/test_native_loader_context.py",
+        "tests/test_fallback_guard.py",
+        "-q",
+        "--tb=short",
+        "--disable-warnings",
+        "--junitxml=/private/tmp/ub2-verified.xml"
+      ],
+      "exit_status": 0,
+      "junit": "docs/verification/universe_batch2/focused-tests.xml",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "1",
+        "tests": "354",
+        "time": "3.155",
+        "timestamp": "2026-10-26T16:18:50.094333-04:00",
+        "hostname": "Mac.phub.net.cable.rogers.com"
+      },
+      "failing_identities": []
+    },
+    {
+      "command": [
+        "PYTHONPATH=src:backend",
+        ".venv-test/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_cisco_raw_events.py",
+        "tests/test_sec2a_serialization.py",
+        "-q",
+        "--tb=short",
+        "--disable-warnings",
+        "--junitxml=/private/tmp/ub2-contract-tests.xml"
+      ],
+      "exit_status": 0,
+      "junit": "docs/verification/universe_batch2/contract-tests.xml",
+      "summary": {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "19",
+        "time": "0.407",
+        "timestamp": "2026-10-26T16:20:04.195155-04:00",
+        "hostname": "Mac.phub.net.cable.rogers.com"
+      },
+      "failing_identities": []
+    }
+  ],
+  "gates": [
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/build_universe_batch2_catalog.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-1.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/build_vendor_universe.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-2.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/sync_core.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-3.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/verify_sources.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-4.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/validate_catalog.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-5.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch2/gate-6.txt"
+    }
+  ],
+  "idempotence": {
+    "checked_catalog_files": 187,
+    "changed_files": []
+  },
+  "wave3_comparison": {
+    "baseline_failure_count": 69,
+    "baseline_passed": 1025,
+    "baseline_skipped": 10,
+    "identities_file": "docs/verification/universe_batch1/wave3_baseline_failure_identities.txt",
+    "current_failing_identities": [],
+    "full_suite_rerun": false,
+    "limitation": "Only focused scopes were run; no claim that the 69 baseline failures have been fixed.",
+    "corrected_regression": "The canonical scenario API refusal guard initially rejected an API bypass. Observation packs now use the explicit /api/generate/scenario-pack endpoint; canonical graph-scenario guard remains intact."
+  },
+  "live_checks": [
+    {
+      "batch": 1,
+      "result": "catalog/universe_batch1_current_raw_equality_results.json",
+      "submitted": "docs/verification/universe_batch2/batch1_submitted_events.json"
+    },
+    {
+      "batch": 2,
+      "result": "catalog/universe_batch2_current_raw_equality_results.json",
+      "submitted": "docs/verification/universe_batch2/batch2_submitted_events.json"
+    }
+  ],
+  "parser_verification": {
+    "new_verified": 0,
+    "overall_historical_verified": 1,
+    "installed_lab_tas": [
+      {
+        "id": "Splunk_TA_cisco-ise",
+        "version": "5.0.0"
+      }
+    ]
+  },
+  "detection_validation": {
+    "new_verified": 0,
+    "performed": false
+  },
+  "discovery": {
+    "snapshot_rows": 1871,
+    "new_discovery": false,
+    "preserved_vendor_candidates": 66,
+    "preserved_product_candidates": 583,
+    "remaining_vendor_keys": 57
+  },
+  "invariant_checks": [
+    "Existing Splunkbase snapshot hash unchanged",
+    "Rebuild and catalog synchronization deterministic",
+    "Frozen PAN emitter methods unchanged; Cisco RAW and serialization contract tests passed",
+    "No TA installation or Splunk configuration change",
+    "Batch 1 and Batch 2 current generator hashes match successful live evidence"
+  ],
+  "frozen_pan_methods_unchanged": [
+    "format_palo_alto_log",
+    "format_palo_alto_threat_log"
+  ],
+  "actual_test_results": {
+    "focused_passed": 199,
+    "contract_passed": 19,
+    "total_distinct_passed": 218,
+    "skipped": 1,
+    "subtests_passed": 154,
+    "failures": 0,
+    "skip_reason": "Generic gate requires NETSPOUT_HEC_TOKEN; separate isolated-lab live checks verified current Batch 1 and Batch 2 bytes."
+  },
+  "introduced_and_fixed_existing_test_identities": [
+    {
+      "identity": "tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal",
+      "subtest_scenario": "ub1_ot_proxy_host_hunt",
+      "wave3_baseline_failure": false,
+      "resolution": "Observation packs use explicit /api/generate/scenario-pack; canonical scenario guard preserved"
+    },
+    {
+      "identity": "tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal",
+      "subtest_scenario": "ub2_cloud_identity_mail_hunt",
+      "wave3_baseline_failure": false,
+      "resolution": "Observation packs use explicit /api/generate/scenario-pack; canonical scenario guard preserved"
+    },
+    {
+      "identity": "tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal",
+      "subtest_scenario": "ub2_database_backup_integrity",
+      "wave3_baseline_failure": false,
+      "resolution": "Observation packs use explicit /api/generate/scenario-pack; canonical scenario guard preserved"
+    },
+    {
+      "identity": "tests/test_fallback_guard.py::TestFallbackGuard::test_api_refusal",
+      "subtest_scenario": "ub2_ot_edge_routing_observation",
+      "wave3_baseline_failure": false,
+      "resolution": "Observation packs use explicit /api/generate/scenario-pack; canonical scenario guard preserved"
+    }
+  ],
+  "post_ordering_rerun": {
+    "command": "PYTHONPATH=src:backend .venv-test/bin/python -m pytest tests/test_vendor_universe.py -q --tb=short --disable-warnings --junitxml=/private/tmp/ub2-universe-post-order.xml",
+    "exit_status": 0,
+    "passed": 10,
+    "junit": "docs/verification/universe_batch2/universe-post-order-tests.xml",
+    "note": "Already counted in distinct tests; rerun after deterministic crossmap ordering fix."
+  }
+}

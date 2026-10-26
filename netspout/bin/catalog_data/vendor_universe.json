@@ -56,28 +56,28 @@
   "counts": {
     "discovered_publishers_raw": 853,
     "discovered_publishers_normalized": 848,
-    "discovered_technology_vendors_canonical": 57,
-    "discovered_technology_vendors_extended": 66,
-    "discovered_products": 583,
+    "discovered_technology_vendors_canonical": 66,
+    "discovered_technology_vendors_extended": 57,
+    "discovered_products": 566,
     "splunkbase_apps_total": 1871,
     "splunkbase_addons": 915,
     "splunkbase_applications": 956,
-    "canonical_sourcetypes": 317,
-    "genuine_event_families_evidenced": 163,
-    "generator_implemented_sources": 317,
-    "live_ingestion_verified_sourcetypes": 56,
+    "canonical_sourcetypes": 326,
+    "genuine_event_families_evidenced": 181,
+    "generator_implemented_sources": 326,
+    "live_ingestion_verified_sourcetypes": 65,
     "ta_parser_verified_sourcetypes": 1
   },
   "counts_by_bucket": {
     "splunk_platform": 266,
     "publisher_only": 684,
     "product_only": 488,
-    "recognized_technology_vendor": 233,
-    "canonical_linked": 200
+    "recognized_technology_vendor": 201,
+    "canonical_linked": 232
   },
   "canonical_coverage_crossmap": {
-    "apps_declaring_canonical_sourcetypes": 71,
-    "canonical_sourcetypes_declared_by_splunkbase": 148,
+    "apps_declaring_canonical_sourcetypes": 78,
+    "canonical_sourcetypes_declared_by_splunkbase": 154,
     "top_declared_canonical_sourcetypes": [
       [
         "o365:management:activity",
@@ -124,11 +124,11 @@
         3
       ],
       [
-        "sophos:xg:firewall",
+        "pan:system",
         3
       ],
       [
-        "pan:system",
+        "sophos:xg:firewall",
         3
       ],
       [
@@ -164,12 +164,14 @@
       "amazon_aws",
       "arista_eos",
       "aruba_cx",
+      "atlassian",
       "broadcom_symantec",
       "checkpoint",
       "cisco_duo",
       "cisco_meraki",
       "cisco_sdwan",
       "citrix_netscaler",
+      "claroty",
       "cloudflare",
       "crowdstrike",
       "dell_os10",
@@ -178,23 +180,30 @@
       "f5_bigip",
       "forcepoint",
       "fortinet",
+      "hashicorp",
       "huawei_vrp",
       "juniper_junos",
       "kubernetes",
       "microsoft_azure",
       "microsoft_windows",
+      "mikrotik",
       "model_context_protocol",
+      "mongodb",
       "netscout",
       "netskope",
+      "nginx_f5",
       "nozomi_networks",
       "nutanix",
       "okta",
       "opentelemetry",
       "palo_alto",
+      "proofpoint",
       "radware",
       "sonicwall",
       "sophos",
       "suricata_oisf",
+      "traefik",
+      "veeam",
       "vmware_nsx",
       "watchguard",
       "wazuh",
@@ -206,10 +215,6 @@
     [
       "cisco_other",
       22
-    ],
-    [
-      "proofpoint",
-      11
     ],
     [
       "ibm_qradar",
@@ -225,10 +230,6 @@
     ],
     [
       "akamai",
-      8
-    ],
-    [
-      "atlassian",
       8
     ],
     [
@@ -254,10 +255,6 @@
     [
       "hitachi_vantara",
       6
-    ],
-    [
-      "hashicorp",
-      5
     ],
     [
       "ivanti",
@@ -368,10 +365,6 @@
       2
     ],
     [
-      "claroty",
-      2
-    ],
-    [
       "pfsense_netgate",
       2
     ],
@@ -396,10 +389,6 @@
       2
     ],
     [
-      "traefik",
-      2
-    ],
-    [
       "cilium_isovalent",
       2
     ],
@@ -417,10 +406,6 @@
     ],
     [
       "darktrace",
-      1
-    ],
-    [
-      "mikrotik",
       1
     ],
     [
@@ -444,10 +429,6 @@
       1
     ],
     [
-      "mongodb",
-      1
-    ],
-    [
       "veritas",
       1
     ],
@@ -456,15 +437,7 @@
       1
     ],
     [
-      "veeam",
-      1
-    ],
-    [
       "hp_enterprise",
-      1
-    ],
-    [
-      "nginx_f5",
       1
     ]
   ],
@@ -503,14 +476,6 @@
     ],
     [
       "tenable",
-      2
-    ],
-    [
-      "observeit (proofpoint) on-prem",
-      2
-    ],
-    [
-      "proofpoint on demand email security",
       2
     ],
     [
@@ -674,10 +639,6 @@
       1
     ],
     [
-      "proofpoint - et",
-      1
-    ],
-    [
       "stormshield network security",
       1
     ],
@@ -731,10 +692,6 @@
     ],
     [
       "darktrace",
-      1
-    ],
-    [
-      "proofpoint tap",
       1
     ],
     [
@@ -1006,10 +963,6 @@
       1
     ],
     [
-      "jira service desk simple addon",
-      1
-    ],
-    [
       "uptimerobot input",
       1
     ],
@@ -1047,10 +1000,6 @@
     ],
     [
       "bigpanda",
-      1
-    ],
-    [
-      "hashicorp vault",
       1
     ],
     [
@@ -1118,10 +1067,6 @@
       1
     ],
     [
-      "proofpoint casb",
-      1
-    ],
-    [
       "pingaccess",
       1
     ],
@@ -1143,10 +1088,6 @@
     ],
     [
       "input add on for sentinelone",
-      1
-    ],
-    [
-      "claroty continuous threat detection (ctd)",
       1
     ],
     [
@@ -1182,10 +1123,6 @@
       1
     ],
     [
-      "proofpoint isolation",
-      1
-    ],
-    [
       "pingdirectory",
       1
     ],
@@ -1195,10 +1132,6 @@
     ],
     [
       "opswat metaaccess",
-      1
-    ],
-    [
-      "jira tracking add on",
       1
     ],
     [
@@ -1282,10 +1215,6 @@
       1
     ],
     [
-      "hashicorp cloud platform",
-      1
-    ],
-    [
       "slack app alert",
       1
     ],
@@ -1323,10 +1252,6 @@
     ],
     [
       "jupiterone",
-      1
-    ],
-    [
-      "jira issue input",
       1
     ],
     [
@@ -1455,10 +1380,6 @@
     ],
     [
       "risk superhandler",
-      1
-    ],
-    [
-      "claroty xdome",
       1
     ],
     [
@@ -1751,10 +1672,6 @@
     ],
     [
       "trellix mvision epo",
-      1
-    ],
-    [
-      "mongo audit",
       1
     ],
     [
@@ -2222,10 +2139,6 @@
       1
     ],
     [
-      "proofpoint incidents",
-      1
-    ],
-    [
       "llm command scoring",
       1
     ],
@@ -2514,10 +2427,6 @@
       1
     ],
     [
-      "confluence and jira audit",
-      1
-    ],
-    [
       "cryptview",
       1
     ],
@@ -2791,10 +2700,6 @@
     ],
     [
       "ptsandbox",
-      1
-    ],
-    [
-      "openappsec npm",
       1
     ],
     [
@@ -3409,9 +3314,9 @@
     {
       "uid": 2915,
       "appid": "TA-etintel",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -3958,10 +3863,9 @@
     {
       "uid": 3681,
       "appid": "TA-Proofpoint-TAP",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
-      "alias": "proofpoint"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "proofpoint"
     },
     {
       "uid": 3683,
@@ -4105,10 +4009,9 @@
     {
       "uid": 3845,
       "appid": "ec299082-f4c6-11e7-b9cc-027ef375ca18",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "mikrotik",
-      "alias": "mikrotik"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "mikrotik"
     },
     {
       "uid": 3855,
@@ -4332,17 +4235,17 @@
     {
       "uid": 4062,
       "appid": "TA-ObserveIT",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
       "uid": 4063,
       "appid": "ObserveIT-App",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -4656,17 +4559,17 @@
     {
       "uid": 4327,
       "appid": "TA-pps_ondemand",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
       "uid": 4328,
       "appid": "pps_ondemand",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -5681,9 +5584,9 @@
     {
       "uid": 4958,
       "appid": "TA-jira-service-desk-simple-addon",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "atlassian",
       "alias": "atlassian"
     },
     {
@@ -5894,10 +5797,9 @@
     {
       "uid": 5093,
       "appid": "vault",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "hashicorp",
-      "alias": "hashicorp"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "hashicorp"
     },
     {
       "uid": 5094,
@@ -5985,9 +5887,9 @@
     {
       "uid": 5141,
       "appid": "terraform_cloud",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "hashicorp",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "hashicorp",
       "alias": "terraform"
     },
     {
@@ -6356,9 +6258,9 @@
     {
       "uid": 5366,
       "appid": "TA-proofpoint-casb-addon-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -6526,10 +6428,9 @@
     {
       "uid": 5450,
       "appid": "TA-claroty-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "claroty",
-      "alias": "claroty"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "claroty"
     },
     {
       "uid": 5457,
@@ -6701,9 +6602,9 @@
     {
       "uid": 5522,
       "appid": "TA-proofpoint-isolation",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -6744,9 +6645,9 @@
     {
       "uid": 5547,
       "appid": "TA-jira-tracking-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "atlassian",
       "alias": "jira"
     },
     {
@@ -7172,9 +7073,9 @@
     {
       "uid": 5733,
       "appid": "hcp",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "hashicorp",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "hashicorp",
       "alias": "hashicorp"
     },
     {
@@ -7392,9 +7293,9 @@
     {
       "uid": 6168,
       "appid": "TA-jira_issue_input",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "atlassian",
       "alias": "jira"
     },
     {
@@ -7727,10 +7628,11 @@
     {
       "uid": 6339,
       "appid": "Splunk_TA_CCX_Proofpoint_Extensions",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
-      "alias": "proofpoint"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "proofpoint_tap_siem"
+      ]
     },
     {
       "uid": 6341,
@@ -8113,9 +8015,9 @@
     {
       "uid": 6488,
       "appid": "TA-claroty-xdome-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "claroty",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "claroty",
       "alias": "claroty"
     },
     {
@@ -8689,10 +8591,9 @@
     {
       "uid": 6733,
       "appid": "splunk_traefik_addon",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "traefik",
-      "alias": "traefik"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "traefik"
     },
     {
       "uid": 6739,
@@ -8798,9 +8699,9 @@
     {
       "uid": 6795,
       "appid": "splunk_traefik_app",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "traefik",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "traefik",
       "alias": "traefik"
     },
     {
@@ -9510,9 +9411,9 @@
     {
       "uid": 7026,
       "appid": "TA-mongo-audit",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "mongodb",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "mongodb",
       "alias": "mongodb"
     },
     {
@@ -9721,9 +9622,9 @@
     {
       "uid": 7108,
       "appid": "jsm-splunk-plugin",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "atlassian",
       "alias": "jira"
     },
     {
@@ -10419,9 +10320,9 @@
     {
       "uid": 7371,
       "appid": "atlassian_audit",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "atlassian",
       "alias": "atlassian"
     },
     {
@@ -11139,9 +11040,9 @@
     {
       "uid": 7595,
       "appid": "TA_publish_to_confluence",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "atlassian",
       "alias": "confluence"
     },
     {
@@ -11708,10 +11609,9 @@
     {
       "uid": 7786,
       "appid": "Splunk_TA_CCX_Veeam_VBR",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "veeam",
-      "alias": "veeam"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "veeam"
     },
     {
       "uid": 7788,
@@ -12020,9 +11920,9 @@
     {
       "uid": 7870,
       "appid": "erabitbucketta",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "atlassian",
       "alias": "atlassian"
     },
     {
@@ -12089,9 +11989,9 @@
     {
       "uid": 7888,
       "appid": "TA-proofpoint-incidents",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -12246,9 +12146,9 @@
     {
       "uid": 7936,
       "appid": "Proofpoint-Essentials-Splunk-Input",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "proofpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "proofpoint",
       "alias": "proofpoint"
     },
     {
@@ -12723,9 +12623,9 @@
     {
       "uid": 8172,
       "appid": "ALTIA_CSIRT_Vault",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "hashicorp",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "hashicorp",
       "alias": "vault"
     },
     {
@@ -13903,10 +13803,9 @@
     {
       "uid": 8784,
       "appid": "confluence_and_jira_audit_addon_for_splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "atlassian",
-      "alias": "confluence"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "atlassian"
     },
     {
       "uid": 8786,
@@ -14892,9 +14791,9 @@
     {
       "uid": 9684,
       "appid": "netbr_vault_dashboards",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "hashicorp",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "hashicorp",
       "alias": "vault"
     },
     {
@@ -15445,9 +15344,9 @@
     {
       "uid": 10097,
       "appid": "TA-openappsec-npm",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "nginx_f5",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "nginx_f5",
       "alias": "nginx"
     },
     {
@@ -15471,11 +15370,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "proofpoint",
-      "app_count": 11,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "ibm_qradar",
       "app_count": 10,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15492,11 +15386,6 @@
     },
     {
       "vendor_key": "akamai",
-      "app_count": 8,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "atlassian",
       "app_count": 8,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15528,11 +15417,6 @@
     {
       "vendor_key": "hitachi_vantara",
       "app_count": 6,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "hashicorp",
-      "app_count": 5,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
@@ -15671,11 +15555,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "claroty",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "pfsense_netgate",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15706,11 +15585,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "traefik",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "cilium_isovalent",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15732,11 +15606,6 @@
     },
     {
       "vendor_key": "darktrace",
-      "app_count": 1,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "mikrotik",
       "app_count": 1,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15766,11 +15635,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "mongodb",
-      "app_count": 1,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "veritas",
       "app_count": 1,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15781,17 +15645,7 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "veeam",
-      "app_count": 1,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "hp_enterprise",
-      "app_count": 1,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "nginx_f5",
       "app_count": 1,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     }
@@ -16655,7 +16509,9 @@
     "catalog/raw_reference/live_raw_equality_results.json",
     "catalog/raw_reference/wave2_live_raw_equality_results.json",
     "catalog/wave3_live_raw_equality_results.json",
-    "catalog/universe_batch1_live_raw_equality_results.json"
+    "catalog/universe_batch1_live_raw_equality_results.json",
+    "catalog/universe_batch1_current_raw_equality_results.json",
+    "catalog/universe_batch2_current_raw_equality_results.json"
   ],
   "restricted_access_apps": 81,
   "directory_listing_apps": 177,
@@ -16958,17 +16814,6 @@
         "downloads": 8616
       },
       {
-        "appid": "TA-etintel",
-        "name": "Proofpoint - ET Splunk TA",
-        "author": "Proofpoint Splunk Integrations",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "proofpoint",
-          "alias": "proofpoint"
-        },
-        "downloads": 5604
-      },
-      {
         "appid": "TA-QualysCloudPlatform",
         "name": "Qualys Technology Add-on (TA) for Splunk",
         "author": "Qualys Inc.",
@@ -16978,6 +16823,17 @@
           "alias": "qualys"
         },
         "downloads": 42142
+      },
+      {
+        "appid": "2a1d87ec-b91c-11e5-8134-020b822305a3",
+        "name": "IBM Websphere MQ Modular Input for Splunk",
+        "author": "Hannes Wagener",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "ibm_qradar",
+          "alias": "ibm"
+        },
+        "downloads": 1514
       }
     ],
     "canonical_linked": [
@@ -17086,7 +16942,24 @@
         "wazuh:alerts",
         "nozomi:universal_alert"
       ],
-      "live_verification": "Historical 9/9 RAW-equality PASS before recovery; revised generators not re-ingested"
+      "live_verification": "Current bytes 7/7 RAW equality PASS; universe_batch1_current_raw_equality_results.json"
+    },
+    "batch_2": {
+      "registry": "catalog/universe_batch2.json",
+      "status": "OFFLINE_IMPLEMENTED",
+      "counts": {
+        "new_canonical_vendors": 9,
+        "new_product_integrations": 9,
+        "new_canonical_sourcetypes": 9,
+        "event_families": 18,
+        "scenario_packs": 3
+      },
+      "live_verification": {
+        "results_file": "catalog/universe_batch2_current_raw_equality_results.json",
+        "status": "PASS",
+        "run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93"
+      }
     }
-  }
+  },
+  "candidate_queue_baseline": "catalog/vendor_universe/batch2_candidate_queue_baseline.json"
 }

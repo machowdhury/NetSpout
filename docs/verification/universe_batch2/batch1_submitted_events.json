@@ -1,0 +1,100 @@
+{
+  "run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+  "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+  "events": [
+    {
+      "event": "2026-10-26T20:08:47.695026000+00:00 container create e421e6b07d28b70a0a2f879c944b123fe34c22a97a4573130d4243859dfd5e14 (image=alpine:latest, name=test)",
+      "sourcetype": "docker_events",
+      "host": "ub1-host",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub1-000"
+      }
+    },
+    {
+      "event": "2026-10-26 20:08:47 48 10.82.255.36 302 TCP_NC_MISS 1242 969 GET https pixel.tapad.com 443 /api/v1/stream/9f1aa324 ?session=702134f5 aeinstein - - pixel.tapad.com - https://vid.vidoomy.com/ OBSERVED \"FastwebRes_CallCntr;Web Ads/Analytics\" - 142.182.19.21 34.111.113.62 \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\" sha256WithRSAEncryption",
+      "sourcetype": "bluecoat:proxysg:access:file",
+      "host": "ub1-sg",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub1-001",
+        "netspout_parent_event_id": "ub1_ot_proxy_host_hunt-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"ack\": false, \"appliance_host\": \"Sandbox-TAE-Guardian3\", \"appliance_id\": \"d5ab7eaa-9a4b-4b4b-9a4b-4b4b9a4b4b4b\", \"appliance_ip\": \"1.128.0.0\", \"appliance_site\": \"Sandbox\", \"bpf_filter\": \"(ip host 1.128.0.11 and ip host 1.128.0.0 and tcp port 58679 and tcp port 44818) or (vlan and ip host 1.128.0.11 and ip host 1.128.0.0 and tcp port 58679 and tcp port 44818)\", \"capture_device\": \"base.pcap\", \"close_option\": null, \"closed_time\": 0, \"created_time\": 1793045327695, \"custom_fields_dst\": {}, \"custom_fields_src\": {}, \"description\": \"Online edits have been made on the PLC with IP 1.128.0.0. The following steps were executed:\\n[1]- Downloaded project [ PLC_LOGIC_CHALLENGE2\\\\challenge2changed.ACD ] to [ \\\\AB_ETHIP-1\\\\1.128.0.0\\\\C1_1756 ]\\n[2]- Changed Controller [ C1_1756 ] to Run Mode\\n[3]- Changed Controller [ C1_1756 ] to Program Mode\", \"dst_roles\": \"producer\", \"grouped_visible\": true, \"id\": \"8a67f574-cfd0-4ae2-9f22-886d86b83398\", \"id_dst\": \"1.128.0.0\", \"id_src\": \"1.128.0.11\", \"ip_src\": \"1.128.0.11\", \"ip_dst\": \"1.128.0.0\", \"incident_keys\": [], \"is_incident\": false, \"is_security\": true, \"label_dst\": \"private.default\", \"label_src\": \"private.default\", \"mac_dst\": \"f4:54:33:9f:22:3d\", \"mac_src\": \"00:0c:29:01:98:be\", \"name\": \"Program change\", \"note\": \"User Defined Note\", \"parents\": [], \"playbook_contents\": null, \"port_dst\": 44818, \"port_src\": 58679, \"properties\": {\"base_risk\": 6, \"from_id\": \"1.128.0.11\", \"is_dst_node_learned\": true, \"is_dst_public\": false, \"is_dst_reputation_bad\": false, \"is_src_node_learned\": true, \"is_src_public\": false, \"is_src_reputation_bad\": false, \"mitre_attack_for_ics\": {\"destination\": {\"levels\": [\"2\"], \"types\": [\"Field Controller/RTU/PLC/IED\"]}, \"source\": {\"levels\": [\"2\"], \"types\": [\"Engineering Workstation\"]}}, \"n2os_version\": \"25.0.0-03042016_D5AB7\", \"raised_by\": \"n2os_ids\", \"to_id\": \"1.128.0.0\"}, \"protocol\": \"ethernetip\", \"record_created_at\": 1793045327695, \"replicated\": true, \"risk\": 6, \"sec_profile_visible\": true, \"session_id\": \"12eszcd-223cds34\", \"severity\": 10, \"src_roles\": \"consumer, engineering_station\", \"status\": \"open\", \"synchronized\": true, \"threat_name\": \"Grizzly Steppe Threat Actor\", \"ti_source\": \"\", \"time\": 1793045327695, \"trace_sha1\": null, \"trace_status\": \"state_unavailable_for_alert_type\", \"transport_protocol\": \"tcp\", \"trigger_id\": \"indicator--fb15c96c-eb73-48ac-a48a-15bcab2f0fe3\", \"trigger_type\": \"stix_indicators\", \"type_id\": \"SIGN:PROGRAM:CHANGE\", \"type_name\": \"Program change\", \"zone_dst\": \"Production_A\", \"zone_src\": \"Production_A\"}\n",
+      "sourcetype": "nozomi:universal_alert",
+      "host": "ub1-ddi",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "FAULT",
+        "netspout_event_id": "ub1-002"
+      }
+    },
+    {
+      "event": "2026-10-26 20:08:47 48 172.17.0.2 403 TCP_DENIED 520 1043 GET https pixel.tapad.com 443 /api/v1/stream/9f1aa324 ?session=702134f5 aeinstein - - pixel.tapad.com - https://vid.vidoomy.com/ DENIED \"FastwebRes_CallCntr;Web Ads/Analytics\" - 142.182.19.21 34.111.113.62 \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36\" sha256WithRSAEncryption",
+      "sourcetype": "bluecoat:proxysg:access:file",
+      "host": "ub1-sg",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "PROPAGATE",
+        "netspout_event_id": "ub1-003"
+      }
+    },
+    {
+      "event": "2026-10-26T20:08:47.695208000+00:00 network connect 518f98fdc886c947bf81f9d121e56c7256e25ce4cfeb0d5eb8ec3dc828532059 (container=e421...5e14, name=bridge, type=bridge)",
+      "sourcetype": "docker_events",
+      "host": "ub1-host",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "PROPAGATE",
+        "netspout_event_id": "ub1-004",
+        "netspout_parent_event_id": "ub1_ot_proxy_host_hunt-PROPAGATE-1"
+      }
+    },
+    {
+      "event": "** Alert 1793045327.612227: - ossec,rootcheck,\n2026 Oct 26 20:08:47 (Ubuntu) any->rootcheck\nRule: 521 (level 11) -> 'Possible kernel level rootkit'\nProcess '659' hidden from /proc. Possible kernel level rootkit.\ntitle: Process '659' hidden from /proc.",
+      "sourcetype": "wazuh:alerts",
+      "host": "ub1-host",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub1-005"
+      }
+    },
+    {
+      "event": "** Alert 1793045327.696775: - ossec,rootcheck,pci_dss_10.6.1,gdpr_IV_35.7.d,\n2026 Oct 26 20:08:47 (Ubuntu) any->rootcheck\nRule: 510 (level 7) -> 'Host-based anomaly detection event (rootcheck).'\nFile '/dev/.hidden' present on /dev. Possible hidden file.\ntitle: File present on /dev.\nfile: /dev/.hidden",
+      "sourcetype": "wazuh:alerts",
+      "host": "ub1-host",
+      "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+        "netspout_scenario_id": "ub1_ot_proxy_host_hunt",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub1-006",
+        "netspout_parent_event_id": "ub1_ot_proxy_host_hunt-VALIDATE-1"
+      }
+    }
+  ]
+}

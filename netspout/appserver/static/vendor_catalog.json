@@ -1753,5 +1753,69 @@
     "sample_events": {
       "crushftp_session": "10/26/2026 14:58:14|netspout-sftp-lab|4|WEB|LOGIN |admin|session:2A|ip:10.0.9.9|port:49304|result success|"
     }
+  },
+  {
+    "id": "zeek",
+    "vendor": "Zeek (Bro)",
+    "vendor_slug": "zeek",
+    "category": "Network Security Monitoring",
+    "name": "Splunk Add-on for Zeek",
+    "splunkbase_id": "",
+    "splunkbase_url": "",
+    "doc_url": "https://docs.zeek.org/en/master/script-reference/proto-analyzers.html",
+    "sourcetypes": [
+      "bro:conn:json"
+    ],
+    "header_type": "JSON",
+    "delimiter": "",
+    "timestamp_format": "ISO 8601",
+    "cim_models": [
+      "Network Traffic"
+    ],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "google_cloud",
+    "vendor": "Google Cloud",
+    "vendor_slug": "google_cloud",
+    "category": "Cloud Platform",
+    "name": "Splunk Add-on for Google Cloud Platform",
+    "splunkbase_id": "",
+    "splunkbase_url": "",
+    "doc_url": "https://cloud.google.com/audit-logs/docs",
+    "sourcetypes": [
+      "gcp:audit"
+    ],
+    "header_type": "JSON",
+    "delimiter": "",
+    "timestamp_format": "ISO 8601",
+    "cim_models": [
+      "Authentication",
+      "Cloud Services"
+    ],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "opentelemetry",
+    "vendor": "OpenTelemetry",
+    "vendor_slug": "opentelemetry",
+    "category": "Observability",
+    "name": "OpenTelemetry Collector (OTLP/JSON)",
+    "splunkbase_id": "",
+    "splunkbase_url": "",
+    "doc_url": "https://opentelemetry.io/docs/specs/otel/logs/",
+    "sourcetypes": [
+      "opentelemetry:otlp"
+    ],
+    "header_type": "JSON",
+    "delimiter": "",
+    "timestamp_format": "Unix ns",
+    "cim_models": [
+      "Performance"
+    ],
+    "field_mappings": {},
+    "sample_events": []
   }
 ]

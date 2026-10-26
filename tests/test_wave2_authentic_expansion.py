@@ -365,18 +365,25 @@ class TestCanonicalGraduation(unittest.TestCase):
     """Workstream A intentional invariant updates."""
 
     def test_vendor_count_50(self):
+        # Intentional pinned counter (authorized Workstream A/B pattern):
+        # 50 Wave-1/2 vendors + 3 Wave-3 additions
+        # (zeek, google_cloud, opentelemetry)
         with open(os.path.join(REPO_ROOT, "catalog", "vendors.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 50)
+            self.assertEqual(len(json.load(fh)), 53)
 
     def test_sourcetype_rows_289(self):
+        # Intentional pinned counter (authorized Workstream A/B pattern):
+        # 289 Wave-2 canonical rows + 24 Wave-3 new rows
         with open(os.path.join(REPO_ROOT, "catalog",
                                "sourcetypes.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 289)
+            self.assertEqual(len(json.load(fh)), 313)
 
     def test_scenarios_37(self):
+        # Intentional pinned counter (authorized Workstream A/B pattern):
+        # 37 Wave-2 scenarios + 3 Wave-3 packs
         with open(os.path.join(REPO_ROOT, "catalog", "scenarios.json")) as fh:
             rows = json.load(fh)
-        self.assertEqual(len(rows), 37)
+        self.assertEqual(len(rows), 40)
         wave2_rows = [r for r in rows if r["id"].startswith("wave2_")]
         self.assertEqual(len(wave2_rows), 8)
 

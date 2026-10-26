@@ -6274,6 +6274,139 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "wave3_ebpf_workload_hunt",
+      "title": "eBPF Workload Hunt (Wave-3 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems",
+        "Google Cloud",
+        "OpenTelemetry",
+        "Zeek (Bro)"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Kubernetes workload compromise chain: Cilium Tetragon process exec/connect, Cisco Cloud Security DNS/proxy/cloud-firewall rows and Zeek conn records - delivered as authentic vendor-native RAW with correlation on HEC fields only.",
+      "sourcetypes": [
+        "cisco:isovalent",
+        "cisco:isovalent:processExec",
+        "cisco:isovalent:processConnect",
+        "cisco:cloud_security:dns",
+        "cisco:cloud_security:proxy",
+        "cisco:cloud_security:firewall",
+        "bro:conn:json",
+        "gcp:audit",
+        "opentelemetry:otlp"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:isovalent",
+        "cisco:cloud_security:firewall"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "eBPF-native workload hunt across container, cloud edge and NSM raw sources",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave3_cloudmail_exfil",
+      "title": "Cloud Mail Exfiltration Chain (Wave-3 pack)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services",
+        "Cisco Duo",
+        "Cisco Systems",
+        "Google Workspace",
+        "Microsoft 365",
+        "Zscaler"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "SaaS identity + mail exfiltration chain: Duo admin activity, M365 reporting/Graph message traces, Gmail BigQuery export, Zscaler NSS web rows and CloudFront edge pull - authentic vendor-native RAW.",
+      "sourcetypes": [
+        "cisco:duo:administrator",
+        "o365:reporting:messagetrace",
+        "o365:graph:messagetrace",
+        "gsuite:gmail:bigquery",
+        "zscalernss-web",
+        "aws:cloudfront:accesslogs",
+        "aws:cloudtrail:lake",
+        "cisco:secure_access:security_events_ravpn"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "o365:reporting:messagetrace",
+        "cisco:duo:administrator"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Multi-SaaS mail and storage exfil chain with identity audit trail",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "wave3_vsphere_hostpath_triage",
+      "title": "vSphere Host Path Triage (Wave-3 pack)",
+      "domain": "OPERATIONS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Meraki",
+        "Cisco Systems",
+        "Linux Infrastructure",
+        "Microsoft 365",
+        "Microsoft Windows",
+        "VMware by Broadcom"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Hypervisor/identity triage sequence: Windows System channel XML, Viptela SD-WAN control+access, ISC dhcpd leases, ESXi shell reads, /var/log/secure su chain and IOS SEC_LOGIN failures - authentic vendor-native RAW.",
+      "sourcetypes": [
+        "XmlWinEventLog:System",
+        "cisco:sdwan:syslog",
+        "dhcpd",
+        "iis",
+        "vmw-syslog",
+        "linux_secure",
+        "cisco:sdwan:access",
+        "cisco:ios",
+        "cisco:meraki:syslog",
+        "MSExchange:Management"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "vmw-syslog",
+        "linux_secure"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Hypervisor and identity plane triage across Windows/Linux/viptela raw surfaces",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -8107,7 +8240,9 @@
       "sourcetypes": [
         "cisco:duo:administrator"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -8625,7 +8760,8 @@
       "scenario_ids": [
         "campus",
         "cross_platform_disaster",
-        "scenario_mv_016_cross_domain_slowness"
+        "scenario_mv_016_cross_domain_slowness",
+        "wave3_vsphere_hostpath_triage"
       ],
       "dashboard_ids": [],
       "formats": [
@@ -9989,7 +10125,9 @@
       "sourcetypes": [
         "cisco:sdwan:syslog"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -14146,6 +14284,654 @@
       ],
       "scenario_ids": [
         "wave2_bigip_openconfig_itops"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "vmw-syslog",
+      "title": "vmw-syslog",
+      "domain": "Enterprise Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "VMware by Broadcom"
+      ],
+      "readiness": "Evidence review required",
+      "description": "VMware vSphere ESXi Syslog",
+      "sourcetypes": [
+        "vmw-syslog"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:cloud_security:firewall",
+      "title": "cisco:cloud_security:firewall",
+      "domain": "Cisco Security & Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Cloud Security Firewall",
+      "sourcetypes": [
+        "cisco:cloud_security:firewall"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:cloud_security:dns",
+      "title": "cisco:cloud_security:dns",
+      "domain": "Cisco Security & Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Cloud Security DNS",
+      "sourcetypes": [
+        "cisco:cloud_security:dns"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:cloud_security:proxy",
+      "title": "cisco:cloud_security:proxy",
+      "domain": "Cisco Security & Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Cloud Security Web Proxy",
+      "sourcetypes": [
+        "cisco:cloud_security:proxy"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:isovalent",
+      "title": "cisco:isovalent",
+      "domain": "Container & Orchestration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Isovalent Cilium Events",
+      "sourcetypes": [
+        "cisco:isovalent"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:isovalent:processExec",
+      "title": "cisco:isovalent:processExec",
+      "domain": "Container & Orchestration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Isovalent Cilium processExec",
+      "sourcetypes": [
+        "cisco:isovalent:processExec"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:isovalent:processConnect",
+      "title": "cisco:isovalent:processConnect",
+      "domain": "Container & Orchestration Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Isovalent Cilium processConnect",
+      "sourcetypes": [
+        "cisco:isovalent:processConnect"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "aws:cloudtrail:lake",
+      "title": "aws:cloudtrail:lake",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services"
+      ],
+      "readiness": "Evidence review required",
+      "description": "AWS CloudTrail Lake (OCSF)",
+      "sourcetypes": [
+        "aws:cloudtrail:lake"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "linux_secure",
+      "title": "linux_secure",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Linux Infrastructure"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Linux /var/log/secure",
+      "sourcetypes": [
+        "linux_secure"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "iis",
+      "title": "iis",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Microsoft IIS W3C Access",
+      "sourcetypes": [
+        "iis"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "bro:conn:json",
+      "title": "bro:conn:json",
+      "domain": "Network Intrusion Detection",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Zeek (Bro)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Zeek (Bro) conn JSON",
+      "sourcetypes": [
+        "bro:conn:json"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "MSExchange:Management",
+      "title": "MSExchange:Management",
+      "domain": "Enterprise Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft 365"
+      ],
+      "readiness": "Evidence review required",
+      "description": "MS Exchange Management Audit",
+      "sourcetypes": [
+        "MSExchange:Management"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "aws:cloudfront:accesslogs",
+      "title": "aws:cloudfront:accesslogs",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Amazon Web Services"
+      ],
+      "readiness": "Evidence review required",
+      "description": "AWS CloudFront Access Logs",
+      "sourcetypes": [
+        "aws:cloudfront:accesslogs"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "o365:reporting:messagetrace",
+      "title": "o365:reporting:messagetrace",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft 365"
+      ],
+      "readiness": "Evidence review required",
+      "description": "M365 Reporting Message Trace",
+      "sourcetypes": [
+        "o365:reporting:messagetrace"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "o365:graph:messagetrace",
+      "title": "o365:graph:messagetrace",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft 365"
+      ],
+      "readiness": "Evidence review required",
+      "description": "M365 Graph Message Trace",
+      "sourcetypes": [
+        "o365:graph:messagetrace"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "gsuite:gmail:bigquery",
+      "title": "gsuite:gmail:bigquery",
+      "domain": "Identity & SaaS Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Google Workspace"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Gmail BigQuery Message Export",
+      "sourcetypes": [
+        "gsuite:gmail:bigquery"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "zscalernss-web",
+      "title": "zscalernss-web",
+      "domain": "Zscaler SSE Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Zscaler"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Zscaler NSS Web Proxy Logs",
+      "sourcetypes": [
+        "zscalernss-web"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:secure_access:security_events_ravpn",
+      "title": "cisco:secure_access:security_events_ravpn",
+      "domain": "Cisco Security & Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Secure Access RA-VPN Events",
+      "sourcetypes": [
+        "cisco:secure_access:security_events_ravpn"
+      ],
+      "scenario_ids": [
+        "wave3_cloudmail_exfil"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:sdwan:access",
+      "title": "cisco:sdwan:access",
+      "domain": "Cisco SD-WAN",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco SD-WAN Management Access",
+      "sourcetypes": [
+        "cisco:sdwan:access"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cisco:meraki:syslog",
+      "title": "cisco:meraki:syslog",
+      "domain": "Meraki",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Meraki"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Cisco Meraki Syslog",
+      "sourcetypes": [
+        "cisco:meraki:syslog"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "dhcpd",
+      "title": "dhcpd",
+      "domain": "Enterprise Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Linux Infrastructure"
+      ],
+      "readiness": "Evidence review required",
+      "description": "ISC dhcpd Lease Events",
+      "sourcetypes": [
+        "dhcpd"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "gcp:audit",
+      "title": "gcp:audit",
+      "domain": "Cloud Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Google Cloud"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Google Cloud Audit Logs",
+      "sourcetypes": [
+        "gcp:audit"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "opentelemetry:otlp",
+      "title": "opentelemetry:otlp",
+      "domain": "Enterprise Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "OpenTelemetry"
+      ],
+      "readiness": "Evidence review required",
+      "description": "OpenTelemetry OTLP/JSON",
+      "sourcetypes": [
+        "opentelemetry:otlp"
+      ],
+      "scenario_ids": [
+        "wave3_ebpf_workload_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "XmlWinEventLog:System",
+      "title": "XmlWinEventLog:System",
+      "domain": "Endpoint & Host Telemetry",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Microsoft Windows"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Windows System Channel XML",
+      "sourcetypes": [
+        "XmlWinEventLog:System"
+      ],
+      "scenario_ids": [
+        "wave3_vsphere_hostpath_triage"
       ],
       "dashboard_ids": [],
       "formats": [],

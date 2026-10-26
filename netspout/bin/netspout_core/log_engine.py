@@ -1606,3 +1606,34 @@ try:
 except ImportError:  # pragma: no cover - wave-2 module unavailable
     pass
 
+# ---------------------------------------------------------------------------
+# Wave-3 authentic source expansion (2026-10-26)
+# Splunkbase-scale batch: VMware vSphere, Cisco Cloud Security (firewall/ns
+# DNS/proxy), Cisco Isovalent Tetragon, CloudTrail Lake, linux_secure, IIS,
+# Zeek conn, MSExchange Management, CloudFront, M365/Gmail traces, Zscaler NSS,
+# Secure Access RA-VPN, SD-WAN, IOS SEC_LOGIN, Meraki syslog, dhcpd, GCP audit,
+# OpenTelemetry OTLP, Windows System channel XML plus the cisco:duo:administrator
+# generator-gap fill. Same guarantees as Wave-1/2.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave3_authentic_engine import (
+        Wave3AuthenticEngine as _Wave3Engine,
+        WAVE3_SOURCE_SOURCETYPES as _W3_MAP,
+    )
+
+    SplunkLogEngine.WAVE3_SOURCE_SOURCETYPES = _W3_MAP
+
+    def _w3_delegate(name):
+        engine_method = getattr(_Wave3Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _w3_fmt in _W3_MAP.values():
+        setattr(SplunkLogEngine, _w3_fmt, _w3_delegate(_w3_fmt))
+except ImportError:  # pragma: no cover - wave-3 module unavailable
+    pass
+

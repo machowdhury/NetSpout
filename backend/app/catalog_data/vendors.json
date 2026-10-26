@@ -2169,5 +2169,90 @@
   "primary_sourcetypes": [
    "crushftp:sessionlogs"
   ]
+ },
+ {
+  "id": "zeek",
+  "legacy_id": "zeek",
+  "name": "Zeek (Bro)",
+  "slug": "zeek",
+  "category": "Network Security Monitoring",
+  "splunk_app_name": "Splunk Add-on for Zeek",
+  "splunkbase_id": "",
+  "splunkbase_url": "",
+  "doc_url": "https://docs.zeek.org/en/master/script-reference/proto-analyzers.html",
+  "supported_device_types": [
+   "firewall"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "JSON",
+  "delimiter": "",
+  "timestamp_format": "ISO 8601",
+  "cim_models": [
+   "Network Traffic"
+  ],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "bro:conn:json"
+  ]
+ },
+ {
+  "id": "google_cloud",
+  "legacy_id": "google_cloud",
+  "name": "Google Cloud",
+  "slug": "google_cloud",
+  "category": "Cloud Platform",
+  "splunk_app_name": "Splunk Add-on for Google Cloud Platform",
+  "splunkbase_id": "",
+  "splunkbase_url": "",
+  "doc_url": "https://cloud.google.com/audit-logs/docs",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "JSON",
+  "delimiter": "",
+  "timestamp_format": "ISO 8601",
+  "cim_models": [
+   "Authentication",
+   "Cloud Services"
+  ],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "gcp:audit"
+  ]
+ },
+ {
+  "id": "opentelemetry",
+  "legacy_id": "opentelemetry",
+  "name": "OpenTelemetry",
+  "slug": "opentelemetry",
+  "category": "Observability",
+  "splunk_app_name": "OpenTelemetry Collector (OTLP/JSON)",
+  "splunkbase_id": "",
+  "splunkbase_url": "",
+  "doc_url": "https://opentelemetry.io/docs/specs/otel/logs/",
+  "supported_device_types": [
+   "web_server"
+  ],
+  "supported_protocols": [
+   "hec"
+  ],
+  "header_type": "JSON",
+  "delimiter": "",
+  "timestamp_format": "Unix ns",
+  "cim_models": [
+   "Performance"
+  ],
+  "field_mappings": {},
+  "sample_events": [],
+  "primary_sourcetypes": [
+   "opentelemetry:otlp"
+  ]
  }
 ]

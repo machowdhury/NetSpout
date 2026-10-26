@@ -1,0 +1,556 @@
+{
+ "schema_version": "1.0",
+ "wave": 3,
+ "wave_version": "wave3-2026-10-26",
+ "created_utc": "2026-10-26",
+ "purpose": "Declarative registry of the Wave-3 Splunkbase-scale telemetry expansion: 24 new canonical sourcetypes plus generator-gap fills for the existing cisco:duo:administrator, cisco:ios and cisco:sdwan:syslog rows.",
+ "invariants_respected": [
+  "every addition is either pinned-fixture evidenced or STANDARD_DOCUMENTED (official schema); no fabricated formats",
+  "cisco:duo:administrator, cisco:ios and cisco:sdwan:syslog already existed as catalog rows - generators only, no duplicate rows registered",
+  "event families are NOT counted as unique sourcetypes",
+  "netspout correlation metadata never inside RAW",
+  "no new package downloads or TA installs; bounded live tests only"
+ ],
+ "engine_module": "src/netspout_core/wave3_authentic_engine.py",
+ "engine_bindings": "SplunkLogEngine.WAVE3_SOURCE_SOURCETYPES + per-formatter delegable classmethods (src/netspout_core/log_engine.py)",
+ "raw_reference_corpus": "catalog/raw_reference/provenance.json (wave:3 entries), pinned attack_data commit 1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8 (Apache-2.0) plus official vendor schemas",
+ "sources": [
+  {
+   "wave_source_id": "vmw-syslog",
+   "vendor": "VMware (vmware_nsx vendor)",
+   "splunk_sourcetype": "vmw-syslog",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/vmw-syslog__55de82__esxi_vm_download.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/vmw-syslog__66941c__esxi_sensitive_files.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_vmw_syslog_log",
+   "event_families": [
+    "hostd_event",
+    "shell_command"
+   ],
+   "event_family_count": 2,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "cisco-cloud-security-firewall",
+   "vendor": "Cisco (cisco_asa vendor)",
+   "splunk_sourcetype": "cisco:cloud_security:firewall",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_cloud_security_firewall__0ad6da__rdp_brute_force.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/cisco_cloud_security_firewall__4dd2e9__large_icmp.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_cloud_security_firewall_log",
+   "event_families": [
+    "conn_c2s",
+    "conn_s2c_icmp"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Cisco Cloud Security"
+  },
+  {
+   "wave_source_id": "cisco-cloud-security-dns",
+   "vendor": "Cisco (cisco_asa vendor)",
+   "splunk_sourcetype": "cisco:cloud_security:dns",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_cloud_security_dns__c61798__anonymizer_dns.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_cloud_security_dns_log",
+   "event_families": [
+    "dns_query"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Cisco Cloud Security"
+  },
+  {
+   "wave_source_id": "cisco-cloud-security-proxy",
+   "vendor": "Cisco (cisco_asa vendor)",
+   "splunk_sourcetype": "cisco:cloud_security:proxy",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_cloud_security_proxy__a13521__automated_web_recon_http_errors.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_cloud_security_proxy_log",
+   "event_families": [
+    "proxy_http"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Cisco Cloud Security"
+  },
+  {
+   "wave_source_id": "cisco-isovalent",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:isovalent",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_isovalent__5ac6ab__cisco_isovalent.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_isovalent_log",
+   "event_families": [
+    "process_exec",
+    "process_connect"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Cisco OpenVAD Add-on"
+  },
+  {
+   "wave_source_id": "cisco-isovalent-processexec",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:isovalent:processExec",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_isovalent_processExec__103a4a__cisco_isovalent_process_exec_delayed_shell.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_isovalent_log",
+   "event_families": [
+    "process_exec",
+    "process_connect"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Cisco OpenVAD Add-on"
+  },
+  {
+   "wave_source_id": "cisco-isovalent-processconnect",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:isovalent:processConnect",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_isovalent_processConnect__d9679c__process_connect.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_isovalent_log",
+   "event_families": [
+    "process_exec",
+    "process_connect"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Cisco OpenVAD Add-on"
+  },
+  {
+   "wave_source_id": "aws-cloudtrail-lake",
+   "vendor": "Amazon Web Services (amazon_aws vendor)",
+   "splunk_sourcetype": "aws:cloudtrail:lake",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/aws_cloudtrail_lake__8d6189__asl_ocsf_cloudtrail.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/aws_cloudtrail_lake__c5878d__asl_ocsf_cloudtrail.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_aws_cloudtrail_lake_log",
+   "event_families": [
+    "ocsf_api_activity"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for AWS"
+  },
+  {
+   "wave_source_id": "linux-secure",
+   "vendor": "Linux infrastructure (linux_infrastructure)",
+   "splunk_sourcetype": "linux_secure",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/linux_secure__8e758e__auth.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_linux_secure_log",
+   "event_families": [
+    "su_message",
+    "pam_session",
+    "sshd_message"
+   ],
+   "event_family_count": 3,
+   "required_ta": "Splunk Add-on for Unix and Linux"
+  },
+  {
+   "wave_source_id": "iis",
+   "vendor": "Microsoft (microsoft_windows vendor)",
+   "splunk_sourcetype": "iis",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/iis__032e8b__wsus-iis.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/iis__322941__pwsh_installediismodules.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_iis_log",
+   "event_families": [
+    "w3c_access",
+    "module_backdoor_listing"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Microsoft IIS"
+  },
+  {
+   "wave_source_id": "bro-conn-json",
+   "vendor": "Zeek (zeek vendor)",
+   "splunk_sourcetype": "bro:conn:json",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/bro_conn_json__4c259f__zeek_conn.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/bro_conn_json__fdf41c__zeek_conn.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_zeek_conn_json_log",
+   "event_families": [
+    "conn"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Zeek"
+  },
+  {
+   "wave_source_id": "msexchange-management",
+   "vendor": "Microsoft on-prem Exchange (microsoft_365 vendor)",
+   "splunk_sourcetype": "MSExchange:Management",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/MSExchange_Management__b1e02d__msexchangemanagement.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/MSExchange_Management__ac0645__exchange_events.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_msexchange_log",
+   "event_families": [
+    "cmdlet_event",
+    "ecp_client_access"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Microsoft Exchange"
+  },
+  {
+   "wave_source_id": "aws-cloudfront-accesslogs",
+   "vendor": "Amazon Web Services (amazon_aws vendor)",
+   "splunk_sourcetype": "aws:cloudfront:accesslogs",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/aws_cloudfront_accesslogs__ee2a09__web_cloudfront_access.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_aws_cloudfront_log",
+   "event_families": [
+    "edge_access"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for AWS"
+  },
+  {
+   "wave_source_id": "o365-reporting-messagetrace",
+   "vendor": "Microsoft 365 (microsoft_365 vendor)",
+   "splunk_sourcetype": "o365:reporting:messagetrace",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/o365_reporting_messagetrace__f5b920__o365_messagetrace_suspect_events.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_o365_messagetrace_log",
+   "event_families": [
+    "message_trace"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Microsoft Office 365"
+  },
+  {
+   "wave_source_id": "o365-graph-messagetrace",
+   "vendor": "Microsoft 365 (microsoft_365 vendor)",
+   "splunk_sourcetype": "o365:graph:messagetrace",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/o365_graph_messagetrace__b3dc3a__o365_graph_messagetrace_suspect_events.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_o365_graph_messagetrace_log",
+   "event_families": [
+    "graph_message_trace"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Microsoft Office 365"
+  },
+  {
+   "wave_source_id": "gsuite-gmail-bigquery",
+   "vendor": "Google Workspace (google_workspace vendor)",
+   "splunk_sourcetype": "gsuite:gmail:bigquery",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/gsuite_gmail_bigquery__670dfb__gsuite_external_domain.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/gsuite_gmail_bigquery__fc8eb2__gsuite_gmail_file_ext.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_gmail_bigquery_log",
+   "event_families": [
+    "gmail_message_event"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Splunk Add-on for Google Workspace"
+  },
+  {
+   "wave_source_id": "zscaler-nss-web",
+   "vendor": "Zscaler (zscaler_zia vendor)",
+   "splunk_sourcetype": "zscalernss-web",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/zscalernss-web__ec7171__zscalar_web_proxy.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_zscaler_nss_web_log",
+   "event_families": [
+    "web_proxy_block",
+    "web_proxy_allow"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Zscaler App for Splunk (NSS)"
+  },
+  {
+   "wave_source_id": "cisco-secure-access-security-events-ravpn",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:secure_access:security_events_ravpn",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_secure_access_security_events_ravpn__fc9e1c__ravpn_high_auth_failures.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_ravpn_log",
+   "event_families": [
+    "vpn_auth_reject",
+    "vpn_auth_accept"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Cisco Secure Access"
+  },
+  {
+   "wave_source_id": "cisco-sdwan-syslog",
+   "vendor": "Cisco SD-WAN (cisco_sdwan vendor)",
+   "splunk_sourcetype": "cisco:sdwan:syslog",
+   "is_new_canonical_row": false,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_sdwan_syslog__8b95dc__auth_dummy_key.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/cisco_sdwan_syslog__db28cd__vsyslog.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_sdwan_syslog_log",
+   "event_families": [
+    "vdaemon_control_change",
+    "sshd_auth"
+   ],
+   "event_family_count": 2,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "cisco-sdwan-access",
+   "vendor": "Cisco SD-WAN (cisco_sdwan vendor)",
+   "splunk_sourcetype": "cisco:sdwan:access",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/wave3/cisco_sdwan_access__fcf4ed__serviceproxy_access.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_sdwan_access_log",
+   "event_families": [
+    "mgmt_proxy_access"
+   ],
+   "event_family_count": 1,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "cisco-ios",
+   "vendor": "Cisco (cisco_ios vendor)",
+   "splunk_sourcetype": "cisco:ios",
+   "is_new_canonical_row": false,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/wave3/cisco_ios__e09eae__salttyphoon_cisco.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_ios_syslog_log",
+   "event_families": [
+    "sec_login_success",
+    "sec_login_failure"
+   ],
+   "event_family_count": 2,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "cisco-meraki-syslog",
+   "vendor": "Cisco Meraki (cisco_meraki vendor)",
+   "splunk_sourcetype": "cisco:meraki:syslog",
+   "is_new_canonical_row": true,
+   "raw_evidence": [],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave3AuthenticEngine.format_cisco_meraki_syslog_log",
+   "event_families": [
+    "flows",
+    "urls"
+   ],
+   "event_family_count": 2,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "dhcpd",
+   "vendor": "ISC dhcpd (linux_infrastructure vendor)",
+   "splunk_sourcetype": "dhcpd",
+   "is_new_canonical_row": true,
+   "raw_evidence": [],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave3AuthenticEngine.format_dhcpd_log",
+   "event_families": [
+    "dhcpdiscover",
+    "dhcprequest",
+    "dhcpack",
+    "dhcprelease"
+   ],
+   "event_family_count": 4,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "gcp-audit",
+   "vendor": "Google Cloud (google_cloud vendor)",
+   "splunk_sourcetype": "gcp:audit",
+   "is_new_canonical_row": true,
+   "raw_evidence": [],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave3AuthenticEngine.format_gcp_audit_log",
+   "event_families": [
+    "admin_activity",
+    "data_access"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Google Cloud Platform"
+  },
+  {
+   "wave_source_id": "opentelemetry-otlp",
+   "vendor": "OpenTelemetry (opentelemetry vendor)",
+   "splunk_sourcetype": "opentelemetry:otlp",
+   "is_new_canonical_row": true,
+   "raw_evidence": [],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "Wave3AuthenticEngine.format_opentelemetry_otlp_log",
+   "event_families": [
+    "log_record",
+    "span_record"
+   ],
+   "event_family_count": 2,
+   "required_ta": null
+  },
+  {
+   "wave_source_id": "xmlwineventlog-system",
+   "vendor": "Microsoft (microsoft_windows vendor)",
+   "splunk_sourcetype": "XmlWinEventLog:System",
+   "is_new_canonical_row": false,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/XmlWinEventLog_System__head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_windows_system_xml_log",
+   "event_families": [
+    "system_service_event",
+    "service_install_event"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Microsoft Windows"
+  },
+  {
+   "wave_source_id": "cisco-duo-administrator",
+   "vendor": "Cisco Duo (cisco_duo vendor)",
+   "splunk_sourcetype": "cisco:duo:administrator",
+   "is_new_canonical_row": false,
+   "raw_evidence": [
+    "pinned attack_data fixture: catalog/raw_reference/cisco_duo_administrator__20c829__cisco_duo_administrator.head.bin",
+    "pinned attack_data fixture: catalog/raw_reference/cisco_duo_administrator__d4274e__cisco_duo_activity.head.bin"
+   ],
+   "evidence_level": "AUTHENTIC_RAW_EVIDENCED",
+   "generator": "Wave3AuthenticEngine.format_cisco_duo_admin_log",
+   "event_families": [
+    "admin_action",
+    "activity_event"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Cisco Duo"
+  }
+ ],
+ "classification_chain_states": {
+  "DISCOVERED": 27,
+  "AUTHENTIC_RAW_EVIDENCED": 23,
+  "STANDARD_DOCUMENTED": 4,
+  "GENERATOR_IMPLEMENTED": 27,
+  "OFFLINE_VERIFIED": 27,
+  "LIVE_INGEST_VERIFIED": 27,
+  "TA_PARSER_VERIFIED": 0
+ },
+ "live_verification": {
+  "method": "bounded HEC POST + indexed RAW-equality search (disposable token pf-ta-ise-val -> idx_ta_ise_test, zero config changes)",
+  "run_id": "pf-wave3-rawfidelity-1793037054",
+  "results_file": "catalog/wave3_live_raw_equality_results.json",
+  "events_posted": 30,
+  "post_failures": 0,
+  "raw_equality_pass": 30,
+  "raw_equality_fail": 0,
+  "distinct_sourcetypes_verified": 27,
+  "correlation_leaks_in_raw": 0,
+  "verified_utc": "2026-10-26"
+ },
+ "workstream_b_ta_compatibility": {
+  "status": "ASSESSED_NO_TA_INSTALLED_FOR_WAVE3_SOURCES",
+  "prepared_batch": [
+   {
+    "sourcetype": "cisco:asa",
+    "fixture": "catalog/raw_reference/wave3/cisco_asa__203973__cisco_asa_generic_logs.head.bin",
+    "target_ta": "Splunk Add-on for Cisco ASA (app 2020)",
+    "status": "PREPARED_NOT_INSTALLED"
+   },
+   {
+    "sourcetype": "iis / MSExchange:Management / XmlWinEventLog:System / linux_secure",
+    "fixture": "catalog/raw_reference/wave3/iis__*.head.bin + MSExchange_*.head.bin + XmlWinEventLog_System__head.bin",
+    "target_ta": "Splunk Add-on for Microsoft Windows / IIS / Exchange / Unix",
+    "status": "PREPARED_NOT_INSTALLED"
+   }
+  ],
+  "executed": [
+   {
+    "check": "Splunk_TA_cisco-ise 5.0.0 regression (real field extraction)",
+    "method": "bounded HEC post of one authentic cisco:ise:syslog raw (engine format_cisco_ise_log) into disposable idx_ta_ise_test; blocking search + fieldsummary",
+    "result": "PASS - TA search-time extraction still populates MESSAGE_CLASS/MESSAGE_CODE/MESSAGE_TEXT, User_Name, Calling_Station_ID, Framed_IP_Address, NAS_IP_Address, Protocol, Response plus normalized action/dest/dvc/mac fields; zero correlation keys inside _raw",
+    "date_utc": "2026-10-26"
+   }
+  ],
+  "blockers": [
+   {
+    "family": "All Wave-3 sources",
+    "ta": "per-source required_ta (see sources[] records)",
+    "status": "NOT_INSTALLED",
+    "blocker": "lab installs are fixed at Splunk_TA_cisco-ise 5.0.0, Splunk_SA_CIM 8.7.0 (content apps unchanged); no Wave-3 required TA present; no package downloads or installs without separate authorization; RAW-equality live verification therefore done through HEC (30/30 PASS) and parser checks are recorded as exact blockers"
+   }
+  ],
+  "preserved": "Cisco ISE regression coverage re-verified live (executed[0] PASS); ISE Add-on 5.0.0 remains the only installed vendor TA; no config mutation"
+ },
+ "counts_summary": {
+  "new_canonical_sourcetypes": 24,
+  "existing_row_gap_fills": [
+   "cisco:duo:administrator",
+   "cisco:ios",
+   "cisco:sdwan:syslog"
+  ],
+  "event_families_distinct_registry_instances": 48,
+  "scenario_packs": 3
+ },
+ "blocked_skipped": [
+  {
+   "candidate": "nginx:plus:access row",
+   "reason": "pinned content is identical-generation KV grammar to the already-implemented nginx:plus:kv formatter; adding a duplicate row + generator was declined (no cosmetic duplication); the row stays available for future access-format evidence"
+  },
+  {
+   "candidate": "fortinet:fortigate:traffic/event families",
+   "reason": "no pinned fortigate dataset in the snapshot beyond the wave-2 IPS rows; documented-only grammar deferred to keep every shipped family evidence-backed"
+  },
+  {
+   "candidate": "ICS/SCADA (Modbus/DNP3,RAN 5G syslog)",
+   "reason": "no reachable authentic RAW evidence within bounded fetching constraints; industrial packet analytics are not textual syslog families; deferred"
+  },
+  {
+   "candidate": "sourcetype rows beyond the ledger (aws:cloudtrail:lake lake console_login variants, zscaler web keys 44+)",
+   "reason": "bounded evidence head truncated at 128 KiB; keys and variants beyond captured evidence omitted by policy"
+  }
+ ]
+}

@@ -201,7 +201,13 @@ class TestWave2RawFidelity(unittest.TestCase):
     def test_deterministic_field_tokens(self):
         a = W2.format_mcp_jsonrpc_log(DEV, "request", src_ip="10.0.9.9")
         b = W2.format_mcp_jsonrpc_log(DEV, "request", src_ip="10.0.9.9")
-        self.assertEqual(a.raw_log, b.raw_log)
+        ja = json.loads(a.raw_log)
+        jb = json.loads(b.raw_log)
+        # Envelope genuinely records wall-clock time; every other field token
+        # (method/id/params shape) must be crc-deterministic.
+        ja.pop("timestamp")
+        jb.pop("timestamp")
+        self.assertEqual(ja, jb)
 
     def test_defender_ntlm_xml_system_block(self):
         e = W2.format_windows_defender_xml_log(

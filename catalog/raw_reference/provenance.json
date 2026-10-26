@@ -699,6 +699,58 @@
    "license": "Apache-2.0 (Security Content attack_data corpus)",
    "evidence_role": "authentic RAW fixture for wave-3 generator",
    "fetched_sha256": "a93c337278af4bd34e2cb4ebebf32144a6827d40f760d0ecb6dbd80be2370f8e"
+  },
+  {
+   "batch": "universe_batch1",
+   "added_utc": "2026-10-26",
+   "sourcetype_family": "docker_events",
+   "documentation_url": "https://docs.docker.com/engine/reference/commandline/events/",
+   "documentation_fetched_utc": "2026-10-26",
+   "raw_reference_file": "catalog/raw_reference/universe_batch1/docker_events__head.bin",
+   "fetched_bytes": 843,
+   "fetched_sha256": "2d5a403be2f4bb3463edeffd894b8bf43c0bd23785b941870be8903c8c441cfb",
+   "fetch_mode": "public vendor/integration documentation excerpt; no app packages downloaded, no TA installed",
+   "excerpt": "docker events 'Basic example' block, verbatim (container create/connect/start/kill/die/disconnect/stop lines)",
+   "evidence_role": "authentic vendor-native RAW fixture for Universal Vendor Coverage batch-1 generator"
+  },
+  {
+   "batch": "universe_batch1",
+   "added_utc": "2026-10-26",
+   "sourcetype_family": "bluecoat:proxysg:access:file",
+   "documentation_url": "https://www.elastic.co/docs/reference/integrations/proxysg",
+   "documentation_fetched_utc": "2026-10-26",
+   "raw_reference_file": "catalog/raw_reference/universe_batch1/bluecoat_proxysg_access_file__head.bin",
+   "fetched_bytes": 651,
+   "fetched_sha256": "7b47dd3525a5d79676109b51e29410a6b24b1ed7842a43ac4a185ddfedf95d38",
+   "fetch_mode": "public vendor/integration documentation excerpt; no app packages downloaded, no TA installed",
+   "excerpt": "Symantec/Broadcom ProxySG main-format access-log record (the ECS document's event.original), verbatim",
+   "evidence_role": "authentic vendor-native RAW fixture for Universal Vendor Coverage batch-1 generator"
+  },
+  {
+   "batch": "universe_batch1",
+   "added_utc": "2026-10-26",
+   "sourcetype_family": "wazuh:alerts",
+   "documentation_url": "https://documentation.wazuh.com/current/user-manual/capabilities/malware-detection/rootkits-behavior-detection.html",
+   "documentation_fetched_utc": "2026-10-26",
+   "raw_reference_file": "catalog/raw_reference/universe_batch1/wazuh_alerts__head.bin",
+   "fetched_bytes": 893,
+   "fetched_sha256": "abe5f03de9749960171b5e1c77d677d4353f207a063b7c1d7157f904fb18a4f4",
+   "fetch_mode": "public vendor/integration documentation excerpt; no app packages downloaded, no TA installed",
+   "excerpt": "Wazuh manager alerts.log Rootcheck alert blocks, verbatim",
+   "evidence_role": "authentic vendor-native RAW fixture for Universal Vendor Coverage batch-1 generator"
+  },
+  {
+   "batch": "universe_batch1",
+   "added_utc": "2026-10-26",
+   "sourcetype_family": "nozomi:universal_alert",
+   "documentation_url": "https://www.elastic.co/docs/reference/integrations/nozomi_networks",
+   "documentation_fetched_utc": "2026-10-26",
+   "raw_reference_file": "catalog/raw_reference/universe_batch1/nozomi_universal_alert__head.bin",
+   "fetched_bytes": 2590,
+   "fetched_sha256": "f53beef575d426966c37596616f6dd89982b873141044b9b102f63fda5449b04",
+   "fetch_mode": "public vendor/integration documentation excerpt; no app packages downloaded, no TA installed",
+   "excerpt": "Nozomi Networks vendor-native alert JSON (the document's event.original), re-serialized from the documented event",
+   "evidence_role": "authentic vendor-native RAW fixture for Universal Vendor Coverage batch-1 generator"
   }
  ]
 }

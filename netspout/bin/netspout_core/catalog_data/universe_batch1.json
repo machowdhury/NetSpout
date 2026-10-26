@@ -1,0 +1,158 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "universe-batch1-2026-10-26",
+ "created_utc": "2026-10-26",
+ "purpose": "First bounded multi-vendor generator batch of the Universal Vendor Coverage phase: 4 new canonical sourcetypes across 4 vendors recognized from the Splunkbase-wide vendor universe registry (catalog/vendor_universe.json).",
+ "invariants_respected": [
+  "every format is modelled on pinned, sha256-recorded vendor documentation RAW samples; no fabricated formats",
+  "vendor-native RAW preserved; correlation metadata only on HEC fields",
+  "event families are NOT counted as unique sourcetypes",
+  "no package downloads, TA installs or Splunk config changes; bounded live tests via the existing disposable HEC token only"
+ ],
+ "engine_module": "src/netspout_core/universe_batch1_engine.py",
+ "engine_bindings": {
+  "sourcetypes": [
+   "docker_events",
+   "bluecoat:proxysg:access:file",
+   "wazuh:alerts",
+   "nozomi:universal_alert"
+  ],
+  "generators": {
+   "docker-events": "format_docker_events_log",
+   "bluecoat-proxysg-access-file": "format_proxysg_access_log",
+   "wazuh-alerts": "format_wazuh_alert_log",
+   "nozomi-universal-alert": "format_nozomi_alert_log"
+  }
+ },
+ "raw_reference_corpus": "catalog/raw_reference/universe_batch1/ + provenance.json (universe:batch1 entries)",
+ "sources": [
+  {
+   "batch_source_id": "docker-events",
+   "vendor": "docker",
+   "splunk_sourcetype": "docker_events",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned vendor documentation fixture: catalog/raw_reference/universe_batch1/docker_events__head.bin"
+   ],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "format_docker_events_log",
+   "event_families": [
+    "container_lifecycle",
+    "network_connect"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Docker Monitoring (monitoringdocker Add-on)",
+   "ta_metadata": {
+    "status": "BLOCKED",
+    "reason": "Named monitoringdocker integration and docker_events parser compatibility not established by the pinned Splunkbase snapshot; native Docker CLI format only."
+   }
+  },
+  {
+   "batch_source_id": "bluecoat-proxysg-access-file",
+   "vendor": "broadcom_symantec",
+   "splunk_sourcetype": "bluecoat:proxysg:access:file",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned vendor documentation fixture: catalog/raw_reference/universe_batch1/bluecoat_proxysg_access_file__head.bin"
+   ],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "format_proxysg_access_log",
+   "event_families": [
+    "proxy_observed",
+    "proxy_denied"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Splunk Add-on for Symantec Blue Coat ProxySG",
+   "ta_metadata": {
+    "uid": 2758,
+    "publisher": "Splunk LLC",
+    "version": "3.9.0",
+    "sourcetype_declared_in_snapshot": true
+   }
+  },
+  {
+   "batch_source_id": "wazuh-alerts",
+   "vendor": "wazuh",
+   "splunk_sourcetype": "wazuh:alerts",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned vendor documentation fixture: catalog/raw_reference/universe_batch1/wazuh_alerts__head.bin"
+   ],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "format_wazuh_alert_log",
+   "event_families": [
+    "rootcheck_hidden_process",
+    "rootcheck_hidden_file"
+   ],
+   "event_family_count": 2,
+   "required_ta": "Wazuh Splunk Integration",
+   "ta_metadata": {
+    "status": "BLOCKED",
+    "reason": "Native alerts.log documented; required TA package and wazuh:alerts parser compatibility not established by pinned metadata."
+   }
+  },
+  {
+   "batch_source_id": "nozomi-universal-alert",
+   "vendor": "nozomi_networks",
+   "splunk_sourcetype": "nozomi:universal_alert",
+   "is_new_canonical_row": true,
+   "raw_evidence": [
+    "pinned vendor documentation fixture: catalog/raw_reference/universe_batch1/nozomi_universal_alert__head.bin"
+   ],
+   "evidence_level": "STANDARD_DOCUMENTED",
+   "generator": "format_nozomi_alert_log",
+   "event_families": [
+    "ot_ids_program_change"
+   ],
+   "event_family_count": 1,
+   "required_ta": "Nozomi Networks Universal Add-on",
+   "ta_metadata": {
+    "uid": 6905,
+    "publisher": "Nozomi Networks",
+    "version": "2.2.0",
+    "sourcetype_declared_in_snapshot": true
+   }
+  }
+ ],
+ "universe_registry": {
+  "file": "catalog/vendor_universe.json",
+  "vendor_keys_previously_extended": [
+   "docker",
+   "broadcom_symantec",
+   "wazuh",
+   "nozomi_networks"
+  ]
+ },
+ "live_verification": {
+  "method": "bounded HEC POST + indexed RAW-equality search (disposable token pf-ta-ise-val -> idx_ta_ise_test, zero config changes)",
+  "results_file": "catalog/universe_batch1_live_raw_equality_results.json",
+  "status": "HISTORICAL_PASS_PRE_RECOVERY",
+  "limitation": "Saved summary reports 9/9 PASS for the interrupted implementation. Recovery corrected generators and deferred two unsupported families; revised bytes were not re-ingested. No submitted/indexed payload hashes retained in the original summary."
+ },
+ "counts_summary": {
+  "new_canonical_sourcetypes": 4,
+  "new_canonical_vendors": 4,
+  "event_families_distinct_registry_instances": 7,
+  "scenario_packs": 1,
+  "note": "One executable scenario; canonical totals 57 vendors, 317 sourcetypes, 41 scenarios."
+ },
+ "ta_parser_verification": {
+  "verified_sourcetypes": 0,
+  "status": "BLOCKED",
+  "reason": "Required Batch 1 TAs and controlled parser evidence unavailable; no TA installation authorized."
+ },
+ "detection_validation": {
+  "verified_detections": 0,
+  "status": "NOT_PERFORMED"
+ },
+ "bounded_deferrals": [
+  {
+   "candidate": "Docker volume_event; Nozomi ot_ids_threat_actor",
+   "reason": "No supporting RAW for these families in the pinned corpus. Excluded from executable families and evidenced counts pending authentic samples."
+  },
+  {
+   "candidate": "Trellix ePO / Illumio / Veeam vbr / Proofpoint pds rows",
+   "reason": "vendor RAW samples not recoverable from public docs in this batch's bounded evidence window (Splunkbase docs carry no samples; SC4S pages declare sourcetypes only); deferred to a later universe batch"
+  }
+ ]
+}

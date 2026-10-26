@@ -366,24 +366,24 @@ class TestCanonicalGraduation(unittest.TestCase):
 
     def test_vendor_count_50(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 50 Wave-1/2 vendors + 3 Wave-3 additions
+        # 50 Wave-1/2 vendors + 3 Wave-3 + 4 Batch-1 additions
         # (zeek, google_cloud, opentelemetry)
         with open(os.path.join(REPO_ROOT, "catalog", "vendors.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 53)
+            self.assertEqual(len(json.load(fh)), 57)
 
     def test_sourcetype_rows_289(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 289 Wave-2 canonical rows + 24 Wave-3 new rows
+        # 289 Wave-2 canonical rows + 24 Wave-3 + 4 Batch-1 new rows
         with open(os.path.join(REPO_ROOT, "catalog",
                                "sourcetypes.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 313)
+            self.assertEqual(len(json.load(fh)), 317)
 
     def test_scenarios_37(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 37 Wave-2 scenarios + 3 Wave-3 packs
+        # 37 Wave-2 scenarios + 3 Wave-3 + 1 Batch-1 pack
         with open(os.path.join(REPO_ROOT, "catalog", "scenarios.json")) as fh:
             rows = json.load(fh)
-        self.assertEqual(len(rows), 40)
+        self.assertEqual(len(rows), 41)
         wave2_rows = [r for r in rows if r["id"].startswith("wave2_")]
         self.assertEqual(len(wave2_rows), 8)
 

@@ -35,14 +35,20 @@ try:
     from netspout_core.wave1_authentic_engine import Wave1AuthenticEngine as W1
     from netspout_core.wave2_authentic_engine import Wave2AuthenticEngine as W2
     from netspout_core.wave3_authentic_engine import Wave3AuthenticEngine as W3
+    from netspout_core.universe_batch1_engine import UniverseBatch1Engine as UB1
 except ImportError:  # pragma: no cover
     try:
         from app.models import LogEntry, Node, NodeType
+        from app.wave1_authentic_engine import Wave1AuthenticEngine as W1
+        from app.wave2_authentic_engine import Wave2AuthenticEngine as W2
+        from app.wave3_authentic_engine import Wave3AuthenticEngine as W3
+        from app.universe_batch1_engine import UniverseBatch1Engine as UB1
     except ImportError:
         from models import LogEntry, Node, NodeType
-    from wave1_authentic_engine import Wave1AuthenticEngine as W1
-    from wave2_authentic_engine import Wave2AuthenticEngine as W2
-    from wave3_authentic_engine import Wave3AuthenticEngine as W3
+        from wave1_authentic_engine import Wave1AuthenticEngine as W1
+        from wave2_authentic_engine import Wave2AuthenticEngine as W2
+        from wave3_authentic_engine import Wave3AuthenticEngine as W3
+        from universe_batch1_engine import UniverseBatch1Engine as UB1
 
 
 SCENARIO_PACK_IDS = [
@@ -57,6 +63,7 @@ SCENARIO_PACK_IDS = [
     "wave3_ebpf_workload_hunt",
     "wave3_cloudmail_exfil",
     "wave3_vsphere_hostpath_triage",
+    "ub1_ot_proxy_host_hunt",
 ]
 
 
@@ -131,6 +138,8 @@ def run_scenario_pack(scenario_id: str, run_id: Optional[str] = None,
         return _cloudmail_exfil(run_id, source_ip)
     if scenario_id == "wave3_vsphere_hostpath_triage":
         return _vsphere_hostpath_triage(run_id, source_ip)
+    if scenario_id == "ub1_ot_proxy_host_hunt":
+        return _ub1_ot_proxy_host_hunt(run_id, source_ip)
     raise ValueError(f"Unknown Wave-2 scenario pack: {scenario_id}")
 
 
@@ -820,4 +829,58 @@ def _vsphere_hostpath_triage(run_id: str, attacker: str) -> List[LogEntry]:
         dest_ip="104.20.23.154", status="normal"))
     secs.extend(_tag(val, run_id, "wave3_vsphere_hostpath_triage",
                      "VALIDATE"))
+    return secs
+
+
+# ---------------------------------------------------------------------------
+# Universal Vendor Coverage batch-1 pack: OT/IDS + web proxy + host IDS +
+# container runtime hunt. Consumer of every batch-1 canonical row
+# (docker_events, bluecoat:proxysg:access:file, wazuh:alerts,
+# nozomi:universal_alert) so the batch keeps the zero-orphan invariant.
+# ---------------------------------------------------------------------------
+def _ub1_ot_proxy_host_hunt(run_id: str, attacker: str) -> List[LogEntry]:
+    """OT tamper -> proxy exfil attempt -> host rootcheck -> container host."""
+    ddi = Node(id="ub1-ddi", name="n2os-guardian-sandbox-01",
+               type=NodeType.OPTICAL_CORE, ip_address="1.128.0.0")
+    plc = Node(id="ub1-plc", name="ab-ethip-c1-1756",
+               type=NodeType.STORAGE_SAN, ip_address="1.128.0.11")
+    sg = Node(id="ub1-sg", name="proxysg-edge-01",
+              type=NodeType.SASE_PROXY, ip_address="10.82.255.36")
+    host = Node(id="ub1-host", name="docker-host-01",
+                type=NodeType.WEB_SERVER, ip_address="172.17.0.2")
+    secs: List[LogEntry] = []
+
+    base: List[LogEntry] = []
+    base.append(UB1.format_docker_events_log(
+        device=host, family="container_lifecycle", status="normal"))
+    base.append(UB1.format_proxysg_access_log(
+        device=sg, family="proxy_observed", src_ip="10.82.255.36",
+        dest_ip="34.111.113.62", status="normal"))
+    secs.extend(_tag(base, run_id, "ub1_ot_proxy_host_hunt", "BASELINE"))
+
+    fault: List[LogEntry] = []
+    fault.append(UB1.format_nozomi_alert_log(
+        device=ddi, family="ot_ids_program_change",
+        src_ip=plc.ip_address, dest_ip=ddi.ip_address,
+        status="breached", action="alerted"))
+    secs.extend(_tag(fault, run_id, "ub1_ot_proxy_host_hunt", "FAULT"))
+
+    spread: List[LogEntry] = []
+    spread.append(UB1.format_proxysg_access_log(
+        device=sg, family="proxy_denied", src_ip="172.17.0.2",
+        dest_ip="34.111.113.62", status="breached", action="blocked"))
+    spread.append(UB1.format_docker_events_log(
+        device=host, family="network_connect", status="breached",
+        action="alerted"))
+    secs.extend(_tag(spread, run_id, "ub1_ot_proxy_host_hunt",
+                     "PROPAGATE"))
+
+    val: List[LogEntry] = []
+    val.append(UB1.format_wazuh_alert_log(
+        device=host, family="rootcheck_hidden_process", status="breached",
+        action="alerted"))
+    val.append(UB1.format_wazuh_alert_log(
+        device=host, family="rootcheck_hidden_file", status="breached",
+        action="alerted"))
+    secs.extend(_tag(val, run_id, "ub1_ot_proxy_host_hunt", "VALIDATE"))
     return secs

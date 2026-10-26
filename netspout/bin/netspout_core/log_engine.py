@@ -1637,3 +1637,42 @@ try:
 except ImportError:  # pragma: no cover - wave-3 module unavailable
     pass
 
+# ---------------------------------------------------------------------------
+# Universal Vendor Coverage — evidence-backed generator batch 1 (2026-10-26)
+# Bounded multi-vendor batch: docker_events, bluecoat:proxysg:access:file,
+# wazuh:alerts, nozomi:universal_alert. Same guarantees as the wave engines.
+# ---------------------------------------------------------------------------
+try:
+    try:
+        from netspout_core.universe_batch1_engine import (
+            UniverseBatch1Engine as _UB1Engine,
+            UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+        )
+    except ImportError:
+        try:
+            from app.universe_batch1_engine import (
+                UniverseBatch1Engine as _UB1Engine,
+                UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+            )
+        except ImportError:
+            from universe_batch1_engine import (
+                UniverseBatch1Engine as _UB1Engine,
+                UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+            )
+
+    SplunkLogEngine.UNIVERSE_BATCH1_SOURCE_SOURCETYPES = _UB1_MAP
+
+    def _ub1_delegate(name):
+        engine_method = getattr(_UB1Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _ub1_fmt in _UB1_MAP.values():
+        setattr(SplunkLogEngine, _ub1_fmt, _ub1_delegate(_ub1_fmt))
+except ImportError:  # pragma: no cover - batch-1 module unavailable
+    pass
+

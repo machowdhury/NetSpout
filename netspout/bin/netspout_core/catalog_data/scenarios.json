@@ -6234,5 +6234,122 @@
   "transport_protocol": "Splunk HEC",
   "splunk_storage": "Splunk Event Index (idx_network_ops)",
   "fidelity_badge": "MODELED PAYLOAD"
+ },
+ {
+  "id": "ub1_ot_proxy_host_hunt",
+  "code": "SEC-UB1-01",
+  "name": "OT Tamper to Container Host Hunt (Universe Batch-1)",
+  "display_name": "OT Tamper to Container Host Hunt (Universe Batch-1)",
+  "category": "SECURITY",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Converged OT/IT hunt: Nozomi Networks OT IDS alerts (PLC program change), Symantec/Broadcom ProxySG denied exfil attempts, Wazuh manager rootcheck alerts and Docker engine container lifecycle events - authentic vendor-native RAW with correlation on HEC fields only.",
+  "attack_vector": "PLC program modification (OT), T1048 exfiltration over web proxy, T1564 hidden files and directories.",
+  "defense_mechanism": "OT threat detection (Nozomi), web proxy verdicts (ProxySG), rootcheck host IDS (Wazuh), container runtime audit (Docker).",
+  "generation_mode": "SCENARIO_DERIVED",
+  "sourcetypes": [
+   "nozomi:universal_alert",
+   "bluecoat:proxysg:access:file",
+   "wazuh:alerts",
+   "docker_events"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "nozomi_networks",
+   "broadcom_symantec",
+   "wazuh",
+   "docker"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Nozomi OT IDS SIGN:PROGRAM:CHANGE alert",
+   "ProxySG OBSERVED baseline category hit",
+   "ProxySG TCP_DENIED exfil attempt (DENIED)",
+   "Wazuh rootcheck hidden process + hidden file alerts",
+   "Docker container/network lifecycle events"
+  ],
+  "expected_phases": [
+   "baseline",
+   "fault",
+   "propagate",
+   "validate"
+  ],
+  "use_case": {
+   "objective": "universe batch-1 multi-vendor hunt across OT IDS, web proxy, host IDS and container runtime RAW",
+   "required_telemetry": [
+    "nozomi:universal_alert",
+    "bluecoat:proxysg:access:file"
+   ]
+  },
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Nominal operations",
+    "duration_ticks": 2,
+    "description": "Container lifecycle + observed proxy transaction.",
+    "expected_observations": [
+     "docker_events create",
+     "proxysg OBSERVED"
+    ]
+   },
+   {
+    "phase": "FAULT",
+    "name": "OT program tamper",
+    "duration_ticks": 1,
+    "description": "Nozomi SIGN:PROGRAM:CHANGE alert on PLC edit.",
+    "expected_observations": [
+     "nozomi:universal_alert SIGN:PROGRAM:CHANGE"
+    ]
+   },
+   {
+    "phase": "PROPAGATE",
+    "name": "Exfil attempt + container churn",
+    "duration_ticks": 2,
+    "description": "Denied ProxySG exfil attempt and container network attach.",
+    "expected_observations": [
+     "bluecoat:proxysg:access:file TCP_DENIED"
+    ]
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Host response + recovery",
+    "duration_ticks": 2,
+    "description": "Wazuh rootcheck alerts and host investigation.",
+    "expected_observations": [
+     "wazuh:alerts rule 521/510"
+    ]
+   }
+  ],
+  "vendor_tech_details": [
+   {
+    "vendor": "nozomi_networks",
+    "sourcetype": "nozomi:universal_alert"
+   },
+   {
+    "vendor": "broadcom_symantec",
+    "sourcetype": "bluecoat:proxysg:access:file"
+   },
+   {
+    "vendor": "wazuh",
+    "sourcetype": "wazuh:alerts"
+   },
+   {
+    "vendor": "docker",
+    "sourcetype": "docker_events"
+   }
+  ],
+  "raw_evidence": "catalog/raw_reference/universe_batch1/ + provenance.json (universe:batch1 entries)",
+  "registry_reference": "catalog/universe_batch1.json"
  }
 ]

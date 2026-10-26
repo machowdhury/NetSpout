@@ -6556,5 +6556,89 @@
   "deprecated_aliases": [],
   "is_benchmark_197": false,
   "status": "active"
+ },
+ {
+  "id": "docker-events",
+  "splunk_sourcetype": "docker_events",
+  "display_name": "Docker Engine Events",
+  "vendor_id": "docker",
+  "category": "Container Platform & DevOps",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Docker Monitoring (monitoringdocker Add-on)",
+  "aliases": [
+   "docker-events",
+   "docker_events"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "bluecoat-proxysg-access-file",
+  "splunk_sourcetype": "bluecoat:proxysg:access:file",
+  "display_name": "Symantec/Broadcom ProxySG Access Log (file/main format)",
+  "vendor_id": "broadcom_symantec",
+  "category": "Web Security & Proxy",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "syslog",
+  "sample_file": null,
+  "required_ta": "Splunk Add-on for Symantec Blue Coat ProxySG",
+  "aliases": [
+   "bluecoat-proxysg-access-file",
+   "bluecoat:proxysg:access:file"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "wazuh-alerts",
+  "splunk_sourcetype": "wazuh:alerts",
+  "display_name": "Wazuh Manager Alerts (alerts.log)",
+  "vendor_id": "wazuh",
+  "category": "Host IDS & XDR",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "syslog",
+  "sample_file": null,
+  "required_ta": "Wazuh Splunk Integration (alerts.log file monitor)",
+  "aliases": [
+   "wazuh-alerts",
+   "wazuh:alerts"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "nozomi-universal-alert",
+  "splunk_sourcetype": "nozomi:universal_alert",
+  "display_name": "Nozomi Networks Universal Alert",
+  "vendor_id": "nozomi_networks",
+  "category": "OT & ICS Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "syslog",
+  "sample_file": null,
+  "required_ta": "Nozomi Networks Universal Add-on",
+  "aliases": [
+   "nozomi-universal-alert",
+   "nozomi:universal_alert"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
  }
 ]

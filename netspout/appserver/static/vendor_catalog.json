@@ -1817,5 +1817,92 @@
     ],
     "field_mappings": {},
     "sample_events": []
+  },
+  {
+    "id": "docker",
+    "vendor": "Docker",
+    "vendor_slug": "docker",
+    "category": "Container Platform & DevOps",
+    "name": "Docker Monitoring (monitoringdocker Add-on)",
+    "splunkbase_id": "",
+    "splunkbase_url": "",
+    "doc_url": "https://docs.docker.com/engine/reference/commandline/events/",
+    "sourcetypes": [
+      "docker_events"
+    ],
+    "header_type": "RFC3339Nano event text",
+    "delimiter": " ",
+    "timestamp_format": "RFC3339Nano",
+    "cim_models": [
+      "Change Analysis"
+    ],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "symantec",
+    "vendor": "Symantec (Broadcom), Web & Network Security",
+    "vendor_slug": "broadcom_symantec",
+    "category": "Web Security & Proxy",
+    "name": "Splunk Add-on for Symantec Blue Coat ProxySG",
+    "splunkbase_id": "2758",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/2758/",
+    "doc_url": "https://www.elastic.co/docs/reference/integrations/proxysg",
+    "sourcetypes": [
+      "bluecoat:proxysg:access:file"
+    ],
+    "header_type": "Space-delimited positional (main log format)",
+    "delimiter": " ",
+    "timestamp_format": "YYYY-MM-DD HH:MM:SS",
+    "cim_models": [
+      "Web",
+      "Network Traffic"
+    ],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "wazuh",
+    "vendor": "Wazuh",
+    "vendor_slug": "wazuh",
+    "category": "Host IDS & XDR",
+    "name": "Wazuh Splunk Integration",
+    "splunkbase_id": "",
+    "splunkbase_url": "",
+    "doc_url": "https://documentation.wazuh.com/current/user-manual/capabilities/malware-detection/rootkits-behavior-detection.html",
+    "sourcetypes": [
+      "wazuh:alerts"
+    ],
+    "header_type": "Multi-line alert block (** Alert header)",
+    "delimiter": "\n",
+    "timestamp_format": "2022 Nov 15 09:35:57 (epoch.us header)",
+    "cim_models": [
+      "Alerts",
+      "Malware Attacks"
+    ],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "nozomi",
+    "vendor": "Nozomi Networks",
+    "vendor_slug": "nozomi_networks",
+    "category": "OT & ICS Security",
+    "name": "Nozomi Networks Universal Add-on",
+    "splunkbase_id": "6905",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/6905/",
+    "doc_url": "https://www.elastic.co/docs/reference/integrations/nozomi_networks",
+    "sourcetypes": [
+      "nozomi:universal_alert"
+    ],
+    "header_type": "JSON (vendor-native alert object)",
+    "delimiter": "",
+    "timestamp_format": "Unix ms",
+    "cim_models": [
+      "Alerts",
+      "Incidents"
+    ],
+    "field_mappings": {},
+    "sample_events": []
   }
 ]

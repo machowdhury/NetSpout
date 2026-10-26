@@ -6407,6 +6407,44 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub1_ot_proxy_host_hunt",
+      "title": "OT Tamper to Container Host Hunt (Universe Batch-1)",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Docker",
+        "Nozomi Networks",
+        "Symantec (Broadcom), Web & Network Security",
+        "Wazuh"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Converged OT/IT hunt: Nozomi Networks OT IDS alerts (PLC program change), Symantec/Broadcom ProxySG denied exfil attempts, Wazuh manager rootcheck alerts and Docker engine container lifecycle events - authentic vendor-native RAW with correlation on HEC fields only.",
+      "sourcetypes": [
+        "nozomi:universal_alert",
+        "bluecoat:proxysg:access:file",
+        "wazuh:alerts",
+        "docker_events"
+      ],
+      "scenario_ids": [
+        "ub1_ot_proxy_host_hunt"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "nozomi:universal_alert",
+        "bluecoat:proxysg:access:file"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "universe batch-1 multi-vendor hunt across OT IDS, web proxy, host IDS and container runtime RAW",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -14932,6 +14970,114 @@
       ],
       "scenario_ids": [
         "wave3_vsphere_hostpath_triage"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "docker_events",
+      "title": "docker_events",
+      "domain": "Container Platform & DevOps",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Docker"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Docker Engine Events",
+      "sourcetypes": [
+        "docker_events"
+      ],
+      "scenario_ids": [
+        "ub1_ot_proxy_host_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "bluecoat:proxysg:access:file",
+      "title": "bluecoat:proxysg:access:file",
+      "domain": "Web Security & Proxy",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Symantec (Broadcom), Web & Network Security"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Symantec/Broadcom ProxySG Access Log (file/main format)",
+      "sourcetypes": [
+        "bluecoat:proxysg:access:file"
+      ],
+      "scenario_ids": [
+        "ub1_ot_proxy_host_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "wazuh:alerts",
+      "title": "wazuh:alerts",
+      "domain": "Host IDS & XDR",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Wazuh"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Wazuh Manager Alerts (alerts.log)",
+      "sourcetypes": [
+        "wazuh:alerts"
+      ],
+      "scenario_ids": [
+        "ub1_ot_proxy_host_hunt"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "nozomi:universal_alert",
+      "title": "nozomi:universal_alert",
+      "domain": "OT & ICS Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Nozomi Networks"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Nozomi Networks Universal Alert",
+      "sourcetypes": [
+        "nozomi:universal_alert"
+      ],
+      "scenario_ids": [
+        "ub1_ot_proxy_host_hunt"
       ],
       "dashboard_ids": [],
       "formats": [],

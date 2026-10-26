@@ -1,0 +1,283 @@
+{
+  "run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+  "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+  "events": [
+    {
+      "event": "{\"org\":\"example-org\",\"pod\":\"se01-useast1\",\"created\":\"2026-10-26T21:02:21.182Z\",\"id\":\"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2\",\"action\":\"USER_PASSWORD_UPDATE_PASSED\",\"type\":\"PASSWORD_ACTIVITY\",\"actor\":{\"id\":\"c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4\",\"name\":\"alice.example\",\"displayName\":\"Alice Example\"},\"target\":{\"name\":\"alice.example\"},\"stack\":\"pigs\",\"details\":\"38eef046d4594d7e9186cee997232f3d\",\"trackingNumber\":\"fb38cc3fb990451dab51133aed21268a\",\"ipAddress\":\"203.0.113.66\",\"attributes\":{\"accountId\":\"alice.example\",\"sourceName\":\"IdentityNow\",\"info\":\"Password workflow invoked successfully.\",\"hostName\":\"203.0.113.66\",\"pod\":\"se01-useast1\",\"org\":\"example-org\",\"scope\":\"[\\\"sp:scopes:all\\\"]\"},\"objects\":[\"USER\",\"PASSWORD\"],\"operation\":\"UPDATE\",\"status\":\"PASSED\",\"technicalName\":\"USER_PASSWORD_UPDATE_PASSED\",\"name\":\"Update User Password Passed\",\"synced\":\"2026-10-26T21:02:21.182Z\",\"_type\":\"event\",\"_version\":\"v2\"}",
+      "sourcetype": "sailpoint_identitynow",
+      "host": "ub3-sailpoint",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_identity_runtime_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"_type\":\"event\",\"action\":\"MACHINE_IDENTITY_CREATED\",\"actor\":{\"name\":\"alex.johnson\"},\"attributes\":{\"businessApplication\":\"NativeApp\",\"description\":\"\",\"identityId\":\"aff68d15-c7c9-4849-8c92-89efcc6664de\",\"identityName\":\"AppTest\",\"manuallyCreated\":\"true\",\"manuallyEdited\":\"true\",\"owners\":\"[{\\\"id\\\":\\\"1e9771b8e55647a3993b71ff442eea06\\\",\\\"displayName\\\":\\\"Alice.Ford\\\",\\\"isPrimary\\\":true},{\\\"id\\\":\\\"ee22390d6ce04aaf9efac403dde0cdfd\\\",\\\"displayName\\\":\\\"Douglas.Flores\\\",\\\"isPrimary\\\":false},{\\\"id\\\":\\\"00e2845735c54a9fa1f8ceb06085930d\\\",\\\"displayName\\\":\\\"Brenda.Cooper\\\",\\\"isPrimary\\\":false},{\\\"id\\\":\\\"8773095aad3b4afeac47d3ebfb544742\\\",\\\"displayName\\\":\\\"alex.johnson\\\",\\\"isPrimary\\\":false}]\",\"subtype\":\"APPLICATION\",\"userEntitlements\":\"[\\\"00215058582f3ae99944c8a78d88ddfd\\\",\\\"01d53d8473bc39a6831549acbdfdc1cc\\\",\\\"02454eeb5fdb3f61b83381bb0f878074\\\",\\\"102cd43f5d1c350ab953a7a0a5b79ac6\\\"]\"},\"created\":\"2026-10-26T21:02:21.182Z\",\"id\":\"802cbef9ae4543939a4bf981eb0a8928\",\"name\":\"Create Machine Identity Passed\",\"objects\":[\"MACHINE IDENTITY\"],\"operation\":\"CREATE\",\"org\":\"ta-partner21989\",\"pod\":\"se01-useast1\",\"status\":\"PASSED\",\"synced\":\"2026-10-26T21:02:21.182Z\",\"target\":{\"name\":\"AppTest\"},\"technicalName\":\"MACHINE IDENTITY_CREATE_PASSED\",\"trackingNumber\":\"ced1238a9a26456b8e5c4bb610f9efef\",\"type\":\"MACHINE_IDENTITY_CREATED\"}",
+      "sourcetype": "sailpoint_identitynow",
+      "host": "ub3-sailpoint",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_identity_runtime_audit-BASELINE-2",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"AuditID\":1,\"ActionType\":\"Add\",\"Section\":\"SecretsSafeFolder\",\"UserID\":-1,\"UserName\":\"test_user@test.com\",\"IPAddress\":\"203.0.113.66\",\"CreateDate\":\"2026-10-26T21:02:21.182Z\"}",
+      "sourcetype": "ccx:beyondinsight:passwordsafe",
+      "host": "ub3-beyondtrust",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_identity_runtime_audit-BASELINE-3",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-BASELINE-2"
+      }
+    },
+    {
+      "event": "{\"id\":\"3be5d9e5db675e8ba826a849e3d0049f\",\"action\":\"user.authenticate.password\",\"crud\":\"u\",\"is_failure\":true,\"received\":\"2026-10-26T21:02:21.182Z\",\"description\":null,\"actor\":{\"id\":\"da1499fd-afdb-4fb9-bfb6-9defec2f0f09\",\"name\":\"user2@example.com\"},\"is_anonymous\":null,\"target\":{\"id\":\"da1499fd-afdb-4fb9-bfb6-9defec2f0f09\",\"name\":\"user2@example.com\",\"type\":\"User\"},\"fields\":[{\"key\":\"message\",\"value\":\"Invalid credentials.\"},{\"key\":\"sessionToken\",\"value\":\"-\"},{\"key\":\"X-Forwarded-For\",\"value\":\"203.0.113.66\"},{\"key\":\"X-Request-Uuid\",\"value\":\"71a6630e83148694260ad838ddff5dce:dd19f39e7ec84ba80dec:8d7f958f8c3b770767af\"}]}",
+      "sourcetype": "tenable:io:audit_logs",
+      "host": "ub3-tenable",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_identity_runtime_audit-OBSERVE-1",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-BASELINE-3"
+      }
+    },
+    {
+      "event": "{\"id\":\"850ea1ee2fc5538fbc64ad48dff65d68\",\"action\":\"session.create\",\"crud\":\"c\",\"is_failure\":false,\"received\":\"2026-10-26T21:02:21.182Z\",\"description\":null,\"actor\":{\"id\":null,\"name\":null},\"is_anonymous\":true,\"target\":{\"id\":\"b569d85a-2e80-44fa-9eb6-2693d656df41\",\"name\":\"user2@example.com\",\"type\":\"User\"},\"fields\":[{\"key\":\"X-Access-Type\",\"value\":\"Created by username\"}]}",
+      "sourcetype": "tenable:io:audit_logs",
+      "host": "ub3-tenable",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_identity_runtime_audit-OBSERVE-2",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-OBSERVE-1"
+      }
+    },
+    {
+      "event": "{\"id\":\"ce364a8ef77c583ab42903783999635e\",\"action\":\"session.delete\",\"crud\":\"d\",\"is_failure\":false,\"received\":\"2026-10-26T21:02:21.182Z\",\"description\":null,\"actor\":{\"id\":\"b569d85a-2e80-44fa-9eb6-2693d656df41\",\"name\":\"user2@example.com\"},\"is_anonymous\":null,\"target\":{\"id\":\"bcce340\",\"name\":null,\"type\":\"Session\"},\"fields\":[{\"key\":\"message\",\"value\":\"session timeout\"}]}",
+      "sourcetype": "tenable:io:audit_logs",
+      "host": "ub3-tenable",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_identity_runtime_audit-OBSERVE-3",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-OBSERVE-2"
+      }
+    },
+    {
+      "event": "{\"category\":\"runtime\",\"content\":{\"fields\":{\"container.image.repository\":\"docker.io/manuelbcd/py-goat\",\"container.name\":\"client\",\"evt.type\":\"execve\",\"fd.cport\":\"<NA>\",\"fd.name\":\"<NA>\",\"fd.sport\":\"<NA>\",\"proc.cmdline\":\"g++ -c -I./liblinear -I./liblua payload.cc -o payload.o\",\"proc.name\":\"g++\",\"proc.pid\":\"{}\",\"proc.ppid\":\"<NA>\",\"proc.pid.ts\":\"1793048541182339574\",\"proc.pname\":\"make\",\"proc.ppid.ts\":\"1793048453102206436\",\"proc.sid\":\"<NA>\",\"user.loginname\":\"<NA>\",\"user.loginuid\":\"-1\",\"user.name\":\"root\",\"user.uid\":\"0\"},\"origin\":\"Sysdig\",\"policyId\":10011704,\"ruleName\":\"Launch Code Compiler Tool in Container\",\"ruleSubType\":0,\"ruleTags\":[\"container\"],\"ruleType\":6,\"type\":\"workloadRuntimeDetection\"},\"engine\":\"falco\",\"id\":\"18b3b0c157a37ff81ee0ffde058bb9c7\",\"labels\":{},\"name\":\"Sysdig Runtime Activity Logs\",\"originator\":\"policy\",\"rawEventCategory\":\"runtime\",\"rawEventOriginator\":\"linuxAgent\",\"severity\":7,\"source\":\"syscall\",\"sourceDetails\":{\"subType\":\"container\",\"type\":\"workload\"},\"timestamp\":1793048541182560000}",
+      "sourcetype": "SysdigSecureEvents",
+      "host": "ub3-sysdig",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_identity_runtime_audit-VALIDATE-1",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-OBSERVE-3"
+      }
+    },
+    {
+      "event": "{\"category\":\"runtime\",\"content\":{\"fields\":{\"ka.auth.decision\":\"allow\",\"ka.auth.reason\":\"\",\"ka.response.code\":\"200\",\"ka.target.name\":\"example-app-8449fcf4bd-abcde\",\"ka.target.namespace\":\"example-namespace\",\"ka.user.name\":\"example_user\"},\"origin\":\"Sysdig\",\"output\":\"K8s Pod Deleted (user=example_user pod=example-app-8449fcf4bd-abcde ns=example-namespace resp=200 decision=allow reason=)\",\"policyId\":10004101,\"ruleName\":\"K8s Pod Deleted\",\"ruleSubType\":0,\"ruleTags\":[\"k8s\"],\"ruleType\":6,\"type\":\"workloadRuntimeDetection\"},\"description\":\"Kubernetes audit activity event.\",\"engine\":\"falco\",\"id\":\"18dcd2ed1560108e268283b464783838\",\"labels\":{\"agent.variant\":\"k8saudit_agent\",\"agent.version\":\"0.1.17\",\"cloudProvider.account.id\":\"012345678912\",\"cloudProvider.name\":\"gcp\",\"cloudProvider.region\":\"us-central1\",\"container.id\":\"abcdef123456\",\"container.image\":\"example.repo.io/example/app@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"container.image.digest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"container.image.id\":\"abcdef123456\",\"container.image.repo\":\"example.repo.io/example/app\",\"container.image.tag\":\"abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\"container.label.io.kubernetes.container.name\":\"example-container\",\"container.label.io.kubernetes.pod.name\":\"example-app-8449fcf4bd-abcde\",\"container.label.io.kubernetes.pod.namespace\":\"example-namespace\",\"container.name\":\"example-container\",\"host.hostName\":\"example-node\",\"host.id\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"host.mac\":\"02:00:00:00:00:01\",\"kubernetes.cluster.distribution\":\"Vanilla\",\"kubernetes.cluster.name\":\"example-cluster\",\"kubernetes.deployment.name\":\"example-app\",\"kubernetes.namespace.name\":\"example-namespace\",\"kubernetes.node.name\":\"example-node\",\"kubernetes.pod.name\":\"example-app-8449fcf4bd-abcde\",\"kubernetes.replicaSet.name\":\"example-app-8449fcf4bd\",\"kubernetes.service.name\":\"example-app\",\"kubernetes.workload.name\":\"example-app\",\"kubernetes.workload.type\":\"deployment\",\"orchestrator.type\":\"k8s\"},\"name\":\"Sysdig K8s Activity Logs\",\"originator\":\"policy\",\"rawEventCategory\":\"runtime\",\"rawEventOriginator\":\"clusterShield\",\"severity\":7,\"source\":\"k8s_audit\",\"sourceDetails\":{\"subType\":\"dynamicAdmissionControl\",\"type\":\"kubernetes\"},\"timestamp\":1793048541182560000}",
+      "sourcetype": "SysdigSecureEvents",
+      "host": "ub3-sysdig",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_identity_runtime_audit",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_identity_runtime_audit-VALIDATE-2",
+        "netspout_parent_event_id": "ub3_identity_runtime_audit-VALIDATE-1"
+      }
+    },
+    {
+      "event": "<134>Oct 26 21:02:21 filterlog[72237]: 146,,,1535324496,igb1.12,match,block,in,4,0x0,,63,12617,0,DF,6,tcp,60,203.0.113.66,198.51.100.20,49724,853,0,S,1891286705,,64240,,mss;sackOK;TS;nop;wscale",
+      "sourcetype": "pfsense:filterlog",
+      "host": "ub3-pfsense",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-BASELINE-1"
+      }
+    },
+    {
+      "event": "<134>Oct 26 21:02:21 filterlog[72237]: 176,,,1520797901,igb1.27,match,pass,in,4,0xb8,,64,58355,0,none,17,udp,76,203.0.113.66,198.51.100.20,123,123,56",
+      "sourcetype": "pfsense:filterlog",
+      "host": "ub3-pfsense",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-BASELINE-2",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-BASELINE-1"
+      }
+    },
+    {
+      "event": "<134>Oct 26 21:02:21 filterlog[72237]: 6,,,1000000105,igb1.27,match,block,in,6,0x00,0xf6279,1,UDP,17,32,2001:db8::10,2001:db8::20,546,547,32",
+      "sourcetype": "pfsense:filterlog",
+      "host": "ub3-pfsense",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-BASELINE-3",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-BASELINE-2"
+      }
+    },
+    {
+      "event": "<129>2026-10-26 21:02:21.182 +0000  barracuda-01.example.test WF ALER NO_PARAM_PROFILE_MATCH 203.0.113.66 61507 198.51.100.20 443 Hackazon:adaptive_url_42099b4af021e53fd8fd URL_PROFILE LOG NONE [Parameter\\=\"0x\\\\[\\\\]\" value\\=\"androxgh0st\"] POST / TLSv1.2 \"-\" \"Mozilla/5.0 (Linux; U; Android 4.4.2; en-US; HM NOTE 1W Build/KOT49H) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/11.0.5.850 U3/0.8.0 Mobile Safari/534.30\" 1.128.0.3 61507 \"-\" \"-\" 1869d743696-dfcf8d96",
+      "sourcetype": "barracuda:waf:web_firewall",
+      "host": "ub3-barracuda",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-OBSERVE-1",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-BASELINE-3"
+      }
+    },
+    {
+      "event": "<129>2026-10-26 21:02:21.182 +0000  barracuda-01.example.test WF ALER NO_URL_PROFILE_MATCH 203.0.113.66 52532 198.51.100.20 443 Hackazon GLOBAL LOG NONE [\"-\"] GET /sitemap.xml TLSv1.2 \"-\" \"Go-http-client/1.1\" 1.128.0.3 52532 \"-\" http://20.84.207.59/sitemap.xml 186c0f24c61-427e368",
+      "sourcetype": "barracuda:waf:web_firewall",
+      "host": "ub3-barracuda",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-OBSERVE-2",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-OBSERVE-1"
+      }
+    },
+    {
+      "event": "CEF:0|Imperva Inc.|SecureSphere|15.1.0|User logged in|User admin logged in from 203.0.113.66.|High|suser=admin rt=Oct 26 2026 21:02:21 cat=SystemEvent",
+      "sourcetype": "imperva:securesphere:cef",
+      "host": "ub3-imperva",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-OBSERVE-3",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-OBSERVE-2"
+      }
+    },
+    {
+      "event": "<14>CEF:0|Imperva Inc.|SecureSphere|14.16.1.10_0|Audit|Audit.DAM|Informative|dst=198.51.100.20 dpt=49561 duser=testuser src=203.0.113.66 spt=64361 proto=TCP rt=Oct 26 2026 21:02:21 cat=Audit DML Operations cs1Label=Policy cs2=Old-app cs2Label=ServerGroup cs3=Old_Application cs3Label=ServiceName cs4=MsSql Application cs4Label=ApplicationName cs5=7420436200618644437 cs5Label=EventId cs6=Query cs6Label=EventType cs7= cs7Label=UserGroup cs8=True cs8Label=UserAuthenticated cs9= cs9Label=ApplicationUser cs10=.net sqlclient data provider cs10Label=SourceApplication cs11= cs11Label=OSUser cs12=Asset01 cs12Label=HostName cs13=app01 cs13Label=Database cs14= cs14Label=Schema cs15=UPDATE [appSession] SET [TimeStamp] \\= '2024/12/16 10:58:43', [SessionInfo] \\= 'eyJDcmVhdGVkIjoiMjAyNC0wOC0xNVQxNTozOTo0Mi45NDk2NDk1KzAzOjAwIn0\\=' WHERE ([SessionID] \\= '395b63e9-f7a5-48a8-92c1-97d30c8f9a65') cs15Label=RawQuery cs16=update [appSession] set [timestamp] \\= ?, [sessioninfo] \\= ? where ([sessionid] \\= ?) cs16Label=ParsedQuery cs17= cs17Label=BindVariables cs18= cs18Label=SQLError cs19=0 cs19Label=ResponseSize cs20=0 cs20Label=ResponseTime cs21=1 cs21Label=AffectedRows",
+      "sourcetype": "imperva:securesphere:cef",
+      "host": "ub3-imperva",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-VALIDATE-1",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-OBSERVE-3"
+      }
+    },
+    {
+      "event": "{\"acknowledged\":false,\"breachUrl\":\"https://someurl.com/#modelbreach/25196\",\"commentCount\":0,\"creationTime\":1793048541182,\"device\":{\"did\":7281,\"firstSeen\":1623686103000,\"ip\":\"192.168.1.1\",\"lastSeen\":1731072276000,\"macaddress\":\"57:d5:10:a3:13:fb\",\"os\":\"FreeBSD\",\"ossource\":\"TCP\",\"sid\":76,\"typelabel\":\"Laptop\",\"typename\":\"laptop\",\"vendor\":\"Some Vendor\"},\"devicepercentscore\":48,\"devicescore\":0.476,\"did\":7281,\"model\":{\"actions\":{\"alert\":true,\"antigena\":{},\"breach\":true,\"model\":true,\"setPriority\":false,\"setTag\":false,\"setType\":false},\"active\":true,\"activeTimes\":{\"devices\":{},\"tags\":{},\"type\":\"exclusions\",\"version\":2},\"autoSuppress\":true,\"autoUpdatable\":true,\"autoUpdate\":true,\"behaviour\":\"decreasing\",\"category\":\"Informational\",\"compliance\":false,\"created\":{\"by\":\"System\"},\"defeats\":[{\"arguments\":{\"value\":\"some.hostname\"},\"comparator\":\"matches\",\"defeatID\":1,\"filtertype\":\"Connection hostname\"},{\"arguments\":{\"value\":\"some.connection\"},\"comparator\":\"matches\",\"defeatID\":2,\"filtertype\":\"Connection hostname\"},{\"arguments\":{\"value\":\"another.connection\"},\"comparator\":\"matches\",\"defeatID\":3,\"filtertype\":\"Connection hostname\"}],\"delay\":0,\"description\":\"A device is moving large volumes of data (1GiB+) out of the network within a short period of time. \\n\\nAction: Investigate if the external data transfer is a legitimate business activity or a loss of corporate data.\",\"edited\":{\"by\":\"System\"},\"interval\":0,\"logic\":{\"data\":[620291],\"type\":\"componentList\",\"version\":1},\"mitre\":{\"tactics\":[\"exfiltration\"],\"techniques\":[\"T1041\",\"T1567.002\"]},\"modified\":\"2023-12-05 22:39:00\",\"name\":\"Anomalous Connection::Uncommon 1 GiB Outbound\",\"phid\":609255,\"pid\":600644,\"priority\":2,\"sequenced\":false,\"sharedEndpoints\":false,\"tags\":[\"AP: Egress\",\"OT Engineer\"],\"throttle\":86400,\"uuid\":\"1f00371b-7681-42d5-5867-c744441898dc\",\"version\":29},\"pbid\":25196,\"pbscore\":0.634,\"percentscore\":48,\"score\":0.476,\"time\":1793048527182,\"triggeredComponents\":[{\"cbid\":34058,\"chid\":630381,\"cid\":620291,\"interval\":3600,\"logic\":{\"data\":{\"left\":{\"left\":\"A\",\"operator\":\"AND\",\"right\":{\"left\":\"B\",\"operator\":\"AND\",\"right\":\"C\"}},\"operator\":\"OR\",\"right\":{\"left\":{\"left\":\"A\",\"operator\":\"AND\",\"right\":{\"left\":\"B\",\"operator\":\"AND\",\"right\":\"D\"}},\"operator\":\"OR\",\"right\":{\"left\":\"A\",\"operator\":\"AND\",\"right\":{\"left\":\"B\",\"operator\":\"AND\",\"right\":\"E\"}}}},\"version\":\"v0.1\"},\"metric\":{\"label\":\"Model\",\"mlid\":234,\"name\":\"dtmodelbreach\"},\"size\":1,\"threshold\":0,\"time\":1793048526182,\"triggeredFilters\":[{\"arguments\":{\"value\":\"Device / Anomaly Indicators / 1 GiB Outbound\"},\"cfid\":254461,\"comparatorType\":\"matches\",\"filterType\":\"Message\",\"id\":\"A\",\"trigger\":{\"value\":\"Device / Anomaly Indicators / 1 GiB Outbound\"}},{\"arguments\":{\"value\":95},\"cfid\":254462,\"comparatorType\":\">\",\"filterType\":\"New or uncommon occurrence\",\"id\":\"B\",\"trigger\":{\"value\":\"100\"}},{\"arguments\":{\"value\":10},\"cfid\":254464,\"comparatorType\":\">\",\"filterType\":\"Rare external IP\",\"id\":\"D\",\"trigger\":{\"value\":\"100\"}},{\"arguments\":{},\"cfid\":254466,\"comparatorType\":\"display\",\"filterType\":\"Connection hostname\",\"id\":\"d1\",\"trigger\":{\"value\":\"another.connection.hostname\"}},{\"arguments\":{},\"cfid\":254467,\"comparatorType\":\"display\",\"filterType\":\"Destination IP\",\"id\":\"d2\",\"trigger\":{\"value\":\"1.1.1.1\"}},{\"arguments\":{},\"cfid\":254468,\"comparatorType\":\"display\",\"filterType\":\"ASN\",\"id\":\"d3\",\"trigger\":{\"value\":\"SOME ASN\"}},{\"arguments\":{},\"cfid\":254469,\"comparatorType\":\"display\",\"filterType\":\"Destination port\",\"id\":\"d4\",\"trigger\":{\"value\":\"80\"}}]}]}",
+      "sourcetype": "darktrace",
+      "host": "ub3-darktrace",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-VALIDATE-2",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-VALIDATE-1"
+      }
+    },
+    {
+      "event": "{\"acknowledged\":{\"time\":1733838122000,\"username\":\"redacted@example.com\"},\"breachUrl\":\"https://redacted.local/#modelbreach/36725\",\"commentCount\":0,\"creationTime\":1793048541182,\"device\":{\"devicelabel\":\"test_device\",\"did\":18390,\"firstSeen\":1731062390000,\"generatedlabel\":true,\"lastSeen\":1736249138000,\"os\":\"Windows NT kernel\",\"sid\":-6,\"typelabel\":\"Desktop\",\"typename\":\"desktop\"},\"devicepercentscore\":44,\"devicescore\":0.439,\"did\":18390,\"model\":{\"actions\":{\"aianalyst\":{\"hypotheses\":[]},\"alert\":true,\"antigena\":{\"action\":\"automatic\",\"confirm\":false,\"duration\":3600,\"threshold\":\"20\"},\"breach\":true,\"model\":true,\"setPriority\":false,\"setTag\":false,\"setType\":false},\"active\":true,\"activeTimes\":{\"devices\":{},\"tags\":{},\"type\":\"exclusions\",\"version\":2},\"autoSuppress\":false,\"autoUpdatable\":true,\"autoUpdate\":true,\"behaviour\":\"decreasing\",\"category\":\"Informational\",\"compliance\":false,\"created\":{\"by\":\"System\"},\"defeats\":[[{\"arguments\":{\"value\":\"REDACTED_IP\"},\"comparator\":\"matches\",\"defeatID\":1,\"filtertype\":\"Destination IP\"},{\"arguments\":{\"value\":\"REDACTED_CIDR\"},\"comparator\":\"matches\",\"defeatID\":\"1-1\",\"filtertype\":\"Source IP\"},{\"arguments\":{\"value\":\"1150\"},\"comparator\":\"=\",\"defeatID\":\"1-2\",\"filtertype\":\"Destination port\"}]],\"delay\":0,\"description\":\"A device has been blocked transferring large volumes of data internally.\\n\\nAction: Review the device's other alerts to see the activities the device has been conducting. Clear any active blocks if the alert was considered to be legitimate.\",\"edited\":{\"by\":\"redacted@example.com\",\"userID\":17},\"interval\":3600,\"logic\":{\"data\":[{\"cid\":67318,\"weight\":1}],\"targetScore\":1,\"type\":\"weightedComponentList\",\"version\":1},\"mitre\":{\"tactics\":[\"defense-evasion\",\"exfiltration\"],\"techniques\":[\"T1030\",\"T1070.004\"]},\"modified\":\"2024-11-19 13:45:36\",\"name\":\"Antigena::Network::Insider Threat::Antigena Internal Data Transfer Block\",\"phid\":10256,\"pid\":90,\"priority\":2,\"sequenced\":false,\"sharedEndpoints\":false,\"tags\":[],\"throttle\":3600,\"uuid\":\"00000000-0000-0000-0000-000000000000\",\"version\":17},\"pbid\":36725,\"pbscore\":0.586,\"percentscore\":44,\"score\":0.439,\"time\":1793048530182,\"triggeredComponents\":[{\"cbid\":45710,\"chid\":77645,\"cid\":67318,\"interval\":3600,\"logic\":{\"data\":{\"left\":{\"left\":\"A\",\"operator\":\"AND\",\"right\":{\"left\":\"B\",\"operator\":\"AND\",\"right\":\"C\"}},\"operator\":\"OR\",\"right\":{\"left\":\"A\",\"operator\":\"AND\",\"right\":{\"left\":\"B\",\"operator\":\"AND\",\"right\":\"D\"}}},\"version\":\"v0.1\"},\"metric\":{\"label\":\"Model\",\"mlid\":234,\"name\":\"dtmodelbreach\"},\"size\":1,\"threshold\":0,\"time\":1793048529182,\"triggeredFilters\":[{\"arguments\":{\"value\":\"Unusual Activity / Internal Data Transfer\"},\"cfid\":340800,\"comparatorType\":\"matches\",\"filterType\":\"Message\",\"id\":\"A\",\"trigger\":{\"value\":\"Unusual Activity / Internal Data Transfer\"}},{\"arguments\":{\"value\":50},\"cfid\":340801,\"comparatorType\":\">\",\"filterType\":\"Strength of model breach\",\"id\":\"B\",\"trigger\":{\"value\":\"71\"}},{\"arguments\":{\"value\":16},\"cfid\":340802,\"comparatorType\":\"has tag\",\"filterType\":\"Tagged internal source\",\"id\":\"C\",\"trigger\":{\"tag\":{\"data\":{\"auto\":false,\"color\":92,\"description\":\"\",\"visibility\":\"Public\"},\"isReferenced\":true,\"name\":\"Antigena All\",\"restricted\":false,\"thid\":289,\"tid\":16},\"value\":\"16\"}},{\"arguments\":{},\"cfid\":340804,\"comparatorType\":\"display\",\"filterType\":\"Message\",\"id\":\"d1\",\"trigger\":{\"value\":\"Unusual Activity / Internal Data Transfer\"}}]}]}",
+      "sourcetype": "darktrace",
+      "host": "ub3-darktrace",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_multivendor_edge_observation",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_multivendor_edge_observation-VALIDATE-3",
+        "netspout_parent_event_id": "ub3_multivendor_edge_observation-VALIDATE-2"
+      }
+    },
+    {
+      "event": "Mon Oct 26 21:02:21 2026 +00:00\nLENGTH : '392'\nACTION :[151] 'select /*+ opt_param('parallel_execution_enabled',\n                                   'false') EXEC_FROM_DBMS_XPLAN */ * from gv$all_sql_plan where 1=0'\nDATABASE USER:[1] '/'\nPRIVILEGE :[4] 'NONE'\nCLIENT USER:[0] ''\nCLIENT TERMINAL:[7] 'UNKNOWN'\nSTATUS:[1] '0'\nDBID:[10] '2824230686'\nSESSIONID:[1] '0'\nUSERHOST:[13] 'testlab.local'\nCLIENT ADDRESS:[0] ''\nACTION NUMBER:[1] '3'\n\n",
+      "sourcetype": "oracle:audit:text",
+      "host": "ub3-oracle",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_database_message_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub3_database_message_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "10/26/26 21:02:21 - Process(460.1) User(root) Program(crtmqm) Host(ibmmq-01.example.test) Installation(Installation1) VRMF(9.4.0.20) Time(2026-10-26T21:02:21.183Z) CommentInsert3(QM1) AMQ8001I: IBM MQ queue manager 'QM1' created.  EXPLANATION: IBM MQ queue manager 'QM1' created. ACTION: None.",
+      "sourcetype": "ibm:mq:errorlog",
+      "host": "ub3-ibmmq",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_database_message_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub3_database_message_audit-OBSERVE-1",
+        "netspout_parent_event_id": "ub3_database_message_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "10/26/26 21:02:21 - Process(512.1) User(root) Program(strmqm) Host(ibmmq-01.example.test) Installation(Installation1) VRMF(9.4.0.20) Time(2026-10-26T21:02:21.183Z) CommentInsert1(strmqm) CommentInsert2(strmqm -x QM1) AMQ6206I: Command strmqm was issued.  EXPLANATION: Control command 'strmqm -x QM1' was issued. ACTION: None.",
+      "sourcetype": "ibm:mq:errorlog",
+      "host": "ub3-ibmmq",
+      "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+        "netspout_scenario_id": "ub3_database_message_audit",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub3_database_message_audit-VALIDATE-1",
+        "netspout_parent_event_id": "ub3_database_message_audit-OBSERVE-1"
+      }
+    }
+  ]
+}

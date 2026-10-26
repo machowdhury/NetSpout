@@ -6546,5 +6546,203 @@
    }
   ],
   "registry_reference": "catalog/universe_batch2.json"
+ },
+ {
+  "id": "ub3_identity_runtime_audit",
+  "code": "SEC-UB3-01",
+  "name": "Ub3 Identity Runtime Audit",
+  "display_name": "Ub3 Identity Runtime Audit",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "SysdigSecureEvents",
+   "sailpoint_identitynow",
+   "ccx:beyondinsight:passwordsafe",
+   "tenable:io:audit_logs"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "sysdig",
+   "sailpoint",
+   "beyondtrust",
+   "tenable"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Sysdig Secure runtime and Kubernetes audit: runtime_activity, kubernetes_audit",
+   "Identity Security Cloud audit: password_update, machine_identity_created",
+   "Password Safe audit: secret_folder_added",
+   "Vulnerability Management audit: password_authentication_failure, session_created, session_deleted"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch3.json"
+ },
+ {
+  "id": "ub3_multivendor_edge_observation",
+  "code": "SEC-UB3-02",
+  "name": "Ub3 Multivendor Edge Observation",
+  "display_name": "Ub3 Multivendor Edge Observation",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "pfsense:filterlog",
+   "imperva:securesphere:cef",
+   "barracuda:waf:web_firewall",
+   "darktrace"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "pfsense_netgate",
+   "imperva",
+   "barracuda",
+   "darktrace"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "pfSense filterlog: ipv4_tcp_block, ipv4_udp_pass, ipv6_udp_block",
+   "SecureSphere CEF: administrator_login, database_audit",
+   "Web Application Firewall: parameter_profile_violation, url_profile_violation",
+   "Model breach alerts: uncommon_outbound_model, antigena_internal_transfer"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch3.json"
+ },
+ {
+  "id": "ub3_database_message_audit",
+  "code": "SEC-UB3-03",
+  "name": "Ub3 Database Message Audit",
+  "display_name": "Ub3 Database Message Audit",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "oracle:audit:text",
+   "ibm:mq:errorlog"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "oracle",
+   "ibm_mq"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Database native audit: sql_select_audit",
+   "IBM MQ native error log: queue_manager_created, control_command_issued"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch3.json"
  }
 ]

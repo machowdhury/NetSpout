@@ -56,28 +56,28 @@
   "counts": {
     "discovered_publishers_raw": 853,
     "discovered_publishers_normalized": 848,
-    "discovered_technology_vendors_canonical": 66,
-    "discovered_technology_vendors_extended": 57,
-    "discovered_products": 566,
+    "discovered_technology_vendors_canonical": 76,
+    "discovered_technology_vendors_extended": 48,
+    "discovered_products": 556,
     "splunkbase_apps_total": 1871,
     "splunkbase_addons": 915,
     "splunkbase_applications": 956,
-    "canonical_sourcetypes": 326,
-    "genuine_event_families_evidenced": 181,
-    "generator_implemented_sources": 326,
-    "live_ingestion_verified_sourcetypes": 65,
+    "canonical_sourcetypes": 336,
+    "genuine_event_families_evidenced": 201,
+    "generator_implemented_sources": 336,
+    "live_ingestion_verified_sourcetypes": 75,
     "ta_parser_verified_sourcetypes": 1
   },
   "counts_by_bucket": {
     "splunk_platform": 266,
     "publisher_only": 684,
     "product_only": 488,
-    "recognized_technology_vendor": 201,
-    "canonical_linked": 232
+    "recognized_technology_vendor": 168,
+    "canonical_linked": 265
   },
   "canonical_coverage_crossmap": {
-    "apps_declaring_canonical_sourcetypes": 78,
-    "canonical_sourcetypes_declared_by_splunkbase": 154,
+    "apps_declaring_canonical_sourcetypes": 85,
+    "canonical_sourcetypes_declared_by_splunkbase": 160,
     "top_declared_canonical_sourcetypes": [
       [
         "o365:management:activity",
@@ -144,6 +144,10 @@
         2
       ],
       [
+        "oracle:audit:text",
+        2
+      ],
+      [
         "citrix:netscaler:syslog",
         2
       ],
@@ -154,10 +158,6 @@
       [
         "cisco:nvm:flowdata",
         2
-      ],
-      [
-        "azure:monitor:aad",
-        2
       ]
     ],
     "canonical_vendors_with_uid_or_title_match": [
@@ -165,6 +165,8 @@
       "arista_eos",
       "aruba_cx",
       "atlassian",
+      "barracuda",
+      "beyondtrust",
       "broadcom_symantec",
       "checkpoint",
       "cisco_duo",
@@ -174,6 +176,7 @@
       "claroty",
       "cloudflare",
       "crowdstrike",
+      "darktrace",
       "dell_os10",
       "docker",
       "extrahop",
@@ -182,6 +185,8 @@
       "fortinet",
       "hashicorp",
       "huawei_vrp",
+      "ibm_mq",
+      "imperva",
       "juniper_junos",
       "kubernetes",
       "microsoft_azure",
@@ -196,12 +201,17 @@
       "nutanix",
       "okta",
       "opentelemetry",
+      "oracle",
       "palo_alto",
+      "pfsense_netgate",
       "proofpoint",
       "radware",
+      "sailpoint",
       "sonicwall",
       "sophos",
       "suricata_oisf",
+      "sysdig",
+      "tenable",
       "traefik",
       "veeam",
       "vmware_nsx",
@@ -217,10 +227,6 @@
       22
     ],
     [
-      "ibm_qradar",
-      10
-    ],
-    [
       "pavo_metrics",
       9
     ],
@@ -229,23 +235,15 @@
       9
     ],
     [
+      "ibm_qradar",
+      9
+    ],
+    [
       "akamai",
       8
     ],
     [
-      "oracle",
-      7
-    ],
-    [
-      "tenable",
-      6
-    ],
-    [
       "vectra_ai",
-      6
-    ],
-    [
-      "beyondtrust",
       6
     ],
     [
@@ -281,10 +279,6 @@
       3
     ],
     [
-      "sailpoint",
-      3
-    ],
-    [
       "netapp",
       3
     ],
@@ -298,10 +292,6 @@
     ],
     [
       "onelogin",
-      3
-    ],
-    [
-      "sysdig",
       3
     ],
     [
@@ -337,10 +327,6 @@
       2
     ],
     [
-      "imperva",
-      2
-    ],
-    [
       "corelight",
       2
     ],
@@ -365,15 +351,7 @@
       2
     ],
     [
-      "pfsense_netgate",
-      2
-    ],
-    [
       "commvault",
-      2
-    ],
-    [
-      "barracuda",
       2
     ],
     [
@@ -402,10 +380,6 @@
     ],
     [
       "ping_identity",
-      1
-    ],
-    [
-      "darktrace",
       1
     ],
     [
@@ -475,10 +449,6 @@
       2
     ],
     [
-      "tenable",
-      2
-    ],
-    [
       "servicenow security operations event ingestion",
       2
     ],
@@ -508,10 +478,6 @@
     ],
     [
       "orca security",
-      2
-    ],
-    [
-      "sysdig",
       2
     ],
     [
@@ -691,10 +657,6 @@
       1
     ],
     [
-      "darktrace",
-      1
-    ],
-    [
       "swimlane",
       1
     ],
@@ -740,10 +702,6 @@
     ],
     [
       "mimecast",
-      1
-    ],
-    [
-      "sailpoint identity security cloud auditevent",
       1
     ],
     [
@@ -1140,10 +1098,6 @@
     ],
     [
       "owl diode receiver",
-      1
-    ],
-    [
-      "pfsense",
       1
     ],
     [
@@ -1555,10 +1509,6 @@
       1
     ],
     [
-      "nessus security scans dashboards",
-      1
-    ],
-    [
       "knowledge object purge master",
       1
     ],
@@ -1604,10 +1554,6 @@
     ],
     [
       "s3spl",
-      1
-    ],
-    [
-      "beyondtrust privileged remote access",
       1
     ],
     [
@@ -1696,10 +1642,6 @@
     ],
     [
       "nvd cve fetcher",
-      1
-    ],
-    [
-      "sysdig vm",
       1
     ],
     [
@@ -2171,10 +2113,6 @@
       1
     ],
     [
-      "nessus cim mapper",
-      1
-    ],
-    [
       "onetrust_assessments",
       1
     ],
@@ -2607,10 +2545,6 @@
       1
     ],
     [
-      "oracle cloud infrastructure",
-      1
-    ],
-    [
       "xaidr",
       1
     ],
@@ -2856,9 +2790,9 @@
     {
       "uid": 1538,
       "appid": "orcl11log",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -3777,10 +3711,9 @@
     {
       "uid": 3507,
       "appid": "imperva_waf",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "imperva",
-      "alias": "imperva"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "imperva"
     },
     {
       "uid": 3523,
@@ -3791,10 +3724,9 @@
     {
       "uid": 3539,
       "appid": "darktrace",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "darktrace",
-      "alias": "darktrace"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "darktrace"
     },
     {
       "uid": 3546,
@@ -3948,9 +3880,9 @@
     {
       "uid": 3803,
       "appid": "Splunk_TA_sailpoint",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sailpoint",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "sailpoint",
       "alias": "sailpoint"
     },
     {
@@ -3977,10 +3909,9 @@
     {
       "uid": 3829,
       "appid": "860bb8d6-e466-11e7-ba1f-027ef375ca18",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
-      "alias": "ibm"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "ibm_mq"
     },
     {
       "uid": 3830,
@@ -4219,17 +4150,16 @@
     {
       "uid": 4060,
       "appid": "TA-tenable",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
-      "alias": "tenable"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "tenable"
     },
     {
       "uid": 4061,
       "appid": "TenableAppforSplunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "tenable",
       "alias": "tenable"
     },
     {
@@ -4283,10 +4213,9 @@
     {
       "uid": 4088,
       "appid": "TA-sailpoint-identitynow-auditevent-add-on",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sailpoint",
-      "alias": "sailpoint"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "sailpoint"
     },
     {
       "uid": 4110,
@@ -4524,9 +4453,9 @@
     {
       "uid": 4307,
       "appid": "omega_core_audit",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -6143,18 +6072,17 @@
     {
       "uid": 5330,
       "appid": "SysdigAppForSplunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sysdig",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "sysdig",
       "alias": "sysdig"
     },
     {
       "uid": 5331,
       "appid": "TA-Sysdig",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sysdig",
-      "alias": "sysdig"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "sysdig"
     },
     {
       "uid": 5332,
@@ -6465,9 +6393,9 @@
     {
       "uid": 5461,
       "appid": "TA_tenable_io_audit",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "tenable",
       "alias": "tenable"
     },
     {
@@ -6723,17 +6651,18 @@
     {
       "uid": 5571,
       "appid": "Splunk_TA_CCX_Unified_SailPoint",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sailpoint",
-      "alias": "sailpoint"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "sailpoint_identitynow"
+      ]
     },
     {
       "uid": 5574,
       "appid": "Splunk_App_BeyondTrust_PWS",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "beyondtrust",
       "alias": "beyondtrust"
     },
     {
@@ -6812,10 +6741,9 @@
     {
       "uid": 5613,
       "appid": "8055c268-d401-11eb-b038-0a58b5c6f36b",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "pfsense_netgate",
-      "alias": "pfsense"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "pfsense_netgate"
     },
     {
       "uid": 5614,
@@ -7308,9 +7236,9 @@
     {
       "uid": 6172,
       "appid": "oracle_unified_audit",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -7337,10 +7265,9 @@
     {
       "uid": 6183,
       "appid": "Splunk_TA_CCX_Unified_Barracuda",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "barracuda",
-      "alias": "barracuda"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "barracuda"
     },
     {
       "uid": 6186,
@@ -8811,9 +8738,9 @@
     {
       "uid": 6819,
       "appid": "BeyondTrust-PMCloud-Integration",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "beyondtrust",
       "alias": "beyondtrust"
     },
     {
@@ -8825,9 +8752,9 @@
     {
       "uid": 6821,
       "appid": "nessus_security_scans_app",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "tenable",
       "alias": "nessus"
     },
     {
@@ -9027,10 +8954,9 @@
     {
       "uid": 6897,
       "appid": "Splunk_TA_CCX_BeyondTrust_Products",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
-      "alias": "beyondtrust"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "beyondtrust"
     },
     {
       "uid": 6900,
@@ -9076,9 +9002,9 @@
     {
       "uid": 6913,
       "appid": "BeyondTrust-PRA-Integration",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "beyondtrust",
       "alias": "beyondtrust"
     },
     {
@@ -9203,9 +9129,9 @@
     {
       "uid": 6968,
       "appid": "BeyondTrust-RS-Integration",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "beyondtrust",
       "alias": "beyondtrust"
     },
     {
@@ -9425,9 +9351,9 @@
     {
       "uid": 7034,
       "appid": "Splunk_TA_CCX_Imperva_WAF",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "imperva",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "imperva",
       "alias": "imperva"
     },
     {
@@ -9467,9 +9393,9 @@
     {
       "uid": 7051,
       "appid": "SA_oracle_sbc_cdr",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -9650,9 +9576,9 @@
     {
       "uid": 7122,
       "appid": "Splunk_TA_CCX_Tenable_Products_Extensions",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "tenable",
       "alias": "tenable"
     },
     {
@@ -9756,9 +9682,9 @@
     {
       "uid": 7169,
       "appid": "TA-sysdig-vulnerabilities",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sysdig",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "sysdig",
       "alias": "sysdig"
     },
     {
@@ -10342,9 +10268,9 @@
     {
       "uid": 7375,
       "appid": "DA-ITSI-CP-CUST-ATLAS-PFSENSE",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "pfsense_netgate",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "pfsense_netgate",
       "alias": "pfsense"
     },
     {
@@ -10380,9 +10306,9 @@
     {
       "uid": 7398,
       "appid": "App-BeyondTrust-PMUL",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "beyondtrust",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "beyondtrust",
       "alias": "beyondtrust"
     },
     {
@@ -11582,9 +11508,9 @@
     {
       "uid": 7776,
       "appid": "Splunk_TA_CCX_Oracle_Cloud",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -12251,9 +12177,9 @@
     {
       "uid": 7968,
       "appid": "TA-Nessus-CIM-Mapper",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tenable",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "tenable",
       "alias": "nessus"
     },
     {
@@ -13105,9 +13031,9 @@
     {
       "uid": 8467,
       "appid": "TA_oracle_sbc_cdr",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -14069,9 +13995,9 @@
     {
       "uid": 8951,
       "appid": "BarracudaEGD",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "barracuda",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "barracuda",
       "alias": "barracuda"
     },
     {
@@ -14757,9 +14683,9 @@
     {
       "uid": 9640,
       "appid": "TA-Oracle-OCI",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "oracle",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "oracle",
       "alias": "oracle"
     },
     {
@@ -15370,11 +15296,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "ibm_qradar",
-      "app_count": 10,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "pavo_metrics",
       "app_count": 9,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15385,27 +15306,17 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
+      "vendor_key": "ibm_qradar",
+      "app_count": 9,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
       "vendor_key": "akamai",
       "app_count": 8,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "oracle",
-      "app_count": 7,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "tenable",
-      "app_count": 6,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "vectra_ai",
-      "app_count": 6,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "beyondtrust",
       "app_count": 6,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15450,11 +15361,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "sailpoint",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "netapp",
       "app_count": 3,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15471,11 +15377,6 @@
     },
     {
       "vendor_key": "onelogin",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "sysdig",
       "app_count": 3,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15520,11 +15421,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "imperva",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "corelight",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15555,17 +15451,7 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "pfsense_netgate",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "commvault",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "barracuda",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15601,11 +15487,6 @@
     },
     {
       "vendor_key": "ping_identity",
-      "app_count": 1,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "darktrace",
       "app_count": 1,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -16511,7 +16392,8 @@
     "catalog/wave3_live_raw_equality_results.json",
     "catalog/universe_batch1_live_raw_equality_results.json",
     "catalog/universe_batch1_current_raw_equality_results.json",
-    "catalog/universe_batch2_current_raw_equality_results.json"
+    "catalog/universe_batch2_current_raw_equality_results.json",
+    "catalog/universe_batch3_current_raw_equality_results.json"
   ],
   "restricted_access_apps": 81,
   "directory_listing_apps": 177,
@@ -16781,17 +16663,6 @@
         "downloads": 5940
       },
       {
-        "appid": "orcl11log",
-        "name": "Log File Analysis for Oracle 11g",
-        "author": "Pete Magee",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "oracle",
-          "alias": "oracle"
-        },
-        "downloads": 2307
-      },
-      {
         "appid": "McAfeeWebGateway",
         "name": "App for McAfee/SkyHigh Web Gateway (MWG/SWG/SSE)",
         "author": "Pavel Prostin",
@@ -16834,9 +16705,31 @@
           "alias": "ibm"
         },
         "downloads": 1514
+      },
+      {
+        "appid": "ivanti_application_control",
+        "name": "Ivanti Application Control for Splunk",
+        "author": "Greg Ford",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "ivanti",
+          "alias": "ivanti"
+        },
+        "downloads": 1461
       }
     ],
     "canonical_linked": [
+      {
+        "appid": "orcl11log",
+        "name": "Log File Analysis for Oracle 11g",
+        "author": "Pete Magee",
+        "basis": {
+          "basis": "canon_alias_title",
+          "canonical_vendor": "oracle",
+          "alias": "oracle"
+        },
+        "downloads": 2307
+      },
       {
         "appid": "b557c60c-da58-4131-b655-eecd037d25b6",
         "name": "Cisco Meraki Presence Modular Input",
@@ -16911,17 +16804,6 @@
           "canonical_vendor": "fortinet"
         },
         "downloads": 87294
-      },
-      {
-        "appid": "72e96afe-5562-11e5-9b6c-063854888a19",
-        "name": "F5 WAF Security",
-        "author": "Nexinto Nexinto",
-        "basis": {
-          "basis": "vendor_lexicon_canonical",
-          "canonical_vendor": "f5_bigip",
-          "alias": "f5"
-        },
-        "downloads": 2824
       }
     ]
   },
@@ -16959,6 +16841,22 @@
         "status": "PASS",
         "run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93"
       }
+    },
+    "batch_3": {
+      "registry": "catalog/universe_batch3.json",
+      "counts": {
+        "new_canonical_vendors": 10,
+        "new_product_integrations": 10,
+        "new_canonical_sourcetypes": 10,
+        "event_families": 20,
+        "scenario_packs": 3
+      },
+      "live_verification": {
+        "results_file": "catalog/universe_batch3_current_raw_equality_results.json",
+        "status": "PASS",
+        "run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6"
+      },
+      "ta_parser_results": "catalog/universe_batch3_ise_parser_results.json"
     }
   },
   "candidate_queue_baseline": "catalog/vendor_universe/batch2_candidate_queue_baseline.json"

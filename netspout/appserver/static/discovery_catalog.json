@@ -6556,6 +6556,120 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub3_identity_runtime_audit",
+      "title": "Ub3 Identity Runtime Audit",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "BeyondTrust",
+        "SailPoint",
+        "Sysdig",
+        "Tenable"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "SysdigSecureEvents",
+        "sailpoint_identitynow",
+        "ccx:beyondinsight:passwordsafe",
+        "tenable:io:audit_logs"
+      ],
+      "scenario_ids": [
+        "ub3_identity_runtime_audit"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "SysdigSecureEvents",
+        "sailpoint_identitynow",
+        "ccx:beyondinsight:passwordsafe",
+        "tenable:io:audit_logs"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub3_multivendor_edge_observation",
+      "title": "Ub3 Multivendor Edge Observation",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Barracuda Networks",
+        "Darktrace",
+        "Imperva",
+        "pfSense (Netgate)"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "pfsense:filterlog",
+        "imperva:securesphere:cef",
+        "barracuda:waf:web_firewall",
+        "darktrace"
+      ],
+      "scenario_ids": [
+        "ub3_multivendor_edge_observation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "pfsense:filterlog",
+        "imperva:securesphere:cef",
+        "barracuda:waf:web_firewall",
+        "darktrace"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub3_database_message_audit",
+      "title": "Ub3 Database Message Audit",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "IBM MQ",
+        "Oracle"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "oracle:audit:text",
+        "ibm:mq:errorlog"
+      ],
+      "scenario_ids": [
+        "ub3_database_message_audit"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "oracle:audit:text",
+        "ibm:mq:errorlog"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -15432,6 +15546,276 @@
       ],
       "scenario_ids": [
         "ub2_ot_edge_routing_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "pfsense:filterlog",
+      "title": "pfsense:filterlog",
+      "domain": "Network Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "pfSense (Netgate)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "pfSense filterlog",
+      "sourcetypes": [
+        "pfsense:filterlog"
+      ],
+      "scenario_ids": [
+        "ub3_multivendor_edge_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "SysdigSecureEvents",
+      "title": "SysdigSecureEvents",
+      "domain": "Cloud Runtime Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Sysdig"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Sysdig Secure runtime and Kubernetes audit",
+      "sourcetypes": [
+        "SysdigSecureEvents"
+      ],
+      "scenario_ids": [
+        "ub3_identity_runtime_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "sailpoint_identitynow",
+      "title": "sailpoint_identitynow",
+      "domain": "Identity SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "SailPoint"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Identity Security Cloud audit",
+      "sourcetypes": [
+        "sailpoint_identitynow"
+      ],
+      "scenario_ids": [
+        "ub3_identity_runtime_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "imperva:securesphere:cef",
+      "title": "imperva:securesphere:cef",
+      "domain": "Database & Web Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Imperva"
+      ],
+      "readiness": "Evidence review required",
+      "description": "SecureSphere CEF",
+      "sourcetypes": [
+        "imperva:securesphere:cef"
+      ],
+      "scenario_ids": [
+        "ub3_multivendor_edge_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "barracuda:waf:web_firewall",
+      "title": "barracuda:waf:web_firewall",
+      "domain": "Application Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Barracuda Networks"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Web Application Firewall",
+      "sourcetypes": [
+        "barracuda:waf:web_firewall"
+      ],
+      "scenario_ids": [
+        "ub3_multivendor_edge_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "oracle:audit:text",
+      "title": "oracle:audit:text",
+      "domain": "Database Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Oracle"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Database native audit",
+      "sourcetypes": [
+        "oracle:audit:text"
+      ],
+      "scenario_ids": [
+        "ub3_database_message_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "darktrace",
+      "title": "darktrace",
+      "domain": "Network Detection",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Darktrace"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Model breach alerts",
+      "sourcetypes": [
+        "darktrace"
+      ],
+      "scenario_ids": [
+        "ub3_multivendor_edge_observation"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "ccx:beyondinsight:passwordsafe",
+      "title": "ccx:beyondinsight:passwordsafe",
+      "domain": "Privileged Access",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "BeyondTrust"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Password Safe audit",
+      "sourcetypes": [
+        "ccx:beyondinsight:passwordsafe"
+      ],
+      "scenario_ids": [
+        "ub3_identity_runtime_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "tenable:io:audit_logs",
+      "title": "tenable:io:audit_logs",
+      "domain": "Exposure Management SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Tenable"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Vulnerability Management audit",
+      "sourcetypes": [
+        "tenable:io:audit_logs"
+      ],
+      "scenario_ids": [
+        "ub3_identity_runtime_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "ibm:mq:errorlog",
+      "title": "ibm:mq:errorlog",
+      "domain": "Messaging Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "IBM MQ"
+      ],
+      "readiness": "Evidence review required",
+      "description": "IBM MQ native error log",
+      "sourcetypes": [
+        "ibm:mq:errorlog"
+      ],
+      "scenario_ids": [
+        "ub3_database_message_audit"
       ],
       "dashboard_ids": [],
       "formats": [],

@@ -6820,5 +6820,205 @@
   "deprecated_aliases": [],
   "is_benchmark_197": false,
   "status": "active"
+ },
+ {
+  "id": "pfsense-filterlog",
+  "splunk_sourcetype": "pfsense:filterlog",
+  "display_name": "pfSense filterlog",
+  "vendor_id": "pfsense_netgate",
+  "category": "Network Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending: Pfsense Add-On for Splunk",
+  "aliases": [
+   "pfsense:filterlog"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "sysdigsecureevents",
+  "splunk_sourcetype": "SysdigSecureEvents",
+  "display_name": "Sysdig Secure runtime and Kubernetes audit",
+  "vendor_id": "sysdig",
+  "category": "Cloud Runtime Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Sysdig Add-on for Splunk",
+  "aliases": [
+   "SysdigSecureEvents"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "sailpoint_identitynow",
+  "splunk_sourcetype": "sailpoint_identitynow",
+  "display_name": "Identity Security Cloud audit",
+  "vendor_id": "sailpoint",
+  "category": "Identity SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "SailPoint Identity Security Cloud AuditEvent Add-on",
+  "aliases": [
+   "sailpoint_identitynow"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "imperva-securesphere-cef",
+  "splunk_sourcetype": "imperva:securesphere:cef",
+  "display_name": "SecureSphere CEF",
+  "vendor_id": "imperva",
+  "category": "Database & Web Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending: Imperva AppSecurity View",
+  "aliases": [
+   "imperva:securesphere:cef"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "barracuda-waf-web_firewall",
+  "splunk_sourcetype": "barracuda:waf:web_firewall",
+  "display_name": "Web Application Firewall",
+  "vendor_id": "barracuda",
+  "category": "Application Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending: CCX Unified Splunk Add-on for Barracuda",
+  "aliases": [
+   "barracuda:waf:web_firewall"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "oracle-audit-text",
+  "splunk_sourcetype": "oracle:audit:text",
+  "display_name": "Database native audit",
+  "vendor_id": "oracle",
+  "category": "Database Infrastructure",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Splunk Add-on for Oracle Database",
+  "aliases": [
+   "oracle:audit:text"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "darktrace",
+  "splunk_sourcetype": "darktrace",
+  "display_name": "Model breach alerts",
+  "vendor_id": "darktrace",
+  "category": "Network Detection",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Darktrace App for Splunk",
+  "aliases": [
+   "darktrace"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "ccx-beyondinsight-passwordsafe",
+  "splunk_sourcetype": "ccx:beyondinsight:passwordsafe",
+  "display_name": "Password Safe audit",
+  "vendor_id": "beyondtrust",
+  "category": "Privileged Access",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "CCX Add-on for BeyondTrust Products",
+  "aliases": [
+   "ccx:beyondinsight:passwordsafe"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "tenable-io-audit_logs",
+  "splunk_sourcetype": "tenable:io:audit_logs",
+  "display_name": "Vulnerability Management audit",
+  "vendor_id": "tenable",
+  "category": "Exposure Management SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Tenable Add-On for Splunk",
+  "aliases": [
+   "tenable:io:audit_logs"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "ibm-mq-errorlog",
+  "splunk_sourcetype": "ibm:mq:errorlog",
+  "display_name": "IBM MQ native error log",
+  "vendor_id": "ibm_mq",
+  "category": "Messaging Infrastructure",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending: Source type add-on for IBM MQ error logs",
+  "aliases": [
+   "ibm:mq:errorlog"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
  }
 ]

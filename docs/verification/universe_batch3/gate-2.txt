@@ -1,0 +1,19 @@
+registry: vendor_universe.json 401050 bytes
+{
+ "discovered_publishers_raw": 853,
+ "discovered_publishers_normalized": 848,
+ "discovered_technology_vendors_canonical": 76,
+ "discovered_technology_vendors_extended": 48,
+ "discovered_products": 556,
+ "splunkbase_apps_total": 1871,
+ "splunkbase_addons": 915,
+ "splunkbase_applications": 956,
+ "canonical_sourcetypes": 336,
+ "genuine_event_families_evidenced": 201,
+ "generator_implemented_sources": 336,
+ "live_ingestion_verified_sourcetypes": 75,
+ "ta_parser_verified_sourcetypes": 1
+}
+buckets: {'splunk_platform': 266, 'publisher_only': 684, 'product_only': 488, 'recognized_technology_vendor': 168, 'canonical_linked': 265}
+top extended vendors: [('cisco_other', 22), ('pavo_metrics', 9), ('trellix_mcafee', 9), ('ibm_qradar', 9), ('akamai', 8), ('vectra_ai', 6), ('manageengine_zoho', 6), ('hitachi_vantara', 6), ('ivanti', 4), ('servicenow', 4), ('slack', 4), ('ubiquiti', 4), ('elastic', 4), ('qualys', 3), ('netapp', 3), ('varonis', 3), ('rapid7', 3), ('onelogin', 3), ('sentinelone', 3), ('pure_storage', 3)]
+top products: [('proxmox', 3), ('fortra dlp', 2), ('airlock digital', 2), ('forescout', 2), ('illumio', 2), ('dtex intercept insider risk intelligence and endpoint telemetry', 2), ('netapp storagegrid', 2), ('vulndb', 2), ('servicenow security operations event ingestion', 2), ('threatquotient', 2), ('securityscorecard', 2), ('flashpoint', 2), ('druva', 2), ('armis', 2), ('webex', 2), ('orca security', 2), ('lansweeper', 2), ('safebreach', 2), ('onelogin', 2), ('cyfirma decyfir', 2), ('clockify', 2), ('google scc', 2), ('ctm360', 2), ('admin ninja', 2), ('picus security', 2)]

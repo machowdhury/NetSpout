@@ -52,3 +52,10 @@ exact paths, hashes and extraction selectors are in `references.json` and
 Splunk TA packages. Small RouterOS console-log excerpts are attributed to the
 MikroTik Log documentation in `references.json`; they are evidence references,
 not a grant of vendor endorsement or parser certification.
+
+Universal Vendor Coverage Batch 3 reuses the same pinned Elastic integrations
+revision and license notice for ten additional native RAW references. Paths,
+hashes and selectors are retained in `catalog/raw_reference/universe_batch3/`
+and `catalog/universe_batch3.json`. No Splunk TA package is redistributed.
+Read-only local TA/package inspection records hashes and metadata only; the
+installed Cisco ISE lookup results are scoped execution evidence.

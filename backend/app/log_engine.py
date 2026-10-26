@@ -1692,3 +1692,14 @@ except ImportError:
         from universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
 SplunkLogEngine.UNIVERSE_BATCH2_SOURCE_SOURCETYPES = UNIVERSE_BATCH2_SOURCE_SOURCETYPES
 SplunkLogEngine.format_universe_batch2_log = UniverseBatch2Engine.format_universe_batch2_log
+
+# Batch 3 native source/family dispatch, including specialized infrastructure formats.
+try:
+    from netspout_core.universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH3_SOURCE_SOURCETYPES = UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch3_log = UniverseBatch3Engine.format_universe_batch3_log

@@ -1,0 +1,174 @@
+{
+  "baseline_commit": "a25c4c124ad41d8e976c7471f7929f3086718e9b",
+  "date": "2026-10-26",
+  "focused_test_command": [
+    "PYTHONPATH=src:backend",
+    ".venv-test/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_universe_batch3.py",
+    "tests/test_universe_batch2.py",
+    "tests/test_universe_batch1.py",
+    "tests/test_vendor_universe.py",
+    "tests/test_wave1_authentic_expansion.py",
+    "tests/test_wave2_authentic_expansion.py",
+    "tests/test_wave3_authentic_expansion.py",
+    "tests/test_native_discovery.py",
+    "tests/test_gate2_canonical.py",
+    "tests/test_gate3_catalog.py",
+    "tests/test_gate6_integrity.py",
+    "tests/test_raw_content_preservation.py",
+    "tests/test_native_loader_context.py",
+    "tests/test_fallback_guard.py",
+    "tests/test_cisco_raw_events.py",
+    "tests/test_sec2a_serialization.py",
+    "-q",
+    "--tb=short",
+    "--disable-warnings",
+    "--junitxml=/private/tmp/ub3-focused.xml"
+  ],
+  "focused_test_exit_status": 0,
+  "observed_test_summary": {
+    "passed": 260,
+    "failed": 0,
+    "skipped": 1,
+    "subtests_passed": 160
+  },
+  "junit_summary": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "1",
+    "tests": "421",
+    "time": "3.819",
+    "timestamp": "2026-10-26T17:04:30.700319-04:00",
+    "hostname": "Mac.phub.net.cable.rogers.com"
+  },
+  "gates": [
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/build_universe_batch3_catalog.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-1.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/build_vendor_universe.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-2.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/sync_core.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-3.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/verify_sources.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-4.txt"
+    },
+    {
+      "command": [
+        ".venv-test/bin/python",
+        "scripts/validate_catalog.py"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-5.txt"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_status": 0,
+      "log": "docs/verification/universe_batch3/gate-6.txt"
+    }
+  ],
+  "deterministic_rebuild": {
+    "checked_catalog_files": 213,
+    "changed_files": []
+  },
+  "failure_identity_comparison": {
+    "baseline_file": "docs/verification/universe_batch1/wave3_baseline_failure_identities.txt",
+    "baseline_sha256": "4bdf6391b5f514c60ccbfc364138e6a037b2bf7b45ca33e26597009b2d20604b",
+    "baseline_failures": 69,
+    "baseline_passed": 1025,
+    "baseline_skipped": 10,
+    "current_failing_identities": [],
+    "new_failing_identities": [],
+    "full_suite_run": false
+  },
+  "frozen_emitter_methods_unchanged": [
+    "format_cisco_ise_coa_log",
+    "format_cisco_ise_log",
+    "format_palo_alto_log",
+    "format_palo_alto_threat_log"
+  ],
+  "raw_verification": {
+    "file": "catalog/universe_batch3_current_raw_equality_results.json",
+    "passes": 20,
+    "sourcetypes": 10,
+    "category": "CURRENT_BYTE_EQUALITY_NOT_PARSER_VERIFICATION"
+  },
+  "installed_ta_execution": {
+    "file": "catalog/universe_batch3_ise_parser_results.json",
+    "records": 10,
+    "passed": 9,
+    "blocked": 1,
+    "lookup_matches": 10,
+    "timestamp_matches": 10,
+    "raw_stream_events": 2,
+    "status": "PARTIAL_WITH_COMPATIBILITY_BLOCKER",
+    "new_distinct_verified_sourcetypes": 0,
+    "unresolved": "ISE 5205 colon MAC: installed TA sets truncated src_ip and does not set src_mac; native emitter unchanged from baseline",
+    "resume_command": [
+      ".venv-test/bin/python",
+      "scripts/verify_installed_ise_parser.py",
+      "--resume"
+    ],
+    "resume_exit_status": 1,
+    "exit_status_meaning": "Known actual 5205 MAC compatibility failure retained; read-only resume, no new ingestion"
+  },
+  "ta_package_provenance": {
+    "file": "catalog/universe_batch3_ta_inventory.json",
+    "installed_files_matching_authorized_package": 5,
+    "downloads": 0,
+    "installs": 0
+  },
+  "configuration_changes": 0,
+  "detection_validations": 0,
+  "queue_conservation": {
+    "original_vendor_candidates": 66,
+    "implemented_limited_batch2": 9,
+    "implemented_limited_batch3": 9,
+    "selected_reference_blocked": 4,
+    "pending_vendors": 44,
+    "active_uncovered_vendor_keys": 48,
+    "original_product_candidates": 583,
+    "partial_products": 9,
+    "blocked_products": 7,
+    "pending_products": 567,
+    "additional_original_snapshot_product": {
+      "uid": 3829,
+      "vendor": "ibm_mq",
+      "note": "Original snapshot app, not newly discovered vendor list; does not cover IBM QRadar"
+    }
+  },
+  "parser_record_regression": {
+    "command": "PYTHONPATH=src:backend .venv-test/bin/python -m pytest tests/test_universe_batch3.py::test_real_ta_parser_results_preserve_blocked_expectation -q --tb=short --disable-warnings --junitxml=/private/tmp/ub3-parser-record-check.xml",
+    "exit_status": 0,
+    "passed": 1,
+    "note": "Repeated existing test after read-only resume; not added to distinct test count."
+  }
+}

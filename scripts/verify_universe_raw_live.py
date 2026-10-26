@@ -84,13 +84,17 @@ print(json.dumps(result))
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--batch', choices=['1', '2'], required=True)
+    parser.add_argument('--batch', choices=['1', '2', '3'], required=True)
     args = parser.parse_args()
     from netspout_core.authentic_scenario_packs import run_scenario_pack
     run_id = f'pf-ub{args.batch}-current-{uuid.uuid4()}'
     if args.batch == '1':
         scenario_ids = ['ub1_ot_proxy_host_hunt']
         module = ROOT / 'src/netspout_core/universe_batch1_engine.py'
+    elif args.batch == '3':
+        from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS
+        scenario_ids = BATCH3_SCENARIO_IDS
+        module = ROOT / 'src/netspout_core/universe_batch3_engine.py'
     else:
         from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
         scenario_ids = BATCH2_SCENARIO_IDS
@@ -102,7 +106,8 @@ def main():
     events = []
     for i, event in enumerate(logs):
         fields = {k: v for k, v in event.model_dump().items() if k.startswith('netspout_') and v is not None}
-        fields['netspout_event_id'] = f'ub{args.batch}-{i:03d}'
+        if args.batch != '3':
+            fields['netspout_event_id'] = f'ub{args.batch}-{i:03d}'
         events.append(dict(event=event.raw_log, sourcetype=event.sourcetype,
                            host=event.device_id, source=source, index='idx_ta_ise_test', fields=fields))
     payload = dict(run_id=run_id, source=source, events=events)
@@ -123,7 +128,8 @@ def main():
     result['method'] = 'Current host-generated UTF-8 bytes, existing isolated HEC input, exact indexed byte and sourcetype comparison'
     dest = ROOT / f'catalog/universe_batch{args.batch}_current_raw_equality_results.json'
     dest.write_text(json.dumps(result, indent=2) + '\n')
-    evidence = ROOT / f'docs/verification/universe_batch2/batch{args.batch}_submitted_events.json'
+    evidence_batch = '3' if args.batch == '3' else '2'
+    evidence = ROOT / f'docs/verification/universe_batch{evidence_batch}/batch{args.batch}_submitted_events.json'
     evidence.parent.mkdir(parents=True, exist_ok=True)
     evidence.write_text(json.dumps(payload, indent=2) + '\n')
     print(json.dumps({k: result[k] for k in ['run_id', 'posted', 'indexed_rows', 'passes', 'distinct_sourcetypes', 'search_attempts']}))

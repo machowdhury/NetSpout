@@ -324,6 +324,7 @@ def main():
         "universe_batch1_live_raw_equality_results.json",
         "universe_batch1_current_raw_equality_results.json",
         "universe_batch2_current_raw_equality_results.json",
+        "universe_batch3_current_raw_equality_results.json",
     ):
         p = CATALOG / live_file
         if not p.exists():
@@ -334,7 +335,7 @@ def main():
     for w in ("wave1", "wave2", "wave3"):
         reg = json.loads((CATALOG / f"{w}_source_expansion.json").read_text())
         wave_families += sum(s.get("event_family_count", len(s.get("event_families", []))) for s in reg["sources"])
-    for filename in ("universe_batch1.json", "universe_batch2.json"):
+    for filename in ("universe_batch1.json", "universe_batch2.json", "universe_batch3.json"):
         if (CATALOG / filename).exists():
             batch = json.loads((CATALOG / filename).read_text())
             wave_families += sum(source["event_family_count"] for source in batch["sources"])
@@ -439,6 +440,7 @@ def main():
             "catalog/universe_batch1_live_raw_equality_results.json",
             "catalog/universe_batch1_current_raw_equality_results.json",
             "catalog/universe_batch2_current_raw_equality_results.json",
+            "catalog/universe_batch3_current_raw_equality_results.json",
         ],
         "restricted_access_apps": sum(1 for a, _b, _i in classified if a["access"] != "unrestricted"),
         "directory_listing_apps": sum(1 for a, _b, _i in classified if a["is_directory_listing"]),
@@ -469,6 +471,12 @@ def main():
                                             status='OFFLINE_IMPLEMENTED', counts=batch2['counts_summary'],
                                             live_verification=batch2['live_verification'])
         registry['candidate_queue_baseline'] = 'catalog/vendor_universe/batch2_candidate_queue_baseline.json'
+    batch3_path = CATALOG / 'universe_batch3.json'
+    if batch3_path.is_file():
+        batch3 = json.loads(batch3_path.read_text())
+        registry['batches']['batch_3'] = dict(registry='catalog/universe_batch3.json',
+                                           counts=batch3['counts_summary'], live_verification=batch3['live_verification'],
+                                           ta_parser_results='catalog/universe_batch3_ise_parser_results.json')
     DEST.write_text(json.dumps(registry, indent=2))
     print("registry:", DEST.name, DEST.stat().st_size, "bytes")
     print(json.dumps(counts, indent=1))

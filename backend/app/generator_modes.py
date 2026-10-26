@@ -154,6 +154,10 @@ class TelemetryGeneratorService:
         return events
 
     def _universe_source(self, sourcetype):
+        from netspout_core.universe_batch3_engine import batch_registry as batch3_registry
+        source = next((s for s in batch3_registry()['sources'] if s['splunk_sourcetype'] == sourcetype), None)
+        if source:
+            return source, 'catalog/universe_batch3.json'
         from netspout_core.universe_batch2_engine import batch_registry
         from netspout_core.universe_batch1_engine import UNIVERSE_BATCH1_SOURCE_SOURCETYPES
         source = next((s for s in batch_registry()['sources'] if s['splunk_sourcetype'] == sourcetype), None)
@@ -174,7 +178,9 @@ class TelemetryGeneratorService:
             raise ValueError('Unsupported native event family')
         device = Node(id='source-preview', name='source-preview.example.test',
                       type=NodeType.WEB_SERVER, ip_address='198.51.100.10')
-        if source.get('batch_source_id') in ('vault','traefik','claroty','mongodb','confluence','nginx','proofpoint','veeam','mikrotik'):
+        if source.get('generator') == 'format_universe_batch3_log':
+            entry = SplunkLogEngine.format_universe_batch3_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)
+        elif source.get('batch_source_id') in ('vault','traefik','claroty','mongodb','confluence','nginx','proofpoint','veeam','mikrotik'):
             entry = SplunkLogEngine.format_universe_batch2_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)
         else:
             kwargs = dict(device=device, family=family)
@@ -188,7 +194,8 @@ class TelemetryGeneratorService:
     def generate_universe_scenario(self, scenario_id, run_id=None, dispatch=False, transport_config=None):
         from netspout_core.authentic_scenario_packs import run_scenario_pack
         from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
-        if scenario_id not in BATCH2_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+        from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS
+        if scenario_id not in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
             raise ValueError('Unsupported universe scenario')
         entries = run_scenario_pack(scenario_id, run_id or 'pf-universe-' + str(uuid.uuid4()))
         results = []

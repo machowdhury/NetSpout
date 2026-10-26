@@ -1,0 +1,316 @@
+{
+  "installed_apps": [
+    {
+      "id": "DA-ESS-ContentUpdate",
+      "version": "6.9.1"
+    },
+    {
+      "id": "SplunkDeploymentServerConfig",
+      "version": null
+    },
+    {
+      "id": "SplunkForwarder",
+      "version": null
+    },
+    {
+      "id": "SplunkLightForwarder",
+      "version": null
+    },
+    {
+      "id": "Splunk_SA_CIM",
+      "version": "8.7.0"
+    },
+    {
+      "id": "Splunk_TA_cisco-ise",
+      "version": "5.0.0",
+      "parser_stanzas": {
+        "default/props.conf": [
+          "cisco:ise",
+          "cisco:ise:syslog",
+          "syslog",
+          "Cisco:ISE:Syslog"
+        ]
+      }
+    },
+    {
+      "id": "alert_logevent",
+      "version": "10.2.7"
+    },
+    {
+      "id": "alert_webhook",
+      "version": "10.2.7"
+    },
+    {
+      "id": "appsbrowser",
+      "version": "10.2.7"
+    },
+    {
+      "id": "audit_trail",
+      "version": "1.0.0"
+    },
+    {
+      "id": "introspection_generator_addon",
+      "version": "10.2.7"
+    },
+    {
+      "id": "journald_input",
+      "version": null
+    },
+    {
+      "id": "launcher",
+      "version": null
+    },
+    {
+      "id": "learned",
+      "version": null
+    },
+    {
+      "id": "legacy",
+      "version": null
+    },
+    {
+      "id": "netspout",
+      "version": "2.0.0"
+    },
+    {
+      "id": "python_upgrade_readiness_app",
+      "version": "4.7.0"
+    },
+    {
+      "id": "sample_app",
+      "version": null
+    },
+    {
+      "id": "search",
+      "version": "10.2.7"
+    },
+    {
+      "id": "splunk-dashboard-studio",
+      "version": "1.23.11"
+    },
+    {
+      "id": "splunk-data-management",
+      "version": "1.1.0"
+    },
+    {
+      "id": "splunk-rolling-upgrade",
+      "version": "2.2.2"
+    },
+    {
+      "id": "splunk-visual-exporter",
+      "version": "1.23.11"
+    },
+    {
+      "id": "splunk_app_for_splunk_o11y_cloud",
+      "version": "1.2.33"
+    },
+    {
+      "id": "splunk_archiver",
+      "version": "1.0"
+    },
+    {
+      "id": "splunk_enterprise_on_docker",
+      "version": "1.0.0"
+    },
+    {
+      "id": "splunk_gdi",
+      "version": "1.0.14"
+    },
+    {
+      "id": "splunk_httpinput",
+      "version": null
+    },
+    {
+      "id": "splunk_ingest_actions",
+      "version": null
+    },
+    {
+      "id": "splunk_instrumentation",
+      "version": "9.3.2"
+    },
+    {
+      "id": "splunk_internal_metrics",
+      "version": null
+    },
+    {
+      "id": "splunk_metrics_workspace",
+      "version": "2.55.4"
+    },
+    {
+      "id": "splunk_monitoring_console",
+      "version": "10.4.4"
+    },
+    {
+      "id": "splunk_pipeline_builders",
+      "version": "1.1.10"
+    },
+    {
+      "id": "splunk_rapid_diag",
+      "version": "1.9.6"
+    },
+    {
+      "id": "splunk_secure_gateway",
+      "version": "3.10.11"
+    },
+    {
+      "id": "user-prefs",
+      "version": null
+    }
+  ],
+  "ise_installed_files": {
+    "default/props.conf": {
+      "sha256": "cf62e4641de1213a5c92b6db86d423535674a6eb237f010ae1aaa228a145067f",
+      "bytes": 12726
+    },
+    "default/transforms.conf": {
+      "sha256": "cb7996656da7ff1495155072100c53093573a5bbf5e8ef492160beb7877a1e92",
+      "bytes": 5220
+    },
+    "default/eventtypes.conf": {
+      "sha256": "e4d5f02b645d35fb1300b50c228b9b3312bd21cfbfe439f1de0bfb2ee1a38c05",
+      "bytes": 4000
+    },
+    "lookups/cisco_ise_message_catalog_500.csv": {
+      "sha256": "8792d58a9b8f9788c38316c99672a128fcd720a2add9c7e7b58c11a41e423199",
+      "bytes": 190724
+    },
+    "default/app.conf": {
+      "sha256": "38b3c2c004b71def1b6e96692387ba3923c19c554c52513a163dcc15f78c2e43",
+      "bytes": 478
+    }
+  },
+  "ise_props": {
+    "cisco:ise": {
+      "rename": "cisco:ise:syslog",
+      "SHOULD_LINEMERGE": "false",
+      "EVENT_BREAKER_ENABLE": "true",
+      "DATETIME_CONFIG": "CURRENT"
+    },
+    "cisco:ise:syslog": {
+      "SHOULD_LINEMERGE": "false",
+      "EVENT_BREAKER_ENABLE": "true",
+      "DATETIME_CONFIG": "CURRENT",
+      "KV_MODE": "none",
+      "EXTRACT-provisioning": "Client\\sProvisioning:\\s+Client\\sprovisioning\\s(?<provisioning_action>\\w+)",
+      "EXTRACT-query": "OperationMessageText\\s*=\\s*(.+)\\s+hostname\\s+(?<query>\\S+)",
+      "EXTRACT-dest_name": "HostID\\s*=\\s*Internal\\s*CA:\\s*(?<dest_name>[^,]*)",
+      "REPORT-cisco-ise-raw-message": "cisco-ise-extract-raw-message",
+      "REPORT-cisco-ise-type-servername": "cisco-ise-type, cisco-ise-servername",
+      "REPORT-cisco-ise-tunnel-private-group-id": "cisco-ise-tunnel-private-group-id",
+      "REPORT-cisco-ise-action-failure-for-auth": "cisco-ise-action-failure-for-auth",
+      "REPORT-cisco-ise-action-success-for-auth": "cisco-ise-action-success-for-auth",
+      "REPORT-cisco-ise-action-blocked": "cisco-ise-action-blocked",
+      "REPORT-cisco-ise-action-allowed": "cisco-ise-action-allowed",
+      "REPORT-cisco-ise-action-unknown": "cisco-ise-action-unknown",
+      "REPORT-cisco-ise-field-action-auth": "cisco_ise_field_action, cisco-ise-vendor-action-for-auth",
+      "REPORT-cisco-ise-raw-operation-message-text": "cisco-ise-raw-message, cisco-ise-operation-message-text",
+      "REPORT-cisco-ise-open-ssl-err-msg": "cisco-ise-open-ssl-err-msg",
+      "REPORT-cisco-ise-operation-counters": "cisco-ise-operation-counters",
+      "REPORT-cisco-ise-calling-station-id": "cisco-ise-calling-station-id",
+      "REPORT-cisco-ise-called-station-id": "cisco-ise-called-station-id",
+      "REPORT-cisco-ise-service-58001": "cisco-ise-service-58001",
+      "REPORT-cisco-ise-traffic-fields": "cisco-ise-traffic-ports-hosts",
+      "REPORT-cisco-ise-traffic-fields-61025-created-connection": "cisco-ise-traffic-fields-61025-created-connection",
+      "FIELDALIAS-system-mgmt-desc": "System_Management AS system_mgmt_desc",
+      "FIELDALIAS-reason": "FailureReason AS reason",
+      "FIELDALIAS-cisco-ise-src_int": "NAS_Port_Id AS src_int",
+      "FIELDALIAS-service_name": "service as service_name",
+      "EVAL-vendor": "\"Cisco\"",
+      "EVAL-product": "if(server_type == \"CISE\", \"Identity Services Engine\", \"Secure Access Control System\")",
+      "EVAL-app": "case(MESSAGE_CODE IN(\"5434\", \"5435\", \"5449\", \"61027\", \"60188\", \"60081\", \"60082\", \"60185\", \"60116\", \"60206\", \"60115\", \"60205\", \"60184\", \"5206\", \"60125\", \"25006\", \"31107\", \"32005\", \"32018\", \"89003\", \"60093\", \"60095\", \"60227\", \"11015\", \"61026\", \"61025\", \"11504\", \"12307\", \"12304\", \"12305\", \"11520\", \"11815\", \"11810\", \"11823\", \"35055\", \"35051\", \"35001\", \"35050\", \"35048\", \"35046\", \"35000\", \"61075\", \"61236\", \"25018\", \"25045\", \"25016\", \"25012\", \"25046\", \"25020\", \"91002\", \"91006\", \"60191\", \"60164\", \"60165\", \"11036\",\"51021\",\"51002\",\"51001\",\"5233\",\"5232\",\"60197\",\"60214\",\"11808\",\"11806\",\"11522\",\"12313\",\"12310\",\"12816\",\"12802\",\"12801\",\"11521\",\"12804\",\"12813\",\"12812\",\"12811\",\"12810\",\"12807\",\"12806\",\"12805\",\"12800\",\"12302\",\"12300\",\"12301\",\"12500\",\"11213\",\"12552\",\"12561\",\"60080\",\"5418\",\"60204\",\"5205\", \"91007\", \"5417\", \"5236\", \"5231\", \"5405\", \"5441\", \"5413\", \"5436\", \"5440\", \"34165\"),\"Cisco ISE\", MESSAGE_CODE IN(\"12508\", \"12514\", \"12516\"),\"EAP-TLS\", MESSAGE_CODE IN(\"5400\", \"5411\", \"5200\"), \"Radius\", MESSAGE_CODE IN(\"5201\", \"5202\", \"5203\", \"5401\"), \"Tacacs\", MESSAGE_CODE IN(\"61076\", \"60075\",\"11507\"), \"Sponsor\")",
+      "EVAL-id": "case(MESSAGE_CODE IN(\"5434\", \"5435\", \"5449\", \"61027\", \"60125\", \"60165\", \"25006\", \"31107\", \"32005\", \"32018\", \"89003\", \"60093\", \"60095\", \"60227\", \"11015\", \"61026\", \"35055\", \"35051\", \"35001\", \"35050\", \"35048\", \"35046\", \"35000\", \"61075\", \"61236\", \"25018\", \"25045\", \"25016\", \"25012\", \"25046\", \"25020\", \"91002\", \"91006\", \"60191\", \"60164\", \"11036\", \"91007\", \"5417\", \"34165\"),MESSAGE_CODE)",
+      "EVAL-type": "case(MESSAGE_CODE IN(\"5434\", \"5435\", \"5449\", \"61027\", \"61026\", \"60125\", \"60165\", \"25006\", \"31107\", \"32005\", \"32018\", \"89003\", \"60093\", \"60095\", \"60227\", \"11015\", \"35055\", \"35051\", \"35001\", \"35050\", \"35048\", \"35046\", \"35000\", \"61075\", \"61236\", \"25018\", \"25045\", \"25016\", \"25012\", \"25046\", \"25020\", \"91002\", \"91006\", \"60191\", \"60164\", \"11036\", \"5417\", \"91007\", \"34165\"), \"event\", true(), type)",
+      "EVAL-action": "case(match(provisioning_action,\"(?i)succeeded\"),\"created\", MESSAGE_CODE IN(\"60461\",\"51003\",\"91003\",\"58004\"),\"stopped\", MESSAGE_CODE IN(\"52002\",\"60132\",\"60198\",\"60216\",\"60106\"),\"deleted\", MESSAGE_CODE IN(\"60085\",\"60086\",\"51100\",\"52001\",\"60208\",\"58016\",\"51101\"),\"modified\", MESSAGE_CODE IN(\"58022\",\"58024\",\"58023\",\"60131\",\"52000\",\"60237\",\"60094\"),\"created\", MESSAGE_CODE IN(\"5400\", \"12516\", \"12514\", \"12508\", \"5411\", \"5405\", \"87501\", \"60188\", \"60081\", \"60082\", \"60185\", \"11504\",\"11213\",\"12552\",\"12561\", \"5441\", \"5413\", \"5436\", \"5440\"),\"failure\",MESSAGE_CODE IN(\"5200\", \"5231\", \"61076\", \"60116\", \"60206\", \"60115\", \"60205\", \"60184\", \"60075\", \"12304\", \"12305\", \"11520\", \"11810\",\"60190\",\"51002\",\"11808\",\"11806\",\"11522\",\"12313\",\"12310\",\"12816\",\"12804\",\"12813\",\"12812\",\"12811\",\"12810\",\"12807\",\"12806\",\"12805\",\"12800\",\"12302\",\"12300\",\"12301\",\"12500\",\"11507\",\"60080\",\"60197\",\"5233\",\"5232\",\"60214\",\"12801\",\"12802\",\"60204\",\"11521\"),\"success\", MESSAGE_CODE IN (\"61025\"),\"allowed\", MESSAGE_CODE IN (\"58003\",\"90051\",\"90200\"),\"started\", MESSAGE_CODE IN (\"60153\"),\"read\",true(),action)",
+      "EVAL-session_id": "coalesce(AcsSessionID,SessionId)",
+      "EVAL-cpu_load_percent": "trim(SysStatsUtilizationCpu,\"%\")",
+      "EVAL-user": "coalesce(OriginalUserName,UserName,User-Name,User_Name,Admin,AdminName,PortalUser,User, case(MESSAGE_CODE IN(\"60227\", \"60125\", \"60184\", \"60185\", \"60082\", \"60081\", \"60188\"), \"admin\"))",
+      "EVAL-src": "case(MESSAGE_CODE IN(\"60188\", \"60081\"), replace(OperationMessageText, \".*(from\\s+(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|[a-fA-F0-9]*:[a-fA-F0-9]*:[a-fA-F0-9:]*)+ ).*\", \"\\2\"), MESSAGE_CODE==61076, IpAddress, MESSAGE_CODE IN(\"60125\", \"60165\", \"60093\", \"60095\", \"61026\", \"52001\", \"60082\", \"60185\", \"60184\", \"25006\", \"31107\", \"32005\", \"60227\", \"25018\", \"25045\", \"25016\", \"25012\", \"25046\", \"25020\", \"91002\", \"91006\", \"89003\", \"61075\", \"61236\", \"60080\", \"51003\", \"91003\", \"90051\", \"90200\", \"34165\"), host, MESSAGE_CODE IN(\"32018\", \"5449\"), DestinationIPAddress, MESSAGE_CODE==61027, replace(OperationMessageText, \".*(?:DestinationIP\\s*:\\s*'?((\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})+|[a-fA-F0-9]*:[a-fA-F0-9]*:[a-fA-F0-9:]*)'?).*\", \"\\1\"), MESSAGE_CODE IN (\"11015\", \"11823\", \"11810\", \"11815\", \"11520\", \"12305\", \"12304\", \"12307\", \"11504\", \"5236\", \"11036\",\"11808\",\"11806\",\"11522\",\"11521\",\"12310\",\"12816\",\"12802\",\"12801\",\"12804\",\"12813\",\"12812\",\"12811\",\"12810\",\"12907\",\"12806\",\"12805\",\"12800\",\"12302\",\"12300\",\"12301\",\"12500\",\"11507\",\"11213\"), Device_IP_Address, MESSAGE_CODE==60237, SRC, MESSAGE_CODE!=5434 AND MESSAGE_CODE!=5435,coalesce(replace(lower(src_mac),\"-\",\":\"),replace(lower(MacAddress),\"-\",\":\"),src_ip,src_host,Remote_Address,Framed_IP_Address,IpAddress,AdminIPAddress,Host,Device_IP_Address))",
+      "EVAL-src_ip": "case(MESSAGE_CODE!=5434 AND MESSAGE_CODE!=5435,coalesce(src_ip,Remote_Address,Framed_IP_Address,IpAddress,AdminIPAddress,Host,Device_IP_Address))",
+      "EVAL-src_mac": "replace(lower(coalesce(src_mac,MacAddress)),\"-\",\":\")",
+      "EVAL-dest_mac": "replace(lower(dest_mac),\"-\",\":\")",
+      "EVAL-dest": "case(MESSAGE_CODE IN(\"5434\", \"5435\"),Framed_IP_Address, MESSAGE_CODE IN(\"5206\", \"11504\", \"12307\", \"12304\", \"12305\", \"11520\", \"11815\", \"11810\", \"11823\", \"11015\", \"5232\", \"5233\", \"11036\",\"11808\",\"11806\",\"11522\",\"11521\",\"12313\",\"12310\",\"12816\",\"12802\",\"12801\",\"12804\",\"12813\",\"12812\",\"12811\",\"12810\",\"12807\",\"12806\",\"12805\",\"12800\",\"12302\",\"12300\",\"12301\",\"12500\",\"11507\",\"11213\",\"5205\",\"12552\",\"12561\",\"5440\",\"5413\",\"5236\"),DestinationIPAddress, MESSAGE_CODE IN(\"60093\", \"60095\", \"60165\", \"61027\"), AdminIPAddress, MESSAGE_CODE==5449, Device_IP_Address, MESSAGE_CODE==89003, MDMServerName, MESSAGE_CODE==60125, replace(OperationMessageText, \".*(from\\s+(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}+|[a-fA-F0-9]*:[a-fA-F0-9]*:[a-fA-F0-9:]*)).*\", \"\\2\"), MESSAGE_CODE IN(\"5203\", \"5201\", \"5202\", \"5401\", \"5411\", \"11010\", \"34127\", \"34126\", \"58001\", \"58002\", \"58005\", \"91004\", \"91018\", \"60188\", \"60081\", \"60082\", \"60185\", \"60116\", \"60206\", \"60115\", \"60205\", \"60184\", \"60075\", \"60461\", \"52002\", \"60086\", \"58022\", \"58024\", \"58023\", \"60131\", \"60132\", \"60198\", \"60197\", \"60085\", \"60190\", \"60214\", \"51100\", \"60234\", \"25004\", \"35055\", \"35051\", \"35001\", \"35050\", \"35048\", \"35046\", \"35000\", \"61075\", \"61236\", \"25018\", \"25045\", \"25016\", \"25012\", \"25046\", \"25020\", \"91002\", \"91006\", \"60191\", \"60164\", \"51101\",\"52000\",\"58004\",\"58003\",\"90051\",\"90200\",\"60237\",\"52001\",\"60094\", \"51021\", \"60153\", \"60208\", \"60216\", \"60106\", \"58016\",\"51002\",\"5231\",\"60080\",\"5418\",\"60204\",\"51001\",\"5400\", \"91007\", \"5417\", \"51003\", \"88010\", \"61026\", \"91003\", \"5441\", \"5436\", \"5405\", \"34165\"), host, MESSAGE_CODE==61076, PsnHostName, MESSAGE_CODE==5200, coalesce(DestinationIPAddress, replace(lower(dest_mac),\"-\",\":\")),MESSAGE_CODE IN(\"87608\", \"87609\", \"87604\"), dest_name,true(),coalesce(replace(lower(dest_mac),\"-\",\":\"),dest_ip,dest_host,EndpointIPAddress))",
+      "EVAL-body": "case(MESSAGE_CODE==5434, \"Endpoint conducted several failed authentications of the same scenario Could not locate Network Device or AAA Client\", MESSAGE_CODE==5435, \"NAS conducted several failed authentications of the same scenario Could not locate Network Device or AAA Client\", true(), RADIUS)",
+      "EVAL-severity": "case(x_status==\"NOTICE\",\"low\",x_status==\"WARN\",\"medium\",x_status==\"INFO\" OR x_status==\"DEBUG\",\"informational\",x_status==\"ERROR\",\"high\",x_status==\"FATAL\",\"critical\")",
+      "EVAL-ise_servername": "coalesce(ise_servername, host)",
+      "EVAL-dvc": "coalesce(ise_servername, host)",
+      "EVAL-vendor_product": "\"Cisco \" + if(server_type == \"CISE\", \"Identity Services Engine\", \"Secure Access Control System\")",
+      "EVAL-status": "case(MESSAGE_CODE IN(\"11010\", \"34126\", \"58002\", \"58005\", \"60234\", \"87604\", \"87608\"), \"stopped\", MESSAGE_CODE IN(\"34127\", \"58001\", \"11009\", \"25004\", \"34050\", \"13002\", \"32000\", \"60235\", \"87609\", \"91004\", \"91018\"), \"started\", MESSAGE_CODE=\"87751\", \"warning\", MESSAGE_CODE IN(\"60461\",\"52002\",\"60086\",\"58022\",\"58024\",\"58023\",\"60132\",\"60131\",\"60198\",\"5233\",\"60085\",\"60190\",\"5232\",\"60197\",\"60214\",\"51100\",\"52000\",\"91003\",\"58004\",\"58003\",\"90051\",\"90200\",\"60237\",\"60094\",\"60153\",\"60208\",\"60216\",\"58016\", \"51003\"), \"success\", MESSAGE_CODE IN (\"51101\",\"52001\",\"60106\"), \"failure\", MESSAGE_CODE==88010, \"registered\")",
+      "EVAL-start_mode": "case(MESSAGE_CODE IN(\"11010\", \"34126\", \"58002\", \"58005\", \"60234\", \"87604\", \"87608\", \"91018\", \"87751\"), \"auto\", MESSAGE_CODE IN(\"34127\", \"58001\", \"11009\", \"25004\", \"34050\", \"13002\", \"32000\", \"60235\", \"87609\", \"91004\"), \"manual\")",
+      "EVAL-authentication_method": "case(MESSAGE_CODE IN(\"11823\", \"11810\", \"11815\", \"11520\", \"12305\", \"12304\", \"12307\", \"11504\",\"11808\",\"12552\",\"12561\", \"5411\"), EapAuthentication, MESSAGE_CODE IN (\"5231\", \"5200\", \"5206\"), AuthenticationMethod)",
+      "EVAL-src_user": "coalesce(OriginalUserName,UserName,User-Name,User_Name,Admin,AdminName,PortalUser,User, case(MESSAGE_CODE IN(\"60227\", \"60125\", \"60184\", \"60185\", \"60082\", \"60081\", \"60188\"), \"admin\"))",
+      "EVAL-user_name": "if(MESSAGE_CODE!=\"35051\" AND MESSAGE_CODE!=\"58004\", coalesce(OriginalUserName,UserName,User-Name,User_Name,Admin,AdminName,PortalUser,User), user_name)",
+      "EVAL-src_user_name": "if(MESSAGE_CODE!=\"35051\" AND MESSAGE_CODE!=\"58004\", coalesce(OriginalUserName,UserName,User-Name,User_Name,Admin,AdminName,PortalUser,User), user_name)",
+      "EVAL-user_type": "case(AdminName==\"admin\",\"admin\",AdminName==\"system\",\"system\",true(),\"user\")",
+      "EVAL-object_id": "case(MESSAGE_CODE IN (\"60190\",\"60197\"),ObjectName, MESSAGE_CODE==91003, AdapterInstanceUuid)",
+      "EVAL-transport": "case(MESSAGE_CODE IN (\"61025\"), \"tcp\")",
+      "EVAL-protocol": "case(MESSAGE_CODE IN (\"61025\"), \"IP\")",
+      "EVAL-dest_port": "coalesce(dest_port,DestinationPort)",
+      "EVAL-object": "case(MESSAGE_CODE==91003, AdapterInstanceName, MESSAGE_CODE==52000, ObjectName)",
+      "EVAL-mac": "case(MESSAGE_CODE==88010, MacAddress)",
+      "EVAL-ip": "case(MESSAGE_CODE==88010, IpAddress)",
+      "EVAL-src_host": "coalesce(src_host, src_ip, case(MESSAGE_CODE!=5434 AND MESSAGE_CODE!=5435,coalesce(src_ip,Remote_Address,Framed_IP_Address,IpAddress,AdminIPAddress,Host,Device_IP_Address)))",
+      "EVAL-dest_host": "coalesce(dest_host, dest_ip)",
+      "LOOKUP-cisco-ise-message-catalog": "cisco-ise-message-catalog-lookup MESSAGE_CODE OUTPUTNEW MESSAGE_CLASS, MESSAGE_TEXT, MESSAGE_TEXT as description, MESSAGE_TEXT as reason, MESSAGE_TEXT as body, MESSAGE_CODE as signature_id, MESSAGE_TEXT as signature",
+      "LOOKUP-cisco-ise-service": "cisco-ise-service-lookup MESSAGE_CODE OUTPUTNEW SERVICE as service, SERVICE as service_name, MESSAGE_CODE as service_id",
+      "LOOKUP-cisco-ise-change": "cisco-ise-change-lookup MESSAGE_CODE OUTPUTNEW change_type,command,object,object_attrs,object_category,result"
+    }
+  },
+  "configuration_changes": 0,
+  "local_authorized_packages": [
+    {
+      "path": "/Volumes/AI-Storage/Docker-Projects/netspout-splunk-lab/evidence/ta-ise-1915-download-20261024/splunk-add-on-for-cisco-identity-services_500.tgz",
+      "bytes": 85224,
+      "sha256": "7c5c1489d11744cfe6270f4f28f109e46b94f65a77f1624bcbb13d0ceb629b80",
+      "apps": [
+        {
+          "app": "Splunk_TA_cisco-ise",
+          "version": "5.0.0"
+        }
+      ],
+      "parser_file_sha256": {
+        "default/app.conf": "38b3c2c004b71def1b6e96692387ba3923c19c554c52513a163dcc15f78c2e43",
+        "default/eventtypes.conf": "e4d5f02b645d35fb1300b50c228b9b3312bd21cfbfe439f1de0bfb2ee1a38c05",
+        "default/props.conf": "cf62e4641de1213a5c92b6db86d423535674a6eb237f010ae1aaa228a145067f",
+        "default/transforms.conf": "cb7996656da7ff1495155072100c53093573a5bbf5e8ef492160beb7877a1e92",
+        "lookups/cisco_ise_message_catalog_500.csv": "8792d58a9b8f9788c38316c99672a128fcd720a2add9c7e7b58c11a41e423199"
+      },
+      "installed_by_this_work": false,
+      "installed_files_match_package": {
+        "default/app.conf": true,
+        "default/eventtypes.conf": true,
+        "default/props.conf": true,
+        "default/transforms.conf": true,
+        "lookups/cisco_ise_message_catalog_500.csv": true
+      }
+    },
+    {
+      "path": "/Volumes/AI-Storage/Docker-Projects/netspout-splunk-lab/evidence/escu-cim-install-20261026/packages/splunkbase_1621_8.7.0.tgz",
+      "bytes": 972853,
+      "sha256": "4c80c3b732ce99004c5343268f63467a6d70ebf99257dc42e5775d6890e46fcb",
+      "apps": [
+        {
+          "app": "Splunk_SA_CIM",
+          "version": "8.7.0"
+        }
+      ],
+      "parser_file_sha256": {},
+      "installed_by_this_work": false
+    },
+    {
+      "path": "/Volumes/AI-Storage/Docker-Projects/netspout-splunk-lab/evidence/escu-cim-install-20261026/packages/splunkbase_3449_6.9.1.tgz",
+      "bytes": 2943570,
+      "sha256": "8d04d1fcce069e39cff43852ab84c293b7205098b2f022ecb2a068a1d5a1c508",
+      "apps": [
+        {
+          "app": "DA-ESS-ContentUpdate",
+          "version": "6.9.1"
+        }
+      ],
+      "parser_file_sha256": {},
+      "installed_by_this_work": false
+    }
+  ],
+  "package_scope": "Only existing ISE download and CIM/ESCU package directories named in prior lab evidence; no backups or credential/config archives opened.",
+  "downloaded_packages": 0,
+  "installed_packages": 0
+}

@@ -2075,5 +2075,195 @@
     "cim_models": [],
     "field_mappings": {},
     "sample_events": []
+  },
+  {
+    "id": "pfsense_netgate",
+    "vendor": "pfSense (Netgate)",
+    "vendor_slug": "pfsense_netgate",
+    "category": "Network Security",
+    "name": "Pfsense Add-On for Splunk",
+    "splunkbase_id": "5613",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/5613/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/pfsense/data_stream/log/_dev/test/pipeline/test-pfsense-bsd.log",
+    "sourcetypes": [
+      "pfsense:filterlog"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "sysdig",
+    "vendor": "Sysdig",
+    "vendor_slug": "sysdig",
+    "category": "Cloud Runtime Security",
+    "name": "Sysdig Add-on for Splunk",
+    "splunkbase_id": "5331",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/5331/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sysdig/data_stream/event/_dev/test/pipeline/test-event.log",
+    "sourcetypes": [
+      "SysdigSecureEvents"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "sailpoint",
+    "vendor": "SailPoint",
+    "vendor_slug": "sailpoint",
+    "category": "Identity SaaS",
+    "name": "SailPoint Identity Security Cloud AuditEvent Add-on",
+    "splunkbase_id": "4088",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/4088/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sailpoint_identity_sc/data_stream/events/_dev/test/pipeline/test-event.log",
+    "sourcetypes": [
+      "sailpoint_identitynow"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "imperva",
+    "vendor": "Imperva",
+    "vendor_slug": "imperva",
+    "category": "Database & Web Security",
+    "name": "Imperva AppSecurity View",
+    "splunkbase_id": "3507",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/3507/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/imperva/data_stream/securesphere/_dev/test/pipeline/test-securesphere.json",
+    "sourcetypes": [
+      "imperva:securesphere:cef"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "barracuda",
+    "vendor": "Barracuda Networks",
+    "vendor_slug": "barracuda",
+    "category": "Application Security",
+    "name": "CCX Unified Splunk Add-on for Barracuda",
+    "splunkbase_id": "6183",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/6183/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/barracuda/data_stream/waf/_dev/test/pipeline/test-web-firewall.log",
+    "sourcetypes": [
+      "barracuda:waf:web_firewall"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "oracle",
+    "vendor": "Oracle",
+    "vendor_slug": "oracle",
+    "category": "Database Infrastructure",
+    "name": "Splunk Add-on for Oracle Database",
+    "splunkbase_id": "1910",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/1910/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/oracle/data_stream/database_audit/_dev/test/pipeline/test-oracle-database-audit.log",
+    "sourcetypes": [
+      "oracle:audit:text"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "darktrace",
+    "vendor": "Darktrace",
+    "vendor_slug": "darktrace",
+    "category": "Network Detection",
+    "name": "Darktrace App for Splunk",
+    "splunkbase_id": "3539",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/3539/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/darktrace/data_stream/model_breach_alert/_dev/test/pipeline/test-model-breach-alert.log",
+    "sourcetypes": [
+      "darktrace"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "beyondtrust",
+    "vendor": "BeyondTrust",
+    "vendor_slug": "beyondtrust",
+    "category": "Privileged Access",
+    "name": "CCX Add-on for BeyondTrust Products",
+    "splunkbase_id": "6897",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/6897/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/beyondinsight_password_safe/data_stream/useraudit/_dev/test/pipeline/test-useraudits.json",
+    "sourcetypes": [
+      "ccx:beyondinsight:passwordsafe"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "tenable",
+    "vendor": "Tenable",
+    "vendor_slug": "tenable",
+    "category": "Exposure Management SaaS",
+    "name": "Tenable Add-On for Splunk",
+    "splunkbase_id": "4060",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/4060/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/tenable_io/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "sourcetypes": [
+      "tenable:io:audit_logs"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "ibm_mq",
+    "vendor": "IBM MQ",
+    "vendor_slug": "ibm_mq",
+    "category": "Messaging Infrastructure",
+    "name": "Source type add-on for IBM MQ error logs",
+    "splunkbase_id": "3829",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/3829/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/ibmmq/data_stream/errorlog/_dev/test/pipeline/test-errorlog-9-4.log",
+    "sourcetypes": [
+      "ibm:mq:errorlog"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
   }
 ]

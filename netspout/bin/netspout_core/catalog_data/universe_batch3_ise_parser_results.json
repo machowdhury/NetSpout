@@ -1,0 +1,532 @@
+{
+  "run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+  "resumed_without_reingestion": true,
+  "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+  "index": "idx_ta_ise_test",
+  "ta": "Splunk_TA_cisco-ise",
+  "version": "5.0.0",
+  "sourcetype": "cisco:ise:syslog",
+  "hec_event_posts": 8,
+  "hec_raw_posts": 1,
+  "indexed_events": 10,
+  "checks": [
+    {
+      "label": "original-line-104",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "58005",
+        "user": "system",
+        "src_ip": "127.0.0.1"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "58005",
+        "x_status": "NOTICE",
+        "user": "system",
+        "src_ip": "127.0.0.1",
+        "src_mac": null,
+        "MESSAGE_CLASS": "Process-Management",
+        "MESSAGE_TEXT": "ISE process was restarted by watchdog service",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": "cisco-ise-endpoint-service"
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "58005",
+        "MESSAGE_CLASS": "Process-Management",
+        "MESSAGE_TEXT": "ISE process was restarted by watchdog service"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "625d2d7509d9025fbb734bfa15653439718d8008758513d5740413dc4bc7e567",
+      "indexed_sha256": "625d2d7509d9025fbb734bfa15653439718d8008758513d5740413dc4bc7e567",
+      "verdict": "PASS"
+    },
+    {
+      "label": "original-line-17",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5201",
+        "user": "splunk",
+        "src_ip": "10.0.10.104"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5201",
+        "x_status": "NOTICE",
+        "user": "splunk",
+        "src_ip": "10.0.10.104",
+        "src_mac": null,
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-passed-authentication"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5201",
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "7c4ffdb9deb1c0bddfea53f9c3ca066a36535a9bc7cbde95dc18a25c80599c24",
+      "indexed_sha256": "7c4ffdb9deb1c0bddfea53f9c3ca066a36535a9bc7cbde95dc18a25c80599c24",
+      "verdict": "PASS"
+    },
+    {
+      "label": "original-line-1",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "assiutdotcom",
+        "src_ip": "45.149.145.155"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5400",
+        "x_status": "NOTICE",
+        "user": "assiutdotcom",
+        "src_ip": "45.149.145.155",
+        "src_mac": null,
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-failed-authentication",
+          "cisco-ise-guest-authentication-failed",
+          "cisco-ise-guest-authentication-failed-attempts",
+          "err0r"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5400",
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "a0fa82f08ef7b8723e67004f5760b393eb247f1b30abbddee8d15c6af847bf0f",
+      "indexed_sha256": "a0fa82f08ef7b8723e67004f5760b393eb247f1b30abbddee8d15c6af847bf0f",
+      "verdict": "PASS"
+    },
+    {
+      "label": "original-line-2",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "11036",
+        "user": "CTS client",
+        "src_ip": "10.0.10.9"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "11036",
+        "x_status": "WARN",
+        "user": "CTS client",
+        "src_ip": "10.0.10.9",
+        "src_mac": null,
+        "MESSAGE_CLASS": "RADIUS",
+        "MESSAGE_TEXT": "The Message-Authenticator RADIUS attribute is invalid",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": "cisco-ise-alert"
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "11036",
+        "MESSAGE_CLASS": "RADIUS",
+        "MESSAGE_TEXT": "The Message-Authenticator RADIUS attribute is invalid"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "8cba032cd6b28c872c12f85658af6b26e15d42c2b1a60108f9e853131a574045",
+      "indexed_sha256": "8cba032cd6b28c872c12f85658af6b26e15d42c2b1a60108f9e853131a574045",
+      "verdict": "PASS"
+    },
+    {
+      "label": "original-line-134",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "3302",
+        "user": "intersight",
+        "src_ip": "10.0.10.3"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "3302",
+        "x_status": "NOTICE",
+        "user": "intersight",
+        "src_ip": "10.0.10.3",
+        "src_mac": null,
+        "MESSAGE_CLASS": "Tacacs-Accounting",
+        "MESSAGE_TEXT": "TACACS+ Accounting STOP",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": null
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "3302",
+        "MESSAGE_CLASS": "Tacacs-Accounting",
+        "MESSAGE_TEXT": "TACACS+ Accounting STOP"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "6ac340a2f54230848832f2940920df1181e21e0481eee5e64d4e814c65030c38",
+      "indexed_sha256": "6ac340a2f54230848832f2940920df1181e21e0481eee5e64d4e814c65030c38",
+      "verdict": "PASS"
+    },
+    {
+      "label": "current-generator-5200",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5200",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5200",
+        "x_status": "NOTICE",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50",
+        "src_mac": "00:1a:2b:3c:4d:5e",
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-passed-authentication"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5200",
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "4676da36154bddd7255d532cfcb64a1b7796c705404b47591ae1d0573ea6e849",
+      "indexed_sha256": "4676da36154bddd7255d532cfcb64a1b7796c705404b47591ae1d0573ea6e849",
+      "verdict": "PASS"
+    },
+    {
+      "label": "current-generator-5400",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5400",
+        "x_status": "NOTICE",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50",
+        "src_mac": "00:1a:2b:3c:4d:5e",
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-failed-authentication",
+          "cisco-ise-guest-authentication-failed",
+          "cisco-ise-guest-authentication-failed-attempts",
+          "err0r"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5400",
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "6990a82966af98b076f55e0f4894e53790268d7ebb0f96cf54fa59ffeb6cb813",
+      "indexed_sha256": "6990a82966af98b076f55e0f4894e53790268d7ebb0f96cf54fa59ffeb6cb813",
+      "verdict": "PASS"
+    },
+    {
+      "label": "current-generator-5205",
+      "framing": "HEC_EVENT",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5205",
+        "user": "parser.training",
+        "src_mac": "00:1a:2b:3c:4d:5e"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5205",
+        "x_status": "NOTICE",
+        "user": "parser.training",
+        "src_ip": "00:1a:2b:3c:4d",
+        "src_mac": null,
+        "MESSAGE_CLASS": "Dynamic-Authorization",
+        "MESSAGE_TEXT": "Dynamic Authorization succeeded",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-passed-authentication"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_mac": false
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5205",
+        "MESSAGE_CLASS": "Dynamic-Authorization",
+        "MESSAGE_TEXT": "Dynamic Authorization succeeded"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "56e6edc952009a19b2dc5bc17c73f09e4dbae4a4ed0977786f15c9670dddbcb8",
+      "indexed_sha256": "56e6edc952009a19b2dc5bc17c73f09e4dbae4a4ed0977786f15c9670dddbcb8",
+      "verdict": "FAIL"
+    },
+    {
+      "label": "raw-stream-old-time-5200",
+      "framing": "HEC_RAW_STREAM",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5200",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5200",
+        "x_status": "NOTICE",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50",
+        "src_mac": "00:1a:2b:3c:4d:5e",
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-passed-authentication"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5200",
+        "MESSAGE_CLASS": "Passed-Authentication",
+        "MESSAGE_TEXT": "Authentication succeeded"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "b1fc3afae7dd21bb7c6d809410286a2a5059a623b89c5458f2ed9e226d314a4a",
+      "indexed_sha256": "b1fc3afae7dd21bb7c6d809410286a2a5059a623b89c5458f2ed9e226d314a4a",
+      "verdict": "PASS"
+    },
+    {
+      "label": "raw-stream-old-time-5400",
+      "framing": "HEC_RAW_STREAM",
+      "matches": 1,
+      "expected_fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "actual_fields": {
+        "MESSAGE_CODE": "5400",
+        "x_status": "NOTICE",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50",
+        "src_mac": "00:1a:2b:3c:4d:5e",
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed",
+        "vendor": "Cisco",
+        "product": "Identity Services Engine",
+        "eventtype": [
+          "cisco-ise-authentication",
+          "cisco-ise-failed-authentication",
+          "cisco-ise-guest-authentication-failed",
+          "cisco-ise-guest-authentication-failed-attempts",
+          "err0r"
+        ]
+      },
+      "field_checks": {
+        "MESSAGE_CODE": true,
+        "user": true,
+        "src_ip": true
+      },
+      "lookup_checks": {
+        "MESSAGE_CLASS": true,
+        "MESSAGE_TEXT": true
+      },
+      "lookup_reference": {
+        "MESSAGE_CODE": "5400",
+        "MESSAGE_CLASS": "Failed-Attempt",
+        "MESSAGE_TEXT": "Authentication failed"
+      },
+      "lookup_status": "VERIFIED",
+      "timestamp_check": {
+        "expected": "DATETIME_CONFIG=CURRENT",
+        "actual_time": 1793048027.0,
+        "index_time": 1793048027.0,
+        "ok": true
+      },
+      "raw_sha256": "644fb3de0a8b64098ec9a69990f4638e67b820f5dad5c679dd9a9580e8205f01",
+      "indexed_sha256": "644fb3de0a8b64098ec9a69990f4638e67b820f5dad5c679dd9a9580e8205f01",
+      "verdict": "PASS"
+    }
+  ],
+  "passes": 9,
+  "event_breaking": {
+    "method": "One HEC /raw POST containing two newline-delimited ISE records; installed SHOULD_LINEMERGE=false",
+    "expected_events": 2,
+    "actual_events": 2,
+    "exact_records": true
+  },
+  "lookup_sha256": "8792d58a9b8f9788c38316c99672a128fcd720a2add9c7e7b58c11a41e423199",
+  "search_attempts": 1,
+  "query": "search index=idx_ta_ise_test earliest=1793047967 latest=1793048147 source=\"pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda*\" | eval parser_event_epoch=_time | table _raw parser_event_epoch _time _indextime source sourcetype MESSAGE_CODE x_status user src_ip src_mac MESSAGE_CLASS MESSAGE_TEXT vendor product vendor_product eventtype netspout_run_id",
+  "verified_sourcetypes": [],
+  "parser_execution": "INSTALLED_SPLUNK_TA_SEARCH_TIME_EXTRACTIONS_AND_LOOKUPS",
+  "configuration_changes": 0,
+  "packages_installed": 0,
+  "note": "All checks scoped to tested records. Eventtypes reported, not used as detection validation. HEC event posts alone are not event-breaking evidence.",
+  "generator_method_ast_sha256": "33a09cf0d71891d9b4f1442a2142ad5d989068cab3cc8ffdf437f30d51c3ccd5",
+  "reporting_attempts": {
+    "ingestion_attempts": 2,
+    "total_parser_test_records_posted": 20,
+    "definitive_record_set": 10,
+    "note": "First reporting attempt failed on formatted _time. Second record set was retained and resumed by read-only search; no re-ingestion during resume."
+  },
+  "overall_status": "PARTIAL_WITH_COMPATIBILITY_BLOCKER",
+  "blocked_cases": [
+    "current-generator-5205"
+  ],
+  "new_verified_sourcetypes": 0,
+  "generator_sha256": "ffe09be3d7f660d97eac69e533a4b870565c78911f2ce0a764e33f733e76eb48"
+}

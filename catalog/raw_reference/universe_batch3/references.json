@@ -1,0 +1,102 @@
+[
+  {
+    "id": "pfsense",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/pfsense/data_stream/log/_dev/test/pipeline/test-pfsense-bsd.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/pfsense.bin",
+    "bytes": 3582,
+    "sha256": "50305fde1c67622d7738e467a736a5cc3bee157ea1007bf0273e58fa3678ab1a",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "sysdig",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sysdig/data_stream/event/_dev/test/pipeline/test-event.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/sysdig.bin",
+    "bytes": 44999,
+    "sha256": "8c5cccf350aa3b632a30d1950e35da9914049cfb0fca76dbcaa1c598bdc0d3fe",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "sailpoint",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sailpoint_identity_sc/data_stream/events/_dev/test/pipeline/test-event.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/sailpoint.bin",
+    "bytes": 5085,
+    "sha256": "91f7453d69dbeaa9837d5d491eed85d4d2b07179918ca42560a1dec8880c68b4",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "imperva",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/imperva/data_stream/securesphere/_dev/test/pipeline/test-securesphere.json",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/imperva.bin",
+    "bytes": 20496,
+    "sha256": "55ae6a1a2f4ef2dbb6352e4e3cd82b85e78e01187db4c8f323cfa1f0c72f952d",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "barracuda",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/barracuda/data_stream/waf/_dev/test/pipeline/test-web-firewall.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/barracuda.bin",
+    "bytes": 1682,
+    "sha256": "695cbb9768b1acc2959f6b94a077ff569b8c359f07fe4d092cb504e5bad06735",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "oracle",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/oracle/data_stream/database_audit/_dev/test/pipeline/test-oracle-database-audit.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/oracle.bin",
+    "bytes": 13816,
+    "sha256": "c2aec91d859fb2ca40864fbb5089f1d8beca0023783623186477a4609e504752",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "darktrace",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/darktrace/data_stream/model_breach_alert/_dev/test/pipeline/test-model-breach-alert.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/darktrace.bin",
+    "bytes": 35382,
+    "sha256": "e46bec3199a367d4962918e478cf62470a5c3c4e161053c558b4209347de1823",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "beyondtrust",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/beyondinsight_password_safe/data_stream/useraudit/_dev/test/pipeline/test-useraudits.json",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/beyondtrust.bin",
+    "bytes": 311,
+    "sha256": "4e58516cd8562c182046b2abfa3c29ad879b6fa2f1b770b9df8c300f99f72f60",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "tenable",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/tenable_io/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/tenable.bin",
+    "bytes": 2302,
+    "sha256": "1c58ff46b3d8e73354bf219a961611608f96c293ba358bfe5c79ba59cd6e3c88",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "ibmmq",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/ibmmq/data_stream/errorlog/_dev/test/pipeline/test-errorlog-9-4.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "raw_reference_file": "catalog/raw_reference/universe_batch3/ibmmq.bin",
+    "bytes": 1167,
+    "sha256": "79c40fbdd517677cb56c0a33e152e929750007d357e5c42ab86846348dd133fd",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  }
+]

@@ -56,10 +56,10 @@ def test_seven_mandate_count_dimensions_present_and_separated():
 
 def test_canonical_dimensions_imported_from_committed_evidence():
     counts = load_registry()["counts"]
-    assert counts["canonical_sourcetypes"] == 326
-    assert counts["generator_implemented_sources"] == 326
-    assert counts["genuine_event_families_evidenced"] == 181
-    assert counts["live_ingestion_verified_sourcetypes"] == 65
+    assert counts["canonical_sourcetypes"] == 336
+    assert counts["generator_implemented_sources"] == 336
+    assert counts["genuine_event_families_evidenced"] == 201
+    assert counts["live_ingestion_verified_sourcetypes"] == 75
     assert counts["ta_parser_verified_sourcetypes"] == 1
     registry = load_registry()
     # Live-verification claim is backed by the committed evidence files it names.

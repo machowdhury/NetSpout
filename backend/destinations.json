@@ -1,0 +1,47 @@
+{
+  "destinations": {
+    "docker_local": {
+      "id": "docker_local",
+      "name": "Local Docker Splunk",
+      "deployment_type": "docker_local",
+      "enabled": true,
+      "hec_url": "https://localhost:18088/services/collector",
+      "search_url": "https://localhost:18000",
+      "search_username": "admin",
+      "docker_container": "pf-native-lab",
+      "docker_compose_file": null,
+      "hec_index": "idx_network_ops",
+      "hec_metric_index": "idx_performance_metrics",
+      "hec_ssl_verify": false,
+      "hec_allow_insecure_tls": true,
+      "hec_token_env": "PULSEFORGE_LAB_HEC_TOKEN",
+      "last_validated": null,
+      "validation_status": "unknown",
+      "validation_message": null,
+      "total_events_sent": 14,
+      "last_used": 1793132977.8108811
+    },
+    "external_default": {
+      "id": "external_default",
+      "name": "External Splunk (Edit Me)",
+      "deployment_type": "external_enterprise",
+      "enabled": true,
+      "hec_url": "https://splunk.example.com:8088/services/collector",
+      "search_url": null,
+      "search_username": null,
+      "docker_container": null,
+      "docker_compose_file": null,
+      "hec_index": "idx_network_ops",
+      "hec_metric_index": "idx_performance_metrics",
+      "hec_ssl_verify": false,
+      "hec_allow_insecure_tls": true,
+      "hec_token_env": "PULSEFORGE_LAB_HEC_TOKEN",
+      "last_validated": null,
+      "validation_status": "unknown",
+      "validation_message": null,
+      "total_events_sent": 0,
+      "last_used": null
+    }
+  },
+  "active_destination_id": "docker_local"
+}

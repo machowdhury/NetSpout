@@ -1,0 +1,42 @@
+{
+  "version": "2.0",
+  "title": "Cisco Aci Syslog Monitor",
+  "description": "Real-time monitoring dashboard for cisco:aci:syslog",
+  "visualizations": [
+    {
+      "id": "data_table",
+      "type": "splunk.table",
+      "title": "Event Data",
+      "dataSource": "default",
+      "options": {
+        "query": "index=* sourcetype=\"cisco:aci:syslog\" | head 100",
+        "fields": [
+          "_time",
+          "host",
+          "sourcetype",
+          "message"
+        ]
+      },
+      "position": {
+        "height": 600,
+        "width": 1200
+      }
+    }
+  ],
+  "inputs": [],
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"cisco:aci:syslog\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "theme": "dark"
+}

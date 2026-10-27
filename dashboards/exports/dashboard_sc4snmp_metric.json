@@ -1,0 +1,54 @@
+{
+  "version": "2.0",
+  "title": "Sc4Snmp Metric Monitor",
+  "description": "Real-time monitoring dashboard for sc4snmp:metric",
+  "visualizations": [
+    {
+      "id": "timeseries_viz",
+      "type": "splunk.line",
+      "title": "Metric Trends",
+      "dataSource": "default",
+      "options": {
+        "query": "index=cisco_mdt_metrics sourcetype=\"sc4snmp:metric\" | timechart span=5m avg(_value) by metric_name",
+        "yAxis": {
+          "title": "Value"
+        }
+      },
+      "position": {
+        "height": 400,
+        "width": 1200
+      }
+    },
+    {
+      "id": "current_value",
+      "type": "splunk.singlevalue",
+      "title": "Current Status",
+      "dataSource": "default",
+      "options": {
+        "query": "index=cisco_mdt_metrics sourcetype=\"sc4snmp:metric\" | stats latest(_value) as latest_value",
+        "field": "latest_value",
+        "title": "Latest Value"
+      },
+      "position": {
+        "height": 200,
+        "width": 400
+      }
+    }
+  ],
+  "inputs": [],
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"sc4snmp:metric\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "theme": "dark"
+}

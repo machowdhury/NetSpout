@@ -1,0 +1,111 @@
+{
+  "verification_date": "2026-10-27T11:10:44.869229",
+  "platform": "PulseForge Splunk Demo Platform",
+  "sourcetypes_verified": [
+    {
+      "sourcetype": "sc4snmp:event",
+      "verification_status": "VERIFIED",
+      "evidence": [
+        "SNMP generator verified"
+      ],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "sc4snmp:metric",
+      "verification_status": "VERIFIED",
+      "evidence": [
+        "SNMP generator verified"
+      ],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "cisco:aci:fault",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "cisco:aci:syslog",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "cloudflare:json",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "cloudflare:r2:json",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "openconfig:gnmi:telemetry",
+      "verification_status": "VERIFIED",
+      "evidence": [
+        "OpenConfig generator verified"
+      ],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "a10:acos:cgnat",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    },
+    {
+      "sourcetype": "a10:acos:syslog",
+      "verification_status": "PENDING",
+      "evidence": [],
+      "dashboard_available": false
+    }
+  ],
+  "evidence_levels": {
+    "snmp": {
+      "status": "GENERATOR_IMPLEMENTED_AND_TESTED",
+      "verified_oids": 307,
+      "data_types": [
+        "Counter32",
+        "Counter64",
+        "Gauge32",
+        "Integer32",
+        "OctetString",
+        "IpAddress",
+        "TimeTicks",
+        "ObjectIdentifier"
+      ],
+      "vendors": [
+        "RFC",
+        "Cisco",
+        "Juniper",
+        "Arista"
+      ]
+    },
+    "yang": {
+      "status": "GENERATOR_IMPLEMENTED",
+      "modules": [
+        "openconfig-interfaces",
+        "openconfig-qos",
+        "openconfig-gnmi-interfaces"
+      ],
+      "paths_generated": [
+        "/interfaces/interface/state/counters",
+        "/qos/interfaces/interface/output/queues"
+      ]
+    },
+    "batch4": {
+      "status": "INTEGRATION_TEST_RAW_VERIFIED",
+      "sources": 12,
+      "scenarios": 50,
+      "verification": "26/26 HEC RAW-equality checks PASS"
+    }
+  },
+  "tests_performed": [
+    "SNMP generator verification - 307 OIDs",
+    "OpenConfig/YANG generator verification",
+    "Batch 4 HEC RAW-equality verification"
+  ]
+}

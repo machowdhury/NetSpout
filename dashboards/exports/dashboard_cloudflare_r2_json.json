@@ -1,0 +1,42 @@
+{
+  "version": "2.0",
+  "title": "Cloudflare R2 Metrics Monitor",
+  "description": "Real-time monitoring dashboard for cloudflare:r2:json",
+  "visualizations": [
+    {
+      "id": "data_table",
+      "type": "splunk.table",
+      "title": "Event Data",
+      "dataSource": "default",
+      "options": {
+        "query": "index=* sourcetype=\"cloudflare:r2:json\" | head 100",
+        "fields": [
+          "_time",
+          "host",
+          "sourcetype",
+          "message"
+        ]
+      },
+      "position": {
+        "height": 600,
+        "width": 1200
+      }
+    }
+  ],
+  "inputs": [],
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"cloudflare:r2:json\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "theme": "dark"
+}

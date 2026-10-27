@@ -1,0 +1,42 @@
+{
+  "version": "2.0",
+  "title": "A10 Acos Syslog Monitor",
+  "description": "Real-time monitoring dashboard for a10:acos:syslog",
+  "visualizations": [
+    {
+      "id": "data_table",
+      "type": "splunk.table",
+      "title": "Event Data",
+      "dataSource": "default",
+      "options": {
+        "query": "index=* sourcetype=\"a10:acos:syslog\" | head 100",
+        "fields": [
+          "_time",
+          "host",
+          "sourcetype",
+          "message"
+        ]
+      },
+      "position": {
+        "height": 600,
+        "width": 1200
+      }
+    }
+  ],
+  "inputs": [],
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"a10:acos:syslog\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "theme": "dark"
+}

@@ -117,14 +117,32 @@ app.include_router(destination_router)
 # Global Simulation State
 scenario_runner = ScenarioRunner()
 
+# Initialize progress tracker first
+progress_tracker = None
+
+# Define broadcast function before use
+async def broadcast_progress_event(event):
+    """Broadcast progress events to WebSocket clients."""
+    from app.run_progress import RunProgressEvent
+    event_dict = event.to_dict()
+    await manager.broadcast({
+        "type": "run_progress",
+        **event_dict
+    })
+
 # Progress-aware scenario runner
 try:
     from app.progress_scenario_runner_v2 import ProgressScenarioRunner
+    from app.run_progress import RunProgressTracker
+    
+    # Create progress tracker
+    progress_tracker = RunProgressTracker(broadcast_callback=broadcast_progress_event)
     progress_scenario_runner = ProgressScenarioRunner(scenario_runner, progress_tracker)
 except ImportError as e:
     print(f"Note: ProgressScenarioRunner not available: {e}")
     # Fallback if module not available
     progress_scenario_runner = None
+    progress_tracker = None
 unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
 scenario_studio_service = ScenarioStudioService(
     catalog=unified_generation_service.catalog,
@@ -370,17 +388,6 @@ class ConnectionManager:
         await self.broadcast_log(payload)
 
 manager = ConnectionManager()
-
-# Global progress tracker
-async def broadcast_progress_event(event):
-    """Broadcast progress events to WebSocket clients."""
-    event_dict = event.to_dict()
-    await manager.broadcast({
-        "type": "run_progress",
-        **event_dict
-    })
-
-progress_tracker = RunProgressTracker(broadcast_callback=broadcast_progress_event)
 
 
 # Background Simulation Task

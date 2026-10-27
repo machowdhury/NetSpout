@@ -11,8 +11,9 @@ from typing import Optional, Dict, Any
 class ProgressScenarioRunner:
     """Scenario runner with progress tracking."""
     
-    def __init__(self, base_runner):
+    def __init__(self, base_runner, progress_tracker=None):
         self.base_runner = base_runner
+        self.progress_tracker = progress_tracker
     
     async def run_scenario_with_progress(
         self,
@@ -30,8 +31,12 @@ class ProgressScenarioRunner:
             RunManifest from the scenario execution
         """
         # Import here to avoid circular imports
-        from .run_progress import RunProgressState
-        from .main import progress_tracker
+        from .run_progress import RunProgressState, RunProgressTracker
+        
+        # Use provided tracker or create a dummy one
+        progress_tracker = self.progress_tracker
+        if progress_tracker is None:
+            progress_tracker = RunProgressTracker()
         
         # Start progress tracking
         run_id = request.seed or str(int(time.time()))

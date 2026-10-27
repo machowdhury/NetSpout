@@ -120,8 +120,9 @@ scenario_runner = ScenarioRunner()
 # Progress-aware scenario runner
 try:
     from app.progress_scenario_runner_v2 import ProgressScenarioRunner
-    progress_scenario_runner = ProgressScenarioRunner(scenario_runner)
-except ImportError:
+    progress_scenario_runner = ProgressScenarioRunner(scenario_runner, progress_tracker)
+except ImportError as e:
+    print(f"Note: ProgressScenarioRunner not available: {e}")
     # Fallback if module not available
     progress_scenario_runner = None
 unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)

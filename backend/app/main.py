@@ -12,6 +12,7 @@ import io
 import os
 import urllib.error
 from contextlib import asynccontextmanager
+from datetime import datetime
 from typing import List, Dict, Set, Optional, Any, Union
 from pydantic import BaseModel
 from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
@@ -37,6 +38,7 @@ from app.telemetry_config_api import (
 )
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
+from app.run_progress import RunProgressTracker, RunProgressState
 from app.unified_generation import (
     GenerationMode,
     UnifiedGenerationRequest,
@@ -114,6 +116,14 @@ app.include_router(destination_router)
 
 # Global Simulation State
 scenario_runner = ScenarioRunner()
+
+# Progress-aware scenario runner
+try:
+    from app.progress_scenario_runner_v2 import ProgressScenarioRunner
+    progress_scenario_runner = ProgressScenarioRunner(scenario_runner)
+except ImportError:
+    # Fallback if module not available
+    progress_scenario_runner = None
 unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
 scenario_studio_service = ScenarioStudioService(
     catalog=unified_generation_service.catalog,
@@ -359,6 +369,17 @@ class ConnectionManager:
         await self.broadcast_log(payload)
 
 manager = ConnectionManager()
+
+# Global progress tracker
+async def broadcast_progress_event(event):
+    """Broadcast progress events to WebSocket clients."""
+    event_dict = event.to_dict()
+    await manager.broadcast({
+        "type": "run_progress",
+        **event_dict
+    })
+
+progress_tracker = RunProgressTracker(broadcast_callback=broadcast_progress_event)
 
 
 # Background Simulation Task
@@ -1376,6 +1397,52 @@ def run_scenario_with_destination(req: EnhancedScenarioRunRequest):
     observe_run(manifest, dest)
     destination_manager.record_event_sent(dest_id, manifest.dispatch_succeeded)
     return manifest.model_dump(mode="json")
+
+@app.post("/api/scenarios/run-with-progress")
+async def run_scenario_with_progress(req: EnhancedScenarioRunRequest):
+    """Run scenario with real-time progress tracking."""
+    dest_id = req.destination_id or destination_manager.active_destination_id
+    dest = destination_manager.destinations.get(dest_id)
+    if not dest:
+        raise HTTPException(404, "Destination not found")
+    transport = dest.to_transport_config()
+    if not dest.enabled or not transport.hec_token:
+        raise HTTPException(400, "Destination disabled or HEC credential unavailable")
+    
+    try:
+        if progress_scenario_runner:
+            # Use progress-aware runner
+            manifest = await progress_scenario_runner.run_scenario_with_progress(
+                ScenarioRunRequest(
+                    scenario_id=req.scenario_id, 
+                    seed=req.seed, 
+                    time_mode="TEST",
+                    dispatch_telemetry=True, 
+                    transport_config=transport,
+                ),
+                destination_info={
+                    "name": dest.name,
+                    "type": dest.type,
+                    "url": dest.url
+                }
+            )
+        else:
+            # Fallback to regular runner
+            manifest = scenario_runner.run_scenario(ScenarioRunRequest(
+                scenario_id=req.scenario_id, seed=req.seed, time_mode="TEST",
+                dispatch_telemetry=True, transport_config=transport,
+            ))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    
+    from app.live_dashboard import observe_run
+    observe_run(manifest, dest)
+    destination_manager.record_event_sent(dest_id, manifest.dispatch_succeeded)
+    
+    # Return manifest with progress info
+    result = manifest.model_dump(mode="json")
+    result["progress_tracked"] = progress_scenario_runner is not None
+    return result
 
 
 @app.get("/api/acceptance/scenarios")
@@ -2485,6 +2552,95 @@ async def websocket_logs_endpoint(websocket: WebSocket):
                     current_topology = TopologyState(**data.get("topology", {}))
             except Exception as e:
                 print(f"WS message error: {e}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        manager.disconnect(websocket)
+
+
+@app.websocket("/ws/run-progress")
+async def websocket_run_progress_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for real-time run progress updates."""
+    await manager.connect(websocket)
+    try:
+        # Send initial handshake
+        await websocket.send_json({
+            "type": "connection_established",
+            "message": "Connected to Run Progress Feed",
+            "active_runs": len(progress_tracker.get_all_active_runs())
+        })
+        
+        # Send current active runs
+        active_runs = progress_tracker.get_all_active_runs()
+        for run_id, progress in active_runs.items():
+            await websocket.send_json({
+                "type": "run_progress",
+                "run_id": progress.run_id,
+                "state": progress.state,
+                "timestamp": progress.timestamp.isoformat(),
+                "message": progress.message,
+                "details": progress.details,
+                "current_phase": progress.current_phase,
+                "phases_total": progress.phases_total,
+                "phases_completed": progress.phases_completed,
+                "generated_count": progress.generated_count,
+                "accepted_count": progress.accepted_count,
+                "rejected_count": progress.rejected_count,
+                "indexed_count": progress.indexed_count,
+                "verified_count": progress.verified_count
+            })
+        
+        # Keep connection alive, listening for client messages
+        while True:
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                action = message.get("action")
+                
+                if action == "get_run_progress":
+                    run_id = message.get("run_id")
+                    if run_id:
+                        progress = progress_tracker.get_run_progress(run_id)
+                        if progress:
+                            await websocket.send_json({
+                                "type": "run_progress",
+                                "run_id": progress.run_id,
+                                "state": progress.state,
+                                "timestamp": progress.timestamp.isoformat(),
+                                "message": progress.message,
+                                "details": progress.details
+                            })
+                        else:
+                            await websocket.send_json({
+                                "type": "error",
+                                "message": f"Run {run_id} not found"
+                            })
+                
+                elif action == "cancel_run":
+                    run_id = message.get("run_id")
+                    reason = message.get("reason", "User requested cancellation")
+                    if run_id:
+                        cancelled = progress_tracker.cancel_run(run_id, reason)
+                        if cancelled:
+                            await websocket.send_json({
+                                "type": "run_cancelled",
+                                "run_id": run_id,
+                                "reason": reason
+                            })
+                        else:
+                            await websocket.send_json({
+                                "type": "error",
+                                "message": f"Run {run_id} not found or already completed"
+                            })
+                
+                elif action == "ping":
+                    await websocket.send_json({"type": "pong", "timestamp": datetime.now().isoformat()})
+                    
+            except json.JSONDecodeError:
+                await websocket.send_json({"type": "error", "message": "Invalid JSON"})
+            except Exception as e:
+                await websocket.send_json({"type": "error", "message": str(e)})
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
     except Exception as e:

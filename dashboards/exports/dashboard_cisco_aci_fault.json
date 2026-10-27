@@ -1,10 +1,8 @@
 {
-  "version": "2.0",
   "title": "Cisco Aci Fault Monitor",
   "description": "Real-time monitoring dashboard for cisco:aci:fault",
-  "visualizations": [
-    {
-      "id": "data_table",
+  "visualizations": {
+    "data_table": {
       "type": "splunk.table",
       "title": "Event Data",
       "dataSource": "default",
@@ -16,14 +14,19 @@
           "sourcetype",
           "message"
         ]
-      },
-      "position": {
-        "height": 600,
-        "width": 1200
       }
     }
-  ],
-  "inputs": [],
+  },
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time Range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-1h,now"
+      }
+    }
+  },
   "defaults": {
     "dataSources": {
       "default": {
@@ -38,5 +41,28 @@
       }
     }
   },
-  "theme": "dark"
+  "dataSources": {},
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "display": "auto-scale",
+      "width": 1200,
+      "height": 600
+    },
+    "globalInputs": [
+      "input_global_time"
+    ],
+    "structure": [
+      {
+        "item": "data_table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 580,
+          "h": 300
+        }
+      }
+    ]
+  }
 }

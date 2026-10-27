@@ -59,27 +59,31 @@ except ImportError:
         from app.catalog import catalog_instance, NetSpoutCatalog
         from app.exporter_session import ExporterSession
     except ImportError:
-        from models import (
-            TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
-            ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
-            UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
-            RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
-            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
-            FlowRecord, TransportResult, CompanionControlManifest
-        )
-        from graph_engine import TopologyGraph
-        from log_engine import SplunkLogEngine
-        from exporter_session import ExporterSession
-        from telemetry_dispatcher import dispatcher
+        # Third fallback: try relative imports
         try:
-            from spl_engine import SPLExecutionEngine
+            from .models import (
+                TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
+                ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
+                UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
+                RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
+                TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
+                FlowRecord, TransportResult, CompanionControlManifest
+            )
+            from .graph_engine import TopologyGraph
+            from .log_engine import SplunkLogEngine
+            from .exporter_session import ExporterSession
+            from .telemetry_dispatcher import dispatcher
+            try:
+                from .spl_engine import SPLExecutionEngine
+            except ImportError:
+                SPLExecutionEngine = None
+            try:
+                from .catalog import catalog_instance, NetSpoutCatalog
+            except ImportError:
+                catalog_instance = None
+                NetSpoutCatalog = None
         except ImportError:
-            SPLExecutionEngine = None
-        try:
-            from catalog import catalog_instance, NetSpoutCatalog
-        except ImportError:
-            catalog_instance = None
-            NetSpoutCatalog = None
+            raise ImportError("Failed to import required modules. Check that app.models and other app modules exist.")
 
 
 # =========================================================================

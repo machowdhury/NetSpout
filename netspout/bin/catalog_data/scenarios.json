@@ -6744,5 +6744,224 @@
    }
   ],
   "registry_reference": "catalog/universe_batch3.json"
+ },
+ {
+  "id": "ub4_saas_collaboration_audit",
+  "code": "SEC-UB4-01",
+  "name": "Ub4 Saas Collaboration Audit",
+  "display_name": "Ub4 Saas Collaboration Audit",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "slack:audit",
+   "github:enterprise:audit",
+   "gitlab:audit:json"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "slack",
+   "github",
+   "gitlab"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Enterprise Grid audit logs: user_login, admin_console_anomaly, malicious_file_detected",
+   "Enterprise audit logs: enterprise_user_login, repository_merge",
+   "Self-Managed audit events: session_login, git_operation"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "telemetry_model": "SaaS Collaboration Audit JSON",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders vendor-native event/audit payload shapes taken from pinned upstream integration reference RAW and delivers them to Splunk through HEC. This is a modeled payload rather than a native vendor agent or API streaming session, and correlation metadata stays on HEC fields instead of the RAW event.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch4.json"
+ },
+ {
+  "id": "ub4_endpoint_threat_pipeline",
+  "code": "SEC-UB4-02",
+  "name": "Ub4 Endpoint Threat Pipeline",
+  "display_name": "Ub4 Endpoint Threat Pipeline",
+  "category": "SECURITY",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cybereason:malops",
+   "sentinelone:channel:threats",
+   "tanium:discover:managed",
+   "trellix_epo:threat_events",
+   "bitdefender:gz"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "cybereason",
+   "sentinelone",
+   "tanium",
+   "trellix_mcafee",
+   "bitdefender"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Malops feed: malop_process_injection",
+   "Threats channel: threat_trojan_detected, threat_malware_agent_reported",
+   "Discover managed machines: managed_endpoint_inventory",
+   "ePO threat events: nips_port_scan_handled, blocked_process_access, nids_would_block_unhandled",
+   "GravityZone push notifications: phishing_blocked, av_malware_detected, firewall_portscan_blocked"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "telemetry_model": "Endpoint / EDR Threat Event JSON",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders vendor-native event/audit payload shapes taken from pinned upstream integration reference RAW and delivers them to Splunk through HEC. This is a modeled payload rather than a native vendor agent or API streaming session, and correlation metadata stays on HEC fields instead of the RAW event.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch4.json"
+ },
+ {
+  "id": "ub4_exposure_infra_logging",
+  "code": "SEC-UB4-03",
+  "name": "Ub4 Exposure Infra Logging",
+  "display_name": "Ub4 Exposure Infra Logging",
+  "category": "INFRASTRUCTURE",
+  "ecosystem": "mixed_vendor",
+  "maturity": "CONTRACTED",
+  "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "qualys:activityLog",
+   "rapid7:insightvm:asset:vulnerability_finding",
+   "ibm:qradar:offense",
+   "elasticsearch:json"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 40,
+  "vendor_scope": [
+   "qualys",
+   "rapid7",
+   "ibm_qradar",
+   "elastic"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "Platform user activity log: console_login, configuration_change",
+   "InsightVM asset vulnerabilities: steady_state_asset_exposure, critical_findings_asset_exposure",
+   "QRadar offense events: generic_log_offense, message_offense, authentication_offense",
+   "Elasticsearch server logs: data_stream_provisioning, shard_bootstrapping"
+  ],
+  "expected_phases": [
+   "baseline",
+   "observe",
+   "validate"
+  ],
+  "telemetry_model": "Vulnerability Exposure & Infra Audit JSON",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders vendor-native event/audit payload shapes taken from pinned upstream integration reference RAW and delivers them to Splunk through HEC. This is a modeled payload rather than a native vendor agent or API streaming session, and correlation metadata stays on HEC fields instead of the RAW event.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "OBSERVE",
+    "name": "Observe",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Fixture-backed native source observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch4.json"
  }
 ]

@@ -201,7 +201,8 @@ def test_current_live_raw_bytes_and_parent_metadata():
 def test_ta_mapping_assessment_covers_every_canonical_source():
     matrix=read('catalog/universe_batch3_parser_assessments.json')
     assert len(matrix['sources'])==336 and matrix['new_verified_sourcetypes']==0
-    assert {s['sourcetype'] for s in matrix['sources']}=={s['splunk_sourcetype'] for s in read('catalog/sourcetypes.json')}
+    batch4_sts={s['splunk_sourcetype'] for s in read('catalog/universe_batch4.json')['sources']}
+    assert {s['sourcetype'] for s in matrix['sources']}=={s['splunk_sourcetype'] for s in read('catalog/sourcetypes.json')}-batch4_sts
     actual=[s for s in matrix['sources'] if s['status']=='ACTUAL_EXECUTION_PARTIAL_WITH_BLOCKER']
     assert len(actual)==1 and actual[0]['sourcetype']=='cisco:ise:syslog'
     assert all(s['ta_metadata']['parser_verified'] is False for s in REG['sources'])

@@ -1698,3 +1698,14 @@ except ImportError:
         from universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
 SplunkLogEngine.UNIVERSE_BATCH3_SOURCE_SOURCETYPES = UNIVERSE_BATCH3_SOURCE_SOURCETYPES
 SplunkLogEngine.format_universe_batch3_log = UniverseBatch3Engine.format_universe_batch3_log
+
+# Batch 4 native source/family dispatch for SaaS audit, endpoint threat and exposure logs.
+try:
+    from netspout_core.universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH4_SOURCE_SOURCETYPES = UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch4_log = UniverseBatch4Engine.format_universe_batch4_log

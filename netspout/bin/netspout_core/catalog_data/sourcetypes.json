@@ -7020,5 +7020,245 @@
   "deprecated_aliases": [],
   "is_benchmark_197": false,
   "status": "active"
+ },
+ {
+  "id": "slack-audit",
+  "splunk_sourcetype": "slack:audit",
+  "display_name": "Enterprise Grid audit logs",
+  "vendor_id": "slack",
+  "category": "Collaboration SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Slack Add-on for Splunk",
+  "aliases": [
+   "slack:audit"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "github-enterprise-audit",
+  "splunk_sourcetype": "github:enterprise:audit",
+  "display_name": "Enterprise audit logs",
+  "vendor_id": "github",
+  "category": "Source Control SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "GitHub Dashboard Collection",
+  "aliases": [
+   "github:enterprise:audit"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "gitlab-audit-json",
+  "splunk_sourcetype": "gitlab:audit:json",
+  "display_name": "Self-Managed audit events",
+  "vendor_id": "gitlab",
+  "category": "Source Control Self-Managed",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "GitLab Self-Managed Add-on for Splunk (CIM)",
+  "aliases": [
+   "gitlab:audit:json"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "cybereason-malops",
+  "splunk_sourcetype": "cybereason:malops",
+  "display_name": "Malops feed",
+  "vendor_id": "cybereason",
+  "category": "Endpoint Detection",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Cybereason Addon For Splunk",
+  "aliases": [
+   "cybereason:malops"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "qualys-activitylog",
+  "splunk_sourcetype": "qualys:activityLog",
+  "display_name": "Platform user activity log",
+  "vendor_id": "qualys",
+  "category": "Exposure Management SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Qualys Technology Add-on (TA) for Splunk",
+  "aliases": [
+   "qualys:activityLog"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "rapid7-insightvm-asset-vulnerability_finding",
+  "splunk_sourcetype": "rapid7:insightvm:asset:vulnerability_finding",
+  "display_name": "InsightVM asset vulnerabilities",
+  "vendor_id": "rapid7",
+  "category": "Vulnerability Management SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Rapid7 InsightVM Technology Add-On for Splunk",
+  "aliases": [
+   "rapid7:insightvm:asset:vulnerability_finding"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "sentinelone-channel-threats",
+  "splunk_sourcetype": "sentinelone:channel:threats",
+  "display_name": "Threats channel",
+  "vendor_id": "sentinelone",
+  "category": "Endpoint Security SaaS",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "SentinelOne App For Splunk",
+  "aliases": [
+   "sentinelone:channel:threats"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "tanium-discover-managed",
+  "splunk_sourcetype": "tanium:discover:managed",
+  "display_name": "Discover managed machines",
+  "vendor_id": "tanium",
+  "category": "Endpoint Management",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "TA-Tanium",
+  "aliases": [
+   "tanium:discover:managed"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "trellix_epo-threat_events",
+  "splunk_sourcetype": "trellix_epo:threat_events",
+  "display_name": "ePO threat events",
+  "vendor_id": "trellix_mcafee",
+  "category": "Endpoint Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Trellix ePO All in one",
+  "aliases": [
+   "trellix_epo:threat_events"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "bitdefender-gz",
+  "splunk_sourcetype": "bitdefender:gz",
+  "display_name": "GravityZone push notifications",
+  "vendor_id": "bitdefender",
+  "category": "Endpoint Security",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Gravityzone Add-on for Splunk",
+  "aliases": [
+   "bitdefender:gz"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "ibm-qradar-offense",
+  "splunk_sourcetype": "ibm:qradar:offense",
+  "display_name": "QRadar offense events",
+  "vendor_id": "ibm_qradar",
+  "category": "SIEM & Incident Response",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Mapping pending: IBM QRadar SOAR Add-on for Splunk",
+  "aliases": [
+   "ibm:qradar:offense"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
+ },
+ {
+  "id": "elasticsearch-json",
+  "splunk_sourcetype": "elasticsearch:json",
+  "display_name": "Elasticsearch server logs",
+  "vendor_id": "elastic",
+  "category": "Search Infrastructure",
+  "data_kind": "event",
+  "default_index": "idx_network_ops",
+  "recommended_index": "netops_logs",
+  "generation_mode": "STATEFUL",
+  "protocol": "hec",
+  "sample_file": null,
+  "required_ta": "Add-on for Elasticsearch",
+  "aliases": [
+   "elasticsearch:json"
+  ],
+  "deprecated_aliases": [],
+  "is_benchmark_197": false,
+  "status": "active"
  }
 ]

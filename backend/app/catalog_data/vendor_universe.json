@@ -56,28 +56,28 @@
   "counts": {
     "discovered_publishers_raw": 853,
     "discovered_publishers_normalized": 848,
-    "discovered_technology_vendors_canonical": 76,
-    "discovered_technology_vendors_extended": 48,
-    "discovered_products": 556,
+    "discovered_technology_vendors_canonical": 88,
+    "discovered_technology_vendors_extended": 36,
+    "discovered_products": 522,
     "splunkbase_apps_total": 1871,
     "splunkbase_addons": 915,
     "splunkbase_applications": 956,
-    "canonical_sourcetypes": 336,
-    "genuine_event_families_evidenced": 201,
-    "generator_implemented_sources": 336,
-    "live_ingestion_verified_sourcetypes": 75,
+    "canonical_sourcetypes": 348,
+    "genuine_event_families_evidenced": 227,
+    "generator_implemented_sources": 348,
+    "live_ingestion_verified_sourcetypes": 87,
     "ta_parser_verified_sourcetypes": 1
   },
   "counts_by_bucket": {
     "splunk_platform": 266,
     "publisher_only": 684,
     "product_only": 488,
-    "recognized_technology_vendor": 168,
-    "canonical_linked": 265
+    "recognized_technology_vendor": 121,
+    "canonical_linked": 312
   },
   "canonical_coverage_crossmap": {
-    "apps_declaring_canonical_sourcetypes": 85,
-    "canonical_sourcetypes_declared_by_splunkbase": 160,
+    "apps_declaring_canonical_sourcetypes": 103,
+    "canonical_sourcetypes_declared_by_splunkbase": 171,
     "top_declared_canonical_sourcetypes": [
       [
         "o365:management:activity",
@@ -132,6 +132,10 @@
         3
       ],
       [
+        "sentinelone:channel:threats",
+        3
+      ],
+      [
         "OktaIM2:log",
         3
       ],
@@ -154,10 +158,6 @@
       [
         "fgt_event",
         2
-      ],
-      [
-        "cisco:nvm:flowdata",
-        2
       ]
     ],
     "canonical_vendors_with_uid_or_title_match": [
@@ -167,6 +167,7 @@
       "atlassian",
       "barracuda",
       "beyondtrust",
+      "bitdefender",
       "broadcom_symantec",
       "checkpoint",
       "cisco_duo",
@@ -176,16 +177,21 @@
       "claroty",
       "cloudflare",
       "crowdstrike",
+      "cybereason",
       "darktrace",
       "dell_os10",
       "docker",
+      "elastic",
       "extrahop",
       "f5_bigip",
       "forcepoint",
       "fortinet",
+      "github",
+      "gitlab",
       "hashicorp",
       "huawei_vrp",
       "ibm_mq",
+      "ibm_qradar",
       "imperva",
       "juniper_junos",
       "kubernetes",
@@ -205,14 +211,20 @@
       "palo_alto",
       "pfsense_netgate",
       "proofpoint",
+      "qualys",
       "radware",
+      "rapid7",
       "sailpoint",
+      "sentinelone",
+      "slack",
       "sonicwall",
       "sophos",
       "suricata_oisf",
       "sysdig",
+      "tanium",
       "tenable",
       "traefik",
+      "trellix_mcafee",
       "veeam",
       "vmware_nsx",
       "watchguard",
@@ -228,14 +240,6 @@
     ],
     [
       "pavo_metrics",
-      9
-    ],
-    [
-      "trellix_mcafee",
-      9
-    ],
-    [
-      "ibm_qradar",
       9
     ],
     [
@@ -263,20 +267,8 @@
       4
     ],
     [
-      "slack",
-      4
-    ],
-    [
       "ubiquiti",
       4
-    ],
-    [
-      "elastic",
-      4
-    ],
-    [
-      "qualys",
-      3
     ],
     [
       "netapp",
@@ -287,15 +279,7 @@
       3
     ],
     [
-      "rapid7",
-      3
-    ],
-    [
       "onelogin",
-      3
-    ],
-    [
-      "sentinelone",
       3
     ],
     [
@@ -315,31 +299,11 @@
       3
     ],
     [
-      "gitlab",
-      3
-    ],
-    [
-      "bitdefender",
-      3
-    ],
-    [
-      "tanium",
-      2
-    ],
-    [
       "corelight",
       2
     ],
     [
-      "cybereason",
-      2
-    ],
-    [
       "malwarebytes",
-      2
-    ],
-    [
-      "github",
       2
     ],
     [
@@ -609,10 +573,6 @@
       1
     ],
     [
-      "qualyscloudplatform",
-      1
-    ],
-    [
       "uberagent indexer",
       1
     ],
@@ -781,10 +741,6 @@
       1
     ],
     [
-      "tanium",
-      1
-    ],
-    [
       "psono password manager",
       1
     ],
@@ -830,10 +786,6 @@
     ],
     [
       "kaspersky",
-      1
-    ],
-    [
-      "ibm datapower",
       1
     ],
     [
@@ -901,10 +853,6 @@
       1
     ],
     [
-      "ibm cics performance analyzer for z/os sample",
-      1
-    ],
-    [
       "open banking",
       1
     ],
@@ -926,10 +874,6 @@
     ],
     [
       "anvilogic",
-      1
-    ],
-    [
-      "slack",
       1
     ],
     [
@@ -958,10 +902,6 @@
     ],
     [
       "bigpanda",
-      1
-    ],
-    [
-      "rapid7 insightvm",
       1
     ],
     [
@@ -1037,18 +977,6 @@
       1
     ],
     [
-      "sentinelone",
-      1
-    ],
-    [
-      "technical add on sentinelone",
-      1
-    ],
-    [
-      "input add on for sentinelone",
-      1
-    ],
-    [
       "orion malware (omw)",
       1
     ],
@@ -1113,10 +1041,6 @@
       1
     ],
     [
-      "qualys edr",
-      1
-    ],
-    [
       "cyences",
       1
     ],
@@ -1169,10 +1093,6 @@
       1
     ],
     [
-      "slack app alert",
-      1
-    ],
-    [
       "asana",
       1
     ],
@@ -1194,10 +1114,6 @@
     ],
     [
       "automox",
-      1
-    ],
-    [
-      "mandiant advantage",
       1
     ],
     [
@@ -1281,10 +1197,6 @@
       1
     ],
     [
-      "cybereason",
-      1
-    ],
-    [
       "alert_forwarder",
       1
     ],
@@ -1338,10 +1250,6 @@
     ],
     [
       "vade for m365",
-      1
-    ],
-    [
-      "ibm qradar soar",
       1
     ],
     [
@@ -1429,10 +1337,6 @@
       1
     ],
     [
-      "ibm maas360",
-      1
-    ],
-    [
       "ip_fabric",
       1
     ],
@@ -1513,10 +1417,6 @@
       1
     ],
     [
-      "gitlab",
-      1
-    ],
-    [
       "aiops magento",
       1
     ],
@@ -1585,10 +1485,6 @@
       1
     ],
     [
-      "ccx extensions for slack",
-      1
-    ],
-    [
       "varonis search and reporting",
       1
     ],
@@ -1614,10 +1510,6 @@
     ],
     [
       "green alerts",
-      1
-    ],
-    [
-      "trellix mvision epo",
       1
     ],
     [
@@ -1650,10 +1542,6 @@
     ],
     [
       "ansible awx",
-      1
-    ],
-    [
-      "trellix epo saas connector",
       1
     ],
     [
@@ -1697,15 +1585,7 @@
       1
     ],
     [
-      "gitlab (saas)",
-      1
-    ],
-    [
       "snyk",
-      1
-    ],
-    [
-      "mandiant threat intelligence",
       1
     ],
     [
@@ -1734,10 +1614,6 @@
     ],
     [
       "google threat intelligence",
-      1
-    ],
-    [
-      "rapid7 insightappsec",
       1
     ],
     [
@@ -1841,19 +1717,11 @@
       1
     ],
     [
-      "splunk add on for ibm ns1",
-      1
-    ],
-    [
       "alert to mqtt",
       1
     ],
     [
       "threatmodeler",
-      1
-    ],
-    [
-      "ibm storage defender",
       1
     ],
     [
@@ -1894,14 +1762,6 @@
     ],
     [
       "swift agi",
-      1
-    ],
-    [
-      "bitdefender gravityzone for splunk dashboard",
-      1
-    ],
-    [
-      "gravityzone",
       1
     ],
     [
@@ -2025,10 +1885,6 @@
       1
     ],
     [
-      "elasticsearch",
-      1
-    ],
-    [
       "microsoft edge for business",
       1
     ],
@@ -2042,10 +1898,6 @@
     ],
     [
       "ermes browser security",
-      1
-    ],
-    [
-      "mandiant digital threat monitoring",
       1
     ],
     [
@@ -2106,10 +1958,6 @@
     ],
     [
       "crogl add on",
-      1
-    ],
-    [
-      "elasticsearch to splunkedgeprocessor",
       1
     ],
     [
@@ -2233,10 +2081,6 @@
       1
     ],
     [
-      "trellix epo",
-      1
-    ],
-    [
       "lcs plug in",
       1
     ],
@@ -2325,19 +2169,11 @@
       1
     ],
     [
-      "ensign_elasticsearch_add on modular_input",
-      1
-    ],
-    [
       "ensign akamai web security",
       1
     ],
     [
       "red river zero trust gap analysis",
-      1
-    ],
-    [
-      "elastic search",
       1
     ],
     [
@@ -2446,10 +2282,6 @@
     ],
     [
       "keri borealis",
-      1
-    ],
-    [
-      "qualys cloud connector",
       1
     ],
     [
@@ -2598,10 +2430,6 @@
     ],
     [
       "socradar incidents mssp",
-      1
-    ],
-    [
-      "gitlab self-managed",
       1
     ],
     [
@@ -2828,9 +2656,9 @@
     {
       "uid": 1654,
       "appid": "McAfeeWebGateway",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "mcafee"
     },
     {
@@ -2969,9 +2797,9 @@
     {
       "uid": 1862,
       "appid": "tanium",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tanium",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "tanium",
       "alias": "tanium"
     },
     {
@@ -3313,10 +3141,9 @@
     {
       "uid": 2964,
       "appid": "TA-QualysCloudPlatform",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "qualys",
-      "alias": "qualys"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "qualys"
     },
     {
       "uid": 2968,
@@ -3349,9 +3176,9 @@
     {
       "uid": 3004,
       "appid": "2a1d87ec-b91c-11e5-8134-020b822305a3",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -4235,10 +4062,11 @@
     {
       "uid": 4137,
       "appid": "CybereasonForSplunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "cybereason",
-      "alias": "cybereason"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "cybereason:malops"
+      ]
     },
     {
       "uid": 4145,
@@ -4534,9 +4362,9 @@
     {
       "uid": 4361,
       "appid": "efc124c0-1b59-11e9-94cb-0ab2b4a57284",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "github",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "github",
       "alias": "github"
     },
     {
@@ -4674,10 +4502,9 @@
     {
       "uid": 4439,
       "appid": "TA-Tanium",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "tanium",
-      "alias": "tanium"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "tanium"
     },
     {
       "uid": 4440,
@@ -4983,9 +4810,9 @@
     {
       "uid": 4662,
       "appid": "TA-ibm_datapower",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -5400,9 +5227,9 @@
     {
       "uid": 4901,
       "appid": "cicspa",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -5553,10 +5380,9 @@
     {
       "uid": 4986,
       "appid": "TA-slack-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "slack",
-      "alias": "slack"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "slack"
     },
     {
       "uid": 4992,
@@ -5741,10 +5567,9 @@
     {
       "uid": 5097,
       "appid": "TA-rapid7-insightvm",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "rapid7",
-      "alias": "rapid7"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "rapid7"
     },
     {
       "uid": 5101,
@@ -6306,10 +6131,9 @@
     {
       "uid": 5433,
       "appid": "sentinelone_app_for_splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sentinelone",
-      "alias": "sentinelone"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "sentinelone"
     },
     {
       "uid": 5434,
@@ -6320,18 +6144,20 @@
     {
       "uid": 5435,
       "appid": "TA-sentinelone_app_for_splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sentinelone",
-      "alias": "sentinelone"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "sentinelone:channel:threats"
+      ]
     },
     {
       "uid": 5436,
       "appid": "IA-sentinelone_app_for_splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "sentinelone",
-      "alias": "sentinelone"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "sentinelone:channel:threats"
+      ]
     },
     {
       "uid": 5438,
@@ -6445,9 +6271,9 @@
     {
       "uid": 5485,
       "appid": "de143b86-9208-11eb-b51a-02c65895b235",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -6829,9 +6655,9 @@
     {
       "uid": 5656,
       "appid": "qualys_edr_splunk_app",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "qualys",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "qualys",
       "alias": "qualys"
     },
     {
@@ -7009,9 +6835,9 @@
     {
       "uid": 5735,
       "appid": "TA-slack-app-alert-integration",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "slack",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "slack",
       "alias": "slack"
     },
     {
@@ -7121,9 +6947,9 @@
     {
       "uid": 6128,
       "appid": "TA-mandiant-advantage",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "mandiant"
     },
     {
@@ -7741,10 +7567,9 @@
     {
       "uid": 6427,
       "appid": "TA-cybereason-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "cybereason",
-      "alias": "cybereason"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "cybereason"
     },
     {
       "uid": 6429,
@@ -7969,10 +7794,9 @@
     {
       "uid": 6498,
       "appid": "SA_QRadar_SOAR",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
-      "alias": "qradar"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "ibm_qradar"
     },
     {
       "uid": 6502,
@@ -8432,9 +8256,9 @@
     {
       "uid": 6706,
       "appid": "TA-MaaS360",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -8791,9 +8615,9 @@
     {
       "uid": 6848,
       "appid": "TA-gitlab-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "gitlab",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "gitlab",
       "alias": "gitlab"
     },
     {
@@ -9156,10 +8980,11 @@
     {
       "uid": 6975,
       "appid": "Splunk_TA_CCX_Slack_Extensions",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "slack",
-      "alias": "slack"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "slack:audit"
+      ]
     },
     {
       "uid": 6987,
@@ -9323,9 +9148,9 @@
     {
       "uid": 7022,
       "appid": "Trellix_Splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "trellix"
     },
     {
@@ -9372,10 +9197,11 @@
     {
       "uid": 7043,
       "appid": "Splunk_TA_CCX_Rapid7_Products_Extensions",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "rapid7",
-      "alias": "rapid7"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "rapid7:insightvm:asset:vulnerability_finding"
+      ]
     },
     {
       "uid": 7044,
@@ -9786,9 +9612,9 @@
     {
       "uid": 7205,
       "appid": "TA-trellix-epo-saas-connector",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "trellix"
     },
     {
@@ -10016,9 +9842,9 @@
     {
       "uid": 7288,
       "appid": "TA-gitlab-saas-add-on-for-splunk",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "gitlab",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "gitlab",
       "alias": "gitlab"
     },
     {
@@ -10079,9 +9905,9 @@
     {
       "uid": 7306,
       "appid": "TA-mandiant-threat-intelligence",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "mandiant"
     },
     {
@@ -10125,9 +9951,9 @@
     {
       "uid": 7322,
       "appid": "Splunk_TA_CCX_McAfee_Products_Extensions",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "mcafee"
     },
     {
@@ -10225,9 +10051,9 @@
     {
       "uid": 7362,
       "appid": "TA-insightappsec",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "rapid7",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "rapid7",
       "alias": "rapid7"
     },
     {
@@ -10254,9 +10080,9 @@
     {
       "uid": 7372,
       "appid": "OB_trellix_etp",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "trellix"
     },
     {
@@ -10801,9 +10627,9 @@
     {
       "uid": 7546,
       "appid": "TA-splunk-add-on-for-ibm-ns1",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -10879,9 +10705,9 @@
     {
       "uid": 7568,
       "appid": "ibm_storage_defender",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -11091,18 +10917,17 @@
     {
       "uid": 7660,
       "appid": "dashboard-bitdefender-gravityzone",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "bitdefender",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "bitdefender",
       "alias": "bitdefender"
     },
     {
       "uid": 7661,
       "appid": "TA2-bitdefender-gravityzone",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "bitdefender",
-      "alias": "bitdefender"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "bitdefender"
     },
     {
       "uid": 7662,
@@ -11722,10 +11547,9 @@
     {
       "uid": 7839,
       "appid": "TA-Elasticsearch",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "elastic",
-      "alias": "elasticsearch"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "elastic"
     },
     {
       "uid": 7842,
@@ -11812,9 +11636,9 @@
     {
       "uid": 7863,
       "appid": "TA-mandiant-digital-threat-monitoring",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "trellix_mcafee",
       "alias": "mandiant"
     },
     {
@@ -12169,9 +11993,9 @@
     {
       "uid": 7967,
       "appid": "TA-ElasticSearch-to-SplunkEdgeProcessor",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "elastic",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "elastic",
       "alias": "elasticsearch"
     },
     {
@@ -12348,9 +12172,9 @@
     {
       "uid": 8055,
       "appid": "Bitdefender-TI-Splunk-App",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "bitdefender",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "bitdefender",
       "alias": "bitdefender"
     },
     {
@@ -12851,10 +12675,9 @@
     {
       "uid": 8351,
       "appid": "TA-trellix-epo",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "trellix_mcafee",
-      "alias": "trellix"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "trellix_mcafee"
     },
     {
       "uid": 8355,
@@ -13420,9 +13243,9 @@
     {
       "uid": 8645,
       "appid": "TA-ensign_elasticsearch_add-on--Modular_input",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "elastic",
+      "bucket": "canonical_linked",
+      "basis": "vendor_lexicon_canonical",
+      "canonical_vendor": "elastic",
       "alias": "elasticsearch"
     },
     {
@@ -13491,10 +13314,11 @@
     {
       "uid": 8681,
       "appid": "TA-elastic-search",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "elastic",
-      "alias": "elastic"
+      "bucket": "canonical_linked",
+      "basis": "declared_canonical_sourcetype",
+      "canonical_sourcetypes": [
+        "elasticsearch:json"
+      ]
     },
     {
       "uid": 8685,
@@ -13576,10 +13400,9 @@
     {
       "uid": 8703,
       "appid": "GitHub_Dashboard_Collection",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "github",
-      "alias": "github"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "github"
     },
     {
       "uid": 8704,
@@ -14071,9 +13894,9 @@
     {
       "uid": 9045,
       "appid": "ta-slack-bot-alert-connector",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "slack",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "slack",
       "alias": "slack"
     },
     {
@@ -14143,17 +13966,17 @@
     {
       "uid": 9110,
       "appid": "TA-Qualys-Cloud-Connector",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "qualys",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "qualys",
       "alias": "qualys"
     },
     {
       "uid": 9112,
       "appid": "sms_maximo",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "ibm_qradar",
+      "bucket": "canonical_linked",
+      "basis": "canon_alias_title",
+      "canonical_vendor": "ibm_qradar",
       "alias": "ibm"
     },
     {
@@ -15025,10 +14848,9 @@
     {
       "uid": 9890,
       "appid": "TA_gitlab",
-      "bucket": "recognized_technology_vendor",
-      "basis": "vendor_lexicon",
-      "vendor_key": "gitlab",
-      "alias": "gitlab"
+      "bucket": "canonical_linked",
+      "basis": "canonical_splunkbase_uid",
+      "canonical_vendor": "gitlab"
     },
     {
       "uid": 9899,
@@ -15301,16 +15123,6 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "trellix_mcafee",
-      "app_count": 9,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "ibm_qradar",
-      "app_count": 9,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "akamai",
       "app_count": 8,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
@@ -15341,23 +15153,8 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "slack",
-      "app_count": 4,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "ubiquiti",
       "app_count": 4,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "elastic",
-      "app_count": 4,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "qualys",
-      "app_count": 3,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
@@ -15371,17 +15168,7 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "rapid7",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "onelogin",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "sentinelone",
       "app_count": 3,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -15406,37 +15193,12 @@
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "gitlab",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "bitdefender",
-      "app_count": 3,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "tanium",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "corelight",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
     {
-      "vendor_key": "cybereason",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
       "vendor_key": "malwarebytes",
-      "app_count": 2,
-      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
-    },
-    {
-      "vendor_key": "github",
       "app_count": 2,
       "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
     },
@@ -16393,7 +16155,8 @@
     "catalog/universe_batch1_live_raw_equality_results.json",
     "catalog/universe_batch1_current_raw_equality_results.json",
     "catalog/universe_batch2_current_raw_equality_results.json",
-    "catalog/universe_batch3_current_raw_equality_results.json"
+    "catalog/universe_batch3_current_raw_equality_results.json",
+    "catalog/universe_batch4_current_raw_equality_results.json"
   ],
   "restricted_access_apps": 81,
   "directory_listing_apps": 177,
@@ -16663,50 +16426,6 @@
         "downloads": 5940
       },
       {
-        "appid": "McAfeeWebGateway",
-        "name": "App for McAfee/SkyHigh Web Gateway (MWG/SWG/SSE)",
-        "author": "Pavel Prostin",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "trellix_mcafee",
-          "alias": "mcafee"
-        },
-        "downloads": 6146
-      },
-      {
-        "appid": "tanium",
-        "name": "Tanium Splunk Application",
-        "author": "Tanium Inc",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "tanium",
-          "alias": "tanium"
-        },
-        "downloads": 8616
-      },
-      {
-        "appid": "TA-QualysCloudPlatform",
-        "name": "Qualys Technology Add-on (TA) for Splunk",
-        "author": "Qualys Inc.",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "qualys",
-          "alias": "qualys"
-        },
-        "downloads": 42142
-      },
-      {
-        "appid": "2a1d87ec-b91c-11e5-8134-020b822305a3",
-        "name": "IBM Websphere MQ Modular Input for Splunk",
-        "author": "Hannes Wagener",
-        "basis": {
-          "basis": "vendor_lexicon",
-          "vendor_key": "ibm_qradar",
-          "alias": "ibm"
-        },
-        "downloads": 1514
-      },
-      {
         "appid": "ivanti_application_control",
         "name": "Ivanti Application Control for Splunk",
         "author": "Greg Ford",
@@ -16716,6 +16435,50 @@
           "alias": "ivanti"
         },
         "downloads": 1461
+      },
+      {
+        "appid": "CorelightForSplunk",
+        "name": "Corelight App For Splunk",
+        "author": "Corelight Inc",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "corelight",
+          "alias": "corelight"
+        },
+        "downloads": 17863
+      },
+      {
+        "appid": "TA-CorelightForSplunk",
+        "name": "TA for Corelight",
+        "author": "Corelight Inc",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "corelight",
+          "alias": "corelight"
+        },
+        "downloads": 11038
+      },
+      {
+        "appid": "TA_netapp-sg",
+        "name": "NetApp StorageGRID Add-on for Splunk",
+        "author": "StorageGRID Webscale",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "netapp",
+          "alias": "netapp"
+        },
+        "downloads": 2948
+      },
+      {
+        "appid": "netapp_app-sg",
+        "name": "NetApp StorageGRID App for Splunk",
+        "author": "StorageGRID Webscale",
+        "basis": {
+          "basis": "vendor_lexicon",
+          "vendor_key": "netapp",
+          "alias": "netapp"
+        },
+        "downloads": 2605
       }
     ],
     "canonical_linked": [
@@ -16729,6 +16492,17 @@
           "alias": "oracle"
         },
         "downloads": 2307
+      },
+      {
+        "appid": "McAfeeWebGateway",
+        "name": "App for McAfee/SkyHigh Web Gateway (MWG/SWG/SSE)",
+        "author": "Pavel Prostin",
+        "basis": {
+          "basis": "vendor_lexicon_canonical",
+          "canonical_vendor": "trellix_mcafee",
+          "alias": "mcafee"
+        },
+        "downloads": 6146
       },
       {
         "appid": "b557c60c-da58-4131-b655-eecd037d25b6",
@@ -16751,6 +16525,17 @@
           "alias": "kinesis"
         },
         "downloads": 7453
+      },
+      {
+        "appid": "tanium",
+        "name": "Tanium Splunk Application",
+        "author": "Tanium Inc",
+        "basis": {
+          "basis": "canon_alias_title",
+          "canonical_vendor": "tanium",
+          "alias": "tanium"
+        },
+        "downloads": 8616
       },
       {
         "appid": "aristanetworks",
@@ -16783,27 +16568,6 @@
           "alias": "symantec"
         },
         "downloads": 1303
-      },
-      {
-        "appid": "e774e914-3a2a-11e5-ac6c-063854888a19",
-        "name": "Symantec ProxySG Add-on for Splunk",
-        "author": "Broadcom Inc",
-        "basis": {
-          "basis": "canon_alias_title",
-          "canonical_vendor": "broadcom_symantec",
-          "alias": "symantec"
-        },
-        "downloads": 661
-      },
-      {
-        "appid": "Splunk_TA_fortinet_fortigate",
-        "name": "Fortinet FortiGate Add-On for Splunk",
-        "author": "Fortinet Inc",
-        "basis": {
-          "basis": "canonical_splunkbase_uid",
-          "canonical_vendor": "fortinet"
-        },
-        "downloads": 87294
       }
     ]
   },
@@ -16857,6 +16621,22 @@
         "run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6"
       },
       "ta_parser_results": "catalog/universe_batch3_ise_parser_results.json"
+    },
+    "batch_4": {
+      "registry": "catalog/universe_batch4.json",
+      "counts": {
+        "new_canonical_vendors": 12,
+        "new_product_integrations": 12,
+        "new_canonical_sourcetypes": 12,
+        "event_families": 26,
+        "scenario_packs": 3
+      },
+      "live_verification": {
+        "results_file": "catalog/universe_batch4_current_raw_equality_results.json",
+        "status": "PASS",
+        "run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41"
+      },
+      "parser_assessments": "catalog/universe_batch4_parser_assessments.json"
     }
   },
   "candidate_queue_baseline": "catalog/vendor_universe/batch2_candidate_queue_baseline.json"

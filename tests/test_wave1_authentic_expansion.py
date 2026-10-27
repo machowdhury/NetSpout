@@ -52,11 +52,12 @@ class TestWave1CatalogRegistry(unittest.TestCase):
         self.assertEqual(wave_sts, set(SplunkLogEngine.WAVE1_SOURCE_SOURCETYPES))
 
     def test_02_graduated_pinned_counters(self):
-        """Canonical graduation: >=313 sourcetypes floor documented; vendors now 53 (3 Wave-3 additions)."""
+        """Canonical graduation: >=280 sourcetypes floor documented; vendors now
+        88 (76 Wave-1/2/3 + Batch-1 plus 12 Batch-4 universal vendors)."""
         with open(os.path.join(REPO_ROOT, "catalog", "sourcetypes.json")) as fh:
             self.assertGreaterEqual(len(json.load(fh)), 280)
         with open(os.path.join(REPO_ROOT, "catalog", "vendors.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 76)
+            self.assertEqual(len(json.load(fh)), 88)
 
     def test_03_provenance_ledger_intact(self):
         prov_path = os.path.join(REPO_ROOT, "catalog", "raw_reference", "provenance.json")

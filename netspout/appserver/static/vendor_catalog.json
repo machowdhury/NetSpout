@@ -2265,5 +2265,233 @@
     "cim_models": [],
     "field_mappings": {},
     "sample_events": []
+  },
+  {
+    "id": "slack",
+    "vendor": "Slack",
+    "vendor_slug": "slack",
+    "category": "Collaboration SaaS",
+    "name": "Slack Add-on for Splunk",
+    "splunkbase_id": "4986",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/4986/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/slack/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "sourcetypes": [
+      "slack:audit"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "github",
+    "vendor": "GitHub",
+    "vendor_slug": "github",
+    "category": "Source Control SaaS",
+    "name": "GitHub Dashboard Collection",
+    "splunkbase_id": "8703",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/8703/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-json.log",
+    "sourcetypes": [
+      "github:enterprise:audit"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "gitlab",
+    "vendor": "GitLab",
+    "vendor_slug": "gitlab",
+    "category": "Source Control Self-Managed",
+    "name": "GitLab Self-Managed Add-on for Splunk (CIM)",
+    "splunkbase_id": "9890",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/9890/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/gitlab/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "sourcetypes": [
+      "gitlab:audit:json"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "cybereason",
+    "vendor": "Cybereason",
+    "vendor_slug": "cybereason",
+    "category": "Endpoint Detection",
+    "name": "Cybereason Addon For Splunk",
+    "splunkbase_id": "6427",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/6427/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/cybereason/data_stream/malop_process/_dev/test/pipeline/test-malop-process.log",
+    "sourcetypes": [
+      "cybereason:malops"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "qualys",
+    "vendor": "Qualys",
+    "vendor_slug": "qualys",
+    "category": "Exposure Management SaaS",
+    "name": "Qualys Technology Add-on (TA) for Splunk",
+    "splunkbase_id": "2964",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/2964/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/qualys_vmdr/data_stream/user_activity/_dev/test/pipeline/test-yes-preserve-custom.log",
+    "sourcetypes": [
+      "qualys:activityLog"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "rapid7",
+    "vendor": "Rapid7",
+    "vendor_slug": "rapid7",
+    "category": "Vulnerability Management SaaS",
+    "name": "Rapid7 InsightVM Technology Add-On for Splunk",
+    "splunkbase_id": "5097",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/5097/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/rapid7_insightvm/data_stream/asset_vulnerability/_dev/test/pipeline/test-asset-vulnerability.log",
+    "sourcetypes": [
+      "rapid7:insightvm:asset:vulnerability_finding"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "sentinelone",
+    "vendor": "SentinelOne",
+    "vendor_slug": "sentinelone",
+    "category": "Endpoint Security SaaS",
+    "name": "SentinelOne App For Splunk",
+    "splunkbase_id": "5433",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/5433/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sentinel_one/data_stream/threat/_dev/test/pipeline/test-pipeline-threat.log",
+    "sourcetypes": [
+      "sentinelone:channel:threats"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "tanium",
+    "vendor": "Tanium",
+    "vendor_slug": "tanium",
+    "category": "Endpoint Management",
+    "name": "TA-Tanium",
+    "splunkbase_id": "4439",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/4439/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/tanium/data_stream/discover/_dev/test/pipeline/test-discover.log",
+    "sourcetypes": [
+      "tanium:discover:managed"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "trellix_mcafee",
+    "vendor": "Trellix (formerly McAfee)",
+    "vendor_slug": "trellix_mcafee",
+    "category": "Endpoint Security",
+    "name": "Trellix ePO All in one",
+    "splunkbase_id": "8351",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/8351/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/trellix_epo_on_prem/data_stream/threat_event/_dev/test/pipeline/test-threat-event.log",
+    "sourcetypes": [
+      "trellix_epo:threat_events"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "bitdefender",
+    "vendor": "Bitdefender",
+    "vendor_slug": "bitdefender",
+    "category": "Endpoint Security",
+    "name": "Gravityzone Add-on for Splunk",
+    "splunkbase_id": "7661",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/7661/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/bitdefender/data_stream/push_notifications/_dev/test/pipeline/test-push-notification.json",
+    "sourcetypes": [
+      "bitdefender:gz"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "ibm_qradar",
+    "vendor": "IBM",
+    "vendor_slug": "ibm_qradar",
+    "category": "SIEM & Incident Response",
+    "name": "IBM QRadar SOAR Add-on for Splunk",
+    "splunkbase_id": "6498",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/6498/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/ibm_qradar/data_stream/offense/_dev/test/pipeline/test-offense.log",
+    "sourcetypes": [
+      "ibm:qradar:offense"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
+  },
+  {
+    "id": "elastic",
+    "vendor": "Elastic",
+    "vendor_slug": "elastic",
+    "category": "Search Infrastructure",
+    "name": "Add-on for Elasticsearch",
+    "splunkbase_id": "7839",
+    "splunkbase_url": "https://splunkbase.splunk.com/app/7839/",
+    "doc_url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/elasticsearch/data_stream/server/_dev/test/pipeline/test-server-logs.log",
+    "sourcetypes": [
+      "elasticsearch:json"
+    ],
+    "header_type": "Vendor-native documented payload",
+    "delimiter": "",
+    "timestamp_format": "Source-specific UTC or native console time",
+    "cim_models": [],
+    "field_mappings": {},
+    "sample_events": []
   }
 ]

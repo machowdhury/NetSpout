@@ -1911,7 +1911,8 @@ def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
     scenario_id = payload.get('scenario_id')
     from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
     from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS
-    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+    from netspout_core.universe_batch4_engine import BATCH4_SCENARIO_IDS
+    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
         from app.generator_modes import generator_service
         try:
             config = payload.get('transport_config')

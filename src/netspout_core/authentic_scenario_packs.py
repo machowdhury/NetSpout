@@ -65,6 +65,9 @@ SCENARIO_PACK_IDS = [
     "ub3_identity_runtime_audit",
     "ub3_multivendor_edge_observation",
     "ub3_database_message_audit",
+    "ub4_saas_collaboration_audit",
+    "ub4_endpoint_threat_pipeline",
+    "ub4_exposure_infra_logging",
 ]
 
 
@@ -159,6 +162,15 @@ def run_scenario_pack(scenario_id: str, run_id: Optional[str] = None,
             except ImportError:
                 from universe_batch3_engine import run_batch3_scenario
         return run_batch3_scenario(scenario_id, run_id, _tag, source_ip)
+    if scenario_id.startswith("ub4_"):
+        try:
+            from netspout_core.universe_batch4_engine import run_batch4_scenario
+        except ImportError:
+            try:
+                from app.universe_batch4_engine import run_batch4_scenario
+            except ImportError:
+                from universe_batch4_engine import run_batch4_scenario
+        return run_batch4_scenario(scenario_id, run_id, _tag, source_ip)
     raise ValueError(f"Unknown authentic scenario pack: {scenario_id}")
 
 

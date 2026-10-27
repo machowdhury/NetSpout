@@ -366,24 +366,23 @@ class TestCanonicalGraduation(unittest.TestCase):
 
     def test_vendor_count_50(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 50 Wave-1/2 vendors + 3 Wave-3 + 4 Batch-1 additions
-        # (zeek, google_cloud, opentelemetry)
+        # 76 Wave-1/2/3 + Batch-1 vendors + 12 Batch-4 universal vendors
         with open(os.path.join(REPO_ROOT, "catalog", "vendors.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 76)
+            self.assertEqual(len(json.load(fh)), 88)
 
     def test_sourcetype_rows_289(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 289 Wave-2 canonical rows + 24 Wave-3 + 4 Batch-1 new rows
+        # 336 Wave-2/Wave-3/Batch-1 canonical rows + 12 Batch-4 sourcetypes
         with open(os.path.join(REPO_ROOT, "catalog",
                                "sourcetypes.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 336)
+            self.assertEqual(len(json.load(fh)), 348)
 
     def test_scenarios_37(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
-        # 37 Wave-2 scenarios + 3 Wave-3 + 1 Batch-1 pack
+        # 47 Wave-2/Wave-3/Batch-1 scenarios + 3 Batch-4 scenario packs
         with open(os.path.join(REPO_ROOT, "catalog", "scenarios.json")) as fh:
             rows = json.load(fh)
-        self.assertEqual(len(rows), 47)
+        self.assertEqual(len(rows), 50)
         wave2_rows = [r for r in rows if r["id"].startswith("wave2_")]
         self.assertEqual(len(wave2_rows), 8)
 

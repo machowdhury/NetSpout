@@ -6670,6 +6670,126 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub4_saas_collaboration_audit",
+      "title": "Ub4 Saas Collaboration Audit",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "GitHub",
+        "GitLab",
+        "Slack"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "slack:audit",
+        "github:enterprise:audit",
+        "gitlab:audit:json"
+      ],
+      "scenario_ids": [
+        "ub4_saas_collaboration_audit"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "slack:audit",
+        "github:enterprise:audit",
+        "gitlab:audit:json"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub4_endpoint_threat_pipeline",
+      "title": "Ub4 Endpoint Threat Pipeline",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Bitdefender",
+        "Cybereason",
+        "SentinelOne",
+        "Tanium",
+        "Trellix (formerly McAfee)"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cybereason:malops",
+        "sentinelone:channel:threats",
+        "tanium:discover:managed",
+        "trellix_epo:threat_events",
+        "bitdefender:gz"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cybereason:malops",
+        "sentinelone:channel:threats",
+        "tanium:discover:managed",
+        "trellix_epo:threat_events",
+        "bitdefender:gz"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub4_exposure_infra_logging",
+      "title": "Ub4 Exposure Infra Logging",
+      "domain": "INFRASTRUCTURE",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Elastic",
+        "IBM",
+        "Qualys",
+        "Rapid7"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "qualys:activityLog",
+        "rapid7:insightvm:asset:vulnerability_finding",
+        "ibm:qradar:offense",
+        "elasticsearch:json"
+      ],
+      "scenario_ids": [
+        "ub4_exposure_infra_logging"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "qualys:activityLog",
+        "rapid7:insightvm:asset:vulnerability_finding",
+        "ibm:qradar:offense",
+        "elasticsearch:json"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Executable observation sequence from pinned native RAW fixtures. Correlation stays on HEC fields; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -15816,6 +15936,330 @@
       ],
       "scenario_ids": [
         "ub3_database_message_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "slack:audit",
+      "title": "slack:audit",
+      "domain": "Collaboration SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Slack"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Enterprise Grid audit logs",
+      "sourcetypes": [
+        "slack:audit"
+      ],
+      "scenario_ids": [
+        "ub4_saas_collaboration_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "github:enterprise:audit",
+      "title": "github:enterprise:audit",
+      "domain": "Source Control SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "GitHub"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Enterprise audit logs",
+      "sourcetypes": [
+        "github:enterprise:audit"
+      ],
+      "scenario_ids": [
+        "ub4_saas_collaboration_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "gitlab:audit:json",
+      "title": "gitlab:audit:json",
+      "domain": "Source Control Self-Managed",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "GitLab"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Self-Managed audit events",
+      "sourcetypes": [
+        "gitlab:audit:json"
+      ],
+      "scenario_ids": [
+        "ub4_saas_collaboration_audit"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "cybereason:malops",
+      "title": "cybereason:malops",
+      "domain": "Endpoint Detection",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cybereason"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Malops feed",
+      "sourcetypes": [
+        "cybereason:malops"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "qualys:activityLog",
+      "title": "qualys:activityLog",
+      "domain": "Exposure Management SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Qualys"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Platform user activity log",
+      "sourcetypes": [
+        "qualys:activityLog"
+      ],
+      "scenario_ids": [
+        "ub4_exposure_infra_logging"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "rapid7:insightvm:asset:vulnerability_finding",
+      "title": "rapid7:insightvm:asset:vulnerability_finding",
+      "domain": "Vulnerability Management SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Rapid7"
+      ],
+      "readiness": "Evidence review required",
+      "description": "InsightVM asset vulnerabilities",
+      "sourcetypes": [
+        "rapid7:insightvm:asset:vulnerability_finding"
+      ],
+      "scenario_ids": [
+        "ub4_exposure_infra_logging"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "sentinelone:channel:threats",
+      "title": "sentinelone:channel:threats",
+      "domain": "Endpoint Security SaaS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "SentinelOne"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Threats channel",
+      "sourcetypes": [
+        "sentinelone:channel:threats"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "tanium:discover:managed",
+      "title": "tanium:discover:managed",
+      "domain": "Endpoint Management",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Tanium"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Discover managed machines",
+      "sourcetypes": [
+        "tanium:discover:managed"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "trellix_epo:threat_events",
+      "title": "trellix_epo:threat_events",
+      "domain": "Endpoint Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Trellix (formerly McAfee)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "ePO threat events",
+      "sourcetypes": [
+        "trellix_epo:threat_events"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "bitdefender:gz",
+      "title": "bitdefender:gz",
+      "domain": "Endpoint Security",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Bitdefender"
+      ],
+      "readiness": "Evidence review required",
+      "description": "GravityZone push notifications",
+      "sourcetypes": [
+        "bitdefender:gz"
+      ],
+      "scenario_ids": [
+        "ub4_endpoint_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "ibm:qradar:offense",
+      "title": "ibm:qradar:offense",
+      "domain": "SIEM & Incident Response",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "IBM"
+      ],
+      "readiness": "Evidence review required",
+      "description": "QRadar offense events",
+      "sourcetypes": [
+        "ibm:qradar:offense"
+      ],
+      "scenario_ids": [
+        "ub4_exposure_infra_logging"
+      ],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
+      "id": "elasticsearch:json",
+      "title": "elasticsearch:json",
+      "domain": "Search Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Elastic"
+      ],
+      "readiness": "Evidence review required",
+      "description": "Elasticsearch server logs",
+      "sourcetypes": [
+        "elasticsearch:json"
+      ],
+      "scenario_ids": [
+        "ub4_exposure_infra_logging"
       ],
       "dashboard_ids": [],
       "formats": [],

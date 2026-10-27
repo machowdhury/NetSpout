@@ -101,7 +101,13 @@ class MultivendorRawTests(unittest.TestCase):
         catalog=TelemetryCatalog.model_validate(raw)
         vendors=json.loads((ROOT/'catalog/vendors.json').read_text())
         old=json.loads(subprocess.check_output(['git','show','HEAD:catalog/vendors.json'],cwd=ROOT,text=True))
-        self.assertEqual([v['id'] for v in vendors],[v['id'] for v in old])
+        # Legacy ids are stable: HEAD's ordering is an exact prefix, so every
+        # addition is append-only (no rename, removal or reorder) while the
+        # canonical vendor list is still allowed to grow.
+        old_ids=[v['id'] for v in old]
+        new_ids=[v['id'] for v in vendors]
+        self.assertEqual(new_ids[:len(old_ids)],old_ids)
+        self.assertEqual(len(new_ids),len(set(new_ids)),'vendor ids must stay unique')
         expected={'palo_alto':('7523','4.0.0'),'fortinet':('2846','1.6.10'),'checkpoint':('4293','1.1.6')}
         self.assertEqual(vendors,project_integration_identities(vendors,catalog))
         for before,after in zip(old,vendors):

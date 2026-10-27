@@ -57,6 +57,11 @@ from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
 from app.fault_injection_engine import fault_engine
+
+# Import destination management
+from app.destination_manager import destination_manager
+from app.destination_api import router as destination_router
+
 from app.release_candidate import (
     ReleaseCandidateConfiguration,
     SecuritySourceCatalog,
@@ -67,6 +72,15 @@ from app.security_content_lab import (
     DetectionValidationOrchestrator,
     SecurityContentCatalog,
 )
+
+# Enhanced scenario run model
+class EnhancedScenarioRunRequest(BaseModel):
+    """Enhanced scenario run request with destination configuration."""
+    scenario_id: str
+    destination_id: Optional[str] = None
+    start_immediately: bool = True
+    seed: Optional[int] = None
+    duration_minutes: Optional[int] = None
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -94,6 +108,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include destination router
+app.include_router(destination_router)
 
 # Global Simulation State
 scenario_runner = ScenarioRunner()
@@ -372,6 +389,37 @@ async def run_simulation_loop():
             await asyncio.sleep(1.0)
 
 # REST API Endpoints
+@app.get("/api/health")
+async def health_check():
+    """Enhanced health check with destination status."""
+    return {
+        "status": "healthy",
+        "version": "2.0.0",
+        "simulation_running": simulation_running,
+        "active_scenario": active_scenario.value if active_scenario else None,
+        "destination_count": len(destination_manager.destinations),
+        "active_destination": destination_manager.active_destination_id,
+        "destinations": [
+            {
+                "id": dest_id,
+                "name": dest.name,
+                "deployment_type": dest.deployment_type,
+                "validation_status": dest.validation_status,
+                "is_active": dest_id == destination_manager.active_destination_id
+            }
+            for dest_id, dest in destination_manager.destinations.items()
+        ]
+    }
+
+@app.get("/api/destinations/active/transport-config")
+async def get_active_transport_config():
+    """Get transport config for active destination."""
+    transport = destination_manager.get_active_transport_config()
+    if not transport:
+        raise HTTPException(status_code=404, detail="No active destination configured")
+
+    return transport
+
 @app.get("/api/status")
 async def get_status():
     return {
@@ -1306,6 +1354,43 @@ def run_scenario_contract(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return manifest.dict() if hasattr(manifest, "dict") else manifest
+
+
+@app.post("/api/scenarios/run-with-destination")
+def run_scenario_with_destination(req: EnhancedScenarioRunRequest):
+    dest_id = req.destination_id or destination_manager.active_destination_id
+    dest = destination_manager.destinations.get(dest_id)
+    if not dest:
+        raise HTTPException(404, "Destination not found")
+    transport = dest.to_transport_config()
+    if not dest.enabled or not transport.hec_token:
+        raise HTTPException(400, "Destination disabled or HEC credential unavailable")
+    try:
+        manifest = scenario_runner.run_scenario(ScenarioRunRequest(
+            scenario_id=req.scenario_id, seed=req.seed, time_mode="TEST",
+            dispatch_telemetry=True, transport_config=transport,
+        ))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    from app.live_dashboard import observe_run
+    observe_run(manifest, dest)
+    destination_manager.record_event_sent(dest_id, manifest.dispatch_succeeded)
+    return manifest.model_dump(mode="json")
+
+
+@app.get("/api/acceptance/scenarios")
+def acceptance_scenarios():
+    return [{"id": item, "title": item.replace("_", " ")} for item in sorted(SUPPORTED_SCENARIO_IDS)]
+
+
+@app.post("/api/acceptance/preview/{scenario_id}")
+def acceptance_preview(scenario_id: str):
+    try:
+        runner = ScenarioRunner()
+        manifest = runner.run_scenario(ScenarioRunRequest(scenario_id=scenario_id, seed=42, dispatch_telemetry=False))
+        return {"manifest": manifest.model_dump(mode="json"), "events": [entry.model_dump(mode="json") for entry in runner.get_run_logs(manifest.run_id)[:5]]}
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
 
 
 # =========================================================================
@@ -2423,3 +2508,6 @@ if os.path.exists(FRONTEND_DIST_DIR):
             return FileResponse(file_path)
         return FileResponse(os.path.join(FRONTEND_DIST_DIR, "index.html"))
 
+
+from app.live_dashboard import register_live_dashboard
+register_live_dashboard(app, scenario_runner, destination_manager)

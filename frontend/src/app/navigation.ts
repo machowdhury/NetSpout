@@ -35,7 +35,9 @@ export type AppRoute =
   | '/catalog/cisco-100'
   | '/catalog/cisco-coverage'
   | '/catalog/splunk-integrations'
-  | '/system/connections';
+  | '/system/connections'
+  | '/destinations'
+  | '/guided-workflow';
 
 export interface DomainDefinition {
   id: DomainId;
@@ -200,7 +202,11 @@ export const NAVIGATION: NavigationGroup[] = [
   },
   {
     label: 'System',
-    items: [{ label: 'Connections', route: '/system/connections', icon: 'settings' }],
+    items: [
+      { label: 'Connections', route: '/system/connections', icon: 'settings' },
+      { label: 'Destination Manager', route: '/destinations', icon: 'server' },
+      { label: 'Guided Workflow', route: '/guided-workflow', icon: 'workflow' },
+    ],
   },
 ];
 

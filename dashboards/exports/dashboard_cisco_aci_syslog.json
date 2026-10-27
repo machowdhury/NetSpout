@@ -1,42 +1,65 @@
 {
-  "version": "2.0",
-  "title": "Cisco Aci Syslog Monitor",
-  "description": "Real-time monitoring dashboard for cisco:aci:syslog",
-  "visualizations": [
-    {
-      "id": "data_table",
-      "type": "splunk.table",
-      "title": "Event Data",
-      "dataSource": "default",
+  "title": "Cisco ACI Nexus syslog",
+  "description": "PulseForge indexed run evidence",
+  "inputs": {
+    "time": {
+      "type": "input.timerange",
+      "title": "Time",
       "options": {
-        "query": "index=* sourcetype=\"cisco:aci:syslog\" | head 100",
-        "fields": [
-          "_time",
-          "host",
-          "sourcetype",
-          "message"
-        ]
-      },
-      "position": {
-        "height": 600,
-        "width": 1200
+        "token": "global_time",
+        "defaultValue": "-1h,now"
       }
     }
-  ],
-  "inputs": [],
+  },
   "defaults": {
     "dataSources": {
-      "default": {
-        "type": "ds.search",
+      "ds.search": {
         "options": {
-          "query": "index=* sourcetype=\"cisco:aci:syslog\"",
-          "timeRange": {
-            "type": "relative",
-            "value": "-24h@h"
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
           }
         }
       }
     }
   },
-  "theme": "dark"
+  "dataSources": {
+    "events": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=\"cisco:dc:nexus9k:syslog\" | table _time host sourcetype netspout_phase _raw"
+      }
+    }
+  },
+  "visualizations": {
+    "table": {
+      "type": "splunk.table",
+      "title": "Indexed scenario events",
+      "dataSources": {
+        "primary": "events"
+      }
+    }
+  },
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "width": 1200,
+      "height": 600
+    },
+    "globalInputs": [
+      "time"
+    ],
+    "structure": [
+      {
+        "item": "table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 1200,
+          "h": 550
+        }
+      }
+    ]
+  }
 }

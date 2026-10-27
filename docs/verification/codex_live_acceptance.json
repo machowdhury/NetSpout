@@ -1,0 +1,718 @@
+{
+  "acceptance_id": "pf-codex-20261027-ef9f54f-seed42-02",
+  "generated_at_utc": "2026-10-27T18:06:02.745486+00:00",
+  "git": {
+    "branch": "oc/ise-ta-1915-record",
+    "head_at_audit": "ef9f54f48cf26f671287a230ab43910aa7ec2564",
+    "initial_modified_tracked": [
+      "backend/app/main.py",
+      "backend/app/scenario_runner.py",
+      "frontend/src/App.tsx",
+      "frontend/src/app/navigation.ts"
+    ],
+    "initial_untracked": "Destination modules, both new UI components, destinations.json, claims documents, scripts and SNMP/YANG inventories were already untracked. Preserved; unrelated files excluded from repair commit.",
+    "status_at_report": [
+      " M backend/app/main.py",
+      " M backend/app/scenario_runner.py",
+      " M backend/requirements.txt",
+      " M dashboards/exports/dashboard_cisco_aci_syslog.json",
+      " M frontend/src/App.tsx",
+      " M frontend/src/app/navigation.ts",
+      "?? FINAL_STATUS.md",
+      "?? QUICK_START.md",
+      "?? VERIFICATION_REPORT.md",
+      "?? WORKFLOW_COMPLETION_SUMMARY.md",
+      "?? backend/app/catalog_data/snmp_mib_oid_inventory.json",
+      "?? backend/app/catalog_data/yang_module_inventory.json",
+      "?? backend/app/destination_api.py",
+      "?? backend/app/destination_manager.py",
+      "?? backend/app/live_dashboard.py",
+      "?? backend/app/main_backup.py",
+      "?? backend/app/main_enhanced.py",
+      "?? destinations.json",
+      "?? docs/workflow/",
+      "?? frontend/src/components/DestinationManager.tsx",
+      "?? frontend/src/components/GuidedWorkflow.tsx",
+      "?? netspout/bin/catalog_data/snmp_mib_oid_inventory.json",
+      "?? netspout/bin/catalog_data/yang_module_inventory.json",
+      "?? netspout/bin/netspout_core/catalog_data/snmp_mib_oid_inventory.json",
+      "?? netspout/bin/netspout_core/catalog_data/yang_module_inventory.json",
+      "?? netspout/catalog/snmp_mib_oid_inventory.json",
+      "?? netspout/catalog/yang_module_inventory.json",
+      "?? scripts/acceptance_test.py",
+      "?? scripts/analyze_workflow_gaps.py",
+      "?? scripts/demonstrate_complete_workflow.py",
+      "?? scripts/live_demo.sh",
+      "?? scripts/quick_app_test.py",
+      "?? scripts/test_destination_integration.py",
+      "?? scripts/test_fix_imports.py",
+      "?? scripts/test_live_api.py",
+      "?? scripts/verify_workflow.py",
+      "?? tests/test_live_acceptance_repairs.py"
+    ],
+    "preservation": "Original tracked diff: /private/tmp/pf-preacceptance.patch; original untracked destination/UI files: /private/tmp/pf-*-before.*"
+  },
+  "acceptance_matrix": [
+    {
+      "criterion": "Backend startup",
+      "status": "PASS",
+      "evidence": "GET /api/health HTTP 200; uvicorn listening on 127.0.0.1:8081."
+    },
+    {
+      "criterion": "Frontend startup",
+      "status": "PASS",
+      "evidence": "npm ci and npm run build passed; Vite localhost:5173 GET / HTTP 200."
+    },
+    {
+      "criterion": "UI scenario selection",
+      "status": "BLOCKED",
+      "evidence": "Browser inventory empty; native Chrome: Computer Use permissions are not granted. API lists 14 executable legacy scenarios."
+    },
+    {
+      "criterion": "UI destination selection",
+      "status": "BLOCKED",
+      "evidence": "Same browser blocker. Selected codex_local_lab via the real run HTTP request."
+    },
+    {
+      "criterion": "Preview",
+      "status": "PASS",
+      "evidence": "POST /api/acceptance/preview/cisco_aci_microburst: HTTP 200; 14 generated, 5 returned samples, dispatch disabled."
+    },
+    {
+      "criterion": "Run execution",
+      "status": "PASS",
+      "evidence": "POST /api/scenarios/run-with-destination: HTTP 200; NS-20261027-12d7e798; actual transport used; no simulation timer."
+    },
+    {
+      "criterion": "WebSocket progress",
+      "status": "PARTIAL",
+      "evidence": "Real /ws/logs handshake and connection_established/simulation_state messages observed. No per-run progress stream; new workflow waits for synchronous results."
+    },
+    {
+      "criterion": "Docker HEC event ingestion",
+      "status": "PASS",
+      "evidence": "10 event records accepted; all 14 event+metric requests returned successful HEC outcomes."
+    },
+    {
+      "criterion": "Docker indexed event verification",
+      "status": "PASS",
+      "evidence": "10 events: five cisco:dc:aci:health and five cisco:dc:nexus9k:syslog in idx_network_ops; RAW 10/10 identical; timestamps 10/10 within run."
+    },
+    {
+      "criterion": "Docker metric ingestion",
+      "status": "PASS",
+      "evidence": "Four cisco:ios:mdt records accepted into existing idx_performance_metrics."
+    },
+    {
+      "criterion": "Docker indexed metric verification",
+      "status": "PASS",
+      "evidence": "mstats: four distinct metric event IDs, 12 points, three metric names; 12/12 generated values match; timestamps within run second."
+    },
+    {
+      "criterion": "Dashboard deployment",
+      "status": "PASS",
+      "evidence": "Namespaced pulseforge_acceptance_ns_20261027_12d7e798 created; management readback HTTP 200; stored definition equals submission on Splunk 10.2.7."
+    },
+    {
+      "criterion": "Dashboard search results",
+      "status": "PASS",
+      "evidence": "Actual deployed table query returned 10 events; disjoint -7d to -6d window returned zero."
+    },
+    {
+      "criterion": "Dashboard rendering",
+      "status": "BLOCKED",
+      "evidence": "Computer Use permissions are not granted. Splunk Web URL HTTP 200 alone does not establish rendered panels."
+    },
+    {
+      "criterion": "Dashboard navigation",
+      "status": "PARTIAL",
+      "evidence": "API returns direct Splunk URL and workflow renders anchor; destination Web HTTP 200. Browser click unverified."
+    },
+    {
+      "criterion": "External destination safety",
+      "status": "PARTIAL",
+      "evidence": "Controlled tests cover TLS defaults, credential exclusion/env-reference reload, read-only health probe, health 403, connection failure and management 403. Real local bad HEC token: HTTP 403/code 4. Zero external transmissions; external Splunk acceptance not tested."
+    },
+    {
+      "criterion": "Cisco multi-source incident",
+      "status": "PARTIAL",
+      "evidence": "IOS XR correlated syslog/SNMP/OpenConfig composition exists; real non-dispatching preview HTTP 200. Full five-source XE/XR incident including separate SNMP traps/polling and Cisco-native MDT is not established; no live execution of that composition in this acceptance."
+    }
+  ],
+  "run": {
+    "run_id": "NS-20261027-12d7e798",
+    "scenario_id": "cisco_aci_microburst",
+    "seed": 42,
+    "start_time": 1793124061.577944,
+    "end_time": 1793124063.2593112,
+    "actual_generated_counts": {
+      "cisco:ios:mdt": 4,
+      "cisco:dc:aci:health": 5,
+      "cisco:dc:nexus9k:syslog": 5
+    },
+    "total_events_generated": 14,
+    "dispatch_attempted": 14,
+    "dispatch_succeeded": 14,
+    "dispatch_failed": 0,
+    "observed_count": 14,
+    "event_observed_count": 10,
+    "metric_observed_count": 4,
+    "observation_status": "VERIFIED",
+    "destination_validation": "PASS",
+    "errors": []
+  },
+  "run_identity_note": "Seed 42 is deterministic; application run IDs remain server-generated UUIDs. Acceptance ID above is the fixed test identifier, not a caller-supplied application run ID.",
+  "splunk_version": {
+    "version": "10.2.7",
+    "build": "c0bff5b0fac3"
+  },
+  "event_spl": {
+    "spl": "search index=idx_network_ops netspout_run_id=\"NS-20261027-12d7e798\" earliest=-1h latest=now | stats count min(_time) as first max(_time) as last by index sourcetype netspout_phase",
+    "results": [
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:aci:health",
+        "netspout_phase": "BASELINE",
+        "count": "1",
+        "first": "1793124061.589329",
+        "last": "1793124061.589329"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:aci:health",
+        "netspout_phase": "FAILOVER",
+        "count": "1",
+        "first": "1793124061.639728",
+        "last": "1793124061.639728"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:aci:health",
+        "netspout_phase": "FAULT",
+        "count": "1",
+        "first": "1793124061.607005",
+        "last": "1793124061.607005"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:aci:health",
+        "netspout_phase": "PROPAGATE",
+        "count": "1",
+        "first": "1793124061.629118",
+        "last": "1793124061.629118"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:aci:health",
+        "netspout_phase": "RECOVER",
+        "count": "1",
+        "first": "1793124061.65109",
+        "last": "1793124061.65109"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:nexus9k:syslog",
+        "netspout_phase": "BASELINE",
+        "count": "1",
+        "first": "1793124061.5954292",
+        "last": "1793124061.5954292"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:nexus9k:syslog",
+        "netspout_phase": "FAILOVER",
+        "count": "1",
+        "first": "1793124061.634391",
+        "last": "1793124061.634391"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:nexus9k:syslog",
+        "netspout_phase": "FAULT",
+        "count": "1",
+        "first": "1793124061.601287",
+        "last": "1793124061.601287"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:nexus9k:syslog",
+        "netspout_phase": "PROPAGATE",
+        "count": "1",
+        "first": "1793124061.623847",
+        "last": "1793124061.623847"
+      },
+      {
+        "index": "idx_network_ops",
+        "sourcetype": "cisco:dc:nexus9k:syslog",
+        "netspout_phase": "RECOVER",
+        "count": "1",
+        "first": "1793124061.645432",
+        "last": "1793124061.645432"
+      }
+    ]
+  },
+  "metric_spl": {
+    "spl": "| mstats count(_value) as points min(_value) as minimum max(_value) as maximum WHERE index=idx_performance_metrics metric_name=* netspout_run_id=\"NS-20261027-12d7e798\" earliest=-1h latest=now BY metric_name device netspout_phase",
+    "results": [
+      {
+        "metric_name": "buffer_utilization",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "BASELINE",
+        "points": "1",
+        "minimum": "12.500000",
+        "maximum": "12.500000"
+      },
+      {
+        "metric_name": "buffer_utilization",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "FAULT",
+        "points": "1",
+        "minimum": "98.500000",
+        "maximum": "98.500000"
+      },
+      {
+        "metric_name": "buffer_utilization",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "PROPAGATE",
+        "points": "1",
+        "minimum": "99.100000",
+        "maximum": "99.100000"
+      },
+      {
+        "metric_name": "buffer_utilization",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "RECOVER",
+        "points": "1",
+        "minimum": "14.000000",
+        "maximum": "14.000000"
+      },
+      {
+        "metric_name": "egress_drops",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "BASELINE",
+        "points": "1",
+        "minimum": "1420.000000",
+        "maximum": "1420.000000"
+      },
+      {
+        "metric_name": "egress_drops",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "FAULT",
+        "points": "1",
+        "minimum": "1420.000000",
+        "maximum": "1420.000000"
+      },
+      {
+        "metric_name": "egress_drops",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "PROPAGATE",
+        "points": "1",
+        "minimum": "1420.000000",
+        "maximum": "1420.000000"
+      },
+      {
+        "metric_name": "egress_drops",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "RECOVER",
+        "points": "1",
+        "minimum": "1420.000000",
+        "maximum": "1420.000000"
+      },
+      {
+        "metric_name": "queue_depth",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "BASELINE",
+        "points": "1",
+        "minimum": "1250000.000000",
+        "maximum": "1250000.000000"
+      },
+      {
+        "metric_name": "queue_depth",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "FAULT",
+        "points": "1",
+        "minimum": "26500000.000000",
+        "maximum": "26500000.000000"
+      },
+      {
+        "metric_name": "queue_depth",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "PROPAGATE",
+        "points": "1",
+        "minimum": "28900000.000000",
+        "maximum": "28900000.000000"
+      },
+      {
+        "metric_name": "queue_depth",
+        "device": "Nexus-9336-Leaf01",
+        "netspout_phase": "RECOVER",
+        "points": "1",
+        "minimum": "1400000.000000",
+        "maximum": "1400000.000000"
+      }
+    ]
+  },
+  "raw_validation": {
+    "spl": "search index=idx_network_ops netspout_run_id=\"NS-20261027-12d7e798\" earliest=-1h latest=now | eval epoch=_time | table _raw epoch sourcetype netspout_event_id",
+    "checks": [
+      {
+        "event_id": "evt-280768bb",
+        "raw_equal": true,
+        "sha256": "fe1f0cb861f1d0d131a0c85c82f035366167df0f1be21a772c37c6a2579d860d",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-b390343d",
+        "raw_equal": true,
+        "sha256": "666d33345ca0f45a98b846291488919e95c3b641a294c3d8bc2c05ee155c319d",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-10126d8e",
+        "raw_equal": true,
+        "sha256": "5b3e54ff67f60d920c4ffccab8fbe005cef26b1761adcbbb12e633abe643fd7d",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-36cf3167",
+        "raw_equal": true,
+        "sha256": "912055acf9a42e64f85a3013f7342477cdf14636be93e0eb2fc0fc2f6690c125",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-d9519866",
+        "raw_equal": true,
+        "sha256": "21d6a41fcdb294b38a9715ee8ce867ba315094718bd61cd251930074b96fcae8",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-0a420161",
+        "raw_equal": true,
+        "sha256": "20a5e75efc144dcd358fff725329699e4a11c7456a76d07e19a6c632127d43ef",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-9ed3dd25",
+        "raw_equal": true,
+        "sha256": "0bd1438b8564da65a64d21b4a87e6312726f00a23c45ca32e26e8569966209b7",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-55313610",
+        "raw_equal": true,
+        "sha256": "88a493c5dc85875b4c88fe003f2f80bc031ffa91a9fed1d23760d4f9ea6524af",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-6cafe515",
+        "raw_equal": true,
+        "sha256": "2b78dc51d318ab51a1e4820243488ebef8419f1b48651ddcf104d7ef9c6fa25e",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      },
+      {
+        "event_id": "evt-3fad5323",
+        "raw_equal": true,
+        "sha256": "fe1f0cb861f1d0d131a0c85c82f035366167df0f1be21a772c37c6a2579d860d",
+        "sourcetype_equal": true,
+        "time_within_run": true
+      }
+    ]
+  },
+  "metric_value_validation": [
+    {
+      "phase": "BASELINE",
+      "metric_name": "queue_depth",
+      "generated_value": 1250000,
+      "indexed_value": 1250000.0,
+      "matches": true
+    },
+    {
+      "phase": "BASELINE",
+      "metric_name": "buffer_utilization",
+      "generated_value": 12.5,
+      "indexed_value": 12.5,
+      "matches": true
+    },
+    {
+      "phase": "BASELINE",
+      "metric_name": "egress_drops",
+      "generated_value": 1420,
+      "indexed_value": 1420.0,
+      "matches": true
+    },
+    {
+      "phase": "FAULT",
+      "metric_name": "queue_depth",
+      "generated_value": 26500000,
+      "indexed_value": 26500000.0,
+      "matches": true
+    },
+    {
+      "phase": "FAULT",
+      "metric_name": "buffer_utilization",
+      "generated_value": 98.5,
+      "indexed_value": 98.5,
+      "matches": true
+    },
+    {
+      "phase": "FAULT",
+      "metric_name": "egress_drops",
+      "generated_value": 1420,
+      "indexed_value": 1420.0,
+      "matches": true
+    },
+    {
+      "phase": "PROPAGATE",
+      "metric_name": "queue_depth",
+      "generated_value": 28900000,
+      "indexed_value": 28900000.0,
+      "matches": true
+    },
+    {
+      "phase": "PROPAGATE",
+      "metric_name": "buffer_utilization",
+      "generated_value": 99.1,
+      "indexed_value": 99.1,
+      "matches": true
+    },
+    {
+      "phase": "PROPAGATE",
+      "metric_name": "egress_drops",
+      "generated_value": 1420,
+      "indexed_value": 1420.0,
+      "matches": true
+    },
+    {
+      "phase": "RECOVER",
+      "metric_name": "queue_depth",
+      "generated_value": 1400000,
+      "indexed_value": 1400000.0,
+      "matches": true
+    },
+    {
+      "phase": "RECOVER",
+      "metric_name": "buffer_utilization",
+      "generated_value": 14.0,
+      "indexed_value": 14.0,
+      "matches": true
+    },
+    {
+      "phase": "RECOVER",
+      "metric_name": "egress_drops",
+      "generated_value": 1420,
+      "indexed_value": 1420.0,
+      "matches": true
+    }
+  ],
+  "metric_timestamp_spl": "| mstats count(_value) as points WHERE index=idx_performance_metrics metric_name=* netspout_run_id=\"NS-20261027-12d7e798\" earliest=-1h latest=now BY netspout_event_id span=1s | eval epoch=_time | table epoch netspout_event_id points",
+  "metric_timestamps_in_run_second": true,
+  "dashboard": {
+    "id": "pulseforge_acceptance_ns_20261027_12d7e798",
+    "url": "http://127.0.0.1:18000/en-US/app/search/pulseforge_acceptance_ns_20261027_12d7e798",
+    "deployment_http_status": 200,
+    "readback": {
+      "status": 200,
+      "entry_names": [
+        "pulseforge_acceptance_ns_20261027_12d7e798"
+      ]
+    },
+    "definition_readback_equal": true,
+    "query": "index=idx_network_ops netspout_run_id=\"NS-20261027-12d7e798\" | table _time host sourcetype netspout_phase _raw",
+    "search_results": {
+      "count": 10,
+      "sourcetypes": [
+        "cisco:dc:aci:health",
+        "cisco:dc:nexus9k:syslog"
+      ]
+    },
+    "empty_time_window": {
+      "spl": "search index=idx_network_ops netspout_run_id=\"NS-20261027-12d7e798\" earliest=-7d latest=-6d | table _time host sourcetype netspout_phase _raw",
+      "rows": 0
+    },
+    "rendering": "NOT VERIFIED",
+    "drilldowns": "Absent",
+    "panels": 1,
+    "static_exports": [
+      {
+        "file": "dashboards/exports/dashboard_a10_acos_cgnat.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_a10_acos_syslog.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_cisco_aci_fault.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_cisco_aci_syslog.json",
+        "json_parse": "PASS",
+        "studio_structure": "PASS",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_cloudflare_json.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_cloudflare_r2_json.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_openconfig_gnmi_telemetry.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_sc4snmp_event.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      },
+      {
+        "file": "dashboards/exports/dashboard_sc4snmp_metric.json",
+        "json_parse": "PASS",
+        "studio_structure": "FAIL",
+        "deployed_original_export": false
+      }
+    ]
+  },
+  "websocket": [
+    {
+      "type": "connection_established",
+      "message": "Connected to Splunk Network Simulator Log Feed",
+      "simulation_running": false,
+      "scenario": "normal_traffic"
+    },
+    {
+      "type": "simulation_state",
+      "running": false,
+      "scenario": "normal_traffic"
+    }
+  ],
+  "browser": {
+    "browser_connector": "Browser is not available: chrome; browser inventory empty",
+    "native_chrome": "Computer Use permissions are not granted",
+    "rendering": "NOT VERIFIED"
+  },
+  "external_transmissions": 0,
+  "local_hec_permission_denial": {
+    "http_status": 403,
+    "code": 4
+  },
+  "cisco": {
+    "composition": "compose-test-correlated-interface-degradation-local",
+    "catalog_id": "C100-SP-001",
+    "runtime_id": "test-correlated-interface-degradation",
+    "preview_http_status": 200,
+    "wired_sources": [
+      "cisco-ios-xr-interface-syslog",
+      "ietf-snmpv2c-ifmib",
+      "openconfig-gnmi-interfaces"
+    ],
+    "shared_device": "cisco-asr9k-pe1",
+    "shared_interface": "HundredGigE0/0/0/1",
+    "lifecycle": [
+      "BASELINE",
+      "DEGRADE",
+      "FAILOVER",
+      "RECOVERY"
+    ],
+    "native_mdt_in_composition": false,
+    "separate_polling_and_traps_live_verified": false,
+    "native_live_execution": "NOT TESTED"
+  },
+  "commands": {
+    "backend_start": "PYTHONPATH=backend:netspout/bin .venv-test/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8081",
+    "frontend_start": "cd frontend && npm run dev -- --host 127.0.0.1",
+    "preview": {
+      "method": "POST",
+      "url": "http://127.0.0.1:8081/api/acceptance/preview/cisco_aci_microburst",
+      "json": {}
+    },
+    "run": {
+      "method": "POST",
+      "url": "http://127.0.0.1:8081/api/scenarios/run-with-destination",
+      "json": {
+        "scenario_id": "cisco_aci_microburst",
+        "destination_id": "codex_local_lab",
+        "seed": 42
+      }
+    },
+    "splunk_search": {
+      "method": "POST",
+      "url": "https://127.0.0.1:18089/services/search/jobs/export",
+      "authorization": "Basic [REDACTED]",
+      "form": {
+        "search": "See event_spl and metric_spl",
+        "output_mode": "json",
+        "preview": "false"
+      },
+      "tls": "Existing self-signed localhost lab only; verification explicitly disabled for this profile"
+    },
+    "dashboard_deploy": {
+      "method": "POST",
+      "url": "http://127.0.0.1:8081/api/acceptance/dashboards/NS-20261027-12d7e798",
+      "json": {
+        "destination_id": "codex_local_lab"
+      }
+    },
+    "tests": "PYTHONPATH=backend:netspout/bin .venv-test/bin/python -m pytest tests/test_live_acceptance_repairs.py tests/test_phase11_dashboard_recipe_engine.py tests/test_sec2b_credential_updates.py -q",
+    "build": "npm run build --prefix frontend",
+    "live_harness_commands": [
+      ".venv-test/bin/python /private/tmp/pf_live_start.py",
+      ".venv-test/bin/python /private/tmp/pf_accept.py",
+      ".venv-test/bin/python /private/tmp/pf_final_checks.py",
+      ".venv-test/bin/python /private/tmp/pf_followup.py",
+      ".venv-test/bin/python /private/tmp/pf_extra_checks.py"
+    ]
+  },
+  "tests": {
+    "passed": 41,
+    "subtests_passed": 40,
+    "failed": 0,
+    "warning": "Starlette httpx TestClient deprecation",
+    "frontend_build": "PASS; non-blocking large-bundle/inlineDynamicImports warnings"
+  },
+  "guardrails": {
+    "splunk_ta_changes": 0,
+    "splunk_configuration_changes": 0,
+    "namespaced_dashboard_creations": 2,
+    "scenario_runs": 2,
+    "events_accepted_total": 20,
+    "metric_records_accepted_total": 8,
+    "external_paid_apis": 0,
+    "push_or_merge": false
+  },
+  "remaining": [
+    "Browser acceptance and rendered Studio panels blocked by permissions",
+    "No per-run WebSocket progress; synchronous run results only",
+    "Eight original static exports remain invalid Studio structures",
+    "Live dashboard contains one table; no drilldowns",
+    "External configuration is API-driven; external live acceptance not performed",
+    "Complete Cisco five-source XE/XR incident not established",
+    "Caller-supplied deterministic application run IDs unsupported",
+    "Legacy runner observation discovery still assumes other management ports; repaired destination endpoint uses explicit matching management URL"
+  ]
+}

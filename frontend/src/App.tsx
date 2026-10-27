@@ -29,6 +29,8 @@ import { SetupWizard } from './components/setup/SetupWizard';
 import { SecurityContentLab } from './components/security/SecurityContentLab';
 import { AppShell } from './components/shell/AppShell';
 import { ProductStateView } from './components/states/ProductStateView';
+import { DestinationManager } from './components/DestinationManager';
+import { GuidedWorkflow } from './components/GuidedWorkflow';
 import { useHashRoute } from './app/useHashRoute';
 import { ROUTE_TITLES, type AppRoute, type DomainId, type ExperienceMode, type ProductMaturity } from './app/navigation';
 import { getApiBaseUrl } from './lib/api';
@@ -757,6 +759,14 @@ export const App: React.FC = () => {
 
     if (route === '/system/connections') {
       return <SetupWizard />;
+    }
+
+    if (route === '/destinations') {
+      return <DestinationManager />;
+    }
+
+    if (route === '/guided-workflow') {
+      return <GuidedWorkflow />;
     }
 
     if (route === '/build/studio') {

@@ -6,3 +6,5 @@ grpcio==1.84.0
 protobuf==7.36.2
 cryptography==50.0.2
 pygnmi==0.8.15
+
+httpx==0.28.1

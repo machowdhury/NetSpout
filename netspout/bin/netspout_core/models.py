@@ -780,6 +780,8 @@ class EvidenceObservation(BaseModel):
 
 
 class UnifiedRunEvidence(BaseModel):
+    schema_version: str = "1.0"  # bump on any breaking change; contract in docs/architecture/NETSPOUT_GATE_8_UNIFIED_EVIDENCE.md
+    observed_at: float = Field(default_factory=time.time)  # when Splunk was queried, not when events were generated
     run_id: str
     scenario_id: str
     destinations: List[EvidenceObservation] = Field(default_factory=list)

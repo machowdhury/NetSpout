@@ -1030,7 +1030,8 @@ async def get_run_observation(run_id: str):
             manifest.event_observed_count = evidence.event_observed_count
             manifest.metric_observed_count = evidence.metric_observed_count
             manifest.observation_completeness_pct = evidence.observation_completeness_pct
-        if count > 0:
+        # PASS only when the REQUIRED destinations were observed (a supporting-only hit is not enough).
+        if (evidence.required_evidence_satisfied if evidence else count > 0):
             manifest.destination_validation = "PASS"
             if manifest.overall_validation in ("BLOCKED", "FAIL"):
                 all_pass = all(r.status == ValidationStatus.PASS for r in manifest.validation_results)
@@ -1039,10 +1040,13 @@ async def get_run_observation(run_id: str):
         "run_id": run_id,
         "observed_count": count,
         "observation_status": status,
-        "destination_validation": manifest.destination_validation if manifest else ("PASS" if count > 0 else "FAIL"),
+        "schema_version": evidence.schema_version if evidence else None,
+        "observed_at": evidence.observed_at if evidence else None,
+        "required_evidence_satisfied": evidence.required_evidence_satisfied if evidence else False,
+        "destination_validation": manifest.destination_validation if manifest else ("PASS" if (evidence.required_evidence_satisfied if evidence else count > 0) else "FAIL"),
         "event_observed_count": evidence.event_observed_count if evidence else count,
         "metric_observed_count": evidence.metric_observed_count if evidence else 0,
-        "observation_completeness_pct": evidence.observation_completeness_pct if evidence else 100.0,
+        "observation_completeness_pct": evidence.observation_completeness_pct if evidence else 0.0,
         "destinations": [d.dict() for d in evidence.destinations] if evidence else [],
         "evidence_summary": evidence.dict() if evidence else None
     }

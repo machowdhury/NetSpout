@@ -21,7 +21,7 @@ Verifies all 22 required Gate 8 areas:
 16. RunManifest serialization with unified evidence fields
 17. Invariant: Contract PASS does not require SUPPORTING metrics
 18. Invariant: Destination PASS requires observed evidence
-19. GP01 evidence discovery (single event destination)
+19. GP01 evidence discovery (event + catalog-classified metric destination)
 20. GP02 evidence discovery (single event destination, GOLDEN_PATH_CERTIFIED)
 21. GP03 evidence discovery (dual destination: event + metric, E2E_VALIDATED)
 22. GP04 evidence discovery (single event destination, GOLDEN_PATH_CERTIFIED)
@@ -810,10 +810,13 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         manifest = self.runner.run_scenario(req)
         evidence = manifest.evidence_summary
         self.assertIsNotNone(evidence)
-        self.assertEqual(len(evidence.destinations), 1)
-        self.assertEqual(evidence.destinations[0].telemetry_type, TelemetryType.EVENT)
-        self.assertEqual(evidence.destinations[0].target_index, "idx_network_ops")
-        self.assertIsNone(manifest.splunk_metric_query)
+        # cisco:thousandeyes:metric is a catalog metric sourcetype, so the dispatcher sends it to the metric
+        # index; evidence must query where the data went (previously miscounted against the event index).
+        by_type = {d.telemetry_type: d for d in evidence.destinations}
+        self.assertEqual(set(by_type), {TelemetryType.EVENT, TelemetryType.METRIC})
+        self.assertEqual(by_type[TelemetryType.EVENT].target_index, "idx_network_ops")
+        self.assertEqual(by_type[TelemetryType.METRIC].target_index, "cisco_mdt_metrics")
+        self.assertTrue(manifest.splunk_metric_query.startswith("| mstats"))
 
     # -------------------------------------------------------------------------
     # Area 20: GP02 evidence discovery (single event destination, verified certified)
@@ -888,6 +891,55 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         self.assertIsNotNone(evidence)
         self.assertEqual(len(evidence.destinations), 1)
         self.assertEqual(evidence.destinations[0].telemetry_type, TelemetryType.EVENT)
+
+    # -------------------------------------------------------------------------
+    # Phase 4E: versioned, truthful evidence
+    # -------------------------------------------------------------------------
+    def _entry(self, sourcetype):
+        return LogEntry(
+            timestamp="2026-09-25T12:00:00Z", device_id="d1", src_ip="10.0.0.1", dest_ip="10.0.0.2",
+            protocol="x", duration="1ms", action="allowed", signature="s", status="normal",
+            raw_log="{}", node_type="switch", node_id="n1", sourcetype=sourcetype,
+        )
+
+    @patch.object(ScenarioRunner, "_execute_splunk_rest_query", return_value=(0, None))
+    def test_23_evidence_is_versioned_and_timestamped(self, _q):
+        self.runner.run_logs["run_v"] = [self._entry("cisco:ios")]
+        ev = self.runner.get_run_evidence("run_v", self.transport)
+        dumped = ev.model_dump(mode="json")
+        self.assertEqual(dumped["schema_version"], "1.0")
+        self.assertGreater(dumped["observed_at"], 0)
+
+    @patch.object(ScenarioRunner, "_execute_splunk_rest_query", return_value=(0, None))
+    def test_24_catalog_metric_sourcetype_queries_metric_index(self, _q):
+        from netspout_core.telemetry_dispatcher import metric_sourcetypes
+        non_cisco = sorted(st for st in metric_sourcetypes() if not st.startswith("cisco:ios:mdt"))
+        self.assertTrue(non_cisco, "catalog should classify at least one non-Cisco metric sourcetype")
+        self.runner.run_logs["run_m"] = [self._entry(non_cisco[0])]
+        ev = self.runner.get_run_evidence("run_m", self.transport)
+        self.assertEqual([d.telemetry_type for d in ev.destinations], [TelemetryType.METRIC])
+        self.assertTrue(ev.destinations[0].query.startswith("| mstats"))
+
+    @patch.object(ScenarioRunner, "_execute_splunk_rest_query", return_value=(0, None))
+    def test_25_no_fabricated_expectations_without_logs_or_manifest(self, _q):
+        ev = self.runner.get_run_evidence("run_unknown", self.transport)
+        self.assertEqual(ev.total_dispatched, 0)
+        self.assertEqual(ev.metric_expected_count, 0)
+        self.assertEqual(ev.observation_status, "PENDING")
+
+    def test_26_observation_endpoint_never_fabricates_pass_or_completeness(self):
+        backend_dir = os.path.join(REPO_ROOT, "backend")
+        if backend_dir not in sys.path:
+            sys.path.insert(0, backend_dir)
+        from fastapi.testclient import TestClient
+        from app.main import app
+        from app.scenario_runner import ScenarioRunner as AppRunner
+        with patch.object(AppRunner, "_execute_splunk_rest_query", return_value=(0, None)):
+            body = TestClient(app).get("/api/scenarios/runs/no-such-run/observation").json()
+        self.assertEqual(body["schema_version"], "1.0")
+        self.assertEqual(body["observation_completeness_pct"], 0.0)
+        self.assertFalse(body["required_evidence_satisfied"])
+        self.assertEqual(body["destination_validation"], "FAIL")
 
 
 if __name__ == "__main__":

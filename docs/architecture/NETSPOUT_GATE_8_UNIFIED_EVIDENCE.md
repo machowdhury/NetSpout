@@ -111,12 +111,12 @@ Each discovered destination is instantiated as an `EvidenceDestination`:
 ### 3.2 Observation Completeness Formula
 Observation completeness is computed across all discovered storage destinations:
 
-41950\text{Observation Completeness (\%)} = \frac{\sum \text{Observed Events} + \sum \text{Observed Metrics}}{\text{Total Telemetry Generated}} \times 100\%41950
+`Observation Completeness (%) = (observed events + observed metrics) / total telemetry generated x 100`
 
 * **Status Lifecycle**:
   * `PENDING`: 0 records observed across all destinations.
   * `PARTIAL`: At least 1 record observed, but total observed is less than total generated.
-  * `COMPLETE`: Total observed equals or exceeds total generated (\%$).
+  * `COMPLETE`: Total observed equals or exceeds total generated.
   * `ERROR`: REST query execution failure against Splunkd.
 
 ### 3.3 Decoupled Evaluation Invariant
@@ -214,6 +214,39 @@ Returns the harmonized multi-store observation summary:
   ]
 }
 ```
+
+### 4.3 Evidence API Contract v1.0 (Phase 4E, authoritative)
+
+Sections 4.1/4.2 are the original Gate 8 sketch; where they differ from this section, this section governs
+(the destination model is `EvidenceObservation`, the run-level model is `UnifiedRunEvidence`).
+
+**Versioning.** `UnifiedRunEvidence.schema_version` (currently `"1.0"`) and `observed_at` (epoch seconds of the
+Splunk query, *not* of event generation) are present on `RunManifest.evidence_summary` and on
+`GET /api/scenarios/runs/{run_id}/observation`. Additive fields keep `1.0`; renames, removals or changed
+semantics bump it.
+
+**Observation endpoint** `GET /api/scenarios/runs/{run_id}/observation` returns:
+`run_id`, `schema_version`, `observed_at`, `observed_count`, `observation_status`, `required_evidence_satisfied`,
+`destination_validation`, `event_observed_count`, `metric_observed_count`, `observation_completeness_pct`,
+`destinations[]` (`EvidenceObservation`), `evidence_summary` (`UnifiedRunEvidence`).
+
+**Truthfulness rules (enforced by `tests/test_gate8_unified_evidence.py`):**
+1. Destination typing follows the dispatcher: a sourcetype the catalog classifies `data_kind == metric` is queried with
+   `| mstats` against the metric index; everything else with SPL against the event index.
+2. `expected_count` is the number of generated records routed to that destination. It is never invented: with no run
+   logs and no manifest, no metric destination is assumed and `total_dispatched` is `0`.
+3. `destination_validation` is `PASS` only when every `REQUIRED` destination has observed records
+   (`required_evidence_satisfied`); a supporting-only hit does not pass a run.
+4. With no evidence, `observation_completeness_pct` is `0.0`, never `100.0`.
+5. Observed counts come only from Splunk REST queries; a query error yields `ERROR` and is surfaced in `errors`.
+
+**HEC metric payload.** Metric records are `event: "metric"` with one `metric_name:<name>` field per measurement and
+all dimensions preserved (`device`, `vendor`, `status`, `action`, `sensor_path`, `netspout_run_id`,
+`netspout_scenario_id`, `netspout_phase`, `netspout_event_id`, `netspout_ground_truth`, ...). `_value` is added only
+for single-measurement records. A metric record with no numeric measurement is not dispatched (fail closed).
+
+**Runtime mirrors.** `src/netspout_core/` is canonical; `scripts/sync_core.py` regenerates `netspout/bin/` and
+`backend/app/`. `backend/app/main.py` is backend-only.
 
 ---
 

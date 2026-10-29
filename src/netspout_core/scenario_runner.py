@@ -35,7 +35,7 @@ try:
     from netspout_core.log_engine import SplunkLogEngine
     from netspout_core.panos_generator import PanOsGenerator, to_log_entry
     from netspout_core.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
-    from netspout_core.telemetry_dispatcher import dispatcher
+    from netspout_core.telemetry_dispatcher import dispatcher, is_metric_sourcetype
     from netspout_core.spl_engine import SPLExecutionEngine
     from netspout_core.catalog import catalog_instance, NetSpoutCatalog
     from netspout_core.exporter_session import ExporterSession
@@ -53,7 +53,7 @@ except ImportError:
         from app.log_engine import SplunkLogEngine
         from app.panos_generator import PanOsGenerator, to_log_entry
         from app.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
-        from app.telemetry_dispatcher import dispatcher
+        from app.telemetry_dispatcher import dispatcher, is_metric_sourcetype
         from app.spl_engine import SPLExecutionEngine
         from app.catalog import catalog_instance, NetSpoutCatalog
         from app.exporter_session import ExporterSession
@@ -69,7 +69,7 @@ except ImportError:
         from graph_engine import TopologyGraph
         from log_engine import SplunkLogEngine
         from exporter_session import ExporterSession
-        from telemetry_dispatcher import dispatcher
+        from telemetry_dispatcher import dispatcher, is_metric_sourcetype
         try:
             from panos_generator import PanOsGenerator, to_log_entry
         except ImportError:
@@ -2834,10 +2834,8 @@ class ScenarioRunner:
         if logs:
             for entry in logs:
                 st = entry.sourcetype or "cisco:ios"
-                is_metric = (
-                    st in ("cisco:ios:mdt", "cisco:ios:mdt:metric") or
-                    (transport.hec_metric_index and st == transport.hec_metric_index)
-                )
+                # Same catalog-driven classification the dispatcher routes by, so evidence queries the index the data went to.
+                is_metric = is_metric_sourcetype(st) or bool(transport.hec_metric_index and st == transport.hec_metric_index)
 
                 if is_metric:
                     dest_key = f"metric_{metric_index}"
@@ -2883,18 +2881,6 @@ class ScenarioRunner:
                 "role": EvidenceRole.REQUIRED,
                 "sourcetypes": set(manifest.expected_sourcetypes) if manifest else set()
             }
-            if manifest and any("mdt" in st.lower() or "metric" in st.lower() for st in manifest.expected_sourcetypes):
-                dest_map[f"metric_{metric_index}"] = {
-                    "destination_id": f"splunk_metric_{metric_index}",
-                    "name": f"Splunk Metric Store ({metric_index})",
-                    "telemetry_type": TelemetryType.METRIC,
-                    "target_index": metric_index,
-                    "query_mechanism": QueryMechanism.MSTATS,
-                    "query": f'| mstats count where index={metric_index} metric_name=* AND netspout_run_id="{run_id}"',
-                    "expected_count": 4,
-                    "role": EvidenceRole.SUPPORTING,
-                    "sourcetypes": {"cisco:ios:mdt:metric"}
-                }
 
         observations: List[EvidenceObservation] = []
         for dest_info in dest_map.values():
@@ -2925,7 +2911,7 @@ class ScenarioRunner:
             observations.append(obs)
 
         total_gen = len(logs) if logs else (manifest.total_events_generated if manifest else 0)
-        total_disp = manifest.dispatch_succeeded if manifest else total_gen
+        total_disp = manifest.dispatch_succeeded if manifest else 0  # unknown without a manifest; never assume success
         evt_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
         evt_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
         met_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.METRIC)

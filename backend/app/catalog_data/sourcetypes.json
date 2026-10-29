@@ -7269,7 +7269,14 @@
     "category": "security",
     "protocol": "syslog",
     "format": "LEEF",
-    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|TRAFFIC|end|src=192.168.1.100 dst=10.0.0.1"
+    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|TRAFFIC|end|src=192.168.1.100 dst=10.0.0.1",
+    "splunk_sourcetype": "paloalto:traffic",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks Traffic Logs",
+    "data_kind": "log",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-threat",
@@ -7279,7 +7286,14 @@
     "category": "security",
     "protocol": "syslog",
     "format": "LEEF",
-    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|THREAT|end|src=192.168.1.100 dst=10.0.0.1 threat=\"MALWARE\""
+    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|THREAT|end|src=192.168.1.100 dst=10.0.0.1 threat=\"MALWARE\"",
+    "splunk_sourcetype": "paloalto:threat",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks Threat Logs",
+    "data_kind": "log",
+    "default_index": "idx_security",
+    "recommended_index": "idx_security",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-system",
@@ -7289,7 +7303,14 @@
     "category": "system",
     "protocol": "syslog",
     "format": "syslog",
-    "sample": "<134>1 2026-10-27T16:00:00Z firewall01.example.com PAN-OS 12345 - - System: admin performed configuration change"
+    "sample": "<134>1 2026-10-27T16:00:00Z firewall01.example.com PAN-OS 12345 - - System: admin performed configuration change",
+    "splunk_sourcetype": "paloalto:system",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks System Logs",
+    "data_kind": "log",
+    "default_index": "idx_internal",
+    "recommended_index": "idx_internal",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-config",
@@ -7299,7 +7320,14 @@
     "category": "audit",
     "protocol": "syslog",
     "format": "syslog",
-    "sample": "<134>1 2026-10-27T16:01:00Z firewall01.example.com PAN-OS 12345 - - Configuration: security policy updated"
+    "sample": "<134>1 2026-10-27T16:01:00Z firewall01.example.com PAN-OS 12345 - - Configuration: security policy updated",
+    "splunk_sourcetype": "paloalto:config",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks Configuration Logs",
+    "data_kind": "audit",
+    "default_index": "idx_audit",
+    "recommended_index": "idx_audit",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-userid",
@@ -7309,7 +7337,14 @@
     "category": "identity",
     "protocol": "syslog",
     "format": "LEEF",
-    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|USERID|login|src=192.168.1.100 user=jsmith"
+    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|USERID|login|src=192.168.1.100 user=jsmith",
+    "splunk_sourcetype": "paloalto:userid",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks User-ID Logs",
+    "data_kind": "identity",
+    "default_index": "idx_security",
+    "recommended_index": "idx_security",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-globalprotect",
@@ -7319,7 +7354,14 @@
     "category": "vpn",
     "protocol": "syslog",
     "format": "LEEF",
-    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|GLOBALPROTECT|gateway|user=jsmith client=192.168.1.100"
+    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|GLOBALPROTECT|gateway|user=jsmith client=192.168.1.100",
+    "splunk_sourcetype": "paloalto:globalprotect",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks GlobalProtect Logs",
+    "data_kind": "vpn",
+    "default_index": "idx_network_ops",
+    "recommended_index": "idx_network_ops",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-wildfire",
@@ -7329,7 +7371,14 @@
     "category": "threat_intel",
     "protocol": "syslog",
     "format": "LEEF",
-    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|WILDFIRE|submit|file_hash=abc123 verdict=\"malicious\""
+    "sample": "LEEF:2.0|PaloAlto|PAN-OS|10.0.0|WILDFIRE|submit|file_hash=abc123 verdict=\"malicious\"",
+    "splunk_sourcetype": "paloalto:wildfire",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks WildFire Logs",
+    "data_kind": "threat_intel",
+    "default_index": "idx_security",
+    "recommended_index": "idx_security",
+    "generation_mode": "scenario"
   },
   {
     "id": "paloalto-cortex",
@@ -7339,6 +7388,13 @@
     "category": "xdr",
     "protocol": "api",
     "format": "json",
-    "sample": "{\"timestamp\": \"2026-10-27T16:00:00Z\", \"event_type\": \"alert\", \"vendor\": \"PaloAlto\", \"product\": \"Cortex XDR\"}"
+    "sample": "{\"timestamp\": \"2026-10-27T16:00:00Z\", \"event_type\": \"alert\", \"vendor\": \"PaloAlto\", \"product\": \"Cortex XDR\"}",
+    "splunk_sourcetype": "paloalto:cortex",
+    "vendor_id": "palo_alto_networks",
+    "display_name": "Palo Alto Networks Cortex XDR Logs",
+    "data_kind": "xdr",
+    "default_index": "idx_security",
+    "recommended_index": "idx_security",
+    "generation_mode": "scenario"
   }
 ]

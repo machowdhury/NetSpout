@@ -851,6 +851,11 @@ class TelemetryDispatcher:
                         "netspout_ground_truth": log.netspout_ground_truth
                     }
                 }
+            if is_metric:
+                # `_value` is only unambiguous for a single-measurement record; multi-metric records carry per-metric `metric_name:*` only.
+                mkeys = [k for k in hec_payload["fields"] if k.startswith("metric_name:")]
+                if len(mkeys) == 1:
+                    hec_payload["fields"].setdefault("_value", hec_payload["fields"][mkeys[0]])
             if is_metric and not any(k.startswith("metric_name:") for k in hec_payload["fields"]):
                 # fail closed: a metric record without a generated numeric value is never sent (no fabricated value)
                 results["hec"] = {"success": False, "message": "metric record has no numeric values; not dispatched",

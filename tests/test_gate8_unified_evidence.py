@@ -66,14 +66,16 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         self.runner = ScenarioRunner()
         self.dispatcher = TelemetryDispatcher()
         self.catalog = NetSpoutCatalog()
-        hec_url = os.environ.get(
-            "NETSPOUT_HEC_URL",
-            "https://127.0.0.1:8088/services/collector/event",
-        ).removesuffix("/event")
+        # Hermetic: the HEC emit is stubbed, so no live Splunk or real token is needed.
+        # Individual tests may re-patch emit_hec; the outer patch is the default.
+        hec_url = "https://127.0.0.1:8088/services/collector"
+        patcher = patch.object(TelemetryDispatcher, "emit_hec", return_value=(True, "OK"))
+        patcher.start()
+        self.addCleanup(patcher.stop)
         self.transport = TelemetryTransportConfig(
             hec_enabled=True,
             hec_url=hec_url,
-            hec_token=os.environ.get("NETSPOUT_HEC_TOKEN", ""),
+            hec_token="test-token-not-a-secret",
             hec_index="idx_network_ops",
             hec_metric_index="cisco_mdt_metrics",
             hec_allow_insecure_tls=True
@@ -572,6 +574,10 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         self.assertEqual(fields.get("netspout_scenario_id"), "cisco_aci_microburst")
         self.assertEqual(fields.get("netspout_phase"), "BASELINE")
         self.assertEqual(fields.get("netspout_event_id"), "evt_001")
+        self.assertEqual(fields.get("netspout_ground_truth"), "true")
+        self.assertEqual(fields.get("device"), "Nexus-9336-Leaf01")
+        # single measurement -> `_value` mirrors it
+        self.assertEqual(fields.get("_value"), 1250000.0)
 
     # -------------------------------------------------------------------------
     # Area 13: Metric extraction from MDT raw_log payloads
@@ -599,7 +605,9 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         payload = mock_emit.call_args[0][0]
         fields = payload.get("fields", {})
         self.assertEqual(fields.get("metric_name:queue_depth"), 26500000.0)
-        self.assertEqual(fields.get("_value"), 26500000.0)
+        self.assertEqual(fields.get("metric_name:buffer_utilization"), 98.5)
+        # two measurements -> no ambiguous single `_value`
+        self.assertNotIn("_value", fields)
         self.assertEqual(fields.get("sensor_path"), "buffer-stats")
 
     # -------------------------------------------------------------------------

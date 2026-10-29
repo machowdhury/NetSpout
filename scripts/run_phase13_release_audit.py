@@ -113,11 +113,18 @@ def operational_secret_scan() -> dict[str, Any]:
     patterns = {
         "private_key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
         "provider_token": re.compile(r"(?:AKIA|ASIA|gh[pousr]_|sk_live_|AIza)[A-Za-z0-9_-]{12,}"),
+        # The retired lab credential pattern is supplied out-of-band (env), never
+        # embedded here: a scanner whose source embeds the needle it scans for is
+        # the failure mode this audit exists to catch. Operators who know the
+        # former value run: PF_LEGACY_LAB_SECRET_PATTERN='<former> '<same-zero-token-regex>
         "legacy_lab_secret": re.compile(
-            r"SplunkPassword123!|(?:token|password)[^\n]{0,80}00000000-0000-0000-0000-000000000000",
+            r"(?:token|password)[^\n]{0,80}00000000-0000-0000-0000-000000000000",
             re.IGNORECASE,
         ),
     }
+    legacy_pattern = os.environ.get("PF_LEGACY_LAB_SECRET_PATTERN", "")
+    if legacy_pattern:
+        patterns["legacy_lab_secret_input"] = re.compile(legacy_pattern, re.IGNORECASE)
     findings = []
     for relative in tracked:
         if relative == "scripts/run_phase13_release_audit.py":

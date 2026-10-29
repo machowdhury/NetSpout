@@ -23,8 +23,15 @@ class NativeDiscoveryTests(unittest.TestCase):
         self.assertIn('Generated from canonical',self.data['provenance'])
 
     def test_all_native_incidents_have_primary_dashboard(self):
-        native=[x for x in self.entries if x['kind']=='scenario' and x['id'].startswith(('network_','telco_'))]
-        self.assertEqual(len(native),37)
+        # The native cohort IS the executable incident pack (netspout/bin/network_incidents.py
+        # via incident_contracts), not a name prefix. A catalog scenario that merely happens
+        # to be called network_* -- e.g. network_security_correlation, which executes through
+        # ScenarioRunner and has no producer incident slug -- is not one of these incidents
+        # and must not be asserted as one.
+        pack=set(build.incident_contracts())
+        self.assertEqual(len(pack),37)
+        native=[x for x in self.entries if x['kind']=='scenario' and x['id'] in pack]
+        self.assertEqual(len(native),len(pack),'every pack incident must appear in the projection')
         self.assertTrue(all(x['dashboard_ids'] for x in native))
         self.assertTrue(all(x['readiness']=='Executable custom simulation' for x in native))
         self.assertEqual(next(x for x in native if x['id']=='network_08_firewall_policy')['dashboard_ids'][0],'discovery-security')

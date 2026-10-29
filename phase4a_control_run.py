@@ -17,8 +17,16 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent.absolute()
 BACKEND_DIR = BASE_DIR / "backend"
 
-# Set environment
-os.environ['PULSEFORGE_LAB_HEC_TOKEN'] = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+# HEC token from environment (set in lab)
+hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+if not hec_token:
+    raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
+# Admin password from environment
+splunk_password = os.getenv('SPLUNK_PASSWORD')
+if not splunk_password:
+    raise ValueError("SPLUNK_PASSWORD environment variable not set")
+# Set environment for downstream modules expecting the token
+os.environ['PULSEFORGE_LAB_HEC_TOKEN'] = hec_token
 
 # Add paths
 sys.path.insert(0, str(BACKEND_DIR))
@@ -29,7 +37,7 @@ class Phase4AControlRun:
     def __init__(self):
         self.run_id = f"NS-{datetime.now().strftime('%Y%m%d')}-{int(time.time()) % 1000000:06x}"
         self.scenario_id = "cisco_aci_microburst"
-        self.destination_id = "codex_local_lab"
+        self.destination_id = "docker_local"
         self.backend_url = "http://localhost:8000"
         self.backend_process = None
         
@@ -37,7 +45,7 @@ class Phase4AControlRun:
         self.splunk_url = "https://localhost:18000"
         self.splunk_api = "https://localhost:18089"
         self.hec_url = "https://localhost:18088"
-        self.splunk_auth = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+        self.splunk_auth = ("admin", splunk_password)
         
         self.results = {
             "phase4a_control_run": True,
@@ -110,7 +118,7 @@ class Phase4AControlRun:
                 json={
                     "event": f"Phase 4A control run connectivity test - {self.run_id}",
                     "sourcetype": "phase4a_test",
-                    "index": "idx_ta_ise_test"
+                    "index": "idx_network_ops"
                 },
                 verify=False,
                 timeout=5

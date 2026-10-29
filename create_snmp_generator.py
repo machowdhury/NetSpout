@@ -4,6 +4,7 @@ Phase 4C P0: Create SNMP metrics generator.
 Build executable SNMP OID-backed metrics engine.
 """
 
+import os
 import json
 import random
 import time
@@ -568,7 +569,9 @@ def main():
         
         # Send to HEC
         hec_url = "https://localhost:18088/services/collector"
-        hec_token = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+        hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+        if not hec_token:
+            raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
         
         print(f"  Sending {len(hec_events)} SNMP metrics to HEC...")
         

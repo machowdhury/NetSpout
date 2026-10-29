@@ -3,6 +3,7 @@
 Phase 4C: Final Palo Alto test with proper HEC formatting.
 """
 
+import os
 import sys
 import json
 import time
@@ -23,7 +24,9 @@ def test_paloalto_with_correct_format():
     
     # Configuration
     hec_url = "https://localhost:18088/services/collector"
-    hec_token = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+    hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+    if not hec_token:
+        raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
     
     run_id = f"PALO-FINAL-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     
@@ -104,7 +107,10 @@ def test_paloalto_with_correct_format():
             print(f"\n🔍 Verifying with Splunk search...")
             
             splunk_api = "https://localhost:18089"
-            splunk_auth = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+            splunk_password = os.getenv('SPLUNK_PASSWORD')
+            if not splunk_password:
+                raise ValueError("SPLUNK_PASSWORD environment variable not set")
+            splunk_auth = ("admin", splunk_password)
             
             # Simple search to verify events
             search = f'search index=idx_network_ops netspout_run_id="{run_id}" earliest=-5m latest=now | stats count by sourcetype'

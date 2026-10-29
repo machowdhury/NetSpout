@@ -29,7 +29,7 @@ The Phase 4A control run successfully executed the `cisco_aci_microburst` scenar
 
 ### 1. Infrastructure Validation
 - ✅ **Splunk Docker Lab**: `pf-native-lab` container healthy and running
-- ✅ **HEC Connectivity**: Token `1379bbf9-5535-48d8-ab4e-b20e2ff6deee` accepts events
+- ✅ **HEC Connectivity**: Token `[REDACTED]` accepts events
 - ✅ **Splunk REST API**: Version 10.2.7 accessible via management port 18089
 - ✅ **Backend Server**: FastAPI backend operational with all dependencies
 

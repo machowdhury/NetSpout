@@ -4,6 +4,7 @@ Phase 4B Integration Test - Verify canonical sourcetype resolver and Palo Alto g
 """
 
 import sys
+import os
 import json
 import requests
 from pathlib import Path
@@ -188,7 +189,9 @@ def test_splunk_ingestion():
         
         # Send to Splunk HEC
         hec_url = "https://localhost:18088/services/collector"
-        hec_token = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+        hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+        if not hec_token:
+            raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
         
         print(f"   Sending {len(hec_events)} Palo Alto events to HEC...")
         
@@ -212,7 +215,10 @@ def test_splunk_ingestion():
             
             # Verify indexing via Splunk REST API
             try:
-                splunk_auth = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+                splunk_password = os.getenv('SPLUNK_PASSWORD')
+                if not splunk_password:
+                    raise ValueError("SPLUNK_PASSWORD environment variable not set")
+                splunk_auth = ("admin", splunk_password)
                 splunk_api = "https://localhost:18089"
                 
                 search_query = f'search index=idx_network_ops test_run_id="{run_id}" earliest=-5m latest=now | head 1'

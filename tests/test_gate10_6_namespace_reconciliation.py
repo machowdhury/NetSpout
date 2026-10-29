@@ -81,12 +81,14 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
     # 2. Maturity Distribution & Reconciliation
     # -------------------------------------------------------------------------
     def test_03_exact_maturity_distribution(self):
-        """Verify maturity breakdown: 13 Golden, 1 E2E, 2 Format, >= 13 Contracted."""
+        """Verify maturity breakdown: 13 Golden, 4 E2E, 2 Format, >= 13 Contracted."""
         scenarios = self.catalog.list_scenarios()
         counts = Counter(s.get("maturity") for s in scenarios)
 
         self.assertEqual(counts["GOLDEN_PATH_CERTIFIED"], 13, "Must have exactly 13 GOLDEN_PATH_CERTIFIED scenarios")
-        self.assertEqual(counts["E2E_VALIDATED"], 1, "Must have exactly 1 E2E_VALIDATED scenario (ddos_attack)")
+        self.assertEqual(counts["E2E_VALIDATED"], 4,
+                         "Must have exactly 4 E2E_VALIDATED scenarios "
+                         "(ddos_attack + the three Phase 4C scenarios)")
         self.assertEqual(counts["FORMAT_VALIDATED"], 2, "Must have exactly 2 FORMAT_VALIDATED scenarios (normal_traffic, lateral_movement)")
         self.assertGreaterEqual(counts["CONTRACTED"], 13, "Must have at least 13 CONTRACTED scenarios")
         self.assertGreaterEqual(sum(counts.values()), 29, "Total of all maturity counts must equal >= 29")
@@ -99,8 +101,18 @@ class TestGate10_6NamespaceReconciliation(unittest.TestCase):
 
     def test_05_e2e_and_format_validated_identifiers(self):
         """Verify E2E_VALIDATED and FORMAT_VALIDATED scenarios match expected canonical sets."""
+        # The three Phase 4C additions earned E2E_VALIDATED by running through
+        # ScenarioRunner, dispatching over HEC and being re-counted per sourcetype in
+        # Splunk; that evidence lives in docs/verification/pulseforge_phase4c_*.json,
+        # NOT on the catalog row -- these rows carry a maturity label and no
+        # evidence_run_id, which is the gap Phase 4D stories C-1/C-3 exist to close.
         e2e = [s["id"] for s in self.catalog.list_scenarios() if s.get("maturity") == "E2E_VALIDATED"]
-        self.assertEqual(set(e2e), {"ddos_attack"})
+        self.assertEqual(set(e2e), {
+            "ddos_attack",
+            "paloalto_threat_investigation",
+            "network_security_correlation",
+            "payment_processing_degradation",
+        })
 
         format_val = [s["id"] for s in self.catalog.list_scenarios() if s.get("maturity") == "FORMAT_VALIDATED"]
         self.assertEqual(set(format_val), {"normal_traffic", "lateral_movement"})

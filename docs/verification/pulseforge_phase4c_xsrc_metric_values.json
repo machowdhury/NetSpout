@@ -1,0 +1,76 @@
+{
+  "scenario_id": "network_security_correlation",
+  "seed": 51002,
+  "run_id": "NS-20261029-58818c7d",
+  "metric_index": "idx_performance_metrics",
+  "tolerance": 1e-06,
+  "metrics_checked": 9,
+  "all_values_match": true,
+  "failures": 0,
+  "per_metric": {
+    "hrProcessorLoad": {
+      "expected_avg": 54.667857142857144,
+      "observed_avg": 54.66785714285715,
+      "samples": 14,
+      "relative_error": 1.2997449925709024e-16,
+      "match": true
+    },
+    "ifHCInOctets": {
+      "expected_avg": 63363411504.28571,
+      "observed_avg": 63363411504.28571,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "ifHCInOctetsRate": {
+      "expected_avg": 4140587040.0667496,
+      "observed_avg": 4140587040.06675,
+      "samples": 12,
+      "relative_error": 1.1516172793591075e-16,
+      "match": true
+    },
+    "ifHCOutOctets": {
+      "expected_avg": 63249613927.21429,
+      "observed_avg": 63249613927.21429,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "ifHCOutOctetsRate": {
+      "expected_avg": 4112613779.889,
+      "observed_avg": 4112613779.8890004,
+      "samples": 12,
+      "relative_error": 1.1594503732271083e-16,
+      "match": true
+    },
+    "ifInErrors": {
+      "expected_avg": 264.92857142857144,
+      "observed_avg": 264.92857142857144,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "ifOutErrors": {
+      "expected_avg": 145.21428571428572,
+      "observed_avg": 145.21428571428572,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "ifSpeed": {
+      "expected_avg": 6142857142.857142,
+      "observed_avg": 6142857142.857142,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "interface_utilization_percent": {
+      "expected_avg": 50.14785714285714,
+      "observed_avg": 50.14785714285714,
+      "samples": 14,
+      "relative_error": 0.0,
+      "match": true
+    }
+  },
+  "note": "Values are modeled SNMP-derived measurements replayed from the seeded generator; no device was polled."
+}

@@ -6790,6 +6790,123 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "paloalto_threat_investigation",
+      "title": "Palo Alto Networks Threat Investigation",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Palo Alto Networks"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Native PAN-OS traffic, threat and system syslog records move a firewall through baseline, suspicious activity, detection, containment and recovery, so an analyst can pivot from a high severity threat verdict back to the correlated traffic sessions.",
+      "sourcetypes": [
+        "pan:traffic",
+        "pan:threat",
+        "pan:system"
+      ],
+      "scenario_ids": [
+        "paloalto_threat_investigation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "pan:traffic",
+        "pan:threat",
+        "pan:system"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Native PAN-OS traffic, threat and system syslog records move a firewall through baseline, suspicious activity, detection, containment and recovery, so an analyst can pivot from a high severity threat verdict back to the correlated traffic sessions.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "network_security_correlation",
+      "title": "Network Degradation With Security Correlation",
+      "domain": "MIXED",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems",
+        "Palo Alto Networks",
+        "Splunk Community / SC4SNMP"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Cisco interface degradation, SNMP-derived performance metrics and Palo Alto Networks security telemetry land in the same incident window so a capacity symptom can be correlated with the security event that produced it.",
+      "sourcetypes": [
+        "cisco:catalyst:security:events",
+        "pan:traffic",
+        "pan:threat",
+        "pan:system",
+        "sc4snmp:metric"
+      ],
+      "scenario_ids": [
+        "network_security_correlation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:catalyst:security:events",
+        "pan:traffic",
+        "pan:threat",
+        "pan:system",
+        "sc4snmp:metric"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Cisco interface degradation, SNMP-derived performance metrics and Palo Alto Networks security telemetry land in the same incident window so a capacity symptom can be correlated with the security event that produced it.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "payment_processing_degradation",
+      "title": "Financial Services Payment Application Degradation",
+      "domain": "INDUSTRY_VERTICAL",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems",
+        "Palo Alto Networks",
+        "Splunk Community / SC4SNMP"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "A payment-processing path degrades under denied sessions and inspection latency, combining PAN-OS security telemetry with Cisco interface evidence and SNMP performance metrics so the business impact and its security cause can be read together.",
+      "sourcetypes": [
+        "pan:traffic",
+        "pan:threat",
+        "pan:system",
+        "cisco:catalyst:security:events",
+        "sc4snmp:metric"
+      ],
+      "scenario_ids": [
+        "payment_processing_degradation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "pan:traffic",
+        "pan:threat",
+        "pan:system",
+        "cisco:catalyst:security:events",
+        "sc4snmp:metric"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "A payment-processing path degrades under denied sessions and inspection latency, combining PAN-OS security telemetry with Cisco interface evidence and SNMP performance metrics so the business impact and its security cause can be read together.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -7934,7 +8051,9 @@
       ],
       "scenario_ids": [
         "arch_lan_campus_access",
-        "cisco_campus_rogue"
+        "cisco_campus_rogue",
+        "network_security_correlation",
+        "payment_processing_degradation"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -13393,7 +13512,10 @@
         "pan:system"
       ],
       "scenario_ids": [
-        "scenario_mv_016_cross_domain_slowness"
+        "scenario_mv_016_cross_domain_slowness",
+        "paloalto_threat_investigation",
+        "network_security_correlation",
+        "payment_processing_degradation"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -13423,7 +13545,10 @@
         "scenario_mv_016_cross_domain_slowness",
         "mixed_edge_breach",
         "mixed_sase_degradation",
-        "mixed_vendor_enterprise"
+        "mixed_vendor_enterprise",
+        "paloalto_threat_investigation",
+        "network_security_correlation",
+        "payment_processing_degradation"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -13455,7 +13580,10 @@
         "mixed_edge_breach",
         "mixed_vendor_enterprise",
         "normal_traffic",
-        "wireless_connected_core_mixed"
+        "wireless_connected_core_mixed",
+        "paloalto_threat_investigation",
+        "network_security_correlation",
+        "payment_processing_degradation"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -13635,7 +13763,10 @@
       "sourcetypes": [
         "sc4snmp:metric"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "network_security_correlation",
+        "payment_processing_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],

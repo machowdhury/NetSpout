@@ -12,7 +12,7 @@ NetSpout provides two distinct, explicitly separated deployment profiles to safe
 | :--- | :--- | :--- |
 | **Intended Target** | Local development, sandbox evaluation, quickstart Docker | Production networks, shared staging labs, remote Splunk Cloud |
 | **UI Badge** | `DEMO / LOCAL LAB` (Prominently displayed in TopBar) | `SECURE / EXTERNAL` |
-| **Credentials** | Disposable lab credentials accepted (`0000...`, `SplunkPassword123!`) | User-supplied/generated secrets **strictly required** |
+| **Credentials** | Disposable lab credentials accepted (`0000...`, `<your-splunk-admin-password>`) | User-supplied/generated secrets **strictly required** |
 | **Fallback Policy** | Allows automatic fallback to demo credentials if unspecified | **Fails fast with error** if demo secrets or empty tokens are passed |
 | **Token Logging** | Strictly masked (`0000****0000`) | Strictly masked (`****`); secrets are never logged in cleartext |
 | **Network Bind** | Local loopback / container network | Explicit target host/ports with TLS verification options |
@@ -47,15 +47,15 @@ When `NETSPOUT_PROFILE=secure` or `NETSPOUT_PROFILE=external`:
 
 2. **Splunk Management Password Enforcement:**
    - Must be explicitly passed via `NETSPOUT_SPLUNK_PASSWORD`.
-   - NetSpout **rejects** the default password (`SplunkPassword123!`).
+   - NetSpout **rejects** the retired disposable lab default (placeholder only: `<your-splunk-admin-password>`).
 
 3. **Example Secure Launch:**
    ```bash
    export NETSPOUT_PROFILE="secure"
    export NETSPOUT_HEC_URL="https://splunk.corp.internal:8088/services/collector/event"
-   export NETSPOUT_HEC_TOKEN="e983fa2b-8a21-419b-a3d8-58319dfa9931"
+   export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
    export NETSPOUT_SPLUNK_USER="svc_netspout"
-   export NETSPOUT_SPLUNK_PASSWORD="SuperSecretCorpPassword2026!"
+   export NETSPOUT_SPLUNK_PASSWORD="<from-your-secret-manager>"
    export NETSPOUT_HEC_SSL_VERIFY="true"
 
    docker compose -f docker-compose.prod.yml up -d

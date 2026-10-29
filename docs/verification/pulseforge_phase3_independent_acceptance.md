@@ -47,7 +47,7 @@ While core infrastructure improvements from Phase 3 have been implemented (WebSo
 - **Splunk Web**: `https://localhost:18000` (accessible)
 - **Management API**: `https://localhost:18089` (authenticated)
 - **HEC Endpoint**: `https://localhost:18088` (working)
-- **HEC Token**: `1379bbf9-5535-48d8-ab4e-b20e2ff6deee` (verified)
+- **HEC Token**: `[REDACTED]` (verified)
 - **Index**: `idx_ta_ise_test` (exists, writable)
 
 ### Verification Results

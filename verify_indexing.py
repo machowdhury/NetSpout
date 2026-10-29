@@ -3,6 +3,7 @@
 Verify Phase 4A control run events are indexed in Splunk.
 """
 
+import os
 import requests
 import json
 import time
@@ -12,7 +13,10 @@ from datetime import datetime
 # Splunk configuration
 SPLUNK_URL = "https://localhost:18000"
 SPLUNK_API = "https://localhost:18089"
-SPLUNK_AUTH = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+splunk_password = os.getenv('SPLUNK_PASSWORD')
+if not splunk_password:
+    raise ValueError("SPLUNK_PASSWORD environment variable not set")
+SPLUNK_AUTH = ("admin", splunk_password)
 
 def search_splunk(search_query):
     """Execute a one-shot search in Splunk."""
@@ -122,10 +126,13 @@ def main():
     
     # Test 4: Direct HEC test
     print("\n4. Testing HEC directly...")
+    hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+    if not hec_token:
+        raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
     try:
         test_response = requests.post(
             "https://localhost:18088/services/collector",
-            headers={"Authorization": "Splunk 1379bbf9-5535-48d8-ab4e-b20e2ff6deee"},
+            headers={"Authorization": f"Splunk {hec_token}"},
             json={
                 "event": f"Phase 4A verification test - {datetime.now().isoformat()}",
                 "sourcetype": "phase4a_verify",

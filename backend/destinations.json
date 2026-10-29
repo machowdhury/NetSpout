@@ -18,8 +18,8 @@
       "last_validated": null,
       "validation_status": "unknown",
       "validation_message": null,
-      "total_events_sent": 14,
-      "last_used": 1793132977.8108811
+      "total_events_sent": 126,
+      "last_used": 1793282143.76959
     },
     "external_default": {
       "id": "external_default",

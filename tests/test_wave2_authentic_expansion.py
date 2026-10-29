@@ -380,9 +380,12 @@ class TestCanonicalGraduation(unittest.TestCase):
     def test_scenarios_37(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):
         # 47 Wave-2/Wave-3/Batch-1 scenarios + 3 Batch-4 scenario packs
+        # + 3 Phase 4C scenarios (paloalto_threat_investigation,
+        # network_security_correlation, payment_processing_degradation), registered
+        # from scripts/register_phase4c_scenarios.py and verified end-to-end.
         with open(os.path.join(REPO_ROOT, "catalog", "scenarios.json")) as fh:
             rows = json.load(fh)
-        self.assertEqual(len(rows), 50)
+        self.assertEqual(len(rows), 53)
         wave2_rows = [r for r in rows if r["id"].startswith("wave2_")]
         self.assertEqual(len(wave2_rows), 8)
 

@@ -134,6 +134,55 @@ HEC_FAILED = "FAILED"            # not delivered: rejected (4xx, Splunk busy), u
 HEC_UNKNOWN = "UNKNOWN"          # outcome cannot be determined (no answer after sending, ambiguous 5xx, unexpected 2xx)
 HEC_LIFECYCLE_STATES = (HEC_GENERATED, HEC_DISPATCHING, HEC_ACCEPTED, HEC_FAILED, HEC_UNKNOWN)
 
+#: Sourcetypes the metric path has always treated as metrics. Kept explicitly so
+#: Cisco MDT routing stays byte-identical while other metric sources are added.
+CISCO_MDT_SOURCETYPES = ("cisco:ios:mdt", "cisco:ios:mdt:metric")
+
+_METRIC_SOURCETYPES_CACHE: Optional[frozenset] = None
+
+
+def metric_sourcetypes() -> frozenset:
+    """Sourcetypes the canonical catalog classifies as ``data_kind == metric``.
+
+    Catalog-driven so a new metric source (for example ``sc4snmp:metric``) is
+    routed to the metrics index by its published classification rather than by
+    another hardcoded ``if sourcetype == ...`` clause. Degrades to the Cisco set
+    if the catalog cannot be loaded, which keeps existing behaviour intact.
+    """
+    global _METRIC_SOURCETYPES_CACHE
+    if _METRIC_SOURCETYPES_CACHE is not None:
+        return _METRIC_SOURCETYPES_CACHE
+    names = set(CISCO_MDT_SOURCETYPES)
+    catalog = None
+    for importer in (
+        "netspout_core.catalog", "app.catalog", "catalog"
+    ):
+        try:
+            module = __import__(importer, fromlist=["catalog_instance"])
+            catalog = getattr(module, "catalog_instance", None)
+            if catalog is not None:
+                break
+        except Exception:
+            continue
+    if catalog is not None:
+        try:
+            for entry in catalog.list_sourcetypes(include_deprecated=False):
+                if entry.get("data_kind") == "metric":
+                    st = entry.get("splunk_sourcetype")
+                    if st:
+                        names.add(st)
+        except Exception:
+            pass
+    _METRIC_SOURCETYPES_CACHE = frozenset(names)
+    return _METRIC_SOURCETYPES_CACHE
+
+
+def is_metric_sourcetype(sourcetype: Optional[str]) -> bool:
+    """True when this sourcetype's telemetry belongs in the metrics index."""
+    if not sourcetype:
+        return False
+    return sourcetype in metric_sourcetypes()
+
 
 class HecOutcome(tuple):
     """(success, message) for existing callers, plus the lifecycle evidence of one HEC send.
@@ -684,12 +733,16 @@ class TelemetryDispatcher:
         # 1. Splunk HEC Transport
         if transport.hec_enabled and transport.hec_url and transport.hec_token:
             target_index = transport.hec_index or "idx_network_ops"
-            if log.sourcetype in ("cisco:ios:mdt", "cisco:ios:mdt:metric"):
+            # Metric routing is decided by the catalog's data_kind, not by a
+            # hardcoded Cisco-only sourcetype list, so SNMP-derived and other
+            # metric sources reach the metrics index through this same path.
+            sourcetype_is_metric = is_metric_sourcetype(log.sourcetype)
+            if sourcetype_is_metric:
                 target_index = transport.hec_metric_index or "cisco_mdt_metrics"
 
-            is_metric = (target_index == "cisco_mdt_metrics" or 
-                         "metric" in target_index.lower() or 
-                         log.sourcetype in ("cisco:ios:mdt", "cisco:ios:mdt:metric"))
+            is_metric = (target_index == "cisco_mdt_metrics" or
+                         "metric" in target_index.lower() or
+                         sourcetype_is_metric)
 
             if is_metric:
                 metric_fields: Dict[str, Any] = {
@@ -754,12 +807,22 @@ class TelemetryDispatcher:
                 if log.netspout_ground_truth:
                     metric_fields["netspout_ground_truth"] = str(log.netspout_ground_truth)
 
+                # Cisco MDT keeps its historic source/sourcetype labels so
+                # existing searches and tests are unaffected. Any other metric
+                # source must not be relabelled as Cisco telemetry -- it keeps
+                # the sourcetype the catalog classified as a metric.
+                if log.sourcetype in CISCO_MDT_SOURCETYPES:
+                    metric_source = "cisco:ios:mdt"
+                    metric_sourcetype = "cisco:ios:mdt:metric"
+                else:
+                    metric_source = log.sourcetype or "netspout:metric"
+                    metric_sourcetype = log.sourcetype
                 hec_payload = {
                     "time": time.time(),
                     "event": "metric",
                     "host": log.device_id,
-                    "source": "cisco:ios:mdt",
-                    "sourcetype": "cisco:ios:mdt:metric",
+                    "source": metric_source,
+                    "sourcetype": metric_sourcetype,
                     "index": target_index,
                     "fields": metric_fields
                 }

@@ -38,3 +38,4 @@ netspout/bin/app
 .Trashes
 ehthumbs.db
 Thumbs.db
+backend/.env

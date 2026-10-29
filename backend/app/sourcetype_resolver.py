@@ -209,8 +209,10 @@ if __name__ == "__main__":
     test_cases = [
         ("cisco-aci-fault", "cisco:aci:fault"),
         ("cisco-dc-nexus9k-syslog", "cisco:dc:nexus9k:syslog"),
-        ("paloalto-traffic", "paloalto:traffic"),
-        ("paloalto-threat", "paloalto:threat"),
+        # Canonical PAN-OS identifiers: the legacy ``paloalto:*`` form was a
+        # vendor-ID divergence that no longer exists in the canonical catalog.
+        ("pan-traffic", "pan:traffic"),
+        ("pan-threat", "pan:threat"),
     ]
     
     print("🧪 Testing Sourcetype Resolver:")

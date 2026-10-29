@@ -36,6 +36,8 @@ CORE_MODULES = [
     "universe_batch4_engine.py",
     "scenario_runner.py",
     "snmp_engine.py",
+    "snmp_metrics.py",
+    "panos_generator.py",
     "gnmi_engine.py",
     "fault_injection_engine.py",
     "telemetry_dispatcher.py",

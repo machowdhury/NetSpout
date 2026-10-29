@@ -26,7 +26,7 @@ def query_splunk_record(obs_id: int, max_wait: float = 6.0) -> Tuple[bool, float
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
     
-    auth_header = "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh"
+    auth_header = "Basic [REDACTED]"
     search_url = "https://localhost:8889/services/search/jobs/export"
     query = f"search index=idx_network_ops sourcetype=netflow:collector (ObservationDomainID={obs_id} OR observation_domain_id={obs_id} OR ObservationDomainId={obs_id}) | head 1"
     

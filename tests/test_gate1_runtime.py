@@ -236,8 +236,12 @@ class TestGate1RuntimeStabilization(unittest.TestCase):
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
 
-        # Test splunkd REST on 8889 with Basic Auth (admin:SplunkPassword123!)
-        auth_bytes = base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+        # Test splunkd REST on 8889 with Basic Auth using the configured admin
+        # credential (resolved from the environment; no hard-coded lab password)
+        admin_password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get("SPLUNK_PASSWORD") or ""
+        if not admin_password:
+            self.skipTest("Live Splunk probe skipped: NETSPOUT_SPLUNK_PASSWORD (or SPLUNK_PASSWORD) not configured")
+        auth_bytes = base64.b64encode(f"admin:{admin_password}".encode("ascii")).decode("ascii")
         auth_header = f"Basic {auth_bytes}"
         url = "https://localhost:8889/services/datablaster/execute?output_mode=json"
 

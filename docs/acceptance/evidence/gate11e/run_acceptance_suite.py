@@ -73,7 +73,7 @@ def query_splunk(query: str, earliest: str = "-15m", latest: str = "now", max_wa
     }).encode("utf-8")
 
     req = urllib.request.Request("https://127.0.0.1:8889/services/search/jobs/export", data=data, method="POST")
-    req.add_header("Authorization", "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh")
+    req.add_header("Authorization", "Basic [REDACTED]")
 
     start = time.time()
     while time.time() - start < max_wait_sec:

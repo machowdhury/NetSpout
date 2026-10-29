@@ -4,6 +4,7 @@ Phase 4C P0: Revalidate existing Cisco control run.
 Execute cisco_aci_microburst scenario and verify results against historical evidence.
 """
 
+import os
 import sys
 import json
 import time
@@ -160,7 +161,10 @@ def validate_cisco_control():
     try:
         # Check Splunk REST API
         splunk_api = "https://localhost:18089"
-        splunk_auth = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+        splunk_password = os.getenv('SPLUNK_PASSWORD')
+        if not splunk_password:
+            raise ValueError("SPLUNK_PASSWORD environment variable not set")
+        splunk_auth = ("admin", splunk_password)
         
         # Get backend run ID from result if available
         backend_run_id = None

@@ -145,7 +145,7 @@ HEC response: {"text": "Success", "code": 0}
 ### Infrastructure Status
 - **Splunk Docker Lab**: `pf-native-lab` healthy (2+ days uptime)
 - **Backend Server**: FastAPI operational on port 8000
-- **HEC Token**: Working (`1379bbf9-5535-48d8-ab4e-b20e2ff6deee`)
+- **HEC Token**: Working (`[REDACTED]`)
 - **Control Run**: `cisco_aci_microburst` execution proven
 
 ## 🎯 PHASE 4B DELIVERABLES

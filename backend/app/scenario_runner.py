@@ -38,6 +38,8 @@ try:
     )
     from netspout_core.graph_engine import TopologyGraph
     from netspout_core.log_engine import SplunkLogEngine
+    from netspout_core.panos_generator import PanOsGenerator, to_log_entry
+    from netspout_core.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
     from netspout_core.telemetry_dispatcher import dispatcher
     from netspout_core.spl_engine import SPLExecutionEngine
     from netspout_core.catalog import catalog_instance, NetSpoutCatalog
@@ -54,36 +56,45 @@ except ImportError:
         )
         from app.graph_engine import TopologyGraph
         from app.log_engine import SplunkLogEngine
+        from app.panos_generator import PanOsGenerator, to_log_entry
+        from app.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
         from app.telemetry_dispatcher import dispatcher
         from app.spl_engine import SPLExecutionEngine
         from app.catalog import catalog_instance, NetSpoutCatalog
         from app.exporter_session import ExporterSession
     except ImportError:
-        # Third fallback: try relative imports
+        from models import (
+            TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
+            ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
+            UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
+            RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
+            TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
+            FlowRecord, TransportResult, CompanionControlManifest
+        )
+        from graph_engine import TopologyGraph
+        from log_engine import SplunkLogEngine
+        from exporter_session import ExporterSession
+        from telemetry_dispatcher import dispatcher
         try:
-            from .models import (
-                TopologyState, Node, Edge, NodeType, ScenarioType, LogEntry, NodePowerState,
-                ScenarioPhase, ValidationType, ValidationStatus, ValidationRule, ValidationResult,
-                UseCaseContract, ScenarioPhaseDefinition, ScenarioContract, GroundTruthRecord,
-                RunManifest, ScenarioRunRequest, TelemetryTransportConfig,
-                TelemetryType, QueryMechanism, EvidenceRole, EvidenceDestination, EvidenceObservation, UnifiedRunEvidence,
-                FlowRecord, TransportResult, CompanionControlManifest
-            )
-            from .graph_engine import TopologyGraph
-            from .log_engine import SplunkLogEngine
-            from .exporter_session import ExporterSession
-            from .telemetry_dispatcher import dispatcher
-            try:
-                from .spl_engine import SPLExecutionEngine
-            except ImportError:
-                SPLExecutionEngine = None
-            try:
-                from .catalog import catalog_instance, NetSpoutCatalog
-            except ImportError:
-                catalog_instance = None
-                NetSpoutCatalog = None
+            from panos_generator import PanOsGenerator, to_log_entry
         except ImportError:
-            raise ImportError("Failed to import required modules. Check that app.models and other app modules exist.")
+            PanOsGenerator = None
+            to_log_entry = None
+        try:
+            from snmp_metrics import SnmpMetricGenerator
+            from snmp_metrics import to_log_entry as snmp_to_log_entry
+        except ImportError:
+            SnmpMetricGenerator = None
+            snmp_to_log_entry = None
+        try:
+            from spl_engine import SPLExecutionEngine
+        except ImportError:
+            SPLExecutionEngine = None
+        try:
+            from catalog import catalog_instance, NetSpoutCatalog
+        except ImportError:
+            catalog_instance = None
+            NetSpoutCatalog = None
 
 
 # =========================================================================
@@ -972,17 +983,65 @@ SUPPORTED_SCENARIO_IDS = frozenset({
     "mixed_backbone_optical",
     "mixed_edge_breach",
     "mixed_sase_degradation",
+    "network_security_correlation",
     "openconfig_mdt_streaming",
+    "paloalto_threat_investigation",
+    "payment_processing_degradation",
     "service_provider_cisco",
     "sql_injection",
 })
 
 
 class ScenarioRunner:
+    #: Maps the engine's ScenarioPhase names onto PAN-OS generator incident phases.
+    _PANOS_PHASE_BY_RUN_PHASE = {
+        ScenarioPhase.INITIALIZE.value: "baseline",
+        ScenarioPhase.BASELINE.value: "baseline",
+        ScenarioPhase.DEGRADE.value: "suspicious",
+        ScenarioPhase.FAULT.value: "detection",
+        ScenarioPhase.PROPAGATE.value: "detection",
+        ScenarioPhase.FAILOVER.value: "containment",
+        ScenarioPhase.RECOVER.value: "recovery",
+        ScenarioPhase.VALIDATE.value: "recovery",
+        ScenarioPhase.COMPLETE.value: "recovery",
+    }
+
+    #: Per-phase native PAN-OS record counts. Honoured exactly by the generator,
+    #: so "count=N" really does produce N events for every phase.
+    _PANOS_COUNTS = {
+        "baseline": {"traffic": 4, "threat": 1, "system": 1},
+        "suspicious": {"traffic": 6, "threat": 3, "system": 2},
+        "detection": {"traffic": 5, "threat": 6, "system": 2},
+        "containment": {"traffic": 6, "threat": 2, "system": 3},
+        "recovery": {"traffic": 4, "threat": 1, "system": 1},
+    }
+
+    #: Cross-source scenario keeps the security mix leaner so the Cisco-side
+    #: degradation signal stays attributable next to the PAN-OS evidence.
+    _PANOS_CORRELATION_COUNTS = {
+        "baseline": {"traffic": 3, "threat": 0, "system": 1},
+        "suspicious": {"traffic": 4, "threat": 2, "system": 1},
+        "detection": {"traffic": 4, "threat": 4, "system": 2},
+        "containment": {"traffic": 4, "threat": 1, "system": 2},
+        "recovery": {"traffic": 3, "threat": 0, "system": 1},
+    }
+
+    #: Modeled SNMP metric samples per phase for the metric-bearing scenarios.
+    _SNMP_COUNTS = {
+        "baseline": 2,
+        "suspicious": 3,
+        "detection": 4,
+        "containment": 3,
+        "recovery": 2,
+    }
+
     def __init__(self):
         self.round_robin_counter = 0
         self.lateral_step = 0
         self.telemetry_tick = 0
+        #: Scenario-id -> SnmpMetricGenerator, so counter state persists across
+        #: phases within a scenario (see _emit_snmp_metrics).
+        self._snmp_generators: Dict[str, Any] = {}
         self.malicious_ips = [
             "198.51.100.42", "203.0.113.88", "198.51.100.199",
             "45.33.32.156", "185.220.101.5", "194.26.29.112",
@@ -1538,6 +1597,12 @@ class ScenarioRunner:
             "sql_injection": get_bypassed_topology,
             "mixed_edge_breach": get_mixed_edge_topology,
             "ddos_attack": get_default_secure_topology,
+            # Phase 4C recovery: PAN-native and cross-source correlation scenarios.
+            # Reuse the mixed-edge fabric, which already carries a Palo Alto NGFW,
+            # a Catalyst switch and an internal app server.
+            "paloalto_threat_investigation": get_mixed_edge_topology,
+            "network_security_correlation": get_mixed_edge_topology,
+            "payment_processing_degradation": get_mixed_edge_topology,
         }
         factory = topology_factories.get(scen_id)
         if factory is None:
@@ -1547,6 +1612,35 @@ class ScenarioRunner:
     # -------------------------------------------------------------------------
     # Specialized Phase Telemetry Generator
     # -------------------------------------------------------------------------
+    def _emit_snmp_metrics(
+        self, scen_id: str, phase: str, pan_phase: str, count: int
+    ) -> List[LogEntry]:
+        """Modeled SNMP metric samples for a scenario phase.
+
+        Deliberately labelled *modeled*: no socket is opened and no device is
+        polled. Records carry the catalog-classified metric sourcetype so the
+        dispatcher routes them to the metrics index through the existing path.
+        """
+        if SnmpMetricGenerator is None or snmp_to_log_entry is None:
+            raise RuntimeError(
+                "snmp_metrics is unavailable in this runtime; cannot emit "
+                "SNMP-derived metric telemetry"
+            )
+        # One generator per scenario id, held on the runner, so counter state
+        # accumulates across phases and rollover/reset maths is exercised for
+        # real instead of being asserted.
+        cache = self._snmp_generators.setdefault(
+            scen_id,
+            SnmpMetricGenerator(seed=f"{scen_id}|snmp"),
+        )
+        out: List[LogEntry] = []
+        for rec in cache.generate(count=count, phase=pan_phase):
+            entry = snmp_to_log_entry(rec)
+            entry.netspout_scenario_id = scen_id
+            entry.netspout_phase = phase
+            out.append(entry)
+        return out
+
     def _generate_phase_telemetry(
         self,
         phase: str,
@@ -2526,6 +2620,100 @@ class ScenarioRunner:
                     src_port=48214, dest_port=443, proto="TCP",
                     action="allowed", signature="Perimeter DDoS Defense Posture Verified",
                     status="normal"
+                ))
+
+        # ---------------------------------------------------------------------
+        # PHASE 4C: NATIVE PAN-OS + CROSS-SOURCE CORRELATION SCENARIOS
+        # Telemetry comes from PanOsGenerator (native PAN-OS CSV, canonical
+        # pan:* sourcetypes) bridged onto LogEntry so it flows through the
+        # existing TelemetryDispatcher -> HEC path. Counts are honoured exactly.
+        # ---------------------------------------------------------------------
+        elif scen_id in ("paloalto_threat_investigation",
+                         "network_security_correlation",
+                         "payment_processing_degradation"):
+            pan_phase = self._PANOS_PHASE_BY_RUN_PHASE.get(phase, "baseline")
+            if PanOsGenerator is None or to_log_entry is None:
+                raise RuntimeError(
+                    "panos_generator is unavailable in this runtime; the PAN-OS "
+                    "scenarios cannot emit native telemetry without it"
+                )
+            pan_gen = PanOsGenerator(
+                # Stable string seed => byte-reproducible values for a given
+                # (scenario, phase) without depending on PYTHONHASHSEED.
+                seed=f"{scen_id}|{phase}",
+                devices=[fw_node.name or fw_node.id],
+            )
+
+            if scen_id == "paloalto_threat_investigation":
+                counts = self._PANOS_COUNTS[pan_phase]
+                for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                threats = pan_gen.generate("THREAT", counts["threat"], phase=pan_phase)
+                correlation = threats[0].raw[:32] if threats else ""
+                for rec in threats:
+                    logs.append(to_log_entry(rec, correlation_id=correlation))
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    # Traffic that shares the threat session carries the same
+                    # correlation id so an investigation can pivot on it.
+                    logs.append(to_log_entry(rec, correlation_id=correlation))
+
+            elif scen_id == "network_security_correlation":
+                counts = self._PANOS_CORRELATION_COUNTS[pan_phase]
+                # Cross-source: Cisco interface/syslog + PAN-OS security telemetry
+                # on the same incident window, so a degradation can be correlated
+                # with the security event that caused it.
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("THREAT", counts["threat"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                if counts["system"]:
+                    for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                        logs.append(to_log_entry(rec))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=switch_node,
+                    src_ip=getattr(switch_node, "ip_address", "") or "10.128.0.1",
+                    dest_ip=getattr(srv_node, "ip_address", "") or "10.128.2.10",
+                    interface="GigabitEthernet1/0/24",
+                    action=("alerted" if pan_phase in ("detection", "containment") else "allowed"),
+                    status=("degraded" if pan_phase in ("detection", "containment") else "normal"),
+                    signature=(
+                        "%LINECARD-3-IF_XCVR_RXCD_ERROR: Rx CD error on GigabitEthernet1/0/24 "
+                        "correlated to firewall security deny"
+                        if pan_phase in ("detection", "containment")
+                        else "Interface Link Up / Normal Forwarding Baseline"
+                    ),
+                ))
+                # SNMP-derived performance metrics for the same window, so the
+                # capacity side of the correlation is measurable, not narrated.
+                logs.extend(self._emit_snmp_metrics(
+                    scen_id, phase, pan_phase, self._SNMP_COUNTS[pan_phase]
+                ))
+
+            else:  # payment_processing_degradation
+                counts = self._PANOS_COUNTS[pan_phase]
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("THREAT", counts["threat"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                # Payment-path application delivery evidence on the access switch
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=switch_node,
+                    src_ip=getattr(srv_node, "ip_address", "") or "10.128.2.10",
+                    dest_ip=getattr(fw_node, "ip_address", "") or "10.128.1.1",
+                    interface="GigabitEthernet1/0/12",
+                    action=("dropped" if pan_phase in ("detection", "containment") else "allowed"),
+                    status=("degraded" if pan_phase in ("detection", "containment") else "normal"),
+                    signature=(
+                        "%SYS-3-AUTH_KFAIL: Payment edge authorization path degraded "
+                        "while firewall inspection denied sessions"
+                        if pan_phase in ("detection", "containment")
+                        else "Payment Edge Forwarding Healthy"
+                    ),
+                ))
+                logs.extend(self._emit_snmp_metrics(
+                    scen_id, phase, pan_phase, self._SNMP_COUNTS[pan_phase]
                 ))
 
         else:

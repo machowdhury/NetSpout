@@ -4,6 +4,7 @@ Phase 4C: Test SNMP metrics ingestion into Splunk.
 Generate SNMP metrics and send them to HEC for mstats testing.
 """
 
+import os
 import sys
 import json
 import time
@@ -24,9 +25,14 @@ def test_snmp_metrics_ingestion():
     
     # Configuration
     hec_url = "https://localhost:18088/services/collector"
-    hec_token = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+    hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+    if not hec_token:
+        raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
     splunk_api = "https://localhost:18089"
-    splunk_auth = ("admin", "Lab-Aa1!Ko2wmmP0nL22v8w2iQvxLDNYWxFMI5Qm")
+    splunk_password = os.getenv('SPLUNK_PASSWORD')
+    if not splunk_password:
+        raise ValueError("SPLUNK_PASSWORD environment variable not set")
+    splunk_auth = ("admin", splunk_password)
     
     run_id = f"SNMP-PHASE4C-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     

@@ -22,7 +22,7 @@
       "web_url": "https://localhost:18000",
       "api_url": "https://localhost:18089",
       "hec_url": "https://localhost:18088",
-      "hec_token": "1379bbf9-5535-48d8-ab4e-b20e2ff6deee",
+      "hec_token": "[REDACTED]",
       "index": "idx_ta_ise_test",
       "status": "OPERATIONAL"
     },

@@ -1,0 +1,724 @@
+{
+ "run_id": "NS-20261029-12083179",
+ "scenario_id": "paloalto_threat_investigation",
+ "scenario_name": "Palo Alto Networks Threat Investigation",
+ "topology_id": "mixed_edge",
+ "scenario_maturity": "CONTRACTED",
+ "seed": 51001,
+ "time_mode": "TEST",
+ "transport_mode": "DIRECT_TO_SPLUNK",
+ "native_protocol": null,
+ "start_time": 1793279281.298419,
+ "end_time": 1793279283.148345,
+ "duration_sec": 1.85,
+ "phases_executed": [
+  "INITIALIZE",
+  "BASELINE",
+  "DEGRADE",
+  "FAULT",
+  "FAILOVER",
+  "RECOVER",
+  "VALIDATE",
+  "COMPLETE"
+ ],
+ "affected_devices": [
+  "palo_alto"
+ ],
+ "expected_sourcetypes": [
+  "pan:traffic",
+  "pan:threat",
+  "pan:system"
+ ],
+ "actual_generated_counts": {
+  "pan:system": 9,
+  "pan:threat": 13,
+  "pan:traffic": 25
+ },
+ "total_events_generated": 47,
+ "ground_truth_records": [
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "INITIALIZE",
+   "timestamp": 1793279281.298651,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "node-meraki-ap",
+    "node-cat-switch",
+    "node-pan-fw",
+    "node-internal-srv"
+   ],
+   "affected_edges": [
+    "e-b1",
+    "e-b2",
+    "e-b3"
+   ],
+   "expected_observations": [
+    "Topology initialized",
+    "Initial graph state snapshotted"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "BASELINE",
+   "timestamp": 1793279281.298657,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Mostly allow actions",
+    "informational system severity"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "DEGRADE",
+   "timestamp": 1793279281.373438,
+   "intentional_fault": {
+    "type": "link_degradation",
+    "target_edge": "e-b1",
+    "loss_pct": 14.5,
+    "latency_ms": 185.0
+   },
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [
+    "e-b1"
+   ],
+   "expected_observations": [
+    "First threat records",
+    "rising deny share"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "FAULT",
+   "timestamp": 1793279281.446508,
+   "intentional_fault": {
+    "type": "primary_fault",
+    "description": "Exploitation attempt detected by PAN-OS threat engine"
+   },
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "palo_alto"
+   ],
+   "affected_edges": [],
+   "expected_observations": [
+    "high or critical severity threats",
+    "correlated denied sessions"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "FAILOVER",
+   "timestamp": 1793279281.5237482,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "deny/drop dominant traffic",
+    "critical system severity"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "RECOVER",
+   "timestamp": 1793279281.593239,
+   "intentional_fault": null,
+   "intentional_recovery": {
+    "type": "full_restoration",
+    "status": "restored"
+   },
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "allow actions restored",
+    "informational system severity"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "VALIDATE",
+   "timestamp": 1793279281.625509,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Evaluating validation rules against generated telemetry"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-12083179",
+   "scenario_id": "paloalto_threat_investigation",
+   "phase": "COMPLETE",
+   "timestamp": 1793279281.6255271,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Scenario lifecycle complete"
+   ],
+   "expected_secondary_effects": []
+  }
+ ],
+ "validation_results": [],
+ "overall_validation": "BLOCKED",
+ "dispatch_results": {
+  "evt-1d0e81ab": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-d68031c0": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-aaaba942": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-53a89c18": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-b60f270f": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-29e92f79": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-9b56649d": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-17e48b5c": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-0e40dd6b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-833aba9a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-2b02d185": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-59eae67e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-d013be38": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-fb8360fd": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-fbbe6478": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-5e98a407": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-8caed70a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-31b8e347": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-335170d6": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ba50de5d": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-52f66ff2": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bc1db7a1": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bee91c4f": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-fe8228aa": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ddff418e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a54c619a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-c3158d97": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-6d8c0d2a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-59a722e3": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-76bd3a1a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-61afa0f4": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-edd76519": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a6559a44": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-18be5aeb": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-6ed5cf6d": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-edd088b5": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-20f509b2": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-457a070c": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-69c1a51e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-f951a458": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ddcc0031": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-76c90a74": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bc237c6b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-75b15f94": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bc52c331": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-3fc114a1": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-24f2e3d4": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  }
+ },
+ "dispatch_attempted": 47,
+ "dispatch_succeeded": 47,
+ "dispatch_failed": 0,
+ "observed_count": 0,
+ "observation_status": "OBSERVATION_PENDING",
+ "destination_validation": "PENDING",
+ "splunk_search_query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-12083179\"",
+ "splunk_metric_query": null,
+ "event_observed_count": 0,
+ "metric_observed_count": 0,
+ "observation_completeness_pct": 0.0,
+ "evidence_summary": {
+  "run_id": "NS-20261029-12083179",
+  "scenario_id": "paloalto_threat_investigation",
+  "destinations": [
+   {
+    "destination_id": "splunk_event_idx_network_ops",
+    "name": "Splunk Event Index (idx_network_ops)",
+    "telemetry_type": "EVENT",
+    "target_index": "idx_network_ops",
+    "query_mechanism": "SPL_SEARCH",
+    "query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-12083179\"",
+    "observed_count": 0,
+    "expected_count": 47,
+    "status": "ERROR",
+    "role": "REQUIRED",
+    "errors": [
+     "Splunk search credentials are not configured"
+    ]
+   }
+  ],
+  "total_generated": 47,
+  "total_dispatched": 47,
+  "total_observed": 0,
+  "event_observed_count": 0,
+  "event_expected_count": 47,
+  "metric_observed_count": 0,
+  "metric_expected_count": 0,
+  "observation_completeness_pct": 0.0,
+  "observation_status": "PENDING",
+  "contract_validation": "NOT_RUN",
+  "required_evidence_satisfied": false,
+  "errors": [
+   "Splunk search credentials are not configured"
+  ]
+ },
+ "timing_claim": null,
+ "timing_value": null,
+ "timing_unit": null,
+ "timing_classification": "NOT_APPLICABLE",
+ "timing_notes": null,
+ "errors": [],
+ "native_transport_result": null,
+ "companion_manifest": null,
+ "native_flow_records": [],
+ "native_snmp_result": null,
+ "native_snmp_pdus": [],
+ "snmp_e2e_scorecard": null,
+ "snmp_normalized_events": [],
+ "snmp_polling_evidence": null,
+ "gnmi_e2e_scorecard": null,
+ "gnmi_collector_result": null,
+ "gnmi_normalized_records": [],
+ "generation_wall_seconds": 1.85,
+ "event_index": "idx_network_ops",
+ "metric_index": "idx_performance_metrics",
+ "hec_url": "https://127.0.0.1:18088/services/collector",
+ "started_at_utc": "2026-10-29T13:08:01.298396+00:00",
+ "generated_records": 47,
+ "generated_by_sourcetype": {
+  "pan:system": 9,
+  "pan:threat": 13,
+  "pan:traffic": 25
+ },
+ "generated_metric_points": 0,
+ "hec_accepted_records": 47,
+ "hec_rejected_records": 0,
+ "hec_reject_reasons": [],
+ "indexed_event_records": 47,
+ "indexed_by_sourcetype": {
+  "pan:system": 9,
+  "pan:threat": 13,
+  "pan:traffic": 25
+ },
+ "indexed_indexes": [
+  "idx_network_ops"
+ ],
+ "event_spl": "index=* netspout_run_id=\"NS-20261029-12083179\" | stats count by sourcetype, index",
+ "event_spl_rows": [
+  {
+   "sourcetype": "pan:system",
+   "index": "idx_network_ops",
+   "count": "9"
+  },
+  {
+   "sourcetype": "pan:threat",
+   "index": "idx_network_ops",
+   "count": "13"
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "index": "idx_network_ops",
+   "count": "25"
+  }
+ ],
+ "metric_query_spl": "| mstats avg(*) span=1m where index=idx_performance_metrics netspout_run_id=\"NS-20261029-12083179\"",
+ "indexed_metric_rows": [
+  {
+   "preview": false,
+   "lastrow": true
+  }
+ ],
+ "indexed_metric_names": [],
+ "indexed_metric_points": 0,
+ "metric_query_spl_extended_rows": []
+}

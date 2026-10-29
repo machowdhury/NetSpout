@@ -102,10 +102,25 @@ class DestinationManager:
     """Manages Splunk destinations with Docker and external support."""
 
     def __init__(self, config_file: Optional[str] = None):
-        self.config_file = config_file or "destinations.json"
+        self.config_file = config_file or self._default_config_file()
         self.destinations: Dict[str, SplunkDestination] = {}
         self.active_destination_id: Optional[str] = None
         self.load_destinations()
+
+    @staticmethod
+    def _default_config_file() -> str:
+        """Resolve the destinations file location-independent.
+
+        A bare relative path made the active destination depend on the
+        process CWD, so running from the repo root silently loaded a stale
+        copy (with a metric index the HEC token does not allow). Anchor to
+        this module's backend/ directory unless an explicit override is set.
+        """
+        override = os.environ.get("PULSEFORGE_DESTINATIONS_FILE")
+        if override:
+            return override
+        backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        return os.path.join(backend_dir, "destinations.json")
 
     def load_destinations(self):
         """Load destinations from config file."""

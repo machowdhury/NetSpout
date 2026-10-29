@@ -17,7 +17,7 @@ Phase 4A control run successfully restored baseline functionality. Coverage anal
 
 ### Infrastructure Operational
 - Splunk Docker lab (`pf-native-lab`): Healthy, 29+ hours uptime
-- HEC token working: `1379bbf9-5535-48d8-ab4e-b20e2ff6deee`
+- HEC token working: `[REDACTED]`
 - Backend server: FastAPI operational with all dependencies
 - Destination configuration: Updated for current lab ports
 

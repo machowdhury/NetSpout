@@ -45,7 +45,7 @@ $$\\text{GENERATED (10)} \\neq \\text{DISPATCHED (10)} \\neq \\text{OBSERVED (10
 | **Splunk Enterprise** | Version 10.2.7 | Docker container `splunk-network-data-blaster` |
 | **Splunk Web** | `http://localhost:8800` | Context: `netspout` and `search` |
 | **Splunk HEC** | `https://127.0.0.1:8888/services/collector` | Token `00000000-0000-0000-0000-000000000000` |
-| **Splunk REST** | `https://127.0.0.1:8889` | Basic Auth `admin:SplunkPassword123!` |
+| **Splunk REST** | `https://127.0.0.1:8889` | Basic Auth `admin:<your-splunk-admin-password>` |
 | **Target Index** | `idx_network_ops` | Defined in `indexes.conf` |
 | **NetSpout Daemon** | FastAPI 0.115 on `http://localhost:8081` | Background task `task-14403` |
 | **Run Correlation ID** | `NS-20260925-3456ff87` | Immutable run correlation stamp |

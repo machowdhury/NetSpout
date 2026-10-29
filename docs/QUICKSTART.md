@@ -20,7 +20,7 @@ docker compose up -d
 ```
 
 ### Step 3: Access Web Interfaces
-- **Splunk Enterprise**: [`http://localhost:8000`](http://localhost:8000) (Login: `admin` / `SplunkPassword123!`)
+- **Splunk Enterprise**: [`http://localhost:8000`](http://localhost:8000) (Login: `admin` / `<your-splunk-admin-password>`)
   - The NetSpout app is pre-installed at `/en-US/app/netspout/guided_onboarding`.
   - The HEC token `00000000-0000-0000-0000-000000000000` is pre-provisioned for the local `DEMO` profile.
 - **NetSpout Standalone NOC UI**: [`http://localhost:8081`](http://localhost:8081) (Visibly badged as `DEMO / LOCAL LAB`).
@@ -52,7 +52,7 @@ pip install -r requirements.txt
 export NETSPOUT_HEC_URL="https://127.0.0.1:8088/services/collector/event"
 export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
 export NETSPOUT_SPLUNK_USER="admin"
-export NETSPOUT_SPLUNK_PASSWORD="SplunkPassword123!"
+export NETSPOUT_SPLUNK_PASSWORD="<your-splunk-admin-password>"
 
 # Launch NetSpout Backend
 python3 run.py

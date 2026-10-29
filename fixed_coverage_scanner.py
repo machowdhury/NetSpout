@@ -4,6 +4,7 @@ Fixed PulseForge Coverage Scanner with corrected methodology.
 Reconciles Codex live acceptance evidence with actual catalog capabilities.
 """
 
+import os
 import sys
 import json
 import csv
@@ -448,7 +449,9 @@ def run_live_regression_test():
     print("\n🔍 Testing Splunk HEC connectivity...")
     try:
         import requests
-        hec_token = "1379bbf9-5535-48d8-ab4e-b20e2ff6deee"
+        hec_token = os.getenv('PULSEFORGE_LAB_HEC_TOKEN')
+        if not hec_token:
+            raise ValueError("PULSEFORGE_LAB_HEC_TOKEN environment variable not set")
         response = requests.post(
             "https://localhost:18088/services/collector",
             headers={"Authorization": f"Splunk {hec_token}"},

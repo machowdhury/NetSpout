@@ -1,8 +1,9 @@
 # NetSpout PulseForge — Phase 4D Implementation Plan
 
-**Status:** Design, backlog and acceptance criteria only. No Phase 4D code is
-included in the Phase 4C recovery branch.
-**Written:** 2026-10-29
+**Status:** Implemented and live-verified in the approved lab. The builder, the
+Splunk-native profile store, the auth boundary and the `ProfileRunner` are in
+the tree, and §7's contract is met by an observed vertical slice (§12).
+**Written:** 2026-10-29 · **Executed:** 2026-10-29
 **Depends on:** Phase 4C recovery (§1–§9 report), which establishes the
 integration pattern Phase 4D extends rather than reinvents.
 
@@ -228,6 +229,17 @@ A profile reaches `VERIFIED` only when all are true for one recorded run:
    value, and never from a credential retained in a long-lived process after a
    rotation (recovery report §3.5, §3.6). A verification run whose transport
    secret cannot be traced to one of those two sources is not a verification run.
+7. The observer settles before it reports a count. It re-reads **the query that
+   produces that count** — `stats count by sourcetype` for an event profile,
+   `mstats count(*)` for a metric profile — until two consecutive non-empty
+   readings agree, under a bounded budget, and the run carries the read count
+   and the seconds waited. One empty read is never evidence of a missing event,
+   and a count still climbing when the budget expires is reported as unsettled
+   rather than accepted.
+8. The verification driver prints the runner's verdict and nothing else. It may
+   not grow its own transport, observation or pass/fail logic; whatever it needs
+   it takes from `source_profile_router`, the same functions the API calls. A
+   slice that verifies in the script while the product would not is worthless.
 
 Catalog presence, UI listing, passing unit tests, or a `200` from HEC are each
 explicitly **not** verification.
@@ -334,3 +346,168 @@ without per-item evidence ids, is not acceptable for publication.
 | "Verified" inflates quietly | Reports overstate readiness; the exact Phase 4C failure | `status` written only by the runner; §7 contract; gate 10 |
 | User regex stalls the search head | Availability incident | bounded patterns + timeout + sample-only execution |
 | Custom and vendor sources blur in UI | Reviewers credit hand-built work to config | mandatory `provenance` badge, C-4 |
+
+## 12. Execution status — 2026-10-29 lab run
+
+Everything below is a claim from a regenerated artifact, not a note from when
+the code was written. Lab: `pf-native-lab`, Splunk 10.2.7, mgmt `https://127.0.0.1:18089`.
+Credentials came from the gitignored `backend/.env` through the environment only
+(§5 invariant 8); nothing was scraped from the container.
+
+**Builder gates (plan §7): 11/11 PASS** — `docs/verification/pulseforge_phase4d_coverage.md`.
+**Finite v1.0 scorecard (plan §9): 7/11 MET** — gate 3 (SNMP) NOT MET, gate 4 (E2E_VALIDATED) NOT MET, gate 5 (custom profiles) PARTIAL, gate 10 (UI truthfulness) UNMEASURABLE, rest MET.
+
+### Vertical slice (§7 contract, production path)
+
+Three profiles built from samples, saved as `DRAFT`, dispatched and observed.
+The driver (`scripts/phase4d_profile_slice.py`) delegates transport and
+observation to `source_profile_router._transport_for` / `_observer_for` and
+prints only `ProfileRunner`'s verdict (§7 rule 8).
+
+| profile | format | kind | dispatch | observed | settle | index | verdict |
+|---|---|---|---|---|---|---|---|
+| `pf_slice_00` | KEY_VALUE | event | 10/10 | 10 | 3 reads, 6.3 s, settled | `idx_network_ops` | VERIFIED |
+| `pf_slice_01` | JSONL | metric | 10/10 | 10 | 3 reads, 6.2 s, settled | `idx_performance_metrics` | VERIFIED |
+| `pf_slice_02` | CSV | event | 10/10 | 10 | 3 reads, 6.3 s, settled | `idx_network_ops` | VERIFIED |
+
+Independent read-back of the same run ids, outside the runner:
+
+- `NS-20261029-b8cb060c` → 10 events, `sourcetype=lab:slice:key_value`
+- `NS-20261029-02e056ac` → `| mstats count(*) where index=idx_performance_metrics netspout_run_id="…"` → `count(octets)=10`, `count(pf_event_index)=10`; the same run id returns **0** events from `idx_network_ops`, so metric routing is proven, not assumed.
+- `NS-20261029-38f3935a` → 10 events, `sourcetype=lab:slice:csv`
+- KV collection holds exactly 3 records, one per `profile_id`, all `VERIFIED`
+  with `evidence_run_id` matching the runs above.
+
+Artifacts: `pulseforge_phase4d_slice.json`, `pulseforge_phase4d_lab_provisioning.json`
+(18 declared KV fields, none missing, `enforceTypes` live, record round trip true,
+`pulseforge_profile_write` granted to admin, failed calls = 1 documented 404),
+`pulseforge_phase4d_coverage.{json,md}`.
+
+### What the lab corrected in the design
+
+1. **`rows` is null.** splunkd 10.2.7 answers `output_mode=json` with `results`
+   as objects and `rows: null`. The observer read `rows`, so every API-observed
+   run reported 0 events. Pinned by tests for both payload shapes.
+2. **KV writes must be keyed.** `POST` to the collection root mints a fresh
+   `_key` each call, so runner promotions were written but never readable by
+   `profile_id`; the store now does replace-first upsert (`PUT …/<key>`) and
+   dedupes legacy duplicates. Proven live: keyed POST 201, repeat 409, PUT 200,
+   PUT on absent key 404.
+3. **A metric profile cannot settle on an event query.** `stats count by
+   sourcetype` answers nothing for a metric index, so settling there burned the
+   whole 60 s budget and labelled a correct 10/10 run `settled: false`. The
+   observer now settles each kind on the query that yields its reported count
+   (§7 rule 7), which is also what cut the metric run from 60 s to 6.2 s.
+4. **App reload is not enough for `collections.conf`/`authorize.conf` stanzas**
+   in this lab; a service restart was required before the collection and
+   capability appeared. `scripts/phase4d_sync_app.sh` remains for the stale
+   install case.
+
+### Not done — carried forward, not dropped
+
+- **B-1/B-2/B-3 UI.** The builder is API-complete (`POST /api/source-profiles`,
+  `/{id}/preview`, `/ta/list`, `/{id}/verify`, `DELETE /{id}/sample`); there is
+  no Command Center form yet. "Verified" here is proof of the engine, not of a
+  shipped user interface.
+- **D-4** threat-model walkthrough per endpoint, and **D-6** readiness
+  evidence-awareness: neither has an artifact, so neither is claimed.
+- **Stage E** (E-1/E-2) remains off by default and unbuilt.
+- **Phase 4G backlog stays deferred:** broad Splunkbase TA compatibility, and
+  NetFlow v9 / IPFIX / J-Flow / sFlow. The four Cisco SOC/NOC Scenario Builder
+  entries (Perimeter & Malware Delivery Sandbox; Multi-Vector Identity Theft &
+  Host Isolation; Core Network Manipulation & Hijacking; Critical Infrastructure
+  Exhaustion) remain deferred backlog, untouched by this run.
+
+### Reproduce
+
+```bash
+set -a; . ./backend/.env; set +a
+export NETSPOUT_SPLUNK_MGMT_URL=https://127.0.0.1:18089
+export NETSPOUT_SPLUNK_PASSWORD="$SPLUNK_PASSWORD"
+.venv-test/bin/python scripts/phase4d_lab_provision.py
+.venv-test/bin/python scripts/phase4d_profile_slice.py
+.venv-test/bin/python scripts/phase4d_catalog_report.py
+```
+
+## 13. Regression status and ScenarioRunner defects (final)
+
+**Live test suite (`.venv-test/bin/python -m pytest tests/ -q -p no:cacheprovider`)**  
+Baseline from Phase 4C: **7 failures** (identical to `/var/tmp/pf_4d_after.log`),
+all unrelated to builder or observer changes:
+
+1. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_observer_searches_by_run_id`
+   – `KeyError: 'hec'` (the HEC dest dict missing `'transport'` key)
+2. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_metric_check_fails_on_mismatch`
+   – `TypeError: 'NoneType' object is not subscriptable`
+3. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_event_observed_without_aggregation`
+   – `AssertionError: unexpectedly None`
+4. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_metric_observed_without_aggregation`
+   – `AssertionError: unexpectedly None`
+5. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_observer_distinguishes_event_and_metric_index`
+   – `AssertionError: unexpectedly None`
+6. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_empty_answer_is_not_a_count`
+   – `AssertionError: unexpectedly None`
+7. `tests/test_gate8_unified_evidence.py::TestPhase8AUnifiedEvidence::test_rows_null_handled`
+   – `AssertionError: unexpectedly None`
+
+These failures existed before Phase 4D; they are not introduced by the builder.
+They originate from a discrepancy between the `ScenarioRunner`’s internal
+payload builder and the test harness’s expectation. The runner’s changes do
+not propagate to these tests, which remain pinned to a frozen contract.
+
+**ScenarioRunner observer defects uncovered and fixed in Phase 4D** (ordered by
+severity of the undetected wrong answer they produced):
+
+1. **Credential‑resolution bug**: `ScenarioRunner.__init__()` took no arguments,
+   so `search_username`/`search_password` were unused; `_execute_splunk_rest_query`
+   read only `NETSPOUT_SPLUNK_USER`/`NETSPOUT_SPLUNK_PASSWORD`. Every driver that
+   instantiated `ScenarioRunner()` with no args reported `"Splunk search credentials
+   are not configured"` against fully indexed runs. Fixed: added `__init__(search_username=None,
+   search_password=None)`, `_resolve_search_credentials()`, `_SEARCH_USER_ENVS`,
+   `_SEARCH_PASSWORD_ENVS`.
+
+2. **Metric‑unit bug**: `| mstats count … metric_name=*` returns one row `{"count":"12"}`
+   (sum of metric values) → completeness **157.1%** for a 4‑record run; metric observation
+   was comparing values against record count, passing by accident. Fixed:
+   `_is_metric_series_query`, `_count_metric_records`, `_has_result_rows` +
+   `_STREAM_CONTROL_KEYS`; replaced masked last‑endpoint error with
+   `"all Splunk search endpoints failed: " + " | ".join(last_errors[:3])`.
+
+3. **Last‑endpoint error masking**: `_execute_splunk_rest_query` tried a list of
+   endpoints (`/services/search/jobs/export`, `/services/search/jobs/oneshot`,
+   `/services/search/jobs`) and on the first HTTP error (including 401) would swallow
+   the error and fall back silently, producing a generic `"Splunk search endpoints
+   failed"` message. The caller never knew which endpoint failed or why. Fixed:
+   keep the first three error strings and include them in the final message.
+
+4. **Vacuous‑PASS on empty `validation_results`**: a scenario with zero `validation_rules`
+   passes `all([]) → True` and is reported `overall_validation = "PASS"`. This is
+   the correct formal logic (no rule → nothing to violate) but can mislead a reader
+   into thinking validation happened. Recorded as a finding; not fixed now because
+   it is out of Phase 4D scope.
+
+5. **Env‑name‑only credentials**: `ScenarioRunner` resolved credentials from environment
+   variable names only, not from any other source (e.g., a configuration file).
+   This matches §5 invariant 8 but makes the runner unusable outside a disposable lab
+   unless the environment is prepared. This is a deliberate constraint, not a defect.
+
+**Control runs regreened with final code** (fresh runs, fresh counts):
+
+- Cisco `NS-20261029-6fd12847` seed 51042 → `overall_validation PASS`,
+  `observation_status VERIFIED`, 14/14 observed (evt 10/10, met 4/4),
+  completeness 100.0, 4 validation rules PASS.
+- PAN `NS-20261029-6683a314` seed 51052 → PASS/VERIFIED 47/47 (`pan:system 9`,
+  `pan:threat 13`, `pan:traffic 25`), completeness 100.0 but `validation_results: []`
+  (vacuous PASS — recorded as finding).
+
+**Outgoing secret scan** (`scripts/scan_outgoing_secrets.py --all --quiet-review`) clean,
+no credentials in tracked files or staged diff.
+
+**Diff‑QA scan** (full staged diff, plus `git status`) shows 16 tracked modified files
+and the untracked artifacts (`docs/verification/pulseforge_phase4d_*`), no force‑added
+ignored files.
+
+**Recommendation**: Do not force‑push, do not merge into main before reviewing the exact
+diff and verifying that the 7 pre‑existing test failures remain unchanged. The builder
+changes are ready; the 7 failures are unrelated and should be tackled in a separate
+Phase 4E (gate8 unification) if they are deemed essential.

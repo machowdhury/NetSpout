@@ -67,32 +67,114 @@ def engine_sourcetypes(catalog_ids):
     return (mapped | literal) & catalog_ids
 
 
+def ta_lab_checked():
+    """Sourcetypes run through real vendor TAs in the isolated validation lab (docs/verification/evidence/ta_validation)."""
+    ev = ROOT / "docs" / "verification" / "evidence" / "ta_validation" / "windows_sysmon.json"
+    if not ev.exists():
+        return set()
+    return {e["sourcetype_emitted"] for e in json.loads(ev.read_text(encoding="utf-8"))["events"] if e["variant"] == "B" and e["indexed"]}
+
+
 def fault_template_only(catalog_ids, native):
     text = (ROOT / "src" / "netspout_core" / FAULT_TEMPLATES).read_text(encoding="utf-8")
     return _literals(text, catalog_ids) - native
 
 
-def raw_equality_passes():
-    passed, live = set(), set()
-    for f in glob.glob(str(ROOT / "catalog" / "**" / "*raw_equality_results.json"), recursive=True):
+def raw_equality_passes(root=None):
+    """Returns (byte-equal PASS sourcetypes, file-level live set, row-level proven set).
+
+    file-level: the result file was written by a HEC-post-then-search harness (posted>0, no post_failures).
+    row-level:  additionally the file records indexed_rows>0 (search returned rows) or the row itself has matches>=1.
+    Earlier batches ran in the retired pf-native-lab (index idx_ta_ise_test); Batch 5/6 ran in netspout_phase4e_splunk.
+    """
+    passed, live, proven = set(), set(), set()
+    for f in glob.glob(str((Path(root) if root else ROOT / "catalog") / "**" / "*raw_equality_results.json"), recursive=True):
         data = json.loads(Path(f).read_text(encoding="utf-8"))
+        harness_ok = data.get("posted", 0) > 0 and not data.get("post_failures")
         for row in data.get("raw_equality", []):
             if row.get("verdict") == "PASS" and row.get("sourcetype"):
                 passed.add(row["sourcetype"])
-                if "live" in Path(f).name:
+                if harness_ok:
                     live.add(row["sourcetype"])
-    return passed, live
+                    if (data.get("indexed_rows") or 0) > 0 or row.get("matches", 0) >= 1:
+                        proven.add(row["sourcetype"])
+    return passed, live, proven
 
 
 def evidence_indexed(catalog_ids):
     """Sourcetypes named in committed live-run evidence files (JSON results only, not prose)."""
     found = set()
     for f in glob.glob(str(OUT / "*.json")) + glob.glob(str(OUT / "evidence" / "**" / "*.json"), recursive=True):
-        if "reconciliation" in f or "demo_platform" in f:  # catalog dump / unverified platform demo: not live-ingest evidence
+        if "reconciliation" in f or "demo_platform" in f or "ta_validation" in f:  # catalog dump / unverified platform demo: not live-ingest evidence
             continue
         text = Path(f).read_text(encoding="utf-8")
         found |= {s for s in catalog_ids if f'"{s}"' in text}
     return found
+
+
+def reconciliation(ids, rows_out):
+    """Origin arithmetic for the native count: pre-batch baseline (old scanner), scanner corrections, then each batch's net new."""
+    from netspout_core.log_engine import SplunkLogEngine as E
+    base = ROOT / "src" / "netspout_core"
+    maps = {a: set(getattr(E, a)) for a in dir(E) if a.endswith("SOURCE_SOURCETYPES")}
+    older = set().union(*[v for a, v in maps.items() if not a.startswith(("UNIVERSE_BATCH5", "UNIVERSE_BATCH6"))]) & ids
+    old_lit = set()
+    for f in ("log_engine.py", "panos_generator.py", "snmp_engine.py", "gnmi_engine.py"):  # the Phase 3-4 scanner's exact module list and patterns
+        text = (base / f).read_text(encoding="utf-8")
+        for st in ids:
+            q = re.escape(st)
+            if re.search(r"sourcetype\s*=\s*[\"']" + q + r"[\"']", text) or re.search(r"[\"'](?:sourcetype|splunk_sourcetype)[\"']\s*:\s*[\"']" + q + r"[\"']", text):
+                old_lit.add(st)
+    baseline = older | old_lit
+    now_native = {o["sourcetype"] for o in rows_out if o["generator"] == "NATIVE_ENGINE"}
+    ub5 = set(maps.get("UNIVERSE_BATCH5_SOURCE_SOURCETYPES", ())) & ids
+    ub6 = set(maps.get("UNIVERSE_BATCH6_SOURCE_SOURCETYPES", ())) & ids
+    corrections = (now_native - ub5 - ub6) - baseline
+    b5_new = ub5 - baseline - corrections
+    b6_new = ub6 - baseline - corrections - ub5
+    return {"pre_batch_baseline": len(baseline), "discovery_corrections": sorted(corrections), "batch5_registered": len(ub5),
+            "batch5_net_new": len(b5_new), "batch5_already_native": sorted(ub5 & (baseline | corrections)), "batch6_registered": len(ub6),
+            "batch6_net_new": len(b6_new), "sum": len(baseline) + len(corrections) + len(b5_new) + len(b6_new), "now_native": len(now_native)}
+
+
+def lost_grounding_count():
+    """Active catalog sourcetypes that no longer get an unrelated vendor-level sample in Single Event mode."""
+    from netspout_core.generator_modes import TelemetryGeneratorService
+    from netspout_core.vendor_catalog import get_vendor_by_id
+    svc = TelemetryGeneratorService()
+    rows = [r for r in svc.catalog._sourcetypes if r.get("status") == "active"]
+    per_vendor = {}
+    for r in rows:
+        per_vendor[r["vendor_id"]] = per_vendor.get(r["vendor_id"], 0) + 1
+    n = 0
+    for r in rows:
+        if svc._universe_source(r["splunk_sourcetype"])[0]:
+            continue
+        events, _, _ = svc.get_grounded_samples(r["splunk_sourcetype"], vendor_id=r["vendor_id"])
+        vendor = get_vendor_by_id(r["vendor_id"])
+        n += (not events) and bool(vendor and vendor.get("sample_events")) and per_vendor[r["vendor_id"]] > 1
+    return n
+
+
+def reachability(ids, native):
+    """Which customer-facing path can actually emit each native sourcetype (not just 'an engine formatter exists')."""
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
+    from netspout_core.log_engine import SplunkLogEngine as E
+    from netspout_core.scenario_runner import SUPPORTED_SCENARIO_IDS
+    single = set()
+    for a in dir(E):
+        if a.startswith("UNIVERSE_BATCH") and a.endswith("SOURCE_SOURCETYPES"):
+            single |= set(getattr(E, a))
+    pack = set()
+    for sid in SCENARIO_PACK_IDS:
+        pack |= {e.sourcetype for e in run_scenario_pack(sid, "coverage")}
+    runner = set()
+    for sc in load("scenarios.json"):
+        if sc["id"] in SUPPORTED_SCENARIO_IDS:
+            runner |= set(sc.get("sourcetypes", []))
+    native &= ids
+    return {"single_event_native": len(native & single), "scenario_pack_emitted": len(native & pack),
+            "runner_scenario_listed": len(native & runner), "no_customer_path": sorted(native - single - pack - runner)}
 
 
 def scenario_evidence():
@@ -119,7 +201,7 @@ def main(check=False):
     rows = load("sourcetypes.json")
     ids = {r["splunk_sourcetype"] for r in rows}
     native = engine_sourcetypes(ids)
-    fmt, live_fmt = raw_equality_passes()
+    fmt, live_fmt, proven_fmt = raw_equality_passes()
     indexed = live_fmt | evidence_indexed(ids)
     assess = {a["sourcetype"]: a for a in load("universe_batch4_parser_assessments.json")["sources"]}
     out = []
@@ -141,6 +223,7 @@ def main(check=False):
         "catalog_sourcetypes": n, "native_generators": c["NATIVE_ENGINE"], "sample_replay_only": c["SAMPLE_REPLAY"], "no_generator": c["NONE"],
         "format_verified": sum(o["format_verified"] == "YES" for o in out),
         "ta_validated_or_partial": sum(o["ta_validated"] != "NO" for o in out),
+        "ta_parsing_checked_isolated_lab": len(ta_lab_checked()),
         "independently_indexed": sum(o["indexed_evidence"] == "YES" for o in out),
     }
     scenarios = load("scenarios.json")
@@ -149,6 +232,10 @@ def main(check=False):
     det = load("phase13a_validation_evidence.json").get("validations", [])
     det_ok = [v for v in det if v.get("status") == "POSITIVE_CASE_VALIDATED"]
     sc_summary = {"catalog_scenarios": len(scenarios), "by_maturity": dict(mat), "golden_path_records": len(gp), "detection_verified": len(det_ok)}
+    rec = reconciliation(ids, out)
+    assert rec["sum"] == rec["now_native"] == summary["native_generators"], rec  # the origin arithmetic must close exactly
+    parts = {t: {o["sourcetype"] for o in out if o["generator"] == t} for t in ("NATIVE_ENGINE", "SAMPLE_REPLAY", "NONE")}
+    assert sum(len(v) for v in parts.values()) == len(ids) == len(out) and not (parts["NATIVE_ENGINE"] & parts["SAMPLE_REPLAY"])
     if check:
         print(json.dumps({"sourcetypes": summary, "scenarios": sc_summary}, indent=1))
         return
@@ -167,7 +254,8 @@ def main(check=False):
     for label, key in (("Cataloged sourcetypes", "catalog_sourcetypes"), ("Vendor-native generator", "native_generators"),
                        ("Sample replay only", "sample_replay_only"), ("No generator", "no_generator"),
                        ("Format verified (byte-equal raw in Splunk)", "format_verified"),
-                       ("Vendor TA validated (full or partial)", "ta_validated_or_partial"),
+                       ("Vendor TA validated (full or partial; Cisco ISE only, earlier lab)", "ta_validated_or_partial"),
+                       ("Parsed by a real vendor TA in the isolated lab this phase (extraction of emitted fields, timestamps and tags; not CIM or detections)", "ta_parsing_checked_isolated_lab"),
                        ("Independently indexed (live evidence)", "independently_indexed")):
         lines.append(f"| {label} | {summary[key]} | {100 * summary[key] / n:.1f}% |")
     lines += ["", "Tier definitions are in the script header. `TA validated` counts only a parser that was installed and exercised; "
@@ -176,11 +264,50 @@ def main(check=False):
     gaps = sorted(by_vendor, key=lambda v: -(by_vendor[v] - nat_vendor[v]))[:15]
     for v in gaps:
         lines.append(f"| {v} | {by_vendor[v]} | {nat_vendor[v]} |")
+    fv = {o["sourcetype"] for o in out if o["format_verified"] == "YES"}
+    ix = {o["sourcetype"] for o in out if o["indexed_evidence"] == "YES"}
+    reach = reachability(ids, set(parts["NATIVE_ENGINE"]))
+    lost_n = lost_grounding_count()
     fault = sorted(fault_template_only(ids, native))
     b5 = {x["splunk_sourcetype"] for x in load("universe_batch5.json")["sources"]} if (ROOT / "catalog" / "universe_batch5.json").exists() else set()
-    lines += ["", "## Reconciliation notes", "",
+    lines += ["", "## Reconciliation (origin arithmetic; internal-consistency check)", "",
+              "| Component | Count |", "|---|---|",
+              f"| Pre-Batch-5 native baseline (re-derived with the ORIGINAL scanner rules and the pre-Batch-5 registries; not a recorded historical number) | {rec['pre_batch_baseline']} |",
+              f"| + Scanner discovery corrections (generators that already existed) | +{len(rec['discovery_corrections'])} ({', '.join(rec['discovery_corrections'])}) |",
+              f"| + Batch 5 net new (registered {rec['batch5_registered']}; already native: {', '.join(rec['batch5_already_native']) or 'none'}) | +{rec['batch5_net_new']} |",
+              f"| + Batch 6 net new (registered {rec['batch6_registered']}) | +{rec['batch6_net_new']} |",
+              f"| **Native generators now** | **{rec['now_native']}** |", "",
+              "The sum closes largely by construction (corrections and batch net-new are defined as set differences), so it checks that no sourcetype is counted twice or dropped; "
+              "it is not an independent historical audit. Registries added after Batch 6 would be treated as part of the baseline until this function is extended.", "",
+              "Partition: native + sample-replay-only + no-generator = %d + %d + %d = %d (disjoint)." % (len(parts['NATIVE_ENGINE']), len(parts['SAMPLE_REPLAY']), len(parts['NONE']), len(ids)), "",
+              "Evidence overlaps (a sourcetype is counted once per measure; measures are independent):", "",
+              "| Overlap | Count |", "|---|---|",
+              f"| Byte-verified AND native | {len(fv & parts['NATIVE_ENGINE'])} |",
+              f"| Byte-verified but NOT native (verified through a retired or fixture path) | {len(fv - parts['NATIVE_ENGINE'])} |",
+              f"| Native but never byte-verified | {len(parts['NATIVE_ENGINE'] - fv)} |",
+              f"| Independently indexed AND byte-verified | {len(ix & fv)} |",
+              f"| Independently indexed but NOT byte-verified (run-evidence files only) | {len(ix - fv)} |",
+              f"| Byte-verified but no live-indexing record (offline/current-fixture equality only) | {len(fv - ix)} |",
+              f"| Independently indexed with ROW-LEVEL proof (indexed_rows>0 or per-row matches>=1) | {len(proven_fmt)} |",
+              f"| Independently indexed on FILE-LEVEL harness evidence only (older result files without row counts) | {len(live_fmt - proven_fmt)} |", "",
+              "Definition change: the earlier report counted only result files whose NAME contained 'live' (105). Every result file is written by a harness that posts to HEC "
+              "and searches Splunk, so the measure now counts all of them (136 = file-level), and the row above separates what has row-level proof. The increase is a "
+              "correction of an undercount, not new indexing.", "",
+              "## Reachability of native generators (a formatter existing is not the same as a customer being able to run it)", "",
+              "| Customer-facing path | Native sourcetypes reachable |", "|---|---|",
+              f"| Single Event / Sourcetype generator modes (native registries UB1-UB6) | {reach['single_event_native']} |",
+              f"| Authentic scenario packs (`/api/generate/scenario-pack`, Explorer `scenario_pack`) emit them | {reach['scenario_pack_emitted']} |",
+              f"| Listed by a ScenarioRunner scenario (label-level; the runner may use a different formatter) | {reach['runner_scenario_listed']} |",
+              f"| **Native but on none of the above** | **{len(reach['no_customer_path'])}** |", "",
+              "Native but not reachable from any listed path: " + (", ".join(reach["no_customer_path"][:40]) + (" ..." if len(reach["no_customer_path"]) > 40 else "")), "",
+              f"Single Event / Sourcetype modes serve native registries for UB1-UB6 sourcetypes only; elsewhere they serve sample files. {lost_n} active catalog sourcetypes used to be answered with an unrelated vendor-level sample and now report TELEMETRY_NOT_GROUNDED (the fallback is limited to vendors with a single active sourcetype). The script does not verify which other path serves a given sourcetype beyond the three rows above.", "",
+              "## Reconciliation notes", "",
               "* Batch 5 registers 31 sourcetypes but added 30 to the count: `cisco:sdwan:BGP-5-ADJCHANGE` already had a native formatter "
               "(`format_cisco_sdwan_bgp_log`), so it now has two generators. Not a counting defect.",
+              "* Each of the six corrections was inspected by hand, not just pattern-matched: `pan:system` is emitted by `PanOsGenerator` (`SOURCETYPE_BY_TYPE['SYSTEM']` used when building the LogEntry, 17 documented fields); "
+              "`netspout:snmp:trap` / `netspout:snmp:poll` are set on the normalized events built in `snmp_splunk_e2e.py` (live E2E evidence exists); `cisco:duo:remote:vpn`, `cisco:catalyst:clienthealth` and "
+              "`meraki:assurancealerts` are the default `sourcetype` of `format_cisco_duo_vpn_log`, `format_cisco_catalyst_wlan_rf_log` and `format_meraki_alert_log` in `log_engine.py`. "
+              "Pattern matching alone would also hit comments and lookups, so any future correction needs the same inspection.",
               "* Scanner fix (Batch 6 pass): sourcetypes declared as default arguments (`sourcetype: str = \"...\"`) and in dedicated generator modules "
               f"({', '.join(DEDICATED_GENERATORS)}) were missed, which hid `pan:system`, `cisco:duo:remote:vpn`, `cisco:catalyst:clienthealth`, "
               "`meraki:assurancealerts`, `netspout:snmp:poll` and `netspout:snmp:trap` (+6).",
@@ -221,7 +348,21 @@ def main(check=False):
           "Unified-generation scenarios (25, `/api/generation/capabilities`) are not catalog rows and are counted separately in the Explorer.", "",
           "| Maturity (catalog value, not upgraded) | Count |", "|---|---|"]
     sl += [f"| {k} | {v} |" for k, v in sorted(mat.items(), key=lambda kv: -kv[1])]
-    sl += ["", "Pack scenarios stay `CONTRACTED`: `FORMAT_VALIDATED` is a governed counter pinned at 2 and live byte equality is not E2E validation.", "",
+    pack_ids = [i for i in ids if i in packs]
+    sl += ["", "## Maturity gates (unchanged; definitions from docs/architecture/NETSPOUT_CANONICAL_SCENARIO_REGISTRY.md)", "",
+           "| Tier | Gate | Count now |", "|---|---|---|",
+           f"| GOLDEN_PATH_CERTIFIED | Independently verified through live Splunk acceptance with 100% telemetry observation completeness, zero developer knowledge, clean validation | {mat.get('GOLDEN_PATH_CERTIFIED', 0)} |",
+           f"| E2E_VALIDATED | Wired to multi-vendor topology graphs with deterministic simulation runners and passing contract rules; pending independent acceptance retest | {mat.get('E2E_VALIDATED', 0)} |",
+           f"| FORMAT_VALIDATED | Baseline traffic emitting compliant wire formats (governed counter, pinned) | {mat.get('FORMAT_VALIDATED', 0)} |",
+           f"| CONTRACTED | Blueprint with schema definitions, expected observations; implementation may be absent | {mat.get('CONTRACTED', 0)} |", "",
+           f"No scenario was promoted in this pass. The {len(pack_ids)} authentic observation packs are `CONTRACTED`: they have live byte-equality and per-phase indexing evidence "
+           "(batch 1-6 result files) but are not wired to topology graphs, have no independent acceptance retest, no dashboard and no detection, so they meet none of the higher gates. "
+           "Byte-equal bytes or successful ingestion never promote a scenario.", "",
+           "| Group | Scenarios | Evidence now | Missing for the next tier |", "|---|---|---|---|",
+           f"| Authentic packs (wave*, ub1-ub6) | {len(pack_ids)} | byte-equal families; per-phase counts for {len([i for i in pack_ids if i in live])} packs | topology wiring, runner determinism contract, independent acceptance retest |",
+           f"| ScenarioRunner scenarios | {len([i for i in ids if i in runner])} | GOLDEN {mat.get('GOLDEN_PATH_CERTIFIED', 0)} / E2E {mat.get('E2E_VALIDATED', 0)} per catalog | E2E_VALIDATED ones need the independent acceptance retest |",
+           f"| Contract-only | {len(ids) - len(runnable)} | none | any executable telemetry; no Run action is offered |", "",
+           "Pack scenarios stay `CONTRACTED`: `FORMAT_VALIDATED` is a governed counter pinned at 2 and live byte equality is not E2E validation.", "",
            "Dashboard-verified: " + ("; ".join(dash_ready) or "none"), "", "Detection-verified: " + ("; ".join(det_ready) or "none") + ". Not Enterprise Security, CIM or Cisco TA.", "",
            "## Scenarios by approved industry (editorial mapping unless an industry pack binds it)", "", "| Industry | Mapped scenarios | Runnable |", "|---|---|---|"]
     sl += [f"| {name} | {n} | {r} |" for _, (n, r, name) in by_ind.items()]

@@ -144,6 +144,7 @@ def test_scenario_pack_route_dispatches_to_the_configured_destination(monkeypatc
     gt = main.current_topology.global_transport
     saved = (gt.hec_url, gt.hec_index)
     gt.hec_url, gt.hec_index = 'https://127.0.0.1:1/services/collector', 'event_idx'
+    monkeypatch.setattr(main.release_candidate_configuration, 'load', lambda: {'configured': True, 'indexes': ['idx_network_ops']})
     try:
         r = TestClient(main.app).post('/api/generate/scenario-pack', json={'scenario_id': 'ub5_cisco_nac_radius_outage', 'dispatch': True, 'index': 'idx_network_ops'})
         assert r.status_code == 200

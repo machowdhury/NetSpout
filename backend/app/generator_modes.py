@@ -119,7 +119,11 @@ class TelemetryGeneratorService:
                     vid = vendor_id or st_meta.get("vendor_id")
                     if vid:
                         v_obj = get_vendor_by_id(vid)
-                        if v_obj and v_obj.get("sample_events"):
+                        # Vendor-level embedded samples carry no sourcetype, so they are only valid when this is the vendor's ONLY
+                        # catalog sourcetype; otherwise an unrelated event (e.g. a Security 4624 for a Sysmon request) would be
+                        # emitted under the requested sourcetype.
+                        siblings = [r for r in self.catalog._sourcetypes if r.get("vendor_id") == vid and r.get("status") == "active"]
+                        if v_obj and v_obj.get("sample_events") and len(siblings) <= 1:
                             ses = list(v_obj["sample_events"].values())
                             if ses:
                                 events = ses

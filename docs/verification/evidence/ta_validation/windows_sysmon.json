@@ -1,0 +1,845 @@
+{
+ "run": "c11b52a7",
+ "splunk_version": "10.2.7",
+ "splunk_build": "c0bff5b0fac3",
+ "installed_vendor_apps": {
+  "Splunk_TA_microsoft_sysmon": "5.0.1",
+  "Splunk_TA_windows": "10.0.1"
+ },
+ "cim_installed": false,
+ "fixture_time_shift_hours": 48,
+ "summary": {
+  "A": {
+   "events": 14,
+   "indexed": 14,
+   "mean_extraction_ratio": 0.976,
+   "event_timestamp_parsed": 0,
+   "with_tags": 14,
+   "with_eventtypes": 14,
+   "source_predicate_matches": 14
+  },
+  "B": {
+   "events": 14,
+   "indexed": 14,
+   "mean_extraction_ratio": 0.976,
+   "event_timestamp_parsed": 4,
+   "with_tags": 14,
+   "with_eventtypes": 14,
+   "source_predicate_matches": 14
+  }
+ },
+ "authentic_control": {
+  "events": 3,
+  "indexed": 3,
+  "event_timestamp_parsed": 0,
+  "note": "authentic pinned Sysmon bytes labeled source=XmlWinEventLog:Application (no TA timestamp rule); parsing from the event body would show here only if Splunk found it by default"
+ },
+ "ta_timestamp_rules": {
+  "source::XmlWinEventLog:Security": {
+   "app": "Splunk_TA_windows",
+   "TIME_PREFIX": null,
+   "TIME_FORMAT": null,
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  },
+  "source::XmlWinEventLog:System": {
+   "app": "Splunk_TA_windows",
+   "TIME_PREFIX": null,
+   "TIME_FORMAT": null,
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  },
+  "source::XmlWinEventLog:Microsoft-Windows-PowerShell/Operational": {
+   "app": "Splunk_TA_windows",
+   "TIME_PREFIX": null,
+   "TIME_FORMAT": null,
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  },
+  "source::XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational": {
+   "app": "Splunk_TA_windows",
+   "TIME_PREFIX": null,
+   "TIME_FORMAT": null,
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  },
+  "source::XmlWinEventLog:Microsoft-Windows-Sysmon/Operational": {
+   "app": "Splunk_TA_microsoft_sysmon",
+   "TIME_PREFIX": "<Data Name='UtcTime'>",
+   "TIME_FORMAT": "%Y-%m-%d %H:%M:%S.%3N",
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  },
+  "XmlWinEventLog": {
+   "app": "Splunk_TA_windows",
+   "TIME_PREFIX": null,
+   "TIME_FORMAT": null,
+   "MAX_TIMESTAMP_LOOKAHEAD": "128",
+   "DATETIME_CONFIG": "/etc/datetime.xml"
+  }
+ },
+ "events": [
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "event_id": "8001",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.823,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "tags": "track_event_signatures",
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "event_id": "8001",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172799.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "tags": "track_event_signatures",
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "event_id": "4104",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.842,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "tags": "track_event_signatures",
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "event_id": "4104",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172799.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "tags": "track_event_signatures",
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "1",
+   "indexed": true,
+   "expected_fields": 11,
+   "extracted": 11,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.85,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "1",
+   "indexed": true,
+   "expected_fields": 11,
+   "extracted": 11,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 0.0,
+   "time_source": "event_timestamp",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "10",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.857,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "10",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 0.0,
+   "time_source": "event_timestamp",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "22",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.865,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "dns",
+    "network",
+    "resolution",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-dns",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "22",
+   "indexed": true,
+   "expected_fields": 10,
+   "extracted": 10,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 0.0,
+   "time_source": "event_timestamp",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "dns",
+    "network",
+    "resolution",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-dns",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "7",
+   "indexed": true,
+   "expected_fields": 23,
+   "extracted": 23,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.874,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "event_id": "7",
+   "indexed": true,
+   "expected_fields": 23,
+   "extracted": 23,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 0.0,
+   "time_source": "event_timestamp",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "tags": [
+    "process",
+    "report",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "ms-sysmon-process",
+    "windows_event_signature",
+    "windows_ta_data"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "event_id": "1116",
+   "indexed": true,
+   "expected_fields": 15,
+   "extracted": 15,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.883,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "tags": [
+    "attack",
+    "malware",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_defender_operational_attack"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "event_id": "1116",
+   "indexed": true,
+   "expected_fields": 15,
+   "extracted": 15,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "tags": [
+    "attack",
+    "malware",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_defender_operational_attack"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "event_id": "1117",
+   "indexed": true,
+   "expected_fields": 8,
+   "extracted": 8,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.891,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "tags": [
+    "attack",
+    "malware",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_defender_operational_attack"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "event_id": "1117",
+   "indexed": true,
+   "expected_fields": 8,
+   "extracted": 8,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "tags": [
+    "attack",
+    "malware",
+    "track_event_signatures"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_defender_operational_attack"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4624",
+   "indexed": true,
+   "expected_fields": 13,
+   "extracted": 13,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.902,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "authentication",
+    "os",
+    "remote",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_logon_success",
+    "windows_security_authentication",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4624",
+   "indexed": true,
+   "expected_fields": 13,
+   "extracted": 13,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "authentication",
+    "os",
+    "remote",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_logon_success",
+    "windows_security_authentication",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4625",
+   "indexed": true,
+   "expected_fields": 19,
+   "extracted": 19,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.915,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "audit",
+    "authentication",
+    "change",
+    "os",
+    "remote",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_audit_log_logon",
+    "windows_event_signature",
+    "windows_logon_failure",
+    "windows_security_authentication",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4625",
+   "indexed": true,
+   "expected_fields": 19,
+   "extracted": 19,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "audit",
+    "authentication",
+    "change",
+    "os",
+    "remote",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_audit_log_logon",
+    "windows_event_signature",
+    "windows_logon_failure",
+    "windows_security_authentication",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4663",
+   "indexed": true,
+   "expected_fields": 14,
+   "extracted": 14,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.931,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "os",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4663",
+   "indexed": true,
+   "expected_fields": 14,
+   "extracted": 14,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "os",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4672",
+   "indexed": true,
+   "expected_fields": 7,
+   "extracted": 7,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.946,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "authentication",
+    "os",
+    "privileged",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_security_authentication",
+    "windows_special_privileges",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4672",
+   "indexed": true,
+   "expected_fields": 7,
+   "extracted": 7,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "authentication",
+    "os",
+    "privileged",
+    "security",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_security_authentication",
+    "windows_special_privileges",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4688",
+   "indexed": true,
+   "expected_fields": 18,
+   "extracted": 18,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.961,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "execute",
+    "os",
+    "process",
+    "report",
+    "security",
+    "start",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_endpoint_processes",
+    "windows_event_signature",
+    "windows_process_new",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:Security",
+   "event_id": "4688",
+   "indexed": true,
+   "expected_fields": 18,
+   "extracted": 18,
+   "extraction_ratio": 1.0,
+   "missing_fields": [],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:Security",
+   "tags": [
+    "execute",
+    "os",
+    "process",
+    "report",
+    "security",
+    "start",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_endpoint_processes",
+    "windows_event_signature",
+    "windows_process_new",
+    "windows_ta_data",
+    "wineventlog_security",
+    "wineventlog_windows",
+    "winsec"
+   ]
+  },
+  {
+   "variant": "A",
+   "sourcetype_emitted": "XmlWinEventLog:System",
+   "event_id": "6005",
+   "indexed": true,
+   "expected_fields": 3,
+   "extracted": 2,
+   "extraction_ratio": 0.667,
+   "missing_fields": [
+    "param1"
+   ],
+   "time_delta_from_event_s": 172800.973,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:System",
+   "tags": [
+    "os",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_system",
+    "wineventlog_windows",
+    "winsystem"
+   ]
+  },
+  {
+   "variant": "B",
+   "sourcetype_emitted": "XmlWinEventLog:System",
+   "event_id": "6005",
+   "indexed": true,
+   "expected_fields": 3,
+   "extracted": 2,
+   "extraction_ratio": 0.667,
+   "missing_fields": [
+    "param1"
+   ],
+   "time_delta_from_event_s": 172800.877,
+   "time_source": "ingest_time",
+   "indexed_sourcetype": "XmlWinEventLog",
+   "source": "XmlWinEventLog:System",
+   "tags": [
+    "os",
+    "track_event_signatures",
+    "windows"
+   ],
+   "eventtypes": [
+    "endpoint_services_processes",
+    "windows_event_signature",
+    "windows_ta_data",
+    "wineventlog_system",
+    "wineventlog_windows",
+    "winsystem"
+   ]
+  }
+ ]
+}

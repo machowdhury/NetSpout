@@ -187,8 +187,13 @@ def test_api_scenario_and_source_generation():
     assert response.json()['dispatch_results']==[]
     response=client.post('/api/generate/single-event',json={'vendor_id':'hashicorp','sourcetype':'hashicorp_vault_audit_log'})
     assert response.status_code==200 and response.json()['status']=='GROUNDED'
-    response=client.post('/api/generate/scenario-pack',json={'scenario_id':BATCH2_SCENARIO_IDS[0],'dispatch':True})
-    assert response.status_code==400  # Fail closed without explicit transport.
+    import tempfile
+    from unittest.mock import patch
+    import app.main as main
+    from netspout_core.release_candidate import ReleaseCandidateConfiguration
+    with tempfile.TemporaryDirectory() as empty, patch.object(main,'release_candidate_configuration',ReleaseCandidateConfiguration(config_dir=empty)):
+        response=client.post('/api/generate/scenario-pack',json={'scenario_id':BATCH2_SCENARIO_IDS[0],'dispatch':True})
+    assert response.status_code==400  # Fail closed without explicit transport or a configured Connection Center.
 
 
 def test_batch2_live_evidence_matches_submitted_current_bytes():

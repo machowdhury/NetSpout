@@ -4,10 +4,10 @@ amazon_aws,aws:cloudtrail,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,Y
 amazon_aws,aws:cloudtrail:lake,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 amazon_aws,aws:cloudwatchlogs:vpcflow,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 arista_eos,arista:flow:ipfix,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
-atlassian,Confluence:audit log,SaaS Audit,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-barracuda,barracuda:waf:web_firewall,Application Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-beyondtrust,ccx:beyondinsight:passwordsafe,Privileged Access,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-bitdefender,bitdefender:gz,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+atlassian,Confluence:audit log,SaaS Audit,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+barracuda,barracuda:waf:web_firewall,Application Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+beyondtrust,ccx:beyondinsight:passwordsafe,Privileged Access,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+bitdefender,bitdefender:gz,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 broadcom_symantec,bluecoat:proxysg:access:file,Web Security & Proxy,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 cisco_aci,cisco:dc:aci:class,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 cisco_aci,cisco:dc:aci:health,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,NO,NO,YES
@@ -80,24 +80,24 @@ cisco_sdwan,cisco:sdwan:syslog,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YE
 cisco_sdwan,cisco:sdwan:sytem:logs,Cisco SD-WAN,event,syslog,deprecated,NATIVE_ENGINE,YES,NO,YES
 cisco_sdwan,cisco:sdwan:utd:logs,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 cisco_sdwan,cisco:sdwan:utdhealth,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
-claroty,claroty:cef,OT & ICS Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+claroty,claroty:cef,OT & ICS Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 crowdstrike,crowdstrike:events:sensor,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 crushftp,crushftp:sessionlogs,File Transfer & Exfiltration Telemetry,event,syslog_rfc3164,active,NATIVE_ENGINE,YES,NO,YES
-cybereason,cybereason:malops,Endpoint Detection,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-darktrace,darktrace,Network Detection,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+cybereason,cybereason:malops,Endpoint Detection,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+darktrace,darktrace,Network Detection,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 docker,docker_events,Container Platform & DevOps,event,hec,active,NATIVE_ENGINE,YES,NO,YES
-elastic,elasticsearch:json,Search Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+elastic,elasticsearch:json,Search Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 f5_bigip,f5:bigip:ltm,F5 BIG-IP,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 fortinet,fortinet:fortigate:utm,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
-github,github:enterprise:audit,Source Control SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-gitlab,gitlab:audit:json,Source Control Self-Managed,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+github,github:enterprise:audit,Source Control SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+gitlab,gitlab:audit:json,Source Control Self-Managed,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 google_cloud,gcp:audit,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 google_workspace,gsuite:gmail:bigquery,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 google_workspace,gws:reports:login,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
-hashicorp,hashicorp_vault_audit_log,Cloud & Secrets Management,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-ibm_mq,ibm:mq:errorlog,Messaging Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-ibm_qradar,ibm:qradar:offense,SIEM & Incident Response,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-imperva,imperva:securesphere:cef,Database & Web Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+hashicorp,hashicorp_vault_audit_log,Cloud & Secrets Management,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+ibm_mq,ibm:mq:errorlog,Messaging Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+ibm_qradar,ibm:qradar:offense,SIEM & Incident Response,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+imperva,imperva:securesphere:cef,Database & Web Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 juniper_junos,juniper:junos,Juniper Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 kubernetes,kube:audit,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 kubernetes,kube:container:falco,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
@@ -119,39 +119,39 @@ microsoft_windows,XmlWinEventLog:Security,Endpoint & Host Telemetry,event,hec_ev
 microsoft_windows,XmlWinEventLog:System,Endpoint & Host Telemetry,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 microsoft_windows,iis,Endpoint & Host Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 microsoft_windows,sysmon:linux,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
-mikrotik,mikrotik:routeros,Carrier & Enterprise Routing,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+mikrotik,mikrotik:routeros,Carrier & Enterprise Routing,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 model_context_protocol,mcp:jsonrpc,Agentic AI Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
-mongodb,mongodb:log,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-nginx_f5,nginx:access,Web Observability,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+mongodb,mongodb:log,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+nginx_f5,nginx:access,Web Observability,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 nokia_sr,nokia:sros:syslog,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 nozomi_networks,nozomi:universal_alert,OT & ICS Security,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 okta,OktaIM2:log,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 ollama,ollama:server,Agentic AI Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 opentelemetry,opentelemetry:otlp,Enterprise Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
-oracle,oracle:audit:text,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+oracle,oracle:audit:text,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 osquery,osquery:results,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 palo_alto,pan:system,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
 palo_alto,pan:threat,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
 palo_alto,pan:traffic,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
-pfsense_netgate,pfsense:filterlog,Network Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-proofpoint,proofpoint_tap_siem,Email Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-qualys,qualys:activityLog,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-rapid7,rapid7:insightvm:asset:vulnerability_finding,Vulnerability Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-sailpoint,sailpoint_identitynow,Identity SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+pfsense_netgate,pfsense:filterlog,Network Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+proofpoint,proofpoint_tap_siem,Email Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+qualys,qualys:activityLog,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+rapid7,rapid7:insightvm:asset:vulnerability_finding,Vulnerability Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+sailpoint,sailpoint_identitynow,Identity SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 sc4snmp,sc4snmp:event,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 sc4snmp,sc4snmp:metric,Enterprise Telemetry,metric,hec,active,NATIVE_ENGINE,NO,NO,YES
 sc4snmp,snmp:trap,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
-sentinelone,sentinelone:channel:threats,Endpoint Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-slack,slack:audit,Collaboration SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+sentinelone,sentinelone:channel:threats,Endpoint Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+slack,slack:audit,Collaboration SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 splunk,nginx:plus:kv,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 splunk,postgresql:audit,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 suricata_oisf,suricata,Network Intrusion Detection,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
-sysdig,SysdigSecureEvents,Cloud Runtime Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-tanium,tanium:discover:managed,Endpoint Management,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-tenable,tenable:io:audit_logs,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-traefik,traefik:access:json,Networking & Observability,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-trellix_mcafee,trellix_epo:threat_events,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,NO
-veeam,veeam_vbr_syslog,Backup Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,NO
+sysdig,SysdigSecureEvents,Cloud Runtime Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+tanium,tanium:discover:managed,Endpoint Management,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+tenable,tenable:io:audit_logs,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+traefik,traefik:access:json,Networking & Observability,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+trellix_mcafee,trellix_epo:threat_events,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+veeam,veeam_vbr_syslog,Backup Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 vmware_nsx,vmw-syslog,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 wazuh,wazuh:alerts,Host IDS & XDR,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 zeek,bro:conn:json,Network Intrusion Detection,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES

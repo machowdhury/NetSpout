@@ -22,6 +22,23 @@ Unified-generation scenarios (25, `/api/generation/capabilities`) are not catalo
 | E2E_VALIDATED | 4 |
 | FORMAT_VALIDATED | 2 |
 
+## Maturity gates (unchanged; definitions from docs/architecture/NETSPOUT_CANONICAL_SCENARIO_REGISTRY.md)
+
+| Tier | Gate | Count now |
+|---|---|---|
+| GOLDEN_PATH_CERTIFIED | Independently verified through live Splunk acceptance with 100% telemetry observation completeness, zero developer knowledge, clean validation | 13 |
+| E2E_VALIDATED | Wired to multi-vendor topology graphs with deterministic simulation runners and passing contract rules; pending independent acceptance retest | 4 |
+| FORMAT_VALIDATED | Baseline traffic emitting compliant wire formats (governed counter, pinned) | 2 |
+| CONTRACTED | Blueprint with schema definitions, expected observations; implementation may be absent | 39 |
+
+No scenario was promoted in this pass. The 26 authentic observation packs are `CONTRACTED`: they have live byte-equality and per-phase indexing evidence (batch 1-6 result files) but are not wired to topology graphs, have no independent acceptance retest, no dashboard and no detection, so they meet none of the higher gates. Byte-equal bytes or successful ingestion never promote a scenario.
+
+| Group | Scenarios | Evidence now | Missing for the next tier |
+|---|---|---|---|
+| Authentic packs (wave*, ub1-ub6) | 26 | byte-equal families; per-phase counts for 5 packs | topology wiring, runner determinism contract, independent acceptance retest |
+| ScenarioRunner scenarios | 17 | GOLDEN 13 / E2E 4 per catalog | E2E_VALIDATED ones need the independent acceptance retest |
+| Contract-only | 15 | none | any executable telemetry; no Run action is offered |
+
 Pack scenarios stay `CONTRACTED`: `FORMAT_VALIDATED` is a governed counter pinned at 2 and live byte equality is not E2E validation.
 
 Dashboard-verified: SEC-P9-B-DNS-ANOMALY (unified generation; Dashboard Studio view pulseforge_dns_anomaly_studio)

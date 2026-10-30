@@ -2038,10 +2038,13 @@ def _generator_transport(index=None, explicit=None):
     destination (global transport) with the requested index; None keeps the pre-existing defaults when none is saved."""
     if explicit:
         return TelemetryTransportConfig(**explicit)
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        return None  # nothing configured: callers keep failing closed (the default transport is not a destination)
     gt = getattr(current_topology, "global_transport", None) if current_topology else None
     if gt is not None and getattr(gt, "hec_url", None):
-        config = release_candidate_configuration.load()
-        if index and config.get("configured") and index not in config.get("indexes", []):
+        effective = index or getattr(gt, "hec_index", None)  # an omitted index falls back to the destination's own index, which must also be allowed
+        if effective and effective not in config.get("indexes", []):
             raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
         return gt.model_copy(update={"hec_index": index} if index else {})
     return None

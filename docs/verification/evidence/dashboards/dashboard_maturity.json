@@ -1,0 +1,341 @@
+{
+ "generated_utc": "2026-10-30T20:17Z",
+ "scale": [
+  "DASHBOARD_SPECIFIED",
+  "DASHBOARD_IMPLEMENTED",
+  "DASHBOARD_DATA_VALIDATED",
+  "DASHBOARD_VISUALLY_VERIFIED"
+ ],
+ "dashboards": {
+  "rp_linux_credential_access": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_cloud_control_plane_activity": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_windows_endpoint_process_chain": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_web_exploitation_recordings": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_edr_and_cloud_activity": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_agentic_ai_mcp_runtime_hybrid": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "rp_workload_sysmon_ebpf_hybrid": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_bank_account_takeover_resilience": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_bank_payments_edge_defense": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_telco_change_induced_outage": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "operational"
+  },
+  "ind_telco_access_and_wireless_health": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_health_ehr_ransomware_readiness": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_health_clinical_network_edge": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_mfg_it_ot_convergence": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_mfg_plant_network_health": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_energy_substation_edge_observation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_energy_scada_proxy_intrusion": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_insurance_claims_platform_audit": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_insurance_underwriting_exposure": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_gov_citizen_identity_attack": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "security"
+  },
+  "ind_gov_agency_mail_exfiltration": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_retail_pos_edge_defense": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_retail_ecommerce_cloud_recon": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_edu_campus_identity_and_collab": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_saas_platform_runtime_attack": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_media_content_delivery_exfil": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_hospitality_guest_network_defense": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_aero_defense_endpoint_c2": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_legal_matter_data_exfiltration": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_agri_edge_gateway_health": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "operational"
+  },
+  "ind_realestate_building_exposure": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  },
+  "ind_nonprofit_donor_platform_attack": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security"
+  },
+  "ind_transport_fleet_network_change": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational"
+  }
+ }
+}

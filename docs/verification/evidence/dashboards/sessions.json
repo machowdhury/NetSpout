@@ -1,0 +1,236 @@
+{
+ "generated_utc": "2026-10-30T19:27Z",
+ "sessions": {
+  "rp_linux_credential_access": {
+   "session_id": "rp-e2fff98055a2",
+   "accepted": 131,
+   "generated": 131,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_cloud_control_plane_activity": {
+   "session_id": "rp-18484a71f348",
+   "accepted": 12,
+   "generated": 12,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_windows_endpoint_process_chain": {
+   "session_id": "rp-9b30f07c513d",
+   "accepted": 102,
+   "generated": 102,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_web_exploitation_recordings": {
+   "session_id": "rp-60a9b52230fb",
+   "accepted": 64,
+   "generated": 64,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_edr_and_cloud_activity": {
+   "session_id": "rp-2739e6921856",
+   "accepted": 55,
+   "generated": 55,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_agentic_ai_mcp_runtime_hybrid": {
+   "session_id": "rp-a2aee7e0d29c",
+   "accepted": 70,
+   "generated": 70,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "rp_workload_sysmon_ebpf_hybrid": {
+   "session_id": "rp-dd0c88281b79",
+   "accepted": 139,
+   "generated": 139,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_bank_account_takeover_resilience": {
+   "session_id": "rp-e488b2dafca8",
+   "accepted": 38,
+   "generated": 38,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_bank_payments_edge_defense": {
+   "session_id": "rp-cd1acc331d07",
+   "accepted": 19,
+   "generated": 19,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_telco_change_induced_outage": {
+   "session_id": "rp-21d65c1b574d",
+   "accepted": 26,
+   "generated": 26,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_telco_access_and_wireless_health": {
+   "session_id": "rp-163d22dc72f7",
+   "accepted": 24,
+   "generated": 24,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_health_ehr_ransomware_readiness": {
+   "session_id": "rp-26f9bdc71e29",
+   "accepted": 29,
+   "generated": 29,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_health_clinical_network_edge": {
+   "session_id": "rp-4d2e1c4e5c78",
+   "accepted": 16,
+   "generated": 16,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_mfg_it_ot_convergence": {
+   "session_id": "rp-c4cf7888533c",
+   "accepted": 23,
+   "generated": 23,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_mfg_plant_network_health": {
+   "session_id": "rp-f9e0877d0dc3",
+   "accepted": 30,
+   "generated": 30,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_energy_substation_edge_observation": {
+   "session_id": "rp-ec52eb2b5e67",
+   "accepted": 17,
+   "generated": 17,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_energy_scada_proxy_intrusion": {
+   "session_id": "rp-cbd006fd8a70",
+   "accepted": 16,
+   "generated": 16,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_insurance_claims_platform_audit": {
+   "session_id": "rp-7f1206d314c3",
+   "accepted": 21,
+   "generated": 21,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_insurance_underwriting_exposure": {
+   "session_id": "rp-88768ec205d3",
+   "accepted": 23,
+   "generated": 23,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_gov_citizen_identity_attack": {
+   "session_id": "rp-558b99604e34",
+   "accepted": 35,
+   "generated": 35,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_gov_agency_mail_exfiltration": {
+   "session_id": "rp-d500ba0636f0",
+   "accepted": 21,
+   "generated": 21,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_retail_pos_edge_defense": {
+   "session_id": "rp-96a5aa2e13ef",
+   "accepted": 19,
+   "generated": 19,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_retail_ecommerce_cloud_recon": {
+   "session_id": "rp-c884422b359c",
+   "accepted": 19,
+   "generated": 19,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_edu_campus_identity_and_collab": {
+   "session_id": "rp-cacd2d6b619a",
+   "accepted": 24,
+   "generated": 24,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_saas_platform_runtime_attack": {
+   "session_id": "rp-9608372da953",
+   "accepted": 25,
+   "generated": 25,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_media_content_delivery_exfil": {
+   "session_id": "rp-7e7f9092b604",
+   "accepted": 11,
+   "generated": 11,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_hospitality_guest_network_defense": {
+   "session_id": "rp-0daa92c01001",
+   "accepted": 26,
+   "generated": 26,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_aero_defense_endpoint_c2": {
+   "session_id": "rp-bd1ea20b2998",
+   "accepted": 27,
+   "generated": 27,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_legal_matter_data_exfiltration": {
+   "session_id": "rp-ebb743f1f593",
+   "accepted": 17,
+   "generated": 17,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_agri_edge_gateway_health": {
+   "session_id": "rp-e94d6b6cfcf2",
+   "accepted": 19,
+   "generated": 19,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_realestate_building_exposure": {
+   "session_id": "rp-d2b1bfff5b1e",
+   "accepted": 16,
+   "generated": 16,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_nonprofit_donor_platform_attack": {
+   "session_id": "rp-a4ad2921a43b",
+   "accepted": 28,
+   "generated": 28,
+   "rejected": 0,
+   "state": "COMPLETED"
+  },
+  "ind_transport_fleet_network_change": {
+   "session_id": "rp-a6ccc61c2735",
+   "accepted": 27,
+   "generated": 27,
+   "rejected": 0,
+   "state": "COMPLETED"
+  }
+ }
+}

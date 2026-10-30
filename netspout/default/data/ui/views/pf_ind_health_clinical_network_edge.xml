@@ -1,0 +1,642 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Hospital network: edge and DNS/proxy health with wireless threat</label>
+  <description>Watch clinical network edge health (DNS, proxy, firewall, flow) while a wireless rogue-device event is raised.</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Hospital network: edge and DNS/proxy health with wireless threat",
+  "description": "Watch clinical network edge health (DNS, proxy, firewall, flow) while a wireless rogue-device event is raised.",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run (replay session)",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_phase": {
+      "type": "input.dropdown",
+      "title": "Incident phase",
+      "options": {
+        "token": "phase_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All phases",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_phase_list"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · Operational scenario\n**Healthcare · Clinical network and medical IoT edge**  ·  `ind_health_clinical_network_edge`\n\nWatch clinical network edge health (DNS, proxy, firewall, flow) while a wireless rogue-device event is raised.\n\n_Live searches over the replayed run: authentic recorded/native telemetry run on the PulseForge replay engine; industry framing is editorial._",
+        "fontColor": "#e8eef3",
+        "backgroundColor": "#0e1822",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#19b5c4",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true,
+      "title": "Events in run"
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#5aa0e8",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true,
+      "title": "Telemetry sources (sourcetypes)"
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#9b7ddc",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true,
+      "title": "Reporting hosts"
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#f2a93b",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true,
+      "title": "Incident duration"
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#3fb97f",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true,
+      "title": "Incident phases observed"
+    },
+    "viz_7": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "majorColor": "#3fb97f",
+        "majorFontSize": 44,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "backgroundColor": "#16232f",
+        "numberPrecision": 0
+      },
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true,
+      "title": "Recovery / validation evidence"
+    },
+    "viz_8": {
+      "type": "splunk.column",
+      "options": {
+        "stackMode": "stacked",
+        "seriesColors": [
+          "#19b5c4",
+          "#f2a93b",
+          "#5aa0e8",
+          "#9b7ddc",
+          "#3fb97f",
+          "#f0615a",
+          "#c7d36f",
+          "#e58fb6"
+        ],
+        "legendDisplay": "bottom",
+        "yAxisTitleText": "Events",
+        "xAxisTitleText": "Seconds since the first event of the run",
+        "backgroundColor": "#16232f"
+      },
+      "title": "Incident timeline · events by phase",
+      "description": "Event volume over the run's own clock, split by incident phase.",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.bar",
+      "options": {
+        "seriesColors": [
+          "#19b5c4"
+        ],
+        "backgroundColor": "#16232f",
+        "xAxisTitleText": "Events",
+        "legendDisplay": "off"
+      },
+      "title": "Events by phase (click to filter the page)",
+      "description": "Click a column to set the Incident phase filter; choose All phases to reset.",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.setToken",
+          "options": {
+            "tokens": [
+              {
+                "token": "phase_tok",
+                "key": "name"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "viz_10": {
+      "type": "splunk.line",
+      "options": {
+        "seriesColors": [
+          "#19b5c4",
+          "#f2a93b",
+          "#5aa0e8",
+          "#9b7ddc",
+          "#3fb97f",
+          "#f0615a",
+          "#c7d36f",
+          "#e58fb6"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#16232f",
+        "yAxisTitleText": "Events",
+        "xAxisTitleText": "Seconds since the first event of the run"
+      },
+      "title": "Telemetry volume trend by source",
+      "description": "Event throughput per source over the run: a drop in a source after the incident phase is the health signal available from this telemetry.",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true
+    },
+    "viz_11": {
+      "type": "splunk.column",
+      "options": {
+        "stackMode": "stacked",
+        "seriesColors": [
+          "#5aa0e8",
+          "#f2a93b",
+          "#3fb97f"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#16232f",
+        "xAxisLabelRotation": -30,
+        "yAxisTitleText": "Events"
+      },
+      "title": "Before / during / after by source",
+      "description": "Events per source before the incident, during it and during recovery/validation (phase names from the constituent packs).",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true
+    },
+    "viz_12": {
+      "type": "splunk.table",
+      "options": {
+        "count": 8,
+        "backgroundColor": "#16232f"
+      },
+      "title": "Affected assets and services (click a row to search its events)",
+      "dataSources": {
+        "primary": "ds_11"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\" | eval pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_host=\"$row.host.value$\" | sort 0 _time| head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_13": {
+      "type": "splunk.table",
+      "options": {
+        "count": 8,
+        "backgroundColor": "#16232f"
+      },
+      "title": "Incident sequence: root cause to recovery",
+      "dataSources": {
+        "primary": "ds_12"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\" | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | search pf_phase=\"$row.pf_phase.value$\" | sort 0 _time| head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_14": {
+      "type": "splunk.table",
+      "options": {
+        "count": 8,
+        "backgroundColor": "#16232f"
+      },
+      "title": "Impact events (everything after the baseline; click a row for the raw event search)",
+      "dataSources": {
+        "primary": "ds_13"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\" | eval pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_host=\"$row.host.value$\" pf_st=\"$row.sourcetype.value$\" | sort 0 _time| head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "viz_2",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as value"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "viz_3",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_st) as value"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "viz_4",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_host) as value"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "viz_5",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as a max(_time) as z | eval value=tostring(round(z-a),\"duration\") | table value"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "viz_6",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_phase) as value"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "viz_7",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | stats count(eval(pf_class=\"3 Recovery / validation\")) as value"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Incident timeline · events by phase",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | stats count by pf_sec, pf_phase | xyseries pf_sec pf_phase count | sort pf_sec | fillnull value=0"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Events by phase (click to filter the page)",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count by pf_phase | sort - count"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Telemetry volume trend by source",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | stats count by pf_sec, pf_st | xyseries pf_sec pf_st count | sort pf_sec | fillnull value=0"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Before / during / after by source",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | chart count over pf_st by pf_class | addtotals fieldname=_total | sort - _total | head 8 | fields - _total | rename pf_st as sourcetype"
+      }
+    },
+    "ds_11": {
+      "type": "ds.search",
+      "name": "Affected assets and services (click a row to search its events)",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as events, dc(pf_phase) as phases, values(pf_st) as services, min(_time) as first, max(_time) as last by pf_host | eval first=strftime(first,\"%H:%M:%S\"), last=strftime(last,\"%H:%M:%S\") | sort - events | head 25 | rename pf_host as host"
+      }
+    },
+    "ds_12": {
+      "type": "ds.search",
+      "name": "Incident sequence: root cause to recovery",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as t0 max(_time) as t1 count as events by netspout_source_pack pf_phase | sort t0 | eval start=strftime(t0,\"%H:%M:%S\"), seconds=round(t1-t0) | fields start pf_phase events seconds netspout_source_pack | rename netspout_source_pack as pack"
+      }
+    },
+    "ds_13": {
+      "type": "ds.search",
+      "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | search pf_class!=\"1 Before incident\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" | stats latest(_time) as t count by netspout_replay_session | sort - t | eval label=netspout_replay_session.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" events\" | table label netspout_replay_session"
+      }
+    },
+    "ds_phase_list": {
+      "type": "ds.search",
+      "name": "Phase list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_health_clinical_network_edge\" netspout_replay_session=\"$run_tok$\" | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | stats count by pf_phase | sort pf_phase | eval label=pf_phase | table label pf_phase"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_phase",
+      "input_index"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1600,
+          "display": "auto-scale",
+          "backgroundColor": "#0e1822"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 112
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 260,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 500,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 1220,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 270,
+              "w": 930,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 970,
+              "y": 270,
+              "w": 470,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 590,
+              "w": 710,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 750,
+              "y": 590,
+              "w": 690,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_12",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 900,
+              "w": 710,
+              "h": 320
+            }
+          },
+          {
+            "item": "viz_13",
+            "type": "block",
+            "position": {
+              "x": 750,
+              "y": 900,
+              "w": 690,
+              "h": 320
+            }
+          },
+          {
+            "item": "viz_14",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1240,
+              "w": 1420,
+              "h": 340
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Scenario",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

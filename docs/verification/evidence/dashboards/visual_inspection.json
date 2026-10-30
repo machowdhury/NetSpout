@@ -1,0 +1,8 @@
+{
+ "note": "Screenshots of the FINAL render (docs/verification/evidence/dashboards/screens/) that were opened and inspected by the engineer: layout, KPI cards, charts, tables populated and legible, run context shown, no error banners. Design reference: design/ (Figma V2 tokens: terracotta accent, IBM Plex Mono) - these dashboards use the earlier teal-on-navy palette (known deviation, not a defect).",
+ "inspected": {
+  "ind_telco_change_induced_outage": "operational template, full page",
+  "ind_gov_citizen_identity_attack": "security template with users table and original analytics list",
+  "ind_agri_edge_gateway_health": "operational template, two hosts"
+ }
+}

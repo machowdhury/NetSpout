@@ -2572,6 +2572,16 @@ def _replay_panels_populated():
         return set()
 
 
+def _replay_dashboards():
+    """pack id -> installed Dashboard Studio view and the maturity recorded by stored evidence (never inferred)."""
+    try:
+        root = Path(__file__).resolve().parents[2]
+        doc = json.loads((root / "docs/verification/evidence/dashboards/dashboard_maturity.json").read_text(encoding="utf-8"))
+        return {pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in doc["dashboards"].items()}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
 def _explorer() -> UseCaseExplorer:
     from app.catalog import catalog
     if "inputs" not in _explorer_operational_cache:
@@ -2592,6 +2602,7 @@ def _explorer() -> UseCaseExplorer:
         incident_packs=incident_catalog(),
         replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
         replay_panels_populated=_replay_panels_populated(),
+        replay_dashboards=_replay_dashboards(),
         candidates=load_candidates(),
         curated_stories=load_curated_stories(),
         verified_scenarios=_verified_scenario_ids()[0],

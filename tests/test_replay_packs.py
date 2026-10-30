@@ -139,12 +139,12 @@ def test_explorer_exposes_replay_packs_as_runnable_contracted_with_honest_verifi
     assert set(packs) == {p['id'] for p in PACKS}
     for e in packs.values():
         assert e['runnable'] and e['blocked_reason'] is None and e['maturity']['tier'] == 'CONTRACTED'     # never promoted because events indexed
-        assert e['live_verified'] and not e['dashboard_verified'] and e['dashboard'] is None
+        assert e['live_verified'] and not e['dashboard_verified'] and e['dashboard']['dashboard_maturity'].startswith('DASHBOARD_')
         assert e['source_modes'] and all(i['basis'] == 'editorial' for i in e['industries']) and e['industries']
         steps = {s['step']: s for s in e['workflow']}
         assert steps['GENERATE']['endpoint']['path'] == '/api/replay/sessions' and steps['GENERATE']['available']
         assert steps['VERIFY']['endpoint']['path'] == '/api/replay/sessions/{session_id}/verify'
-        assert not steps['DASHBOARD']['available']
+        assert steps['DASHBOARD']['available']                  # a Studio view exists; its maturity is evidence-driven
     assert packs['rp_agentic_ai_mcp_runtime_hybrid']['source_modes'] == ['native', 'replay']
     assert packs['rp_cloud_control_plane_activity']['source_modes'] == ['replay']
 

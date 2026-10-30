@@ -114,6 +114,7 @@ class UseCaseExplorer:
         incident_packs: Iterable[Dict[str, Any]] = (),
         replay_packs: Iterable[Dict[str, Any]] = (),
         replay_panels_populated: Iterable[str] = (),
+        replay_dashboards: Optional[Dict[str, Dict[str, Any]]] = None,
         candidates: Iterable[Dict[str, Any]] = (),
         verified_scenarios: Iterable[str] = (),
         dashboard_verified: Iterable[str] = (),
@@ -122,6 +123,7 @@ class UseCaseExplorer:
         # pack_scenario_ids: authentic observation packs, run through /api/generate/scenario-pack.
         # runner_scenario_ids: scenarios ScenarioRunner can execute; None keeps the legacy "all catalog scenarios runnable".
         self._pack_ids = set(pack_scenario_ids)
+        self._replay_dashboards = replay_dashboards or {}  # pack id -> {view, maturity, evidence}; maturity from stored evidence only
         self._panels_populated = set(replay_panels_populated)  # panel queries returned rows for a live run (NOT a dashboard-verified claim)
         self._verified = set(verified_scenarios)          # live Splunk evidence recorded for this scenario id (event/metric counts)
         self._dashboard_verified = set(dashboard_verified)  # DASHBOARD_READY evidence recorded
@@ -259,6 +261,13 @@ class UseCaseExplorer:
             source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid),
         )
 
+    def _replay_dashboard_ref(self, sid: str) -> Optional[Dict[str, Any]]:
+        d = self._replay_dashboards.get(sid)
+        if not d:
+            return None
+        return {"dashboard_id": d["view"], "eligibility": "ELIGIBLE", "dashboard_maturity": d["maturity"], "reasons": [], "splunk_view": d["view"],
+                "scale": "DASHBOARD_SPECIFIED < DASHBOARD_IMPLEMENTED < DASHBOARD_DATA_VALIDATED < DASHBOARD_VISUALLY_VERIFIED"}
+
     def _replay_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
         """Scenario pack that runs on the replay engine: recorded (authentic) phases and/or existing native packs on one timeline."""
         sid = row["id"]
@@ -269,7 +278,7 @@ class UseCaseExplorer:
             summary=row["objective"] + " Sources: " + ", ".join(sorted({ph["source"].get("source_id") or ph["source"]["pack"] for ph in row["phases"]})) + ". "
                     + ("Recorded events are replayed with only the timestamp rewritten; independent recordings are aligned in time only." if "replay" in kinds else ""),
             domain=row["category"].replace("_", " ").title(), category="REPLAY_PACK", vendors=[], sourcetypes=list(row.get("required_sourcetypes", sts)), source_ids=[],
-            raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=None)
+            raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._replay_dashboard_ref(sid))
         entry["industries"] = [{"id": i, "basis": "editorial"} for i in row["industries"] if i in self._industry_ids]
         if row.get("subindustry"):
             entry["industries"][0]["subindustry_label"] = row["subindustry"]
@@ -339,6 +348,8 @@ class UseCaseExplorer:
             dash_blocked = "no dashboard recipe is bound to this scenario"
         elif dash["eligibility"] != "ELIGIBLE":
             dash_blocked = "; ".join(dash["reasons"]) or "dashboard is not eligible"
+        elif e["engine"] == "replay_pack":
+            dash_blocked = None   # the Splunk Dashboard Studio view is opened directly with the session as run context
         elif e["engine"] != "unified_generation":
             dash_blocked = "dashboard validation requires a unified generation run"
         def step(name, method=None, path=None, body=None, note="", blocked_reason=None):
@@ -350,8 +361,10 @@ class UseCaseExplorer:
             step("GENERATE", *gen, note="Modeled telemetry is produced and dispatched to the configured destination", blocked_reason=blocked),
             step("INGEST", note=ing_note, blocked_reason=blocked),
             step("VERIFY", *ver, note=ver_note, blocked_reason=blocked),
-            step("DASHBOARD", "GET", f"/api/dashboards/{dash['dashboard_id']}?run_id={{run_id}}" if dash else None, None,
-                 "Panels are generated for the run; readiness is whatever dashboard validation records, never assumed",
+            step("DASHBOARD", "GET", (f"/app/netspout/{dash['splunk_view']}?form.run_tok={{session_id}}" if e["engine"] == "replay_pack" and dash else
+                                      f"/api/dashboards/{dash['dashboard_id']}?run_id={{run_id}}" if dash else None), None,
+                 ("Opens the Splunk Dashboard Studio view for this replay session; its maturity is what stored evidence records (" + dash["dashboard_maturity"] + ")" if e["engine"] == "replay_pack" and dash else
+                  "Panels are generated for the run; readiness is whatever dashboard validation records, never assumed"),
                  blocked_reason=blocked or dash_blocked),
         ]
 
@@ -466,6 +479,12 @@ class UseCaseExplorer:
     def get(self, entry_id: str) -> Optional[Dict[str, Any]]:
         return next((e for e in self.all_entries() if e["entry_id"] == entry_id), None)
 
+    @staticmethod
+    def _dash_level(e: Dict[str, Any]) -> int:
+        """0 none, 1 IMPLEMENTED, 2 DATA_VALIDATED, 3 VISUALLY_VERIFIED (replay-pack dashboards, from stored evidence)."""
+        d = e.get("dashboard") or {}
+        return {"DASHBOARD_IMPLEMENTED": 1, "DASHBOARD_DATA_VALIDATED": 2, "DASHBOARD_VISUALLY_VERIFIED": 3}.get(d.get("dashboard_maturity"), 0) if e.get("engine") == "replay_pack" else 0
+
     def industries(self) -> List[Dict[str, Any]]:
         """Per approved industry. Cataloged (documented) and runnable (executable) are separate columns; nothing is inferred from one to the other."""
         rows = []
@@ -480,6 +499,9 @@ class UseCaseExplorer:
                 "scenarios_cataloged_only": sum(e["maturity"]["tier"] == "CATALOGED" for e in mine),
                 "scenarios_contracted": sum(e["maturity"]["tier"] == "CONTRACTED" for e in mine),
                 "scenarios_panels_populated": sum(e["scenario_id"] in self._panels_populated for e in mine),
+                "dashboards_implemented": sum(self._dash_level(e) >= 1 for e in mine),
+                "dashboards_data_validated": sum(self._dash_level(e) >= 2 for e in mine),
+                "dashboards_visually_verified": sum(self._dash_level(e) >= 3 for e in mine),
                 "scenarios_live_verified": sum(e["scenario_id"] in self._verified for e in mine),
                 "scenarios_dashboard_verified": sum(e["scenario_id"] in self._dashboard_verified for e in mine),
                 "scenarios_demo_ready": sum(e["demo_ready"] for e in mine),

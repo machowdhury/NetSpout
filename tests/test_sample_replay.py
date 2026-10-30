@@ -218,7 +218,9 @@ def test_pause_freezes_the_clock_and_resume_continues_without_burst_or_gap_colla
     assert len(sink.got) == n                                      # nothing delivered while paused (queued items are held too)
     s.resume()
     assert s.state == 'RUNNING'
-    time.sleep(0.5)
+    deadline = time.monotonic() + 5            # progress after resume, with headroom for a loaded machine
+    while len(sink.got) <= n and time.monotonic() < deadline:
+        time.sleep(0.05)
     s.stop()
     assert len(sink.got) > n
     stamps = [g[1] for g in sink.got]

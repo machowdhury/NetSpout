@@ -1,0 +1,101 @@
+{
+ "rp_linux_credential_access": {
+  "users": false
+ },
+ "rp_cloud_control_plane_activity": {
+  "users": false
+ },
+ "rp_windows_endpoint_process_chain": {
+  "users": true
+ },
+ "rp_web_exploitation_recordings": {
+  "users": false
+ },
+ "rp_edr_and_cloud_activity": {
+  "users": false
+ },
+ "rp_agentic_ai_mcp_runtime_hybrid": {
+  "users": false
+ },
+ "rp_workload_sysmon_ebpf_hybrid": {
+  "users": false
+ },
+ "ind_bank_account_takeover_resilience": {
+  "users": true
+ },
+ "ind_bank_payments_edge_defense": {
+  "users": true
+ },
+ "ind_telco_change_induced_outage": {
+  "users": false
+ },
+ "ind_telco_access_and_wireless_health": {
+  "users": false
+ },
+ "ind_health_ehr_ransomware_readiness": {
+  "users": true
+ },
+ "ind_health_clinical_network_edge": {
+  "users": false
+ },
+ "ind_mfg_it_ot_convergence": {
+  "users": false
+ },
+ "ind_mfg_plant_network_health": {
+  "users": false
+ },
+ "ind_energy_substation_edge_observation": {
+  "users": false
+ },
+ "ind_energy_scada_proxy_intrusion": {
+  "users": false
+ },
+ "ind_insurance_claims_platform_audit": {
+  "users": true
+ },
+ "ind_insurance_underwriting_exposure": {
+  "users": false
+ },
+ "ind_gov_citizen_identity_attack": {
+  "users": true
+ },
+ "ind_gov_agency_mail_exfiltration": {
+  "users": true
+ },
+ "ind_retail_pos_edge_defense": {
+  "users": false
+ },
+ "ind_retail_ecommerce_cloud_recon": {
+  "users": true
+ },
+ "ind_edu_campus_identity_and_collab": {
+  "users": true
+ },
+ "ind_saas_platform_runtime_attack": {
+  "users": true
+ },
+ "ind_media_content_delivery_exfil": {
+  "users": true
+ },
+ "ind_hospitality_guest_network_defense": {
+  "users": true
+ },
+ "ind_aero_defense_endpoint_c2": {
+  "users": false
+ },
+ "ind_legal_matter_data_exfiltration": {
+  "users": true
+ },
+ "ind_agri_edge_gateway_health": {
+  "users": false
+ },
+ "ind_realestate_building_exposure": {
+  "users": false
+ },
+ "ind_nonprofit_donor_platform_attack": {
+  "users": true
+ },
+ "ind_transport_fleet_network_change": {
+  "users": false
+ }
+}

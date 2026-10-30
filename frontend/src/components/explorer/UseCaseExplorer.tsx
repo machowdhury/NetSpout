@@ -340,6 +340,11 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
       const id = needRun();
       const dash = entry.dashboard;
       if (!dash) throw new Error('No dashboard is bound to this scenario.');
+      if (replay) {
+        // The Dashboard Studio view is a Splunk object: the link below opens it with this replay session as the run context.
+        return { ok: true, lines: [`Dashboard ${dash.dashboard_id}: ${dash.dashboard_maturity.replaceAll('_', ' ').toLowerCase()}`,
+          `Opens with run context ${id}. Maturity comes from stored evidence; it is not a detection or TA result.`] };
+      }
       const ix = needIndex();
       const pack = await explorerApi.dashboard(dash.dashboard_id, id, ix);
       const v = await explorerApi.validateDashboard(dash.dashboard_id, id, ix);

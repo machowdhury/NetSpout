@@ -1,0 +1,204 @@
+{
+ "generated_utc": "2026-10-30T19:35Z",
+ "app": "netspout",
+ "views": {
+  "pf_ind_aero_defense_endpoint_c2": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20715,
+   "matches_source": true
+  },
+  "pf_ind_agri_edge_gateway_health": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22644,
+   "matches_source": true
+  },
+  "pf_ind_bank_account_takeover_resilience": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22474,
+   "matches_source": true
+  },
+  "pf_ind_bank_payments_edge_defense": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 21760,
+   "matches_source": true
+  },
+  "pf_ind_edu_campus_identity_and_collab": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22006,
+   "matches_source": true
+  },
+  "pf_ind_energy_scada_proxy_intrusion": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20619,
+   "matches_source": true
+  },
+  "pf_ind_energy_substation_edge_observation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22884,
+   "matches_source": true
+  },
+  "pf_ind_gov_agency_mail_exfiltration": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23587,
+   "matches_source": true
+  },
+  "pf_ind_gov_citizen_identity_attack": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22155,
+   "matches_source": true
+  },
+  "pf_ind_health_clinical_network_edge": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22716,
+   "matches_source": true
+  },
+  "pf_ind_health_ehr_ransomware_readiness": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 21858,
+   "matches_source": true
+  },
+  "pf_ind_hospitality_guest_network_defense": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22033,
+   "matches_source": true
+  },
+  "pf_ind_insurance_claims_platform_audit": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23733,
+   "matches_source": true
+  },
+  "pf_ind_insurance_underwriting_exposure": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22888,
+   "matches_source": true
+  },
+  "pf_ind_legal_matter_data_exfiltration": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23684,
+   "matches_source": true
+  },
+  "pf_ind_media_content_delivery_exfil": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23505,
+   "matches_source": true
+  },
+  "pf_ind_mfg_it_ot_convergence": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20626,
+   "matches_source": true
+  },
+  "pf_ind_mfg_plant_network_health": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22645,
+   "matches_source": true
+  },
+  "pf_ind_nonprofit_donor_platform_attack": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23611,
+   "matches_source": true
+  },
+  "pf_ind_realestate_building_exposure": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22786,
+   "matches_source": true
+  },
+  "pf_ind_retail_ecommerce_cloud_recon": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 21751,
+   "matches_source": true
+  },
+  "pf_ind_retail_pos_edge_defense": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20438,
+   "matches_source": true
+  },
+  "pf_ind_saas_platform_runtime_attack": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 21918,
+   "matches_source": true
+  },
+  "pf_ind_telco_access_and_wireless_health": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22887,
+   "matches_source": true
+  },
+  "pf_ind_telco_change_induced_outage": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22767,
+   "matches_source": true
+  },
+  "pf_ind_transport_fleet_network_change": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 22814,
+   "matches_source": true
+  },
+  "pf_rp_agentic_ai_mcp_runtime_hybrid": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20320,
+   "matches_source": true
+  },
+  "pf_rp_cloud_control_plane_activity": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20175,
+   "matches_source": true
+  },
+  "pf_rp_edr_and_cloud_activity": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20141,
+   "matches_source": true
+  },
+  "pf_rp_linux_credential_access": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20204,
+   "matches_source": true
+  },
+  "pf_rp_web_exploitation_recordings": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20188,
+   "matches_source": true
+  },
+  "pf_rp_windows_endpoint_process_chain": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 21407,
+   "matches_source": true
+  },
+  "pf_rp_workload_sysmon_ebpf_hybrid": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 20180,
+   "matches_source": true
+  }
+ }
+}

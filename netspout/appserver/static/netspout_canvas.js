@@ -26,7 +26,11 @@ require([
 
     var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
     var locale = localeMatch ? localeMatch[1] : 'en-US';
-    var canvasUrl = '/' + locale + '/static/app/netspout/dist/index.html';
+    // The React UI talks to the NetSpout backend (default loopback :8081). Override with
+    // localStorage 'netspout.apiBase' (loopback origins only; the UI ignores anything else).
+    var apiBase = 'http://127.0.0.1:8081';
+    try { apiBase = window.localStorage.getItem('netspout.apiBase') || apiBase; } catch (e) {}
+    var canvasUrl = '/' + locale + '/static/app/netspout/dist/index.html?api_base=' + encodeURIComponent(apiBase);
 
     var iframe = $('<iframe>', {
       id: 'netspout-canvas-frame',

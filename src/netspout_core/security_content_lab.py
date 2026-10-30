@@ -772,6 +772,9 @@ class DetectionValidationOrchestrator:
         if detection is None:
             raise KeyError("Detection not found")
         spl, adaptations = self.prepare_query(detection, None, index)
+        # Splunk prepends "search " to a saved search's SPL; a stored leading "search" would become a literal
+        # term ("search search index=...") that matches nothing.
+        spl = re.sub(r"^\s*search\s+", "", spl)
         return {
             "detection_id": detection["content_id"],
             "saved_search_name": re.sub(r"\s+", " ", re.sub(r"[^A-Za-z0-9 _.\-]", " ", f"NetSpout - {detection['name']}")).strip()[:120],

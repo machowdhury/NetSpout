@@ -135,7 +135,10 @@ export const explorerApi = {
     call<{ run_id: string; status: string; evidence: Array<{ stage: string; state: string; detail?: string }>; limitations: string[] }>(
       'POST', '/api/generation/runs', { mode: 'SCENARIO', selection_id: selectionId, count }, 60_000),
   observe: (runId: string) =>
-    call<{ run_id: string; status: string; evidence: Array<{ stage: string; state: string; detail?: string }> }>(
+    call<{
+      run_id: string; status: string; evidence: Array<{ stage: string; state: string; detail?: string }>;
+      channel_results: Array<{ source_id: string; required: boolean; evidence: Array<{ stage: string; state: string; count?: number }> }>;
+    }>(
       'POST', `/api/generation/runs/${e(runId)}/observe`, undefined, 30_000),
   // operational, ScenarioRunner
   runScenario: (scenarioId: string) =>

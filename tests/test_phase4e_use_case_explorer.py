@@ -184,6 +184,7 @@ class TestEnableDetection(unittest.TestCase):
         orch = DetectionValidationOrchestrator(SecurityContentCatalog(), lambda q: ([], None))
         prepared = orch.prepare_enable(APPROVED_ID, "main")
         self.assertNotIn("netspout_run_id", prepared["spl"])
+        self.assertFalse(prepared["spl"].lstrip().lower().startswith("search "))  # Splunk adds it; doubling matches nothing
         self.assertIn('index="main"', prepared["spl"])
         self.assertRegex(prepared["saved_search_name"], r"^NetSpout - [A-Za-z0-9 _.\-]+$")
         other = next(d["content_id"] for d in SecurityContentCatalog().document["detections"]
@@ -307,6 +308,21 @@ class TestExplorerApi(unittest.TestCase):
         self.assertIn(r.status_code, (403, 409))
         r = self.client.post("/api/explorer/security/observe", json={"index": "main", "run_id": "r1"})
         self.assertIn(r.status_code, (403, 409))
+
+    def test_topology_sync_does_not_wipe_configured_destination(self):
+        import app.main as main
+        main.current_topology.global_transport.hec_url = "https://127.0.0.1:18088/services/collector"
+        main.current_topology.global_transport.hec_token = "placeholder-not-real"
+        body = main.current_topology.model_dump(mode="json")
+        # hec_token is exclude=True, so a browser round-trip never carries it back.
+        for key in ("hec_url", "hec_endpoint", "hec_token"):
+            body["global_transport"].pop(key, None)
+        body["global_transport"]["hec_enabled"] = False
+        self.assertEqual(self.client.post("/api/topology", json=body).status_code, 200)
+        self.assertEqual(main.current_topology.global_transport.hec_url, "https://127.0.0.1:18088/services/collector")
+        self.assertEqual(main.current_topology.global_transport.hec_token, "placeholder-not-real")
+        main.current_topology.global_transport.hec_url = ""
+        main.current_topology.global_transport.hec_token = ""
 
 
 if __name__ == "__main__":

@@ -484,7 +484,12 @@ async def get_topology():
 @app.post("/api/topology", response_model=TopologyState)
 async def update_topology(topology: TopologyState):
     global current_topology
+    # The backend owns the destination and its credentials (Connection Center / /api/telemetry/config). A topology
+    # sync from the UI carries an empty transport and must not wipe them.
+    previous = getattr(current_topology, "global_transport", None)
     current_topology = topology
+    if previous is not None:
+        current_topology.global_transport = previous
     # Notify WebSocket clients of topology update
     await manager.broadcast_log({
         "type": "topology_updated",

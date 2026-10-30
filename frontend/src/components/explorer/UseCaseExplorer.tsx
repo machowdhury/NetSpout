@@ -183,7 +183,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     explorerApi.setup().then((s) => {
       const list = s.indexes ?? [];
       setIndexes(list);
-      setIndex((cur) => cur || list[0] || '');
+      // Default to an event index: the list is sorted, so list[0] can be the metric store.
+      setIndex((cur) => cur || list.find((i) => !/metric/i.test(i)) || list[0] || '');
     }, () => undefined);
   }, []);
 
@@ -229,9 +230,11 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     actions.INGEST = async () => {
       const id = needRun();
       if (unified) {
+        // Dispatch (HEC acknowledgement) is proven per channel; every required channel must prove it.
         const r = await explorerApi.observe(id);
-        const st = stageOf(r.evidence, 'SPLUNK_DISPATCHED');
-        return { ok: st === 'PROVEN', lines: [`SPLUNK_DISPATCHED: ${st}`] };
+        const channels = r.channel_results.filter((c) => c.required);
+        const states = channels.map((c) => `${c.source_id}: ${stageOf(c.evidence, 'SPLUNK_DISPATCHED')}`);
+        return { ok: channels.length > 0 && channels.every((c) => stageOf(c.evidence, 'SPLUNK_DISPATCHED') === 'PROVEN'), lines: states.map((x) => `SPLUNK_DISPATCHED ${x}`) };
       }
       const r = await explorerApi.runObservation(id);
       return { ok: r.event_observed_count + r.metric_observed_count > 0, lines: [`Observed ${r.event_observed_count} events, ${r.metric_observed_count} metrics (${r.observation_status})`] };

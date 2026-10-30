@@ -3,7 +3,11 @@ function configuredApiBase(): string | null {
   const value = document
     .querySelector<HTMLMetaElement>('meta[name="netspout-api-base"]')
     ?.content.trim();
-  return value || null;
+  if (value) return value;
+  // Splunk-hosted iframe: the canvas passes the backend origin. Loopback only, matching the backend CORS policy,
+  // so a crafted link cannot redirect API calls (and credentials) to another host.
+  const param = new URLSearchParams(window.location.search).get('api_base') ?? '';
+  return /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d{1,5})?$/.test(param) ? param : null;
 }
 
 export function getApiBaseUrl(): string {

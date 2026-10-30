@@ -188,7 +188,7 @@ class UseCaseExplorer:
             cfg = ("POST", "/api/generation/preflight", body)
             gen = ("POST", "/api/generation/runs", body)
             ver = ("POST", "/api/generation/runs/{run_id}/observe", None)
-            ing_note = "HEC acceptance is recorded per channel on the run (stage SPLUNK_ACCEPTED)"
+            ing_note = "HEC acknowledgement is recorded per required channel (stage SPLUNK_DISPATCHED)"
             ver_note = "Success = SPLUNK_OBSERVED PROVEN for every required channel"
         else:
             cfg = ("GET", f"/api/scenarios/{sid}", None)

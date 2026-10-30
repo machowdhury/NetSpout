@@ -1348,9 +1348,9 @@ def run_scenario_contract(
         if "dispatch_telemetry" in payload:
             dispatch_telemetry = bool(payload["dispatch_telemetry"])
         if "transport_config" in payload and payload["transport_config"]:
-            transport_config = TelemetryTransportConfig(**payload["transport_config"])
-            if current_topology:
-                current_topology.global_transport = transport_config
+            transport_config = _authorize_caller_transport(payload["transport_config"])
+            if current_topology and not release_candidate_configuration.load().get("configured"):
+                current_topology.global_transport = transport_config  # legacy lab behavior only; never replaces a saved Connection Center destination
         if "transport_mode" in payload and payload["transport_mode"] is not None:
             transport_mode = str(payload["transport_mode"])
         if "native_protocol" in payload:
@@ -2033,11 +2033,40 @@ def run_studio_pack(pack_id: str, payload: StudioRunRequest):
 # =========================================================================
 # Legacy Generation Modes (compatibility surface)
 # =========================================================================
+def _authorize_caller_transport(raw: Dict[str, Any]) -> TelemetryTransportConfig:
+    """A caller-supplied transport_config is untrusted input (it carries a destination URL, a token and index names).
+
+    Connection Center not configured: lab/legacy behavior is kept, but index names must be safe.
+    Connection Center configured: the config must point at the configured destination (same host:port) and BOTH the event and
+    metric index it would use (explicit or defaulted) must be on the allowlist; otherwise 403 before anything is sent.
+    """
+    from urllib.parse import urlparse
+    try:
+        cfg = TelemetryTransportConfig(**raw)
+    except Exception as exc:
+        raise HTTPException(status_code=422, detail="Invalid transport_config") from exc
+    indexes = [i for i in (cfg.hec_index, cfg.hec_metric_index) if i]
+    for name in indexes:
+        try:
+            validate_index_name(name)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        return cfg
+    if urlparse(cfg.hec_url or "").netloc.lower() != urlparse(config.get("hec_url") or "").netloc.lower():
+        raise HTTPException(status_code=403, detail="transport_config destination differs from the Connection Center destination")
+    for name in indexes:
+        if name not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    return cfg
+
+
 def _generator_transport(index=None, explicit=None):
     """Transport for the generator-mode routes: an explicit request config wins; otherwise the Connection Center
     destination (global transport) with the requested index; None keeps the pre-existing defaults when none is saved."""
     if explicit:
-        return TelemetryTransportConfig(**explicit)
+        return _authorize_caller_transport(explicit)
     config = release_candidate_configuration.load()
     if not config.get("configured"):
         return None  # nothing configured: callers keep failing closed (the default transport is not a destination)

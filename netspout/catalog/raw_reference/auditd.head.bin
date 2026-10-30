@@ -1,0 +1,91 @@
+type=PROCTITLE msg=audit(02/20/2025 13:07:46.504:118908) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 13:07:46.504:118907) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 13:07:46.504:118906) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 13:07:46.503:118905) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 13:07:05.497:110383) : proctitle=cat /opt/splunkforwarder/etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.629:103880) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.629:103880) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.624:103879) : proctitle=cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.624:103879) : proctitle=cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.618:103876) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.618:103875) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.618:103876) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.618:103875) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.616:103872) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.616:103872) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103871) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103870) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103869) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103871) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103870) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.606:103869) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.603:103868) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.603:103867) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.603:103868) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.603:103867) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.600:103862) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.600:103861) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.600:103862) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.600:103861) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.586:103860) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.586:103860) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.583:103857) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.583:103856) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.583:103857) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.583:103856) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.581:103855) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.581:103855) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.577:103852) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.577:103851) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.577:103852) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.577:103851) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.576:103848) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.576:103848) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103847) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103846) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103845) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103847) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103846) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.572:103845) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.571:103844) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.571:103843) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.571:103844) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.571:103843) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.569:103838) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.569:103837) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.569:103838) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.569:103837) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.562:103836) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 13:06:23.562:103836) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:02:08.322:60288) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 10:02:08.321:60287) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 10:02:08.321:60286) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 10:02:08.321:60285) : proctitle=cat /etc/shadow /etc/shadow- /etc/shadow~ /etc/gshadow /etc/gshadow- /etc/master.passwd /etc/spwd.db 
+type=PROCTITLE msg=audit(02/20/2025 10:01:26.682:51610) : proctitle=cat /opt/splunkforwarder/etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.524:45013) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.520:45012) : proctitle=cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.517:45009) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.517:45008) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.516:45005) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.512:45004) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.512:45003) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.512:45002) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.511:45001) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.511:45000) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.509:44995) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.509:44994) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.505:44993) : proctitle=sudo cat /etc/passwd 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.503:44990) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.502:44989) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.500:44988) : proctitle=cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.495:44985) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.495:44984) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.494:44981) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.489:44980) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.489:44979) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.489:44978) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.488:44977) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.488:44976) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.487:44971) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.487:44970) : proctitle=sudo cat /etc/shadow 
+type=PROCTITLE msg=audit(02/20/2025 10:00:26.480:44969) : proctitle=sudo cat /etc/shadow 

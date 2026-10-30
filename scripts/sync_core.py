@@ -217,6 +217,18 @@ def sync_core(modules=None):
             )
             print(f"  [CATALOG_SYNC] {copied} catalog JSONs -> {os.path.relpath(target, REPO_ROOT)}")
 
+    # 5b. Ship the authentic recordings the replay registry points at: the deployed app has no repository checkout to read them from
+    registry = os.path.join(CANONICAL_CATALOG_DIR, "replay_sources.json")
+    if os.path.isfile(registry):
+        import json as _json
+        with open(registry, encoding="utf-8") as fh:
+            files = sorted({src["file"] for src in _json.load(fh)["sources"]})
+        for rel in files:
+            dest = os.path.join(REPO_ROOT, "netspout", rel)
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            shutil.copyfile(os.path.join(REPO_ROOT, rel), dest)
+        print(f"  [REPLAY_SAMPLES] {len(files)} recorded sample files -> netspout/catalog/raw_reference")
+
     # 6. Generate netspout/appserver/static/vendor_catalog.json from Canonical Catalog
     try:
         sys.path.insert(0, os.path.join(REPO_ROOT, "src"))

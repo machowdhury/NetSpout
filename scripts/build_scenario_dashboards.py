@@ -346,6 +346,21 @@ def view_name(pid):
     return "pf_" + pid
 
 
+def write_nav(built):
+    """Explicit nav entries (no pattern matching): two collections, operational and security, labelled with the scenario titles."""
+    import re
+    nav = ROOT / "netspout" / "default" / "data" / "ui" / "nav" / "default.xml"
+    text = nav.read_text(encoding="utf-8")
+    def coll(label, rows):
+        body = "\n".join('      <view name="%s" label="%s"/>' % (pid, escape(title, {'"': "&quot;"})) for pid, title in sorted(rows, key=lambda r: r[1].lower()))
+        return '    <collection label="%s">\n%s\n    </collection>' % (label, body)
+    ops = [("pf_" + b[0], b[3]) for b in built if b[1] == "operational"]
+    sec = [("pf_" + b[0], b[3]) for b in built if b[1] == "security"]
+    block = ('  <collection label="Scenario Dashboards">\n' + coll("Operational", ops) + "\n" + coll("Security", sec) + "\n  </collection>")
+    text = re.sub(r'  <collection label="Scenario Dashboards">.*?</collection>\s*</collection>|  <collection label="Scenario Dashboards">.*?</collection>', lambda m: block, text, count=1, flags=re.S)
+    nav.write_text(text, encoding="utf-8")
+
+
 def main():
     probe_all = json.loads(PROBE.read_text()) if PROBE.exists() else {}
     built = []
@@ -354,7 +369,8 @@ def main():
         d = (build_operational if s["kind"] == "operational" else build_security)(s, probe)
         xml, spec = render(d)
         (VIEWS / (view_name(s["id"]) + ".xml")).write_text(xml, encoding="utf-8")
-        built.append((s["id"], s["kind"], s["family"]))
+        built.append((s["id"], s["kind"], s["family"], s["title"]))
+    write_nav(built)
     c = collections.Counter((b[2], b[1]) for b in built)
     print(json.dumps({"dashboards": len(built), "by_family_kind": {"%s/%s" % k: v for k, v in c.items()}}))
 

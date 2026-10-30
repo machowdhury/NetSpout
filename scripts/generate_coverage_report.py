@@ -425,17 +425,26 @@ def main(check=False):
         modes = sorted({ph["source"]["kind"] for ph in p_["phases"]})
         sl.append(f"| {p_['id']} | {p_['category']} | {'both' if len(modes) == 2 else modes[0]} | {len(p_['phases'])} | {_rp.correlation_level(p_)} | {'YES' if p_['id'] in rverified else 'NO'} | none | none | {', '.join(p_['industries'])} |")
     sl += ["", f"Replay-verified canonical sourcetypes ({len(rcanon)}): {', '.join(rcanon)}. Recorded sources whose sourcetype is not a catalog canonical name ({len(rnoncanon)}): {', '.join(rnoncanon) or 'none'} (replayable, not counted as coverage).", "",
+           "## Industry scenario packs added 2026-10-30 (26; all native sequences of existing authentic packs, run by the replay engine)", "",
+           "Framing by industry/sub-industry is editorial; telemetry and in-pack correlation are authentic; constituent packs are related by time only. "
+           "Maturity CONTRACTED. `Panels` = every panel query returned rows for a live run in the isolated lab (not a Dashboard Studio object). "
+           "Detections are not claimed (no add-on, CIM or ES content installed).", "",
+           "| Scenario | Industry / sub-industry | Kind | Constituent native packs | Sourcetypes | Indexed | Panels |", "|---|---|---|---|---|---|---|"]
+    rpanels = set(json.loads((OUT / "evidence" / "replay" / "replay_live.json").read_text(encoding="utf-8")).get("packs_panels_populated", [])) if (OUT / "evidence" / "replay" / "replay_live.json").exists() else set()
+    for p_ in [x for x in rpacks if x["id"].startswith("ind_")]:
+        sl.append(f"| {p_['id']} | {p_['industries'][0]} / {p_['subindustry']} | {p_['kind']} | {', '.join(ph['source']['pack'] for ph in p_['phases'])} | {len(p_['required_sourcetypes'])} | {'YES' if p_['id'] in rverified else 'NO'} | {'YES' if p_['id'] in rpanels else 'NO'} |")
+    sl += ["", "**Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.", "",
            "Replay sample corpus: 10 vendored authentic recordings (`catalog/replay_sources.json`). The Ollama server log was excluded because it mixes three timestamp formats. "
            "SA-Eventgen was not evaluated against its version-specific spec (not installed in any lab); the PulseForge replay engine was reused.", "",
            "## 18-industry coverage matrix", "",
            "Columns are separate evidence: documented is not runnable, runnable is not verified, verified is not TA-parsed or detected. Mappings are editorial unless the "
            "source labels the industry (`*` in the Explorer).", "",
-           "| Industry | Documented | Cataloged only | Runnable | Live-verified | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |",
-           "|---|---|---|---|---|---|---|---|---|---|---|"]
+           "| Industry | Documented (all) | Cataloged only | Contracted | Runnable | Independently indexed | Panel queries populated | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |",
+           "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in ex.industries():
         mine = [e for e in entries if any(i["id"] == r["id"] for i in e["industries"])]
         named = {st for e in mine for st in e.get("sourcetypes", []) if st not in native_now and not st.startswith("netspout:")}
-        sl.append(f"| {r['name']} | {r['scenarios_total']} | {r['scenarios_cataloged_only']} | {r['scenarios_runnable']} | {r['scenarios_live_verified']} | {r['scenarios_dashboard_verified']} | {r['security_stories_curated']} | {r['security_stories_runnable']} | {r['security_detections_verified']} | {len(named)} | {', '.join(s.replace('gov-', '') for s in r['subdomains_with_scenarios']) or '-'} |")
+        sl.append(f"| {r['name']} | {r['scenarios_total']} | {r['scenarios_cataloged_only']} | {r['scenarios_contracted']} | {r['scenarios_runnable']} | {r['scenarios_live_verified']} | {r['scenarios_panels_populated']} | {r['scenarios_dashboard_verified']} | {r['security_stories_curated']} | {r['security_stories_runnable']} | {r['security_detections_verified']} | {len(named)} | {', '.join(s.replace('gov-', '') for s in r['subdomains_with_scenarios']) or '-'} |")
     sl += ["", "Curated stories are Splunk Analytic Stories whose own text names the sector as a threat target (basis NARRATIVE_TARGET_SECTOR) and whose original research.splunk.com page was verified (HTTP 200); "
            "they are NOT executable: only a story with a runtime-approved detection is runnable, and the single detection-verified item (React2Shell) is not curated to an industry. "
            "Technology/SaaS, media, non-profit and agriculture have no story whose text names the sector and whose link resolves. "

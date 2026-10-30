@@ -38,7 +38,7 @@ class Sink:
 def test_definitions_reference_only_real_sources_real_native_packs_and_approved_industries():
     from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS
     ids = {s['id'] for s in sources()}
-    assert len(PACKS) == 7 and len({p['id'] for p in PACKS}) == 7
+    assert len(PACKS) == 33 and len({p['id'] for p in PACKS}) == 33 and sum(p['id'].startswith('ind_') for p in PACKS) == 26
     for p in PACKS:
         assert set(p['industries']) <= TAXONOMY and p['category'] in ('SOC', 'NOC', 'ITOPS', 'AI_SECURITY') and p['seed'] and p['verification_spl'] and p['detection_prerequisites']
         for ph in p['phases']:
@@ -114,7 +114,7 @@ def api(tmp_path):
 
 def test_api_lists_packs_previews_and_runs_one_shot_and_continuous(api):
     listing = client.get('/api/replay/packs').json()
-    assert len(listing['packs']) == 7 and all(p['correlation_level'] for p in listing['packs']) and 'phases' in listing['packs'][0]
+    assert len(listing['packs']) == len(PACKS) and all(p['correlation_level'] for p in listing['packs']) and 'phases' in listing['packs'][0]
     pv = client.post('/api/replay/preview', json={'pack_id': 'rp_workload_sysmon_ebpf_hybrid', 'count': 4}).json()
     assert pv['pack_id'] == 'rp_workload_sysmon_ebpf_hybrid' and pv['rows'][0]['phase'] == 'WORKLOAD'
     one = client.post('/api/replay/sessions', json={'pack_id': 'rp_cloud_control_plane_activity', 'speed': 1000, 'loops': 1}).json()
@@ -134,7 +134,7 @@ def test_unknown_pack_is_refused(api):
 
 
 def test_explorer_exposes_replay_packs_as_runnable_contracted_with_honest_verification():
-    items = client.get('/api/explorer/entries?kind=operational&q=rp_&limit=50').json()['items']
+    items = client.get('/api/explorer/entries?kind=operational&q=rp_&limit=100').json()['items'] + client.get('/api/explorer/entries?kind=operational&q=ind_&limit=100').json()['items']
     packs = {i['scenario_id']: i for i in items if i['engine'] == 'replay_pack'}
     assert set(packs) == {p['id'] for p in PACKS}
     for e in packs.values():
@@ -147,3 +147,27 @@ def test_explorer_exposes_replay_packs_as_runnable_contracted_with_honest_verifi
         assert not steps['DASHBOARD']['available']
     assert packs['rp_agentic_ai_mcp_runtime_hybrid']['source_modes'] == ['native', 'replay']
     assert packs['rp_cloud_control_plane_activity']['source_modes'] == ['replay']
+
+
+def test_industry_scenarios_cover_all_18_industries_with_contract_fields_and_honest_framing():
+    ind = [p for p in PACKS if p['id'].startswith('ind_')]
+    assert {i for p in ind for i in p['industries']} == TAXONOMY
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS
+    for p in ind:
+        assert p['subindustry'] and p['kind'] in ('operational', 'security') and p['required_sourcetypes'] and p['dashboard_panels'] and p['provenance'] and p['correlation_note']
+        assert all(ph['source']['kind'] == 'native' and ph['source']['pack'] in SCENARIO_PACK_IDS for ph in p['phases'])     # only existing authentic native packs
+        assert 'editorial' in p['provenance'].lower() and p['execution_requirement'] == 'native'
+        assert ('no detection is claimed' in p['detection_prerequisites']) if p['kind'] == 'security' else ('no detection claimed' in p['detection_prerequisites'])
+        assert (p['kind'] == 'operational') == ('Panels' in p['dashboard_requirement'])
+        tl = rp.build_pack_timeline(p['id'])
+        assert {it.fields['netspout_source_pack'] for it in tl.items} == {ph['source']['pack'] for ph in p['phases']}
+        assert {it.sourcetype for it in tl.items} == set(p['required_sourcetypes'])
+    assert rp.correlation_level(rp.get('ind_bank_account_takeover_resilience')) == 'NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN'
+    assert rp.correlation_level(rp.get('ind_media_content_delivery_exfil')) == 'NATIVE_CORRELATED'
+
+
+def test_panel_query_evidence_is_not_reported_as_dashboard_verification():
+    items = client.get('/api/explorer/entries?kind=operational&q=ind_&limit=100').json()['items']
+    ind = [e for e in items if e['scenario_id'].startswith('ind_')]
+    assert len(ind) == 26 and all(e['panel_queries_populated'] and not e['dashboard_verified'] and e['maturity']['tier'] == 'CONTRACTED' for e in ind)
+    assert all(e['industries'][0].get('subindustry_label') and e['dashboard_requirement'] and e['provenance_note'] for e in ind)

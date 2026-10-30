@@ -2564,6 +2564,14 @@ def _verified_scenario_ids():
     return verified, dashboards
 
 
+def _replay_panels_populated():
+    try:
+        root = Path(__file__).resolve().parents[2]
+        return set(json.loads((root / "docs/verification/evidence/replay/replay_live.json").read_text(encoding="utf-8")).get("packs_panels_populated", []))
+    except (OSError, ValueError):
+        return set()
+
+
 def _explorer() -> UseCaseExplorer:
     from app.catalog import catalog
     if "inputs" not in _explorer_operational_cache:
@@ -2583,6 +2591,7 @@ def _explorer() -> UseCaseExplorer:
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
         incident_packs=incident_catalog(),
         replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
+        replay_panels_populated=_replay_panels_populated(),
         candidates=load_candidates(),
         curated_stories=load_curated_stories(),
         verified_scenarios=_verified_scenario_ids()[0],

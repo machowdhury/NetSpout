@@ -202,10 +202,10 @@ class ReplayService:
 
     # independent verification -----------------------------------------------------------------------------------------------
     def verify(self, sid: str, search: Callable[[str], tuple]) -> Dict:
-        """Counts what Splunk actually holds for this session's unique `source`, through an independent search (never from sender counters)."""
+        """Counts what Splunk actually holds for this session (indexed field netspout_replay_session; `source` can be rewritten by add-ons), through an independent search (never from sender counters)."""
         s = self.get(sid)
-        query = ('search index="%s" source="%s" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time'
-                 % (s.index, s.source))
+        query = ('search index="%s" netspout_replay_session="%s" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time'
+                 % (s.index, s.id))
         rows, error = search(query)
         if error:
             return {"session_id": sid, "verified": False, "error": error}
@@ -215,4 +215,4 @@ class ReplayService:
         return {"session_id": sid, "verified": True, "indexed": indexed, "accepted": counts["accepted"], "delivered": counts["delivered"],
                 "complete": s.state in ("COMPLETED", "STOPPED") and indexed == counts["accepted"],
                 "first_time": row.get("first_time"), "last_time": row.get("last_time"), "query": query,
-                "note": "indexed is read from Splunk for source=%s; it can trail accepted until indexing catches up" % s.source}
+                "note": "indexed is read from Splunk for netspout_replay_session=%s; it can trail accepted until indexing catches up" % s.id}

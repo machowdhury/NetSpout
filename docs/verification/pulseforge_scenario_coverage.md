@@ -74,18 +74,18 @@ Live-verified scenarios: ub5_cisco_change_induced_outage, ub5_cisco_nac_radius_o
 
 | Measure | Count |
 |---|---|
-| Unique operational definitions (executable + documented candidates) | 336 |
-| Runnable (a real generator and Run path exist) | 112 |
+| Unique operational definitions (executable + documented candidates) | 362 |
+| Runnable (a real generator and Run path exist) | 138 |
 | Cataloged candidates only (documented; no generator or contract; never runnable) | 209 |
 | Contract-only (catalog contracts without executable telemetry; no Run action) | 15 |
-| Live-verified in Splunk (counts and, for incident packs, mstats values checked independently) | 50 |
+| Live-verified in Splunk (counts and, for incident packs, mstats values checked independently) | 76 |
 | Dashboard-verified | 1 |
 | Security analytic stories (reference stories; NOT counted as executable) | 365 |
 | Security stories with a runnable workflow (runtime-approved detection) | 1 |
 | Detection-verified | 1 |
 | Duplicate candidates removed (already represented by an executable entry) | 0 |
 
-By engine: cataloged 209, incident_pack 37, replay_pack 7, scenario_pack 26, scenario_runner 32, unified_generation 25. By tier: CATALOGED 209, CERTIFIED 18, CONTRACTED 83, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
+By engine: cataloged 209, incident_pack 37, replay_pack 33, scenario_pack 26, scenario_runner 32, unified_generation 25. By tier: CATALOGED 209, CERTIFIED 18, CONTRACTED 109, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
 
 Incident packs (27 network + 10 telecom) emit NetSpout-defined MODELED telemetry (`netspout:*`), not vendor-native formats; they stay CONTRACTED. Cataloged candidates come from `catalog/scenario_candidates.json` (MIT community use-case catalog pinned to a commit, plus Cisco 100 definitions that are not execution-enabled).
 
@@ -102,8 +102,69 @@ Each pack mixes recorded (authentic) phases and/or existing native packs. Tier s
 | rp_edr_and_cloud_activity | SOC | replay | 2 | TEMPORAL_ONLY | YES | none | none | banking-financial-services, aerospace-defense |
 | rp_agentic_ai_mcp_runtime_hybrid | AI_SECURITY | both | 2 | MIXED_TEMPORAL_ONLY_BETWEEN_SOURCES | YES | none | none | technology-saas, legal-compliance-professional-services |
 | rp_workload_sysmon_ebpf_hybrid | SOC | both | 2 | MIXED_TEMPORAL_ONLY_BETWEEN_SOURCES | YES | none | none | technology-saas, telecommunications, transportation-logistics |
+| ind_bank_account_takeover_resilience | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | banking-financial-services |
+| ind_bank_payments_edge_defense | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | banking-financial-services |
+| ind_telco_change_induced_outage | NOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | telecommunications |
+| ind_telco_access_and_wireless_health | NOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | telecommunications |
+| ind_health_ehr_ransomware_readiness | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | healthcare |
+| ind_health_clinical_network_edge | NOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | healthcare |
+| ind_mfg_it_ot_convergence | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | manufacturing |
+| ind_mfg_plant_network_health | NOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | manufacturing |
+| ind_energy_substation_edge_observation | NOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | energy-utilities |
+| ind_energy_scada_proxy_intrusion | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | energy-utilities |
+| ind_insurance_claims_platform_audit | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | insurance-insurtech |
+| ind_insurance_underwriting_exposure | ITOPS | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | insurance-insurtech |
+| ind_gov_citizen_identity_attack | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | government-public-sector |
+| ind_gov_agency_mail_exfiltration | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | government-public-sector |
+| ind_retail_pos_edge_defense | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | retail-ecommerce |
+| ind_retail_ecommerce_cloud_recon | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | retail-ecommerce |
+| ind_edu_campus_identity_and_collab | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | education |
+| ind_saas_platform_runtime_attack | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | technology-saas |
+| ind_media_content_delivery_exfil | SOC | native | 1 | NATIVE_CORRELATED | YES | none | none | media-entertainment |
+| ind_hospitality_guest_network_defense | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | hospitality-travel |
+| ind_aero_defense_endpoint_c2 | SOC | native | 3 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | aerospace-defense |
+| ind_legal_matter_data_exfiltration | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | legal-compliance-professional-services |
+| ind_agri_edge_gateway_health | ITOPS | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | agriculture-agritech |
+| ind_realestate_building_exposure | ITOPS | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | real-estate-proptech-construction |
+| ind_nonprofit_donor_platform_attack | SOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | nonprofit-ngo-global-aid |
+| ind_transport_fleet_network_change | NOC | native | 2 | NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN | YES | none | none | transportation-logistics |
 
 Replay-verified canonical sourcetypes (9): auditd, aws:cloudtrail, crowdstrike:events:sensor, crushftp:sessionlogs, linux_messages_syslog, mcp:jsonrpc, nginx:access, suricata, sysmon:linux. Recorded sources whose sourcetype is not a catalog canonical name (1): XmlWinEventLog (replayable, not counted as coverage).
+
+## Industry scenario packs added 2026-10-30 (26; all native sequences of existing authentic packs, run by the replay engine)
+
+Framing by industry/sub-industry is editorial; telemetry and in-pack correlation are authentic; constituent packs are related by time only. Maturity CONTRACTED. `Panels` = every panel query returned rows for a live run in the isolated lab (not a Dashboard Studio object). Detections are not claimed (no add-on, CIM or ES content installed).
+
+| Scenario | Industry / sub-industry | Kind | Constituent native packs | Sourcetypes | Indexed | Panels |
+|---|---|---|---|---|---|---|
+| ind_bank_account_takeover_resilience | banking-financial-services / Retail banking | security | wave2_ws_credential_compromise_chain, wave2_cloud_identity_sso_hunt, ub2_database_backup_integrity | 13 | YES | YES |
+| ind_bank_payments_edge_defense | banking-financial-services / Payments and e-banking | security | ub3_multivendor_edge_observation, wave2_aws_recon_escalation | 6 | YES | YES |
+| ind_telco_change_induced_outage | telecommunications / Enterprise WAN and SD-WAN services | operational | ub5_cisco_change_induced_outage, ub6_sdwan_utd_threat_pipeline | 15 | YES | YES |
+| ind_telco_access_and_wireless_health | telecommunications / Access, wireless and subscriber edge | operational | ub5_cisco_nac_radius_outage, ub5_cisco_platform_health_degradation, ub6_catalyst_wireless_rogue_threat | 16 | YES | YES |
+| ind_health_ehr_ransomware_readiness | healthcare / Hospital systems and EHR | security | wave2_ws_credential_compromise_chain, ub2_database_backup_integrity, ub3_identity_runtime_audit | 12 | YES | YES |
+| ind_health_clinical_network_edge | healthcare / Clinical network and medical IoT edge | operational | wave3_ebpf_workload_hunt, ub6_catalyst_wireless_rogue_threat | 13 | YES | YES |
+| ind_mfg_it_ot_convergence | manufacturing / Discrete manufacturing plant | security | ub1_ot_proxy_host_hunt, ub2_ot_edge_routing_observation, wave2_c2_callback_detection | 10 | YES | YES |
+| ind_mfg_plant_network_health | manufacturing / Plant network operations | operational | ub5_cisco_platform_health_degradation, ub5_cisco_change_induced_outage | 19 | YES | YES |
+| ind_energy_substation_edge_observation | energy-utilities / Electric transmission and substations | operational | ub2_ot_edge_routing_observation, ub5_cisco_platform_health_degradation | 11 | YES | YES |
+| ind_energy_scada_proxy_intrusion | energy-utilities / Utility control systems | security | ub1_ot_proxy_host_hunt, wave2_c2_callback_detection | 6 | YES | YES |
+| ind_insurance_claims_platform_audit | insurance-insurtech / Claims and policy administration | security | ub4_saas_collaboration_audit, ub3_database_message_audit, wave3_cloudmail_exfil | 13 | YES | YES |
+| ind_insurance_underwriting_exposure | insurance-insurtech / Underwriting analytics and data platforms | operational | ub4_exposure_infra_logging, ub2_cloud_identity_mail_hunt, ub3_identity_runtime_audit | 11 | YES | YES |
+| ind_gov_citizen_identity_attack | government-public-sector / State and local government | security | wave2_cloud_identity_sso_hunt, wave2_aws_recon_escalation, ub3_identity_runtime_audit | 11 | YES | YES |
+| ind_gov_agency_mail_exfiltration | government-public-sector / Federal civilian and compliance (framing only) | security | wave3_cloudmail_exfil, ub4_endpoint_threat_pipeline | 13 | YES | YES |
+| ind_retail_pos_edge_defense | retail-ecommerce / Stores and point of sale | security | ub3_multivendor_edge_observation, ub4_endpoint_threat_pipeline | 9 | YES | YES |
+| ind_retail_ecommerce_cloud_recon | retail-ecommerce / E-commerce platform | security | wave2_aws_recon_escalation, ub4_exposure_infra_logging | 6 | YES | YES |
+| ind_edu_campus_identity_and_collab | education / Higher education | security | wave2_cloud_identity_sso_hunt, ub4_saas_collaboration_audit | 8 | YES | YES |
+| ind_saas_platform_runtime_attack | technology-saas / Cloud-native software platform | security | wave2_k8s_container_escape, ub4_saas_collaboration_audit, ub4_exposure_infra_logging | 11 | YES | YES |
+| ind_media_content_delivery_exfil | media-entertainment / Streaming and content delivery | security | wave3_cloudmail_exfil | 8 | YES | YES |
+| ind_hospitality_guest_network_defense | hospitality-travel / Hotels and guest networks | security | ub3_multivendor_edge_observation, wave2_cloud_identity_sso_hunt | 9 | YES | YES |
+| ind_aero_defense_endpoint_c2 | aerospace-defense / Defense contractor | security | wave2_c2_callback_detection, ub4_endpoint_threat_pipeline, ub3_identity_runtime_audit | 11 | YES | YES |
+| ind_legal_matter_data_exfiltration | legal-compliance-professional-services / Law firms and professional services | security | wave3_cloudmail_exfil, ub2_cloud_identity_mail_hunt | 11 | YES | YES |
+| ind_agri_edge_gateway_health | agriculture-agritech / Precision farming and processing | operational | ub2_ot_edge_routing_observation, wave2_linux_auth_anomaly | 7 | YES | YES |
+| ind_realestate_building_exposure | real-estate-proptech-construction / Commercial property and construction | operational | ub4_exposure_infra_logging, ub4_saas_collaboration_audit | 7 | YES | YES |
+| ind_nonprofit_donor_platform_attack | nonprofit-ngo-global-aid / Humanitarian and donor platforms | security | wave2_cloud_identity_sso_hunt, wave3_cloudmail_exfil | 13 | YES | YES |
+| ind_transport_fleet_network_change | transportation-logistics / Logistics and fleet networks | operational | ub5_cisco_change_induced_outage, ub2_ot_edge_routing_observation | 16 | YES | YES |
+
+**Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.
 
 Replay sample corpus: 10 vendored authentic recordings (`catalog/replay_sources.json`). The Ollama server log was excluded because it mixes three timestamp formats. SA-Eventgen was not evaluated against its version-specific spec (not installed in any lab); the PulseForge replay engine was reused.
 
@@ -111,25 +172,25 @@ Replay sample corpus: 10 vendored authentic recordings (`catalog/replay_sources.
 
 Columns are separate evidence: documented is not runnable, runnable is not verified, verified is not TA-parsed or detected. Mappings are editorial unless the source labels the industry (`*` in the Explorer).
 
-| Industry | Documented | Cataloged only | Runnable | Live-verified | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Banking and Financial Services | 14 | 9 | 5 | 3 | 0 | 4 | 0 | 0 | 0 | - |
-| Healthcare | 12 | 9 | 3 | 2 | 0 | 4 | 0 | 0 | 0 | - |
-| Retail and E-commerce | 10 | 6 | 4 | 3 | 0 | 1 | 0 | 0 | 1 | - |
-| Manufacturing | 16 | 11 | 4 | 1 | 0 | 4 | 0 | 0 | 1 | - |
-| Energy and Utilities | 20 | 16 | 4 | 1 | 0 | 4 | 0 | 0 | 0 | - |
-| Telecommunications | 41 | 27 | 13 | 11 | 0 | 4 | 0 | 0 | 2 | - |
-| Government and Public Sector | 23 | 20 | 3 | 2 | 0 | 4 | 0 | 0 | 0 | critical-infrastructure, national-security, state-local |
-| Transportation and Logistics | 12 | 11 | 1 | 1 | 0 | 3 | 0 | 0 | 0 | - |
-| Education | 12 | 9 | 3 | 1 | 0 | 4 | 0 | 0 | 1 | - |
-| Technology and SaaS | 23 | 5 | 18 | 4 | 0 | 0 | 0 | 0 | 1 | - |
-| Media and Entertainment | 5 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | - |
-| Hospitality and Travel | 9 | 6 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | - |
-| Aerospace and Defense | 5 | 4 | 1 | 1 | 0 | 3 | 0 | 0 | 0 | - |
-| Legal, Compliance and Professional Services | 9 | 5 | 4 | 2 | 0 | 1 | 0 | 0 | 1 | - |
-| Agriculture and Agritech | 5 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | - |
-| Real Estate, PropTech and Construction | 7 | 5 | 2 | 2 | 0 | 1 | 0 | 0 | 0 | - |
-| Insurance and InsurTech | 7 | 6 | 1 | 1 | 0 | 1 | 0 | 0 | 0 | - |
-| Non-Profit, NGOs and Global Aid | 7 | 5 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | - |
+| Industry | Documented (all) | Cataloged only | Contracted | Runnable | Independently indexed | Panel queries populated | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Banking and Financial Services | 16 | 9 | 5 | 7 | 5 | 2 | 0 | 4 | 0 | 0 | 0 | - |
+| Healthcare | 14 | 9 | 4 | 5 | 4 | 2 | 0 | 4 | 0 | 0 | 0 | - |
+| Retail and E-commerce | 12 | 6 | 5 | 6 | 5 | 2 | 0 | 1 | 0 | 0 | 1 | - |
+| Manufacturing | 18 | 11 | 6 | 6 | 3 | 2 | 0 | 4 | 0 | 0 | 1 | - |
+| Energy and Utilities | 22 | 16 | 5 | 6 | 3 | 2 | 0 | 4 | 0 | 0 | 0 | - |
+| Telecommunications | 43 | 27 | 14 | 15 | 13 | 2 | 0 | 4 | 0 | 0 | 2 | - |
+| Government and Public Sector | 25 | 20 | 4 | 5 | 4 | 2 | 0 | 4 | 0 | 0 | 0 | critical-infrastructure, national-security, state-local |
+| Transportation and Logistics | 13 | 11 | 2 | 2 | 2 | 1 | 0 | 3 | 0 | 0 | 0 | - |
+| Education | 13 | 9 | 2 | 4 | 2 | 1 | 0 | 4 | 0 | 0 | 1 | - |
+| Technology and SaaS | 24 | 5 | 6 | 19 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | - |
+| Media and Entertainment | 6 | 4 | 2 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | - |
+| Hospitality and Travel | 10 | 6 | 2 | 4 | 2 | 1 | 0 | 1 | 0 | 0 | 1 | - |
+| Aerospace and Defense | 6 | 4 | 2 | 2 | 2 | 1 | 0 | 3 | 0 | 0 | 0 | - |
+| Legal, Compliance and Professional Services | 10 | 5 | 3 | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | - |
+| Agriculture and Agritech | 6 | 3 | 3 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | - |
+| Real Estate, PropTech and Construction | 8 | 5 | 3 | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 0 | - |
+| Insurance and InsurTech | 9 | 6 | 3 | 3 | 3 | 2 | 0 | 1 | 0 | 0 | 0 | - |
+| Non-Profit, NGOs and Global Aid | 8 | 5 | 3 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | - |
 
 Curated stories are Splunk Analytic Stories whose own text names the sector as a threat target (basis NARRATIVE_TARGET_SECTOR) and whose original research.splunk.com page was verified (HTTP 200); they are NOT executable: only a story with a runtime-approved detection is runnable, and the single detection-verified item (React2Shell) is not curated to an industry. Technology/SaaS, media, non-profit and agriculture have no story whose text names the sector and whose link resolves. Government subdomains: State/Local, National Security and Critical Infrastructure have editorial or source-labeled entries; **Federal Civilian and Compliance has none** (no authoritative source selected). TA validation is not tracked per industry: only Windows/Sysmon channels were TA-checked (see the TA matrix). Industries whose documented scenarios have no runnable counterpart (for example transportation, media, aerospace/defense, agriculture, real estate, insurance, non-profit) need authentic telemetry sources before they can become runnable.

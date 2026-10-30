@@ -132,7 +132,7 @@ class ListSink:
     def __init__(self, delay=0, fail_every=0, result='accepted'):
         self.got, self.delay, self.fail_every, self.result, self.lock = [], delay, fail_every, result, threading.Lock()
 
-    def send(self, raw, when):
+    def send(self, raw, when, meta=None):
         time.sleep(self.delay)
         with self.lock:
             self.got.append((raw, when, time.monotonic()))

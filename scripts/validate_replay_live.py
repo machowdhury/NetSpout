@@ -54,10 +54,10 @@ def session(source_id, token=None, delay=0.0, **kw):
     return s, sink, tl
 
 
-def indexed(source, wait_for=None, timeout=45):
+def indexed(sid, wait_for=None, timeout=45):
     rows = []
     for _ in range(timeout // 3):
-        rows = lab.search('search index=* source="%s" | eval t=_time, it=_indextime | table index host source sourcetype t it _raw | sort 0 t' % source, earliest="-2h")
+        rows = lab.search('search index=* netspout_replay_session="%s" | eval t=_time, it=_indextime | table index host source sourcetype t it _raw | sort 0 t' % sid, earliest="-2h")
         if wait_for is None or len(rows) >= wait_for:
             break
         time.sleep(3)
@@ -74,7 +74,7 @@ def main():
     t0 = datetime.now(timezone.utc)
     s, sink, tl = session("aws_cloudtrail", speed=5, loops=2, loop_gap_s=5)
     s.start(); s.wait(60)
-    rows = indexed(s.source, 24)
+    rows = indexed(s.id, 24)
     sent = [x[1].timestamp() for x in sink.sent]
     ts = [float(r["t"]) for r in rows]
     check("A1_hec_accepts_every_event", s.counts["accepted"] == 24 == s.counts["delivered"] and not s.counts["rejected"], counts=s.counts)
@@ -92,7 +92,7 @@ def main():
     stripped = lambda r: re.sub(r'"eventTime":"[^"]+"', '"eventTime":"X"', r)
     check("A7_everything_but_the_timestamp_is_byte_identical", {stripped(r["_raw"]) for r in rows} == {stripped(o) for o in originals} and
           all(r["_raw"] not in originals for r in rows), distinct_records=len({r['_raw'] for r in rows}))
-    check("A8_no_leak_to_other_indexes", {r["index"] for r in lab.search('search index=* source="%s" | table index' % s.source, earliest="-2h")} == {INDEX})
+    check("A8_no_leak_to_other_indexes", {r["index"] for r in lab.search('search index=* netspout_replay_session="%s" | table index' % s.id, earliest="-2h")} == {INDEX})
 
     # B. continuous replay with pause / resume / stop
     s, sink, tl = session("suricata_eve", speed=20, loops=None, loop_gap_s=2)
@@ -100,40 +100,40 @@ def main():
     s.pause(); paused_at = time.time(); time.sleep(0.5)
     n_pause = s.counts["accepted"]
     time.sleep(3)
-    r1 = indexed(s.source)
+    r1 = indexed(s.id)
     check("B1_pause_stops_delivery", s.counts["accepted"] == n_pause and s.state == "PAUSED" and len(r1) == n_pause and max(float(r["it"]) for r in r1) <= paused_at + 1.5,
           accepted_during_pause=s.counts["accepted"] - n_pause, indexed=len(r1))
     s.resume(); time.sleep(2.5)
     s.stop()
-    final = indexed(s.source, s.counts["accepted"])
+    final = indexed(s.id, s.counts["accepted"])
     ts = [float(r["t"]) for r in final]
     check("B2_resume_continues_and_stop_halts", s.state == "STOPPED" and s.counts["accepted"] > n_pause, accepted=s.counts["accepted"], before_pause=n_pause)
     check("B3_continuous_loops_more_than_once", s.counts["generated"] > len(tl.items), generated=s.counts["generated"], records=len(tl.items))
     check("B4_stop_accounting_matches_splunk", len(final) == s.counts["accepted"] and not s.counts["rejected"], indexed=len(final), counts=s.counts)
     check("B5_stamps_never_go_backwards_across_pause_and_loops", all(b >= a for a, b in zip(ts, ts[1:])), note="equal stamps occur where the source itself has equal timestamps")
     time.sleep(3)
-    check("B6_nothing_arrives_after_stop", len(indexed(s.source)) == len(final))
+    check("B6_nothing_arrives_after_stop", len(indexed(s.id)) == len(final))
 
     # C. EPS throttle
     s, sink, _ = session("sysmon_linux_xml", speed=1000, loops=1, eps_limit=15)
     s.start(); s.wait(60)
     t = [x[2] for x in sink.sent]
     rate = (len(t) - 1) / (t[-1] - t[0])
-    rows = indexed(s.source, len(t))
+    rows = indexed(s.id, len(t))
     check("C1_eps_limit_respected", rate <= 15 * 1.1 and len(t) == 129, observed_eps=round(rate, 2), limit=15)
     check("C2_all_throttled_events_indexed", len(rows) == s.counts["accepted"] == 129, indexed=len(rows))
 
     # D. backpressure: slow consumer, tiny queue, nothing dropped
     s, sink, _ = session("aws_cloudtrail", delay=0.05, speed=1000, loops=3, queue_size=2)
     s.start(); s.wait(60)
-    rows = indexed(s.source, 36)
+    rows = indexed(s.id, 36)
     check("D1_backpressure_blocks_producer_without_loss", s.counts["backpressure_waits"] > 0 and s.counts["generated"] == s.counts["delivered"] == 36 == len(rows), counts=s.counts, indexed=len(rows))
 
     # E. wrong token: HEC rejections are counted as rejected and nothing is indexed
     s, sink, _ = session("aws_cloudtrail", token="00000000-0000-0000-0000-000000000000", speed=1000, loops=1)
     s.start(); s.wait(30)
     time.sleep(3)
-    check("E1_rejected_events_counted_and_not_indexed", s.counts["rejected"] == s.counts["delivered"] == 12 and s.counts["accepted"] == 0 and not indexed(s.source, None, 6), counts=s.counts)
+    check("E1_rejected_events_counted_and_not_indexed", s.counts["rejected"] == s.counts["delivered"] == 12 and s.counts["accepted"] == 0 and not indexed(s.id, None, 6), counts=s.counts)
 
     # F. a source with no trustworthy timestamp is refused
     try:
@@ -144,15 +144,15 @@ def main():
 
     # G. scenario packs: replay phases + native phases, phase/run tagging as indexed fields, ordering, cycles
     from netspout_core import replay_packs
-    pack_ok = []
+    pack_ok, panels_ok = [], []
     for pid, loops in [(p["id"], 1) for p in replay_packs.packs()]:
         tl = replay_packs.build_pack_timeline(pid, cycle_gap_s=2)
         sink = Recording(HecSink(URL, lab.ENV["LAB_HEC_TOKEN"], INDEX, HOST, "placeholder", "x", False, True))
         s = ReplaySession(tl, sink, source_label=pid, sourcetype="(per event)", index=INDEX, host=HOST, speed=50, loops=loops)
         sink.sink._m["source"] = s.source
         s.start(); s.wait(120)
-        rows = indexed(s.source, len(tl.items))
-        by_phase = lab.search('search index=%s source="%s" | stats count min(_time) as first max(_time) as last by netspout_phase' % (INDEX, s.source), earliest="-2h")
+        rows = indexed(s.id, len(tl.items))
+        by_phase = lab.search('search index=%s netspout_replay_session="%s" | stats count min(_time) as first max(_time) as last by netspout_phase' % (INDEX, s.id), earliest="-2h")
         expected_by_phase = {}
         for it in tl.items:
             expected_by_phase[it.fields["netspout_phase"]] = expected_by_phase.get(it.fields["netspout_phase"], 0) + 1
@@ -160,8 +160,21 @@ def main():
         order = [r["netspout_phase"] for r in sorted(by_phase, key=lambda r: float(r["first"]))]
         check("G1_%s_every_event_indexed_and_counted_per_phase" % pid, len(rows) == len(tl.items) == s.counts["accepted"] and got == expected_by_phase, expected=expected_by_phase, indexed=got)
         check("G2_%s_phase_order_in_splunk_time" % pid, order == [ph["id"] for ph in replay_packs.get(pid)["phases"]], order=order)
-        run_ids = lab.search('search index=%s source="%s" | stats dc(netspout_run_id) as runs, values(netspout_scenario_id) as scn, dc(sourcetype) as sourcetypes' % (INDEX, s.source), earliest="-2h")
+        run_ids = lab.search('search index=%s netspout_replay_session="%s" | stats dc(netspout_run_id) as runs, values(netspout_scenario_id) as scn, dc(sourcetype) as sourcetypes' % (INDEX, s.id), earliest="-2h")
         check("G3_%s_single_run_id_and_scenario_tag" % pid, run_ids and run_ids[0]["runs"] == "1" and run_ids[0]["scn"] == pid, sourcetypes=run_ids[0].get("sourcetypes") if run_ids else None)
+        pk = replay_packs.get(pid)
+        if pk.get("required_sourcetypes"):
+            sts = lab.search('search index=%s netspout_replay_session="%s" | stats values(sourcetype) as st' % (INDEX, s.id), earliest="-2h")
+            got_st = sorted(sts[0]["st"] if sts and isinstance(sts[0]["st"], list) else [sts[0]["st"]] if sts else [])
+            # The Windows add-on installed in this lab rewrites sourcetype XmlWinEventLog:<channel> to XmlWinEventLog (and source to the channel) at index time.
+            want = sorted({"XmlWinEventLog" if st.startswith("XmlWinEventLog:") else st for st in pk["required_sourcetypes"]})
+            check("G5_%s_required_sourcetypes_all_present" % pid, got_st == want, expected=pk["required_sourcetypes"], indexed=got_st,
+                  note="XmlWinEventLog:<channel> is indexed as XmlWinEventLog by the installed Windows add-on" if want != sorted(pk["required_sourcetypes"]) else None)
+        if pk.get("dashboard_panels"):
+            empty = [pn["title"] for pn in pk["dashboard_panels"] if not lab.search("search " + pn["spl"].replace("{session}", s.id), earliest="-2h")]
+            check("H1_%s_dashboard_panel_queries_populated" % pid, not empty, empty_panels=empty)
+            if not empty:
+                panels_ok.append(pid)
         if all(results["G%d_%s_%s" % (n, pid, suffix)]["pass"] for n, suffix in ((1, "every_event_indexed_and_counted_per_phase"), (2, "phase_order_in_splunk_time"), (3, "single_run_id_and_scenario_tag"))):
             pack_ok.append(pid)
     tl = replay_packs.build_pack_timeline("rp_cloud_control_plane_activity", cycle_gap_s=1)
@@ -169,12 +182,13 @@ def main():
     s = ReplaySession(tl, sink, source_label="rp_cloud_control_plane_activity", sourcetype="(per event)", index=INDEX, host=HOST, speed=10, loops=None)
     sink.sink._m["source"] = s.source
     s.start(); time.sleep(6); s.stop()
-    cyc = lab.search('search index=%s source="%s" | stats count by netspout_cycle | sort 0 netspout_cycle' % (INDEX, s.source), earliest="-2h")
+    indexed(s.id, s.counts["accepted"])   # wait until Splunk has everything that was accepted
+    cyc = lab.search('search index=%s netspout_replay_session="%s" | stats count by netspout_cycle | sort 0 netspout_cycle' % (INDEX, s.id), earliest="-2h")
     check("G4_continuous_pack_repeats_incident_cycles", len(cyc) >= 2 and sum(int(c["count"]) for c in cyc) == s.counts["accepted"], cycles={c["netspout_cycle"]: c["count"] for c in cyc})
 
     doc = {"generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "lab": "tests/lab/ta_validation (isolated)", "splunk_version": info["version"],
            "index": INDEX, "host": HOST, "ta_cim_detection_validated": False, "passed": sum(v["pass"] for k, v in results.items() if isinstance(v, dict)),
-           "failed": failures, "packs_indexed_verified": pack_ok, "checks": results}
+           "failed": failures, "packs_indexed_verified": pack_ok, "packs_panels_populated": panels_ok, "checks": results}
     out = ROOT / "docs/verification/evidence/replay/replay_live.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(doc, indent=1, default=str) + "\n")

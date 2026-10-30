@@ -118,6 +118,7 @@ class UseCaseExplorer:
         runner_scenario_ids: Optional[Iterable[str]] = None,
         incident_packs: Iterable[Dict[str, Any]] = (),
         replay_packs: Iterable[Dict[str, Any]] = (),
+        replay_panels_populated: Iterable[str] = (),
         candidates: Iterable[Dict[str, Any]] = (),
         verified_scenarios: Iterable[str] = (),
         dashboard_verified: Iterable[str] = (),
@@ -126,6 +127,7 @@ class UseCaseExplorer:
         # pack_scenario_ids: authentic observation packs, run through /api/generate/scenario-pack.
         # runner_scenario_ids: scenarios ScenarioRunner can execute; None keeps the legacy "all catalog scenarios runnable".
         self._pack_ids = set(pack_scenario_ids)
+        self._panels_populated = set(replay_panels_populated)  # panel queries returned rows for a live run (NOT a dashboard-verified claim)
         self._verified = set(verified_scenarios)          # live Splunk evidence recorded for this scenario id (event/metric counts)
         self._dashboard_verified = set(dashboard_verified)  # DASHBOARD_READY evidence recorded
         self._curated = {c["content_id"]: c for c in curated_stories}  # Analytic Stories curated for sector relevance (never implies executable)
@@ -271,9 +273,16 @@ class UseCaseExplorer:
             entry_id=f"op:replay:{sid}", engine="replay_pack", scenario_id=sid, title=row["title"],
             summary=row["objective"] + " Sources: " + ", ".join(sorted({ph["source"].get("source_id") or ph["source"]["pack"] for ph in row["phases"]})) + ". "
                     + ("Recorded events are replayed with only the timestamp rewritten; independent recordings are aligned in time only." if "replay" in kinds else ""),
-            domain=row["category"].replace("_", " ").title(), category="REPLAY_PACK", vendors=[], sourcetypes=sts, source_ids=[],
+            domain=row["category"].replace("_", " ").title(), category="REPLAY_PACK", vendors=[], sourcetypes=list(row.get("required_sourcetypes", sts)), source_ids=[],
             raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=None)
         entry["industries"] = [{"id": i, "basis": "editorial"} for i in row["industries"] if i in self._industry_ids]
+        if row.get("subindustry"):
+            entry["industries"][0]["subindustry_label"] = row["subindustry"]
+            entry["scenario_kind"] = row.get("kind")
+            entry["dashboard_requirement"] = row.get("dashboard_requirement")
+            entry["panel_queries_populated"] = sid in self._panels_populated
+            entry["provenance_note"] = row.get("provenance")
+            entry["correlation_note"] = row.get("correlation_note")
         entry["source_modes"] = kinds            # replay | native | both (hybrid)
         entry["replay"] = {"phases": [{"id": ph["id"], "kind": ph["source"]["kind"], "source": ph["source"].get("source_id") or ph["source"].get("pack"), "offset_s": ph["offset_s"]} for ph in row["phases"]],
                            "supports": ["one_shot", "continuous_cycles"], "seed": row["seed"], "detection_prerequisites": row.get("detection_prerequisites"),
@@ -474,6 +483,8 @@ class UseCaseExplorer:
                 "scenarios_total": len(mine),
                 "scenarios_runnable": sum(e["runnable"] for e in mine),
                 "scenarios_cataloged_only": sum(e["maturity"]["tier"] == "CATALOGED" for e in mine),
+                "scenarios_contracted": sum(e["maturity"]["tier"] == "CONTRACTED" for e in mine),
+                "scenarios_panels_populated": sum(e["scenario_id"] in self._panels_populated for e in mine),
                 "scenarios_live_verified": sum(e["scenario_id"] in self._verified for e in mine),
                 "scenarios_dashboard_verified": sum(e["scenario_id"] in self._dashboard_verified for e in mine),
                 "scenarios_demo_ready": sum(e["demo_ready"] for e in mine),

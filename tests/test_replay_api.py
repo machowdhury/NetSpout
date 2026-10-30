@@ -29,7 +29,7 @@ class FakeSink:
     def __init__(self, *a, **k):
         self.a = a
 
-    def send(self, raw, when):
+    def send(self, raw, when, meta=None):
         FakeSink.sent.append((self.a, raw, when))
         return 'accepted'
 

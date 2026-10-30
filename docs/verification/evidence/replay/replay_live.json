@@ -1,11 +1,11 @@
 {
- "generated_utc": "2026-10-30T17:55Z",
+ "generated_utc": "2026-10-30T18:42Z",
  "lab": "tests/lab/ta_validation (isolated)",
  "splunk_version": "10.2.7",
  "index": "dev_test_replay",
  "host": "replayed-log-generator",
  "ta_cim_detection_validated": false,
- "passed": 41,
+ "passed": 171,
  "failed": [],
  "packs_indexed_verified": [
   "rp_linux_credential_access",
@@ -14,7 +14,61 @@
   "rp_web_exploitation_recordings",
   "rp_edr_and_cloud_activity",
   "rp_agentic_ai_mcp_runtime_hybrid",
-  "rp_workload_sysmon_ebpf_hybrid"
+  "rp_workload_sysmon_ebpf_hybrid",
+  "ind_bank_account_takeover_resilience",
+  "ind_bank_payments_edge_defense",
+  "ind_telco_change_induced_outage",
+  "ind_telco_access_and_wireless_health",
+  "ind_health_ehr_ransomware_readiness",
+  "ind_health_clinical_network_edge",
+  "ind_mfg_it_ot_convergence",
+  "ind_mfg_plant_network_health",
+  "ind_energy_substation_edge_observation",
+  "ind_energy_scada_proxy_intrusion",
+  "ind_insurance_claims_platform_audit",
+  "ind_insurance_underwriting_exposure",
+  "ind_gov_citizen_identity_attack",
+  "ind_gov_agency_mail_exfiltration",
+  "ind_retail_pos_edge_defense",
+  "ind_retail_ecommerce_cloud_recon",
+  "ind_edu_campus_identity_and_collab",
+  "ind_saas_platform_runtime_attack",
+  "ind_media_content_delivery_exfil",
+  "ind_hospitality_guest_network_defense",
+  "ind_aero_defense_endpoint_c2",
+  "ind_legal_matter_data_exfiltration",
+  "ind_agri_edge_gateway_health",
+  "ind_realestate_building_exposure",
+  "ind_nonprofit_donor_platform_attack",
+  "ind_transport_fleet_network_change"
+ ],
+ "packs_panels_populated": [
+  "ind_bank_account_takeover_resilience",
+  "ind_bank_payments_edge_defense",
+  "ind_telco_change_induced_outage",
+  "ind_telco_access_and_wireless_health",
+  "ind_health_ehr_ransomware_readiness",
+  "ind_health_clinical_network_edge",
+  "ind_mfg_it_ot_convergence",
+  "ind_mfg_plant_network_health",
+  "ind_energy_substation_edge_observation",
+  "ind_energy_scada_proxy_intrusion",
+  "ind_insurance_claims_platform_audit",
+  "ind_insurance_underwriting_exposure",
+  "ind_gov_citizen_identity_attack",
+  "ind_gov_agency_mail_exfiltration",
+  "ind_retail_pos_edge_defense",
+  "ind_retail_ecommerce_cloud_recon",
+  "ind_edu_campus_identity_and_collab",
+  "ind_saas_platform_runtime_attack",
+  "ind_media_content_delivery_exfil",
+  "ind_hospitality_guest_network_defense",
+  "ind_aero_defense_endpoint_c2",
+  "ind_legal_matter_data_exfiltration",
+  "ind_agri_edge_gateway_health",
+  "ind_realestate_building_exposure",
+  "ind_nonprofit_donor_platform_attack",
+  "ind_transport_fleet_network_change"
  ],
  "checks": {
   "A1_hec_accepts_every_event": {
@@ -40,8 +94,8 @@
   },
   "A4_timestamps_are_on_the_current_clock": {
    "pass": true,
-   "earliest": 0.00447392463684082,
-   "latest": 6.604473829269409
+   "earliest": 0.003981113433837891,
+   "latest": 6.603981018066406
   },
   "A5_relative_spacing_preserved_in_splunk_time": {
    "pass": true,
@@ -62,28 +116,28 @@
   "B1_pause_stops_delivery": {
    "pass": true,
    "accepted_during_pause": 0,
-   "indexed": 15
+   "indexed": 16
   },
   "B2_resume_continues_and_stop_halts": {
    "pass": true,
-   "accepted": 106,
-   "before_pause": 15
+   "accepted": 105,
+   "before_pause": 16
   },
   "B3_continuous_loops_more_than_once": {
    "pass": true,
-   "generated": 188,
+   "generated": 105,
    "records": 94
   },
   "B4_stop_accounting_matches_splunk": {
    "pass": true,
-   "indexed": 106,
+   "indexed": 105,
    "counts": {
-    "generated": 188,
-    "delivered": 106,
-    "accepted": 106,
+    "generated": 105,
+    "delivered": 105,
+    "accepted": 105,
     "rejected": 0,
     "unknown": 0,
-    "discarded_on_stop": 82,
+    "discarded_on_stop": 0,
     "backpressure_waits": 0
    }
   },
@@ -96,7 +150,7 @@
   },
   "C1_eps_limit_respected": {
    "pass": true,
-   "observed_eps": 14.3,
+   "observed_eps": 13.68,
    "limit": 15
   },
   "C2_all_throttled_events_indexed": {
@@ -282,13 +336,1484 @@
    "pass": true,
    "sourcetypes": "10"
   },
+  "G1_ind_bank_account_takeover_resilience_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN": 16,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "UB2_DATABASE_BACKUP_INTEGRITY": 5
+   },
+   "indexed": {
+    "UB2_DATABASE_BACKUP_INTEGRITY": 5,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN": 16
+   }
+  },
+  "G2_ind_bank_account_takeover_resilience_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN",
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+    "UB2_DATABASE_BACKUP_INTEGRITY"
+   ]
+  },
+  "G3_ind_bank_account_takeover_resilience_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "9"
+  },
+  "G5_ind_bank_account_takeover_resilience_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "OktaIM2:log",
+    "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+    "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+    "XmlWinEventLog:Security",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "crowdstrike:events:sensor",
+    "gws:reports:login",
+    "mongodb:log",
+    "o365:management:activity",
+    "veeam_vbr_syslog"
+   ],
+   "indexed": [
+    "OktaIM2:log",
+    "XmlWinEventLog",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "crowdstrike:events:sensor",
+    "gws:reports:login",
+    "mongodb:log",
+    "o365:management:activity",
+    "veeam_vbr_syslog"
+   ],
+   "note": "XmlWinEventLog:<channel> is indexed as XmlWinEventLog by the installed Windows add-on"
+  },
+  "H1_ind_bank_account_takeover_resilience_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_bank_payments_edge_defense_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "WAVE2_AWS_RECON_ESCALATION": 10
+   },
+   "indexed": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "WAVE2_AWS_RECON_ESCALATION": 10
+   }
+  },
+  "G2_ind_bank_payments_edge_defense_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+    "WAVE2_AWS_RECON_ESCALATION"
+   ]
+  },
+  "G3_ind_bank_payments_edge_defense_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "6"
+  },
+  "G5_ind_bank_payments_edge_defense_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog"
+   ],
+   "indexed": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog"
+   ],
+   "note": null
+  },
+  "H1_ind_bank_payments_edge_defense_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_telco_change_induced_outage_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20,
+    "UB6_SDWAN_UTD_THREAT_PIPELINE": 6
+   },
+   "indexed": {
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20,
+    "UB6_SDWAN_UTD_THREAT_PIPELINE": 6
+   }
+  },
+  "G2_ind_telco_change_induced_outage_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE",
+    "UB6_SDWAN_UTD_THREAT_PIPELINE"
+   ]
+  },
+  "G3_ind_telco_change_induced_outage_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "15"
+  },
+  "G5_ind_telco_change_induced_outage_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:ssetunnels",
+    "cisco:sdwan:utd:logs",
+    "cisco:sdwan:utdhealth"
+   ],
+   "indexed": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:ssetunnels",
+    "cisco:sdwan:utd:logs",
+    "cisco:sdwan:utdhealth"
+   ],
+   "note": null
+  },
+  "H1_ind_telco_change_induced_outage_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_telco_access_and_wireless_health_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB5_CISCO_NAC_RADIUS_OUTAGE": 8,
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10,
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT": 6
+   },
+   "indexed": {
+    "UB5_CISCO_NAC_RADIUS_OUTAGE": 8,
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10,
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT": 6
+   }
+  },
+  "G2_ind_telco_access_and_wireless_health_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB5_CISCO_NAC_RADIUS_OUTAGE",
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION",
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT"
+   ]
+  },
+  "G3_ind_telco_access_and_wireless_health_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "16"
+  },
+  "G5_ind_telco_access_and_wireless_health_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "indexed": [
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "note": null
+  },
+  "H1_ind_telco_access_and_wireless_health_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_health_ehr_ransomware_readiness_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN": 16,
+    "UB2_DATABASE_BACKUP_INTEGRITY": 5,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8
+   },
+   "indexed": {
+    "UB2_DATABASE_BACKUP_INTEGRITY": 5,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8,
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN": 16
+   }
+  },
+  "G2_ind_health_ehr_ransomware_readiness_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN",
+    "UB2_DATABASE_BACKUP_INTEGRITY",
+    "UB3_IDENTITY_RUNTIME_AUDIT"
+   ]
+  },
+  "G3_ind_health_ehr_ransomware_readiness_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "8"
+  },
+  "G5_ind_health_ehr_ransomware_readiness_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "SysdigSecureEvents",
+    "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+    "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+    "XmlWinEventLog:Security",
+    "ccx:beyondinsight:passwordsafe",
+    "crowdstrike:events:sensor",
+    "mongodb:log",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs",
+    "veeam_vbr_syslog"
+   ],
+   "indexed": [
+    "SysdigSecureEvents",
+    "XmlWinEventLog",
+    "ccx:beyondinsight:passwordsafe",
+    "crowdstrike:events:sensor",
+    "mongodb:log",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs",
+    "veeam_vbr_syslog"
+   ],
+   "note": "XmlWinEventLog:<channel> is indexed as XmlWinEventLog by the installed Windows add-on"
+  },
+  "H1_ind_health_ehr_ransomware_readiness_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_health_clinical_network_edge_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE3_EBPF_WORKLOAD_HUNT": 10,
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT": 6
+   },
+   "indexed": {
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT": 6,
+    "WAVE3_EBPF_WORKLOAD_HUNT": 10
+   }
+  },
+  "G2_ind_health_clinical_network_edge_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE3_EBPF_WORKLOAD_HUNT",
+    "UB6_CATALYST_WIRELESS_ROGUE_THREAT"
+   ]
+  },
+  "G3_ind_health_clinical_network_edge_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "13"
+  },
+  "G5_ind_health_clinical_network_edge_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "bro:conn:json",
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:cloud_security:dns",
+    "cisco:cloud_security:firewall",
+    "cisco:cloud_security:proxy",
+    "cisco:isovalent",
+    "cisco:isovalent:processConnect",
+    "cisco:isovalent:processExec",
+    "gcp:audit",
+    "opentelemetry:otlp"
+   ],
+   "indexed": [
+    "bro:conn:json",
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:cloud_security:dns",
+    "cisco:cloud_security:firewall",
+    "cisco:cloud_security:proxy",
+    "cisco:isovalent",
+    "cisco:isovalent:processConnect",
+    "cisco:isovalent:processExec",
+    "gcp:audit",
+    "opentelemetry:otlp"
+   ],
+   "note": null
+  },
+  "H1_ind_health_clinical_network_edge_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_mfg_it_ot_convergence_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB1_OT_PROXY_HOST_HUNT": 7,
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "WAVE2_C2_CALLBACK_DETECTION": 9
+   },
+   "indexed": {
+    "UB1_OT_PROXY_HOST_HUNT": 7,
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "WAVE2_C2_CALLBACK_DETECTION": 9
+   }
+  },
+  "G2_ind_mfg_it_ot_convergence_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB1_OT_PROXY_HOST_HUNT",
+    "UB2_OT_EDGE_ROUTING_OBSERVATION",
+    "WAVE2_C2_CALLBACK_DETECTION"
+   ]
+  },
+  "G3_ind_mfg_it_ot_convergence_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "10"
+  },
+  "G5_ind_mfg_it_ot_convergence_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "bluecoat:proxysg:access:file",
+    "claroty:cef",
+    "docker_events",
+    "mikrotik:routeros",
+    "nginx:access",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "traefik:access:json",
+    "wazuh:alerts"
+   ],
+   "indexed": [
+    "bluecoat:proxysg:access:file",
+    "claroty:cef",
+    "docker_events",
+    "mikrotik:routeros",
+    "nginx:access",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "traefik:access:json",
+    "wazuh:alerts"
+   ],
+   "note": null
+  },
+  "H1_ind_mfg_it_ot_convergence_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_mfg_plant_network_health_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10,
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20
+   },
+   "indexed": {
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20,
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10
+   }
+  },
+  "G2_ind_mfg_plant_network_health_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION",
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE"
+   ]
+  },
+  "G3_ind_mfg_plant_network_health_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "19"
+  },
+  "G5_ind_mfg_plant_network_health_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "indexed": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "note": null
+  },
+  "H1_ind_mfg_plant_network_health_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_energy_substation_edge_observation_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10
+   },
+   "indexed": {
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION": 10
+   }
+  },
+  "G2_ind_energy_substation_edge_observation_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB2_OT_EDGE_ROUTING_OBSERVATION",
+    "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION"
+   ]
+  },
+  "G3_ind_energy_substation_edge_observation_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_energy_substation_edge_observation_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "indexed": [
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "note": null
+  },
+  "H1_ind_energy_substation_edge_observation_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_energy_scada_proxy_intrusion_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB1_OT_PROXY_HOST_HUNT": 7,
+    "WAVE2_C2_CALLBACK_DETECTION": 9
+   },
+   "indexed": {
+    "UB1_OT_PROXY_HOST_HUNT": 7,
+    "WAVE2_C2_CALLBACK_DETECTION": 9
+   }
+  },
+  "G2_ind_energy_scada_proxy_intrusion_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB1_OT_PROXY_HOST_HUNT",
+    "WAVE2_C2_CALLBACK_DETECTION"
+   ]
+  },
+  "G3_ind_energy_scada_proxy_intrusion_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "6"
+  },
+  "G5_ind_energy_scada_proxy_intrusion_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "bluecoat:proxysg:access:file",
+    "docker_events",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "wazuh:alerts"
+   ],
+   "indexed": [
+    "bluecoat:proxysg:access:file",
+    "docker_events",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "wazuh:alerts"
+   ],
+   "note": null
+  },
+  "H1_ind_energy_scada_proxy_intrusion_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_insurance_claims_platform_audit_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB4_SAAS_COLLABORATION_AUDIT": 7,
+    "UB3_DATABASE_MESSAGE_AUDIT": 3,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   },
+   "indexed": {
+    "UB3_DATABASE_MESSAGE_AUDIT": 3,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   }
+  },
+  "G2_ind_insurance_claims_platform_audit_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB4_SAAS_COLLABORATION_AUDIT",
+    "UB3_DATABASE_MESSAGE_AUDIT",
+    "WAVE3_CLOUDMAIL_EXFIL"
+   ]
+  },
+  "G3_ind_insurance_claims_platform_audit_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "13"
+  },
+  "G5_ind_insurance_claims_platform_audit_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gsuite:gmail:bigquery",
+    "ibm:mq:errorlog",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "oracle:audit:text",
+    "slack:audit",
+    "zscalernss-web"
+   ],
+   "indexed": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gsuite:gmail:bigquery",
+    "ibm:mq:errorlog",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "oracle:audit:text",
+    "slack:audit",
+    "zscalernss-web"
+   ],
+   "note": null
+  },
+  "H1_ind_insurance_claims_platform_audit_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_insurance_underwriting_exposure_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB4_EXPOSURE_INFRA_LOGGING": 9,
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT": 6,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8
+   },
+   "indexed": {
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT": 6,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8,
+    "UB4_EXPOSURE_INFRA_LOGGING": 9
+   }
+  },
+  "G2_ind_insurance_underwriting_exposure_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB4_EXPOSURE_INFRA_LOGGING",
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT",
+    "UB3_IDENTITY_RUNTIME_AUDIT"
+   ]
+  },
+  "G3_ind_insurance_underwriting_exposure_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_insurance_underwriting_exposure_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "Confluence:audit log",
+    "SysdigSecureEvents",
+    "ccx:beyondinsight:passwordsafe",
+    "elasticsearch:json",
+    "hashicorp_vault_audit_log",
+    "ibm:qradar:offense",
+    "proofpoint_tap_siem",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "indexed": [
+    "Confluence:audit log",
+    "SysdigSecureEvents",
+    "ccx:beyondinsight:passwordsafe",
+    "elasticsearch:json",
+    "hashicorp_vault_audit_log",
+    "ibm:qradar:offense",
+    "proofpoint_tap_siem",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "note": null
+  },
+  "H1_ind_insurance_underwriting_exposure_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_gov_citizen_identity_attack_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "WAVE2_AWS_RECON_ESCALATION": 10,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8
+   },
+   "indexed": {
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8,
+    "WAVE2_AWS_RECON_ESCALATION": 10,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17
+   }
+  },
+  "G2_ind_gov_citizen_identity_attack_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+    "WAVE2_AWS_RECON_ESCALATION",
+    "UB3_IDENTITY_RUNTIME_AUDIT"
+   ]
+  },
+  "G3_ind_gov_citizen_identity_attack_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_gov_citizen_identity_attack_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "OktaIM2:log",
+    "SysdigSecureEvents",
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "ccx:beyondinsight:passwordsafe",
+    "gws:reports:login",
+    "o365:management:activity",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "indexed": [
+    "OktaIM2:log",
+    "SysdigSecureEvents",
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "ccx:beyondinsight:passwordsafe",
+    "gws:reports:login",
+    "o365:management:activity",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "note": null
+  },
+  "H1_ind_gov_citizen_identity_attack_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_gov_agency_mail_exfiltration_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE3_CLOUDMAIL_EXFIL": 11,
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10
+   },
+   "indexed": {
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   }
+  },
+  "G2_ind_gov_agency_mail_exfiltration_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE3_CLOUDMAIL_EXFIL",
+    "UB4_ENDPOINT_THREAT_PIPELINE"
+   ]
+  },
+  "G3_ind_gov_agency_mail_exfiltration_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "13"
+  },
+  "G5_ind_gov_agency_mail_exfiltration_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "bitdefender:gz",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "cybereason:malops",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events",
+    "zscalernss-web"
+   ],
+   "indexed": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "bitdefender:gz",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "cybereason:malops",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events",
+    "zscalernss-web"
+   ],
+   "note": null
+  },
+  "H1_ind_gov_agency_mail_exfiltration_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_retail_pos_edge_defense_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10
+   },
+   "indexed": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10
+   }
+  },
+  "G2_ind_retail_pos_edge_defense_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+    "UB4_ENDPOINT_THREAT_PIPELINE"
+   ]
+  },
+  "G3_ind_retail_pos_edge_defense_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "9"
+  },
+  "G5_ind_retail_pos_edge_defense_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "barracuda:waf:web_firewall",
+    "bitdefender:gz",
+    "cybereason:malops",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events"
+   ],
+   "indexed": [
+    "barracuda:waf:web_firewall",
+    "bitdefender:gz",
+    "cybereason:malops",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events"
+   ],
+   "note": null
+  },
+  "H1_ind_retail_pos_edge_defense_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_retail_ecommerce_cloud_recon_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_AWS_RECON_ESCALATION": 10,
+    "UB4_EXPOSURE_INFRA_LOGGING": 9
+   },
+   "indexed": {
+    "UB4_EXPOSURE_INFRA_LOGGING": 9,
+    "WAVE2_AWS_RECON_ESCALATION": 10
+   }
+  },
+  "G2_ind_retail_ecommerce_cloud_recon_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_AWS_RECON_ESCALATION",
+    "UB4_EXPOSURE_INFRA_LOGGING"
+   ]
+  },
+  "G3_ind_retail_ecommerce_cloud_recon_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "6"
+  },
+  "G5_ind_retail_ecommerce_cloud_recon_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "elasticsearch:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding"
+   ],
+   "indexed": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "elasticsearch:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding"
+   ],
+   "note": null
+  },
+  "H1_ind_retail_ecommerce_cloud_recon_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_edu_campus_identity_and_collab_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7
+   },
+   "indexed": {
+    "UB4_SAAS_COLLABORATION_AUDIT": 7,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17
+   }
+  },
+  "G2_ind_edu_campus_identity_and_collab_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+    "UB4_SAAS_COLLABORATION_AUDIT"
+   ]
+  },
+  "G3_ind_edu_campus_identity_and_collab_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "8"
+  },
+  "G5_ind_edu_campus_identity_and_collab_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gws:reports:login",
+    "o365:management:activity",
+    "slack:audit"
+   ],
+   "indexed": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gws:reports:login",
+    "o365:management:activity",
+    "slack:audit"
+   ],
+   "note": null
+  },
+  "H1_ind_edu_campus_identity_and_collab_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_saas_platform_runtime_attack_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_K8S_CONTAINER_ESCAPE": 9,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7,
+    "UB4_EXPOSURE_INFRA_LOGGING": 9
+   },
+   "indexed": {
+    "UB4_EXPOSURE_INFRA_LOGGING": 9,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7,
+    "WAVE2_K8S_CONTAINER_ESCAPE": 9
+   }
+  },
+  "G2_ind_saas_platform_runtime_attack_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_K8S_CONTAINER_ESCAPE",
+    "UB4_SAAS_COLLABORATION_AUDIT",
+    "UB4_EXPOSURE_INFRA_LOGGING"
+   ]
+  },
+  "G3_ind_saas_platform_runtime_attack_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_saas_platform_runtime_attack_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "kube:audit",
+    "kube:container:falco",
+    "osquery:results",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit",
+    "suricata"
+   ],
+   "indexed": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "kube:audit",
+    "kube:container:falco",
+    "osquery:results",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit",
+    "suricata"
+   ],
+   "note": null
+  },
+  "H1_ind_saas_platform_runtime_attack_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_media_content_delivery_exfil_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   },
+   "indexed": {
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   }
+  },
+  "G2_ind_media_content_delivery_exfil_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE3_CLOUDMAIL_EXFIL"
+   ]
+  },
+  "G3_ind_media_content_delivery_exfil_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "8"
+  },
+  "G5_ind_media_content_delivery_exfil_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "indexed": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "note": null
+  },
+  "H1_ind_media_content_delivery_exfil_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_hospitality_guest_network_defense_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17
+   },
+   "indexed": {
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION": 9,
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17
+   }
+  },
+  "G2_ind_hospitality_guest_network_defense_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT"
+   ]
+  },
+  "G3_ind_hospitality_guest_network_defense_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "9"
+  },
+  "G5_ind_hospitality_guest_network_defense_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "gws:reports:login",
+    "imperva:securesphere:cef",
+    "o365:management:activity",
+    "pfsense:filterlog"
+   ],
+   "indexed": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "gws:reports:login",
+    "imperva:securesphere:cef",
+    "o365:management:activity",
+    "pfsense:filterlog"
+   ],
+   "note": null
+  },
+  "H1_ind_hospitality_guest_network_defense_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_aero_defense_endpoint_c2_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_C2_CALLBACK_DETECTION": 9,
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10,
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8
+   },
+   "indexed": {
+    "UB3_IDENTITY_RUNTIME_AUDIT": 8,
+    "UB4_ENDPOINT_THREAT_PIPELINE": 10,
+    "WAVE2_C2_CALLBACK_DETECTION": 9
+   }
+  },
+  "G2_ind_aero_defense_endpoint_c2_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_C2_CALLBACK_DETECTION",
+    "UB4_ENDPOINT_THREAT_PIPELINE",
+    "UB3_IDENTITY_RUNTIME_AUDIT"
+   ]
+  },
+  "G3_ind_aero_defense_endpoint_c2_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_aero_defense_endpoint_c2_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "SysdigSecureEvents",
+    "bitdefender:gz",
+    "ccx:beyondinsight:passwordsafe",
+    "cybereason:malops",
+    "osquery:results",
+    "sailpoint_identitynow",
+    "sentinelone:channel:threats",
+    "suricata",
+    "tanium:discover:managed",
+    "tenable:io:audit_logs",
+    "trellix_epo:threat_events"
+   ],
+   "indexed": [
+    "SysdigSecureEvents",
+    "bitdefender:gz",
+    "ccx:beyondinsight:passwordsafe",
+    "cybereason:malops",
+    "osquery:results",
+    "sailpoint_identitynow",
+    "sentinelone:channel:threats",
+    "suricata",
+    "tanium:discover:managed",
+    "tenable:io:audit_logs",
+    "trellix_epo:threat_events"
+   ],
+   "note": null
+  },
+  "H1_ind_aero_defense_endpoint_c2_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_legal_matter_data_exfiltration_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE3_CLOUDMAIL_EXFIL": 11,
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT": 6
+   },
+   "indexed": {
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT": 6,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   }
+  },
+  "G2_ind_legal_matter_data_exfiltration_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE3_CLOUDMAIL_EXFIL",
+    "UB2_CLOUD_IDENTITY_MAIL_HUNT"
+   ]
+  },
+  "G3_ind_legal_matter_data_exfiltration_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "11"
+  },
+  "G5_ind_legal_matter_data_exfiltration_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "Confluence:audit log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "hashicorp_vault_audit_log",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "proofpoint_tap_siem",
+    "zscalernss-web"
+   ],
+   "indexed": [
+    "Confluence:audit log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "hashicorp_vault_audit_log",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "proofpoint_tap_siem",
+    "zscalernss-web"
+   ],
+   "note": null
+  },
+  "H1_ind_legal_matter_data_exfiltration_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_agri_edge_gateway_health_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "WAVE2_LINUX_AUTH_ANOMALY": 12
+   },
+   "indexed": {
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "WAVE2_LINUX_AUTH_ANOMALY": 12
+   }
+  },
+  "G2_ind_agri_edge_gateway_health_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB2_OT_EDGE_ROUTING_OBSERVATION",
+    "WAVE2_LINUX_AUTH_ANOMALY"
+   ]
+  },
+  "G3_ind_agri_edge_gateway_health_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "7"
+  },
+  "G5_ind_agri_edge_gateway_health_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "auditd",
+    "claroty:cef",
+    "linux_messages_syslog",
+    "mikrotik:routeros",
+    "nginx:access",
+    "sysmon:linux",
+    "traefik:access:json"
+   ],
+   "indexed": [
+    "auditd",
+    "claroty:cef",
+    "linux_messages_syslog",
+    "mikrotik:routeros",
+    "nginx:access",
+    "sysmon:linux",
+    "traefik:access:json"
+   ],
+   "note": null
+  },
+  "H1_ind_agri_edge_gateway_health_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_realestate_building_exposure_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB4_EXPOSURE_INFRA_LOGGING": 9,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7
+   },
+   "indexed": {
+    "UB4_EXPOSURE_INFRA_LOGGING": 9,
+    "UB4_SAAS_COLLABORATION_AUDIT": 7
+   }
+  },
+  "G2_ind_realestate_building_exposure_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB4_EXPOSURE_INFRA_LOGGING",
+    "UB4_SAAS_COLLABORATION_AUDIT"
+   ]
+  },
+  "G3_ind_realestate_building_exposure_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "7"
+  },
+  "G5_ind_realestate_building_exposure_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit"
+   ],
+   "indexed": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit"
+   ],
+   "note": null
+  },
+  "H1_ind_realestate_building_exposure_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_nonprofit_donor_platform_attack_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   },
+   "indexed": {
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT": 17,
+    "WAVE3_CLOUDMAIL_EXFIL": 11
+   }
+  },
+  "G2_ind_nonprofit_donor_platform_attack_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+    "WAVE3_CLOUDMAIL_EXFIL"
+   ]
+  },
+  "G3_ind_nonprofit_donor_platform_attack_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "13"
+  },
+  "G5_ind_nonprofit_donor_platform_attack_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "OktaIM2:log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "gws:reports:login",
+    "o365:graph:messagetrace",
+    "o365:management:activity",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "indexed": [
+    "OktaIM2:log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "gws:reports:login",
+    "o365:graph:messagetrace",
+    "o365:management:activity",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "note": null
+  },
+  "H1_ind_nonprofit_donor_platform_attack_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
+  "G1_ind_transport_fleet_network_change_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20,
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7
+   },
+   "indexed": {
+    "UB2_OT_EDGE_ROUTING_OBSERVATION": 7,
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE": 20
+   }
+  },
+  "G2_ind_transport_fleet_network_change_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "UB5_CISCO_CHANGE_INDUCED_OUTAGE",
+    "UB2_OT_EDGE_ROUTING_OBSERVATION"
+   ]
+  },
+  "G3_ind_transport_fleet_network_change_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "16"
+  },
+  "G5_ind_transport_fleet_network_change_required_sourcetypes_all_present": {
+   "pass": true,
+   "expected": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "indexed": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "note": null
+  },
+  "H1_ind_transport_fleet_network_change_dashboard_panel_queries_populated": {
+   "pass": true,
+   "empty_panels": []
+  },
   "G4_continuous_pack_repeats_incident_cycles": {
    "pass": true,
    "cycles": {
     "0": "12",
     "1": "12",
     "2": "12",
-    "3": "12"
+    "3": "12",
+    "4": "1"
    }
   }
  }

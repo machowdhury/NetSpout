@@ -361,10 +361,17 @@ def transform(item: Item, rule: Optional[TimestampRule], when: datetime, cycle: 
     return item.record[:a] + render_ts(when, item.original, rule) + item.record[b:]
 
 
-def item_meta(item: Item, cycle: int):
-    if item.sourcetype is None and item.fields is None:
+def item_meta(item: Item, cycle: int, session_id: Optional[str] = None):
+    """HEC metadata for one event. The session id is an indexed field on EVERY event: add-ons may rewrite `source` (the Windows TA does),
+    so the field, not the source, is the key for independent verification."""
+    if item.sourcetype is None and item.fields is None and session_id is None:
         return None
-    return {"sourcetype": item.sourcetype, "fields": {**(item.fields or {}), "netspout_cycle": str(cycle)}}
+    fields = {**(item.fields or {})}
+    if item.fields is not None:
+        fields["netspout_cycle"] = str(cycle)
+    if session_id:
+        fields["netspout_replay_session"] = session_id
+    return {"sourcetype": item.sourcetype, "fields": fields}
 
 
 def iter_transformed(tl: Timeline, anchor: datetime, *, speed=1.0, loops: Optional[int] = 1, start_loop=0) -> Iterator[tuple]:
@@ -506,7 +513,7 @@ class ReplaySession:
                 # the stamp was computed from the schedule; add time spent paused so the emitted clock stays "current"
                 stamp = stamp + timedelta(seconds=self._paused_total)
                 raw = transform(self.tl.items[i], self.tl.rule, stamp, k)
-                item = (raw, stamp, item_meta(self.tl.items[i], k))
+                item = (raw, stamp, item_meta(self.tl.items[i], k, self.id))
                 try:
                     self._q.put_nowait(item)
                 except queue.Full:

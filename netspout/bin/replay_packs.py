@@ -40,7 +40,7 @@ def get(pack_id: str) -> Dict:
 def correlation_level(pack: Dict) -> str:
     kinds = {ph["source"]["kind"] for ph in pack["phases"]}
     if kinds == {"native"}:
-        return "NATIVE_CORRELATED"
+        return "NATIVE_CORRELATED" if len(pack["phases"]) == 1 else "NATIVE_CORRELATED_WITHIN_PACKS_TEMPORAL_BETWEEN"
     return "MIXED_TEMPORAL_ONLY_BETWEEN_SOURCES" if "native" in kinds else "TEMPORAL_ONLY"
 
 
@@ -79,7 +79,8 @@ def build_pack_timeline(pack_id: str, *, run_id=None, cycle_gap_s=None) -> Timel
         elif src["kind"] == "native":
             sample = run_scenario_pack(src["pack"], run_id + "-probe")
             for i, ev in enumerate(sample):
-                items.append(Item(None, None, None, base + i * float(src["spacing_s"]), sourcetype=ev.sourcetype, fields=tags,
+                ftags = {**tags, "netspout_source_pack": src["pack"], "netspout_pack_phase": ev.netspout_phase}
+                items.append(Item(None, None, None, base + i * float(src["spacing_s"]), sourcetype=ev.sourcetype, fields=ftags,
                                   producer=_native_producer(src["pack"], run_id, i)))
         else:
             raise ReplayError("unknown phase source kind")

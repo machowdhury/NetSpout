@@ -35,7 +35,7 @@
     }
    ],
    "detection_prerequisites": "Splunk Add-on for Unix and Linux (not installed in any lab); no detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_linux_credential_access:*\" | stats count by netspout_phase, sourcetype"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_linux_credential_access\" | stats count by netspout_phase, sourcetype"
   },
   {
    "id": "rp_cloud_control_plane_activity",
@@ -62,7 +62,7 @@
     }
    ],
    "detection_prerequisites": "Splunk Add-on for AWS (not installed); no detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_cloud_control_plane_activity:*\" | stats count by netspout_phase"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_cloud_control_plane_activity\" | stats count by netspout_phase"
   },
   {
    "id": "rp_windows_endpoint_process_chain",
@@ -90,7 +90,7 @@
     }
    ],
    "detection_prerequisites": "Splunk Add-on for Sysmon (validated in the isolated lab for parsing only); no detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_windows_endpoint_process_chain:*\" | stats count by netspout_phase"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_windows_endpoint_process_chain\" | stats count by netspout_phase"
   },
   {
    "id": "rp_web_exploitation_recordings",
@@ -135,7 +135,7 @@
     }
    ],
    "detection_prerequisites": "No TA for these sources is installed; no detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_web_exploitation_recordings:*\" | stats count by netspout_phase, sourcetype"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_web_exploitation_recordings\" | stats count by netspout_phase, sourcetype"
   },
   {
    "id": "rp_edr_and_cloud_activity",
@@ -167,7 +167,7 @@
     }
    ],
    "detection_prerequisites": "CrowdStrike and AWS add-ons are not installed; no detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_edr_and_cloud_activity:*\" | stats count by netspout_phase, sourcetype"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_edr_and_cloud_activity\" | stats count by netspout_phase, sourcetype"
   },
   {
    "id": "rp_agentic_ai_mcp_runtime_hybrid",
@@ -202,7 +202,7 @@
     }
    ],
    "detection_prerequisites": "No detection claimed; the native pack documents its own contract.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_agentic_ai_mcp_runtime_hybrid:*\" | stats count by netspout_phase, sourcetype"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_agentic_ai_mcp_runtime_hybrid\" | stats count by netspout_phase, sourcetype"
   },
   {
    "id": "rp_workload_sysmon_ebpf_hybrid",
@@ -236,7 +236,1794 @@
     }
    ],
    "detection_prerequisites": "No detection claimed.",
-   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_workload_sysmon_ebpf_hybrid:*\" | stats count by netspout_phase, sourcetype"
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"rp_workload_sysmon_ebpf_hybrid\" | stats count by netspout_phase, sourcetype"
+  },
+  {
+   "id": "ind_bank_account_takeover_resilience",
+   "title": "Retail banking: workstation credential compromise, cloud SSO abuse, backup integrity check",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2000,
+   "industries": [
+    "banking-financial-services"
+   ],
+   "subindustry": "Retail banking",
+   "objective": "Follow an analyst-workstation credential compromise into cloud single-sign-on abuse, then confirm the backup and database estate is intact (ransomware resilience).",
+   "expected_outcome": "Windows credential-attack chain, cloud identity stuffing/escalation, then Veeam and MongoDB integrity observations in one run.",
+   "phases": [
+    {
+     "id": "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_ws_credential_compromise_chain",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+     "offset_s": 21.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_cloud_identity_sso_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_DATABASE_BACKUP_INTEGRITY",
+     "offset_s": 43.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_database_backup_integrity",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "OktaIM2:log",
+    "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+    "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+    "XmlWinEventLog:Security",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "crowdstrike:events:sensor",
+    "gws:reports:login",
+    "mongodb:log",
+    "o365:management:activity",
+    "veeam_vbr_syslog"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_ws_credential_compromise_chain, wave2_cloud_identity_sso_hunt, ub2_database_backup_integrity (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_bank_account_takeover_resilience\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_bank_payments_edge_defense",
+   "title": "Payments edge: WAF/IDS/firewall observation then cloud control-plane reconnaissance",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2001,
+   "industries": [
+    "banking-financial-services"
+   ],
+   "subindustry": "Payments and e-banking",
+   "objective": "Observe attacks against the internet-facing payment edge (WAF, IDS, firewall) and the follow-on reconnaissance of the cloud account hosting it.",
+   "expected_outcome": "Barracuda WAF, Darktrace, Imperva and pfSense observations, then an AWS recon-to-escalation sequence.",
+   "phases": [
+    {
+     "id": "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_multivendor_edge_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_AWS_RECON_ESCALATION",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_aws_recon_escalation",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub3_multivendor_edge_observation, wave2_aws_recon_escalation (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_bank_payments_edge_defense\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_telco_change_induced_outage",
+   "title": "Telecom NOC: change-induced SD-WAN outage, then edge threat pipeline",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2002,
+   "industries": [
+    "telecommunications"
+   ],
+   "subindustry": "Enterprise WAN and SD-WAN services",
+   "objective": "Reconstruct a change that triggers a BGP/CDP/DMI fault with recovery, then check the UTD threat pipeline on the same edge estate.",
+   "expected_outcome": "Cisco SD-WAN/IOS-XE change, fault and recovery messages followed by UTD, SSE tunnel and health records.",
+   "phases": [
+    {
+     "id": "UB5_CISCO_CHANGE_INDUCED_OUTAGE",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_change_induced_outage",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB6_SDWAN_UTD_THREAT_PIPELINE",
+     "offset_s": 25.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub6_sdwan_utd_threat_pipeline",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:ssetunnels",
+    "cisco:sdwan:utd:logs",
+    "cisco:sdwan:utdhealth"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub5_cisco_change_induced_outage, ub6_sdwan_utd_threat_pipeline (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_telco_change_induced_outage\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_telco_access_and_wireless_health",
+   "title": "Telecom NOC: RADIUS/NAC outage, platform degradation and rogue wireless threat",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2003,
+   "industries": [
+    "telecommunications"
+   ],
+   "subindustry": "Access, wireless and subscriber edge",
+   "objective": "Correlate an authentication-server outage and platform health degradation with a wireless rogue-device threat on the access layer.",
+   "expected_outcome": "AAA/RADIUS outage and recovery, platform degradation, then Catalyst rogue and threat records.",
+   "phases": [
+    {
+     "id": "UB5_CISCO_NAC_RADIUS_OUTAGE",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_nac_radius_outage",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION",
+     "offset_s": 13.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_platform_health_degradation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB6_CATALYST_WIRELESS_ROGUE_THREAT",
+     "offset_s": 28.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub6_catalyst_wireless_rogue_threat",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub5_cisco_nac_radius_outage, ub5_cisco_platform_health_degradation, ub6_catalyst_wireless_rogue_threat (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_telco_access_and_wireless_health\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_health_ehr_ransomware_readiness",
+   "title": "Hospital: endpoint credential attack with backup and privileged-access audit",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2004,
+   "industries": [
+    "healthcare"
+   ],
+   "subindustry": "Hospital systems and EHR",
+   "objective": "Show a credential attack on a clinical workstation next to the backup integrity and privileged-access evidence an investigator needs.",
+   "expected_outcome": "Windows credential chain, Veeam/MongoDB observations, identity and privileged-session audit records.",
+   "phases": [
+    {
+     "id": "WAVE2_WS_CREDENTIAL_COMPROMISE_CHAIN",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_ws_credential_compromise_chain",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_DATABASE_BACKUP_INTEGRITY",
+     "offset_s": 21.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_database_backup_integrity",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB3_IDENTITY_RUNTIME_AUDIT",
+     "offset_s": 31.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_identity_runtime_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "SysdigSecureEvents",
+    "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+    "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+    "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+    "XmlWinEventLog:Security",
+    "ccx:beyondinsight:passwordsafe",
+    "crowdstrike:events:sensor",
+    "mongodb:log",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs",
+    "veeam_vbr_syslog"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_ws_credential_compromise_chain, ub2_database_backup_integrity, ub3_identity_runtime_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_health_ehr_ransomware_readiness\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_health_clinical_network_edge",
+   "title": "Hospital network: edge and DNS/proxy health with wireless threat",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2005,
+   "industries": [
+    "healthcare"
+   ],
+   "subindustry": "Clinical network and medical IoT edge",
+   "objective": "Watch clinical network edge health (DNS, proxy, firewall, flow) while a wireless rogue-device event is raised.",
+   "expected_outcome": "Cisco Secure Access DNS/proxy/firewall, Zeek, Isovalent flow, then Catalyst rogue records.",
+   "phases": [
+    {
+     "id": "WAVE3_EBPF_WORKLOAD_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_ebpf_workload_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB6_CATALYST_WIRELESS_ROGUE_THREAT",
+     "offset_s": 15.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub6_catalyst_wireless_rogue_threat",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "bro:conn:json",
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy",
+    "cisco:cloud_security:dns",
+    "cisco:cloud_security:firewall",
+    "cisco:cloud_security:proxy",
+    "cisco:isovalent",
+    "cisco:isovalent:processConnect",
+    "cisco:isovalent:processExec",
+    "gcp:audit",
+    "opentelemetry:otlp"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave3_ebpf_workload_hunt, ub6_catalyst_wireless_rogue_threat (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_health_clinical_network_edge\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_mfg_it_ot_convergence",
+   "title": "Plant: OT proxy and edge routing observation, then command-and-control callback",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2006,
+   "industries": [
+    "manufacturing"
+   ],
+   "subindustry": "Discrete manufacturing plant",
+   "objective": "Observe the plant OT proxy and edge-routing estate, then a C2 callback and discovery from a host on the IT side.",
+   "expected_outcome": "Nozomi/Wazuh/Docker/BlueCoat OT records, Claroty/MikroTik/NGINX/Traefik edge records, then osquery and Suricata callback evidence.",
+   "phases": [
+    {
+     "id": "UB1_OT_PROXY_HOST_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub1_ot_proxy_host_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_OT_EDGE_ROUTING_OBSERVATION",
+     "offset_s": 12.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_ot_edge_routing_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_C2_CALLBACK_DETECTION",
+     "offset_s": 24.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_c2_callback_detection",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "bluecoat:proxysg:access:file",
+    "claroty:cef",
+    "docker_events",
+    "mikrotik:routeros",
+    "nginx:access",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "traefik:access:json",
+    "wazuh:alerts"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub1_ot_proxy_host_hunt, ub2_ot_edge_routing_observation, wave2_c2_callback_detection (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_mfg_it_ot_convergence\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_mfg_plant_network_health",
+   "title": "Plant network: platform degradation and change-induced outage",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2007,
+   "industries": [
+    "manufacturing"
+   ],
+   "subindustry": "Plant network operations",
+   "objective": "Track platform health degradation and a configuration change that causes an outage and recovery on the plant network.",
+   "expected_outcome": "Cisco platform health, then change, fault and recovery messages.",
+   "phases": [
+    {
+     "id": "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_platform_health_degradation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB5_CISCO_CHANGE_INDUCED_OUTAGE",
+     "offset_s": 15.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_change_induced_outage",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub5_cisco_platform_health_degradation, ub5_cisco_change_induced_outage (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_mfg_plant_network_health\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_energy_substation_edge_observation",
+   "title": "Substation edge: OT routing observation and network platform health",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2008,
+   "industries": [
+    "energy-utilities"
+   ],
+   "subindustry": "Electric transmission and substations",
+   "objective": "Observe the substation OT edge (Claroty, MikroTik, reverse proxies) and the health of the supporting Cisco network platform.",
+   "expected_outcome": "OT edge records followed by a platform degradation and recovery sequence.",
+   "phases": [
+    {
+     "id": "UB2_OT_EDGE_ROUTING_OBSERVATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_ot_edge_routing_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB5_CISCO_PLATFORM_HEALTH_DEGRADATION",
+     "offset_s": 12.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_platform_health_degradation",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub2_ot_edge_routing_observation, ub5_cisco_platform_health_degradation (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_energy_substation_edge_observation\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_energy_scada_proxy_intrusion",
+   "title": "Utility: OT proxy host hunt and C2 callback detection",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2009,
+   "industries": [
+    "energy-utilities"
+   ],
+   "subindustry": "Utility control systems",
+   "objective": "Hunt a compromised proxy/host in the control-system DMZ and the callback and discovery it produces.",
+   "expected_outcome": "OT proxy, Wazuh, Docker and Nozomi records, then osquery and Suricata callback evidence.",
+   "phases": [
+    {
+     "id": "UB1_OT_PROXY_HOST_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub1_ot_proxy_host_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_C2_CALLBACK_DETECTION",
+     "offset_s": 12.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_c2_callback_detection",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "bluecoat:proxysg:access:file",
+    "docker_events",
+    "nozomi:universal_alert",
+    "osquery:results",
+    "suricata",
+    "wazuh:alerts"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub1_ot_proxy_host_hunt, wave2_c2_callback_detection (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_energy_scada_proxy_intrusion\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_insurance_claims_platform_audit",
+   "title": "Claims platform: SaaS and database/message audit with cloud mail exfiltration",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2010,
+   "industries": [
+    "insurance-insurtech"
+   ],
+   "subindustry": "Claims and policy administration",
+   "objective": "Review collaboration-platform audit, Oracle and IBM MQ audit of the claims system, and a cloud-mail exfiltration attempt.",
+   "expected_outcome": "GitHub/GitLab/Slack audit, Oracle and IBM MQ audit, then the cloud-mail exfiltration sequence.",
+   "phases": [
+    {
+     "id": "UB4_SAAS_COLLABORATION_AUDIT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_saas_collaboration_audit",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB3_DATABASE_MESSAGE_AUDIT",
+     "offset_s": 12.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_database_message_audit",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE3_CLOUDMAIL_EXFIL",
+     "offset_s": 20.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_cloudmail_exfil",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gsuite:gmail:bigquery",
+    "ibm:mq:errorlog",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "oracle:audit:text",
+    "slack:audit",
+    "zscalernss-web"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub4_saas_collaboration_audit, ub3_database_message_audit, wave3_cloudmail_exfil (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_insurance_claims_platform_audit\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_insurance_underwriting_exposure",
+   "title": "Underwriting data platform: exposure management, vault and identity audit",
+   "category": "ITOPS",
+   "kind": "operational",
+   "seed": 2011,
+   "industries": [
+    "insurance-insurtech"
+   ],
+   "subindustry": "Underwriting analytics and data platforms",
+   "objective": "Combine vulnerability/exposure management, secrets and mail-security audit, and identity runtime audit for the underwriting data platform.",
+   "expected_outcome": "Qualys/Rapid7/Elastic/QRadar records, Confluence/Vault/Proofpoint records, SailPoint/Tenable/Sysdig/BeyondTrust records.",
+   "phases": [
+    {
+     "id": "UB4_EXPOSURE_INFRA_LOGGING",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_exposure_infra_logging",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_CLOUD_IDENTITY_MAIL_HUNT",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_cloud_identity_mail_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB3_IDENTITY_RUNTIME_AUDIT",
+     "offset_s": 25.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_identity_runtime_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "Confluence:audit log",
+    "SysdigSecureEvents",
+    "ccx:beyondinsight:passwordsafe",
+    "elasticsearch:json",
+    "hashicorp_vault_audit_log",
+    "ibm:qradar:offense",
+    "proofpoint_tap_siem",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub4_exposure_infra_logging, ub2_cloud_identity_mail_hunt, ub3_identity_runtime_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_insurance_underwriting_exposure\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_gov_citizen_identity_attack",
+   "title": "Citizen services: cloud identity attack, AWS reconnaissance, privileged-access audit",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2012,
+   "industries": [
+    "government-public-sector"
+   ],
+   "subindustry": "State and local government",
+   "objective": "Trace identity stuffing against citizen-facing cloud services, reconnaissance of the hosting account, and the privileged-access audit trail.",
+   "expected_outcome": "Okta/Azure/Google/O365 identity events, AWS recon and escalation, identity audit records.",
+   "phases": [
+    {
+     "id": "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_cloud_identity_sso_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_AWS_RECON_ESCALATION",
+     "offset_s": 22.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_aws_recon_escalation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB3_IDENTITY_RUNTIME_AUDIT",
+     "offset_s": 37.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_identity_runtime_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "OktaIM2:log",
+    "SysdigSecureEvents",
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "ccx:beyondinsight:passwordsafe",
+    "gws:reports:login",
+    "o365:management:activity",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_cloud_identity_sso_hunt, wave2_aws_recon_escalation, ub3_identity_runtime_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_gov_citizen_identity_attack\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_gov_agency_mail_exfiltration",
+   "title": "Agency: cloud mail exfiltration with containment and endpoint pipeline",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2013,
+   "industries": [
+    "government-public-sector"
+   ],
+   "subindustry": "Federal civilian and compliance (framing only)",
+   "objective": "Follow a cloud-mail exfiltration attempt through containment and the endpoint-protection pipeline.",
+   "expected_outcome": "CloudFront/CloudTrail Lake/Duo/Secure Access/Gmail records then endpoint-protection records.",
+   "phases": [
+    {
+     "id": "WAVE3_CLOUDMAIL_EXFIL",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_cloudmail_exfil",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_ENDPOINT_THREAT_PIPELINE",
+     "offset_s": 16.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_endpoint_threat_pipeline",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "bitdefender:gz",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "cybereason:malops",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events",
+    "zscalernss-web"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave3_cloudmail_exfil, ub4_endpoint_threat_pipeline (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_gov_agency_mail_exfiltration\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_retail_pos_edge_defense",
+   "title": "Retail stores: edge defense observation and endpoint threat pipeline",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2014,
+   "industries": [
+    "retail-ecommerce"
+   ],
+   "subindustry": "Stores and point of sale",
+   "objective": "Observe the store/e-commerce edge (WAF, IDS, firewall) and the endpoint-protection pipeline covering store systems.",
+   "expected_outcome": "Edge security records followed by Bitdefender/Cybereason/SentinelOne/Tanium/Trellix records.",
+   "phases": [
+    {
+     "id": "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_multivendor_edge_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_ENDPOINT_THREAT_PIPELINE",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_endpoint_threat_pipeline",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "barracuda:waf:web_firewall",
+    "bitdefender:gz",
+    "cybereason:malops",
+    "darktrace",
+    "imperva:securesphere:cef",
+    "pfsense:filterlog",
+    "sentinelone:channel:threats",
+    "tanium:discover:managed",
+    "trellix_epo:threat_events"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub3_multivendor_edge_observation, ub4_endpoint_threat_pipeline (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_retail_pos_edge_defense\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_retail_ecommerce_cloud_recon",
+   "title": "E-commerce: AWS reconnaissance and escalation with exposure management",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2015,
+   "industries": [
+    "retail-ecommerce"
+   ],
+   "subindustry": "E-commerce platform",
+   "objective": "Follow cloud reconnaissance and privilege escalation against the e-commerce account, then the exposure-management evidence for the same estate.",
+   "expected_outcome": "AWS recon and escalation, then Qualys/Rapid7/Elastic/QRadar records.",
+   "phases": [
+    {
+     "id": "WAVE2_AWS_RECON_ESCALATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_aws_recon_escalation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_EXPOSURE_INFRA_LOGGING",
+     "offset_s": 15.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_exposure_infra_logging",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "aws:cloudtrail",
+    "aws:cloudwatchlogs:vpcflow",
+    "elasticsearch:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_aws_recon_escalation, ub4_exposure_infra_logging (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_retail_ecommerce_cloud_recon\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_edu_campus_identity_and_collab",
+   "title": "Campus: cloud identity attack and collaboration-platform audit",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2016,
+   "industries": [
+    "education"
+   ],
+   "subindustry": "Higher education",
+   "objective": "Show credential stuffing against campus single sign-on and the source-control/collaboration audit trail.",
+   "expected_outcome": "Cloud identity events, then GitHub/GitLab/Slack audit records.",
+   "phases": [
+    {
+     "id": "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_cloud_identity_sso_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_SAAS_COLLABORATION_AUDIT",
+     "offset_s": 22.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_saas_collaboration_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "gws:reports:login",
+    "o365:management:activity",
+    "slack:audit"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_cloud_identity_sso_hunt, ub4_saas_collaboration_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_edu_campus_identity_and_collab\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_saas_platform_runtime_attack",
+   "title": "SaaS platform: Kubernetes container escape, collaboration audit and exposure management",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2017,
+   "industries": [
+    "technology-saas"
+   ],
+   "subindustry": "Cloud-native software platform",
+   "objective": "Trace a container escape in the platform cluster alongside collaboration audit and exposure-management evidence.",
+   "expected_outcome": "Kubernetes audit, Falco, osquery and Suricata records, collaboration audit, exposure records.",
+   "phases": [
+    {
+     "id": "WAVE2_K8S_CONTAINER_ESCAPE",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_k8s_container_escape",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_SAAS_COLLABORATION_AUDIT",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_saas_collaboration_audit",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_EXPOSURE_INFRA_LOGGING",
+     "offset_s": 26.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_exposure_infra_logging",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "kube:audit",
+    "kube:container:falco",
+    "osquery:results",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit",
+    "suricata"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_k8s_container_escape, ub4_saas_collaboration_audit, ub4_exposure_infra_logging (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_saas_platform_runtime_attack\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_media_content_delivery_exfil",
+   "title": "Media: content-delivery access with cloud-mail exfiltration",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2018,
+   "industries": [
+    "media-entertainment"
+   ],
+   "subindustry": "Streaming and content delivery",
+   "objective": "Observe CDN access logs and a cloud-mail exfiltration of pre-release content, with containment.",
+   "expected_outcome": "CloudFront access, CloudTrail Lake, Duo, Secure Access and Gmail records.",
+   "phases": [
+    {
+     "id": "WAVE3_CLOUDMAIL_EXFIL",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_cloudmail_exfil",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave3_cloudmail_exfil (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_media_content_delivery_exfil\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_hospitality_guest_network_defense",
+   "title": "Hospitality: edge defense and guest/staff identity attack",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2019,
+   "industries": [
+    "hospitality-travel"
+   ],
+   "subindustry": "Hotels and guest networks",
+   "objective": "Observe guest-network edge defenses and credential stuffing against staff cloud identities.",
+   "expected_outcome": "Edge security records, then cloud identity events.",
+   "phases": [
+    {
+     "id": "UB3_MULTIVENDOR_EDGE_OBSERVATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_multivendor_edge_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_cloud_identity_sso_hunt",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "OktaIM2:log",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "barracuda:waf:web_firewall",
+    "darktrace",
+    "gws:reports:login",
+    "imperva:securesphere:cef",
+    "o365:management:activity",
+    "pfsense:filterlog"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub3_multivendor_edge_observation, wave2_cloud_identity_sso_hunt (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_hospitality_guest_network_defense\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_aero_defense_endpoint_c2",
+   "title": "Defense contractor: C2 callback, endpoint pipeline and privileged-access audit",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2020,
+   "industries": [
+    "aerospace-defense"
+   ],
+   "subindustry": "Defense contractor",
+   "objective": "Detect a callback and discovery from a contractor host, the endpoint-protection response and the privileged-access audit trail.",
+   "expected_outcome": "osquery and Suricata callback evidence, endpoint-protection records, identity audit records.",
+   "phases": [
+    {
+     "id": "WAVE2_C2_CALLBACK_DETECTION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_c2_callback_detection",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_ENDPOINT_THREAT_PIPELINE",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_endpoint_threat_pipeline",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB3_IDENTITY_RUNTIME_AUDIT",
+     "offset_s": 29.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub3_identity_runtime_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "SysdigSecureEvents",
+    "bitdefender:gz",
+    "ccx:beyondinsight:passwordsafe",
+    "cybereason:malops",
+    "osquery:results",
+    "sailpoint_identitynow",
+    "sentinelone:channel:threats",
+    "suricata",
+    "tanium:discover:managed",
+    "tenable:io:audit_logs",
+    "trellix_epo:threat_events"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_c2_callback_detection, ub4_endpoint_threat_pipeline, ub3_identity_runtime_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_aero_defense_endpoint_c2\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_legal_matter_data_exfiltration",
+   "title": "Law firm: client-matter data exfiltration across mail, vault and wiki",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2021,
+   "industries": [
+    "legal-compliance-professional-services"
+   ],
+   "subindustry": "Law firms and professional services",
+   "objective": "Follow client-matter data leaving through cloud mail and the secrets, wiki and mail-security audit evidence around it.",
+   "expected_outcome": "Cloud-mail exfiltration sequence, then Confluence/Vault/Proofpoint records.",
+   "phases": [
+    {
+     "id": "WAVE3_CLOUDMAIL_EXFIL",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_cloudmail_exfil",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_CLOUD_IDENTITY_MAIL_HUNT",
+     "offset_s": 16.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_cloud_identity_mail_hunt",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "Confluence:audit log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "hashicorp_vault_audit_log",
+    "o365:graph:messagetrace",
+    "o365:reporting:messagetrace",
+    "proofpoint_tap_siem",
+    "zscalernss-web"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave3_cloudmail_exfil, ub2_cloud_identity_mail_hunt (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_legal_matter_data_exfiltration\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_agri_edge_gateway_health",
+   "title": "Agritech: edge gateway routing observation and Linux gateway authentication anomaly",
+   "category": "ITOPS",
+   "kind": "operational",
+   "seed": 2022,
+   "industries": [
+    "agriculture-agritech"
+   ],
+   "subindustry": "Precision farming and processing",
+   "objective": "Observe field/processing edge routing gear and an authentication anomaly on a Linux edge gateway.",
+   "expected_outcome": "Claroty/MikroTik/NGINX/Traefik edge records, then Linux auditd/syslog/Sysmon records.",
+   "phases": [
+    {
+     "id": "UB2_OT_EDGE_ROUTING_OBSERVATION",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_ot_edge_routing_observation",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE2_LINUX_AUTH_ANOMALY",
+     "offset_s": 12.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_linux_auth_anomaly",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "auditd",
+    "claroty:cef",
+    "linux_messages_syslog",
+    "mikrotik:routeros",
+    "nginx:access",
+    "sysmon:linux",
+    "traefik:access:json"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub2_ot_edge_routing_observation, wave2_linux_auth_anomaly (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_agri_edge_gateway_health\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_realestate_building_exposure",
+   "title": "Property technology: exposure management and collaboration audit",
+   "category": "ITOPS",
+   "kind": "operational",
+   "seed": 2023,
+   "industries": [
+    "real-estate-proptech-construction"
+   ],
+   "subindustry": "Commercial property and construction",
+   "objective": "Track exposure-management findings for property systems and the collaboration/source-control audit trail of the platform team.",
+   "expected_outcome": "Qualys/Rapid7/Elastic/QRadar records, then GitHub/GitLab/Slack audit records.",
+   "phases": [
+    {
+     "id": "UB4_EXPOSURE_INFRA_LOGGING",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_exposure_infra_logging",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB4_SAAS_COLLABORATION_AUDIT",
+     "offset_s": 14.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub4_saas_collaboration_audit",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "elasticsearch:json",
+    "github:enterprise:audit",
+    "gitlab:audit:json",
+    "ibm:qradar:offense",
+    "qualys:activityLog",
+    "rapid7:insightvm:asset:vulnerability_finding",
+    "slack:audit"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub4_exposure_infra_logging, ub4_saas_collaboration_audit (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_realestate_building_exposure\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_nonprofit_donor_platform_attack",
+   "title": "Non-profit: staff identity attack and cloud-mail exfiltration of donor data",
+   "category": "SOC",
+   "kind": "security",
+   "seed": 2024,
+   "industries": [
+    "nonprofit-ngo-global-aid"
+   ],
+   "subindustry": "Humanitarian and donor platforms",
+   "objective": "Show credential stuffing against staff identities and a cloud-mail exfiltration of donor records.",
+   "expected_outcome": "Cloud identity events, then the cloud-mail exfiltration sequence.",
+   "phases": [
+    {
+     "id": "WAVE2_CLOUD_IDENTITY_SSO_HUNT",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_cloud_identity_sso_hunt",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "WAVE3_CLOUDMAIL_EXFIL",
+     "offset_s": 22.0,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_cloudmail_exfil",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "OktaIM2:log",
+    "aws:cloudfront:accesslogs",
+    "aws:cloudtrail:lake",
+    "azure:monitor:aad",
+    "azure:monitor:activity",
+    "cisco:duo:administrator",
+    "cisco:secure_access:security_events_ravpn",
+    "gsuite:gmail:bigquery",
+    "gws:reports:login",
+    "o365:graph:messagetrace",
+    "o365:management:activity",
+    "o365:reporting:messagetrace",
+    "zscalernss-web"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.",
+   "dashboard_requirement": "Security scenario: no dashboard required; panel queries are still available for the run.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: wave2_cloud_identity_sso_hunt, wave3_cloudmail_exfil (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_nonprofit_donor_platform_attack\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
+  },
+  {
+   "id": "ind_transport_fleet_network_change",
+   "title": "Logistics network: change-induced outage and edge routing observation",
+   "category": "NOC",
+   "kind": "operational",
+   "seed": 2025,
+   "industries": [
+    "transportation-logistics"
+   ],
+   "subindustry": "Logistics and fleet networks",
+   "objective": "Reconstruct a change that causes an outage on the logistics WAN, then observe edge routing and proxy services after recovery.",
+   "expected_outcome": "Cisco change/fault/recovery messages, then edge routing records.",
+   "phases": [
+    {
+     "id": "UB5_CISCO_CHANGE_INDUCED_OUTAGE",
+     "offset_s": 0.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub5_cisco_change_induced_outage",
+      "spacing_s": 1.0
+     }
+    },
+    {
+     "id": "UB2_OT_EDGE_ROUTING_OBSERVATION",
+     "offset_s": 25.0,
+     "source": {
+      "kind": "native",
+      "pack": "ub2_ot_edge_routing_observation",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "required_sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG",
+    "claroty:cef",
+    "mikrotik:routeros",
+    "nginx:access",
+    "traefik:access:json"
+   ],
+   "execution_requirement": "native",
+   "correlation_note": "Correlated inside each constituent native pack; constituent packs are related by time only.",
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "dashboard_requirement": "Panels (validated only as populated queries against the replayed run, in the isolated lab): Event volume by sourcetype; Events by incident phase; Top reporting hosts. No Dashboard Studio object is built or claimed for these packs.",
+   "dashboard_panels": [
+    {
+     "title": "Event volume by sourcetype",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | timechart span=10s count by sourcetype"
+    },
+    {
+     "title": "Events by incident phase",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by netspout_phase, netspout_pack_phase | sort netspout_phase"
+    },
+    {
+     "title": "Top reporting hosts",
+     "spl": "index=dev_test_replay netspout_replay_session=\"{session}\" | stats count by host sourcetype | sort - count | head 10"
+    }
+   ],
+   "provenance": "Constituent native packs: ub5_cisco_change_induced_outage, ub2_ot_edge_routing_observation (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.",
+   "verification_spl": "index=dev_test_replay netspout_scenario_id=\"ind_transport_fleet_network_change\" | stats count by netspout_phase, netspout_pack_phase, sourcetype"
   }
  ]
 }

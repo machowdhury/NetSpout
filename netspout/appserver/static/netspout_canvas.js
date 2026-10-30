@@ -26,11 +26,11 @@ require([
 
     var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
     var locale = localeMatch ? localeMatch[1] : 'en-US';
-    // The React UI talks to the NetSpout backend (default loopback :8081). Override with
-    // localStorage 'netspout.apiBase' (loopback origins only; the UI ignores anything else).
-    var apiBase = 'http://127.0.0.1:8081';
-    try { apiBase = window.localStorage.getItem('netspout.apiBase') || apiBase; } catch (e) {}
-    var canvasUrl = '/' + locale + '/static/app/netspout/dist/index.html?api_base=' + encodeURIComponent(apiBase);
+    // API calls go through the app's authenticated REST gateway on this origin (no backend port in the browser).
+    // The view name selects the React route: Command Center = home, Use Case Explorer = #/explore.
+    var view = (window.location.pathname.match(/\/app\/netspout\/([^/?#]+)/) || [])[1] || '';
+    var route = { pulseforge_command_center: '#/', use_case_explorer: '#/explore' }[view] || '';
+    var canvasUrl = '/' + locale + '/static/app/netspout/dist/index.html' + route;
 
     var iframe = $('<iframe>', {
       id: 'netspout-canvas-frame',

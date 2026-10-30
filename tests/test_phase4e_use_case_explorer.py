@@ -59,7 +59,11 @@ class TestTaxonomy(unittest.TestCase):
     def test_eighteen_unique_industries_and_valid_mappings(self):
         tax = load_taxonomy()
         self.assertEqual(len(tax["industries"]), 18)
-        self.assertEqual(tax["taxonomy_status"], "PROPOSED_DEFAULT")
+        self.assertEqual(tax["taxonomy_status"], "APPROVED")
+        gov = next(i for i in tax["industries"] if i["id"] == "government-public-sector")
+        self.assertEqual(len(gov["subdomains"]), 4)
+        self.assertEqual([i["name"] for i in tax["industries"]][0], "Banking and Financial Services")
+        self.assertEqual([i["name"] for i in tax["industries"]][-1], "Non-Profit, NGOs and Global Aid")
         ids = {i["id"] for i in tax["industries"]}
         for m in tax["scenario_industries"]:
             self.assertIn(m["basis"], ("industry_pack", "editorial"))
@@ -79,9 +83,10 @@ class TestTaxonomy(unittest.TestCase):
     def test_industry_counts_are_computed_and_empty_industries_are_zero(self):
         rows = {r["id"]: r for r in make_explorer().industries()}
         self.assertEqual(len(rows), 18)
-        self.assertEqual(rows["financial-services"]["scenarios_total"], 1)
-        self.assertEqual(rows["financial-services"]["bases"], ["industry_pack"])
-        self.assertEqual(rows["insurance"]["scenarios_total"], 0)
+        self.assertEqual(rows["banking-financial-services"]["scenarios_total"], 1)
+        self.assertEqual(rows["banking-financial-services"]["bases"], ["industry_pack"])
+        self.assertEqual(rows["insurance-insurtech"]["scenarios_total"], 0)
+        self.assertEqual(rows["nonprofit-ngo-global-aid"]["scenarios_total"], 0)
 
 
 class TestOperationalTruthfulness(unittest.TestCase):
@@ -126,7 +131,7 @@ class TestOperationalTruthfulness(unittest.TestCase):
     def test_search_and_filters(self):
         self.assertEqual([e["scenario_id"] for e in self.ex.search(q="payments")["items"]],
                          ["payment_processing_degradation"])
-        self.assertEqual(self.ex.search(industry="financial-services")["total"], 1)
+        self.assertEqual(self.ex.search(industry="banking-financial-services")["total"], 1)
         self.assertEqual(self.ex.search(demo_ready=True, kind="operational")["total"], 2)
         self.assertEqual(self.ex.search(vendor="cisco", kind="operational")["total"], 3)  # S-GOLD, S-BLOCKED ("Cisco") + payments ("cisco")
 
@@ -292,7 +297,7 @@ class TestExplorerApi(unittest.TestCase):
         body = self.client.get("/api/explorer/summary").json()
         self.assertEqual(len(body["industries"]), 18)
         self.assertEqual(body["security"]["total"], 365)
-        self.assertEqual(body["taxonomy"]["status"], "PROPOSED_DEFAULT")
+        self.assertEqual(body["taxonomy"]["status"], "APPROVED")
         res = self.client.get("/api/explorer/entries", params={"q": "dns", "limit": 5}).json()
         self.assertGreater(res["total"], 0)
         self.assertLessEqual(len(res["items"]), 5)

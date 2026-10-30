@@ -1,0 +1,519 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge Operational: DNS Anomaly (Dashboard Studio)</label>
+  <description>SEC-P9-B-DNS-ANOMALY indexed-data dashboard: KPIs, trend, incident timeline and drilldowns.</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge Operational: DNS Anomaly (Dashboard Studio)",
+  "description": "SEC-P9-B-DNS-ANOMALY: DNS query volume, NXDOMAIN behaviour and incident timeline from events indexed in idx_network_ops. Filter by run, click a phase or client to drill down.",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_phase": {
+      "type": "input.dropdown",
+      "title": "Phase",
+      "options": {
+        "token": "phase_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All phases",
+            "value": "*"
+          },
+          {
+            "label": "NORMAL",
+            "value": "NORMAL"
+          },
+          {
+            "label": "SUSPICIOUS_ACTIVITY",
+            "value": "SUSPICIOUS_ACTIVITY"
+          }
+        ]
+      }
+    },
+    "input_client": {
+      "type": "input.text",
+      "title": "Client IP (wildcards ok)",
+      "options": {
+        "token": "client_tok",
+        "defaultValue": "*"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.singlevalue",
+      "title": "DNS queries",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44
+      }
+    },
+    "viz_2": {
+      "type": "splunk.singlevalue",
+      "title": "NXDOMAIN responses",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44
+      }
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "title": "NXDOMAIN rate",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44,
+        "unit": "%"
+      }
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "title": "Attack-related queries",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44,
+        "unit": "%"
+      }
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "title": "Unique domains",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44
+      }
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "title": "Clients",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "majorFontSize": 44
+      }
+    },
+    "viz_7": {
+      "type": "splunk.column",
+      "title": "Query volume over the scenario clock (10 s buckets, by phase)",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "description": "Click a phase segment to filter the incident timeline and detail tables.",
+      "options": {
+        "stackMode": "stacked",
+        "xAxisTitleText": "Seconds since scenario start",
+        "yAxisTitleText": "Queries",
+        "legendDisplay": "bottom"
+      },
+      "eventHandlers": [
+        {
+          "type": "drilldown.setToken",
+          "options": {
+            "tokens": [
+              {
+                "token": "phase_tok",
+                "key": "name2"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "viz_8": {
+      "type": "splunk.bar",
+      "title": "NXDOMAIN % by phase",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "yAxisTitleText": "",
+        "xAxisTitleText": "NXDOMAIN %",
+        "dataValuesDisplay": "all"
+      },
+      "eventHandlers": [
+        {
+          "type": "drilldown.setToken",
+          "options": {
+            "tokens": [
+              {
+                "token": "phase_tok",
+                "key": "row.netspout_phase.value"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "viz_9": {
+      "type": "splunk.area",
+      "title": "Ingest trend across runs (hourly, all runs in range)",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "options": {
+        "stackMode": "stacked",
+        "legendDisplay": "bottom"
+      }
+    },
+    "viz_10": {
+      "type": "splunk.table",
+      "title": "Top clients (click a row to filter)",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.setToken",
+          "options": {
+            "tokens": [
+              {
+                "token": "client_tok",
+                "key": "row.client_ip.value"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "viz_11": {
+      "type": "splunk.table",
+      "title": "Incident timeline (scenario clock order)",
+      "dataSources": {
+        "primary": "ds_11"
+      },
+      "showProgressBar": true,
+      "showLastUpdated": true,
+      "description": "Click a row to open the matching events in Search.",
+      "options": {
+        "count": 10,
+        "dataOverlayMode": "none"
+      },
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY query=\"$row.query.value$\"",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Total DNS queries",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as value"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "NXDOMAIN responses",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count(eval(response_code=3)) as value"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "NXDOMAIN rate",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as t count(eval(response_code=3)) as n | eval value=if(t>0,round(100*n/t,1),0) | fields value"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Attack-related share",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as t count(eval(attack_related=\"true\")) as a | eval value=if(t>0,round(100*a/t,1),0) | fields value"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Unique domains queried",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats dc(query) as value"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Clients involved",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats dc(client_ip) as value"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Query volume over scenario clock",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | eval t0=timestamp_ms | eventstats min(t0) as m by netspout_run_id | eval scenario_second=floor((t0-m)/1000/10)*10 | chart count over scenario_second by netspout_phase"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "NXDOMAIN ratio by phase",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as queries count(eval(response_code=3)) as nxdomain by netspout_phase | eval nxdomain_pct=round(100*nxdomain/queries,1) | fields netspout_phase nxdomain_pct"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Runs over time",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY earliest=$global_time.earliest$ latest=$global_time.latest$ | timechart span=1h count by netspout_phase"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Top clients",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as queries count(eval(response_code=3)) as nxdomain by client_ip | sort - queries | head 10"
+      }
+    },
+    "ds_11": {
+      "type": "ds.search",
+      "name": "Incident timeline",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ netspout_phase=\"$phase_tok$\" client_ip=\"$client_tok$\" | eval _t=timestamp_ms | sort 0 _t | eval scenario_clock=strftime(_t/1000,\"%H:%M:%S\"), rcode=case(response_code=0,\"NOERROR\",response_code=3,\"NXDOMAIN\",true(),\"RCODE \".response_code) | table scenario_clock netspout_phase client_ip query rcode attack_related resolver_ip _time"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY earliest=$global_time.earliest$ latest=$global_time.latest$ | stats latest(_time) as t by netspout_run_id | sort - t | eval label=netspout_run_id.\" \".strftime(t,\"%m-%d %H:%M\") | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_phase",
+      "input_client"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1180,
+          "display": "auto-scale"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 260,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 500,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 1220,
+              "y": 70,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 220,
+              "w": 700,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 220,
+              "w": 700,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 540,
+              "w": 700,
+              "h": 260
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 540,
+              "w": 700,
+              "h": 260
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 820,
+              "w": 1420,
+              "h": 330
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Scenario",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+  <meta type="hiddenElements"><![CDATA[
+{"hideEdit":false,"hideOpenInSearch":false,"hideExport":false}
+]]></meta>
+</dashboard>

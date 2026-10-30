@@ -1,10 +1,13 @@
 <nav search_view="search">
-  <view name="guided_onboarding" default="true" label="PulseForge Onboarding"/>
+  <view name="pulseforge_command_center" default="true" label="PulseForge Command Center"/>
+  <view name="use_case_explorer" label="Use Case Explorer"/>
+  <view name="guided_onboarding" label="PulseForge Onboarding"/>
   <view name="pulseforge_discovery" label="Use Cases &amp; Dashboards"/>
   <view name="scenario_builder" label="Scenario Builder"/>
   <view name="netspout_canvas" label="Canvas Orchestrator"/>
   <view name="security_content_lab" label="Security Content Lab"/>
   <collection label="PulseForge Dashboards">
+    <view name="pulseforge_dns_anomaly_studio" label="Operational: DNS Anomaly (Dashboard Studio)"/>
     <view name="pulseforge_security" label="Security Simulation"/>
     <view name="pulseforge_network" label="Network Simulation"/>
     <view name="pulseforge_application" label="Application Dependencies"/>

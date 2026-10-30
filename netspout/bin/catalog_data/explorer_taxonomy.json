@@ -1,28 +1,24 @@
 {
   "schema_version": "1.0.0",
-  "taxonomy_version": "2026.10-phase4e",
-  "taxonomy_status": "PROPOSED_DEFAULT",
-  "taxonomy_note": "Industry taxonomy is a proposed default: replace this list with the approved taxonomy if it differs. Counts are computed from the mappings below, never hardcoded.",
+  "taxonomy_version": "2026.10-approved",
+  "taxonomy_status": "APPROVED",
+  "taxonomy_note": "Approved 18-industry list with four Government subdomains. Scenario-to-industry mappings remain editorial unless an industry pack binds them (see mapping basis); no scenario is mapped to a Government subdomain, and industries without a supported scenario show 0 rather than being padded.",
   "mapping_basis_legend": {
     "industry_pack": "Dashboard/industry pack in the catalog explicitly binds this scenario to the industry.",
     "editorial": "Maintainer judgement that the scenario's telemetry is typical for the industry. Not a customer-validated claim."
   },
   "industries": [
     {
-      "id": "financial-services",
-      "name": "Financial Services"
-    },
-    {
-      "id": "insurance",
-      "name": "Insurance"
+      "id": "banking-financial-services",
+      "name": "Banking and Financial Services"
     },
     {
       "id": "healthcare",
-      "name": "Healthcare Providers"
+      "name": "Healthcare"
     },
     {
-      "id": "life-sciences",
-      "name": "Life Sciences & Pharma"
+      "id": "retail-ecommerce",
+      "name": "Retail and E-commerce"
     },
     {
       "id": "manufacturing",
@@ -30,55 +26,77 @@
     },
     {
       "id": "energy-utilities",
-      "name": "Energy & Utilities"
+      "name": "Energy and Utilities"
     },
     {
       "id": "telecommunications",
-      "name": "Telecommunications & Service Providers"
+      "name": "Telecommunications"
     },
     {
-      "id": "retail",
-      "name": "Retail & E-commerce"
-    },
-    {
-      "id": "hospitality-travel",
-      "name": "Hospitality & Travel"
+      "id": "government-public-sector",
+      "name": "Government and Public Sector",
+      "subdomains": [
+        {
+          "id": "gov-national-security",
+          "name": "National Security, Defense and Intelligence"
+        },
+        {
+          "id": "gov-state-local",
+          "name": "State, Local and Citizen Services"
+        },
+        {
+          "id": "gov-federal-civilian",
+          "name": "Federal Civilian and Compliance"
+        },
+        {
+          "id": "gov-critical-infrastructure",
+          "name": "Critical National Infrastructure"
+        }
+      ]
     },
     {
       "id": "transportation-logistics",
-      "name": "Transportation & Logistics"
-    },
-    {
-      "id": "public-sector",
-      "name": "Public Sector & Government"
-    },
-    {
-      "id": "defense-aerospace",
-      "name": "Defense & Aerospace"
+      "name": "Transportation and Logistics"
     },
     {
       "id": "education",
       "name": "Education"
     },
     {
-      "id": "technology-software",
-      "name": "Technology & Software"
+      "id": "technology-saas",
+      "name": "Technology and SaaS"
     },
     {
       "id": "media-entertainment",
-      "name": "Media & Entertainment"
+      "name": "Media and Entertainment"
     },
     {
-      "id": "professional-services",
-      "name": "Professional Services"
+      "id": "hospitality-travel",
+      "name": "Hospitality and Travel"
     },
     {
-      "id": "real-estate-construction",
-      "name": "Real Estate & Construction"
+      "id": "aerospace-defense",
+      "name": "Aerospace and Defense"
     },
     {
-      "id": "agriculture-food",
-      "name": "Agriculture & Food"
+      "id": "legal-compliance-professional-services",
+      "name": "Legal, Compliance and Professional Services"
+    },
+    {
+      "id": "agriculture-agritech",
+      "name": "Agriculture and Agritech"
+    },
+    {
+      "id": "real-estate-proptech-construction",
+      "name": "Real Estate, PropTech and Construction"
+    },
+    {
+      "id": "insurance-insurtech",
+      "name": "Insurance and InsurTech"
+    },
+    {
+      "id": "nonprofit-ngo-global-aid",
+      "name": "Non-Profit, NGOs and Global Aid"
     }
   ],
   "scenario_industries": [
@@ -86,14 +104,14 @@
       "scenario_id": "payment_processing_degradation",
       "basis": "industry_pack",
       "industries": [
-        "financial-services"
+        "banking-financial-services"
       ]
     },
     {
       "scenario_id": "C100-CRI-002",
       "basis": "industry_pack",
       "industries": [
-        "financial-services"
+        "banking-financial-services"
       ]
     },
     {
@@ -115,7 +133,7 @@
       "basis": "editorial",
       "industries": [
         "energy-utilities",
-        "public-sector"
+        "government-public-sector"
       ]
     },
     {
@@ -152,7 +170,7 @@
       "industries": [
         "education",
         "hospitality-travel",
-        "retail"
+        "retail-ecommerce"
       ]
     },
     {
@@ -168,7 +186,7 @@
       "basis": "editorial",
       "industries": [
         "manufacturing",
-        "agriculture-food"
+        "agriculture-agritech"
       ]
     },
     {
@@ -191,100 +209,100 @@
       "scenario_id": "arch_vpn_remote_workforce",
       "basis": "editorial",
       "industries": [
-        "professional-services",
-        "technology-software"
+        "legal-compliance-professional-services",
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "mixed_sase_degradation",
       "basis": "editorial",
       "industries": [
-        "professional-services",
-        "technology-software"
+        "legal-compliance-professional-services",
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "wave2_agentic_ai_exfil_attempt",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-001",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-002",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-003",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-004",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-005",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "AI-006",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "SC-001",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "SC-002",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "SC-003",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "SC-004",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     },
     {
       "scenario_id": "SC-005",
       "basis": "editorial",
       "industries": [
-        "technology-software"
+        "technology-saas"
       ]
     }
   ]

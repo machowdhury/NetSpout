@@ -1,9 +1,32 @@
+// Inside Splunk Web (static/app/netspout) API calls go through the app's authenticated REST gateway on the Splunk
+// origin; Splunk forwards them to the backend server-side, so the browser never contacts the backend port.
+function splunkGatewayBase(): string | null {
+  const m = typeof window === 'undefined' ? null : window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\/static\/app\/netspout\//);
+  return m ? `/${m[1]}/splunkd/__raw/services/netspout_gateway` : null;
+}
+
+// Splunk rejects POSTs to splunkd/__raw without its CSRF header; add it to gateway calls only.
+if (typeof window !== 'undefined' && splunkGatewayBase()) {
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = (input, init) => {
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    if (!url.includes('/splunkd/__raw/services/netspout_gateway')) return nativeFetch(input, init);
+    const token = document.cookie.split('; ').find((c) => c.startsWith('splunkweb_csrf_token'))?.split('=')[1] ?? '';
+    const headers = new Headers(init?.headers);
+    headers.set('X-Splunk-Form-Key', token);
+    headers.set('X-Requested-With', 'XMLHttpRequest');
+    return nativeFetch(input, { ...init, headers });
+  };
+}
+
 function configuredApiBase(): string | null {
   if (typeof document === 'undefined') return null;
   const value = document
     .querySelector<HTMLMetaElement>('meta[name="netspout-api-base"]')
     ?.content.trim();
   if (value) return value;
+  const gateway = splunkGatewayBase();
+  if (gateway) return gateway;
   // Splunk-hosted iframe: the canvas passes the backend origin. Loopback only, matching the backend CORS policy,
   // so a crafted link cannot redirect API calls (and credentials) to another host.
   const param = new URLSearchParams(window.location.search).get('api_base') ?? '';

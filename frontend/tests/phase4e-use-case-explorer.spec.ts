@@ -9,8 +9,8 @@ test.describe('Use Case Explorer', () => {
     await expect(page.getByTestId('explorer-card').first()).toBeVisible();
   });
 
-  test('lists 18 industries and flags the taxonomy as a proposed default', async ({ page }) => {
-    await expect(page.getByRole('note')).toContainText('proposed default');
+  test('lists 18 industries and shows the approved taxonomy with editorial-mapping caveat', async ({ page }) => {
+    await expect(page.getByRole('note')).toContainText('editorial');
     const industries = page.getByLabel('Industry').locator('option');
     expect(await industries.count()).toBe(19); // 18 + "All industries"
   });
@@ -19,7 +19,7 @@ test.describe('Use Case Explorer', () => {
     await page.getByLabel('Search use cases').fill('dns');
     await expect(page.getByTestId('explorer-card').first()).toContainText(/dns/i);
     await page.getByLabel('Search use cases').fill('');
-    await page.getByLabel('Industry').selectOption('insurance');
+    await page.getByLabel('Industry').selectOption('insurance-insurtech');
     await expect(page.getByText('Nothing matches.')).toBeVisible();
   });
 

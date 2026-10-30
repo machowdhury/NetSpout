@@ -34,9 +34,12 @@ Counts are computed at request time; nothing is hardcoded.
 
 ## Taxonomy
 
-`catalog/explorer_taxonomy.json` holds the 18 industries and the scenario mappings. `taxonomy_status` is `PROPOSED_DEFAULT`
-and the UI says so. **Replace the `industries` list with the approved taxonomy if it differs**; `load_taxonomy()` rejects
-mappings that reference unknown industry ids. Editing this one file is sufficient (it is mirrored by `scripts/sync_core.py`).
+`catalog/explorer_taxonomy.json` holds the approved 18 industries (`taxonomy_status` `APPROVED`, version `2026.10-approved`) and the
+scenario mappings. Government carries four subdomains (National Security, Defense and Intelligence; State, Local and Citizen
+Services; Federal Civilian and Compliance; Critical National Infrastructure). Mappings are editorial unless an industry pack binds
+the scenario, no scenario is mapped to a subdomain, and industries without a supported scenario (for example Non-Profit, NGOs and
+Global Aid) show 0 rather than being padded. `load_taxonomy()` rejects mappings that reference unknown industry ids. Editing this
+one file is sufficient (it is mirrored by `scripts/sync_core.py`).
 
 ## Workflows
 

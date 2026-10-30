@@ -95,8 +95,14 @@ export function UseCaseExplorer() {
         )}
       </header>
 
-      {summary?.taxonomy.status === 'PROPOSED_DEFAULT' && (
+      {summary && (
         <p className="ux-note" role="note">{summary.taxonomy.note}</p>
+      )}
+      {summary?.industries.find((i) => i.id === industry)?.subdomains && (
+        <p className="ux-note">
+          Subdomains: {summary.industries.find((i) => i.id === industry)!.subdomains!.map((d) => d.name).join(' · ')}.
+          Scenarios are mapped at the parent industry only.
+        </p>
       )}
 
       <div className="ux-filters">

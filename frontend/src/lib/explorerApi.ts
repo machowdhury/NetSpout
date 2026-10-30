@@ -63,7 +63,7 @@ export interface ExplorerEntry {
 }
 
 export interface IndustrySummary {
-  id: string; name: string; scenarios_total: number; scenarios_demo_ready: number; bases: string[];
+  id: string; name: string; subdomains?: Array<{ id: string; name: string }>; scenarios_total: number; scenarios_demo_ready: number; bases: string[];
 }
 
 export interface ExplorerSummary {

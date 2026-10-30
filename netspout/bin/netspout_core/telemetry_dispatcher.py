@@ -717,6 +717,59 @@ class TelemetryDispatcher:
     # -------------------------------------------------------------------------
     # Multi-Pipeline Broadcaster: Standard Log Entries
     # -------------------------------------------------------------------------
+    @staticmethod
+    def extract_metric_fields(log: LogEntry) -> Dict[str, Any]:
+        """Dimensions plus one metric_name:<name> entry per numeric measurement carried by a metric log."""
+        metric_fields: Dict[str, Any] = {
+            "device": log.device_id,
+            "host": log.device_id,
+            "vendor": log.vendor or "cisco",
+            "status": log.status or "normal",
+            "action": log.action or "streamed"
+        }
+
+        # Extract metric values from raw_log
+        if log.raw_log:
+            try:
+                if isinstance(log.raw_log, str):
+                    raw_obj, _ = json.JSONDecoder().raw_decode(log.raw_log.lstrip())
+                else:
+                    raw_obj = log.raw_log
+                if isinstance(raw_obj, dict):
+                    # Handle fields dict
+                    if "fields" in raw_obj and isinstance(raw_obj["fields"], dict):
+                        metric_fields.update(raw_obj["fields"])
+                    # Handle data dict
+                    if "data" in raw_obj and isinstance(raw_obj["data"], dict):
+                        data = raw_obj["data"]
+                        for k, v in data.items():
+                            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                                name = k
+                                if name == "queue_depth_bytes":
+                                    name = "queue_depth"
+                                elif name == "buffer_utilization_pct":
+                                    name = "buffer_utilization"
+                                metric_fields[f"metric_name:{name}"] = float(v)
+                    # Handle data_gpbkv list
+                    if "data_gpbkv" in raw_obj and isinstance(raw_obj["data_gpbkv"], list):
+                        for entry in raw_obj["data_gpbkv"]:
+                            if isinstance(entry, dict) and "content" in entry and isinstance(entry["content"], dict):
+                                content = entry["content"]
+                                for k, v in content.items():
+                                    if isinstance(v, (int, float)) and not isinstance(v, bool):
+                                        name = k.replace("-", "_")
+                                        metric_fields[f"metric_name:{name}"] = float(v)
+                                # Set sensor_path from first entry that contributed a value
+                                if "sensor_path" not in metric_fields and "path" in entry:
+                                    metric_fields["sensor_path"] = str(entry["path"])
+                    # Copy top-level keys
+                    for k in ("node_id_str", "sensor_path", "subscription_id"):
+                        if k in raw_obj:
+                            metric_fields[k] = str(raw_obj[k])
+            except Exception:
+                pass
+        return metric_fields
+
     def dispatch_log(
         self,
         log: LogEntry,
@@ -745,55 +798,7 @@ class TelemetryDispatcher:
                          sourcetype_is_metric)
 
             if is_metric:
-                metric_fields: Dict[str, Any] = {
-                    "device": log.device_id,
-                    "host": log.device_id,
-                    "vendor": log.vendor or "cisco",
-                    "status": log.status or "normal",
-                    "action": log.action or "streamed"
-                }
-
-                # Extract metric values from raw_log
-                if log.raw_log:
-                    try:
-                        if isinstance(log.raw_log, str):
-                            raw_obj, _ = json.JSONDecoder().raw_decode(log.raw_log.lstrip())
-                        else:
-                            raw_obj = log.raw_log
-                        if isinstance(raw_obj, dict):
-                            # Handle fields dict
-                            if "fields" in raw_obj and isinstance(raw_obj["fields"], dict):
-                                metric_fields.update(raw_obj["fields"])
-                            # Handle data dict
-                            if "data" in raw_obj and isinstance(raw_obj["data"], dict):
-                                data = raw_obj["data"]
-                                for k, v in data.items():
-                                    if isinstance(v, (int, float)) and not isinstance(v, bool):
-                                        name = k
-                                        if name == "queue_depth_bytes":
-                                            name = "queue_depth"
-                                        elif name == "buffer_utilization_pct":
-                                            name = "buffer_utilization"
-                                        metric_fields[f"metric_name:{name}"] = float(v)
-                            # Handle data_gpbkv list
-                            if "data_gpbkv" in raw_obj and isinstance(raw_obj["data_gpbkv"], list):
-                                for entry in raw_obj["data_gpbkv"]:
-                                    if isinstance(entry, dict) and "content" in entry and isinstance(entry["content"], dict):
-                                        content = entry["content"]
-                                        for k, v in content.items():
-                                            if isinstance(v, (int, float)) and not isinstance(v, bool):
-                                                name = k.replace("-", "_")
-                                                metric_fields[f"metric_name:{name}"] = float(v)
-                                        # Set sensor_path from first entry that contributed a value
-                                        if "sensor_path" not in metric_fields and "path" in entry:
-                                            metric_fields["sensor_path"] = str(entry["path"])
-                            # Copy top-level keys
-                            for k in ("node_id_str", "sensor_path", "subscription_id"):
-                                if k in raw_obj:
-                                    metric_fields[k] = str(raw_obj[k])
-                    except Exception:
-                        pass
-
+                metric_fields = self.extract_metric_fields(log)
                 if log.netspout_run_id:
                     metric_fields["netspout_run_id"] = log.netspout_run_id
                 if log.netspout_scenario_id:
@@ -856,6 +861,19 @@ class TelemetryDispatcher:
                 mkeys = [k for k in hec_payload["fields"] if k.startswith("metric_name:")]
                 if len(mkeys) == 1:
                     hec_payload["fields"].setdefault("_value", hec_payload["fields"][mkeys[0]])
+            if not is_metric:
+                # Indexed fields that repeat a key already present in a JSON _raw become multivalue under Splunk's
+                # JSON extraction (stats ... by <field> then double counts), and None would index as the string "null".
+                raw_obj = None
+                if isinstance(log.raw_log, str) and log.raw_log.lstrip().startswith("{"):
+                    try:
+                        raw_obj, _ = json.JSONDecoder().raw_decode(log.raw_log.lstrip())
+                    except ValueError:
+                        raw_obj = None
+                if isinstance(raw_obj, dict):
+                    for k in [k for k, v in hec_payload["fields"].items() if k in raw_obj and str(raw_obj[k]) == str(v)]:
+                        del hec_payload["fields"][k]
+                hec_payload["fields"] = {k: v for k, v in hec_payload["fields"].items() if v is not None}
             if is_metric and not any(k.startswith("metric_name:") for k in hec_payload["fields"]):
                 # fail closed: a metric record without a generated numeric value is never sent (no fabricated value)
                 results["hec"] = {"success": False, "message": "metric record has no numeric values; not dispatched",

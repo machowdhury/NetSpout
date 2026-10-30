@@ -178,6 +178,16 @@ detection_validation_orchestrator = DetectionValidationOrchestrator(
     lambda query: release_candidate_configuration.execute_read_only_search(query),
     detection_evidence_store,
 )
+def _connection_center_search_target():
+    """(search_url, Authorization header) from Connection Center, or None so callers fall back to env vars."""
+    config = release_candidate_configuration.load()
+    if not config.get("configured") or not release_candidate_configuration.secrets.search_secret:
+        return None
+    return config["search_url"], release_candidate_configuration._search_authorization(config)
+
+
+unified_generation_service.search_provider = _connection_center_search_target
+scenario_runner.search_provider = _connection_center_search_target
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
@@ -2485,7 +2495,13 @@ def save_release_candidate_setup(payload: SetupConfigurationPayload):
     current_topology.global_transport.hec_token = (
         release_candidate_configuration.secrets.hec_token or ""
     )
-    current_topology.global_transport.hec_index = saved["indexes"][0]
+    # Indexes are stored sorted; use the dispatcher's own rule (a "metric" name means a metric store) so the
+    # alphabetically-first index is not wrongly chosen as the event index.
+    event_indexes = [i for i in saved["indexes"] if "metric" not in i.lower()]
+    metric_indexes = [i for i in saved["indexes"] if "metric" in i.lower()]
+    current_topology.global_transport.hec_index = (event_indexes or saved["indexes"])[0]
+    if metric_indexes:
+        current_topology.global_transport.hec_metric_index = metric_indexes[0]
     current_topology.global_transport.hec_ssl_verify = not saved["allow_insecure_tls"]
     current_topology.global_transport.hec_allow_insecure_tls = saved["allow_insecure_tls"]
     return saved

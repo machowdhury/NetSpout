@@ -2724,6 +2724,9 @@ class ScenarioRunner:
     # -------------------------------------------------------------------------
     # Destination Observation & Evidence Verification (Gate 6)
     # -------------------------------------------------------------------------
+    # Optional Connection Center hook: () -> (search_url, authorization_header) or None; env vars remain the fallback.
+    search_provider = None
+
     def _execute_splunk_rest_query(
         self,
         query: str,
@@ -2747,13 +2750,18 @@ class ScenarioRunner:
         rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
         rest_candidates.append("https://localhost:8889/services/search/jobs/export")
 
-        search_user = os.environ.get("NETSPOUT_SPLUNK_USER", "").strip()
-        search_password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD", "")
-        if not search_user or not search_password:
-            return 0, "Splunk search credentials are not configured"
-        auth_header = "Basic " + base64.b64encode(
-            f"{search_user}:{search_password}".encode("utf-8")
-        ).decode("ascii")
+        configured = self.search_provider() if self.search_provider is not None else None
+        if configured:
+            rest_candidates = [configured[0]]
+            auth_header = configured[1]
+        else:
+            search_user = os.environ.get("NETSPOUT_SPLUNK_USER", "").strip()
+            search_password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD", "")
+            if not search_user or not search_password:
+                return 0, "Splunk search credentials are not configured"
+            auth_header = "Basic " + base64.b64encode(
+                f"{search_user}:{search_password}".encode("utf-8")
+            ).decode("ascii")
         ssl_verify = getattr(transport, "hec_ssl_verify", True) if transport else True
         allow_insecure = getattr(transport, "hec_allow_insecure_tls", False) if transport else False
         ctx = ssl.create_default_context()
@@ -2856,7 +2864,9 @@ class ScenarioRunner:
                             "role": EvidenceRole.REQUIRED if any(rst in st for rst in required_sourcetypes) else EvidenceRole.SUPPORTING,
                             "sourcetypes": set()
                         }
-                    dest_map[dest_key]["expected_count"] += 1
+                    # mstats counts datapoints, so the expectation is the number of measurements, not events.
+                    datapoints = sum(1 for k in dispatcher.extract_metric_fields(entry) if k.startswith("metric_name:"))
+                    dest_map[dest_key]["expected_count"] += max(datapoints, 1)
                     dest_map[dest_key]["sourcetypes"].add(st)
                 else:
                     dest_key = f"event_{event_index}"
@@ -2923,7 +2933,9 @@ class ScenarioRunner:
         met_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.METRIC)
         total_obs = evt_obs + met_obs
 
-        completeness_pct = round((total_obs / total_gen * 100.0), 1) if total_gen > 0 else 0.0
+        # Denominator is what was expected at the destinations (events + metric datapoints), so the ratio is like-for-like.
+        total_expected = evt_exp + met_exp
+        completeness_pct = round((total_obs / total_expected * 100.0), 1) if total_expected > 0 else 0.0
         req_satisfied = all(o.status in ("PASS", "PARTIAL") and o.observed_count > 0 for o in observations if o.role == EvidenceRole.REQUIRED)
 
         if total_obs == 0:

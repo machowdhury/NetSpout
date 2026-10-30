@@ -356,7 +356,7 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
 
         def query_side_effect(q, trans=None):
             if "mstats" in q:
-                return 4, None
+                return 4, None  # raw_log "{}" carries no numeric measurements: floor of 1 datapoint per metric record
             return 10, None
 
         mock_query.side_effect = query_side_effect
@@ -850,7 +850,7 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
 
         def mock_side_effect(q, trans=None):
             if "mstats" in q:
-                return 4, None
+                return 12, None  # 4 MDT events x 3 measurements: mstats counts datapoints
             return 10, None
 
         mock_query.side_effect = mock_side_effect
@@ -865,9 +865,9 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         self.assertIsNotNone(evidence)
         self.assertEqual(len(evidence.destinations), 2)
         self.assertEqual(manifest.event_observed_count, 10)
-        self.assertEqual(manifest.metric_observed_count, 4)
-        self.assertEqual(manifest.observed_count, 14)
-        self.assertEqual(manifest.observation_completeness_pct, 100.0)
+        self.assertEqual(manifest.metric_observed_count, 12)
+        self.assertEqual(manifest.observed_count, 22)
+        self.assertEqual(manifest.observation_completeness_pct, 100.0)  # like-for-like: events + datapoints expected
         self.assertIsNotNone(manifest.splunk_metric_query)
         self.assertTrue(manifest.splunk_metric_query.startswith("| mstats count where index=cisco_mdt_metrics"))
 
@@ -919,6 +919,15 @@ class TestGate8UnifiedEvidence(unittest.TestCase):
         ev = self.runner.get_run_evidence("run_m", self.transport)
         self.assertEqual([d.telemetry_type for d in ev.destinations], [TelemetryType.METRIC])
         self.assertTrue(ev.destinations[0].query.startswith("| mstats"))
+
+    def test_27_metric_expectation_counts_datapoints_not_events(self):
+        entry = self._entry("cisco:ios:mdt")
+        entry.raw_log = '{"data": {"queue_depth_bytes": 1, "buffer_utilization_pct": 2, "drops": 3}}'
+        self.runner.run_logs["run_dp"] = [entry]
+        with patch.object(ScenarioRunner, "_execute_splunk_rest_query", return_value=(3, None)):
+            ev = self.runner.get_run_evidence("run_dp", self.transport)
+        self.assertEqual(ev.metric_expected_count, 3)
+        self.assertEqual(ev.observation_completeness_pct, 100.0)
 
     @patch.object(ScenarioRunner, "_execute_splunk_rest_query", return_value=(0, None))
     def test_25_no_fabricated_expectations_without_logs_or_manifest(self, _q):

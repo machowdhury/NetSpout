@@ -2516,34 +2516,43 @@ class UnifiedGenerationService:
             return False, "Authenticated Splunk search failed: {}".format(error)
         return True, "Authenticated Splunk search succeeded."
 
-    def _execute_splunk_search(
-        self, query: str, transport_config: TelemetryTransportConfig
-    ) -> Tuple[int, Optional[str]]:
-        password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get(
-            "SPLUNK_PASSWORD"
-        )
+    # Optional Connection Center hook: () -> (search_url, authorization_header) or None. Env vars remain the fallback.
+    search_provider = None
+
+    def _search_target(
+        self, transport_config: TelemetryTransportConfig
+    ) -> Tuple[Optional[str], Optional[str]]:
+        if self.search_provider is not None:
+            target = self.search_provider()
+            if target:
+                return target
+        password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get("SPLUNK_PASSWORD")
         username = (
             os.environ.get("NETSPOUT_SPLUNK_USERNAME")
             or os.environ.get("NETSPOUT_SPLUNK_USER")
             or "admin"
         )
         if not password:
-            return 0, "authenticated Splunk search is not configured"
-        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL") or os.environ.get(
-            "NETSPOUT_REST_SEARCH_URL"
-        )
+            return None, None
+        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL") or os.environ.get("NETSPOUT_REST_SEARCH_URL")
         if not endpoint:
-            endpoint = transport_config.hec_url.replace(
-                ":8088", ":8089"
-            ).replace("/services/collector", "/services/search/jobs/export")
-        auth = base64.b64encode(
-            "{}:{}".format(username, password).encode("utf-8")
-        ).decode("ascii")
+            endpoint = transport_config.hec_url.replace(":8088", ":8089").replace(
+                "/services/collector", "/services/search/jobs/export"
+            )
+        auth = base64.b64encode("{}:{}".format(username, password).encode("utf-8")).decode("ascii")
+        return endpoint, "Basic " + auth
+
+    def _execute_splunk_search(
+        self, query: str, transport_config: TelemetryTransportConfig
+    ) -> Tuple[int, Optional[str]]:
+        endpoint, authorization = self._search_target(transport_config)
+        if not endpoint:
+            return 0, "authenticated Splunk search is not configured"
         data = urllib.parse.urlencode(
             {"search": query, "output_mode": "json"}
         ).encode("utf-8")
         request = urllib.request.Request(
-            endpoint, data=data, headers={"Authorization": "Basic " + auth}
+            endpoint, data=data, headers={"Authorization": authorization}
         )
         try:
             context = self._ssl_context(transport_config)
@@ -2583,31 +2592,14 @@ class UnifiedGenerationService:
             return [], "dashboard search is not run and time scoped"
         if "| join" in lowered or len(query) > 10_000:
             return [], "dashboard search exceeds the supported workload policy"
-        password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD") or os.environ.get(
-            "SPLUNK_PASSWORD"
-        )
-        username = (
-            os.environ.get("NETSPOUT_SPLUNK_USERNAME")
-            or os.environ.get("NETSPOUT_SPLUNK_USER")
-            or "admin"
-        )
-        if not password:
-            return [], "authenticated Splunk search is not configured"
-        endpoint = os.environ.get("NETSPOUT_SPLUNK_REST_URL") or os.environ.get(
-            "NETSPOUT_REST_SEARCH_URL"
-        )
+        endpoint, authorization = self._search_target(transport_config)
         if not endpoint:
-            endpoint = transport_config.hec_url.replace(
-                ":8088", ":8089"
-            ).replace("/services/collector", "/services/search/jobs/export")
-        auth = base64.b64encode(
-            "{}:{}".format(username, password).encode("utf-8")
-        ).decode("ascii")
+            return [], "authenticated Splunk search is not configured"
         data = urllib.parse.urlencode(
             {"search": query, "output_mode": "json"}
         ).encode("utf-8")
         request = urllib.request.Request(
-            endpoint, data=data, headers={"Authorization": "Basic " + auth}
+            endpoint, data=data, headers={"Authorization": authorization}
         )
         rows: List[Dict[str, Any]] = []
         try:

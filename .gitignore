@@ -39,3 +39,6 @@ netspout/bin/app
 ehthumbs.db
 Thumbs.db
 backend/.env
+
+# Phase 4E lab credentials
+tests/lab/**/.env*

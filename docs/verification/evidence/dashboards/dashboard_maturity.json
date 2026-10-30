@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T22:38Z",
+ "generated_utc": "2026-10-30T22:54Z",
  "scale": [
   "DASHBOARD_SPECIFIED",
   "DASHBOARD_IMPLEMENTED",
@@ -1062,6 +1062,193 @@
    "screenshot_inspected": false,
    "kind": "operational",
    "family": "incident_pack"
+  },
+  "arch_lan_campus_access": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "arch_man_carrier_ring": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "arch_vpn_remote_workforce": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "arch_wlan_meraki_catalyst": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "cisco_aci_microburst": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "cisco_campus_rogue": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "cisco_sdwan_brownout": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "ddos_attack": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "runner"
+  },
+  "mixed_backbone_optical": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "mixed_edge_breach": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "runner"
+  },
+  "mixed_sase_degradation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "network_security_correlation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "openconfig_mdt_streaming": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "paloalto_threat_investigation": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "security",
+   "family": "runner"
+  },
+  "payment_processing_degradation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "service_provider_cisco": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "runner"
+  },
+  "sql_injection": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "runner"
   }
  }
 }

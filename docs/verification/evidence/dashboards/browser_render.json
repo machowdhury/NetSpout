@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T22:37:57.418Z",
+ "generated_utc": "2026-10-30T22:54:24.930Z",
  "splunk_web": "isolated lab",
  "dashboards": {
   "rp_linux_credential_access": {
@@ -2783,6 +2783,499 @@
    "title_rendered": true,
    "events_count_rendered": true,
    "expected_events": 30,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "arch_wlan_meraki_catalyst": {
+   "url": "/en-US/app/netspout/pf_arch_wlan_meraki_catalyst?form.run_tok=NS-20261030-d371fcd6&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-d371fcd6",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 8,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "arch_man_carrier_ring": {
+   "url": "/en-US/app/netspout/pf_arch_man_carrier_ring?form.run_tok=NS-20261030-762a9923&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-762a9923",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 8,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "arch_vpn_remote_workforce": {
+   "url": "/en-US/app/netspout/pf_arch_vpn_remote_workforce?form.run_tok=NS-20261030-fd41beef&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-fd41beef",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 9,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "arch_lan_campus_access": {
+   "url": "/en-US/app/netspout/pf_arch_lan_campus_access?form.run_tok=NS-20261030-b2bb3ed4&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-b2bb3ed4",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 10,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "cisco_aci_microburst": {
+   "url": "/en-US/app/netspout/pf_cisco_aci_microburst?form.run_tok=NS-20261030-1a68a0bb&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-1a68a0bb",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 10,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "cisco_campus_rogue": {
+   "url": "/en-US/app/netspout/pf_cisco_campus_rogue?form.run_tok=NS-20261030-750051fd&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-750051fd",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 10,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "cisco_sdwan_brownout": {
+   "url": "/en-US/app/netspout/pf_cisco_sdwan_brownout?form.run_tok=NS-20261030-5175fbbb&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-5175fbbb",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 6,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "ddos_attack": {
+   "url": "/en-US/app/netspout/pf_ddos_attack?form.run_tok=NS-20261030-162736b6&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-162736b6",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 8,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "mixed_edge_breach": {
+   "url": "/en-US/app/netspout/pf_mixed_edge_breach?form.run_tok=NS-20261030-7ea6a246&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-7ea6a246",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 10,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "mixed_backbone_optical": {
+   "url": "/en-US/app/netspout/pf_mixed_backbone_optical?form.run_tok=NS-20261030-b6548826&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-b6548826",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 7,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "mixed_sase_degradation": {
+   "url": "/en-US/app/netspout/pf_mixed_sase_degradation?form.run_tok=NS-20261030-8205e19b&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-8205e19b",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 6,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "network_security_correlation": {
+   "url": "/en-US/app/netspout/pf_network_security_correlation?form.run_tok=NS-20261030-18e31800&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-18e31800",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 37,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "openconfig_mdt_streaming": {
+   "url": "/en-US/app/netspout/pf_openconfig_mdt_streaming?form.run_tok=NS-20261030-6d3daecd&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-6d3daecd",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 3,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "paloalto_threat_investigation": {
+   "url": "/en-US/app/netspout/pf_paloalto_threat_investigation?form.run_tok=NS-20261030-5269f947&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-5269f947",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 47,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "payment_processing_degradation": {
+   "url": "/en-US/app/netspout/pf_payment_processing_degradation?form.run_tok=NS-20261030-c238aa12&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-c238aa12",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 52,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "service_provider_cisco": {
+   "url": "/en-US/app/netspout/pf_service_provider_cisco?form.run_tok=NS-20261030-155d269f&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-155d269f",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "sql_injection": {
+   "url": "/en-US/app/netspout/pf_sql_injection?form.run_tok=NS-20261030-d89a0735&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "NS-20261030-d89a0735",
+   "family": "runner",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 8,
    "run_filter_shows_session": true,
    "ok": true
   }

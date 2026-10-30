@@ -1,7 +1,55 @@
 {
- "generated_utc": "2026-10-30T22:30Z",
+ "generated_utc": "2026-10-30T22:51Z",
  "app": "netspout",
  "views": {
+  "pf_arch_lan_campus_access": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26677,
+   "matches_source": true
+  },
+  "pf_arch_man_carrier_ring": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26672,
+   "matches_source": true
+  },
+  "pf_arch_vpn_remote_workforce": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26811,
+   "matches_source": true
+  },
+  "pf_arch_wlan_meraki_catalyst": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26806,
+   "matches_source": true
+  },
+  "pf_cisco_aci_microburst": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 29617,
+   "matches_source": true
+  },
+  "pf_cisco_campus_rogue": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26602,
+   "matches_source": true
+  },
+  "pf_cisco_sdwan_brownout": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26739,
+   "matches_source": true
+  },
+  "pf_ddos_attack": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 28077,
+   "matches_source": true
+  },
   "pf_ind_aero_defense_endpoint_c2": {
    "app": "netspout",
    "sharing": "app",
@@ -156,6 +204,24 @@
    "app": "netspout",
    "sharing": "app",
    "bytes": 27707,
+   "matches_source": true
+  },
+  "pf_mixed_backbone_optical": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26736,
+   "matches_source": true
+  },
+  "pf_mixed_edge_breach": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24358,
+   "matches_source": true
+  },
+  "pf_mixed_sase_degradation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26800,
    "matches_source": true
   },
   "pf_network_01_campus_link": {
@@ -320,6 +386,30 @@
    "bytes": 31137,
    "matches_source": true
   },
+  "pf_network_security_correlation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30050,
+   "matches_source": true
+  },
+  "pf_openconfig_mdt_streaming": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 29674,
+   "matches_source": true
+  },
+  "pf_paloalto_threat_investigation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24899,
+   "matches_source": true
+  },
+  "pf_payment_processing_degradation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30192,
+   "matches_source": true
+  },
   "pf_rp_agentic_ai_mcp_runtime_hybrid": {
    "app": "netspout",
    "sharing": "app",
@@ -360,6 +450,18 @@
    "app": "netspout",
    "sharing": "app",
    "bytes": 28549,
+   "matches_source": true
+  },
+  "pf_service_provider_cisco": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 29523,
+   "matches_source": true
+  },
+  "pf_sql_injection": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30723,
    "matches_source": true
   },
   "pf_telco_01_ran_cell": {

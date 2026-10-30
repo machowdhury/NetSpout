@@ -112,6 +112,21 @@ def sources():
                     "required_sourcetypes": ["netspout:network:syslog", "netspout:network:metric"] if row["family"] == "network" else ["netspout:telecom:log", "netspout:telecom:metric"],
                     "detection_prerequisites": "Operational scenario: no detection claimed.",
                     "provenance": "MODELED NetSpout-defined telemetry (not vendor-native formats, not device firmware emulation); seeded and reproducible."})
+    try:   # ScenarioRunner topology scenarios (needs the backend dependencies; run this script with the project virtualenv)
+        from netspout_core.scenario_runner import SUPPORTED_SCENARIO_IDS
+    except Exception:
+        SUPPORTED_SCENARIO_IDS = frozenset()
+    for sid in sorted(set(SUPPORTED_SCENARIO_IDS) - set(SCENARIO_PACK_IDS)):
+        s = cat.get(sid)
+        if not s:
+            continue
+        sec = s.get("category") == "SECURITY"
+        probe = json.loads(PROBE.read_text()).get(sid, {}) if PROBE.exists() else {}
+        out.append({"id": sid, "title": s.get("display_name") or sid, "kind": "security" if sec else "operational", "family": "runner", "key_field": "netspout_run_id",
+                    "scenario_value": sid, "industries": ind_map.get(sid, []), "subindustry": None, "objective": s.get("description", ""),
+                    "phases": [{"id": "RUNNER", "source": {"kind": "native", "pack": sid}}], "required_sourcetypes": sorted(s.get("sourcetypes", [])), "metric": (not sec) and bool(probe.get("metrics")),
+                    "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
+                    "provenance": "ScenarioRunner topology simulation: vendor-format events and gauge metrics produced by the scenario's own contract; correlated by the runner.", "category": s.get("category")})
     return out
 
 
@@ -256,7 +271,7 @@ def build_operational(s, probe):
           options={"stackMode": "stacked", "seriesColors": [C["blue"], C["amber"], C["green"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
           description="Events per source before the incident, during it and during recovery/validation (phase names from the scenario).")
     y = 450
-    if incident:
+    if s["metric"]:
         mb = 'index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="$run_tok$"' % s["scenario_value"]
         d.add("engineer", "splunk.line", "Health and performance metrics over the run (mstats)", 20, y, 710, 300,
               query="| mstats avg(_value) as value WHERE " + mb + " BY metric_name span=1s | xyseries _time metric_name value | fillnull value=0",
@@ -266,6 +281,7 @@ def build_operational(s, probe):
               options={"seriesColors": [C["blue"], C["amber"], C["green"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30},
               description="Average of each gauge in the baseline, the incident and recovery phases: the before/after comparison.")
         y += 320
+    if incident:
         d.add("engineer", "splunk.table", "Affected sites, devices and roles (click a row to search it)", 20, y, 1420, 300,
               query=b + PHASE + " | stats count as events, min(severity) as most_severe_level, dc(netspout_phase) as phases by netspout_site_id, netspout_device_id, device_role | sort - events | head 25",
               options={"count": 8, "backgroundColor": C["card"]}, handlers=[search_drill(b + ' netspout_device_id="$row.netspout_device_id.value$" | sort 0 _time' + DRILL)],

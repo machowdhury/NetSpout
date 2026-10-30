@@ -286,5 +286,73 @@
  },
  "telco_10_cross_layer": {
   "users": false
+ },
+ "arch_lan_campus_access": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_man_carrier_ring": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_vpn_remote_workforce": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_wlan_meraki_catalyst": {
+  "users": false,
+  "metrics": false
+ },
+ "cisco_aci_microburst": {
+  "users": false,
+  "metrics": true
+ },
+ "cisco_campus_rogue": {
+  "users": false,
+  "metrics": false
+ },
+ "cisco_sdwan_brownout": {
+  "users": false,
+  "metrics": false
+ },
+ "ddos_attack": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_backbone_optical": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_edge_breach": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_sase_degradation": {
+  "users": true,
+  "metrics": false
+ },
+ "network_security_correlation": {
+  "users": false,
+  "metrics": true
+ },
+ "openconfig_mdt_streaming": {
+  "users": false,
+  "metrics": true
+ },
+ "paloalto_threat_investigation": {
+  "users": false,
+  "metrics": false
+ },
+ "payment_processing_degradation": {
+  "users": false,
+  "metrics": true
+ },
+ "service_provider_cisco": {
+  "users": false,
+  "metrics": true
+ },
+ "sql_injection": {
+  "users": true,
+  "metrics": false
  }
 }

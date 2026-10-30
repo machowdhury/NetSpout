@@ -70,6 +70,19 @@ def run_source(src):
         s.sink._m["source"] = s.source
         s.start(); s.wait(180)
         return {"run": s.id, "accepted": s.counts["accepted"], "expected_events": s.counts["accepted"], "rejected": s.counts["rejected"], "state": s.state}
+    if src["family"] == "runner":
+        from netspout_core.scenario_runner import scenario_runner
+        from netspout_core.models import ScenarioRunRequest
+        cfg = TelemetryTransportConfig(hec_url=URL, hec_token=lab.ENV["LAB_HEC_TOKEN"], hec_index=INDEX, hec_metric_index=METRIC_INDEX, hec_ssl_verify=False, hec_allow_insecure_tls=True)
+        m = scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=pid, seed=7, time_mode="TEST", dispatch_telemetry=True, transport_config=cfg))
+        events = 0
+        for _ in range(12):
+            time.sleep(3)
+            n = spl('index=%s netspout_scenario_id="%s" netspout_run_id="%s" | stats count' % (INDEX, pid, m.run_id))
+            events = int(n[0]["count"]) if n else 0
+            if events and events == int(spl('index=%s netspout_scenario_id="%s" netspout_run_id="%s" | stats count' % (INDEX, pid, m.run_id))[0]["count"]):
+                break
+        return {"run": m.run_id, "accepted": m.dispatch_succeeded, "expected_events": events, "rejected": m.dispatch_failed, "state": "COMPLETED"}
     from netspout_core.generator_modes import generator_service
     cfg = TelemetryTransportConfig(hec_url=URL, hec_token=lab.ENV["LAB_HEC_TOKEN"], hec_index=INDEX, hec_metric_index=METRIC_INDEX, hec_ssl_verify=False, hec_allow_insecure_tls=True)
     r = generator_service.generate_universe_scenario(pid, run_id="dash-%d" % (int(time.time() * 1000) % 10**10), dispatch=True, transport_config=cfg)
@@ -82,7 +95,10 @@ def probe(only=None):
     ensure_indexes()
     sessions, probes = ({}, {}) if not only else (jload("sessions.json")["sessions"], jload("panel_probe.json", {}))
     for src in gen.sources():
-        if only == {"__native__"}:
+        if only == {"__runner__"}:
+            if src["family"] != "runner":
+                continue
+        elif only == {"__native__"}:
             if src["family"] == "replay":
                 continue
         elif only and src["id"] not in only:
@@ -98,6 +114,9 @@ def probe(only=None):
             time.sleep(3)
         users = spl('index=%s %s="%s" | eval who=coalesce(user, User, src_user, TargetUserName, SubjectUserName, Account_Name, \'userIdentity.userName\', \'actor.alternateId\') | where isnotnull(who) | stats count' % (INDEX, src["key_field"], rec["run"]))
         probes[pid] = {"users": bool(users and int(users[0]["count"]) > 0)}
+        if src["family"] == "runner":   # only some topology scenarios emit gauge metrics: metric panels are included only when mstats finds datapoints for the run
+            m = spl('| mstats count(_value) as n WHERE index=%s AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="%s"' % (METRIC_INDEX, src["scenario_value"], rec["run"]))
+            probes[pid]["metrics"] = bool(m and int(m[0]["n"]) > 0)
         print(pid, rec["accepted"], rec["expected_events"], probes[pid], flush=True)
         jsave("sessions.json", {"generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "sessions": sessions})
         jsave("panel_probe.json", probes)

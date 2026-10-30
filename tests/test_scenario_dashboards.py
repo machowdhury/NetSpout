@@ -65,17 +65,18 @@ def test_incident_dashboards_use_only_real_fields_and_mstats_with_the_metric_ind
     for x in SOURCES:
         if x['family'] != 'incident_pack':
             t = json.dumps(spec(x['id'])[1])
-            assert 'mstats' not in t and 'netspout_site_id' not in t and 'min(severity)' not in t   # no sites, severity or metrics asserted where the telemetry has none
+            assert ('mstats' in t) == bool(x['metric'])          # metric panels only where the run really has gauge datapoints
+            assert 'netspout_site_id' not in t and 'min(severity)' not in t        # no sites or severity asserted where the telemetry has none
 
 
 def test_security_dashboards_state_detection_status_and_never_claim_a_verified_detection():
     sec = [x for x in SOURCES if x['kind'] == 'security']
-    assert len(sec) == 37
+    assert len(sec) == 41
     for x in sec:
         text = json.dumps(spec(x['id'])[1])
         assert 'Detection status: **NOT VERIFIED**' in text and 'Severity:** not asserted' in text and 'Original analytics (Splunk Security Content)' in text
     ops = [x for x in SOURCES if x['kind'] == 'operational']
-    assert len(ops) == 59 and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
+    assert len(ops) == 72 and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
 
 
 def test_palette_follows_the_figma_v2_tokens_and_perspective_tabs_exist():
@@ -118,8 +119,7 @@ def test_explorer_links_every_scenario_with_a_view_to_it_with_the_run_as_context
     m = json.loads((EV / 'dashboard_maturity.json').read_text())['dashboards']
     ex = main._explorer()
     linked = [e for e in ex.all_entries() if e['kind'] == 'operational' and e.get('dashboard') and e['dashboard'].get('scale')]
-    assert {e['scenario_id'] for e in linked} == {x['id'] for x in SOURCES if x['kind'] == 'operational'} | {x['id'] for x in SOURCES if x['kind'] == 'security' and x['family'] == 'replay'} | \
-        {x['id'] for x in SOURCES if x['kind'] == 'security' and x['family'] == 'native_pack'}
+    assert {e['scenario_id'] for e in linked} == {x['id'] for x in SOURCES}   # every scenario family that emits indexed telemetry
     for e in linked:
         assert e['dashboard']['splunk_view'] == 'pf_' + e['scenario_id'] and e['dashboard']['dashboard_maturity'] == m[e['scenario_id']]['maturity']
         step = {s_['step']: s_ for s_ in e['workflow']}['DASHBOARD']

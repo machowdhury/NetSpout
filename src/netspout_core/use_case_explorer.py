@@ -223,7 +223,7 @@ class UseCaseExplorer:
             domain=str(s.get("category", "")).replace("_", " ").title(), category=s.get("category", ""),
             vendors=list(s.get("vendor_scope", [])), sourcetypes=list(s.get("sourcetypes", [])), source_ids=[],
             raw_maturity=s.get("maturity", "NOT_ESTABLISHED"), runnable=runnable, blocked_reason=blocked,
-            dashboard=self._dashboard_ref(sid) or (self._replay_dashboard_ref(sid) if engine == "scenario_pack" else None),
+            dashboard=self._dashboard_ref(sid) or (self._replay_dashboard_ref(sid) if engine in ("scenario_pack", "scenario_runner") else None),
         )
 
     def _candidate_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:

@@ -173,8 +173,10 @@ Dashboard maturity is assembled from stored evidence (`docs/verification/evidenc
 | native_pack | security | 13 | 13 | 13 | 1 |
 | replay | operational | 9 | 9 | 9 | 1 |
 | replay | security | 24 | 24 | 24 | 1 |
+| runner | operational | 13 | 13 | 13 | 1 |
+| runner | security | 4 | 4 | 4 | 1 |
 
-Not yet covered: ScenarioRunner scenarios (17) and unified-generation scenarios (25) keep their existing dashboard recipes; no Studio view was generated for them in this window.
+Not yet covered: unified-generation scenarios (25) keep their existing dashboard recipes (`/api/dashboards`); no Studio view was generated for them.
 
 **Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.
 
@@ -186,20 +188,20 @@ Columns are separate evidence: documented is not runnable, runnable is not verif
 
 | Industry | Documented (all) | Cataloged only | Contracted | Runnable | Independently indexed | Panel queries populated | Dashboards installed | Dashboards data-validated | Dashboards visually verified | Dashboard-verified (legacy gate) | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Banking and Financial Services | 16 | 9 | 5 | 7 | 5 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 0 | - |
+| Banking and Financial Services | 16 | 9 | 5 | 7 | 5 | 2 | 6 | 6 | 0 | 0 | 4 | 0 | 0 | 0 | - |
 | Healthcare | 14 | 9 | 4 | 5 | 4 | 2 | 4 | 4 | 0 | 0 | 4 | 0 | 0 | 0 | - |
-| Retail and E-commerce | 12 | 6 | 5 | 6 | 5 | 2 | 5 | 5 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Retail and E-commerce | 12 | 6 | 5 | 6 | 5 | 2 | 6 | 6 | 0 | 0 | 1 | 0 | 0 | 1 | - |
 | Manufacturing | 18 | 11 | 6 | 6 | 3 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 1 | - |
 | Energy and Utilities | 22 | 16 | 5 | 6 | 3 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 0 | - |
-| Telecommunications | 43 | 27 | 14 | 15 | 13 | 2 | 13 | 13 | 2 | 0 | 4 | 0 | 0 | 2 | - |
+| Telecommunications | 43 | 27 | 14 | 15 | 13 | 2 | 15 | 15 | 2 | 0 | 4 | 0 | 0 | 2 | - |
 | Government and Public Sector | 25 | 20 | 4 | 5 | 4 | 2 | 4 | 4 | 1 | 0 | 4 | 0 | 0 | 0 | critical-infrastructure, national-security, state-local |
 | Transportation and Logistics | 13 | 11 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 3 | 0 | 0 | 0 | - |
-| Education | 13 | 9 | 2 | 4 | 2 | 1 | 2 | 2 | 0 | 0 | 4 | 0 | 0 | 1 | - |
-| Technology and SaaS | 24 | 5 | 6 | 19 | 5 | 1 | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 1 | - |
+| Education | 13 | 9 | 2 | 4 | 2 | 1 | 4 | 4 | 0 | 0 | 4 | 0 | 0 | 1 | - |
+| Technology and SaaS | 24 | 5 | 6 | 19 | 5 | 1 | 8 | 8 | 0 | 0 | 0 | 0 | 0 | 1 | - |
 | Media and Entertainment | 6 | 4 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | - |
-| Hospitality and Travel | 10 | 6 | 2 | 4 | 2 | 1 | 2 | 2 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Hospitality and Travel | 10 | 6 | 2 | 4 | 2 | 1 | 4 | 4 | 0 | 0 | 1 | 0 | 0 | 1 | - |
 | Aerospace and Defense | 6 | 4 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 3 | 0 | 0 | 0 | - |
-| Legal, Compliance and Professional Services | 10 | 5 | 3 | 5 | 3 | 1 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Legal, Compliance and Professional Services | 10 | 5 | 3 | 5 | 3 | 1 | 5 | 5 | 0 | 0 | 1 | 0 | 0 | 1 | - |
 | Agriculture and Agritech | 6 | 3 | 3 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | - |
 | Real Estate, PropTech and Construction | 8 | 5 | 3 | 3 | 3 | 1 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 0 | - |
 | Insurance and InsurTech | 9 | 6 | 3 | 3 | 3 | 2 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 0 | - |

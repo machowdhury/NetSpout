@@ -4,6 +4,8 @@
   "telco_04_ims_volte": "incident pack with mstats: Engineer tab",
   "ind_gov_citizen_identity_attack": "security replay pack: Overview tab",
   "ind_telco_change_induced_outage": "operational replay pack: Engineer tab",
-  "wave3_cloudmail_exfil": "authentic native security pack: Investigation tab"
+  "wave3_cloudmail_exfil": "authentic native security pack: Investigation tab",
+  "cisco_aci_microburst": "ScenarioRunner operational with mstats: Engineer tab",
+  "paloalto_threat_investigation": "ScenarioRunner security: Investigation tab"
  }
 }

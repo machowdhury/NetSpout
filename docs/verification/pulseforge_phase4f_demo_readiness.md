@@ -90,7 +90,21 @@ The app's `netspout_streamer` modular input was found running in the lab contain
 although `disabled = 1`. It was stopped inside this lab container only. Those events are not part of any dashboard (panels filter by scenario and run).
 No other container was touched.
 
-## 8. Remaining demo blockers and caveats
+## 8. Regression and release
+
+| Check | Result |
+|---|---|
+| Background pytest jobs from the previous session | Both had finished (no pytest processes). `full_final.log` (no lab): 54 failed, 1334 passed. `full_live.log` (lab): 42 failed, 1349 passed. Four stuck wait-loop shells (`pgrep -f` matched their own command line) were stopped. |
+| Full suite, lab configured, Phase 4F final | **42 failed, 1354 passed, 9 skipped.** Failing set identical to the Phase 4E lab baseline: 0 new, 0 fixed (gate13d 25 and gate13e 5 need an external collector; gate9_5 7; gate4 2; gate11f 1; gate12f 1; phase12 1). |
+| Focused | Gate 8 27/27; Explorer 25/25; dashboard retry 2/2; app surface 3/3; Splunk Web nav/gateway/RBAC 2/2; operational and security rehearsals 1/1 each |
+| Secret scan | Lab password and HEC token: 0 hits in tracked files, untracked files and the `.spl` |
+| Package | `netspout.spl` contains the gateway, nav, views, taxonomy and Explorer code (byte-compared); lab-installed files hashed equal to the source tree |
+
+Two intermediate full runs were not clean and were fixed rather than excused: one used a wrongly-formed `NETSPOUT_REST_URL` (it needs the full
+`/services/search/jobs/export` URL) and showed 9 SNMP failures; it also exposed two tests that assumed a pristine Connection Center and were
+affected by a saved lab config on disk. Both are now hermetic.
+
+## 9. Remaining demo blockers and caveats
 
 * Re-enter the destination in Connection Center (or re-run the lab config helper) after any backend restart; secrets are in memory by design.
 * The backend must run on the Docker host (`:8081`) while the demo runs; the gateway returns a clear 502 if it does not.

@@ -72,3 +72,10 @@ Coverage is now computed from repository evidence by `scripts/generate_coverage_
 | Network change/fault scenarios | +3 executable packs (`ub5_*`): change-induced outage, platform health degradation, NAC RADIUS outage. Maturity stays CONTRACTED. |
 | Financial / telecom scenario libraries | **Not integrated: the supplied library files are not in the repository or the usual local folders.** Needed: the financial-services and telecom scenario library source files (scenario definitions plus any sample payloads). Nothing was invented in their place. |
 | TA validation | Unchanged (1 partial: ISE). Batch 5 proves delivery and byte fidelity only; no Cisco TA parsing is claimed. |
+
+### Batch 5 live evidence (Splunk 10.2.7 lab, index `idx_network_ops`)
+
+* Byte equality: 38/38 families (31 sourcetypes) indexed `_raw` identical to submitted bytes (`catalog/universe_batch5_live_raw_equality_results.json`).
+* Product path: `POST /api/generate/scenario-pack` dispatched 20 / 10 / 8 events for the three `ub5_*` packs; independent per-phase counts matched exactly; no correlation metadata in `_raw`.
+* Explorer (inside Splunk Web): `Cisco Change-Induced Outage` Select, Configure, Generate (20), Ingest (HEC accepted 20 of 20), Verify (Splunk indexed 20 of 20); independent search by phase 3/4/8/5.
+* Not claimed: Cisco TA parsing of these sourcetypes, detections, dashboards for these packs, or maturity above CONTRACTED.

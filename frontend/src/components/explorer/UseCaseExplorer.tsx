@@ -21,6 +21,8 @@ type Steps = Partial<Record<StepName, StepState>>;
 
 interface RunContext {
   runId?: string;        // operational run id, or security replay run id
+  expected?: number;     // scenario pack: events generated
+  accepted?: number;     // scenario pack: events HEC accepted
   localId?: string;      // retrieved dataset id
   datasetPath?: string;
   indexed?: number;      // events actually observed in Splunk
@@ -224,6 +226,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   if (!security) {
     const sid = entry.scenario_id as string;
     const unified = entry.engine === 'unified_generation';
+    const pack = entry.engine === 'scenario_pack';
     actions.CONFIGURE = async () => {
       if (!unified) return { ok: true, lines: ['Runs against the destination saved in Connection Center. Nothing is sent by this step.'] };
       const p = await explorerApi.preflight(sid, count);
@@ -234,6 +237,12 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         const r = await explorerApi.generate(sid, count);
         update({ runId: r.run_id });
         return { ok: stageOf(r.evidence, 'GENERATED') === 'PROVEN', lines: [`Run ${r.run_id}: ${r.status}`, ...r.evidence.map((s) => `${s.stage}: ${s.state}`)] };
+      }
+      if (pack) {
+        const r = await explorerApi.generatePack(sid, needIndex());
+        const accepted = r.dispatch_results.filter((d) => d.hec?.success).length;
+        update({ runId: r.run_id, expected: r.count_generated, accepted });
+        return { ok: r.count_generated > 0, lines: [`Run ${r.run_id}: generated ${r.count_generated} events`] };
       }
       const r = await explorerApi.runScenario(sid);
       update({ runId: r.run_id });
@@ -247,6 +256,10 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         const channels = r.channel_results.filter((c) => c.required);
         const states = channels.map((c) => `${c.source_id}: ${stageOf(c.evidence, 'SPLUNK_DISPATCHED')}`);
         return { ok: channels.length > 0 && channels.every((c) => stageOf(c.evidence, 'SPLUNK_DISPATCHED') === 'PROVEN'), lines: states.map((x) => `SPLUNK_DISPATCHED ${x}`) };
+      }
+      if (pack) {
+        const { expected = 0, accepted = 0 } = ctxRef.current;
+        return { ok: expected > 0 && accepted === expected, lines: [`HEC accepted ${accepted} of ${expected} events`] };
       }
       const r = await explorerApi.runObservation(id);
       return { ok: r.event_observed_count + r.metric_observed_count > 0, lines: [`Observed ${r.event_observed_count} events, ${r.metric_observed_count} metrics (${r.observation_status})`] };
@@ -262,6 +275,16 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         }
         const st = stageOf(r.evidence, 'SPLUNK_OBSERVED');
         return { ok: st === 'PROVEN', lines: [`SPLUNK_OBSERVED: ${st}`, ...r.evidence.filter((s) => s.stage !== 'SPLUNK_OBSERVED').map((s) => `${s.stage}: ${s.state}`)] };
+      }
+      if (pack) {
+        // Events can take a few seconds to become searchable; poll, never upgrade a short count.
+        const { expected = 0 } = ctxRef.current;
+        let seen = await explorerApi.observeReplay(needIndex(), id);
+        for (let i = 0; i < 8 && (seen.indexed_event_count ?? 0) < expected && !seen.error; i++) {
+          await new Promise((resolve) => window.setTimeout(resolve, 4000));
+          seen = await explorerApi.observeReplay(needIndex(), id);
+        }
+        return { ok: expected > 0 && seen.indexed_event_count === expected, lines: [`Splunk indexed ${seen.indexed_event_count ?? 'n/a'} of ${expected} events for this run`, ...(seen.error ? [seen.error] : [])] };
       }
       const r = await explorerApi.runObservation(id);
       return { ok: r.required_evidence_satisfied, lines: [`Required evidence satisfied: ${r.required_evidence_satisfied}`, `Completeness ${r.observation_completeness_pct}% · contract v${r.schema_version ?? '?'}`] };

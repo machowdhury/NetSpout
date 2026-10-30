@@ -154,3 +154,42 @@ def test_scenario_pack_route_dispatches_to_the_configured_destination(monkeypatc
         assert sent[0][1:] == (False, None)
     finally:
         gt.hec_url, gt.hec_index = saved
+
+
+def test_explorer_runs_packs_through_the_pack_engine_and_marks_contract_only_scenarios_not_runnable():
+    from netspout_core.use_case_explorer import UseCaseExplorer, load_taxonomy
+    from netspout_core.security_content_lab import SecurityContentCatalog
+    scenarios = [{"id": "ub5_cisco_nac_radius_outage", "maturity": "CONTRACTED"}, {"id": "sleepy", "maturity": "CONTRACTED"},
+                 {"id": "cisco_aci_microburst", "maturity": "GOLDEN_PATH_CERTIFIED"}]
+    ex = UseCaseExplorer(taxonomy=load_taxonomy(), generation_scenarios=[], generation_sources=[], dashboards=[], catalog_scenarios=scenarios,
+                         security_catalog=SecurityContentCatalog(), validations=lambda: [], runtime_approved_detections=[],
+                         pack_scenario_ids=['ub5_cisco_nac_radius_outage'], runner_scenario_ids=['cisco_aci_microburst'])
+    by = {e['scenario_id']: e for e in ex.search(kind='operational', demo_ready=None, limit=10)['items']}
+    pack, sleepy, runner = by['ub5_cisco_nac_radius_outage'], by['sleepy'], by['cisco_aci_microburst']
+    assert (pack['engine'], pack['runnable'], pack['entry_id']) == ('scenario_pack', True, 'op:pack:ub5_cisco_nac_radius_outage')
+    steps = {s['step']: s for s in pack['workflow']}
+    assert steps['GENERATE']['endpoint']['path'] == '/api/generate/scenario-pack' and steps['VERIFY']['endpoint']['path'] == '/api/explorer/observe'
+    assert steps['DASHBOARD']['available'] is False  # no dashboard is claimed for a pack
+    assert not pack['demo_ready']  # CONTRACTED stays out of the demo-ready filter even though it runs
+    assert sleepy['runnable'] is False and 'Contract only' in sleepy['blocked_reason'] and sleepy['workflow'][2]['available'] is False
+    assert runner['engine'] == 'scenario_runner' and runner['runnable'] and runner['demo_ready']
+
+
+def test_generator_route_refuses_an_index_the_connection_center_does_not_authorize(tmp_path, monkeypatch):
+    sys.path.insert(0, str(ROOT / 'backend'))
+    import app.main as main
+    from fastapi import HTTPException
+    from netspout_core.release_candidate import ReleaseCandidateConfiguration
+    cfg = ReleaseCandidateConfiguration(config_dir=str(tmp_path))
+    monkeypatch.setattr(main, 'release_candidate_configuration', cfg)
+    monkeypatch.setattr(cfg, 'load', lambda: {'configured': True, 'indexes': ['idx_network_ops']})
+    gt = main.current_topology.global_transport
+    saved = gt.hec_url
+    gt.hec_url = 'https://127.0.0.1:1/services/collector'
+    try:
+        assert main._generator_transport('idx_network_ops').hec_index == 'idx_network_ops'
+        with pytest.raises(HTTPException) as err:
+            main._generator_transport('some_other_index')
+        assert err.value.status_code == 403
+    finally:
+        gt.hec_url = saved

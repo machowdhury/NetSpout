@@ -83,7 +83,13 @@ class UseCaseExplorer:
         security_catalog: Any,
         validations: Callable[[], List[Dict[str, Any]]],
         runtime_approved_detections: Iterable[str],
+        pack_scenario_ids: Iterable[str] = (),
+        runner_scenario_ids: Optional[Iterable[str]] = None,
     ):
+        # pack_scenario_ids: authentic observation packs, run through /api/generate/scenario-pack.
+        # runner_scenario_ids: scenarios ScenarioRunner can execute; None keeps the legacy "all catalog scenarios runnable".
+        self._pack_ids = set(pack_scenario_ids)
+        self._runner_ids = None if runner_scenario_ids is None else set(runner_scenario_ids)
         self.taxonomy = taxonomy
         self._industry_ids = [i["id"] for i in taxonomy["industries"]]
         self._validations = validations
@@ -154,12 +160,17 @@ class UseCaseExplorer:
 
     def _catalog_entry(self, s: Dict[str, Any]) -> Dict[str, Any]:
         sid = s["id"]
+        engine, runnable, blocked = "scenario_runner", True, None
+        if sid in self._pack_ids:
+            engine = "scenario_pack"
+        elif self._runner_ids is not None and sid not in self._runner_ids:
+            runnable, blocked = False, "Contract only in this release: no executable telemetry is implemented for this scenario"
         return self._operational_entry(
-            entry_id=f"op:runner:{sid}", engine="scenario_runner", scenario_id=sid,
+            entry_id=f"op:{'pack' if engine == 'scenario_pack' else 'runner'}:{sid}", engine=engine, scenario_id=sid,
             title=s.get("display_name") or s.get("name", sid), summary=s.get("description", ""),
             domain=str(s.get("category", "")).replace("_", " ").title(), category=s.get("category", ""),
             vendors=list(s.get("vendor_scope", [])), sourcetypes=list(s.get("sourcetypes", [])), source_ids=[],
-            raw_maturity=s.get("maturity", "NOT_ESTABLISHED"), runnable=True, blocked_reason=None,
+            raw_maturity=s.get("maturity", "NOT_ESTABLISHED"), runnable=runnable, blocked_reason=blocked,
             dashboard=self._dashboard_ref(sid),
         )
 
@@ -189,6 +200,12 @@ class UseCaseExplorer:
             ver = ("POST", "/api/generation/runs/{run_id}/observe", None)
             ing_note = "HEC acknowledgement is recorded per required channel (stage SPLUNK_DISPATCHED)"
             ver_note = "Success = SPLUNK_OBSERVED PROVEN for every required channel"
+        elif e["engine"] == "scenario_pack":
+            cfg = ("GET", "/api/setup", None)
+            gen = ("POST", "/api/generate/scenario-pack", {"scenario_id": sid, "dispatch": True})
+            ver = ("POST", "/api/explorer/observe", {"run_id": "{run_id}"})
+            ing_note = "HEC acceptance is counted per event from the dispatch results (accepted must equal generated)"
+            ver_note = "Success = Splunk's run-scoped event count equals the number of events generated (independent search)"
         else:
             cfg = ("GET", f"/api/scenarios/{sid}", None)
             gen = ("POST", f"/api/scenarios/{sid}/run", {"dispatch_telemetry": True})

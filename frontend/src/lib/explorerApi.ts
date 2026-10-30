@@ -38,7 +38,7 @@ export interface ExplorerEntry {
   demo_ready: boolean;
   workflow: WorkflowStep[];
   // operational
-  engine?: 'unified_generation' | 'scenario_runner';
+  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack';
   scenario_id?: string;
   domain?: string;
   runnable?: boolean;
@@ -140,6 +140,10 @@ export const explorerApi = {
       channel_results: Array<{ source_id: string; required: boolean; evidence: Array<{ stage: string; state: string; count?: number }> }>;
     }>(
       'POST', `/api/generation/runs/${e(runId)}/observe`, undefined, 30_000),
+  // operational, authentic observation packs
+  generatePack: (scenarioId: string, index: string) =>
+    call<{ run_id: string; count_generated: number; dispatch_results: Array<{ hec?: { success?: boolean } }> }>(
+      'POST', '/api/generate/scenario-pack', { scenario_id: scenarioId, dispatch: true, index }, 120_000),
   // operational, ScenarioRunner
   runScenario: (scenarioId: string) =>
     call<{ run_id: string; dispatch_attempted: number; dispatch_succeeded: number; dispatch_failed: number; errors: string[] }>(

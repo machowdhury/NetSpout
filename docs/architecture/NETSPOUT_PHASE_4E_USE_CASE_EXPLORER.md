@@ -53,6 +53,12 @@ Operational: **Select → Configure → Generate → Ingest → Verify → Dashb
 | Verify | `SPLUNK_OBSERVED` `PROVEN` | `required_evidence_satisfied` (Gate 8 contract v1.0) |
 | Dashboard | generate + validate; reports the maturity the service returns | not available (no binding) |
 
+A third operational engine, `scenario_pack` (authentic observation packs such as `ub5_*`), runs through `POST /api/generate/scenario-pack`
+(dispatching to the Connection Center destination; the index must be authorized). Ingest = HEC acceptance counted per event from the dispatch
+results; Verify = Splunk's run-scoped event count (`POST /api/explorer/observe`) must equal the events generated. No dashboard is claimed for packs.
+Catalog scenarios that ScenarioRunner cannot execute (and are not packs) are listed as **not runnable** ("contract only") instead of being offered a Run
+button that fails.
+
 Security: **Select → Prerequisites → Generate → Ingest → Enable Detection → Verify** (no dashboard step)
 
 | Step | Call | Success means |

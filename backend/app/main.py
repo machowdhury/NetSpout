@@ -39,6 +39,7 @@ from app.telemetry_config_api import (
 )
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
+from app.authentic_scenario_packs import SCENARIO_PACK_IDS
 from app.run_progress import RunProgressTracker, RunProgressState
 from app.unified_generation import (
     GenerationMode,
@@ -2039,6 +2040,9 @@ def _generator_transport(index=None, explicit=None):
         return TelemetryTransportConfig(**explicit)
     gt = getattr(current_topology, "global_transport", None) if current_topology else None
     if gt is not None and getattr(gt, "hec_url", None):
+        config = release_candidate_configuration.load()
+        if index and config.get("configured") and index not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
         return gt.model_copy(update={"hec_index": index} if index else {})
     return None
 
@@ -2407,6 +2411,8 @@ def _explorer() -> UseCaseExplorer:
         security_catalog=security_content_catalog,
         validations=detection_evidence_store.list,
         runtime_approved_detections=SUPPORTED_RUNTIME_DETECTIONS,
+        pack_scenario_ids=SCENARIO_PACK_IDS,
+        runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
         **_explorer_operational_cache["inputs"],
     )
 
@@ -2484,6 +2490,7 @@ def explorer_enable_detection(detection_id: str, payload: ExplorerEnablePayload)
     }
 
 
+@app.post("/api/explorer/observe")
 @app.post("/api/explorer/security/observe")
 def explorer_observe_replay(payload: ExplorerObservePayload):
     """Count run-scoped events actually present in Splunk, so validation never relies on 'events sent'."""

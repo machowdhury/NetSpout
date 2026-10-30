@@ -1,39 +1,15 @@
 # PulseForge Scenario Coverage
 
-**Generated**: 2026-10-27 15:54:15
-**Total Scenarios**: 50
+Generated 2026-10-30 by `scripts/generate_coverage_report.py`.
 
-## Coverage by Industry
+Cataloged scenarios: **56**
 
-| Industry | Scenario Count | Percentage |
-|----------|---------------|------------|
+| Maturity (catalog value, not upgraded) | Count |
+|---|---|
+| CONTRACTED | 37 |
+| GOLDEN_PATH_CERTIFIED | 13 |
+| E2E_VALIDATED | 4 |
+| FORMAT_VALIDATED | 2 |
 
-## Coverage by Technology Domain
-
-| Domain | Scenario Count | Percentage |
-|--------|---------------|------------|
-| Cloud | 8 | 16.0% |
-| Security | 2 | 4.0% |
-| Observability | 1 | 2.0% |
-
-## AI Scenario Coverage
-
-| AI Family | Scenario Count |
-|-----------|---------------|
-
-## Maturity Distribution
-
-**DEFINED**: 50
-**GENERATOR_READY**: 0
-**EXECUTABLE**: 0
-**LIVE_INGESTED**: 0
-**SPL_VALIDATED**: 0
-**DASHBOARD_READY**: 0
-
-## Next Steps for Phase 4
-
-1. **Increase EXECUTABLE scenarios** to >80% of catalog
-2. **Expand AI/ML scenario coverage** for emerging use cases
-3. **Add industry-specific scenarios** for Finance, Healthcare, Telecom
-4. **Improve dashboard readiness** for all EXECUTABLE scenarios
-5. **Create validation test suite** for SPL and metric verification
+Golden-path evidence records: 13. Detection-verified security validations (`POSITIVE_CASE_VALIDATED`): 0.
+Dashboard readiness is recorded per run by the dashboard service, not in this catalog. Security stories need detection verification, not dashboards. Industry coverage is in `catalog/explorer_taxonomy.json` (approved 18 industries, editorial mappings).

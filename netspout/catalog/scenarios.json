@@ -7297,5 +7297,247 @@
     ]
    }
   ]
+ },
+ {
+  "id": "ub5_cisco_change_induced_outage",
+  "code": "NET-UB5-01",
+  "name": "Cisco Change-Induced Outage",
+  "display_name": "Cisco Change-Induced Outage",
+  "category": "NETWORK_OPERATIONS",
+  "ecosystem": "pure_cisco",
+  "maturity": "CONTRACTED",
+  "description": "A CLI change allows a new VLAN on a trunk, the native VLAN mismatches, the access link bounces, OSPF and BGP adjacencies drop, and service recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cisco:sdwan:OSPF-5-ADJCHG",
+   "cisco:sdwan:BGP-5-ADJCHANGE",
+   "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+   "cisco:sdwan:DMI-5-SYNC_NEEDED",
+   "cisco:sdwan:DMI-5-SYNC_START",
+   "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+   "cisco:sdwan:NDBMAN-5-CONFIG_I",
+   "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+   "cisco:sdwan:LINK-5-CHANGED",
+   "cisco:sdwan:LINK-5-UPDOWN",
+   "cisco:sdwan:LINEPROTO-5-UPDOWN",
+   "cisco:sdwan:BGP-5-NBR_RESET"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 200,
+  "vendor_scope": [
+   "cisco_sdwan"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "OSPF-5-ADJCHG: adjacency",
+   "BGP-5-ADJCHANGE: up",
+   "MSDP-5-PEER_UPDOWN: peer_state",
+   "DMI-5-SYNC_NEEDED: sync_needed",
+   "DMI-5-SYNC_START: captured",
+   "DMI-5-SYNC_COMPLETE: captured"
+  ],
+  "expected_phases": [
+   "baseline",
+   "change",
+   "fault",
+   "recovery"
+  ],
+  "telemetry_model": "Cisco IOS-XE device syslog",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders captured IOS-XE device message text and delivers it to Splunk through HEC. This is a modeled sequence delivered over HEC rather than a live device syslog session; correlation metadata stays on HEC fields instead of the RAW event. Splunk TA parsing of these sourcetypes is not verified.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "CHANGE",
+    "name": "Change",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "FAULT",
+    "name": "Fault",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "RECOVERY",
+    "name": "Recovery",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch5.json"
+ },
+ {
+  "id": "ub5_cisco_platform_health_degradation",
+  "code": "NET-UB5-02",
+  "name": "Cisco Platform Health Degradation",
+  "display_name": "Cisco Platform Health Degradation",
+  "category": "NETWORK_OPERATIONS",
+  "ecosystem": "pure_cisco",
+  "maturity": "CONTRACTED",
+  "description": "Inlet temperature and 5-minute load rise, event-library CPU hogs follow, punt keepalives are missed and the model-driven telemetry connection drops, then recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+   "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+   "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+   "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+   "cisco:sdwan:EVENTLIB-3-CPUHOG",
+   "cisco:sdwan:IOSXE-3-PLATFORM",
+   "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 100,
+  "vendor_scope": [
+   "cisco_sdwan"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "PKI-6-AUTHORITATIVE_CLOCK: captured",
+   "MDT_CONNECTION-6-STATE_CHANGED: connection_state",
+   "ENVIRONMENTAL-1-ALERT: temperature",
+   "PLATFORM-4-ELEMENT_WARNING: load_average",
+   "EVENTLIB-3-CPUHOG: captured",
+   "IOSXE-3-PLATFORM: captured"
+  ],
+  "expected_phases": [
+   "baseline",
+   "degrade",
+   "impact",
+   "recovery"
+  ],
+  "telemetry_model": "Cisco IOS-XE device syslog",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders captured IOS-XE device message text and delivers it to Splunk through HEC. This is a modeled sequence delivered over HEC rather than a live device syslog session; correlation metadata stays on HEC fields instead of the RAW event. Splunk TA parsing of these sourcetypes is not verified.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "DEGRADE",
+    "name": "Degrade",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "IMPACT",
+    "name": "Impact",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "RECOVERY",
+    "name": "Recovery",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch5.json"
+ },
+ {
+  "id": "ub5_cisco_nac_radius_outage",
+  "code": "SEC-UB5-03",
+  "name": "Cisco NAC RADIUS Outage",
+  "display_name": "Cisco NAC RADIUS Outage",
+  "category": "NETWORK_OPERATIONS",
+  "ecosystem": "pure_cisco",
+  "maturity": "CONTRACTED",
+  "description": "The AAA method list for 802.1X is marked DEAD after RADIUS servers become unreachable (CTS env-data fails), then returns to ALIVE. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+   "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+   "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+   "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 80,
+  "vendor_scope": [
+   "cisco_sdwan"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "AAA-6-METHOD_LIST_STATE: alive",
+   "CTS-3-AAA_NO_RADIUS_SERVER: captured",
+   "AAA-6-METHOD_LIST_STATE: dead",
+   "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: dead",
+   "AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE: captured",
+   "AAA-6-METHOD_LIST_STATE: alive"
+  ],
+  "expected_phases": [
+   "baseline",
+   "outage",
+   "recovery"
+  ],
+  "telemetry_model": "Cisco IOS-XE device syslog",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders captured IOS-XE device message text and delivers it to Splunk through HEC. This is a modeled sequence delivered over HEC rather than a live device syslog session; correlation metadata stays on HEC fields instead of the RAW event. Splunk TA parsing of these sourcetypes is not verified.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "OUTAGE",
+    "name": "Outage",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   },
+   {
+    "phase": "RECOVERY",
+    "name": "Recovery",
+    "duration_ticks": 1,
+    "description": "Captured IOS-XE message observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch5.json"
  }
 ]

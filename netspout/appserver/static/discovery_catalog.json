@@ -6907,6 +6907,141 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub5_cisco_change_induced_outage",
+      "title": "Cisco Change-Induced Outage",
+      "domain": "NETWORK_OPERATIONS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "A CLI change allows a new VLAN on a trunk, the native VLAN mismatches, the access link bounces, OSPF and BGP adjacencies drop, and service recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cisco:sdwan:OSPF-5-ADJCHG",
+        "cisco:sdwan:BGP-5-ADJCHANGE",
+        "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+        "cisco:sdwan:DMI-5-SYNC_NEEDED",
+        "cisco:sdwan:DMI-5-SYNC_START",
+        "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+        "cisco:sdwan:NDBMAN-5-CONFIG_I",
+        "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+        "cisco:sdwan:LINK-5-CHANGED",
+        "cisco:sdwan:LINK-5-UPDOWN",
+        "cisco:sdwan:LINEPROTO-5-UPDOWN",
+        "cisco:sdwan:BGP-5-NBR_RESET"
+      ],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:sdwan:OSPF-5-ADJCHG",
+        "cisco:sdwan:BGP-5-ADJCHANGE",
+        "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+        "cisco:sdwan:DMI-5-SYNC_NEEDED",
+        "cisco:sdwan:DMI-5-SYNC_START",
+        "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+        "cisco:sdwan:NDBMAN-5-CONFIG_I",
+        "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+        "cisco:sdwan:LINK-5-CHANGED",
+        "cisco:sdwan:LINK-5-UPDOWN",
+        "cisco:sdwan:LINEPROTO-5-UPDOWN",
+        "cisco:sdwan:BGP-5-NBR_RESET"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "A CLI change allows a new VLAN on a trunk, the native VLAN mismatches, the access link bounces, OSPF and BGP adjacencies drop, and service recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub5_cisco_platform_health_degradation",
+      "title": "Cisco Platform Health Degradation",
+      "domain": "NETWORK_OPERATIONS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "Inlet temperature and 5-minute load rise, event-library CPU hogs follow, punt keepalives are missed and the model-driven telemetry connection drops, then recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+        "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+        "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+        "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+        "cisco:sdwan:EVENTLIB-3-CPUHOG",
+        "cisco:sdwan:IOSXE-3-PLATFORM",
+        "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE"
+      ],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+        "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+        "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+        "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+        "cisco:sdwan:EVENTLIB-3-CPUHOG",
+        "cisco:sdwan:IOSXE-3-PLATFORM",
+        "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "Inlet temperature and 5-minute load rise, event-library CPU hogs follow, punt keepalives are missed and the model-driven telemetry connection drops, then recovers. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub5_cisco_nac_radius_outage",
+      "title": "Cisco NAC RADIUS Outage",
+      "domain": "NETWORK_OPERATIONS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "The AAA method list for 802.1X is marked DEAD after RADIUS servers become unreachable (CTS env-data fails), then returns to ALIVE. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+        "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+        "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+        "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+        "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
+      ],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+        "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+        "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+        "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+        "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "The AAA method list for 802.1X is marked DEAD after RADIUS servers become unreachable (CTS env-data fails), then returns to ALIVE. Executable sequence of captured IOS-XE device messages; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -9754,7 +9889,9 @@
       "sourcetypes": [
         "cisco:sdwan:AAA-6-METHOD_LIST_STATE"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -9779,7 +9916,9 @@
       "sourcetypes": [
         "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -9804,7 +9943,9 @@
       "sourcetypes": [
         "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -9829,7 +9970,9 @@
       "sourcetypes": [
         "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -9858,7 +10001,8 @@
         "sdwan",
         "mix",
         "cisco_sdwan_brownout",
-        "sdwan_connected_core"
+        "sdwan_connected_core",
+        "ub5_cisco_change_induced_outage"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -9884,7 +10028,9 @@
       "sourcetypes": [
         "cisco:sdwan:BGP-5-NBR_RESET"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -9959,7 +10105,9 @@
       "sourcetypes": [
         "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10009,7 +10157,9 @@
       "sourcetypes": [
         "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_nac_radius_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10084,7 +10234,9 @@
       "sourcetypes": [
         "cisco:sdwan:DMI-5-SYNC_COMPLETE"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10109,7 +10261,9 @@
       "sourcetypes": [
         "cisco:sdwan:DMI-5-SYNC_NEEDED"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10134,7 +10288,9 @@
       "sourcetypes": [
         "cisco:sdwan:DMI-5-SYNC_START"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10159,7 +10315,9 @@
       "sourcetypes": [
         "cisco:sdwan:ENVIRONMENTAL-1-ALERT"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10184,7 +10342,9 @@
       "sourcetypes": [
         "cisco:sdwan:EVENTLIB-3-CPUHOG"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10209,7 +10369,9 @@
       "sourcetypes": [
         "cisco:sdwan:IOSXE-3-PLATFORM"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10234,7 +10396,9 @@
       "sourcetypes": [
         "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10285,7 +10449,8 @@
         "cisco:sdwan:LINEPROTO-5-UPDOWN"
       ],
       "scenario_ids": [
-        "sdwan"
+        "sdwan",
+        "ub5_cisco_change_induced_outage"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -10312,7 +10477,8 @@
         "cisco:sdwan:LINK-5-CHANGED"
       ],
       "scenario_ids": [
-        "sdwan"
+        "sdwan",
+        "ub5_cisco_change_induced_outage"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -10338,7 +10504,9 @@
       "sourcetypes": [
         "cisco:sdwan:LINK-5-UPDOWN"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10363,7 +10531,9 @@
       "sourcetypes": [
         "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10388,7 +10558,9 @@
       "sourcetypes": [
         "cisco:sdwan:MSDP-5-PEER_UPDOWN"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10413,7 +10585,9 @@
       "sourcetypes": [
         "cisco:sdwan:NDBMAN-5-CONFIG_I"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10438,7 +10612,9 @@
       "sourcetypes": [
         "cisco:sdwan:OSPF-5-ADJCHG"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_change_induced_outage"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10463,7 +10639,9 @@
       "sourcetypes": [
         "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10488,7 +10666,9 @@
       "sourcetypes": [
         "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub5_cisco_platform_health_degradation"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],

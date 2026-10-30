@@ -59,3 +59,16 @@
 4. **Metrics capability**: Full metric-index support for numeric telemetry
 5. **Dashboard readiness**: 100% of EXECUTABLE scenarios have dashboards
 6. **Validation coverage**: Automated tests for all core functionality
+
+## Execution status (updated 2026-10-30)
+
+Coverage is now computed from repository evidence by `scripts/generate_coverage_report.py`
+(see `pulseforge_sourcetype_coverage.md` / `pulseforge_scenario_coverage.md`; the earlier all-UNKNOWN reports came from scanner bugs).
+
+| Item | Status |
+|---|---|
+| P4-001 Sourcetype coverage | Native generators 112 → **142** of 348 (Batch 5, +31 Cisco IOS-XE change/fault/health sourcetypes); byte-verified in Splunk 87 → **118**; independently indexed 64 → **95**. The 70% target is **not** met (142/348 = 41%). |
+| P4-002 Cisco IOS XE telemetry | Partial: IOS-XE change/fault/health syslog done (Batch 5). Catalyst Center / DNAC, Meraki, Intersight, Duo and ISE API-style sourcetypes remain sample-replay only. |
+| Network change/fault scenarios | +3 executable packs (`ub5_*`): change-induced outage, platform health degradation, NAC RADIUS outage. Maturity stays CONTRACTED. |
+| Financial / telecom scenario libraries | **Not integrated: the supplied library files are not in the repository or the usual local folders.** Needed: the financial-services and telecom scenario library source files (scenario definitions plus any sample payloads). Nothing was invented in their place. |
+| TA validation | Unchanged (1 partial: ISE). Batch 5 proves delivery and byte fidelity only; no Cisco TA parsing is claimed. |

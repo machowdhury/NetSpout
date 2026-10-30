@@ -1,54 +1,35 @@
 # PulseForge Sourcetype Coverage
 
-**Generated**: 2026-10-27 15:54:14
-**Catalog Version**: Phase 4 Baseline
+Generated 2026-10-30 by `scripts/generate_coverage_report.py` from repository evidence (replaces the Phase 3 scanner output).
 
-## Overview
+| Measure | Count | Of catalog |
+|---|---|---|
+| Cataloged sourcetypes | 348 | 100.0% |
+| Vendor-native generator | 142 | 40.8% |
+| Sample replay only | 156 | 44.8% |
+| No generator | 50 | 14.4% |
+| Format verified (byte-equal raw in Splunk) | 118 | 33.9% |
+| Vendor TA validated (full or partial) | 1 | 0.3% |
+| Independently indexed (live evidence) | 95 | 27.3% |
 
-Total sourcetypes in catalog: **348**
+Tier definitions are in the script header. `TA validated` counts only a parser that was installed and exercised; mapping-only assessments are not counted. `Sample replay only` is recorded-event replay, not a vendor-native formatter.
 
-### Maturity Breakdown
+## Vendors with the most uncovered sourcetypes
 
-| Status | Count | Percentage |
-|--------|-------|------------|
-| SUPPORTED_AND_VERIFIED | 0 | 0.0% |
-| IMPLEMENTED_NOT_VERIFIED | 0 | 0.0% |
-| PARTIAL | 0 | 0.0% |
-| MISSING | 0 | 0.0% |
-| BLOCKED | 0 | 0.0% |
-| UNKNOWN | 348 | 100.0% |
-
-## Coverage by Vendor (Top 10)
-
-| Vendor | Total Sourcetypes | Verified | Verification Rate |
-|--------|-------------------|----------|-------------------|
-| unknown | 348 | 0 | 0.0% |
-
-## Coverage by Event Family
-
-| Event Family | Total Sourcetypes | Verified | Verification Rate |
-|--------------|-------------------|----------|-------------------|
-| unknown | 348 | 0 | 0.0% |
-
-## Notes
-
-1. **SUPPORTED_AND_VERIFIED**: Generator implemented and validated with Splunk ingestion
-2. **IMPLEMENTED_NOT_VERIFIED**: Generator exists but not validated
-3. **PARTIAL**: Partial implementation (e.g., only specific event types)
-4. **MISSING**: Catalog entry exists but no generator
-5. **BLOCKED**: Known blocker (e.g., missing protocol support)
-6. **UNKNOWN**: Insufficient data to determine status
-
-## Data Sources
-
-- `backend/app/catalog_data/sourcetypes.json`
-- `backend/app/catalog_data/vendors.json`
-- Generator registry and scenario mappings
-- Splunk TA parser compatibility data
-
-## Next Steps for Phase 4
-
-1. Increase SUPPORTED_AND_VERIFIED percentage to >70%
-2. Reduce UNKNOWN status through systematic testing
-3. Address BLOCKED items with protocol implementations
-4. Expand coverage for high-value industries (Finance, Healthcare, Telecom)
+| Vendor | Cataloged | Native generator |
+|---|---|---|
+| cisco_catalyst | 34 | 2 |
+| splunk | 21 | 2 |
+| cisco_meraki | 17 | 1 |
+| nutanix | 16 | 0 |
+| cisco_ios | 26 | 11 |
+| cisco_intersight | 11 | 0 |
+| cisco_duo | 10 | 1 |
+| cisco_sdwan | 41 | 34 |
+| fortinet | 8 | 1 |
+| aruba_cx | 6 | 0 |
+| cisco_aci | 8 | 2 |
+| cisco_ise | 7 | 1 |
+| netskope | 4 | 0 |
+| radware | 4 | 0 |
+| zscaler_zia | 6 | 2 |

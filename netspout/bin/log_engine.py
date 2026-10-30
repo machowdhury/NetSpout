@@ -1714,3 +1714,14 @@ except ImportError:
         from universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
 SplunkLogEngine.UNIVERSE_BATCH4_SOURCE_SOURCETYPES = UNIVERSE_BATCH4_SOURCE_SOURCETYPES
 SplunkLogEngine.format_universe_batch4_log = UniverseBatch4Engine.format_universe_batch4_log
+
+# Batch 5 native source/family dispatch for Cisco IOS-XE change, fault and health device syslog.
+try:
+    from netspout_core.universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH5_SOURCE_SOURCETYPES = UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch5_log = UniverseBatch5Engine.format_universe_batch5_log

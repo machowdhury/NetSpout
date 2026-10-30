@@ -1,0 +1,522 @@
+{
+ "run_id": "pf-ub5-live-69fa56be-fc2d-471c-8f28-071075b27b07",
+ "source": "netspout-ub5-live",
+ "index": "idx_network_ops",
+ "posted": 38,
+ "indexed_rows": 38,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "AAA-6-METHOD_LIST_STATE-dead",
+   "sourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 189,
+   "indexed_bytes": 189,
+   "submitted_sha256": "ce24fbd0c32c1891aa874d09d293ef8c10c61547f0c81a59b2cf42768670dce9",
+   "indexed_sha256": "ce24fbd0c32c1891aa874d09d293ef8c10c61547f0c81a59b2cf42768670dce9",
+   "correlation_leak": false
+  },
+  {
+   "label": "AAA-6-METHOD_LIST_STATE-alive",
+   "sourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 190,
+   "indexed_bytes": 190,
+   "submitted_sha256": "5627d75451c547c9bfb1c4b2138898d79981263edbacf71e3dd5dabd8db88f1f",
+   "indexed_sha256": "5627d75451c547c9bfb1c4b2138898d79981263edbacf71e3dd5dabd8db88f1f",
+   "correlation_leak": false
+  },
+  {
+   "label": "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT-dead",
+   "sourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 184,
+   "indexed_bytes": 184,
+   "submitted_sha256": "76028e52cf747eb9822dfa690fe3af731d8eb63546072fecbcc1d3ff32eb3b9b",
+   "indexed_sha256": "76028e52cf747eb9822dfa690fe3af731d8eb63546072fecbcc1d3ff32eb3b9b",
+   "correlation_leak": false
+  },
+  {
+   "label": "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT-alive",
+   "sourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 185,
+   "indexed_bytes": 185,
+   "submitted_sha256": "9529ca8ca804a7f7e0f28f3352e2c41bc8da3acd962eb8af568ef4c224a85d09",
+   "indexed_sha256": "9529ca8ca804a7f7e0f28f3352e2c41bc8da3acd962eb8af568ef4c224a85d09",
+   "correlation_leak": false
+  },
+  {
+   "label": "AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE-captured_1",
+   "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 218,
+   "indexed_bytes": 218,
+   "submitted_sha256": "afc81a8597ebff11d56b705921e2ff549449cc8d5f4fdc405dde89e3e07b6081",
+   "indexed_sha256": "afc81a8597ebff11d56b705921e2ff549449cc8d5f4fdc405dde89e3e07b6081",
+   "correlation_leak": false
+  },
+  {
+   "label": "AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT-captured_1",
+   "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 218,
+   "indexed_bytes": 218,
+   "submitted_sha256": "3202f979638547743624cb5d73da70a6f6b6c130b6803e53f02617414296e4f1",
+   "indexed_sha256": "3202f979638547743624cb5d73da70a6f6b6c130b6803e53f02617414296e4f1",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP-5-ADJCHANGE-vrf_down",
+   "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 139,
+   "indexed_bytes": 139,
+   "submitted_sha256": "8dea8ac0a86a894bdce07acfa63f6c4bd905ebc0eae094f770cac4fe38b91e49",
+   "indexed_sha256": "8dea8ac0a86a894bdce07acfa63f6c4bd905ebc0eae094f770cac4fe38b91e49",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP-5-ADJCHANGE-up",
+   "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 103,
+   "indexed_bytes": 103,
+   "submitted_sha256": "eb3c1abc8b0c39e6022b60c64adb6d964c3b11c9d1c1146628ba4ae2092a45fd",
+   "indexed_sha256": "eb3c1abc8b0c39e6022b60c64adb6d964c3b11c9d1c1146628ba4ae2092a45fd",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP-5-NBR_RESET-peer_closed",
+   "sourcetype": "cisco:sdwan:BGP-5-NBR_RESET",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 139,
+   "indexed_bytes": 139,
+   "submitted_sha256": "6f4476366b27f0211884d2a75e538f9ab1a5489b587ff5078d1e40a593af996b",
+   "indexed_sha256": "6f4476366b27f0211884d2a75e538f9ab1a5489b587ff5078d1e40a593af996b",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP-6-NEXTHOP-captured_1",
+   "sourcetype": "cisco:sdwan:BGP-6-NEXTHOP",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 147,
+   "indexed_bytes": 147,
+   "submitted_sha256": "f9a75087b762a158573f37f71384d7d1e8fc40411e39e54d872c08d2aee9a65a",
+   "indexed_sha256": "f9a75087b762a158573f37f71384d7d1e8fc40411e39e54d872c08d2aee9a65a",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP_SESSION-5-ADJCHANGE-captured_1",
+   "sourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 191,
+   "indexed_bytes": 191,
+   "submitted_sha256": "c6284f3b576d4dbb0fee2e1b8e1db385701dfa63ae744516fed2bd56b357f0dc",
+   "indexed_sha256": "c6284f3b576d4dbb0fee2e1b8e1db385701dfa63ae744516fed2bd56b357f0dc",
+   "correlation_leak": false
+  },
+  {
+   "label": "BGP_SESSION-5-ADJCHANGE-captured_2",
+   "sourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 182,
+   "indexed_bytes": 182,
+   "submitted_sha256": "40cce0751cafae5f93a3bbb80a7f9c1d5dbe1847bae58b894195b287de4dde79",
+   "indexed_sha256": "40cce0751cafae5f93a3bbb80a7f9c1d5dbe1847bae58b894195b287de4dde79",
+   "correlation_leak": false
+  },
+  {
+   "label": "CDP-4-NATIVE_VLAN_MISMATCH-vlan_mismatch",
+   "sourcetype": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 187,
+   "indexed_bytes": 187,
+   "submitted_sha256": "92bd09fc3c83e403af077458270b41f73c96ac6908d2485fc18b640ee5cebec8",
+   "indexed_sha256": "92bd09fc3c83e403af077458270b41f73c96ac6908d2485fc18b640ee5cebec8",
+   "correlation_leak": false
+  },
+  {
+   "label": "CRYPTO-6-ISAKMP_ON_OFF-captured_1",
+   "sourcetype": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 95,
+   "indexed_bytes": 95,
+   "submitted_sha256": "5101b9f5c7a23cd207f16f7e28a1c8f3b5610f80701bcc80ec6330155d040b5e",
+   "indexed_sha256": "5101b9f5c7a23cd207f16f7e28a1c8f3b5610f80701bcc80ec6330155d040b5e",
+   "correlation_leak": false
+  },
+  {
+   "label": "CTS-3-AAA_NO_RADIUS_SERVER-captured_1",
+   "sourcetype": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 155,
+   "indexed_bytes": 155,
+   "submitted_sha256": "eaf6ac7a5fc0a57b4c5ee21362817a13b9fe93ea0d4fd9deee74b87f223267e8",
+   "indexed_sha256": "eaf6ac7a5fc0a57b4c5ee21362817a13b9fe93ea0d4fd9deee74b87f223267e8",
+   "correlation_leak": false
+  },
+  {
+   "label": "DMI-5-AUTH_PASSED-captured_1",
+   "sourcetype": "cisco:sdwan:DMI-5-AUTH_PASSED",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 202,
+   "indexed_bytes": 202,
+   "submitted_sha256": "b3380b487635d5060f9b95f571b72b4966dd0da0f32212325fc440978cedeaf0",
+   "indexed_sha256": "b3380b487635d5060f9b95f571b72b4966dd0da0f32212325fc440978cedeaf0",
+   "correlation_leak": false
+  },
+  {
+   "label": "DMI-5-CONFIG_I-captured_1",
+   "sourcetype": "cisco:sdwan:DMI-5-CONFIG_I",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 166,
+   "indexed_bytes": 166,
+   "submitted_sha256": "bb6ad4866d38d3e1844ec4385757df8be162ab7e93393c1f466a103284f154c2",
+   "indexed_sha256": "bb6ad4866d38d3e1844ec4385757df8be162ab7e93393c1f466a103284f154c2",
+   "correlation_leak": false
+  },
+  {
+   "label": "DMI-5-SYNC_COMPLETE-captured_1",
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 188,
+   "indexed_bytes": 188,
+   "submitted_sha256": "97dc48615cb9e5c5e005434d93941b1528973e2fe8c905b1c31156e52cd937b9",
+   "indexed_sha256": "97dc48615cb9e5c5e005434d93941b1528973e2fe8c905b1c31156e52cd937b9",
+   "correlation_leak": false
+  },
+  {
+   "label": "DMI-5-SYNC_NEEDED-sync_needed",
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_NEEDED",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 293,
+   "indexed_bytes": 293,
+   "submitted_sha256": "bd425afe8dd1173e0565e3edc50a0d799d8f1d649f069dd7fd9721d0a2f0110d",
+   "indexed_sha256": "bd425afe8dd1173e0565e3edc50a0d799d8f1d649f069dd7fd9721d0a2f0110d",
+   "correlation_leak": false
+  },
+  {
+   "label": "DMI-5-SYNC_START-captured_1",
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_START",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 194,
+   "indexed_bytes": 194,
+   "submitted_sha256": "17c9a00d928feb3afc0e1b89fe2657d23970aa58a9bd4661c01d730cec20d8d9",
+   "indexed_sha256": "17c9a00d928feb3afc0e1b89fe2657d23970aa58a9bd4661c01d730cec20d8d9",
+   "correlation_leak": false
+  },
+  {
+   "label": "ENVIRONMENTAL-1-ALERT-temperature",
+   "sourcetype": "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 146,
+   "indexed_bytes": 146,
+   "submitted_sha256": "169c86ea49474174305e5fee3d524d851b015cd3ebdd7b17495323e02c887039",
+   "indexed_sha256": "169c86ea49474174305e5fee3d524d851b015cd3ebdd7b17495323e02c887039",
+   "correlation_leak": false
+  },
+  {
+   "label": "EVENTLIB-3-CPUHOG-captured_1",
+   "sourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 424,
+   "indexed_bytes": 424,
+   "submitted_sha256": "d0f105b12be2b84d86d4b5386513a7a2b175fe6d6d0225610b12258530d9aa50",
+   "indexed_sha256": "d0f105b12be2b84d86d4b5386513a7a2b175fe6d6d0225610b12258530d9aa50",
+   "correlation_leak": false
+  },
+  {
+   "label": "EVENTLIB-3-CPUHOG-captured_2",
+   "sourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 424,
+   "indexed_bytes": 424,
+   "submitted_sha256": "96bc5678f18949f7211903f3b17972203bd0019b0bf910b19e6feadc6959c865",
+   "indexed_sha256": "96bc5678f18949f7211903f3b17972203bd0019b0bf910b19e6feadc6959c865",
+   "correlation_leak": false
+  },
+  {
+   "label": "IOSXE-3-PLATFORM-captured_1",
+   "sourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 138,
+   "indexed_bytes": 138,
+   "submitted_sha256": "e4134a3051985d9142fe9b863c1a3b67cf5a061c163ab2543e5896344cfe8adb",
+   "indexed_sha256": "e4134a3051985d9142fe9b863c1a3b67cf5a061c163ab2543e5896344cfe8adb",
+   "correlation_leak": false
+  },
+  {
+   "label": "IOSXE-3-PLATFORM-captured_2",
+   "sourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 126,
+   "indexed_bytes": 126,
+   "submitted_sha256": "7c3722e062ece863e3823376da4569e805afd9923a4363b129272556e5963f82",
+   "indexed_sha256": "7c3722e062ece863e3823376da4569e805afd9923a4363b129272556e5963f82",
+   "correlation_leak": false
+  },
+  {
+   "label": "IOSXE_INFRA-4-NO_PUNT_KEEPALIVE-captured_1",
+   "sourcetype": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 131,
+   "indexed_bytes": 131,
+   "submitted_sha256": "fa0084b3cbbad27c2ea0252a4ff8d7593ec3bef37bcd89dc571d4c3c8d0f957d",
+   "indexed_sha256": "fa0084b3cbbad27c2ea0252a4ff8d7593ec3bef37bcd89dc571d4c3c8d0f957d",
+   "correlation_leak": false
+  },
+  {
+   "label": "IOSXE_RP_PAE_NOT-6-PAE_STARTUP-captured_1",
+   "sourcetype": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 121,
+   "indexed_bytes": 121,
+   "submitted_sha256": "5b5166f078368d98cce27d3d85a6b29de9e55df1cbd371a215aa64b3912549c7",
+   "indexed_sha256": "5b5166f078368d98cce27d3d85a6b29de9e55df1cbd371a215aa64b3912549c7",
+   "correlation_leak": false
+  },
+  {
+   "label": "LINEPROTO-5-UPDOWN-line_protocol",
+   "sourcetype": "cisco:sdwan:LINEPROTO-5-UPDOWN",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 148,
+   "indexed_bytes": 148,
+   "submitted_sha256": "5ec43b78030c591218d542e57f8ba25cc7128f75841a649010e5b4915b4a436d",
+   "indexed_sha256": "5ec43b78030c591218d542e57f8ba25cc7128f75841a649010e5b4915b4a436d",
+   "correlation_leak": false
+  },
+  {
+   "label": "LINK-5-CHANGED-admin_down",
+   "sourcetype": "cisco:sdwan:LINK-5-CHANGED",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 146,
+   "indexed_bytes": 146,
+   "submitted_sha256": "c5ea48c391b54642721a64d696694304d98ac6012232a0c36535a42295120bee",
+   "indexed_sha256": "c5ea48c391b54642721a64d696694304d98ac6012232a0c36535a42295120bee",
+   "correlation_leak": false
+  },
+  {
+   "label": "LINK-5-UPDOWN-link_state",
+   "sourcetype": "cisco:sdwan:LINK-5-UPDOWN",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 126,
+   "indexed_bytes": 126,
+   "submitted_sha256": "48052658c2aea7e217bed9657f351b8a5396c91e445a3ad8a3906878facdbbbb",
+   "indexed_sha256": "48052658c2aea7e217bed9657f351b8a5396c91e445a3ad8a3906878facdbbbb",
+   "correlation_leak": false
+  },
+  {
+   "label": "MDT_CONNECTION-6-STATE_CHANGED-connection_state",
+   "sourcetype": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 185,
+   "indexed_bytes": 185,
+   "submitted_sha256": "6a86ddabdffd330c76eaec499200a3281aaae03dfc5b7ba3f98d19efa597aa20",
+   "indexed_sha256": "6a86ddabdffd330c76eaec499200a3281aaae03dfc5b7ba3f98d19efa597aa20",
+   "correlation_leak": false
+  },
+  {
+   "label": "MSDP-5-PEER_UPDOWN-peer_state",
+   "sourcetype": "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 119,
+   "indexed_bytes": 119,
+   "submitted_sha256": "4c467ba9cf63ad8ee9b7ad5b7ab476de39139ea2d87bfdd3cb3c7e3619bc6395",
+   "indexed_sha256": "4c467ba9cf63ad8ee9b7ad5b7ab476de39139ea2d87bfdd3cb3c7e3619bc6395",
+   "correlation_leak": false
+  },
+  {
+   "label": "NDBMAN-5-CONFIG_I-captured_1",
+   "sourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 222,
+   "indexed_bytes": 222,
+   "submitted_sha256": "cb00ecd7274e5f17f06f88b02ed6d2c7d90190aa29e0dc9e808e132158e68427",
+   "indexed_sha256": "cb00ecd7274e5f17f06f88b02ed6d2c7d90190aa29e0dc9e808e132158e68427",
+   "correlation_leak": false
+  },
+  {
+   "label": "NDBMAN-5-CONFIG_I-captured_2",
+   "sourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 222,
+   "indexed_bytes": 222,
+   "submitted_sha256": "0c068fb13800aed296661db09590ce078849e43290806e0cb3d1373da4ac5d34",
+   "indexed_sha256": "0c068fb13800aed296661db09590ce078849e43290806e0cb3d1373da4ac5d34",
+   "correlation_leak": false
+  },
+  {
+   "label": "OSPF-5-ADJCHG-adjacency",
+   "sourcetype": "cisco:sdwan:OSPF-5-ADJCHG",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 180,
+   "indexed_bytes": 180,
+   "submitted_sha256": "c4891082bd26e036cd3e82cd1552e08c42564876030464aaba8680b4955b48e9",
+   "indexed_sha256": "c4891082bd26e036cd3e82cd1552e08c42564876030464aaba8680b4955b48e9",
+   "correlation_leak": false
+  },
+  {
+   "label": "PKI-6-AUTHORITATIVE_CLOCK-captured_1",
+   "sourcetype": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 116,
+   "indexed_bytes": 116,
+   "submitted_sha256": "0fd7e8a0ca0ff9d4fb47b9e83924e485591d887360056b792a66603e069e0e28",
+   "indexed_sha256": "0fd7e8a0ca0ff9d4fb47b9e83924e485591d887360056b792a66603e069e0e28",
+   "correlation_leak": false
+  },
+  {
+   "label": "PLATFORM-4-ELEMENT_WARNING-load_average",
+   "sourcetype": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 166,
+   "indexed_bytes": 166,
+   "submitted_sha256": "c63662ad588ce95fee23cc09fe58d8fa1914067fb1f230407ccbb3ca69419e57",
+   "indexed_sha256": "c63662ad588ce95fee23cc09fe58d8fa1914067fb1f230407ccbb3ca69419e57",
+   "correlation_leak": false
+  },
+  {
+   "label": "SYS-5-CONFIG_P-captured_1",
+   "sourcetype": "cisco:sdwan:SYS-5-CONFIG_P",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 200,
+   "indexed_bytes": 200,
+   "submitted_sha256": "69a46d9c5e65f4985eb10f3040a02f0e8a5505a7f90e1e20ff86fae36c49b23e",
+   "indexed_sha256": "69a46d9c5e65f4985eb10f3040a02f0e8a5505a7f90e1e20ff86fae36c49b23e",
+   "correlation_leak": false
+  }
+ ],
+ "passes": 38,
+ "scenario_runs": [
+  {
+   "scenario_id": "ub5_cisco_change_induced_outage",
+   "run_id": "pf-universe-3bdc2e9c-9d50-403f-bf59-9009a5c1df91",
+   "events_generated": 20,
+   "hec_accepted": 20,
+   "independent_count_by_phase": {
+    "BASELINE": 3,
+    "CHANGE": 4,
+    "FAULT": 8,
+    "RECOVERY": 5
+   },
+   "expected_by_phase": {
+    "BASELINE": 3,
+    "CHANGE": 4,
+    "FAULT": 8,
+    "RECOVERY": 5
+   },
+   "distinct_sourcetypes_indexed": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:BGP-5-NBR_RESET",
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+    "cisco:sdwan:DMI-5-SYNC_NEEDED",
+    "cisco:sdwan:DMI-5-SYNC_START",
+    "cisco:sdwan:LINEPROTO-5-UPDOWN",
+    "cisco:sdwan:LINK-5-CHANGED",
+    "cisco:sdwan:LINK-5-UPDOWN",
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+    "cisco:sdwan:NDBMAN-5-CONFIG_I",
+    "cisco:sdwan:OSPF-5-ADJCHG"
+   ],
+   "correlation_leak_in_raw": false,
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "ub5_cisco_platform_health_degradation",
+   "run_id": "pf-universe-e603c2c1-0378-4a66-aed9-f2af3671838f",
+   "events_generated": 10,
+   "hec_accepted": 10,
+   "independent_count_by_phase": {
+    "BASELINE": 2,
+    "DEGRADE": 4,
+    "IMPACT": 2,
+    "RECOVERY": 2
+   },
+   "expected_by_phase": {
+    "BASELINE": 2,
+    "DEGRADE": 4,
+    "IMPACT": 2,
+    "RECOVERY": 2
+   },
+   "distinct_sourcetypes_indexed": [
+    "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+    "cisco:sdwan:EVENTLIB-3-CPUHOG",
+    "cisco:sdwan:IOSXE-3-PLATFORM",
+    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
+   ],
+   "correlation_leak_in_raw": false,
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "ub5_cisco_nac_radius_outage",
+   "run_id": "pf-universe-9330f166-116a-4e55-94af-67d980ad82e1",
+   "events_generated": 8,
+   "hec_accepted": 8,
+   "independent_count_by_phase": {
+    "BASELINE": 1,
+    "OUTAGE": 4,
+    "RECOVERY": 3
+   },
+   "expected_by_phase": {
+    "BASELINE": 1,
+    "OUTAGE": 4,
+    "RECOVERY": 3
+   },
+   "distinct_sourcetypes_indexed": [
+    "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER"
+   ],
+   "correlation_leak_in_raw": false,
+   "verdict": "PASS"
+  }
+ ],
+ "ta_parser_checks_performed": 0,
+ "detection_checks_performed": 0,
+ "configuration_changes": 0
+}

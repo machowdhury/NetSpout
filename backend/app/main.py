@@ -2032,6 +2032,17 @@ def run_studio_pack(pack_id: str, payload: StudioRunRequest):
 # =========================================================================
 # Legacy Generation Modes (compatibility surface)
 # =========================================================================
+def _generator_transport(index=None, explicit=None):
+    """Transport for the generator-mode routes: an explicit request config wins; otherwise the Connection Center
+    destination (global transport) with the requested index; None keeps the pre-existing defaults when none is saved."""
+    if explicit:
+        return TelemetryTransportConfig(**explicit)
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    if gt is not None and getattr(gt, "hec_url", None):
+        return gt.model_copy(update={"hec_index": index} if index else {})
+    return None
+
+
 @app.post("/api/generate/single-event")
 def post_generate_single_event(payload: Dict[str, Any]):
     from app.generator_modes import generator_service
@@ -2046,6 +2057,7 @@ def post_generate_single_event(payload: Dict[str, Any]):
             sourcetype=sourcetype,
             event_name=event_name,
             dispatch=dispatch,
+            transport_config=_generator_transport(index) if dispatch else None,
             index=index
         )
     except ValueError as exc:
@@ -2069,6 +2081,7 @@ def post_generate_sourcetype_batch(payload: Dict[str, Any]):
             rate_eps=rate_eps,
             event_families=payload.get("event_families"),
             dispatch=dispatch,
+            transport_config=_generator_transport(index) if dispatch else None,
             index=index
         )
     except ValueError as exc:
@@ -2106,13 +2119,14 @@ def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
     from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
     from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS
     from netspout_core.universe_batch4_engine import BATCH4_SCENARIO_IDS
-    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+    from netspout_core.universe_batch5_engine import BATCH5_SCENARIO_IDS
+    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + BATCH5_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
         from app.generator_modes import generator_service
         try:
             config = payload.get('transport_config')
             return generator_service.generate_universe_scenario(
                 scenario_id, run_id=payload.get('run_id'), dispatch=bool(payload.get('dispatch', False)),
-                transport_config=TelemetryTransportConfig(**config) if config else None)
+                transport_config=_generator_transport(payload.get('index'), config) if payload.get('dispatch') else None)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
     raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")

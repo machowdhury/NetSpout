@@ -159,12 +159,22 @@ Framing by industry/sub-industry is editorial; telemetry and in-pack correlation
 | ind_hospitality_guest_network_defense | hospitality-travel / Hotels and guest networks | security | ub3_multivendor_edge_observation, wave2_cloud_identity_sso_hunt | 9 | YES | YES | pf_ind_hospitality_guest_network_defense | DASHBOARD_DATA_VALIDATED |
 | ind_aero_defense_endpoint_c2 | aerospace-defense / Defense contractor | security | wave2_c2_callback_detection, ub4_endpoint_threat_pipeline, ub3_identity_runtime_audit | 11 | YES | YES | pf_ind_aero_defense_endpoint_c2 | DASHBOARD_DATA_VALIDATED |
 | ind_legal_matter_data_exfiltration | legal-compliance-professional-services / Law firms and professional services | security | wave3_cloudmail_exfil, ub2_cloud_identity_mail_hunt | 11 | YES | YES | pf_ind_legal_matter_data_exfiltration | DASHBOARD_DATA_VALIDATED |
-| ind_agri_edge_gateway_health | agriculture-agritech / Precision farming and processing | operational | ub2_ot_edge_routing_observation, wave2_linux_auth_anomaly | 7 | YES | YES | pf_ind_agri_edge_gateway_health | DASHBOARD_VISUALLY_VERIFIED |
+| ind_agri_edge_gateway_health | agriculture-agritech / Precision farming and processing | operational | ub2_ot_edge_routing_observation, wave2_linux_auth_anomaly | 7 | YES | YES | pf_ind_agri_edge_gateway_health | DASHBOARD_DATA_VALIDATED |
 | ind_realestate_building_exposure | real-estate-proptech-construction / Commercial property and construction | operational | ub4_exposure_infra_logging, ub4_saas_collaboration_audit | 7 | YES | YES | pf_ind_realestate_building_exposure | DASHBOARD_DATA_VALIDATED |
 | ind_nonprofit_donor_platform_attack | nonprofit-ngo-global-aid / Humanitarian and donor platforms | security | wave2_cloud_identity_sso_hunt, wave3_cloudmail_exfil | 13 | YES | YES | pf_ind_nonprofit_donor_platform_attack | DASHBOARD_DATA_VALIDATED |
 | ind_transport_fleet_network_change | transportation-logistics / Logistics and fleet networks | operational | ub5_cisco_change_induced_outage, ub2_ot_edge_routing_observation | 16 | YES | YES | pf_ind_transport_fleet_network_change | DASHBOARD_DATA_VALIDATED |
 
-Dashboard maturity is assembled from stored evidence (`docs/verification/evidence/dashboards/`): IMPLEMENTED = installed in Splunk and read back identical; DATA_VALIDATED = every data source populated with the run context, KPIs equal independent SPL, tokens bound, drilldowns return rows; VISUALLY_VERIFIED = also opened in Splunk Web with the run context and the final screenshot inspected. Installed-and-opened is separate from visually verified. All 33 packs (26 industry + 7 recorded-telemetry) have a Studio view; existing operational scenarios outside the replay-pack engine have none yet.
+Dashboard maturity is assembled from stored evidence (`docs/verification/evidence/dashboards/`): IMPLEMENTED = installed in Splunk and read back identical; DATA_VALIDATED = every data source populated with the run context, KPIs equal independent SPL, tokens bound, drilldowns return rows; VISUALLY_VERIFIED = also opened in Splunk Web with the run context, all three tabs rendered, and the final screenshot inspected. Installed-and-opened is separate from visually verified.
+
+| Scenario family | Kind | Dashboards | Installed | Data-validated | Visually verified |
+|---|---|---|---|---|---|
+| incident_pack | operational | 37 | 37 | 37 | 1 |
+| native_pack | operational | 13 | 13 | 13 | 0 |
+| native_pack | security | 13 | 13 | 13 | 1 |
+| replay | operational | 9 | 9 | 9 | 1 |
+| replay | security | 24 | 24 | 24 | 1 |
+
+Not yet covered: ScenarioRunner scenarios (17) and unified-generation scenarios (25) keep their existing dashboard recipes; no Studio view was generated for them in this window.
 
 **Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.
 
@@ -176,21 +186,21 @@ Columns are separate evidence: documented is not runnable, runnable is not verif
 
 | Industry | Documented (all) | Cataloged only | Contracted | Runnable | Independently indexed | Panel queries populated | Dashboards installed | Dashboards data-validated | Dashboards visually verified | Dashboard-verified (legacy gate) | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Banking and Financial Services | 16 | 9 | 5 | 7 | 5 | 2 | 4 | 4 | 0 | 0 | 4 | 0 | 0 | 0 | - |
-| Healthcare | 14 | 9 | 4 | 5 | 4 | 2 | 3 | 3 | 0 | 0 | 4 | 0 | 0 | 0 | - |
-| Retail and E-commerce | 12 | 6 | 5 | 6 | 5 | 2 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 1 | - |
-| Manufacturing | 18 | 11 | 6 | 6 | 3 | 2 | 3 | 3 | 0 | 0 | 4 | 0 | 0 | 1 | - |
-| Energy and Utilities | 22 | 16 | 5 | 6 | 3 | 2 | 3 | 3 | 0 | 0 | 4 | 0 | 0 | 0 | - |
-| Telecommunications | 43 | 27 | 14 | 15 | 13 | 2 | 3 | 3 | 1 | 0 | 4 | 0 | 0 | 2 | - |
+| Banking and Financial Services | 16 | 9 | 5 | 7 | 5 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 0 | - |
+| Healthcare | 14 | 9 | 4 | 5 | 4 | 2 | 4 | 4 | 0 | 0 | 4 | 0 | 0 | 0 | - |
+| Retail and E-commerce | 12 | 6 | 5 | 6 | 5 | 2 | 5 | 5 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Manufacturing | 18 | 11 | 6 | 6 | 3 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 1 | - |
+| Energy and Utilities | 22 | 16 | 5 | 6 | 3 | 2 | 5 | 5 | 0 | 0 | 4 | 0 | 0 | 0 | - |
+| Telecommunications | 43 | 27 | 14 | 15 | 13 | 2 | 13 | 13 | 2 | 0 | 4 | 0 | 0 | 2 | - |
 | Government and Public Sector | 25 | 20 | 4 | 5 | 4 | 2 | 4 | 4 | 1 | 0 | 4 | 0 | 0 | 0 | critical-infrastructure, national-security, state-local |
 | Transportation and Logistics | 13 | 11 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 3 | 0 | 0 | 0 | - |
 | Education | 13 | 9 | 2 | 4 | 2 | 1 | 2 | 2 | 0 | 0 | 4 | 0 | 0 | 1 | - |
-| Technology and SaaS | 24 | 5 | 6 | 19 | 5 | 1 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 1 | - |
+| Technology and SaaS | 24 | 5 | 6 | 19 | 5 | 1 | 6 | 6 | 0 | 0 | 0 | 0 | 0 | 1 | - |
 | Media and Entertainment | 6 | 4 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | - |
 | Hospitality and Travel | 10 | 6 | 2 | 4 | 2 | 1 | 2 | 2 | 0 | 0 | 1 | 0 | 0 | 1 | - |
 | Aerospace and Defense | 6 | 4 | 2 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 3 | 0 | 0 | 0 | - |
 | Legal, Compliance and Professional Services | 10 | 5 | 3 | 5 | 3 | 1 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 1 | - |
-| Agriculture and Agritech | 6 | 3 | 3 | 2 | 2 | 1 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | - |
+| Agriculture and Agritech | 6 | 3 | 3 | 2 | 2 | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | - |
 | Real Estate, PropTech and Construction | 8 | 5 | 3 | 3 | 3 | 1 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 0 | - |
 | Insurance and InsurTech | 9 | 6 | 3 | 3 | 3 | 2 | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 0 | - |
 | Non-Profit, NGOs and Global Aid | 8 | 5 | 3 | 3 | 3 | 1 | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | - |

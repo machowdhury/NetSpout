@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T20:17Z",
+ "generated_utc": "2026-10-30T22:38Z",
  "scale": [
   "DASHBOARD_SPECIFIED",
   "DASHBOARD_IMPLEMENTED",
@@ -15,7 +15,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_cloud_control_plane_activity": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -25,7 +26,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_windows_endpoint_process_chain": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -35,7 +37,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_web_exploitation_recordings": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -45,7 +48,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_edr_and_cloud_activity": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -55,7 +59,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_agentic_ai_mcp_runtime_hybrid": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -65,7 +70,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "rp_workload_sysmon_ebpf_hybrid": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -75,7 +81,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_bank_account_takeover_resilience": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -85,7 +92,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_bank_payments_edge_defense": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -95,7 +103,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_telco_change_induced_outage": {
    "maturity": "DASHBOARD_VISUALLY_VERIFIED",
@@ -105,7 +114,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": true,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_telco_access_and_wireless_health": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -115,7 +125,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_health_ehr_ransomware_readiness": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -125,7 +136,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_health_clinical_network_edge": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -135,7 +147,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_mfg_it_ot_convergence": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -145,7 +158,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_mfg_plant_network_health": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -155,7 +169,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_energy_substation_edge_observation": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -165,7 +180,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_energy_scada_proxy_intrusion": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -175,7 +191,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_insurance_claims_platform_audit": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -185,7 +202,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_insurance_underwriting_exposure": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -195,7 +213,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_gov_citizen_identity_attack": {
    "maturity": "DASHBOARD_VISUALLY_VERIFIED",
@@ -205,7 +224,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": true,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_gov_agency_mail_exfiltration": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -215,7 +235,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_retail_pos_edge_defense": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -225,7 +246,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_retail_ecommerce_cloud_recon": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -235,7 +257,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_edu_campus_identity_and_collab": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -245,7 +268,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_saas_platform_runtime_attack": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -255,7 +279,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_media_content_delivery_exfil": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -265,7 +290,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_hospitality_guest_network_defense": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -275,7 +301,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_aero_defense_endpoint_c2": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -285,7 +312,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_legal_matter_data_exfiltration": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -295,17 +323,19 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_agri_edge_gateway_health": {
-   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "maturity": "DASHBOARD_DATA_VALIDATED",
    "specified": true,
    "implemented": true,
    "installed_and_opened_in_splunk_web": true,
    "data_validated": true,
    "browser_render_checks_pass": true,
-   "screenshot_inspected": true,
-   "kind": "operational"
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_realestate_building_exposure": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -315,7 +345,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
   },
   "ind_nonprofit_donor_platform_attack": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -325,7 +356,8 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "security"
+   "kind": "security",
+   "family": "replay"
   },
   "ind_transport_fleet_network_change": {
    "maturity": "DASHBOARD_DATA_VALIDATED",
@@ -335,7 +367,701 @@
    "data_validated": true,
    "browser_render_checks_pass": true,
    "screenshot_inspected": false,
-   "kind": "operational"
+   "kind": "operational",
+   "family": "replay"
+  },
+  "wave2_ws_credential_compromise_chain": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_cloud_identity_sso_hunt": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_aws_recon_escalation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_linux_auth_anomaly": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_agentic_ai_exfil_attempt": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_k8s_container_escape": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_c2_callback_detection": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave2_bigip_openconfig_itops": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "wave3_ebpf_workload_hunt": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave3_cloudmail_exfil": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "wave3_vsphere_hostpath_triage": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub1_ot_proxy_host_hunt": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "ub2_cloud_identity_mail_hunt": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "ub2_ot_edge_routing_observation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub2_database_backup_integrity": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub3_identity_runtime_audit": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub3_multivendor_edge_observation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub3_database_message_audit": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub4_saas_collaboration_audit": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub4_endpoint_threat_pipeline": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "ub4_exposure_infra_logging": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub5_cisco_change_induced_outage": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub5_cisco_platform_health_degradation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub5_cisco_nac_radius_outage": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "ub6_sdwan_utd_threat_pipeline": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "native_pack"
+  },
+  "ub6_catalyst_wireless_rogue_threat": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "native_pack"
+  },
+  "network_01_campus_link": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_02_vlan_trunk": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_03_stp_storm": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_04_wan_brownout": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_05_dual_isp": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_06_bgp_flap": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_07_ospf_adjacency": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_08_firewall_policy": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_09_ddos_flood": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_10_dns_failure": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_11_dhcp_exhaustion": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_12_dc_congestion": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_13_mtu_pmtud": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_14_wireless_outage": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_15_device_resources": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_16_retail_uplink": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_17_hospital_mac_auth": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_18_payment_deny": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_19_ips_service": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_20_backend_link": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_21_partial_pool": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_22_authentication_storm": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_23_containment_request": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_24_policy_disagreement": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_25_mpls_recovery": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_26_maintenance": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "network_27_stale_sessions": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_01_ran_cell": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_02_registration_auth": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_03_slice_sla": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_04_ims_volte": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_05_mobile_transport": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_06_broadband_cpe": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_07_sdwan_service": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_08_roaming_mobility": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_09_core_user_plane": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
+  },
+  "telco_10_cross_layer": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "incident_pack"
   }
  }
 }

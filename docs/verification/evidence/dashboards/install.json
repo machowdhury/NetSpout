@@ -1,203 +1,581 @@
 {
- "generated_utc": "2026-10-30T19:35Z",
+ "generated_utc": "2026-10-30T22:30Z",
  "app": "netspout",
  "views": {
   "pf_ind_aero_defense_endpoint_c2": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20715,
+   "bytes": 25499,
    "matches_source": true
   },
   "pf_ind_agri_edge_gateway_health": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22644,
+   "bytes": 27164,
    "matches_source": true
   },
   "pf_ind_bank_account_takeover_resilience": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22474,
+   "bytes": 29231,
    "matches_source": true
   },
   "pf_ind_bank_payments_edge_defense": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 21760,
+   "bytes": 27697,
    "matches_source": true
   },
   "pf_ind_edu_campus_identity_and_collab": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22006,
+   "bytes": 28350,
    "matches_source": true
   },
   "pf_ind_energy_scada_proxy_intrusion": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20619,
+   "bytes": 25274,
    "matches_source": true
   },
   "pf_ind_energy_substation_edge_observation": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22884,
+   "bytes": 27684,
    "matches_source": true
   },
   "pf_ind_gov_agency_mail_exfiltration": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 23587,
+   "bytes": 31682,
    "matches_source": true
   },
   "pf_ind_gov_citizen_identity_attack": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22155,
+   "bytes": 28578,
    "matches_source": true
   },
   "pf_ind_health_clinical_network_edge": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22716,
+   "bytes": 27507,
    "matches_source": true
   },
   "pf_ind_health_ehr_ransomware_readiness": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 21858,
+   "bytes": 28135,
    "matches_source": true
   },
   "pf_ind_hospitality_guest_network_defense": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22033,
+   "bytes": 28418,
    "matches_source": true
   },
   "pf_ind_insurance_claims_platform_audit": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 23733,
+   "bytes": 31817,
    "matches_source": true
   },
   "pf_ind_insurance_underwriting_exposure": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22888,
+   "bytes": 27633,
    "matches_source": true
   },
   "pf_ind_legal_matter_data_exfiltration": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 23684,
+   "bytes": 31737,
    "matches_source": true
   },
   "pf_ind_media_content_delivery_exfil": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 23505,
+   "bytes": 31474,
    "matches_source": true
   },
   "pf_ind_mfg_it_ot_convergence": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20626,
+   "bytes": 25335,
    "matches_source": true
   },
   "pf_ind_mfg_plant_network_health": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22645,
+   "bytes": 27723,
    "matches_source": true
   },
   "pf_ind_nonprofit_donor_platform_attack": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 23611,
+   "bytes": 31679,
    "matches_source": true
   },
   "pf_ind_realestate_building_exposure": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22786,
+   "bytes": 27372,
    "matches_source": true
   },
   "pf_ind_retail_ecommerce_cloud_recon": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 21751,
+   "bytes": 27718,
    "matches_source": true
   },
   "pf_ind_retail_pos_edge_defense": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20438,
+   "bytes": 24988,
    "matches_source": true
   },
   "pf_ind_saas_platform_runtime_attack": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 21918,
+   "bytes": 28155,
    "matches_source": true
   },
   "pf_ind_telco_access_and_wireless_health": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22887,
+   "bytes": 28043,
    "matches_source": true
   },
   "pf_ind_telco_change_induced_outage": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22767,
+   "bytes": 27646,
    "matches_source": true
   },
   "pf_ind_transport_fleet_network_change": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 22814,
+   "bytes": 27707,
+   "matches_source": true
+  },
+  "pf_network_01_campus_link": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31006,
+   "matches_source": true
+  },
+  "pf_network_02_vlan_trunk": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30977,
+   "matches_source": true
+  },
+  "pf_network_03_stp_storm": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30944,
+   "matches_source": true
+  },
+  "pf_network_04_wan_brownout": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31055,
+   "matches_source": true
+  },
+  "pf_network_05_dual_isp": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30921,
+   "matches_source": true
+  },
+  "pf_network_06_bgp_flap": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30937,
+   "matches_source": true
+  },
+  "pf_network_07_ospf_adjacency": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31103,
+   "matches_source": true
+  },
+  "pf_network_08_firewall_policy": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31122,
+   "matches_source": true
+  },
+  "pf_network_09_ddos_flood": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30981,
+   "matches_source": true
+  },
+  "pf_network_10_dns_failure": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31008,
+   "matches_source": true
+  },
+  "pf_network_11_dhcp_exhaustion": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31116,
+   "matches_source": true
+  },
+  "pf_network_12_dc_congestion": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31072,
+   "matches_source": true
+  },
+  "pf_network_13_mtu_pmtud": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 30948,
+   "matches_source": true
+  },
+  "pf_network_14_wireless_outage": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31116,
+   "matches_source": true
+  },
+  "pf_network_15_device_resources": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31141,
+   "matches_source": true
+  },
+  "pf_network_16_retail_uplink": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31103,
+   "matches_source": true
+  },
+  "pf_network_17_hospital_mac_auth": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31201,
+   "matches_source": true
+  },
+  "pf_network_18_payment_deny": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31084,
+   "matches_source": true
+  },
+  "pf_network_19_ips_service": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31052,
+   "matches_source": true
+  },
+  "pf_network_20_backend_link": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31077,
+   "matches_source": true
+  },
+  "pf_network_21_partial_pool": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31087,
+   "matches_source": true
+  },
+  "pf_network_22_authentication_storm": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31285,
+   "matches_source": true
+  },
+  "pf_network_23_containment_request": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31284,
+   "matches_source": true
+  },
+  "pf_network_24_policy_disagreement": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31244,
+   "matches_source": true
+  },
+  "pf_network_25_mpls_recovery": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31124,
+   "matches_source": true
+  },
+  "pf_network_26_maintenance": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31052,
+   "matches_source": true
+  },
+  "pf_network_27_stale_sessions": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31137,
    "matches_source": true
   },
   "pf_rp_agentic_ai_mcp_runtime_hybrid": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20320,
+   "bytes": 27956,
    "matches_source": true
   },
   "pf_rp_cloud_control_plane_activity": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20175,
+   "bytes": 24406,
    "matches_source": true
   },
   "pf_rp_edr_and_cloud_activity": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20141,
+   "bytes": 24425,
    "matches_source": true
   },
   "pf_rp_linux_credential_access": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20204,
+   "bytes": 24882,
    "matches_source": true
   },
   "pf_rp_web_exploitation_recordings": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20188,
+   "bytes": 24808,
    "matches_source": true
   },
   "pf_rp_windows_endpoint_process_chain": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 21407,
+   "bytes": 27099,
    "matches_source": true
   },
   "pf_rp_workload_sysmon_ebpf_hybrid": {
    "app": "netspout",
    "sharing": "app",
-   "bytes": 20180,
+   "bytes": 28549,
+   "matches_source": true
+  },
+  "pf_telco_01_ran_cell": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31057,
+   "matches_source": true
+  },
+  "pf_telco_02_registration_auth": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31330,
+   "matches_source": true
+  },
+  "pf_telco_03_slice_sla": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31098,
+   "matches_source": true
+  },
+  "pf_telco_04_ims_volte": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31106,
+   "matches_source": true
+  },
+  "pf_telco_05_mobile_transport": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31301,
+   "matches_source": true
+  },
+  "pf_telco_06_broadband_cpe": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31202,
+   "matches_source": true
+  },
+  "pf_telco_07_sdwan_service": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31198,
+   "matches_source": true
+  },
+  "pf_telco_08_roaming_mobility": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31275,
+   "matches_source": true
+  },
+  "pf_telco_09_core_user_plane": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31260,
+   "matches_source": true
+  },
+  "pf_telco_10_cross_layer": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31190,
+   "matches_source": true
+  },
+  "pf_ub1_ot_proxy_host_hunt": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24823,
+   "matches_source": true
+  },
+  "pf_ub2_cloud_identity_mail_hunt": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24531,
+   "matches_source": true
+  },
+  "pf_ub2_database_backup_integrity": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26770,
+   "matches_source": true
+  },
+  "pf_ub2_ot_edge_routing_observation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26854,
+   "matches_source": true
+  },
+  "pf_ub3_database_message_audit": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26700,
+   "matches_source": true
+  },
+  "pf_ub3_identity_runtime_audit": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26766,
+   "matches_source": true
+  },
+  "pf_ub3_multivendor_edge_observation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26902,
+   "matches_source": true
+  },
+  "pf_ub4_endpoint_threat_pipeline": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24581,
+   "matches_source": true
+  },
+  "pf_ub4_exposure_infra_logging": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26774,
+   "matches_source": true
+  },
+  "pf_ub4_saas_collaboration_audit": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26773,
+   "matches_source": true
+  },
+  "pf_ub5_cisco_change_induced_outage": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27491,
+   "matches_source": true
+  },
+  "pf_ub5_cisco_nac_radius_outage": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27200,
+   "matches_source": true
+  },
+  "pf_ub5_cisco_platform_health_degradation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27571,
+   "matches_source": true
+  },
+  "pf_ub6_catalyst_wireless_rogue_threat": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27318,
+   "matches_source": true
+  },
+  "pf_ub6_sdwan_utd_threat_pipeline": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 25080,
+   "matches_source": true
+  },
+  "pf_wave2_agentic_ai_exfil_attempt": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 28110,
+   "matches_source": true
+  },
+  "pf_wave2_aws_recon_escalation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27211,
+   "matches_source": true
+  },
+  "pf_wave2_bigip_openconfig_itops": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26951,
+   "matches_source": true
+  },
+  "pf_wave2_c2_callback_detection": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 25040,
+   "matches_source": true
+  },
+  "pf_wave2_cloud_identity_sso_hunt": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 28185,
+   "matches_source": true
+  },
+  "pf_wave2_k8s_container_escape": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27485,
+   "matches_source": true
+  },
+  "pf_wave2_linux_auth_anomaly": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 25653,
+   "matches_source": true
+  },
+  "pf_wave2_ws_credential_compromise_chain": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27911,
+   "matches_source": true
+  },
+  "pf_wave3_cloudmail_exfil": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 31174,
+   "matches_source": true
+  },
+  "pf_wave3_ebpf_workload_hunt": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 28800,
+   "matches_source": true
+  },
+  "pf_wave3_vsphere_hostpath_triage": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27133,
    "matches_source": true
   }
  }

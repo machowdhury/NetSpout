@@ -49,7 +49,7 @@ export interface ExplorerEntry {
   provenance?: { source_id: string; source_ref?: string | null; url?: string | null; upstream_industry?: string | null; criticality?: string | null };
   live_verified?: boolean;
   dashboard_verified?: boolean;
-  dashboard?: { dashboard_id: string; eligibility: string; dashboard_maturity: string; reasons: string[]; splunk_view?: string | null } | null;
+  dashboard?: { dashboard_id: string; eligibility: string; dashboard_maturity: string; reasons: string[]; splunk_view?: string | null; scale?: string } | null;
   // security
   story_id?: string;
   narrative?: string;

@@ -97,5 +97,194 @@
  },
  "ind_transport_fleet_network_change": {
   "users": false
+ },
+ "wave2_ws_credential_compromise_chain": {
+  "users": true
+ },
+ "wave2_cloud_identity_sso_hunt": {
+  "users": true
+ },
+ "wave2_aws_recon_escalation": {
+  "users": true
+ },
+ "wave2_linux_auth_anomaly": {
+  "users": false
+ },
+ "wave2_agentic_ai_exfil_attempt": {
+  "users": false
+ },
+ "wave2_k8s_container_escape": {
+  "users": true
+ },
+ "wave2_c2_callback_detection": {
+  "users": false
+ },
+ "wave2_bigip_openconfig_itops": {
+  "users": false
+ },
+ "wave3_ebpf_workload_hunt": {
+  "users": false
+ },
+ "wave3_cloudmail_exfil": {
+  "users": true
+ },
+ "wave3_vsphere_hostpath_triage": {
+  "users": false
+ },
+ "ub1_ot_proxy_host_hunt": {
+  "users": false
+ },
+ "ub2_cloud_identity_mail_hunt": {
+  "users": false
+ },
+ "ub2_ot_edge_routing_observation": {
+  "users": false
+ },
+ "ub2_database_backup_integrity": {
+  "users": false
+ },
+ "ub3_identity_runtime_audit": {
+  "users": false
+ },
+ "ub3_multivendor_edge_observation": {
+  "users": false
+ },
+ "ub3_database_message_audit": {
+  "users": false
+ },
+ "ub4_saas_collaboration_audit": {
+  "users": false
+ },
+ "ub4_endpoint_threat_pipeline": {
+  "users": false
+ },
+ "ub4_exposure_infra_logging": {
+  "users": false
+ },
+ "ub5_cisco_change_induced_outage": {
+  "users": false
+ },
+ "ub5_cisco_platform_health_degradation": {
+  "users": false
+ },
+ "ub5_cisco_nac_radius_outage": {
+  "users": false
+ },
+ "ub6_sdwan_utd_threat_pipeline": {
+  "users": false
+ },
+ "ub6_catalyst_wireless_rogue_threat": {
+  "users": false
+ },
+ "network_01_campus_link": {
+  "users": false
+ },
+ "network_02_vlan_trunk": {
+  "users": false
+ },
+ "network_03_stp_storm": {
+  "users": false
+ },
+ "network_04_wan_brownout": {
+  "users": false
+ },
+ "network_05_dual_isp": {
+  "users": false
+ },
+ "network_06_bgp_flap": {
+  "users": false
+ },
+ "network_07_ospf_adjacency": {
+  "users": false
+ },
+ "network_08_firewall_policy": {
+  "users": false
+ },
+ "network_09_ddos_flood": {
+  "users": false
+ },
+ "network_10_dns_failure": {
+  "users": false
+ },
+ "network_11_dhcp_exhaustion": {
+  "users": false
+ },
+ "network_12_dc_congestion": {
+  "users": false
+ },
+ "network_13_mtu_pmtud": {
+  "users": false
+ },
+ "network_14_wireless_outage": {
+  "users": false
+ },
+ "network_15_device_resources": {
+  "users": false
+ },
+ "network_16_retail_uplink": {
+  "users": false
+ },
+ "network_17_hospital_mac_auth": {
+  "users": false
+ },
+ "network_18_payment_deny": {
+  "users": false
+ },
+ "network_19_ips_service": {
+  "users": false
+ },
+ "network_20_backend_link": {
+  "users": false
+ },
+ "network_21_partial_pool": {
+  "users": false
+ },
+ "network_22_authentication_storm": {
+  "users": false
+ },
+ "network_23_containment_request": {
+  "users": false
+ },
+ "network_24_policy_disagreement": {
+  "users": false
+ },
+ "network_25_mpls_recovery": {
+  "users": false
+ },
+ "network_26_maintenance": {
+  "users": false
+ },
+ "network_27_stale_sessions": {
+  "users": false
+ },
+ "telco_01_ran_cell": {
+  "users": false
+ },
+ "telco_02_registration_auth": {
+  "users": false
+ },
+ "telco_03_slice_sla": {
+  "users": false
+ },
+ "telco_04_ims_volte": {
+  "users": false
+ },
+ "telco_05_mobile_transport": {
+  "users": false
+ },
+ "telco_06_broadband_cpe": {
+  "users": false
+ },
+ "telco_07_sdwan_service": {
+  "users": false
+ },
+ "telco_08_roaming_mobility": {
+  "users": false
+ },
+ "telco_09_core_user_plane": {
+  "users": false
+ },
+ "telco_10_cross_layer": {
+  "users": false
  }
 }

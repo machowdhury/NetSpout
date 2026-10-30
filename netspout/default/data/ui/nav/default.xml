@@ -22,6 +22,9 @@
     <view name="studio_firewall_capacity" label="Edge Next-Gen Firewall Capacity (MV-014)"/>
     <view name="studio_cross_domain_triage" label="Cross-Domain Slowness Triage (MV-016)"/>
   </collection>
+  <collection label="Scenario Dashboards">
+    <view source="all" match="^pf_"/>
+  </collection>
   <view name="spl_playground" label="SPL Playground"/>
   <collection label="Operations">
     <view name="datablaster_console" label="PulseForge Run Console"/>

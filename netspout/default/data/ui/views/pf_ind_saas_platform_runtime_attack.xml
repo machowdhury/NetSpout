@@ -79,126 +79,126 @@
     "viz_1": {
       "type": "splunk.markdown",
       "options": {
-        "markdown": "### **PulseForge** · Security investigation\n**Technology Saas · Cloud-native software platform**  ·  `ind_saas_platform_runtime_attack`\n\nTrace a container escape in the platform cluster alongside collaboration audit and exposure-management evidence.\n\n_Live searches over the replayed run: authentic recorded/native telemetry run on the PulseForge replay engine; industry framing is editorial._",
-        "fontColor": "#e8eef3",
-        "backgroundColor": "#0e1822",
+        "markdown": "### **PulseForge** · Security investigation\n**Technology Saas · Cloud-native software platform**  ·  `ind_saas_platform_runtime_attack`\n\nTrace a container escape in the platform cluster alongside collaboration audit and exposure-management evidence.\n\n_Live searches over the run; authentic recorded/native telemetry; industry framing is editorial._",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
         "fontSize": "default"
       }
     },
     "viz_2": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#19b5c4",
+        "majorColor": "#d4764f",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Events in run",
       "dataSources": {
         "primary": "ds_1"
       },
-      "showProgressBar": true,
-      "title": "Events in run"
+      "showProgressBar": true
     },
     "viz_3": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#5aa0e8",
+        "majorColor": "#6f9db5",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Telemetry sources (sourcetypes)",
       "dataSources": {
         "primary": "ds_2"
       },
-      "showProgressBar": true,
-      "title": "Telemetry sources (sourcetypes)"
+      "showProgressBar": true
     },
     "viz_4": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#9b7ddc",
+        "majorColor": "#a79fc4",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Hosts observed",
       "dataSources": {
         "primary": "ds_3"
       },
-      "showProgressBar": true,
-      "title": "Hosts observed"
+      "showProgressBar": true
     },
     "viz_5": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#f2a93b",
+        "majorColor": "#c9a24a",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Attack progression span",
       "dataSources": {
         "primary": "ds_4"
       },
-      "showProgressBar": true,
-      "title": "Attack progression span"
+      "showProgressBar": true
     },
     "viz_6": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#3fb97f",
+        "majorColor": "#6fa387",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Progression phases observed",
       "dataSources": {
         "primary": "ds_5"
       },
-      "showProgressBar": true,
-      "title": "Progression phases observed"
+      "showProgressBar": true
     },
     "viz_7": {
       "type": "splunk.singlevalue",
       "options": {
-        "majorColor": "#f0615a",
+        "majorColor": "#c9786f",
         "majorFontSize": 44,
         "trendDisplay": "off",
         "sparklineDisplay": "off",
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "numberPrecision": 0
       },
+      "title": "Contributing packs",
       "dataSources": {
         "primary": "ds_6"
       },
-      "showProgressBar": true,
-      "title": "Contributing packs"
+      "showProgressBar": true
     },
     "viz_8": {
       "type": "splunk.column",
       "options": {
         "stackMode": "stacked",
         "seriesColors": [
-          "#19b5c4",
-          "#f2a93b",
-          "#5aa0e8",
-          "#9b7ddc",
-          "#3fb97f",
-          "#f0615a",
-          "#c7d36f",
-          "#e58fb6"
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
         ],
         "legendDisplay": "bottom",
         "yAxisTitleText": "Events",
         "xAxisTitleText": "Seconds since the first event of the run",
-        "backgroundColor": "#16232f"
+        "backgroundColor": "#22262a"
       },
       "title": "Incident timeline · events by phase",
       "description": "Event volume over the run's own clock, split by incident phase.",
@@ -211,14 +211,14 @@
       "type": "splunk.bar",
       "options": {
         "seriesColors": [
-          "#19b5c4"
+          "#d4764f"
         ],
-        "backgroundColor": "#16232f",
+        "backgroundColor": "#22262a",
         "xAxisTitleText": "Events",
         "legendDisplay": "off"
       },
       "title": "Events by phase (click to filter the page)",
-      "description": "Click a column to set the Incident phase filter; choose All phases to reset.",
+      "description": "Click a bar to set the Incident phase filter; choose All phases to reset.",
       "dataSources": {
         "primary": "ds_8"
       },
@@ -240,24 +240,24 @@
     "viz_10": {
       "type": "splunk.markdown",
       "options": {
-        "markdown": "### Detection status: **NOT VERIFIED**\nNo vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.\n\n**Severity:** not asserted. PulseForge does not assign a severity to replayed telemetry; no detection has fired in this lab.\n\n**Constituent contracts:** wave2_k8s_container_escape; ub4_saas_collaboration_audit; ub4_exposure_infra_logging",
-        "fontColor": "#e8eef3",
-        "backgroundColor": "#16232f"
+        "markdown": "### Detection status: **NOT VERIFIED**\nNo vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent native packs' contracts list their own expectations.\n\n**Severity:** not asserted. PulseForge does not assign a severity to replayed telemetry; no detection has fired in this lab.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a"
       }
     },
     "viz_11": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Original analytics (Splunk Security Content)\nDetections whose published test data is a dataset replayed by this scenario:\n\n- [HTTP C2 Framework User Agent](https://research.splunk.com/network/229dc225-6abe-4d28-89fd-edf874086162/) · TTP · upstream validation: NOT_TESTED\n- [MacOS List Firewall Rules](https://research.splunk.com/endpoint/f8db6e0b-55bb-40ca-bc85-2b3700adb0f8/) · Anomaly · upstream validation: NOT_TESTED",
-        "fontColor": "#e8eef3",
-        "backgroundColor": "#16232f"
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a"
       }
     },
     "viz_12": {
       "type": "splunk.table",
       "options": {
         "count": 8,
-        "backgroundColor": "#16232f"
+        "backgroundColor": "#22262a"
       },
       "title": "Affected hosts and assets (click a row to search its events)",
       "dataSources": {
@@ -281,7 +281,7 @@
       "type": "splunk.table",
       "options": {
         "count": 8,
-        "backgroundColor": "#16232f"
+        "backgroundColor": "#22262a"
       },
       "title": "Attack progression by phase (click a row to search it)",
       "dataSources": {
@@ -305,7 +305,7 @@
       "type": "splunk.table",
       "options": {
         "count": 8,
-        "backgroundColor": "#16232f"
+        "backgroundColor": "#22262a"
       },
       "title": "Users and accounts seen in the events",
       "dataSources": {
@@ -314,14 +314,78 @@
       "showProgressBar": true
     },
     "viz_15": {
+      "type": "splunk.line",
+      "options": {
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "yAxisTitleText": "Events",
+        "xAxisTitleText": "Seconds since the first event of the run"
+      },
+      "title": "Telemetry volume trend by source",
+      "dataSources": {
+        "primary": "ds_12"
+      },
+      "showProgressBar": true
+    },
+    "viz_16": {
       "type": "splunk.table",
       "options": {
         "count": 8,
-        "backgroundColor": "#16232f"
+        "backgroundColor": "#22262a"
       },
       "title": "Investigation evidence: security-relevant events (click a row for the raw search)",
       "dataSources": {
-        "primary": "ds_12"
+        "primary": "ds_13"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\" | eval pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_host=\"$row.host.value$\" pf_st=\"$row.sourcetype.value$\" | sort 0 _time| head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_17": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### Provenance and contract\n**Scenario:** `ind_saas_platform_runtime_attack`  \n**Execution:** replay  \n**Telemetry:** Constituent native packs: wave2_k8s_container_escape, ub4_saas_collaboration_audit, ub4_exposure_infra_logging (authentic vendor-format telemetry from the vendored attack_data/universe samples; see each pack's contract). Industry framing is editorial.  \n**Sourcetypes:** `elasticsearch:json`, `github:enterprise:audit`, `gitlab:audit:json`, `ibm:qradar:offense`, `kube:audit`, `kube:container:falco`, `osquery:results`, `qualys:activityLog`, `rapid7:insightvm:asset:vulnerability_finding`, `slack:audit`, `suricata`\n\n**Correlation:** Correlated inside each constituent native pack; constituent packs are related by time only.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a"
+      }
+    },
+    "viz_18": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### Original analytics (Splunk Security Content)\nDetections whose published test data is a dataset replayed by this scenario:\n\n- [HTTP C2 Framework User Agent](https://research.splunk.com/network/229dc225-6abe-4d28-89fd-edf874086162/) · TTP · upstream validation: NOT_TESTED\n- [MacOS List Firewall Rules](https://research.splunk.com/endpoint/f8db6e0b-55bb-40ca-bc85-2b3700adb0f8/) · Anomaly · upstream validation: NOT_TESTED",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a"
+      }
+    },
+    "viz_19": {
+      "type": "splunk.table",
+      "options": {
+        "count": 8,
+        "backgroundColor": "#22262a"
+      },
+      "title": "Raw event evidence for the run (click a row for the search)",
+      "dataSources": {
+        "primary": "ds_14"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -341,44 +405,44 @@
   "dataSources": {
     "ds_1": {
       "type": "ds.search",
-      "name": "viz_2",
+      "name": "Events in run",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as value"
       }
     },
     "ds_2": {
       "type": "ds.search",
-      "name": "viz_3",
+      "name": "Telemetry sources (sourcetypes)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_st) as value"
       }
     },
     "ds_3": {
       "type": "ds.search",
-      "name": "viz_4",
+      "name": "Hosts observed",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_host) as value"
       }
     },
     "ds_4": {
       "type": "ds.search",
-      "name": "viz_5",
+      "name": "Attack progression span",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as a max(_time) as z | eval value=tostring(round(z-a),\"duration\") | table value"
       }
     },
     "ds_5": {
       "type": "ds.search",
-      "name": "viz_6",
+      "name": "Progression phases observed",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_phase) as value"
       }
     },
     "ds_6": {
       "type": "ds.search",
-      "name": "viz_7",
+      "name": "Contributing packs",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pk=coalesce(netspout_source_pack, netspout_phase) | stats dc(pk) as value"
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pk=coalesce(netspout_source_pack, netspout_scenario_id) | stats dc(pk) as value"
       }
     },
     "ds_7": {
@@ -418,7 +482,21 @@
     },
     "ds_12": {
       "type": "ds.search",
+      "name": "Telemetry volume trend by source",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | stats count by pf_sec, pf_st | xyseries pf_sec pf_st count | sort pf_sec | fillnull value=0"
+      }
+    },
+    "ds_13": {
+      "type": "ds.search",
       "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
+      }
+    },
+    "ds_14": {
+      "type": "ds.search",
+      "name": "Raw event evidence for the run (click a row for the search)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"ind_saas_platform_runtime_attack\" netspout_replay_session=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
       }
@@ -446,13 +524,13 @@
       "input_index"
     ],
     "layoutDefinitions": {
-      "layout_1": {
+      "layout_overview": {
         "type": "absolute",
         "options": {
           "width": 1460,
-          "height": 1600,
+          "height": 910,
           "display": "auto-scale",
-          "backgroundColor": "#0e1822"
+          "backgroundColor": "#17191b"
         },
         "structure": [
           {
@@ -552,7 +630,7 @@
               "x": 20,
               "y": 590,
               "w": 700,
-              "h": 330
+              "h": 300
             }
           },
           {
@@ -562,7 +640,28 @@
               "x": 740,
               "y": 590,
               "w": 700,
-              "h": 330
+              "h": 300
+            }
+          }
+        ]
+      },
+      "layout_investigation": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1150,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 112
             }
           },
           {
@@ -570,8 +669,8 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 940,
-              "w": 700,
+              "y": 130,
+              "w": 710,
               "h": 320
             }
           },
@@ -579,9 +678,9 @@
             "item": "viz_13",
             "type": "block",
             "position": {
-              "x": 740,
-              "y": 940,
-              "w": 700,
+              "x": 750,
+              "y": 130,
+              "w": 690,
               "h": 320
             }
           },
@@ -590,7 +689,7 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 1280,
+              "y": 470,
               "w": 700,
               "h": 300
             }
@@ -600,9 +699,70 @@
             "type": "block",
             "position": {
               "x": 740,
-              "y": 1280,
+              "y": 470,
               "w": 700,
               "h": 300
+            }
+          },
+          {
+            "item": "viz_16",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 790,
+              "w": 1420,
+              "h": 340
+            }
+          }
+        ]
+      },
+      "layout_evidence": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 890,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 112
+            }
+          },
+          {
+            "item": "viz_17",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 130,
+              "w": 700,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_18",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 130,
+              "w": 700,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_19",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 450,
+              "w": 1420,
+              "h": 420
             }
           }
         ]
@@ -611,8 +771,16 @@
     "tabs": {
       "items": [
         {
-          "label": "Scenario",
-          "layoutId": "layout_1"
+          "label": "Overview",
+          "layoutId": "layout_overview"
+        },
+        {
+          "label": "Investigation",
+          "layoutId": "layout_investigation"
+        },
+        {
+          "label": "Evidence",
+          "layoutId": "layout_evidence"
         }
       ]
     }

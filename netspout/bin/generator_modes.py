@@ -247,13 +247,8 @@ class TelemetryGeneratorService:
         from netspout_core import incident_packs
         if scenario_id in incident_packs.incident_ids():
             return self.generate_incident_pack(scenario_id, run_id=run_id, dispatch=dispatch, transport_config=transport_config)
-        from netspout_core.authentic_scenario_packs import run_scenario_pack
-        from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
-        from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS
-        from netspout_core.universe_batch4_engine import BATCH4_SCENARIO_IDS
-        from netspout_core.universe_batch5_engine import BATCH5_SCENARIO_IDS
-        from netspout_core.universe_batch6_engine import BATCH6_SCENARIO_IDS
-        if scenario_id not in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + BATCH5_SCENARIO_IDS + BATCH6_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+        from netspout_core.authentic_scenario_packs import run_scenario_pack, SCENARIO_PACK_IDS
+        if scenario_id not in SCENARIO_PACK_IDS:   # every authentic pack the Explorer lists as runnable (wave2/wave3 and ub1-ub6)
             raise ValueError('Unsupported universe scenario')
         entries = run_scenario_pack(scenario_id, run_id or 'pf-universe-' + str(uuid.uuid4()))
         results = []

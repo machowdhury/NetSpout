@@ -435,8 +435,19 @@ def main(check=False):
     for p_ in [x for x in rpacks if x["id"].startswith("ind_")]:
         sl.append(f"| {p_['id']} | {p_['industries'][0]} / {p_['subindustry']} | {p_['kind']} | {', '.join(ph['source']['pack'] for ph in p_['phases'])} | {len(p_['required_sourcetypes'])} | {'YES' if p_['id'] in rverified else 'NO'} | {'YES' if p_['id'] in rpanels else 'NO'} | pf_{p_['id']} | {dm.get(p_['id'], {}).get('maturity', 'NONE')} |")
     sl += ["", "Dashboard maturity is assembled from stored evidence (`docs/verification/evidence/dashboards/`): IMPLEMENTED = installed in Splunk and read back identical; DATA_VALIDATED = every data source populated with the run context, KPIs equal independent SPL, tokens bound, drilldowns return rows; "
-           "VISUALLY_VERIFIED = also opened in Splunk Web with the run context and the final screenshot inspected. Installed-and-opened is separate from visually verified. All 33 packs (26 industry + 7 recorded-telemetry) have a Studio view; "
-           "existing operational scenarios outside the replay-pack engine have none yet.", "", "**Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.", "",
+           "VISUALLY_VERIFIED = also opened in Splunk Web with the run context, all three tabs rendered, and the final screenshot inspected. Installed-and-opened is separate from visually verified.", "",
+           "| Scenario family | Kind | Dashboards | Installed | Data-validated | Visually verified |", "|---|---|---|---|---|---|"]
+    fam = Counter()
+    for pid_, v_ in dm.items():
+        k_ = (v_.get("family"), v_.get("kind"))
+        fam[k_ + ("n",)] += 1
+        fam[k_ + ("i",)] += v_["implemented"]
+        fam[k_ + ("d",)] += v_["data_validated"]
+        fam[k_ + ("v",)] += v_["maturity"] == "DASHBOARD_VISUALLY_VERIFIED"
+    for (f_, k_) in sorted({(a, b) for a, b, _ in fam}):
+        sl.append(f"| {f_} | {k_} | {fam[(f_, k_, 'n')]} | {fam[(f_, k_, 'i')]} | {fam[(f_, k_, 'd')]} | {fam[(f_, k_, 'v')]} |")
+    sl += ["", "Not yet covered: ScenarioRunner scenarios (17) and unified-generation scenarios (25) keep their existing dashboard recipes; no Studio view was generated for them in this window.", "",
+           "**Missing inputs (not reconstructed, not claimed integrated):** the original 100 financial-services and 100 telecom use-case libraries. Their IDs are still needed; none of the scenarios above came from them.", "",
            "Replay sample corpus: 10 vendored authentic recordings (`catalog/replay_sources.json`). The Ollama server log was excluded because it mixes three timestamp formats. "
            "SA-Eventgen was not evaluated against its version-specific spec (not installed in any lab); the PulseForge replay engine was reused.", "",
            "## 18-industry coverage matrix", "",

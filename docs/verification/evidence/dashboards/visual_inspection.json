@@ -1,8 +1,9 @@
 {
- "note": "Screenshots of the FINAL render (docs/verification/evidence/dashboards/screens/) that were opened and inspected by the engineer: layout, KPI cards, charts, tables populated and legible, run context shown, no error banners. Design reference: design/ (Figma V2 tokens: terracotta accent, IBM Plex Mono) - these dashboards use the earlier teal-on-navy palette (known deviation, not a defect).",
+ "note": "Final-render screenshots (docs/verification/evidence/dashboards/screens/, generator at the commit that records them) opened and inspected by the engineer: layout, tab content, KPI cards, charts, tables populated and legible, run context shown, no error banners. Design reference design/ (Figma V2): terracotta accent and dark canvas applied; IBM Plex Mono not loadable in Dashboard Studio; markdown links on the dark card have weak contrast (Splunk renders link colour). Only the tabs listed were viewed.",
  "inspected": {
-  "ind_telco_change_induced_outage": "operational template, full page",
-  "ind_gov_citizen_identity_attack": "security template with users table and original analytics list",
-  "ind_agri_edge_gateway_health": "operational template, two hosts"
+  "telco_04_ims_volte": "incident pack with mstats: Engineer tab",
+  "ind_gov_citizen_identity_attack": "security replay pack: Overview tab",
+  "ind_telco_change_induced_outage": "operational replay pack: Engineer tab",
+  "wave3_cloudmail_exfil": "authentic native security pack: Investigation tab"
  }
 }

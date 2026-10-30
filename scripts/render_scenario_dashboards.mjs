@@ -11,7 +11,8 @@ const root = path.resolve(process.cwd(), '..');
 const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/dashboards');
 const sessions = JSON.parse(fs.readFileSync(path.join(evDir, 'sessions.json'), 'utf8')).sessions;
-const packs = JSON.parse(fs.readFileSync(path.join(root, 'catalog/replay_packs.json'), 'utf8')).packs;
+const shots = new Set((process.env.SHOT || '').split(',').filter(Boolean));   // screenshots are stored only for these ids (all tabs)
+const SENT = { NOC: 'Affected assets and services', Engineer: 'Telemetry volume trend by source', Overview: 'Detection status', Investigation: 'Investigation evidence', Evidence: 'Provenance and contract' };
 const only = process.argv[2] ? process.argv[2].split(',') : null;
 const base = `http://127.0.0.1:${env.LAB_WEB_PORT}`;
 fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
@@ -28,35 +29,42 @@ await page.keyboard.press('Enter');
 await page.waitForURL((u) => !u.pathname.includes('/account/login'), { timeout: 60000 });
 
 const results = {};
-for (const p of packs) {
-  if (only && !only.includes(p.id)) continue;
-  const sid = sessions[p.id].session_id;
-  const url = `${base}/en-US/app/netspout/pf_${p.id}?form.run_tok=${encodeURIComponent(sid)}&form.global_time.earliest=-24h%40h&form.global_time.latest=now`;
-  const r = { url: url.replace(base, ''), session_id: sid, errors: [] };
+async function renderOne(pid, info) {
+  const page = await ctx.newPage();
+  const sid = info.run;
+  const url = `${base}/en-US/app/netspout/pf_${pid}?form.run_tok=${encodeURIComponent(sid)}&form.global_time.earliest=-24h%40h&form.global_time.latest=now`;
+  const r = { url: url.replace(base, ''), session_id: sid, family: info.family, errors: [], tabs: {} };
   try {
     const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
     r.http_status = resp ? resp.status() : null;
-    const want = String(sessions[p.id].accepted);
+    const want = String(info.expected_events);
     await page.waitForFunction((w) => document.body.innerText.includes(w), want, { timeout: 90000 }).catch(() => r.errors.push('events count never rendered'));
-    await page.waitForTimeout(6000);   // let remaining searches finish
-    const text = await page.evaluate(() => document.body.innerText);
-    r.title_rendered = text.includes(p.title.slice(0, 40));
+    await page.waitForTimeout(5000);
+    let text = await page.evaluate(() => document.body.innerText);
+    r.title_rendered = text.includes(info.title.slice(0, 30));
     r.events_count_rendered = text.includes(want);
     r.expected_events = Number(want);
-    r.panel_titles_rendered = ['Incident timeline', 'Events by phase'].every((t) => text.includes(t));
     r.run_filter_shows_session = text.includes(sid);
-    r.error_text = (text.match(/(Search (failed|error)|Error in|Unable to load|Could not (load|run)|Search not found)[^\n]{0,80}/gi) || []).slice(0, 5);
-    r.waiting_text = (text.match(/Waiting for (data|input)/gi) || []).length;
-    r.viz_count = await page.locator('[data-test="visualization"], [data-test="splunk.singlevalue"], [data-test="splunk.table"]').count().catch(() => null);
-    await page.screenshot({ path: path.join(evDir, 'screens', `${p.id}.jpg`), type: 'jpeg', quality: 60, fullPage: true });
+    const labels = info.kind === 'operational' ? ['NOC', 'Engineer', 'Evidence'] : ['Overview', 'Investigation', 'Evidence'];
+    for (const [i, label] of labels.entries()) {
+      if (i > 0) { await page.getByText(label, { exact: true }).first().click({ timeout: 15000 }).catch((e) => r.errors.push('tab ' + label + ': ' + String(e).slice(0, 80))); await page.waitForTimeout(6000); text = await page.evaluate(() => document.body.innerText); }
+      const t = { sentinel_rendered: text.includes(SENT[label]), error_text: (text.match(/(Search (failed|error)|Error in|Unable to load|Could not (load|run)|Search not found)[^\n]{0,80}/gi) || []).slice(0, 3), waiting: (text.match(/Waiting for (data|input)/gi) || []).length };
+      r.tabs[label] = t;
+      if (shots.has(pid)) await page.screenshot({ path: path.join(evDir, 'screens', `${pid}__${label}.jpg`), type: 'jpeg', quality: 55, fullPage: true });
+    }
   } catch (e) {
     r.errors.push(String(e).slice(0, 200));
   }
-  r.ok = r.http_status === 200 && r.title_rendered && r.events_count_rendered && r.panel_titles_rendered && r.error_text.length === 0 && r.errors.length === 0 && r.waiting_text === 0;
-  results[p.id] = r;
-  console.log((r.ok ? 'PASS ' : 'FAIL ') + p.id + (r.ok ? '' : ' ' + JSON.stringify({ e: r.errors, t: r.error_text, w: r.waiting_text, c: r.events_count_rendered })));
+  const tabsOk = Object.values(r.tabs).length === 3 && Object.values(r.tabs).every((t) => t.sentinel_rendered && t.error_text.length === 0 && t.waiting === 0);
+  r.ok = r.http_status === 200 && r.title_rendered && r.events_count_rendered && tabsOk && r.errors.length === 0;
+  results[pid] = r;
+  console.log((r.ok ? 'PASS ' : 'FAIL ') + pid + (r.ok ? '' : ' ' + JSON.stringify({ e: r.errors, c: r.events_count_rendered, t: r.tabs })));
+  await page.close();
 }
+const queue = Object.entries(sessions).filter(([pid]) => !only || only.includes(pid));
+const conc = Number(process.env.CONC || 4);   // bounded concurrency: a few independent pages against the lab
+await Promise.all(Array.from({ length: conc }, async () => { for (let item; (item = queue.shift());) await renderOne(item[0], item[1]); }));
 const out = path.join(evDir, 'browser_render.json');
 const prev = fs.existsSync(out) ? JSON.parse(fs.readFileSync(out, 'utf8')).dashboards : {};
-fs.writeFileSync(out, JSON.stringify({ generated_utc: new Date().toISOString(), splunk_web: 'isolated lab', dashboards: { ...prev, ...results } }, null, 1) + '\n');
+fs.writeFileSync(out, JSON.stringify({ generated_utc: new Date().toISOString(), splunk_web: 'isolated lab', dashboards: only ? { ...prev, ...results } : results }, null, 1) + '\n');
 await browser.close();

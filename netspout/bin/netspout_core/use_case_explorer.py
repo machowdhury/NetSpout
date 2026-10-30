@@ -223,7 +223,7 @@ class UseCaseExplorer:
             domain=str(s.get("category", "")).replace("_", " ").title(), category=s.get("category", ""),
             vendors=list(s.get("vendor_scope", [])), sourcetypes=list(s.get("sourcetypes", [])), source_ids=[],
             raw_maturity=s.get("maturity", "NOT_ESTABLISHED"), runnable=runnable, blocked_reason=blocked,
-            dashboard=self._dashboard_ref(sid),
+            dashboard=self._dashboard_ref(sid) or (self._replay_dashboard_ref(sid) if engine == "scenario_pack" else None),
         )
 
     def _candidate_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
@@ -258,7 +258,7 @@ class UseCaseExplorer:
             domain=row["family"].title(), category="INCIDENT_PACK", vendors=[],
             sourcetypes=[f"netspout:{row['family']}:syslog" if row["family"] == "network" else "netspout:telecom:log",
                          f"netspout:{row['family']}:metric"],
-            source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid),
+            source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid) or self._replay_dashboard_ref(sid),
         )
 
     def _replay_dashboard_ref(self, sid: str) -> Optional[Dict[str, Any]]:
@@ -348,8 +348,8 @@ class UseCaseExplorer:
             dash_blocked = "no dashboard recipe is bound to this scenario"
         elif dash["eligibility"] != "ELIGIBLE":
             dash_blocked = "; ".join(dash["reasons"]) or "dashboard is not eligible"
-        elif e["engine"] == "replay_pack":
-            dash_blocked = None   # the Splunk Dashboard Studio view is opened directly with the session as run context
+        elif dash.get("scale"):
+            dash_blocked = None   # a Splunk Dashboard Studio view: opened directly with the run (or replay session) as run context
         elif e["engine"] != "unified_generation":
             dash_blocked = "dashboard validation requires a unified generation run"
         def step(name, method=None, path=None, body=None, note="", blocked_reason=None):
@@ -361,9 +361,9 @@ class UseCaseExplorer:
             step("GENERATE", *gen, note="Modeled telemetry is produced and dispatched to the configured destination", blocked_reason=blocked),
             step("INGEST", note=ing_note, blocked_reason=blocked),
             step("VERIFY", *ver, note=ver_note, blocked_reason=blocked),
-            step("DASHBOARD", "GET", (f"/app/netspout/{dash['splunk_view']}?form.run_tok={{session_id}}" if e["engine"] == "replay_pack" and dash else
+            step("DASHBOARD", "GET", (f"/app/netspout/{dash['splunk_view']}?form.run_tok={{run_id}}" if dash and dash.get("scale") else
                                       f"/api/dashboards/{dash['dashboard_id']}?run_id={{run_id}}" if dash else None), None,
-                 ("Opens the Splunk Dashboard Studio view for this replay session; its maturity is what stored evidence records (" + dash["dashboard_maturity"] + ")" if e["engine"] == "replay_pack" and dash else
+                 ("Opens the Splunk Dashboard Studio view for this run; its maturity is what stored evidence records (" + dash["dashboard_maturity"] + ")" if dash and dash.get("scale") else
                   "Panels are generated for the run; readiness is whatever dashboard validation records, never assumed"),
                  blocked_reason=blocked or dash_blocked),
         ]
@@ -483,7 +483,7 @@ class UseCaseExplorer:
     def _dash_level(e: Dict[str, Any]) -> int:
         """0 none, 1 IMPLEMENTED, 2 DATA_VALIDATED, 3 VISUALLY_VERIFIED (replay-pack dashboards, from stored evidence)."""
         d = e.get("dashboard") or {}
-        return {"DASHBOARD_IMPLEMENTED": 1, "DASHBOARD_DATA_VALIDATED": 2, "DASHBOARD_VISUALLY_VERIFIED": 3}.get(d.get("dashboard_maturity"), 0) if e.get("engine") == "replay_pack" else 0
+        return {"DASHBOARD_IMPLEMENTED": 1, "DASHBOARD_DATA_VALIDATED": 2, "DASHBOARD_VISUALLY_VERIFIED": 3}.get(d.get("dashboard_maturity"), 0) if d.get("scale") else 0
 
     def industries(self) -> List[Dict[str, Any]]:
         """Per approved industry. Cataloged (documented) and runnable (executable) are separate columns; nothing is inferred from one to the other."""

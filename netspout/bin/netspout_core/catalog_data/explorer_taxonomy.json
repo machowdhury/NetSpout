@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "taxonomy_version": "2026.10-phase4e",
   "taxonomy_status": "PROPOSED_DEFAULT",
-  "taxonomy_note": "The 18 industries are a proposed default; replace this list with the approved taxonomy if it differs. Counts are computed from the mappings below, never hardcoded.",
+  "taxonomy_note": "Industry taxonomy is a proposed default: replace this list with the approved taxonomy if it differs. Counts are computed from the mappings below, never hardcoded.",
   "mapping_basis_legend": {
     "industry_pack": "Dashboard/industry pack in the catalog explicitly binds this scenario to the industry.",
     "editorial": "Maintainer judgement that the scenario's telemetry is typical for the industry. Not a customer-validated claim."

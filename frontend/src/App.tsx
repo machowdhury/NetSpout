@@ -20,6 +20,7 @@ import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
 import { ScenarioStudio } from './components/studio/ScenarioStudio';
 import { IndustryStudio } from './components/industry/IndustryStudio';
 import { HomeView } from './components/home/HomeView';
+import { UseCaseExplorer } from './components/explorer/UseCaseExplorer';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
 import { CiscoCoverageView } from './components/catalog/CiscoCoverageView';
@@ -711,6 +712,10 @@ export const App: React.FC = () => {
           onNavigate={navigate}
         />
       );
+    }
+
+    if (route === '/explore') {
+      return <UseCaseExplorer />;
     }
 
     if (route === '/generate/quick') {

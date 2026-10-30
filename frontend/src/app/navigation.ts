@@ -17,6 +17,7 @@ export type ProductMaturity =
 
 export type AppRoute =
   | '/'
+  | '/explore'
   | '/generate/quick'
   | '/generate/scenarios'
   | '/build/studio'
@@ -109,6 +110,10 @@ export const NAVIGATION: NavigationGroup[] = [
   {
     label: 'Home',
     items: [{ label: 'Overview', route: '/', icon: 'home' }],
+  },
+  {
+    label: 'Explore',
+    items: [{ label: 'Use Case Explorer', route: '/explore', icon: 'search', availability: 'BETA' }],
   },
   {
     label: 'Generate',

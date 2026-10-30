@@ -383,10 +383,11 @@ class TestCanonicalGraduation(unittest.TestCase):
         # + 3 Phase 4C scenarios (paloalto_threat_investigation,
         # network_security_correlation, payment_processing_degradation), registered
         # from scripts/register_phase4c_scenarios.py and verified end-to-end,
-        # + 3 Batch-5 Cisco IOS-XE scenario packs (scripts/build_universe_batch5.py).
+        # + 3 Batch-5 Cisco IOS-XE scenario packs (scripts/build_universe_batch5.py)
+        # + 2 Batch-6 Cisco captured-record scenario packs (scripts/build_universe_batch6.py).
         with open(os.path.join(REPO_ROOT, "catalog", "scenarios.json")) as fh:
             rows = json.load(fh)
-        self.assertEqual(len(rows), 56)
+        self.assertEqual(len(rows), 58)
         wave2_rows = [r for r in rows if r["id"].startswith("wave2_")]
         self.assertEqual(len(wave2_rows), 8)
 

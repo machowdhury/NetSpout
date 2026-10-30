@@ -1,10 +1,10 @@
-"""Live verification of Batch 5 against a local Splunk lab (reads the git-ignored tests/lab/phase4e/.env.lab).
+"""Live verification of a native-generator batch (--batch 5|6) against a local Splunk lab (reads the git-ignored tests/lab/phase4e/.env.lab).
 
 1. RAW equality: every family is posted once over HEC; the indexed _raw must equal the submitted bytes.
 2. Product path: each scenario pack is run through the backend API (/api/generate/scenario-pack, dispatching to the
    Connection Center destination) and independent splunkd searches must count the expected events per phase.
 No TA is installed or claimed; this proves delivery and byte fidelity, not parsing or detection. Writes
-catalog/universe_batch5_live_raw_equality_results.json (no credentials). Usage: verify_batch5_live.py [--backend URL]
+catalog/universe_batch<N>_live_raw_equality_results.json (no credentials). Usage: verify_batch_live.py --batch N [--backend URL]
 """
 import argparse
 import base64
@@ -22,11 +22,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
 from netspout_core.models import Node, NodeType
-from netspout_core.universe_batch5_engine import UniverseBatch5Engine, batch_registry
+import importlib
 
 ENV = dict(l.strip().split('=', 1) for l in (ROOT / 'tests/lab/phase4e/.env.lab').read_text().splitlines() if '=' in l)
 CTX = ssl._create_unverified_context()  # isolated loopback lab with a self-signed certificate
 INDEX = 'idx_network_ops'
+SOURCE = None
 
 
 def splunk(path, data=None, method=None):
@@ -54,20 +55,19 @@ def backend(base, path, body=None):
     return json.loads(urllib.request.urlopen(req, timeout=120).read())
 
 
-def raw_equality(run_id):
-    reg = batch_registry()
+def raw_equality(run_id, reg, fmt):
     dev = Node(id='ub5-live', name='edge.example.test', type=NodeType.SWITCH, ip_address='10.201.48.119')
     posted = []
     for s in reg['sources']:
         for f in s['families']:
-            e = UniverseBatch5Engine.format_universe_batch5_log(dev, s['splunk_sourcetype'], f['id'], when=datetime.now(timezone.utc))
+            e = fmt(dev, s['splunk_sourcetype'], f['id'], when=datetime.now(timezone.utc))
             event_id = '%s-%s-%s' % (run_id, s['batch_source_id'], f['id'])
-            hec({'event': e.raw_log, 'sourcetype': s['splunk_sourcetype'], 'index': INDEX, 'source': 'netspout-ub5-live', 'host': dev.name,
+            hec({'event': e.raw_log, 'sourcetype': s['splunk_sourcetype'], 'index': INDEX, 'source': SOURCE, 'host': dev.name,
                  'fields': {'netspout_event_id': event_id, 'netspout_run_id': run_id}})
             posted.append((event_id, s['splunk_sourcetype'], e.raw_log))
     rows = []
     for _ in range(15):
-        rows = search('search index=%s source="netspout-ub5-live" netspout_run_id="%s" | table _raw sourcetype netspout_event_id' % (INDEX, run_id))
+        rows = search('search index=%s source="%s" netspout_run_id="%s" | table _raw sourcetype netspout_event_id' % (INDEX, SOURCE, run_id))
         if len(rows) >= len(posted):
             break
         time.sleep(3)
@@ -82,8 +82,7 @@ def raw_equality(run_id):
     return checks, len(rows)
 
 
-def scenarios(base):
-    reg = batch_registry()
+def scenarios(base, reg):
     results = []
     for sid, steps in reg['scenarios'].items():
         run = backend(base, '/api/generate/scenario-pack', {'scenario_id': sid, 'dispatch': True, 'index': INDEX})
@@ -109,13 +108,19 @@ def scenarios(base):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
+    ap.add_argument('--batch', required=True, choices=['5', '6'])
     ap.add_argument('--backend', default='http://127.0.0.1:8081')
     a = ap.parse_args()
-    run_id = 'pf-ub5-live-' + str(uuid.uuid4())
-    checks, indexed = raw_equality(run_id)
-    scen = scenarios(a.backend)
-    result = {'run_id': run_id, 'source': 'netspout-ub5-live', 'index': INDEX, 'posted': len(checks), 'indexed_rows': indexed, 'post_failures': [],
+    ap_batch = a.batch
+    mod = importlib.import_module('netspout_core.universe_batch%s_engine' % ap_batch)
+    reg = mod.batch_registry()
+    fmt = getattr(getattr(mod, 'UniverseBatch%sEngine' % ap_batch), 'format_universe_batch%s_log' % ap_batch)
+    SOURCE = 'netspout-ub%s-live' % ap_batch
+    run_id = 'pf-ub%s-live-' % ap_batch + str(uuid.uuid4())
+    checks, indexed = raw_equality(run_id, reg, fmt)
+    scen = scenarios(a.backend, reg)
+    result = {'run_id': run_id, 'source': SOURCE, 'index': INDEX, 'posted': len(checks), 'indexed_rows': indexed, 'post_failures': [],
               'raw_equality': checks, 'passes': sum(c['verdict'] == 'PASS' and not c['correlation_leak'] for c in checks),
               'scenario_runs': scen, 'ta_parser_checks_performed': 0, 'detection_checks_performed': 0, 'configuration_changes': 0}
-    (ROOT / 'catalog' / 'universe_batch5_live_raw_equality_results.json').write_text(json.dumps(result, indent=1) + '\n')
+    (ROOT / 'catalog' / ('universe_batch%s_live_raw_equality_results.json' % ap_batch)).write_text(json.dumps(result, indent=1) + '\n')
     print(json.dumps({'raw_equality_pass': '%d/%d' % (result['passes'], len(checks)), 'scenarios': [(s['scenario_id'], s['verdict'], s['independent_count_by_phase']) for s in scen]}, indent=1))

@@ -1,0 +1,394 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "universe-batch6-2026-10-30",
+ "purpose": "Captured Cisco Catalyst Center, SD-WAN, ACI and Nexus records rendered natively with declared time fields; two correlated scenarios.",
+ "baseline_counts": {
+  "native_generators": 148,
+  "sourcetypes": 348
+ },
+ "engine_module": "src/netspout_core/universe_batch6_engine.py",
+ "provenance": "Captured records in netspout/appserver/static/samples/* (Network Assurance replay). Provenance basis is the repository capture, not vendor documentation. Splunk TA parsing is NOT verified.",
+ "sources": [
+  {
+   "batch_source_id": "cisco:dc:aci:class",
+   "vendor": "cisco_aci",
+   "product": "Cisco Dc Aci Class",
+   "splunk_sourcetype": "cisco:dc:aci:class",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "$GOTS$\tadminSt=in-service\tchildAction=\tclearDamp=0\tdampFilter=0\tdampHalfLife=15\tdampMaxSuppressTime=45\tdampReuse=750\tdampSuppress=2000\tdn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets\tl3extInstP_descr=\tl3extInstP_dn=uni/tn-common/out-L3Out-OSPF/instP-All-Subnets\tl3extInstP_name=All-Subnets\tl3extOut_descr=\tl3extOut_dn=uni/tn-common/out-L3Out-OSPF\tl3extOut_name=L3Out-OSPF\tmodTs=2025-08-17T01:00:51.000-05:00\tmonPolDn=uni/tn-common/monepg-default\tname=All-Subnets\toperSt=online\tparentDn=uni/tn-common/out-L3Out-OSPF\tpref=unspecified\trp=no\trtMapDn=\tstatus=\ttargetDscp=unspecified\tapic_host=apic-inb.maple.ciscolabs.com\tcomponent=l3extInstP",
+     "tokens": [
+      "$GOTS$"
+     ],
+     "sample": "cisco-dc-aci-class",
+     "sample_line": 28,
+     "captured_sha256": "b5729a9de4026f97331b0fb1e24c05fdbdfc6ac6fc9bb005bf1b49be8678c814"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:dc:nexus9k",
+   "vendor": "cisco_aci",
+   "product": "Cisco Dc Nexus9K",
+   "splunk_sourcetype": "cisco:dc:nexus9k",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"timestamp\": \"$GOTS$\", \"component\": \"nxpower\", \"device\": \"10.0.0.253:443\", \"Row_info\": {\"voltage_level\": \"12\"}}",
+     "tokens": [
+      "$GOTS$"
+     ],
+     "sample": "cisco-dc-nexus9k",
+     "sample_line": 28,
+     "captured_sha256": "7c19de87a5729ff64f989ba7b907740199f91ea5e2a8fc16ecefcfed018f419f"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"timestamp\": \"$GOTS$\", \"component\": \"nxversion\", \"device\": \"10.0.0.253:443\", \"Row_info\": {\"package_id\": null}}",
+     "tokens": [
+      "$GOTS$"
+     ],
+     "sample": "cisco-dc-nexus9k",
+     "sample_line": 34,
+     "captured_sha256": "d8a8ab727cbc806cbc4f0fa15277ebdf8c3759dbc62933f49340bf085669a3c1"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:catalyst:rogue:verbose",
+   "vendor": "cisco_catalyst",
+   "product": "Cisco Catalyst Rogue Verbose",
+   "splunk_sourcetype": "cisco:catalyst:rogue:verbose",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"macAddress\": \"C2:D6:66:6F:BA:30\", \"mldMacAddress\": \"NA\", \"updatedTime\": $EPOCH_MS$, \"createdTime\": $EPOCH_MS$, \"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"apName\": \"OTT-Lab-9117-AP\", \"detectingAPMac\": \"0C:D0:F8:95:5B:20\", \"ssid\": \"internet\", \"containment\": \"Open\", \"radioType\": \"8\", \"controllerIp\": \"10.0.10.50\", \"controllerName\": \"C9800.maple.ciscolabs.com\", \"channelNumber\": \"6\", \"siteNameHierarchy\": \"Global/Ottawa/OTT02-Lab/OTT02-SDA\", \"encryption\": \"Open\", \"switchIp\": \"-\", \"switchName\": \"-\", \"portDescription\": \"-\"}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-rogue-verbose",
+     "sample_line": 28,
+     "captured_sha256": "8fc396665ec3b2d3320b457f1cd22354d9eb1e36a0d54d28ef601d90123ad1ea"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"macAddress\": \"C6:D6:76:70:F1:20\", \"mldMacAddress\": \"NA\", \"updatedTime\": $EPOCH_MS$, \"createdTime\": $EPOCH_MS$, \"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"apName\": \"OTT-Lab-2802-AP\", \"detectingAPMac\": \"70:7D:B9:13:97:20\", \"ssid\": \"blizzard\", \"containment\": \"Open\", \"radioType\": \"5\", \"controllerIp\": \"NA\", \"controllerName\": \"NA\", \"channelNumber\": \"112\", \"siteNameHierarchy\": \"Global/Ottawa/OTT02-Lab/OTT02-SDA\", \"encryption\": \"Encrypted\", \"switchIp\": \"-\", \"switchName\": \"-\", \"portDescription\": \"-\"}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-rogue-verbose",
+     "sample_line": 34,
+     "captured_sha256": "b4079a68fa5bc3ce8d16fa6b5e6e48e1a758269c0312b0043ce2f24c0a848751"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:catalyst:security:profile_signatures",
+   "vendor": "cisco_catalyst",
+   "product": "Cisco Catalyst Security Profile Signatures",
+   "splunk_sourcetype": "cisco:catalyst:security:profile_signatures",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"profileDetails\": {\"instanceUuid\": \"6fdbebc5-b9f9-45bd-a7a6-735de93e0c25\", \"name\": \"Dovetail-SSID\", \"ssidDetails\": [{\"name\": \"Ott02-LAB-SDA-CORP\", \"enableFabric\": false, \"flexConnect\": {\"enableFlexConnect\": false}, \"interfaceName\": \"management\", \"wlanProfileName\": \"Ott02-LAB-SDA-CORP_profile\", \"policyProfileName\": \"Ott02-LAB-SDA-CORP_profile\"}], \"sites\": [\"Global/Ottawa/OTT02-Lab\", \"Global/Ottawa/OTT02-Lab/OTT02-SDA\"]}}",
+     "tokens": [],
+     "sample": "cisco-catalyst-security-profile-signatures",
+     "sample_line": 28,
+     "captured_sha256": "2c6a00425883ced28590c5d90690ede4733f04b46f99d9c753879fe2346a43d4"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:catalyst:threat:summary",
+   "vendor": "cisco_catalyst",
+   "product": "Cisco Catalyst Threat Summary",
+   "splunk_sourcetype": "cisco:catalyst:threat:summary",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 16, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 6, \"threatTypeInt\": \"18000\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 3, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"threatCount\": 1, \"threatTypeInt\": \"5001\"}]}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-threat-summary",
+     "sample_line": 28,
+     "captured_sha256": "afc187687762058588bc172228a59f35e32f9cdeb8db2f386488d167a1c4bc41"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 17, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"threatCount\": 2, \"threatTypeInt\": \"5001\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 4, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 3, \"threatTypeInt\": \"18000\"}]}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-threat-summary",
+     "sample_line": 34,
+     "captured_sha256": "e3dbf1170d6fd5bced186d3b33c1a5c6400da7787a7770b54124fd985dc45f80"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:catalyst:threat:summary:legacy",
+   "vendor": "cisco_catalyst",
+   "product": "Cisco Catalyst Threat Summary Legacy",
+   "splunk_sourcetype": "cisco:catalyst:threat:summary:legacy",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 17, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 3, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 2, \"threatTypeInt\": \"18000\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"threatCount\": 1, \"threatTypeInt\": \"5001\"}]}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-threat-summary-legacy",
+     "sample_line": 28,
+     "captured_sha256": "42d46eb72791b10c15b9088b6459d4657ff663c55a19baac4791a8c056c3a1f6"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"timestamp\": $EPOCH_MS$, \"threatData\": [{\"threatType\": \"mapleRule2\", \"threatLevel\": \"High\", \"threatCount\": 21, \"threatTypeInt\": \"18001\"}, {\"threatType\": \"rougeRule\", \"threatLevel\": \"High\", \"threatCount\": 2, \"threatTypeInt\": \"18000\"}, {\"threatType\": \"Neighbor\", \"threatLevel\": \"Informational\", \"threatCount\": 4, \"threatTypeInt\": \"1901\"}, {\"threatType\": \"Interferer\", \"threatLevel\": \"Potential\", \"threatCount\": 1, \"threatTypeInt\": \"5001\"}]}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-catalyst-threat-summary-legacy",
+     "sample_line": 34,
+     "captured_sha256": "0298958e19c1dab59f716adc5bcb6444d30b0701b377fdb7f132918e1ced8551"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:sdwan:ssetunnels",
+   "vendor": "cisco_sdwan",
+   "product": "Cisco Sdwan Ssetunnels",
+   "splunk_sourcetype": "cisco:sdwan:ssetunnels",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"device-state\": \"Up\", \"tunnel-if-name\": \"Tunnel17000102\", \"vdevice-name\": \"172.80.1.10\", \"createTimeStamp\": $EPOCH_MS$, \"sse-tcsm\": \"-\", \"vdevice-host-name\": \"C1131X-site8000\", \"tunnelType\": \"SSE-Private access\", \"vdevice-dataKey\": \"172.80.1.10-Tunnel17000102--\", \"destination-data-center\": \"35.171.214.188\", \"vmanage-system-ip\": \"172.80.1.10\", \"tenantId\": \"default\", \"lastupdated\": $EPOCH_MS$, \"sig-state\": \"Up\", \"eventNumber\": 0, \"site-name\": \"Montreal\", \"device-packets-in\": 0, \"device-packets-out\": 0, \"site-id\": \"8000\", \"tunnel-name\": \"us-east-1\", \"tunnel-id\": \"666447230\", \"tunnel-type\": \"IPSEC\", \"provider\": \"Cisco Secure Access\", \"lastModified\": $EPOCH_MS$}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-sdwan-ssetunnels",
+     "sample_line": 28,
+     "captured_sha256": "0153a35d5613efee7d0aaf5d47054350b9d84f97b662270bf05673950e0a3c5a"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"device-state\": \"Up\", \"tunnel-if-name\": \"Tunnel17000102\", \"vdevice-name\": \"172.80.1.10\", \"createTimeStamp\": $EPOCH_MS$, \"sse-tcsm\": \"-\", \"vdevice-host-name\": \"C1131X-site8000\", \"tunnelType\": \"SSE-Private access\", \"vdevice-dataKey\": \"172.80.1.10-Tunnel17000102--\", \"destination-data-center\": \"35.171.214.188\", \"vmanage-system-ip\": \"172.80.1.10\", \"tenantId\": \"default\", \"lastupdated\": $EPOCH_MS$, \"sig-state\": \"Up\", \"eventNumber\": 0, \"site-name\": \"Montreal\", \"device-packets-in\": 0, \"device-packets-out\": 0, \"site-id\": \"8000\", \"tunnel-name\": \"us-east-1\", \"tunnel-id\": \"666447230\", \"tunnel-type\": \"IPSEC\", \"provider\": \"Cisco Secure Access\", \"lastModified\": $EPOCH_MS$}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-sdwan-ssetunnels",
+     "sample_line": 34,
+     "captured_sha256": "0153a35d5613efee7d0aaf5d47054350b9d84f97b662270bf05673950e0a3c5a"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:sdwan:sytem:logs",
+   "vendor": "cisco_sdwan",
+   "product": "Cisco Sdwan Sytem Logs",
+   "splunk_sourcetype": "cisco:sdwan:sytem:logs",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "$TS$ 192.168.128.1 1 $EPOCH_NS$ MX_67_Home ip_flow_end src=192.168.128.102 dst=23.220.93.204 protocol=tcp sport=52390 dport=443 translated_src_ip=192.168.1.66 translated_port=52390",
+     "tokens": [
+      "$EPOCH_NS$",
+      "$TS$"
+     ],
+     "sample": "cisco-sdwan-sytem-logs",
+     "sample_line": 28,
+     "captured_sha256": "3a31e0037c72e441549204e86194d61652356657f6998c320768c1d1a268d002"
+    },
+    {
+     "id": "captured_2",
+     "template": "$TS$ 192.168.128.1 1 $EPOCH_NS$ MX_67_Home ip_flow_start src=192.168.128.70 dst=10.80.80.2 protocol=tcp sport=55599 dport=443 translated_src_ip=192.168.1.66 translated_port=55599",
+     "tokens": [
+      "$EPOCH_NS$",
+      "$TS$"
+     ],
+     "sample": "cisco-sdwan-sytem-logs",
+     "sample_line": 34,
+     "captured_sha256": "fd9dceddfed1a915d1fe69decd19d61153d61c6a8e8e1619d1b24a3e2e872e80"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:sdwan:utd:logs",
+   "vendor": "cisco_sdwan",
+   "product": "Cisco Sdwan Utd Logs",
+   "splunk_sourcetype": "cisco:sdwan:utd:logs",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "$TS$ 192.168.128.132 $UTD_TS$ [**] [Hostname: c8kv-site-3000-gw1] [**] [System_IP: 172.100.1.5] [**] [Instance_ID: 1] [**] Drop [**] UTD WebFilter Category/Reputation [**] [URL: www.tekdefense.com/downloads/malware-samples/1.exe.zip] ** [Category: Malware Sites] ** [Reputation: 10] [POLICY: BR-TYPE2-AIP] {TCP} 10.33.35.101:55924 -> 198.185.159.160:80",
+     "tokens": [
+      "$TS$",
+      "$UTD_TS$"
+     ],
+     "sample": "cisco-sdwan-utd-logs",
+     "sample_line": 28,
+     "captured_sha256": "00d423c80136a9c0ef33ebbb85eb8df7c0c37da02f9bc39cc7774438d7308d0e"
+    },
+    {
+     "id": "captured_2",
+     "template": "$TS$ 192.168.128.218 $UTD_TS$ [**] [Hostname: c4451x-site5000] [**] [System_IP: 172.50.1.1] [**] [Instance_ID: 1] [**] Drop [**] [1:25659:6] MALWARE-CNC User-Agent known malicious user agent - spam_bot [**] [Classification: A Network Trojan was Detected] [Priority: 1] [POLICY: BR-TYPE2-AIP] {TCP} 10.50.50.110:45764 -> 150.171.27.10:80",
+     "tokens": [
+      "$TS$",
+      "$UTD_TS$"
+     ],
+     "sample": "cisco-sdwan-utd-logs",
+     "sample_line": 34,
+     "captured_sha256": "d3d99a0d0fa7c1b72b7e8f84c567b802fc02a11106db2a54f93b533396403ceb"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "cisco:sdwan:utdhealth",
+   "vendor": "cisco_sdwan",
+   "product": "Cisco Sdwan Utdhealth",
+   "splunk_sourcetype": "cisco:sdwan:utdhealth",
+   "generator": "format_universe_batch6_log",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "{\"vdevice-dataKey\": \"172.100.1.5\", \"utd-engine-status-version\": \"1.1.0_SV3.3.5.0_XE17.18\", \"vdevice-name\": \"172.100.1.5\", \"utd-engine-status-memory-status\": \"utd-oper-status-green\", \"lastupdated\": $EPOCH_MS$, \"utd-engine-status-status\": \"utd-oper-status-green\", \"utd-engine-status-memory-usage\": \"44.9\", \"vdevice-host-name\": \"c8kv-site-3000-gw1\", \"utd-engine-status-profile\": \"Cloud-Low\"}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-sdwan-utdhealth",
+     "sample_line": 28,
+     "captured_sha256": "093542fcfeef1d0184db74586cb1b03f779b8fe6b58b6c81dd4a148c18e71069"
+    },
+    {
+     "id": "captured_2",
+     "template": "{\"vdevice-dataKey\": \"172.50.1.1\", \"utd-engine-status-version\": \"1.2.2_SV3.1.81.0_XE17.12\", \"vdevice-name\": \"172.50.1.1\", \"utd-engine-status-memory-status\": \"utd-oper-status-green\", \"lastupdated\": $EPOCH_MS$, \"utd-engine-status-status\": \"utd-oper-status-green\", \"utd-engine-status-memory-usage\": \"52.2\", \"vdevice-host-name\": \"C4451X-site5000\", \"utd-engine-status-profile\": \"Cloud-Low\"}",
+     "tokens": [
+      "$EPOCH_MS$"
+     ],
+     "sample": "cisco-sdwan-utdhealth",
+     "sample_line": 34,
+     "captured_sha256": "e017a80fc070bea4d0c6ef5b1b732f6848ac567b7bf6a0dc61195afe122b61cd"
+    }
+   ]
+  }
+ ],
+ "scenarios": {
+  "ub6_sdwan_utd_threat_pipeline": [
+   {
+    "phase": "BASELINE",
+    "sourcetype": "cisco:sdwan:utdhealth",
+    "family": "captured_1"
+   },
+   {
+    "phase": "BASELINE",
+    "sourcetype": "cisco:sdwan:ssetunnels",
+    "family": "captured_1"
+   },
+   {
+    "phase": "DETECT",
+    "sourcetype": "cisco:sdwan:utd:logs",
+    "family": "captured_1"
+   },
+   {
+    "phase": "DETECT",
+    "sourcetype": "cisco:sdwan:utd:logs",
+    "family": "captured_2"
+   },
+   {
+    "phase": "VALIDATE",
+    "sourcetype": "cisco:sdwan:utdhealth",
+    "family": "captured_2"
+   },
+   {
+    "phase": "VALIDATE",
+    "sourcetype": "cisco:sdwan:ssetunnels",
+    "family": "captured_2"
+   }
+  ],
+  "ub6_catalyst_wireless_rogue_threat": [
+   {
+    "phase": "BASELINE",
+    "sourcetype": "cisco:catalyst:security:profile_signatures",
+    "family": "captured_1"
+   },
+   {
+    "phase": "BASELINE",
+    "sourcetype": "cisco:catalyst:threat:summary:legacy",
+    "family": "captured_1"
+   },
+   {
+    "phase": "DETECT",
+    "sourcetype": "cisco:catalyst:rogue:verbose",
+    "family": "captured_1"
+   },
+   {
+    "phase": "DETECT",
+    "sourcetype": "cisco:catalyst:rogue:verbose",
+    "family": "captured_2"
+   },
+   {
+    "phase": "DETECT",
+    "sourcetype": "cisco:catalyst:threat:summary",
+    "family": "captured_1"
+   },
+   {
+    "phase": "VALIDATE",
+    "sourcetype": "cisco:catalyst:threat:summary",
+    "family": "captured_2"
+   }
+  ]
+ },
+ "counts_summary": {
+  "new_native_sourcetypes": 10,
+  "families": 18,
+  "scenario_packs": 2
+ }
+}

@@ -70,7 +70,7 @@ Coverage is now computed from repository evidence by `scripts/generate_coverage_
 | P4-001 Sourcetype coverage | Native generators 112 → **142** of 348 (Batch 5, +31 Cisco IOS-XE change/fault/health sourcetypes); byte-verified in Splunk 87 → **118**; independently indexed 64 → **95**. The 70% target is **not** met (142/348 = 41%). |
 | P4-002 Cisco IOS XE telemetry | Partial: IOS-XE change/fault/health syslog done (Batch 5). Catalyst Center / DNAC, Meraki, Intersight, Duo and ISE API-style sourcetypes remain sample-replay only. |
 | Network change/fault scenarios | +3 executable packs (`ub5_*`): change-induced outage, platform health degradation, NAC RADIUS outage. Maturity stays CONTRACTED. |
-| Financial / telecom scenario libraries | **Not integrated: the supplied library files are not in the repository or the usual local folders.** Needed: the financial-services and telecom scenario library source files (scenario definitions plus any sample payloads). Nothing was invented in their place. |
+| Financial / telecom scenario libraries | **Not integrated; inputs missing.** Needed: the 100 financial-services and 100 telecom use-case library files (scenario definitions, any sample payloads, and their original IDs so they can be ingested with stable IDs, provenance, dedup and maturity labels). Checked only the repository (`docs/`, `catalog/`, `tests/`) and the usual local folders (`~/Projects`, `~/Downloads`, `~/Documents`, `~/Desktop`); found only unrelated Splunk marketing PDFs. Nothing was invented in their place. |
 | TA validation | Unchanged (1 partial: ISE). Batch 5 proves delivery and byte fidelity only; no Cisco TA parsing is claimed. |
 
 ### Batch 5 live evidence (Splunk 10.2.7 lab, index `idx_network_ops`)
@@ -79,3 +79,14 @@ Coverage is now computed from repository evidence by `scripts/generate_coverage_
 * Product path: `POST /api/generate/scenario-pack` dispatched 20 / 10 / 8 events for the three `ub5_*` packs; independent per-phase counts matched exactly; no correlation metadata in `_raw`.
 * Explorer (inside Splunk Web): `Cisco Change-Induced Outage` Select, Configure, Generate (20), Ingest (HEC accepted 20 of 20), Verify (Splunk indexed 20 of 20); independent search by phase 3/4/8/5.
 * Not claimed: Cisco TA parsing of these sourcetypes, detections, dashboards for these packs, or maturity above CONTRACTED.
+
+### Batch 6 and counting reconciliation (2026-10-30)
+
+| Item | Result |
+|---|---|
+| Batch 5 "31 added, 30 counted" | `cisco:sdwan:BGP-5-ADJCHANGE` already had a native formatter, so it now has two generators. Not a counting defect. |
+| Real counting defect found | The scanner missed generators declared as default arguments or in dedicated generator modules: `pan:system`, `cisco:duo:remote:vpn`, `cisco:catalyst:clienthealth`, `meraki:assurancealerts`, `netspout:snmp:poll`, `netspout:snmp:trap` (+6, fixed in `scripts/generate_coverage_report.py`). |
+| Batch 6 (+10 native) | 10 captured Cisco records promoted (ACI class, Nexus power, Catalyst rogue/threat/profile, SD-WAN SSE tunnels, UTD logs and health, MX flow) with declared time fields; 2 correlated scenarios (`ub6_*`). Live: 18/18 byte-equal; both scenarios counted exactly per phase in Splunk. |
+| Deliberately not promoted | 10 Catalyst rows whose captured text is an empty-poller status string, a bare number or a heartbeat; ~136 demo-authored samples (dated 2026, invented names); fault-injection templates without a format reference. |
+| FortiGate (7 rows) | Official FortiOS 7.4.0 Log Message Reference pages print field tables but **no sample log lines**, so no native generator was built; keep as sample replay until a pinned authentic log or the PDF samples are supplied. |
+| 70% target (244/348) | **Not reachable on current evidence**: 158 native. Remaining 190 need authentic captures or documented sample lines per source. Exact blocker list: Aruba, Arista, Cisco ASA/FTD/NX-OS syslog, F5, Juniper, Sophos, Zscaler, Radware, Check Point, Nokia, A10, Huawei, Extreme, Dell, Netskope, Forcepoint, SonicWall, WatchGuard, VMware NSX, Cloudflare, NetApp, Nutanix, Meraki API, Intersight, Duo, remaining Catalyst/DNAC API types. |

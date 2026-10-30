@@ -1720,3 +1720,14 @@ except ImportError:
         from universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
 SplunkLogEngine.UNIVERSE_BATCH5_SOURCE_SOURCETYPES = UNIVERSE_BATCH5_SOURCE_SOURCETYPES
 SplunkLogEngine.format_universe_batch5_log = UniverseBatch5Engine.format_universe_batch5_log
+
+# Batch 6 native source/family dispatch for captured Cisco Catalyst Center, SD-WAN, ACI and Nexus records.
+try:
+    from netspout_core.universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH6_SOURCE_SOURCETYPES = UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch6_log = UniverseBatch6Engine.format_universe_batch6_log

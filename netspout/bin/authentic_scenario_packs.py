@@ -76,6 +76,8 @@ SCENARIO_PACK_IDS = [
     "ub5_cisco_change_induced_outage",
     "ub5_cisco_platform_health_degradation",
     "ub5_cisco_nac_radius_outage",
+    "ub6_sdwan_utd_threat_pipeline",
+    "ub6_catalyst_wireless_rogue_threat",
 ]
 
 
@@ -188,6 +190,15 @@ def run_scenario_pack(scenario_id: str, run_id: Optional[str] = None,
             except ImportError:
                 from universe_batch5_engine import run_batch5_scenario
         return run_batch5_scenario(scenario_id, run_id, _tag, source_ip)
+    if scenario_id.startswith("ub6_"):
+        try:
+            from netspout_core.universe_batch6_engine import run_batch6_scenario
+        except ImportError:
+            try:
+                from app.universe_batch6_engine import run_batch6_scenario
+            except ImportError:
+                from universe_batch6_engine import run_batch6_scenario
+        return run_batch6_scenario(scenario_id, run_id, _tag, source_ip)
     raise ValueError(f"Unknown authentic scenario pack: {scenario_id}")
 
 

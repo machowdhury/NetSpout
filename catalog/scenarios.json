@@ -7539,5 +7539,148 @@
    }
   ],
   "registry_reference": "catalog/universe_batch5.json"
+ },
+ {
+  "id": "ub6_sdwan_utd_threat_pipeline",
+  "code": "SEC-UB6-01",
+  "name": "SD-WAN UTD Threat Pipeline",
+  "display_name": "SD-WAN UTD Threat Pipeline",
+  "category": "SECURITY",
+  "ecosystem": "pure_cisco",
+  "maturity": "CONTRACTED",
+  "description": "UTD engine health and SSE tunnel state are baselined, UTD drops a malware URL and a known malicious user agent at the branch (the log and health records share system IP and hostname), then health and tunnels are confirmed again. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cisco:sdwan:utdhealth",
+   "cisco:sdwan:ssetunnels",
+   "cisco:sdwan:utd:logs"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 90,
+  "vendor_scope": [
+   "cisco_sdwan"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "cisco:sdwan:utdhealth: captured_1",
+   "cisco:sdwan:ssetunnels: captured_1",
+   "cisco:sdwan:utd:logs: captured_1",
+   "cisco:sdwan:utd:logs: captured_2",
+   "cisco:sdwan:utdhealth: captured_2",
+   "cisco:sdwan:ssetunnels: captured_2"
+  ],
+  "expected_phases": [
+   "baseline",
+   "detect",
+   "validate"
+  ],
+  "telemetry_model": "Cisco Catalyst Center / SD-WAN captured records",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders captured Cisco records with declared time fields resolved and delivers them to Splunk through HEC. This is a modeled sequence rather than a live API or syslog session; correlation metadata stays on HEC fields instead of the RAW event. Splunk TA parsing of these sourcetypes is not verified.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   },
+   {
+    "phase": "DETECT",
+    "name": "Detect",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch6.json"
+ },
+ {
+  "id": "ub6_catalyst_wireless_rogue_threat",
+  "code": "NET-UB6-02",
+  "name": "Catalyst Wireless Rogue And Threat Summary",
+  "display_name": "Catalyst Wireless Rogue And Threat Summary",
+  "category": "NETWORK_OPERATIONS",
+  "ecosystem": "pure_cisco",
+  "maturity": "CONTRACTED",
+  "description": "A wireless profile and legacy threat summary are baselined, Catalyst Center reports rogue and neighbor access points, and the threat summary rises. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+  "generation_mode": "SCENARIO_DERIVED",
+  "generation_modes": [
+   "SCENARIO_DERIVED"
+  ],
+  "sourcetypes": [
+   "cisco:catalyst:security:profile_signatures",
+   "cisco:catalyst:threat:summary:legacy",
+   "cisco:catalyst:rogue:verbose",
+   "cisco:catalyst:threat:summary"
+  ],
+  "default_topology_id": "mixed_sase",
+  "topology_id": "mixed_sase",
+  "difficulty": "ADVANCED",
+  "estimated_duration_sec": 90,
+  "vendor_scope": [
+   "cisco_catalyst"
+  ],
+  "telemetry_requirements": [
+   "hec_event"
+  ],
+  "affected_entities": [
+   "mixed_sase"
+  ],
+  "expected_observations": [
+   "cisco:catalyst:security:profile_signatures: captured_1",
+   "cisco:catalyst:threat:summary:legacy: captured_1",
+   "cisco:catalyst:rogue:verbose: captured_1",
+   "cisco:catalyst:rogue:verbose: captured_2",
+   "cisco:catalyst:threat:summary: captured_1",
+   "cisco:catalyst:threat:summary: captured_2"
+  ],
+  "expected_phases": [
+   "baseline",
+   "detect",
+   "validate"
+  ],
+  "telemetry_model": "Cisco Catalyst Center / SD-WAN captured records",
+  "transport_protocol": "Splunk HEC",
+  "splunk_storage": "Splunk Event Index (idx_network_ops)",
+  "fidelity_badge": "MODELED PAYLOAD",
+  "telemetry_notes": "PulseForge renders captured Cisco records with declared time fields resolved and delivers them to Splunk through HEC. This is a modeled sequence rather than a live API or syslog session; correlation metadata stays on HEC fields instead of the RAW event. Splunk TA parsing of these sourcetypes is not verified.",
+  "phases": [
+   {
+    "phase": "BASELINE",
+    "name": "Baseline",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   },
+   {
+    "phase": "DETECT",
+    "name": "Detect",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   },
+   {
+    "phase": "VALIDATE",
+    "name": "Validate",
+    "duration_ticks": 1,
+    "description": "Captured record observation"
+   }
+  ],
+  "registry_reference": "catalog/universe_batch6.json"
  }
 ]

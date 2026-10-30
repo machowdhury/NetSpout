@@ -7042,6 +7042,78 @@
       "executable": false
     },
     {
+      "kind": "scenario",
+      "id": "ub6_sdwan_utd_threat_pipeline",
+      "title": "SD-WAN UTD Threat Pipeline",
+      "domain": "SECURITY",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "UTD engine health and SSE tunnel state are baselined, UTD drops a malware URL and a known malicious user agent at the branch (the log and health records share system IP and hostname), then health and tunnels are confirmed again. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cisco:sdwan:utdhealth",
+        "cisco:sdwan:ssetunnels",
+        "cisco:sdwan:utd:logs"
+      ],
+      "scenario_ids": [
+        "ub6_sdwan_utd_threat_pipeline"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:sdwan:utdhealth",
+        "cisco:sdwan:ssetunnels",
+        "cisco:sdwan:utd:logs"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "UTD engine health and SSE tunnel state are baselined, UTD drops a malware URL and a known malicious user agent at the branch (the log and health records share system IP and hostname), then health and tunnels are confirmed again. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
+      "kind": "scenario",
+      "id": "ub6_catalyst_wireless_rogue_threat",
+      "title": "Catalyst Wireless Rogue And Threat Summary",
+      "domain": "NETWORK_OPERATIONS",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "Cisco Systems"
+      ],
+      "readiness": "Legacy / verification pending",
+      "description": "A wireless profile and legacy threat summary are baselined, Catalyst Center reports rogue and neighbor access points, and the threat summary rises. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+      "sourcetypes": [
+        "cisco:catalyst:security:profile_signatures",
+        "cisco:catalyst:threat:summary:legacy",
+        "cisco:catalyst:rogue:verbose",
+        "cisco:catalyst:threat:summary"
+      ],
+      "scenario_ids": [
+        "ub6_catalyst_wireless_rogue_threat"
+      ],
+      "dashboard_ids": [],
+      "required_telemetry": [
+        "cisco:catalyst:security:profile_signatures",
+        "cisco:catalyst:threat:summary:legacy",
+        "cisco:catalyst:rogue:verbose",
+        "cisco:catalyst:threat:summary"
+      ],
+      "gaps": [
+        "Execution and parser compatibility require separate validation."
+      ],
+      "objective": "A wireless profile and legacy threat summary are baselined, Catalyst Center reports rogue and neighbor access points, and the threat summary rises. Executable sequence of captured Cisco records; no detection efficacy or real causality claimed.",
+      "filename": null,
+      "evidence": [],
+      "executable": false
+    },
+    {
       "kind": "dashboard",
       "id": "discovery-security",
       "title": "Security incident simulation",
@@ -8059,7 +8131,9 @@
       "sourcetypes": [
         "cisco:catalyst:rogue:verbose"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub6_catalyst_wireless_rogue_threat"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -8239,7 +8313,9 @@
       "sourcetypes": [
         "cisco:catalyst:security:profile_signatures"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub6_catalyst_wireless_rogue_threat"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -8389,7 +8465,9 @@
       "sourcetypes": [
         "cisco:catalyst:threat:summary"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub6_catalyst_wireless_rogue_threat"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -8414,7 +8492,9 @@
       "sourcetypes": [
         "cisco:catalyst:threat:summary:legacy"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub6_catalyst_wireless_rogue_threat"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],
@@ -10781,7 +10861,8 @@
       ],
       "scenario_ids": [
         "sdwan_toronto",
-        "sdwan"
+        "sdwan",
+        "ub6_sdwan_utd_threat_pipeline"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -10919,7 +11000,8 @@
         "cisco:sdwan:utd:logs"
       ],
       "scenario_ids": [
-        "sdwan_toronto"
+        "sdwan_toronto",
+        "ub6_sdwan_utd_threat_pipeline"
       ],
       "dashboard_ids": [],
       "formats": [],
@@ -10945,7 +11027,9 @@
       "sourcetypes": [
         "cisco:sdwan:utdhealth"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "ub6_sdwan_utd_threat_pipeline"
+      ],
       "dashboard_ids": [],
       "formats": [],
       "profiles": [],

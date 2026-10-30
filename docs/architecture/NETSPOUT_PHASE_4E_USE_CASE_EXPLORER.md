@@ -76,6 +76,6 @@ Security: **Select → Prerequisites → Generate → Ingest → Enable Detectio
 
 * Hermetic: `tests/test_phase4e_use_case_explorer.py` (24 tests, local Splunk REST stub), `tests/test_gate8_unified_evidence.py` (26).
 * Browser: `frontend/tests/phase4e-use-case-explorer.spec.ts` (5) against the real backend with an unconfigured Connection Center.
-* **Not performed:** live Splunk ingest, saved-search enablement, detection verification, dashboard validation. No NetSpout lab
-  was reachable and no credentials were provided. Those steps are implemented and unit-tested against a protocol stub, not
-  proven against Splunk.
+* **Live:** operational and security workflows were run against a real Splunk 10.2.7 lab and independently verified; see
+  `docs/verification/pulseforge_phase4e_live_splunk_acceptance.md` (including what remains unverified: ES, visual dashboard
+  validation, collector-dependent gNMI E2E).

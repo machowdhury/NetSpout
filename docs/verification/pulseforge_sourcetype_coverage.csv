@@ -123,6 +123,7 @@ mikrotik,mikrotik:routeros,Carrier & Enterprise Routing,event,hec,active,NATIVE_
 model_context_protocol,mcp:jsonrpc,Agentic AI Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
 mongodb,mongodb:log,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 nginx_f5,nginx:access,Web Observability,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+nginx_f5,nginx:plus:access,Web Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
 nokia_sr,nokia:sros:syslog,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
 nozomi_networks,nozomi:universal_alert,OT & ICS Security,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
 okta,OktaIM2:log,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES

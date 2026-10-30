@@ -20,7 +20,7 @@ def _script():
 def test_coverage_origin_arithmetic_closes_and_partitions_the_catalog(capsys):
     _script().main(check=True)  # raises AssertionError if baseline + corrections + batch net-new != native, or the partition is not disjoint
     out = json.loads(capsys.readouterr().out)["sourcetypes"]
-    assert out["native_generators"] + out["sample_replay_only"] + out["no_generator"] == out["catalog_sourcetypes"] == 348
+    assert out["native_generators"] + out["sample_replay_only"] + out["no_generator"] == out["catalog_sourcetypes"] == 349
 
 
 def test_indexed_evidence_requires_a_harness_that_posted_and_searched(tmp_path):

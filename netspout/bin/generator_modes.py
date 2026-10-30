@@ -158,6 +158,10 @@ class TelemetryGeneratorService:
         return events
 
     def _universe_source(self, sourcetype):
+        from netspout_core.universe_batch7_engine import batch_registry as batch7_registry
+        source = next((s for s in batch7_registry()['sources'] if s['splunk_sourcetype'] == sourcetype), None)
+        if source:
+            return source, 'catalog/universe_batch7.json'
         from netspout_core.universe_batch6_engine import batch_registry as batch6_registry
         source = next((s for s in batch6_registry()['sources'] if s['splunk_sourcetype'] == sourcetype), None)
         if source:
@@ -194,7 +198,9 @@ class TelemetryGeneratorService:
             raise ValueError('Unsupported native event family')
         device = Node(id='source-preview', name='source-preview.example.test',
                       type=NodeType.WEB_SERVER, ip_address='198.51.100.10')
-        if source.get('generator') == 'format_universe_batch6_log':
+        if source.get('generator') == 'format_universe_batch7_log':
+            entry = SplunkLogEngine.format_universe_batch7_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)
+        elif source.get('generator') == 'format_universe_batch6_log':
             entry = SplunkLogEngine.format_universe_batch6_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)
         elif source.get('generator') == 'format_universe_batch5_log':
             entry = SplunkLogEngine.format_universe_batch5_log(device=device, sourcetype=source['splunk_sourcetype'], family=family)

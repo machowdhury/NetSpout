@@ -1731,3 +1731,14 @@ except ImportError:
         from universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
 SplunkLogEngine.UNIVERSE_BATCH6_SOURCE_SOURCETYPES = UNIVERSE_BATCH6_SOURCE_SOURCETYPES
 SplunkLogEngine.format_universe_batch6_log = UniverseBatch6Engine.format_universe_batch6_log
+
+# Batch 7 native source/family dispatch for authentic NGINX Plus key=value access records.
+try:
+    from netspout_core.universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH7_SOURCE_SOURCETYPES = UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch7_log = UniverseBatch7Engine.format_universe_batch7_log

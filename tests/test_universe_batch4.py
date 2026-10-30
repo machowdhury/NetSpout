@@ -184,7 +184,7 @@ def test_batch1_and_batch3_statuses_remain_visible_in_batch4_registry():
 def test_ta_mapping_assessment_covers_every_canonical_source():
     matrix=read('catalog/universe_batch4_parser_assessments.json')
     assert len(matrix['sources'])==348 and matrix['new_verified_sourcetypes']==0
-    assert {s['sourcetype'] for s in matrix['sources']}=={s['splunk_sourcetype'] for s in read('catalog/sourcetypes.json')}
+    assert {s['sourcetype'] for s in matrix['sources']}=={s['splunk_sourcetype'] for s in read('catalog/sourcetypes.json')}-{s['splunk_sourcetype'] for s in read('catalog/universe_batch7.json')['sources']}  # Batch 7 postdates the assessment
     actual=[s for s in matrix['sources'] if s['status']=='ACTUAL_EXECUTION_PARTIAL_WITH_BLOCKER']
     assert len(actual)==1 and actual[0]['sourcetype']=='cisco:ise:syslog'
     assert actual[0]['evidence']=='catalog/universe_batch3_ise_parser_results.json'

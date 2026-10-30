@@ -160,3 +160,6 @@ stories have no resolving page and were excluded). Curated is not executable: on
 
 **Evidence limits unchanged.** No sourcetype was promoted: the remaining 143 sample-replay and 47 missing sources have no authentic format reference, and the pinned attack-data corpus backs none of them.
 The original 100 financial and 100 telecom files are still missing; when supplied they should be imported as a new source in `scenario_candidates.json` using their original IDs and the same dedupe rule.
+
+## Update 2026-10-30: Splunkbase add-on cross-reference
+Catalog 349 sourcetypes, native generators 159 (+1 `nginx:plus:access`, byte-equal in the isolated lab, TA parsing NOT validated), 37 of 100 Cisco `required_ta` rows now verified-declared by Splunkbase (declaration only). No CONTRACTED scenario was unblocked; eight blocking sourcetypes still lack authentic samples. Full detail and blockers: `pulseforge_splunkbase_gap_analysis.md`.

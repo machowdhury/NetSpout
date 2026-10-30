@@ -4,14 +4,14 @@ Generated 2026-10-30 by `scripts/generate_coverage_report.py` from repository ev
 
 | Measure | Count | Of catalog |
 |---|---|---|
-| Cataloged sourcetypes | 348 | 100.0% |
-| Vendor-native generator | 158 | 45.4% |
-| Sample replay only | 143 | 41.1% |
+| Cataloged sourcetypes | 349 | 100.0% |
+| Vendor-native generator | 159 | 45.6% |
+| Sample replay only | 143 | 41.0% |
 | No generator | 47 | 13.5% |
-| Format verified (byte-equal raw in Splunk) | 128 | 36.8% |
+| Format verified (byte-equal raw in Splunk) | 129 | 37.0% |
 | Vendor TA validated (full or partial; Cisco ISE only, earlier lab) | 1 | 0.3% |
 | Parsed by a real vendor TA in the isolated lab this phase (extraction of emitted fields, timestamps and tags; not CIM or detections) | 6 | 1.7% |
-| Independently indexed (live evidence) | 136 | 39.1% |
+| Independently indexed (live evidence) | 137 | 39.3% |
 
 Tier definitions are in the script header. `TA validated` counts only a parser that was installed and exercised; mapping-only assessments are not counted. `Sample replay only` is recorded-event replay, not a vendor-native formatter.
 
@@ -43,23 +43,24 @@ Tier definitions are in the script header. `TA validated` counts only a parser t
 | + Scanner discovery corrections (generators that already existed) | +6 (cisco:catalyst:clienthealth, cisco:duo:remote:vpn, meraki:assurancealerts, netspout:snmp:poll, netspout:snmp:trap, pan:system) |
 | + Batch 5 net new (registered 31; already native: cisco:sdwan:BGP-5-ADJCHANGE) | +30 |
 | + Batch 6 net new (registered 10) | +10 |
-| **Native generators now** | **158** |
+| + Batch 7 net new (registered 1) | +1 |
+| **Native generators now** | **159** |
 
 The sum closes largely by construction (corrections and batch net-new are defined as set differences), so it checks that no sourcetype is counted twice or dropped; it is not an independent historical audit. Registries added after Batch 6 would be treated as part of the baseline until this function is extended.
 
-Partition: native + sample-replay-only + no-generator = 158 + 143 + 47 = 348 (disjoint).
+Partition: native + sample-replay-only + no-generator = 159 + 143 + 47 = 349 (disjoint).
 
 Evidence overlaps (a sourcetype is counted once per measure; measures are independent):
 
 | Overlap | Count |
 |---|---|
-| Byte-verified AND native | 128 |
+| Byte-verified AND native | 129 |
 | Byte-verified but NOT native (verified through a retired or fixture path) | 0 |
 | Native but never byte-verified | 30 |
-| Independently indexed AND byte-verified | 128 |
+| Independently indexed AND byte-verified | 129 |
 | Independently indexed but NOT byte-verified (run-evidence files only) | 8 |
 | Byte-verified but no live-indexing record (offline/current-fixture equality only) | 0 |
-| Independently indexed with ROW-LEVEL proof (indexed_rows>0 or per-row matches>=1) | 76 |
+| Independently indexed with ROW-LEVEL proof (indexed_rows>0 or per-row matches>=1) | 77 |
 | Independently indexed on FILE-LEVEL harness evidence only (older result files without row counts) | 52 |
 
 Definition change: the earlier report counted only result files whose NAME contained 'live' (105). Every result file is written by a harness that posts to HEC and searches Splunk, so the measure now counts all of them (136 = file-level), and the row above separates what has row-level proof. The increase is a correction of an undercount, not new indexing.
@@ -68,7 +69,7 @@ Definition change: the earlier report counted only result files whose NAME conta
 
 | Customer-facing path | Native sourcetypes reachable |
 |---|---|
-| Single Event / Sourcetype generator modes (native registries UB1-UB6) | 76 |
+| Single Event / Sourcetype generator modes (native registries UB1-UB6) | 77 |
 | Authentic scenario packs (`/api/generate/scenario-pack`, Explorer `scenario_pack`) emit them | 118 |
 | Listed by a ScenarioRunner scenario (label-level; the runner may use a different formatter) | 29 |
 | **Native but on none of the above** | **2** |

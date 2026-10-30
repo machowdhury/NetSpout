@@ -16666,6 +16666,31 @@
     },
     {
       "kind": "sourcetype",
+      "id": "nginx:plus:access",
+      "title": "nginx:plus:access",
+      "domain": "Web Infrastructure",
+      "industries": [
+        "Cross-industry"
+      ],
+      "vendors": [
+        "NGINX (F5)"
+      ],
+      "readiness": "Evidence review required",
+      "description": "NGINX Plus access (key=value)",
+      "sourcetypes": [
+        "nginx:plus:access"
+      ],
+      "scenario_ids": [],
+      "dashboard_ids": [],
+      "formats": [],
+      "profiles": [],
+      "evidence": [],
+      "gaps": [
+        "Catalog identity is not proof of raw-event fidelity or selected-version TA parsing."
+      ]
+    },
+    {
+      "kind": "sourcetype",
       "id": "cisco:dnac:event",
       "title": "cisco:dnac:event",
       "domain": "ACME Enterprise",

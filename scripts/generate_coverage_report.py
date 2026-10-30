@@ -105,7 +105,7 @@ def evidence_indexed(catalog_ids):
     """Sourcetypes named in committed live-run evidence files (JSON results only, not prose)."""
     found = set()
     for f in glob.glob(str(OUT / "*.json")) + glob.glob(str(OUT / "evidence" / "**" / "*.json"), recursive=True):
-        if "reconciliation" in f or "demo_platform" in f or "ta_validation" in f:  # catalog dump / unverified platform demo: not live-ingest evidence
+        if "reconciliation" in f or "demo_platform" in f or "ta_validation" in f or "splunkbase" in f:  # catalog dump / unverified platform demo: not live-ingest evidence
             continue
         text = Path(f).read_text(encoding="utf-8")
         found |= {s for s in catalog_ids if f'"{s}"' in text}
@@ -117,7 +117,7 @@ def reconciliation(ids, rows_out):
     from netspout_core.log_engine import SplunkLogEngine as E
     base = ROOT / "src" / "netspout_core"
     maps = {a: set(getattr(E, a)) for a in dir(E) if a.endswith("SOURCE_SOURCETYPES")}
-    older = set().union(*[v for a, v in maps.items() if not a.startswith(("UNIVERSE_BATCH5", "UNIVERSE_BATCH6"))]) & ids
+    older = set().union(*[v for a, v in maps.items() if not a.startswith(("UNIVERSE_BATCH5", "UNIVERSE_BATCH6", "UNIVERSE_BATCH7"))]) & ids
     old_lit = set()
     for f in ("log_engine.py", "panos_generator.py", "snmp_engine.py", "gnmi_engine.py"):  # the Phase 3-4 scanner's exact module list and patterns
         text = (base / f).read_text(encoding="utf-8")
@@ -129,12 +129,15 @@ def reconciliation(ids, rows_out):
     now_native = {o["sourcetype"] for o in rows_out if o["generator"] == "NATIVE_ENGINE"}
     ub5 = set(maps.get("UNIVERSE_BATCH5_SOURCE_SOURCETYPES", ())) & ids
     ub6 = set(maps.get("UNIVERSE_BATCH6_SOURCE_SOURCETYPES", ())) & ids
-    corrections = (now_native - ub5 - ub6) - baseline
+    ub7 = set(maps.get("UNIVERSE_BATCH7_SOURCE_SOURCETYPES", ())) & ids
+    corrections = (now_native - ub5 - ub6 - ub7) - baseline
     b5_new = ub5 - baseline - corrections
     b6_new = ub6 - baseline - corrections - ub5
+    b7_new = ub7 - baseline - corrections - ub5 - ub6
     return {"pre_batch_baseline": len(baseline), "discovery_corrections": sorted(corrections), "batch5_registered": len(ub5),
             "batch5_net_new": len(b5_new), "batch5_already_native": sorted(ub5 & (baseline | corrections)), "batch6_registered": len(ub6),
-            "batch6_net_new": len(b6_new), "sum": len(baseline) + len(corrections) + len(b5_new) + len(b6_new), "now_native": len(now_native)}
+            "batch6_net_new": len(b6_new), "batch7_registered": len(ub7), "batch7_net_new": len(b7_new),
+            "sum": len(baseline) + len(corrections) + len(b5_new) + len(b6_new) + len(b7_new), "now_native": len(now_native)}
 
 
 def lost_grounding_count():
@@ -284,6 +287,7 @@ def main(check=False):
               f"| + Scanner discovery corrections (generators that already existed) | +{len(rec['discovery_corrections'])} ({', '.join(rec['discovery_corrections'])}) |",
               f"| + Batch 5 net new (registered {rec['batch5_registered']}; already native: {', '.join(rec['batch5_already_native']) or 'none'}) | +{rec['batch5_net_new']} |",
               f"| + Batch 6 net new (registered {rec['batch6_registered']}) | +{rec['batch6_net_new']} |",
+              f"| + Batch 7 net new (registered {rec['batch7_registered']}) | +{rec['batch7_net_new']} |",
               f"| **Native generators now** | **{rec['now_native']}** |", "",
               "The sum closes largely by construction (corrections and batch net-new are defined as set differences), so it checks that no sourcetype is counted twice or dropped; "
               "it is not an independent historical audit. Registries added after Batch 6 would be treated as part of the baseline until this function is extended.", "",

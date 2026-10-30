@@ -34,5 +34,26 @@ def main():
     print(json.dumps({"rows_corrected": changed}))
 
 
+def apply_declared():
+    """Second step: fill required_ta ONLY where Splunkbase declares that exact sourcetype (docs/verification/evidence/splunkbase/crossref.json). Idempotent."""
+    path = ROOT / "catalog" / "sourcetypes.json"
+    rows = json.loads(path.read_text(encoding="utf-8"))
+    x = json.loads((ROOT / "docs" / "verification" / "evidence" / "splunkbase" / "crossref.json").read_text(encoding="utf-8"))
+    declared = {r["sourcetype"]: r["declared_by_uids"] for r in x["sourcetypes"]}
+    apps = {a["uid"]: a for a in x["apps"]}
+    changed = 0
+    for r in rows:
+        rv = r.get("required_ta_review")
+        uids = declared.get(r["splunk_sourcetype"])
+        if rv and rv.get("status") == "UNVERIFIED" and uids:
+            r["required_ta"] = " / ".join(apps[u]["csv_name"] for u in uids)
+            rv.update({"status": "VERIFIED_DECLARED_BY_SPLUNKBASE", "splunkbase_ids": [int(u) for u in uids],
+                       "basis": "Splunkbase release metadata declares this exact sourcetype for the listed app(s) (pinned snapshot 2026-10-26 + v1 API). Declaration only: package not installed, parsing not validated."})
+            changed += 1
+    path.write_text(json.dumps(rows, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(json.dumps({"rows_verified": changed}))
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+    apply_declared() if "--apply-declared" in sys.argv else main()

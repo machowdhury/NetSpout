@@ -49,12 +49,12 @@ Detection-verified: React2Shell / d36459b1-7901-401a-a67e-44426c15b168 (saved se
 
 | Industry | Mapped scenarios | Runnable |
 |---|---|---|
-| Banking and Financial Services | 2 | 1 |
-| Healthcare | 1 | 0 |
-| Retail and E-commerce | 1 | 1 |
+| Banking and Financial Services | 3 | 1 |
+| Healthcare | 2 | 0 |
+| Retail and E-commerce | 3 | 1 |
 | Manufacturing | 4 | 2 |
 | Energy and Utilities | 3 | 2 |
-| Telecommunications | 4 | 2 |
+| Telecommunications | 14 | 2 |
 | Government and Public Sector | 1 | 0 |
 | Transportation and Logistics | 0 | 0 |
 | Education | 2 | 2 |
@@ -69,3 +69,49 @@ Detection-verified: React2Shell / d36459b1-7901-401a-a67e-44426c15b168 (saved se
 | Non-Profit, NGOs and Global Aid | 0 | 0 |
 
 Live-verified scenarios: ub5_cisco_change_induced_outage, ub5_cisco_nac_radius_outage, ub5_cisco_platform_health_degradation, ub6_catalyst_wireless_rogue_threat, ub6_sdwan_utd_threat_pipeline
+
+## Unique scenario inventory (the Explorer's own view; nothing counted twice)
+
+| Measure | Count |
+|---|---|
+| Unique operational definitions (executable + documented candidates) | 329 |
+| Runnable (a real generator and Run path exist) | 105 |
+| Cataloged candidates only (documented; no generator or contract; never runnable) | 209 |
+| Contract-only (catalog contracts without executable telemetry; no Run action) | 15 |
+| Live-verified in Splunk (counts and, for incident packs, mstats values checked independently) | 43 |
+| Dashboard-verified | 1 |
+| Security analytic stories (reference stories; NOT counted as executable) | 365 |
+| Security stories with a runnable workflow (runtime-approved detection) | 1 |
+| Detection-verified | 1 |
+| Duplicate candidates removed (already represented by an executable entry) | 0 |
+
+By engine: cataloged 209, incident_pack 37, scenario_pack 26, scenario_runner 32, unified_generation 25. By tier: CATALOGED 209, CERTIFIED 18, CONTRACTED 76, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
+
+Incident packs (27 network + 10 telecom) emit NetSpout-defined MODELED telemetry (`netspout:*`), not vendor-native formats; they stay CONTRACTED. Cataloged candidates come from `catalog/scenario_candidates.json` (MIT community use-case catalog pinned to a commit, plus Cisco 100 definitions that are not execution-enabled).
+
+## 18-industry coverage matrix
+
+Columns are separate evidence: documented is not runnable, runnable is not verified, verified is not TA-parsed or detected. Mappings are editorial unless the source labels the industry (`*` in the Explorer).
+
+| Industry | Documented | Cataloged only | Runnable | Live-verified | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Banking and Financial Services | 12 | 9 | 3 | 1 | 0 | 4 | 0 | 0 | 0 | - |
+| Healthcare | 11 | 9 | 2 | 1 | 0 | 4 | 0 | 0 | 0 | - |
+| Retail and E-commerce | 9 | 6 | 3 | 2 | 0 | 1 | 0 | 0 | 1 | - |
+| Manufacturing | 15 | 11 | 3 | 0 | 0 | 4 | 0 | 0 | 1 | - |
+| Energy and Utilities | 19 | 16 | 3 | 0 | 0 | 4 | 0 | 0 | 0 | - |
+| Telecommunications | 40 | 27 | 12 | 10 | 0 | 4 | 0 | 0 | 2 | - |
+| Government and Public Sector | 21 | 20 | 1 | 0 | 0 | 4 | 0 | 0 | 0 | critical-infrastructure, national-security, state-local |
+| Transportation and Logistics | 11 | 11 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | - |
+| Education | 11 | 9 | 2 | 0 | 0 | 4 | 0 | 0 | 1 | - |
+| Technology and SaaS | 19 | 5 | 14 | 0 | 0 | 0 | 0 | 0 | 1 | - |
+| Media and Entertainment | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | - |
+| Hospitality and Travel | 8 | 6 | 2 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Aerospace and Defense | 4 | 4 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | - |
+| Legal, Compliance and Professional Services | 7 | 5 | 2 | 0 | 0 | 1 | 0 | 0 | 1 | - |
+| Agriculture and Agritech | 4 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | - |
+| Real Estate, PropTech and Construction | 5 | 5 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | - |
+| Insurance and InsurTech | 6 | 6 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | - |
+| Non-Profit, NGOs and Global Aid | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | - |
+
+Curated stories are Splunk Analytic Stories whose own text names the sector as a threat target (basis NARRATIVE_TARGET_SECTOR) and whose original research.splunk.com page was verified (HTTP 200); they are NOT executable: only a story with a runtime-approved detection is runnable, and the single detection-verified item (React2Shell) is not curated to an industry. Technology/SaaS, media, non-profit and agriculture have no story whose text names the sector and whose link resolves. Government subdomains: State/Local, National Security and Critical Infrastructure have editorial or source-labeled entries; **Federal Civilian and Compliance has none** (no authoritative source selected). TA validation is not tracked per industry: only Windows/Sysmon channels were TA-checked (see the TA matrix). Industries whose documented scenarios have no runnable counterpart (for example transportation, media, aerospace/defense, agriculture, real estate, insurance, non-profit) need authentic telemetry sources before they can become runnable.

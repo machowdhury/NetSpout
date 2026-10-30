@@ -90,3 +90,15 @@ Coverage is now computed from repository evidence by `scripts/generate_coverage_
 | Deliberately not promoted | 10 Catalyst rows whose captured text is an empty-poller status string, a bare number or a heartbeat; ~136 demo-authored samples (dated 2026, invented names); fault-injection templates without a format reference. |
 | FortiGate (7 rows) | Official FortiOS 7.4.0 Log Message Reference pages print field tables but **no sample log lines**, so no native generator was built; keep as sample replay until a pinned authentic log or the PDF samples are supplied. |
 | 70% target (244/348) | **Not reachable on current evidence**: 158 native. Remaining 190 need authentic captures or documented sample lines per source. Exact blocker list: Aruba, Arista, Cisco ASA/FTD/NX-OS syslog, F5, Juniper, Sophos, Zscaler, Radware, Check Point, Nokia, A10, Huawei, Extreme, Dell, Netskope, Forcepoint, SonicWall, WatchGuard, VMware NSX, Cloudflare, NetApp, Nutanix, Meraki API, Intersight, Duo, remaining Catalyst/DNAC API types. |
+
+### Industry and scenario batch (2026-10-30)
+
+| Item | Result |
+|---|---|
+| Unique operational definitions in the Explorer | 329: 105 runnable, 209 cataloged candidates, 15 contract-only |
+| Runnable scenarios added | +37 NetSpout incident packs (27 network, 10 telecom), live-verified 37/37, modeled telemetry, CONTRACTED |
+| Industries with documented scenarios | 18 of 18 (matrix in `pulseforge_scenario_coverage.md`); runnable counts are 0 for transportation, media, aerospace/defense, agriculture, real estate, insurance and non-profit |
+| Curated Analytic Stories | 20 (14 industries), links verified; no industry claim for technology/SaaS, media, non-profit, agriculture |
+| Missing-input register | **Original 100 financial and 100 telecom use-case files** (need original IDs): import as `source_id` `supplied-financial-100` / `supplied-telecom-100` into `catalog/scenario_candidates.json` (CATALOGED), dedupe by normalized title plus objective against the 209 candidates and the 37 incident packs, keep their original IDs. **Federal Civilian and Compliance** subdomain: no authoritative source selected. |
+| Sourcetype expansion | None this batch: no authentic format evidence for the remaining 190 sources |
+| Per-industry TA/CIM | Not tracked: only Windows/Sysmon channels were TA-checked |

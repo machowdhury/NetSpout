@@ -1,0 +1,744 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "curated-stories-2026-10-30",
+ "source": {
+  "repository": "https://github.com/splunk/security_content",
+  "commit": "1b2142fdd2d1358b4ac6ad3dfc47e5e455e619e8",
+  "stories_in_snapshot": 365
+ },
+ "note": "Curated for sector relevance only. Not executable unless the Explorer reports a runtime-approved detection; research links were HTTP-checked at build time.",
+ "stories": [
+  {
+   "content_id": "4798d58a-9191-461f-bec1-467a87e245a0",
+   "name": "Cactus Ransomware",
+   "file_path": "stories/cactus_ransomware.yml",
+   "industries": [
+    {
+     "id": "healthcare",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "healthcare"
+    },
+    {
+     "id": "manufacturing",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "manufacturing"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/cactus_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 31,
+   "detections_with_attack_data": 31,
+   "data_source_names": [
+    "Cisco Network Visibility Module Flow Data",
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Suricata",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 3",
+    "Sysmon EventID 10",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 22",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698"
+   ]
+  },
+  {
+   "content_id": "5a6f6849-1a26-4fae-aa05-fa730556eeb6",
+   "name": "Clop Ransomware",
+   "file_path": "stories/clop_ransomware.yml",
+   "industries": [
+    {
+     "id": "healthcare",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "healthcare"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/clop_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 16,
+   "detections_with_attack_data": 16,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 23",
+    "Sysmon EventID 26",
+    "Sysmon EventID 5",
+    "Windows Event Log Security 1100",
+    "Windows Event Log Security 1102",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 104",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "91e57890-73bb-4d98-8c47-8d6ca53c033c",
+   "name": "Earth Alux",
+   "file_path": "stories/earth_alux.yml",
+   "industries": [
+    {
+     "id": "telecommunications",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "telecommunications"
+    },
+    {
+     "id": "transportation-logistics",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "logistics"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/earth_alux/",
+   "research_url_http_status": 200,
+   "detections_total": 15,
+   "detections_with_attack_data": 14,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Nginx Access",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 3",
+    "Sysmon EventID 10",
+    "Sysmon EventID 11",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688"
+   ]
+  },
+  {
+   "content_id": "df2b00d3-06ba-49f1-b253-b19cef19b569",
+   "name": "FIN7",
+   "file_path": "stories/fin7.yml",
+   "industries": [
+    {
+     "id": "retail-ecommerce",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "retail"
+    },
+    {
+     "id": "hospitality-travel",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "hospitality"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/fin7/",
+   "research_url_http_status": 200,
+   "detections_total": 13,
+   "detections_with_attack_data": 13,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 11",
+    "Sysmon EventID 7",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688"
+   ]
+  },
+  {
+   "content_id": "78fadce9-a07f-4508-8d14-9b20052a62cc",
+   "name": "Flax Typhoon",
+   "file_path": "stories/flax_typhoon.yml",
+   "industries": [
+    {
+     "id": "education",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "education"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/flax_typhoon/",
+   "research_url_http_status": 200,
+   "detections_total": 12,
+   "detections_with_attack_data": 11,
+   "data_source_names": [
+    "Cisco Network Visibility Module Flow Data",
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon for Linux EventID 1",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "7165a44b-4978-48f1-bac1-6ddbe6fe31ca",
+   "name": "Hellcat Ransomware",
+   "file_path": "stories/hellcat_ransomware.yml",
+   "industries": [
+    {
+     "id": "government-public-sector",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "government",
+     "subdomain": "gov-critical-infrastructure"
+    },
+    {
+     "id": "energy-utilities",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "critical infrastructure"
+    },
+    {
+     "id": "telecommunications",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "telecommunications"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/hellcat_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 90,
+   "detections_with_attack_data": 89,
+   "data_source_names": [
+    "AWS CloudTrail CreateTask",
+    "Azure Active Directory Set domain authentication",
+    "Azure Active Directory Update user",
+    "Cisco Network Visibility Module Flow Data",
+    "Cisco Secure Firewall Threat Defense File Event",
+    "CrowdStrike ProcessRollup2",
+    "CrushFTP",
+    "Ivanti VTM Audit",
+    "Linux Auditd Execve",
+    "Nginx Access",
+    "Osquery Results",
+    "Palo Alto Network Threat",
+    "Powershell Script Block Logging 4104",
+    "Splunk Stream HTTP",
+    "Suricata",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 3",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 20",
+    "Sysmon EventID 22",
+    "Sysmon EventID 3",
+    "Sysmon EventID 5",
+    "Sysmon EventID 7",
+    "Sysmon for Linux EventID 1",
+    "Sysmon for Linux EventID 11",
+    "VMWare ESXi Syslog",
+    "Windows Event Log Application 17135",
+    "Windows Event Log CAPI2 70",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 5145",
+    "Windows Event Log System 7036",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "1d2cc747-63d7-49a9-abb8-93aa36305603",
+   "name": "IcedID",
+   "file_path": "stories/icedid.yml",
+   "industries": [
+    {
+     "id": "banking-financial-services",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "banking"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/icedid/",
+   "research_url_http_status": 200,
+   "detections_total": 55,
+   "detections_with_attack_data": 55,
+   "data_source_names": [
+    "Cisco Network Visibility Module Flow Data",
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 22",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 5140",
+    "Windows Event Log Security 5145",
+    "Windows Event Log TaskScheduler 200",
+    "Windows Event Log TaskScheduler 201"
+   ]
+  },
+  {
+   "content_id": "d8db6b83-85b9-40f1-a6bc-28f6c6e3d487",
+   "name": "Lokibot",
+   "file_path": "stories/lokibot.yml",
+   "industries": [
+    {
+     "id": "banking-financial-services",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "banking"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/lokibot/",
+   "research_url_http_status": 200,
+   "detections_total": 28,
+   "detections_with_attack_data": 28,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Suricata",
+    "Sysmon EventID 1",
+    "Sysmon EventID 10",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 22",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4703"
+   ]
+  },
+  {
+   "content_id": "4c58f09f-f76f-4261-bbf8-3be406d2fbad",
+   "name": "Lotus Blossom Chrysalis Backdoor",
+   "file_path": "stories/lotus_blossom_chrysalis_backdoor.yml",
+   "industries": [
+    {
+     "id": "telecommunications",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "telecom"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/lotus_blossom_chrysalis_backdoor/",
+   "research_url_http_status": 200,
+   "detections_total": 7,
+   "detections_with_attack_data": 6,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Sysmon EventID 1",
+    "Sysmon EventID 7",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "fffb273c-3f8c-45ef-9e23-2d8913d2783b",
+   "name": "Medusa Ransomware",
+   "file_path": "stories/medusa_ransomware.yml",
+   "industries": [
+    {
+     "id": "manufacturing",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "manufacturing"
+    },
+    {
+     "id": "energy-utilities",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "critical infrastructure"
+    },
+    {
+     "id": "education",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "education"
+    },
+    {
+     "id": "insurance-insurtech",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "insurance"
+    },
+    {
+     "id": "legal-compliance-professional-services",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "legal,"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/medusa_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 52,
+   "detections_with_attack_data": 52,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 23",
+    "Sysmon EventID 26",
+    "Sysmon EventID 5",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 4728",
+    "Windows Event Log Security 4946",
+    "Windows Event Log Security 4947",
+    "Windows Event Log Security 4948"
+   ]
+  },
+  {
+   "content_id": "6e912210-02ec-488a-aafb-06e7d531886a",
+   "name": "MuddyWater",
+   "file_path": "stories/muddywater.yml",
+   "industries": [
+    {
+     "id": "aerospace-defense",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "military"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/muddywater/",
+   "research_url_http_status": 200,
+   "detections_total": 14,
+   "detections_with_attack_data": 14,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 13",
+    "Sysmon EventID 22",
+    "Sysmon EventID 7",
+    "Windows Event Log Security 4688"
+   ]
+  },
+  {
+   "content_id": "758196b5-2e21-424f-a50c-6e421ce926c2",
+   "name": "NOBELIUM Group",
+   "file_path": "stories/nobelium_group.yml",
+   "industries": [
+    {
+     "id": "government-public-sector",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "government",
+     "subdomain": "gov-national-security"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/nobelium_group/",
+   "research_url_http_status": 200,
+   "detections_total": 40,
+   "detections_with_attack_data": 37,
+   "data_source_names": [
+    "Azure Active Directory",
+    "Azure Active Directory Add app role assignment to service principal",
+    "Azure Active Directory Add member to role",
+    "Azure Active Directory Add owner to application",
+    "Azure Active Directory Add service principal",
+    "Azure Active Directory Consent to application",
+    "Azure Active Directory Sign-in activity",
+    "Azure Active Directory Update application",
+    "Cisco Secure Access Firewall",
+    "Cisco Secure Firewall Threat Defense Connection Event",
+    "CrowdStrike ProcessRollup2",
+    "O365",
+    "O365 Add owner to application.",
+    "O365 Add service principal.",
+    "O365 Consent to application.",
+    "O365 MailItemsAccessed",
+    "O365 Update application.",
+    "O365 UserLoginFailed",
+    "Palo Alto Network Traffic",
+    "Sysmon EventID 1",
+    "Sysmon EventID 22",
+    "Sysmon EventID 7",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 7036"
+   ]
+  },
+  {
+   "content_id": "8b8d8506-b931-450c-b794-f24184ca1deb",
+   "name": "Prestige Ransomware",
+   "file_path": "stories/prestige_ransomware.yml",
+   "industries": [
+    {
+     "id": "transportation-logistics",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "transportation"
+    },
+    {
+     "id": "aerospace-defense",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "military"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/prestige_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 43,
+   "detections_with_attack_data": 43,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 5145",
+    "Windows Event Log TaskScheduler 200",
+    "Windows Event Log TaskScheduler 201"
+   ]
+  },
+  {
+   "content_id": "0c6169b1-f126-4d86-8e4f-f7891007ebc6",
+   "name": "Qakbot",
+   "file_path": "stories/qakbot.yml",
+   "industries": [
+    {
+     "id": "banking-financial-services",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "banking"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/qakbot/",
+   "research_url_http_status": 200,
+   "detections_total": 53,
+   "detections_with_attack_data": 53,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 13",
+    "Sysmon EventID 10",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 7045",
+    "Windows Event Log TaskScheduler 200",
+    "Windows Event Log TaskScheduler 201"
+   ]
+  },
+  {
+   "content_id": "0925ee49-1185-4484-94ac-7867764a9183",
+   "name": "Rhysida Ransomware",
+   "file_path": "stories/rhysida_ransomware.yml",
+   "industries": [
+    {
+     "id": "healthcare",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "healthcare"
+    },
+    {
+     "id": "manufacturing",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "manufacturing"
+    },
+    {
+     "id": "education",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "education"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/rhysida_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 40,
+   "detections_with_attack_data": 37,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 5",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "507edc74-13d5-4339-878e-b9744ded1f35",
+   "name": "Ryuk Ransomware",
+   "file_path": "stories/ryuk_ransomware.yml",
+   "industries": [
+    {
+     "id": "healthcare",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "healthcare"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/ryuk_ransomware/",
+   "research_url_http_status": 200,
+   "detections_total": 18,
+   "detections_with_attack_data": 17,
+   "data_source_names": [
+    "Cisco Secure Access Firewall",
+    "CrowdStrike ProcessRollup2",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 3",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 4700",
+    "Windows Event Log Security 4702",
+    "Zeek Conn"
+   ]
+  },
+  {
+   "content_id": "7df800b1-af23-4f65-ac36-abe87374ee72",
+   "name": "Salt Typhoon",
+   "file_path": "stories/salt_typhoon.yml",
+   "industries": [
+    {
+     "id": "government-public-sector",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "government",
+     "subdomain": "gov-national-security"
+    },
+    {
+     "id": "energy-utilities",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "critical infrastructure"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/salt_typhoon/",
+   "research_url_http_status": 200,
+   "detections_total": 60,
+   "detections_with_attack_data": 60,
+   "data_source_names": [
+    "Cisco IOS Logs",
+    "Cisco Network Visibility Module Flow Data",
+    "Cisco Secure Firewall Threat Defense Intrusion Event",
+    "CrowdStrike ProcessRollup2",
+    "Linux Auditd Cwd",
+    "Linux Auditd Execve",
+    "Linux Auditd Path",
+    "Linux Auditd Proctitle",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Sysmon EventID 7",
+    "Sysmon for Linux EventID 1",
+    "Sysmon for Linux EventID 11",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 4703",
+    "Windows Event Log System 7045"
+   ]
+  },
+  {
+   "content_id": "f73010e4-49eb-44ef-9f3f-2c25a1ae5415",
+   "name": "Volt Typhoon",
+   "file_path": "stories/volt_typhoon.yml",
+   "industries": [
+    {
+     "id": "government-public-sector",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "government",
+     "subdomain": "gov-national-security"
+    },
+    {
+     "id": "manufacturing",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "manufacturing"
+    },
+    {
+     "id": "energy-utilities",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "critical infrastructure"
+    },
+    {
+     "id": "transportation-logistics",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "transportation"
+    },
+    {
+     "id": "education",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "education"
+    },
+    {
+     "id": "real-estate-proptech-construction",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": ", construction,"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/volt_typhoon/",
+   "research_url_http_status": 200,
+   "detections_total": 46,
+   "detections_with_attack_data": 46,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Sysmon EventID 1",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 17",
+    "Sysmon EventID 18",
+    "Windows Event Log Security 4625",
+    "Windows Event Log Security 4648",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4768",
+    "Windows Event Log Security 4771",
+    "Windows Event Log Security 4776"
+   ]
+  },
+  {
+   "content_id": "8dc84752-f4da-4285-931c-bddd5c4d440b",
+   "name": "Warzone RAT",
+   "file_path": "stories/warzone_rat.yml",
+   "industries": [
+    {
+     "id": "aerospace-defense",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "military"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/warzone_rat/",
+   "research_url_http_status": 200,
+   "detections_total": 23,
+   "detections_with_attack_data": 23,
+   "data_source_names": [
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 11",
+    "Sysmon EventID 11",
+    "Sysmon EventID 13",
+    "Sysmon EventID 23",
+    "Sysmon EventID 26",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4663",
+    "Windows Event Log Security 4688"
+   ]
+  },
+  {
+   "content_id": "f3a9e8b6-7d21-42c5-9f6b-e4f8d1c936ea",
+   "name": "Water Gamayun",
+   "file_path": "stories/water_gamayun.yml",
+   "industries": [
+    {
+     "id": "banking-financial-services",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "financial sectors"
+    },
+    {
+     "id": "telecommunications",
+     "basis": "NARRATIVE_TARGET_SECTOR",
+     "matched_phrase": "telecommunications"
+    }
+   ],
+   "research_url": "https://research.splunk.com/stories/water_gamayun/",
+   "research_url_http_status": 200,
+   "detections_total": 35,
+   "detections_with_attack_data": 35,
+   "data_source_names": [
+    "Cisco Network Visibility Module Flow Data",
+    "CrowdStrike ProcessRollup2",
+    "Powershell Script Block Logging 4104",
+    "Sysmon EventID 1",
+    "Sysmon EventID 1 AND Sysmon EventID 3",
+    "Sysmon EventID 10",
+    "Sysmon EventID 15",
+    "Sysmon EventID 22",
+    "Sysmon EventID 3",
+    "Sysmon EventID 7",
+    "Sysmon EventID 8",
+    "Windows Event Log Security 4688",
+    "Windows Event Log Security 4698",
+    "Windows Event Log Security 4798"
+   ]
+  }
+ ]
+}

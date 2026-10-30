@@ -304,6 +304,98 @@
       "industries": [
         "technology-saas"
       ]
+    },
+    {
+      "scenario_id": "network_16_retail_uplink",
+      "basis": "editorial",
+      "industries": [
+        "retail-ecommerce"
+      ]
+    },
+    {
+      "scenario_id": "network_17_hospital_mac_auth",
+      "basis": "editorial",
+      "industries": [
+        "healthcare"
+      ]
+    },
+    {
+      "scenario_id": "network_18_payment_deny",
+      "basis": "editorial",
+      "industries": [
+        "banking-financial-services",
+        "retail-ecommerce"
+      ]
+    },
+    {
+      "scenario_id": "telco_01_ran_cell",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_02_registration_auth",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_03_slice_sla",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_04_ims_volte",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_05_mobile_transport",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_06_broadband_cpe",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_07_sdwan_service",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_08_roaming_mobility",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_09_core_user_plane",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_10_cross_layer",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
     }
   ]
 }

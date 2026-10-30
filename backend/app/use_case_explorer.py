@@ -29,8 +29,12 @@ _TIER_BY_RAW = {
     "SPLUNK_VALIDATED": "VALIDATED",
     "FORMAT_VALIDATED": "FORMAT_VALIDATED",
     "CONTRACTED": "CONTRACTED",
+    # CATALOGED: a documented, research-backed definition exists; NetSpout has no generator or contract for it. Never runnable.
+    "CATALOGED": "CATALOGED",
+    "CANDIDATE": "CATALOGED",
+    "RESEARCH_REQUIRED": "CATALOGED",
 }
-TIER_ORDER = ["CERTIFIED", "VALIDATED", "FORMAT_VALIDATED", "CONTRACTED", "NOT_ESTABLISHED"]
+TIER_ORDER = ["CERTIFIED", "VALIDATED", "FORMAT_VALIDATED", "CONTRACTED", "CATALOGED", "NOT_ESTABLISHED"]
 DEMO_READY_TIERS = {"CERTIFIED", "VALIDATED"}
 
 OPERATIONAL_STEPS = ["SELECT", "CONFIGURE", "GENERATE", "INGEST", "VERIFY", "DASHBOARD"]
@@ -58,6 +62,28 @@ def _taxonomy_path() -> Path:
         if candidate.is_file():
             return candidate
     raise FileNotFoundError("Use Case Explorer taxonomy is unavailable")
+
+
+def load_candidates(path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    """Documented scenario candidates (catalog/scenario_candidates.json); [] if the registry is not shipped."""
+    module = Path(__file__).resolve()
+    for candidate in ([path] if path else [module.parents[2] / "catalog" / "scenario_candidates.json", module.parent / "catalog_data" / "scenario_candidates.json",
+                                            module.parent.parent / "catalog_data" / "scenario_candidates.json",
+                                            Path("/opt/splunk/etc/apps/netspout/bin/catalog_data/scenario_candidates.json")]):
+        if candidate and candidate.is_file():
+            return json.loads(candidate.read_text(encoding="utf-8"))["candidates"]
+    return []
+
+
+def load_curated_stories(path: Optional[Path] = None) -> List[Dict[str, Any]]:
+    """Curated Splunk Analytic Stories (catalog/curated_analytic_stories.json); [] if not shipped."""
+    module = Path(__file__).resolve()
+    for candidate in ([path] if path else [module.parents[2] / "catalog" / "curated_analytic_stories.json", module.parent / "catalog_data" / "curated_analytic_stories.json",
+                                            module.parent.parent / "catalog_data" / "curated_analytic_stories.json",
+                                            Path("/opt/splunk/etc/apps/netspout/bin/catalog_data/curated_analytic_stories.json")]):
+        if candidate and candidate.is_file():
+            return json.loads(candidate.read_text(encoding="utf-8"))["stories"]
+    return []
 
 
 def load_taxonomy(path: Optional[Path] = None) -> Dict[str, Any]:
@@ -90,10 +116,18 @@ class UseCaseExplorer:
         runtime_approved_detections: Iterable[str],
         pack_scenario_ids: Iterable[str] = (),
         runner_scenario_ids: Optional[Iterable[str]] = None,
+        incident_packs: Iterable[Dict[str, Any]] = (),
+        candidates: Iterable[Dict[str, Any]] = (),
+        verified_scenarios: Iterable[str] = (),
+        dashboard_verified: Iterable[str] = (),
+        curated_stories: Iterable[Dict[str, Any]] = (),
     ):
         # pack_scenario_ids: authentic observation packs, run through /api/generate/scenario-pack.
         # runner_scenario_ids: scenarios ScenarioRunner can execute; None keeps the legacy "all catalog scenarios runnable".
         self._pack_ids = set(pack_scenario_ids)
+        self._verified = set(verified_scenarios)          # live Splunk evidence recorded for this scenario id (event/metric counts)
+        self._dashboard_verified = set(dashboard_verified)  # DASHBOARD_READY evidence recorded
+        self._curated = {c["content_id"]: c for c in curated_stories}  # Analytic Stories curated for sector relevance (never implies executable)
         self._runner_ids = None if runner_scenario_ids is None else set(runner_scenario_ids)
         self.taxonomy = taxonomy
         self._industry_ids = [i["id"] for i in taxonomy["industries"]]
@@ -126,6 +160,17 @@ class UseCaseExplorer:
             entries.append(self._unified_entry(s, sources))
         for s in catalog_scenarios:
             entries.append(self._catalog_entry(s))
+        for row in incident_packs:
+            entries.append(self._incident_entry(row))
+        seen = {e["scenario_id"] for e in entries}
+        self.duplicate_candidates: List[str] = []
+        for row in candidates:
+            key = row.get("source_ref") if row["source_id"] == "cisco-100" else row["candidate_id"]
+            if key in seen or row["candidate_id"] in seen:
+                self.duplicate_candidates.append(row["candidate_id"])  # already represented by an executable entry: never counted twice
+                continue
+            seen.add(row["candidate_id"])
+            entries.append(self._candidate_entry(row))
         self._operational = entries
         self._security: Optional[List[Dict[str, Any]]] = None
 
@@ -179,6 +224,41 @@ class UseCaseExplorer:
             dashboard=self._dashboard_ref(sid),
         )
 
+    def _candidate_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        sid = row["candidate_id"]
+        deps = row.get("dependencies", {})
+        extra = []
+        if deps.get("sourcetypes"):
+            extra.append("sourcetypes named by the definition: " + ", ".join(deps["sourcetypes"][:6]))
+        if deps.get("research_gaps"):
+            extra.append("research gaps: " + "; ".join(str(g) for g in deps["research_gaps"][:3]))
+        reason = ("Cataloged candidate: a documented definition exists but NetSpout has no generator or scenario contract for it. " + " ".join(extra)).strip()
+        entry = self._operational_entry(
+            entry_id=f"op:candidate:{sid}", engine="cataloged", scenario_id=sid, title=row["title"],
+            summary=("Documented " + ("compliance" if row.get("kind") == "compliance" else "operational") + " candidate (" + row["source_id"] + " " + str(row.get("source_ref")) + "). Not executable."),
+            domain=row.get("domain") or (row.get("upstream_industry") or "Candidate"), category=str(row.get("upstream_industry") or ""), vendors=[],
+            sourcetypes=list(deps.get("sourcetypes", [])), source_ids=[], raw_maturity="CATALOGED", runnable=False, blocked_reason=reason, dashboard=None)
+        unknown = {i["id"] for i in row.get("industries", [])} - set(self._industry_ids)
+        if unknown:
+            raise ValueError(f"candidate {sid} maps to unknown industries {sorted(unknown)}")
+        entry["industries"] = [{"id": i["id"], "basis": i["basis"], **({"subdomain": i["subdomain"]} if i.get("subdomain") else {}),
+                                **({"source_subindustry": i["source_subindustry"]} if i.get("source_subindustry") else {})} for i in row.get("industries", [])]
+        entry["provenance"] = {"source_id": row["source_id"], "source_ref": row.get("source_ref"), "url": row.get("url"), "upstream_industry": row.get("upstream_industry"),
+                               "criticality": row.get("criticality")}
+        return entry
+
+    def _incident_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        sid = row["scenario_id"]
+        return self._operational_entry(
+            entry_id=f"op:incident:{sid}", engine="incident_pack", scenario_id=sid, title=row["title"],
+            summary=f"Finite {row['family']} incident pack: 30 log records and 10 gauge records of NetSpout-defined, modeled telemetry. "
+                    "Not vendor-native formats and not device firmware emulation.",
+            domain=row["family"].title(), category="INCIDENT_PACK", vendors=[],
+            sourcetypes=[f"netspout:{row['family']}:syslog" if row["family"] == "network" else "netspout:telecom:log",
+                         f"netspout:{row['family']}:metric"],
+            source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid),
+        )
+
     def _operational_entry(self, *, entry_id, engine, scenario_id, title, summary, domain, category, vendors,
                            sourcetypes, source_ids, raw_maturity, runnable, blocked_reason, dashboard):
         tier = maturity_tier(raw_maturity)
@@ -189,6 +269,7 @@ class UseCaseExplorer:
             "sourcetypes": sourcetypes, "source_ids": source_ids,
             "maturity": {"tier": tier, "raw": raw_maturity, "basis": "catalog"},
             "runnable": runnable, "blocked_reason": blocked_reason,
+            "live_verified": scenario_id in self._verified, "dashboard_verified": scenario_id in self._dashboard_verified,
             "demo_ready": runnable and tier in DEMO_READY_TIERS,
             "dashboard": dashboard,
         }
@@ -205,12 +286,15 @@ class UseCaseExplorer:
             ver = ("POST", "/api/generation/runs/{run_id}/observe", None)
             ing_note = "HEC acknowledgement is recorded per required channel (stage SPLUNK_DISPATCHED)"
             ver_note = "Success = SPLUNK_OBSERVED PROVEN for every required channel"
-        elif e["engine"] == "scenario_pack":
+        elif e["engine"] in ("scenario_pack", "incident_pack"):
             cfg = ("GET", "/api/setup", None)
             gen = ("POST", "/api/generate/scenario-pack", {"scenario_id": sid, "dispatch": True})
             ver = ("POST", "/api/explorer/observe", {"run_id": "{run_id}"})
             ing_note = "HEC acceptance is counted per event from the dispatch results (accepted must equal generated)"
             ver_note = "Success = Splunk's run-scoped event count equals the number of events generated (independent search)"
+            if e["engine"] == "incident_pack":
+                ver = ("POST", "/api/explorer/observe", {"run_id": "{run_id}", "metric_index": "<metric index>"})
+                ver_note += " AND the mstats datapoint count for the run equals the generated gauge datapoints"
         else:
             cfg = ("GET", f"/api/scenarios/{sid}", None)
             gen = ("POST", f"/api/scenarios/{sid}/run", {"dispatch_telemetry": True})
@@ -273,10 +357,19 @@ class UseCaseExplorer:
                 })
             level = self._security_level(det_rows)
             mitre = sorted({m for r in det_rows for m in r["mitre_attack_ids"]})
+            cur = self._curated.get(story["content_id"])
+            if cur:
+                unknown = {i["id"] for i in cur["industries"]} - set(self._industry_ids)
+                if unknown:
+                    raise ValueError(f"curated story {story['name']} maps to unknown industries {sorted(unknown)}")
             out.append({
                 "entry_id": f"sec:{story['content_id']}", "kind": "security", "story_id": story["content_id"],
                 "title": story["name"], "summary": story.get("description", ""),
-                "narrative": story.get("narrative", ""), "industries": [], "vendors": [],
+                "narrative": story.get("narrative", ""),
+                "industries": [{"id": i["id"], "basis": i["basis"], **({"subdomain": i["subdomain"]} if i.get("subdomain") else {})} for i in cur["industries"]] if cur else [],
+                "curation": ({"research_url": cur["research_url"], "matched": [i["matched_phrase"] for i in cur["industries"]],
+                              "note": "Curated because the story's own text names this sector; not an execution claim."} if cur else None),
+                "vendors": [],
                 "mitre_attack_ids": mitre, "detections": det_rows,
                 "data_sources": sorted({n for r in det_rows for n in r["data_source_names"]}),
                 "readiness": {"level": level, "label": _LEVEL_LABELS[level],
@@ -343,13 +436,24 @@ class UseCaseExplorer:
         return next((e for e in self.all_entries() if e["entry_id"] == entry_id), None)
 
     def industries(self) -> List[Dict[str, Any]]:
+        """Per approved industry. Cataloged (documented) and runnable (executable) are separate columns; nothing is inferred from one to the other."""
         rows = []
+        stories = self.security_entries()
         for ind in self.taxonomy["industries"]:
             mine = [e for e in self._operational if any(i["id"] == ind["id"] for i in e["industries"])]
+            subs = sorted({i["subdomain"] for e in mine for i in e["industries"] if i["id"] == ind["id"] and i.get("subdomain")})
             rows.append({
                 **ind,
                 "scenarios_total": len(mine),
+                "scenarios_runnable": sum(e["runnable"] for e in mine),
+                "scenarios_cataloged_only": sum(e["maturity"]["tier"] == "CATALOGED" for e in mine),
+                "scenarios_live_verified": sum(e["scenario_id"] in self._verified for e in mine),
+                "scenarios_dashboard_verified": sum(e["scenario_id"] in self._dashboard_verified for e in mine),
                 "scenarios_demo_ready": sum(e["demo_ready"] for e in mine),
+                "subdomains_with_scenarios": subs,
+                "security_stories_curated": sum(any(i["id"] == ind["id"] for i in e["industries"]) for e in stories),
+                "security_stories_runnable": sum(e["demo_ready"] and any(i["id"] == ind["id"] for i in e["industries"]) for e in stories),
+                "security_detections_verified": sum(e["readiness"]["detections_verified"] for e in stories if any(i["id"] == ind["id"] for i in e["industries"])),
                 "bases": sorted({i["basis"] for e in mine for i in e["industries"] if i["id"] == ind["id"]}),
             })
         return rows

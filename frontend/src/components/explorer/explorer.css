@@ -30,7 +30,7 @@
 .ux-badge--certified, .ux-badge--detection_verified { color: var(--ns-success); }
 .ux-badge--validated, .ux-badge--runtime_approved { color: var(--ns-info); }
 .ux-badge--format_validated, .ux-badge--replay_only { color: var(--ns-warning); }
-.ux-badge--contracted, .ux-badge--content_only, .ux-badge--not_established, .ux-badge--no_detections { color: var(--ns-text-faint); }
+.ux-badge--contracted, .ux-badge--cataloged, .ux-badge--content_only, .ux-badge--not_established, .ux-badge--no_detections { color: var(--ns-text-faint); }
 .ux-detail { background: var(--ns-surface); border: 1px solid var(--ns-border); border-radius: var(--ns-radius-lg); padding: 16px; min-height: 240px; }
 .ux-detail__head { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
 .ux-detail h2 { margin: 0; font-size: 17px; }

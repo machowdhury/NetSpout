@@ -23,6 +23,9 @@ interface RunContext {
   runId?: string;        // operational run id, or security replay run id
   expected?: number;     // scenario pack: events generated
   accepted?: number;     // scenario pack: events HEC accepted
+  metricIndex?: string;  // incident pack: metric index used
+  metricExpected?: number; // incident pack: gauge datapoints generated
+  eventExpected?: number;  // incident pack: log events generated
   localId?: string;      // retrieved dataset id
   datasetPath?: string;
   indexed?: number;      // events actually observed in Splunk
@@ -30,7 +33,7 @@ interface RunContext {
 
 const TIER_LABEL: Record<string, string> = {
   CERTIFIED: 'Certified', VALIDATED: 'Validated', FORMAT_VALIDATED: 'Format validated',
-  CONTRACTED: 'Contracted only', NOT_ESTABLISHED: 'Not established',
+  CONTRACTED: 'Contracted only', CATALOGED: 'Cataloged candidate', NOT_ESTABLISHED: 'Not established',
 };
 const STEP_LABEL: Record<StepName, string> = {
   SELECT: 'Select', CONFIGURE: 'Configure', GENERATE: 'Generate', INGEST: 'Ingest', VERIFY: 'Verify',
@@ -109,7 +112,7 @@ export function UseCaseExplorer() {
       {summary?.industries.find((i) => i.id === industry)?.subdomains && (
         <p className="ux-note">
           Subdomains: {summary.industries.find((i) => i.id === industry)!.subdomains!.map((d) => d.name).join(' · ')}.
-          Scenarios are mapped at the parent industry only.
+          Subdomain tags appear only where a source supports one; mappings marked * are editorial.
         </p>
       )}
 
@@ -127,7 +130,7 @@ export function UseCaseExplorer() {
         <select value={industry} onChange={(e) => setIndustry(e.target.value)} aria-label="Industry">
           <option value="">All industries</option>
           {summary?.industries.map((i) => (
-            <option key={i.id} value={i.id}>{i.name} ({i.scenarios_total})</option>
+            <option key={i.id} value={i.id}>{i.name} ({i.scenarios_runnable ?? 0} runnable / {i.scenarios_total} documented)</option>
           ))}
         </select>
         <label className="ux-check">
@@ -160,8 +163,8 @@ export function UseCaseExplorer() {
                   <span className="ux-card__sum">{entry.summary}</span>
                   {entry.industries.length > 0 && (
                     <span className="ux-tags">{entry.industries.map((i) => (
-                      <em key={i.id} title={i.basis === 'editorial' ? 'Editorial applicability' : 'Bound by an industry pack'}>
-                        {i.id}{i.basis === 'editorial' ? '*' : ''}
+                      <em key={`${i.id}-${i.subdomain ?? ''}`} title={`mapping basis: ${i.basis}${i.subdomain ? `; subdomain ${i.subdomain}` : ''}${i.source_subindustry ? `; source sub-industry ${i.source_subindustry}` : ''}`}>
+                        {i.id}{i.subdomain ? ` / ${i.subdomain.replace('gov-', '')}` : ''}{i.basis.startsWith('EDITORIAL') || i.basis === 'editorial' ? '*' : ''}
                       </em>))}</span>
                   )}
                 </button>
@@ -226,7 +229,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   if (!security) {
     const sid = entry.scenario_id as string;
     const unified = entry.engine === 'unified_generation';
-    const pack = entry.engine === 'scenario_pack';
+    const incident = entry.engine === 'incident_pack';
+    const pack = entry.engine === 'scenario_pack' || incident;
     actions.CONFIGURE = async () => {
       if (!unified) return { ok: true, lines: ['Runs against the destination saved in Connection Center. Nothing is sent by this step.'] };
       const p = await explorerApi.preflight(sid, count);
@@ -241,7 +245,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
       if (pack) {
         const r = await explorerApi.generatePack(sid, needIndex());
         const accepted = r.dispatch_results.filter((d) => d.hec?.success).length;
-        update({ runId: r.run_id, expected: r.count_generated, accepted });
+        update({ runId: r.run_id, expected: r.count_generated, accepted, metricIndex: r.indexes?.metrics, metricExpected: r.metric_datapoints_expected, eventExpected: r.event_count });
         return { ok: r.count_generated > 0, lines: [`Run ${r.run_id}: generated ${r.count_generated} events`] };
       }
       const r = await explorerApi.runScenario(sid);
@@ -278,13 +282,21 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
       }
       if (pack) {
         // Events can take a few seconds to become searchable; poll, never upgrade a short count.
-        const { expected = 0 } = ctxRef.current;
-        let seen = await explorerApi.observeReplay(needIndex(), id);
-        for (let i = 0; i < 8 && (seen.indexed_event_count ?? 0) < expected && !seen.error; i++) {
+        const { expected = 0, eventExpected, metricExpected = 0, metricIndex } = ctxRef.current;
+        const want = incident ? (eventExpected ?? 0) : expected;
+        const mIdx = incident ? metricIndex : undefined;
+        const done = (x: Awaited<ReturnType<typeof explorerApi.observeReplay>>) =>
+          (x.indexed_event_count ?? 0) >= want && (!mIdx || (x.indexed_metric_datapoints ?? 0) >= metricExpected);
+        let seen = await explorerApi.observeReplay(needIndex(), id, mIdx);
+        for (let i = 0; i < 8 && !done(seen) && !seen.error; i++) {
           await new Promise((resolve) => window.setTimeout(resolve, 4000));
-          seen = await explorerApi.observeReplay(needIndex(), id);
+          seen = await explorerApi.observeReplay(needIndex(), id, mIdx);
         }
-        return { ok: expected > 0 && seen.indexed_event_count === expected, lines: [`Splunk indexed ${seen.indexed_event_count ?? 'n/a'} of ${expected} events for this run`, ...(seen.error ? [seen.error] : [])] };
+        const eventsOk = want > 0 && seen.indexed_event_count === want;
+        const metricsOk = !mIdx || (metricExpected > 0 && seen.indexed_metric_datapoints === metricExpected);
+        return { ok: eventsOk && metricsOk, lines: [`Splunk indexed ${seen.indexed_event_count ?? 'n/a'} of ${want} events for this run`,
+          ...(mIdx ? [`mstats counted ${seen.indexed_metric_datapoints ?? 'n/a'} of ${metricExpected} metric datapoints`] : []),
+          ...(seen.error ? [seen.error] : []), ...(seen.metric_error ? [seen.metric_error] : [])] };
       }
       const r = await explorerApi.runObservation(id);
       return { ok: r.required_evidence_satisfied, lines: [`Required evidence satisfied: ${r.required_evidence_satisfied}`, `Completeness ${r.observation_completeness_pct}% · contract v${r.schema_version ?? '?'}`] };
@@ -354,6 +366,14 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         <MaturityBadge entry={entry} />
       </header>
       <p>{entry.summary}</p>
+      {entry.provenance && (
+        <p className="ux-note" data-testid="candidate-provenance">
+          Source: {entry.provenance.source_id} {entry.provenance.source_ref}
+          {entry.provenance.url && <> · <a href={entry.provenance.url} target="_blank" rel="noreferrer">original</a></>}
+          {entry.provenance.upstream_industry ? ` · upstream label: ${entry.provenance.upstream_industry}` : ''}. Documented candidate, not executable.
+        </p>
+      )}
+      {entry.live_verified && <p className="ux-note">Live Splunk evidence recorded for this scenario (counts verified independently). This does not imply TA parsing, a dashboard or a detection.</p>}
       {security && entry.readiness && (
         <p className="ux-note">
           {entry.readiness.label}. {entry.readiness.detections_runtime_approved} of {entry.readiness.detections_total} detections
@@ -403,7 +423,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
                      href={splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId)!}>Open the Splunk Dashboard Studio dashboard for this run</a>
                 )}
               </div>
-              {s.step !== 'SELECT' && act && (
+              {s.step !== 'SELECT' && act && !blocked && (
                 <button type="button" className="ux-run-btn" disabled={blocked || st.status === 'running' || i < first}
                         onClick={() => run(s.step, act)}>
                   <Play size={12} aria-hidden /> Run

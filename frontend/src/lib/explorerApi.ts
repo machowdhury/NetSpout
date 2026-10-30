@@ -12,7 +12,7 @@ export interface WorkflowStep {
   success_criterion: string;
 }
 
-export interface IndustryTag { id: string; basis: 'industry_pack' | 'editorial' }
+export interface IndustryTag { id: string; basis: string; subdomain?: string; source_subindustry?: string }
 
 export interface ReplayDataset { dataset_path: string; sourcetype: string | null }
 
@@ -38,12 +38,15 @@ export interface ExplorerEntry {
   demo_ready: boolean;
   workflow: WorkflowStep[];
   // operational
-  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack';
+  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack' | 'incident_pack';
   scenario_id?: string;
   domain?: string;
   runnable?: boolean;
   blocked_reason?: string | null;
   maturity?: { tier: string; raw: string; basis: string };
+  provenance?: { source_id: string; source_ref?: string | null; url?: string | null; upstream_industry?: string | null; criticality?: string | null };
+  live_verified?: boolean;
+  dashboard_verified?: boolean;
   dashboard?: { dashboard_id: string; eligibility: string; dashboard_maturity: string; reasons: string[]; splunk_view?: string | null } | null;
   // security
   story_id?: string;
@@ -64,6 +67,7 @@ export interface ExplorerEntry {
 
 export interface IndustrySummary {
   id: string; name: string; subdomains?: Array<{ id: string; name: string }>; scenarios_total: number; scenarios_demo_ready: number; bases: string[];
+  scenarios_runnable?: number; scenarios_cataloged_only?: number; scenarios_live_verified?: number; scenarios_dashboard_verified?: number; subdomains_with_scenarios?: string[];
 }
 
 export interface ExplorerSummary {
@@ -142,7 +146,8 @@ export const explorerApi = {
       'POST', `/api/generation/runs/${e(runId)}/observe`, undefined, 30_000),
   // operational, authentic observation packs
   generatePack: (scenarioId: string, index: string) =>
-    call<{ run_id: string; count_generated: number; dispatch_results: Array<{ hec?: { success?: boolean } }> }>(
+    call<{ run_id: string; count_generated: number; event_count?: number; metric_datapoints_expected?: number; indexes?: { events?: string; metrics?: string };
+           dispatch_results: Array<{ hec?: { success?: boolean } }> }>(
       'POST', '/api/generate/scenario-pack', { scenario_id: scenarioId, dispatch: true, index }, 120_000),
   // operational, ScenarioRunner
   runScenario: (scenarioId: string) =>
@@ -165,9 +170,9 @@ export const explorerApi = {
   replay: (localId: string, datasetPath: string, index: string) =>
     call<{ run_id: string; status: string; events_read: number; events_sent: number; errors: string[] }>(
       'POST', '/api/security-content/replays', { local_id: localId, dataset_path: datasetPath, index }, 120_000),
-  observeReplay: (index: string, runId: string) =>
-    call<{ status: string; indexed_event_count: number | null; error: string | null }>(
-      'POST', '/api/explorer/security/observe', { index, run_id: runId }, 30_000),
+  observeReplay: (index: string, runId: string, metricIndex?: string) =>
+    call<{ status: string; indexed_event_count: number | null; error: string | null; indexed_metric_datapoints?: number | null; metric_error?: string | null }>(
+      'POST', '/api/explorer/security/observe', { index, run_id: runId, ...(metricIndex ? { metric_index: metricIndex } : {}) }, 30_000),
   enableDetection: (detectionId: string, index: string) =>
     call<{ status: string; enabled: boolean; saved_search?: string; error?: string; limitations: string[] }>(
       'POST', `/api/explorer/detections/${e(detectionId)}/enable`, { index }, 30_000),

@@ -84,9 +84,8 @@ Fixed:
 3. **Coverage counting**: indexed-evidence undercount and the missed generators above.
 
 Open (not fixed):
-* A caller-supplied `transport_config` on `/api/generate/scenario-pack` still bypasses the index allowlist (pre-existing path).
-* `catalog/vendors.json` Splunkbase IDs disagree with `telemetry_catalog.json` and the ISE-verified ID (ISE 2736 vs 1915; ASA 6259 vs 7404), and `required_ta` shows
-  "Splunk Add-on for Unix and Linux" for ~100 Cisco rows. Confirm IDs before any download.
+* ~~A caller-supplied `transport_config` bypassed the index allowlist.~~ **Fixed** (see section 11): both routes that accept one now authorize it.
+* `catalog/vendors.json` Splunkbase IDs disagree with `telemetry_catalog.json` and the ISE-verified ID (ISE 2736 vs 1915; ASA 6259 vs 7404). Confirm IDs before any download. (The wrong `required_ta` on 100 Cisco rows is corrected, section 11.)
 * The coverage scanner uses pattern matching for generators; the six corrections were inspected by hand, and any future ones need the same check.
 * NetSpout's dispatcher uses send time for `_time` and a constant `source`; correct for simulation, but detections written against event time or per-channel `source` depend on the TA's fixups.
 
@@ -130,9 +129,34 @@ Tests: `tests/test_ta_readiness.py`, `tests/test_universe_batch2.py`, `tests/tes
 A fresh agent re-ran the coverage script and the new tests and attacked the claims. Confirmed: the counts, mirror sync, no secrets in the new files, `.env.lab` ignored, no weakened assertions.
 Acted on: the redefined indexed measure (now disclosed and split into row-level versus file-level), the tautological test (replaced by tests that exercise the harness rules),
 the overstated "closes exactly" wording, the allowlist gap when `index` is omitted, verdict names and control wording in the matrix, and the TA measure missing from the coverage report.
-Not acted on: the pre-existing explicit-transport allowlist bypass (recorded above).
+The explicit-transport allowlist bypass the review flagged was fixed in the follow-up batch (section 11).
 
 ## 10. Hygiene
 
 The isolated lab password was echoed once into this session's terminal output by a mis-quoted command; it was a generated, loopback-only lab credential, rotated immediately
 through Splunk's REST API and never committed. `tests/lab/**/.env*` is git-ignored.
+
+## 11. Follow-up batch: industry coverage, incident packs, allowlist, TA mapping, curated stories
+
+**Security fix.** `transport_config` supplied by a caller (`/api/generate/scenario-pack`, `/api/scenarios/{id}/run`) is now authorized: when the Connection Center is
+configured it must target the configured destination (same host:port) and both the event and metric index must be on the allowlist (403, or 422 for an unsafe name, before
+anything is sent); a request can no longer replace the saved transport. `tests/test_transport_allowlist.py` covers wrong index, wrong metric index, redirected URL, other port,
+defaulted index, both routes and the unconfigured legacy path.
+
+**37 incident packs now runnable** (27 network + 10 telecom, already in the repo but invisible to the product): deterministic, 30 logs + 10 gauge records, correlated by run id, NetSpout-defined MODELED
+telemetry (`netspout:*`, not vendor-native), maturity CONTRACTED. Live evidence (`docs/verification/evidence/incident_packs/live_results.json`, 37/37 PASS): 40/40 HEC accepted, per-phase log counts exact,
+`mstats` datapoint counts and per-metric averages equal to the generator's values, dimensions present; two packs re-proven through the Explorer UI inside Splunk Web (30/30 events plus mstats 50/50 and 30/30).
+Defect found by that verification: the Explorer's new metric check used `mstats` without `metric_name=*` and would have reported 0 datapoints for every pack; fixed with a regression test.
+
+**Industry coverage (18 approved industries).** `catalog/scenario_candidates.json` records 209 documented, CATALOGED candidates (114 selected entries from the MIT-licensed community use-case catalog pinned
+to commit `8d26053`, 95 Cisco 100 definitions that are not execution-enabled; 4 already-promoted Cisco 100 scenarios excluded to avoid double counting). Only id, title, labels, URL and an unverified data-source hint are
+recorded. Mapping basis is SOURCE_LABEL, EDITORIAL_TITLE or EDITORIAL_DOMAIN; government subdomains only where a title supports one (Federal Civilian and Compliance has none). The Explorer shows them as
+`CATALOGED`, never runnable, with no Run action. The 18-industry matrix is in `pulseforge_scenario_coverage.md`.
+
+**Curated Analytic Stories.** `catalog/curated_analytic_stories.json`: 20 stories (14 industries) whose own text names the sector as a threat target; every original `research.splunk.com` URL was HTTP-checked (57 of 365
+stories have no resolving page and were excluded). Curated is not executable: only a runtime-approved detection makes a story runnable (still only React2Shell).
+
+**TA mapping.** 100 Cisco rows no longer claim the Unix and Linux add-on (`required_ta: null` + review record). No replacement ID is asserted.
+
+**Evidence limits unchanged.** No sourcetype was promoted: the remaining 143 sample-replay and 47 missing sources have no authentic format reference, and the pinned attack-data corpus backs none of them.
+The original 100 financial and 100 telecom files are still missing; when supplied they should be imported as a new source in `scenario_candidates.json` using their original IDs and the same dedupe rule.

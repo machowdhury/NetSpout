@@ -6,6 +6,7 @@ and real-time WebSocket streaming at 500ms intervals.
 
 import asyncio
 import json
+from pathlib import Path
 import re
 import time
 import csv
@@ -40,6 +41,7 @@ from app.telemetry_config_api import (
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
 from app.authentic_scenario_packs import SCENARIO_PACK_IDS
+from netspout_core.incident_packs import catalog as incident_catalog
 from app.run_progress import RunProgressTracker, RunProgressState
 from app.unified_generation import (
     GenerationMode,
@@ -70,7 +72,7 @@ from app.release_candidate import (
     ReleaseCandidateConfiguration,
     SecuritySourceCatalog,
 )
-from app.use_case_explorer import UseCaseExplorer, load_taxonomy
+from app.use_case_explorer import UseCaseExplorer, load_candidates, load_curated_stories, load_taxonomy
 from app.security_content_lab import (
     SUPPORTED_RUNTIME_DETECTIONS,
     validate_index_name,
@@ -2062,7 +2064,7 @@ def _authorize_caller_transport(raw: Dict[str, Any]) -> TelemetryTransportConfig
     return cfg
 
 
-def _generator_transport(index=None, explicit=None):
+def _generator_transport(index=None, explicit=None, needs_metric_index=False):
     """Transport for the generator-mode routes: an explicit request config wins; otherwise the Connection Center
     destination (global transport) with the requested index; None keeps the pre-existing defaults when none is saved."""
     if explicit:
@@ -2075,6 +2077,9 @@ def _generator_transport(index=None, explicit=None):
         effective = index or getattr(gt, "hec_index", None)  # an omitted index falls back to the destination's own index, which must also be allowed
         if effective and effective not in config.get("indexes", []):
             raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+        metric_index = getattr(gt, "hec_metric_index", None)
+        if needs_metric_index and metric_index and metric_index not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
         return gt.model_copy(update={"hec_index": index} if index else {})
     return None
 
@@ -2157,13 +2162,15 @@ def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
     from netspout_core.universe_batch4_engine import BATCH4_SCENARIO_IDS
     from netspout_core.universe_batch5_engine import BATCH5_SCENARIO_IDS
     from netspout_core.universe_batch6_engine import BATCH6_SCENARIO_IDS
-    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + BATCH5_SCENARIO_IDS + BATCH6_SCENARIO_IDS + ['ub1_ot_proxy_host_hunt']:
+    from netspout_core.incident_packs import incident_ids
+    incident = incident_ids()
+    if scenario_id in BATCH2_SCENARIO_IDS + BATCH3_SCENARIO_IDS + BATCH4_SCENARIO_IDS + BATCH5_SCENARIO_IDS + BATCH6_SCENARIO_IDS + incident + ['ub1_ot_proxy_host_hunt']:
         from app.generator_modes import generator_service
         try:
             config = payload.get('transport_config')
             return generator_service.generate_universe_scenario(
                 scenario_id, run_id=payload.get('run_id'), dispatch=bool(payload.get('dispatch', False)),
-                transport_config=_generator_transport(payload.get('index'), config) if payload.get('dispatch') else None)
+                transport_config=_generator_transport(payload.get('index'), config, needs_metric_index=scenario_id in incident) if payload.get('dispatch') else None)
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
     raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")
@@ -2429,6 +2436,31 @@ def list_security_content_validations():
 _explorer_operational_cache: Dict[str, Any] = {}
 
 
+def _verified_scenario_ids():
+    """(live-verified scenario ids, dashboard-verified scenario ids) from COMMITTED evidence only; empty if the evidence files are not present."""
+    import glob as _glob
+    here = Path(__file__).resolve().parent
+    root = here.parents[1]
+    verified, dashboards = set(), set()
+    files = _glob.glob(str(here / "catalog_data" / "*live_raw_equality_results.json")) + _glob.glob(str(root / "docs/verification/evidence/incident_packs/live_results.json"))
+    for f in files:
+        try:
+            doc = json.loads(Path(f).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for run in doc.get("scenario_runs", []):
+            if run.get("verdict") == "PASS":
+                verified.add(run["scenario_id"])
+    try:
+        visual = json.loads((root / "docs/verification/evidence/phase4f/visual-validation.json").read_text(encoding="utf-8"))
+        if visual.get("verdict", {}).get("maturity") == "DASHBOARD_READY":
+            dashboards.add("SEC-P9-B-DNS-ANOMALY")
+            verified.add("SEC-P9-B-DNS-ANOMALY")
+    except (OSError, ValueError):
+        pass
+    return verified, dashboards
+
+
 def _explorer() -> UseCaseExplorer:
     from app.catalog import catalog
     if "inputs" not in _explorer_operational_cache:
@@ -2446,6 +2478,11 @@ def _explorer() -> UseCaseExplorer:
         runtime_approved_detections=SUPPORTED_RUNTIME_DETECTIONS,
         pack_scenario_ids=SCENARIO_PACK_IDS,
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
+        incident_packs=incident_catalog(),
+        candidates=load_candidates(),
+        curated_stories=load_curated_stories(),
+        verified_scenarios=_verified_scenario_ids()[0],
+        dashboard_verified=_verified_scenario_ids()[1],
         **_explorer_operational_cache["inputs"],
     )
 
@@ -2500,6 +2537,7 @@ class ExplorerEnablePayload(BaseModel):
 class ExplorerObservePayload(BaseModel):
     index: str
     run_id: str
+    metric_index: Optional[str] = None
 
 
 @app.post("/api/explorer/detections/{detection_id}/enable")
@@ -2544,7 +2582,19 @@ def explorer_observe_replay(payload: ExplorerObservePayload):
     if error:
         return {"status": "ERROR", "indexed_event_count": None, "error": error}
     count = int(rows[0].get("count", 0)) if rows else 0
-    return {"status": "OBSERVED" if count > 0 else "NOT_OBSERVED", "indexed_event_count": count, "error": None}
+    reply = {"status": "OBSERVED" if count > 0 else "NOT_OBSERVED", "indexed_event_count": count, "error": None}
+    if payload.metric_index:
+        if payload.metric_index not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+        try:
+            validate_index_name(payload.metric_index)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        mrows, merror = release_candidate_configuration.execute_read_only_search(
+            f'| mstats count(_value) as datapoints WHERE index="{payload.metric_index}" AND metric_name=* AND netspout_run_id="{payload.run_id}" earliest=-24h latest=now')
+        reply["indexed_metric_datapoints"] = None if merror else (int(mrows[0].get("datapoints", 0)) if mrows else 0)
+        reply["metric_error"] = merror
+    return reply
 
 
 @app.get("/api/setup")

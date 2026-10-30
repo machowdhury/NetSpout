@@ -409,14 +409,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-client.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-client",
    "cisco:catalyst:client"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-clienthealth",
@@ -430,14 +436,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-clienthealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-clienthealth",
    "cisco:catalyst:clienthealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-compliance",
@@ -451,14 +463,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-compliance.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-compliance",
    "cisco:catalyst:compliance"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-devicehealth",
@@ -472,14 +490,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-devicehealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-devicehealth",
    "cisco:catalyst:devicehealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-issue",
@@ -493,14 +517,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-issue.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-issue",
    "cisco:catalyst:issue"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-networkhealth",
@@ -514,14 +544,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-networkhealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-networkhealth",
    "cisco:catalyst:networkhealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-allowed",
@@ -535,14 +571,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-allowed.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-allowed",
    "cisco:catalyst:rogue:allowed"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-counts",
@@ -556,14 +598,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-counts.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-counts",
    "cisco:catalyst:rogue:counts"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-threat_details",
@@ -577,14 +625,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-threat-details.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-threat_details",
    "cisco:catalyst:rogue:threat_details"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-verbose",
@@ -598,14 +652,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-verbose.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-verbose",
    "cisco:catalyst:rogue:verbose"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-verbose-legacy",
@@ -619,14 +679,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-verbose-legacy.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-verbose-legacy",
    "cisco:catalyst:rogue:verbose:legacy"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-rogue-wired",
@@ -640,14 +706,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-rogue-wired.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-rogue-wired",
    "cisco:catalyst:rogue:wired"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-script-heartbeat",
@@ -661,14 +733,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-script-heartbeat.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-script-heartbeat",
    "cisco:catalyst:script:heartbeat"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-security-awips_signatures",
@@ -682,14 +760,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-security-awips-signatures.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-security-awips_signatures",
    "cisco:catalyst:security:awips_signatures"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-security-events",
@@ -703,14 +787,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-security-events.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-security-events",
    "cisco:catalyst:security:events"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-security-profile",
@@ -724,14 +814,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-security-profile.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-security-profile",
    "cisco:catalyst:security:profile"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-security-profile_signatures",
@@ -745,14 +841,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-security-profile-signatures.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-security-profile_signatures",
    "cisco:catalyst:security:profile_signatures"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-security-rules",
@@ -766,14 +868,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-security-rules.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-security-rules",
    "cisco:catalyst:security:rules"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-securityadvisory",
@@ -787,14 +895,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-securityadvisory.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-securityadvisory",
    "cisco:catalyst:securityadvisory"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-syslog",
@@ -829,14 +943,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-threat-list.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-threat-list",
    "cisco:catalyst:threat:list"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-threat-signatures",
@@ -850,14 +970,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-threat-signatures.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-threat-signatures",
    "cisco:catalyst:threat:signatures"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-threat-summary",
@@ -871,14 +997,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-threat-summary.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-threat-summary",
    "cisco:catalyst:threat:summary"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-catalyst-threat-summary-legacy",
@@ -892,14 +1024,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-catalyst-threat-summary-legacy.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-catalyst-threat-summary-legacy",
    "cisco:catalyst:threat:summary:legacy"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dc-aci-class",
@@ -913,14 +1051,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dc-aci-class.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dc-aci-class",
    "cisco:dc:aci:class"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco ACI Add-on for Splunk Enterprise",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dc-aci-events",
@@ -955,14 +1099,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dc-aci-bridge-domain.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dc-aci-health",
    "cisco:dc:aci:health"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco ACI Add-on for Splunk Enterprise",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dc-nexus9k",
@@ -976,14 +1126,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dc-nexus9k.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dc-nexus9k",
    "cisco:dc:nexus9k"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco ACI Add-on for Splunk Enterprise",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dc-nexus9k-syslog",
@@ -997,14 +1153,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dc-nexus9k-syslog.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dc-nexus9k-syslog",
    "cisco:dc:nexus9k:syslog"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco ACI Add-on for Splunk Enterprise",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-audit-logs",
@@ -1018,14 +1180,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-audit-logs.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-audit-logs",
    "cisco:dnac:audit:logs"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-client",
@@ -1039,14 +1207,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-client.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-client",
    "cisco:dnac:client"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-clienthealth",
@@ -1060,14 +1234,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-clienthealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-clienthealth",
    "cisco:dnac:clienthealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-compliance",
@@ -1081,14 +1261,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-compliance.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-compliance",
    "cisco:dnac:compliance"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-devicehealth",
@@ -1102,14 +1288,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-devicehealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-devicehealth",
    "cisco:dnac:devicehealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-issue",
@@ -1123,14 +1315,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-issue.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-issue",
    "cisco:dnac:issue"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-networkhealth",
@@ -1144,14 +1342,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-networkhealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-networkhealth",
    "cisco:dnac:networkhealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-securityadvisory",
@@ -1165,14 +1369,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-securityadvisory.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-securityadvisory",
    "cisco:dnac:securityadvisory"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-dnac-site-topology",
@@ -1186,14 +1396,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-dnac-site-topology.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-dnac-site-topology",
    "cisco:dnac:site:topology"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Catalyst Switch Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-account",
@@ -1207,14 +1423,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-account.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-account",
    "cisco:duo:account"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-activity",
@@ -1228,14 +1450,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-activity.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-activity",
    "cisco:duo:activity"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-administrator",
@@ -1249,14 +1477,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-administrator.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-administrator",
    "cisco:duo:administrator"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-auth",
@@ -1291,14 +1525,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-authentication.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-authentication",
    "cisco:duo:authentication"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-authentication_v2",
@@ -1312,14 +1552,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-authentication-v2.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-authentication_v2",
    "cisco:duo:authentication_v2"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-endpoint",
@@ -1333,14 +1579,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-endpoint.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-endpoint",
    "cisco:duo:endpoint"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-duo-push-prompt",
@@ -1396,14 +1648,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-duo-user.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-duo-user",
    "cisco:duo:user"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Duo Security Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-ftd-syslog",
@@ -1438,14 +1696,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-advisories.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-advisories",
    "cisco:intersight:advisories"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-alarms",
@@ -1459,14 +1723,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-alarms.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-alarms",
    "cisco:intersight:alarms"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-auditrecords",
@@ -1480,14 +1750,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-auditrecords.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-auditrecords",
    "cisco:intersight:auditrecords"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-compute",
@@ -1501,14 +1777,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-compute.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-compute",
    "cisco:intersight:compute"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-contracts",
@@ -1522,14 +1804,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-contracts.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-contracts",
    "cisco:intersight:contracts"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-licenses",
@@ -1543,14 +1831,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-licenses.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-licenses",
    "cisco:intersight:licenses"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-metrics",
@@ -1585,14 +1879,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-networkelements.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-networkelements",
    "cisco:intersight:networkelements"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-networkobjects",
@@ -1606,14 +1906,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-networkobjects.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-networkobjects",
    "cisco:intersight:networkobjects"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-profiles",
@@ -1627,14 +1933,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-profiles.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-profiles",
    "cisco:intersight:profiles"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-intersight-targets",
@@ -1648,14 +1960,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-intersight-targets.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-intersight-targets",
    "cisco:intersight:targets"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Intersight Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-ios",
@@ -1669,14 +1987,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-ios.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-ios",
    "cisco:ios"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-ios-mdt",
@@ -1963,14 +2287,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-nvm-flowdata.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-nvm-flowdata",
    "cisco:nvm:flowdata"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-nxos",
@@ -2026,14 +2356,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-aaa-6-method-list-state.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-aaa-6-method_list_state",
    "cisco:sdwan:AAA-6-METHOD_LIST_STATE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-aaa-6-notify_mlist_state_to_aaa_client",
@@ -2047,14 +2383,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-aaa-6-notify_mlist_state_to_aaa_client",
    "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-aaa_audit_message-6-method_list_state",
@@ -2068,14 +2410,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-aaa-audit-message-6-method-list-state.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-aaa_audit_message-6-method_list_state",
    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-aaa_audit_message-6-notify_mlist_state_to_aaa_client",
@@ -2089,14 +2437,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-aaa_audit_message-6-notify_mlist_state_to_aaa_client",
    "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-bgp-5-adjchange",
@@ -2110,14 +2464,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-bgp-5-adjchange.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-bgp-5-adjchange",
    "cisco:sdwan:BGP-5-ADJCHANGE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-bgp-5-nbr_reset",
@@ -2131,14 +2491,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-bgp-5-nbr-reset.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-bgp-5-nbr_reset",
    "cisco:sdwan:BGP-5-NBR_RESET"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-bgp-6-nexthop",
@@ -2152,14 +2518,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-bgp-6-nexthop.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-bgp-6-nexthop",
    "cisco:sdwan:BGP-6-NEXTHOP"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-bgp_session-5-adjchange",
@@ -2173,14 +2545,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-bgp-session-5-adjchange.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-bgp_session-5-adjchange",
    "cisco:sdwan:BGP_SESSION-5-ADJCHANGE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-cdp-4-native_vlan_mismatch",
@@ -2194,14 +2572,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-cdp-4-native-vlan-mismatch.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-cdp-4-native_vlan_mismatch",
    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-crypto-6-isakmp_on_off",
@@ -2215,14 +2599,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-crypto-6-isakmp-on-off.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-crypto-6-isakmp_on_off",
    "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-cts-3-aaa_no_radius_server",
@@ -2236,14 +2626,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-cts-3-aaa-no-radius-server.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-cts-3-aaa_no_radius_server",
    "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-dmi-5-auth_passed",
@@ -2257,14 +2653,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-dmi-5-auth-passed.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-dmi-5-auth_passed",
    "cisco:sdwan:DMI-5-AUTH_PASSED"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-dmi-5-config_i",
@@ -2278,14 +2680,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-dmi-5-config-i.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-dmi-5-config_i",
    "cisco:sdwan:DMI-5-CONFIG_I"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-dmi-5-sync_complete",
@@ -2299,14 +2707,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-dmi-5-sync-complete.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-dmi-5-sync_complete",
    "cisco:sdwan:DMI-5-SYNC_COMPLETE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-dmi-5-sync_needed",
@@ -2320,14 +2734,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-dmi-5-sync-needed.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-dmi-5-sync_needed",
    "cisco:sdwan:DMI-5-SYNC_NEEDED"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-dmi-5-sync_start",
@@ -2341,14 +2761,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-dmi-5-sync-start.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-dmi-5-sync_start",
    "cisco:sdwan:DMI-5-SYNC_START"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-environmental-1-alert",
@@ -2362,14 +2788,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-environmental-1-alert.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-environmental-1-alert",
    "cisco:sdwan:ENVIRONMENTAL-1-ALERT"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-eventlib-3-cpuhog",
@@ -2383,14 +2815,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-eventlib-3-cpuhog.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-eventlib-3-cpuhog",
    "cisco:sdwan:EVENTLIB-3-CPUHOG"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-iosxe-3-platform",
@@ -2404,14 +2842,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-iosxe-3-platform.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-iosxe-3-platform",
    "cisco:sdwan:IOSXE-3-PLATFORM"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-iosxe_infra-4-no_punt_keepalive",
@@ -2425,14 +2869,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-iosxe_infra-4-no_punt_keepalive",
    "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-iosxe_rp_pae_not-6-pae_startup",
@@ -2446,14 +2896,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-iosxe_rp_pae_not-6-pae_startup",
    "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-lineproto-5-updown",
@@ -2467,14 +2923,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-lineproto-5-updown.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-lineproto-5-updown",
    "cisco:sdwan:LINEPROTO-5-UPDOWN"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-link-5-changed",
@@ -2488,14 +2950,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-link-5-changed.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-link-5-changed",
    "cisco:sdwan:LINK-5-CHANGED"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-link-5-updown",
@@ -2509,14 +2977,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-link-5-updown.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-link-5-updown",
    "cisco:sdwan:LINK-5-UPDOWN"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-mdt_connection-6-state_changed",
@@ -2551,14 +3025,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-msdp-5-peer-updown.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-msdp-5-peer_updown",
    "cisco:sdwan:MSDP-5-PEER_UPDOWN"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-ndbman-5-config_i",
@@ -2572,14 +3052,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-ndbman-5-config-i.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-ndbman-5-config_i",
    "cisco:sdwan:NDBMAN-5-CONFIG_I"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-ospf-5-adjchg",
@@ -2593,14 +3079,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-ospf-5-adjchg.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-ospf-5-adjchg",
    "cisco:sdwan:OSPF-5-ADJCHG"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-pki-6-authoritative_clock",
@@ -2614,14 +3106,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-pki-6-authoritative-clock.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-pki-6-authoritative_clock",
    "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-platform-4-element_warning",
@@ -2635,14 +3133,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-platform-4-element-warning.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-platform-4-element_warning",
    "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-sys-5-config_p",
@@ -2656,14 +3160,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-sys-5-config-p.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-sys-5-config_p",
    "cisco:sdwan:SYS-5-CONFIG_P"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-linkhealth",
@@ -2677,14 +3187,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-linkhealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-linkhealth",
    "cisco:sdwan:linkhealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-sitehealth",
@@ -2698,14 +3214,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-sitehealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-sitehealth",
    "cisco:sdwan:sitehealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-ssetunnels",
@@ -2719,14 +3241,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-ssetunnels.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-ssetunnels",
    "cisco:sdwan:ssetunnels"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-syslog",
@@ -2740,14 +3268,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-syslog.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-syslog",
    "cisco:sdwan:syslog"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-system-logs",
@@ -2761,7 +3295,7 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-system-logs.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-system-logs",
    "cisco:sdwan:system:logs"
@@ -2771,7 +3305,13 @@
    "cisco-sdwan-sytem-logs"
   ],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-sytem-logs",
@@ -2785,7 +3325,7 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-sytem-logs.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-sytem-logs",
    "cisco:sdwan:sytem:logs"
@@ -2794,7 +3334,13 @@
   "is_benchmark_197": true,
   "status": "deprecated",
   "canonical_sourcetype": "cisco:sdwan:system:logs",
-  "canonical_id": "cisco-sdwan-system-logs"
+  "canonical_id": "cisco-sdwan-system-logs",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-tunnelhealth",
@@ -2808,14 +3354,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-tunnelhealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-tunnelhealth",
    "cisco:sdwan:tunnelhealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-utd-logs",
@@ -2829,14 +3381,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-utd-logs.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-utd-logs",
    "cisco:sdwan:utd:logs"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sdwan-utdhealth",
@@ -2850,14 +3408,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sdwan-utdhealth.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sdwan-utdhealth",
    "cisco:sdwan:utdhealth"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Enterprise Networking Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-se",
@@ -2871,14 +3435,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-se.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-se",
    "cisco:se"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sfw-estreamer",
@@ -2892,14 +3462,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sfw-estreamer.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sfw-estreamer",
    "cisco:sfw:estreamer"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-sfw-policy",
@@ -2913,14 +3489,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-sfw-policy.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-sfw-policy",
    "cisco:sfw:policy"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-thousandeyes-event",
@@ -2934,14 +3516,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-thousandeyes-event.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-thousandeyes-event",
    "cisco:thousandeyes:event"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco-thousandeyes-metric",
@@ -2976,14 +3564,20 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-thousandeyes-path-vis.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco-thousandeyes-path-vis",
    "cisco:thousandeyes:path-vis"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "cisco_syslog",
@@ -2997,13 +3591,19 @@
   "generation_mode": "REPLAY",
   "protocol": "syslog",
   "sample_file": "cisco-syslog.yml",
-  "required_ta": "Splunk Add-on for Unix and Linux",
+  "required_ta": null,
   "aliases": [
    "cisco_syslog"
   ],
   "deprecated_aliases": [],
   "is_benchmark_197": true,
-  "status": "active"
+  "status": "active",
+  "required_ta_review": {
+   "status": "UNVERIFIED",
+   "previous": "Splunk Add-on for Unix and Linux",
+   "candidate_name": "Cisco Networks Add-on for Splunk",
+   "basis": "Previous value is a Unix/Linux parser for a Cisco source; candidate is the vendor-level app name in vendors.json, not verified for this sourcetype; no Splunkbase ID asserted."
+  }
  },
  {
   "id": "citrix-netscaler-syslog",

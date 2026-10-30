@@ -180,9 +180,10 @@ def reachability(ids, native):
 def scenario_evidence():
     """Runnable / live-verified / dashboard / detection evidence for catalog scenarios, from committed artifacts only."""
     from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS
+    from netspout_core.incident_packs import incident_ids
     from netspout_core.scenario_runner import SUPPORTED_SCENARIO_IDS
     live = {}
-    for f in glob.glob(str(ROOT / "catalog" / "*live_raw_equality_results.json")):
+    for f in glob.glob(str(ROOT / "catalog" / "*live_raw_equality_results.json")) + glob.glob(str(OUT / "evidence" / "incident_packs" / "live_results.json")):
         for run in json.loads(Path(f).read_text(encoding="utf-8")).get("scenario_runs", []):
             if run.get("verdict") == "PASS":
                 live[run["scenario_id"]] = Path(f).name
@@ -194,7 +195,14 @@ def scenario_evidence():
     detection = []
     if sec.exists() and json.loads(sec.read_text(encoding="utf-8")).get("scheduler", {}).get("result_count", 0) >= 1:
         detection = ["React2Shell / d36459b1-7901-401a-a67e-44426c15b168 (saved search fired on Splunk's scheduler)"]
-    return set(SCENARIO_PACK_IDS), set(SUPPORTED_SCENARIO_IDS), live, dashboard_ready, detection
+    return set(SCENARIO_PACK_IDS) | set(incident_ids()), set(SUPPORTED_SCENARIO_IDS), live, dashboard_ready, detection
+
+
+def explorer_view():
+    """The Explorer's own inventory (unified generation + catalog + incident packs + documented candidates), so reports never disagree with the product."""
+    sys.path.insert(0, str(ROOT / "backend"))
+    from app.main import _explorer
+    return _explorer()
 
 
 def main(check=False):
@@ -367,6 +375,42 @@ def main(check=False):
            "## Scenarios by approved industry (editorial mapping unless an industry pack binds it)", "", "| Industry | Mapped scenarios | Runnable |", "|---|---|---|"]
     sl += [f"| {name} | {n} | {r} |" for _, (n, r, name) in by_ind.items()]
     sl += ["", "Live-verified scenarios: " + ", ".join(sorted(i for i in ids if i in live))]
+    ex = explorer_view()
+    entries = [e for e in ex.all_entries() if e["kind"] == "operational"]
+    by_engine = Counter(e["engine"] for e in entries)
+    by_tier = Counter(e["maturity"]["tier"] for e in entries)
+    sec = ex.facets()["security"]
+    native_now = {o["sourcetype"] for o in out if o["generator"] == "NATIVE_ENGINE"}
+    sl += ["", "## Unique scenario inventory (the Explorer's own view; nothing counted twice)", "",
+           "| Measure | Count |", "|---|---|",
+           f"| Unique operational definitions (executable + documented candidates) | {len(entries)} |",
+           f"| Runnable (a real generator and Run path exist) | {sum(e['runnable'] for e in entries)} |",
+           f"| Cataloged candidates only (documented; no generator or contract; never runnable) | {by_tier['CATALOGED']} |",
+           f"| Contract-only (catalog contracts without executable telemetry; no Run action) | {sum(1 for e in entries if not e['runnable'] and e['maturity']['tier'] != 'CATALOGED')} |",
+           f"| Live-verified in Splunk (counts and, for incident packs, mstats values checked independently) | {sum(e['live_verified'] for e in entries)} |",
+           f"| Dashboard-verified | {sum(e['dashboard_verified'] for e in entries)} |",
+           f"| Security analytic stories (reference stories; NOT counted as executable) | {sec['total']} |",
+           f"| Security stories with a runnable workflow (runtime-approved detection) | {sec['demo_ready']} |",
+           f"| Detection-verified | {len(det_ready)} |",
+           f"| Duplicate candidates removed (already represented by an executable entry) | {len(ex.duplicate_candidates)} |", "",
+           "By engine: " + ", ".join(f"{k} {v}" for k, v in sorted(by_engine.items())) + ". By tier: " + ", ".join(f"{k} {v}" for k, v in sorted(by_tier.items())) + ".", "",
+           "Incident packs (27 network + 10 telecom) emit NetSpout-defined MODELED telemetry (`netspout:*`), not vendor-native formats; they stay CONTRACTED. "
+           "Cataloged candidates come from `catalog/scenario_candidates.json` (MIT community use-case catalog pinned to a commit, plus Cisco 100 definitions that are not execution-enabled).", "",
+           "## 18-industry coverage matrix", "",
+           "Columns are separate evidence: documented is not runnable, runnable is not verified, verified is not TA-parsed or detected. Mappings are editorial unless the "
+           "source labels the industry (`*` in the Explorer).", "",
+           "| Industry | Documented | Cataloged only | Runnable | Live-verified | Dashboard-verified | Curated stories | Stories runnable | Detections verified | Named sourcetypes without a native generator | Government subdomains covered |",
+           "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for r in ex.industries():
+        mine = [e for e in entries if any(i["id"] == r["id"] for i in e["industries"])]
+        named = {st for e in mine for st in e.get("sourcetypes", []) if st not in native_now and not st.startswith("netspout:")}
+        sl.append(f"| {r['name']} | {r['scenarios_total']} | {r['scenarios_cataloged_only']} | {r['scenarios_runnable']} | {r['scenarios_live_verified']} | {r['scenarios_dashboard_verified']} | {r['security_stories_curated']} | {r['security_stories_runnable']} | {r['security_detections_verified']} | {len(named)} | {', '.join(s.replace('gov-', '') for s in r['subdomains_with_scenarios']) or '-'} |")
+    sl += ["", "Curated stories are Splunk Analytic Stories whose own text names the sector as a threat target (basis NARRATIVE_TARGET_SECTOR) and whose original research.splunk.com page was verified (HTTP 200); "
+           "they are NOT executable: only a story with a runtime-approved detection is runnable, and the single detection-verified item (React2Shell) is not curated to an industry. "
+           "Technology/SaaS, media, non-profit and agriculture have no story whose text names the sector and whose link resolves. "
+           "Government subdomains: State/Local, National Security and Critical Infrastructure have editorial or source-labeled entries; **Federal Civilian and Compliance has none** (no authoritative source selected). "
+           "TA validation is not tracked per industry: only Windows/Sysmon channels were TA-checked (see the TA matrix). Industries whose documented scenarios have no runnable counterpart "
+           "(for example transportation, media, aerospace/defense, agriculture, real estate, insurance, non-profit) need authentic telemetry sources before they can become runnable."]
     (OUT / "pulseforge_scenario_coverage.md").write_text("\n".join(sl) + "\n", encoding="utf-8")
     print(json.dumps({"sourcetypes": summary, "scenarios": sc_summary}, indent=1))
 

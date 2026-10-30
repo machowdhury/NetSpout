@@ -15,6 +15,16 @@ test.describe('Use Case Explorer', () => {
     expect(await industries.count()).toBe(19); // 18 + "All industries"
   });
 
+  test('every approved industry lists documented candidates that are never runnable', async ({ page }) => {
+    await page.getByLabel('Demo-ready only').uncheck();
+    await page.getByLabel('Industry').selectOption('insurance-insurtech');
+    const cards = page.getByTestId('explorer-card');
+    await expect(cards.first()).toContainText('Cataloged candidate');
+    await cards.first().click();
+    await expect(page.getByTestId('candidate-provenance')).toContainText('Documented candidate, not executable');
+    await expect(page.getByTestId('explorer-workflow').getByRole('button', { name: 'Run' })).toHaveCount(0);
+  });
+
   test('search narrows results and empty industries are not padded', async ({ page }) => {
     await page.getByLabel('Search use cases').fill('dns');
     await expect(page.getByTestId('explorer-card').first()).toContainText(/dns/i);

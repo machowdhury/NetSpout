@@ -208,7 +208,34 @@ class TelemetryGeneratorService:
         entry.netspout_ground_truth = 'synthetic_observation'
         return entry
 
+    def generate_incident_pack(self, scenario_id, run_id=None, dispatch=False, transport_config=None):
+        """Run one of the 37 finite NetSpout incident packs (modeled telemetry): 30 logs to the event index, 10 gauges to the metric index."""
+        from netspout_core import incident_packs
+        rid = run_id or 'pf-incident-' + str(uuid.uuid4())
+        events = incident_packs.generate_pack(scenario_id, rid)
+        results = []
+        if dispatch:
+            if transport_config is None:
+                raise ValueError('Explicit transport configuration required for scenario dispatch')
+            for payload in incident_packs.hec_payloads(events, transport_config.hec_index, transport_config.hec_metric_index):
+                outcome = dispatcher.emit_hec(payload, transport_config.hec_url, transport_config.hec_token,
+                                              ssl_verify=transport_config.hec_ssl_verify,
+                                              allow_insecure_tls=transport_config.hec_allow_insecure_tls)
+                results.append({'hec': {'success': bool(outcome[0]), 'state': str(getattr(outcome, 'state', ''))}})
+        summary = incident_packs.summarize(events)
+        indexes = {'events': (transport_config.hec_index if transport_config else None),
+                   'metrics': (transport_config.hec_metric_index if transport_config else None)}
+        return dict(mode='SCENARIO', status='GENERATED', scenario_id=scenario_id, run_id=rid, count_generated=len(events),
+                    event_count=summary['log_events'], metric_event_count=summary['metric_events'],
+                    metric_datapoints_expected=summary['metric_datapoints'], indexes=indexes, telemetry='MODELED_NETSPOUT_SCHEMA',
+                    events=[{'time': e['time'], 'host': e['host'], 'sourcetype': e['sourcetype'], 'phase': e['fields']['netspout_phase'],
+                             'kind': 'metric' if 'metrics' in e else 'log'} for e in events],
+                    dispatch_results=results, dispatched=dispatch)
+
     def generate_universe_scenario(self, scenario_id, run_id=None, dispatch=False, transport_config=None):
+        from netspout_core import incident_packs
+        if scenario_id in incident_packs.incident_ids():
+            return self.generate_incident_pack(scenario_id, run_id=run_id, dispatch=dispatch, transport_config=transport_config)
         from netspout_core.authentic_scenario_packs import run_scenario_pack
         from netspout_core.universe_batch2_engine import BATCH2_SCENARIO_IDS
         from netspout_core.universe_batch3_engine import BATCH3_SCENARIO_IDS

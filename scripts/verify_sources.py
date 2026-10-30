@@ -30,6 +30,8 @@ CORE_MODULES = [
     "universe_batch5_engine.py",
     "universe_batch6_engine.py",
     "universe_batch7_engine.py",
+    "sample_replay.py",
+    "replay_service.py",
     "incident_packs.py",
     "authentic_scenario_packs.py",
     "wave1_authentic_engine.py",

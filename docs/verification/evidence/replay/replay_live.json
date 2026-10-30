@@ -1,0 +1,126 @@
+{
+ "generated_utc": "2026-10-30T17:46Z",
+ "lab": "tests/lab/ta_validation (isolated)",
+ "splunk_version": "10.2.7",
+ "index": "dev_test_replay",
+ "host": "replayed-log-generator",
+ "ta_cim_detection_validated": false,
+ "passed": 19,
+ "failed": [],
+ "checks": {
+  "A1_hec_accepts_every_event": {
+   "pass": true,
+   "counts": {
+    "generated": 24,
+    "delivered": 24,
+    "accepted": 24,
+    "rejected": 0,
+    "unknown": 0,
+    "discarded_on_stop": 0,
+    "backpressure_waits": 0
+   }
+  },
+  "A2_independent_search_count_equals_accepted": {
+   "pass": true,
+   "indexed": 24
+  },
+  "A3_isolation_index_host_source": {
+   "pass": true,
+   "index": "dev_test_replay",
+   "host": "replayed-log-generator"
+  },
+  "A4_timestamps_are_on_the_current_clock": {
+   "pass": true,
+   "earliest": 0.003919124603271484,
+   "latest": 6.60391902923584
+  },
+  "A5_relative_spacing_preserved_in_splunk_time": {
+   "pass": true,
+   "max_error_s": 0.0
+  },
+  "A6_loop_boundary_monotonic_gap_is_the_documented_loop_gap": {
+   "pass": true,
+   "boundary_gap_s": 1.0,
+   "expected_s": 1.0
+  },
+  "A7_everything_but_the_timestamp_is_byte_identical": {
+   "pass": true,
+   "distinct_records": 24
+  },
+  "A8_no_leak_to_other_indexes": {
+   "pass": true
+  },
+  "B1_pause_stops_delivery": {
+   "pass": true,
+   "accepted_during_pause": 0,
+   "indexed": 15
+  },
+  "B2_resume_continues_and_stop_halts": {
+   "pass": true,
+   "accepted": 106,
+   "before_pause": 15
+  },
+  "B3_continuous_loops_more_than_once": {
+   "pass": true,
+   "generated": 188,
+   "records": 94
+  },
+  "B4_stop_accounting_matches_splunk": {
+   "pass": true,
+   "indexed": 106,
+   "counts": {
+    "generated": 188,
+    "delivered": 106,
+    "accepted": 106,
+    "rejected": 0,
+    "unknown": 0,
+    "discarded_on_stop": 82,
+    "backpressure_waits": 0
+   }
+  },
+  "B5_stamps_never_go_backwards_across_pause_and_loops": {
+   "pass": true,
+   "note": "equal stamps occur where the source itself has equal timestamps"
+  },
+  "B6_nothing_arrives_after_stop": {
+   "pass": true
+  },
+  "C1_eps_limit_respected": {
+   "pass": true,
+   "observed_eps": 14.29,
+   "limit": 15
+  },
+  "C2_all_throttled_events_indexed": {
+   "pass": true,
+   "indexed": 129
+  },
+  "D1_backpressure_blocks_producer_without_loss": {
+   "pass": true,
+   "counts": {
+    "generated": 36,
+    "delivered": 36,
+    "accepted": 36,
+    "rejected": 0,
+    "unknown": 0,
+    "discarded_on_stop": 0,
+    "backpressure_waits": 33
+   },
+   "indexed": 36
+  },
+  "E1_rejected_events_counted_and_not_indexed": {
+   "pass": true,
+   "counts": {
+    "generated": 12,
+    "delivered": 12,
+    "accepted": 0,
+    "rejected": 12,
+    "unknown": 0,
+    "discarded_on_stop": 0,
+    "backpressure_waits": 0
+   }
+  },
+  "F1_no_timestamp_source_refused": {
+   "pass": true
+  }
+ }
+}

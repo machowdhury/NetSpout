@@ -2176,6 +2176,96 @@ def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
     raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")
 
 
+# =========================================================================
+# Continuous sample replay (Connection Center destination only; no caller transport_config)
+# =========================================================================
+from netspout_core.replay_service import ReplayService, preview as replay_preview, sources as replay_sources
+from netspout_core.sample_replay import DEFAULT_HOST as REPLAY_HOST, DEFAULT_INDEX as REPLAY_INDEX, HecSink, ReplayError
+
+replay_service = ReplayService(Path(os.environ["NETSPOUT_REPLAY_STATE"]) if os.environ.get("NETSPOUT_REPLAY_STATE") else None)
+
+
+def _replay_destination(payload: Dict[str, Any]):
+    """The authorized destination for replay: the saved Connection Center destination, an allowlisted index (default dev_test_replay).
+    A caller-supplied transport_config is refused outright. Outside DOCKER_LAB the index must be a dev_ index and the caller must confirm."""
+    if payload.get("transport_config"):
+        raise HTTPException(status_code=422, detail="Replay uses the Connection Center destination; transport_config is not accepted")
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Connection Center destination is not configured")
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    if gt is None or not getattr(gt, "hec_url", None) or not getattr(gt, "hec_token", None):
+        raise HTTPException(status_code=409, detail="Connection Center HEC destination is not active")
+    index = payload.get("index") or REPLAY_INDEX
+    try:
+        validate_index_name(index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    if config.get("deployment_mode") != "DOCKER_LAB" and not (index.startswith("dev_") and payload.get("confirm_destination") is True):
+        raise HTTPException(status_code=403, detail="Replay outside a lab destination requires a dev_ index and confirm_destination=true")
+    return gt, index, payload.get("host") or REPLAY_HOST
+
+
+@app.get("/api/replay/sources")
+def replay_list_sources():
+    return {"sources": [{k: v for k, v in s.items() if k != "file"} for s in replay_sources()],
+            "defaults": {"index": REPLAY_INDEX, "host": REPLAY_HOST}}
+
+
+@app.post("/api/replay/preview")
+def replay_post_preview(payload: Dict[str, Any]):
+    try:
+        return replay_preview(payload)
+    except ReplayError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.post("/api/replay/sessions")
+def replay_start(payload: Dict[str, Any]):
+    gt, index, host = _replay_destination(payload)
+    def sink(source, sourcetype, idx, hst):
+        return HecSink(gt.hec_url, gt.hec_token, idx, hst, source, sourcetype, getattr(gt, "hec_ssl_verify", True), getattr(gt, "hec_allow_insecure_tls", False))
+    try:
+        return replay_service.create(payload, sink, index=index, host=host).status()
+    except ReplayError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/replay/sessions")
+def replay_list_sessions():
+    return {"sessions": replay_service.list()}
+
+
+@app.get("/api/replay/sessions/{session_id}")
+def replay_get_session(session_id: str):
+    try:
+        return replay_service.status(session_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+
+
+@app.post("/api/replay/sessions/{session_id}/verify")
+def replay_verify(session_id: str):
+    try:
+        return replay_service.verify(session_id, lambda q: release_candidate_configuration.execute_read_only_search(q))
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+
+
+@app.post("/api/replay/sessions/{session_id}/{action}")
+def replay_control(session_id: str, action: str):
+    if action not in ("pause", "resume", "stop"):
+        raise HTTPException(status_code=404, detail="Unknown action")
+    try:
+        return replay_service.control(session_id, action)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+    except ReplayError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.post("/api/generate/scenario")
 def post_generate_scenario_canonical(payload: Dict[str, Any]):
     """Canonical alias for scenario execution matching Section 17 API requirements."""

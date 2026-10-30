@@ -94,6 +94,13 @@ def _timeline(params, text, fmt, rule, record_start):
 
 
 def preview(params: Dict):
+    if params.get("pack_id"):
+        from netspout_core import replay_packs
+        from netspout_core.sample_replay import preview_timeline as _pt
+        tl = replay_packs.build_pack_timeline(params["pack_id"], run_id=params.get("run_id"), cycle_gap_s=params.get("loop_gap_s"))
+        out = _pt(tl, count=int(min(max(params.get("count", 5), 1), 20)), speed=_bounded("speed", params.get("speed"), 1.0))
+        out.update({"pack_id": params["pack_id"], "correlation_level": replay_packs.correlation_level(replay_packs.get(params["pack_id"]))})
+        return out
     text, fmt, rule, _, _, rs = resolve(params)
     out = preview_timeline(text, fmt, rule, count=int(min(max(params.get("count", 5), 1), 20)), speed=_bounded("speed", params.get("speed"), 1.0),
                            on_bad_record=params.get("on_bad_record", "fail"), loop_gap_s=params.get("loop_gap_s"),
@@ -136,10 +143,15 @@ class ReplayService:
     def create(self, params: Dict, sink_factory: Callable[[str, str, str, str], object], *, index=DEFAULT_INDEX, host=DEFAULT_HOST) -> ReplaySession:
         if not HOST_RE.match(host):
             raise ReplayError("invalid host")
-        text, fmt, rule, sourcetype, label, rs = resolve(params)
-        if not sourcetype:
-            raise ReplayError("sourcetype is required: this source has none recorded")
-        tl = _timeline(params, text, fmt, rule, rs)
+        if params.get("pack_id"):
+            from netspout_core import replay_packs
+            tl = replay_packs.build_pack_timeline(params["pack_id"], run_id=params.get("run_id"), cycle_gap_s=params.get("loop_gap_s"))
+            sourcetype, label = "(per event)", params["pack_id"]
+        else:
+            text, fmt, rule, sourcetype, label, rs = resolve(params)
+            if not sourcetype:
+                raise ReplayError("sourcetype is required: this source has none recorded")
+            tl = _timeline(params, text, fmt, rule, rs)
         loops = params.get("loops")
         if params.get("continuous"):
             loops = None

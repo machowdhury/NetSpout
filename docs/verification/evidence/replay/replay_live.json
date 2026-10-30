@@ -1,12 +1,21 @@
 {
- "generated_utc": "2026-10-30T17:46Z",
+ "generated_utc": "2026-10-30T17:55Z",
  "lab": "tests/lab/ta_validation (isolated)",
  "splunk_version": "10.2.7",
  "index": "dev_test_replay",
  "host": "replayed-log-generator",
  "ta_cim_detection_validated": false,
- "passed": 19,
+ "passed": 41,
  "failed": [],
+ "packs_indexed_verified": [
+  "rp_linux_credential_access",
+  "rp_cloud_control_plane_activity",
+  "rp_windows_endpoint_process_chain",
+  "rp_web_exploitation_recordings",
+  "rp_edr_and_cloud_activity",
+  "rp_agentic_ai_mcp_runtime_hybrid",
+  "rp_workload_sysmon_ebpf_hybrid"
+ ],
  "checks": {
   "A1_hec_accepts_every_event": {
    "pass": true,
@@ -31,8 +40,8 @@
   },
   "A4_timestamps_are_on_the_current_clock": {
    "pass": true,
-   "earliest": 0.003919124603271484,
-   "latest": 6.60391902923584
+   "earliest": 0.00447392463684082,
+   "latest": 6.604473829269409
   },
   "A5_relative_spacing_preserved_in_splunk_time": {
    "pass": true,
@@ -87,7 +96,7 @@
   },
   "C1_eps_limit_respected": {
    "pass": true,
-   "observed_eps": 14.29,
+   "observed_eps": 14.3,
    "limit": 15
   },
   "C2_all_throttled_events_indexed": {
@@ -121,6 +130,166 @@
   },
   "F1_no_timestamp_source_refused": {
    "pass": true
+  },
+  "G1_rp_linux_credential_access_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "BASELINE": 40,
+    "DETECT": 91
+   },
+   "indexed": {
+    "BASELINE": 40,
+    "DETECT": 91
+   }
+  },
+  "G2_rp_linux_credential_access_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "BASELINE",
+    "DETECT"
+   ]
+  },
+  "G3_rp_linux_credential_access_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "2"
+  },
+  "G1_rp_cloud_control_plane_activity_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "ACTIVITY": 12
+   },
+   "indexed": {
+    "ACTIVITY": 12
+   }
+  },
+  "G2_rp_cloud_control_plane_activity_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "ACTIVITY"
+   ]
+  },
+  "G3_rp_cloud_control_plane_activity_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "1"
+  },
+  "G1_rp_windows_endpoint_process_chain_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "ENDPOINT": 102
+   },
+   "indexed": {
+    "ENDPOINT": 102
+   }
+  },
+  "G2_rp_windows_endpoint_process_chain_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "ENDPOINT"
+   ]
+  },
+  "G3_rp_windows_endpoint_process_chain_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "1"
+  },
+  "G1_rp_web_exploitation_recordings_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "ACCESS": 14,
+    "NETWORK": 40,
+    "SESSION": 10
+   },
+   "indexed": {
+    "ACCESS": 14,
+    "NETWORK": 40,
+    "SESSION": 10
+   }
+  },
+  "G2_rp_web_exploitation_recordings_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "ACCESS",
+    "NETWORK",
+    "SESSION"
+   ]
+  },
+  "G3_rp_web_exploitation_recordings_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "3"
+  },
+  "G1_rp_edr_and_cloud_activity_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "ENDPOINT": 43,
+    "CLOUD": 12
+   },
+   "indexed": {
+    "CLOUD": 12,
+    "ENDPOINT": 43
+   }
+  },
+  "G2_rp_edr_and_cloud_activity_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "ENDPOINT",
+    "CLOUD"
+   ]
+  },
+  "G3_rp_edr_and_cloud_activity_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "2"
+  },
+  "G1_rp_agentic_ai_mcp_runtime_hybrid_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "MCP_RUNTIME": 60,
+    "EXFIL_ATTEMPT": 10
+   },
+   "indexed": {
+    "EXFIL_ATTEMPT": 10,
+    "MCP_RUNTIME": 60
+   }
+  },
+  "G2_rp_agentic_ai_mcp_runtime_hybrid_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "MCP_RUNTIME",
+    "EXFIL_ATTEMPT"
+   ]
+  },
+  "G3_rp_agentic_ai_mcp_runtime_hybrid_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "3"
+  },
+  "G1_rp_workload_sysmon_ebpf_hybrid_every_event_indexed_and_counted_per_phase": {
+   "pass": true,
+   "expected": {
+    "WORKLOAD": 129,
+    "EBPF_HUNT": 10
+   },
+   "indexed": {
+    "EBPF_HUNT": 10,
+    "WORKLOAD": 129
+   }
+  },
+  "G2_rp_workload_sysmon_ebpf_hybrid_phase_order_in_splunk_time": {
+   "pass": true,
+   "order": [
+    "WORKLOAD",
+    "EBPF_HUNT"
+   ]
+  },
+  "G3_rp_workload_sysmon_ebpf_hybrid_single_run_id_and_scenario_tag": {
+   "pass": true,
+   "sourcetypes": "10"
+  },
+  "G4_continuous_pack_repeats_incident_cycles": {
+   "pass": true,
+   "cycles": {
+    "0": "12",
+    "1": "12",
+    "2": "12",
+    "3": "12"
+   }
   }
  }
 }

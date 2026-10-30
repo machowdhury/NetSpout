@@ -2214,6 +2214,15 @@ def replay_list_sources():
             "defaults": {"index": REPLAY_INDEX, "host": REPLAY_HOST}}
 
 
+@app.get("/api/replay/packs")
+def replay_list_packs():
+    from netspout_core import replay_packs
+    return {"packs": [{**{k: v for k, v in p.items() if k != "phases"}, "correlation_level": replay_packs.correlation_level(p),
+                       "phases": [{"id": ph["id"], "kind": ph["source"]["kind"], "source": ph["source"].get("source_id") or ph["source"].get("pack"),
+                                   "offset_s": ph["offset_s"]} for ph in p["phases"]]} for p in replay_packs.packs()],
+            "defaults": {"index": REPLAY_INDEX, "host": REPLAY_HOST}}
+
+
 @app.post("/api/replay/preview")
 def replay_post_preview(payload: Dict[str, Any]):
     try:
@@ -2541,6 +2550,10 @@ def _verified_scenario_ids():
         for run in doc.get("scenario_runs", []):
             if run.get("verdict") == "PASS":
                 verified.add(run["scenario_id"])
+    try:  # replay packs whose every event, phase order and run tag were read back from Splunk in the isolated lab
+        verified |= set(json.loads((root / "docs/verification/evidence/replay/replay_live.json").read_text(encoding="utf-8")).get("packs_indexed_verified", []))
+    except (OSError, ValueError):
+        pass
     try:
         visual = json.loads((root / "docs/verification/evidence/phase4f/visual-validation.json").read_text(encoding="utf-8"))
         if visual.get("verdict", {}).get("maturity") == "DASHBOARD_READY":
@@ -2569,6 +2582,7 @@ def _explorer() -> UseCaseExplorer:
         pack_scenario_ids=SCENARIO_PACK_IDS,
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
         incident_packs=incident_catalog(),
+        replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
         candidates=load_candidates(),
         curated_stories=load_curated_stories(),
         verified_scenarios=_verified_scenario_ids()[0],

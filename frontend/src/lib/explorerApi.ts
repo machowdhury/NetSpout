@@ -38,7 +38,9 @@ export interface ExplorerEntry {
   demo_ready: boolean;
   workflow: WorkflowStep[];
   // operational
-  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack' | 'incident_pack';
+  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack' | 'incident_pack' | 'replay_pack';
+  source_modes?: string[];
+  replay?: { phases: Array<{ id: string; kind: string; source: string; offset_s: number }>; supports: string[]; seed: number; detection_prerequisites?: string; verification_spl?: string };
   scenario_id?: string;
   domain?: string;
   runnable?: boolean;
@@ -114,6 +116,11 @@ async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, tim
 
 const e = encodeURIComponent;
 
+export interface ReplayStatus {
+  session_id: string; state: string; error?: string | null; index: string; host: string; source: string; queue_depth: number;
+  counts: { generated: number; delivered: number; accepted: number; rejected: number; unknown: number; discarded_on_stop: number; backpressure_waits: number };
+}
+
 export const explorerApi = {
   summary: () => call<ExplorerSummary>('GET', '/api/explorer/summary'),
   search: (p: SearchParams) => {
@@ -149,6 +156,16 @@ export const explorerApi = {
     call<{ run_id: string; count_generated: number; event_count?: number; metric_datapoints_expected?: number; indexes?: { events?: string; metrics?: string };
            dispatch_results: Array<{ hec?: { success?: boolean } }> }>(
       'POST', '/api/generate/scenario-pack', { scenario_id: scenarioId, dispatch: true, index }, 120_000),
+  // operational, replay packs (Connection Center destination only)
+  replayPreview: (packId: string, speed: number) =>
+    call<{ records: number; period_s: number; loop_gap_s: number; correlation_level: string; chronology: string; rows: Array<{ phase?: string; transformed: string }> }>(
+      'POST', '/api/replay/preview', { pack_id: packId, speed, count: 3 }, 60_000),
+  replayStart: (body: { pack_id: string; continuous: boolean; speed: number; index: string }) =>
+    call<ReplayStatus>('POST', '/api/replay/sessions', body, 60_000),
+  replayStatus: (id: string) => call<ReplayStatus>('GET', `/api/replay/sessions/${e(id)}`),
+  replayControl: (id: string, action: 'pause' | 'resume' | 'stop') => call<ReplayStatus>('POST', `/api/replay/sessions/${e(id)}/${action}`, undefined, 30_000),
+  replayVerify: (id: string) =>
+    call<{ verified: boolean; indexed?: number; accepted?: number; complete?: boolean; error?: string }>('POST', `/api/replay/sessions/${e(id)}/verify`, undefined, 60_000),
   // operational, ScenarioRunner
   runScenario: (scenarioId: string) =>
     call<{ run_id: string; dispatch_attempted: number; dispatch_succeeded: number; dispatch_failed: number; errors: string[] }>(

@@ -38,9 +38,9 @@ class Recording:
     def __init__(self, sink, delay=0.0):
         self.sink, self.delay, self.sent = sink, delay, []
 
-    def send(self, raw, when):
+    def send(self, raw, when, meta=None):
         time.sleep(self.delay)
-        outcome = self.sink.send(raw, when)
+        outcome = self.sink.send(raw, when, meta)
         self.sent.append((raw, when, time.monotonic(), outcome))
         return outcome
 
@@ -142,9 +142,39 @@ def main():
     except ReplayError as exc:
         check("F1_no_timestamp_source_refused", "refusing to invent" in str(exc))
 
+    # G. scenario packs: replay phases + native phases, phase/run tagging as indexed fields, ordering, cycles
+    from netspout_core import replay_packs
+    pack_ok = []
+    for pid, loops in [(p["id"], 1) for p in replay_packs.packs()]:
+        tl = replay_packs.build_pack_timeline(pid, cycle_gap_s=2)
+        sink = Recording(HecSink(URL, lab.ENV["LAB_HEC_TOKEN"], INDEX, HOST, "placeholder", "x", False, True))
+        s = ReplaySession(tl, sink, source_label=pid, sourcetype="(per event)", index=INDEX, host=HOST, speed=50, loops=loops)
+        sink.sink._m["source"] = s.source
+        s.start(); s.wait(120)
+        rows = indexed(s.source, len(tl.items))
+        by_phase = lab.search('search index=%s source="%s" | stats count min(_time) as first max(_time) as last by netspout_phase' % (INDEX, s.source), earliest="-2h")
+        expected_by_phase = {}
+        for it in tl.items:
+            expected_by_phase[it.fields["netspout_phase"]] = expected_by_phase.get(it.fields["netspout_phase"], 0) + 1
+        got = {r["netspout_phase"]: int(r["count"]) for r in by_phase}
+        order = [r["netspout_phase"] for r in sorted(by_phase, key=lambda r: float(r["first"]))]
+        check("G1_%s_every_event_indexed_and_counted_per_phase" % pid, len(rows) == len(tl.items) == s.counts["accepted"] and got == expected_by_phase, expected=expected_by_phase, indexed=got)
+        check("G2_%s_phase_order_in_splunk_time" % pid, order == [ph["id"] for ph in replay_packs.get(pid)["phases"]], order=order)
+        run_ids = lab.search('search index=%s source="%s" | stats dc(netspout_run_id) as runs, values(netspout_scenario_id) as scn, dc(sourcetype) as sourcetypes' % (INDEX, s.source), earliest="-2h")
+        check("G3_%s_single_run_id_and_scenario_tag" % pid, run_ids and run_ids[0]["runs"] == "1" and run_ids[0]["scn"] == pid, sourcetypes=run_ids[0].get("sourcetypes") if run_ids else None)
+        if all(results["G%d_%s_%s" % (n, pid, suffix)]["pass"] for n, suffix in ((1, "every_event_indexed_and_counted_per_phase"), (2, "phase_order_in_splunk_time"), (3, "single_run_id_and_scenario_tag"))):
+            pack_ok.append(pid)
+    tl = replay_packs.build_pack_timeline("rp_cloud_control_plane_activity", cycle_gap_s=1)
+    sink = Recording(HecSink(URL, lab.ENV["LAB_HEC_TOKEN"], INDEX, HOST, "placeholder", "x", False, True))
+    s = ReplaySession(tl, sink, source_label="rp_cloud_control_plane_activity", sourcetype="(per event)", index=INDEX, host=HOST, speed=10, loops=None)
+    sink.sink._m["source"] = s.source
+    s.start(); time.sleep(6); s.stop()
+    cyc = lab.search('search index=%s source="%s" | stats count by netspout_cycle | sort 0 netspout_cycle' % (INDEX, s.source), earliest="-2h")
+    check("G4_continuous_pack_repeats_incident_cycles", len(cyc) >= 2 and sum(int(c["count"]) for c in cyc) == s.counts["accepted"], cycles={c["netspout_cycle"]: c["count"] for c in cyc})
+
     doc = {"generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), "lab": "tests/lab/ta_validation (isolated)", "splunk_version": info["version"],
            "index": INDEX, "host": HOST, "ta_cim_detection_validated": False, "passed": sum(v["pass"] for k, v in results.items() if isinstance(v, dict)),
-           "failed": failures, "checks": results}
+           "failed": failures, "packs_indexed_verified": pack_ok, "checks": results}
     out = ROOT / "docs/verification/evidence/replay/replay_live.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(doc, indent=1, default=str) + "\n")

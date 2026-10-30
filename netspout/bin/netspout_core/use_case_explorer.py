@@ -112,6 +112,7 @@ class UseCaseExplorer:
         pack_scenario_ids: Iterable[str] = (),
         runner_scenario_ids: Optional[Iterable[str]] = None,
         incident_packs: Iterable[Dict[str, Any]] = (),
+        replay_packs: Iterable[Dict[str, Any]] = (),
         candidates: Iterable[Dict[str, Any]] = (),
         verified_scenarios: Iterable[str] = (),
         dashboard_verified: Iterable[str] = (),
@@ -157,6 +158,8 @@ class UseCaseExplorer:
             entries.append(self._catalog_entry(s))
         for row in incident_packs:
             entries.append(self._incident_entry(row))
+        for row in replay_packs:
+            entries.append(self._replay_entry(row))
         seen = {e["scenario_id"] for e in entries}
         self.duplicate_candidates: List[str] = []
         for row in candidates:
@@ -254,6 +257,24 @@ class UseCaseExplorer:
             source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid),
         )
 
+    def _replay_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        """Scenario pack that runs on the replay engine: recorded (authentic) phases and/or existing native packs on one timeline."""
+        sid = row["id"]
+        kinds = sorted({ph["source"]["kind"] for ph in row["phases"]})
+        sts = []
+        entry = self._operational_entry(
+            entry_id=f"op:replay:{sid}", engine="replay_pack", scenario_id=sid, title=row["title"],
+            summary=row["objective"] + " Sources: " + ", ".join(sorted({ph["source"].get("source_id") or ph["source"]["pack"] for ph in row["phases"]})) + ". "
+                    + ("Recorded events are replayed with only the timestamp rewritten; independent recordings are aligned in time only." if "replay" in kinds else ""),
+            domain=row["category"].replace("_", " ").title(), category="REPLAY_PACK", vendors=[], sourcetypes=sts, source_ids=[],
+            raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=None)
+        entry["industries"] = [{"id": i, "basis": "editorial"} for i in row["industries"] if i in self._industry_ids]
+        entry["source_modes"] = kinds            # replay | native | both (hybrid)
+        entry["replay"] = {"phases": [{"id": ph["id"], "kind": ph["source"]["kind"], "source": ph["source"].get("source_id") or ph["source"].get("pack"), "offset_s": ph["offset_s"]} for ph in row["phases"]],
+                           "supports": ["one_shot", "continuous_cycles"], "seed": row["seed"], "detection_prerequisites": row.get("detection_prerequisites"),
+                           "verification_spl": row.get("verification_spl")}
+        return entry
+
     def _operational_entry(self, *, entry_id, engine, scenario_id, title, summary, domain, category, vendors,
                            sourcetypes, source_ids, raw_maturity, runnable, blocked_reason, dashboard):
         tier = maturity_tier(raw_maturity)
@@ -281,6 +302,12 @@ class UseCaseExplorer:
             ver = ("POST", "/api/generation/runs/{run_id}/observe", None)
             ing_note = "HEC acknowledgement is recorded per required channel (stage SPLUNK_DISPATCHED)"
             ver_note = "Success = SPLUNK_OBSERVED PROVEN for every required channel"
+        elif e["engine"] == "replay_pack":
+            cfg = ("GET", "/api/replay/packs", None)
+            gen = ("POST", "/api/replay/sessions", {"pack_id": sid, "continuous": False, "speed": 1})
+            ver = ("POST", "/api/replay/sessions/{session_id}/verify", None)
+            ing_note = "HEC outcome is counted per event on the session (accepted / rejected / unknown); pause, resume and stop are available"
+            ver_note = "Success = Splunk's count for this session's unique source equals the accepted count (independent search); not a detection or dashboard claim"
         elif e["engine"] in ("scenario_pack", "incident_pack"):
             cfg = ("GET", "/api/setup", None)
             gen = ("POST", "/api/generate/scenario-pack", {"scenario_id": sid, "dispatch": True})

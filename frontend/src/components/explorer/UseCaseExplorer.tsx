@@ -29,6 +29,7 @@ interface RunContext {
   localId?: string;      // retrieved dataset id
   datasetPath?: string;
   indexed?: number;      // events actually observed in Splunk
+  replayState?: string;  // replay pack: session state
 }
 
 const TIER_LABEL: Record<string, string> = {
@@ -189,6 +190,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   const [indexes, setIndexes] = useState<string[]>([]);
   const [index, setIndex] = useState('');
   const [count, setCount] = useState(6);
+  const [replayMode, setReplayMode] = useState<'one_shot' | 'continuous'>('one_shot');
+  const [replaySpeed, setReplaySpeed] = useState(10);
   const [prereq, setPrereq] = useState<Prerequisites | null>(null);
   const security = entry.kind === 'security';
   const detection = useMemo(
@@ -231,12 +234,24 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     const unified = entry.engine === 'unified_generation';
     const incident = entry.engine === 'incident_pack';
     const pack = entry.engine === 'scenario_pack' || incident;
+    const replay = entry.engine === 'replay_pack';
     actions.CONFIGURE = async () => {
+      if (replay) {
+        const p = await explorerApi.replayPreview(sid, replaySpeed);
+        return { ok: p.records > 0, lines: [`${p.records} records per cycle, cycle period ${p.period_s.toFixed(1)}s (loop gap ${p.loop_gap_s.toFixed(1)}s)`,
+          `Correlation: ${p.correlation_level.replaceAll('_', ' ').toLowerCase()}; chronology: ${p.chronology.replaceAll('_', ' ').toLowerCase()}`,
+          ...p.rows.slice(0, 2).map((r) => `Preview [${r.phase ?? ''}] ${r.transformed.slice(0, 110)}`)] };
+      }
       if (!unified) return { ok: true, lines: ['Runs against the destination saved in Connection Center. Nothing is sent by this step.'] };
       const p = await explorerApi.preflight(sid, count);
       return { ok: p.state !== 'BLOCKED', lines: [`Preflight: ${p.state}`, ...p.checks.map((c) => `${c.state} · ${c.label}: ${c.detail}`)] };
     };
     actions.GENERATE = async () => {
+      if (replay) {
+        const r = await explorerApi.replayStart({ pack_id: sid, continuous: replayMode === 'continuous', speed: replaySpeed, index: needIndex() });
+        update({ runId: r.session_id, replayState: r.state });
+        return { ok: true, lines: [`Replay session ${r.session_id}: ${r.state}`, `Source ${r.source} -> index ${r.index}, host ${r.host}`] };
+      }
       if (unified) {
         const r = await explorerApi.generate(sid, count);
         update({ runId: r.run_id });
@@ -254,6 +269,17 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     };
     actions.INGEST = async () => {
       const id = needRun();
+      if (replay) {
+        let st = await explorerApi.replayStatus(id);
+        for (let i = 0; i < 20 && replayMode === 'one_shot' && ['RUNNING', 'CREATED'].includes(st.state); i++) {
+          await new Promise((resolve) => window.setTimeout(resolve, 2000));
+          st = await explorerApi.replayStatus(id);
+        }
+        update({ replayState: st.state, expected: st.counts.delivered, accepted: st.counts.accepted });
+        const c = st.counts;
+        return { ok: c.delivered > 0 && c.rejected === 0 && c.unknown === 0, lines: [`${st.state}: generated ${c.generated}, delivered ${c.delivered}, HEC accepted ${c.accepted}, rejected ${c.rejected}, unknown ${c.unknown}`,
+          ...(c.backpressure_waits ? [`Backpressure waits: ${c.backpressure_waits} (nothing dropped)`] : [])] };
+      }
       if (unified) {
         // Dispatch (HEC acknowledgement) is proven per channel; every required channel must prove it.
         const r = await explorerApi.observe(id);
@@ -270,6 +296,15 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     };
     actions.VERIFY = async () => {
       const id = needRun();
+      if (replay) {
+        let v = await explorerApi.replayVerify(id);
+        for (let i = 0; i < 6 && v.verified && !v.complete; i++) {
+          await new Promise((resolve) => window.setTimeout(resolve, 4000));
+          v = await explorerApi.replayVerify(id);
+        }
+        return { ok: !!v.verified && !!v.complete, lines: [v.verified ? `Splunk holds ${v.indexed} events for this session; HEC accepted ${v.accepted}` : `Not verified: ${v.error ?? 'unknown'}`,
+          'Independent count only: this is not a TA, dashboard or detection result.'] };
+      }
       if (unified) {
         // Events can take a few seconds to become searchable: poll while Splunk reports PENDING, never upgrade it.
         let r = await explorerApi.observe(id);
@@ -396,6 +431,25 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
           <label>Events
             <input type="number" min={1} max={100} value={count} onChange={(e) => setCount(Math.max(1, Math.min(100, Number(e.target.value) || 1)))} />
           </label>
+        )}
+        {!security && entry.engine === 'replay_pack' && (
+          <>
+            <label>Mode
+              <select value={replayMode} onChange={(e) => setReplayMode(e.target.value as 'one_shot' | 'continuous')}>
+                <option value="one_shot">One-shot incident playback</option>
+                <option value="continuous">Continuous cycles</option>
+              </select>
+            </label>
+            <label>Speed
+              <input type="number" min={0.1} max={1000} value={replaySpeed} onChange={(e) => setReplaySpeed(Math.max(0.1, Math.min(1000, Number(e.target.value) || 1)))} />
+            </label>
+            {ctx.runId && (['pause', 'resume', 'stop'] as const).map((a) => (
+              <button key={a} type="button" className="ux-run-btn" data-testid={`replay-${a}`}
+                      onClick={() => explorerApi.replayControl(ctxRef.current.runId!, a).then((r) => update({ replayState: r.state }), (e) => set('GENERATE', 'failed', [errText(e)]))}>
+                {a[0].toUpperCase() + a.slice(1)}
+              </button>))}
+            {ctx.replayState && <code className="ux-run">{ctx.replayState}</code>}
+          </>
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>

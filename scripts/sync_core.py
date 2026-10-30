@@ -39,6 +39,7 @@ CORE_MODULES = [
     "universe_batch7_engine.py",
     "sample_replay.py",
     "replay_service.py",
+    "replay_packs.py",
     "incident_packs.py",
     "scenario_runner.py",
     "snmp_engine.py",

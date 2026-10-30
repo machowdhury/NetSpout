@@ -1,0 +1,242 @@
+{
+ "schema_version": "1.0",
+ "note": "Scenario packs built ONLY from vendored authentic recordings (replay phases) and existing native scenario packs (native phases). Independent recordings are aligned in time only: no identifier is rewritten to fake a shared incident, so correlation_level is TEMPORAL_ONLY unless a phase comes from one native pack. Industry mappings are editorial (maintainer judgement), not customer-validated.",
+ "packs": [
+  {
+   "id": "rp_linux_credential_access",
+   "title": "Linux credential-file access with system context (replayed recordings)",
+   "category": "SOC",
+   "seed": 1101,
+   "industries": [
+    "technology-saas",
+    "government-public-sector",
+    "banking-financial-services"
+   ],
+   "objective": "Show shadow/passwd file access recorded by auditd against ordinary Linux system messages, on the current clock.",
+   "expected_outcome": "auditd PROCTITLE/EXECVE records for credential-file reads appear after a baseline of Linux messages in one run.",
+   "phases": [
+    {
+     "id": "BASELINE",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "linux_syslog_messages",
+      "max_records": 40,
+      "max_gap_s": 2
+     }
+    },
+    {
+     "id": "DETECT",
+     "offset_s": 30,
+     "source": {
+      "kind": "replay",
+      "source_id": "auditd"
+     }
+    }
+   ],
+   "detection_prerequisites": "Splunk Add-on for Unix and Linux (not installed in any lab); no detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_linux_credential_access:*\" | stats count by netspout_phase, sourcetype"
+  },
+  {
+   "id": "rp_cloud_control_plane_activity",
+   "title": "AWS control-plane activity (replayed CloudTrail)",
+   "category": "SOC",
+   "seed": 1102,
+   "industries": [
+    "technology-saas",
+    "insurance-insurtech",
+    "media-entertainment",
+    "nonprofit-ngo-global-aid",
+    "real-estate-proptech-construction"
+   ],
+   "objective": "Replay recorded CloudTrail API activity so cloud audit searches and dashboards have live-dated data.",
+   "expected_outcome": "12 CloudTrail records per cycle with their original spacing, dated to the replay clock.",
+   "phases": [
+    {
+     "id": "ACTIVITY",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "aws_cloudtrail"
+     }
+    }
+   ],
+   "detection_prerequisites": "Splunk Add-on for AWS (not installed); no detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_cloud_control_plane_activity:*\" | stats count by netspout_phase"
+  },
+  {
+   "id": "rp_windows_endpoint_process_chain",
+   "title": "Windows endpoint process and network activity (replayed Sysmon)",
+   "category": "SOC",
+   "seed": 1103,
+   "industries": [
+    "healthcare",
+    "manufacturing",
+    "education",
+    "legal-compliance-professional-services",
+    "energy-utilities",
+    "agriculture-agritech"
+   ],
+   "objective": "Replay recorded Sysmon XML events (process, network, file) as a stream of endpoint telemetry.",
+   "expected_outcome": "102 complete Sysmon events per cycle; SystemTime re-stamped, every other byte as recorded.",
+   "phases": [
+    {
+     "id": "ENDPOINT",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "windows_sysmon_xml"
+     }
+    }
+   ],
+   "detection_prerequisites": "Splunk Add-on for Sysmon (validated in the isolated lab for parsing only); no detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_windows_endpoint_process_chain:*\" | stats count by netspout_phase"
+  },
+  {
+   "id": "rp_web_exploitation_recordings",
+   "title": "Web exploitation observed from three recordings (aligned in time only)",
+   "category": "SOC",
+   "seed": 1104,
+   "industries": [
+    "retail-ecommerce",
+    "hospitality-travel",
+    "government-public-sector",
+    "nonprofit-ngo-global-aid",
+    "real-estate-proptech-construction"
+   ],
+   "objective": "Show web access, network IDS and file-transfer session recordings in one timeline.",
+   "expected_outcome": "NGINX access, Suricata EVE and CrushFTP session records in three ordered phases.",
+   "phases": [
+    {
+     "id": "ACCESS",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "nginx_access_combined",
+      "max_gap_s": 3
+     }
+    },
+    {
+     "id": "NETWORK",
+     "offset_s": 20,
+     "source": {
+      "kind": "replay",
+      "source_id": "suricata_eve",
+      "max_records": 40
+     }
+    },
+    {
+     "id": "SESSION",
+     "offset_s": 40,
+     "source": {
+      "kind": "replay",
+      "source_id": "crushftp_sessions"
+     }
+    }
+   ],
+   "detection_prerequisites": "No TA for these sources is installed; no detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_web_exploitation_recordings:*\" | stats count by netspout_phase, sourcetype"
+  },
+  {
+   "id": "rp_edr_and_cloud_activity",
+   "title": "Endpoint sensor and cloud audit side by side (aligned in time only)",
+   "category": "SOC",
+   "seed": 1105,
+   "industries": [
+    "banking-financial-services",
+    "aerospace-defense"
+   ],
+   "objective": "Replay CrowdStrike sensor events with CloudTrail activity for a combined endpoint-and-cloud view.",
+   "expected_outcome": "43 sensor events then 12 CloudTrail records per cycle.",
+   "phases": [
+    {
+     "id": "ENDPOINT",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "crowdstrike_sensor"
+     }
+    },
+    {
+     "id": "CLOUD",
+     "offset_s": 15,
+     "source": {
+      "kind": "replay",
+      "source_id": "aws_cloudtrail"
+     }
+    }
+   ],
+   "detection_prerequisites": "CrowdStrike and AWS add-ons are not installed; no detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_edr_and_cloud_activity:*\" | stats count by netspout_phase, sourcetype"
+  },
+  {
+   "id": "rp_agentic_ai_mcp_runtime_hybrid",
+   "title": "Agentic AI: recorded MCP server log plus native exfiltration attempt (hybrid)",
+   "category": "AI_SECURITY",
+   "seed": 1106,
+   "industries": [
+    "technology-saas",
+    "legal-compliance-professional-services"
+   ],
+   "objective": "Combine a replayed MCP JSON-RPC server log with the existing native agentic-AI exfiltration scenario in one run.",
+   "expected_outcome": "MCP traffic first, then the native pack's phases, all tagged with the same scenario and run id.",
+   "phases": [
+    {
+     "id": "MCP_RUNTIME",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "mcp_jsonrpc",
+      "max_records": 60,
+      "max_gap_s": 2
+     }
+    },
+    {
+     "id": "EXFIL_ATTEMPT",
+     "offset_s": 25,
+     "source": {
+      "kind": "native",
+      "pack": "wave2_agentic_ai_exfil_attempt",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "detection_prerequisites": "No detection claimed; the native pack documents its own contract.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_agentic_ai_mcp_runtime_hybrid:*\" | stats count by netspout_phase, sourcetype"
+  },
+  {
+   "id": "rp_workload_sysmon_ebpf_hybrid",
+   "title": "Linux workload: recorded Sysmon-for-Linux plus native eBPF hunt (hybrid)",
+   "category": "SOC",
+   "seed": 1107,
+   "industries": [
+    "technology-saas",
+    "telecommunications",
+    "transportation-logistics"
+   ],
+   "objective": "Replay Sysmon-for-Linux events then run the existing native eBPF workload hunt in the same run.",
+   "expected_outcome": "129 recorded events followed by the native pack's events, tagged per phase.",
+   "phases": [
+    {
+     "id": "WORKLOAD",
+     "offset_s": 0,
+     "source": {
+      "kind": "replay",
+      "source_id": "sysmon_linux_xml"
+     }
+    },
+    {
+     "id": "EBPF_HUNT",
+     "offset_s": 30,
+     "source": {
+      "kind": "native",
+      "pack": "wave3_ebpf_workload_hunt",
+      "spacing_s": 1.0
+     }
+    }
+   ],
+   "detection_prerequisites": "No detection claimed.",
+   "verification_spl": "index=dev_test_replay source=\"pulseforge:replay:rp_workload_sysmon_ebpf_hybrid:*\" | stats count by netspout_phase, sourcetype"
+  }
+ ]
+}

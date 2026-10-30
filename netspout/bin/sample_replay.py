@@ -277,10 +277,14 @@ def render_ts(when: datetime, original: str, rule: TimestampRule) -> str:
 # ------------------------------------------------------------------------------------------------------------------ timeline
 @dataclass
 class Item:
-    record: str
+    record: Optional[str]
     span: Optional[tuple]
     original: Optional[str]
     offset: float
+    rule: Optional[TimestampRule] = None      # per-item rule (merged scenario timelines); falls back to the timeline rule
+    sourcetype: Optional[str] = None          # per-item sourcetype override (merged timelines)
+    fields: Optional[dict] = None             # HEC indexed fields (scenario/run/phase tags); never part of _raw
+    producer: Optional[Callable] = None       # native phase: producer(cycle) -> raw text generated at emission time
 
 
 @dataclass
@@ -352,11 +356,20 @@ def build_timeline(text: str, fmt: str, rule: Optional[TimestampRule], *, on_bad
     return tl
 
 
-def transform(item: Item, rule: Optional[TimestampRule], when: datetime) -> str:
-    if rule is None:
+def transform(item: Item, rule: Optional[TimestampRule], when: datetime, cycle: int = 0) -> str:
+    if item.producer is not None:
+        return item.producer(cycle)
+    rule = item.rule or rule
+    if rule is None or item.span is None:
         return item.record
     a, b = item.span
     return item.record[:a] + render_ts(when, item.original, rule) + item.record[b:]
+
+
+def item_meta(item: Item, cycle: int):
+    if item.sourcetype is None and item.fields is None:
+        return None
+    return {"sourcetype": item.sourcetype, "fields": {**(item.fields or {}), "netspout_cycle": str(cycle)}}
 
 
 def iter_transformed(tl: Timeline, anchor: datetime, *, speed=1.0, loops: Optional[int] = 1, start_loop=0) -> Iterator[tuple]:
@@ -368,23 +381,29 @@ def iter_transformed(tl: Timeline, anchor: datetime, *, speed=1.0, loops: Option
         for i, item in enumerate(tl.items):
             off = (k * tl.period_s + item.offset) / speed
             stamp = anchor + timedelta(seconds=off)
-            yield k, i, off, stamp, transform(item, tl.rule, stamp)
+            yield k, i, off, stamp, transform(item, tl.rule, stamp, k)
         k += 1
 
 
-def preview(text, fmt, rule, *, count=5, **kw):
-    tl = build_timeline(text, fmt, rule, **{k: v for k, v in kw.items() if k in ("on_bad_record", "loop_gap_s", "fixed_interval_s", "record_start", "max_gap_s")})
-    anchor = kw.get("anchor") or datetime.now(timezone.utc)
+def preview_timeline(tl: Timeline, *, count=5, speed=1.0, anchor=None):
+    anchor = anchor or datetime.now(timezone.utc)
     rows = []
-    for k, i, off, stamp, raw in iter_transformed(tl, anchor, speed=kw.get("speed", 1.0), loops=2):
+    for k, i, off, stamp, raw in iter_transformed(tl, anchor, speed=speed, loops=2):
         if len(rows) >= count and k == 0:
             break
-        rows.append({"loop": k, "index": i, "offset_s": round(off, 6), "original": tl.items[i].record, "transformed": raw,
-                     "changed_only_timestamp": (tl.rule is None) or (raw != tl.items[i].record)})
+        item = tl.items[i]
+        rows.append({"loop": k, "index": i, "offset_s": round(off, 6), "original": item.record if item.producer is None else "(native generator output)",
+                     "transformed": raw, "phase": (item.fields or {}).get("netspout_phase"), "sourcetype": item.sourcetype,
+                     "changed_only_timestamp": item.producer is not None or tl.rule is None and item.rule is None or raw != item.record})
         if len(rows) >= count + 2 and k == 1:
             break
     return {"records": len(tl.items), "chronology": tl.chronology, "span_s": tl.span_s, "loop_gap_s": tl.loop_gap_s, "period_s": tl.period_s,
             "out_of_order_clamped": tl.out_of_order, "idle_time_compressed_s": tl.compressed_s, "skipped": tl.skipped[:10], "rows": rows}
+
+
+def preview(text, fmt, rule, *, count=5, **kw):
+    tl = build_timeline(text, fmt, rule, **{k: v for k, v in kw.items() if k in ("on_bad_record", "loop_gap_s", "fixed_interval_s", "record_start", "max_gap_s")})
+    return preview_timeline(tl, count=count, speed=kw.get("speed", 1.0), anchor=kw.get("anchor"))
 
 
 # ------------------------------------------------------------------------------------------------------------------ session
@@ -397,8 +416,14 @@ class HecSink:
         self._m = dict(index=index, host=host, source=source, sourcetype=sourcetype)
         self._v, self._i = ssl_verify, allow_insecure_tls
 
-    def send(self, raw: str, when: datetime) -> str:
-        outcome = self._d.emit_hec({"time": round(when.timestamp(), 6), "event": raw, **self._m}, self._u, self._t, self._v, self._i)
+    def send(self, raw: str, when: datetime, meta=None) -> str:
+        event = {"time": round(when.timestamp(), 6), "event": raw, **self._m}
+        if meta:
+            if meta.get("sourcetype"):
+                event["sourcetype"] = meta["sourcetype"]
+            if meta.get("fields"):
+                event["fields"] = meta["fields"]
+        outcome = self._d.emit_hec(event, self._u, self._t, self._v, self._i)
         return {"ACCEPTED": "accepted", "FAILED": "rejected"}.get(str(outcome.state).upper(), "unknown")
 
 
@@ -485,8 +510,8 @@ class ReplaySession:
                     break
                 # the stamp was computed from the schedule; add time spent paused so the emitted clock stays "current"
                 stamp = stamp + timedelta(seconds=self._paused_total)
-                raw = transform(self.tl.items[i], self.tl.rule, stamp)
-                item = (raw, stamp)
+                raw = transform(self.tl.items[i], self.tl.rule, stamp, k)
+                item = (raw, stamp, item_meta(self.tl.items[i], k))
                 try:
                     self._q.put_nowait(item)
                 except queue.Full:
@@ -529,9 +554,9 @@ class ReplaySession:
                     self.counts["discarded_on_stop"] += 1
                     break
                 nxt = max(nxt, self._clock()) + gap
-            raw, stamp = item
+            raw, stamp, meta = item
             try:
-                result = self.sink.send(raw, stamp)
+                result = self.sink.send(raw, stamp, meta) if meta else self.sink.send(raw, stamp)
             except Exception:
                 result = "rejected"
             self.counts["delivered"] += 1

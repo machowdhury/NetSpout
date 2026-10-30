@@ -12,6 +12,7 @@ Generated 2026-10-30 by `scripts/generate_coverage_report.py` from repository ev
 | Vendor TA validated (full or partial; Cisco ISE only, earlier lab) | 1 | 0.3% |
 | Parsed by a real vendor TA in the isolated lab this phase (extraction of emitted fields, timestamps and tags; not CIM or detections) | 6 | 1.7% |
 | Independently indexed (live evidence) | 137 | 39.3% |
+| Continuous-replay-verified (canonical sourcetype replayed from an authentic recording in a pack verified live; not TA/CIM) | 9 | 2.6% |
 
 Tier definitions are in the script header. `TA validated` counts only a parser that was installed and exercised; mapping-only assessments are not counted. `Sample replay only` is recorded-event replay, not a vendor-native formatter.
 

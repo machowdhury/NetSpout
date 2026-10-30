@@ -201,6 +201,18 @@ def scenario_evidence():
     return set(SCENARIO_PACK_IDS) | set(incident_ids()), set(SUPPORTED_SCENARIO_IDS), live, dashboard_ready, detection
 
 
+def replay_evidence(ids):
+    """Replay packs, the recorded sources they use, and which of those the isolated-lab validation verified (replay_live.json)."""
+    packs = load("replay_packs.json")["packs"]
+    srcs = {x["id"]: x for x in load("replay_sources.json")["sources"]}
+    ev_path = OUT / "evidence" / "replay" / "replay_live.json"
+    ev = json.loads(ev_path.read_text(encoding="utf-8")) if ev_path.exists() else {}
+    verified = set(ev.get("packs_indexed_verified", []))
+    used = {ph["source"]["source_id"] for p in packs if p["id"] in verified for ph in p["phases"] if ph["source"]["kind"] == "replay"}
+    sts = {srcs[u]["sourcetype"] for u in used if srcs[u].get("sourcetype")}
+    return packs, srcs, verified, sorted(sts & ids), sorted(sts - ids)
+
+
 def explorer_view():
     """The Explorer's own inventory (unified generation + catalog + incident packs + documented candidates), so reports never disagree with the product."""
     sys.path.insert(0, str(ROOT / "backend"))
@@ -211,6 +223,7 @@ def explorer_view():
 def main(check=False):
     rows = load("sourcetypes.json")
     ids = {r["splunk_sourcetype"] for r in rows}
+    cat_ids = set(ids)  # `ids` is reused for scenario ids further down
     native = engine_sourcetypes(ids)
     fmt, live_fmt, proven_fmt = raw_equality_passes()
     indexed = live_fmt | evidence_indexed(ids)
@@ -236,6 +249,7 @@ def main(check=False):
         "ta_validated_or_partial": sum(o["ta_validated"] != "NO" for o in out),
         "ta_parsing_checked_isolated_lab": len(ta_lab_checked()),
         "independently_indexed": sum(o["indexed_evidence"] == "YES" for o in out),
+        "continuous_replay_verified": len(replay_evidence(cat_ids)[3]),
     }
     scenarios = load("scenarios.json")
     mat = Counter(s.get("maturity") for s in scenarios)
@@ -267,7 +281,8 @@ def main(check=False):
                        ("Format verified (byte-equal raw in Splunk)", "format_verified"),
                        ("Vendor TA validated (full or partial; Cisco ISE only, earlier lab)", "ta_validated_or_partial"),
                        ("Parsed by a real vendor TA in the isolated lab this phase (extraction of emitted fields, timestamps and tags; not CIM or detections)", "ta_parsing_checked_isolated_lab"),
-                       ("Independently indexed (live evidence)", "independently_indexed")):
+                       ("Independently indexed (live evidence)", "independently_indexed"),
+                       ("Continuous-replay-verified (canonical sourcetype replayed from an authentic recording in a pack verified live; not TA/CIM)", "continuous_replay_verified")):
         lines.append(f"| {label} | {summary[key]} | {100 * summary[key] / n:.1f}% |")
     lines += ["", "Tier definitions are in the script header. `TA validated` counts only a parser that was installed and exercised; "
               "mapping-only assessments are not counted. `Sample replay only` is recorded-event replay, not a vendor-native formatter.", "",
@@ -400,6 +415,18 @@ def main(check=False):
            "By engine: " + ", ".join(f"{k} {v}" for k, v in sorted(by_engine.items())) + ". By tier: " + ", ".join(f"{k} {v}" for k, v in sorted(by_tier.items())) + ".", "",
            "Incident packs (27 network + 10 telecom) emit NetSpout-defined MODELED telemetry (`netspout:*`), not vendor-native formats; they stay CONTRACTED. "
            "Cataloged candidates come from `catalog/scenario_candidates.json` (MIT community use-case catalog pinned to a commit, plus Cisco 100 definitions that are not execution-enabled).", "",
+           "## Replay packs (scenario packs on the continuous-replay engine)", "",
+           "Each pack mixes recorded (authentic) phases and/or existing native packs. Tier stays CONTRACTED: events indexing is evidence of delivery, not E2E validation, "
+           "a dashboard or a detection. Independent recordings are aligned in time only (TEMPORAL_ONLY).", "",
+           "| Pack | Category | Source mode | Phases | Correlation | Indexed-verified (isolated lab) | Dashboard | Detection | Industries (editorial) |", "|---|---|---|---|---|---|---|---|---|"]
+    rpacks, rsrcs, rverified, rcanon, rnoncanon = replay_evidence(cat_ids)
+    from netspout_core import replay_packs as _rp
+    for p_ in rpacks:
+        modes = sorted({ph["source"]["kind"] for ph in p_["phases"]})
+        sl.append(f"| {p_['id']} | {p_['category']} | {'both' if len(modes) == 2 else modes[0]} | {len(p_['phases'])} | {_rp.correlation_level(p_)} | {'YES' if p_['id'] in rverified else 'NO'} | none | none | {', '.join(p_['industries'])} |")
+    sl += ["", f"Replay-verified canonical sourcetypes ({len(rcanon)}): {', '.join(rcanon)}. Recorded sources whose sourcetype is not a catalog canonical name ({len(rnoncanon)}): {', '.join(rnoncanon) or 'none'} (replayable, not counted as coverage).", "",
+           "Replay sample corpus: 10 vendored authentic recordings (`catalog/replay_sources.json`). The Ollama server log was excluded because it mixes three timestamp formats. "
+           "SA-Eventgen was not evaluated against its version-specific spec (not installed in any lab); the PulseForge replay engine was reused.", "",
            "## 18-industry coverage matrix", "",
            "Columns are separate evidence: documented is not runnable, runnable is not verified, verified is not TA-parsed or detected. Mappings are editorial unless the "
            "source labels the industry (`*` in the Explorer).", "",

@@ -44,6 +44,7 @@ CORE_MODULES = [
     "cisco_sample_provider.py",
     "spl_engine.py",
     "use_case_repo.py",
+    "use_case_explorer.py",
     "noc_soc_metrics.py",
     "catalog.py",
     "catalog_contracts.py",

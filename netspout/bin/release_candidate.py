@@ -363,6 +363,73 @@ class ReleaseCandidateConfiguration:
             "secret_state": self.secret_state(),
         }
 
+    def _search_authorization(self, config: Dict[str, Any]) -> str:
+        if config["auth_method"] == "HEC_TOKEN_AND_SPLUNK_TOKEN":
+            return f"Bearer {self.secrets.search_secret}"
+        username = config.get("search_username") or ""
+        encoded = base64.b64encode(f"{username}:{self.secrets.search_secret}".encode("utf-8")).decode("ascii")
+        return f"Basic {encoded}"
+
+    def upsert_saved_search(
+        self, name: str, spl: str, *, cron: str = "*/15 * * * *", timeout: float = 10.0
+    ) -> Dict[str, Any]:
+        """Create or update one scheduled saved search with no alert actions, then read it back.
+
+        The result reports what Splunk returned, not what was requested: `enabled` is True only when
+        the read-back shows the search exists, is not disabled and is scheduled. Splunk RBAC applies
+        because the configured search credential performs the call.
+        """
+        config = self.load()
+        if not config.get("configured") or not self.secrets.search_secret:
+            return {"status": "NOT_CONFIGURED", "enabled": False, "error": "authenticated Splunk search is not configured"}
+        if not re.fullmatch(r"[A-Za-z0-9 _.\-]{1,120}", name):
+            raise ValueError("Invalid saved search name")
+        if not re.fullmatch(r"[0-9*/, \-]{9,60}", cron):
+            raise ValueError("Invalid cron schedule")
+        parsed = urlparse(config["search_url"])
+        app = os.environ.get("NETSPOUT_SPLUNK_APP", "netspout")
+        if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", app):
+            raise ValueError("Invalid Splunk app name")
+        base = f"{parsed.scheme}://{parsed.netloc}/servicesNS/nobody/{app}/saved/searches"
+        context = ssl.create_default_context()
+        if config.get("allow_insecure_tls"):
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+        opener = urllib.request.build_opener(
+            urllib.request.HTTPHandler(), urllib.request.HTTPSHandler(context=context), NoRedirectHandler()
+        )
+        headers = {"Authorization": self._search_authorization(config), "Content-Type": "application/x-www-form-urlencoded"}
+        settings = {
+            "search": spl, "is_scheduled": "1", "cron_schedule": cron, "disabled": "0",
+            "dispatch.earliest_time": "-15m", "dispatch.latest_time": "now",
+            "description": "Created by NetSpout Use Case Explorer from a reviewed Splunk security_content detection",
+        }
+
+        def call(url: str, data: Optional[Dict[str, str]] = None):
+            body = urllib.parse.urlencode(data).encode("utf-8") if data is not None else None
+            req = urllib.request.Request(url, data=body, headers=headers, method="POST" if body is not None else "GET")
+            with opener.open(req, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8") or "{}")
+
+        entity = f"{base}/{urllib.parse.quote(name, safe='')}"
+        try:
+            try:
+                call(base, {"name": name, "output_mode": "json", **settings})
+            except urllib.error.HTTPError as exc:
+                if exc.code != 409:
+                    raise
+                call(entity, {"output_mode": "json", **settings})
+            content = call(f"{entity}?output_mode=json")["entry"][0]["content"]
+        except urllib.error.HTTPError as exc:
+            return {"status": "FAILED", "enabled": False, "error": f"HTTP {exc.code}", "saved_search": name}
+        except (urllib.error.URLError, TimeoutError, OSError, ssl.SSLError, ValueError, KeyError, IndexError) as exc:
+            return {"status": "FAILED", "enabled": False, "error": type(exc).__name__, "saved_search": name}
+        enabled = str(content.get("disabled")) in ("0", "False", "false") and str(content.get("is_scheduled")) in ("1", "True", "true")
+        return {
+            "status": "ENABLED" if enabled else "NOT_ENABLED", "enabled": enabled, "saved_search": name,
+            "app": app, "cron_schedule": content.get("cron_schedule"), "read_back": True,
+        }
+
     def execute_read_only_search(
         self, query: str, *, timeout: float = 8.0, result_limit: int = 200
     ) -> tuple[List[Dict[str, Any]], Optional[str]]:
@@ -376,14 +443,7 @@ class ReleaseCandidateConfiguration:
         if config.get("allow_insecure_tls"):
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
-        if config["auth_method"] == "HEC_TOKEN_AND_SPLUNK_TOKEN":
-            authorization = f"Bearer {self.secrets.search_secret}"
-        else:
-            username = config.get("search_username") or ""
-            encoded = base64.b64encode(
-                f"{username}:{self.secrets.search_secret}".encode("utf-8")
-            ).decode("ascii")
-            authorization = f"Basic {encoded}"
+        authorization = self._search_authorization(config)
         request = urllib.request.Request(
             config["search_url"],
             data=urllib.parse.urlencode(

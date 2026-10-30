@@ -6,6 +6,7 @@ and real-time WebSocket streaming at 500ms intervals.
 
 import asyncio
 import json
+import re
 import time
 import csv
 import io
@@ -68,7 +69,10 @@ from app.release_candidate import (
     ReleaseCandidateConfiguration,
     SecuritySourceCatalog,
 )
+from app.use_case_explorer import UseCaseExplorer, load_taxonomy
 from app.security_content_lab import (
+    SUPPORTED_RUNTIME_DETECTIONS,
+    validate_index_name,
     AttackDataReplayService,
     DetectionEvidenceStore,
     DetectionValidationOrchestrator,
@@ -2340,6 +2344,127 @@ def validate_security_content_detection(payload: DetectionValidationPayload):
 @app.get("/api/security-content/validations")
 def list_security_content_validations():
     return detection_evidence_store.list()
+
+
+# =========================================================================
+# Use Case Explorer (Phase 4E): search + workflow descriptors over existing engines
+# =========================================================================
+_explorer_operational_cache: Dict[str, Any] = {}
+
+
+def _explorer() -> UseCaseExplorer:
+    from app.catalog import catalog
+    if "inputs" not in _explorer_operational_cache:
+        capabilities = unified_generation_service.capabilities(_unified_transport_config())
+        _explorer_operational_cache["inputs"] = {
+            "generation_scenarios": capabilities["scenarios"],
+            "generation_sources": capabilities["sources"],
+            "dashboards": dashboard_recipe_service.catalog_summary()["dashboards"],
+            "catalog_scenarios": catalog.list_scenarios(),
+        }
+    return UseCaseExplorer(
+        taxonomy=load_taxonomy(),
+        security_catalog=security_content_catalog,
+        validations=detection_evidence_store.list,
+        runtime_approved_detections=SUPPORTED_RUNTIME_DETECTIONS,
+        **_explorer_operational_cache["inputs"],
+    )
+
+
+@app.get("/api/explorer/summary")
+def explorer_summary():
+    explorer = _explorer()
+    return {**explorer.facets(), "industries": explorer.industries()}
+
+
+@app.get("/api/explorer/entries")
+def explorer_search(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = Query(default=None, pattern="^(operational|security)$"),
+    industry: Optional[str] = None,
+    tier: Optional[str] = None,
+    vendor: Optional[str] = None,
+    readiness: Optional[str] = None,
+    demo_ready: Optional[bool] = None,
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+):
+    return _explorer().search(q=q, kind=kind, industry=industry, tier=tier, vendor=vendor,
+                              readiness=readiness, demo_ready=demo_ready, limit=limit, offset=offset)
+
+
+@app.get("/api/explorer/entries/{entry_id}")
+def explorer_entry(entry_id: str):
+    entry = _explorer().get(entry_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Explorer entry not found")
+    return entry
+
+
+@app.get("/api/explorer/entries/{entry_id}/prerequisites")
+def explorer_prerequisites(entry_id: str, index: Optional[str] = None):
+    if index is not None:
+        try:
+            validate_index_name(index)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+    try:
+        return _explorer().prerequisites(entry_id, release_candidate_configuration.load(), index=index)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+class ExplorerEnablePayload(BaseModel):
+    index: str
+
+
+class ExplorerObservePayload(BaseModel):
+    index: str
+    run_id: str
+
+
+@app.post("/api/explorer/detections/{detection_id}/enable")
+def explorer_enable_detection(detection_id: str, payload: ExplorerEnablePayload):
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    try:
+        prepared = detection_validation_orchestrator.prepare_enable(detection_id, payload.index)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    result = release_candidate_configuration.upsert_saved_search(prepared["saved_search_name"], prepared["spl"])
+    return {
+        **result, "detection_id": prepared["detection_id"], "spl_hash": prepared["spl_hash"],
+        "upstream_commit": prepared["upstream_commit"], "adaptations": prepared["adaptations"],
+        "limitations": ["Enabled means the scheduled saved search exists in Splunk; it does not show that it has fired."],
+    }
+
+
+@app.post("/api/explorer/security/observe")
+def explorer_observe_replay(payload: ExplorerObservePayload):
+    """Count run-scoped events actually present in Splunk, so validation never relies on 'events sent'."""
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    try:
+        validate_index_name(payload.index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", payload.run_id):
+        raise HTTPException(status_code=422, detail="Invalid run identifier")
+    rows, error = release_candidate_configuration.execute_read_only_search(
+        f'search index="{payload.index}" netspout_run_id="{payload.run_id}" earliest=-24h latest=now | stats count'
+    )
+    if error:
+        return {"status": "ERROR", "indexed_event_count": None, "error": error}
+    count = int(rows[0].get("count", 0)) if rows else 0
+    return {"status": "OBSERVED" if count > 0 else "NOT_OBSERVED", "indexed_event_count": count, "error": None}
 
 
 @app.get("/api/setup")

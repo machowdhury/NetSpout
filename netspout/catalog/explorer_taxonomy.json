@@ -1,0 +1,291 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "2026.10-phase4e",
+  "taxonomy_status": "PROPOSED_DEFAULT",
+  "taxonomy_note": "The 18 industries are a proposed default; replace this list with the approved taxonomy if it differs. Counts are computed from the mappings below, never hardcoded.",
+  "mapping_basis_legend": {
+    "industry_pack": "Dashboard/industry pack in the catalog explicitly binds this scenario to the industry.",
+    "editorial": "Maintainer judgement that the scenario's telemetry is typical for the industry. Not a customer-validated claim."
+  },
+  "industries": [
+    {
+      "id": "financial-services",
+      "name": "Financial Services"
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare Providers"
+    },
+    {
+      "id": "life-sciences",
+      "name": "Life Sciences & Pharma"
+    },
+    {
+      "id": "manufacturing",
+      "name": "Manufacturing"
+    },
+    {
+      "id": "energy-utilities",
+      "name": "Energy & Utilities"
+    },
+    {
+      "id": "telecommunications",
+      "name": "Telecommunications & Service Providers"
+    },
+    {
+      "id": "retail",
+      "name": "Retail & E-commerce"
+    },
+    {
+      "id": "hospitality-travel",
+      "name": "Hospitality & Travel"
+    },
+    {
+      "id": "transportation-logistics",
+      "name": "Transportation & Logistics"
+    },
+    {
+      "id": "public-sector",
+      "name": "Public Sector & Government"
+    },
+    {
+      "id": "defense-aerospace",
+      "name": "Defense & Aerospace"
+    },
+    {
+      "id": "education",
+      "name": "Education"
+    },
+    {
+      "id": "technology-software",
+      "name": "Technology & Software"
+    },
+    {
+      "id": "media-entertainment",
+      "name": "Media & Entertainment"
+    },
+    {
+      "id": "professional-services",
+      "name": "Professional Services"
+    },
+    {
+      "id": "real-estate-construction",
+      "name": "Real Estate & Construction"
+    },
+    {
+      "id": "agriculture-food",
+      "name": "Agriculture & Food"
+    }
+  ],
+  "scenario_industries": [
+    {
+      "scenario_id": "payment_processing_degradation",
+      "basis": "industry_pack",
+      "industries": [
+        "financial-services"
+      ]
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "basis": "industry_pack",
+      "industries": [
+        "financial-services"
+      ]
+    },
+    {
+      "scenario_id": "C100-ENT-001",
+      "basis": "industry_pack",
+      "industries": [
+        "healthcare"
+      ]
+    },
+    {
+      "scenario_id": "C100-DC-001",
+      "basis": "industry_pack",
+      "industries": [
+        "manufacturing"
+      ]
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "basis": "editorial",
+      "industries": [
+        "energy-utilities",
+        "public-sector"
+      ]
+    },
+    {
+      "scenario_id": "C100-SP-001",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "arch_man_carrier_ring",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "service_provider_cisco",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "service_provider_mixed",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "arch_wlan_meraki_catalyst",
+      "basis": "editorial",
+      "industries": [
+        "education",
+        "hospitality-travel",
+        "retail"
+      ]
+    },
+    {
+      "scenario_id": "cisco_campus_rogue",
+      "basis": "editorial",
+      "industries": [
+        "education",
+        "hospitality-travel"
+      ]
+    },
+    {
+      "scenario_id": "arch_pan_iot_mesh",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "agriculture-food"
+      ]
+    },
+    {
+      "scenario_id": "ub1_ot_proxy_host_hunt",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "energy-utilities"
+      ]
+    },
+    {
+      "scenario_id": "ub2_ot_edge_routing_observation",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "energy-utilities"
+      ]
+    },
+    {
+      "scenario_id": "arch_vpn_remote_workforce",
+      "basis": "editorial",
+      "industries": [
+        "professional-services",
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "mixed_sase_degradation",
+      "basis": "editorial",
+      "industries": [
+        "professional-services",
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "wave2_agentic_ai_exfil_attempt",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-001",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-002",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-003",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-004",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-005",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "AI-006",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "SC-001",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "SC-002",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "SC-003",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "SC-004",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    },
+    {
+      "scenario_id": "SC-005",
+      "basis": "editorial",
+      "industries": [
+        "technology-software"
+      ]
+    }
+  ]
+}

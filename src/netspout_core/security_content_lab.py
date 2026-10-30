@@ -714,13 +714,15 @@ class DetectionValidationOrchestrator:
         self.evidence_store = evidence_store or DetectionEvidenceStore()
 
     def prepare_query(
-        self, detection: Dict[str, Any], run_id: str, index: str
+        self, detection: Dict[str, Any], run_id: Optional[str], index: str
     ) -> Tuple[str, List[str]]:
+        """Expand an approved detection into executable SPL. run_id=None yields the unscoped schedule form."""
         validate_index_name(index)
         if detection.get("content_id") not in SUPPORTED_RUNTIME_DETECTIONS:
             raise ValueError("Detection SPL has not been approved for bounded runtime execution")
-        if not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", run_id):
+        if run_id is not None and not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", run_id):
             raise ValueError("Invalid run identifier")
+        run_scope = f'netspout_run_id="{run_id}" ' if run_id is not None else ""
         query = str(detection.get("spl") or "")
         macros = set(detection.get("dependencies", {}).get("macros", []))
         missing = sorted(macros - SUPPORTED_RUNTIME_MACROS)
@@ -730,7 +732,7 @@ class DetectionValidationOrchestrator:
         if "cisco_secure_firewall" in macros:
             scope = (
                 f'search index="{index}" sourcetype="cisco:sfw:estreamer" '
-                f'netspout_run_id="{run_id}" earliest=-15m latest=now '
+                f'{run_scope}earliest=-15m latest=now '
                 "| spath "
                 "| eval signature_id=coalesce(signature_id,SignatureID), "
                 "signature=coalesce(signature,IntrusionRuleMessage), "
@@ -760,9 +762,24 @@ class DetectionValidationOrchestrator:
         if "cisco_secure_firewall___react_server_components_rce_attempt_filter" in macros:
             adaptations.append("Expanded empty upstream filter macro")
         validate_read_only_spl(query)
-        if run_id not in query or "earliest=" not in query.lower() or "latest=" not in query.lower():
+        if (run_id is not None and run_id not in query) or "earliest=" not in query.lower() or "latest=" not in query.lower():
             raise ValueError("Prepared SPL is not run and time scoped")
         return query, adaptations
+
+    def prepare_enable(self, detection_id: str, index: str) -> Dict[str, Any]:
+        """Name and unscoped SPL for the saved search that enables an approved detection."""
+        detection = self.catalog.get_detection(detection_id)
+        if detection is None:
+            raise KeyError("Detection not found")
+        spl, adaptations = self.prepare_query(detection, None, index)
+        return {
+            "detection_id": detection["content_id"],
+            "saved_search_name": re.sub(r"\s+", " ", re.sub(r"[^A-Za-z0-9 _.\-]", " ", f"NetSpout - {detection['name']}")).strip()[:120],
+            "spl": spl,
+            "spl_hash": hashlib.sha256(spl.encode()).hexdigest(),
+            "upstream_commit": detection["repository_commit"],
+            "adaptations": adaptations,
+        }
 
     def validate(
         self,

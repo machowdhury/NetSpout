@@ -44,7 +44,7 @@ export interface ExplorerEntry {
   runnable?: boolean;
   blocked_reason?: string | null;
   maturity?: { tier: string; raw: string; basis: string };
-  dashboard?: { dashboard_id: string; eligibility: string; dashboard_maturity: string; reasons: string[] } | null;
+  dashboard?: { dashboard_id: string; eligibility: string; dashboard_maturity: string; reasons: string[]; splunk_view?: string | null } | null;
   // security
   story_id?: string;
   narrative?: string;

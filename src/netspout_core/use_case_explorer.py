@@ -13,6 +13,9 @@ from typing import Any, Callable, Dict, Iterable, List, Optional
 
 SCHEMA_VERSION = "1.0.0"
 
+# Dashboard Studio views shipped in the Splunk app, keyed by dashboard pack id. A pack without an entry has no deployed view.
+SPLUNK_DASHBOARD_VIEWS = {"scenario-sec-p9-b-dns-anomaly": "pulseforge_dns_anomaly_studio"}
+
 # Normalised maturity tiers, strongest first. Raw values come from three scales (catalog, unified generation, dashboards).
 _TIER_BY_RAW = {
     "GOLDEN_PATH_CERTIFIED": "CERTIFIED",
@@ -133,6 +136,7 @@ class UseCaseExplorer:
             "eligibility": d["state"],
             "dashboard_maturity": d["dashboard_maturity"],
             "reasons": d.get("reasons", []),
+            "splunk_view": SPLUNK_DASHBOARD_VIEWS.get(d["dashboard_id"]),
         }
 
     def _unified_entry(self, s: Dict[str, Any], sources: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:

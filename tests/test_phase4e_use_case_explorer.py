@@ -308,11 +308,14 @@ class TestExplorerApi(unittest.TestCase):
         self.assertEqual(self.client.get("/api/explorer/entries/sec:x/prerequisites", params={"index": "a b"}).status_code, 422)
 
     def test_mutating_routes_refuse_without_connection_center(self):
-        # Backend default in tests: Connection Center is unconfigured, so nothing may reach Splunk.
-        r = self.client.post(f"/api/explorer/detections/{APPROVED_ID}/enable", json={"index": "main"})
-        self.assertIn(r.status_code, (403, 409))
-        r = self.client.post("/api/explorer/security/observe", json={"index": "main", "run_id": "r1"})
-        self.assertIn(r.status_code, (403, 409))
+        # A pristine Connection Center (fresh config dir, so a developer's saved lab config cannot leak in): nothing may reach Splunk.
+        import app.main as main
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as empty, patch.object(main, "release_candidate_configuration", ReleaseCandidateConfiguration(config_dir=empty)):
+            r = self.client.post(f"/api/explorer/detections/{APPROVED_ID}/enable", json={"index": "main"})
+            self.assertIn(r.status_code, (403, 409))
+            r = self.client.post("/api/explorer/security/observe", json={"index": "main", "run_id": "r1"})
+            self.assertIn(r.status_code, (403, 409))
 
     def test_topology_sync_does_not_wipe_configured_destination(self):
         import app.main as main

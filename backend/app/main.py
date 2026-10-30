@@ -1713,6 +1713,10 @@ def get_dashboard_pack(
         raise HTTPException(status_code=409, detail=str(error))
 
 
+DASHBOARD_PANEL_RETRIES = 8
+DASHBOARD_PANEL_RETRY_DELAY_S = 4.0
+
+
 @app.post("/api/dashboards/{dashboard_id}/validate")
 def validate_dashboard_pack(
     dashboard_id: str, payload: DashboardLiveValidationRequest
@@ -1736,9 +1740,16 @@ def validate_dashboard_pack(
     for panel in pack.panels:
         if not panel.executable or not panel.query:
             continue
-        rows, error = unified_generation_service.execute_bounded_spl(
-            panel.query, _unified_transport_config()
-        )
+        # Observed events can lag behind search by a few seconds; retry an empty or short-shaped panel before
+        # concluding it has no data. The verdict still rests only on rows Splunk actually returned.
+        for attempt in range(DASHBOARD_PANEL_RETRIES):
+            rows, error = unified_generation_service.execute_bounded_spl(
+                panel.query, _unified_transport_config()
+            )
+            shaped = bool(rows) and set(panel.expected_shape) <= {f for r in rows for f in r}
+            if error or shaped or attempt == DASHBOARD_PANEL_RETRIES - 1:
+                break
+            time.sleep(DASHBOARD_PANEL_RETRY_DELAY_S)
         if error:
             failures.append("{}: {}".format(panel.panel_id, error))
         else:

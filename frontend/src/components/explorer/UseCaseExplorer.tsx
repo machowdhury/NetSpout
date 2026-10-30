@@ -10,6 +10,12 @@ import {
 import './explorer.css';
 
 type StepStatus = 'idle' | 'running' | 'ok' | 'failed';
+// Only meaningful inside Splunk Web, where the app's views live on the same origin as this iframe.
+function splunkDashboardHref(view?: string | null, runId?: string): string | null {
+  const m = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\/static\/app\/netspout\//);
+  return view && m ? `/${m[1]}/app/netspout/${view}?form.run_tok=${encodeURIComponent(runId ?? '*')}` : null;
+}
+
 interface StepState { status: StepStatus; lines: string[] }
 type Steps = Partial<Record<StepName, StepState>>;
 
@@ -248,7 +254,12 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     actions.VERIFY = async () => {
       const id = needRun();
       if (unified) {
-        const r = await explorerApi.observe(id);
+        // Events can take a few seconds to become searchable: poll while Splunk reports PENDING, never upgrade it.
+        let r = await explorerApi.observe(id);
+        for (let i = 0; i < 8 && stageOf(r.evidence, 'SPLUNK_OBSERVED') === 'PENDING'; i++) {
+          await new Promise((resolve) => window.setTimeout(resolve, 4000));
+          r = await explorerApi.observe(id);
+        }
         const st = stageOf(r.evidence, 'SPLUNK_OBSERVED');
         return { ok: st === 'PROVEN', lines: [`SPLUNK_OBSERVED: ${st}`, ...r.evidence.filter((s) => s.stage !== 'SPLUNK_OBSERVED').map((s) => `${s.stage}: ${s.state}`)] };
       }
@@ -364,6 +375,10 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
                     <li key={c.check_id} className={c.state === 'PASS' ? 'is-pass' : 'is-fail'}>{c.state} · {c.label}: {c.detail}</li>))}</ul>
                 )}
                 {st.lines.map((l, k) => <p className="ux-line" key={k}>{l}</p>)}
+                {s.step === 'DASHBOARD' && st.status === 'ok' && splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId) && (
+                  <a className="ux-line" data-testid="open-splunk-dashboard" target="_top"
+                     href={splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId)!}>Open the Splunk Dashboard Studio dashboard for this run</a>
+                )}
               </div>
               {s.step !== 'SELECT' && act && (
                 <button type="button" className="ux-run-btn" disabled={blocked || st.status === 'running' || i < first}

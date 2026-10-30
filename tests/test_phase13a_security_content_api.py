@@ -43,7 +43,11 @@ def test_security_content_relationship_endpoints():
     assert "initial-access" in t1190["tactics"]
 
 
-def test_security_content_execution_requires_authorized_connection():
+def test_security_content_execution_requires_authorized_connection(tmp_path, monkeypatch):
+    import app.main as main
+    from netspout_core.release_candidate import ReleaseCandidateConfiguration
+    # pristine Connection Center: a developer's saved lab config must not authorize the request
+    monkeypatch.setattr(main, "release_candidate_configuration", ReleaseCandidateConfiguration(config_dir=str(tmp_path)))
     replay = client.post(
         "/api/security-content/replays",
         json={

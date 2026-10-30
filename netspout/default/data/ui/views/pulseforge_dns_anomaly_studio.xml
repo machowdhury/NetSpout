@@ -172,39 +172,24 @@
       },
       "showProgressBar": true,
       "showLastUpdated": true,
-      "description": "Click a phase segment to filter the incident timeline and detail tables.",
+      "description": "Event volume per 10 s of scenario time, split by phase.",
       "options": {
         "stackMode": "stacked",
         "xAxisTitleText": "Seconds since scenario start",
         "yAxisTitleText": "Queries",
         "legendDisplay": "bottom"
-      },
-      "eventHandlers": [
-        {
-          "type": "drilldown.setToken",
-          "options": {
-            "tokens": [
-              {
-                "token": "phase_tok",
-                "key": "name2"
-              }
-            ]
-          }
-        }
-      ]
+      }
     },
     "viz_8": {
-      "type": "splunk.bar",
-      "title": "NXDOMAIN % by phase",
+      "type": "splunk.table",
+      "title": "Phase summary (click a row to filter)",
       "dataSources": {
         "primary": "ds_8"
       },
       "showProgressBar": true,
       "showLastUpdated": true,
       "options": {
-        "yAxisTitleText": "",
-        "xAxisTitleText": "NXDOMAIN %",
-        "dataValuesDisplay": "all"
+        "count": 5
       },
       "eventHandlers": [
         {
@@ -257,7 +242,7 @@
     },
     "viz_11": {
       "type": "splunk.table",
-      "title": "Incident timeline (scenario clock order)",
+      "title": "Incident timeline (seconds since scenario start)",
       "dataSources": {
         "primary": "ds_11"
       },
@@ -336,7 +321,7 @@
       "type": "ds.search",
       "name": "NXDOMAIN ratio by phase",
       "options": {
-        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as queries count(eval(response_code=3)) as nxdomain by netspout_phase | eval nxdomain_pct=round(100*nxdomain/queries,1) | fields netspout_phase nxdomain_pct"
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ | stats count as queries count(eval(response_code=3)) as nxdomain by netspout_phase | eval nxdomain_pct=round(100*nxdomain/queries,1) | table netspout_phase queries nxdomain nxdomain_pct"
       }
     },
     "ds_9": {
@@ -357,7 +342,7 @@
       "type": "ds.search",
       "name": "Incident timeline",
       "options": {
-        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ netspout_phase=\"$phase_tok$\" client_ip=\"$client_tok$\" | eval _t=timestamp_ms | sort 0 _t | eval scenario_clock=strftime(_t/1000,\"%H:%M:%S\"), rcode=case(response_code=0,\"NOERROR\",response_code=3,\"NXDOMAIN\",true(),\"RCODE \".response_code) | table scenario_clock netspout_phase client_ip query rcode attack_related resolver_ip _time"
+        "query": "index=idx_network_ops sourcetype=netspout:dns:wire netspout_scenario_id=SEC-P9-B-DNS-ANOMALY netspout_run_id=\"$run_tok$\" earliest=$global_time.earliest$ latest=$global_time.latest$ netspout_phase=\"$phase_tok$\" client_ip=\"$client_tok$\" | eval _t=timestamp_ms | eventstats min(_t) as _m by netspout_run_id | sort 0 _t | eval t_plus_s=round((_t-_m)/1000), rcode=case(response_code=0,\"NOERROR\",response_code=3,\"NXDOMAIN\",true(),\"RCODE \".response_code) | table t_plus_s netspout_phase client_ip query rcode attack_related resolver_ip _time"
       }
     },
     "ds_runs": {
@@ -380,7 +365,7 @@
         "type": "absolute",
         "options": {
           "width": 1460,
-          "height": 1180,
+          "height": 1110,
           "display": "auto-scale"
         },
         "structure": [
@@ -389,7 +374,7 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -399,7 +384,7 @@
             "type": "block",
             "position": {
               "x": 260,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -409,7 +394,7 @@
             "type": "block",
             "position": {
               "x": 500,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -419,7 +404,7 @@
             "type": "block",
             "position": {
               "x": 740,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -429,7 +414,7 @@
             "type": "block",
             "position": {
               "x": 980,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -439,7 +424,7 @@
             "type": "block",
             "position": {
               "x": 1220,
-              "y": 70,
+              "y": 10,
               "w": 230,
               "h": 130
             }
@@ -449,7 +434,7 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 220,
+              "y": 160,
               "w": 700,
               "h": 300
             }
@@ -459,7 +444,7 @@
             "type": "block",
             "position": {
               "x": 740,
-              "y": 220,
+              "y": 160,
               "w": 700,
               "h": 300
             }
@@ -469,7 +454,7 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 540,
+              "y": 480,
               "w": 700,
               "h": 260
             }
@@ -479,7 +464,7 @@
             "type": "block",
             "position": {
               "x": 740,
-              "y": 540,
+              "y": 480,
               "w": 700,
               "h": 260
             }
@@ -489,7 +474,7 @@
             "type": "block",
             "position": {
               "x": 20,
-              "y": 820,
+              "y": 760,
               "w": 1420,
               "h": 330
             }

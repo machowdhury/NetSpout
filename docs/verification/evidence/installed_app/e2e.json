@@ -1,0 +1,89 @@
+{
+ "generated_utc": "2026-10-31T00:27Z",
+ "lab": "tests/lab/ta_validation (isolated Docker Splunk Enterprise 10.2.7)",
+ "app": "netspout.spl installed from the built package",
+ "engine": "PulseForge engine on the host, reached through the installed gateway (NETSPOUT_BACKEND_URL)",
+ "passed": 12,
+ "failed": [],
+ "runs": {
+  "replay_session": "rp-fc355a670a5d",
+  "native_run": "pf-universe-0062edff-58da-4683-a726-bba465eb1fbe",
+  "incident_run": "pf-incident-4164a92b-195a-4e50-bd20-42f9c70fe608"
+ },
+ "checks": {
+  "01_app_installed_and_enabled": {
+   "pass": true,
+   "version": "2.0.0"
+  },
+  "02_dashboard_views_and_navigation_installed": {
+   "pass": true,
+   "pf_views": 133
+  },
+  "03_gateway_reaches_engine_and_explorer_lists_scenarios": {
+   "pass": true,
+   "operational_total": 362
+  },
+  "04_connection_center_configured_and_secret_free": {
+   "pass": true,
+   "indexes": [
+    "dev_test_replay",
+    "dev_test_replay_metrics"
+   ]
+  },
+  "05_rbac_read_only_splunk_user_can_read_but_not_start_runs": {
+   "pass": true,
+   "read": 200,
+   "write": 403
+  },
+  "06_unauthorized_index_refused_through_the_gateway": {
+   "pass": true,
+   "status": 403
+  },
+  "07_replay_session_completes_and_splunk_holds_what_was_accepted": {
+   "pass": true,
+   "counts": {
+    "generated": 12,
+    "delivered": 12,
+    "accepted": 12,
+    "rejected": 0,
+    "unknown": 0,
+    "discarded_on_stop": 0,
+    "backpressure_waits": 0
+   },
+   "independent_indexed": 12
+  },
+  "08_engine_verify_endpoint_agrees_with_independent_search": {
+   "pass": true,
+   "verify": {
+    "session_id": "rp-fc355a670a5d",
+    "verified": true,
+    "indexed": 12,
+    "accepted": 12,
+    "delivered": 12,
+    "complete": true,
+    "first_time": "1793406467.907085",
+    "last_time": "1793406468.047085",
+    "query": "search index=\"dev_test_replay\" netspout_replay_session=\"rp-fc355a670a5d\" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time",
+    "note": "indexed is read from Splunk for netspout_replay_session=rp-fc355a670a5d; it can trail accepted until indexing catches up"
+   }
+  },
+  "09_native_pack_generated_dispatched_and_indexed": {
+   "pass": true,
+   "generated": 20,
+   "accepted": 20,
+   "indexed": 20
+  },
+  "10_incident_pack_events_and_mstats_datapoints_indexed": {
+   "pass": true,
+   "events": 30,
+   "datapoints": 50
+  },
+  "11_no_index_was_created_by_the_product": {
+   "pass": true
+  },
+  "12_no_secret_appeared_in_any_gateway_response": {
+   "pass": true,
+   "leaking_paths": []
+  }
+ }
+}

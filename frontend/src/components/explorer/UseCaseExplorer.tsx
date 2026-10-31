@@ -7,6 +7,8 @@ import {
   type Prerequisites,
   type StepName,
 } from '../../lib/explorerApi';
+import { LiveDeliveryMonitor, rememberRun } from '../monitor/LiveDeliveryMonitor';
+import { startRun } from '../../lib/runsApi';
 import './explorer.css';
 
 type StepStatus = 'idle' | 'running' | 'ok' | 'failed';
@@ -192,6 +194,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   const [count, setCount] = useState(6);
   const [replayMode, setReplayMode] = useState<'one_shot' | 'continuous'>('one_shot');
   const [replaySpeed, setReplaySpeed] = useState(10);
+  const [monitorId, setMonitorId] = useState<string | null>(null);
+  const [monitorError, setMonitorError] = useState<string | null>(null);
   const [prereq, setPrereq] = useState<Prerequisites | null>(null);
   const security = entry.kind === 'security';
   const detection = useMemo(
@@ -458,6 +462,14 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>
+      {!security && ['scenario_pack', 'incident_pack'].includes(entry.engine ?? '') && (
+        <button type="button" className="ux-run-btn" data-testid="monitored-run"
+                onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined }).then(
+                  (r) => { rememberRun(r.run_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>
+          Run with live delivery monitor
+        </button>)}
+      {monitorError && <p className="ux-foot">{monitorError}</p>}
+      {(() => { const id = monitorId ?? (entry.engine === 'replay_pack' ? ctx.runId : null); return id ? <LiveDeliveryMonitor key={id} runId={id} onClose={() => setMonitorId(null)} /> : null; })()}
 
       <ol className="ux-steps">
         {stepList.map((s, i) => {

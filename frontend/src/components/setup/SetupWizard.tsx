@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { CheckCircle2, CircleAlert, RefreshCw, ShieldCheck } from 'lucide-react';
 import { fetchJson } from '../../lib/api';
+import { testConnection } from '../../lib/runsApi';
 import type { SetupConfiguration, SetupValidation } from '../../types/release';
 
 type FormState = {
@@ -39,6 +40,14 @@ export function SetupWizard() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [validation, setValidation] = useState<SetupValidation | null>(null);
   const [busy, setBusy] = useState(false);
+  const [testIndex, setTestIndex] = useState('');
+  const [testing, setTesting] = useState(false);
+  const [testResult, setTestResult] = useState<Record<string, unknown> | null>(null);
+  const [testError, setTestError] = useState<string | null>(null);
+  const runConnectionTest = async () => {
+    setTesting(true); setTestError(null); setTestResult(null);
+    try { setTestResult(await testConnection({ test_index: testIndex.trim() })); } catch (e) { setTestError(e instanceof Error ? e.message : String(e)); } finally { setTesting(false); }
+  };
   const [error, setError] = useState('');
 
   const load = () => fetchJson<SetupConfiguration>('/api/setup')
@@ -151,6 +160,23 @@ export function SetupWizard() {
         {!validation && <div className="generation-empty">Save configuration, then validate before running telemetry.</div>}
         {validation?.checks.map((check) => <article className="setup-check" key={check.id}>{check.status === 'PASS' ? <CheckCircle2 /> : <CircleAlert />}<div><strong>{check.id.replaceAll('_', ' ')}</strong><span>{check.detail}</span></div><span className={badgeForCheck(check.status)}>{check.status}</span></article>)}
         {validation?.status === 'PASS' && form.guided_sample && <a className="generation-primary source-run-link" href="#/generate/scenarios">Run guided security scenario</a>}
+      </section>
+
+      <section className="generation-panel" aria-label="External HEC connection test">
+        <div className="generation-panel__header"><div><h3>HEC connection test</h3><span>Sends one marked synthetic event to the named test index of the saved destination, then searches for it. Connection, acceptance and indexing are reported separately.</span></div></div>
+        <div className="generation-actions">
+          <label>Test index<input value={testIndex} placeholder="must be an allowed index" onChange={(event) => setTestIndex(event.target.value)} /></label>
+          <button type="button" className="generation-secondary" disabled={testing || !configuration?.configured || !testIndex.trim()} onClick={runConnectionTest}>{testing ? 'Testing…' : 'Test connection'}</button>
+        </div>
+        {testError && <div className="generation-empty">{testError}</div>}
+        {testResult && (
+          <>
+            <p><strong>Overall: {String(testResult.overall)}</strong> {testResult.overall === 'ACCEPTED_NOT_VERIFIED' && '— Splunk acknowledged the event but indexing was not independently confirmed.'}</p>
+            <p>{Object.entries((testResult.statuses ?? {}) as Record<string, string>).map(([k, v]) => `${k}: ${v}`).join(' · ')}</p>
+            {((testResult.steps ?? []) as Array<{ id: string; status: string; detail: string }>).map((step) => <article className="setup-check" key={step.id}><div><strong>{step.id.replaceAll('_', ' ')}</strong><span>{step.detail}</span></div><span className={badgeForCheck(step.status)}>{step.status}</span></article>)}
+            {testResult.error && <div className="generation-empty">{(testResult.error as { category: string; message: string }).category}: {(testResult.error as { message: string }).message}</div>}
+          </>
+        )}
       </section>
     </div>
   );

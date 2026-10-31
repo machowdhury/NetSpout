@@ -2271,6 +2271,175 @@ def replay_control(session_id: str, action: str):
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
+# =========================================================================
+# Live event delivery monitor: one run schema for replay sessions, native/incident packs and single-sourcetype generation.
+# Destination = the saved Connection Center destination only (same authorization as replay); counters are the real delivery counters.
+# =========================================================================
+from netspout_core.delivery_monitor import DeliveryRun, Item, RunMonitorService, replay_snapshot, clean_error  # noqa: E402
+
+_runs_state = os.environ.get("NETSPOUT_RUNS_STATE") or (str(Path(os.environ["NETSPOUT_CONFIG_DIR"]) / "runs.json") if os.environ.get("NETSPOUT_CONFIG_DIR") else None)
+run_monitor = RunMonitorService(Path(_runs_state) if _runs_state else None)
+_replay_verification: Dict[str, Dict[str, Any]] = {}
+
+
+def _destination_name(gt) -> str:
+    from urllib.parse import urlparse
+    cfg = release_candidate_configuration.load()
+    return "%s · %s" % (cfg.get("deployment_mode") or "destination", urlparse(getattr(gt, "hec_url", "") or "").netloc or "unconfigured")
+
+
+def _hec_item(dispatch_fn, sourcetype, phase):
+    def send():
+        r = dispatch_fn()
+        h = r.get("hec") or {}
+        state = str(h.get("state") or "").upper()
+        if state == "ACCEPTED" or (not state and h.get("success")):
+            return "accepted", None
+        return ("rejected" if state == "FAILED" or h.get("success") is False else "unknown"), h.get("message") or h.get("error_class") or "not accepted"
+    return Item(sourcetype, phase, send)
+
+
+def _monitor_links(target: str):
+    views = _replay_dashboards()
+    return {"dashboard_view": ("pf_" + target) if target in views else None}
+
+
+@app.post("/api/runs")
+def runs_start(payload: Dict[str, Any]):
+    kind, target = payload.get("kind"), payload.get("target")
+    if kind not in ("scenario", "sourcetype") or not target:
+        raise HTTPException(status_code=422, detail="kind must be scenario or sourcetype and target is required")
+    gt, index, host = _replay_destination(payload)
+    name = _destination_name(gt)
+    from netspout_core import replay_packs, incident_packs
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
+    cfg = gt.model_copy(update={"hec_index": index})
+    try:
+        if kind == "scenario" and target in {p["id"] for p in replay_packs.packs()}:
+            def sink(source, sourcetype, idx, hst):
+                return HecSink(gt.hec_url, gt.hec_token, idx, hst, source, sourcetype, getattr(gt, "hec_ssl_verify", True), getattr(gt, "hec_allow_insecure_tls", False))
+            sess = replay_service.create({"pack_id": target, "speed": payload.get("speed", 10), "continuous": bool(payload.get("continuous")), "loops": payload.get("loops", 1),
+                                          "eps_limit": payload.get("eps")}, sink, index=index, host=host)
+            sess.title = replay_packs.get(target)["title"]
+            return replay_snapshot(sess, name, _monitor_links(target))
+        run_id = payload.get("run_id") or "run-" + __import__("uuid").uuid4().hex[:12]
+        eps = payload.get("eps")
+        if eps is not None and not (isinstance(eps, (int, float)) and 0.1 <= eps <= 2000):
+            raise ValueError("eps must be between 0.1 and 2000")
+        if kind == "scenario" and target in SCENARIO_PACK_IDS:
+            items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in run_scenario_pack(target, run_id)]
+            title, metric_index = target, None
+        elif kind == "scenario" and target in incident_packs.incident_ids():
+            events = incident_packs.generate_pack(target, run_id)
+            metric_index = cfg.hec_metric_index
+            if metric_index not in release_candidate_configuration.load().get("indexes", []):
+                raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+            items = []
+            for e, pl in zip(events, incident_packs.hec_payloads(events, index, metric_index)):
+                items.append(_hec_item(lambda pl=pl: {"hec": (lambda o: {"state": str(o.state), "success": bool(o[0]), "message": o[1]})(dispatcher.emit_hec(pl, cfg.hec_url, cfg.hec_token, ssl_verify=cfg.hec_ssl_verify, allow_insecure_tls=cfg.hec_allow_insecure_tls))},
+                                       e["sourcetype"], e["fields"].get("netspout_phase")))
+            title = target
+        elif kind == "scenario":
+            raise HTTPException(status_code=422, detail="This scenario family has no per-event live monitor yet (ScenarioRunner and unified-generation runs report only when they finish); use the standard run flow")
+        else:
+            from app.generator_modes import generator_service
+            entries, prov = generator_service.prepare_sourcetype_entries(payload.get("vendor_id") or "", target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
+            items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
+            title, metric_index = target, None
+        run = DeliveryRun(kind, target, title, name, index, items, eps_limit=eps, run_id=run_id, links=_monitor_links(target), metric_index=metric_index)
+        return run_monitor.start(run).snapshot()
+    except HTTPException:
+        raise
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+def _run_snapshot(run_id: str):
+    live = run_monitor.snapshot(run_id)
+    if live:
+        return live
+    try:
+        sess = replay_service.get(run_id)
+        from netspout_core.replay_service import ReplayService  # noqa: F401
+        gt = getattr(current_topology, "global_transport", None)
+        return replay_snapshot(sess, _destination_name(gt) if gt else "destination", _monitor_links(sess.source.split(":")[2] if sess.source.count(":") >= 3 else ""), _replay_verification.get(run_id))
+    except KeyError:
+        h = replay_service.status(run_id) if run_id in replay_service._history else None
+        if h:
+            return {"run_id": run_id, "kind": "replay", "state": h.get("state", "INTERRUPTED"), "mode": "finite", "counters": {"generated": h["counts"]["generated"], "attempts": h["counts"]["delivered"],
+                    "accepted": h["counts"]["accepted"], "rejected": h["counts"]["rejected"], "unknown": h["counts"]["unknown"], "pending": h["counts"]["generated"] - h["counts"]["delivered"], "indexed": None},
+                    "controls": {"pause": False, "resume": False, "stop": False}, "interrupted_note": h.get("note"), "persisted_summary": True}
+    return None
+
+
+@app.get("/api/runs")
+def runs_list():
+    rows = {r["run_id"]: r for r in run_monitor.list()}
+    for s in replay_service.list():
+        rows.setdefault(s["session_id"], {"run_id": s["session_id"], "kind": "replay", "state": s["state"], "target": s.get("source")})
+    return {"runs": list(rows.values())}
+
+
+@app.post("/api/runs/{run_id}/verify")
+def runs_verify(run_id: str):
+    snap = _run_snapshot(run_id)
+    if not snap:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+    try:
+        if snap["kind"] == "replay":
+            v = replay_service.verify(run_id, lambda q: release_candidate_configuration.execute_read_only_search(q))
+            rec = {"status": ("VERIFIED" if v.get("complete") else "INCOMPLETE") if v.get("verified") else "ERROR", "indexed": v.get("indexed"), "accepted": v.get("accepted"), "at": now, "query": v.get("query"), "error": v.get("error")}
+            _replay_verification[run_id] = rec
+            return rec
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    run = run_monitor.get(run_id)
+    idx = snap["destination"]["index"]
+    rows, error = release_candidate_configuration.execute_read_only_search('search index="%s" netspout_run_id="%s" earliest=-30d latest=+1d | stats count as indexed' % (idx, run_id))
+    metric = None
+    if snap["destination"].get("metric_index") and not error:
+        m, merr = release_candidate_configuration.execute_read_only_search('| mstats count(_value) as n WHERE index="%s" AND metric_name=* AND netspout_run_id="%s" earliest=-30d latest=+1d' % (snap["destination"]["metric_index"], run_id))
+        metric = None if merr else int((m[0].get("n") if m else 0) or 0)
+    if error:
+        rec = {"status": "ERROR", "error": clean_error(error), "at": now}
+    else:
+        indexed = int(float((rows[0].get("indexed") if rows else 0) or 0))
+        accepted = snap["counters"]["accepted"]
+        rec = {"status": "VERIFIED" if (indexed == accepted and snap["state"] in ("COMPLETED", "STOPPED")) or (snap.get("destination", {}).get("metric_index") and indexed + (metric or 0) == accepted and snap["state"] in ("COMPLETED", "STOPPED")) else "INCOMPLETE",
+               "indexed": indexed, "metric_datapoint_events_indexed": metric, "accepted": accepted, "at": now,
+               "note": "indexed is counted by an independent search; it can trail accepted briefly"}
+        if run:
+            run.indexed = indexed + (metric or 0)
+    if run:
+        run.verification = rec
+    return rec
+
+
+@app.get("/api/runs/{run_id}")
+def runs_get(run_id: str):
+    snap = _run_snapshot(run_id)
+    if not snap:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    return snap
+
+
+@app.post("/api/runs/{run_id}/{action}")
+def runs_control(run_id: str, action: str):
+    if action not in ("pause", "resume", "stop"):
+        raise HTTPException(status_code=404, detail="Unknown action")
+    try:
+        if run_monitor.get(run_id):
+            run_monitor.control(run_id, action)
+        else:
+            replay_service.control(run_id, action)
+        return _run_snapshot(run_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.post("/api/generate/scenario")
 def post_generate_scenario_canonical(payload: Dict[str, Any]):
     """Canonical alias for scenario execution matching Section 17 API requirements."""
@@ -2750,6 +2919,30 @@ def save_release_candidate_setup(payload: SetupConfigurationPayload):
 @app.post("/api/setup/validate")
 def validate_release_candidate_setup():
     return release_candidate_configuration.validate_connection()
+
+
+@app.post("/api/setup/test-connection")
+def test_saved_connection(payload: Dict[str, Any]):
+    """Test the SAVED destination: DNS/TCP/TLS, HEC health, token authentication, one marked synthetic event to an allowlisted index, independent search.
+    Caller-supplied transports or credentials are refused; the test index must be named explicitly and be on the allowlist."""
+    forbidden = {"hec_url", "hec_token", "search_url", "search_secret", "transport_config", "token"} & set(payload)
+    if forbidden:
+        raise HTTPException(status_code=422, detail="The connection test uses the saved Connection Center destination only; remove: " + ", ".join(sorted(forbidden)))
+    test_index = str(payload.get("test_index") or "").strip()
+    if not test_index:
+        raise HTTPException(status_code=422, detail="test_index is required: name the authorized test index explicitly")
+    try:
+        validate_index_name(test_index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    config = release_candidate_configuration.load()
+    if not config.get("configured") or not release_candidate_configuration.secrets.hec_token:
+        raise HTTPException(status_code=409, detail="Connection Center destination is not configured")
+    from netspout_core.hec_connection_test import run_test
+    has_search = bool(release_candidate_configuration.secrets.search_secret)
+    return run_test(config, release_candidate_configuration.secrets.hec_token, test_index, config.get("indexes", []),
+                    (lambda q: release_candidate_configuration.execute_read_only_search(q, timeout=8)) if has_search else None,
+                    release_candidate_configuration.secrets.search_secret)
 
 
 @app.delete("/api/setup")

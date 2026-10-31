@@ -450,6 +450,38 @@ class TelemetryGeneratorService:
             "sample_preview": events_generated[:3]
         }
 
+    def prepare_sourcetype_entries(self, vendor_id: str, sourcetype: str, count: int, event_families: Optional[List[str]] = None,
+                                   run_id: Optional[str] = None):
+        """Build (not send) the LogEntry list for one sourcetype so a monitored run can deliver them with exact per-event accounting.
+        Same grounding rules as generate_sourcetype_batch: native registries first, then verified samples; never a fabricated payload.
+        Returns (entries, provenance) or raises ValueError('TELEMETRY_NOT_GROUNDED: ...')."""
+        if not 1 <= count <= 1000:
+            raise ValueError("count must be between 1 and 1000")
+        source, reference = self._universe_source(sourcetype)
+        if source:
+            families = event_families or source["event_families"]
+            if any(f not in source["event_families"] for f in families):
+                raise ValueError("Unsupported native event family")
+            entries = [self._universe_entry(source, vendor_id, families[i % len(families)]) for i in range(count)]
+            prov = dict(classification=source.get("evidence_level", "VENDOR_DOCUMENTED"), source=reference, mode="native")
+        else:
+            samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
+            if not samples:
+                raise ValueError("TELEMETRY_NOT_GROUNDED: no authoritative vendor log schema or verified sample exists for " + sourcetype)
+            entries = []
+            for i in range(count):
+                dev = f"device-{(i % 3) + 1:02d}"
+                ev_id = str(uuid.uuid4())
+                entries.append(LogEntry(id=ev_id, timestamp=SplunkLogEngine.current_timestamp_iso(), device_id=dev, src_ip=f"10.0.1.{(i % 250) + 1}", dest_ip="10.0.2.50",
+                                        protocol="TCP", duration="10ms", signature="NETSPOUT_BATCH_STREAM", node_type="switch", node_id=dev, vendor=vendor_id,
+                                        sourcetype=sourcetype, raw_log=random.choice(samples), status="normal", action="streamed", netspout_event_id=ev_id,
+                                        netspout_ground_truth="true"))
+            prov = dict(classification=prov_class, source=source_ref, mode="grounded_sample")
+        if run_id:
+            for e in entries:
+                e.netspout_run_id = run_id
+        return entries, prov
+
     def generate_data_source(
         self,
         vendor_id: str,

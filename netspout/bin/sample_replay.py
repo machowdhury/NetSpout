@@ -29,6 +29,7 @@ import statistics
 import threading
 import time
 import uuid
+from collections import Counter, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Callable, Iterator, List, Optional
@@ -431,7 +432,9 @@ class HecSink:
             if meta.get("fields"):
                 event["fields"] = meta["fields"]
         outcome = self._d.emit_hec(event, self._u, self._t, self._v, self._i)
-        return {"ACCEPTED": "accepted", "FAILED": "rejected"}.get(str(outcome.state).upper(), "unknown")
+        result = {"ACCEPTED": "accepted", "FAILED": "rejected"}.get(str(outcome.state).upper(), "unknown")
+        self.last_error = None if result == "accepted" else str(outcome[1])
+        return result
 
 
 STATES = ("CREATED", "RUNNING", "PAUSED", "STOPPING", "STOPPED", "COMPLETED", "FAILED", "INTERRUPTED")
@@ -452,6 +455,19 @@ class ReplaySession:
         self.state, self.error = "CREATED", None
         self.counts = dict(generated=0, delivered=0, accepted=0, rejected=0, unknown=0, discarded_on_stop=0, backpressure_waits=0)
         self.last_emitted = None
+        self.title = source_label
+        # live-monitor accounting (real counters only): per sourcetype/phase outcomes, delivery samples, recent failures, expected total for finite runs
+        self.by_sourcetype, self.by_phase = {}, {}
+        self.samples, self.errors = deque(maxlen=2000), deque(maxlen=20)
+        self.total_expected = len(timeline.items) * loops if loops else None
+        self.expected_by_sourcetype = None
+        if loops:
+            tally = Counter((it.sourcetype or sourcetype) for it in timeline.items)
+            self.expected_by_sourcetype = {k: v * loops for k, v in tally.items()}
+            for k, v in self.expected_by_sourcetype.items():
+                self.by_sourcetype.setdefault(k, Counter())["total"] = v
+            for ph, n in Counter((it.fields or {}).get("netspout_phase") for it in timeline.items if it.fields and it.fields.get("netspout_phase")).items():
+                self.by_phase.setdefault(ph, Counter())["total"] = n * loops
         self.started_at = self.ended_at = None
         self._paused_total, self._paused_at, self._threads = 0.0, None, []
 
@@ -567,7 +583,18 @@ class ReplaySession:
             except Exception:
                 result = "rejected"
             self.counts["delivered"] += 1
-            self.counts[{"accepted": "accepted", "rejected": "rejected"}.get(result, "unknown")] += 1
+            key = {"accepted": "accepted", "rejected": "rejected"}.get(result, "unknown")
+            self.counts[key] += 1
+            st = (meta or {}).get("sourcetype") or self.sourcetype
+            self.by_sourcetype.setdefault(st, Counter())[key] += 1
+            phase = ((meta or {}).get("fields") or {}).get("netspout_phase")
+            if phase:
+                self.by_phase.setdefault(phase, Counter())[key] += 1
+            if key != "accepted":
+                self.errors.append({"at": datetime.now(timezone.utc).isoformat(), "sourcetype": st, "outcome": key, "message": str(getattr(self.sink, "last_error", None) or result)[:240]})
+            now = time.time()
+            if not self.samples or now - self.samples[-1][0] >= 0.5:
+                self.samples.append((now, self.counts["delivered"]))
             self.last_emitted = stamp
         while True:
             try:

@@ -33,6 +33,8 @@ CORE_MODULES = [
     "sample_replay.py",
     "replay_service.py",
     "replay_packs.py",
+    "delivery_monitor.py",
+    "hec_connection_test.py",
     "incident_packs.py",
     "authentic_scenario_packs.py",
     "wave1_authentic_engine.py",

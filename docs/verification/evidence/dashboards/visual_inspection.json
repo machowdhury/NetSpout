@@ -6,6 +6,8 @@
   "ind_telco_change_induced_outage": "operational replay pack: Engineer tab",
   "wave3_cloudmail_exfil": "authentic native security pack: Investigation tab",
   "cisco_aci_microburst": "ScenarioRunner operational with mstats: Engineer tab",
-  "paloalto_threat_investigation": "ScenarioRunner security: Investigation tab"
+  "paloalto_threat_investigation": "ScenarioRunner security: Investigation tab",
+  "AI-001": "unified security: Investigation tab",
+  "C100-DC-001": "unified operational: Engineer tab"
  }
 }

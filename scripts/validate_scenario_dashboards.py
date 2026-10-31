@@ -59,6 +59,11 @@ def ensure_indexes():
                     raise
 
 
+def cfgx():
+    from netspout_core.models import TelemetryTransportConfig
+    return TelemetryTransportConfig(hec_url=URL, hec_token=lab.ENV["LAB_HEC_TOKEN"], hec_index=INDEX, hec_metric_index=METRIC_INDEX, hec_ssl_verify=False, hec_allow_insecure_tls=True)
+
+
 def run_source(src):
     """Generate fresh data for one scenario in the lab and return its run record. Replay packs run on the replay engine; native and incident packs through the generator service."""
     from netspout_core.models import TelemetryTransportConfig
@@ -70,6 +75,25 @@ def run_source(src):
         s.sink._m["source"] = s.source
         s.start(); s.wait(180)
         return {"run": s.id, "accepted": s.counts["accepted"], "expected_events": s.counts["accepted"], "rejected": s.counts["rejected"], "state": s.state}
+    if src["family"] == "unified":
+        from app.main import unified_generation_service
+        from netspout_core.unified_generation import UnifiedGenerationRequest
+        import base64 as _b64
+        # post-run observation needs an authenticated search target: the isolated lab's REST endpoint (credentials from .env.lab, never printed)
+        unified_generation_service.search_provider = lambda: ("https://127.0.0.1:%s/services/search/jobs/export" % lab.ENV["LAB_MGMT_PORT"],
+                                                              "Basic " + _b64.b64encode(("admin:" + lab.ENV["LAB_SPLUNK_PASSWORD"]).encode()).decode())
+        cfg = TelemetryTransportConfig(hec_url=URL, hec_token=lab.ENV["LAB_HEC_TOKEN"], hec_index=INDEX, hec_metric_index=METRIC_INDEX, hec_ssl_verify=False, hec_allow_insecure_tls=True)
+        d = unified_generation_service.run(UnifiedGenerationRequest(mode="SCENARIO", selection_id=pid), cfg).model_dump(mode="json")
+        events = 0
+        for _ in range(10):
+            time.sleep(3)
+            n = spl('index=%s netspout_scenario_id="%s" netspout_run_id="%s" | stats count' % (INDEX, pid, d["run_id"]))
+            events = int(n[0]["count"]) if n else 0
+            if events:
+                time.sleep(2)
+                events = int(spl('index=%s netspout_scenario_id="%s" netspout_run_id="%s" | stats count' % (INDEX, pid, d["run_id"]))[0]["count"])
+                break
+        return {"run": d["run_id"], "accepted": len(d.get("events", [])), "expected_events": events, "rejected": 0, "state": d["status"]}
     if src["family"] == "runner":
         from netspout_core.scenario_runner import scenario_runner
         from netspout_core.models import ScenarioRunRequest
@@ -94,8 +118,11 @@ def run_source(src):
 def probe(only=None):
     ensure_indexes()
     sessions, probes = ({}, {}) if not only else (jload("sessions.json")["sessions"], jload("panel_probe.json", {}))
-    for src in gen.sources():
-        if only == {"__runner__"}:
+    for src in gen.sources(include_blocked=True):
+        if only == {"__unified__"}:
+            if src["family"] != "unified":
+                continue
+        elif only == {"__runner__"}:
             if src["family"] != "runner":
                 continue
         elif only == {"__native__"}:
@@ -104,7 +131,16 @@ def probe(only=None):
         elif only and src["id"] not in only:
             continue
         pid = src["id"]
-        rec = run_source(src)
+        try:
+            rec = run_source(src)
+        except ValueError as exc:   # unified scenarios whose preflight is BLOCKED in this lab (e.g. a native receiver is not running): recorded, no dashboard claimed
+            from app.main import unified_generation_service as _u
+            from netspout_core.unified_generation import UnifiedGenerationRequest as _R
+            pf = _u.preflight(_R(mode="SCENARIO", selection_id=pid), cfgx()).model_dump(mode="json") if src["family"] == "unified" else {"checks": []}
+            probes[pid] = {"blocked": str(exc), "failing_checks": [c["label"] + ": " + c["detail"][:140] for c in pf["checks"] if c["state"] in ("FAIL", "BLOCK", "BLOCKED")]}
+            print(pid, "BLOCKED", probes[pid]["failing_checks"][:2], flush=True)
+            jsave("panel_probe.json", probes)
+            continue
         rec.update({"key_field": src["key_field"], "scenario_value": src["scenario_value"], "family": src["family"], "kind": src["kind"], "title": src["title"], "metric": src["metric"]})
         sessions[pid] = {**rec, "session_id": rec["run"]}
         for _ in range(15):
@@ -114,7 +150,10 @@ def probe(only=None):
             time.sleep(3)
         users = spl('index=%s %s="%s" | eval who=coalesce(user, User, src_user, TargetUserName, SubjectUserName, Account_Name, \'userIdentity.userName\', \'actor.alternateId\') | where isnotnull(who) | stats count' % (INDEX, src["key_field"], rec["run"]))
         probes[pid] = {"users": bool(users and int(users[0]["count"]) > 0)}
-        if src["family"] == "runner":   # only some topology scenarios emit gauge metrics: metric panels are included only when mstats finds datapoints for the run
+        if src["family"] == "unified":
+            st = spl('index=%s netspout_run_id="%s" | stats values(sourcetype) as st' % (INDEX, rec["run"]))
+            probes[pid]["sourcetypes"] = (st[0]["st"] if st and isinstance(st[0]["st"], list) else [st[0]["st"]] if st else [])
+        if src["family"] in ("runner", "unified"):   # only some topology scenarios emit gauge metrics: metric panels are included only when mstats finds datapoints for the run
             m = spl('| mstats count(_value) as n WHERE index=%s AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="%s"' % (METRIC_INDEX, src["scenario_value"], rec["run"]))
             probes[pid]["metrics"] = bool(m and int(m[0]["n"]) > 0)
         print(pid, rec["accepted"], rec["expected_events"], probes[pid], flush=True)

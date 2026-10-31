@@ -71,12 +71,12 @@ def test_incident_dashboards_use_only_real_fields_and_mstats_with_the_metric_ind
 
 def test_security_dashboards_state_detection_status_and_never_claim_a_verified_detection():
     sec = [x for x in SOURCES if x['kind'] == 'security']
-    assert len(sec) == 41
+    assert len(sec) == 56
     for x in sec:
         text = json.dumps(spec(x['id'])[1])
         assert 'Detection status: **NOT VERIFIED**' in text and 'Severity:** not asserted' in text and 'Original analytics (Splunk Security Content)' in text
     ops = [x for x in SOURCES if x['kind'] == 'operational']
-    assert len(ops) == 72 and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
+    assert len(ops) == 77 and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
 
 
 def test_palette_follows_the_figma_v2_tokens_and_perspective_tabs_exist():
@@ -119,7 +119,8 @@ def test_explorer_links_every_scenario_with_a_view_to_it_with_the_run_as_context
     m = json.loads((EV / 'dashboard_maturity.json').read_text())['dashboards']
     ex = main._explorer()
     linked = [e for e in ex.all_entries() if e['kind'] == 'operational' and e.get('dashboard') and e['dashboard'].get('scale')]
-    assert {e['scenario_id'] for e in linked} == {x['id'] for x in SOURCES}   # every scenario family that emits indexed telemetry
+    LEGACY = {'SEC-P9-B-DNS-ANOMALY'}   # keeps its earlier, independently verified DASHBOARD_READY view as the primary link
+    assert {e['scenario_id'] for e in linked} == {x['id'] for x in SOURCES} - LEGACY   # every scenario family that emits indexed telemetry
     for e in linked:
         assert e['dashboard']['splunk_view'] == 'pf_' + e['scenario_id'] and e['dashboard']['dashboard_maturity'] == m[e['scenario_id']]['maturity']
         step = {s_['step']: s_ for s_ in e['workflow']}['DASHBOARD']

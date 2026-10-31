@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T22:54Z",
+ "generated_utc": "2026-10-31T00:22Z",
  "scale": [
   "DASHBOARD_SPECIFIED",
   "DASHBOARD_IMPLEMENTED",
@@ -1249,6 +1249,226 @@
    "screenshot_inspected": false,
    "kind": "security",
    "family": "runner"
+  },
+  "rfc5424-link-state-lifecycle": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "unified"
+  },
+  "test-correlated-interface-degradation": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "unified"
+  },
+  "C100-ENT-001": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "unified"
+  },
+  "C100-DC-001": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "operational",
+   "family": "unified"
+  },
+  "C100-SEC-001": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "C100-CRI-002": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "operational",
+   "family": "unified"
+  },
+  "SEC-P9-B-DNS-ANOMALY": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-001": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-002": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-003": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-004": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-005": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "AI-006": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "SC-001": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "SC-002": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "SC-003": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "SC-004": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "SC-005": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "P12-XD-001": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
+  },
+  "P12-XD-002": {
+   "maturity": "DASHBOARD_DATA_VALIDATED",
+   "specified": true,
+   "implemented": true,
+   "installed_and_opened_in_splunk_web": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": false,
+   "kind": "security",
+   "family": "unified"
   }
  }
 }

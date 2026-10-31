@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T22:54:24.930Z",
+ "generated_utc": "2026-10-31T00:22:16.363Z",
  "splunk_web": "isolated lab",
  "dashboards": {
   "rp_linux_credential_access": {
@@ -3276,6 +3276,586 @@
    "title_rendered": true,
    "events_count_rendered": true,
    "expected_events": 8,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "rfc5424-link-state-lifecycle": {
+   "url": "/en-US/app/netspout/pf_rfc5424-link-state-lifecycle?form.run_tok=99cc3c17-ebef-4f63-ba18-d30cb762e3fb&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "99cc3c17-ebef-4f63-ba18-d30cb762e3fb",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 6,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-003": {
+   "url": "/en-US/app/netspout/pf_AI-003?form.run_tok=6816d2e9-185f-4282-9420-82d7b6c6c42b&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "6816d2e9-185f-4282-9420-82d7b6c6c42b",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-002": {
+   "url": "/en-US/app/netspout/pf_AI-002?form.run_tok=cb13111b-5ccb-4587-9f03-fe110da94ad8&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "cb13111b-5ccb-4587-9f03-fe110da94ad8",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-001": {
+   "url": "/en-US/app/netspout/pf_AI-001?form.run_tok=a74be5ca-b69e-4232-b21a-027939b1f364&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "a74be5ca-b69e-4232-b21a-027939b1f364",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-004": {
+   "url": "/en-US/app/netspout/pf_AI-004?form.run_tok=22223290-c6dc-4147-b548-8821c8cb23e6&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "22223290-c6dc-4147-b548-8821c8cb23e6",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-005": {
+   "url": "/en-US/app/netspout/pf_AI-005?form.run_tok=ead2dc92-f9b9-430e-b68c-868f8585b3e0&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "ead2dc92-f9b9-430e-b68c-868f8585b3e0",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "AI-006": {
+   "url": "/en-US/app/netspout/pf_AI-006?form.run_tok=1a488792-af32-42d1-841c-7ca76625e65b&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "1a488792-af32-42d1-841c-7ca76625e65b",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SC-001": {
+   "url": "/en-US/app/netspout/pf_SC-001?form.run_tok=1af96bab-53f0-4cab-a9d4-8d03ca1a5401&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "1af96bab-53f0-4cab-a9d4-8d03ca1a5401",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SC-002": {
+   "url": "/en-US/app/netspout/pf_SC-002?form.run_tok=7c08a0b8-26ce-45b9-b25c-3e3202017dd4&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "7c08a0b8-26ce-45b9-b25c-3e3202017dd4",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SC-003": {
+   "url": "/en-US/app/netspout/pf_SC-003?form.run_tok=d6f9cdaa-2f24-415b-b55d-2f72d86dbc8e&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "d6f9cdaa-2f24-415b-b55d-2f72d86dbc8e",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SC-004": {
+   "url": "/en-US/app/netspout/pf_SC-004?form.run_tok=704d2ddf-f580-4c6d-9f2b-d86bf59f14d5&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "704d2ddf-f580-4c6d-9f2b-d86bf59f14d5",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SC-005": {
+   "url": "/en-US/app/netspout/pf_SC-005?form.run_tok=9fbc5c33-5c1e-43f1-98ad-c78e557e104c&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "9fbc5c33-5c1e-43f1-98ad-c78e557e104c",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "test-correlated-interface-degradation": {
+   "url": "/en-US/app/netspout/pf_test-correlated-interface-degradation?form.run_tok=b2d5b061-17eb-4eff-bf7a-134d6ea35951&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "b2d5b061-17eb-4eff-bf7a-134d6ea35951",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 4,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "P12-XD-001": {
+   "url": "/en-US/app/netspout/pf_P12-XD-001?form.run_tok=0b869004-d9ba-48dc-9f82-b08de1e26893&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "0b869004-d9ba-48dc-9f82-b08de1e26893",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "P12-XD-002": {
+   "url": "/en-US/app/netspout/pf_P12-XD-002?form.run_tok=83330a47-aac8-4aa2-a381-3f398b3a6c45&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "83330a47-aac8-4aa2-a381-3f398b3a6c45",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 5,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-B-DNS-ANOMALY": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-B-DNS-ANOMALY?form.run_tok=511c4e04-6a91-4da0-9666-ebf5b24bba98&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "511c4e04-6a91-4da0-9666-ebf5b24bba98",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 9,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "C100-ENT-001": {
+   "url": "/en-US/app/netspout/pf_C100-ENT-001?form.run_tok=9c6a707e-12d5-4bed-add7-f77b1786380a&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "9c6a707e-12d5-4bed-add7-f77b1786380a",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 4,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "C100-DC-001": {
+   "url": "/en-US/app/netspout/pf_C100-DC-001?form.run_tok=5982e2da-10a9-4f92-8c2f-3f0d2c6ef712&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "5982e2da-10a9-4f92-8c2f-3f0d2c6ef712",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 4,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "C100-CRI-002": {
+   "url": "/en-US/app/netspout/pf_C100-CRI-002?form.run_tok=1ae98fba-2f30-4832-b582-9a2acd2b791b&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "1ae98fba-2f30-4832-b582-9a2acd2b791b",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "NOC": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Engineer": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 8,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "C100-SEC-001": {
+   "url": "/en-US/app/netspout/pf_C100-SEC-001?form.run_tok=702f40e0-58fc-4def-9a29-82f298c189e5&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "702f40e0-58fc-4def-9a29-82f298c189e5",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 11,
    "run_filter_shows_session": true,
    "ok": true
   }

@@ -1,7 +1,115 @@
 {
- "generated_utc": "2026-10-30T22:51Z",
+ "generated_utc": "2026-10-31T00:10Z",
  "app": "netspout",
  "views": {
+  "pf_AI-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23831,
+   "matches_source": true
+  },
+  "pf_AI-002": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23824,
+   "matches_source": true
+  },
+  "pf_AI-003": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23860,
+   "matches_source": true
+  },
+  "pf_AI-004": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23880,
+   "matches_source": true
+  },
+  "pf_AI-005": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23780,
+   "matches_source": true
+  },
+  "pf_AI-006": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23885,
+   "matches_source": true
+  },
+  "pf_C100-CRI-002": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26538,
+   "matches_source": true
+  },
+  "pf_C100-DC-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26354,
+   "matches_source": true
+  },
+  "pf_C100-ENT-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26420,
+   "matches_source": true
+  },
+  "pf_C100-SEC-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24274,
+   "matches_source": true
+  },
+  "pf_P12-XD-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23962,
+   "matches_source": true
+  },
+  "pf_P12-XD-002": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24019,
+   "matches_source": true
+  },
+  "pf_SC-001": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23843,
+   "matches_source": true
+  },
+  "pf_SC-002": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23841,
+   "matches_source": true
+  },
+  "pf_SC-003": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23818,
+   "matches_source": true
+  },
+  "pf_SC-004": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23875,
+   "matches_source": true
+  },
+  "pf_SC-005": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 23919,
+   "matches_source": true
+  },
+  "pf_SEC-P9-B-DNS-ANOMALY": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 24130,
+   "matches_source": true
+  },
   "pf_arch_lan_campus_access": {
    "app": "netspout",
    "sharing": "app",
@@ -410,6 +518,12 @@
    "bytes": 30192,
    "matches_source": true
   },
+  "pf_rfc5424-link-state-lifecycle": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 26624,
+   "matches_source": true
+  },
   "pf_rp_agentic_ai_mcp_runtime_hybrid": {
    "app": "netspout",
    "sharing": "app",
@@ -522,6 +636,12 @@
    "app": "netspout",
    "sharing": "app",
    "bytes": 31190,
+   "matches_source": true
+  },
+  "pf_test-correlated-interface-degradation": {
+   "app": "netspout",
+   "sharing": "app",
+   "bytes": 27070,
    "matches_source": true
   },
   "pf_ub1_ot_proxy_host_hunt": {

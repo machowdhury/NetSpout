@@ -33,11 +33,13 @@
       <view name="pf_network_06_bgp_flap" label="BGP neighbor flap/route withdrawal"/>
       <view name="pf_wave2_bigip_openconfig_itops" label="Big-IP ADC &amp; OpenConfig Observability Health (Wave-2 pack)"/>
       <view name="pf_telco_06_broadband_cpe" label="Broadband CPE service outage"/>
+      <view name="pf_C100-ENT-001" label="Campus Access Link Degradation — IOS XE Reference"/>
       <view name="pf_network_22_authentication_storm" label="Campus authentication retry storm at perimeter"/>
       <view name="pf_cisco_campus_rogue" label="Campus Core L2/3 Disturbance &amp; Rogue AP"/>
       <view name="pf_network_01_campus_link" label="Campus link failure/recovery"/>
       <view name="pf_ub6_catalyst_wireless_rogue_threat" label="Catalyst Wireless Rogue And Threat Summary"/>
       <view name="pf_ub5_cisco_change_induced_outage" label="Cisco Change-Induced Outage"/>
+      <view name="pf_test-correlated-interface-degradation" label="Cisco IOS XR Interface Degradation — Golden Scenario"/>
       <view name="pf_ub5_cisco_nac_radius_outage" label="Cisco NAC RADIUS Outage"/>
       <view name="pf_ub5_cisco_platform_health_degradation" label="Cisco Platform Health Degradation"/>
       <view name="pf_telco_10_cross_layer" label="Cross-layer telecom service outage and SLA impact"/>
@@ -60,10 +62,12 @@
       <view name="pf_ind_transport_fleet_network_change" label="Logistics network: change-induced outage and edge routing observation"/>
       <view name="pf_arch_man_carrier_ring" label="MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring &amp; G.8032 ERPS"/>
       <view name="pf_telco_05_mobile_transport" label="Mobile transport/fronthaul congestion"/>
+      <view name="pf_rfc5424-link-state-lifecycle" label="Modeled Link-State Lifecycle"/>
       <view name="pf_network_13_mtu_pmtud" label="MTU mismatch/PMTUD failure"/>
       <view name="pf_network_24_policy_disagreement" label="Multi-firewall path-policy disagreement"/>
       <view name="pf_mixed_backbone_optical" label="Multicast/MPLS Backbone Optical Carrier Shift"/>
       <view name="pf_network_security_correlation" label="Network Degradation With Security Correlation"/>
+      <view name="pf_C100-DC-001" label="Nexus Fabric Uplink Degradation — NX-OS Reference"/>
       <view name="pf_openconfig_mdt_streaming" label="OpenConfig MDT Streaming &amp; Telemetry Assurance"/>
       <view name="pf_network_07_ospf_adjacency" label="OSPF adjacency failure/reconvergence"/>
       <view name="pf_network_21_partial_pool" label="Partial load-balancer pool outage with perimeter demand"/>
@@ -82,6 +86,7 @@
       <view name="pf_ind_energy_substation_edge_observation" label="Substation edge: OT routing observation and network platform health"/>
       <view name="pf_ind_telco_change_induced_outage" label="Telecom NOC: change-induced SD-WAN outage, then edge threat pipeline"/>
       <view name="pf_ind_telco_access_and_wireless_health" label="Telecom NOC: RADIUS/NAC outage, platform degradation and rogue wireless threat"/>
+      <view name="pf_C100-CRI-002" label="Telecom Operations Network Degradation — Correlated Reference"/>
       <view name="pf_ub2_database_backup_integrity" label="Ub2 Database Backup Integrity"/>
       <view name="pf_ub2_ot_edge_routing_observation" label="Ub2 Ot Edge Routing Observation"/>
       <view name="pf_ub3_database_message_audit" label="Ub3 Database Message Audit"/>
@@ -98,12 +103,17 @@
       <view name="pf_arch_wlan_meraki_catalyst" label="WLAN: Wireless Local Area Network - Catalyst 9800 &amp; Meraki Wi-Fi 6E/7"/>
     </collection>
     <collection label="Security">
+      <view name="pf_AI-005" label="A2A Delegation Abuse"/>
       <view name="pf_ind_gov_agency_mail_exfiltration" label="Agency: cloud mail exfiltration with containment and endpoint pipeline"/>
+      <view name="pf_AI-004" label="Agent Identity and Privilege Drift"/>
       <view name="pf_wave2_agentic_ai_exfil_attempt" label="Agentic AI Runtime Exfiltration Attempt (Wave-2 pack)"/>
       <view name="pf_rp_agentic_ai_mcp_runtime_hybrid" label="Agentic AI: recorded MCP server log plus native exfiltration attempt (hybrid)"/>
+      <view name="pf_P12-XD-001" label="AI Agent to Infrastructure"/>
       <view name="pf_wave2_aws_recon_escalation" label="AWS CloudTrail Recon &amp; Escalation (Wave-2 pack)"/>
       <view name="pf_rp_cloud_control_plane_activity" label="AWS control-plane activity (replayed CloudTrail)"/>
+      <view name="pf_SC-003" label="Build Artifact Provenance Gap"/>
       <view name="pf_ind_edu_campus_identity_and_collab" label="Campus: cloud identity attack and collaboration-platform audit"/>
+      <view name="pf_SC-002" label="CI Workflow Permission Escalation"/>
       <view name="pf_ind_gov_citizen_identity_attack" label="Citizen services: cloud identity attack, AWS reconnaissance, privileged-access audit"/>
       <view name="pf_ind_insurance_claims_platform_audit" label="Claims platform: SaaS and database/message audit with cloud mail exfiltration"/>
       <view name="pf_wave3_cloudmail_exfil" label="Cloud Mail Exfiltration Chain (Wave-3 pack)"/>
@@ -111,30 +121,40 @@
       <view name="pf_ind_aero_defense_endpoint_c2" label="Defense contractor: C2 callback, endpoint pipeline and privileged-access audit"/>
       <view name="pf_ddos_attack" label="Distributed Denial of Service (DDoS SYN Flood)"/>
       <view name="pf_mixed_edge_breach" label="Distributed Edge Breach &amp; Internal Probing"/>
+      <view name="pf_SEC-P9-B-DNS-ANOMALY" label="DNS Diversity and NXDOMAIN Indicators"/>
       <view name="pf_ind_retail_ecommerce_cloud_recon" label="E-commerce: AWS reconnaissance and escalation with exposure management"/>
       <view name="pf_wave3_ebpf_workload_hunt" label="eBPF Workload Hunt (Wave-3 pack)"/>
       <view name="pf_rp_edr_and_cloud_activity" label="Endpoint sensor and cloud audit side by side (aligned in time only)"/>
       <view name="pf_ind_health_ehr_ransomware_readiness" label="Hospital: endpoint credential attack with backup and privileged-access audit"/>
       <view name="pf_ind_hospitality_guest_network_defense" label="Hospitality: edge defense and guest/staff identity attack"/>
+      <view name="pf_AI-001" label="Indirect Prompt Injection"/>
       <view name="pf_wave2_k8s_container_escape" label="Kubernetes Auth Abuse + Container Escape (Wave-2 pack)"/>
       <view name="pf_ind_legal_matter_data_exfiltration" label="Law firm: client-matter data exfiltration across mail, vault and wiki"/>
       <view name="pf_rp_linux_credential_access" label="Linux credential-file access with system context (replayed recordings)"/>
       <view name="pf_wave2_linux_auth_anomaly" label="Linux Infrastructure Auth Anomaly (Wave-2 pack)"/>
       <view name="pf_rp_workload_sysmon_ebpf_hybrid" label="Linux workload: recorded Sysmon-for-Linux plus native eBPF hunt (hybrid)"/>
+      <view name="pf_AI-003" label="MCP Tool Output Manipulation"/>
       <view name="pf_ind_media_content_delivery_exfil" label="Media: content-delivery access with cloud-mail exfiltration"/>
+      <view name="pf_AI-006" label="Multi-Agent Incident"/>
       <view name="pf_wave2_c2_callback_detection" label="Network C2 Callback &amp; Discovery Behaviors (Wave-2 pack)"/>
       <view name="pf_ind_nonprofit_donor_platform_attack" label="Non-profit: staff identity attack and cloud-mail exfiltration of donor data"/>
       <view name="pf_ub1_ot_proxy_host_hunt" label="OT Tamper to Container Host Hunt (Universe Batch-1)"/>
       <view name="pf_paloalto_threat_investigation" label="Palo Alto Networks Threat Investigation"/>
       <view name="pf_ind_bank_payments_edge_defense" label="Payments edge: WAF/IDS/firewall observation then cloud control-plane reconnaissance"/>
       <view name="pf_ind_mfg_it_ot_convergence" label="Plant: OT proxy and edge routing observation, then command-and-control callback"/>
+      <view name="pf_SC-004" label="Repository Automation Abuse"/>
       <view name="pf_ind_bank_account_takeover_resilience" label="Retail banking: workstation credential compromise, cloud SSO abuse, backup integrity check"/>
       <view name="pf_ind_retail_pos_edge_defense" label="Retail stores: edge defense observation and endpoint threat pipeline"/>
       <view name="pf_ind_saas_platform_runtime_attack" label="SaaS platform: Kubernetes container escape, collaboration audit and exposure management"/>
       <view name="pf_ub6_sdwan_utd_threat_pipeline" label="SD-WAN UTD Threat Pipeline"/>
+      <view name="pf_C100-SEC-001" label="Secure Firewall Suspicious Connection Burst — ASA Reference"/>
       <view name="pf_sql_injection" label="SQL Injection / Application Breach"/>
+      <view name="pf_P12-XD-002" label="Supply Chain to Application"/>
+      <view name="pf_SC-005" label="Supply Chain to Runtime Correlation"/>
+      <view name="pf_SC-001" label="Suspicious Dependency Change"/>
       <view name="pf_ub2_cloud_identity_mail_hunt" label="Ub2 Cloud Identity Mail Hunt"/>
       <view name="pf_ub4_endpoint_threat_pipeline" label="Ub4 Endpoint Threat Pipeline"/>
+      <view name="pf_AI-002" label="Unauthorized Tool Invocation"/>
       <view name="pf_ind_energy_scada_proxy_intrusion" label="Utility: OT proxy host hunt and C2 callback detection"/>
       <view name="pf_rp_web_exploitation_recordings" label="Web exploitation observed from three recordings (aligned in time only)"/>
       <view name="pf_wave2_ws_credential_compromise_chain" label="Windows Credential Compromise Kill Chain (Wave-2 pack)"/>

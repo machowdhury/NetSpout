@@ -354,5 +354,176 @@
  "sql_injection": {
   "users": true,
   "metrics": false
+ },
+ "rfc5424-link-state-lifecycle": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:rfc5424"
+  ],
+  "metrics": false
+ },
+ "test-correlated-interface-degradation": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxr:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-ENT-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxe:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-DC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:nxos:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-SEC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:asa:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-CRI-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxe:syslog",
+   "netspout:cisco:iosxr:syslog"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-A-TRAFFIC-FLOOD": {
+  "blocked": "generation preflight is BLOCKED",
+  "failing_checks": [
+   "bundled-ipfix-collector: Collector or forwarder probe failed."
+  ]
+ },
+ "SEC-P9-B-DNS-ANOMALY": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:dns:wire"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-C-BEACONING": {
+  "blocked": "generation preflight is BLOCKED",
+  "failing_checks": [
+   "bundled-ipfix-collector: Collector or forwarder probe failed."
+  ]
+ },
+ "SEC-P9-D-INTERNAL-RECON": {
+  "blocked": "generation preflight is BLOCKED",
+  "failing_checks": [
+   "bundled-ipfix-collector: Collector or forwarder probe failed."
+  ]
+ },
+ "SEC-P9-E-DNS-TUNNEL": {
+  "blocked": "generation preflight is BLOCKED",
+  "failing_checks": [
+   "bundled-ipfix-collector: Collector or forwarder probe failed."
+  ]
+ },
+ "SEC-P9-F-CROSS-SOURCE": {
+  "blocked": "generation preflight is BLOCKED",
+  "failing_checks": [
+   "bundled-ipfix-collector: Collector or forwarder probe failed."
+  ]
+ },
+ "AI-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-003": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-004": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-005": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-006": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "SC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-003": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-004": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-005": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "P12-XD-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:cross_domain"
+  ],
+  "metrics": false
+ },
+ "P12-XD-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:cross_domain"
+  ],
+  "metrics": false
  }
 }

@@ -72,7 +72,7 @@ def analytics_for(sourcetypes):
 
 
 # ------------------------------------------------------------------------------------------------------------------ scenario sources
-def sources():
+def sources(include_blocked=False):
     """-> list of dicts: id, title, kind, family, key_field, scenario_value, industries, subindustry, objective, phases, required_sourcetypes, detection_prerequisites, provenance, metric."""
     tax = json.load(open(ROOT / "catalog/explorer_taxonomy.json"))
     ind_map = collections.defaultdict(list)
@@ -127,6 +127,25 @@ def sources():
                     "phases": [{"id": "RUNNER", "source": {"kind": "native", "pack": sid}}], "required_sourcetypes": sorted(s.get("sourcetypes", [])), "metric": (not sec) and bool(probe.get("metrics")),
                     "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
                     "provenance": "ScenarioRunner topology simulation: vendor-format events and gauge metrics produced by the scenario's own contract; correlated by the runner.", "category": s.get("category")})
+    try:   # unified-generation scenarios (service lives in the backend app; run this script with the project virtualenv)
+        from app.main import unified_generation_service, _unified_transport_config
+        uni = unified_generation_service.capabilities(_unified_transport_config())["scenarios"]
+    except Exception:
+        uni = []
+    for u in uni:
+        if not u.get("runnable"):
+            continue
+        sid = u["scenario_id"]
+        sec = u.get("domain") in ("Security & SecOps", "Agentic AI Security", "Software Supply Chain Security", "Cross-Domain Incident") or u.get("category") == "FIREWALL_ACTIVITY"
+        probe = json.loads(PROBE.read_text()).get(sid, {}) if PROBE.exists() else {}
+        if probe.get("blocked") and not include_blocked:
+            continue   # preflight blocked in the validation lab: no dashboard is claimed for a scenario that could not be run and indexed
+        out.append({"id": sid, "title": u["title"], "kind": "security" if sec else "operational", "family": "unified", "key_field": "netspout_run_id", "scenario_value": sid,
+                    "industries": ind_map.get(sid, []), "subindustry": None, "objective": u.get("description", ""), "phases": [{"id": "UNIFIED", "source": {"kind": "native", "pack": sid}}],
+                    "required_sourcetypes": sorted(probe.get("sourcetypes", [])), "metric": (not sec) and bool(probe.get("metrics")),
+                    "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
+                    "provenance": "Unified-generation scenario (%s); modeled and documented payloads as declared by its source contracts." % u.get("category", "").replace("_", " ").title().lower(),
+                    "category": u.get("category")})
     return out
 
 

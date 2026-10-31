@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-30T22:52Z",
+ "generated_utc": "2026-10-31T00:20Z",
  "dashboards": {
   "rp_linux_credential_access": {
    "session_id": "rp-b8930b5675fa",
@@ -16789,6 +16789,2731 @@
    "run_filter": {
     "events_for_run": 8,
     "events_all_runs": 16,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "rfc5424-link-state-lifecycle": {
+   "session_id": "99cc3c17-ebef-4f63-ba18-d30cb762e3fb",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Reporting hosts",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Incident duration",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Incident phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Recovery / validation evidence",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 6
+    },
+    "ds_9": {
+     "name": "Affected assets and services (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Incident sequence: root cause to recovery",
+     "rows": 6
+    },
+    "ds_11": {
+     "name": "Telemetry volume trend by source",
+     "rows": 1
+    },
+    "ds_12": {
+     "name": "Before / during / after by source",
+     "rows": 1
+    },
+    "ds_13": {
+     "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+     "rows": 5
+    },
+    "ds_14": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 6
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 7
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 6
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "6",
+     "independent": "6",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Reporting hosts": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Incident duration": {
+     "dashboard": "00:00:01",
+     "independent_seconds": 1,
+     "equal": true
+    },
+    "Incident phases observed": {
+     "dashboard": "6",
+     "independent": "6",
+     "equal": true
+    },
+    "Recovery / validation evidence": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected assets and services (click a row to search its events)": {
+     "rows": 6
+    },
+    "Incident sequence: root cause to recovery": {
+     "rows": 1
+    },
+    "Impact events (everything after the baseline; click a row for the raw event search)": {
+     "rows": 6
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 6
+    }
+   },
+   "run_filter": {
+    "events_for_run": 6,
+    "events_all_runs": 42,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "test-correlated-interface-degradation": {
+   "session_id": "b2d5b061-17eb-4eff-bf7a-134d6ea35951",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Reporting hosts",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Incident duration",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Incident phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Recovery / validation evidence",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 4
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 4
+    },
+    "ds_9": {
+     "name": "Affected assets and services (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Incident sequence: root cause to recovery",
+     "rows": 4
+    },
+    "ds_11": {
+     "name": "Telemetry volume trend by source",
+     "rows": 4
+    },
+    "ds_12": {
+     "name": "Before / during / after by source",
+     "rows": 1
+    },
+    "ds_13": {
+     "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+     "rows": 3
+    },
+    "ds_14": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 4
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 3
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 4
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Reporting hosts": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Incident duration": {
+     "dashboard": "00:00:03",
+     "independent_seconds": 3,
+     "equal": true
+    },
+    "Incident phases observed": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Recovery / validation evidence": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected assets and services (click a row to search its events)": {
+     "rows": 4
+    },
+    "Incident sequence: root cause to recovery": {
+     "rows": 1
+    },
+    "Impact events (everything after the baseline; click a row for the raw event search)": {
+     "rows": 4
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 4
+    }
+   },
+   "run_filter": {
+    "events_for_run": 4,
+    "events_all_runs": 12,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "C100-ENT-001": {
+   "session_id": "9c6a707e-12d5-4bed-add7-f77b1786380a",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Reporting hosts",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Incident duration",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Incident phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Recovery / validation evidence",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 4
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 4
+    },
+    "ds_9": {
+     "name": "Affected assets and services (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Incident sequence: root cause to recovery",
+     "rows": 4
+    },
+    "ds_11": {
+     "name": "Telemetry volume trend by source",
+     "rows": 4
+    },
+    "ds_12": {
+     "name": "Before / during / after by source",
+     "rows": 1
+    },
+    "ds_13": {
+     "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+     "rows": 3
+    },
+    "ds_14": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 4
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 2
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 4
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Reporting hosts": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Incident duration": {
+     "dashboard": "00:00:03",
+     "independent_seconds": 3,
+     "equal": true
+    },
+    "Incident phases observed": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Recovery / validation evidence": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected assets and services (click a row to search its events)": {
+     "rows": 4
+    },
+    "Incident sequence: root cause to recovery": {
+     "rows": 1
+    },
+    "Impact events (everything after the baseline; click a row for the raw event search)": {
+     "rows": 4
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 4
+    }
+   },
+   "run_filter": {
+    "events_for_run": 4,
+    "events_all_runs": 8,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "C100-DC-001": {
+   "session_id": "5982e2da-10a9-4f92-8c2f-3f0d2c6ef712",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Reporting hosts",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Incident duration",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Incident phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Recovery / validation evidence",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 4
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 4
+    },
+    "ds_9": {
+     "name": "Affected assets and services (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Incident sequence: root cause to recovery",
+     "rows": 4
+    },
+    "ds_11": {
+     "name": "Telemetry volume trend by source",
+     "rows": 4
+    },
+    "ds_12": {
+     "name": "Before / during / after by source",
+     "rows": 1
+    },
+    "ds_13": {
+     "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+     "rows": 3
+    },
+    "ds_14": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 4
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 2
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 4
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Reporting hosts": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Incident duration": {
+     "dashboard": "00:00:03",
+     "independent_seconds": 3,
+     "equal": true
+    },
+    "Incident phases observed": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Recovery / validation evidence": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected assets and services (click a row to search its events)": {
+     "rows": 4
+    },
+    "Incident sequence: root cause to recovery": {
+     "rows": 1
+    },
+    "Impact events (everything after the baseline; click a row for the raw event search)": {
+     "rows": 4
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 4
+    }
+   },
+   "run_filter": {
+    "events_for_run": 4,
+    "events_all_runs": 8,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "C100-SEC-001": {
+   "session_id": "702f40e0-58fc-4def-9a29-82f298c189e5",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 11
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 4
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 4
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 11
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 11
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 2
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 4
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "11",
+     "independent": "11",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:10",
+     "independent_seconds": 10,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 11
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 11
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 11
+    }
+   },
+   "run_filter": {
+    "events_for_run": 11,
+    "events_all_runs": 22,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "C100-CRI-002": {
+   "session_id": "1ae98fba-2f30-4832-b582-9a2acd2b791b",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Reporting hosts",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Incident duration",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Incident phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Recovery / validation evidence",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 8
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 4
+    },
+    "ds_9": {
+     "name": "Affected assets and services (click a row to search its events)",
+     "rows": 2
+    },
+    "ds_10": {
+     "name": "Incident sequence: root cause to recovery",
+     "rows": 4
+    },
+    "ds_11": {
+     "name": "Telemetry volume trend by source",
+     "rows": 8
+    },
+    "ds_12": {
+     "name": "Before / during / after by source",
+     "rows": 2
+    },
+    "ds_13": {
+     "name": "Impact events (everything after the baseline; click a row for the raw event search)",
+     "rows": 6
+    },
+    "ds_14": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 8
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 2
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 4
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "8",
+     "independent": "8",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "2",
+     "independent": "2",
+     "equal": true
+    },
+    "Reporting hosts": {
+     "dashboard": "2",
+     "independent": "2",
+     "equal": true
+    },
+    "Incident duration": {
+     "dashboard": "00:00:07",
+     "independent_seconds": 7,
+     "equal": true
+    },
+    "Incident phases observed": {
+     "dashboard": "4",
+     "independent": "4",
+     "equal": true
+    },
+    "Recovery / validation evidence": {
+     "dashboard": "2",
+     "independent": "2",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected assets and services (click a row to search its events)": {
+     "rows": 4
+    },
+    "Incident sequence: root cause to recovery": {
+     "rows": 2
+    },
+    "Impact events (everything after the baseline; click a row for the raw event search)": {
+     "rows": 4
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 4
+    }
+   },
+   "run_filter": {
+    "events_for_run": 8,
+    "events_all_runs": 16,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SEC-P9-B-DNS-ANOMALY": {
+   "session_id": "511c4e04-6a91-4da0-9666-ebf5b24bba98",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 2
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 2
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 9
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 9
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 3
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 2
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "9",
+     "independent": "9",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "2",
+     "independent": "2",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 9
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 3
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 9
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 9
+    }
+   },
+   "run_filter": {
+    "events_for_run": 9,
+    "events_all_runs": 27,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-001": {
+   "session_id": "a74be5ca-b69e-4232-b21a-027939b1f364",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-002": {
+   "session_id": "cb13111b-5ccb-4587-9f03-fe110da94ad8",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:01",
+     "independent_seconds": 1,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-003": {
+   "session_id": "6816d2e9-185f-4282-9420-82d7b6c6c42b",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-004": {
+   "session_id": "22223290-c6dc-4147-b548-8821c8cb23e6",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:01",
+     "independent_seconds": 1,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-005": {
+   "session_id": "ead2dc92-f9b9-430e-b68c-868f8585b3e0",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "AI-006": {
+   "session_id": "1a488792-af32-42d1-841c-7ca76625e65b",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SC-001": {
+   "session_id": "1af96bab-53f0-4cab-a9d4-8d03ca1a5401",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:01",
+     "independent_seconds": 1,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SC-002": {
+   "session_id": "7c08a0b8-26ce-45b9-b25c-3e3202017dd4",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SC-003": {
+   "session_id": "d6f9cdaa-2f24-415b-b55d-2f72d86dbc8e",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SC-004": {
+   "session_id": "704d2ddf-f580-4c6d-9f2b-d86bf59f14d5",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "SC-005": {
+   "session_id": "9fbc5c33-5c1e-43f1-98ad-c78e557e104c",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "P12-XD-001": {
+   "session_id": "0b869004-d9ba-48dc-9f82-b08de1e26893",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
+    "run_equals_generated": true,
+    "narrows_or_equals": true
+   },
+   "datasources_empty": [],
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "pass": true
+  },
+  "P12-XD-002": {
+   "session_id": "83330a47-aac8-4aa2-a381-3f398b3a6c45",
+   "family": "unified",
+   "datasources": {
+    "ds_1": {
+     "name": "Events in run",
+     "rows": 1
+    },
+    "ds_2": {
+     "name": "Telemetry sources (sourcetypes)",
+     "rows": 1
+    },
+    "ds_3": {
+     "name": "Hosts observed",
+     "rows": 1
+    },
+    "ds_4": {
+     "name": "Attack progression span",
+     "rows": 1
+    },
+    "ds_5": {
+     "name": "Progression phases observed",
+     "rows": 1
+    },
+    "ds_6": {
+     "name": "Contributing packs",
+     "rows": 1
+    },
+    "ds_7": {
+     "name": "Incident timeline \u00b7 events by phase",
+     "rows": 1
+    },
+    "ds_8": {
+     "name": "Events by phase (click to filter the page)",
+     "rows": 5
+    },
+    "ds_9": {
+     "name": "Affected hosts and assets (click a row to search its events)",
+     "rows": 1
+    },
+    "ds_10": {
+     "name": "Attack progression by phase (click a row to search it)",
+     "rows": 5
+    },
+    "ds_11": {
+     "name": "Investigation evidence: security-relevant events (click a row for the raw search)",
+     "rows": 5
+    },
+    "ds_12": {
+     "name": "Raw event evidence for the run (click a row for the search)",
+     "rows": 5
+    },
+    "ds_runs": {
+     "name": "Run list",
+     "rows": 5
+    },
+    "ds_phase_list": {
+     "name": "Phase list",
+     "rows": 5
+    }
+   },
+   "kpi": {
+    "Events in run": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    },
+    "Telemetry sources (sourcetypes)": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Hosts observed": {
+     "dashboard": "1",
+     "independent": "1",
+     "equal": true
+    },
+    "Attack progression span": {
+     "dashboard": "00:00:00",
+     "independent_seconds": 0,
+     "equal": true
+    },
+    "Progression phases observed": {
+     "dashboard": "5",
+     "independent": "5",
+     "equal": true
+    }
+   },
+   "tokens": {
+    "used": [
+     "global_time.earliest",
+     "global_time.latest",
+     "index_tok",
+     "phase_tok",
+     "row.host.value",
+     "row.pf_phase.value",
+     "row.sourcetype.value",
+     "run_tok"
+    ],
+    "unbound": []
+   },
+   "drilldowns": {
+    "Events by phase (click to filter the page)": {
+     "sets_token": "phase_tok",
+     "token_declared": true
+    },
+    "Affected hosts and assets (click a row to search its events)": {
+     "rows": 5
+    },
+    "Attack progression by phase (click a row to search it)": {
+     "rows": 1
+    },
+    "Investigation evidence: security-relevant events (click a row for the raw search)": {
+     "rows": 5
+    },
+    "Raw event evidence for the run (click a row for the search)": {
+     "rows": 5
+    }
+   },
+   "run_filter": {
+    "events_for_run": 5,
+    "events_all_runs": 25,
     "run_equals_generated": true,
     "narrows_or_equals": true
    },

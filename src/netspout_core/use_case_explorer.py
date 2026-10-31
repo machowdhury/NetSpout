@@ -199,16 +199,21 @@ class UseCaseExplorer:
 
     def _unified_entry(self, s: Dict[str, Any], sources: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         sid = s["scenario_id"]
-        dash = self._dashboard_ref(sid)
+        recipe = self._dashboard_ref(sid)
+        # a recipe dashboard that already ships a verified Splunk view (SEC-P9-B DNS anomaly) stays primary; otherwise the Studio view with stored evidence wins
+        dash = recipe if (recipe and recipe.get("splunk_view")) else (self._replay_dashboard_ref(sid) or recipe)
         raw = (self._dashboards.get(sid) or {}).get("scenario_maturity") or s.get("scenario_maturity") or "NOT_ESTABLISHED"
         vendors = sorted({sources[x]["vendor"] for x in s.get("source_ids", []) if x in sources})
-        return self._operational_entry(
+        entry = self._operational_entry(
             entry_id=f"op:unified:{sid}", engine="unified_generation", scenario_id=sid,
             title=s["title"], summary=s.get("description", ""), domain=s.get("domain", ""),
             category=s.get("category", ""), vendors=vendors, sourcetypes=[], source_ids=list(s.get("source_ids", [])),
             raw_maturity=raw, runnable=bool(s.get("runnable")), blocked_reason=s.get("blocked_reason"),
             dashboard=dash,
         )
+        if recipe and dash is not recipe:
+            entry["dashboard_recipe"] = recipe
+        return entry
 
     def _catalog_entry(self, s: Dict[str, Any]) -> Dict[str, Any]:
         sid = s["id"]

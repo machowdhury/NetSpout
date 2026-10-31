@@ -94,35 +94,21 @@
       }
     },
     "viz_2": {
-      "type": "splunk.bubble",
+      "type": "splunk.table",
       "options": {
-        "backgroundColor": "#22262a",
-        "bubbleSizeMax": 24,
-        "bubbleSizeMin": 6,
-        "seriesColors": [
-          "#d4764f",
-          "#6f9db5",
-          "#c9a24a",
-          "#6fa387",
-          "#a79fc4",
-          "#c9786f",
-          "#8fb0a8",
-          "#b8b09a"
-        ],
-        "xAxisTitleText": "Seconds after the run's first event",
-        "yAxisTitleText": "Events from the device"
+        "count": 8,
+        "backgroundColor": "#22262a"
       },
-      "title": "Device footprint: when each device first reported, how much it emitted",
-      "description": "One bubble per device: left to right is when it first appeared, height is how many events it emitted, size is how many phases it appeared in. A device that only shows up late is where the incident reached.",
+      "title": "Metric scorecard: baseline, worst point, last value (click a row to search the metric's events)",
+      "description": "Baseline = the metric's average in the BASELINE phase. Worst = the point furthest from baseline. back_within_10pct compares the last value with the baseline; it is a plain arithmetic check, not a recovery verdict.",
       "dataSources": {
         "primary": "ds_1"
       },
       "showProgressBar": true
     },
     "viz_3": {
-      "type": "splunk.pie",
+      "type": "splunk.line",
       "options": {
-        "backgroundColor": "#22262a",
         "seriesColors": [
           "#d4764f",
           "#6f9db5",
@@ -133,36 +119,40 @@
           "#8fb0a8",
           "#b8b09a"
         ],
-        "collapseThreshold": 0.03,
-        "labelDisplay": "values"
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "yAxisTitleText": "% of the metric's own range"
       },
-      "title": "Events by device role",
-      "description": "Share of the run's events per device role (for example core, edge, access).",
+      "title": "Metric shapes: each metric scaled to its own range in this run (0 = lowest, 100 = highest)",
+      "description": "Metrics have different units, so each is scaled to its own minimum and maximum in the run. This shows when each one moved and in what order; the scorecard above has the real values.",
       "dataSources": {
         "primary": "ds_2"
       },
       "showProgressBar": true
     },
     "viz_4": {
-      "type": "splunk.area",
+      "type": "splunk.table",
       "options": {
-        "stackMode": "stacked",
-        "seriesColors": [
-          "#c9786f",
-          "#c9a24a",
-          "#6f9db5"
-        ],
-        "legendDisplay": "bottom",
-        "backgroundColor": "#22262a",
-        "yAxisTitleText": "Events",
-        "xAxisTitleText": "Seconds since the first event of the run"
+        "count": 6,
+        "backgroundColor": "#22262a"
       },
-      "title": "Severity mix over the run",
-      "description": "Syslog severity carried by the events: a rise in the red band is the incident, a return to blue is recovery.",
+      "title": "What happened, phase by phase (first event of each phase)",
       "dataSources": {
         "primary": "ds_3"
       },
-      "showProgressBar": true
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ netspout_scenario_id=\"12_dc_congestion\" netspout_run_id=\"$run_tok$\" | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | search pf_phase=\"$row.pf_phase.value$\" | sort 0 _time| head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
     },
     "viz_5": {
       "type": "splunk.singlevalue",
@@ -546,23 +536,23 @@
   "dataSources": {
     "ds_1": {
       "type": "ds.search",
-      "name": "Device footprint: when each device first reported, how much it emitted",
+      "name": "Metric scorecard: baseline, worst point, last value (click a row to search the metric's events)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"12_dc_congestion\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as first count as events dc(pf_phase) as phases by netspout_device_id | eventstats min(first) as t0 | eval first_seen_s=round(first-t0) | table netspout_device_id first_seen_s events phases"
+        "query": "| mstats avg(_value) as v WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"12_dc_congestion\" AND netspout_run_id=\"$run_tok$\" BY metric_name, netspout_phase span=1s | eval pf_phase=netspout_phase | eventstats avg(eval(if(match(pf_phase,\"(?i)^BASELINE\"),v,null()))) as base by metric_name | eval dev=abs(v-base) | eventstats max(dev) as maxdev by metric_name | eval worst_pt=if(dev=maxdev,v,null()) | sort 0 _time | stats first(base) as baseline, first(worst_pt) as worst, last(v) as last by metric_name | eval change_pct=round(100*(worst-baseline)/baseline,1), back_within_10pct=if(abs(last-baseline)<=0.1*abs(baseline),\"yes\",\"no\") | eval baseline=round(baseline,2), worst=round(worst,2), last=round(last,2)"
       }
     },
     "ds_2": {
       "type": "ds.search",
-      "name": "Events by device role",
+      "name": "Metric shapes: each metric scaled to its own range in this run (0 = lowest, 100 = highest)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"12_dc_congestion\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count by device_role | sort - count"
+        "query": "| mstats avg(_value) as v WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"12_dc_congestion\" AND netspout_run_id=\"$run_tok$\" BY metric_name, netspout_phase span=1s | eval pf_phase=netspout_phase  | eventstats min(v) as lo max(v) as hi by metric_name | eval idx=if(hi>lo, round(100*(v-lo)/(hi-lo),1), null()) | xyseries _time metric_name idx"
       }
     },
     "ds_3": {
       "type": "ds.search",
-      "name": "Severity mix over the run",
+      "name": "What happened, phase by phase (first event of each phase)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"12_dc_congestion\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | eval level=case(tonumber(severity)<=3,\"critical to error\",tonumber(severity)<=5,\"warning to notice\",true(),\"informational\") | stats count by pf_sec, level | xyseries pf_sec level count | sort pf_sec | fillnull value=0"
+        "query": "index=$index_tok$ netspout_scenario_id=\"12_dc_congestion\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | sort 0 _time | stats first(_time) as t0 first(_raw) as first_event count as events by pf_phase | sort t0 | eval start=strftime(t0,\"%H:%M:%S\"), first_event=substr(first_event,1,180) | fields start pf_phase events first_event"
       }
     },
     "ds_4": {
@@ -965,7 +955,7 @@
         "type": "absolute",
         "options": {
           "width": 1460,
-          "height": 850,
+          "height": 790,
           "display": "auto-scale",
           "backgroundColor": "#17191b"
         },
@@ -986,28 +976,28 @@
             "position": {
               "x": 20,
               "y": 130,
-              "w": 930,
-              "h": 380
+              "w": 1420,
+              "h": 300
             }
           },
           {
             "item": "viz_3",
             "type": "block",
             "position": {
-              "x": 970,
-              "y": 130,
-              "w": 470,
-              "h": 380
+              "x": 20,
+              "y": 450,
+              "w": 930,
+              "h": 320
             }
           },
           {
             "item": "viz_4",
             "type": "block",
             "position": {
-              "x": 20,
-              "y": 530,
-              "w": 1420,
-              "h": 300
+              "x": 970,
+              "y": 450,
+              "w": 470,
+              "h": 320
             }
           }
         ]
@@ -1028,7 +1018,7 @@
           "layoutId": "layout_evidence"
         },
         {
-          "label": "Impact map",
+          "label": "Metric impact",
           "layoutId": "layout_impact"
         }
       ]

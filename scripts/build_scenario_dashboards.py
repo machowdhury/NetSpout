@@ -219,7 +219,7 @@ class Dash:
         ds["ds_phase_list"] = {"type": "ds.search", "name": "Phase list", "options": {"query": self.base + " | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | stats count by pf_phase | sort pf_phase | eval label=pf_phase | table label pf_phase"}}
         defaults = {"dataSources": {"ds.search": {"options": {"queryParameters": {"earliest": "$global_time.earliest$", "latest": "$global_time.latest$"}}}}}
         layouts, items = {}, []
-        labels = dict(self.TABS[self.kind], impact="Impact map")
+        labels = dict(self.TABS[self.kind], impact="Metric impact")
         for tab in self.tabs:
             label = labels[tab]
             lid = "layout_" + tab
@@ -271,21 +271,29 @@ def provenance_md(s):
 
 
 def impact_tab(d):
-    """Incident packs carry site, device, role and severity on every event, which the generic tabs only tabulate. This tab shows the shape of the impact instead:
-    where it concentrated (device x phase punchcard), which roles took it (donut) and how severe it got (stacked area). Every field is on the indexed events."""
+    """Incident packs are small and uniform (30 log events, 3 devices, one site, a few seconds), so device/role/severity charts say nothing here. What the packs do carry is
+    gauge metrics per phase and an ordered story of events. This tab answers 'what degraded, by how much against its own baseline, and did it come back':
+    a scorecard per metric, all metrics indexed to their baseline on one axis, and the first event of each phase as the narrative."""
     b = d.base
     d.banner()
-    d.add("impact", "splunk.bubble", "Device footprint: when each device first reported, how much it emitted", 20, 130, 930, 380,
-          query=b + PHASE + " | stats min(_time) as first count as events dc(pf_phase) as phases by netspout_device_id | eventstats min(first) as t0 | eval first_seen_s=round(first-t0) | table netspout_device_id first_seen_s events phases",
-          options={"backgroundColor": C["card"], "bubbleSizeMax": 24, "bubbleSizeMin": 6, "seriesColors": SERIES, "xAxisTitleText": "Seconds after the run's first event", "yAxisTitleText": "Events from the device"},
-          description="One bubble per device: left to right is when it first appeared, height is how many events it emitted, size is how many phases it appeared in. A device that only shows up late is where the incident reached.")
-    d.add("impact", "splunk.pie", "Events by device role", 970, 130, 470, 380,
-          query=b + PHASE + " | stats count by device_role | sort - count", options={"backgroundColor": C["card"], "seriesColors": SERIES, "collapseThreshold": 0.03, "labelDisplay": "values"},
-          description="Share of the run's events per device role (for example core, edge, access).")
-    d.add("impact", "splunk.area", "Severity mix over the run", 20, 530, 1420, 300,
-          query=b + PHASE + SECS + ' | eval level=case(tonumber(severity)<=3,"critical to error",tonumber(severity)<=5,"warning to notice",true(),"informational") | stats count by pf_sec, level | xyseries pf_sec level count | sort pf_sec | fillnull value=0',
-          options={"stackMode": "stacked", "seriesColors": [C["red"], C["amber"], C["blue"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "yAxisTitleText": "Events", "xAxisTitleText": "Seconds since the first event of the run"},
-          description="Syslog severity carried by the events: a rise in the red band is the incident, a return to blue is recovery.")
+    mb = 'index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="$run_tok$"' % d.src["scenario_value"]
+    per = "| mstats avg(_value) as v WHERE " + mb + " BY metric_name, netspout_phase span=1s | eval pf_phase=netspout_phase "
+    base = '| eventstats avg(eval(if(match(pf_phase,"(?i)^BASELINE"),v,null()))) as base by metric_name'
+    d.add("impact", "splunk.table", "Metric scorecard: baseline, worst point, last value (click a row to search the metric's events)", 20, 130, 1420, 300,
+          query=per + base + ' | eval dev=abs(v-base) | eventstats max(dev) as maxdev by metric_name | eval worst_pt=if(dev=maxdev,v,null()) | sort 0 _time'
+                ' | stats first(base) as baseline, first(worst_pt) as worst, last(v) as last by metric_name'
+                ' | eval change_pct=round(100*(worst-baseline)/baseline,1), back_within_10pct=if(abs(last-baseline)<=0.1*abs(baseline),"yes","no")'
+                ' | eval baseline=round(baseline,2), worst=round(worst,2), last=round(last,2)',
+          options={"count": 8, "backgroundColor": C["card"]},
+          description="Baseline = the metric's average in the BASELINE phase. Worst = the point furthest from baseline. back_within_10pct compares the last value with the baseline; it is a plain arithmetic check, not a recovery verdict.")
+    d.add("impact", "splunk.line", "Metric shapes: each metric scaled to its own range in this run (0 = lowest, 100 = highest)", 20, 450, 930, 320,
+          query=per + " | eventstats min(v) as lo max(v) as hi by metric_name | eval idx=if(hi>lo, round(100*(v-lo)/(hi-lo),1), null()) | xyseries _time metric_name idx",
+          options={"seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "yAxisTitleText": "% of the metric's own range"},
+          description="Metrics have different units, so each is scaled to its own minimum and maximum in the run. This shows when each one moved and in what order; the scorecard above has the real values.")
+    d.add("impact", "splunk.table", "What happened, phase by phase (first event of each phase)", 970, 450, 470, 320,
+          query=b + PHASE + " | sort 0 _time | stats first(_time) as t0 first(_raw) as first_event count as events by pf_phase | sort t0 | eval start=strftime(t0,\"%H:%M:%S\"), first_event=substr(first_event,1,180) | fields start pf_phase events first_event",
+          options={"count": 6, "backgroundColor": C["card"]},
+          handlers=[search_drill(b + ' | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | search pf_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)])
 
 
 def build_operational(s, probe):

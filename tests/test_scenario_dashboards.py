@@ -52,7 +52,7 @@ def test_view_is_a_dashboard_studio_v2_definition_built_only_from_searches_over_
     assert used <= bound, used - bound
     assert {'run_tok', 'global_time', 'index_tok'} <= bound and (('mindex_tok' in bound) == src['metric'])
     labels = [t['label'] for t in d['layout']['tabs']['items']]
-    assert labels == ((['NOC', 'Engineer', 'Evidence'] + (['Impact map'] if src['family'] == 'incident_pack' else [])) if src['kind'] == 'operational' else ['Overview', 'Investigation', 'Evidence'])
+    assert labels == ((['NOC', 'Engineer', 'Evidence'] + (['Metric impact'] if src['family'] == 'incident_pack' else [])) if src['kind'] == 'operational' else ['Overview', 'Investigation', 'Evidence'])
     assert all(t['layoutId'] in d['layout']['layoutDefinitions'] for t in d['layout']['tabs']['items'])
 
 

@@ -37,6 +37,10 @@ await app.locator('[data-testid="universal-search"] li button').first().click();
 r.scenario_opens_workflow = await app.locator('.ux-detail h2').count();
 app = await open(); // reload: state preserved
 r.state_preserved = await app.locator('input[aria-label="Universal search"]').inputValue();
+// moderate load: a second continuous stream (different sourcetype) runs on the engine during the browser stream test
+const ENGINE = process.env.NETSPOUT_ENGINE || 'http://127.0.0.1:8091';
+const api = async (m, u, b) => (await fetch(ENGINE + u, { method: m, headers: { 'content-type': 'application/json' }, body: b ? JSON.stringify(b) : undefined })).json();
+const load = await api('POST', '/api/runs', { kind: 'sourcetype', target: 'arista:eos:syslog', vendor_id: 'arista_eos', index: 'dev_test_replay', mode: 'continuous', eps: 25 });
 // single-sourcetype continuous streaming from a search result, with refresh recovery
 await app.locator('input[aria-label="Universal search"]').fill('cisco:dc:aci:class'); await app.locator('select[aria-label="Result type"]').selectOption('sourcetype'); await app.waitForTimeout(1500);
 await app.locator('[data-testid="stream-sourcetype"]').first().click();
@@ -52,7 +56,9 @@ await app.locator('input[aria-label="Universal search"]').waitFor();
 await app.locator('[data-testid="stream-sourcetype"]').first().click();
 await app.waitForSelector('.pf-mon', { timeout: 20000 }); await app.waitForTimeout(2500);
 r.stream.after_refresh = await tile(app, 'HEC accepted'); r.stream.state_after_refresh = await app.locator('.pf-mon-state').innerText();
-r.stream.posts = [];
+r.stream.posts = []; const lat = []; const t0s = new Map();
+app.page().on('request', (rq) => { if (rq.method() === 'GET' && /runs\//.test(rq.url())) t0s.set(rq, Date.now()); });
+app.page().on('requestfinished', (rq) => { if (t0s.has(rq)) lat.push(Date.now() - t0s.get(rq)); });
 app.page().on('response', (resp) => { if (resp.request().method() === 'POST') r.stream.posts.push(resp.url().split('/api/')[1] + ' ' + resp.status()); });
 app.page().on('requestfailed', (rq) => r.stream.posts.push('FAILED ' + rq.url().split('/api/')[1]));
 await app.locator('.pf-mon-actions button', { hasText: /^Pause$/ }).click();
@@ -63,14 +69,21 @@ r.stream.resumed = (await tile(app, 'HEC accepted')) > pa;
 await app.locator('.pf-mon-actions button', { hasText: /^Stop$/ }).click();
 for (let i = 0; i < 30 && (await app.locator('.pf-mon-state').innerText()) !== 'STOPPED'; i++) await app.waitForTimeout(500);
 r.stream.final = await app.locator('.pf-mon-state').innerText();
+r.stream.get_latency_ms = { n: lat.length, max: Math.max(0, ...lat), p50: lat.sort((a, b) => a - b)[Math.floor(lat.length / 2)] ?? null };
+await api('POST', '/api/runs/' + load.run_id + '/stop');
+r.stream.control_posts = { pause: r.stream.posts.filter((x) => /\/pause 200/.test(x)).length, resume: r.stream.posts.filter((x) => /\/resume 200/.test(x)).length, stop: r.stream.posts.filter((x) => /\/stop 200/.test(x)).length };
 await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click();
 for (let i = 0; i < 12; i++) { await app.waitForTimeout(4000); r.stream.verification = await app.locator('.pf-mon-verify').innerText().catch(() => ''); if (/VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification)) break; await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click(); }
 await page.screenshot({ path: path.join(evDir, 'screens/stream_stopped_verified.jpg'), type: 'jpeg', quality: 60, fullPage: true });
-r.stream.ok = r.stream.mode_text && r.stream.after_refresh >= r.stream.a1 && r.stream.state_after_refresh === 'RUNNING' && r.stream.paused_state === 'PAUSED' && r.stream.held && r.stream.resumed && r.stream.final === 'STOPPED' && /VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification);
+await new Promise((res) => setTimeout(res, 3000));
+const act = ((await api('GET', '/api/runs')).runs || []).filter((x) => ['RUNNING', 'PAUSED', 'STOPPING'].includes(x.state));
+r.stream.orphans = act.length;
+r.stream.ok = act.length === 0 && r.stream.control_posts.pause === 1 && r.stream.control_posts.resume === 1 && r.stream.control_posts.stop === 1 && r.stream.mode_text && r.stream.after_refresh >= r.stream.a1 && r.stream.state_after_refresh === 'RUNNING' && r.stream.paused_state === 'PAUSED' && r.stream.held && r.stream.resumed && r.stream.final === 'STOPPED' && /VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification);
 // finite scenario run: search -> workflow -> monitor -> readiness READY -> run-bound dashboard
-await app.locator('input[aria-label="Universal search"]').fill('Campus Core L2/3 Disturbance'); await app.locator('select[aria-label="Result type"]').selectOption('scenario'); await app.waitForTimeout(1500);
-await app.locator('[data-testid="universal-search"] li button').first().click(); await app.waitForTimeout(3000);
-await app.locator('[data-testid="monitored-run"]').click();
+await app.locator('input[aria-label="Universal search"]').fill('Campus Core L2/3 Disturbance'); await app.locator('select[aria-label="Result type"]').selectOption('scenario');
+await app.waitForFunction(() => (document.querySelector('[data-testid="universal-search"] li')?.innerText || '').includes('Campus Core'), null, { timeout: 30000 });
+await app.locator('[data-testid="universal-search"] li button').first().click();
+await app.locator('[data-testid="monitored-run"]').click({ timeout: 60000 });
 await app.waitForSelector('[data-testid="readiness"]', { timeout: 60000 });
 const states = new Set();
 for (let i = 0; i < 90; i++) { const st = await app.locator('[data-testid="readiness-state"]').innerText().catch(() => ''); if (st) states.add(st); if (['READY', 'DEGRADED', 'FAILED'].includes(st)) break; await app.waitForTimeout(2000); }

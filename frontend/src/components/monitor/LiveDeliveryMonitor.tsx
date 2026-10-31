@@ -77,12 +77,15 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const [transition, setTransition] = useState<{ label: string; want: string[]; until: number } | null>(null);
+  const [lagS, setLagS] = useState(0);
+  const lastOk = useRef(Date.now());
   const inflight = useRef(false);
   // One poll at a time: a stalled gateway must not pile up requests, because browsers allow only a few connections per origin and the control POSTs would queue behind them.
   const refresh = useCallback(async () => {
     if (inflight.current) return;
     inflight.current = true;
-    try { setRun(await getRun(runId)); setError(null); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { inflight.current = false; }
+    try { setRun(await getRun(runId)); lastOk.current = Date.now(); setError(null); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { inflight.current = false; }
   }, [runId]);
 
   useEffect(() => {
@@ -90,6 +93,21 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
     const t = window.setInterval(() => { if (!run || !FINAL.includes(run.state)) refresh(); }, 1000);
     return () => window.clearInterval(t);
   }, [refresh, run]);
+
+  // Seconds since the last answer from the engine through the gateway: a stalled gateway shows as lag, not as a state the run does not have.
+  useEffect(() => {
+    const t = window.setInterval(() => setLagS(Math.round((Date.now() - lastOk.current) / 1000)), 1000);
+    return () => window.clearInterval(t);
+  }, []);
+  useEffect(() => {
+    if (transition && (run && (transition.want.includes(run.state) || FINAL.includes(run.state)) || Date.now() > transition.until)) setTransition(null);
+  }, [run, transition, lagS]);
+
+  const TRANSITIONS: Record<string, { label: string; want: string[] }> = { pause: { label: 'PAUSING', want: ['PAUSED'] }, resume: { label: 'RESUMING', want: ['RUNNING'] }, stop: { label: 'STOPPING', want: ['STOPPING', 'STOPPED', 'COMPLETED'] } };
+  const control = (action: 'pause' | 'resume' | 'stop') => {
+    setTransition({ ...TRANSITIONS[action], until: Date.now() + 20000 });
+    return act(() => controlRun(runId, action));
+  };
 
   const act = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -115,8 +133,9 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
             {run.destination?.name} · index {run.destination?.index} · run <code>{run.run_id}</code>{run.mode ? ` · ${run.mode === 'continuous' ? 'continuous, runs until stopped' : run.mode}` : ''}
           </div>
         </div>
-        <span className="pf-mon-state">{run.state}</span>
+        <span className="pf-mon-state" data-engine-state={run.state}>{transition ? `${transition.label}…` : run.state}</span>
       </header>
+      {lagS >= 4 && !FINAL.includes(run.state) && <p className="pf-mon-warn" data-testid="gateway-lag">No answer from the engine through the gateway for {lagS}s. The state shown is the last one received; the run itself is not affected by this delay.</p>}
       {run.interrupted_note && <p className="pf-mon-warn">{run.interrupted_note}</p>}
       {run.error && <p className="pf-mon-warn">{run.error}</p>}
       {error && <p className="pf-mon-warn">Engine unreachable: {error}. Showing the last known counters.</p>}
@@ -146,9 +165,9 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
       )}
       {(run as RunSnapshot & { controls_note?: string }).controls_note && <p className="pf-mon-note">{(run as RunSnapshot & { controls_note?: string }).controls_note}</p>}
       <footer className="pf-mon-actions">
-        <button disabled={busy || !run.controls.pause} onClick={() => act(() => controlRun(runId, 'pause'))}>Pause</button>
-        <button disabled={busy || !run.controls.resume} onClick={() => act(() => controlRun(runId, 'resume'))}>Resume</button>
-        <button disabled={busy || !run.controls.stop} onClick={() => act(() => controlRun(runId, 'stop'))}>Stop</button>
+        <button disabled={busy || !run.controls.pause} onClick={() => control('pause')}>Pause</button>
+        <button disabled={busy || !run.controls.resume} onClick={() => control('resume')}>Resume</button>
+        <button disabled={busy || !run.controls.stop} onClick={() => control('stop')}>Stop</button>
         <button disabled={busy} onClick={() => act(() => verifyRun(runId))}>Verify in Splunk</button>
         {run.links?.dashboard && <a href={run.links.dashboard}>Open dashboard</a>}
         {onClose && <button onClick={onClose}>Close</button>}

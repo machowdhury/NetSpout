@@ -89,9 +89,9 @@ from .vendor_profiles import (
 )
 
 
-DEFAULT_SPLUNK_HEC_URL = "https://127.0.0.1:8088/services/collector/event"
+DEFAULT_SPLUNK_HEC_URL = os.environ.get("NETSPOUT_HEC_URL", "https://127.0.0.1:8088/services/collector/event")  # same destination variables as the SNMP bridge
 DEFAULT_SPLUNK_HEC_TOKEN = ""
-DEFAULT_SPLUNK_REST_SEARCH_URL = "https://127.0.0.1:8089/services/search/jobs/export"
+DEFAULT_SPLUNK_REST_SEARCH_URL = os.environ.get("NETSPOUT_REST_SEARCH_URL", os.environ.get("NETSPOUT_REST_URL", "https://127.0.0.1:8089/services/search/jobs/export"))
 DEFAULT_SPLUNK_USER = "admin"
 DEFAULT_SPLUNK_PASSWORD = ""
 DEFAULT_EVENT_INDEX = "idx_network_ops"

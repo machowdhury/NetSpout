@@ -4,11 +4,11 @@ import { controlRun, getRun, verifyRun, type RunSnapshot } from '../../lib/runsA
 const KEY = 'netspout.monitor.run';
 const FINAL = ['COMPLETED', 'STOPPED', 'FAILED', 'INTERRUPTED'];
 
-export function rememberRun(id: string) {
-  try { sessionStorage.setItem(KEY, id); } catch { /* storage unavailable: monitor still works without refresh recovery */ }
+export function rememberRun(id: string, scope = '') {
+  try { sessionStorage.setItem(KEY + scope, id); } catch { /* storage unavailable: monitor still works without refresh recovery */ }
 }
-export function rememberedRun(): string | null {
-  try { return sessionStorage.getItem(KEY); } catch { return null; }
+export function rememberedRun(scope = ''): string | null {
+  try { return sessionStorage.getItem(KEY + scope); } catch { return null; }
 }
 
 const fmt = (n: number | null | undefined) => (n === null || n === undefined ? '—' : n.toLocaleString());
@@ -80,11 +80,11 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
       <Chart points={run.throughput ?? []} />
       {sts.length > 0 && (
         <table className="pf-mon-table"><thead><tr><th>Sourcetype</th><th>Generated</th><th>Accepted</th><th>Rejected</th><th>Unknown</th></tr></thead>
-          <tbody>{sts.map(([k, v]) => <tr key={k}><td>{k}</td><td>{v.generated}</td><td>{v.accepted}</td><td>{v.rejected}</td><td>{v.unknown}</td></tr>)}</tbody></table>
+          <tbody>{sts.map(([k, v]) => <tr key={k}><td>{k}</td><td>{v.total ?? 0}</td><td>{v.accepted ?? 0}</td><td>{v.rejected ?? 0}</td><td>{v.unknown ?? 0}</td></tr>)}</tbody></table>
       )}
       {(run.by_phase ?? []).length > 0 && (
         <table className="pf-mon-table"><thead><tr><th>Phase</th><th>Accepted</th><th>Total</th></tr></thead>
-          <tbody>{run.by_phase!.map((p) => <tr key={String(p.phase)}><td>{String(p.phase)}</td><td>{p.accepted}</td><td>{p.total ?? '—'}</td></tr>)}</tbody></table>
+          <tbody>{run.by_phase!.map((p) => <tr key={String(p.phase)}><td>{String(p.phase)}</td><td>{p.accepted ?? 0}</td><td>{p.total ?? '—'}</td></tr>)}</tbody></table>
       )}
       {(run.recent_errors ?? []).length > 0 && (
         <ul className="pf-mon-errors">{run.recent_errors!.slice(-5).map((e, i) => <li key={i}>{e.at} {e.sourcetype} {e.outcome}: {e.message}</li>)}</ul>

@@ -25,12 +25,17 @@ export interface RunSnapshot {
   accounting_note?: string;
 }
 
-async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
+async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, timeoutMs = 25_000): Promise<T> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);   // a hung gateway call must not leave the monitor controls disabled forever
   const response = await fetch(apiUrl(path), {
     method,
+    signal: controller.signal,
     headers: { Accept: 'application/json', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
     body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  }).catch((e: unknown) => {
+    throw new Error(e instanceof DOMException && e.name === 'AbortError' ? `No answer from the engine within ${timeoutMs / 1000}s` : String(e));
+  }).finally(() => window.clearTimeout(timer));
   if (!response.ok) {
     const detail = await response.json().then((j) => (typeof j?.detail === 'string' ? j.detail : null), () => null);
     throw new Error(detail ? `${detail} (HTTP ${response.status})` : `HTTP ${response.status}`);

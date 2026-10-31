@@ -399,10 +399,11 @@
   "metrics": false
  },
  "SEC-P9-A-TRAFFIC-FLOOD": {
-  "blocked": "generation preflight is BLOCKED",
-  "failing_checks": [
-   "bundled-ipfix-collector: Collector or forwarder probe failed."
-  ]
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector"
+  ],
+  "metrics": false
  },
  "SEC-P9-B-DNS-ANOMALY": {
   "users": false,
@@ -412,28 +413,35 @@
   "metrics": false
  },
  "SEC-P9-C-BEACONING": {
-  "blocked": "generation preflight is BLOCKED",
-  "failing_checks": [
-   "bundled-ipfix-collector: Collector or forwarder probe failed."
-  ]
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
  },
  "SEC-P9-D-INTERNAL-RECON": {
-  "blocked": "generation preflight is BLOCKED",
-  "failing_checks": [
-   "bundled-ipfix-collector: Collector or forwarder probe failed."
-  ]
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector"
+  ],
+  "metrics": false
  },
  "SEC-P9-E-DNS-TUNNEL": {
-  "blocked": "generation preflight is BLOCKED",
-  "failing_checks": [
-   "bundled-ipfix-collector: Collector or forwarder probe failed."
-  ]
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
  },
  "SEC-P9-F-CROSS-SOURCE": {
-  "blocked": "generation preflight is BLOCKED",
-  "failing_checks": [
-   "bundled-ipfix-collector: Collector or forwarder probe failed."
-  ]
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
  },
  "AI-001": {
   "users": false,

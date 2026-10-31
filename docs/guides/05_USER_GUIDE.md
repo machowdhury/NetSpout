@@ -21,7 +21,7 @@ All runs use the single destination saved in the Connection Center (HEC URL, sea
 | Verify | An independent Splunk search counts events for the run | indexed equals accepted (it can trail briefly) |
 | Dashboard | Opens the Studio dashboard with the run as context | Panels populate from that run |
 
-Counts: **generated** (rendered), **delivered** (sent), **accepted** (HEC success), **rejected**, **unknown** (answer unreadable; never re-sent), and **indexed** (found by Splunk). Only `indexed` proves ingestion.
+Counts: **generated** (rendered), **delivered** (sent), **accepted** (HEC success), **rejected**, **unknown** (answer unreadable; never re-sent), and **indexed** (found by Splunk). Only `indexed` proves ingestion. Every run opens the **Live Delivery Monitor** with these counters, rates, per-sourcetype and per-phase tables and Verify; see [11](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md).
 
 ## 5. Replay packs and continuous replay
 Replay packs combine authentic recordings and/or existing native packs on one timeline. Controls: mode **one-shot** or **continuous cycles**, **speed** (0.01 to 1000), optional **EPS limit**, **Pause / Resume / Stop**. The engine keeps source spacing, restarts each loop after a documented gap (median source spacing by default, at least 1 ms), never overlaps or regresses timestamps, and refuses sources that have no trustworthy timestamp. A full queue slows the producer; nothing is dropped. After an engine restart active sessions show `INTERRUPTED` and are not resumed.

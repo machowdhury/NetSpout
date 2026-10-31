@@ -14,3 +14,12 @@
 | SNMP/gNMI suites fail with 0 observed | No Splunk destination configured for the tests | Export `NETSPOUT_HEC_URL`, `NETSPOUT_HEC_TOKEN`, `NETSPOUT_REST_SEARCH_URL`, `NETSPOUT_SPLUNK_USER`, `NETSPOUT_SPLUNK_PASSWORD`; create `idx_network_ops` and the metric index in your lab |
 | AppInspect fails on the Enterprise app | Expected for Splunk Cloud (engine code in the app) | Use the Cloud edition ([04](04_SPLUNK_CLOUD_GUIDE.md)) |
 | Index `already exists` (409) but not listed | Index created earlier, shown after a restart | Treat as existing |
+| Monitor shows `INTERRUPTED` | The engine restarted while the run was active | Counters are the last persisted values; start a new run |
+| Monitor says pause/resume/stop are not supported | ScenarioRunner or unified-generation runs execute synchronously | Expected; wait for COMPLETED, the counters are still real |
+| Monitor: Indexed stays `Not verified` | Verify was not pressed, or the search is not configured | Press **Verify in Splunk**; configure search credentials in Connection Center |
+| Verify says INCOMPLETE | Indexing latency, a rejected/unknown event, or the run is still active | Verify again after a minute; compare with accepted, rejected and unknown |
+| HEC test `TLS_CERTIFICATE` | The certificate is not trusted or the host name does not match | Install the CA / use the real host name; `allow_insecure_tls` is only for the loopback lab |
+| HEC test `AUTH` | HEC rejected the token | Check the token value, that the input is enabled and not expired |
+| HEC test ACCEPTED_NOT_VERIFIED | HEC acknowledged the event but no independent search confirmed it | Add search credentials, or check that the token may write to the test index (an unknown or disallowed index can be accepted and never indexed) |
+| HEC test `INDEX_NOT_ALLOWED` | The test index is not on the Connection Center allowlist; nothing was sent | Add it to the allowlist or name an allowed index |
+| After reinstalling the app the UI looks old | Splunk caches the static bundle | Restart splunkd or `_bump` |

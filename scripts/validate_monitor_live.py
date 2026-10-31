@@ -57,7 +57,7 @@ def case(name, body, expect_indexed=True):
     mono = all(b["attempts"] >= a["attempts"] for a, b in zip(polls, polls[1:]))
     ok = (final["state"] == "COMPLETED" and c["generated"] == c["attempts"] == c["accepted"] + c["rejected"] + c["unknown"] and c["pending"] == 0 and mono
           and (not expect_indexed or (v and v.get("status") == "VERIFIED" and after["counters"]["indexed"] == c["accepted"])))
-    return {"name": name, "run_id": rid, "mode": final.get("mode"), "state": final["state"], "counters": c, "polls": len(polls), "monotonic": mono,
+    return {"name": name, "target": body["target"], "run_id": rid, "mode": final.get("mode"), "state": final["state"], "counters": c, "polls": len(polls), "monotonic": mono,
             "peak_current_eps": max([p["eps"] or 0 for p in polls] + [0]), "avg_eps": (final.get("rate") or {}).get("average_eps"), "elapsed_s": final.get("elapsed_s"),
             "by_sourcetype": {k: v_.get("accepted") for k, v_ in (final.get("by_sourcetype") or {}).items()}, "phases": [(p["phase"], p.get("accepted"), p.get("total")) for p in final.get("by_phase") or []],
             "verification": {k: v.get(k) for k in ("status", "indexed", "accepted")} if v else None, "indexed_after": after["counters"]["indexed"], "ok": bool(ok)}

@@ -43,3 +43,4 @@ backend/.env
 # Phase 4E lab credentials
 tests/lab/**/.env*
 .cloud_stage/
+pulseforge-engine.tar.gz

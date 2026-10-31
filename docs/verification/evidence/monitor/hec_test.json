@@ -1,0 +1,332 @@
+{
+ "generated_utc": "2026-10-31T13:11:15.305065+00:00",
+ "destination": "isolated Docker lab (loopback)",
+ "cases": {
+  "valid_with_search": {
+   "http": 200,
+   "overall": "FULLY_VERIFIED",
+   "statuses": {
+    "connection": "REACHABLE",
+    "authentication": "AUTHENTICATED",
+    "acceptance": "ACCEPTED",
+    "indexing": "VERIFIED"
+   },
+   "error": null,
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "PASS"
+    ],
+    [
+     "tls",
+     "WARN"
+    ],
+    [
+     "health",
+     "PASS"
+    ],
+    [
+     "hec_event",
+     "PASS"
+    ],
+    [
+     "indexing",
+     "PASS"
+    ]
+   ],
+   "expected": {
+    "overall": "FULLY_VERIFIED",
+    "category": null
+   },
+   "ok": true
+  },
+  "disallowed_index_via_engine": {
+   "http": 200,
+   "overall": "FAILED",
+   "statuses": {
+    "connection": "NOT_RUN",
+    "authentication": "NOT_RUN",
+    "acceptance": "NOT_RUN",
+    "indexing": "NOT_RUN"
+   },
+   "error": {
+    "category": "INDEX_NOT_ALLOWED",
+    "message": "Index is not authorized by Connection Center; nothing was sent"
+   },
+   "steps": [
+    [
+     "allowlist",
+     "FAIL"
+    ]
+   ],
+   "events_found_anywhere": 0,
+   "ok": true
+  },
+  "accepted_without_search": {
+   "overall": "ACCEPTED_NOT_VERIFIED",
+   "statuses": {
+    "connection": "REACHABLE",
+    "authentication": "AUTHENTICATED",
+    "acceptance": "ACCEPTED",
+    "indexing": "NOT_CONFIGURED"
+   },
+   "error": null,
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "PASS"
+    ],
+    [
+     "tls",
+     "WARN"
+    ],
+    [
+     "health",
+     "PASS"
+    ],
+    [
+     "hec_event",
+     "PASS"
+    ],
+    [
+     "indexing",
+     "SKIP"
+    ]
+   ],
+   "expected": {
+    "overall": "ACCEPTED_NOT_VERIFIED",
+    "category": null
+   },
+   "ok": true
+  },
+  "invalid_token": {
+   "overall": "FAILED",
+   "statuses": {
+    "connection": "REACHABLE",
+    "authentication": "REFUSED",
+    "acceptance": "REJECTED",
+    "indexing": "NOT_RUN"
+   },
+   "error": {
+    "category": "AUTH_FAILED",
+    "message": "HEC token authentication failed (HTTP 403, Invalid token). Check the token value, that it is enabled, and that it belongs to this HEC endpoint."
+   },
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "PASS"
+    ],
+    [
+     "tls",
+     "WARN"
+    ],
+    [
+     "health",
+     "PASS"
+    ],
+    [
+     "hec_event",
+     "FAIL"
+    ]
+   ],
+   "expected": {
+    "overall": "FAILED",
+    "category": "AUTH"
+   },
+   "ok": true
+  },
+  "unreachable": {
+   "overall": "FAILED",
+   "statuses": {
+    "connection": "FAILED",
+    "authentication": "NOT_RUN",
+    "acceptance": "NOT_RUN",
+    "indexing": "NOT_RUN"
+   },
+   "error": {
+    "category": "REFUSED",
+    "message": "Connection to 127.0.0.1 was refused (nothing is listening on that port, or a firewall rejected it)"
+   },
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "FAIL"
+    ]
+   ],
+   "expected": {
+    "overall": "FAILED",
+    "category": "REFUSED"
+   },
+   "ok": true
+  },
+  "dns_failure": {
+   "overall": "FAILED",
+   "statuses": {
+    "connection": "FAILED",
+    "authentication": "NOT_RUN",
+    "acceptance": "NOT_RUN",
+    "indexing": "NOT_RUN"
+   },
+   "error": {
+    "category": "DNS",
+    "message": "DNS lookup for hec.invalid failed (nodename nor servname provided, or not known)"
+   },
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "FAIL"
+    ]
+   ],
+   "ok": true
+  },
+  "tls_certificate_not_trusted": {
+   "overall": "FAILED",
+   "statuses": {
+    "connection": "FAILED",
+    "authentication": "NOT_RUN",
+    "acceptance": "NOT_RUN",
+    "indexing": "NOT_RUN"
+   },
+   "error": {
+    "category": "TLS_CERTIFICATE",
+    "message": "TLS certificate is not trusted (self-signed certificate in certificate chain). Install the CA, use a certificate the host name matches, or (lab loopback only) allow insecure TLS."
+   },
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "PASS"
+    ],
+    [
+     "tls",
+     "FAIL"
+    ]
+   ],
+   "expected": {
+    "overall": "FAILED",
+    "category": "TLS_CERTIFICATE"
+   },
+   "ok": true
+  },
+  "accepted_but_not_indexed_missing_index": {
+   "overall": "ACCEPTED_NOT_VERIFIED",
+   "statuses": {
+    "connection": "REACHABLE",
+    "authentication": "AUTHENTICATED",
+    "acceptance": "ACCEPTED",
+    "indexing": "NOT_FOUND"
+   },
+   "error": null,
+   "steps": [
+    [
+     "allowlist",
+     "PASS"
+    ],
+    [
+     "config",
+     "PASS"
+    ],
+    [
+     "dns",
+     "PASS"
+    ],
+    [
+     "tcp",
+     "PASS"
+    ],
+    [
+     "tls",
+     "WARN"
+    ],
+    [
+     "health",
+     "PASS"
+    ],
+    [
+     "hec_event",
+     "PASS"
+    ],
+    [
+     "indexing",
+     "WARN"
+    ]
+   ],
+   "expected": {
+    "overall": "ACCEPTED_NOT_VERIFIED",
+    "category": null
+   },
+   "ok": true
+  },
+  "secret_leak_scan": {
+   "hec_token_in_evidence": false,
+   "password_in_evidence": false
+  }
+ }
+}

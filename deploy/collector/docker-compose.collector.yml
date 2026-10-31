@@ -59,10 +59,10 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
-      - SPLUNK_HEC_URL=https://host.docker.internal:8888/services/collector/event
+      - SPLUNK_HEC_URL=${SPLUNK_HEC_URL:-https://host.docker.internal:8888/services/collector/event}
       - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting the collector}
       - SPLUNK_HEC_ALLOW_INSECURE_TLS=${SPLUNK_HEC_ALLOW_INSECURE_TLS:-false}
-      - SPLUNK_INDEX=idx_network_ops
+      - SPLUNK_INDEX=${SPLUNK_INDEX:-idx_network_ops}
       - SPLUNK_SOURCETYPE=netflow:collector
       - FLOW_FILE=/flows/flows.json
       - STATUS_PORT=8082

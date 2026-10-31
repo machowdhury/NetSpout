@@ -117,17 +117,21 @@
       <view name="pf_ind_gov_citizen_identity_attack" label="Citizen services: cloud identity attack, AWS reconnaissance, privileged-access audit"/>
       <view name="pf_ind_insurance_claims_platform_audit" label="Claims platform: SaaS and database/message audit with cloud mail exfiltration"/>
       <view name="pf_wave3_cloudmail_exfil" label="Cloud Mail Exfiltration Chain (Wave-3 pack)"/>
+      <view name="pf_SEC-P9-A-TRAFFIC-FLOOD" label="Controlled Traffic Flood Indicators"/>
       <view name="pf_wave2_cloud_identity_sso_hunt" label="Cross-Cloud Identity SSO Brute Force (Wave-2 pack)"/>
+      <view name="pf_SEC-P9-F-CROSS-SOURCE" label="Cross-Source DNS, Beaconing, and Reconnaissance Incident"/>
       <view name="pf_ind_aero_defense_endpoint_c2" label="Defense contractor: C2 callback, endpoint pipeline and privileged-access audit"/>
       <view name="pf_ddos_attack" label="Distributed Denial of Service (DDoS SYN Flood)"/>
       <view name="pf_mixed_edge_breach" label="Distributed Edge Breach &amp; Internal Probing"/>
       <view name="pf_SEC-P9-B-DNS-ANOMALY" label="DNS Diversity and NXDOMAIN Indicators"/>
+      <view name="pf_SEC-P9-E-DNS-TUNNEL" label="DNS Tunneling and Exfiltration Indicators"/>
       <view name="pf_ind_retail_ecommerce_cloud_recon" label="E-commerce: AWS reconnaissance and escalation with exposure management"/>
       <view name="pf_wave3_ebpf_workload_hunt" label="eBPF Workload Hunt (Wave-3 pack)"/>
       <view name="pf_rp_edr_and_cloud_activity" label="Endpoint sensor and cloud audit side by side (aligned in time only)"/>
       <view name="pf_ind_health_ehr_ransomware_readiness" label="Hospital: endpoint credential attack with backup and privileged-access audit"/>
       <view name="pf_ind_hospitality_guest_network_defense" label="Hospitality: edge defense and guest/staff identity attack"/>
       <view name="pf_AI-001" label="Indirect Prompt Injection"/>
+      <view name="pf_SEC-P9-D-INTERNAL-RECON" label="Internal Reconnaissance Indicators"/>
       <view name="pf_wave2_k8s_container_escape" label="Kubernetes Auth Abuse + Container Escape (Wave-2 pack)"/>
       <view name="pf_ind_legal_matter_data_exfiltration" label="Law firm: client-matter data exfiltration across mail, vault and wiki"/>
       <view name="pf_rp_linux_credential_access" label="Linux credential-file access with system context (replayed recordings)"/>
@@ -141,6 +145,7 @@
       <view name="pf_ub1_ot_proxy_host_hunt" label="OT Tamper to Container Host Hunt (Universe Batch-1)"/>
       <view name="pf_paloalto_threat_investigation" label="Palo Alto Networks Threat Investigation"/>
       <view name="pf_ind_bank_payments_edge_defense" label="Payments edge: WAF/IDS/firewall observation then cloud control-plane reconnaissance"/>
+      <view name="pf_SEC-P9-C-BEACONING" label="Periodic External Communication Indicators"/>
       <view name="pf_ind_mfg_it_ot_convergence" label="Plant: OT proxy and edge routing observation, then command-and-control callback"/>
       <view name="pf_SC-004" label="Repository Automation Abuse"/>
       <view name="pf_ind_bank_account_takeover_resilience" label="Retail banking: workstation credential compromise, cloud SSO abuse, backup integrity check"/>

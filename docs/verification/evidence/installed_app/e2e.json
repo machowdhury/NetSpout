@@ -1,14 +1,14 @@
 {
- "generated_utc": "2026-10-31T00:55Z",
+ "generated_utc": "2026-10-31T12:37Z",
  "lab": "tests/lab/ta_validation (isolated Docker Splunk Enterprise 10.2.7)",
  "app": "netspout.spl installed from the built package",
  "engine": "PulseForge engine on the host, reached through the installed gateway (NETSPOUT_BACKEND_URL)",
  "passed": 12,
  "failed": [],
  "runs": {
-  "replay_session": "rp-6a7f1fd1ab12",
-  "native_run": "pf-universe-86d23c56-9897-4c19-808b-e491f04b318d",
-  "incident_run": "pf-incident-0b708f8f-f6a5-453e-ad07-4ac8254e05a9"
+  "replay_session": "rp-828735615224",
+  "native_run": "pf-universe-41c5446b-711a-4041-8c02-5afb58f0020f",
+  "incident_run": "pf-incident-72c0f15b-51bb-4741-a3f9-4b2d0ddedb2e"
  },
  "checks": {
   "01_app_installed_and_enabled": {
@@ -17,7 +17,7 @@
   },
   "02_dashboard_views_and_navigation_installed": {
    "pass": true,
-   "pf_views": 133
+   "pf_views": 138
   },
   "03_gateway_reaches_engine_and_explorer_lists_scenarios": {
    "pass": true,
@@ -55,16 +55,16 @@
   "08_engine_verify_endpoint_agrees_with_independent_search": {
    "pass": true,
    "verify": {
-    "session_id": "rp-6a7f1fd1ab12",
+    "session_id": "rp-828735615224",
     "verified": true,
     "indexed": 12,
     "accepted": 12,
     "delivered": 12,
     "complete": true,
-    "first_time": "1793408092.334924",
-    "last_time": "1793408092.474924",
-    "query": "search index=\"dev_test_replay\" netspout_replay_session=\"rp-6a7f1fd1ab12\" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time",
-    "note": "indexed is read from Splunk for netspout_replay_session=rp-6a7f1fd1ab12; it can trail accepted until indexing catches up"
+    "first_time": "1793450231.508957",
+    "last_time": "1793450231.648957",
+    "query": "search index=\"dev_test_replay\" netspout_replay_session=\"rp-828735615224\" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time",
+    "note": "indexed is read from Splunk for netspout_replay_session=rp-828735615224; it can trail accepted until indexing catches up"
    }
   },
   "09_native_pack_generated_dispatched_and_indexed": {

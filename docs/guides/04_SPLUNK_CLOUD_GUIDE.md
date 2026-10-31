@@ -5,7 +5,7 @@
 ## Why there is a separate Cloud edition
 `netspout.spl` (Enterprise app) was inspected with Splunk AppInspect 4.4.0 using the Splunk Cloud ruleset (`--mode precert --included-tags cloud`), evidence `docs/verification/evidence/appinspect/cloud.json`: **0 errors, 8 failures, 11 warnings, 137 passed**. The failures: UDP network communications in the engine modules (25 findings: SNMP, syslog, flow), a modular input and REST handlers without the required `python.version`/`python.required` settings, illegal `indexes.conf` properties, `is_configured = 1`, and a missing `[triggers]` stanza. Splunk Cloud cannot run a customer collector and prohibits programmatic UDP, so the engine cannot live in the app.
 
-`netspout_cloud.spl` (built by `scripts/build_splunk_cloud_package.py`) therefore contains **only** Dashboard Studio views (133), navigation, `app.conf`, `app.manifest`, metadata and a README: no Python, no inputs, no indexes, no REST handlers, no custom conf. AppInspect (cloud ruleset): **0 failures, 0 errors, 0 warnings, 87 passed** (`cloud_edition.json`). That is a pre-submission result, not Splunk Cloud approval; the official vetting and any manual review are yours to run.
+`netspout_cloud.spl` (built by `scripts/build_splunk_cloud_package.py`) therefore contains **only** Dashboard Studio views (138), navigation, `app.conf`, `app.manifest`, metadata and a README: no Python, no inputs, no indexes, no REST handlers, no custom conf. AppInspect (cloud ruleset): **0 failures, 0 errors, 0 warnings, 87 passed** (`cloud_edition.json`). That is a pre-submission result, not Splunk Cloud approval; the official vetting and any manual review are yours to run.
 
 ## Supported architecture
 ```text
@@ -23,8 +23,10 @@ The Explorer/Command Center UI and the gateway are **not** part of the Cloud edi
 3. Run AppInspect on `netspout_cloud.spl` (`splunk-appinspect inspect netspout_cloud.spl --mode precert --included-tags cloud`) and submit through your normal Cloud app-vetting path ([official requirements](https://dev.splunk.com/enterprise/docs/releaseapps/cloudvetting)).
 4. Install the vetted app; confirm the `Scenario Dashboards` nav collection and that your role can read the views.
 5. Start the engine on your network with the Connection Center pointed at the Cloud HEC URL (real TLS; `allow_insecure_tls` false) and a search credential limited to the allowed indexes.
-6. Run one replay pack and one incident pack; confirm indexed counts with your own search and open the matching dashboards with the returned run id.
-7. Record: HEC acceptance, indexed counts, dashboards populated, any vetting findings.
+6. Run the **HEC connection test** in Connection Center with an explicitly named, allowed test index ([11](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md)). Expected: connection REACHABLE, authentication AUTHENTICATED, acceptance ACCEPTED, and indexing VERIFIED when search credentials are configured (otherwise overall ACCEPTED_NOT_VERIFIED, which is not a pass for indexing). Also try a wrong token and an index outside the allowlist: both must fail with a named reason and the second must send nothing.
+7. Run one replay pack and one incident pack; confirm indexed counts with your own search and open the matching dashboards with the returned run id.
+8. Open the Live Delivery Monitor for a small bounded run (a few dozen events) and press Verify; record accepted vs indexed.
+9. Record: HEC test statuses, HEC acceptance, indexed counts, dashboards populated, any vetting findings.
 
 ## Known blockers and open questions
 - Splunk Cloud outbound/inbound policies for the engine-to-Cloud path are customer-specific.

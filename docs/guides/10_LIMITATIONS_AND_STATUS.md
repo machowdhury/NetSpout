@@ -6,8 +6,8 @@ Statuses are separate: **IMPLEMENTED** (code exists), **TESTED** (automated test
 |---|---|---|---|---|---|
 | Native generators (159 of 349 sourcetypes) | yes | yes | 137 sourcetypes indexed (evidence-derived) | n/a | partly (packs through the gateway) |
 | Continuous replay (10 recordings, 33 packs) | yes | yes (unit, API, 41+ live checks) | yes | n/a | yes (installed-app run, 12/12) |
-| Scenarios (362 definitions, 138 runnable) | yes | yes | 76 scenarios indexed | n/a | sampled (replay, native pack, incident pack) |
-| Dashboards (133) | yes | yes | data-validated 133 | n/a | opened in Splunk Web from the real app (2 checked in the installed app) |
+| Scenarios (362 definitions, 138 runnable) | yes | yes | 138 scenarios indexed (76 by the older scenario-level evidence alone) | n/a | sampled (replay, native pack, incident pack) |
+| Dashboards (138: all 138 runnable scenarios) | yes | yes | data-validated 137, one recipe dashboard SPL-validated | n/a | opened in Splunk Web from the real app (2 checked in the installed app) |
 | SNMPv2c | yes | yes (75) | yes | Net-SNMP tools | not exercised through the app UI |
 | gNMI / OpenConfig + vendor-native paths | yes | yes (27 + more) | yes (events and mstats) | gnmic 0.49.0 | not exercised through the app UI |
 | NetFlow v9 / IPFIX | yes | yes | yes | GoFlow2 2.2.5, tshark 4.6.9 | not exercised through the app UI |
@@ -21,7 +21,9 @@ Statuses are separate: **IMPLEMENTED** (code exists), **TESTED** (automated test
 
 ## Known limitations
 - The engine is a separate service; it is not packaged inside the app and is not deployable inside Splunk Cloud.
-- 5 unified scenarios (SEC-P9 flow-based) need the repository's GoFlow2 collector and forwarder; not run here.
+- The five flow-based SEC-P9 scenarios (A, C, D, E, F) need the repository's GoFlow2 collector and forwarder; they were run end to end in the isolated lab (GoFlow2 2.2.5 decoded, forwarder delivered, Splunk indexed) and have dashboards. Elsewhere they stay BLOCKED until the collector is running.
+- Runner scenarios (ScenarioRunner and unified generation) cannot be paused or stopped from the monitor; their counters cover HEC deliveries only.
+- Splunk Cloud HEC test and monitor against a Cloud stack: not run by the maintainers (USER VALIDATION PENDING).
 - Recorded replay: year-less syslog timestamps assume a leap year; microsecond precision; mixed-format logs (Ollama) excluded; independent recordings are time-aligned only.
 - Original 100 financial and 100 telecom libraries were not supplied and are not integrated.
 - 30+ scenarios have no industry mapping; the UI says so instead of inventing one.

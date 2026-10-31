@@ -2739,6 +2739,15 @@ def _verified_scenario_ids():
         verified |= set(json.loads((root / "docs/verification/evidence/replay/replay_live.json").read_text(encoding="utf-8")).get("packs_indexed_verified", []))
     except (OSError, ValueError):
         pass
+    try:  # flow scenarios proven through GoFlow2 + forwarder and read back from Splunk by run id; monitored runs verified by an independent search
+        flow = json.loads((root / "docs/verification/evidence/flow/scenarios.json").read_text(encoding="utf-8"))
+        verified |= {sid for sid, r in flow.get("scenarios", {}).items() if r.get("ok")}
+        dv = json.loads((root / "docs/verification/evidence/dashboards/data_validation.json").read_text(encoding="utf-8"))
+        verified |= {sid for sid, r in dv.get("dashboards", {}).items() if r.get("pass")}   # fresh run's events read back from Splunk by run id and KPIs equal to independent searches
+        live = json.loads((root / "docs/verification/evidence/monitor/live.json").read_text(encoding="utf-8"))
+        verified |= {c["target"] for c in live.get("cases", []) if c.get("ok") and c.get("target") and (c.get("verification") or {}).get("status") == "VERIFIED"}
+    except (OSError, ValueError):
+        pass
     try:
         visual = json.loads((root / "docs/verification/evidence/phase4f/visual-validation.json").read_text(encoding="utf-8"))
         if visual.get("verdict", {}).get("maturity") == "DASHBOARD_READY":

@@ -71,7 +71,7 @@ def test_incident_dashboards_use_only_real_fields_and_mstats_with_the_metric_ind
 
 def test_security_dashboards_state_detection_status_and_never_claim_a_verified_detection():
     sec = [x for x in SOURCES if x['kind'] == 'security']
-    assert len(sec) == 56
+    assert len(sec) == 61
     for x in sec:
         text = json.dumps(spec(x['id'])[1])
         assert 'Detection status: **NOT VERIFIED**' in text and 'Severity:** not asserted' in text and 'Original analytics (Splunk Security Content)' in text

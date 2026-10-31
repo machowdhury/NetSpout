@@ -1,10 +1,11 @@
 {
- "generated_utc": "2026-10-31T11:54:55.646757+00:00",
+ "generated_utc": "2026-10-31T13:11:05.323118+00:00",
  "engine": "isolated lab engine",
  "cases": [
   {
    "name": "single_sourcetype",
-   "run_id": "run-85d6e32ca168",
+   "target": "cisco:sdwan:utdhealth",
+   "run_id": "run-7fe0367dc89a",
    "mode": "finite",
    "state": "COMPLETED",
    "counters": {
@@ -18,8 +19,8 @@
    },
    "polls": 6,
    "monotonic": true,
-   "peak_current_eps": 15.05,
-   "avg_eps": 14.19,
+   "peak_current_eps": 14.98,
+   "avg_eps": 14.12,
    "elapsed_s": 2.1,
    "by_sourcetype": {
     "cisco:sdwan:utdhealth": 30
@@ -35,7 +36,8 @@
   },
   {
    "name": "replay_pack_finite",
-   "run_id": "rp-3786895740d3",
+   "target": "rp_cloud_control_plane_activity",
+   "run_id": "rp-0c045ff8cd23",
    "mode": "finite",
    "state": "COMPLETED",
    "counters": {
@@ -50,7 +52,7 @@
    "polls": 2,
    "monotonic": true,
    "peak_current_eps": 0,
-   "avg_eps": 40.16,
+   "avg_eps": 39.99,
    "elapsed_s": 0.3,
    "by_sourcetype": {
     "aws:cloudtrail": 12
@@ -72,7 +74,8 @@
   },
   {
    "name": "native_pack",
-   "run_id": "run-1d1b40579dfd",
+   "target": "ub5_cisco_change_induced_outage",
+   "run_id": "run-0279a004d803",
    "mode": "finite",
    "state": "COMPLETED",
    "counters": {
@@ -87,7 +90,7 @@
    "polls": 3,
    "monotonic": true,
    "peak_current_eps": 0,
-   "avg_eps": 36.66,
+   "avg_eps": 36.62,
    "elapsed_s": 0.5,
    "by_sourcetype": {
     "cisco:sdwan:OSPF-5-ADJCHG": 3,
@@ -135,7 +138,8 @@
   },
   {
    "name": "incident_pack",
-   "run_id": "run-018407bbbea7",
+   "target": "network_01_campus_link",
+   "run_id": "run-a8832dc16169",
    "mode": "finite",
    "state": "COMPLETED",
    "counters": {
@@ -150,7 +154,7 @@
    "polls": 3,
    "monotonic": true,
    "peak_current_eps": 0,
-   "avg_eps": 53.63,
+   "avg_eps": 55.47,
    "elapsed_s": 0.7,
    "by_sourcetype": {
     "netspout:network:syslog": 30,
@@ -218,7 +222,8 @@
   },
   {
    "name": "scenario_runner",
-   "run_id": "NS-20261031-1cb12f0e",
+   "target": "arch_lan_campus_access",
+   "run_id": "NS-20261031-52dad5b4",
    "mode": "observed",
    "state": "COMPLETED",
    "counters": {
@@ -230,11 +235,11 @@
     "pending": 0,
     "indexed": null
    },
-   "polls": 2,
+   "polls": 5,
    "monotonic": true,
    "peak_current_eps": 0,
-   "avg_eps": 26.51,
-   "elapsed_s": 0.4,
+   "avg_eps": 5.89,
+   "elapsed_s": 1.7,
    "by_sourcetype": {
     "cisco:catalyst:security:events": 7,
     "cisco:ise:nac:8021x": 2,
@@ -277,7 +282,8 @@
   },
   {
    "name": "unified_generation",
-   "run_id": "28474e95-0f1e-42ac-9b1e-6189c7f536d1",
+   "target": "SEC-P9-B-DNS-ANOMALY",
+   "run_id": "1d5ba0df-4260-4dd5-b3a4-1d29a0fa8d45",
    "mode": "observed",
    "state": "COMPLETED",
    "counters": {
@@ -292,8 +298,8 @@
    "polls": 2,
    "monotonic": true,
    "peak_current_eps": 0,
-   "avg_eps": 58.18,
-   "elapsed_s": 0.2,
+   "avg_eps": 63.4,
+   "elapsed_s": 0.1,
    "by_sourcetype": {
     "netspout:dns:wire": 9
    },
@@ -319,7 +325,7 @@
   },
   {
    "name": "pause_resume_stop",
-   "run_id": "run-d8400fa6da6c",
+   "run_id": "run-66ba02cfa9aa",
    "paused_held": true,
    "state": "STOPPED",
    "counters": {

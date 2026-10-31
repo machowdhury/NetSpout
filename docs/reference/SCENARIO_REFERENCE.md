@@ -7,34 +7,45 @@ Generated 2026-10-31 by `scripts/generate_reference_docs.py` from the Use Case E
 | Unique operational scenario definitions | 362 |
 | Runnable (a real generator and run path exist) | 138 |
 | Cataloged candidates only (documented, not executable) | 209 |
-| Independently indexed in an isolated lab | 76 |
-| With a Dashboard Studio dashboard | 133 |
-| Dashboards DATA_VALIDATED or better | 132 |
-| Dashboards VISUALLY_VERIFIED | 8 |
+| Independently indexed in an isolated lab | 138 |
+| With a Dashboard Studio dashboard | 138 |
+| Dashboards DATA_VALIDATED or better | 137 |
+| Dashboards VISUALLY_VERIFIED | 9 |
 | Detection verified | 0 (no add-on, CIM or Enterprise Security content installed) |
 
 Tiers (as recorded, never upgraded by indexing): CATALOGED 209, CERTIFIED 18, CONTRACTED 109, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
 
 The original 100 financial-services and 100 telecom use-case libraries were not supplied; they are **not** part of these counts and none of the scenarios below were derived from them. Industry mappings are editorial unless an industry pack binds them. Splunk Analytic Stories are a separate reference universe (see the Explorer's Security view); they are not counted as scenarios.
 
+## How the counts relate (one partition, plus overlapping attributes)
+
+| Group | Count | Meaning |
+|---|---|---|
+| Runnable | 138 | A real generator and run path exist; every one has a Dashboard Studio dashboard |
+| Contract only | 15 | A topology or format contract exists but no executable telemetry (reason recorded per scenario) |
+| Cataloged only | 209 | Documented candidates with no execution path |
+| Total | 362 | The three groups above are mutually exclusive and add up to the total |
+
+**Overlapping attributes** (not additional groups): *independently indexed* (138) is a subset of the runnable group, i.e. runnable scenarios whose events from a fresh run were read back from Splunk by an independent search in an isolated lab (scenario-level live checks, dashboard data validation, the monitored runs and the flow scenarios); 0 runnable scenarios lack that proof. Earlier status reports counted 76 because they used only the scenario-level live-equality evidence; the dashboard data validation (a fresh run per scenario, read back from Splunk by run id, KPIs equal to separately written searches) extends the same kind of proof to every runnable scenario, which is why the figure is now higher. The two numbers measure different evidence, not different scenarios. *Tier* (CERTIFIED, VALIDATED, CONTRACTED, ...) is the maturity recorded by the catalog and is never upgraded by indexing.
+
 ## Coverage by approved industry
 
 | Industry | Definitions | Runnable | Indexed | Dashboards | Dashboards data-validated |
 |---|---|---|---|---|---|
-| Banking and Financial Services | 16 | 7 | 5 | 7 | 7 |
-| Healthcare | 14 | 5 | 4 | 5 | 5 |
-| Retail and E-commerce | 12 | 6 | 5 | 6 | 6 |
-| Manufacturing | 18 | 6 | 3 | 6 | 6 |
-| Energy and Utilities | 22 | 6 | 3 | 6 | 6 |
-| Telecommunications | 43 | 15 | 13 | 15 | 15 |
-| Government and Public Sector | 25 | 5 | 4 | 5 | 5 |
+| Banking and Financial Services | 16 | 7 | 7 | 7 | 7 |
+| Healthcare | 14 | 5 | 5 | 5 | 5 |
+| Retail and E-commerce | 12 | 6 | 6 | 6 | 6 |
+| Manufacturing | 18 | 6 | 6 | 6 | 6 |
+| Energy and Utilities | 22 | 6 | 6 | 6 | 6 |
+| Telecommunications | 43 | 15 | 15 | 15 | 15 |
+| Government and Public Sector | 25 | 5 | 5 | 5 | 5 |
 | Transportation and Logistics | 13 | 2 | 2 | 2 | 2 |
-| Education | 13 | 4 | 2 | 4 | 4 |
-| Technology and SaaS | 24 | 19 | 5 | 19 | 19 |
+| Education | 13 | 4 | 4 | 4 | 4 |
+| Technology and SaaS | 24 | 19 | 19 | 19 | 19 |
 | Media and Entertainment | 6 | 2 | 2 | 2 | 2 |
-| Hospitality and Travel | 10 | 4 | 2 | 4 | 4 |
+| Hospitality and Travel | 10 | 4 | 4 | 4 | 4 |
 | Aerospace and Defense | 6 | 2 | 2 | 2 | 2 |
-| Legal, Compliance and Professional Services | 10 | 5 | 3 | 5 | 5 |
+| Legal, Compliance and Professional Services | 10 | 5 | 5 | 5 | 5 |
 | Agriculture and Agritech | 6 | 2 | 2 | 2 | 2 |
 | Real Estate, PropTech and Construction | 8 | 3 | 3 | 3 | 3 |
 | Insurance and InsurTech | 9 | 3 | 3 | 3 | 3 |
@@ -44,37 +55,37 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 
 | ID | Title | Execution | Kind | Industries | Sourcetypes | Indexed | Dashboard | Dashboard maturity |
 |---|---|---|---|---|---|---|---|---|
-| `AI-001` | Indirect Prompt Injection | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-001 | VISUALLY_VERIFIED |
-| `AI-002` | Unauthorized Tool Invocation | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-002 | DATA_VALIDATED |
-| `AI-003` | MCP Tool Output Manipulation | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-003 | DATA_VALIDATED |
-| `AI-004` | Agent Identity and Privilege Drift | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-004 | DATA_VALIDATED |
-| `AI-005` | A2A Delegation Abuse | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-005 | DATA_VALIDATED |
-| `AI-006` | Multi-Agent Incident | native (unified_generation) | security | technology-saas | 1 | - | pf_AI-006 | DATA_VALIDATED |
-| `C100-CRI-002` | Telecom Operations Network Degradation — Correlated Reference | native (unified_generation) | operational | banking-financial-services, energy-utilities, government-public-sector | 2 | - | pf_C100-CRI-002 | DATA_VALIDATED |
-| `C100-DC-001` | Nexus Fabric Uplink Degradation — NX-OS Reference | native (unified_generation) | operational | manufacturing | 1 | - | pf_C100-DC-001 | VISUALLY_VERIFIED |
-| `C100-ENT-001` | Campus Access Link Degradation — IOS XE Reference | native (unified_generation) | operational | healthcare | 1 | - | pf_C100-ENT-001 | DATA_VALIDATED |
-| `C100-SEC-001` | Secure Firewall Suspicious Connection Burst — ASA Reference | native (unified_generation) | security | not mapped | 1 | - | pf_C100-SEC-001 | DATA_VALIDATED |
-| `P12-XD-001` | AI Agent to Infrastructure | native (unified_generation) | security | not mapped | 1 | - | pf_P12-XD-001 | DATA_VALIDATED |
-| `P12-XD-002` | Supply Chain to Application | native (unified_generation) | security | not mapped | 1 | - | pf_P12-XD-002 | DATA_VALIDATED |
-| `SC-001` | Suspicious Dependency Change | native (unified_generation) | security | technology-saas | 1 | - | pf_SC-001 | DATA_VALIDATED |
-| `SC-002` | CI Workflow Permission Escalation | native (unified_generation) | security | technology-saas | 1 | - | pf_SC-002 | DATA_VALIDATED |
-| `SC-003` | Build Artifact Provenance Gap | native (unified_generation) | security | technology-saas | 1 | - | pf_SC-003 | DATA_VALIDATED |
-| `SC-004` | Repository Automation Abuse | native (unified_generation) | security | technology-saas | 1 | - | pf_SC-004 | DATA_VALIDATED |
-| `SC-005` | Supply Chain to Runtime Correlation | native (unified_generation) | security | technology-saas | 1 | - | pf_SC-005 | DATA_VALIDATED |
-| `SEC-P9-A-TRAFFIC-FLOOD` | Controlled Traffic Flood Indicators | native (unified_generation) | security | not mapped | 0 | - | - | NOT_STARTED |
+| `AI-001` | Indirect Prompt Injection | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-001 | VISUALLY_VERIFIED |
+| `AI-002` | Unauthorized Tool Invocation | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-002 | DATA_VALIDATED |
+| `AI-003` | MCP Tool Output Manipulation | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-003 | DATA_VALIDATED |
+| `AI-004` | Agent Identity and Privilege Drift | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-004 | DATA_VALIDATED |
+| `AI-005` | A2A Delegation Abuse | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-005 | DATA_VALIDATED |
+| `AI-006` | Multi-Agent Incident | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-006 | DATA_VALIDATED |
+| `C100-CRI-002` | Telecom Operations Network Degradation — Correlated Reference | native (unified_generation) | operational | banking-financial-services, energy-utilities, government-public-sector | 2 | Y | pf_C100-CRI-002 | DATA_VALIDATED |
+| `C100-DC-001` | Nexus Fabric Uplink Degradation — NX-OS Reference | native (unified_generation) | operational | manufacturing | 1 | Y | pf_C100-DC-001 | VISUALLY_VERIFIED |
+| `C100-ENT-001` | Campus Access Link Degradation — IOS XE Reference | native (unified_generation) | operational | healthcare | 1 | Y | pf_C100-ENT-001 | DATA_VALIDATED |
+| `C100-SEC-001` | Secure Firewall Suspicious Connection Burst — ASA Reference | native (unified_generation) | security | not mapped | 1 | Y | pf_C100-SEC-001 | DATA_VALIDATED |
+| `P12-XD-001` | AI Agent to Infrastructure | native (unified_generation) | security | not mapped | 1 | Y | pf_P12-XD-001 | DATA_VALIDATED |
+| `P12-XD-002` | Supply Chain to Application | native (unified_generation) | security | not mapped | 1 | Y | pf_P12-XD-002 | DATA_VALIDATED |
+| `SC-001` | Suspicious Dependency Change | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-001 | DATA_VALIDATED |
+| `SC-002` | CI Workflow Permission Escalation | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-002 | DATA_VALIDATED |
+| `SC-003` | Build Artifact Provenance Gap | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-003 | DATA_VALIDATED |
+| `SC-004` | Repository Automation Abuse | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-004 | DATA_VALIDATED |
+| `SC-005` | Supply Chain to Runtime Correlation | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-005 | DATA_VALIDATED |
+| `SEC-P9-A-TRAFFIC-FLOOD` | Controlled Traffic Flood Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-A-TRAFFIC-FLOOD | DATA_VALIDATED |
 | `SEC-P9-B-DNS-ANOMALY` | DNS Diversity and NXDOMAIN Indicators | native (unified_generation) | security | not mapped | 1 | Y | pulseforge_dns_anomaly_studio | SPL_VALIDATED |
-| `SEC-P9-C-BEACONING` | Periodic External Communication Indicators | native (unified_generation) | security | not mapped | 0 | - | - | NOT_STARTED |
-| `SEC-P9-D-INTERNAL-RECON` | Internal Reconnaissance Indicators | native (unified_generation) | security | not mapped | 0 | - | - | NOT_STARTED |
-| `SEC-P9-E-DNS-TUNNEL` | DNS Tunneling and Exfiltration Indicators | native (unified_generation) | security | not mapped | 0 | - | - | NOT_STARTED |
-| `SEC-P9-F-CROSS-SOURCE` | Cross-Source DNS, Beaconing, and Reconnaissance Incident | native (unified_generation) | security | not mapped | 0 | - | - | NOT_STARTED |
-| `arch_lan_campus_access` | LAN: Local Area Network - Campus Switching & 802.1Q Segments | native (scenario_runner) | operational | not mapped | 3 | - | pf_arch_lan_campus_access | DATA_VALIDATED |
-| `arch_man_carrier_ring` | MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 E | native (scenario_runner) | operational | telecommunications | 3 | - | pf_arch_man_carrier_ring | DATA_VALIDATED |
-| `arch_vpn_remote_workforce` | VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 3 | - | pf_arch_vpn_remote_workforce | DATA_VALIDATED |
-| `arch_wlan_meraki_catalyst` | WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7 | native (scenario_runner) | operational | education, hospitality-travel, retail-ecommerce | 3 | - | pf_arch_wlan_meraki_catalyst | DATA_VALIDATED |
-| `cisco_aci_microburst` | Data Center Fabric ACI Ingress Microburst Traffic | native (scenario_runner) | operational | not mapped | 3 | - | pf_cisco_aci_microburst | VISUALLY_VERIFIED |
-| `cisco_campus_rogue` | Campus Core L2/3 Disturbance & Rogue AP | native (scenario_runner) | operational | education, hospitality-travel | 4 | - | pf_cisco_campus_rogue | DATA_VALIDATED |
-| `cisco_sdwan_brownout` | Enterprise WAN Circuit Brownout & App Route Failover | native (scenario_runner) | operational | not mapped | 4 | - | pf_cisco_sdwan_brownout | DATA_VALIDATED |
-| `ddos_attack` | Distributed Denial of Service (DDoS SYN Flood) | native (scenario_runner) | security | not mapped | 3 | - | pf_ddos_attack | DATA_VALIDATED |
+| `SEC-P9-C-BEACONING` | Periodic External Communication Indicators | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-C-BEACONING | DATA_VALIDATED |
+| `SEC-P9-D-INTERNAL-RECON` | Internal Reconnaissance Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-D-INTERNAL-RECON | DATA_VALIDATED |
+| `SEC-P9-E-DNS-TUNNEL` | DNS Tunneling and Exfiltration Indicators | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-E-DNS-TUNNEL | DATA_VALIDATED |
+| `SEC-P9-F-CROSS-SOURCE` | Cross-Source DNS, Beaconing, and Reconnaissance Incident | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-F-CROSS-SOURCE | VISUALLY_VERIFIED |
+| `arch_lan_campus_access` | LAN: Local Area Network - Campus Switching & 802.1Q Segments | native (scenario_runner) | operational | not mapped | 3 | Y | pf_arch_lan_campus_access | DATA_VALIDATED |
+| `arch_man_carrier_ring` | MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 E | native (scenario_runner) | operational | telecommunications | 3 | Y | pf_arch_man_carrier_ring | DATA_VALIDATED |
+| `arch_vpn_remote_workforce` | VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 3 | Y | pf_arch_vpn_remote_workforce | DATA_VALIDATED |
+| `arch_wlan_meraki_catalyst` | WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7 | native (scenario_runner) | operational | education, hospitality-travel, retail-ecommerce | 3 | Y | pf_arch_wlan_meraki_catalyst | DATA_VALIDATED |
+| `cisco_aci_microburst` | Data Center Fabric ACI Ingress Microburst Traffic | native (scenario_runner) | operational | not mapped | 3 | Y | pf_cisco_aci_microburst | VISUALLY_VERIFIED |
+| `cisco_campus_rogue` | Campus Core L2/3 Disturbance & Rogue AP | native (scenario_runner) | operational | education, hospitality-travel | 4 | Y | pf_cisco_campus_rogue | DATA_VALIDATED |
+| `cisco_sdwan_brownout` | Enterprise WAN Circuit Brownout & App Route Failover | native (scenario_runner) | operational | not mapped | 4 | Y | pf_cisco_sdwan_brownout | DATA_VALIDATED |
+| `ddos_attack` | Distributed Denial of Service (DDoS SYN Flood) | native (scenario_runner) | security | not mapped | 3 | Y | pf_ddos_attack | DATA_VALIDATED |
 | `ind_aero_defense_endpoint_c2` | Defense contractor: C2 callback, endpoint pipeline and privileged-acce | native (replay_pack) | security | aerospace-defense | 11 | Y | pf_ind_aero_defense_endpoint_c2 | DATA_VALIDATED |
 | `ind_agri_edge_gateway_health` | Agritech: edge gateway routing observation and Linux gateway authentic | native (replay_pack) | operational | agriculture-agritech | 7 | Y | pf_ind_agri_edge_gateway_health | DATA_VALIDATED |
 | `ind_bank_account_takeover_resilience` | Retail banking: workstation credential compromise, cloud SSO abuse, ba | native (replay_pack) | security | banking-financial-services | 13 | Y | pf_ind_bank_account_takeover_resilience | DATA_VALIDATED |
@@ -101,9 +112,9 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `ind_telco_access_and_wireless_health` | Telecom NOC: RADIUS/NAC outage, platform degradation and rogue wireles | native (replay_pack) | operational | telecommunications | 16 | Y | pf_ind_telco_access_and_wireless_health | DATA_VALIDATED |
 | `ind_telco_change_induced_outage` | Telecom NOC: change-induced SD-WAN outage, then edge threat pipeline | native (replay_pack) | operational | telecommunications | 15 | Y | pf_ind_telco_change_induced_outage | VISUALLY_VERIFIED |
 | `ind_transport_fleet_network_change` | Logistics network: change-induced outage and edge routing observation | native (replay_pack) | operational | transportation-logistics | 16 | Y | pf_ind_transport_fleet_network_change | DATA_VALIDATED |
-| `mixed_backbone_optical` | Multicast/MPLS Backbone Optical Carrier Shift | native (scenario_runner) | operational | not mapped | 3 | - | pf_mixed_backbone_optical | DATA_VALIDATED |
-| `mixed_edge_breach` | Distributed Edge Breach & Internal Probing | native (scenario_runner) | security | not mapped | 5 | - | pf_mixed_edge_breach | DATA_VALIDATED |
-| `mixed_sase_degradation` | SASE Cloud Ingress App Degradation & Synthetic Validation | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 4 | - | pf_mixed_sase_degradation | DATA_VALIDATED |
+| `mixed_backbone_optical` | Multicast/MPLS Backbone Optical Carrier Shift | native (scenario_runner) | operational | not mapped | 3 | Y | pf_mixed_backbone_optical | DATA_VALIDATED |
+| `mixed_edge_breach` | Distributed Edge Breach & Internal Probing | native (scenario_runner) | security | not mapped | 5 | Y | pf_mixed_edge_breach | DATA_VALIDATED |
+| `mixed_sase_degradation` | SASE Cloud Ingress App Degradation & Synthetic Validation | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 4 | Y | pf_mixed_sase_degradation | DATA_VALIDATED |
 | `network_01_campus_link` | Campus link failure/recovery | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_01_campus_link | DATA_VALIDATED |
 | `network_02_vlan_trunk` | VLAN/trunk misconfiguration | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_02_vlan_trunk | DATA_VALIDATED |
 | `network_03_stp_storm` | STP loop/broadcast storm | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_03_stp_storm | DATA_VALIDATED |
@@ -131,11 +142,11 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `network_25_mpls_recovery` | Primary MPLS path-change observation and branch SLA recovery | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_25_mpls_recovery | DATA_VALIDATED |
 | `network_26_maintenance` | Planned maintenance versus unplanned service outage | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_26_maintenance | DATA_VALIDATED |
 | `network_27_stale_sessions` | Authentication recovery with stale perimeter sessions | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_27_stale_sessions | DATA_VALIDATED |
-| `network_security_correlation` | Network Degradation With Security Correlation | native (scenario_runner) | operational | not mapped | 5 | - | pf_network_security_correlation | DATA_VALIDATED |
-| `openconfig_mdt_streaming` | OpenConfig MDT Streaming & Telemetry Assurance | native (scenario_runner) | operational | not mapped | 3 | - | pf_openconfig_mdt_streaming | DATA_VALIDATED |
-| `paloalto_threat_investigation` | Palo Alto Networks Threat Investigation | native (scenario_runner) | security | not mapped | 3 | - | pf_paloalto_threat_investigation | VISUALLY_VERIFIED |
-| `payment_processing_degradation` | Financial Services Payment Application Degradation | native (scenario_runner) | operational | banking-financial-services | 5 | - | pf_payment_processing_degradation | DATA_VALIDATED |
-| `rfc5424-link-state-lifecycle` | Modeled Link-State Lifecycle | native (unified_generation) | operational | not mapped | 1 | - | pf_rfc5424-link-state-lifecycle | DATA_VALIDATED |
+| `network_security_correlation` | Network Degradation With Security Correlation | native (scenario_runner) | operational | not mapped | 5 | Y | pf_network_security_correlation | DATA_VALIDATED |
+| `openconfig_mdt_streaming` | OpenConfig MDT Streaming & Telemetry Assurance | native (scenario_runner) | operational | not mapped | 3 | Y | pf_openconfig_mdt_streaming | DATA_VALIDATED |
+| `paloalto_threat_investigation` | Palo Alto Networks Threat Investigation | native (scenario_runner) | security | not mapped | 3 | Y | pf_paloalto_threat_investigation | VISUALLY_VERIFIED |
+| `payment_processing_degradation` | Financial Services Payment Application Degradation | native (scenario_runner) | operational | banking-financial-services | 5 | Y | pf_payment_processing_degradation | DATA_VALIDATED |
+| `rfc5424-link-state-lifecycle` | Modeled Link-State Lifecycle | native (unified_generation) | operational | not mapped | 1 | Y | pf_rfc5424-link-state-lifecycle | DATA_VALIDATED |
 | `rp_agentic_ai_mcp_runtime_hybrid` | Agentic AI: recorded MCP server log plus native exfiltration attempt ( | hybrid (replay_pack) | security | technology-saas, legal-compliance-professional-services | 3 | Y | pf_rp_agentic_ai_mcp_runtime_hybrid | DATA_VALIDATED |
 | `rp_cloud_control_plane_activity` | AWS control-plane activity (replayed CloudTrail) | replay (replay_pack) | security | technology-saas, insurance-insurtech, media-entertainment | 1 | Y | pf_rp_cloud_control_plane_activity | DATA_VALIDATED |
 | `rp_edr_and_cloud_activity` | Endpoint sensor and cloud audit side by side (aligned in time only) | replay (replay_pack) | security | banking-financial-services, aerospace-defense | 2 | Y | pf_rp_edr_and_cloud_activity | DATA_VALIDATED |
@@ -143,8 +154,8 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `rp_web_exploitation_recordings` | Web exploitation observed from three recordings (aligned in time only) | replay (replay_pack) | security | retail-ecommerce, hospitality-travel, government-public-sector | 3 | Y | pf_rp_web_exploitation_recordings | DATA_VALIDATED |
 | `rp_windows_endpoint_process_chain` | Windows endpoint process and network activity (replayed Sysmon) | replay (replay_pack) | security | healthcare, manufacturing, education | 1 | Y | pf_rp_windows_endpoint_process_chain | DATA_VALIDATED |
 | `rp_workload_sysmon_ebpf_hybrid` | Linux workload: recorded Sysmon-for-Linux plus native eBPF hunt (hybri | hybrid (replay_pack) | security | technology-saas, telecommunications, transportation-logistics | 10 | Y | pf_rp_workload_sysmon_ebpf_hybrid | DATA_VALIDATED |
-| `service_provider_cisco` | Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv | native (scenario_runner) | operational | telecommunications | 4 | - | pf_service_provider_cisco | DATA_VALIDATED |
-| `sql_injection` | SQL Injection / Application Breach | native (scenario_runner) | security | not mapped | 3 | - | pf_sql_injection | DATA_VALIDATED |
+| `service_provider_cisco` | Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv | native (scenario_runner) | operational | telecommunications | 4 | Y | pf_service_provider_cisco | DATA_VALIDATED |
+| `sql_injection` | SQL Injection / Application Breach | native (scenario_runner) | security | not mapped | 3 | Y | pf_sql_injection | DATA_VALIDATED |
 | `telco_01_ran_cell` | 5G RAN cell degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_01_ran_cell | DATA_VALIDATED |
 | `telco_02_registration_auth` | 5G registration/authentication failure | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_02_registration_auth | DATA_VALIDATED |
 | `telco_03_slice_sla` | 5G network slice SLA violation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_03_slice_sla | DATA_VALIDATED |
@@ -155,33 +166,33 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `telco_08_roaming_mobility` | Roaming/mobility failure | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_08_roaming_mobility | DATA_VALIDATED |
 | `telco_09_core_user_plane` | 5G core user-plane degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_09_core_user_plane | DATA_VALIDATED |
 | `telco_10_cross_layer` | Cross-layer telecom service outage and SLA impact | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_10_cross_layer | DATA_VALIDATED |
-| `test-correlated-interface-degradation` | Cisco IOS XR Interface Degradation — Golden Scenario | native (unified_generation) | operational | not mapped | 1 | - | pf_test-correlated-interface-degradation | DATA_VALIDATED |
-| `ub1_ot_proxy_host_hunt` | OT Tamper to Container Host Hunt (Universe Batch-1) | native (scenario_pack) | security | manufacturing, energy-utilities | 4 | - | pf_ub1_ot_proxy_host_hunt | DATA_VALIDATED |
-| `ub2_cloud_identity_mail_hunt` | Ub2 Cloud Identity Mail Hunt | native (scenario_pack) | security | not mapped | 3 | - | pf_ub2_cloud_identity_mail_hunt | DATA_VALIDATED |
-| `ub2_database_backup_integrity` | Ub2 Database Backup Integrity | native (scenario_pack) | operational | not mapped | 2 | - | pf_ub2_database_backup_integrity | DATA_VALIDATED |
-| `ub2_ot_edge_routing_observation` | Ub2 Ot Edge Routing Observation | native (scenario_pack) | operational | manufacturing, energy-utilities | 4 | - | pf_ub2_ot_edge_routing_observation | DATA_VALIDATED |
-| `ub3_database_message_audit` | Ub3 Database Message Audit | native (scenario_pack) | operational | not mapped | 2 | - | pf_ub3_database_message_audit | DATA_VALIDATED |
-| `ub3_identity_runtime_audit` | Ub3 Identity Runtime Audit | native (scenario_pack) | operational | not mapped | 4 | - | pf_ub3_identity_runtime_audit | DATA_VALIDATED |
-| `ub3_multivendor_edge_observation` | Ub3 Multivendor Edge Observation | native (scenario_pack) | operational | not mapped | 4 | - | pf_ub3_multivendor_edge_observation | DATA_VALIDATED |
-| `ub4_endpoint_threat_pipeline` | Ub4 Endpoint Threat Pipeline | native (scenario_pack) | security | not mapped | 5 | - | pf_ub4_endpoint_threat_pipeline | DATA_VALIDATED |
-| `ub4_exposure_infra_logging` | Ub4 Exposure Infra Logging | native (scenario_pack) | operational | not mapped | 4 | - | pf_ub4_exposure_infra_logging | DATA_VALIDATED |
-| `ub4_saas_collaboration_audit` | Ub4 Saas Collaboration Audit | native (scenario_pack) | operational | not mapped | 3 | - | pf_ub4_saas_collaboration_audit | DATA_VALIDATED |
+| `test-correlated-interface-degradation` | Cisco IOS XR Interface Degradation — Golden Scenario | native (unified_generation) | operational | not mapped | 1 | Y | pf_test-correlated-interface-degradation | DATA_VALIDATED |
+| `ub1_ot_proxy_host_hunt` | OT Tamper to Container Host Hunt (Universe Batch-1) | native (scenario_pack) | security | manufacturing, energy-utilities | 4 | Y | pf_ub1_ot_proxy_host_hunt | DATA_VALIDATED |
+| `ub2_cloud_identity_mail_hunt` | Ub2 Cloud Identity Mail Hunt | native (scenario_pack) | security | not mapped | 3 | Y | pf_ub2_cloud_identity_mail_hunt | DATA_VALIDATED |
+| `ub2_database_backup_integrity` | Ub2 Database Backup Integrity | native (scenario_pack) | operational | not mapped | 2 | Y | pf_ub2_database_backup_integrity | DATA_VALIDATED |
+| `ub2_ot_edge_routing_observation` | Ub2 Ot Edge Routing Observation | native (scenario_pack) | operational | manufacturing, energy-utilities | 4 | Y | pf_ub2_ot_edge_routing_observation | DATA_VALIDATED |
+| `ub3_database_message_audit` | Ub3 Database Message Audit | native (scenario_pack) | operational | not mapped | 2 | Y | pf_ub3_database_message_audit | DATA_VALIDATED |
+| `ub3_identity_runtime_audit` | Ub3 Identity Runtime Audit | native (scenario_pack) | operational | not mapped | 4 | Y | pf_ub3_identity_runtime_audit | DATA_VALIDATED |
+| `ub3_multivendor_edge_observation` | Ub3 Multivendor Edge Observation | native (scenario_pack) | operational | not mapped | 4 | Y | pf_ub3_multivendor_edge_observation | DATA_VALIDATED |
+| `ub4_endpoint_threat_pipeline` | Ub4 Endpoint Threat Pipeline | native (scenario_pack) | security | not mapped | 5 | Y | pf_ub4_endpoint_threat_pipeline | DATA_VALIDATED |
+| `ub4_exposure_infra_logging` | Ub4 Exposure Infra Logging | native (scenario_pack) | operational | not mapped | 4 | Y | pf_ub4_exposure_infra_logging | DATA_VALIDATED |
+| `ub4_saas_collaboration_audit` | Ub4 Saas Collaboration Audit | native (scenario_pack) | operational | not mapped | 3 | Y | pf_ub4_saas_collaboration_audit | DATA_VALIDATED |
 | `ub5_cisco_change_induced_outage` | Cisco Change-Induced Outage | native (scenario_pack) | operational | not mapped | 12 | Y | pf_ub5_cisco_change_induced_outage | DATA_VALIDATED |
 | `ub5_cisco_nac_radius_outage` | Cisco NAC RADIUS Outage | native (scenario_pack) | operational | not mapped | 5 | Y | pf_ub5_cisco_nac_radius_outage | DATA_VALIDATED |
 | `ub5_cisco_platform_health_degradation` | Cisco Platform Health Degradation | native (scenario_pack) | operational | not mapped | 7 | Y | pf_ub5_cisco_platform_health_degradation | DATA_VALIDATED |
 | `ub6_catalyst_wireless_rogue_threat` | Catalyst Wireless Rogue And Threat Summary | native (scenario_pack) | operational | not mapped | 4 | Y | pf_ub6_catalyst_wireless_rogue_threat | DATA_VALIDATED |
 | `ub6_sdwan_utd_threat_pipeline` | SD-WAN UTD Threat Pipeline | native (scenario_pack) | security | not mapped | 3 | Y | pf_ub6_sdwan_utd_threat_pipeline | DATA_VALIDATED |
-| `wave2_agentic_ai_exfil_attempt` | Agentic AI Runtime Exfiltration Attempt (Wave-2 pack) | native (scenario_pack) | security | technology-saas | 3 | - | pf_wave2_agentic_ai_exfil_attempt | DATA_VALIDATED |
-| `wave2_aws_recon_escalation` | AWS CloudTrail Recon & Escalation (Wave-2 pack) | native (scenario_pack) | security | not mapped | 2 | - | pf_wave2_aws_recon_escalation | DATA_VALIDATED |
-| `wave2_bigip_openconfig_itops` | Big-IP ADC & OpenConfig Observability Health (Wave-2 pack) | native (scenario_pack) | operational | not mapped | 4 | - | pf_wave2_bigip_openconfig_itops | DATA_VALIDATED |
-| `wave2_c2_callback_detection` | Network C2 Callback & Discovery Behaviors (Wave-2 pack) | native (scenario_pack) | security | not mapped | 2 | - | pf_wave2_c2_callback_detection | DATA_VALIDATED |
-| `wave2_cloud_identity_sso_hunt` | Cross-Cloud Identity SSO Brute Force (Wave-2 pack) | native (scenario_pack) | security | not mapped | 5 | - | pf_wave2_cloud_identity_sso_hunt | DATA_VALIDATED |
-| `wave2_k8s_container_escape` | Kubernetes Auth Abuse + Container Escape (Wave-2 pack) | native (scenario_pack) | security | not mapped | 3 | - | pf_wave2_k8s_container_escape | DATA_VALIDATED |
-| `wave2_linux_auth_anomaly` | Linux Infrastructure Auth Anomaly (Wave-2 pack) | native (scenario_pack) | security | not mapped | 3 | - | pf_wave2_linux_auth_anomaly | DATA_VALIDATED |
-| `wave2_ws_credential_compromise_chain` | Windows Credential Compromise Kill Chain (Wave-2 pack) | native (scenario_pack) | security | not mapped | 6 | - | pf_wave2_ws_credential_compromise_chain | DATA_VALIDATED |
-| `wave3_cloudmail_exfil` | Cloud Mail Exfiltration Chain (Wave-3 pack) | native (scenario_pack) | security | not mapped | 8 | - | pf_wave3_cloudmail_exfil | VISUALLY_VERIFIED |
-| `wave3_ebpf_workload_hunt` | eBPF Workload Hunt (Wave-3 pack) | native (scenario_pack) | security | not mapped | 9 | - | pf_wave3_ebpf_workload_hunt | DATA_VALIDATED |
-| `wave3_vsphere_hostpath_triage` | vSphere Host Path Triage (Wave-3 pack) | native (scenario_pack) | operational | not mapped | 10 | - | pf_wave3_vsphere_hostpath_triage | DATA_VALIDATED |
+| `wave2_agentic_ai_exfil_attempt` | Agentic AI Runtime Exfiltration Attempt (Wave-2 pack) | native (scenario_pack) | security | technology-saas | 3 | Y | pf_wave2_agentic_ai_exfil_attempt | DATA_VALIDATED |
+| `wave2_aws_recon_escalation` | AWS CloudTrail Recon & Escalation (Wave-2 pack) | native (scenario_pack) | security | not mapped | 2 | Y | pf_wave2_aws_recon_escalation | DATA_VALIDATED |
+| `wave2_bigip_openconfig_itops` | Big-IP ADC & OpenConfig Observability Health (Wave-2 pack) | native (scenario_pack) | operational | not mapped | 4 | Y | pf_wave2_bigip_openconfig_itops | DATA_VALIDATED |
+| `wave2_c2_callback_detection` | Network C2 Callback & Discovery Behaviors (Wave-2 pack) | native (scenario_pack) | security | not mapped | 2 | Y | pf_wave2_c2_callback_detection | DATA_VALIDATED |
+| `wave2_cloud_identity_sso_hunt` | Cross-Cloud Identity SSO Brute Force (Wave-2 pack) | native (scenario_pack) | security | not mapped | 5 | Y | pf_wave2_cloud_identity_sso_hunt | DATA_VALIDATED |
+| `wave2_k8s_container_escape` | Kubernetes Auth Abuse + Container Escape (Wave-2 pack) | native (scenario_pack) | security | not mapped | 3 | Y | pf_wave2_k8s_container_escape | DATA_VALIDATED |
+| `wave2_linux_auth_anomaly` | Linux Infrastructure Auth Anomaly (Wave-2 pack) | native (scenario_pack) | security | not mapped | 3 | Y | pf_wave2_linux_auth_anomaly | DATA_VALIDATED |
+| `wave2_ws_credential_compromise_chain` | Windows Credential Compromise Kill Chain (Wave-2 pack) | native (scenario_pack) | security | not mapped | 6 | Y | pf_wave2_ws_credential_compromise_chain | DATA_VALIDATED |
+| `wave3_cloudmail_exfil` | Cloud Mail Exfiltration Chain (Wave-3 pack) | native (scenario_pack) | security | not mapped | 8 | Y | pf_wave3_cloudmail_exfil | VISUALLY_VERIFIED |
+| `wave3_ebpf_workload_hunt` | eBPF Workload Hunt (Wave-3 pack) | native (scenario_pack) | security | not mapped | 9 | Y | pf_wave3_ebpf_workload_hunt | DATA_VALIDATED |
+| `wave3_vsphere_hostpath_triage` | vSphere Host Path Triage (Wave-3 pack) | native (scenario_pack) | operational | not mapped | 10 | Y | pf_wave3_vsphere_hostpath_triage | DATA_VALIDATED |
 
 ## Not runnable
 

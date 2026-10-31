@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-31T00:22:16.363Z",
+ "generated_utc": "2026-10-31T12:16:42.382Z",
  "splunk_web": "isolated lab",
  "dashboards": {
   "rp_linux_credential_access": {
@@ -3856,6 +3856,151 @@
    "title_rendered": true,
    "events_count_rendered": true,
    "expected_events": 11,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-C-BEACONING": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-C-BEACONING?form.run_tok=fa921b76-5bd1-43b1-ae15-938f6490a543&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "fa921b76-5bd1-43b1-ae15-938f6490a543",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 11,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-A-TRAFFIC-FLOOD": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-A-TRAFFIC-FLOOD?form.run_tok=1b2827f1-4208-4909-a998-de7b5396dc80&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "1b2827f1-4208-4909-a998-de7b5396dc80",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 11,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-D-INTERNAL-RECON": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-D-INTERNAL-RECON?form.run_tok=55c841ee-e581-44db-862c-7e8ced2602c1&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "55c841ee-e581-44db-862c-7e8ced2602c1",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 11,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-E-DNS-TUNNEL": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-E-DNS-TUNNEL?form.run_tok=5ac744da-5714-4b51-8002-d13cf2e56c07&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "5ac744da-5714-4b51-8002-d13cf2e56c07",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 18,
+   "run_filter_shows_session": true,
+   "ok": true
+  },
+  "SEC-P9-F-CROSS-SOURCE": {
+   "url": "/en-US/app/netspout/pf_SEC-P9-F-CROSS-SOURCE?form.run_tok=d96aab0d-9866-4a07-808e-3a65a2e0ac71&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "session_id": "d96aab0d-9866-4a07-808e-3a65a2e0ac71",
+   "family": "unified",
+   "errors": [],
+   "tabs": {
+    "Overview": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Investigation": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    },
+    "Evidence": {
+     "sentinel_rendered": true,
+     "error_text": [],
+     "waiting": 0
+    }
+   },
+   "http_status": 200,
+   "title_rendered": true,
+   "events_count_rendered": true,
+   "expected_events": 15,
    "run_filter_shows_session": true,
    "ok": true
   }

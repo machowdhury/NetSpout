@@ -7,7 +7,7 @@ import {
   type Prerequisites,
   type StepName,
 } from '../../lib/explorerApi';
-import { LiveDeliveryMonitor, rememberRun } from '../monitor/LiveDeliveryMonitor';
+import { LiveDeliveryMonitor, rememberRun, rememberedRun } from '../monitor/LiveDeliveryMonitor';
 import { startRun } from '../../lib/runsApi';
 import './explorer.css';
 
@@ -194,7 +194,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   const [count, setCount] = useState(6);
   const [replayMode, setReplayMode] = useState<'one_shot' | 'continuous'>('one_shot');
   const [replaySpeed, setReplaySpeed] = useState(10);
-  const [monitorId, setMonitorId] = useState<string | null>(null);
+  const [monitorId, setMonitorId] = useState<string | null>(rememberedRun(entry.entry_id));
   const [monitorError, setMonitorError] = useState<string | null>(null);
   const [prereq, setPrereq] = useState<Prerequisites | null>(null);
   const security = entry.kind === 'security';
@@ -253,6 +253,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
     actions.GENERATE = async () => {
       if (replay) {
         const r = await explorerApi.replayStart({ pack_id: sid, continuous: replayMode === 'continuous', speed: replaySpeed, index: needIndex() });
+        rememberRun(r.session_id, entry.entry_id);
+        setMonitorId(r.session_id);
         update({ runId: r.session_id, replayState: r.state });
         return { ok: true, lines: [`Replay session ${r.session_id}: ${r.state}`, `Source ${r.source} -> index ${r.index}, host ${r.host}`] };
       }
@@ -465,7 +467,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
       {!security && entry.engine !== 'replay_pack' && (
         <button type="button" className="ux-run-btn" data-testid="monitored-run"
                 onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined }).then(
-                  (r) => { rememberRun(r.run_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>
+                  (r) => { rememberRun(r.run_id, entry.entry_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>
           Run with live delivery monitor
         </button>)}
       {monitorError && <p className="ux-foot">{monitorError}</p>}

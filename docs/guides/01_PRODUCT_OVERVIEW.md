@@ -10,7 +10,7 @@ Splunk solution engineers, architects, security, network and observability engin
 - **Continuous sample replay**: authentic recordings (10 vendored) re-emitted on the current clock; only the selected timestamp bytes change; looping, pause/resume/stop, speed, EPS limit, backpressure.
 - **Scenarios**: finite incidents across 18 approved industries and SOC/NOC/ITOps/AI/supply-chain categories, run from native generators, replay, or both. See [Scenario reference](../reference/SCENARIO_REFERENCE.md).
 - **Network protocols**: SNMPv2c polling/traps/informs, gNMI/OpenConfig (and vendor-native paths) streaming, NetFlow v9 and IPFIX export. See [06](06_NETWORK_TELEMETRY_GUIDE.md).
-- **Dashboards**: 133 Dashboard Studio dashboards with NOC/Engineer/Evidence (operational) or Overview/Investigation/Evidence (security) tabs. See [07](07_DASHBOARD_GUIDE.md).
+- **Dashboards**: 138 Dashboard Studio dashboards with NOC/Engineer/Evidence (operational) or Overview/Investigation/Evidence (security) tabs. See [07](07_DASHBOARD_GUIDE.md).
 - **Independent verification**: every run can be checked by a Splunk search written separately from the sender's counters.
 
 ## What it does not do

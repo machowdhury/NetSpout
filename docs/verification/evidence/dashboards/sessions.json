@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-10-31T00:18Z",
+ "generated_utc": "2026-10-31T12:14Z",
  "sessions": {
   "rp_linux_credential_access": {
    "run": "rp-b8930b5675fa",
@@ -1925,6 +1925,76 @@
    "title": "Telecom Operations Network Degradation \u2014 Correlated Reference",
    "metric": false,
    "session_id": "1ae98fba-2f30-4832-b582-9a2acd2b791b"
+  },
+  "SEC-P9-A-TRAFFIC-FLOOD": {
+   "run": "1b2827f1-4208-4909-a998-de7b5396dc80",
+   "accepted": 0,
+   "expected_events": 11,
+   "rejected": 0,
+   "state": "COMPLETED",
+   "key_field": "netspout_run_id",
+   "scenario_value": "SEC-P9-A-TRAFFIC-FLOOD",
+   "family": "unified",
+   "kind": "security",
+   "title": "Controlled Traffic Flood Indicators",
+   "metric": false,
+   "session_id": "1b2827f1-4208-4909-a998-de7b5396dc80"
+  },
+  "SEC-P9-C-BEACONING": {
+   "run": "fa921b76-5bd1-43b1-ae15-938f6490a543",
+   "accepted": 0,
+   "expected_events": 11,
+   "rejected": 0,
+   "state": "COMPLETED",
+   "key_field": "netspout_run_id",
+   "scenario_value": "SEC-P9-C-BEACONING",
+   "family": "unified",
+   "kind": "security",
+   "title": "Periodic External Communication Indicators",
+   "metric": false,
+   "session_id": "fa921b76-5bd1-43b1-ae15-938f6490a543"
+  },
+  "SEC-P9-D-INTERNAL-RECON": {
+   "run": "55c841ee-e581-44db-862c-7e8ced2602c1",
+   "accepted": 0,
+   "expected_events": 11,
+   "rejected": 0,
+   "state": "COMPLETED",
+   "key_field": "netspout_run_id",
+   "scenario_value": "SEC-P9-D-INTERNAL-RECON",
+   "family": "unified",
+   "kind": "security",
+   "title": "Internal Reconnaissance Indicators",
+   "metric": false,
+   "session_id": "55c841ee-e581-44db-862c-7e8ced2602c1"
+  },
+  "SEC-P9-E-DNS-TUNNEL": {
+   "run": "5ac744da-5714-4b51-8002-d13cf2e56c07",
+   "accepted": 0,
+   "expected_events": 18,
+   "rejected": 0,
+   "state": "COMPLETED",
+   "key_field": "netspout_run_id",
+   "scenario_value": "SEC-P9-E-DNS-TUNNEL",
+   "family": "unified",
+   "kind": "security",
+   "title": "DNS Tunneling and Exfiltration Indicators",
+   "metric": false,
+   "session_id": "5ac744da-5714-4b51-8002-d13cf2e56c07"
+  },
+  "SEC-P9-F-CROSS-SOURCE": {
+   "run": "d96aab0d-9866-4a07-808e-3a65a2e0ac71",
+   "accepted": 0,
+   "expected_events": 15,
+   "rejected": 0,
+   "state": "COMPLETED",
+   "key_field": "netspout_run_id",
+   "scenario_value": "SEC-P9-F-CROSS-SOURCE",
+   "family": "unified",
+   "kind": "security",
+   "title": "Cross-Source DNS, Beaconing, and Reconnaissance Incident",
+   "metric": false,
+   "session_id": "d96aab0d-9866-4a07-808e-3a65a2e0ac71"
   }
  }
 }

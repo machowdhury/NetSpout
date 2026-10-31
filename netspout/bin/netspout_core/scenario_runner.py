@@ -3004,6 +3004,8 @@ class ScenarioRunner:
     ) -> RunManifest:
         from netspout_core.delivery_monitor import observed_run
         transport = request.transport_config or (topology.global_transport if topology else None)
+        if request.scenario_id not in SUPPORTED_SCENARIO_IDS:   # refused by _run_scenario before any run id exists; nothing to monitor
+            return self._run_scenario(request, topology)
         with observed_run("scenario", request.scenario_id, self.generate_run_id(), transport):
             return self._run_scenario(request, topology)
 

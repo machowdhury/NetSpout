@@ -12,6 +12,7 @@
 | [08 Security, TA and CIM guide](08_SECURITY_TA_CIM_GUIDE.md) | security engineers | Detections, analytic stories, TA and CIM status |
 | [09 Troubleshooting](09_TROUBLESHOOTING.md) | everyone | Symptoms, causes, fixes |
 | [10 Limitations and status](10_LIMITATIONS_AND_STATUS.md) | evaluators | Maturity matrix: implemented / tested / indexed / interoperability / release |
+| [11 Live Delivery Monitor and HEC test](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md) | operators | Counter definitions, controls per family, external HEC connection test, engine restart |
 | [Sourcetype reference](../reference/SOURCETYPE_REFERENCE.md) | everyone | Generated from the registry; JSON/CSV exports alongside |
 | [Scenario reference](../reference/SCENARIO_REFERENCE.md) | everyone | Generated from the deduplicated scenario registry |
 

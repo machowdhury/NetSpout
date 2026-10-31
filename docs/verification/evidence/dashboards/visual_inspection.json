@@ -8,6 +8,7 @@
   "cisco_aci_microburst": "ScenarioRunner operational with mstats: Engineer tab",
   "paloalto_threat_investigation": "ScenarioRunner security: Investigation tab",
   "AI-001": "unified security: Investigation tab",
-  "C100-DC-001": "unified operational: Engineer tab"
+  "C100-DC-001": "unified operational: Engineer tab",
+  "SEC-P9-F-CROSS-SOURCE": "flow + DNS wire run through GoFlow2: Investigation tab viewed (hosts netspout-flow-collector 11 / test-resolver-01 4, phases, evidence table populated); other tabs and the four sibling flow dashboards not viewed"
  }
 }

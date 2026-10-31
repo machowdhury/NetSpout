@@ -1,6 +1,6 @@
 # 07 Dashboard guide
 
-## Families (133 Dashboard Studio views, one per scenario that emits indexed telemetry)
+## Families (138 Dashboard Studio views, one per scenario that emits indexed telemetry)
 | Family | Views | Run key (token `run_tok`) | Metric panels |
 |---|---|---|---|
 | Replay packs (recorded and hybrid) | 33 | `netspout_replay_session` | no |
@@ -20,7 +20,7 @@ Operational: **NOC / Engineer / Evidence**. Security: **Overview / Investigation
 Dark canvas `#17191b`, terracotta accent from the Figma V2 tokens in `design/` (lightened for contrast on dark), restrained status colors, KPI cards, bar/column/line charts with labeled axes. Dashboard Studio cannot load custom web fonts, so the IBM Plex Mono identifiers from the design are rendered with markdown code formatting; markdown links keep Splunk's link color (weak contrast on dark cards).
 
 ## Maturity (kept separate; stored as evidence)
-`DASHBOARD_SPECIFIED` (template contract exists) < `DASHBOARD_IMPLEMENTED` (installed in Splunk and read back identical) < `DASHBOARD_DATA_VALIDATED` (every data source populated for the run, KPIs equal independent searches, tokens bound, drilldowns return rows) < `DASHBOARD_VISUALLY_VERIFIED` (also opened in Splunk Web with the run context, all three tabs rendered, and a human inspected the screenshot). Current: see `docs/verification/evidence/dashboards/dashboard_maturity.json` (133 data-validated, 8 of them visually verified). The older `DASHBOARD_READY` gate is not claimed for any generated dashboard.
+`DASHBOARD_SPECIFIED` (template contract exists) < `DASHBOARD_IMPLEMENTED` (installed in Splunk and read back identical) < `DASHBOARD_DATA_VALIDATED` (every data source populated for the run, KPIs equal independent searches, tokens bound, drilldowns return rows) < `DASHBOARD_VISUALLY_VERIFIED` (also opened in Splunk Web with the run context, all three tabs rendered, and a human inspected the screenshot). Current: see `docs/verification/evidence/dashboards/dashboard_maturity.json` (138 data-validated except one recipe dashboard recorded as SPL_VALIDATED, 9 visually verified). The older `DASHBOARD_READY` gate is not claimed for any generated dashboard.
 
 ## Regenerate and revalidate
 ```bash

@@ -24,7 +24,7 @@ Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run a
    curl -sk -u admin:"$SPLUNK_PASSWORD" https://127.0.0.1:<mgmt-port>/services/apps/local \
         -d name=/tmp/netspout.spl -d filename=true -d update=true -d output_mode=json
    ```
-   Expected: app `netspout` 2.0.0, enabled, visible. The package carries 133 `pf_*` dashboards, the nav, the UI and the recorded samples.
+   Expected: app `netspout` 2.0.0, enabled, visible. The package carries 138 `pf_*` dashboards, the nav, the UI and the recorded samples.
 3. **Create indexes and a HEC token** in Splunk (Settings). The app ships no inputs enabled and creates nothing.
 4. **Start the engine** (secrets only in the environment; use a dedicated config directory):
    ```bash
@@ -40,10 +40,22 @@ Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run a
     "search_username":"admin","hec_token":"...","search_secret":"...","indexes":["dev_test_replay","dev_test_replay_metrics"],"allow_insecure_tls":true}
    ```
    `allow_insecure_tls` is accepted only for loopback lab endpoints. `POST /api/setup/validate` must return `PASS` for hec, search and indexes.
-7. **Verify the installation end to end**: `python scripts/validate_installed_app.py` (needs the isolated-lab credentials file) checks: app installed and enabled; 133 views and nav present; gateway reaches the engine; Connection Center configured and secret-free; read-only Splunk user refused; unauthorized index refused; replay session accepted equals indexed; native pack indexed; incident pack events and `mstats` datapoints indexed; no index created; no secret in any response. Last result: **12 of 12 passed** (`docs/verification/evidence/installed_app/e2e.json`). `scripts/render_installed_app.mjs` then opens the Command Center, the Explorer and two dashboards in a browser.
+7. **Verify the installation end to end**: `python scripts/validate_installed_app.py` (needs the isolated-lab credentials file) checks: app installed and enabled; 138 views and nav present; gateway reaches the engine; Connection Center configured and secret-free; read-only Splunk user refused; unauthorized index refused; replay session accepted equals indexed; native pack indexed; incident pack events and `mstats` datapoints indexed; no index created; no secret in any response. Last result: **12 of 12 passed** (`docs/verification/evidence/installed_app/e2e.json`). `scripts/render_installed_app.mjs` then opens the Command Center, the Explorer and two dashboards in a browser.
 
 ## B. Splunk Enterprise on a VM or physical host
 Same steps. Differences: install the package by Splunk Web or by unpacking into `$SPLUNK_HOME/etc/apps` and restarting; the gateway defaults to `http://127.0.0.1:8081`; run the engine as a service account (systemd) bound to loopback or a firewalled interface; use real TLS (`allow_insecure_tls` stays false). **Not run on a VM by the maintainers.**
+
+## C. The engine (customer-hosted; no repository checkout needed)
+Build once with `python scripts/sync_core.py && python scripts/build_engine_package.py`, which writes `pulseforge-engine.tar.gz` (engine code, catalog, recorded samples and launcher; no tests). On the engine host:
+```bash
+sudo tar xzf pulseforge-engine.tar.gz -C /opt             # extracts /opt/pulseforge-engine; any directory works
+/opt/pulseforge-engine/deploy/engine/install.sh          # creates venv/ and installs backend/requirements.txt
+sudo install -m 600 /opt/pulseforge-engine/deploy/engine/engine.env.example /etc/pulseforge/engine.env   # then edit: port, state dir, HEC token, search credentials
+/opt/pulseforge-engine/deploy/engine/pulseforge-engine   # or the systemd unit / launchd plist in deploy/engine/
+```
+Nothing is hardcoded: bind address and port come from `PULSEFORGE_ENGINE_HOST`/`PULSEFORGE_ENGINE_PORT` (default 127.0.0.1:8081), state from `PULSEFORGE_STATE_DIR`, the package location from `PULSEFORGE_ENGINE_HOME`. Point the Splunk gateway at it with `NETSPOUT_BACKEND_URL`. **Restart behaviour:** the saved Connection Center destination is rebuilt on start (secrets from the environment), active runs and replay sessions come back `INTERRUPTED`, and nothing is re-sent. Verified here by extracting the package outside the repository and starting it with a fresh state directory (Explorer 727 entries, 33 replay packs and 25 generation scenarios, identical to the repository engine; `docs/verification/evidence/monitor/`). Flow scenarios additionally need the collector: `docker compose -f deploy/collector/docker-compose.collector.yml up` with `SPLUNK_HEC_TOKEN`, and optionally `SPLUNK_HEC_URL` and `SPLUNK_INDEX` to point it at your HEC; then set `NETSPOUT_GOFLOW_METRICS_URL`, `NETSPOUT_FLOW_FORWARDER_STATUS_URL` and `NETSPOUT_COLLECTOR_HOST` for the engine.
+
+After reinstalling the app, **restart splunkd** (or run a Splunk Web `_bump`): Splunk caches the static UI bundle and keeps serving the old one until then.
 
 ## Upgrade
 Rebuild, reinstall with `update=true`; restart splunkd when the REST handler or nav changed. Keep `NETSPOUT_CONFIG_DIR`. Replay sessions that were active are reported `INTERRUPTED` after an engine restart and are never resumed or re-sent.

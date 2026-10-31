@@ -9,6 +9,7 @@ import {
 } from '../../lib/explorerApi';
 import { LiveDeliveryMonitor, rememberRun, rememberedRun } from '../monitor/LiveDeliveryMonitor';
 import { startRun } from '../../lib/runsApi';
+import { UniversalSearch } from './UniversalSearch';
 import './explorer.css';
 
 type StepStatus = 'idle' | 'running' | 'ok' | 'failed';
@@ -118,6 +119,8 @@ export function UseCaseExplorer() {
           Subdomain tags appear only where a source supports one; mappings marked * are editorial.
         </p>
       )}
+
+      <UniversalSearch onPickScenario={(id) => open({ entry_id: id } as ExplorerEntry)} />
 
       <div className="ux-filters">
         <label className="ux-search">

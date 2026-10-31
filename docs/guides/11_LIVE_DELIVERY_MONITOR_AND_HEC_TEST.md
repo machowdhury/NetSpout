@@ -46,3 +46,7 @@ Splunk Cloud testing is yours to run; see the checklist in [04](04_SPLUNK_CLOUD_
 
 ## Engine deployment and restart
 See [03](03_INSTALLATION.md) section C (`pulseforge-engine.tar.gz`, launcher, systemd and launchd units). After a restart the engine rebuilds its in-memory destination from the saved Connection Center configuration (the token comes from the environment) and reports active runs and replay sessions as `INTERRUPTED`.
+
+## Universal search
+
+The Use Case Explorer starts with one search box over sourcetypes (349), scenarios (727 Explorer entries, which include the 362 deduplicated scenarios plus replay, native and incident packs) and installed dashboards (138). Statuses are copied from the registries: catalog-only scenarios and sourcetypes without a generator stay in the results, labelled "catalog only", and are never offered as runnable. Filters cover type, runnable/catalog-only and dashboard availability; the API (`GET /api/search`) also filters by vendor, protocol, category, industry, execution mode, maturity and independently-indexed. The query is kept for the browser session. Dashboards open in Splunk Web; scenarios open the existing workflow and monitor. Not yet built: guided pre-run dialog, dashboard readiness states and notification, run-bound dashboard hand-off beyond the existing `run_tok`.

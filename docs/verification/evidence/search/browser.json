@@ -1,0 +1,18 @@
+{
+ "generated_utc": "2026-10-31T17:53:16.663Z",
+ "result": {
+  "bgp": "22 results: 5 dashboards, 12 scenarios, 5 sourcetypes",
+  "kinds_in_bgp": [
+   "dashboard",
+   "scenario",
+   "sourcetype"
+  ],
+  "dashboard_filter": "5 results: 5 dashboards",
+  "dashboard_href": "/en-US/app/netspout/pf_network_06_bgp_flap",
+  "sourcetype": "2 results: 2 sourcetypes",
+  "sourcetype_catalog_only_visible": 0,
+  "scenario_opens_workflow": 1,
+  "state_preserved": "credential",
+  "ok": true
+ }
+}

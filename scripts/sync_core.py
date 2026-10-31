@@ -41,6 +41,7 @@ CORE_MODULES = [
     "replay_service.py",
     "replay_packs.py",
     "delivery_monitor.py",
+    "universal_search.py",
     "hec_connection_test.py",
     "incident_packs.py",
     "scenario_runner.py",

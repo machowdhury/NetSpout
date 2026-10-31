@@ -2827,6 +2827,32 @@ def explorer_search(
                               readiness=readiness, demo_ready=demo_ready, limit=limit, offset=offset)
 
 
+_search_cache: Dict[str, Any] = {}
+
+
+@app.get("/api/search")
+def universal_search(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = Query(default=None, pattern="^(sourcetype|scenario|dashboard)$"),
+    industry: Optional[str] = None, vendor: Optional[str] = None, protocol: Optional[str] = None, category: Optional[str] = None,
+    execution_mode: Optional[str] = None, maturity: Optional[str] = None,
+    runnable: Optional[bool] = None, dashboard_available: Optional[bool] = None, independently_indexed: Optional[bool] = None,
+    limit: int = Query(default=50, ge=1, le=200), offset: int = Query(default=0, ge=0),
+):
+    """One ranked search over sourcetypes, Explorer scenarios and installed dashboards; statuses are copied from the registries, never upgraded."""
+    from app.catalog import catalog
+    from netspout_core import universal_search as us
+    if "records" not in _search_cache:
+        root = Path(__file__).resolve().parents[2]
+        views = us.dashboard_views(root / "netspout/default/data/ui/views", _replay_dashboards())
+        entries = _explorer().search(q="", limit=200, offset=0)["items"]
+        total = _explorer().search(q="", limit=1)["total"]
+        for off in range(200, total, 200):
+            entries += _explorer().search(q="", limit=200, offset=off)["items"]
+        _search_cache["records"] = us.build_records(catalog.list_sourcetypes(include_deprecated=True), entries, views)
+    return us.search(_search_cache["records"], q, kind, dict(industry=industry, vendor=vendor, protocol=protocol, category=category, execution_mode=execution_mode, maturity=maturity, runnable=runnable, dashboard_available=dashboard_available, independently_indexed=independently_indexed), limit, offset)
+
+
 @app.get("/api/explorer/entries/{entry_id}")
 def explorer_entry(entry_id: str):
     entry = _explorer().get(entry_id)

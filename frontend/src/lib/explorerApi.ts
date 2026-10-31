@@ -197,3 +197,21 @@ export const explorerApi = {
     call<{ status: string; matched_event_count: number; error: string | null; limitations: string[] }>(
       'POST', '/api/security-content/validations', { ...p, expected_min_matches: 1, control: 'POSITIVE' }, 60_000),
 };
+
+export interface SearchHit {
+  kind: 'sourcetype' | 'scenario' | 'dashboard';
+  id: string; title: string; subtitle?: string | null;
+  vendor?: string | null; category?: string | null; protocol?: string | null; execution_mode?: string | null;
+  maturity?: string | null; runnable: boolean; blocked_reason?: string | null; next_action: string;
+  dashboard_view?: string | null; dashboard_available?: boolean; independently_indexed?: boolean;
+  related_scenarios?: string[]; related_sourcetypes?: string[]; status?: string | null;
+}
+export interface UniversalResult { total: number; counts: Record<string, number>; items: SearchHit[] }
+
+export async function universalSearch(params: Record<string, string | boolean | undefined>): Promise<UniversalResult> {
+  const qs = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => { if (v !== undefined && v !== '') qs.set(k, String(v)); });
+  const r = await fetch(apiUrl(`/api/search?${qs}`));
+  if (!r.ok) throw new Error(`Search failed (${r.status})`);
+  return r.json();
+}

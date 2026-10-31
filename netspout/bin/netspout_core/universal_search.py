@@ -30,7 +30,8 @@ def dashboard_views(views_dir: Path, maturity: Dict[str, Dict[str, Any]]) -> Lis
     return out
 
 
-def build_records(sourcetypes: Iterable[Dict[str, Any]], entries: Iterable[Dict[str, Any]], dashboards: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def build_records(sourcetypes: Iterable[Dict[str, Any]], entries: Iterable[Dict[str, Any]], dashboards: Iterable[Dict[str, Any]], streamable: Optional[Dict[str, str]] = None) -> List[Dict[str, Any]]:
+    """streamable maps a sourcetype to the grounded path that can stream it (native or grounded_sample); when given, only those are runnable."""
     entries = list(entries)
     by_view: Dict[str, List[Dict[str, Any]]] = {}
     for e in entries:
@@ -44,14 +45,14 @@ def build_records(sourcetypes: Iterable[Dict[str, Any]], entries: Iterable[Dict[
     recs: List[Dict[str, Any]] = []
     for s in sourcetypes:
         name = s.get("splunk_sourcetype") or s.get("sourcetype") or s["id"]
-        generated = s.get("generation_mode") not in (None, "", "NONE", "UNSUPPORTED")
+        generated = (name in streamable) if streamable is not None else s.get("generation_mode") not in (None, "", "NONE", "UNSUPPORTED")
         recs.append({
             "kind": "sourcetype", "id": s["id"], "title": name, "subtitle": s.get("display_name"),
             "vendor": s.get("vendor_id"), "category": s.get("category"), "protocol": s.get("protocol"),
-            "data_format": s.get("data_kind"), "execution_mode": s.get("generation_mode"),
+            "data_format": s.get("data_kind"), "execution_mode": (streamable or {}).get(name) or s.get("generation_mode"),
             "status": s.get("status"), "runnable": generated,
             "related_scenarios": st_scen.get(name, []) + st_scen.get(s["id"], []),
-            "next_action": "Open sourcetype details" if generated else "Catalog entry only: no generator is claimed",
+            "next_action": "Stream continuously or for a count/duration" if generated else "Catalog entry only: no authentic generator or verified sample is available",
             "_text": [(name, 5), (s.get("display_name") or "", 4), (s.get("vendor_id") or "", 3), (s.get("category") or "", 2), (s.get("protocol") or "", 2), (s.get("data_kind") or "", 1), (" ".join(s.get("aliases") or []), 2)],
         })
     for e in entries:

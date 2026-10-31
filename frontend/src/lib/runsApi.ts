@@ -45,6 +45,30 @@ async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, tim
 
 export const startRun = (body: Record<string, unknown>) => call<RunSnapshot>('POST', '/api/runs', body);
 export const getRun = (id: string) => call<RunSnapshot>('GET', `/api/runs/${encodeURIComponent(id)}`);
-export const controlRun = (id: string, action: 'pause' | 'resume' | 'stop') => call<RunSnapshot>('POST', `/api/runs/${encodeURIComponent(id)}/${action}`);
+const WANT: Record<'pause' | 'resume' | 'stop', string[]> = { pause: ['PAUSED'], resume: ['RUNNING'], stop: ['STOPPING', 'STOPPED', 'COMPLETED'] };
+// The Splunk gateway sometimes drops a POST at the connection level. The control is retried once, and a failed or rejected retry still counts as done when the engine already reports the wanted state.
+export async function controlRun(id: string, action: 'pause' | 'resume' | 'stop'): Promise<RunSnapshot> {
+  const path = `/api/runs/${encodeURIComponent(id)}/${action}`;
+  try { return await call<RunSnapshot>('POST', path); } catch (first) {
+    await new Promise((r) => window.setTimeout(r, 500));
+    const now = await getRun(id).catch(() => null);
+    if (now && WANT[action].includes(now.state)) return now;
+    try { return await call<RunSnapshot>('POST', path); } catch (second) {
+      const after = await getRun(id).catch(() => null);
+      if (after && WANT[action].includes(after.state)) return after;
+      throw second instanceof Error ? second : first;
+    }
+  }
+}
 export const verifyRun = (id: string) => call<NonNullable<RunSnapshot['verification']>>('POST', `/api/runs/${encodeURIComponent(id)}/verify`);
 export const testConnection = (body: Record<string, unknown>) => call<Record<string, unknown>>('POST', '/api/setup/test-connection', body);
+
+export interface Readiness {
+  state: 'NOT_STARTED' | 'GENERATING' | 'DELIVERING' | 'INDEXING' | 'PARTIALLY_READY' | 'READY' | 'DEGRADED' | 'FAILED' | 'UNKNOWN';
+  run_id: string; title?: string; scenario?: string; notes: string[]; missing: string[]; elapsed_s?: number; elapsed_to_ready_s?: number | null;
+  required?: { sourcetypes?: Record<string, number>; phases?: string[] }; present?: { sourcetypes?: Record<string, number>; phases?: Record<string, number>; events_indexed?: number };
+  counters?: RunSnapshot['counters'];
+  verification?: { status: string; indexed?: number; accepted?: number; metric_datapoints_indexed?: number; query?: string } | null;
+  dashboard?: { view: string; tokens: Record<string, string | number>; openable: boolean; note: string } | null;
+}
+export const checkReadiness = (id: string) => call<Readiness>('POST', `/api/runs/${encodeURIComponent(id)}/readiness`, undefined, 60_000);

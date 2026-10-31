@@ -2357,9 +2357,30 @@ def runs_start(payload: Dict[str, Any]):
             return run_monitor.run_in_background(obs, runner).snapshot()
         else:
             from app.generator_modes import generator_service
-            entries, prov = generator_service.prepare_sourcetype_entries(payload.get("vendor_id") or "", target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
-            items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
-            title, metric_index = target, None
+            mode = payload.get("mode", "finite")
+            if mode not in ("finite", "continuous", "duration"):
+                raise ValueError("mode must be finite, continuous or duration")
+            vendor = payload.get("vendor_id") or ""
+            if mode == "finite":
+                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
+                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
+                title, metric_index = target, None
+            else:
+                # continuous / timed streaming of ONE sourcetype; grounding is checked once up front, then events are produced just before each send
+                duration = float(payload["duration_s"]) if mode == "duration" else None
+                if mode == "duration" and not duration or (duration is not None and not 1 <= duration <= 86400):
+                    raise ValueError("duration_s must be between 1 and 86400")
+                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id)
+                eps = eps if eps is not None else 5
+
+                def produce(n, vendor=vendor, run_id=run_id):
+                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id)
+                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in es]
+                from netspout_core.delivery_monitor import ContinuousRun
+                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration,
+                                     max_events=int(payload["count"]) if payload.get("count") and mode == "continuous" else None)
+                crun.source_mode = prov.get("mode")
+                return run_monitor.start(crun).snapshot()
         run = DeliveryRun(kind, target, title, name, index, items, eps_limit=eps, run_id=run_id, links=_monitor_links(target), metric_index=metric_index)
         return run_monitor.start(run).snapshot()
     except HTTPException:
@@ -2434,6 +2455,100 @@ def runs_verify(run_id: str):
     if run:
         run.verification = rec
     return rec
+
+
+READINESS_GRACE_S = 180   # after delivery ends, indexing may still trail; after this the missing evidence is reported as DEGRADED
+
+
+def _readiness_state(snap: Dict[str, Any], found: Optional[Dict[str, Any]], verification: Optional[Dict[str, Any]], now_s: float) -> Dict[str, Any]:
+    """Pure run-bound readiness. `found` is the independent search result {sourcetypes: {st: n}, phases: {ph: n}, total: n} or None when the search failed.
+    Required evidence = what the run actually delivered with acceptance (accepted sourcetypes, phases, metric datapoints), never unrelated data."""
+    c, st = snap["counters"], snap["state"]
+    out: Dict[str, Any] = {"run_id": snap["run_id"], "run_state": st, "required": {}, "present": {}, "missing": [], "notes": []}
+    if st in ("RUNNING", "PAUSED", "STOPPING", "CREATED"):
+        out["state"] = "GENERATING" if c["attempts"] == 0 else "DELIVERING"
+        return out
+    if st == "FAILED" or c["accepted"] == 0:
+        out["state"] = "FAILED"
+        out["notes"].append(snap.get("error") or "no event was accepted by the destination, so there is nothing to index")
+        return out
+    if found is None:
+        out["state"] = "UNKNOWN"
+        out["notes"].append("the independent Splunk search could not be completed" + (": " + str(verification.get("error")) if verification and verification.get("error") else ""))
+        return out
+    req_st = {k: v.get("accepted", 0) for k, v in snap.get("by_sourcetype", {}).items() if v.get("accepted", 0)}
+    req_ph = [p["phase"] for p in snap.get("by_phase", []) if p.get("accepted", 0)]
+    aligned = sum(found["sourcetypes"].get(k, 0) for k in req_st) == found["total"]   # a TA that rewrites sourcetype would break name matching; then only totals are trusted
+    out["required"] = {"sourcetypes": req_st, "phases": req_ph, "events_expected": (verification or {}).get("expected_log_events")}
+    out["present"] = {"sourcetypes": found["sourcetypes"], "phases": found["phases"], "events_indexed": found["total"]}
+    if aligned:
+        out["missing"] += ["sourcetype " + k for k in req_st if not found["sourcetypes"].get(k)]
+    out["missing"] += ["phase " + p for p in req_ph if not found["phases"].get(p)]
+    complete = bool(verification) and verification.get("status") == "VERIFIED" and not out["missing"]
+    ended = snap.get("ended_at")
+    since = (now_s - __import__("datetime").datetime.fromisoformat(ended).timestamp()) if ended else 0
+    if complete and c["rejected"] == 0 and c["unknown"] == 0:
+        out["state"] = "READY"
+    elif complete:
+        out["state"] = "DEGRADED"
+        out["notes"].append("all accepted events are indexed, but %d were rejected and %d have an unknown outcome" % (c["rejected"], c["unknown"]))
+    elif found["total"] > 0:
+        out["state"] = "PARTIALLY_READY" if since < READINESS_GRACE_S else "DEGRADED"
+    else:
+        out["state"] = "INDEXING" if since < READINESS_GRACE_S else "DEGRADED"
+    if out["state"] in ("INDEXING", "PARTIALLY_READY"):
+        out["notes"].append("indexing and search visibility can lag delivery; this run is re-checked until %ds after delivery ended. No ETA is given because none is measured." % READINESS_GRACE_S)
+    if out["state"] == "DEGRADED" and out["missing"]:
+        out["notes"].append("evidence still missing after the wait window: " + ", ".join(out["missing"]))
+    return out
+
+
+@app.post("/api/runs/{run_id}/readiness")
+def runs_readiness(run_id: str):
+    """Run-bound dashboard readiness: one independent search keyed by this run's id, compared with what the run actually delivered."""
+    snap = _run_snapshot(run_id)
+    if not snap:
+        return {"run_id": run_id, "state": "NOT_STARTED", "notes": ["unknown run id"]}
+    import time as _t
+    found, verification = None, None
+    if snap["state"] in ("COMPLETED", "STOPPED") and snap["counters"]["accepted"]:
+        verification = runs_verify(run_id)
+        if snap["kind"] != "replay" and verification.get("status") != "ERROR":
+            key = "netspout_run_id"
+            rows, err = release_candidate_configuration.execute_read_only_search('search index="%s" %s="%s" earliest=-30d latest=+1d | stats count by sourcetype, netspout_phase' % (snap["destination"]["index"], key, run_id))
+            if not err:
+                found = {"sourcetypes": {}, "phases": {}, "total": 0}
+                for r in rows:
+                    n = int(float(r.get("count") or 0))
+                    found["sourcetypes"][r.get("sourcetype") or ""] = found["sourcetypes"].get(r.get("sourcetype") or "", 0) + n
+                    if r.get("netspout_phase"):
+                        found["phases"][r["netspout_phase"]] = found["phases"].get(r["netspout_phase"], 0) + n
+                    found["total"] += n
+        elif verification.get("status") != "ERROR":
+            found = {"sourcetypes": {}, "phases": {}, "total": int(verification.get("indexed") or 0)}
+    out = _readiness_state(snap, found, verification, _t.time())
+    out["verification"] = verification
+    out["started_at"], out["elapsed_s"] = snap.get("started_at"), snap.get("elapsed_s")
+    out["scenario"], out["title"] = snap.get("target"), snap.get("title")
+    out["counters"] = snap["counters"]
+    out["dashboard"] = _dashboard_handoff(snap, out["state"])
+    run = run_monitor.get(run_id)
+    if run is not None:
+        if out["state"] == "READY" and not getattr(run, "ready_elapsed_s", None):
+            run.ready_elapsed_s = snap.get("elapsed_s")
+        out["elapsed_to_ready_s"] = getattr(run, "ready_elapsed_s", None)
+        run.readiness = out["state"]
+    return out
+
+
+def _dashboard_handoff(snap: Dict[str, Any], state: str) -> Optional[Dict[str, Any]]:
+    view = (snap.get("links") or {}).get("dashboard_view")
+    if not view:
+        return None
+    from datetime import datetime, timedelta, timezone
+    t0 = datetime.fromisoformat(snap["started_at"]) if snap.get("started_at") else datetime.now(timezone.utc)
+    return {"view": view, "tokens": {"form.run_tok": snap["run_id"], "form.global_time.earliest": int((t0 - timedelta(minutes=5)).timestamp()), "form.global_time.latest": int((datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp())},
+            "openable": state in ("READY", "PARTIALLY_READY", "DEGRADED"), "note": "the dashboard is filtered to this run; it stays empty until the run is indexed"}
 
 
 @app.get("/api/runs/{run_id}")
@@ -2849,7 +2964,15 @@ def universal_search(
         total = _explorer().search(q="", limit=1)["total"]
         for off in range(200, total, 200):
             entries += _explorer().search(q="", limit=200, offset=off)["items"]
-        _search_cache["records"] = us.build_records(catalog.list_sourcetypes(include_deprecated=True), entries, views)
+        from app.generator_modes import generator_service
+        sts = catalog.list_sourcetypes(include_deprecated=True)
+        streamable = {}
+        for st in sts:
+            try:
+                streamable[st["splunk_sourcetype"]] = generator_service.prepare_sourcetype_entries(st["vendor_id"], st["splunk_sourcetype"], 1)[1]["mode"]
+            except ValueError:
+                pass   # not grounded: stays searchable as catalog-only
+        _search_cache["records"] = us.build_records(sts, entries, views, streamable)
     return us.search(_search_cache["records"], q, kind, dict(industry=industry, vendor=vendor, protocol=protocol, category=category, execution_mode=execution_mode, maturity=maturity, runnable=runnable, dashboard_available=dashboard_available, independently_indexed=independently_indexed), limit, offset)
 
 
@@ -2872,6 +2995,49 @@ def explorer_prerequisites(entry_id: str, index: Optional[str] = None):
         return _explorer().prerequisites(entry_id, release_candidate_configuration.load(), index=index)
     except KeyError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.get("/api/explorer/entries/{entry_id}/preview")
+def explorer_preview(entry_id: str):
+    """What a run of this entry will do, before it runs: sourcetypes, phases and volume where they can be calculated, destination, dashboard, and exact blockers."""
+    entry = _explorer().get(entry_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Explorer entry not found")
+    from collections import Counter
+    from netspout_core import incident_packs
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
+    target = entry.get("scenario_id")
+    cfg = release_candidate_configuration.load()
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    volume = {"events": None, "metric_events": None, "phases": [], "basis": "not known before the run"}
+    try:
+        if target in SCENARIO_PACK_IDS:
+            evs = run_scenario_pack(target, "preview")
+            ph = Counter(e.netspout_phase for e in evs if getattr(e, "netspout_phase", None))
+            volume = {"events": len(evs), "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}
+            st = sorted({e.sourcetype for e in evs})
+        elif target in incident_packs.incident_ids():
+            evs = incident_packs.generate_pack(target, "preview")
+            ph = Counter((e["fields"] or {}).get("netspout_phase") for e in evs if (e["fields"] or {}).get("netspout_phase"))
+            mets = sum(1 for e in evs if e.get("metrics"))
+            volume = {"events": len(evs) - mets, "metric_events": mets, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}
+            st = sorted({e["sourcetype"] for e in evs})
+        else:
+            st = None
+    except Exception:   # a preview must never fail the page; the volume simply stays unknown
+        st = None
+    total = (volume["events"] or 0) + (volume["metric_events"] or 0)
+    return {
+        "entry_id": entry_id, "title": entry["title"], "scenario_id": target, "summary": entry.get("summary"), "domain": entry.get("domain"), "category": entry.get("category"),
+        "industries": [i["id"] for i in entry.get("industries") or []], "maturity": (entry.get("maturity") or {}).get("tier"),
+        "runnable": bool(entry.get("runnable")), "blockers": [entry["blocked_reason"]] if entry.get("blocked_reason") else [],
+        "required_sourcetypes": st or list(entry.get("sourcetypes") or []) + list(entry.get("source_ids") or []), "vendors": entry.get("vendors") or [],
+        "volume": volume,
+        "execution": {"path": "HEC" , "destination": _destination_name(gt) if gt else None, "configured": bool(cfg.get("configured")), "indexes": cfg.get("indexes", []),
+                      "metric_index": getattr(gt, "hec_metric_index", None) if gt else None},
+        "dashboard": ({"view": entry["dashboard"].get("splunk_view"), "maturity": entry["dashboard"].get("dashboard_maturity"), "note": "the dashboard stays empty until this run is indexed"} if (entry.get("dashboard") or {}).get("splunk_view") else None),
+        "timing": {"planned_events": total or None, "note": "Timing varies with ingestion, indexing and search availability. PulseForge will verify when your data is ready."},
+    }
 
 
 class ExplorerEnablePayload(BaseModel):

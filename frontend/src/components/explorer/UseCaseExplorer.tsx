@@ -9,6 +9,7 @@ import {
 } from '../../lib/explorerApi';
 import { LiveDeliveryMonitor, rememberRun, rememberedRun } from '../monitor/LiveDeliveryMonitor';
 import { startRun } from '../../lib/runsApi';
+import { ScenarioPreview } from './ScenarioPreview';
 import { UniversalSearch } from './UniversalSearch';
 import './explorer.css';
 
@@ -434,6 +435,8 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         <p className="ux-note">Contract only: this scenario has not been validated end to end. Expect gaps.</p>
       )}
 
+      {!security && entry.kind === 'operational' && <ScenarioPreview entryId={entry.entry_id} index={index} />}
+
       <div className="ux-controls">
         <label>Index
           <select value={index} onChange={(e) => setIndex(e.target.value)} disabled={indexes.length === 0}>
@@ -467,11 +470,11 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>
-      {!security && entry.engine !== 'replay_pack' && (
+      {!security && entry.engine !== 'replay_pack' && entry.runnable !== false && (
         <button type="button" className="ux-run-btn" data-testid="monitored-run"
                 onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined }).then(
                   (r) => { rememberRun(r.run_id, entry.entry_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>
-          Run with live delivery monitor
+          Run scenario with live delivery monitor
         </button>)}
       {monitorError && <p className="ux-foot">{monitorError}</p>}
       {(() => { const id = monitorId ?? (entry.engine === 'replay_pack' ? ctx.runId : null); return id ? <LiveDeliveryMonitor key={id} runId={id} onClose={() => setMonitorId(null)} /> : null; })()}

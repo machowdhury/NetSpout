@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { controlRun, getRun, verifyRun, type RunSnapshot } from '../../lib/runsApi';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { checkReadiness, controlRun, getRun, verifyRun, type Readiness, type RunSnapshot } from '../../lib/runsApi';
 
 const KEY = 'netspout.monitor.run';
 const FINAL = ['COMPLETED', 'STOPPED', 'FAILED', 'INTERRUPTED'];
@@ -25,13 +25,64 @@ function Chart({ points }: { points: Array<{ t: number; eps: number }> }) {
   );
 }
 
+// Dashboards live in Splunk Web on the same origin as this iframe; the run id and a time window are passed as form tokens.
+function dashboardHref(r: Readiness): string | null {
+  const m = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\/static\/app\/netspout\//);
+  if (!r.dashboard || !m) return null;
+  const qs = Object.entries(r.dashboard.tokens).map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`).join('&');
+  return `/${m[1]}/app/netspout/${r.dashboard.view}?${qs}`;
+}
+
+const POLL_MS = 5000;
+const POLL_MAX = 60;   // about five minutes after delivery ends, then the last state stands (DEGRADED/INDEXING) instead of spinning forever
+
+function ReadinessPanel({ run }: { run: RunSnapshot }) {
+  const [r, setR] = useState<Readiness | null>(null);
+  const [shown, setShown] = useState(true);
+  const final = FINAL.includes(run.state);
+  useEffect(() => {
+    if (!final || run.counters.accepted === 0 && run.state !== 'FAILED') return undefined;
+    let cancelled = false; let n = 0; let timer = 0;
+    const tick = async () => {
+      try { const x = await checkReadiness(run.run_id); if (cancelled) return; setR(x); n += 1; if (!['READY', 'FAILED', 'DEGRADED'].includes(x.state) && n < POLL_MAX) timer = window.setTimeout(tick, POLL_MS); }
+      catch { if (!cancelled && n < POLL_MAX) { n += 1; timer = window.setTimeout(tick, POLL_MS); } }
+    };
+    tick();
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [final, run.run_id, run.state, run.counters.accepted]);
+  const state = r?.state ?? (final ? 'INDEXING' : run.counters.attempts === 0 ? 'GENERATING' : 'DELIVERING');
+  const href = r ? dashboardHref(r) : null;
+  return (
+    <div className={`pf-mon-ready pf-mon-ready--${state}`} data-testid="readiness" role="status">
+      <b data-testid="readiness-state">{state}</b>
+      {state === 'READY' && shown ? (
+        <div className="pf-mon-toast" data-testid="readiness-toast">
+          <strong>Your scenario data is ready in Splunk.</strong>
+          <span>{r?.title || r?.scenario} · run <code>{r?.run_id}</code> · {fmt(r?.present?.events_indexed)} events indexed{r?.verification?.metric_datapoints_indexed != null ? `, ${fmt(r.verification.metric_datapoints_indexed)} metric datapoints` : ''} · {dur(r?.elapsed_to_ready_s ?? r?.elapsed_s)}</span>
+          {href ? <a href={href} target="_top">Open dashboard</a> : <span>{r?.dashboard ? 'Open the dashboard from Splunk Web' : 'This scenario has no dashboard'}</span>}
+          <a href="#evidence" onClick={(e) => { e.preventDefault(); document.querySelector('.pf-mon-verify')?.scrollIntoView({ block: 'center' }); }}>View evidence</a>
+          <button type="button" onClick={() => setShown(false)}>Dismiss</button>
+        </div>
+      ) : null}
+      {state === 'PARTIALLY_READY' && <span> Present: {Object.entries(r?.present?.sourcetypes ?? {}).map(([k, v]) => `${k} ${v}`).join(', ') || 'some events'}. Missing: {(r?.missing ?? []).join(', ') || 'remaining events'}.</span>}
+      {state === 'INDEXING' && <span> Delivery is finished; checking Splunk for this run&apos;s events. Indexing can lag, so verification is in progress.</span>}
+      {state === 'DELIVERING' && <span> Events are being delivered; indexing is checked after the run ends.</span>}
+      {['DEGRADED', 'FAILED', 'UNKNOWN'].includes(state) && <span> {(r?.notes ?? []).join(' ')}{href && state === 'DEGRADED' ? ' ' : ''}{href && state === 'DEGRADED' && <a href={href} target="_top">Open dashboard anyway</a>}</span>}
+    </div>
+  );
+}
+
 export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose?: () => void }) {
   const [run, setRun] = useState<RunSnapshot | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const inflight = useRef(false);
+  // One poll at a time: a stalled gateway must not pile up requests, because browsers allow only a few connections per origin and the control POSTs would queue behind them.
   const refresh = useCallback(async () => {
-    try { setRun(await getRun(runId)); setError(null); } catch (e) { setError(e instanceof Error ? e.message : String(e)); }
+    if (inflight.current) return;
+    inflight.current = true;
+    try { setRun(await getRun(runId)); setError(null); } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { inflight.current = false; }
   }, [runId]);
 
   useEffect(() => {
@@ -61,7 +112,7 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
         <div>
           <div className="pf-mon-title">{run.title || run.target}</div>
           <div className="pf-mon-meta">
-            {run.destination?.name} · index {run.destination?.index} · run <code>{run.run_id}</code>
+            {run.destination?.name} · index {run.destination?.index} · run <code>{run.run_id}</code>{run.mode ? ` · ${run.mode === 'continuous' ? 'continuous, runs until stopped' : run.mode}` : ''}
           </div>
         </div>
         <span className="pf-mon-state">{run.state}</span>
@@ -77,6 +128,7 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
           <div key={k} title={hint}><span>{k}</span><b>{v}</b></div>
         ))}
       </div>
+      <ReadinessPanel run={run} />
       <Chart points={run.throughput ?? []} />
       {sts.length > 0 && (
         <table className="pf-mon-table"><thead><tr><th>Sourcetype</th><th>Generated</th><th>Accepted</th><th>Rejected</th><th>Unknown</th></tr></thead>

@@ -30,3 +30,9 @@ def test_ranking_filters_and_dashboard_link():
     d = us.search(recs(), kind="dashboard")["items"][0]
     assert d["related_scenarios"] == ["op:1"] and d["related_sourcetypes"] == ["cisco:ios"]
     assert us.search(recs(), "zzzz")["total"] == 0
+
+
+def test_streamable_map_overrides_catalog_flag():
+    r = us.search(us.build_records(ST, EN, DB, {"aws:cloudtrail": "grounded_sample"}), kind="sourcetype")["items"]
+    by = {i["title"]: i for i in r}
+    assert by["aws:cloudtrail"]["runnable"] and by["aws:cloudtrail"]["execution_mode"] == "grounded_sample" and not by["x:none"]["runnable"]

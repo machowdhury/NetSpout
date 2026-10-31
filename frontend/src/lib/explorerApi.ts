@@ -215,3 +215,17 @@ export async function universalSearch(params: Record<string, string | boolean | 
   if (!r.ok) throw new Error(`Search failed (${r.status})`);
   return r.json();
 }
+
+export interface ScenarioPreviewData {
+  title: string; scenario_id?: string; summary?: string; runnable: boolean; blockers: string[]; maturity?: string | null;
+  required_sourcetypes: string[]; vendors: string[]; industries: string[];
+  volume: { events: number | null; metric_events: number | null; phases: Array<{ phase: string; events: number }>; basis: string };
+  execution: { path: string; destination: string | null; configured: boolean; indexes: string[]; metric_index: string | null };
+  dashboard: { view: string; maturity?: string; note: string } | null;
+  timing: { planned_events: number | null; note: string };
+}
+export async function scenarioPreview(entryId: string): Promise<ScenarioPreviewData> {
+  const r = await fetch(apiUrl(`/api/explorer/entries/${encodeURIComponent(entryId)}/preview`));
+  if (!r.ok) throw new Error(`Preview failed (${r.status})`);
+  return r.json();
+}

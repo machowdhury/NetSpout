@@ -71,6 +71,10 @@ def _current_eps(samples, horizon=5.0):
     return round((c_end - start[1]) / max(t_end - start[0], 1e-6), 2) if t_end > start[0] else 0.0
 
 
+class StreamAbort(RuntimeError):
+    """A stream ended deliberately with a user-facing reason."""
+
+
 class DeliveryRun:
     """A monitored, finite batch delivered one event at a time with exact accounting; supports pause, resume and stop."""
 
@@ -141,7 +145,7 @@ class DeliveryRun:
         gap = 1.0 / self.eps if self.eps else 0.0
         nxt = time.monotonic()
         try:
-            for it in self.items:
+            for it in self._source():
                 while not self._run.is_set() and not self._cancel.is_set():
                     self._run.wait(0.05)
                 if self._cancel.is_set():
@@ -156,19 +160,26 @@ class DeliveryRun:
                 except Exception as exc:   # a sender fault is a rejected event with a visible reason, never a silent loss
                     state, err = "rejected", "%s" % type(exc).__name__
                 self._account(it.sourcetype, it.phase, state, err, it.datapoints)
+                self._after(state)
                 if self._persist and self.counts["attempts"] % 25 == 0:
                     self._persist()
         except Exception as exc:
-            self.error = "worker: %s" % type(exc).__name__
+            self.error = str(exc) if isinstance(exc, StreamAbort) else "worker: %s" % type(exc).__name__
             self.state = "FAILED"
         finally:
             with self._lock:
                 self.samples.append((time.time(), self.counts["attempts"]))
                 if self.state != "FAILED":
-                    self.state = "STOPPED" if self._cancel.is_set() and self.counts["attempts"] < self.counts["generated"] else "COMPLETED"
+                    self.state = "STOPPED" if self._cancel.is_set() and (self.counts["attempts"] < self.counts["generated"] or getattr(self, "unbounded", False)) else "COMPLETED"
                 self.ended = _now()
             if self._persist:
                 self._persist()
+
+    def _source(self):
+        return iter(self.items)
+
+    def _after(self, state):
+        pass
 
     def _account(self, sourcetype, phase, state, err, datapoints=0):
         with self._lock:
@@ -213,6 +224,58 @@ class DeliveryRun:
 
     def persisted(self) -> dict:
         return self.snapshot()
+
+
+class ContinuousRun(DeliveryRun):
+    """Streams one source until stopped (or until max_events / duration_s). `produce(n)` returns up to n fresh Items, so every event is generated
+    just before it is sent and carries a current timestamp. Failures back off, and a destination that rejects FAIL_LIMIT events in a row ends the run
+    as FAILED instead of hammering it."""
+    CHUNK, FAIL_LIMIT, BACKOFF_MAX = 25, 50, 5.0
+
+    def __init__(self, *a, produce, max_events: Optional[int] = None, duration_s: Optional[float] = None, **kw):
+        super().__init__(*a, **kw)
+        self.produce, self.max_events, self.duration_s = produce, max_events, duration_s
+        self.unbounded = not max_events and not duration_s
+        self.counts["generated"] = 0
+        self._fails = 0
+
+    def _source(self):
+        while not self._cancel.is_set():
+            if self.duration_s and self.counts["attempts"] and self._elapsed() >= self.duration_s:
+                return
+            n = self.CHUNK if not self.max_events else min(self.CHUNK, self.max_events - self.counts["generated"])
+            if n <= 0:
+                return
+            for it in self.produce(n):
+                with self._lock:
+                    self.counts["generated"] += 1
+                    self.by_st.setdefault(it.sourcetype, Counter())["total"] += 1
+                yield it
+
+    def _elapsed(self):
+        return time.monotonic() - self._t0 - self._paused_total - (time.monotonic() - self._paused_at if self._paused_at else 0)
+
+    def _after(self, state):
+        self._fails = 0 if state == "accepted" else self._fails + 1
+        if self._fails >= self.FAIL_LIMIT:
+            raise StreamAbort("destination rejected %d events in a row" % self._fails)
+        if self._fails:
+            self._cancel.wait(min(self.BACKOFF_MAX, 0.2 * 2 ** min(self._fails, 5)))
+
+    def snapshot(self) -> dict:
+        snap = super().snapshot()
+        done = snap["counters"]["attempts"]
+        snap["mode"] = "continuous" if self.unbounded else "finite"
+        if self.max_events:
+            snap["progress"] = {"total": self.max_events, "done": done, "pct": round(100.0 * done / self.max_events, 1)}
+        elif self.duration_s:
+            snap["progress"] = {"total": None, "done": done, "pct": min(100.0, round(100.0 * snap["elapsed_s"] / self.duration_s, 1))}
+        else:
+            snap["progress"] = {"total": None, "done": done, "pct": None}
+        snap["eta_s"] = (round(self.max_events - done) / snap["rate"]["current_eps"]) if self.max_events and snap["rate"]["current_eps"] else (None if self.unbounded else snap["eta_s"])
+        snap["source_mode"] = getattr(self, "source_mode", None)
+        snap["limits"] = {"max_events": self.max_events, "duration_s": self.duration_s}
+        return snap
 
 
 _observer = contextvars.ContextVar("pf_delivery_observer", default=None)

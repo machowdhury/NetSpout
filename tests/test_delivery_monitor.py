@@ -235,3 +235,80 @@ def test_scenario_runner_run_is_monitored_through_the_real_dispatcher(env):
     assert c['generated'] == c['attempts'] == c['accepted'] > 0 and c['rejected'] == c['unknown'] == 0 and c['indexed'] is None
     manifest = main.scenario_runner.get_run(r.json()['run_id'])
     assert manifest is not None and manifest.dispatch_attempted == c['attempts']          # the monitor and the runner's own manifest agree
+
+
+def _producer(outcome='accepted'):
+    def produce(n):
+        return [Item('x:y', None, lambda: (outcome, None if outcome == 'accepted' else 'HEC HTTP 503')) for _ in range(n)]
+    return produce
+
+
+def test_continuous_run_streams_until_stopped_and_pauses():
+    from netspout_core.delivery_monitor import ContinuousRun
+    run = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], eps_limit=100, produce=_producer()).start()
+    time.sleep(0.6)
+    s1 = run.snapshot()
+    assert s1['mode'] == 'continuous' and s1['progress']['pct'] is None and s1['counters']['attempts'] > 20
+    run.pause(); time.sleep(0.2); a = run.snapshot()['counters']['attempts']; time.sleep(0.4)
+    assert run.snapshot()['counters']['attempts'] == a and run.snapshot()['state'] == 'PAUSED'
+    run.resume(); time.sleep(0.4)
+    assert run.snapshot()['counters']['attempts'] > a
+    run.stop()
+    s = run.snapshot()
+    assert s['state'] == 'STOPPED' and not run._thread.is_alive() and s['counters']['accepted'] == s['counters']['attempts']
+    assert s['counters']['pending'] == s['counters']['generated'] - s['counters']['attempts']
+
+
+def test_continuous_run_limits_and_failing_destination():
+    from netspout_core.delivery_monitor import ContinuousRun
+    r = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], eps_limit=500, produce=_producer(), max_events=40).start()
+    assert r.wait(10) == 'COMPLETED' and r.snapshot()['counters']['attempts'] == 40
+    t = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], eps_limit=500, produce=_producer(), duration_s=1).start()
+    assert t.wait(10) == 'COMPLETED' and t.snapshot()['counters']['attempts'] > 0
+    ContinuousRun.BACKOFF_MAX = 0.01
+    f = ContinuousRun('sourcetype', 'x:y', 'x:y', 'd', 'i', [], produce=_producer('rejected')).start()
+    assert f.wait(20) == 'FAILED' and 'in a row' in f.snapshot()['error']
+
+
+def _snap(state='COMPLETED', accepted=10, rejected=0, unknown=0, st=None, ph=None, ended='2026-10-31T12:00:00+00:00', attempts=None):
+    st = st or {'a:b': {'accepted': accepted}}
+    return {'run_id': 'r1', 'state': state, 'ended_at': ended, 'counters': {'attempts': attempts if attempts is not None else accepted + rejected + unknown, 'accepted': accepted, 'rejected': rejected, 'unknown': unknown},
+            'by_sourcetype': st, 'by_phase': [{'phase': p, 'accepted': 5} for p in (ph or [])]}
+
+
+NOW = __import__('datetime').datetime.fromisoformat('2026-10-31T12:00:30+00:00').timestamp()
+VERIFIED = {'status': 'VERIFIED', 'expected_log_events': 10}
+
+
+def test_readiness_states_are_evidence_based():
+    rs = main._readiness_state
+    assert rs(_snap('RUNNING', attempts=0), None, None, NOW)['state'] == 'GENERATING'
+    assert rs(_snap('RUNNING', attempts=3), None, None, NOW)['state'] == 'DELIVERING'
+    assert rs(_snap('FAILED'), None, None, NOW)['state'] == 'FAILED' and rs(_snap(accepted=0), None, None, NOW)['state'] == 'FAILED'
+    assert rs(_snap(), None, None, NOW)['state'] == 'UNKNOWN'
+    full = {'sourcetypes': {'a:b': 10}, 'phases': {}, 'total': 10}
+    assert rs(_snap(), full, VERIFIED, NOW)['state'] == 'READY'
+    assert rs(_snap(), {'sourcetypes': {}, 'phases': {}, 'total': 0}, {'status': 'INCOMPLETE'}, NOW)['state'] == 'INDEXING'
+    assert rs(_snap(), {'sourcetypes': {'a:b': 4}, 'phases': {}, 'total': 4}, {'status': 'INCOMPLETE'}, NOW)['state'] == 'PARTIALLY_READY'
+    late = NOW + 600
+    assert rs(_snap(), {'sourcetypes': {}, 'phases': {}, 'total': 0}, {'status': 'INCOMPLETE'}, late)['state'] == 'DEGRADED'
+    assert rs(_snap(rejected=2, accepted=10), full, VERIFIED, NOW)['state'] == 'DEGRADED'
+
+
+def test_readiness_requires_the_runs_own_sourcetypes_and_phases():
+    rs = main._readiness_state
+    two = _snap(st={'a:b': {'accepted': 6}, 'c:d': {'accepted': 4}}, ph=['P1', 'P2'])
+    only_one = {'sourcetypes': {'a:b': 6, 'unrelated:x': 0}, 'phases': {'P1': 6}, 'total': 6}
+    r = rs(two, only_one, {'status': 'INCOMPLETE'}, NOW)
+    assert r['state'] == 'PARTIALLY_READY' and 'sourcetype c:d' in r['missing'] and 'phase P2' in r['missing']
+    # indexed total satisfied but a required phase never appeared: not READY
+    no_phase = {'sourcetypes': {'a:b': 6, 'c:d': 4}, 'phases': {'P1': 6}, 'total': 10}
+    assert rs(two, no_phase, VERIFIED, NOW)['state'] != 'READY'
+
+
+def test_preview_states_phases_volume_and_blockers():
+    p = main.explorer_preview('op:incident:telco_09_core_user_plane')
+    assert p['runnable'] and p['volume']['events'] == 30 and p['volume']['metric_events'] == 10 and 'BASELINE' in [x['phase'] for x in p['volume']['phases']]
+    assert p['dashboard']['view'] == 'pf_telco_09_core_user_plane' and 'Timing varies' in p['timing']['note']
+    b = main.explorer_preview('op:runner:normal_traffic')
+    assert not b['runnable'] and b['blockers'] and b['volume']['events'] is None and b['dashboard'] is None

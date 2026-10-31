@@ -94,6 +94,77 @@
       }
     },
     "viz_2": {
+      "type": "splunk.bubble",
+      "options": {
+        "backgroundColor": "#22262a",
+        "bubbleSizeMax": 24,
+        "bubbleSizeMin": 6,
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "xAxisTitleText": "Seconds after the run's first event",
+        "yAxisTitleText": "Events from the device"
+      },
+      "title": "Device footprint: when each device first reported, how much it emitted",
+      "description": "One bubble per device: left to right is when it first appeared, height is how many events it emitted, size is how many phases it appeared in. A device that only shows up late is where the incident reached.",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.pie",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "collapseThreshold": 0.03,
+        "labelDisplay": "values"
+      },
+      "title": "Events by device role",
+      "description": "Share of the run's events per device role (for example core, edge, access).",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.area",
+      "options": {
+        "stackMode": "stacked",
+        "seriesColors": [
+          "#c9786f",
+          "#c9a24a",
+          "#6f9db5"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "yAxisTitleText": "Events",
+        "xAxisTitleText": "Seconds since the first event of the run"
+      },
+      "title": "Severity mix over the run",
+      "description": "Syslog severity carried by the events: a rise in the red band is the incident, a return to blue is recovery.",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#d4764f",
@@ -105,11 +176,11 @@
       },
       "title": "Events in run",
       "dataSources": {
-        "primary": "ds_1"
+        "primary": "ds_4"
       },
       "showProgressBar": true
     },
-    "viz_3": {
+    "viz_6": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#6f9db5",
@@ -121,11 +192,11 @@
       },
       "title": "Telemetry sources (sourcetypes)",
       "dataSources": {
-        "primary": "ds_2"
+        "primary": "ds_5"
       },
       "showProgressBar": true
     },
-    "viz_4": {
+    "viz_7": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#a79fc4",
@@ -137,11 +208,11 @@
       },
       "title": "Devices reporting",
       "dataSources": {
-        "primary": "ds_3"
+        "primary": "ds_6"
       },
       "showProgressBar": true
     },
-    "viz_5": {
+    "viz_8": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#c9a24a",
@@ -153,11 +224,11 @@
       },
       "title": "Incident duration",
       "dataSources": {
-        "primary": "ds_4"
+        "primary": "ds_7"
       },
       "showProgressBar": true
     },
-    "viz_6": {
+    "viz_9": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#6fa387",
@@ -169,11 +240,11 @@
       },
       "title": "Sites involved",
       "dataSources": {
-        "primary": "ds_5"
+        "primary": "ds_8"
       },
       "showProgressBar": true
     },
-    "viz_7": {
+    "viz_10": {
       "type": "splunk.singlevalue",
       "options": {
         "majorColor": "#6fa387",
@@ -185,11 +256,11 @@
       },
       "title": "Recovery / validation evidence",
       "dataSources": {
-        "primary": "ds_6"
+        "primary": "ds_9"
       },
       "showProgressBar": true
     },
-    "viz_8": {
+    "viz_11": {
       "type": "splunk.column",
       "options": {
         "stackMode": "stacked",
@@ -211,11 +282,11 @@
       "title": "Incident timeline · events by phase",
       "description": "Event volume over the run's own clock, split by incident phase.",
       "dataSources": {
-        "primary": "ds_7"
+        "primary": "ds_10"
       },
       "showProgressBar": true
     },
-    "viz_9": {
+    "viz_12": {
       "type": "splunk.bar",
       "options": {
         "seriesColors": [
@@ -228,7 +299,7 @@
       "title": "Events by phase (click to filter the page)",
       "description": "Click a bar to set the Incident phase filter; choose All phases to reset.",
       "dataSources": {
-        "primary": "ds_8"
+        "primary": "ds_11"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -245,7 +316,7 @@
         }
       ]
     },
-    "viz_10": {
+    "viz_13": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -253,7 +324,7 @@
       },
       "title": "Affected assets and services (click a row to search its events)",
       "dataSources": {
-        "primary": "ds_9"
+        "primary": "ds_12"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -269,7 +340,7 @@
         }
       ]
     },
-    "viz_11": {
+    "viz_14": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -277,7 +348,7 @@
       },
       "title": "Incident sequence: root cause to recovery",
       "dataSources": {
-        "primary": "ds_10"
+        "primary": "ds_13"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -293,7 +364,7 @@
         }
       ]
     },
-    "viz_12": {
+    "viz_15": {
       "type": "splunk.line",
       "options": {
         "seriesColors": [
@@ -314,11 +385,11 @@
       "title": "Telemetry volume trend by source",
       "description": "Event throughput per source over the run: a drop after the incident phase is the health signal available from this telemetry.",
       "dataSources": {
-        "primary": "ds_11"
+        "primary": "ds_14"
       },
       "showProgressBar": true
     },
-    "viz_13": {
+    "viz_16": {
       "type": "splunk.column",
       "options": {
         "stackMode": "stacked",
@@ -335,11 +406,11 @@
       "title": "Before / during / after by source",
       "description": "Events per source before the incident, during it and during recovery/validation (phase names from the scenario).",
       "dataSources": {
-        "primary": "ds_12"
+        "primary": "ds_15"
       },
       "showProgressBar": true
     },
-    "viz_14": {
+    "viz_17": {
       "type": "splunk.line",
       "options": {
         "seriesColors": [
@@ -359,11 +430,11 @@
       "title": "Health and performance metrics over the run (mstats)",
       "description": "Gauge metrics recorded by the incident: loss, latency, error rate, availability.",
       "dataSources": {
-        "primary": "ds_13"
+        "primary": "ds_16"
       },
       "showProgressBar": true
     },
-    "viz_15": {
+    "viz_18": {
       "type": "splunk.column",
       "options": {
         "seriesColors": [
@@ -378,11 +449,11 @@
       "title": "Metrics before / during / after (average)",
       "description": "Average of each gauge in the baseline, the incident and recovery phases: the before/after comparison.",
       "dataSources": {
-        "primary": "ds_14"
+        "primary": "ds_17"
       },
       "showProgressBar": true
     },
-    "viz_16": {
+    "viz_19": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -391,7 +462,7 @@
       "title": "Affected sites, devices and roles (click a row to search it)",
       "description": "most_severe_level is the syslog severity carried by the events (0 = emergency, 7 = debug); lower is worse.",
       "dataSources": {
-        "primary": "ds_15"
+        "primary": "ds_18"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -407,7 +478,7 @@
         }
       ]
     },
-    "viz_17": {
+    "viz_20": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -415,7 +486,7 @@
       },
       "title": "Impact events (everything after the baseline; click a row for the raw event search)",
       "dataSources": {
-        "primary": "ds_16"
+        "primary": "ds_19"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -431,7 +502,7 @@
         }
       ]
     },
-    "viz_18": {
+    "viz_21": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Provenance and contract\n**Scenario:** `telco_06_broadband_cpe`  \n**Execution:** incident pack  \n**Telemetry:** MODELED NetSpout-defined telemetry (not vendor-native formats, not device firmware emulation); seeded and reproducible.  \n**Sourcetypes:** `netspout:telecom:log`, `netspout:telecom:metric`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
@@ -439,7 +510,7 @@
         "backgroundColor": "#22262a"
       }
     },
-    "viz_19": {
+    "viz_22": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Detection and verification status\n**Detection:** not applicable to this operational scenario; none is claimed.\n\nVerification search:\n\n    index=YOUR_INDEX netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=RUN_ID\n    | stats count by netspout_phase, sourcetype\n\nMaturity is recorded in the PulseForge evidence store, not on this page.",
@@ -447,7 +518,7 @@
         "backgroundColor": "#22262a"
       }
     },
-    "viz_20": {
+    "viz_23": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -455,7 +526,7 @@
       },
       "title": "Raw event evidence for the run (click a row for the search)",
       "dataSources": {
-        "primary": "ds_17"
+        "primary": "ds_20"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -475,117 +546,138 @@
   "dataSources": {
     "ds_1": {
       "type": "ds.search",
+      "name": "Device footprint: when each device first reported, how much it emitted",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as first count as events dc(pf_phase) as phases by netspout_device_id | eventstats min(first) as t0 | eval first_seen_s=round(first-t0) | table netspout_device_id first_seen_s events phases"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Events by device role",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count by device_role | sort - count"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Severity mix over the run",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | eval level=case(tonumber(severity)<=3,\"critical to error\",tonumber(severity)<=5,\"warning to notice\",true(),\"informational\") | stats count by pf_sec, level | xyseries pf_sec level count | sort pf_sec | fillnull value=0"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
       "name": "Events in run",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as value"
       }
     },
-    "ds_2": {
+    "ds_5": {
       "type": "ds.search",
       "name": "Telemetry sources (sourcetypes)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(pf_st) as value"
       }
     },
-    "ds_3": {
+    "ds_6": {
       "type": "ds.search",
       "name": "Devices reporting",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(netspout_device_id) as value"
       }
     },
-    "ds_4": {
+    "ds_7": {
       "type": "ds.search",
       "name": "Incident duration",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as a max(_time) as z | eval value=tostring(round(z-a),\"duration\") | table value"
       }
     },
-    "ds_5": {
+    "ds_8": {
       "type": "ds.search",
       "name": "Sites involved",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats dc(netspout_site_id) as value"
       }
     },
-    "ds_6": {
+    "ds_9": {
       "type": "ds.search",
       "name": "Recovery / validation evidence",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | stats count(eval(pf_class=\"3 Recovery / validation\")) as value"
       }
     },
-    "ds_7": {
+    "ds_10": {
       "type": "ds.search",
       "name": "Incident timeline · events by phase",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | stats count by pf_sec, pf_phase | xyseries pf_sec pf_phase count | sort pf_sec | fillnull value=0"
       }
     },
-    "ds_8": {
+    "ds_11": {
       "type": "ds.search",
       "name": "Events by phase (click to filter the page)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count by pf_phase | sort - count"
       }
     },
-    "ds_9": {
+    "ds_12": {
       "type": "ds.search",
       "name": "Affected assets and services (click a row to search its events)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as events, dc(pf_phase) as phases, values(pf_st) as services, min(_time) as first by pf_host | eval first=strftime(first,\"%H:%M:%S\") | sort - events | head 25 | rename pf_host as host"
       }
     },
-    "ds_10": {
+    "ds_13": {
       "type": "ds.search",
       "name": "Incident sequence: root cause to recovery",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats min(_time) as t0 max(_time) as t1 count as events by pf_phase | sort t0 | eval start=strftime(t0,\"%H:%M:%S\"), seconds=round(t1-t0) | fields start pf_phase events seconds"
       }
     },
-    "ds_11": {
+    "ds_14": {
       "type": "ds.search",
       "name": "Telemetry volume trend by source",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eventstats min(_time) as pf_t0 max(_time) as pf_t1 | eval pf_w=max(1, ceil((pf_t1-pf_t0)/60)), pf_sec=floor((_time-pf_t0)/pf_w)*pf_w | stats count by pf_sec, pf_st | xyseries pf_sec pf_st count | sort pf_sec | fillnull value=0"
       }
     },
-    "ds_12": {
+    "ds_15": {
       "type": "ds.search",
       "name": "Before / during / after by source",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | chart count over pf_st by pf_class | addtotals fieldname=_total | sort - _total | head 8 | fields - _total | rename pf_st as sourcetype"
       }
     },
-    "ds_13": {
+    "ds_16": {
       "type": "ds.search",
       "name": "Health and performance metrics over the run (mstats)",
       "options": {
         "query": "| mstats avg(_value) as value WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"telco_06_broadband_cpe\" AND netspout_run_id=\"$run_tok$\" BY metric_name span=1s | xyseries _time metric_name value | fillnull value=0"
       }
     },
-    "ds_14": {
+    "ds_17": {
       "type": "ds.search",
       "name": "Metrics before / during / after (average)",
       "options": {
         "query": "| mstats avg(_value) as v WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"telco_06_broadband_cpe\" AND netspout_run_id=\"$run_tok$\" BY metric_name, netspout_phase | eval pf_phase=netspout_phase | eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | stats avg(v) as v by metric_name, pf_class | xyseries metric_name pf_class v"
       }
     },
-    "ds_15": {
+    "ds_18": {
       "type": "ds.search",
       "name": "Affected sites, devices and roles (click a row to search it)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | stats count as events, min(severity) as most_severe_level, dc(netspout_phase) as phases by netspout_site_id, netspout_device_id, device_role | sort - events | head 25"
       }
     },
-    "ds_16": {
+    "ds_19": {
       "type": "ds.search",
       "name": "Impact events (everything after the baseline; click a row for the raw event search)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"telco_06_broadband_cpe\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | search pf_class!=\"1 Before incident\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
       }
     },
-    "ds_17": {
+    "ds_20": {
       "type": "ds.search",
       "name": "Raw event evidence for the run (click a row for the search)",
       "options": {
@@ -636,40 +728,10 @@
             }
           },
           {
-            "item": "viz_2",
-            "type": "block",
-            "position": {
-              "x": 20,
-              "y": 130,
-              "w": 230,
-              "h": 120
-            }
-          },
-          {
-            "item": "viz_3",
-            "type": "block",
-            "position": {
-              "x": 260,
-              "y": 130,
-              "w": 230,
-              "h": 120
-            }
-          },
-          {
-            "item": "viz_4",
-            "type": "block",
-            "position": {
-              "x": 500,
-              "y": 130,
-              "w": 230,
-              "h": 120
-            }
-          },
-          {
             "item": "viz_5",
             "type": "block",
             "position": {
-              "x": 740,
+              "x": 20,
               "y": 130,
               "w": 230,
               "h": 120
@@ -679,7 +741,7 @@
             "item": "viz_6",
             "type": "block",
             "position": {
-              "x": 980,
+              "x": 260,
               "y": 130,
               "w": 230,
               "h": 120
@@ -689,7 +751,7 @@
             "item": "viz_7",
             "type": "block",
             "position": {
-              "x": 1220,
+              "x": 500,
               "y": 130,
               "w": 230,
               "h": 120
@@ -699,6 +761,36 @@
             "item": "viz_8",
             "type": "block",
             "position": {
+              "x": 740,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 1220,
+              "y": 130,
+              "w": 230,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
               "x": 20,
               "y": 270,
               "w": 930,
@@ -706,7 +798,7 @@
             }
           },
           {
-            "item": "viz_9",
+            "item": "viz_12",
             "type": "block",
             "position": {
               "x": 970,
@@ -716,7 +808,7 @@
             }
           },
           {
-            "item": "viz_10",
+            "item": "viz_13",
             "type": "block",
             "position": {
               "x": 20,
@@ -726,7 +818,7 @@
             }
           },
           {
-            "item": "viz_11",
+            "item": "viz_14",
             "type": "block",
             "position": {
               "x": 750,
@@ -757,47 +849,47 @@
             }
           },
           {
-            "item": "viz_12",
-            "type": "block",
-            "position": {
-              "x": 20,
-              "y": 130,
-              "w": 710,
-              "h": 300
-            }
-          },
-          {
-            "item": "viz_13",
-            "type": "block",
-            "position": {
-              "x": 750,
-              "y": 130,
-              "w": 690,
-              "h": 300
-            }
-          },
-          {
-            "item": "viz_14",
-            "type": "block",
-            "position": {
-              "x": 20,
-              "y": 450,
-              "w": 710,
-              "h": 300
-            }
-          },
-          {
             "item": "viz_15",
             "type": "block",
             "position": {
-              "x": 750,
-              "y": 450,
-              "w": 690,
+              "x": 20,
+              "y": 130,
+              "w": 710,
               "h": 300
             }
           },
           {
             "item": "viz_16",
+            "type": "block",
+            "position": {
+              "x": 750,
+              "y": 130,
+              "w": 690,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_17",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 450,
+              "w": 710,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_18",
+            "type": "block",
+            "position": {
+              "x": 750,
+              "y": 450,
+              "w": 690,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_19",
             "type": "block",
             "position": {
               "x": 20,
@@ -807,7 +899,7 @@
             }
           },
           {
-            "item": "viz_17",
+            "item": "viz_20",
             "type": "block",
             "position": {
               "x": 20,
@@ -838,7 +930,7 @@
             }
           },
           {
-            "item": "viz_18",
+            "item": "viz_21",
             "type": "block",
             "position": {
               "x": 20,
@@ -848,7 +940,7 @@
             }
           },
           {
-            "item": "viz_19",
+            "item": "viz_22",
             "type": "block",
             "position": {
               "x": 740,
@@ -858,13 +950,64 @@
             }
           },
           {
-            "item": "viz_20",
+            "item": "viz_23",
             "type": "block",
             "position": {
               "x": 20,
               "y": 450,
               "w": 1420,
               "h": 420
+            }
+          }
+        ]
+      },
+      "layout_impact": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 850,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 112
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 130,
+              "w": 930,
+              "h": 380
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 970,
+              "y": 130,
+              "w": 470,
+              "h": 380
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 530,
+              "w": 1420,
+              "h": 300
             }
           }
         ]
@@ -883,6 +1026,10 @@
         {
           "label": "Evidence",
           "layoutId": "layout_evidence"
+        },
+        {
+          "label": "Impact map",
+          "layoutId": "layout_impact"
         }
       ]
     }

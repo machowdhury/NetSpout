@@ -219,7 +219,9 @@ class Dash:
         ds["ds_phase_list"] = {"type": "ds.search", "name": "Phase list", "options": {"query": self.base + " | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | stats count by pf_phase | sort pf_phase | eval label=pf_phase | table label pf_phase"}}
         defaults = {"dataSources": {"ds.search": {"options": {"queryParameters": {"earliest": "$global_time.earliest$", "latest": "$global_time.latest$"}}}}}
         layouts, items = {}, []
-        for tab, label in self.TABS[self.kind]:
+        labels = dict(self.TABS[self.kind], impact="Impact map")
+        for tab in self.tabs:
+            label = labels[tab]
             lid = "layout_" + tab
             height = max(it["position"]["y"] + it["position"]["h"] for it in self.tabs[tab]) + 20
             layouts[lid] = {"type": "absolute", "options": {"width": 1460, "height": height, "display": "auto-scale", "backgroundColor": C["bg"]}, "structure": self.tabs[tab]}
@@ -268,11 +270,33 @@ def provenance_md(s):
              "**Correlation:** " + s["correlation_note"] if s.get("correlation_note") else "**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge."))
 
 
+def impact_tab(d):
+    """Incident packs carry site, device, role and severity on every event, which the generic tabs only tabulate. This tab shows the shape of the impact instead:
+    where it concentrated (device x phase punchcard), which roles took it (donut) and how severe it got (stacked area). Every field is on the indexed events."""
+    b = d.base
+    d.banner()
+    d.add("impact", "splunk.bubble", "Device footprint: when each device first reported, how much it emitted", 20, 130, 930, 380,
+          query=b + PHASE + " | stats min(_time) as first count as events dc(pf_phase) as phases by netspout_device_id | eventstats min(first) as t0 | eval first_seen_s=round(first-t0) | table netspout_device_id first_seen_s events phases",
+          options={"backgroundColor": C["card"], "bubbleSizeMax": 24, "bubbleSizeMin": 6, "seriesColors": SERIES, "xAxisTitleText": "Seconds after the run's first event", "yAxisTitleText": "Events from the device"},
+          description="One bubble per device: left to right is when it first appeared, height is how many events it emitted, size is how many phases it appeared in. A device that only shows up late is where the incident reached.")
+    d.add("impact", "splunk.pie", "Events by device role", 970, 130, 470, 380,
+          query=b + PHASE + " | stats count by device_role | sort - count", options={"backgroundColor": C["card"], "seriesColors": SERIES, "collapseThreshold": 0.03, "labelDisplay": "values"},
+          description="Share of the run's events per device role (for example core, edge, access).")
+    d.add("impact", "splunk.area", "Severity mix over the run", 20, 530, 1420, 300,
+          query=b + PHASE + SECS + ' | eval level=case(tonumber(severity)<=3,"critical to error",tonumber(severity)<=5,"warning to notice",true(),"informational") | stats count by pf_sec, level | xyseries pf_sec level count | sort pf_sec | fillnull value=0',
+          options={"stackMode": "stacked", "seriesColors": [C["red"], C["amber"], C["blue"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "yAxisTitleText": "Events", "xAxisTitleText": "Seconds since the first event of the run"},
+          description="Syslog severity carried by the events: a rise in the red band is the incident, a return to blue is recovery.")
+
+
 def build_operational(s, probe):
     d = Dash(s)
     b = d.base
-    d.banner()
     incident = s["family"] == "incident_pack"
+    if incident:
+        d.tabs["impact"] = []
+        impact_tab(d)
+    else:
+        d.banner()
     K = [("Events in run", b + PHASE + " | stats count as value", C["accent"]), ("Telemetry sources (sourcetypes)", b + PHASE + " | stats dc(pf_st) as value", C["blue"]),
          (("Devices reporting" if incident else "Reporting hosts"), b + PHASE + (" | stats dc(netspout_device_id) as value" if incident else " | stats dc(pf_host) as value"), C["purple"]),
          ("Incident duration", b + PHASE + " | stats min(_time) as a max(_time) as z | eval value=tostring(round(z-a),\"duration\") | table value", C["amber"]),

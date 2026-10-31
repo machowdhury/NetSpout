@@ -2859,3 +2859,11 @@
 .pf-mon-actions { display:flex; gap:8px; margin-top:10px; align-items:center }
 .pf-mon-actions button { background:#2c2f32; color:inherit; border:0; border-radius:6px; padding:5px 12px } .pf-mon-actions button:disabled { opacity:.4 }
 .pf-mon-actions a { color:#c7714f }
+
+.pf-mon-ready { margin: 10px 0; padding: 8px 12px; border-left: 3px solid #8a8f98; background: rgba(255,255,255,.04); font-size: 13px; }
+.pf-mon-ready b { margin-right: 8px; letter-spacing: .04em; }
+.pf-mon-ready--READY { border-color: #4caf7a; }
+.pf-mon-ready--PARTIALLY_READY, .pf-mon-ready--INDEXING, .pf-mon-ready--DELIVERING { border-color: #d97757; }
+.pf-mon-ready--DEGRADED, .pf-mon-ready--FAILED, .pf-mon-ready--UNKNOWN { border-color: #e5534b; }
+.pf-mon-toast { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 6px; }
+.pf-mon-toast strong { color: #d97757; flex-basis: 100%; }

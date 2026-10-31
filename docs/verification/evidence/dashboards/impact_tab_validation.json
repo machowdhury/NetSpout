@@ -1,0 +1,189 @@
+{
+ "checked": {
+  "network_01_campus_link": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_02_vlan_trunk": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_03_stp_storm": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_04_wan_brownout": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_05_dual_isp": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_06_bgp_flap": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_07_ospf_adjacency": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_08_firewall_policy": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_09_ddos_flood": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_10_dns_failure": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_11_dhcp_exhaustion": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_12_dc_congestion": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_13_mtu_pmtud": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_14_wireless_outage": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_15_device_resources": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 2,
+   "Severity mix over the run": 4
+  },
+  "network_16_retail_uplink": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_17_hospital_mac_auth": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_18_payment_deny": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_19_ips_service": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_20_backend_link": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_21_partial_pool": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_22_authentication_storm": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_23_containment_request": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_24_policy_disagreement": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_25_mpls_recovery": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_26_maintenance": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "network_27_stale_sessions": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_01_ran_cell": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_02_registration_auth": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_03_slice_sla": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_04_ims_volte": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_05_mobile_transport": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_06_broadband_cpe": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_07_sdwan_service": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_08_roaming_mobility": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_09_core_user_plane": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  },
+  "telco_10_cross_layer": {
+   "Where the impact concentrated: device by phase": 30,
+   "Events by device role": 3,
+   "Severity mix over the run": 4
+  }
+ }
+}

@@ -16,7 +16,7 @@ await page.fill('input[name="username"]', 'admin');
 await page.fill('input[name="password"]', env.LAB_SPLUNK_PASSWORD);
 await page.keyboard.press('Enter');
 await page.waitForURL((u) => !u.pathname.includes('/account/login'), { timeout: 60000 });
-const open = async () => { await page.goto(`${base}/en-US/app/netspout/use_case_explorer`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(10000); return page.frames().find((f) => f !== page.mainFrame()); };
+const open = async () => { await page.goto(`${base}/en-US/app/netspout/use_case_explorer`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(14000); return page.frames().find((f) => f !== page.mainFrame()); };
 const r = {};
 let app = await open();
 const find = app.locator('input[aria-label="Universal search"]');
@@ -37,7 +37,55 @@ await app.locator('[data-testid="universal-search"] li button').first().click();
 r.scenario_opens_workflow = await app.locator('.ux-detail h2').count();
 app = await open(); // reload: state preserved
 r.state_preserved = await app.locator('input[aria-label="Universal search"]').inputValue();
-r.ok = /dashboard/.test(r.bgp) && r.kinds_in_bgp.length === 3 && !!r.dashboard_href && /sourcetype/.test(r.sourcetype) && r.scenario_opens_workflow > 0 && r.state_preserved === 'credential';
+// single-sourcetype continuous streaming from a search result, with refresh recovery
+await app.locator('input[aria-label="Universal search"]').fill('cisco:dc:aci:class'); await app.locator('select[aria-label="Result type"]').selectOption('sourcetype'); await app.waitForTimeout(1500);
+await app.locator('[data-testid="stream-sourcetype"]').first().click();
+await app.locator('select[aria-label="Index"]').selectOption('dev_test_replay');
+await app.locator('input[aria-label="Events per second"]').fill('8');
+await app.locator('[data-testid="start-streaming"]').click();
+await app.waitForSelector('.pf-mon', { timeout: 30000 }); await app.waitForTimeout(6000);
+const tile = async (a, l) => Number((await a.locator(`.pf-mon div:has(> span:text-is("${l}")) > b`).first().innerText()).replace(/,/g, ''));
+r.stream = { mode_text: await app.locator('.pf-mon').innerText().then((t) => /continuous/i.test(t)), a1: await tile(app, 'HEC accepted') };
+await page.screenshot({ path: path.join(evDir, 'screens/stream_running.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+app = await open();
+await app.locator('input[aria-label="Universal search"]').waitFor();
+await app.locator('[data-testid="stream-sourcetype"]').first().click();
+await app.waitForSelector('.pf-mon', { timeout: 20000 }); await app.waitForTimeout(2500);
+r.stream.after_refresh = await tile(app, 'HEC accepted'); r.stream.state_after_refresh = await app.locator('.pf-mon-state').innerText();
+r.stream.posts = [];
+app.page().on('response', (resp) => { if (resp.request().method() === 'POST') r.stream.posts.push(resp.url().split('/api/')[1] + ' ' + resp.status()); });
+app.page().on('requestfailed', (rq) => r.stream.posts.push('FAILED ' + rq.url().split('/api/')[1]));
+await app.locator('.pf-mon-actions button', { hasText: /^Pause$/ }).click();
+for (let i = 0; i < 20 && (await app.locator('.pf-mon-state').innerText()) !== 'PAUSED'; i++) await app.waitForTimeout(500);
+r.stream.paused_state = await app.locator('.pf-mon-state').innerText(); r.stream.warn = await app.locator('.pf-mon-warn').allInnerTexts(); const pa = await tile(app, 'HEC accepted'); await app.waitForTimeout(3000); r.stream.held = (await tile(app, 'HEC accepted')) === pa;
+r.stream.err_text = await app.locator('.pf-mon').innerText().then((t) => t.slice(0, 400)); await app.locator('.pf-mon-actions button', { hasText: /^Resume$/ }).click({ timeout: 8000 }).catch((e) => { r.stream.resume_click = String(e).slice(0, 80); }); for (let i = 0; i < 20 && !((await tile(app, 'HEC accepted')) > pa); i++) await app.waitForTimeout(500);
+r.stream.resumed = (await tile(app, 'HEC accepted')) > pa;
+await app.locator('.pf-mon-actions button', { hasText: /^Stop$/ }).click();
+for (let i = 0; i < 30 && (await app.locator('.pf-mon-state').innerText()) !== 'STOPPED'; i++) await app.waitForTimeout(500);
+r.stream.final = await app.locator('.pf-mon-state').innerText();
+await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click();
+for (let i = 0; i < 12; i++) { await app.waitForTimeout(4000); r.stream.verification = await app.locator('.pf-mon-verify').innerText().catch(() => ''); if (/VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification)) break; await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click(); }
+await page.screenshot({ path: path.join(evDir, 'screens/stream_stopped_verified.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+r.stream.ok = r.stream.mode_text && r.stream.after_refresh >= r.stream.a1 && r.stream.state_after_refresh === 'RUNNING' && r.stream.paused_state === 'PAUSED' && r.stream.held && r.stream.resumed && r.stream.final === 'STOPPED' && /VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification);
+// finite scenario run: search -> workflow -> monitor -> readiness READY -> run-bound dashboard
+await app.locator('input[aria-label="Universal search"]').fill('Campus Core L2/3 Disturbance'); await app.locator('select[aria-label="Result type"]').selectOption('scenario'); await app.waitForTimeout(1500);
+await app.locator('[data-testid="universal-search"] li button').first().click(); await app.waitForTimeout(3000);
+await app.locator('[data-testid="monitored-run"]').click();
+await app.waitForSelector('[data-testid="readiness"]', { timeout: 60000 });
+const states = new Set();
+for (let i = 0; i < 90; i++) { const st = await app.locator('[data-testid="readiness-state"]').innerText().catch(() => ''); if (st) states.add(st); if (['READY', 'DEGRADED', 'FAILED'].includes(st)) break; await app.waitForTimeout(2000); }
+r.readiness = { states: [...states], toast: await app.locator('[data-testid="readiness-toast"]').innerText().catch(() => null) };
+r.readiness.href = await app.locator('[data-testid="readiness-toast"] a', { hasText: 'Open dashboard' }).getAttribute('href').catch(() => null);
+await page.screenshot({ path: path.join(evDir, 'screens/readiness_ready.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+if (r.readiness.href) {
+  await page.goto(base + r.readiness.href, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(25000);
+  const body = await page.locator('body').innerText();
+  const runTok = decodeURIComponent((r.readiness.href.match(/run_tok=([^&]+)/) || [])[1] || '');
+  r.dashboard = { run_id_visible: body.includes(runTok), no_results_panels: (body.match(/No results found/g) || []).length, empty_state_panels: (body.match(/Search did not return any results|No data/gi) || []).length };
+  await page.screenshot({ path: path.join(evDir, 'screens/dashboard_run_bound.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+}
+r.readiness.ok = r.readiness.states.includes('READY') && !!r.readiness.href && /ready in Splunk/.test(r.readiness.toast || '');
+r.ok = r.stream.ok && r.readiness.ok && /dashboard/.test(r.bgp) && r.kinds_in_bgp.length === 3 && !!r.dashboard_href && /sourcetype/.test(r.sourcetype) && r.scenario_opens_workflow > 0 && r.state_preserved === 'credential';
 fs.writeFileSync(path.join(evDir, 'browser.json'), JSON.stringify({ generated_utc: new Date().toISOString(), result: r }, null, 1) + '\n');
 console.log(r.ok ? 'PASS' : 'FAIL', JSON.stringify(r));
 await browser.close();

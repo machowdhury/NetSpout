@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SourcetypeStream } from './SourcetypeStream';
 import { universalSearch, type SearchHit, type UniversalResult } from '../../lib/explorerApi';
 
 const KEY = 'pf-find';
@@ -22,6 +23,7 @@ export function UniversalSearch({ onPickScenario }: { onPickScenario: (entryId: 
   const [dash, setDash] = useState(init.dash);
   const [res, setRes] = useState<UniversalResult | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [streaming, setStreaming] = useState<string | null>(null);
 
   useEffect(() => {
     try { sessionStorage.setItem(KEY, JSON.stringify({ q, kind, runnable, dash })); } catch { /* per-viewer convenience only */ }
@@ -69,6 +71,8 @@ export function UniversalSearch({ onPickScenario }: { onPickScenario: (entryId: 
                   <span className="ux-card__sum">Next: {h.next_action}</span>
                   {h.kind === 'scenario' && <button type="button" onClick={() => onPickScenario(h.id)}>{h.runnable ? 'Open scenario workflow' : 'View details (not executable)'}</button>}
                   {h.kind === 'dashboard' && (href ? <a href={href} target="_top">Open dashboard</a> : <span className="ux-card__sum">Opens inside Splunk Web</span>)}
+                  {h.kind === 'sourcetype' && h.runnable && <button type="button" data-testid="stream-sourcetype" onClick={() => setStreaming(streaming === h.id ? null : h.id)}>{streaming === h.id ? 'Hide streaming' : 'Stream this sourcetype'}</button>}
+                  {h.kind === 'sourcetype' && streaming === h.id && <SourcetypeStream sourcetype={h.title} vendor={h.vendor} />}
                   {h.kind === 'sourcetype' && !!h.related_scenarios?.length && <span className="ux-card__sum">{h.related_scenarios.length} related scenario(s)</span>}
                 </li>
               );

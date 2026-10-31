@@ -1,14 +1,14 @@
 {
- "generated_utc": "2026-10-31T00:27Z",
+ "generated_utc": "2026-10-31T00:55Z",
  "lab": "tests/lab/ta_validation (isolated Docker Splunk Enterprise 10.2.7)",
  "app": "netspout.spl installed from the built package",
  "engine": "PulseForge engine on the host, reached through the installed gateway (NETSPOUT_BACKEND_URL)",
  "passed": 12,
  "failed": [],
  "runs": {
-  "replay_session": "rp-fc355a670a5d",
-  "native_run": "pf-universe-0062edff-58da-4683-a726-bba465eb1fbe",
-  "incident_run": "pf-incident-4164a92b-195a-4e50-bd20-42f9c70fe608"
+  "replay_session": "rp-6a7f1fd1ab12",
+  "native_run": "pf-universe-86d23c56-9897-4c19-808b-e491f04b318d",
+  "incident_run": "pf-incident-0b708f8f-f6a5-453e-ad07-4ac8254e05a9"
  },
  "checks": {
   "01_app_installed_and_enabled": {
@@ -55,16 +55,16 @@
   "08_engine_verify_endpoint_agrees_with_independent_search": {
    "pass": true,
    "verify": {
-    "session_id": "rp-fc355a670a5d",
+    "session_id": "rp-6a7f1fd1ab12",
     "verified": true,
     "indexed": 12,
     "accepted": 12,
     "delivered": 12,
     "complete": true,
-    "first_time": "1793406467.907085",
-    "last_time": "1793406468.047085",
-    "query": "search index=\"dev_test_replay\" netspout_replay_session=\"rp-fc355a670a5d\" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time",
-    "note": "indexed is read from Splunk for netspout_replay_session=rp-fc355a670a5d; it can trail accepted until indexing catches up"
+    "first_time": "1793408092.334924",
+    "last_time": "1793408092.474924",
+    "query": "search index=\"dev_test_replay\" netspout_replay_session=\"rp-6a7f1fd1ab12\" earliest=-30d latest=+1d | stats count as indexed, min(_time) as first_time, max(_time) as last_time",
+    "note": "indexed is read from Splunk for netspout_replay_session=rp-6a7f1fd1ab12; it can trail accepted until indexing catches up"
    }
   },
   "09_native_pack_generated_dispatched_and_indexed": {

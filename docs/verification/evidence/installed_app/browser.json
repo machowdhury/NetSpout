@@ -1,33 +1,33 @@
 {
- "generated_utc": "2026-10-31T00:28:37.583Z",
+ "generated_utc": "2026-10-31T00:55:26.370Z",
  "results": {
   "command_center": {
    "url": "/en-US/app/netspout/pulseforge_command_center",
    "http_status": 200,
    "error_text": [],
-   "text_sample": "Skip Navigation > Apps Administrator 2Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-",
+   "text_sample": "Skip Navigation > Apps Administrator 5Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-",
    "ok": true
   },
   "use_case_explorer": {
    "url": "/en-US/app/netspout/use_case_explorer",
    "http_status": 200,
    "error_text": [],
-   "text_sample": "Skip Navigation > Apps Administrator 2Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-",
+   "text_sample": "Skip Navigation > Apps Administrator 5Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-",
    "ok": true,
    "cards": 0
   },
   "dashboard_replay_session": {
-   "url": "/en-US/app/netspout/pf_rp_cloud_control_plane_activity?form.run_tok=rp-fc355a670a5d",
+   "url": "/en-US/app/netspout/pf_rp_cloud_control_plane_activity?form.run_tok=rp-6a7f1fd1ab12",
    "http_status": 200,
    "error_text": [],
-   "text_sample": "Apps Administrator 2Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-case & Dashboard D",
+   "text_sample": "Apps Administrator 5Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-case & Dashboard D",
    "ok": true
   },
   "dashboard_incident_run": {
-   "url": "/en-US/app/netspout/pf_network_01_campus_link?form.run_tok=pf-incident-4164a92b-195a-4e50-bd20-42f9c70fe608",
+   "url": "/en-US/app/netspout/pf_network_01_campus_link?form.run_tok=pf-incident-0b708f8f-f6a5-453e-ad07-4ac8254e05a9",
    "http_status": 200,
    "error_text": [],
-   "text_sample": "Apps Administrator 2Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-case & Dashboard D",
+   "text_sample": "Apps Administrator 5Messages Settings Activity Help PulseForge Command Center Use Case Explorer NetSpout PulseForge Onboarding PulseForge Use-case & Dashboard D",
    "ok": true
   }
  }

@@ -780,6 +780,19 @@ class TelemetryDispatcher:
         log: LogEntry,
         transport: Optional[TelemetryTransportConfig] = None
     ) -> Dict[str, Any]:
+        result = self._dispatch_log(log, transport)
+        try:
+            from netspout_core.delivery_monitor import observe_dispatch
+        except ImportError:
+            from app.delivery_monitor import observe_dispatch
+        observe_dispatch(log.sourcetype, log.netspout_phase, result)
+        return result
+
+    def _dispatch_log(
+        self,
+        log: LogEntry,
+        transport: Optional[TelemetryTransportConfig] = None
+    ) -> Dict[str, Any]:
         """
         Route log entry to configured transports (HEC, Syslog, OTel, Telegraf).
         """

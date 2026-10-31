@@ -462,7 +462,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>
-      {!security && ['scenario_pack', 'incident_pack'].includes(entry.engine ?? '') && (
+      {!security && entry.engine !== 'replay_pack' && (
         <button type="button" className="ux-run-btn" data-testid="monitored-run"
                 onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined }).then(
                   (r) => { rememberRun(r.run_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>

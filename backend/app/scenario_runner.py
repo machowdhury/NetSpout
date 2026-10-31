@@ -3007,6 +3007,16 @@ class ScenarioRunner:
         request: ScenarioRunRequest,
         topology: Optional[TopologyState] = None
     ) -> RunManifest:
+        from netspout_core.delivery_monitor import observed_run
+        transport = request.transport_config or (topology.global_transport if topology else None)
+        with observed_run("scenario", request.scenario_id, self.generate_run_id(), transport):
+            return self._run_scenario(request, topology)
+
+    def _run_scenario(
+        self,
+        request: ScenarioRunRequest,
+        topology: Optional[TopologyState] = None
+    ) -> RunManifest:
         """
         Executes a complete, deterministic, multi-phase scenario lifecycle.
         Progresses through:
@@ -3072,7 +3082,8 @@ class ScenarioRunner:
         initial_snapshot = graph.snapshot_state()
 
         # 5. Initialize Run Manifest & State
-        run_id = self.generate_run_id()
+        from netspout_core.delivery_monitor import observed_id
+        run_id = observed_id() or self.generate_run_id()
         effective_mode = (
             "NATIVE_TRANSPORT"
             if (getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False))

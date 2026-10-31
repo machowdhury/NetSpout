@@ -1,0 +1,342 @@
+{
+ "generated_utc": "2026-10-31T11:54:55.646757+00:00",
+ "engine": "isolated lab engine",
+ "cases": [
+  {
+   "name": "single_sourcetype",
+   "run_id": "run-85d6e32ca168",
+   "mode": "finite",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 30,
+    "attempts": 30,
+    "accepted": 30,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 6,
+   "monotonic": true,
+   "peak_current_eps": 15.05,
+   "avg_eps": 14.19,
+   "elapsed_s": 2.1,
+   "by_sourcetype": {
+    "cisco:sdwan:utdhealth": 30
+   },
+   "phases": [],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 30,
+    "accepted": 30
+   },
+   "indexed_after": 30,
+   "ok": true
+  },
+  {
+   "name": "replay_pack_finite",
+   "run_id": "rp-3786895740d3",
+   "mode": "finite",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 12,
+    "attempts": 12,
+    "accepted": 12,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 2,
+   "monotonic": true,
+   "peak_current_eps": 0,
+   "avg_eps": 40.16,
+   "elapsed_s": 0.3,
+   "by_sourcetype": {
+    "aws:cloudtrail": 12
+   },
+   "phases": [
+    [
+     "ACTIVITY",
+     12,
+     12
+    ]
+   ],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 12,
+    "accepted": 12
+   },
+   "indexed_after": 12,
+   "ok": true
+  },
+  {
+   "name": "native_pack",
+   "run_id": "run-1d1b40579dfd",
+   "mode": "finite",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 20,
+    "attempts": 20,
+    "accepted": 20,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 3,
+   "monotonic": true,
+   "peak_current_eps": 0,
+   "avg_eps": 36.66,
+   "elapsed_s": 0.5,
+   "by_sourcetype": {
+    "cisco:sdwan:OSPF-5-ADJCHG": 3,
+    "cisco:sdwan:BGP-5-ADJCHANGE": 3,
+    "cisco:sdwan:MSDP-5-PEER_UPDOWN": 3,
+    "cisco:sdwan:DMI-5-SYNC_NEEDED": 1,
+    "cisco:sdwan:DMI-5-SYNC_START": 1,
+    "cisco:sdwan:DMI-5-SYNC_COMPLETE": 1,
+    "cisco:sdwan:NDBMAN-5-CONFIG_I": 1,
+    "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH": 1,
+    "cisco:sdwan:LINK-5-CHANGED": 1,
+    "cisco:sdwan:LINK-5-UPDOWN": 2,
+    "cisco:sdwan:LINEPROTO-5-UPDOWN": 2,
+    "cisco:sdwan:BGP-5-NBR_RESET": 1
+   },
+   "phases": [
+    [
+     "BASELINE",
+     3,
+     3
+    ],
+    [
+     "CHANGE",
+     4,
+     4
+    ],
+    [
+     "FAULT",
+     8,
+     8
+    ],
+    [
+     "RECOVERY",
+     5,
+     5
+    ]
+   ],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 20,
+    "accepted": 20
+   },
+   "indexed_after": 20,
+   "ok": true
+  },
+  {
+   "name": "incident_pack",
+   "run_id": "run-018407bbbea7",
+   "mode": "finite",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 40,
+    "attempts": 40,
+    "accepted": 40,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 3,
+   "monotonic": true,
+   "peak_current_eps": 0,
+   "avg_eps": 53.63,
+   "elapsed_s": 0.7,
+   "by_sourcetype": {
+    "netspout:network:syslog": 30,
+    "netspout:network:metric": 10
+   },
+   "phases": [
+    [
+     "BASELINE",
+     4,
+     4
+    ],
+    [
+     "WARNING",
+     4,
+     4
+    ],
+    [
+     "DEGRADATION",
+     4,
+     4
+    ],
+    [
+     "FAILURE",
+     4,
+     4
+    ],
+    [
+     "NETWORK_IMPACT",
+     4,
+     4
+    ],
+    [
+     "USER_IMPACT",
+     4,
+     4
+    ],
+    [
+     "INTERVENTION",
+     4,
+     4
+    ],
+    [
+     "RECOVERY",
+     4,
+     4
+    ],
+    [
+     "RECONVERGENCE",
+     4,
+     4
+    ],
+    [
+     "VERIFIED_HEALTHY",
+     4,
+     4
+    ]
+   ],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 30,
+    "accepted": 40
+   },
+   "indexed_after": 40,
+   "ok": true
+  },
+  {
+   "name": "scenario_runner",
+   "run_id": "NS-20261031-1cb12f0e",
+   "mode": "observed",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 10,
+    "attempts": 10,
+    "accepted": 10,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 2,
+   "monotonic": true,
+   "peak_current_eps": 0,
+   "avg_eps": 26.51,
+   "elapsed_s": 0.4,
+   "by_sourcetype": {
+    "cisco:catalyst:security:events": 7,
+    "cisco:ise:nac:8021x": 2,
+    "cisco:ios:syslog": 1
+   },
+   "phases": [
+    [
+     "BASELINE",
+     3,
+     3
+    ],
+    [
+     "FAULT",
+     1,
+     1
+    ],
+    [
+     "PROPAGATE",
+     2,
+     2
+    ],
+    [
+     "FAILOVER",
+     2,
+     2
+    ],
+    [
+     "RECOVER",
+     2,
+     2
+    ]
+   ],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 10,
+    "accepted": 10
+   },
+   "indexed_after": 10,
+   "ok": true
+  },
+  {
+   "name": "unified_generation",
+   "run_id": "28474e95-0f1e-42ac-9b1e-6189c7f536d1",
+   "mode": "observed",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 9,
+    "attempts": 9,
+    "accepted": 9,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": null
+   },
+   "polls": 2,
+   "monotonic": true,
+   "peak_current_eps": 0,
+   "avg_eps": 58.18,
+   "elapsed_s": 0.2,
+   "by_sourcetype": {
+    "netspout:dns:wire": 9
+   },
+   "phases": [
+    [
+     "NORMAL",
+     3,
+     3
+    ],
+    [
+     "SUSPICIOUS_ACTIVITY",
+     6,
+     6
+    ]
+   ],
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 9,
+    "accepted": 9
+   },
+   "indexed_after": 9,
+   "ok": true
+  },
+  {
+   "name": "pause_resume_stop",
+   "run_id": "run-d8400fa6da6c",
+   "paused_held": true,
+   "state": "STOPPED",
+   "counters": {
+    "generated": 200,
+    "attempts": 74,
+    "accepted": 74,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 126,
+    "indexed": null
+   },
+   "verification": {
+    "status": "VERIFIED",
+    "indexed": 74,
+    "accepted": 74
+   },
+   "ok": true
+  }
+ ]
+}

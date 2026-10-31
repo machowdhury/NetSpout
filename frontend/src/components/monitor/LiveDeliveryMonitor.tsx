@@ -92,6 +92,7 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
       {run.verification && (
         <p className="pf-mon-verify">Verification: <b>{run.verification.status}</b>{run.verification.indexed != null && ` — ${run.verification.indexed} indexed of ${run.verification.accepted} accepted`}{run.verification.error && ` — ${run.verification.error}`}</p>
       )}
+      {(run as RunSnapshot & { controls_note?: string }).controls_note && <p className="pf-mon-note">{(run as RunSnapshot & { controls_note?: string }).controls_note}</p>}
       <footer className="pf-mon-actions">
         <button disabled={busy || !run.controls.pause} onClick={() => act(() => controlRun(runId, 'pause'))}>Pause</button>
         <button disabled={busy || !run.controls.resume} onClick={() => act(() => controlRun(runId, 'resume'))}>Resume</button>

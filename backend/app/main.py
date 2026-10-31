@@ -2275,10 +2275,11 @@ def replay_control(session_id: str, action: str):
 # Live event delivery monitor: one run schema for replay sessions, native/incident packs and single-sourcetype generation.
 # Destination = the saved Connection Center destination only (same authorization as replay); counters are the real delivery counters.
 # =========================================================================
-from netspout_core.delivery_monitor import DeliveryRun, Item, RunMonitorService, replay_snapshot, clean_error  # noqa: E402
+from netspout_core.delivery_monitor import DeliveryRun, Item, RunMonitorService, replay_snapshot, clean_error, set_service  # noqa: E402
 
 _runs_state = os.environ.get("NETSPOUT_RUNS_STATE") or (str(Path(os.environ["NETSPOUT_CONFIG_DIR"]) / "runs.json") if os.environ.get("NETSPOUT_CONFIG_DIR") else None)
 run_monitor = RunMonitorService(Path(_runs_state) if _runs_state else None)
+set_service(run_monitor)
 _replay_verification: Dict[str, Dict[str, Any]] = {}
 
 
@@ -2288,15 +2289,14 @@ def _destination_name(gt) -> str:
     return "%s · %s" % (cfg.get("deployment_mode") or "destination", urlparse(getattr(gt, "hec_url", "") or "").netloc or "unconfigured")
 
 
-def _hec_item(dispatch_fn, sourcetype, phase):
+def _hec_item(dispatch_fn, sourcetype, phase, datapoints=0):
     def send():
         r = dispatch_fn()
         h = r.get("hec") or {}
         state = str(h.get("state") or "").upper()
-        if state == "ACCEPTED" or (not state and h.get("success")):
-            return "accepted", None
-        return ("rejected" if state == "FAILED" or h.get("success") is False else "unknown"), h.get("message") or h.get("error_class") or "not accepted"
-    return Item(sourcetype, phase, send)
+        key = {"ACCEPTED": "accepted", "FAILED": "rejected"}.get(state) if state else ("accepted" if h.get("success") else ("rejected" if h.get("success") is False else "unknown"))
+        return (key or "unknown"), (None if key == "accepted" else h.get("message") or h.get("error_class") or "not accepted")
+    return Item(sourcetype, phase, send, datapoints)
 
 
 def _monitor_links(target: str):
@@ -2337,10 +2337,24 @@ def runs_start(payload: Dict[str, Any]):
             items = []
             for e, pl in zip(events, incident_packs.hec_payloads(events, index, metric_index)):
                 items.append(_hec_item(lambda pl=pl: {"hec": (lambda o: {"state": str(o.state), "success": bool(o[0]), "message": o[1]})(dispatcher.emit_hec(pl, cfg.hec_url, cfg.hec_token, ssl_verify=cfg.hec_ssl_verify, allow_insecure_tls=cfg.hec_allow_insecure_tls))},
-                                       e["sourcetype"], e["fields"].get("netspout_phase")))
+                                       e["sourcetype"], e["fields"].get("netspout_phase"), len(e.get("metrics") or {})))
             title = target
         elif kind == "scenario":
-            raise HTTPException(status_code=422, detail="This scenario family has no per-event live monitor yet (ScenarioRunner and unified-generation runs report only when they finish); use the standard run flow")
+            # ScenarioRunner and unified-generation families: the runner owns the loop, so it runs on a worker and the monitor reads the delivery boundary
+            from netspout_core.delivery_monitor import ObservedRun
+            if target in SUPPORTED_SCENARIO_IDS:
+                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**cfg.model_dump())))
+                run_id = scenario_runner.generate_run_id()
+            else:
+                run_id = str(__import__("uuid").uuid4())
+                ureq = UnifiedGenerationRequest(mode=GenerationMode.SCENARIO, selection_id=target, count=int(payload.get("count", 6)), rate_eps=int(eps or 10))
+                pre = unified_generation_service.preflight(ureq, cfg)
+                if str(getattr(pre.state, "value", pre.state)) == "BLOCKED":
+                    why = "; ".join("%s: %s" % (c.label, c.detail) for c in pre.checks if str(getattr(c.state, "value", c.state)) == "BLOCKED")
+                    raise HTTPException(status_code=409, detail="Preflight is BLOCKED (" + (why or "see /api/generation/preflight") + ")")
+                runner = lambda: unified_generation_service.run(ureq, cfg)
+            obs = ObservedRun("scenario", target, target, name, index, run_id=run_id, links=_monitor_links(target))
+            return run_monitor.run_in_background(obs, runner).snapshot()
         else:
             from app.generator_modes import generator_service
             entries, prov = generator_service.prepare_sourcetype_entries(payload.get("vendor_id") or "", target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
@@ -2406,11 +2420,17 @@ def runs_verify(run_id: str):
     else:
         indexed = int(float((rows[0].get("indexed") if rows else 0) or 0))
         accepted = snap["counters"]["accepted"]
-        rec = {"status": "VERIFIED" if (indexed == accepted and snap["state"] in ("COMPLETED", "STOPPED")) or (snap.get("destination", {}).get("metric_index") and indexed + (metric or 0) == accepted and snap["state"] in ("COMPLETED", "STOPPED")) else "INCOMPLETE",
-               "indexed": indexed, "metric_datapoint_events_indexed": metric, "accepted": accepted, "at": now,
+        macc = snap.get("metric_accepted") or {"events": 0, "datapoints": 0}
+        logs_expected = accepted - macc["events"]
+        metric_ok = macc["datapoints"] == 0 or metric == macc["datapoints"]
+        done = snap["state"] in ("COMPLETED", "STOPPED")
+        rec = {"status": "VERIFIED" if (done and indexed == logs_expected and metric_ok) else "INCOMPLETE",
+               "indexed": indexed, "accepted": accepted, "expected_log_events": logs_expected, "at": now,
                "note": "indexed is counted by an independent search; it can trail accepted briefly"}
+        if macc["datapoints"]:
+            rec.update({"metric_datapoints_indexed": metric, "metric_datapoints_expected": macc["datapoints"], "metric_events_accepted": macc["events"]})
         if run:
-            run.indexed = indexed + (metric or 0)
+            run.indexed = indexed + (macc["events"] if metric_ok else 0)   # metric events count as indexed only when every datapoint they carry was found
     if run:
         run.verification = rec
     return rec
@@ -2891,13 +2911,7 @@ def get_release_candidate_setup():
     return release_candidate_configuration.load()
 
 
-@app.post("/api/setup")
-def save_release_candidate_setup(payload: SetupConfigurationPayload):
-    try:
-        saved = release_candidate_configuration.save(payload.model_dump())
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-
+def _apply_saved_destination(saved):
     global current_topology
     current_topology.global_transport.hec_enabled = True
     current_topology.global_transport.hec_url = saved["hec_url"]
@@ -2913,6 +2927,22 @@ def save_release_candidate_setup(payload: SetupConfigurationPayload):
         current_topology.global_transport.hec_metric_index = metric_indexes[0]
     current_topology.global_transport.hec_ssl_verify = not saved["allow_insecure_tls"]
     current_topology.global_transport.hec_allow_insecure_tls = saved["allow_insecure_tls"]
+
+
+# A restart must not lose the saved destination: rebuild the in-memory transport from the persisted Connection Center config (the token comes from the environment, never the file).
+_saved_at_start = release_candidate_configuration.load()
+if _saved_at_start.get("configured") and release_candidate_configuration.secrets.hec_token:
+    _apply_saved_destination(_saved_at_start)
+
+
+@app.post("/api/setup")
+def save_release_candidate_setup(payload: SetupConfigurationPayload):
+    try:
+        saved = release_candidate_configuration.save(payload.model_dump())
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    _apply_saved_destination(saved)
     return saved
 
 

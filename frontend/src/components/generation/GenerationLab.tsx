@@ -1,3 +1,4 @@
+import { LiveDeliveryMonitor } from '../monitor/LiveDeliveryMonitor';
 import { useEffect, useMemo, useState } from 'react';
 import {
   Activity,
@@ -881,6 +882,7 @@ function RunStep({
             <div><span>Current phase</span><strong>{run.current_phase}</strong></div>
             <div><span>Channels</span><strong>{run.channel_results?.length || run.source_ids.length}</strong></div>
           </div>
+          <LiveDeliveryMonitor runId={run.run_id} />
           {scenario && (
             <>
               <div className="generation-timeline">

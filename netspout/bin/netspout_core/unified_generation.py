@@ -765,8 +765,13 @@ class UnifiedGenerationService:
         preflight = self.preflight(request, transport_config)
         if preflight.state == PreflightState.BLOCKED:
             raise ValueError("generation preflight is BLOCKED")
+        from netspout_core.delivery_monitor import observed_id, observed_run
+        run_id = observed_id() or str(uuid.uuid4())
+        with observed_run("generation", request.selection_id, run_id, transport_config):
+            return self._run(request, transport_config, run_id)
+
+    def _run(self, request: UnifiedGenerationRequest, transport_config: TelemetryTransportConfig, run_id: str) -> UnifiedGenerationRun:
         resolved = self._resolve(request)
-        run_id = str(uuid.uuid4())
         started_at = _utc_now()
         events: List[GeneratedEvent] = []
         channel_results: List[UnifiedChannelResult] = []

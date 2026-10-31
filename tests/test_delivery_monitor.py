@@ -147,13 +147,15 @@ def test_incident_pack_uses_the_metric_index_and_is_verified_independently(env):
     s = wait_done(r['run_id'])
     assert s['counters']['accepted'] == 40 and s['destination']['metric_index'] == 'dev_test_replay_metrics'
     assert {i for _, i, _ in env} == {'dev_test_replay', 'dev_test_replay_metrics'}
+    dp = main.run_monitor.snapshot(r['run_id'])['metric_accepted']['datapoints']
+    assert dp > 10 and main.run_monitor.snapshot(r['run_id'])['metric_accepted']['events'] == 10     # one metric event carries several datapoints
     calls = []
     def search(q):
         calls.append(q)
-        return ([{'indexed': '30'}] if 'stats count as indexed' in q else [{'n': '10'}]), None
+        return ([{'indexed': '30'}] if 'stats count as indexed' in q else [{'n': str(dp)}]), None
     with patch.object(main.release_candidate_configuration, 'execute_read_only_search', side_effect=search):
         v = client.post('/api/runs/%s/verify' % r['run_id']).json()
-    assert v['status'] == 'VERIFIED' and v['indexed'] == 30 and v['metric_datapoint_events_indexed'] == 10 and any('mstats' in q for q in calls)
+    assert v['status'] == 'VERIFIED' and v['indexed'] == 30 and v['metric_datapoints_indexed'] == dp and any('mstats' in q for q in calls)
     assert client.get('/api/runs/' + r['run_id']).json()['counters']['indexed'] == 40
     with patch.object(main.release_candidate_configuration, 'execute_read_only_search', return_value=([{'indexed': '12'}], None)):
         v2 = client.post('/api/runs/%s/verify' % r['run_id']).json()
@@ -188,7 +190,6 @@ def test_replay_pack_run_uses_the_same_schema_with_finite_and_continuous_modes(e
 @pytest.mark.parametrize('body,code', [
     ({'kind': 'scenario', 'target': 'ub5_cisco_change_induced_outage', 'index': 'prod_main'}, 403),
     ({'kind': 'scenario', 'target': 'ub5_cisco_change_induced_outage', 'transport_config': {'hec_url': 'https://evil.example:8088/services/collector'}}, 422),
-    ({'kind': 'scenario', 'target': 'cisco_aci_microburst'}, 422),            # no per-event monitor for runner scenarios: refused, not faked
     ({'kind': 'scenario', 'target': 'ub5_cisco_change_induced_outage', 'eps': 0}, 422),
     ({'kind': 'nope', 'target': 'x'}, 422),
 ])
@@ -201,3 +202,36 @@ def test_unknown_run_and_actions(env):
     assert client.post('/api/runs/run-unknown/pause').status_code == 404
     assert client.post('/api/runs/run-unknown/dance').status_code == 404
     assert client.get('/api/runs').status_code == 200
+
+
+def test_observed_run_counts_only_what_crosses_the_delivery_boundary(tmp_path):
+    from netspout_core.delivery_monitor import ObservedRun, observe_dispatch, set_service
+    svc = RunMonitorService(tmp_path / 'r.json')
+    set_service(svc)
+    with svc.observe(ObservedRun('scenario', 't', 't', 'd', 'i', expected=4, run_id='obs-1')):
+        observe_dispatch('a:b', 'P1', {'hec': {'state': 'ACCEPTED', 'success': True}})
+        observe_dispatch('a:b', 'P1', {'hec': {'state': 'FAILED', 'success': False, 'message': 'HEC HTTP 403 (code 4)'}})
+        observe_dispatch('a:c', 'P2', {'hec': {'state': 'UNKNOWN', 'success': False, 'message': 'timeout'}})
+        observe_dispatch('a:c', 'P2', {'hec': None})                                   # never attempted: generated, not an attempt
+        mid = svc.snapshot('obs-1')
+        assert mid['state'] == 'RUNNING' and mid['progress']['pct'] == 75.0 and mid['mode'] == 'observed'
+    s = svc.snapshot('obs-1')
+    c = s['counters']
+    assert (c['generated'], c['attempts'], c['accepted'], c['rejected'], c['unknown'], c['pending'], c['indexed']) == (4, 3, 1, 1, 1, 1, None)
+    assert s['state'] == 'COMPLETED' and s['controls'] == {'pause': False, 'resume': False, 'stop': False} and 'not supported' in s['controls_note']
+    assert {e['outcome'] for e in s['recent_errors']} == {'rejected', 'unknown', 'not_attempted'}
+    observe_dispatch('x', None, {'hec': {'success': True}})                            # outside a run: nothing recorded anywhere
+    assert svc.snapshot('obs-1')['counters']['generated'] == 4
+
+
+def test_scenario_runner_run_is_monitored_through_the_real_dispatcher(env):
+    from app import scenario_runner as sr
+    with patch.object(sr.dispatcher, '_dispatch_log', return_value={'hec': {'success': True, 'state': 'ACCEPTED', 'message': 'ok'}}):
+        r = client.post('/api/runs', json={'kind': 'scenario', 'target': 'arch_lan_campus_access'})
+        assert r.status_code == 200, r.text
+        s = wait_done(r.json()['run_id'], 60)
+    assert s['state'] == 'COMPLETED' and s['mode'] == 'observed', s['error']
+    c = s['counters']
+    assert c['generated'] == c['attempts'] == c['accepted'] > 0 and c['rejected'] == c['unknown'] == 0 and c['indexed'] is None
+    manifest = main.scenario_runner.get_run(r.json()['run_id'])
+    assert manifest is not None and manifest.dispatch_attempted == c['attempts']          # the monitor and the runner's own manifest agree

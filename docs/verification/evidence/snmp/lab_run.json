@@ -1,0 +1,14 @@
+{
+ "generated_utc": "2026-10-31T00:39Z",
+ "environment": "isolated Docker Splunk Enterprise 10.2.7 as HEC/REST destination (NETSPOUT_HEC_URL, NETSPOUT_REST_SEARCH_URL, credentials via environment); fixture index idx_network_ops; host Net-SNMP CLI tools (NET-SNMP version: 5.6.2.1)",
+ "suites": [
+  "tests/test_gate12c_snmp_polling.py",
+  "tests/test_gate12d_snmp_splunk_e2e.py",
+  "tests/test_gate12f_snmp_productization.py"
+ ],
+ "tests": 75,
+ "failures": 0,
+ "errors": 0,
+ "skipped": 0,
+ "interpretation": "With a compatible Splunk destination configured these suites pass in full, including the Net-SNMP CLI (snmpget/snmpwalk) and snmptrapd interoperability checks and fresh SPL observation of dispatched traps, informs and polls. Without a destination they fail as before (the 12 lab-dependent failures plus test_08). Receiver and agent in the end-to-end suite are the product's own implementations; third-party interoperability is limited to the Net-SNMP tools. SNMPv3 security interoperability is not claimed."
+}

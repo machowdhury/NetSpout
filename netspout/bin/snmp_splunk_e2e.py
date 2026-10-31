@@ -2214,10 +2214,12 @@ def _resolve_binary(name: str, search_dirs: List[str]) -> Optional[str]:
 
 def run_snmp_preflight_check(
     index: str = "idx_network_ops",
-    hec_url: str = "https://127.0.0.1:8088/services/collector/event",
-    rest_search_url: str = "https://127.0.0.1:8089/services/search/jobs/export",
+    hec_url: Optional[str] = None,
+    rest_search_url: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
+    Probes the SAME destination the SNMP bridge dispatches to: NETSPOUT_HEC_URL / NETSPOUT_REST_SEARCH_URL (or NETSPOUT_REST_URL) when set, else the local defaults.
+    Before this fix the probe always used 127.0.0.1:8088/8089 and could report on an unrelated Splunk.
     Executes Gate 12F Section 8 customer-usable Native SNMP preflight and readiness checks:
       1. Net-SNMP CLI binaries (`/usr/bin/snmpget`, `/usr/bin/snmpgetnext`, `/usr/bin/snmpwalk`, `/usr/bin/snmpbulkwalk`)
       2. `snmptrapd` binary (`/usr/sbin/snmptrapd`)
@@ -2226,6 +2228,8 @@ def run_snmp_preflight_check(
       5. Splunk REST search reachability (`https://127.0.0.1:8089/services/search/jobs/export`)
       6. Target index availability (`idx_network_ops`)
     """
+    hec_url = hec_url or os.environ.get("NETSPOUT_HEC_URL", "https://127.0.0.1:8088/services/collector/event")
+    rest_search_url = rest_search_url or os.environ.get("NETSPOUT_REST_SEARCH_URL", os.environ.get("NETSPOUT_REST_URL", "https://127.0.0.1:8089/services/search/jobs/export"))
     checks: List[Dict[str, Any]] = []
     remediations: List[str] = []
 

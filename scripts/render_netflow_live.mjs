@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
 const root = path.resolve(process.cwd(), '..');
-const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/netflow');
 fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
 const runs = Object.fromEntries(Object.entries(JSON.parse(fs.readFileSync(path.join(evDir, 'dashboard_validation.json'), 'utf8')).dashboards).map(([k, v]) => [k, v.run_id]));
@@ -26,7 +26,7 @@ const results = {};
 for (const [sid, run] of Object.entries(runs)) {
   if (only && !only.includes(sid)) continue;
   const page = await ctx.newPage();
-  const url = `${base}/en-US/app/netspout/pf_${sid}?form.run_tok=${encodeURIComponent(run)}&form.global_time.earliest=-24h%40h&form.global_time.latest=now`;
+  const url = `${base}/en-US/app/netspout/pf_${sid}?form.run_tok=${encodeURIComponent(run)}&form.index_tok=${encodeURIComponent(process.env.LAB_INDEX ?? 'dev_test_replay')}&form.global_time.earliest=-24h%40h&form.global_time.latest=now`;
   const r = { url: url.replace(base, ''), run_id: run, errors: [] };
   try {
     const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
@@ -42,13 +42,13 @@ for (const [sid, run] of Object.entries(runs)) {
     const text = await page.evaluate(() => document.body.innerText);
     r.run_selected = text.includes(run);
     r.error_text = (text.match(/(Search (failed|error)|Error in|Unable to load|Could not (load|run)|Search not found|Invalid)[^\n]{0,100}/gi) || []).slice(0, 4);
-    r.no_results_panels = (text.match(/No results found|No data/gi) || []).length;
+    r.no_results_panels = (text.match(/No search results returned|No results found|No data/gi) || []).length;
     r.title_rendered = text.includes('PulseForge');
     r.panels = await page.evaluate(() => document.querySelectorAll('[data-test="visualization"], [data-test="dashboard-panel"], .dashboard-panel').length);
     r.canvas_or_svg = await page.evaluate(() => document.querySelectorAll('svg, canvas').length);
     await page.screenshot({ path: path.join(evDir, 'screens', `${sid}.jpg`), type: 'jpeg', quality: 60, fullPage: true });
   } catch (e) { r.errors.push(String(e).slice(0, 200)); }
-  r.ok = r.http_status === 200 && r.title_rendered && r.error_text.length === 0 && r.errors.length === 0 && r.run_selected;
+  r.ok = r.http_status === 200 && r.title_rendered && r.error_text.length === 0 && r.errors.length === 0 && r.run_selected && r.no_results_panels === 0;
   results[sid] = r;
   console.log((r.ok ? 'PASS ' : 'FAIL ') + sid, 'no-result panels:', r.no_results_panels, 'svg/canvas:', r.canvas_or_svg, r.error_text.length ? JSON.stringify(r.error_text) : '', r.errors.join(';'));
   await page.close();

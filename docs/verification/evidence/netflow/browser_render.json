@@ -1,10 +1,10 @@
 {
- "generated_utc": "2026-11-01T03:18:31.574Z",
+ "generated_utc": "2026-11-01T15:13:00.202Z",
  "splunk_web": "isolated lab, installed app",
  "dashboards": {
   "NF-NOC-01-ELEPHANT": {
-   "url": "/en-US/app/netspout/pf_NF-NOC-01-ELEPHANT?form.run_tok=run-77566dd92eb6&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-77566dd92eb6",
+   "url": "/en-US/app/netspout/pf_NF-NOC-01-ELEPHANT?form.run_tok=run-f3b93ba9245e&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-f3b93ba9245e",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -16,8 +16,8 @@
    "ok": true
   },
   "NF-NOC-02-DSCP": {
-   "url": "/en-US/app/netspout/pf_NF-NOC-02-DSCP?form.run_tok=run-4aa3b054190c&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-4aa3b054190c",
+   "url": "/en-US/app/netspout/pf_NF-NOC-02-DSCP?form.run_tok=run-e8dd126e2d25&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-e8dd126e2d25",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -29,8 +29,8 @@
    "ok": true
   },
   "NF-NOC-03-ROUTING-LOOP": {
-   "url": "/en-US/app/netspout/pf_NF-NOC-03-ROUTING-LOOP?form.run_tok=run-b91bcd65c2fd&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-b91bcd65c2fd",
+   "url": "/en-US/app/netspout/pf_NF-NOC-03-ROUTING-LOOP?form.run_tok=run-76336267f6be&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-76336267f6be",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -42,8 +42,8 @@
    "ok": true
   },
   "NF-NOC-04-ASYMMETRY": {
-   "url": "/en-US/app/netspout/pf_NF-NOC-04-ASYMMETRY?form.run_tok=run-8706ab1b4cbf&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-8706ab1b4cbf",
+   "url": "/en-US/app/netspout/pf_NF-NOC-04-ASYMMETRY?form.run_tok=run-a080726e2d70&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-a080726e2d70",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -55,8 +55,8 @@
    "ok": true
   },
   "NF-NOC-05-BASELINE-DRIFT": {
-   "url": "/en-US/app/netspout/pf_NF-NOC-05-BASELINE-DRIFT?form.run_tok=run-f972af3a6bb4&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-f972af3a6bb4",
+   "url": "/en-US/app/netspout/pf_NF-NOC-05-BASELINE-DRIFT?form.run_tok=run-81cac8b9b3de&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-81cac8b9b3de",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -68,8 +68,8 @@
    "ok": true
   },
   "NF-SEC-06-DDOS": {
-   "url": "/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-47ce7dd082e6&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-47ce7dd082e6",
+   "url": "/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-736f2720ea63&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-736f2720ea63",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -81,8 +81,8 @@
    "ok": true
   },
   "NF-SEC-07-PORTSCAN": {
-   "url": "/en-US/app/netspout/pf_NF-SEC-07-PORTSCAN?form.run_tok=run-7b7c85c230c7&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-7b7c85c230c7",
+   "url": "/en-US/app/netspout/pf_NF-SEC-07-PORTSCAN?form.run_tok=run-ce4c66af7236&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-ce4c66af7236",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -94,8 +94,8 @@
    "ok": true
   },
   "NF-SEC-08-EXFIL": {
-   "url": "/en-US/app/netspout/pf_NF-SEC-08-EXFIL?form.run_tok=run-7f55d28ddfc9&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-7f55d28ddfc9",
+   "url": "/en-US/app/netspout/pf_NF-SEC-08-EXFIL?form.run_tok=run-4f7427b7a3a4&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-4f7427b7a3a4",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -107,8 +107,8 @@
    "ok": true
   },
   "NF-SEC-09-BEACON": {
-   "url": "/en-US/app/netspout/pf_NF-SEC-09-BEACON?form.run_tok=run-a572a00ce3b7&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-a572a00ce3b7",
+   "url": "/en-US/app/netspout/pf_NF-SEC-09-BEACON?form.run_tok=run-7d42822b0196&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-7d42822b0196",
    "errors": [],
    "http_status": 200,
    "run_selected": true,
@@ -120,8 +120,8 @@
    "ok": true
   },
   "NF-SEC-10-DNS-FLOW": {
-   "url": "/en-US/app/netspout/pf_NF-SEC-10-DNS-FLOW?form.run_tok=run-246613bc876b&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
-   "run_id": "run-246613bc876b",
+   "url": "/en-US/app/netspout/pf_NF-SEC-10-DNS-FLOW?form.run_tok=run-28e135755b65&form.index_tok=idx_network_ops&form.global_time.earliest=-24h%40h&form.global_time.latest=now",
+   "run_id": "run-28e135755b65",
    "errors": [],
    "http_status": 200,
    "run_selected": true,

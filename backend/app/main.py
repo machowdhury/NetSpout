@@ -2562,7 +2562,9 @@ def _dashboard_handoff(snap: Dict[str, Any], state: str) -> Optional[Dict[str, A
         return None
     from datetime import datetime, timedelta, timezone
     t0 = datetime.fromisoformat(snap["started_at"]) if snap.get("started_at") else datetime.now(timezone.utc)
-    return {"view": view, "tokens": {"form.run_tok": snap["run_id"], "form.global_time.earliest": int((t0 - timedelta(minutes=5)).timestamp()), "form.global_time.latest": int((datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp())},
+    dest = snap.get("destination") or {}
+    idx = {k: v for k, v in (("form.index_tok", dest.get("index")), ("form.mindex_tok", dest.get("metric_index"))) if v}   # dashboards default to dev_test_replay; carry the run's own index
+    return {"view": view, "tokens": {"form.run_tok": snap["run_id"], **idx, "form.global_time.earliest": int((t0 - timedelta(minutes=5)).timestamp()), "form.global_time.latest": int((datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp())},
             "openable": state in ("READY", "PARTIALLY_READY", "DEGRADED"), "note": "the dashboard is filtered to this run; it stays empty until the run is indexed"}
 
 

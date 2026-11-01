@@ -15,6 +15,7 @@ Measured per event: indexed, _time source, extraction of the fields the event it
 detection macros are commonly written against. CIM data models are NOT validated (Splunk_SA_CIM is not installed).
 Usage: python scripts/validate_ta_windows.py [--out docs/verification/evidence/ta_validation/windows_sysmon.json]
 """
+import os
 import argparse
 import json
 import re
@@ -26,7 +27,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-ENV = dict(l.strip().split("=", 1) for l in (ROOT / "tests/lab/ta_validation/.env.lab").read_text().splitlines() if "=" in l)
+ENV = dict(l.strip().split("=", 1) for l in (ROOT / os.environ.get("LAB_ENV_DIR", "tests/lab/ta_validation") / ".env.lab").read_text().splitlines() if "=" in l)
 
 import base64
 import ssl

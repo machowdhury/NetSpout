@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
 const root = path.resolve(process.cwd(), '..');
-const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/monitor');
 fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
 const base = `http://127.0.0.1:${env.LAB_WEB_PORT}`;

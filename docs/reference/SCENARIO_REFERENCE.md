@@ -9,7 +9,7 @@ Generated 2026-11-01 by `scripts/generate_reference_docs.py` from the Use Case E
 | Cataloged candidates only (documented, not executable) | 209 |
 | Independently indexed in an isolated lab | 148 |
 | With a Dashboard Studio dashboard | 148 |
-| Dashboards DATA_VALIDATED or better | 147 |
+| Dashboards DATA_VALIDATED or better | 148 |
 | Dashboards VISUALLY_VERIFIED | 20 |
 | Detection verified | 0 (no add-on, CIM or Enterprise Security content installed) |
 
@@ -83,7 +83,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `SC-004` | Repository Automation Abuse | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-004 | DATA_VALIDATED |
 | `SC-005` | Supply Chain to Runtime Correlation | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-005 | DATA_VALIDATED |
 | `SEC-P9-A-TRAFFIC-FLOOD` | Controlled Traffic Flood Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-A-TRAFFIC-FLOOD | DATA_VALIDATED |
-| `SEC-P9-B-DNS-ANOMALY` | DNS Diversity and NXDOMAIN Indicators | native (unified_generation) | security | not mapped | 1 | Y | pulseforge_dns_anomaly_studio | SPL_VALIDATED |
+| `SEC-P9-B-DNS-ANOMALY` | DNS Diversity and NXDOMAIN Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-B-DNS-ANOMALY | DATA_VALIDATED |
 | `SEC-P9-C-BEACONING` | Periodic External Communication Indicators | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-C-BEACONING | DATA_VALIDATED |
 | `SEC-P9-D-INTERNAL-RECON` | Internal Reconnaissance Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-D-INTERNAL-RECON | DATA_VALIDATED |
 | `SEC-P9-E-DNS-TUNNEL` | DNS Tunneling and Exfiltration Indicators | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-E-DNS-TUNNEL | DATA_VALIDATED |

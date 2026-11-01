@@ -13,6 +13,8 @@
 | [09 Troubleshooting](09_TROUBLESHOOTING.md) | everyone | Symptoms, causes, fixes |
 | [10 Limitations and status](10_LIMITATIONS_AND_STATUS.md) | evaluators | Maturity matrix: implemented / tested / indexed / interoperability / release |
 | [11 Live Delivery Monitor and HEC test](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md) | operators | Counter definitions, controls per family, external HEC connection test, engine restart |
+| [12 NetFlow/IPFIX solution](12_NETFLOW_IPFIX_SOLUTION.md) | network and security engineers | Ten flow scenarios, normalized NDJSON, CIM status, wire path, limits, related SEC-P9 profiles |
+| [13 Demo runbook](13_DEMO_RUNBOOK.md) | presenters | Pre-demo checks, live demo script, backup plan |
 | [Sourcetype reference](../reference/SOURCETYPE_REFERENCE.md) | everyone | Generated from the registry; JSON/CSV exports alongside |
 | [Scenario reference](../reference/SCENARIO_REFERENCE.md) | everyone | Generated from the deduplicated scenario registry |
 

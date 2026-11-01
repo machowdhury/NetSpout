@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
 const root = path.resolve(process.cwd(), '..');
-const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/search');
 fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
 const base = `http://127.0.0.1:${env.LAB_WEB_PORT}`;
@@ -40,11 +40,11 @@ r.state_preserved = await app.locator('input[aria-label="Universal search"]').in
 // moderate load: a second continuous stream (different sourcetype) runs on the engine during the browser stream test
 const ENGINE = process.env.NETSPOUT_ENGINE || 'http://127.0.0.1:8091';
 const api = async (m, u, b) => (await fetch(ENGINE + u, { method: m, headers: { 'content-type': 'application/json' }, body: b ? JSON.stringify(b) : undefined })).json();
-const load = await api('POST', '/api/runs', { kind: 'sourcetype', target: 'arista:eos:syslog', vendor_id: 'arista_eos', index: 'dev_test_replay', mode: 'continuous', eps: 25 });
+const load = await api('POST', '/api/runs', { kind: 'sourcetype', target: 'arista:eos:syslog', vendor_id: 'arista_eos', index: (process.env.LAB_INDEX ?? 'dev_test_replay'), mode: 'continuous', eps: 25 });
 // single-sourcetype continuous streaming from a search result, with refresh recovery
 await app.locator('input[aria-label="Universal search"]').fill('cisco:dc:aci:class'); await app.locator('select[aria-label="Result type"]').selectOption('sourcetype'); await app.waitForTimeout(1500);
 await app.locator('[data-testid="stream-sourcetype"]').first().click();
-await app.locator('select[aria-label="Index"]').selectOption('dev_test_replay');
+await app.locator('select[aria-label="Index"]').selectOption((process.env.LAB_INDEX ?? 'dev_test_replay'));
 await app.locator('input[aria-label="Events per second"]').fill('8');
 await app.locator('[data-testid="start-streaming"]').click();
 await app.waitForSelector('.pf-mon', { timeout: 30000 }); await app.waitForTimeout(6000);

@@ -73,6 +73,7 @@ export function UniversalSearch({ onPickScenario }: { onPickScenario: (entryId: 
                   {h.kind === 'dashboard' && (href ? <a href={href} target="_top">Open dashboard</a> : <span className="ux-card__sum">Opens inside Splunk Web</span>)}
                   {h.kind === 'sourcetype' && h.runnable && <button type="button" data-testid="stream-sourcetype" onClick={() => setStreaming(streaming === h.id ? null : h.id)}>{streaming === h.id ? 'Hide streaming' : 'Stream this sourcetype'}</button>}
                   {h.kind === 'sourcetype' && streaming === h.id && <SourcetypeStream sourcetype={h.title} vendor={h.vendor} />}
+                  {!!(h as { relation?: string | null }).relation && <span className="ux-card__sum" data-testid="search-relation">{(h as { relation?: string | null }).relation}</span>}
                   {h.kind === 'sourcetype' && !!h.related_scenarios?.length && <span className="ux-card__sum">{h.related_scenarios.length} related scenario(s)</span>}
                 </li>
               );

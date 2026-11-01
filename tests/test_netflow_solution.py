@@ -164,3 +164,29 @@ def test_explorer_exposes_ten_runnable_netflow_entries():
     entries = [e for e in main._explorer().all_entries() if e.get("engine") == "netflow_solution" or "netflow" in str(e.get("entry_id"))]
     assert len(entries) == 10
     assert len({e["scenario_id"] for e in entries}) == 10
+
+
+def test_netflow_profiles_link_to_parent_packs_and_back():
+    from app import main
+    by = {e["scenario_id"]: e for e in main._explorer().all_entries() if e.get("scenario_id")}
+    for sid, parent in (("NF-SEC-06-DDOS", "SEC-P9-A-TRAFFIC-FLOOD"), ("NF-SEC-07-PORTSCAN", "SEC-P9-D-INTERNAL-RECON"), ("NF-SEC-09-BEACON", "SEC-P9-C-BEACONING"), ("NF-SEC-10-DNS-FLOW", "SEC-P9-E-DNS-TUNNEL")):
+        assert [r["scenario_id"] for r in by[sid]["related"]] == [parent]
+        assert by[parent]["related"][0]["scenario_id"] == sid and by[parent]["related"][0]["dashboard_view"] == "pf_" + sid
+    assert "related" not in by["NF-NOC-01-ELEPHANT"]
+    assert by["SEC-P9-B-DNS-ANOMALY"]["dashboard"]["splunk_view"] == "pf_SEC-P9-B-DNS-ANOMALY"
+
+
+def test_search_rows_label_the_relationship():
+    from fastapi.testclient import TestClient
+    from app import main
+    c = TestClient(main.app)
+    one = lambda q: c.get("/api/search", params={"q": q, "kind": "scenario"}).json()["items"][0]
+    assert one("NF-SEC-06-DDOS")["relation"] == "NetFlow profile of SEC-P9-A-TRAFFIC-FLOOD"
+    assert one("SEC-P9-A-TRAFFIC-FLOOD")["relation"] == "Has NetFlow profile NF-SEC-06-DDOS"
+
+
+def test_dashboard_handoff_carries_the_runs_index():
+    from app import main
+    snap = {"run_id": "run-x", "started_at": None, "links": {"dashboard_view": "pf_NF-NOC-01-ELEPHANT"}, "destination": {"index": "idx_network_ops", "metric_index": None}}
+    t = main._dashboard_handoff(snap, "READY")["tokens"]
+    assert t["form.run_tok"] == "run-x" and t["form.index_tok"] == "idx_network_ops" and "form.mindex_tok" not in t

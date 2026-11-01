@@ -5,7 +5,7 @@ return rows without an error. Each table/chart drilldown is executed with values
   docs/verification/evidence/netflow/dashboard_validation.json
 Usage: PYTHONPATH=src python scripts/validate_netflow_dashboards.py [scenario-id ...]     Credentials: git-ignored tests/lab/ta_validation/.env.lab
 """
-import base64
+import os, base64
 import json
 import re
 import ssl
@@ -20,10 +20,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from netspout_core import netflow_solution as nf  # noqa: E402
 
-ENV = dict(l.split("=", 1) for l in (ROOT / "tests/lab/ta_validation/.env.lab").read_text().split("\n") if "=" in l)
+ENV = dict(l.split("=", 1) for l in (ROOT / os.environ.get("LAB_ENV_DIR", "tests/lab/ta_validation") / ".env.lab").read_text().split("\n") if "=" in l)
 CTX = ssl._create_unverified_context()   # isolated lab, self-signed
 OUT = ROOT / "docs/verification/evidence/netflow/dashboard_validation.json"
-INDEX = "dev_test_replay"
+INDEX = os.environ.get("LAB_INDEX", "dev_test_replay")
 
 
 def spl(q, earliest="-24h", latest="now"):

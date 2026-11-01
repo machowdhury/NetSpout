@@ -2870,3 +2870,4 @@
 
 .pf-mon-wire{margin:10px 0;padding:10px 12px;border:1px solid #3a3f44;border-radius:8px;background:#1d2023}
 .pf-mon-wire b{display:block;margin-bottom:6px}
+.ux-link{background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit}

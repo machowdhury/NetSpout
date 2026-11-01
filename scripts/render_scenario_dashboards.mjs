@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
 
 const root = path.resolve(process.cwd(), '..');
-const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/dashboards');
 const sessions = JSON.parse(fs.readFileSync(path.join(evDir, 'sessions.json'), 'utf8')).sessions;
 const shots = new Set((process.env.SHOT || '').split(',').filter(Boolean));   // screenshots are stored only for these ids (all tabs)

@@ -17,6 +17,7 @@ import validate_ta_windows as lab  # noqa: E402
 from netspout_core.hec_connection_test import run_test  # noqa: E402
 
 ENGINE = os.environ.get("NETSPOUT_ENGINE", "http://127.0.0.1:8091")
+IDX = os.environ.get("LAB_INDEX", "dev_test_replay")
 TOKEN, PASSWORD = lab.ENV["LAB_HEC_TOKEN"], lab.ENV["LAB_SPLUNK_PASSWORD"]
 BASE = {"hec_url": "https://127.0.0.1:%s/services/collector" % lab.ENV["LAB_HEC_PORT"], "deployment_mode": "DOCKER_LAB", "allow_insecure_tls": True}
 
@@ -36,19 +37,19 @@ def brief(res):
 
 def main():
     out, fast = {}, dict(connect_timeout=2.0, http_timeout=4.0, polls=1, interval=0.5)
-    code, res = engine_test("dev_test_replay")
+    code, res = engine_test(IDX)
     out["valid_with_search"] = {"http": code, **brief(res)}
-    code, res = engine_test("main")
+    code, res = engine_test(os.environ.get("LAB_DISALLOWED_INDEX", "main"))
     out["disallowed_index_via_engine"] = {"http": code, **brief(res)}
     marker = res["test_id"]
     rows = lab.search('search index=* "%s" | stats count' % marker, "-1h")
     out["disallowed_index_via_engine"]["events_found_anywhere"] = int((rows[0].get("count") if rows else 0) or 0)
-    allowed = ["dev_test_replay", "dev_missing_index"]
-    out["accepted_without_search"] = brief(run_test(BASE, TOKEN, "dev_test_replay", allowed, None, None, **fast))
-    out["invalid_token"] = brief(run_test(BASE, "00000000-0000-0000-0000-000000000000", "dev_test_replay", allowed, None, None, **fast))
-    out["unreachable"] = brief(run_test(dict(BASE, hec_url="https://127.0.0.1:1/services/collector"), TOKEN, "dev_test_replay", allowed, None, None, **fast))
-    out["dns_failure"] = brief(run_test(dict(BASE, hec_url="https://hec.invalid/services/collector"), TOKEN, "dev_test_replay", allowed, None, None, **fast))
-    out["tls_certificate_not_trusted"] = brief(run_test(dict(BASE, allow_insecure_tls=False), TOKEN, "dev_test_replay", allowed, None, None, **fast))
+    allowed = [IDX, "dev_missing_index"]
+    out["accepted_without_search"] = brief(run_test(BASE, TOKEN, IDX, allowed, None, None, **fast))
+    out["invalid_token"] = brief(run_test(BASE, "00000000-0000-0000-0000-000000000000", IDX, allowed, None, None, **fast))
+    out["unreachable"] = brief(run_test(dict(BASE, hec_url="https://127.0.0.1:1/services/collector"), TOKEN, IDX, allowed, None, None, **fast))
+    out["dns_failure"] = brief(run_test(dict(BASE, hec_url="https://hec.invalid/services/collector"), TOKEN, IDX, allowed, None, None, **fast))
+    out["tls_certificate_not_trusted"] = brief(run_test(dict(BASE, allow_insecure_tls=False), TOKEN, IDX, allowed, None, None, **fast))
     # a nonexistent index that is on the allowlist: this lab HEC acknowledges the event (acceptance), but an independent search must not find it in that index
     out["accepted_but_not_indexed_missing_index"] = brief(run_test(BASE, TOKEN, "dev_missing_index", allowed, lambda q: (lab.search(q, "-15m"), None), "x", connect_timeout=2.0, http_timeout=4.0, polls=2, interval=3.0))
     blob = json.dumps(out)

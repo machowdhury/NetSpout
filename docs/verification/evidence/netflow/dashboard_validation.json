@@ -1,10 +1,10 @@
 {
- "generated_utc": "2026-11-01T03:16+00:00",
- "index": "dev_test_replay",
+ "generated_utc": "2026-11-01T15:10+00:00",
+ "index": "idx_network_ops",
  "dashboards": {
   "NF-NOC-01-ELEPHANT": {
    "scenario_id": "NF-NOC-01-ELEPHANT",
-   "run_id": "run-77566dd92eb6",
+   "run_id": "run-f3b93ba9245e",
    "panels": {
     "Flow records": {
      "type": "splunk.singlevalue",
@@ -55,8 +55,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:08:40.000+00:00",
-      "Throughput_Mbps": "0.1",
+      "_time": "2026-11-01T14:51:40.000+00:00",
+      "Throughput_Mbps": "0.3",
       "_span": "10"
      }
     },
@@ -76,7 +76,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:09:12",
+      "start": "14:52:07",
       "src": "192.0.2.51",
       "dest": "192.0.2.201",
       "dest_port": "873",
@@ -105,7 +105,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "duration_s": "0.3",
+      "duration_s": "0.1",
       "MB": "0.00"
      }
     },
@@ -115,7 +115,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:09:12",
+      "start": "14:52:07",
       "exporter_ip": "192.0.2.1",
       "src": "192.0.2.51",
       "src_port": "40001",
@@ -147,20 +147,20 @@
      "rows": 1,
      "error": null,
      "from_row": {
-      "start": "03:09:12",
+      "start": "14:52:07",
       "src": "192.0.2.51",
       "dest": "192.0.2.201"
      }
     }
    },
-   "runs_dropdown_rows": 7,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-NOC-02-DSCP": {
    "scenario_id": "NF-NOC-02-DSCP",
-   "run_id": "run-4aa3b054190c",
+   "run_id": "run-e8dd126e2d25",
    "panels": {
     "Policy compliance (% of voice/video flows)": {
      "type": "splunk.markergauge",
@@ -183,13 +183,13 @@
     },
     "Marked as policy vs not marked as policy, over time": {
      "type": "splunk.column",
-     "rows": 12,
+     "rows": 13,
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:00.000+00:00",
-      "compliant": "12",
-      "noncompliant": "2",
+      "_time": "2026-11-01T14:52:30.000+00:00",
+      "compliant": "1",
+      "noncompliant": "0",
       "_span": "15"
      }
     },
@@ -249,7 +249,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:11:55",
+      "start": "14:55:37",
       "exporter_ip": "192.0.2.2",
       "src": "198.51.100.124",
       "src_port": "23131",
@@ -285,14 +285,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 5,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-NOC-03-ROUTING-LOOP": {
    "scenario_id": "NF-NOC-03-ROUTING-LOOP",
-   "run_id": "run-b91bcd65c2fd",
+   "run_id": "run-76336267f6be",
    "panels": {
     "Flagged pairs": {
      "type": "splunk.singlevalue",
@@ -354,8 +354,8 @@
        "2"
       ],
       "avg_pkts": "2.0",
-      "first_seen": "03:09:57",
-      "last_seen": "03:11:50"
+      "first_seen": "14:54:16",
+      "last_seen": "14:56:08"
      }
     },
     "Anomaly trend: indicator flows vs all flows": {
@@ -364,8 +364,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:00.000+00:00",
-      "all_flows": "6",
+      "_time": "2026-11-01T14:53:15.000+00:00",
+      "all_flows": "3",
       "indicator_flows": "0",
       "_span": "15"
      }
@@ -386,7 +386,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:11:52",
+      "start": "14:56:11",
       "exporter_ip": "192.0.2.2",
       "src": "198.51.100.102",
       "src_port": "41002",
@@ -416,14 +416,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 5,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-NOC-04-ASYMMETRY": {
    "scenario_id": "NF-NOC-04-ASYMMETRY",
-   "run_id": "run-8706ab1b4cbf",
+   "run_id": "run-a080726e2d70",
    "panels": {
     "Pair classification": {
      "type": "splunk.pie",
@@ -507,7 +507,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:10:56",
+      "start": "14:55:47",
       "exporter_ip": "192.0.2.1",
       "src": "198.51.100.20",
       "src_port": "30000",
@@ -537,14 +537,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 6,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-NOC-05-BASELINE-DRIFT": {
    "scenario_id": "NF-NOC-05-BASELINE-DRIFT",
-   "run_id": "run-f972af3a6bb4",
+   "run_id": "run-81cac8b9b3de",
    "panels": {
     "Largest duration ratio": {
      "type": "splunk.singlevalue",
@@ -595,10 +595,10 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:20.000+00:00",
-      "192.0.2.80": "561.3636363636364",
-      "192.0.2.81": "595.5714285714286",
-      "192.0.2.82": "533.5",
+      "_time": "2026-11-01T14:54:40.000+00:00",
+      "192.0.2.80": "571.1111111111111",
+      "192.0.2.81": "566.4285714285714",
+      "192.0.2.82": "523.75",
       "_span": "20"
      }
     },
@@ -619,10 +619,10 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:20.000+00:00",
-      "192.0.2.80": "172223",
-      "192.0.2.81": "230105",
-      "192.0.2.82": "103273",
+      "_time": "2026-11-01T14:54:40.000+00:00",
+      "192.0.2.80": "140674",
+      "192.0.2.81": "105807",
+      "192.0.2.82": "73939",
       "_span": "20"
      }
     },
@@ -642,7 +642,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:11:41",
+      "start": "14:57:06",
       "exporter_ip": "192.0.2.1",
       "src": "198.51.100.35",
       "src_port": "50954",
@@ -679,16 +679,16 @@
   },
   "NF-SEC-06-DDOS": {
    "scenario_id": "NF-SEC-06-DDOS",
-   "run_id": "run-47ce7dd082e6",
+   "run_id": "run-736f2720ea63",
    "panels": {
     "Packet rate (packets per second, 5 s buckets)": {
      "type": "splunk.area",
-     "rows": 37,
+     "rows": 36,
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:30.000+00:00",
-      "pps": "20.8",
+      "_time": "2026-11-01T15:01:40.000+00:00",
+      "pps": "21.2",
       "_span": "5"
      }
     },
@@ -743,8 +743,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:30.000+00:00",
-      "PSH|ACK": "3",
+      "_time": "2026-11-01T15:01:30.000+00:00",
+      "PSH|ACK": "2",
       "SYN": "0",
       "_span": "15"
      }
@@ -775,8 +775,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:09:30.000+00:00",
-      "distinct_sources": "6",
+      "_time": "2026-11-01T15:01:30.000+00:00",
+      "distinct_sources": "3",
       "_span": "15"
      }
     },
@@ -814,14 +814,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 5,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-SEC-07-PORTSCAN": {
    "scenario_id": "NF-SEC-07-PORTSCAN",
-   "run_id": "run-7b7c85c230c7",
+   "run_id": "run-ce4c66af7236",
    "panels": {
     "Footprint per source: distinct destinations (x) vs distinct ports (y); one dot per source": {
      "type": "splunk.scatter",
@@ -853,8 +853,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:10:20.000+00:00",
-      "198.51.100.77": "6",
+      "_time": "2026-11-01T14:57:30.000+00:00",
+      "198.51.100.77": "5",
       "_span": "10"
      }
     },
@@ -864,8 +864,8 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:10:20.000+00:00",
-      "198.51.100.77": "3",
+      "_time": "2026-11-01T14:57:30.000+00:00",
+      "198.51.100.77": "2",
       "_span": "10"
      }
     },
@@ -912,7 +912,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:10:23",
+      "start": "14:57:34",
       "exporter_ip": "192.0.2.1",
       "src": "198.51.100.77",
       "src_port": "56062",
@@ -962,7 +962,7 @@
   },
   "NF-SEC-08-EXFIL": {
    "scenario_id": "NF-SEC-08-EXFIL",
-   "run_id": "run-7f55d28ddfc9",
+   "run_id": "run-4f7427b7a3a4",
    "panels": {
     "Outbound volume: internal source \u2192 external destination (MB)": {
      "type": "splunk.sankey",
@@ -1008,7 +1008,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:10:00.000+00:00",
+      "_time": "2026-11-01T14:57:50.000+00:00",
       "Mbps": "0.1",
       "_span": "10"
      }
@@ -1034,8 +1034,8 @@
       "MB": "675.0",
       "flows": "9",
       "sources": "1",
-      "first": "03:11:43",
-      "last": "03:12:58"
+      "first": "14:59:27",
+      "last": "15:00:42"
      }
     },
     "Outbound bytes by port (port-based label)": {
@@ -1054,14 +1054,14 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:12:36",
+      "start": "15:00:05",
       "exporter_ip": "192.0.2.2",
       "src": "192.0.2.120",
-      "src_port": "44010",
+      "src_port": "44008",
       "dest": "203.0.113.50",
-      "dest_port": "443",
+      "dest_port": "22",
       "transport": "tcp",
-      "app": "https",
+      "app": "ssh",
       "tcp_flags_text": "PSH|ACK",
       "dscp": "0",
       "packets": "51795",
@@ -1092,14 +1092,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 3,
+   "runs_dropdown_rows": 4,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-SEC-09-BEACON": {
    "scenario_id": "NF-SEC-09-BEACON",
-   "run_id": "run-a572a00ce3b7",
+   "run_id": "run-7d42822b0196",
    "panels": {
     "Inter-arrival interval distribution (seconds between consecutive flow starts per pair)": {
      "type": "splunk.column",
@@ -1158,14 +1158,14 @@
     },
     "Periodicity timeline: contacts per 5 s for the 3 most regular pairs": {
      "type": "splunk.column",
-     "rows": 35,
+     "rows": 34,
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:10:05.000+00:00",
+      "_time": "2026-11-01T14:58:30.000+00:00",
       "198.51.100.140 \u2192 203.0.113.66": "1",
       "198.51.100.154 \u2192 203.0.113.14": "0",
-      "198.51.100.157 \u2192 203.0.113.17": "0",
+      "198.51.100.157 \u2192 203.0.113.17": "1",
       "_span": "5"
      }
     },
@@ -1185,7 +1185,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:10:09",
+      "start": "14:58:30",
       "exporter_ip": "192.0.2.2",
       "src": "198.51.100.140",
       "src_port": "45000",
@@ -1215,14 +1215,14 @@
      }
     }
    },
-   "runs_dropdown_rows": 4,
+   "runs_dropdown_rows": 7,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true
   },
   "NF-SEC-10-DNS-FLOW": {
    "scenario_id": "NF-SEC-10-DNS-FLOW",
-   "run_id": "run-246613bc876b",
+   "run_id": "run-28e135755b65",
    "panels": {
     "DNS bytes over time by direction": {
      "type": "splunk.area",
@@ -1230,9 +1230,9 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "_time": "2026-11-01T03:10:15.000+00:00",
-      "query (client to resolver)": "1249",
-      "response (resolver to client)": "2773",
+      "_time": "2026-11-01T14:59:00.000+00:00",
+      "query (client to resolver)": "140",
+      "response (resolver to client)": "313",
       "_span": "15"
      }
     },
@@ -1334,7 +1334,7 @@
      "error": null,
      "unresolved_tokens": [],
      "sample": {
-      "start": "03:10:42",
+      "start": "14:59:38",
       "exporter_ip": "192.0.2.1",
       "src": "198.51.100.200",
       "src_port": "53791",
@@ -1364,7 +1364,7 @@
      }
     }
    },
-   "runs_dropdown_rows": 3,
+   "runs_dropdown_rows": 13,
    "empty_panels": [],
    "bad_drilldowns": [],
    "pass": true

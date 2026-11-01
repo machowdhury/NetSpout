@@ -44,3 +44,4 @@ backend/.env
 tests/lab/**/.env*
 .cloud_stage/
 pulseforge-engine.tar.gz
+.lab_engine_cfg/

@@ -167,6 +167,12 @@ class UseCaseExplorer:
             entries.append(self._replay_entry(row))
         for row in netflow_packs:
             entries.append(self._netflow_entry(row))
+        by_sid = {e["scenario_id"]: e for e in entries}
+        for e in list(entries):   # parent <-> NetFlow profile links; both stay separate, independently runnable scenarios
+            parent = by_sid.get((e.get("netflow") or {}).get("extends") or "")
+            if parent:
+                e.setdefault("related", []).append(self._related(parent, "parent_pack"))
+                parent.setdefault("related", []).append(self._related(e, "netflow_profile"))
         seen = {e["scenario_id"] for e in entries}
         self.duplicate_candidates: List[str] = []
         for row in candidates:
@@ -203,8 +209,11 @@ class UseCaseExplorer:
     def _unified_entry(self, s: Dict[str, Any], sources: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
         sid = s["scenario_id"]
         recipe = self._dashboard_ref(sid)
-        # a recipe dashboard that already ships a verified Splunk view (SEC-P9-B DNS anomaly) stays primary; otherwise the Studio view with stored evidence wins
-        dash = recipe if (recipe and recipe.get("splunk_view")) else (self._replay_dashboard_ref(sid) or recipe)
+        # the run-bound Studio view with stored data-validation evidence is primary; a recipe view (SEC-P9-B studio, SPL_VALIDATED only) stays reachable as `alternate_view`
+        replay = self._replay_dashboard_ref(sid)
+        dash = replay or recipe
+        if replay and recipe and recipe.get("splunk_view"):
+            dash = {**replay, "alternate_view": recipe["splunk_view"]}
         raw = (self._dashboards.get(sid) or {}).get("scenario_maturity") or s.get("scenario_maturity") or "NOT_ESTABLISHED"
         vendors = sorted({sources[x]["vendor"] for x in s.get("source_ids", []) if x in sources})
         entry = self._operational_entry(
@@ -280,6 +289,11 @@ class UseCaseExplorer:
         entry["netflow"] = {"code": row["code"], "question": row["question"], "limits": row["limits"], "extends": row.get("extends"), "mitre": row.get("mitre", []), "params": row.get("params", {}),
                             "flow_kind": row["kind"]}
         return entry
+
+    @staticmethod
+    def _related(e: Dict[str, Any], relation: str) -> Dict[str, Any]:
+        d = e.get("dashboard") or {}
+        return {"entry_id": e["entry_id"], "scenario_id": e["scenario_id"], "title": e["title"], "relation": relation, "dashboard_view": d.get("splunk_view")}
 
     def _replay_dashboard_ref(self, sid: str) -> Optional[Dict[str, Any]]:
         d = self._replay_dashboards.get(sid)

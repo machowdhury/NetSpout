@@ -6,7 +6,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
 const root = path.resolve(process.cwd(), '..');
-const env = Object.fromEntries(fs.readFileSync(path.join(root, 'tests/lab/ta_validation/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
 const evDir = path.join(root, 'docs/verification/evidence/netflow');
 fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
 const IDS = ['NF-NOC-01-ELEPHANT', 'NF-NOC-02-DSCP', 'NF-NOC-03-ROUTING-LOOP', 'NF-NOC-04-ASYMMETRY', 'NF-NOC-05-BASELINE-DRIFT', 'NF-SEC-06-DDOS', 'NF-SEC-07-PORTSCAN', 'NF-SEC-08-EXFIL', 'NF-SEC-09-BEACON', 'NF-SEC-10-DNS-FLOW'];
@@ -57,12 +57,12 @@ for (const sid of only) {
       await page.waitForTimeout(20000);
       const body = await page.locator('body').innerText();
       const runTok = decodeURIComponent((r.href.match(/run_tok=([^&]+)/) || [])[1] || '');
-      r.dashboard = { run_id_visible: body.includes(runTok), no_results_panels: (body.match(/No results found/g) || []).length, errors: (body.match(/(Search (failed|error)|Error in|Unable to load)[^\n]{0,80}/gi) || []).length };
+      r.dashboard = { run_id_visible: body.includes(runTok), no_results_panels: (body.match(/No search results returned|No results found/g) || []).length, errors: (body.match(/(Search (failed|error)|Error in|Unable to load)[^\n]{0,80}/gi) || []).length };
       await page.screenshot({ path: path.join(evDir, 'screens', sid + '__run_bound.jpg'), type: 'jpeg', quality: 55, fullPage: true });
     }
     r.title_matches = r.monitor_title.toLowerCase().includes(sid.split('-')[1] ? '' : '') || true;
     r.config_matches = r.config_for.includes(({ 'NF-NOC-01-ELEPHANT': 'NOC-01', 'NF-NOC-02-DSCP': 'NOC-02', 'NF-NOC-03-ROUTING-LOOP': 'NOC-03', 'NF-NOC-04-ASYMMETRY': 'NOC-04', 'NF-NOC-05-BASELINE-DRIFT': 'NOC-05', 'NF-SEC-06-DDOS': 'SEC-06', 'NF-SEC-07-PORTSCAN': 'SEC-07', 'NF-SEC-08-EXFIL': 'SEC-08', 'NF-SEC-09-BEACON': 'SEC-09', 'NF-SEC-10-DNS-FLOW': 'SEC-10' })[sid]);
-    r.ok = r.config_matches && r.readiness_states.includes('READY') && !!r.href && (r.href || '').includes('pf_' + sid) && r.dashboard?.run_id_visible && r.dashboard.errors === 0 && /UDP exported/.test(r.wire_panel || '');
+    r.ok = r.config_matches && r.readiness_states.includes('READY') && !!r.href && (r.href || '').includes('pf_' + sid) && r.dashboard?.run_id_visible && r.dashboard.errors === 0 && r.dashboard.no_results_panels === 0 && /UDP exported/.test(r.wire_panel || '');
   } catch (e) { r.ok = false; r.error = String(e).slice(0, 220); }
   results[sid] = r;
   console.log((r.ok ? 'PASS ' : 'FAIL ') + sid, JSON.stringify({ states: r.readiness_states, dash: r.dashboard, err: r.error }));

@@ -108,7 +108,7 @@ Generated from the registries (`docs/reference/`), kept separate on purpose:
 | Runnable scenarios | 148 |
 | Catalog-only scenarios | 209 |
 | Installed dashboards | 148 |
-| Dashboards data-validated or better | 147 |
+| Dashboards data-validated or better | 148 |
 | Dashboards visually verified (screenshot inspected) | 20 |
 
 The Explorer's 700+ search entries include 365 security stories and are not the scenario count. Full references: [sourcetypes](docs/reference/SOURCETYPE_REFERENCE.md), [scenarios](docs/reference/SCENARIO_REFERENCE.md), [status and limitations](docs/guides/10_LIMITATIONS_AND_STATUS.md).
@@ -159,7 +159,7 @@ Complete list: [Installation guide](docs/guides/03_INSTALLATION.md), [Monitor an
 * The 90 sourcetypes that cannot be grounded in a native generator or recorded sample are catalog-only.
 * 209 scenario definitions are catalog-only; 15 more are contracts without executable telemetry.
 * Validated in an isolated Docker lab. `netspout_cloud.spl` (dashboards only) passed AppInspect cloud rules; that is **not** Splunk Cloud approval.
-* Native flow export over UDP can lose datagrams on some Docker setups. The run panel shows exported versus collector-decoded counts rather than hiding the gap.
+* Native flow export over UDP is unreliable by nature. The repository's collector compose file runs GoFlow2 with `workers=1` (several workers dropped records for lack of a template; fixed and measured at 100% decoded in the lab). The run panel always shows exported versus collector-decoded counts rather than hiding a gap.
 * Telemetry for incident packs is modeled by NetSpout, not vendor-native. Details: [Limitations and status](docs/guides/10_LIMITATIONS_AND_STATUS.md), [LIMITATIONS](docs/LIMITATIONS.md).
 
 </details>
@@ -175,6 +175,7 @@ Organized by purpose (Diátaxis). The guides below are the documentation; nothin
 | [Quickstart](docs/QUICKSTART.md) | [Run a NetFlow/IPFIX scenario](docs/guides/12_NETFLOW_IPFIX_SOLUTION.md) |
 | | [Configure native flow collectors](docs/guides/NATIVE_FLOW_QUICKSTART.md) |
 | | [Troubleshoot ingestion](docs/guides/09_TROUBLESHOOTING.md) |
+| | [Run the Nov 3 demo](docs/guides/13_DEMO_RUNBOOK.md) |
 
 | Reference | Explanation |
 |---|---|
@@ -184,7 +185,7 @@ Organized by purpose (Diátaxis). The guides below are the documentation; nothin
 | [Network protocol guide](docs/guides/06_NETWORK_TELEMETRY_GUIDE.md) | [Security, TA and CIM status](docs/guides/08_SECURITY_TA_CIM_GUIDE.md) |
 | [Limitations and status](docs/guides/10_LIMITATIONS_AND_STATUS.md) | [Security and index allowlist](docs/SECURITY.md) |
 | [Splunk Cloud guide](docs/guides/04_SPLUNK_CLOUD_GUIDE.md) | [Telemetry provenance](docs/TELEMETRY_PROVENANCE.md) |
-| [Verification evidence](docs/verification/) · [Release notes](docs/releases/NETSPOUT_V1_RC1_RELEASE_REPORT.md) | [Roadmap](docs/ROADMAP.md) |
+| [Verification evidence](docs/verification/) · [Release acceptance](docs/verification/release_acceptance_final.md) · [NetFlow verification](docs/verification/netflow_solution_verification.md) · [Release notes](docs/releases/NETSPOUT_V1_RC1_RELEASE_REPORT.md) | [Roadmap](docs/ROADMAP.md) |
 
 ## Safety
 

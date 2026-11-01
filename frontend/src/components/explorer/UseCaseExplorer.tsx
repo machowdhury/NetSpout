@@ -16,9 +16,9 @@ import './explorer.css';
 
 type StepStatus = 'idle' | 'running' | 'ok' | 'failed';
 // Only meaningful inside Splunk Web, where the app's views live on the same origin as this iframe.
-function splunkDashboardHref(view?: string | null, runId?: string): string | null {
+function splunkDashboardHref(view?: string | null, runId?: string, index?: string): string | null {
   const m = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\/static\/app\/netspout\//);
-  return view && m ? `/${m[1]}/app/netspout/${view}?form.run_tok=${encodeURIComponent(runId ?? '*')}` : null;
+  return view && m ? `/${m[1]}/app/netspout/${view}?form.run_tok=${encodeURIComponent(runId ?? '*')}${index ? `&form.index_tok=${encodeURIComponent(index)}` : ''}` : null;
 }
 
 interface StepState { status: StepStatus; lines: string[] }
@@ -182,7 +182,7 @@ export function UseCaseExplorer() {
         </section>
 
         <section className="ux-detail" aria-label="Workflow">
-          {selected ? <Workflow key={selected.entry_id} entry={selected} /> :
+          {selected ? <Workflow key={selected.entry_id} entry={selected} onOpen={open} /> :
             <p className="ux-empty">Select a use case to see its workflow and what is blocked.</p>}
         </section>
       </div>
@@ -190,7 +190,7 @@ export function UseCaseExplorer() {
   );
 }
 
-function Workflow({ entry }: { entry: ExplorerEntry }) {
+function Workflow({ entry, onOpen }: { entry: ExplorerEntry; onOpen: (e: ExplorerEntry) => void }) {
   const [steps, setSteps] = useState<Steps>({});
   const [ctx, setCtx] = useState<RunContext>({});
   const ctxRef = useRef<RunContext>({});
@@ -472,6 +472,17 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>
+      {((entry as ExplorerEntry & { related?: { entry_id: string; scenario_id: string; title: string; relation: string; dashboard_view?: string | null }[] }).related ?? []).length > 0 && (
+        <section className="ux-preview" data-testid="related-scenarios" aria-label="Related scenario profiles">
+          <h3>Related scenario profiles</h3>
+          <ul>{((entry as ExplorerEntry & { related?: { entry_id: string; scenario_id: string; title: string; relation: string; dashboard_view?: string | null }[] }).related ?? []).map((r) => (
+            <li key={r.entry_id}>
+              <b>{r.relation === 'parent_pack' ? 'Extends fixed pack' : 'NetFlow/IPFIX profile'}:</b>{' '}
+              <button type="button" className="ux-link" onClick={() => onOpen({ entry_id: r.entry_id } as ExplorerEntry)}>{r.scenario_id}</button> {r.title}
+              {r.dashboard_view && <> — dashboard <code>{r.dashboard_view}</code></>}
+            </li>))}</ul>
+          <p className="ux-note">Both are runnable. The profile is a separate execution (different generator and dashboard); the fixed pack is unchanged.</p>
+        </section>)}
       {entry.engine === 'netflow_solution' && <NetflowConfig entry={entry} value={nfCfg} onChange={setNfCfg} />}
       {!security && entry.engine !== 'replay_pack' && entry.runnable !== false && (
         <button type="button" className="ux-run-btn" data-testid="monitored-run"
@@ -500,9 +511,9 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
                     <li key={c.check_id} className={c.state === 'PASS' ? 'is-pass' : 'is-fail'}>{c.state} · {c.label}: {c.detail}</li>))}</ul>
                 )}
                 {st.lines.map((l, k) => <p className="ux-line" key={k}>{l}</p>)}
-                {s.step === 'DASHBOARD' && st.status === 'ok' && splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId) && (
+                {s.step === 'DASHBOARD' && st.status === 'ok' && splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId, index || undefined) && (
                   <a className="ux-line" data-testid="open-splunk-dashboard" target="_top"
-                     href={splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId)!}>Open the Splunk Dashboard Studio dashboard for this run</a>
+                     href={splunkDashboardHref(entry.dashboard?.splunk_view, ctxRef.current.runId, index || undefined)!}>Open the Splunk Dashboard Studio dashboard for this run</a>
                 )}
               </div>
               {s.step !== 'SELECT' && act && !blocked && (

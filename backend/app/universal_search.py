@@ -66,6 +66,7 @@ def build_records(sourcetypes: Iterable[Dict[str, Any]], entries: Iterable[Dict[
             "kind": "scenario", "id": e["entry_id"], "title": e["title"], "subtitle": e.get("scenario_id"),
             "vendor": ", ".join(e.get("vendors") or []), "category": e.get("category"), "industries": [i["id"] for i in e.get("industries") or []],
             "execution_mode": e.get("engine"), "maturity": (e.get("maturity") or {}).get("tier"), "runnable": bool(e.get("runnable")),
+            "relation": "; ".join(("NetFlow profile of " if r["relation"] == "parent_pack" else "Has NetFlow profile ") + r["scenario_id"] for r in e.get("related") or []) or None,
             "blocked_reason": e.get("blocked_reason"), "dashboard_view": dash.get("splunk_view"), "dashboard_available": bool(dash.get("splunk_view")),
             "independently_indexed": bool(e.get("live_verified")), "related_sourcetypes": list(e.get("sourcetypes") or []) + list(e.get("source_ids") or []),
             "next_action": "Review, run and monitor" if e.get("runnable") else "Catalog only: " + (e.get("blocked_reason") or "not executable"),

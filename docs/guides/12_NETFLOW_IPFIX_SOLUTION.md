@@ -120,3 +120,20 @@ The deliverable is **Dashboard Studio (v2)** views (`<dashboard version="2">` wr
 ## 9. Verification
 
 `scripts/validate_netflow_dashboards.py` (every data source and drilldown against real indexed data), `scripts/render_netflow_live.mjs` (rendered in Splunk Web), `scripts/render_netflow_flow.mjs` (search → configure → run → monitor → READY → dashboard), `scripts/validate_netflow_wire.py`. Results: `docs/verification/netflow_solution_verification.md`.
+
+## Related scenario profiles (search and scenario detail)
+
+Four NetFlow scenarios are configurable profiles of existing SEC-P9 packs. Both sides stay in search and both stay runnable; they are different executions with different dashboards:
+
+| NetFlow profile (new dashboard) | Parent fixed pack (unchanged dashboard) |
+|---|---|
+| `NF-SEC-06-DDOS` → `pf_NF-SEC-06-DDOS` | `SEC-P9-A-TRAFFIC-FLOOD` → `pf_SEC-P9-A-TRAFFIC-FLOOD` |
+| `NF-SEC-07-PORTSCAN` → `pf_NF-SEC-07-PORTSCAN` | `SEC-P9-D-INTERNAL-RECON` → `pf_SEC-P9-D-INTERNAL-RECON` |
+| `NF-SEC-09-BEACON` → `pf_NF-SEC-09-BEACON` | `SEC-P9-C-BEACONING` → `pf_SEC-P9-C-BEACONING` |
+| `NF-SEC-10-DNS-FLOW` → `pf_NF-SEC-10-DNS-FLOW` | `SEC-P9-E-DNS-TUNNEL` → `pf_SEC-P9-E-DNS-TUNNEL` |
+
+Search rows carry a relation label ("NetFlow profile of …" / "Has NetFlow profile …"), and a scenario's detail page shows a **Related scenario profiles** panel with a link to the other side and its dashboard. The data comes from the `related` list on the Explorer entry (`GET /api/explorer/entries/{id}`) and `relation` on `GET /api/search` scenario rows. The other six NetFlow scenarios have no parent pack.
+
+## Index in the lab
+
+The target index is whichever authorized index your Connection Center allows. PulseForge never creates one. The earlier validation lab used `dev_test_replay`; the `phase4e` lab (ports 18000/18088/18191) has no `dev_test_replay` and no `netflow` index, so its runs used `idx_network_ops`. There is no `netflow` index in either lab.

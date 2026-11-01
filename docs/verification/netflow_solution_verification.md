@@ -14,7 +14,7 @@ Isolated Docker Splunk 10.2.7 lab (`netspout_tavalidation_splunk`), installed `n
 ## Wire path: what is and is not proven
 
 * Proven: for every record the collector decoded, all compared fields (times, 5-tuple, protocol, TCP flags, ToS/DSCP, interfaces, ASNs, bytes, packets, duration, app) equal the generated record.
-* **Not complete delivery.** In the Docker Desktop lab the collector decoded between roughly 82% and 100% of exported records per run (most losses were about one datagram, about 21 records). In the final API runs 5 of 11 runs were fully decoded and 6 were `PARTIAL` (for example 224 exported, 203 decoded). The cause was not isolated; slower pacing (50 datagrams/s) did not remove it. The run panel shows exported versus decoded as measured and the HEC path is independent, so no indexed or accepted count depends on it.
+* **UDP loss: root cause found and fixed (2026-11-01).** Earlier runs decoded 82–100% of exported records, usually missing one or two datagrams (about 21 records each) from the first exporter. GoFlow2 logged `template error`: the collector ran `workers=2` on one socket, so a data datagram could reach the worker that had not received the exporter's template and was dropped. `deploy/collector/docker-compose.collector.yml` now starts both listeners with `?workers=1`. After the change, the wire round trip decoded **100% (0 mismatches) for all ten scenarios** and all 11 API runs reached `COLLECTOR_DECODED` (exported equals decoded). Slower pacing never helped because pacing was not the cause. The fix applies to collectors started from the repository's compose file; an externally managed GoFlow2 needs the same setting. UDP is still unreliable by nature: the run panel keeps exported and decoded separate and reports any gap, and no accepted or indexed count depends on the wire stage.
 * The first scripted pass reported SEC-10 as failed because a parallel diagnostic export wrote extra rows into the same collector file (more decoded than exported). Rerun alone it passed (699 of 720 decoded, 0 field mismatches).
 
 ## Findings fixed during verification
@@ -31,3 +31,26 @@ Isolated Docker Splunk 10.2.7 lab (`netspout_tavalidation_splunk`), installed `n
 * Flow-only DNS and routing-loop dashboards are indicators with stated limits (no query names, no TTL).
 * `cisco:ios:ipfix` is selectable per run but is not a catalog sourcetype.
 * No Classic Simple XML versions were produced.
+
+## Final acceptance in the `netspout_phase4e_splunk` lab (2026-11-01)
+
+Splunk Enterprise 10.2.x container, Web 18000, management 18191, HEC 18088, installed from the final `netspout.spl`, splunkd restarted, engine on 8091 (never 8081), index `idx_network_ops` (no `dev_test_replay`, no `netflow`; nothing was created).
+
+| Check | Result |
+|---|---|
+| Ten scenarios + one `cisco:ios:ipfix` run via `/api/runs` | 11 of 11: generated = HEC accepted = independently indexed, rejected 0, unknown 0, readiness READY, IPFIX wire `COLLECTOR_DECODED` with exported = decoded (`live_runs.json`) |
+| Wire round trip | 10 of 10 at 100% decoded, 0 field mismatches (`wire_roundtrip.json`) after the GoFlow2 `workers=1` fix |
+| Dashboard data sources and drilldowns on this lab's index | 10 of 10 return rows (`dashboard_validation.json`) |
+| Dashboards rendered in Splunk Web with run and index bound, empty-panel check | 10 of 10, 0 "No search results returned" panels (`browser_render.json`); screenshots re-captured, 3 inspected again (NOC-01, NOC-04, SEC-07), the other 7 inspected in the first pass |
+| Browser flow: search → configure → preview → run → monitor → READY → run-bound dashboard, clean browser state | 10 of 10 (SEC-06 timed out once waiting for the wire table, passed on rerun alone; `browser_flow.json` records both) |
+| Search, continuous stream, pause/resume/stop, refresh reattach, scenario run, readiness toast, run-bound dashboard | pass (`evidence/search/browser.json`), 0 orphan runs |
+| Native (`barracuda:waf:web_firewall`) and recorded-sample (`arista:eos:syslog`) sourcetypes: finite (40), timed (6 s) and continuous with pause (counters held) / resume / stop | all runs: accepted = indexed (continuous: 89 accepted, 89 indexed after stop), rejected 0, unknown 0; no run left active |
+| External HEC connection test | 8 of 8 cases as expected; no token or password in evidence |
+| Native collector (GoFlow2 + forwarder) | forwarder HEALTHY, 46,313 of 46,315 flows forwarded to this lab's HEC with bounded retry |
+
+### Defects found and fixed in this pass
+
+* **Dashboards ignored the run's index.** Every Studio view defaults its Index input to `dev_test_replay`; the run-bound link carried only the run id, so in a lab without that index every panel was empty. The first browser pass reported PASS because the empty-panel check looked for the wrong text ("No results found" instead of Splunk Web's "No search results returned"). Fixed: the readiness handoff and the Explorer link now carry `form.index_tok` (and `form.mindex_tok` for metric runs), both checks now count the real empty-state text and fail on it, and all browser checks were rerun. Anyone opening a dashboard by hand still sees the `dev_test_replay` default and must set the Index input.
+* **UDP loss** (see above): GoFlow2 `workers=2` template race.
+* **Gateway backend URL.** The app's gateway defaults to `http://host.docker.internal:8081`; a lab whose engine is on another port needs `NETSPOUT_BACKEND_URL` in `splunk-launch.conf` (set for this lab to 8091).
+* **Dashboard count reconciliation.** The 147 vs 148 difference was SEC-P9-B: the Explorer's primary link for it was the older recipe view `pulseforge_dns_anomaly_studio` (SPL-validated only) while its `pf_SEC-P9-B-DNS-ANOMALY` view was already data-validated. The pf view is now primary and the recipe view is kept as `alternate_view`. All 148 `pf_` views have data-validated evidence; 20 are visually verified.

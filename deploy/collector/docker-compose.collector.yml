@@ -19,7 +19,8 @@ services:
       - no-new-privileges:true
     command:
       - -listen
-      - netflow://:2055,netflow://:4739
+      # workers=1: with several workers sharing one socket, a data datagram can reach a worker that never saw the template and is dropped ("template error")
+      - netflow://:2055?workers=1,netflow://:4739?workers=1
       - -format
       - json
       - -transport

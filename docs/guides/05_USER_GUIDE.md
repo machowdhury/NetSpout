@@ -23,6 +23,16 @@ All runs use the single destination saved in the Connection Center (HEC URL, sea
 
 Counts: **generated** (rendered), **delivered** (sent), **accepted** (HEC success), **rejected**, **unknown** (answer unreadable; never re-sent), and **indexed** (found by Splunk). Only `indexed` proves ingestion. Every run opens the **Live Delivery Monitor** with these counters, rates, per-sourcetype and per-phase tables and Verify; see [11](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md).
 
+## 4a. First sourcetype stream (continuous, pause, resume, stop)
+1. In **Use Case Explorer** type a sourcetype (for example `cloudtrail`). Rows with **Stream this sourcetype** can stream; others are catalog-only.
+2. Choose an authorized index and an EPS, pick **Continuous (until stopped)** (or Finite by count or duration) and press **Start Streaming**.
+3. The Live Delivery Monitor opens. **Pause**, **Resume** and **Stop** act on the server-side run; refreshing the browser reattaches to it.
+4. Run **Verify** (or open the sourcetype in Splunk): *indexed* comes from an independent search by run id and is the only proof of ingestion.
+Details: [11](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md).
+
+## 4b. Related scenario profiles
+Some scenarios have a sibling (for example `NF-SEC-06-DDOS` and `SEC-P9-A-TRAFFIC-FLOOD`). Search rows say so and the detail page lists the sibling with its dashboard. They are separate, runnable executions; see [12](12_NETFLOW_IPFIX_SOLUTION.md#related-scenario-profiles-search-and-scenario-detail).
+
 ## 5. Replay packs and continuous replay
 Replay packs combine authentic recordings and/or existing native packs on one timeline. Controls: mode **one-shot** or **continuous cycles**, **speed** (0.01 to 1000), optional **EPS limit**, **Pause / Resume / Stop**. The engine keeps source spacing, restarts each loop after a documented gap (median source spacing by default, at least 1 ms), never overlaps or regresses timestamps, and refuses sources that have no trustworthy timestamp. A full queue slows the producer; nothing is dropped. After an engine restart active sessions show `INTERRUPTED` and are not resumed.
 Independent recordings in one pack are aligned in time only; they do not share identifiers.

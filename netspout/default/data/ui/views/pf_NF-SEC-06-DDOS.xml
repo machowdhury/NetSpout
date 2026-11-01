@@ -1,0 +1,554 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Volumetric DDoS indicators</label>
+  <description>Where is the packet rate peaking, which protocols and TCP flags dominate, and which destination assets are targeted?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Volumetric DDoS indicators",
+  "description": "Where is the packet rate peaking, which protocols and TCP flags dominate, and which destination assets are targeted?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · SEC-06\n**Volumetric DDoS indicators**  ·  `NF-SEC-06-DDOS`  ·  MITRE ATT&CK T1498.001  ·  extends `SEC-P9-A-TRAFFIC-FLOOD`\n\n**Question:** Where is the packet rate peaking, which protocols and TCP flags dominate, and which destination assets are targeted?\n\n**Limits:** Synthetic flood patterns. Production flow export is often sampled, and flow data cannot show whether availability was lost.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.area",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#c9786f"
+        ],
+        "legendDisplay": "off",
+        "yAxisTitleText": "packets/s"
+      },
+      "title": "Packet rate (packets per second, 5 s buckets)",
+      "description": "Packet counts per flow are attributed to the flow end time; peak is the highest 5 s bucket.",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Peak packets/s",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Flows",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "%"
+      },
+      "title": "SYN-only flows",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Distinct sources",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Destinations receiving SYN-only flows",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.column",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked"
+      },
+      "title": "TCP flags over time",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.pie",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom"
+      },
+      "title": "Packets by protocol",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true
+    },
+    "viz_10": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Targeted assets (packets)",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" dest=\"$click.value$\" | sort - packets | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_11": {
+      "type": "splunk.line",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#c9a24a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Attack progression: distinct sources per 15 s",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true
+    },
+    "viz_12": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Top sources by packets (click for flow evidence)",
+      "dataSources": {
+        "primary": "ds_11"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" src=\"$row.src.value$\" | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_13": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-SEC-06-DDOS`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: packets, bytes, tcp_flags, tcp_flags_text, transport, src, dest, dest_port. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Packet rate (packets per second, 5 s buckets)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | bin _time span=5s | stats sum(packets) as packets by _time | makecontinuous _time span=5s | fillnull value=0 | eval pps=round(packets/5,1) | fields _time pps"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Peak packets/s",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | bin _time span=5s | stats sum(packets) as p by _time | eval r=p/5 | stats max(r) as v | fields v"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Flows",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats count as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "SYN-only flows",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats count(eval(tcp_flags=2)) as s count as n | eval v=round(100*s/n,1) | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Distinct sources",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats dc(src) as v | fields v"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Destinations receiving SYN-only flows",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | where tcp_flags=2 | stats dc(dest) as v | fields v"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "TCP flags over time",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | where transport=\"tcp\" | bin _time span=15s | chart count over _time by tcp_flags_text limit=6 | makecontinuous _time span=15s | fillnull value=0"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Packets by protocol",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats sum(packets) as packets by transport"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Targeted assets (packets)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats sum(packets) as packets dc(src) as sources by dest | sort - packets | head 8 | fields dest packets"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Attack progression: distinct sources per 15 s",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | bin _time span=15s | stats dc(src) as distinct_sources by _time | makecontinuous _time span=15s | fillnull value=0"
+      }
+    },
+    "ds_11": {
+      "type": "ds.search",
+      "name": "Top sources by packets (click for flow evidence)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-06-DDOS\" netspout_run_id=\"$run_tok$\" | stats sum(packets) as packets count as flows values(dest_port) as ports values(tcp_flags_text) as flags values(transport) as proto by src | sort - packets | head 50"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-SEC-06-DDOS\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1290,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 1420,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 454,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 270,
+              "y": 454,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 520,
+              "y": 454,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 770,
+              "y": 454,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 1020,
+              "y": 454,
+              "w": 420,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 584,
+              "w": 480,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 520,
+              "y": 584,
+              "w": 300,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 840,
+              "y": 584,
+              "w": 600,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 894,
+              "w": 700,
+              "h": 260
+            }
+          },
+          {
+            "item": "viz_12",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 894,
+              "w": 700,
+              "h": 260
+            }
+          },
+          {
+            "item": "viz_13",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1174,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Volumetric DDoS indicators",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

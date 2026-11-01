@@ -1,6 +1,6 @@
 # 07 Dashboard guide
 
-## Families (138 Dashboard Studio views, one per scenario that emits indexed telemetry)
+## Families (148 Dashboard Studio views, one per scenario that emits indexed telemetry: 138 template-based, plus 10 individually designed NetFlow/IPFIX views described in [12](12_NETFLOW_IPFIX_SOLUTION.md))
 | Family | Views | Run key (token `run_tok`) | Metric panels |
 |---|---|---|---|
 | Replay packs (recorded and hybrid) | 33 | `netspout_replay_session` | no |

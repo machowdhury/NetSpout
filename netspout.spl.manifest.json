@@ -1,9 +1,9 @@
 {
   "artifact": "netspout.spl",
   "contains_local_configuration": false,
-  "member_count": 1137,
+  "member_count": 1151,
   "reproducible_metadata_epoch": 0,
   "schema_version": "1.0.0",
-  "sha256": "091a5e55f8683e0c88578d1e053b9894376ba25eb484d43d6160cd34ee1ea42e",
-  "size_bytes": 6611393
+  "sha256": "31d66540ffe86f5733eab095a1a4af2005f1d8c7c995553cf1619324148003a5",
+  "size_bytes": 6652057
 }

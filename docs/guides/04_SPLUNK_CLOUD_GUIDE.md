@@ -5,7 +5,7 @@
 ## Why there is a separate Cloud edition
 `netspout.spl` (Enterprise app) was inspected with Splunk AppInspect 4.4.0 using the Splunk Cloud ruleset (`--mode precert --included-tags cloud`), evidence `docs/verification/evidence/appinspect/cloud.json`: **0 errors, 8 failures, 11 warnings, 137 passed**. The failures: UDP network communications in the engine modules (25 findings: SNMP, syslog, flow), a modular input and REST handlers without the required `python.version`/`python.required` settings, illegal `indexes.conf` properties, `is_configured = 1`, and a missing `[triggers]` stanza. Splunk Cloud cannot run a customer collector and prohibits programmatic UDP, so the engine cannot live in the app.
 
-`netspout_cloud.spl` (built by `scripts/build_splunk_cloud_package.py`) therefore contains **only** Dashboard Studio views (138), navigation, `app.conf`, `app.manifest`, metadata and a README: no Python, no inputs, no indexes, no REST handlers, no custom conf. AppInspect (cloud ruleset): **0 failures, 0 errors, 0 warnings, 87 passed** (`cloud_edition.json`). That is a pre-submission result, not Splunk Cloud approval; the official vetting and any manual review are yours to run.
+`netspout_cloud.spl` (built by `scripts/build_splunk_cloud_package.py`) therefore contains **only** Dashboard Studio views (148), navigation, `app.conf`, `app.manifest`, metadata and a README: no Python, no inputs, no indexes, no REST handlers, no custom conf. AppInspect (cloud ruleset): **0 failures, 0 errors, 0 warnings, 87 passed** (`cloud_edition.json`). That is a pre-submission result, not Splunk Cloud approval; the official vetting and any manual review are yours to run.
 
 ## Supported architecture
 ```text

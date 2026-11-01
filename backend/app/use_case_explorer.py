@@ -118,6 +118,7 @@ class UseCaseExplorer:
         runner_scenario_ids: Optional[Iterable[str]] = None,
         incident_packs: Iterable[Dict[str, Any]] = (),
         replay_packs: Iterable[Dict[str, Any]] = (),
+        netflow_packs: Iterable[Dict[str, Any]] = (),
         replay_panels_populated: Iterable[str] = (),
         replay_dashboards: Optional[Dict[str, Dict[str, Any]]] = None,
         candidates: Iterable[Dict[str, Any]] = (),
@@ -169,6 +170,8 @@ class UseCaseExplorer:
             entries.append(self._incident_entry(row))
         for row in replay_packs:
             entries.append(self._replay_entry(row))
+        for row in netflow_packs:
+            entries.append(self._netflow_entry(row))
         seen = {e["scenario_id"] for e in entries}
         self.duplicate_candidates: List[str] = []
         for row in candidates:
@@ -271,6 +274,18 @@ class UseCaseExplorer:
             source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._dashboard_ref(sid) or self._replay_dashboard_ref(sid),
         )
 
+    def _netflow_entry(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        """NetFlow/IPFIX solution scenario: deterministic flow patterns delivered as normalized NDJSON over HEC, plus an optional separately reported IPFIX wire export."""
+        sid = row["scenario_id"]
+        entry = self._operational_entry(
+            entry_id=f"op:netflow:{sid}", engine="netflow_solution", scenario_id=sid, title=row["title"],
+            summary=row["question"] + " Synthetic flows from documentation address ranges. " + row["limits"],
+            domain="NetFlow/IPFIX " + ("Security" if row["kind"] == "security" else "Network Operations"), category="NETFLOW_SOLUTION", vendors=[],
+            sourcetypes=["netflow:collector"], source_ids=[], raw_maturity="CONTRACTED", runnable=True, blocked_reason=None, dashboard=self._replay_dashboard_ref(sid))
+        entry["netflow"] = {"code": row["code"], "question": row["question"], "limits": row["limits"], "extends": row.get("extends"), "mitre": row.get("mitre", []), "params": row.get("params", {}),
+                            "flow_kind": row["kind"]}
+        return entry
+
     def _replay_dashboard_ref(self, sid: str) -> Optional[Dict[str, Any]]:
         d = self._replay_dashboards.get(sid)
         if not d:
@@ -336,6 +351,12 @@ class UseCaseExplorer:
             ver = ("POST", "/api/replay/sessions/{session_id}/verify", None)
             ing_note = "HEC outcome is counted per event on the session (accepted / rejected / unknown); pause, resume and stop are available"
             ver_note = "Success = Splunk's count for this session's unique source equals the accepted count (independent search); not a detection or dashboard claim"
+        elif e["engine"] == "netflow_solution":
+            cfg = ("GET", f"/api/explorer/entries/{e['entry_id']}/preview", None)
+            gen = ("POST", "/api/runs", {"kind": "scenario", "target": sid})
+            ver = ("POST", "/api/runs/{run_id}/verify", None)
+            ing_note = "Normalized flow events are accepted by HEC; the IPFIX wire export (generated, UDP exported, collector decoded) is reported separately and is never counted as accepted"
+            ver_note = "Success = Splunk's run-scoped event count equals the HEC-accepted count (independent search)"
         elif e["engine"] in ("scenario_pack", "incident_pack"):
             cfg = ("GET", "/api/setup", None)
             gen = ("POST", "/api/generate/scenario-pack", {"scenario_id": sid, "dispatch": True})

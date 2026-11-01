@@ -1,0 +1,498 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Outbound data-exfiltration indicators</label>
+  <description>Which internal host sends unusual byte volume to external destinations, over which ports and when?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Outbound data-exfiltration indicators",
+  "description": "Which internal host sends unusual byte volume to external destinations, over which ports and when?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_int1_tok": {
+      "type": "input.text",
+      "title": "Internal range 1",
+      "options": {
+        "token": "int1_tok",
+        "defaultValue": "192.0.2.0/24"
+      }
+    },
+    "input_int2_tok": {
+      "type": "input.text",
+      "title": "Internal range 2",
+      "options": {
+        "token": "int2_tok",
+        "defaultValue": "198.51.100.0/24"
+      }
+    },
+    "input_min_mb": {
+      "type": "input.text",
+      "title": "Evidence threshold (MB per flow)",
+      "options": {
+        "token": "min_mb",
+        "defaultValue": "50"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · SEC-08\n**Outbound data-exfiltration indicators**  ·  `NF-SEC-08-EXFIL`  ·  MITRE ATT&CK T1048\n\n**Question:** Which internal host sends unusual byte volume to external destinations, over which ports and when?\n\n**Limits:** Volume alone does not establish data theft: backups, updates and uploads look identical in flow records. Internal ranges are the lab documentation ranges, adjustable below.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.sankey",
+      "options": {
+        "backgroundColor": "#22262a"
+      },
+      "title": "Outbound volume: internal source → external destination (MB)",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1
+      },
+      "title": "Outbound volume (MB)",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "External destinations",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "× median"
+      },
+      "title": "Top source vs median source",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.area",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#c9786f"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Outbound transfer timeline (Mbps, bytes spread over each flow)",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Top internal sources (MB out)",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" src=\"$click.value$\" | sort - bytes | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_8": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Destination and port analysis",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" dest=\"$row.dest.value$\" dest_port=$row.dest_port.value$ | sort - bytes | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_9": {
+      "type": "splunk.pie",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "right"
+      },
+      "title": "Outbound bytes by port (port-based label)",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true
+    },
+    "viz_10": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Evidence: outbound flows above threshold",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true
+    },
+    "viz_11": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-SEC-08-EXFIL`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, dest_port, bytes, flowStartMilliseconds, flowEndMilliseconds. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Outbound volume: internal source → external destination (MB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as MB by src dest | eval MB=round(MB/1e6,1) | sort - MB | head 6 | table src dest MB"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Outbound volume (MB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as b | eval v=round(b/1e6,1) | fields v"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "External destinations",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats dc(dest) as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Top source vs median source",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as b by src | eventstats median(b) as med | eval v=round(b/med,1) | sort - b | head 1 | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Outbound transfer timeline (Mbps, bytes spread over each flow)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | eval s=flowStartMilliseconds/1000, e=max(flowEndMilliseconds/1000, flowStartMilliseconds/1000+0.001) | eval bucket=mvrange(floor(s/10)*10, floor(e/10)*10+10, 10) | mvexpand bucket | eval ov=max(0, min(e, bucket+10)-max(s, bucket)), share=bytes*ov/(e-s), _time=bucket | stats sum(share) as s by _time | makecontinuous _time span=10s | fillnull value=0 | eval Mbps=round(s*8/1e6/10,1) | fields _time Mbps"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Top internal sources (MB out)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as bytes by src | sort - bytes | head 8 | eval MB=round(bytes/1e6,1) | fields src MB"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Destination and port analysis",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as bytes count as flows dc(src) as sources min(_time) as first max(_time) as last by dest dest_port | eval MB=round(bytes/1e6,1), first=strftime(first,\"%H:%M:%S\"), last=strftime(last,\"%H:%M:%S\") | sort - bytes | table dest dest_port MB flows sources first last"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Outbound bytes by port (port-based label)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | stats sum(bytes) as bytes by dest_port | eval dest_port=\"port \".dest_port | sort - bytes"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Evidence: outbound flows above threshold",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-08-EXFIL\" netspout_run_id=\"$run_tok$\" | where (cidrmatch(\"$int1_tok$\",src) OR cidrmatch(\"$int2_tok$\",src)) AND NOT (cidrmatch(\"$int1_tok$\",dest) OR cidrmatch(\"$int2_tok$\",dest)) | where bytes>=$min_mb$*1000000 | sort - bytes | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-SEC-08-EXFIL\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_int1_tok",
+      "input_int2_tok",
+      "input_min_mb"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1450,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 940,
+              "h": 320
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 134,
+              "w": 225,
+              "h": 150
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 1215,
+              "y": 134,
+              "w": 225,
+              "h": 150
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 304,
+              "w": 460,
+              "h": 150
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 474,
+              "w": 940,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 474,
+              "w": 460,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 774,
+              "w": 700,
+              "h": 270
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 774,
+              "w": 700,
+              "h": 270
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1064,
+              "w": 1420,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1334,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Outbound data-exfiltration indicators",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

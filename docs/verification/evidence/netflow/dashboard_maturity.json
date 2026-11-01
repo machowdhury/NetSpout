@@ -1,0 +1,91 @@
+{
+ "generated_utc": "2026-11-01T03:18+00:00",
+ "scale": [
+  "DASHBOARD_SPECIFIED",
+  "DASHBOARD_IMPLEMENTED",
+  "DASHBOARD_DATA_VALIDATED",
+  "DASHBOARD_VISUALLY_VERIFIED"
+ ],
+ "dashboards": {
+  "NF-NOC-01-ELEPHANT": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-77566dd92eb6"
+  },
+  "NF-NOC-02-DSCP": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-4aa3b054190c"
+  },
+  "NF-NOC-03-ROUTING-LOOP": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-b91bcd65c2fd"
+  },
+  "NF-NOC-04-ASYMMETRY": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-8706ab1b4cbf"
+  },
+  "NF-NOC-05-BASELINE-DRIFT": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-f972af3a6bb4"
+  },
+  "NF-SEC-06-DDOS": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-47ce7dd082e6"
+  },
+  "NF-SEC-07-PORTSCAN": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-7b7c85c230c7"
+  },
+  "NF-SEC-08-EXFIL": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-7f55d28ddfc9"
+  },
+  "NF-SEC-09-BEACON": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-a572a00ce3b7"
+  },
+  "NF-SEC-10-DNS-FLOW": {
+   "maturity": "DASHBOARD_VISUALLY_VERIFIED",
+   "implemented": true,
+   "data_validated": true,
+   "browser_render_checks_pass": true,
+   "screenshot_inspected": true,
+   "run_id": "run-246613bc876b"
+  }
+ }
+}

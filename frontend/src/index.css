@@ -2867,3 +2867,6 @@
 .pf-mon-ready--DEGRADED, .pf-mon-ready--FAILED, .pf-mon-ready--UNKNOWN { border-color: #e5534b; }
 .pf-mon-toast { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 6px; }
 .pf-mon-toast strong { color: #d97757; flex-basis: 100%; }
+
+.pf-mon-wire{margin:10px 0;padding:10px 12px;border:1px solid #3a3f44;border-radius:8px;background:#1d2023}
+.pf-mon-wire b{display:block;margin-bottom:6px}

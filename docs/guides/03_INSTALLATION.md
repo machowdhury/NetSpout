@@ -24,7 +24,7 @@ Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run a
    curl -sk -u admin:"$SPLUNK_PASSWORD" https://127.0.0.1:<mgmt-port>/services/apps/local \
         -d name=/tmp/netspout.spl -d filename=true -d update=true -d output_mode=json
    ```
-   Expected: app `netspout` 2.0.0, enabled, visible. The package carries 138 `pf_*` dashboards, the nav, the UI and the recorded samples.
+   Expected: app `netspout` 2.0.0, enabled, visible. The package carries 148 `pf_*` dashboards, the nav, the UI and the recorded samples.
 3. **Create indexes and a HEC token** in Splunk (Settings). The app ships no inputs enabled and creates nothing.
 4. **Start the engine** (secrets only in the environment; use a dedicated config directory):
    ```bash
@@ -40,7 +40,7 @@ Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run a
     "search_username":"admin","hec_token":"...","search_secret":"...","indexes":["dev_test_replay","dev_test_replay_metrics"],"allow_insecure_tls":true}
    ```
    `allow_insecure_tls` is accepted only for loopback lab endpoints. `POST /api/setup/validate` must return `PASS` for hec, search and indexes.
-7. **Verify the installation end to end**: `python scripts/validate_installed_app.py` (needs the isolated-lab credentials file) checks: app installed and enabled; 138 views and nav present; gateway reaches the engine; Connection Center configured and secret-free; read-only Splunk user refused; unauthorized index refused; replay session accepted equals indexed; native pack indexed; incident pack events and `mstats` datapoints indexed; no index created; no secret in any response. Last result: **12 of 12 passed** (`docs/verification/evidence/installed_app/e2e.json`). `scripts/render_installed_app.mjs` then opens the Command Center, the Explorer and two dashboards in a browser.
+7. **Verify the installation end to end**: `python scripts/validate_installed_app.py` (needs the isolated-lab credentials file) checks: app installed and enabled; 148 views and nav present; gateway reaches the engine; Connection Center configured and secret-free; read-only Splunk user refused; unauthorized index refused; replay session accepted equals indexed; native pack indexed; incident pack events and `mstats` datapoints indexed; no index created; no secret in any response. Last result: **12 of 12 passed** (`docs/verification/evidence/installed_app/e2e.json`). `scripts/render_installed_app.mjs` then opens the Command Center, the Explorer and two dashboards in a browser.
 
 ## B. Splunk Enterprise on a VM or physical host
 Same steps. Differences: install the package by Splunk Web or by unpacking into `$SPLUNK_HOME/etc/apps` and restarting; the gateway defaults to `http://127.0.0.1:8081`; run the engine as a service account (systemd) bound to loopback or a firewalled interface; use real TLS (`allow_insecure_tls` stays false). **Not run on a VM by the maintainers.**

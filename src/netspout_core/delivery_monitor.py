@@ -90,6 +90,7 @@ class DeliveryRun:
         self.samples = deque(maxlen=2000)
         self.state, self.started, self.ended, self.error = "CREATED", None, None, None
         self.indexed = None
+        self.extra: dict = {}   # run-family evidence shown next to the delivery counters (e.g. NetFlow wire stages); never added to accepted/indexed
         self.verification = {"status": "NOT_RUN"}
         self._lock, self._cancel, self._run = threading.Lock(), threading.Event(), threading.Event()
         self._run.set()
@@ -215,6 +216,7 @@ class DeliveryRun:
                 "controls": {"pause": self.state == "RUNNING", "resume": self.state == "PAUSED", "stop": self.state in ("RUNNING", "PAUSED")},
                 "verification": self.verification, "links": self.links, "key_field": self.key_field, "metric_accepted": dict(self.metric),
                 "accounting_note": "accepted is the transport acknowledgement, not proof of indexing; indexed comes only from an independent Splunk search",
+                **self.extra,
             }
 
     def persisted(self) -> dict:

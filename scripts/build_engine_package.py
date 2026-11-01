@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "pulseforge-engine.tar.gz"
 INCLUDE = ["backend/app", "backend/run.py", "backend/requirements.txt", "src/netspout_core", "catalog", "netspout/bin/network_incidents.py", "netspout/bin/telecom_incidents.py", "netspout/samples", "netspout/appserver/static/samples", "netspout/catalog", "netspout/default/data/ui/views", "deploy/engine", "deploy/collector",
            "docs/verification/evidence/replay/replay_live.json", "docs/verification/evidence/incident_packs/live_results.json", "docs/verification/evidence/flow/scenarios.json",
-           "docs/verification/evidence/monitor/live.json", "docs/verification/evidence/dashboards/dashboard_maturity.json"]
+           "docs/verification/evidence/monitor/live.json", "docs/verification/evidence/dashboards/dashboard_maturity.json", "docs/verification/evidence/netflow/dashboard_maturity.json", "docs/verification/evidence/netflow/live_runs.json"]
 SKIP = ("__pycache__", ".pyc", ".DS_Store")
 
 

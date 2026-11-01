@@ -23,6 +23,9 @@ export interface RunSnapshot {
   links?: Record<string, string>;
   interrupted_note?: string | null;
   accounting_note?: string;
+  flow_wire?: { state: string; protocol?: string; collector?: string; generated: number; udp_exported?: number; datagrams?: number; collector_decoded?: number | null; note?: string };
+  flow_summary?: { flows: number; phases: Record<string, number>; exporters: string[]; malicious_labeled: number; bytes: number; packets: number };
+  sourcetype?: string;
 }
 
 async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown, timeoutMs = 25_000): Promise<T> {

@@ -15,6 +15,7 @@ def test_cloud_edition_contains_only_dashboards_navigation_and_metadata():
     assert not forbidden, forbidden
     views = [n for n in names if re.search(r'default/data/ui/views/pf_.*\.xml$', n)]
     maturity = json.loads((ROOT / 'docs/verification/evidence/dashboards/dashboard_maturity.json').read_text())['dashboards']
+    maturity = {**maturity, **json.loads((ROOT / 'docs/verification/evidence/netflow/dashboard_maturity.json').read_text())['dashboards']}   # NetFlow solution views carry their own maturity evidence
     assert len(views) == len(maturity) == len(list((ROOT / 'netspout/default/data/ui/views').glob('pf_*.xml')))
     assert '[id]' in app_conf and 'is_configured' not in app_conf
 

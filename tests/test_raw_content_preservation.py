@@ -442,7 +442,7 @@ class TestSyslogHeaderGuards(unittest.TestCase):
         ts = SplunkLogEngine.current_timestamp_syslog()
         m = BSD_SYSLOG_TS.fullmatch(ts)
         self.assertTrue(m, ts)
-        day_field = ts.split(" ")[1]
+        day_field = ts[4:6]   # "Mmm dd": the day is space-padded to two characters (split(" ") breaks on single-digit days)
         self.assertEqual(len(day_field), 2)
         day = int(day_field)
         if day < 10:

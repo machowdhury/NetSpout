@@ -117,10 +117,12 @@ def test_maturity_is_assembled_from_evidence_and_visual_claims_need_an_inspected
 def test_explorer_links_every_scenario_with_a_view_to_it_with_the_run_as_context():
     client = TestClient(main.app)
     m = json.loads((EV / 'dashboard_maturity.json').read_text())['dashboards']
+    m.update(json.loads((EV.parent / 'netflow' / 'dashboard_maturity.json').read_text())['dashboards'])   # NetFlow views carry their own maturity evidence
     ex = main._explorer()
     linked = [e for e in ex.all_entries() if e['kind'] == 'operational' and e.get('dashboard') and e['dashboard'].get('scale')]
     LEGACY = {'SEC-P9-B-DNS-ANOMALY'}   # keeps its earlier, independently verified DASHBOARD_READY view as the primary link
-    assert {e['scenario_id'] for e in linked} == {x['id'] for x in SOURCES} - LEGACY   # every scenario family that emits indexed telemetry
+    from netspout_core import netflow_solution
+    assert {e['scenario_id'] for e in linked} == ({x['id'] for x in SOURCES} - LEGACY) | set(netflow_solution.IDS)   # every scenario family that emits indexed telemetry, plus the individually designed NetFlow views
     for e in linked:
         assert e['dashboard']['splunk_view'] == 'pf_' + e['scenario_id'] and e['dashboard']['dashboard_maturity'] == m[e['scenario_id']]['maturity']
         step = {s_['step']: s_ for s_ in e['workflow']}['DASHBOARD']

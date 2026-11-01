@@ -1,0 +1,468 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Command-and-control beaconing indicators</label>
+  <description>Which source/destination pairs reconnect on a regular interval, and how regular is it?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Command-and-control beaconing indicators",
+  "description": "Which source/destination pairs reconnect on a regular interval, and how regular is it?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_min_ev": {
+      "type": "input.text",
+      "title": "Min intervals per pair",
+      "options": {
+        "token": "min_ev",
+        "defaultValue": "5"
+      }
+    },
+    "input_cv_tok": {
+      "type": "input.text",
+      "title": "High regularity if CV below",
+      "options": {
+        "token": "cv_tok",
+        "defaultValue": "0.25"
+      }
+    },
+    "input_bin_tok": {
+      "type": "input.text",
+      "title": "Histogram bin (s)",
+      "options": {
+        "token": "bin_tok",
+        "defaultValue": "5"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · SEC-09\n**Command-and-control beaconing indicators**  ·  `NF-SEC-09-BEACON`  ·  MITRE ATT&CK T1071  ·  extends `SEC-P9-C-BEACONING`\n\n**Question:** Which source/destination pairs reconnect on a regular interval, and how regular is it?\n\n**Limits:** Periodicity is a weak indicator by itself: agents, monitoring and update checks beacon too, and encrypted payloads are not visible. Intervals use actual flow start timestamps.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.column",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off",
+        "xAxisTitleText": "interval (s)",
+        "yAxisTitleText": "intervals"
+      },
+      "title": "Inter-arrival interval distribution (seconds between consecutive flow starts per pair)",
+      "description": "A tall narrow peak means many repeats at one interval.",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Pairs analysed",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "High-regularity pairs",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 3
+      },
+      "title": "Lowest CV",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Pairs ranked by regularity (lowest coefficient of variation first; click a row for the flows)",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" src=\"$row.src.value$\" dest=\"$row.dest.value$\" | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_7": {
+      "type": "splunk.column",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked"
+      },
+      "title": "Periodicity timeline: contacts per 5 s for the 3 most regular pairs",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Coefficient of variation, 10 most regular pairs",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Flow evidence (regular pairs)",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true
+    },
+    "viz_10": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-SEC-09-BEACON`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, flowStartMilliseconds, bytes, packets. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Inter-arrival interval distribution (seconds between consecutive flow starts per pair)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | where gap_s<=600 | bin gap_s span=$bin_tok$ | stats count by gap_s | sort 0 gap_s"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Pairs analysed",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | stats count as v | fields v"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "High-regularity pairs",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | where cv<$cv_tok$ | stats count as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Lowest CV",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | stats min(cv) as v | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Pairs ranked by regularity (lowest coefficient of variation first; click a row for the flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | sort cv | table src dest intervals mean_s sd_s cv regularity min_s max_s bytes"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Periodicity timeline: contacts per 5 s for the 3 most regular pairs",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | sort cv | head 3 | fields src dest ] | eval pair=src.\" → \".dest | bin _time span=5s | chart count over _time by pair limit=6 | makecontinuous _time span=5s | fillnull value=0"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Coefficient of variation, 10 most regular pairs",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | sort cv | head 10 | eval pair=src.\" → \".dest | table pair cv"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Flow evidence (regular pairs)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-09-BEACON\" netspout_run_id=\"$run_tok$\" | sort 0 src dest flowStartMilliseconds | streamstats current=f last(flowStartMilliseconds) as prev by src dest | eval gap_s=round((flowStartMilliseconds-prev)/1000,1) | where isnotnull(gap_s) | stats count as intervals avg(gap_s) as mean_s stdev(gap_s) as sd_s min(gap_s) as min_s max(gap_s) as max_s sum(bytes) as bytes by src dest | where intervals>=$min_ev$ | eval cv=round(sd_s/mean_s,3), mean_s=round(mean_s,1), sd_s=round(sd_s,1) | eval regularity=if(cv<$cv_tok$,\"high\",if(cv<0.6,\"medium\",\"low\")) | where cv<$cv_tok$ | fields src dest ] | sort 0 src dest flowStartMilliseconds | head 300 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-SEC-09-BEACON\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_min_ev",
+      "input_cv_tok",
+      "input_bin_tok"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1460,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 940,
+              "h": 330
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 134,
+              "w": 225,
+              "h": 150
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 1215,
+              "y": 134,
+              "w": 225,
+              "h": 150
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 304,
+              "w": 460,
+              "h": 160
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 484,
+              "w": 1420,
+              "h": 260
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 764,
+              "w": 940,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 764,
+              "w": 460,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1074,
+              "w": 1420,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1344,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Command-and-control beaconing indicators",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

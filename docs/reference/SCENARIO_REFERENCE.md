@@ -1,19 +1,19 @@
 # Scenario Coverage Reference
 
-Generated 2026-10-31 by `scripts/generate_reference_docs.py` from the Use Case Explorer registry (all scenario registries merged and deduplicated by scenario id). Machine-readable: `scenario_coverage.json` / `scenario_coverage.csv`.
+Generated 2026-11-01 by `scripts/generate_reference_docs.py` from the Use Case Explorer registry (all scenario registries merged and deduplicated by scenario id). Machine-readable: `scenario_coverage.json` / `scenario_coverage.csv`.
 
 | Measure | Count |
 |---|---|
-| Unique operational scenario definitions | 362 |
-| Runnable (a real generator and run path exist) | 138 |
+| Unique operational scenario definitions | 372 |
+| Runnable (a real generator and run path exist) | 148 |
 | Cataloged candidates only (documented, not executable) | 209 |
-| Independently indexed in an isolated lab | 138 |
-| With a Dashboard Studio dashboard | 138 |
-| Dashboards DATA_VALIDATED or better | 137 |
-| Dashboards VISUALLY_VERIFIED | 9 |
+| Independently indexed in an isolated lab | 148 |
+| With a Dashboard Studio dashboard | 148 |
+| Dashboards DATA_VALIDATED or better | 147 |
+| Dashboards VISUALLY_VERIFIED | 20 |
 | Detection verified | 0 (no add-on, CIM or Enterprise Security content installed) |
 
-Tiers (as recorded, never upgraded by indexing): CATALOGED 209, CERTIFIED 18, CONTRACTED 109, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
+Tiers (as recorded, never upgraded by indexing): CATALOGED 209, CERTIFIED 18, CONTRACTED 119, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
 
 The original 100 financial-services and 100 telecom use-case libraries were not supplied; they are **not** part of these counts and none of the scenarios below were derived from them. Industry mappings are editorial unless an industry pack binds them. Splunk Analytic Stories are a separate reference universe (see the Explorer's Security view); they are not counted as scenarios.
 
@@ -21,12 +21,12 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 
 | Group | Count | Meaning |
 |---|---|---|
-| Runnable | 138 | A real generator and run path exist; every one has a Dashboard Studio dashboard |
+| Runnable | 148 | A real generator and run path exist; every one has a Dashboard Studio dashboard |
 | Contract only | 15 | A topology or format contract exists but no executable telemetry (reason recorded per scenario) |
 | Cataloged only | 209 | Documented candidates with no execution path |
-| Total | 362 | The three groups above are mutually exclusive and add up to the total |
+| Total | 372 | The three groups above are mutually exclusive and add up to the total |
 
-**Overlapping attributes** (not additional groups): *independently indexed* (138) is a subset of the runnable group, i.e. runnable scenarios whose events from a fresh run were read back from Splunk by an independent search in an isolated lab (scenario-level live checks, dashboard data validation, the monitored runs and the flow scenarios); 0 runnable scenarios lack that proof. Earlier status reports counted 76 because they used only the scenario-level live-equality evidence; the dashboard data validation (a fresh run per scenario, read back from Splunk by run id, KPIs equal to separately written searches) extends the same kind of proof to every runnable scenario, which is why the figure is now higher. The two numbers measure different evidence, not different scenarios. *Tier* (CERTIFIED, VALIDATED, CONTRACTED, ...) is the maturity recorded by the catalog and is never upgraded by indexing.
+**Overlapping attributes** (not additional groups): *independently indexed* (148) is a subset of the runnable group, i.e. runnable scenarios whose events from a fresh run were read back from Splunk by an independent search in an isolated lab (scenario-level live checks, dashboard data validation, the monitored runs and the flow scenarios); 0 runnable scenarios lack that proof. Earlier status reports counted 76 because they used only the scenario-level live-equality evidence; the dashboard data validation (a fresh run per scenario, read back from Splunk by run id, KPIs equal to separately written searches) extends the same kind of proof to every runnable scenario, which is why the figure is now higher. The two numbers measure different evidence, not different scenarios. *Tier* (CERTIFIED, VALIDATED, CONTRACTED, ...) is the maturity recorded by the catalog and is never upgraded by indexing.
 
 ## Coverage by approved industry
 
@@ -65,6 +65,16 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `C100-DC-001` | Nexus Fabric Uplink Degradation — NX-OS Reference | native (unified_generation) | operational | manufacturing | 1 | Y | pf_C100-DC-001 | VISUALLY_VERIFIED |
 | `C100-ENT-001` | Campus Access Link Degradation — IOS XE Reference | native (unified_generation) | operational | healthcare | 1 | Y | pf_C100-ENT-001 | DATA_VALIDATED |
 | `C100-SEC-001` | Secure Firewall Suspicious Connection Burst — ASA Reference | native (unified_generation) | security | not mapped | 1 | Y | pf_C100-SEC-001 | DATA_VALIDATED |
+| `NF-NOC-01-ELEPHANT` | NetFlow: bandwidth saturation and elephant flows | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-01-ELEPHANT | VISUALLY_VERIFIED |
+| `NF-NOC-02-DSCP` | NetFlow: QoS and DSCP marking validation | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-02-DSCP | VISUALLY_VERIFIED |
+| `NF-NOC-03-ROUTING-LOOP` | NetFlow: routing-loop indicators (flow-only) | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-03-ROUTING-LOOP | VISUALLY_VERIFIED |
+| `NF-NOC-04-ASYMMETRY` | NetFlow: asymmetric-routing indicators | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-04-ASYMMETRY | VISUALLY_VERIFIED |
+| `NF-NOC-05-BASELINE-DRIFT` | NetFlow: application baseline and duration drift | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-05-BASELINE-DRIFT | VISUALLY_VERIFIED |
+| `NF-SEC-06-DDOS` | NetFlow: volumetric DDoS indicators (SYN flood and UDP) | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-SEC-06-DDOS | VISUALLY_VERIFIED |
+| `NF-SEC-07-PORTSCAN` | NetFlow: network reconnaissance and port scanning | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-SEC-07-PORTSCAN | VISUALLY_VERIFIED |
+| `NF-SEC-08-EXFIL` | NetFlow: outbound data-exfiltration indicators | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-SEC-08-EXFIL | VISUALLY_VERIFIED |
+| `NF-SEC-09-BEACON` | NetFlow: command-and-control beaconing indicators | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-SEC-09-BEACON | VISUALLY_VERIFIED |
+| `NF-SEC-10-DNS-FLOW` | NetFlow: DNS-tunneling indicators (flow-only, limited evidence) | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-SEC-10-DNS-FLOW | VISUALLY_VERIFIED |
 | `P12-XD-001` | AI Agent to Infrastructure | native (unified_generation) | security | not mapped | 1 | Y | pf_P12-XD-001 | DATA_VALIDATED |
 | `P12-XD-002` | Supply Chain to Application | native (unified_generation) | security | not mapped | 1 | Y | pf_P12-XD-002 | DATA_VALIDATED |
 | `SC-001` | Suspicious Dependency Change | native (unified_generation) | security | technology-saas | 1 | Y | pf_SC-001 | DATA_VALIDATED |
@@ -164,7 +174,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `telco_06_broadband_cpe` | Broadband CPE service outage | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_06_broadband_cpe | DATA_VALIDATED |
 | `telco_07_sdwan_service` | SD-WAN service degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_07_sdwan_service | DATA_VALIDATED |
 | `telco_08_roaming_mobility` | Roaming/mobility failure | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_08_roaming_mobility | DATA_VALIDATED |
-| `telco_09_core_user_plane` | 5G core user-plane degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_09_core_user_plane | DATA_VALIDATED |
+| `telco_09_core_user_plane` | 5G core user-plane degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_09_core_user_plane | VISUALLY_VERIFIED |
 | `telco_10_cross_layer` | Cross-layer telecom service outage and SLA impact | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_10_cross_layer | DATA_VALIDATED |
 | `test-correlated-interface-degradation` | Cisco IOS XR Interface Degradation — Golden Scenario | native (unified_generation) | operational | not mapped | 1 | Y | pf_test-correlated-interface-degradation | DATA_VALIDATED |
 | `ub1_ot_proxy_host_hunt` | OT Tamper to Container Host Hunt (Universe Batch-1) | native (scenario_pack) | security | manufacturing, energy-utilities | 4 | Y | pf_ub1_ot_proxy_host_hunt | DATA_VALIDATED |

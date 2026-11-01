@@ -2311,7 +2311,7 @@ def runs_start(payload: Dict[str, Any]):
         raise HTTPException(status_code=422, detail="kind must be scenario or sourcetype and target is required")
     gt, index, host = _replay_destination(payload)
     name = _destination_name(gt)
-    from netspout_core import replay_packs, incident_packs
+    from netspout_core import replay_packs, incident_packs, netflow_solution, netflow_wire
     from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
     cfg = gt.model_copy(update={"hec_index": index})
     try:
@@ -2329,6 +2329,21 @@ def runs_start(payload: Dict[str, Any]):
         if kind == "scenario" and target in SCENARIO_PACK_IDS:
             items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in run_scenario_pack(target, run_id)]
             title, metric_index = target, None
+        elif kind == "scenario" and target in netflow_solution.IDS:
+            # NetFlow/IPFIX solution: normalized NDJSON flow events over HEC are what the monitor counts; the IPFIX wire export is a separate, separately reported stage
+            seed = int(payload.get("seed", 42))
+            rows = netflow_solution.generate(target, run_id, seed=seed, duration_s=int(payload.get("duration_s", 180)), scale=float(payload.get("scale", 1.0)), params=payload.get("params"))
+            st = payload.get("sourcetype") or netflow_solution.DEFAULT_SOURCETYPE
+            if st not in (netflow_solution.DEFAULT_SOURCETYPE, netflow_solution.REQUESTED_SOURCETYPE):
+                raise ValueError("sourcetype must be %s or %s" % (netflow_solution.DEFAULT_SOURCETYPE, netflow_solution.REQUESTED_SOURCETYPE))
+            pls = netflow_solution.hec_payloads(rows, index, st)
+            items = [Item(st, r["phase"], (lambda pl=pl: (lambda o: ("accepted" if o[0] else "rejected", None if o[0] else (o[1] or "not accepted")))(
+                         dispatcher.emit_hec(pl, cfg.hec_url, cfg.hec_token, ssl_verify=cfg.hec_ssl_verify, allow_insecure_tls=cfg.hec_allow_insecure_tls)))) for r, pl in zip(rows, pls)]
+            title, metric_index = netflow_solution.get(target)["title"], None
+            wire = netflow_wire.export(rows) if payload.get("wire", True) else {"state": "SKIPPED", "generated": len(rows), "note": "wire export disabled for this run"}
+            run = DeliveryRun(kind, target, title, name, index, items, eps_limit=eps if eps is not None else 50, run_id=run_id, links=_monitor_links(target))
+            run.extra = {"flow_wire": wire, "flow_summary": netflow_solution.summary(rows), "sourcetype": st}
+            return run_monitor.start(run).snapshot()
         elif kind == "scenario" and target in incident_packs.incident_ids():
             events = incident_packs.generate_pack(target, run_id)
             metric_index = cfg.hec_metric_index
@@ -2863,6 +2878,11 @@ def _verified_scenario_ids():
         verified |= {c["target"] for c in live.get("cases", []) if c.get("ok") and c.get("target") and (c.get("verification") or {}).get("status") == "VERIFIED"}
     except (OSError, ValueError):
         pass
+    try:  # NetFlow solution runs: HEC-accepted == independently indexed by run id, readiness READY (scripts/validate_netflow_live.py)
+        nfl = json.loads((root / "docs/verification/evidence/netflow/live_runs.json").read_text(encoding="utf-8"))
+        verified |= {r["scenario_id"] for r in nfl.get("runs", []) if r.get("ok")}
+    except (OSError, ValueError):
+        pass
     try:
         visual = json.loads((root / "docs/verification/evidence/phase4f/visual-validation.json").read_text(encoding="utf-8"))
         if visual.get("verdict", {}).get("maturity") == "DASHBOARD_READY":
@@ -2883,12 +2903,18 @@ def _replay_panels_populated():
 
 def _replay_dashboards():
     """scenario id -> installed Dashboard Studio view and the maturity recorded by stored evidence (replay, authentic native and incident packs; never inferred)."""
+    root = Path(__file__).resolve().parents[2]
     try:
-        root = Path(__file__).resolve().parents[2]
         doc = json.loads((root / "docs/verification/evidence/dashboards/dashboard_maturity.json").read_text(encoding="utf-8"))
-        return {pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in doc["dashboards"].items()}
+        out = {pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in doc["dashboards"].items()}
     except (OSError, ValueError, KeyError):
-        return {}
+        out = {}
+    try:   # NetFlow solution dashboards are validated by their own evidence file (scripts/validate_netflow_dashboards.py)
+        nf_doc = json.loads((root / "docs/verification/evidence/netflow/dashboard_maturity.json").read_text(encoding="utf-8"))
+        out.update({pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in nf_doc["dashboards"].items()})
+    except (OSError, ValueError, KeyError):
+        pass
+    return out
 
 
 def _explorer() -> UseCaseExplorer:
@@ -2910,6 +2936,7 @@ def _explorer() -> UseCaseExplorer:
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
         incident_packs=incident_catalog(),
         replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
+        netflow_packs=__import__('netspout_core.netflow_solution', fromlist=['catalog']).catalog(),
         replay_panels_populated=_replay_panels_populated(),
         replay_dashboards=_replay_dashboards(),
         candidates=load_candidates(),
@@ -3016,6 +3043,13 @@ def explorer_preview(entry_id: str):
             ph = Counter(e.netspout_phase for e in evs if getattr(e, "netspout_phase", None))
             volume = {"events": len(evs), "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}
             st = sorted({e.sourcetype for e in evs})
+        elif target in __import__("netspout_core.netflow_solution", fromlist=["IDS"]).IDS:
+            from netspout_core import netflow_solution as nfs
+            rows = nfs.generate(target, "preview")
+            sm = nfs.summary(rows)
+            volume = {"events": sm["flows"], "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in sm["phases"].items()],
+                      "basis": "deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count"}
+            st = [nfs.DEFAULT_SOURCETYPE]
         elif target in incident_packs.incident_ids():
             evs = incident_packs.generate_pack(target, "preview")
             ph = Counter((e["fields"] or {}).get("netspout_phase") for e in evs if (e["fields"] or {}).get("netspout_phase"))

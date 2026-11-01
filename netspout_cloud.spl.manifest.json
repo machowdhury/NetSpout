@@ -1,6 +1,6 @@
 {
  "artifact": "netspout_cloud.spl",
- "sha256": "a67e8ac457aa3928700b9f54bb42f9926daa35de01cf5f273e4e33d4011701c7",
- "views": 138,
+ "sha256": "d84f95f5d1ba5ba3aa461ad053465afa3d6a966d3ab4112ceed5a9d99b2dd5cb",
+ "views": 148,
  "edition": "splunk-cloud-dashboards-only"
 }

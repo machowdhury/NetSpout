@@ -38,7 +38,7 @@ export interface ExplorerEntry {
   demo_ready: boolean;
   workflow: WorkflowStep[];
   // operational
-  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack' | 'incident_pack' | 'replay_pack';
+  engine?: 'unified_generation' | 'scenario_runner' | 'scenario_pack' | 'incident_pack' | 'replay_pack' | 'netflow_solution';
   source_modes?: string[];
   replay?: { phases: Array<{ id: string; kind: string; source: string; offset_s: number }>; supports: string[]; seed: number; detection_prerequisites?: string; verification_spl?: string };
   scenario_id?: string;

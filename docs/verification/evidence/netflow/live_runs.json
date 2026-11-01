@@ -1,0 +1,459 @@
+{
+ "generated_utc": "2026-11-01T03:13+00:00",
+ "engine": "isolated lab engine",
+ "index": "dev_test_replay",
+ "runs": [
+  {
+   "scenario_id": "NF-NOC-01-ELEPHANT",
+   "run_id": "run-77566dd92eb6",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 224,
+    "attempts": 224,
+    "accepted": 224,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 224,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 1.6,
+   "dashboard": "pf_NF-NOC-01-ELEPHANT",
+   "flow_summary": {
+    "flows": 224,
+    "phases": {
+     "traffic": 220,
+     "elephant": 4
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 0,
+    "bytes": 10977544984,
+    "packets": 7583240
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 224,
+    "udp_exported": 224,
+    "datagrams": 12,
+    "collector_decoded": 203
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-NOC-02-DSCP",
+   "run_id": "run-4aa3b054190c",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 340,
+    "attempts": 340,
+    "accepted": 340,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 340,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 2.4,
+   "dashboard": "pf_NF-NOC-02-DSCP",
+   "flow_summary": {
+    "flows": 340,
+    "phases": {
+     "traffic": 80,
+     "voice-video": 260
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 0,
+    "bytes": 11799524,
+    "packets": 24117
+   },
+   "wire": {
+    "state": "COLLECTOR_DECODED",
+    "generated": 340,
+    "udp_exported": 340,
+    "datagrams": 17,
+    "collector_decoded": 340
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-NOC-03-ROUTING-LOOP",
+   "run_id": "run-b91bcd65c2fd",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 280,
+    "attempts": 280,
+    "accepted": 280,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 280,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 2.0,
+   "dashboard": "pf_NF-NOC-03-ROUTING-LOOP",
+   "flow_summary": {
+    "flows": 280,
+    "phases": {
+     "traffic": 160,
+     "repeat-observation": 120
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 0,
+    "bytes": 5976684,
+    "packets": 5991
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 280,
+    "udp_exported": 280,
+    "datagrams": 15,
+    "collector_decoded": 259
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-NOC-04-ASYMMETRY",
+   "run_id": "run-8706ab1b4cbf",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 114,
+    "attempts": 114,
+    "accepted": 114,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 114,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 0.8,
+   "dashboard": "pf_NF-NOC-04-ASYMMETRY",
+   "flow_summary": {
+    "flows": 114,
+    "phases": {
+     "paired": 102,
+     "reverse-elsewhere": 12
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 0,
+    "bytes": 12740893,
+    "packets": 10941
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 114,
+    "udp_exported": 114,
+    "datagrams": 6,
+    "collector_decoded": 93
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-NOC-05-BASELINE-DRIFT",
+   "run_id": "run-f972af3a6bb4",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 420,
+    "attempts": 420,
+    "accepted": 420,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 420,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 2.9,
+   "dashboard": "pf_NF-NOC-05-BASELINE-DRIFT",
+   "flow_summary": {
+    "flows": 420,
+    "phases": {
+     "baseline": 373,
+     "drift": 47
+    },
+    "exporters": [
+     "192.0.2.1"
+    ],
+    "malicious_labeled": 0,
+    "bytes": 7246598,
+    "packets": 10559
+   },
+   "wire": {
+    "state": "COLLECTOR_DECODED",
+    "generated": 420,
+    "udp_exported": 420,
+    "datagrams": 21,
+    "collector_decoded": 420
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-06-DDOS",
+   "run_id": "run-47ce7dd082e6",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 820,
+    "attempts": 820,
+    "accepted": 820,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 820,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 5.9,
+   "dashboard": "pf_NF-SEC-06-DDOS",
+   "flow_summary": {
+    "flows": 820,
+    "phases": {
+     "traffic": 100,
+     "syn-flood": 560,
+     "udp-flood": 160
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 720,
+    "bytes": 4054869,
+    "packets": 4531
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 820,
+    "udp_exported": 820,
+    "datagrams": 40,
+    "collector_decoded": 799
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-07-PORTSCAN",
+   "run_id": "run-7b7c85c230c7",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 262,
+    "attempts": 262,
+    "accepted": 262,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 262,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 1.8,
+   "dashboard": "pf_NF-SEC-07-PORTSCAN",
+   "flow_summary": {
+    "flows": 262,
+    "phases": {
+     "traffic": 162,
+     "horizontal-scan": 60,
+     "vertical-scan": 40
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 100,
+    "bytes": 5490338,
+    "packets": 5495
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 262,
+    "udp_exported": 262,
+    "datagrams": 14,
+    "collector_decoded": 241
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-08-EXFIL",
+   "run_id": "run-7f55d28ddfc9",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 212,
+    "attempts": 212,
+    "accepted": 212,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 212,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 1.5,
+   "dashboard": "pf_NF-SEC-08-EXFIL",
+   "flow_summary": {
+    "flows": 212,
+    "phases": {
+     "traffic": 200,
+     "outbound-transfer": 12
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 12,
+    "bytes": 907854662,
+    "packets": 629143
+   },
+   "wire": {
+    "state": "COLLECTOR_DECODED",
+    "generated": 212,
+    "udp_exported": 212,
+    "datagrams": 11,
+    "collector_decoded": 212
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-09-BEACON",
+   "run_id": "run-a572a00ce3b7",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 221,
+    "attempts": 221,
+    "accepted": 221,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 221,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 1.6,
+   "dashboard": "pf_NF-SEC-09-BEACON",
+   "flow_summary": {
+    "flows": 221,
+    "phases": {
+     "traffic": 212,
+     "beacon": 9
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 9,
+    "bytes": 3633402,
+    "packets": 4612
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 221,
+    "udp_exported": 221,
+    "datagrams": 12,
+    "collector_decoded": 197
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-10-DNS-FLOW",
+   "run_id": "run-246613bc876b",
+   "sourcetype": "netflow:collector",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 720,
+    "attempts": 720,
+    "accepted": 720,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 720,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 5.0,
+   "dashboard": "pf_NF-SEC-10-DNS-FLOW",
+   "flow_summary": {
+    "flows": 720,
+    "phases": {
+     "dns": 440,
+     "dns-heavy": 280
+    },
+    "exporters": [
+     "192.0.2.1"
+    ],
+    "malicious_labeled": 280,
+    "bytes": 200327,
+    "packets": 1479
+   },
+   "wire": {
+    "state": "COLLECTOR_DECODED",
+    "generated": 720,
+    "udp_exported": 720,
+    "datagrams": 35,
+    "collector_decoded": 720
+   },
+   "ok": true
+  },
+  {
+   "scenario_id": "NF-SEC-09-BEACON",
+   "run_id": "run-41822eb66bbe",
+   "sourcetype": "cisco:ios:ipfix",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 221,
+    "attempts": 221,
+    "accepted": 221,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_by_independent_search": 221,
+   "verification": "VERIFIED",
+   "readiness": "READY",
+   "elapsed_to_ready_s": 1.6,
+   "dashboard": "pf_NF-SEC-09-BEACON",
+   "flow_summary": {
+    "flows": 221,
+    "phases": {
+     "traffic": 212,
+     "beacon": 9
+    },
+    "exporters": [
+     "192.0.2.1",
+     "192.0.2.2"
+    ],
+    "malicious_labeled": 9,
+    "bytes": 3633402,
+    "packets": 4612
+   },
+   "wire": {
+    "state": "PARTIAL",
+    "generated": 221,
+    "udp_exported": 221,
+    "datagrams": 12,
+    "collector_decoded": 200
+   },
+   "ok": true,
+   "note": "same scenario with the optional sourcetype cisco:ios:ipfix (not a catalog sourcetype)"
+  }
+ ]
+}

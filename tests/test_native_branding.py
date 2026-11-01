@@ -147,7 +147,9 @@ class NativeBrandingTests(unittest.TestCase):
 
     def test_documentation_headings(self):
         for name in ('README.md', 'docs/QUICKSTART.md', 'docs/TROUBLESHOOTING.md', 'docs/LIMITATIONS.md'):
-            self.assertTrue((ROOT / name).read_text().startswith('# NetSpout PulseForge'), name)
+            text = (ROOT / name).read_text()
+            # the README may centre its title with an HTML heading; the product name must still be the first heading
+            self.assertTrue(text.startswith('# NetSpout PulseForge') or (name == 'README.md' and '<h1 align="center">NetSpout PulseForge</h1>' in text[:300]), name)
 
 
 class NativeBrandingStateTests(unittest.TestCase):

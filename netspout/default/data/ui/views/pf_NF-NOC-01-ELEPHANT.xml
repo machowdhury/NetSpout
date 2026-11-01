@@ -1,0 +1,581 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Bandwidth saturation and elephant flows</label>
+  <description>Which few flows carry most of the bytes, who sends them, where do they go, and how long do they last?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Bandwidth saturation and elephant flows",
+  "description": "Which few flows carry most of the bytes, who sends them, where do they go, and how long do they last?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_eleph_mb": {
+      "type": "input.text",
+      "title": "Elephant threshold (MB per flow)",
+      "options": {
+        "token": "eleph_mb",
+        "defaultValue": "500"
+      }
+    },
+    "input_cap_mbps": {
+      "type": "input.text",
+      "title": "Link capacity Mbps (0 = not set)",
+      "options": {
+        "token": "cap_mbps",
+        "defaultValue": "0"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · NOC-01\n**Bandwidth saturation and elephant flows**  ·  `NF-NOC-01-ELEPHANT`\n\n**Question:** Which few flows carry most of the bytes, who sends them, where do they go, and how long do they last?\n\n**Limits:** Utilization is calculated only when a link capacity is entered below; NetFlow carries no interface speed. Throughput assumes a constant rate within each flow.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Flow records",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 2
+      },
+      "title": "Volume (GB)",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Elephant flows (≥ threshold)",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "%"
+      },
+      "title": "Top talker share of bytes",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "%"
+      },
+      "title": "Peak utilization (needs capacity)",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.area",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "yAxisTitleText": "Mbps"
+      },
+      "title": "Estimated throughput (Mbps, 10 s buckets)",
+      "description": "Flow bytes spread evenly across each flow's start-to-end time. The capacity line appears only if you set a capacity.",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Top source talkers (GB)",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" src=\"$click.value$\" | sort - bytes | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_9": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 8
+      },
+      "title": "Elephant flows (click a row to see its flow records)",
+      "description": "app is a port-based label, not application identification.",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" src=\"$row.src.value$\" dest=\"$row.dest.value$\" | sort - bytes | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_10": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked"
+      },
+      "title": "Volume by destination, split by application (GB, port-based app)",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true
+    },
+    "viz_11": {
+      "type": "splunk.scatter",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off",
+        "xAxisTitleText": "flow duration (s)",
+        "yAxisTitleText": "MB"
+      },
+      "title": "Duration vs volume per flow (seconds vs MB)",
+      "description": "Each dot is one flow record. Elephants sit top-right.",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true
+    },
+    "viz_12": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Flow evidence (largest 100)",
+      "dataSources": {
+        "primary": "ds_11"
+      },
+      "showProgressBar": true
+    },
+    "viz_13": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-NOC-01-ELEPHANT`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, dest_port, app, bytes, packets, duration_ms, flowStartMilliseconds, flowEndMilliseconds, exporter_ip, snmp_in, snmp_out. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Flow records",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | stats count as v | fields v"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Volume (GB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | stats sum(bytes) as b | eval v=round(b/1e9,2) | fields v"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Elephant flows (≥ threshold)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | where bytes>=$eleph_mb$*1000000 | stats count as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Top talker share of bytes",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | stats sum(bytes) as b by src | eventstats sum(b) as tot | eval v=round(100*b/tot,1) | sort - v | head 1 | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Peak utilization (needs capacity)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | eval s=flowStartMilliseconds/1000, e=max(flowEndMilliseconds/1000, flowStartMilliseconds/1000+0.001) | eval bucket=mvrange(floor(s/10)*10, floor(e/10)*10+10, 10) | mvexpand bucket | eval ov=max(0, min(e, bucket+10)-max(s, bucket)), share=bytes*ov/(e-s), _time=bucket | stats sum(share) as bytes_share by bucket | eval mbps=bytes_share*8/1e6/10 | stats max(mbps) as peak | eval v=if($cap_mbps$>0, round(100*peak/$cap_mbps$,1), null()) | fields v"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Estimated throughput (Mbps, 10 s buckets)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | eval s=flowStartMilliseconds/1000, e=max(flowEndMilliseconds/1000, flowStartMilliseconds/1000+0.001) | eval bucket=mvrange(floor(s/10)*10, floor(e/10)*10+10, 10) | mvexpand bucket | eval ov=max(0, min(e, bucket+10)-max(s, bucket)), share=bytes*ov/(e-s), _time=bucket | stats sum(share) as bytes_share by _time | makecontinuous _time span=10s | fillnull value=0 | eval Throughput_Mbps=round(bytes_share*8/1e6/10,1), Capacity_Mbps=if($cap_mbps$>0,$cap_mbps$,null()) | fields _time Throughput_Mbps Capacity_Mbps"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Top source talkers (GB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | stats sum(bytes) as bytes count as flows by src | sort - bytes | head 10 | eval GB=round(bytes/1e9,3) | fields src GB"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Elephant flows (click a row to see its flow records)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | where bytes>=$eleph_mb$*1000000 | eval dur_s=round(duration_ms/1000,1), MB=round(bytes/1e6,1), avg_Mbps=round(bytes*8/1e6/max(duration_ms/1000,0.001),1), app=coalesce(app,\"unclassified\") | sort - bytes | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | table start src dest dest_port app dur_s MB avg_Mbps exporter_ip snmp_in snmp_out"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Volume by destination, split by application (GB, port-based app)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | eval app=coalesce(app,\"unclassified\") | stats sum(bytes) as bytes by dest app | eval GB=round(bytes/1e9,3) | sort - bytes | head 12 | chart sum(GB) over dest by app"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Duration vs volume per flow (seconds vs MB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | eval duration_s=round(duration_ms/1000,1), MB=round(bytes/1e6,2) | table duration_s MB | head 2000"
+      }
+    },
+    "ds_11": {
+      "type": "ds.search",
+      "name": "Flow evidence (largest 100)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" netspout_run_id=\"$run_tok$\" | sort - bytes | head 100 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-NOC-01-ELEPHANT\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_eleph_mb",
+      "input_cap_mbps"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1316,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 270,
+              "y": 134,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 520,
+              "y": 134,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 770,
+              "y": 134,
+              "w": 230,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 1020,
+              "y": 134,
+              "w": 420,
+              "h": 110
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 260,
+              "w": 940,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 260,
+              "w": 460,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 580,
+              "w": 940,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 580,
+              "w": 460,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 900,
+              "w": 700,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_12",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 900,
+              "w": 700,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_13",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1200,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Bandwidth saturation and elephant flows",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

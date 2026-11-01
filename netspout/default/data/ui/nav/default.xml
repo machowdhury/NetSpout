@@ -167,6 +167,18 @@
     </collection>
   </collection>
   <view name="spl_playground" label="SPL Playground"/>
+  <collection label="NetFlow / IPFIX">
+    <view name="pf_NF-NOC-01-ELEPHANT" label="Bandwidth saturation and elephant flows"/>
+    <view name="pf_NF-NOC-02-DSCP" label="QoS and DSCP marking validation"/>
+    <view name="pf_NF-NOC-03-ROUTING-LOOP" label="Routing-loop indicators (flow-only)"/>
+    <view name="pf_NF-NOC-04-ASYMMETRY" label="Asymmetric-routing indicators"/>
+    <view name="pf_NF-NOC-05-BASELINE-DRIFT" label="Application baseline and flow-duration drift"/>
+    <view name="pf_NF-SEC-06-DDOS" label="Volumetric DDoS indicators"/>
+    <view name="pf_NF-SEC-07-PORTSCAN" label="Network reconnaissance and port scanning"/>
+    <view name="pf_NF-SEC-08-EXFIL" label="Outbound data-exfiltration indicators"/>
+    <view name="pf_NF-SEC-09-BEACON" label="Command-and-control beaconing indicators"/>
+    <view name="pf_NF-SEC-10-DNS-FLOW" label="DNS-tunneling indicators (flow-only, limited evidence)"/>
+  </collection>
   <collection label="Operations">
     <view name="datablaster_console" label="PulseForge Run Console"/>
     <view name="configuration" label="PulseForge Setup &amp; Preflight"/>

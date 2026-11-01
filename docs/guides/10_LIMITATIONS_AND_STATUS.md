@@ -6,8 +6,8 @@ Statuses are separate: **IMPLEMENTED** (code exists), **TESTED** (automated test
 |---|---|---|---|---|---|
 | Native generators (159 of 349 sourcetypes) | yes | yes | 137 sourcetypes indexed (evidence-derived) | n/a | partly (packs through the gateway) |
 | Continuous replay (10 recordings, 33 packs) | yes | yes (unit, API, 41+ live checks) | yes | n/a | yes (installed-app run, 12/12) |
-| Scenarios (362 definitions, 138 runnable) | yes | yes | 138 scenarios indexed (76 by the older scenario-level evidence alone) | n/a | sampled (replay, native pack, incident pack) |
-| Dashboards (138: all 138 runnable scenarios) | yes | yes | data-validated 137, one recipe dashboard SPL-validated | n/a | opened in Splunk Web from the real app (2 checked in the installed app) |
+| Scenarios (372 definitions, 148 runnable) | yes | yes | 148 scenarios indexed (138 earlier plus the 10 NetFlow scenarios; 76 by the older scenario-level evidence alone) | n/a | sampled (replay, native pack, incident pack) |
+| Dashboards (148: all 148 runnable scenarios) | yes | yes | data-validated 147 (137 + the 10 NetFlow views), one recipe dashboard SPL-validated | n/a | opened in Splunk Web from the real app (2 checked in the installed app) |
 | SNMPv2c | yes | yes (75) | yes | Net-SNMP tools | not exercised through the app UI |
 | gNMI / OpenConfig + vendor-native paths | yes | yes (27 + more) | yes (events and mstats) | gnmic 0.49.0 | not exercised through the app UI |
 | NetFlow v9 / IPFIX | yes | yes | yes | GoFlow2 2.2.5, tshark 4.6.9 | not exercised through the app UI |

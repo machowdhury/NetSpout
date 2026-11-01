@@ -147,6 +147,18 @@ export function LiveDeliveryMonitor({ runId, onClose }: { runId: string; onClose
           <div key={k} title={hint}><span>{k}</span><b>{v}</b></div>
         ))}
       </div>
+      {run.flow_wire && (
+        <section className="pf-mon-wire" data-testid="flow-wire" aria-label="NetFlow wire stages">
+          <b>NetFlow/IPFIX stages</b>
+          <table className="pf-mon-table"><thead><tr><th>Stage</th><th>Records</th><th>Meaning</th></tr></thead><tbody>
+            <tr><td>Generated flows</td><td>{run.flow_wire.generated}</td><td>Deterministic synthetic flow records</td></tr>
+            <tr><td>UDP exported (IPFIX)</td><td>{run.flow_wire.udp_exported ?? 0}</td><td>{run.flow_wire.state}{run.flow_wire.collector ? ` → ${run.flow_wire.collector}` : ''}; the OS accepted the datagrams</td></tr>
+            <tr><td>Collector decoded</td><td>{run.flow_wire.collector_decoded ?? 'n/a'}</td><td>GoFlow2 record counter delta; not HEC and not indexing</td></tr>
+            <tr><td>HEC accepted (normalized events)</td><td>{c.accepted}</td><td>What this monitor counts{run.sourcetype ? ` · ${run.sourcetype}` : ''}</td></tr>
+          </tbody></table>
+          {run.flow_wire.note && <p className="pf-mon-note">{run.flow_wire.note}</p>}
+        </section>
+      )}
       <ReadinessPanel run={run} />
       <Chart points={run.throughput ?? []} />
       {sts.length > 0 && (

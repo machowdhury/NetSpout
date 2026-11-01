@@ -44,6 +44,8 @@ CORE_MODULES = [
     "universal_search.py",
     "hec_connection_test.py",
     "incident_packs.py",
+    "netflow_solution.py",
+    "netflow_wire.py",
     "scenario_runner.py",
     "snmp_engine.py",
     "snmp_metrics.py",

@@ -9,6 +9,7 @@ import {
 } from '../../lib/explorerApi';
 import { LiveDeliveryMonitor, rememberRun, rememberedRun } from '../monitor/LiveDeliveryMonitor';
 import { startRun } from '../../lib/runsApi';
+import { NetflowConfig, defaultNetflowConfig, type NetflowRunConfig } from './NetflowConfig';
 import { ScenarioPreview } from './ScenarioPreview';
 import { UniversalSearch } from './UniversalSearch';
 import './explorer.css';
@@ -199,6 +200,7 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
   const [replayMode, setReplayMode] = useState<'one_shot' | 'continuous'>('one_shot');
   const [replaySpeed, setReplaySpeed] = useState(10);
   const [monitorId, setMonitorId] = useState<string | null>(rememberedRun(entry.entry_id));
+  const [nfCfg, setNfCfg] = useState<NetflowRunConfig>(() => defaultNetflowConfig(entry));
   const [monitorError, setMonitorError] = useState<string | null>(null);
   const [prereq, setPrereq] = useState<Prerequisites | null>(null);
   const security = entry.kind === 'security';
@@ -470,9 +472,10 @@ function Workflow({ entry }: { entry: ExplorerEntry }) {
         )}
         {ctx.runId && <code className="ux-run">run {ctx.runId}</code>}
       </div>
+      {entry.engine === 'netflow_solution' && <NetflowConfig entry={entry} value={nfCfg} onChange={setNfCfg} />}
       {!security && entry.engine !== 'replay_pack' && entry.runnable !== false && (
         <button type="button" className="ux-run-btn" data-testid="monitored-run"
-                onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined }).then(
+                onClick={() => startRun({ kind: 'scenario', target: entry.scenario_id, index: index || undefined, ...(entry.engine === 'netflow_solution' ? nfCfg : {}) }).then(
                   (r) => { rememberRun(r.run_id, entry.entry_id); setMonitorId(r.run_id); setMonitorError(null); }, (e) => setMonitorError(errText(e)))}>
           Run scenario with live delivery monitor
         </button>)}

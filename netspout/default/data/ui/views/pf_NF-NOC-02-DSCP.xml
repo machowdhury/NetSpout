@@ -1,0 +1,423 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · QoS and DSCP marking validation</label>
+  <description>Is voice and video marked with the DSCP the policy expects, and which endpoints are not?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · QoS and DSCP marking validation",
+  "description": "Is voice and video marked with the DSCP the policy expects, and which endpoints are not?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_if_tok": {
+      "type": "input.text",
+      "title": "Ingress interface (snmp_in, * = all)",
+      "options": {
+        "token": "if_tok",
+        "defaultValue": "*"
+      }
+    },
+    "input_class_tok": {
+      "type": "input.text",
+      "title": "Traffic class (voice, video or *)",
+      "options": {
+        "token": "class_tok",
+        "defaultValue": "*"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · NOC-02\n**QoS and DSCP marking validation**  ·  `NF-NOC-02-DSCP`\n\n**Question:** Is voice and video marked with the DSCP the policy expects, and which endpoints are not?\n\n**Limits:** Voice/video class is a UDP port heuristic (RTP 16384-32767, video 5004) and the policy (voice EF=46, video AF41=34) is the lab default, not discovered from the network.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.markergauge",
+      "options": {
+        "backgroundColor": "#22262a",
+        "orientation": "horizontal",
+        "gaugeRanges": [
+          {
+            "from": 0,
+            "to": 80,
+            "value": "#c9786f"
+          },
+          {
+            "from": 80,
+            "to": 95,
+            "value": "#c9a24a"
+          },
+          {
+            "from": 95,
+            "to": 100,
+            "value": "#6fa387"
+          }
+        ],
+        "majorValueDisplay": "number"
+      },
+      "title": "Policy compliance (% of voice/video flows)",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.pie",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "right"
+      },
+      "title": "DSCP distribution (all flows)",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.column",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#6fa387",
+          "#c9786f"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked",
+        "yAxisTitleText": "flow records"
+      },
+      "title": "Marked as policy vs not marked as policy, over time",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#6fa387",
+          "#c9786f"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked"
+      },
+      "title": "Result by class",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 7
+      },
+      "title": "Noncompliant endpoints (click a row for their flows)",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ src=\"$row.src.value$\" | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_7": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Observed DSCP by class and interface (voice/video flows)",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 5
+      },
+      "title": "Noncompliant flow evidence",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-NOC-02-DSCP`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: dscp, tos, dest_port, transport, src, snmp_in. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Policy compliance (% of voice/video flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | stats count(eval(result=\"compliant\")) as c count as n | eval v=round(100*c/n,1) | fields v"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "DSCP distribution (all flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | stats count by dscp | eval dscp=\"DSCP \".dscp | sort - count"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Marked as policy vs not marked as policy, over time",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | bin _time span=15s | chart count over _time by result limit=6 | makecontinuous _time span=15s | fillnull value=0"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Result by class",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | stats count(eval(result=\"compliant\")) as compliant count(eval(result=\"noncompliant\")) as noncompliant by cls"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Noncompliant endpoints (click a row for their flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | stats count as flows count(eval(result=\"noncompliant\")) as noncompliant values(cls) as class values(dscp) as observed_dscp values(expected) as expected_dscp sum(bytes) as bytes values(snmp_in) as interfaces by src | where noncompliant>0 | eval pct_noncompliant=round(100*noncompliant/flows,1) | sort - noncompliant | table src class expected_dscp observed_dscp flows noncompliant pct_noncompliant bytes interfaces"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Observed DSCP by class and interface (voice/video flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | stats count as flows by cls dscp expected snmp_in | sort cls - flows | table cls expected dscp snmp_in flows"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Noncompliant flow evidence",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-02-DSCP\" netspout_run_id=\"$run_tok$\" snmp_in=$if_tok$ | eval cls=case(transport=\"udp\" AND dest_port=5004,\"video\", transport=\"udp\" AND dest_port>=16384 AND dest_port<=32767,\"voice\") | where isnotnull(cls) | search cls=\"$class_tok$\" | eval expected=case(cls=\"voice\",46,cls=\"video\",34), result=if(dscp=expected,\"compliant\",\"noncompliant\") | where result=\"noncompliant\" | sort - _time | head 100 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-NOC-02-DSCP\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_if_tok",
+      "input_class_tok"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1116,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 330,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 400,
+              "w": 330,
+              "h": 330
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 370,
+              "y": 134,
+              "w": 1070,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 370,
+              "y": 450,
+              "w": 340,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 730,
+              "y": 450,
+              "w": 710,
+              "h": 280
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 750,
+              "w": 690,
+              "h": 230
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 730,
+              "y": 750,
+              "w": 710,
+              "h": 230
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1000,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "QoS and DSCP marking validation",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

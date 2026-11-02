@@ -1,196 +1,45 @@
-<div align="center">
+# NetSpout PulseForge
 
-<h1 align="center">NetSpout PulseForge</h1>
+PulseForge is a Splunk app that generates realistic, **bounded** network, security and infrastructure telemetry so you can test dashboards, detections and investigations without touching production. Pick a scenario, preview it, send it to an authorized Splunk destination, confirm the events were indexed, and open the matching dashboard.
 
-**Synthetic telemetry for Splunk: generate, replay, stream, verify, investigate.**
+You sign in with your normal **Splunk** login. PulseForge has no accounts of its own.
 
-PulseForge generates and replays telemetry, runs correlated scenarios, proves what Splunk actually indexed, and opens a dashboard bound to that run.
+## What you get
+- **148 runnable scenarios** (372 defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. The other 224 are documented but not runnable yet, each with the reason. See [SCENARIOS](docs/SCENARIOS.md).
+- **349 sourcetypes from 88 vendors** in the catalog, with the evidence for each kept separate. Catalog presence is not proof it works. See [TELEMETRY_COVERAGE](docs/TELEMETRY_COVERAGE.md).
+- **148 Dashboard Studio dashboards**, one per runnable scenario; all are data-validated and 20 have also been visually verified.
+- Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement.
 
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Splunk Enterprise tested: 10.2.7](https://img.shields.io/badge/Splunk_Enterprise-tested_on_10.2.7-ed5b26.svg)](docs/guides/03_INSTALLATION.md)
-[![App version 2.0.0](https://img.shields.io/badge/app_version-2.0.0-444.svg)](netspout/default/app.conf)
-[![Documentation](https://img.shields.io/badge/docs-guides-a45132.svg)](docs/guides/README.md)
+## Install (two choices)
 
-[Quick start](#quick-start) · [Capabilities](#what-you-can-do) · [Screenshots](#screenshots) · [Coverage](#coverage-at-a-glance) · [Configuration](#configuration) · [Documentation](#documentation)
-
-</div>
-
----
-
-## 30-second overview
-
-PulseForge has **two parts**: a **Splunk app** (`netspout.spl`: UI, 148 Dashboard Studio dashboards, a gateway) and an **engine** (a Python service that generates the telemetry and talks to your Splunk HEC). You choose a sourcetype or a scenario, press run, watch delivery live, and PulseForge tells you when the data is **independently confirmed in Splunk** and the matching dashboard is ready.
-
-```text
-Search → Select → Preview → Configure → Generate / Stream → Live Monitor → Verify in Splunk → Dashboard READY → Open dashboard
-```
-
-> **Accepted is not indexed.** HEC acknowledgement and indexing are counted separately. "Indexed" only ever comes from an independent Splunk search keyed by the run id.
-
-## Quick start
-
-**Prerequisites:** Splunk Enterprise with admin access and an HEC token (tested on 10.2.7); an event index **you create yourself** (PulseForge never creates indexes); Python 3.11+ for the engine. Docker is a validated *lab* option, not a requirement.
-
-The shortest verified path (full steps and troubleshooting: [Installation guide](docs/guides/03_INSTALLATION.md)):
-
-```bash
-# 1. Build the Splunk app and the engine package from this repository
-python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
-PYTHONPATH=src:backend .venv/bin/python scripts/build_splunk_package.py     # writes netspout.spl
-.venv/bin/python scripts/build_engine_package.py                            # writes pulseforge-engine.tar.gz
-
-# 2. Install netspout.spl in Splunk (Apps > Manage Apps > Install app from file), then RESTART splunkd
-
-# 3. Start the engine (secrets come from the environment, never from files in this repo)
-export NETSPOUT_HEC_TOKEN='<your-hec-token>' NETSPOUT_SPLUNK_PASSWORD='<your-splunk-password>'
-cd backend && PYTHONPATH=../src:. ../.venv/bin/python run.py --host 127.0.0.1 --port 8081
-
-# 4. In Splunk Web open the app > Use Case Explorer, finish Connection Center (HEC URL, search URL, authorized indexes), and run something
-```
-
-The first run: search for `cloudtrail` (a sourcetype) or `5G core user-plane degradation` (a scenario), press **Run**, wait for **READY**, open the dashboard. Step-by-step tutorials: [User guide](docs/guides/05_USER_GUIDE.md).
-
-| Deployment | What it is | Status |
+| | Docker | Splunk Enterprise app |
 |---|---|---|
-| Splunk Enterprise app + engine | `netspout.spl` + engine on a host you control | validated in an isolated lab |
-| Docker lab | `docker compose up -d` (`.env.example` → `.env`) | validated lab option, not a dependency |
-| Standalone engine | `pulseforge-engine.tar.gz` + `deploy/engine/install.sh` | packaged; see [installation, section C](docs/guides/03_INSTALLATION.md) |
-| Splunk Cloud dashboards | `netspout_cloud.spl`: **dashboards only**, no engine, no generation | built; **Splunk Cloud validation is not done**; not an approval claim |
+| Best for | Trying it quickly: includes an evaluation Splunk | Adding PulseForge to a Splunk you already run |
+| You install | Docker | `netspout.spl` from Splunk Web, **plus** the PulseForge engine on a host Splunk can reach |
+| Open | `http://localhost:8000` | Apps → NetSpout PulseForge |
+| Status | Compose file validated; a one-command clean-checkout run is **not yet repeated** for this release | Verified end to end on Splunk Enterprise 10.2.7 in an isolated Docker lab |
 
-## What you can do
+Steps are in **[docs/INSTALL.md](docs/INSTALL.md)**. First run: **[docs/QUICKSTART.md](docs/QUICKSTART.md)**.
 
-| Capability | Status |
+A single-package install, where Splunk runs the engine for you, is in development and is **not part of this release**.
+
+**Splunk Cloud** is different: only the dashboards can be installed there, and generation runs in an engine you host. Read [the Cloud guide](docs/guides/04_SPLUNK_CLOUD_GUIDE.md) first. Nothing here is Splunk Cloud certified.
+
+## Supported platforms
+
+| Platform | State |
 |---|---|
-| **Universal search** across sourcetypes, scenarios and dashboards, with kind / runnable / vendor / protocol filters | supported |
-| **Generate one sourcetype**, finite or **continuously until stopped**, at a configurable event rate | supported for 259 of 349 sourcetypes |
-| **Native generation vs recorded-sample replay** per sourcetype, labelled honestly | supported |
-| **Run a correlated scenario** with preview, configuration and a **Live Delivery Monitor** (pause, resume, stop where the engine supports it) | supported for 148 scenarios |
-| **HEC connection test** and **independent indexing verification** | supported |
-| **Dashboard readiness** (`GENERATING` … `READY` / `DEGRADED`) with a notification and a run-bound **Dashboard Studio** dashboard | supported |
-| **NetFlow v9 / IPFIX** over UDP to a GoFlow2 collector, plus ten flow-pattern scenarios ([guide](docs/guides/12_NETFLOW_IPFIX_SOLUTION.md)) | supported |
-| Native SNMPv2c and gNMI/OpenConfig | supported ([network telemetry guide](docs/guides/06_NETWORK_TELEMETRY_GUIDE.md)) |
-| Standalone engine package, index allowlist, secrets only in the environment | supported |
-| SNMPv3, sFlow, gRPC dial-out MDT, J-Flow-specific export, IPv6 flow | **not implemented** |
-| CIM validation of sourcetypes, security detection verification | **not done** (0 sourcetypes CIM-validated, 0 detections verified) |
-| Splunk Cloud HEC | **metrics only, bounded:** 5 synthetic metrics and one incident pack's gauges (30 datapoints) were accepted into a remote `test_metrics` index and independently found with `mstats`/`mcatalog` (Nov 2). Event-index delivery, the engine run path against Cloud, a rendered dashboard and vendor samples were **not** tested; see [telemetry guide](docs/guides/06_NETWORK_TELEMETRY_GUIDE.md#remote-test_metrics-status) |
+| Splunk Enterprise 10.2.7 (Docker lab) | Verified |
+| Other Splunk Enterprise versions, VM installs | Not tested |
+| Docker (Compose v2, `linux/amd64` image) | Supported; see status above |
+| Splunk Cloud | Dashboards only; customer-hosted engine; not certified |
 
-Not every cataloged sourcetype or scenario is executable. Catalog-only entries are labelled and never offered a Run button.
+## Known limitations
+- AppInspect reports failures on the Enterprise package; it is not Splunk-vetted. See [LIMITATIONS](docs/LIMITATIONS.md).
+- A HEC or search secret entered in the UI is held by the engine in memory and has to be entered again after the engine restarts.
+- Detection content (Enterprise Security, CIM) is not claimed.
 
-## Screenshots
+## More
+[Install](docs/INSTALL.md) · [Quickstart](docs/QUICKSTART.md) · [Scenarios](docs/SCENARIOS.md) · [Telemetry coverage](docs/TELEMETRY_COVERAGE.md) · [Security](docs/SECURITY.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Limitations](docs/LIMITATIONS.md)
 
-Captured from the installed app in the validation lab. Click to enlarge.
-
-<table>
-<tr>
-<td align="center"><a href="docs/verification/evidence/search/screens/search_sourcetype.jpg"><img src="docs/verification/evidence/search/screens/search_sourcetype.jpg" width="260" alt="Universal search over sourcetypes"></a><br><sub>Universal search</sub></td>
-<td align="center"><a href="docs/verification/evidence/search/screens/stream_running.jpg"><img src="docs/verification/evidence/search/screens/stream_running.jpg" width="260" alt="Continuous sourcetype stream running"></a><br><sub>Continuous streaming</sub></td>
-<td align="center"><a href="docs/verification/evidence/monitor/screens/native_pack_final.jpg"><img src="docs/verification/evidence/monitor/screens/native_pack_final.jpg" width="260" alt="Live Delivery Monitor"></a><br><sub>Live Delivery Monitor</sub></td>
-</tr>
-<tr>
-<td align="center"><a href="docs/verification/evidence/search/screens/readiness_ready.jpg"><img src="docs/verification/evidence/search/screens/readiness_ready.jpg" width="260" alt="Dashboard readiness READY"></a><br><sub>Dashboard readiness</sub></td>
-<td align="center"><a href="docs/verification/evidence/netflow/screens/NF-SEC-09-BEACON.jpg"><img src="docs/verification/evidence/netflow/screens/NF-SEC-09-BEACON.jpg" width="260" alt="NetFlow beaconing dashboard"></a><br><sub>NetFlow beaconing indicators</sub></td>
-<td align="center"><a href="docs/verification/evidence/netflow/screens/NF-NOC-01-ELEPHANT.jpg"><img src="docs/verification/evidence/netflow/screens/NF-NOC-01-ELEPHANT.jpg" width="260" alt="NetFlow elephant flow dashboard"></a><br><sub>NetFlow elephant flows</sub></td>
-</tr>
-</table>
-
-## Coverage at a glance
-
-Generated from the registries (`docs/reference/`), kept separate on purpose:
-
-| Measure | Count |
-|---|---|
-| Canonical sourcetypes | 349 |
-| Native generator coverage (sourcetypes) | 159 |
-| Recorded-sample replay catalog (sourcetypes) | 143 |
-| Streamable one at a time (77 native path + 182 recorded-sample) | 259 |
-| Independently indexed sourcetypes (read back from Splunk) | 137 |
-| Deduplicated scenario definitions | 372 |
-| Runnable scenarios | 148 |
-| Catalog-only scenarios | 209 |
-| Installed dashboards | 148 |
-| Dashboards data-validated or better | 148 |
-| Dashboards visually verified (screenshot inspected) | 20 |
-
-The Explorer's 700+ search entries include 365 security stories and are not the scenario count. Full references: [sourcetypes](docs/reference/SOURCETYPE_REFERENCE.md), [scenarios](docs/reference/SCENARIO_REFERENCE.md), [status and limitations](docs/guides/10_LIMITATIONS_AND_STATUS.md).
-
-## Tech stack
-
-| Layer | Technology (from the source) |
-|---|---|
-| Splunk app UI | React 19, TypeScript, Vite, Tailwind CSS (bundle in `netspout/appserver/static/dist`) |
-| Engine | Python, FastAPI, Uvicorn, Pydantic, `src/netspout_core` |
-| Dashboards | Splunk Dashboard Studio (v2), generated by `scripts/build_*dashboards.py` |
-| Delivery | Splunk HTTP Event Collector, independent verification by Splunk REST search |
-| Native protocols | SNMPv2c, gNMI/OpenConfig (gRPC, protobuf), NetFlow v9 and IPFIX over UDP |
-| Flow collection | GoFlow2 v2.2.5 + a repo forwarder (`deploy/collector`) |
-| Packaging | `netspout.spl`, `netspout_cloud.spl`, `pulseforge-engine.tar.gz` |
-| Tests | pytest (backend/core), Playwright (browser checks) |
-
-## Configuration
-
-Complete list: [Installation guide](docs/guides/03_INSTALLATION.md), [Monitor and HEC test guide](docs/guides/11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md). Secrets are read **only** from the environment.
-
-| Setting | Purpose | Required | Default | Example |
-|---|---|---|---|---|
-| HEC URL, search URL, authorized indexes | Connection Center (UI or `POST /api/setup`) | yes | none | `https://splunk.example.com:8088/services/collector` |
-| `NETSPOUT_HEC_TOKEN` | HEC token | yes | none | `<your-hec-token>` |
-| `NETSPOUT_SPLUNK_PASSWORD` or `NETSPOUT_SPLUNK_TOKEN` | Search credentials for independent verification | for verification | none | `<your-splunk-password>` |
-| `PULSEFORGE_ENGINE_HOST` / `PULSEFORGE_ENGINE_PORT` | Engine bind address (launcher) | no | `127.0.0.1:8081` | `127.0.0.1:8091` |
-| `PULSEFORGE_STATE_DIR` / `NETSPOUT_CONFIG_DIR` | Connection Center config and run state (no secrets) | no | `~/.pulseforge` | `/var/lib/pulseforge` |
-| `NETSPOUT_BACKEND_URL` | Where the Splunk gateway finds the engine | if not default | `http://127.0.0.1:8081` | `http://host.docker.internal:8091` |
-| `NETSPOUT_COLLECTOR_HOST`, `NETSPOUT_GOFLOW_METRICS_URL`, `NETSPOUT_FLOW_FORWARDER_STATUS_URL` | Native flow collector | flow only | loopback | `http://127.0.0.1:8080/metrics` |
-| TLS verification | On by default; `allow_insecure_tls` is accepted only for loopback lab endpoints | n/a | verify | |
-
-<details>
-<summary>Advanced configuration: collectors, TLS, HEC and indexing troubleshooting</summary>
-
-* **Collectors.** NetFlow/IPFIX needs the GoFlow2 collector and forwarder from `deploy/collector` (needs `SPLUNK_HEC_TOKEN`, `SPLUNK_HEC_URL`, `SPLUNK_INDEX`). See [native flow quickstart](docs/guides/NATIVE_FLOW_QUICKSTART.md) and the [NetFlow guide](docs/guides/12_NETFLOW_IPFIX_SOLUTION.md). Without a collector the flow wire stage reports `COLLECTOR_UNREACHABLE`; HEC delivery still works.
-* **TLS.** Certificate errors are reported as `TLS_CERTIFICATE`. Fix the certificate; do not disable verification outside a loopback lab.
-* **HEC.** A token without access to the index produces a rejection; an unknown index can be accepted and never found, which is why indexing is a separate status. Run the HEC connection test first.
-* **Indexing delay.** Search visibility can trail HEC acceptance. Readiness re-checks for 180 s after delivery ends before reporting `DEGRADED`; no ETA is invented.
-* **After reinstalling the app, restart splunkd.** Splunk caches the static UI bundle and serves the old one until then.
-* More: [Troubleshooting](docs/guides/09_TROUBLESHOOTING.md), [security](docs/SECURITY.md).
-
-</details>
-
-<details>
-<summary>Known limitations</summary>
-
-* The 90 sourcetypes that cannot be grounded in a native generator or recorded sample are catalog-only.
-* 209 scenario definitions are catalog-only; 15 more are contracts without executable telemetry.
-* Validated in an isolated Docker lab. `netspout_cloud.spl` (dashboards only) passed AppInspect cloud rules; that is **not** Splunk Cloud approval.
-* Native flow export over UDP is unreliable by nature. The repository's collector compose file runs GoFlow2 with `workers=1` (several workers dropped records for lack of a template; fixed and measured at 100% decoded in the lab). The run panel always shows exported versus collector-decoded counts rather than hiding a gap.
-* Telemetry for incident packs is modeled by NetSpout, not vendor-native. Details: [Limitations and status](docs/guides/10_LIMITATIONS_AND_STATUS.md), [LIMITATIONS](docs/LIMITATIONS.md).
-
-</details>
-
-## Documentation
-
-Organized by purpose (Diátaxis). The guides below are the documentation; nothing is duplicated here.
-
-| Learn (tutorials) | Do (how-to) |
-|---|---|
-| [Installation: first working setup](docs/guides/03_INSTALLATION.md) | [Configure a destination and test HEC](docs/guides/11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md) |
-| [User guide: first stream, first scenario, first dashboard](docs/guides/05_USER_GUIDE.md) | [Stream, pause, resume, stop; verify indexed data](docs/guides/11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md) |
-| [Quickstart](docs/QUICKSTART.md) | [Run a NetFlow/IPFIX scenario](docs/guides/12_NETFLOW_IPFIX_SOLUTION.md) |
-| | [Configure native flow collectors](docs/guides/NATIVE_FLOW_QUICKSTART.md) |
-| | [Troubleshoot ingestion](docs/guides/09_TROUBLESHOOTING.md) |
-| | [Run the Nov 3 demo](docs/guides/13_DEMO_RUNBOOK.md) |
-
-| Reference | Explanation |
-|---|---|
-| [Sourcetype reference](docs/reference/SOURCETYPE_REFERENCE.md) | [Product overview](docs/guides/01_PRODUCT_OVERVIEW.md) |
-| [Scenario reference](docs/reference/SCENARIO_REFERENCE.md) | [Architecture and deployment](docs/guides/02_ARCHITECTURE_AND_DEPLOYMENT.md) |
-| [Dashboard guide and inventory](docs/guides/07_DASHBOARD_GUIDE.md) | [Native vs sample replay, HEC acceptance vs indexing](docs/guides/11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md) |
-| [Network protocol guide](docs/guides/06_NETWORK_TELEMETRY_GUIDE.md) | [Security, TA and CIM status](docs/guides/08_SECURITY_TA_CIM_GUIDE.md) |
-| [Limitations and status](docs/guides/10_LIMITATIONS_AND_STATUS.md) | [Security and index allowlist](docs/SECURITY.md) |
-| [Splunk Cloud guide](docs/guides/04_SPLUNK_CLOUD_GUIDE.md) | [Telemetry provenance](docs/TELEMETRY_PROVENANCE.md) |
-| [Verification evidence](docs/verification/) · [Release acceptance](docs/verification/release_acceptance_final.md) · [NetFlow verification](docs/verification/netflow_solution_verification.md) · [Release notes](docs/releases/NETSPOUT_V1_RC1_RELEASE_REPORT.md) | [Roadmap](docs/ROADMAP.md) |
-
-## Safety
-
-Native simulated servers bind to loopback by default. gNMI `SetRequest` is disabled and SNMP `SetRequest` is rejected. No credentials are committed; tokens and passwords come from the environment. Synthetic flows use RFC 5737 documentation addresses.
-
-## License
-
-[Apache-2.0](LICENSE). Third-party notices: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Maintainer: [machowdhury](https://github.com/machowdhury).
+PulseForge only sends to destinations you authorize, in bounded runs. Use it with test data and test indexes. Licensed under the terms in [LICENSE](LICENSE).

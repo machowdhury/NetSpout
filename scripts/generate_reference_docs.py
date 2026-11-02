@@ -118,6 +118,7 @@ def md_scenarios(rows, tax):
          f"| Dashboards DATA_VALIDATED or better | {sum(1 for r in rows if r['dashboard_maturity'] in ('DASHBOARD_DATA_VALIDATED', 'DASHBOARD_VISUALLY_VERIFIED'))} |",
          f"| Dashboards VISUALLY_VERIFIED | {sum(1 for r in rows if r['dashboard_maturity'] == 'DASHBOARD_VISUALLY_VERIFIED')} |", "| Detection verified | 0 (no add-on, CIM or Enterprise Security content installed) |", "",
          "Tiers (as recorded, never upgraded by indexing): " + ", ".join(f"{k} {v}" for k, v in sorted(c.items())) + ".", "",
+         "Why each non-runnable scenario is not runnable, and what it would take: [SCENARIO_ACTIVATION_AUDIT.md](SCENARIO_ACTIVATION_AUDIT.md). Customer catalog: [../SCENARIOS.md](../SCENARIOS.md).", "",
          "The original 100 financial-services and 100 telecom use-case libraries were not supplied; they are **not** part of these counts and none of the scenarios below were derived from them. Industry mappings are editorial unless an industry pack binds them. Splunk Analytic Stories are a separate reference universe (see the Explorer's Security view); they are not counted as scenarios.", "",
          "## How the counts relate (one partition, plus overlapping attributes)", "",
          "| Group | Count | Meaning |", "|---|---|---|",

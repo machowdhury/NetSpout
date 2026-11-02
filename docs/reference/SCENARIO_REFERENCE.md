@@ -15,6 +15,8 @@ Generated 2026-11-02 by `scripts/generate_reference_docs.py` from the Use Case E
 
 Tiers (as recorded, never upgraded by indexing): CATALOGED 209, CERTIFIED 18, CONTRACTED 119, FORMAT_VALIDATED 2, NOT_ESTABLISHED 1, VALIDATED 23.
 
+Why each non-runnable scenario is not runnable, and what it would take: [SCENARIO_ACTIVATION_AUDIT.md](SCENARIO_ACTIVATION_AUDIT.md). Customer catalog: [../SCENARIOS.md](../SCENARIOS.md).
+
 The original 100 financial-services and 100 telecom use-case libraries were not supplied; they are **not** part of these counts and none of the scenarios below were derived from them. Industry mappings are editorial unless an industry pack binds them. Splunk Analytic Stories are a separate reference universe (see the Explorer's Security view); they are not counted as scenarios.
 
 ## How the counts relate (one partition, plus overlapping attributes)

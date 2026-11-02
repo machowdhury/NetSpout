@@ -5,9 +5,9 @@ PulseForge is a Splunk app that generates realistic, **bounded** network, securi
 You sign in with your normal **Splunk** login. PulseForge has no accounts of its own.
 
 ## What you get
-- **148 runnable scenarios** (372 defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. See [SCENARIOS](docs/SCENARIOS.md).
+- **148 runnable scenarios** (372 defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. The other 224 are documented but not runnable yet, each with the reason. See [SCENARIOS](docs/SCENARIOS.md).
 - **349 sourcetypes from 88 vendors** in the catalog, with the evidence for each kept separate. Catalog presence is not proof it works. See [TELEMETRY_COVERAGE](docs/TELEMETRY_COVERAGE.md).
-- **148 Dashboard Studio dashboards**, one per runnable scenario.
+- **148 Dashboard Studio dashboards**, one per runnable scenario; all are data-validated and 20 have also been visually verified.
 - Delivery through **HEC** (events and metrics), with indexed counts confirmed by an independent Splunk search, not by HEC acknowledgement.
 
 ## Install (two choices)

@@ -46,3 +46,42 @@ def test_customer_docs_do_not_ship_credentials_or_the_engine_port():
         assert not re.search(r"(?i)password\s*[:=]\s*\S*[A-Za-z0-9]{6,}", text.replace("SPLUNK_PASSWORD", "")), name
     install = (ROOT / "docs" / "INSTALL.md").read_text()
     assert "localhost:8081" not in install and "http://127.0.0.1:8081" not in install
+
+
+def test_activation_audit_accounts_for_every_non_runnable_scenario():
+    audit = json.loads((ROOT / "docs" / "reference" / "scenario_activation_audit.json").read_text())
+    non = [r for r in S if not r["runnable"]]
+    assert audit["non_runnable"] == len(non) == len(audit["rows"]) == sum(audit["classes"].values())
+    assert {a["scenario_id"] for a in audit["rows"]} == {r["scenario_id"] for r in non}      # nothing missing, nothing runnable listed
+    assert all(a["class"] in "ABCD" and a["reason"] for a in audit["rows"])
+    assert audit["defined"] == len(S) and audit["runnable"] == len(S) - len(non)
+
+
+def test_scenarios_doc_describes_every_scenario_without_placeholder_text():
+    text = (ROOT / "docs" / "SCENARIOS.md").read_text()
+    assert all("`%s`" % r["scenario_id"] in text for r in S)                                  # every defined scenario appears
+    for banned in ("Cataloged candidate", "Not executable."):
+        assert banned not in text
+    assert not __import__("re").search(r"Documented \w+ candidate", text)
+    assert "dashboard_views" not in text
+
+
+def test_dashboard_accounting_matches_the_views():
+    audit = json.loads((ROOT / "docs" / "reference" / "scenario_activation_audit.json").read_text())["dashboards"]
+    views = list((ROOT / "netspout" / "default" / "data" / "ui" / "views").glob("pf_*.xml"))
+    assert audit["dashboard_views"] == len(views) == sum(1 for r in S if r.get("dashboard"))
+    assert audit["structural_spl_ok"] + len(audit["structural_spl_failed"]) == audit["dashboard_views"]
+    assert audit["visually_verified"] == sum(1 for r in S if r.get("dashboard_maturity") == "DASHBOARD_VISUALLY_VERIFIED")
+
+
+def test_every_runnable_scenario_is_registered_with_its_run_path():
+    sys.path[:0] = [str(ROOT / "src"), str(ROOT / "backend")]
+    from app.main import SUPPORTED_SCENARIO_IDS
+    from netspout_core import incident_packs, netflow_solution, replay_packs
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS
+    registry = {"netflow_solution": set(netflow_solution.IDS), "incident_pack": set(incident_packs.incident_ids()), "scenario_pack": set(SCENARIO_PACK_IDS),
+                "replay_pack": {p["id"] for p in replay_packs.packs()}, "scenario_runner": set(SUPPORTED_SCENARIO_IDS)}
+    for r in S:
+        if r["runnable"] and r["engine"] in registry:
+            assert r["scenario_id"] in registry[r["engine"]], (r["engine"], r["scenario_id"])
+    assert sum(1 for r in S if r["runnable"] and r["engine"] in registry) >= 120          # the five code-registered engines cover most runnable scenarios

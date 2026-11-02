@@ -29,6 +29,15 @@ def load(name):
     return d["generated"], d["rows"]
 
 
+def describe(r):
+    """What the scenario simulates, taken from its own definition (summary, else objective); never the placeholder stub text."""
+    d = (r.get("summary") or r.get("objective") or "").strip()
+    m = __import__("re").match(r"^Documented (\w+) candidate", d)
+    if m:
+        d = "%s use case from the community use-case library (%s). It describes what to detect on real data and defines no telemetry to generate." % (m.group(1).capitalize(), r["scenario_id"].replace("UCR-", "UC-"))
+    return d
+
+
 def scenarios_doc(srows, trows):
     kind_of = {t["sourcetype"]: t["data_kind"] for t in trows}
     run = [r for r in srows if r["runnable"]]
@@ -45,17 +54,23 @@ def scenarios_doc(srows, trows):
     for e in sorted(by_engine):
         rows = sorted((r for r in run if r["engine"] == e), key=lambda r: r["scenario_id"])
         L += ["## %s (%d)" % (ENGINE_LABEL.get(e, e), len(rows)), "",
-              "| ID | Name | Category | Vendor / technology | Sourcetypes | Telemetry | Maturity | Dashboard |", "|---|---|---|---|---|---|---|---|"]
+              "| ID | Name | What it simulates | Category | Vendor / technology | Sourcetypes | Telemetry | Transport | Maturity | Dashboard | Validation |", "|---|---|---|---|---|---|---|---|---|---|---|"]
         for r in rows:
             kinds = sorted({kind_of.get(s) or ("metric" if "metric" in s else "event") for s in r["sourcetypes"]}) or ["event"]
             dash = "`%s`" % r["dashboard"] if r.get("dashboard") and (VIEWS / (r["dashboard"] + ".xml")).exists() else "—"
-            L.append("| `%s` | %s | %s | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(r["category"], 30), cell(r["vendors"], 50),
-                                                                   cell(["`%s`" % s for s in r["sourcetypes"]], 120), "/".join(kinds), r["maturity_tier"], dash))
+            val = "indexed in lab; dashboard " + {"DASHBOARD_VISUALLY_VERIFIED": "visually verified", "DASHBOARD_DATA_VALIDATED": "data-validated"}.get(r.get("dashboard_maturity"), "not validated")
+            L.append("| `%s` | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(r["category"], 30), cell(r["vendors"], 50),
+                                                                                  cell(["`%s`" % s for s in r["sourcetypes"]], 120), "/".join(kinds), "HEC" + (" + IPFIX wire" if e == "netflow_solution" else ""), r["maturity_tier"], dash, val))
         L.append("")
-    blocked = collections.Counter((r.get("blocked_reason") or "").split(":")[0] for r in cat)
-    L += ["## Defined but not runnable (%d)" % len(cat), ""]
-    L += ["- %s: %d" % (k or "other", n) for k, n in blocked.most_common()]
-    L += ["", "The full list, with objectives, is in [reference/SCENARIO_REFERENCE.md](reference/SCENARIO_REFERENCE.md) (also CSV and JSON in `docs/reference/`).", ""]
+    audit = {a["scenario_id"]: a for a in json.loads((REF / "scenario_activation_audit.json").read_text())["rows"]}
+    L += ["## Defined but not runnable (%d)" % len(cat), "",
+          "These have a definition but no executable telemetry. **Class C**: its sourcetypes have generators but no scenario sequence exists yet. **Class D**: blocked, because a needed data source is not in the catalog, has no generator, or is not named. "
+          "Nothing here is hidden behind a status flag: the reason is computed in [reference/SCENARIO_ACTIVATION_AUDIT.md](reference/SCENARIO_ACTIVATION_AUDIT.md).", "",
+          "| ID | Name | What it describes | Sourcetypes named | Class | Why not runnable |", "|---|---|---|---|---|---|"]
+    for r in sorted(cat, key=lambda x: (x["engine"], x["scenario_id"])):
+        a = audit.get(r["scenario_id"], {})
+        L.append("| `%s` | %s | %s | %s | %s | %s |" % (r["scenario_id"], cell(r["title"], 70), cell(describe(r), 150), cell(["`%s`" % x for x in r["sourcetypes"]], 100) or "—", a.get("class", "?"), cell(a.get("reason", ""), 170)))
+    L.append("")
     return "\n".join(L)
 
 
@@ -68,6 +83,12 @@ def telemetry_doc(srows, trows):
             if r.get("dashboard"):
                 dash_of[s] += 1
     gen = collections.Counter(t["generator_tier"] for t in trows)
+    vis_of = collections.defaultdict(int)
+    for r in srows:
+        if r.get("dashboard_maturity") == "DASHBOARD_VISUALLY_VERIFIED":
+            for st in r["sourcetypes"]:
+                vis_of[st] += 1
+    fam = json.loads((REF / "sourcetype_event_families.json").read_text()) if (REF / "sourcetype_event_families.json").exists() else {}
     L = ["# Telemetry coverage", "",
          "Generated from `catalog/sourcetypes.json` and the coverage evidence by `scripts/generate_customer_docs.py`; do not edit by hand. "
          "Each column is separate evidence. **Catalog presence is not proof that a sourcetype works.**", "",
@@ -80,7 +101,9 @@ def telemetry_doc(srows, trows):
          "| Independently indexed | Found by a separate Splunk search in an isolated lab | %d |" % sum(t["independently_indexed"] for t in trows),
          "| Add-on parsing checked | Parsed by the installed add-on in a lab | %d |" % sum(t["ta_parsing_checked_in_lab"] for t in trows),
          "| CIM validated | No CIM data model was installed in any lab | %d |" % sum(t["cim_validated"] for t in trows),
-         "| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | %d |" % sum(1 for t in trows if dash_of[t["sourcetype"]]), "",
+         "| Dashboard-validated | Referenced by a scenario with a data-validated dashboard | %d |" % sum(1 for t in trows if dash_of[t["sourcetype"]]),
+         "| Visually verified | Referenced by a scenario whose dashboard was rendered and inspected | %d |" % sum(1 for t in trows if vis_of[t["sourcetype"]]),
+         "| Not yet implemented | No generator: cataloged only | %d |" % gen["NONE"], "",
          "Everything else is **not tested**. Detection content (Enterprise Security, correlation searches) is not claimed.", "",
          "## Transports", "",
          "| Transport | Status in this release |", "|---|---|",
@@ -98,12 +121,13 @@ def telemetry_doc(srows, trows):
         ts = by[v]
         L.append("| %s | %d | %d | %d | %d | %s |" % (cell(v, 40), len(ts), sum(t["generator_tier"] == "NATIVE_ENGINE" for t in ts), sum(t["generator_tier"] == "SAMPLE_REPLAY" for t in ts),
                                                        sum(t["independently_indexed"] for t in ts), cell(sorted({t["protocol"] for t in ts}), 40)))
-    L += ["", "## By sourcetype", "", "`G` generated, `R` sample replay, `-` none. Scenarios counts the registered scenarios that use the sourcetype; Dash counts those with a dashboard.", "",
-          "| Vendor | Product | Sourcetype | Kind | Protocol | Gen | Byte | Indexed | Scenarios | Dash |", "|---|---|---|---|---|---|---|---|---|---|"]
+    L += ["", "## By sourcetype", "", "`G` generated, `R` sample replay, `-` none. **Event categories** are the generator's own event families (— where the generator does not enumerate them). Scenarios counts the registered scenarios that use the sourcetype; Dash counts those with a dashboard; Visual counts those whose dashboard was visually verified.", "",
+          "| Vendor | Product | Sourcetype | Kind | Event categories | Transport | Gen | Byte | Indexed | Scenarios | Dash | Visual |", "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for t in sorted(trows, key=lambda x: (x["vendor"].lower(), x["sourcetype"])):
         g = {"NATIVE_ENGINE": "G", "SAMPLE_REPLAY": "R"}.get(t["generator_tier"], "-")
-        L.append("| %s | %s | `%s` | %s | %s | %s | %s | %s | %d | %d |" % (cell(t["vendor"], 30), cell(t["product"], 40), t["sourcetype"], t["data_kind"], t["protocol"], g,
-                                                                          "yes" if t["format_byte_verified"] else "-", "yes" if t["independently_indexed"] else "-", n_of[t["sourcetype"]], dash_of[t["sourcetype"]]))
+        L.append("| %s | %s | `%s` | %s | %s | %s | %s | %s | %s | %d | %d | %d |" % (cell(t["vendor"], 30), cell(t["product"], 40), t["sourcetype"], t["data_kind"], cell(fam.get(t["sourcetype"], []), 60) or "—",
+                                                                                  "HEC (" + t["protocol"] + " format)", g, "yes" if t["format_byte_verified"] else "-", "yes" if t["independently_indexed"] else "-",
+                                                                                  n_of[t["sourcetype"]], dash_of[t["sourcetype"]], vis_of[t["sourcetype"]]))
     L.append("")
     return "\n".join(L)
 

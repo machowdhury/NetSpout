@@ -1,4 +1,4 @@
-# Quickstart: your first run
+# NetSpout PulseForge: your first run
 
 You need PulseForge installed ([INSTALL](INSTALL.md)) and a Splunk HEC token plus an index you may write to. Use a **test index**, not a production one.
 

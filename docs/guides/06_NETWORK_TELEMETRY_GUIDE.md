@@ -41,4 +41,44 @@ Cisco native paths are modeled as separate profiles from OpenConfig (IOS-XR abov
 | Blocked scenarios | Five unified SEC-P9 scenarios need the bundled collector (GoFlow2 metrics on 8080, forwarder on 8082) from the repository compose; they were not run in the lab and have no dashboards |
 
 ## Metrics
-Numerical telemetry (incident gauges, ScenarioRunner metrics, gNMI metrics) goes to a metric index with `metric_name` and dimensions (`netspout_scenario_id`, `netspout_run_id`, `netspout_phase`, device, site) and is verified with `mstats ... WHERE metric_name=*`. Events use HEC events; native protocols keep their own transport to their collector first.
+
+Numeric telemetry is delivered as **Splunk metric events**: HEC JSON with `"event": "metric"` and one `metric_name:<name>` field per measurement, all other fields as dimensions. Logs and non-numeric records go to an **event** index as ordinary HEC events. A mixed run (incident packs, gNMI) needs both indexes authorized.
+
+### Events versus metrics, models versus transports
+| Concept | Meaning here |
+|---|---|
+| Event vs metric | Events are searched with `index=...`; metrics with `mstats` / `mcatalog` / `mpreview`. A metric index cannot be read with an event search, and PulseForge never falls back to an event index for metrics |
+| YANG model vs transport | OpenConfig and vendor-native YANG define *what* a path means; gNMI, SNMP or HEC define *how* it moves. A path in the catalog is not a transport |
+| gNMI vs HEC | gNMI is the device-facing protocol (served by the synthetic native server, dial-in only); HEC is how normalized events and metrics reach Splunk |
+| Synthetic vs replay vs device | Everything here is synthetic generation or recorded-sample replay. **No real device is connected.** |
+
+### Connection Center authorization
+A destination's `indexes` list is the allow-list for both event and metric indexes. An index whose name contains `metric` is used as the destination's metrics index (for example `test_metrics`); otherwise the default `cisco_mdt_metrics` applies. If that index is not on the list, a metric-bearing run is refused with `Metric index is not authorized by Connection Center (HTTP 403)`. To authorize a remote metrics index, save the destination with both the event index and the metrics index listed. PulseForge does not create indexes, and the HEC token itself must be allowed to write to them.
+
+### What is implemented (from the code; verified by reading, not by device tests)
+| Family | OpenConfig | Vendor-native paths | Transport | Metrics delivery |
+|---|---|---|---|---|
+| Cisco IOS-XR | 14 shared OpenConfig sensors | 6 (`infra-statsd`, `pfi-im-cmd`, `ipv4-bgp`, `qos-ma`, `controller-optics`, `wdsysmon-fd`) | gNMI dial-in, synthetic | `gnmi.*` metrics with `gnmi_unit`; SNMP-typed metrics |
+| Cisco IOS-XE | same 14 | 5 (`interfaces-oper`, `bgp-oper`, `environment-oper`, `transceiver-oper`, `process-cpu-oper`) | gNMI dial-in, synthetic; SNMPv2c | same |
+| Arista EOS | 14 + EVPN/VXLAN (modeled) | 4 (`eos_native`: Sysdb counters, LANZ, Smash BGP, Smash VXLAN) | gNMI dial-in, synthetic | `gnmi.*` metrics; `arista:telemetry:json` is a recorded-sample replay |
+| Juniper Junos | same 14 | 4 (`junos`: linecard interface, optics, qmon, BGP) | gNMI dial-in, synthetic | `gnmi.*` metrics |
+
+Not implemented: gNMI **dial-out**, Cisco **MDT** as a protocol (MDT is only a log/metric *format* here), SNMPv3, NX-OS gNMI, gNMI `Set`. Native paths were not validated against vendor YANG; the registry's "VERIFIED" labels are the project's own, not an external check. Incident-pack gauges (27 network + 10 telecom packs, 10 gauge records per 40) are generic modeled KPIs such as `interface.errors.rate` or `upf.packet_drop.percent`; they carry **no vendor, YANG model or path**, and they are gauges only.
+
+### Metric contract gaps (stated, not hidden)
+- gNMI metrics carry `gnmi_unit`, `gnmi_path`, `gnmi_sensor_id`, vendor and platform, run id and phase, but **no counter-versus-gauge flag**. Only SNMP-typed metrics (`snmp_metrics.py`) distinguish counter32/counter64/gauge32. Treat interface octet and packet metrics as cumulative counters when querying.
+- Equivalent measurements across vendors share a name only where the gNMI leaf name matches; interface naming, counter widths and reset behavior are not normalized.
+
+### Searching metrics
+Discover what a run produced, then rate a counter. `<metric>` and the index are yours to fill in; these two queries were **not executed**, because no metrics index was available to test against (see below):
+```
+| mcatalog values(metric_name) AS metrics values(gnmi_vendor) AS vendors WHERE index=test_metrics
+
+| mstats latest(_value) AS v WHERE index=test_metrics AND metric_name="<metric>" AND netspout_run_id="<run id>" BY interface_name span=10s
+| streamstats current=f last(v) AS prev BY interface_name
+| eval bits_per_s=if(v>=prev, (v-prev)*8/10, null())
+```
+The `if` drops a negative step (a counter reset) instead of plotting it. Cumulative octets are never bits per second. Existing incident dashboards use `mstats avg(_value) ... span=1s` on gauges, with `fillnull value=0` for missing samples, so a gap shows as zero. Syntax reference: <https://docs.splunk.com/Documentation/Splunk/8.2.12/Metrics/Search>.
+
+### Remote `test_metrics` status
+**BLOCKED BY MISSING CREDENTIAL.** The remote HEC token is not in the local environment, so no data was sent to the remote destination and nothing was verified there. The isolated Docker lab has no metrics index (and none was created), so metric-bearing runs are refused there. Offline checks that did pass: the incident-pack payload is a valid metric payload (every value finite and numeric, all gauge records to the metrics index and all log records to the event index) and the metrics-related unit tests pass (118 passed).

@@ -1,0 +1,33 @@
+{
+ "date": "2026-11-02",
+ "endpoint": "http-inputs.pog0-poc-premium.splunkcloud.com (HEC /services/collector/event)",
+ "hec_health": "200 HEC is healthy",
+ "metrics_index": "test_metrics",
+ "test_run_id": "rm-d83e4628ce",
+ "metric_names": [
+  "netspout.test.cpu.percent",
+  "netspout.test.mem.percent",
+  "netspout.test.if.in_octets",
+  "netspout.test.if.out_octets",
+  "netspout.test.bgp.peers"
+ ],
+ "generated": 5,
+ "submitted": 5,
+ "hec_http": 200,
+ "hec_response": "Success (code 0)",
+ "rejected": 0,
+ "unknown": 0,
+ "independent_search": {
+  "api": "https://pog0-poc-premium.splunkcloud.com:8089 /services/server/info",
+  "result": "HTTP 401 Unauthorized with the supplied search credentials",
+  "mstats_executed": false
+ },
+ "verdicts": {
+  "remote_metrics_hec": "PASS (HTTP acceptance only)",
+  "independent_metrics_indexing": "BLOCKED - INDEXING UNVERIFIED",
+  "vendor_sample": "NOT RUN",
+  "incident_pack": "NOT RUN",
+  "metrics_dashboard": "NOT RUN"
+ },
+ "notes": "No token or password is recorded. HEC acceptance is not proof of indexing."
+}

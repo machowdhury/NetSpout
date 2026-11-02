@@ -3,8 +3,8 @@ NetSpout same-origin API gateway, registered under /services/netspout_gateway.
 
 The React UI inside Splunk Web calls /<locale>/splunkd/__raw/services/netspout_gateway/api/... on the Splunk origin.
 This handler forwards those calls server-side to the NetSpout backend, so the browser never needs to reach the backend
-port. Splunk authenticates the session (requireAuthentication); this handler additionally requires a Splunk write role
-for anything that is not a GET. Standard library only, so it adds no import risk to the app.
+port. Splunk authenticates the session (requireAuthentication); this handler additionally requires a Splunk capability
+(netspout_admin for POST, netspout_view for GET), checked against splunkd for the session. Standard library only, so it adds no import risk to the app.
 """
 
 import json
@@ -22,7 +22,10 @@ except ImportError:  # unit tests / non-Splunk import
     class PersistentServerConnectionApplication:
         pass
 
-WRITE_ROLES = {"admin", "sc_admin", "power"}
+ADMIN_CAPABILITY = "netspout_admin"   # POST: run, stop, configure (granted by default to admin, sc_admin and power in authorize.conf)
+VIEW_CAPABILITY = "netspout_view"     # GET: read-only use (granted to the `user` role and so inherited by power and admin)
+CAPS_TTL = 30
+_caps_cache = {}
 FORWARD_HEADERS = ("content-type", "accept")
 MAX_BODY = 8 * 1024 * 1024
 # The management port is this splunkd on loopback; its self-signed certificate cannot be verified by name.
@@ -44,12 +47,31 @@ def _reply(status, body):
             "payload": body if isinstance(body, str) else json.dumps(body)}
 
 
-def _roles(session_key):
+def _capabilities(session_key):
+    """Capabilities of the authenticated Splunk user, asked of splunkd itself; cached briefly (keyed by a hash, never the raw token)."""
+    import hashlib
+    import time
+    k = hashlib.sha256(session_key.encode()).hexdigest()
+    hit = _caps_cache.get(k)
+    if hit and time.monotonic() - hit[0] < CAPS_TTL:
+        return hit[1]
     req = urllib.request.Request(
         "https://127.0.0.1:8089/services/authentication/current-context?output_mode=json",
         headers={"Authorization": "Splunk " + session_key})
     with urllib.request.urlopen(req, timeout=5, context=_LOOPBACK_CTX) as r:
-        return set(json.loads(r.read().decode())["entry"][0]["content"].get("roles", []))
+        caps = set(json.loads(r.read().decode())["entry"][0]["content"].get("capabilities", []))
+    if len(_caps_cache) > 256:
+        _caps_cache.clear()
+    _caps_cache[k] = (time.monotonic(), caps)
+    return caps
+
+
+def _authorized(session_key, method):
+    """Fail closed: any error, or a missing capability list, is a refusal."""
+    try:
+        return (ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY) in _capabilities(session_key)
+    except Exception:
+        return False
 
 
 class NetSpoutGateway(PersistentServerConnectionApplication):
@@ -66,13 +88,8 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             session_key = request.get("session", {}).get("authtoken", "")
             if not session_key:
                 return _reply(401, {"detail": "Splunk session required"})
-            if method == "POST":
-                try:
-                    allowed = bool(_roles(session_key) & WRITE_ROLES)
-                except Exception:
-                    allowed = False  # fail closed: unknown role is not a write role
-                if not allowed:
-                    return _reply(403, {"detail": "A Splunk admin or power role is required to change NetSpout state"})
+            if not _authorized(session_key, method):
+                return _reply(403, {"detail": "The Splunk capability %s is required%s" % (ADMIN_CAPABILITY if method == "POST" else VIEW_CAPABILITY, " to change PulseForge state" if method == "POST" else " to use PulseForge")})
             query = request.get("query") or []
             pairs = query.items() if isinstance(query, dict) else query
             qs = urllib.parse.urlencode([(k, v) for k, v in pairs])

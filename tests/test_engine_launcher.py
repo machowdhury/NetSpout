@@ -163,6 +163,7 @@ def test_gateway_reaches_the_managed_engine_over_the_socket_and_reports_it_down(
     monkeypatch.setenv("PULSEFORGE_STATE_DIR", state)
     monkeypatch.delenv("NETSPOUT_BACKEND_URL", raising=False)
     monkeypatch.delenv("PULSEFORGE_GATEWAY_KEY", raising=False)
+    monkeypatch.setattr(netspout_gateway, "_capabilities", lambda _k: {"netspout_view"})
     call = lambda path: netspout_gateway.NetSpoutGateway().handle(json.dumps({"method": "GET", "path_info": path, "session": {"authtoken": "s"}, "query": [["q", "NF-SEC-06"]]}))
     sup = launcher.Supervisor(state, grace=20, probe_every=0.3)
     t = threading.Thread(target=sup.run, daemon=True)
@@ -176,3 +177,15 @@ def test_gateway_reaches_the_managed_engine_over_the_socket_and_reports_it_down(
         sup.stop()
         t.join(60)
     assert call("/api/search")["status"] == 502                                      # engine stopped: a clear error, not a hang
+
+
+def test_engine_interpreter_prefers_splunks_python313_and_refuses_old_pythons(tmp_path, monkeypatch):
+    monkeypatch.setenv("SPLUNK_HOME", str(tmp_path))
+    (tmp_path / "bin").mkdir()
+    (tmp_path / "bin" / "python3.13").write_text("")
+    assert launcher.engine_python() == str(tmp_path / "bin" / "python3.13")
+    (tmp_path / "bin" / "python3.13").unlink()
+    assert launcher.engine_python() == sys.executable                      # this test interpreter is new enough
+    monkeypatch.setattr(sys, "version_info", (3, 9, 0, "final", 0))
+    with pytest.raises(SystemExit):
+        launcher.engine_python()

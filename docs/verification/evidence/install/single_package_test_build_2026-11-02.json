@@ -1,0 +1,115 @@
+{
+ "date": "2026-11-02",
+ "note": "TEST-ONLY package built offline; no Splunk was started; released artifacts untouched",
+ "build": {
+  "script": "scripts/build_single_package_test.py",
+  "package": "build/single_package_test/netspout_single_test.spl (git-ignored, not committed)",
+  "bytes": 17825241,
+  "sha256": "458efa165fc5ba9f48f9adfb1c14041723c9f63933446689a2076117e01a53eb",
+  "variants": {
+   "py313-linux-x86_64": "BUNDLED",
+   "py313-linux-aarch64": "BUNDLED"
+  },
+  "unavailable_variants": {
+   "py39-linux-x86_64": "no wheels: fastapi 0.143 and pydantic 2.14 require Python >=3.10",
+   "py39-linux-aarch64": "same"
+  },
+  "required_files_missing": [],
+  "dependency_gaps_per_variant": {
+   "py313-linux-x86_64": [],
+   "py313-linux-aarch64": []
+  },
+  "optional_unresolved_ok": [
+   "gnmi",
+   "pygnmi"
+  ],
+  "third_party_imports_checked": [
+   "fastapi",
+   "gnmi",
+   "httpx",
+   "pydantic",
+   "pygnmi",
+   "starlette"
+  ],
+  "private_key_files": [],
+  "launcher_stanza_enabled": true
+ },
+ "appinspect": {
+  "version": "4.4.0 (python:3.13-slim container, host Python 3.15 breaks its analyzer)",
+  "mode": "precert, all checks (no tag filter)",
+  "summary": {
+   "error": 0,
+   "failure": 9,
+   "future_failure": 0,
+   "skipped": 0,
+   "not_applicable": 94,
+   "warning": 12,
+   "success": 139
+  },
+  "failures": [
+   {
+    "check": "check_aarch64_compatibility",
+    "findings": 2
+   },
+   {
+    "check": "check_inputs_conf_spec_stanzas_has_python_version_property",
+    "findings": 2
+   },
+   {
+    "check": "check_modular_inputs_python_required",
+    "findings": 4
+   },
+   {
+    "check": "check_reload_trigger_for_all_custom_confs",
+    "findings": 1
+   },
+   {
+    "check": "check_that_setup_has_not_been_performed",
+    "findings": 1
+   },
+   {
+    "check": "check_indexes_conf_properties",
+    "findings": 7
+   },
+   {
+    "check": "check_rest_handler_python_executable_exists",
+    "findings": 2
+   },
+   {
+    "check": "check_script_restmap_conf_python_required",
+    "findings": 2
+   },
+   {
+    "check": "check_for_python_udp_network_communications",
+    "findings": 25
+   }
+  ],
+  "warnings": [
+   "check_version_is_valid_semver",
+   "check_for_indexer_synced_configs",
+   "check_for_splunk_js",
+   "check_for_python_script_existence",
+   "check_for_modular_inputs",
+   "check_custom_conf_replication",
+   "check_for_valid_package_id",
+   "check_collections_conf",
+   "check_kos_are_accessible",
+   "check_for_possible_threading",
+   "check_hostnames_and_ips",
+   "check_for_insecure_http_calls_in_python"
+  ],
+  "new_vs_release_app": [
+   "check_aarch64_compatibility: the bundled x86_64 binaries (pydantic_core, websockets .so) are flagged AArch64-incompatible; the aarch64 variant is not flagged"
+  ],
+  "launcher_stanza": "pulseforge_engine_launcher is named by no failure after python.version (generic stanza) plus python.required=3.13 were set",
+  "pre_existing_in_release_app": "all other failures (netspout_streamer/pulseforge_spool python settings, REST handler python settings, [triggers], is_configured, indexes.conf properties, programmatic UDP)"
+ },
+ "not_run": [
+  "any Splunk container",
+  "modular input supervision by splunkd",
+  "python.required=3.13 selection on a real Splunk",
+  "interval=0 restart semantics on a real Splunk",
+  "shutdown signal behaviour",
+  "capability lookup via authentication/current-context on a real Splunk"
+ ]
+}

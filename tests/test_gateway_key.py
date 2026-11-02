@@ -40,6 +40,7 @@ def test_gateway_forwards_the_key_only_when_configured(monkeypatch):
         def __exit__(self, *a): return False
         def read(self): return b"{}"
 
+    monkeypatch.setattr(netspout_gateway, "_capabilities", lambda _k: {"netspout_view"})
     monkeypatch.setattr(urllib.request, "urlopen", lambda req, timeout=0: seen.append(dict(req.header_items())) or R())
     req = json.dumps({"method": "GET", "path_info": "/api/health", "session": {"authtoken": "s"}, "query": []})
     monkeypatch.delenv("PULSEFORGE_GATEWAY_KEY", raising=False)

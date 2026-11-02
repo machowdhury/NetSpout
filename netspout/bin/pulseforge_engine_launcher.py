@@ -51,11 +51,22 @@ def ensure_key(directory):
     return path.read_text().strip()
 
 
+def engine_python():
+    """The interpreter for the engine. The pinned fastapi/pydantic need Python >= 3.10, so prefer Splunk's bundled 3.13 even if this
+    launcher itself was started with an older interpreter; fall back to the launcher's own only when it is new enough."""
+    candidate = Path(os.environ.get("SPLUNK_HOME", "/opt/splunk")) / "bin" / "python3.13"
+    if candidate.is_file():
+        return str(candidate)
+    if sys.version_info >= (3, 10):
+        return sys.executable
+    raise SystemExit("PulseForge engine needs Python 3.10+ (Splunk's bundled python3.13 was not found and this interpreter is %d.%d)" % sys.version_info[:2])
+
+
 class Supervisor:
     def __init__(self, directory, command=None, grace=15, healthy_after=60, probe_every=2, parent_pid=None):
         self.dir = Path(directory)
         self.sock = self.dir / ipc.SOCKET_FILE
-        self.command = command or [sys.executable, str(Path(__file__).resolve().parent / "pulseforge_engine_main.py"), "--uds", str(self.sock)]
+        self.command = command or [engine_python(), str(Path(__file__).resolve().parent / "pulseforge_engine_main.py"), "--uds", str(self.sock)]
         self.grace, self.healthy_after, self.probe_every = grace, healthy_after, probe_every
         self.parent_pid = parent_pid
         self.proc = None

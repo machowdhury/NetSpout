@@ -45,7 +45,8 @@ def test_gateway_rejects_non_api_paths_and_unprivileged_writes(monkeypatch):
     assert call(method="GET", path_info="/api/../x")["status"] == 404
     assert call(method="DELETE", path_info="/api/setup")["status"] == 404
     assert gw.handle(json.dumps({"method": "GET", "path_info": "/api/setup", "session": {}}))["status"] == 401
-    monkeypatch.setattr(g, "_roles", lambda _k: {"user"})
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_view"})
     assert call(method="POST", path_info="/api/setup", payload="{}")["status"] == 403
-    monkeypatch.setattr(g, "_roles", lambda _k: (_ for _ in ()).throw(RuntimeError("splunkd down")))
-    assert call(method="POST", path_info="/api/setup", payload="{}")["status"] == 403, "unknown role fails closed"
+    monkeypatch.setattr(g, "_capabilities", lambda _k: (_ for _ in ()).throw(RuntimeError("splunkd down")))
+    assert call(method="POST", path_info="/api/setup", payload="{}")["status"] == 403, "unknown capabilities fail closed"
+    assert call(method="GET", path_info="/api/setup")["status"] == 403, "reads fail closed too"

@@ -23,7 +23,7 @@ Statuses are separate: **IMPLEMENTED** (code exists), **TESTED** (automated test
 - The engine is a separate service; it is not packaged inside the app and is not deployable inside Splunk Cloud.
 - The five flow-based SEC-P9 scenarios (A, C, D, E, F) need the repository's GoFlow2 collector and forwarder; they were run end to end in the isolated lab (GoFlow2 2.2.5 decoded, forwarder delivered, Splunk indexed) and have dashboards. Elsewhere they stay BLOCKED until the collector is running.
 - Runner scenarios (ScenarioRunner and unified generation) cannot be paused or stopped from the monitor; their counters cover HEC deliveries only.
-- Splunk Cloud HEC test and monitor against a Cloud stack: not run by the maintainers (USER VALIDATION PENDING).
+- Splunk Cloud: a bounded remote **metrics** check passed on Nov 2 (HEC acceptance plus independent `mstats`/`mcatalog`, `test_metrics`; see the telemetry guide). The Cloud event-index path, the full HEC test and Live Delivery Monitor against a Cloud stack, and a rendered dashboard are not run (USER VALIDATION PENDING).
 - Recorded replay: year-less syslog timestamps assume a leap year; microsecond precision; mixed-format logs (Ollama) excluded; independent recordings are time-aligned only.
 - Original 100 financial and 100 telecom libraries were not supplied and are not integrated.
 - 30+ scenarios have no industry mapping; the UI says so instead of inventing one.

@@ -1,0 +1,87 @@
+{
+ "date": "2026-11-02",
+ "endpoint": "http-inputs.pog0-poc-premium.splunkcloud.com (HEC /services/collector/event)",
+ "hec_health": "200 HEC is healthy",
+ "metrics_index": "test_metrics",
+ "test_run_id": "rm-d83e4628ce",
+ "metric_names": [
+  "netspout.test.cpu.percent",
+  "netspout.test.mem.percent",
+  "netspout.test.if.in_octets",
+  "netspout.test.if.out_octets",
+  "netspout.test.bgp.peers"
+ ],
+ "generated": 5,
+ "submitted": 5,
+ "hec_http": 200,
+ "hec_response": "Success (code 0)",
+ "rejected": 0,
+ "unknown": 0,
+ "independent_search": {
+  "api": "Splunk Cloud REST 8089, version 10.4.2604.17, bearer token (not recorded)",
+  "five_metric_test": {
+   "mstats_count_per_metric": {
+    "netspout.test.cpu.percent": 1,
+    "netspout.test.mem.percent": 1,
+    "netspout.test.if.in_octets": 1,
+    "netspout.test.if.out_octets": 1,
+    "netspout.test.bgp.peers": 1
+   },
+   "mcatalog_names_found": 5,
+   "dimensions_seen": {
+    "netspout_run_id": "rm-d83e4628ce",
+    "vendor": "synthetic",
+    "interface": "synthetic0"
+   }
+  },
+  "script_note": "an earlier mstats returned 0 rows only because 'earliest' was placed after BY; the corrected query returned all five"
+ },
+ "verdicts": {
+  "remote_metrics_hec": "PASS",
+  "independent_metrics_indexing": "PASS (5 test metrics + 30 pack datapoints found with mstats/mcatalog)",
+  "vendor_sample": "NOT RUN (no gNMI/gnmic path in this environment; no bounded OpenConfig replay run)",
+  "incident_pack": "PARTIAL (metrics side PASS; event/log side not testable: token not permitted on an event index; engine run path and monitor not exercised)",
+  "metrics_dashboard": "PARTIAL (4/4 mstats datasources return data for the run; not rendered in Splunk Web)"
+ },
+ "notes": "No token or password is recorded.",
+ "incident_pack": {
+  "scenario": "telco_09_core_user_plane",
+  "run_id": "pk-91dbc2ad8c",
+  "method": "product payload conversion (incident_packs.hec_payloads) sent directly over HEC; not the engine run path or Live Delivery Monitor",
+  "metrics_sent": {
+   "records": 10,
+   "datapoints": 30,
+   "accepted": 10,
+   "rejected": 0
+  },
+  "metrics_independently_found": {
+   "upf.data.latency.ms": {
+    "n": 10,
+    "avg": 119.36,
+    "max": 250
+   },
+   "upf.forwarding.packets_per_second": {
+    "n": 10,
+    "avg": 30680.1,
+    "max": 50000
+   },
+   "upf.packet_drop.percent": {
+    "n": 10,
+    "avg": 11.54,
+    "max": 25
+   }
+  },
+  "log_records": {
+   "generated": 30,
+   "sent": 0,
+   "reason": "first attempt to send them to index main was rejected by HEC: Incorrect index (code 7); the metrics token is not permitted on an event index. Not retried with another token."
+  },
+  "dashboard_pf_telco_09_core_user_plane": {
+   "mstats_datasources": 4,
+   "ok": 4,
+   "empty": 0,
+   "error": 0,
+   "method": "the view's own mstats searches executed against Cloud with the run id and test_metrics substituted; the app was not installed in Cloud, so no rendered dashboard"
+  }
+ }
+}

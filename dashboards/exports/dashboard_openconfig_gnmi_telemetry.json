@@ -1,0 +1,68 @@
+{
+  "title": "Openconfig Gnmi Telemetry Monitor",
+  "description": "Real-time monitoring dashboard for openconfig:gnmi:telemetry",
+  "visualizations": {
+    "data_table": {
+      "type": "splunk.table",
+      "title": "Event Data",
+      "dataSource": "default",
+      "options": {
+        "query": "index=* sourcetype=\"openconfig:gnmi:telemetry\" | head 100",
+        "fields": [
+          "_time",
+          "host",
+          "sourcetype",
+          "message"
+        ]
+      }
+    }
+  },
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time Range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-1h,now"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"openconfig:gnmi:telemetry\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "dataSources": {},
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "display": "auto-scale",
+      "width": 1200,
+      "height": 600
+    },
+    "globalInputs": [
+      "input_global_time"
+    ],
+    "structure": [
+      {
+        "item": "data_table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 580,
+          "h": 300
+        }
+      }
+    ]
+  }
+}

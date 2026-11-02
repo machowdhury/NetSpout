@@ -1,0 +1,109 @@
+{
+  "run_id": "pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+  "source": "pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c",
+  "index": "idx_ta_ise_test",
+  "posted": 7,
+  "indexed_rows": 7,
+  "post_failures": [],
+  "raw_equality": [
+    {
+      "label": "ub1-000",
+      "sourcetype": "docker_events",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 150,
+      "indexed_bytes": 150,
+      "submitted_sha256": "0fc0fbdf1fea01ee89bed982ca4b26865c3cb25e19806096f188c144c2e06da5",
+      "indexed_sha256": "0fc0fbdf1fea01ee89bed982ca4b26865c3cb25e19806096f188c144c2e06da5",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-001",
+      "sourcetype": "bluecoat:proxysg:access:file",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 406,
+      "indexed_bytes": 406,
+      "submitted_sha256": "9df2b66c4014f23349adac6fce158315f9ddf3c249553de008103274794fd5d2",
+      "indexed_sha256": "9df2b66c4014f23349adac6fce158315f9ddf3c249553de008103274794fd5d2",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-002",
+      "sourcetype": "nozomi:universal_alert",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 2509,
+      "indexed_bytes": 2509,
+      "submitted_sha256": "5e4d2cb261a4e1555d4f7eee6e297e8e2f3f868d22265ed4fafd18ffeb7f907a",
+      "indexed_sha256": "5e4d2cb261a4e1555d4f7eee6e297e8e2f3f868d22265ed4fafd18ffeb7f907a",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-003",
+      "sourcetype": "bluecoat:proxysg:access:file",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 401,
+      "indexed_bytes": 401,
+      "submitted_sha256": "a5480df361738227a74f43ec00a0801d0d2b9630575a2d47b29d8d983ff9b41e",
+      "indexed_sha256": "a5480df361738227a74f43ec00a0801d0d2b9630575a2d47b29d8d983ff9b41e",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-004",
+      "sourcetype": "docker_events",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 166,
+      "indexed_bytes": 166,
+      "submitted_sha256": "5d4ccd43448854efa719d89e0b0effd98e703ea94e92f2a13b8c09407a85bbe7",
+      "indexed_sha256": "5d4ccd43448854efa719d89e0b0effd98e703ea94e92f2a13b8c09407a85bbe7",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-005",
+      "sourcetype": "wazuh:alerts",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 251,
+      "indexed_bytes": 251,
+      "submitted_sha256": "ff9d0413374af13ca842ce8091aaedf8f9ea486036ae6b204a3cefdc84f0eb7e",
+      "indexed_sha256": "ff9d0413374af13ca842ce8091aaedf8f9ea486036ae6b204a3cefdc84f0eb7e",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub1-006",
+      "sourcetype": "wazuh:alerts",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 301,
+      "indexed_bytes": 301,
+      "submitted_sha256": "4403c76be12eeebf624c83f84b283bdb0d87615acb67057db79832d6bb1e6596",
+      "indexed_sha256": "4403c76be12eeebf624c83f84b283bdb0d87615acb67057db79832d6bb1e6596",
+      "correlation_leak": false
+    }
+  ],
+  "passes": 7,
+  "distinct_sourcetypes": [
+    "bluecoat:proxysg:access:file",
+    "docker_events",
+    "nozomi:universal_alert",
+    "wazuh:alerts"
+  ],
+  "installed_ta_inventory": [
+    {
+      "id": "Splunk_TA_cisco-ise",
+      "version": "5.0.0"
+    }
+  ],
+  "ta_parser_checks_performed": 0,
+  "detection_checks_performed": 0,
+  "search_attempts": 2,
+  "query": "search index=idx_ta_ise_test earliest=-15m source=\"pulseforge:universe:raw-check:pf-ub1-current-b2f2e962-d45d-4543-9121-b08d68ccc17c\" | table _raw sourcetype netspout_event_id",
+  "configuration_changes": 0,
+  "engine_sha256": "deb9c4b5d9d91877120e01e2635c6caca82ba13a7dd534c6353f1db0d4fecb8d",
+  "generator_module": "src/netspout_core/universe_batch1_engine.py",
+  "scenario_module_sha256": "d874c243eae1a00b221fddc94127bed60e12e90ed96781b1a2e9318cd934d442",
+  "method": "Current host-generated UTF-8 bytes, existing isolated HEC input, exact indexed byte and sourcetype comparison"
+}

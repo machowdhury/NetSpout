@@ -1,0 +1,235 @@
+{
+  "run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+  "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+  "index": "idx_ta_ise_test",
+  "posted": 18,
+  "indexed_rows": 18,
+  "post_failures": [],
+  "raw_equality": [
+    {
+      "label": "ub2-000",
+      "sourcetype": "hashicorp_vault_audit_log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1079,
+      "indexed_bytes": 1079,
+      "submitted_sha256": "fb629de303c359b987a95ac4f60288368ec9aa1eea10ccff3248d3436256c4a9",
+      "indexed_sha256": "fb629de303c359b987a95ac4f60288368ec9aa1eea10ccff3248d3436256c4a9",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-001",
+      "sourcetype": "hashicorp_vault_audit_log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1978,
+      "indexed_bytes": 1978,
+      "submitted_sha256": "9b849748f1ff8b3cbbed03f29a9fee711a9ace3667c0e84addcaf4783c13ec62",
+      "indexed_sha256": "9b849748f1ff8b3cbbed03f29a9fee711a9ace3667c0e84addcaf4783c13ec62",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-002",
+      "sourcetype": "Confluence:audit log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 975,
+      "indexed_bytes": 975,
+      "submitted_sha256": "b4281f6481ecebc1663cbe1f93d7667580dba11eeef68249fa1711e0c2f014e5",
+      "indexed_sha256": "b4281f6481ecebc1663cbe1f93d7667580dba11eeef68249fa1711e0c2f014e5",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-003",
+      "sourcetype": "Confluence:audit log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 540,
+      "indexed_bytes": 540,
+      "submitted_sha256": "365607447c2b6496db7f1cd64fa98bb926e2a5f4e931af8ae2e19d37e93562ee",
+      "indexed_sha256": "365607447c2b6496db7f1cd64fa98bb926e2a5f4e931af8ae2e19d37e93562ee",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-004",
+      "sourcetype": "proofpoint_tap_siem",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1520,
+      "indexed_bytes": 1520,
+      "submitted_sha256": "8d2bcd48ac21226d4b18de06f471b7a83a7e923d1cb65ec5ff5d831d1efdfed0",
+      "indexed_sha256": "8d2bcd48ac21226d4b18de06f471b7a83a7e923d1cb65ec5ff5d831d1efdfed0",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-005",
+      "sourcetype": "proofpoint_tap_siem",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 2914,
+      "indexed_bytes": 2914,
+      "submitted_sha256": "d7df0937f9e37cf9b75c15f0fff371131b0a8f19bd73089268119ea6780b59e0",
+      "indexed_sha256": "d7df0937f9e37cf9b75c15f0fff371131b0a8f19bd73089268119ea6780b59e0",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-006",
+      "sourcetype": "mikrotik:routeros",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 97,
+      "indexed_bytes": 97,
+      "submitted_sha256": "cf955269af105f22af0db014bac57f5ccb61e02a787250f7c6c8c28de808a983",
+      "indexed_sha256": "cf955269af105f22af0db014bac57f5ccb61e02a787250f7c6c8c28de808a983",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-007",
+      "sourcetype": "mikrotik:routeros",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 78,
+      "indexed_bytes": 78,
+      "submitted_sha256": "c30f195657b676222ec7fd7f4cad02195555ff428a7d9225b685f5beccf5bf0e",
+      "indexed_sha256": "c30f195657b676222ec7fd7f4cad02195555ff428a7d9225b685f5beccf5bf0e",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-008",
+      "sourcetype": "traefik:access:json",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1328,
+      "indexed_bytes": 1328,
+      "submitted_sha256": "adb29f9bbbe8c88525add3ba93bbf7efa23a71bb840c66eb9d6c15db4becccab",
+      "indexed_sha256": "adb29f9bbbe8c88525add3ba93bbf7efa23a71bb840c66eb9d6c15db4becccab",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-009",
+      "sourcetype": "claroty:cef",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1333,
+      "indexed_bytes": 1333,
+      "submitted_sha256": "9d6da39e8a8aedf368b4d991036e481dc50fb67d374a2def3cc8270ab01bebec",
+      "indexed_sha256": "9d6da39e8a8aedf368b4d991036e481dc50fb67d374a2def3cc8270ab01bebec",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-010",
+      "sourcetype": "claroty:cef",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 824,
+      "indexed_bytes": 824,
+      "submitted_sha256": "6d5ebf0373ccfde6e8b5231f23fed9a214542b0e3bb4c35f3cbfe8d3130d6605",
+      "indexed_sha256": "6d5ebf0373ccfde6e8b5231f23fed9a214542b0e3bb4c35f3cbfe8d3130d6605",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-011",
+      "sourcetype": "claroty:cef",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 4089,
+      "indexed_bytes": 4089,
+      "submitted_sha256": "10eb12dbe23f28125a62a628f5e8e018648b538a0d21afce2f502f850775fa93",
+      "indexed_sha256": "10eb12dbe23f28125a62a628f5e8e018648b538a0d21afce2f502f850775fa93",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-012",
+      "sourcetype": "nginx:access",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 197,
+      "indexed_bytes": 197,
+      "submitted_sha256": "aa7dc19b351973e3461b24311d245d49dde9f4011955ed739bc366b20c993407",
+      "indexed_sha256": "aa7dc19b351973e3461b24311d245d49dde9f4011955ed739bc366b20c993407",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-013",
+      "sourcetype": "mongodb:log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 236,
+      "indexed_bytes": 236,
+      "submitted_sha256": "64d441dc6c05a4ca79b767250c4e574f8e221da86a3966c66c27625345df5259",
+      "indexed_sha256": "64d441dc6c05a4ca79b767250c4e574f8e221da86a3966c66c27625345df5259",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-014",
+      "sourcetype": "mongodb:log",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 258,
+      "indexed_bytes": 258,
+      "submitted_sha256": "545f63bb96207e3dd4ad15a25ba2f15285f0bc1da699c02f2dd6bf25106a4798",
+      "indexed_sha256": "545f63bb96207e3dd4ad15a25ba2f15285f0bc1da699c02f2dd6bf25106a4798",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-015",
+      "sourcetype": "veeam_vbr_syslog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 337,
+      "indexed_bytes": 337,
+      "submitted_sha256": "e6e9acda4c7c6834319e62a538c716b6a67308c3ff886f3403a316f7827d73f6",
+      "indexed_sha256": "e6e9acda4c7c6834319e62a538c716b6a67308c3ff886f3403a316f7827d73f6",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-016",
+      "sourcetype": "veeam_vbr_syslog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 408,
+      "indexed_bytes": 408,
+      "submitted_sha256": "45ce1556e51f42aa16b35b614187dfea2b5a10cb5dd9a8786634f5f92eb56527",
+      "indexed_sha256": "45ce1556e51f42aa16b35b614187dfea2b5a10cb5dd9a8786634f5f92eb56527",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub2-017",
+      "sourcetype": "veeam_vbr_syslog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 674,
+      "indexed_bytes": 674,
+      "submitted_sha256": "bb69b98c1e3af64d26befa343395ebfe238b2da74d9c4a6086bc9822101d10a7",
+      "indexed_sha256": "bb69b98c1e3af64d26befa343395ebfe238b2da74d9c4a6086bc9822101d10a7",
+      "correlation_leak": false
+    }
+  ],
+  "passes": 18,
+  "distinct_sourcetypes": [
+    "Confluence:audit log",
+    "claroty:cef",
+    "hashicorp_vault_audit_log",
+    "mikrotik:routeros",
+    "mongodb:log",
+    "nginx:access",
+    "proofpoint_tap_siem",
+    "traefik:access:json",
+    "veeam_vbr_syslog"
+  ],
+  "installed_ta_inventory": [
+    {
+      "id": "Splunk_TA_cisco-ise",
+      "version": "5.0.0"
+    }
+  ],
+  "ta_parser_checks_performed": 0,
+  "detection_checks_performed": 0,
+  "search_attempts": 1,
+  "query": "search index=idx_ta_ise_test earliest=-15m source=\"pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93\" | table _raw sourcetype netspout_event_id",
+  "configuration_changes": 0,
+  "engine_sha256": "81860e847d32a34c605cb706706d1e2bbbe2ba2d8409c37e91d06f27d471f8b9",
+  "generator_module": "src/netspout_core/universe_batch2_engine.py",
+  "scenario_module_sha256": "1dba5a70934fdd3079e8b662137e30875e3e6ee8091687c4aa99a4c99f30d7f3",
+  "method": "Current host-generated UTF-8 bytes, existing isolated HEC input, exact indexed byte and sourcetype comparison"
+}

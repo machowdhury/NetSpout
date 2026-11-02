@@ -1,0 +1,261 @@
+{
+ "run_id": "pf-ub6-live-61ed2fec-ed09-4fff-b19d-4f7f2c148d45",
+ "source": "netspout-ub6-live",
+ "index": "idx_network_ops",
+ "posted": 18,
+ "indexed_rows": 18,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "cisco:dc:aci:class-captured_1",
+   "sourcetype": "cisco:dc:aci:class",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 653,
+   "indexed_bytes": 653,
+   "submitted_sha256": "10455e7aeeba181c5fd0e45ea8e0ab6cfa5c78c4fca9b59b6d7b53014cd44ae9",
+   "indexed_sha256": "10455e7aeeba181c5fd0e45ea8e0ab6cfa5c78c4fca9b59b6d7b53014cd44ae9",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:dc:nexus9k-captured_1",
+   "sourcetype": "cisco:dc:nexus9k",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 126,
+   "indexed_bytes": 126,
+   "submitted_sha256": "c7a979a2599e66963e50e9275dff4cddde669aeb9b708fa3a4028c751376995a",
+   "indexed_sha256": "c7a979a2599e66963e50e9275dff4cddde669aeb9b708fa3a4028c751376995a",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:dc:nexus9k-captured_2",
+   "sourcetype": "cisco:dc:nexus9k",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 125,
+   "indexed_bytes": 125,
+   "submitted_sha256": "71a4625ab779face37f549bbdff5a0cba5dee5d96a7645bdd98263ff8049b952",
+   "indexed_sha256": "71a4625ab779face37f549bbdff5a0cba5dee5d96a7645bdd98263ff8049b952",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:rogue:verbose-captured_1",
+   "sourcetype": "cisco:catalyst:rogue:verbose",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 537,
+   "indexed_bytes": 537,
+   "submitted_sha256": "0b0c6284afd22f65fdd51e92ee6c24ac0844f3b5baf2977753cb9a9606000ee1",
+   "indexed_sha256": "0b0c6284afd22f65fdd51e92ee6c24ac0844f3b5baf2977753cb9a9606000ee1",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:rogue:verbose-captured_2",
+   "sourcetype": "cisco:catalyst:rogue:verbose",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 520,
+   "indexed_bytes": 520,
+   "submitted_sha256": "f1e9a60ae4a7c66b190d2a72f8b92a3d8799234570b7aa3e9136d631aa37e450",
+   "indexed_sha256": "f1e9a60ae4a7c66b190d2a72f8b92a3d8799234570b7aa3e9136d631aa37e450",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:security:profile_signatures-captured_1",
+   "sourcetype": "cisco:catalyst:security:profile_signatures",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 424,
+   "indexed_bytes": 424,
+   "submitted_sha256": "2c6a00425883ced28590c5d90690ede4733f04b46f99d9c753879fe2346a43d4",
+   "indexed_sha256": "2c6a00425883ced28590c5d90690ede4733f04b46f99d9c753879fe2346a43d4",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:threat:summary-captured_1",
+   "sourcetype": "cisco:catalyst:threat:summary",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 442,
+   "indexed_bytes": 442,
+   "submitted_sha256": "01f5acd90b68c92a5c5d7bb27ef5f07b2157d160c62eb99a058b2dd8a534db7c",
+   "indexed_sha256": "01f5acd90b68c92a5c5d7bb27ef5f07b2157d160c62eb99a058b2dd8a534db7c",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:threat:summary-captured_2",
+   "sourcetype": "cisco:catalyst:threat:summary",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 442,
+   "indexed_bytes": 442,
+   "submitted_sha256": "c7cc61ee837b756cc88c26740721394d883e251094d5f3d3d6254a7fb0993117",
+   "indexed_sha256": "c7cc61ee837b756cc88c26740721394d883e251094d5f3d3d6254a7fb0993117",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:threat:summary:legacy-captured_1",
+   "sourcetype": "cisco:catalyst:threat:summary:legacy",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 442,
+   "indexed_bytes": 442,
+   "submitted_sha256": "ee6a737e665580f03e39bee4ecd15c9735c2ece73c0ee16515e335203fb2333b",
+   "indexed_sha256": "ee6a737e665580f03e39bee4ecd15c9735c2ece73c0ee16515e335203fb2333b",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:catalyst:threat:summary:legacy-captured_2",
+   "sourcetype": "cisco:catalyst:threat:summary:legacy",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 442,
+   "indexed_bytes": 442,
+   "submitted_sha256": "68716dac02ddc09fbf9f59d6477e2d062b20cc06f80d573ae0ef5558d3e12494",
+   "indexed_sha256": "68716dac02ddc09fbf9f59d6477e2d062b20cc06f80d573ae0ef5558d3e12494",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:ssetunnels-captured_1",
+   "sourcetype": "cisco:sdwan:ssetunnels",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 675,
+   "indexed_bytes": 675,
+   "submitted_sha256": "be30235124686cccd068f7636aed5d095b79efef189db0b839d01c425491f34d",
+   "indexed_sha256": "be30235124686cccd068f7636aed5d095b79efef189db0b839d01c425491f34d",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:ssetunnels-captured_2",
+   "sourcetype": "cisco:sdwan:ssetunnels",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 675,
+   "indexed_bytes": 675,
+   "submitted_sha256": "1f8c51ff67f6a2ea357df8ccad8d520a1c8ae45e801d0f1347364fb4a4380760",
+   "indexed_sha256": "1f8c51ff67f6a2ea357df8ccad8d520a1c8ae45e801d0f1347364fb4a4380760",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:sytem:logs-captured_1",
+   "sourcetype": "cisco:sdwan:sytem:logs",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 201,
+   "indexed_bytes": 201,
+   "submitted_sha256": "ffbc559b42a60f01f1f6e7d31e716d6cd7a945320bcd6542eb6c64aaad45e938",
+   "indexed_sha256": "ffbc559b42a60f01f1f6e7d31e716d6cd7a945320bcd6542eb6c64aaad45e938",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:sytem:logs-captured_2",
+   "sourcetype": "cisco:sdwan:sytem:logs",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 199,
+   "indexed_bytes": 199,
+   "submitted_sha256": "fef25db018141a7b605dc687772837bb72fadd50a982f4fb18680028fe6d77ec",
+   "indexed_sha256": "fef25db018141a7b605dc687772837bb72fadd50a982f4fb18680028fe6d77ec",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:utd:logs-captured_1",
+   "sourcetype": "cisco:sdwan:utd:logs",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 385,
+   "indexed_bytes": 385,
+   "submitted_sha256": "1f28ece5bfed1925e76f42616389c7a3c5f0d096a5714952d6e20fde64b7c78f",
+   "indexed_sha256": "1f28ece5bfed1925e76f42616389c7a3c5f0d096a5714952d6e20fde64b7c78f",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:utd:logs-captured_2",
+   "sourcetype": "cisco:sdwan:utd:logs",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 369,
+   "indexed_bytes": 369,
+   "submitted_sha256": "0efc8331319cd24ba07bed2e453e34cbbc4e3c8f998993ee5ed49ebf245369c5",
+   "indexed_sha256": "0efc8331319cd24ba07bed2e453e34cbbc4e3c8f998993ee5ed49ebf245369c5",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:utdhealth-captured_1",
+   "sourcetype": "cisco:sdwan:utdhealth",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 391,
+   "indexed_bytes": 391,
+   "submitted_sha256": "740039fcdaac314a04a36be9bc2698fe6712e5cf6ba991b46e634e6ef18ec578",
+   "indexed_sha256": "740039fcdaac314a04a36be9bc2698fe6712e5cf6ba991b46e634e6ef18ec578",
+   "correlation_leak": false
+  },
+  {
+   "label": "cisco:sdwan:utdhealth-captured_2",
+   "sourcetype": "cisco:sdwan:utdhealth",
+   "matches": 1,
+   "verdict": "PASS",
+   "submitted_bytes": 387,
+   "indexed_bytes": 387,
+   "submitted_sha256": "5ef9cb4d5cd73eeb6a9c08233c3fe0a19820afeae861cb644d9a8e31afbdb2ca",
+   "indexed_sha256": "5ef9cb4d5cd73eeb6a9c08233c3fe0a19820afeae861cb644d9a8e31afbdb2ca",
+   "correlation_leak": false
+  }
+ ],
+ "passes": 18,
+ "scenario_runs": [
+  {
+   "scenario_id": "ub6_sdwan_utd_threat_pipeline",
+   "run_id": "pf-universe-62a81f18-79bc-4ae3-82fd-cd67601ee333",
+   "events_generated": 6,
+   "hec_accepted": 6,
+   "independent_count_by_phase": {
+    "BASELINE": 2,
+    "DETECT": 2,
+    "VALIDATE": 2
+   },
+   "expected_by_phase": {
+    "BASELINE": 2,
+    "DETECT": 2,
+    "VALIDATE": 2
+   },
+   "distinct_sourcetypes_indexed": [
+    "cisco:sdwan:ssetunnels",
+    "cisco:sdwan:utd:logs",
+    "cisco:sdwan:utdhealth"
+   ],
+   "correlation_leak_in_raw": false,
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "ub6_catalyst_wireless_rogue_threat",
+   "run_id": "pf-universe-19a169d6-312e-4a4a-96b5-606c06787d5e",
+   "events_generated": 6,
+   "hec_accepted": 6,
+   "independent_count_by_phase": {
+    "BASELINE": 2,
+    "DETECT": 3,
+    "VALIDATE": 1
+   },
+   "expected_by_phase": {
+    "BASELINE": 2,
+    "DETECT": 3,
+    "VALIDATE": 1
+   },
+   "distinct_sourcetypes_indexed": [
+    "cisco:catalyst:rogue:verbose",
+    "cisco:catalyst:security:profile_signatures",
+    "cisco:catalyst:threat:summary",
+    "cisco:catalyst:threat:summary:legacy"
+   ],
+   "correlation_leak_in_raw": false,
+   "verdict": "PASS"
+  }
+ ],
+ "ta_parser_checks_performed": 0,
+ "detection_checks_performed": 0,
+ "configuration_changes": 0
+}

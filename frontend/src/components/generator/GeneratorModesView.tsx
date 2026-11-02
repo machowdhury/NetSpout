@@ -1,3 +1,5 @@
+import { LiveDeliveryMonitor, rememberRun, rememberedRun } from '../monitor/LiveDeliveryMonitor';
+import { startRun } from '../../lib/runsApi';
 import React, { useState } from 'react';
 import { 
   Zap, Play, Send, 
@@ -24,6 +26,8 @@ export const GeneratorModesView: React.FC = () => {
   const [stDispatch, setStDispatch] = useState(false);
   const [stIndex, setStIndex] = useState('idx_network_ops');
   const [stResult, setStResult] = useState<any | null>(null);
+  const [stRunId, setStRunId] = useState<string | null>(rememberedRun());
+  const [stRunError, setStRunError] = useState<string | null>(null);
   const [stLoading, setStLoading] = useState(false);
 
   // Data Source state (Mode B)
@@ -84,6 +88,18 @@ export const GeneratorModesView: React.FC = () => {
       setStResult({ error: e.message });
     } finally {
       setStLoading(false);
+    }
+  };
+
+  // Live-monitored delivery to the saved Connection Center destination (index must be allowlisted)
+  const handleMonitoredRun = async () => {
+    setStRunError(null);
+    try {
+      const snap = await startRun({ kind: 'sourcetype', target: stSourcetype, vendor_id: stVendor, count: stCount, eps: stRate, index: stIndex });
+      rememberRun(snap.run_id);
+      setStRunId(snap.run_id);
+    } catch (e: any) {
+      setStRunError(e.message);
     }
   };
 
@@ -385,6 +401,14 @@ export const GeneratorModesView: React.FC = () => {
                 <Send className="w-3.5 h-3.5" />
                 <span>{stLoading ? 'Generating Batch...' : `Emit ${stCount} Events`}</span>
               </button>
+              <button
+                onClick={handleMonitoredRun}
+                className="w-full mt-2 px-3 py-2 rounded-lg text-xs font-mono border border-slate-700 text-slate-200 hover:border-cyan-500"
+              >
+                Emit with live delivery monitor
+              </button>
+              {stRunError && <p className="text-xs text-red-400 mt-1">{stRunError}</p>}
+              {stRunId && <LiveDeliveryMonitor runId={stRunId} onClose={() => setStRunId(null)} />}
             </div>
           </div>
 

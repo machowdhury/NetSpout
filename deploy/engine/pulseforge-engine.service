@@ -1,0 +1,15 @@
+[Unit]
+Description=PulseForge engine
+After=network-online.target
+
+[Service]
+User=pulseforge
+EnvironmentFile=-/etc/pulseforge/engine.env
+ExecStart=/opt/pulseforge-engine/deploy/engine/pulseforge-engine
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

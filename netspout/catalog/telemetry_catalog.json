@@ -1,0 +1,1932 @@
+{
+  "schema_version": "1.1.0",
+  "catalog_version": "2026.10-c3b",
+  "evidence": [
+    {
+      "evidence_id": "EVID-IETF-RFC5424",
+      "title": "The Syslog Protocol",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc5424",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines the RFC 5424 message format and transport-independent syslog protocol."
+    },
+    {
+      "evidence_id": "EVID-IETF-RFC3416",
+      "title": "Version 2 of the Protocol Operations for SNMP",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc3416",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines SNMPv2 protocol data units and operations."
+    },
+    {
+      "evidence_id": "EVID-IETF-RFC2863",
+      "title": "The Interfaces Group MIB",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc2863",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines the standard IF-MIB interface objects used by the modeled SNMP source."
+    },
+    {
+      "evidence_id": "EVID-IETF-RFC3954",
+      "title": "Cisco Systems NetFlow Services Export Version 9",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc3954",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Informational specification for NetFlow v9 templates and data flowsets."
+    },
+    {
+      "evidence_id": "EVID-IETF-RFC7011-7012",
+      "title": "IPFIX Protocol and Information Model",
+      "publisher": "IETF",
+      "reference": "https://www.rfc-editor.org/rfc/rfc7011",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "RFC 7011 defines IPFIX transport; RFC 7012 defines the information model."
+    },
+    {
+      "evidence_id": "EVID-OPENCONFIG-GNMI",
+      "title": "gRPC Network Management Interface specification",
+      "publisher": "OpenConfig",
+      "reference": "https://openconfig.net/docs/gnmi/gnmi-specification/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines the gRPC/protobuf service and telemetry subscription behavior."
+    },
+    {
+      "evidence_id": "EVID-OPENCONFIG-INTERFACES",
+      "title": "OpenConfig interfaces model",
+      "publisher": "OpenConfig",
+      "reference": "https://github.com/openconfig/public/tree/master/release/models/interfaces",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Authoritative public YANG model for interface configuration and state."
+    },
+    {
+      "evidence_id": "EVID-OTEL-OTLP",
+      "title": "OpenTelemetry Protocol specification",
+      "publisher": "OpenTelemetry",
+      "reference": "https://opentelemetry.io/docs/specs/otlp/",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines OTLP protobuf payloads over gRPC and HTTP."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-NETWORK-INPUT",
+      "title": "Get data from TCP and UDP ports",
+      "publisher": "Splunk",
+      "reference": "https://help.splunk.com/en/splunk-enterprise/get-started/get-data-in/10.6/get-data-from-network-sources/get-data-from-tcp-and-udp-ports",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents native Splunk Enterprise TCP and UDP network inputs."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-OTEL-HEC",
+      "title": "Splunk HEC exporter",
+      "publisher": "Splunk",
+      "reference": "https://help.splunk.com/en/splunk-observability-cloud/manage-data/splunk-distribution-of-the-opentelemetry-collector/get-started-with-the-splunk-distribution-of-the-opentelemetry-collector/collector-components/exporters/splunk-hec-exporter",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents the Splunk HEC exporter in the Splunk Distribution of the OpenTelemetry Collector."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-CISCO-IOS-1467",
+      "title": "Deprecated Add-on for Cisco Network Data",
+      "publisher": "Splunkbase community",
+      "reference": "https://splunkbase.splunk.com/app/1467",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Verifies the cisco:ios sourcetype and records that app 1467 is deprecated in favor of app 7538."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOS-SYSLOG",
+      "title": "Cisco IOS system message guides",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/ios/system/messages/guide.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "notes": "Vendor documentation family; individual message identifiers still require per-message verification."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+      "title": "Cisco 8000 IOS XR Implementing System Logging",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-monitoring/25xx/configuration/guide/b-system-monitoring-cg-cisco8k-25xx/implementing-system-logging.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Defines the IOS XR node, timestamp, process/PID, category-group-severity-mnemonic, and message-text structure. Applicability is limited to documented Cisco 8000 IOS XR releases."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-LINK-UPDOWN",
+      "title": "Cisco 8000 Logging Services Commands",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-monitoring/b-system-monitoring-cr-cisco8k/logging_services_commands.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents concrete PKT_INFRA-LINK-3-UPDOWN interface state messages and the IOS XR logging format command."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES",
+      "title": "Telemetry Configuration Guide for Cisco 8000 Series Routers, IOS XR Release 7.11.x",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/telemetry/711x/configuration/guide/b-telemetry-cg-8000-711x.pdf",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents gNMI and the openconfig-interfaces:interfaces/interface sensor path for Cisco 8000 IOS XR 7.11.x; no universal release claim is made."
+    },
+    {
+      "evidence_id": "EVID-CISCO-IOSXR-SNMP-IFMIB",
+      "title": "Cisco 8000 IOS XR Configuring Simple Network Management Protocol",
+      "publisher": "Cisco",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/system-management/710x/configuration/guide/b-system-management-cg-8k-710x/configuring-simple-network-management-protocol.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents IOS XR SNMP support and identifies IF-MIB as a supported interfaces MIB for Cisco 8000 IOS XR 7.10.x."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+      "title": "Cisco Enterprise Networking Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7538",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Splunkbase identifies app 7538, publisher Cisco Systems, and supported Cisco network devices including ASR platforms. Specific IOS XR sourcetypes and CIM mappings are not asserted by this evidence."
+    },
+    {
+      "evidence_id": "EVID-NETSPOUT-CONTRACT-SCHEMA",
+      "title": "NetSpout telemetry contract schema",
+      "publisher": "NetSpout",
+      "reference": "repo://src/netspout_core/catalog_contracts.py",
+      "provenance": "NETSPOUT_SCHEMA",
+      "verification_state": "VERIFIED",
+      "notes": "NetSpout-owned schema. It is not a vendor, standards, or Splunk contract."
+    },
+    {
+      "evidence_id": "EVID-NETSPOUT-RUNTIME",
+      "title": "NetSpout protocol implementation",
+      "publisher": "NetSpout",
+      "reference": "repo://src/netspout_core",
+      "provenance": "MODELED_PAYLOAD",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "notes": "Identifies modeled payload implementation separately from native and Splunk documentation."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-MERAKI-5580",
+      "title": "Cisco Meraki Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/5580",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-SECURITY-CLOUD-7404",
+      "title": "Cisco Security Cloud Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7404",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-SECURE-ACCESS-7569",
+      "title": "Cisco Secure Access Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://splunkbase.splunk.com/app/7569",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-UCS-2731",
+      "title": "Splunk Add-on for Cisco UCS",
+      "publisher": "Splunk LLC",
+      "reference": "https://splunkbase.splunk.com/app/2731",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Catalog identity from the preceding Cisco research; not parser or field-level validation. No live refresh performed in C1."
+    },
+    {
+      "evidence_id": "EVID-SPLUNK-UCS-SOURCE-SCHEMA",
+      "title": "Splunk Add-on for Cisco UCS documentation",
+      "publisher": "Splunk LLC",
+      "reference": "https://splunk.github.io/splunk-add-on-for-cisco-ucs/print_page/",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Prior research identified cisco:ucs as the sourcetype and object-class values as source, not separate sourcetypes. Documentation/release alignment requires validation."
+    },
+    {
+      "evidence_id": "EVID-C3B-SPLUNKBASE-7523",
+      "title": "Splunk Add-on for Palo Alto Networks",
+      "publisher": "Splunk LLC",
+      "reference": "https://splunkbase.splunk.com/app/7523",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Listing identity and candidate version only; no selected-version parser validation."
+    },
+    {
+      "evidence_id": "EVID-C3B-SPLUNKBASE-2846",
+      "title": "Fortinet FortiGate Add-On for Splunk",
+      "publisher": "Fortinet Inc",
+      "reference": "https://splunkbase.splunk.com/app/2846",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Listing identity and candidate version only; no selected-version parser validation."
+    },
+    {
+      "evidence_id": "EVID-C3B-SPLUNKBASE-4293",
+      "title": "Check Point App for Splunk",
+      "publisher": "Check Point",
+      "reference": "https://splunkbase.splunk.com/app/4293",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Listing identity and candidate version only; no selected-version parser validation."
+    },
+    {
+      "evidence_id": "EVID-C3B-FORTIOS72-IPS",
+      "title": "FortiOS 7.2.0 IPS signature filter options",
+      "publisher": "Fortinet",
+      "reference": "https://docs.fortinet.com/document/fortigate/7.2.0/administration-guide/535363/ips-signature-filter-options",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents 0419016384 signature-event KV records and detected action; dropped action also documented by the FortiOS 7.2.0 HTTP transaction example."
+    },
+    {
+      "evidence_id": "EVID-C3B-FORTIOS72-DROPPED",
+      "title": "FortiOS 7.2.0 HTTP transaction log fields",
+      "publisher": "Fortinet",
+      "reference": "https://docs.fortinet.com/document/fortigate/7.2.0/new-features/395172/http-transaction-log-fields",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Source-backed IPS dropped example; full page retrieval returned 403; indexed official documentation example retained as reference, not parser evidence."
+    },
+    {
+      "evidence_id": "EVID-C3B-CHECKPOINT-CEF",
+      "title": "Log Exporter Administration Guide",
+      "publisher": "Check Point",
+      "reference": "https://sc1.checkpoint.com/documents/Log_Exporter/EN/CP_Log_Exporter_AdminGuide.pdf",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "2026-09-07 document, CEF header appendix, page 85; no app 4293 CEF parser claim."
+    },
+    {
+      "evidence_id": "EVID-C3B-CHECKPOINT-MAPPING",
+      "title": "Log Exporter CEF Field Mappings",
+      "publisher": "Check Point",
+      "reference": "https://community.checkpoint.com/t5/AI-Network-Firewall/Log-Exporter-CEF-Field-Mappings/m-p/41060",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Vendor-hosted mapping/example for act, rt, spt, dpt, proto, src/dst and cs2Label=Rule Name/cs2."
+    },
+    {
+      "evidence_id": "EVID-C3B-PAN-ARCHIVED",
+      "title": "Archived Palo Alto Networks Add-on for Splunk",
+      "publisher": "Palo Alto Networks",
+      "reference": "https://splunkbase.splunk.com/app/2757",
+      "provenance": "SPLUNK_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Archived 8.1.3 predecessor, retained as evidence. No raw-event changes."
+    },
+    {
+      "evidence_id": "EVID-LAB-CISCO-ISE-TA-1915-500",
+      "title": "Installed-TA lab validation: Splunk Add-on for Cisco Identity Services 5.0.0 on Splunk Enterprise 10.2.7",
+      "publisher": "PulseForge isolated pf-native-lab (Splunkbase 1915 package)",
+      "reference": "/Volumes/AI-Storage/Docker-Projects/netspout-splunk-lab/evidence/ta-ise-1915-install-20261024/",
+      "provenance": "DATASET_VERIFIED",
+      "verification_state": "VERIFIED",
+      "notes": "Bounded Level D (installed-TA extraction) run: package splunk-add-on-for-cisco-identity-services_500.tgz SHA-256 7c5c1489d11744cfe6270f4f28f109e46b94f65a77f1624bcbb13d0ceb629b80, internal app Splunk_TA_cisco-ise v5.0.0; 64/64 checks passed on 7 exactly-once HEC events to disposable index idx_ta_ise_test: five ORIGINAL cisco_ise_syslog.sample lines (codes 58005/5201/5400/11036/3302, one per captured CISE class) plus two PulseForge-generated format_cisco_ise_log events (codes 5200/5400, commit a39efc7). All _raw byte-preserved and sourcetype=cisco:ise:syslog; embedded ISE 2026-03-11 timestamps NOT parsed (DATETIME_CONFIG=CURRENT design: _time==_indextime); message-catalog lookup enrichment resolved for all; eventtype lists matched for six of seven (code 3302 not in any installed list, recorded N/A). Scope limits: validates ONLY the seven tested records and cisco:ise:syslog; not all ISE formats, no other Cisco sourcetype, no CIM/dashboard (Level E unknown). Splunk Enterprise 10.2.7 is OUTSIDE the add-on's published release scope (published 2024-11-21 for Splunk 9.x); research validation only, NO certified-support claim. No C1 profile or validations record references this evidence; the installed-TA distinction is documented in docs/catalog/CISCO_ISE_TA_1915_LAB_VALIDATION.md per the C1 contract, and the existing C1 Cisco profiles remain not_assessed."
+    }
+  ],
+  "integrations": [
+    {
+      "integration_id": "splunk-native-network-input",
+      "name": "Splunk TCP/UDP Network Input",
+      "publisher": "Splunk",
+      "integration_type": "NATIVE_INPUT",
+      "supported_source_ids": [
+        "ietf-syslog-rfc5424"
+      ],
+      "splunkbase_id": null,
+      "verification_state": "VERIFIED",
+      "support_state": "SUPPORTED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "PARTIALLY_VERIFIED",
+      "evidence_ids": [
+        "EVID-SPLUNK-NETWORK-INPUT"
+      ],
+      "notes": "A native input, not a Technical Add-on. Source-specific parsing remains separate."
+    },
+    {
+      "integration_id": "splunk-otel-hec-exporter",
+      "name": "Splunk Distribution of the OpenTelemetry Collector \u2014 HEC exporter",
+      "publisher": "Splunk",
+      "integration_type": "COLLECTOR",
+      "supported_source_ids": [
+        "opentelemetry-otlp"
+      ],
+      "splunkbase_id": null,
+      "verification_state": "VERIFIED",
+      "support_state": "SUPPORTED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "PARTIALLY_VERIFIED",
+      "evidence_ids": [
+        "EVID-SPLUNK-OTEL-HEC"
+      ],
+      "notes": "OTel Collector integration is documented; NetSpout OTel-to-Splunk observation is not yet proven."
+    },
+    {
+      "integration_id": "splunkbase-cisco-network-data-1467",
+      "name": "Add-on for Cisco Network Data",
+      "publisher": "Splunkbase community",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [
+        "cisco-ios-syslog"
+      ],
+      "splunkbase_id": "1467",
+      "verification_state": "VERIFIED",
+      "support_state": "DEPRECATED",
+      "sourcetypes": [
+        {
+          "name": "cisco:ios",
+          "authority": "SPLUNK_DOCUMENTED",
+          "evidence_ids": [
+            "EVID-SPLUNK-CISCO-IOS-1467"
+          ]
+        }
+      ],
+      "cim_mappings": [],
+      "netspout_coverage": "PARTIALLY_VERIFIED",
+      "evidence_ids": [
+        "EVID-SPLUNK-CISCO-IOS-1467"
+      ],
+      "notes": "The evidence page explicitly marks app 1467 deprecated and recommends app 7538. App 7538 is not promoted here until separately cataloged."
+    },
+    {
+      "integration_id": "splunkbase-cisco-enterprise-networking-7538",
+      "name": "Cisco Enterprise Networking Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [
+        "cisco-ios-syslog",
+        "cisco-ios-xr-interface-syslog"
+      ],
+      "splunkbase_id": "7538",
+      "verification_state": "VERIFIED",
+      "support_state": "SUPPORTED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+      ],
+      "notes": "The product/source relationship is documented. Sourcetype, field extraction, and CIM behavior remain research required until the add-on is installed and validated.",
+      "profiles": [
+        {
+          "profile_id": "cisco-enterprise-networking-sdwan-catalog",
+          "vendor": "Cisco",
+          "product": "Catalyst SD-WAN",
+          "splunkbase_id": "7538",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7538",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "vendor_id": "cisco_sdwan",
+          "legacy_catalog_default": true,
+          "evidence_ids": [
+            "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+          ],
+          "notes": "Replaces the incorrect Meraki app 5580 association in the legacy vendor projection. Selected release, collection schema and parsing remain unassessed.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ]
+    },
+    {
+      "integration_id": "netspout-direct-structured-ingestion",
+      "name": "NetSpout direct structured ingestion",
+      "publisher": "NetSpout",
+      "integration_type": "DIRECT_STRUCTURED_INGESTION",
+      "supported_source_ids": [
+        "ietf-syslog-rfc5424",
+        "cisco-ios-xr-interface-syslog",
+        "openconfig-gnmi-interfaces",
+        "netspout-agentic-activity"
+      ],
+      "splunkbase_id": null,
+      "verification_state": "PARTIALLY_VERIFIED",
+      "support_state": "LAB_ONLY",
+      "sourcetypes": [
+        {
+          "name": "netspout:rfc5424",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "name": "netspout:cisco:iosxr:syslog",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "name": "openconfig:gnmi:telemetry",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "name": "netspout:agentic:activity",
+          "authority": "NETSPOUT_DEFINED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        }
+      ],
+      "cim_mappings": [],
+      "netspout_coverage": "PARTIALLY_VERIFIED",
+      "evidence_ids": [
+        "EVID-NETSPOUT-CONTRACT-SCHEMA",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "notes": "NetSpout-defined lab ingestion path. It is not an official Splunk Technical Add-on."
+    },
+    {
+      "integration_id": "splunkbase-cisco-meraki-5580",
+      "name": "Cisco Meraki Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "5580",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-MERAKI-5580"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-meraki-api-catalog",
+          "vendor": "Cisco",
+          "product": "Meraki",
+          "splunkbase_id": "5580",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/5580",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "vendor_id": "cisco_meraki",
+          "legacy_catalog_default": true,
+          "collection_method": "API",
+          "evidence_ids": [
+            "EVID-SPLUNK-MERAKI-5580"
+          ],
+          "notes": "API profile placeholder, not the syslog or webhook schema. Release, sourcetypes and fields require selected-version documentation.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-security-cloud-7404",
+      "name": "Cisco Security Cloud Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "7404",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-SECURITY-CLOUD-7404"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-security-cloud-3x-research",
+          "vendor": "Cisco",
+          "product": "Security Cloud",
+          "splunkbase_id": "7404",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7404",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURITY-CLOUD-7404"
+          ],
+          "notes": "Exact app version is unknown. Do not reuse a 4.x schema for this track.",
+          "publisher": "Cisco Systems, Inc."
+        },
+        {
+          "profile_id": "cisco-security-cloud-4x-research",
+          "vendor": "Cisco",
+          "product": "Security Cloud",
+          "splunkbase_id": "7404",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7404",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURITY-CLOUD-7404"
+          ],
+          "notes": "Exact app version is unknown. Versioned fields, FTD routing and parser behavior remain unassessed.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-secure-access-7569",
+      "name": "Cisco Secure Access Add-on for Splunk",
+      "publisher": "Cisco Systems, Inc.",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "7569",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-SECURE-ACCESS-7569"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-secure-access-s3-research",
+          "vendor": "Cisco",
+          "product": "Secure Access",
+          "splunkbase_id": "7569",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7569",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "collection_method": "S3",
+          "evidence_ids": [
+            "EVID-SPLUNK-SECURE-ACCESS-7569"
+          ],
+          "notes": "S3 collection is a separate contract from API JSON. Header fields, timestamp semantics and sourcetypes remain unknown.",
+          "publisher": "Cisco Systems, Inc."
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-cisco-ucs-2731",
+      "name": "Splunk Add-on for Cisco UCS",
+      "publisher": "Splunk LLC",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "2731",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-SPLUNK-UCS-2731"
+      ],
+      "profiles": [
+        {
+          "profile_id": "cisco-ucs-source-contract-research",
+          "vendor": "Cisco",
+          "product": "UCS",
+          "splunkbase_id": "2731",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/2731",
+          "integration_type": "add_on",
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "collection_method": "API",
+          "sourcetypes": [
+            {
+              "name": "cisco:ucs",
+              "authority": "SPLUNK_DOCUMENTED",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            }
+          ],
+          "requirements": [
+            {
+              "kind": "source",
+              "value": "cisco:ucs:faultInst",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            },
+            {
+              "kind": "source",
+              "value": "cisco:ucs:computeBlade",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            },
+            {
+              "kind": "source",
+              "value": "cisco:ucs:processorEnvStats",
+              "evidence_ids": [
+                "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+              ]
+            }
+          ],
+          "evidence_ids": [
+            "EVID-SPLUNK-UCS-2731",
+            "EVID-SPLUNK-UCS-SOURCE-SCHEMA"
+          ],
+          "notes": "Documented source/sourcetype distinction only; no selected-version parser validation.",
+          "publisher": "Splunk LLC"
+        }
+      ],
+      "notes": "Catalog identity only. No parser, field, CIM or dashboard compatibility asserted."
+    },
+    {
+      "integration_id": "splunkbase-palo-alto-7523",
+      "name": "Splunk Add-on for Palo Alto Networks",
+      "publisher": "Splunk LLC",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "7523",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-C3B-SPLUNKBASE-7523",
+        "EVID-C3B-PAN-ARCHIVED"
+      ],
+      "notes": "PAN-OS native CSV repair BLOCKED: release-specific field specification unavailable. Archived predecessor app 2757 is not the selected candidate. Raw generator and samples unchanged.",
+      "profiles": [
+        {
+          "profile_id": "palo-alto-4.0.0-research",
+          "vendor": "Palo Alto Networks",
+          "product": "PAN-OS",
+          "vendor_id": "palo_alto",
+          "legacy_catalog_default": true,
+          "splunkbase_id": "7523",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/7523",
+          "publisher": "Splunk LLC",
+          "integration_type": "add_on",
+          "app_version": "4.0.0",
+          "wire_format": "CSV",
+          "collection_method": "Syslog",
+          "schema_known": false,
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-C3B-SPLUNKBASE-7523",
+            "EVID-C3B-PAN-ARCHIVED"
+          ],
+          "notes": "PAN-OS native CSV repair BLOCKED: release-specific field specification unavailable. Archived predecessor app 2757 is not the selected candidate. Raw generator and samples unchanged."
+        }
+      ]
+    },
+    {
+      "integration_id": "splunkbase-fortinet-2846",
+      "name": "Fortinet FortiGate Add-On for Splunk",
+      "publisher": "Fortinet Inc",
+      "integration_type": "SPLUNKBASE_ADD_ON",
+      "supported_source_ids": [],
+      "splunkbase_id": "2846",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-C3B-SPLUNKBASE-2846",
+        "EVID-C3B-FORTIOS72-IPS",
+        "EVID-C3B-FORTIOS72-DROPPED"
+      ],
+      "notes": "Bounded IPS signature-event grammar only. Existing fortinet:fortigate:utm routing label is retained, not asserted as this TA's documented sourcetype. Parser/field extraction unvalidated.",
+      "profiles": [
+        {
+          "profile_id": "fortinet-1.6.10-research",
+          "vendor": "Fortinet",
+          "product": "FortiGate / FortiOS 7.2.0 IPS",
+          "vendor_id": "fortinet",
+          "legacy_catalog_default": true,
+          "splunkbase_id": "2846",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/2846",
+          "publisher": "Fortinet Inc",
+          "integration_type": "add_on",
+          "app_version": "1.6.10",
+          "wire_format": "key/value",
+          "collection_method": "Syslog",
+          "schema_known": false,
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-C3B-SPLUNKBASE-2846",
+            "EVID-C3B-FORTIOS72-IPS",
+            "EVID-C3B-FORTIOS72-DROPPED"
+          ],
+          "notes": "Bounded IPS signature-event grammar only. Existing fortinet:fortigate:utm routing label is retained, not asserted as this TA's documented sourcetype. Parser/field extraction unvalidated."
+        }
+      ]
+    },
+    {
+      "integration_id": "splunkbase-checkpoint-4293",
+      "name": "Check Point App for Splunk",
+      "publisher": "Check Point",
+      "integration_type": "SPLUNKBASE_APP",
+      "supported_source_ids": [],
+      "splunkbase_id": "4293",
+      "verification_state": "VERIFIED",
+      "support_state": "RESEARCH_REQUIRED",
+      "sourcetypes": [],
+      "cim_mappings": [],
+      "netspout_coverage": "RESEARCH_REQUIRED",
+      "evidence_ids": [
+        "EVID-C3B-SPLUNKBASE-4293",
+        "EVID-C3B-CHECKPOINT-CEF",
+        "EVID-C3B-CHECKPOINT-MAPPING"
+      ],
+      "notes": "Corrects unrelated Departures Board Viz ID 4292. CEF wire structure does not establish app 4293 parser support; its Splunk export format is a separate contract. Existing checkpoint:cef routing label retained without compatibility claim.",
+      "profiles": [
+        {
+          "profile_id": "checkpoint-1.1.6-research",
+          "vendor": "Check Point",
+          "product": "Log Exporter CEF",
+          "vendor_id": "checkpoint",
+          "legacy_catalog_default": true,
+          "splunkbase_id": "4293",
+          "splunkbase_url": "https://splunkbase.splunk.com/app/4293",
+          "publisher": "Check Point",
+          "integration_type": "app",
+          "app_version": "1.1.6",
+          "wire_format": "CEF",
+          "collection_method": "Syslog",
+          "schema_known": false,
+          "coverage": "not_assessed",
+          "verification_state": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-C3B-SPLUNKBASE-4293",
+            "EVID-C3B-CHECKPOINT-CEF",
+            "EVID-C3B-CHECKPOINT-MAPPING"
+          ],
+          "notes": "Corrects unrelated Departures Board Viz ID 4292. CEF wire structure does not establish app 4293 parser support; its Splunk export format is a separate contract. Existing checkpoint:cef routing label retained without compatibility claim."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "ietf-syslog-rfc5424",
+      "vendor": "IETF",
+      "product": "Syslog Protocol",
+      "product_family": "Internet Standards",
+      "domains": [
+        "netops",
+        "secops",
+        "itops"
+      ],
+      "telemetry_source": "RFC 5424 syslog message",
+      "applicable_industries": [],
+      "verification_state": "VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "MODELED_PAYLOAD"
+      ],
+      "evidence_ids": [
+        "EVID-IETF-RFC5424",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-ietf-syslog-rfc5424",
+        "verification_state": "VERIFIED",
+        "format": "RFC 5424 structured syslog message",
+        "schema": "PRI VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG",
+        "transports": [
+          {
+            "protocol": "UDP",
+            "default_port": 514,
+            "encoding": "UTF-8"
+          },
+          {
+            "protocol": "TCP",
+            "default_port": 514,
+            "encoding": "UTF-8"
+          }
+        ],
+        "structural_fields": [
+          "PRI",
+          "VERSION",
+          "TIMESTAMP",
+          "HOSTNAME",
+          "APP-NAME",
+          "PROCID",
+          "MSGID",
+          "STRUCTURED-DATA",
+          "MSG"
+        ],
+        "evidence_ids": [
+          "EVID-IETF-RFC5424"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-ietf-syslog-rfc5424",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "input_mechanisms": [
+          "TCP network input",
+          "UDP network input",
+          "NetSpout direct structured ingestion"
+        ],
+        "integration_ids": [
+          "splunk-native-network-input",
+          "netspout-direct-structured-ingestion"
+        ],
+        "sourcetypes": [
+          {
+            "name": "netspout:rfc5424",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-SPLUNK-NETWORK-INPUT",
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-ietf-syslog-rfc5424",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_PAYLOAD",
+        "generator": "netspout_core.log_engine.SplunkLogEngine",
+        "validator": null,
+        "transports": [
+          "UDP",
+          "TCP",
+          "HEC"
+        ],
+        "modeled_fields": [
+          "timestamp",
+          "hostname",
+          "message"
+        ],
+        "structural_fields": [
+          "PRI",
+          "VERSION",
+          "TIMESTAMP",
+          "HOSTNAME",
+          "APP-NAME",
+          "PROCID",
+          "MSGID"
+        ],
+        "scenario_ids": [
+          "pure_cisco_enterprise"
+        ],
+        "generation_modes": [
+          "MODE_A",
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "AVAILABLE",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "_raw",
+          "host",
+          "source",
+          "sourcetype"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_scenario_id"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "A network input does not establish source-specific parsing or CIM normalization.",
+        "HEC delivery is not the original native syslog transport."
+      ]
+    },
+    {
+      "source_id": "ietf-snmpv2c-ifmib",
+      "vendor": "IETF",
+      "product": "SNMPv2 and IF-MIB",
+      "product_family": "Internet Standards",
+      "domains": [
+        "netops"
+      ],
+      "telemetry_source": "SNMPv2 trap, inform, and polling data",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-IETF-RFC3416",
+        "EVID-IETF-RFC2863",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-ietf-snmpv2c-ifmib",
+        "verification_state": "VERIFIED",
+        "format": "SNMPv2 protocol data units with BER encoding",
+        "schema": "RFC 3416 protocol operations and RFC 2863 IF-MIB objects",
+        "transports": [
+          {
+            "protocol": "UDP",
+            "default_port": 162,
+            "encoding": "ASN.1 BER"
+          },
+          {
+            "protocol": "UDP",
+            "default_port": 161,
+            "encoding": "ASN.1 BER"
+          }
+        ],
+        "structural_fields": [
+          "request-id",
+          "error-status",
+          "error-index",
+          "variable-bindings"
+        ],
+        "evidence_ids": [
+          "EVID-IETF-RFC3416",
+          "EVID-IETF-RFC2863"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-ietf-snmpv2c-ifmib",
+        "verification_state": "RESEARCH_REQUIRED",
+        "input_mechanisms": [],
+        "integration_ids": [],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": []
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-ietf-snmpv2c-ifmib",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_VALUE",
+        "generator": "netspout_core.transport_native_snmp.NativeSnmpTransport",
+        "validator": "netspout_core.snmp_splunk_e2e.SnmpSplunkE2EOrchestrator",
+        "transports": [
+          "SNMPv2c UDP"
+        ],
+        "modeled_fields": [
+          "interface counters",
+          "interface state",
+          "request identifiers"
+        ],
+        "structural_fields": [
+          "PDU type",
+          "OID",
+          "ASN.1 value type"
+        ],
+        "scenario_ids": [
+          "service_provider_cisco"
+        ],
+        "generation_modes": [
+          "MODE_A",
+          "MODE_B",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_device_id",
+          "origin_evidence_stage"
+        ],
+        "portable_spl_status": "RESEARCH_REQUIRED"
+      },
+      "known_limitations": [
+        "The container runtime currently fails native SNMP preflight on Python 3.9.",
+        "No Splunk sourcetype or CIM claim is promoted without separate Splunk evidence."
+      ]
+    },
+    {
+      "source_id": "ietf-netflow-v9",
+      "vendor": "Cisco / IETF",
+      "product": "NetFlow Version 9",
+      "product_family": "Flow Export",
+      "domains": [
+        "netops",
+        "secops"
+      ],
+      "telemetry_source": "Template-based NetFlow v9 export",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-IETF-RFC3954",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-ietf-netflow-v9",
+        "verification_state": "VERIFIED",
+        "format": "NetFlow v9 template and data flowsets",
+        "schema": "RFC 3954",
+        "transports": [
+          {
+            "protocol": "UDP",
+            "default_port": 2055,
+            "encoding": "Binary network byte order"
+          }
+        ],
+        "structural_fields": [
+          "version",
+          "count",
+          "system uptime",
+          "export time",
+          "sequence number",
+          "source ID"
+        ],
+        "evidence_ids": [
+          "EVID-IETF-RFC3954"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-ietf-netflow-v9",
+        "verification_state": "RESEARCH_REQUIRED",
+        "input_mechanisms": [],
+        "integration_ids": [],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": []
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-ietf-netflow-v9",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_VALUE",
+        "generator": "netspout_core.netflow_v9_encoder",
+        "validator": "netspout_core.transport_native_flow.NativeFlowTransport",
+        "transports": [
+          "NetFlow v9 UDP"
+        ],
+        "modeled_fields": [
+          "addresses",
+          "ports",
+          "packet and octet counts",
+          "timestamps"
+        ],
+        "structural_fields": [
+          "template ID",
+          "field type",
+          "field length"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [
+          "netspout_run_id"
+        ],
+        "portable_spl_status": "RESEARCH_REQUIRED"
+      },
+      "known_limitations": [
+        "The native Flow collector is not orchestrated in the current Docker stack.",
+        "Splunk parsing and sourcetype remain research required."
+      ]
+    },
+    {
+      "source_id": "ietf-ipfix",
+      "vendor": "IETF",
+      "product": "IP Flow Information Export",
+      "product_family": "Flow Export",
+      "domains": [
+        "netops",
+        "secops"
+      ],
+      "telemetry_source": "IPFIX template and data sets",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-IETF-RFC7011-7012",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-ietf-ipfix",
+        "verification_state": "VERIFIED",
+        "format": "IPFIX messages, templates, and data sets",
+        "schema": "RFC 7011 and RFC 7012",
+        "transports": [
+          {
+            "protocol": "UDP",
+            "default_port": 4739,
+            "encoding": "Binary network byte order"
+          }
+        ],
+        "structural_fields": [
+          "version",
+          "length",
+          "export time",
+          "sequence number",
+          "observation domain ID"
+        ],
+        "evidence_ids": [
+          "EVID-IETF-RFC7011-7012"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-ietf-ipfix",
+        "verification_state": "RESEARCH_REQUIRED",
+        "input_mechanisms": [],
+        "integration_ids": [],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": []
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-ietf-ipfix",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_VALUE",
+        "generator": "netspout_core.ipfix_encoder",
+        "validator": "netspout_core.transport_native_flow.NativeFlowTransport",
+        "transports": [
+          "IPFIX UDP"
+        ],
+        "modeled_fields": [
+          "information element values",
+          "addresses",
+          "ports",
+          "counters"
+        ],
+        "structural_fields": [
+          "set ID",
+          "template ID",
+          "information element ID",
+          "field length"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [
+          "netspout_run_id"
+        ],
+        "portable_spl_status": "RESEARCH_REQUIRED"
+      },
+      "known_limitations": [
+        "The native Flow collector is not orchestrated in the current Docker stack.",
+        "No Splunk integration is claimed."
+      ]
+    },
+    {
+      "source_id": "openconfig-gnmi-interfaces",
+      "vendor": "OpenConfig",
+      "product": "gNMI with openconfig-interfaces",
+      "product_family": "Model-Driven Telemetry",
+      "domains": [
+        "netops",
+        "observability"
+      ],
+      "telemetry_source": "gNMI Subscribe notifications for interface state",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "NETSPOUT_SCHEMA",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-OPENCONFIG-GNMI",
+        "EVID-OPENCONFIG-INTERFACES",
+        "EVID-NETSPOUT-CONTRACT-SCHEMA",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-openconfig-gnmi-interfaces",
+        "verification_state": "VERIFIED",
+        "format": "gNMI protobuf Notification and Update messages",
+        "schema": "openconfig-interfaces YANG",
+        "transports": [
+          {
+            "protocol": "gRPC over HTTP/2",
+            "default_port": 57400,
+            "encoding": "PROTO or JSON_IETF"
+          }
+        ],
+        "structural_fields": [
+          "timestamp",
+          "prefix",
+          "update",
+          "path",
+          "typed value"
+        ],
+        "evidence_ids": [
+          "EVID-OPENCONFIG-GNMI",
+          "EVID-OPENCONFIG-INTERFACES"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-openconfig-gnmi-interfaces",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "input_mechanisms": [
+          "NetSpout direct structured ingestion"
+        ],
+        "integration_ids": [
+          "netspout-direct-structured-ingestion"
+        ],
+        "sourcetypes": [
+          {
+            "name": "openconfig:gnmi:telemetry",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-openconfig-gnmi-interfaces",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_VALUE",
+        "generator": "netspout_core.gnmi.sensor_registry.TelemetrySensorRegistry",
+        "validator": "netspout_core.gnmi.collector_pipeline.audit_sensor_provenance_registry",
+        "transports": [
+          "gNMI STREAM",
+          "gNMI ONCE"
+        ],
+        "modeled_fields": [
+          "interface names",
+          "counter values",
+          "operational state"
+        ],
+        "structural_fields": [
+          "OpenConfig origin",
+          "YANG path",
+          "typed value"
+        ],
+        "scenario_ids": [
+          "openconfig_mdt_streaming"
+        ],
+        "generation_modes": [
+          "MODE_A",
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "path",
+          "timestamp"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_device_id",
+          "origin_evidence_stage"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "The packaged protobuf runtime currently prevents native container preflight.",
+        "The listed sourcetype is NETSPOUT-DEFINED, not an official Splunk sourcetype."
+      ]
+    },
+    {
+      "source_id": "opentelemetry-otlp",
+      "vendor": "OpenTelemetry",
+      "product": "OpenTelemetry Protocol",
+      "product_family": "Observability",
+      "domains": [
+        "observability",
+        "itops"
+      ],
+      "telemetry_source": "OTLP metrics generated by existing protocol converters",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "STANDARD_DOCUMENTED",
+        "SPLUNK_DOCUMENTED",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-OTEL-OTLP",
+        "EVID-SPLUNK-OTEL-HEC",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-opentelemetry-otlp",
+        "verification_state": "VERIFIED",
+        "format": "OTLP protobuf export requests",
+        "schema": "OpenTelemetry Protocol",
+        "transports": [
+          {
+            "protocol": "OTLP/gRPC",
+            "default_port": 4317,
+            "encoding": "Protocol Buffers"
+          },
+          {
+            "protocol": "OTLP/HTTP",
+            "default_port": 4318,
+            "encoding": "Binary or JSON Protocol Buffers"
+          }
+        ],
+        "structural_fields": [
+          "resource",
+          "scope",
+          "signal records",
+          "attributes"
+        ],
+        "evidence_ids": [
+          "EVID-OTEL-OTLP"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-opentelemetry-otlp",
+        "verification_state": "VERIFIED",
+        "input_mechanisms": [
+          "OTel Collector Splunk HEC exporter"
+        ],
+        "integration_ids": [
+          "splunk-otel-hec-exporter"
+        ],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-SPLUNK-OTEL-HEC"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-opentelemetry-otlp",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_VALUE",
+        "generator": "netspout_core.snmp_engine.SNMPEngine.to_otel_metric_payload",
+        "validator": null,
+        "transports": [
+          "OTLP/HTTP"
+        ],
+        "modeled_fields": [
+          "resource attributes",
+          "metric values"
+        ],
+        "structural_fields": [
+          "resourceMetrics",
+          "scopeMetrics",
+          "metrics"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "DEGRADED",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "service.name",
+          "host.name"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_scenario_id"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "Collector acceptance has not yet been proven as Splunk-indexed observation.",
+        "No sourcetype or CIM claim is made by this catalog entry."
+      ]
+    },
+    {
+      "source_id": "cisco-ios-syslog",
+      "vendor": "Cisco",
+      "product": "IOS family",
+      "product_family": "Routing and Switching",
+      "domains": [
+        "netops"
+      ],
+      "telemetry_source": "IOS family syslog",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "VENDOR_DOCUMENTED",
+        "SPLUNK_DOCUMENTED",
+        "MODELED_PAYLOAD"
+      ],
+      "evidence_ids": [
+        "EVID-CISCO-IOS-SYSLOG",
+        "EVID-SPLUNK-CISCO-IOS-1467",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-cisco-ios-syslog",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "format": "Cisco IOS family system messages carried by syslog",
+        "schema": "Message identifiers require vendor-guide verification",
+        "transports": [
+          {
+            "protocol": "Syslog",
+            "default_port": 514,
+            "encoding": "Text"
+          }
+        ],
+        "structural_fields": [
+          "facility",
+          "severity",
+          "mnemonic",
+          "message"
+        ],
+        "evidence_ids": [
+          "EVID-CISCO-IOS-SYSLOG"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-cisco-ios-syslog",
+        "verification_state": "VERIFIED",
+        "input_mechanisms": [
+          "Cisco Network Data add-on parsing"
+        ],
+        "integration_ids": [
+          "splunkbase-cisco-network-data-1467"
+        ],
+        "sourcetypes": [
+          {
+            "name": "cisco:ios",
+            "authority": "SPLUNK_DOCUMENTED",
+            "evidence_ids": [
+              "EVID-SPLUNK-CISCO-IOS-1467"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-SPLUNK-CISCO-IOS-1467"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-cisco-ios-syslog",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "schema_classification": "MODELED_PAYLOAD",
+        "generator": "netspout_core.log_engine.SplunkLogEngine",
+        "validator": null,
+        "transports": [
+          "Syslog UDP",
+          "HEC"
+        ],
+        "modeled_fields": [
+          "hostname",
+          "interface",
+          "addresses",
+          "message values"
+        ],
+        "structural_fields": [
+          "facility",
+          "severity",
+          "mnemonic"
+        ],
+        "scenario_ids": [
+          "pure_cisco_enterprise"
+        ],
+        "generation_modes": [
+          "MODE_A",
+          "MODE_B",
+          "MODE_C",
+          "MODE_D"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "PARTIAL",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "_raw",
+          "host",
+          "sourcetype"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_scenario_id"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "Splunkbase app 1467 is deprecated and must not be recommended as current.",
+        "Only cisco:ios is claimed from current evidence; cisco:ios:syslog is not promoted as official."
+      ]
+    },
+    {
+      "source_id": "cisco-ios-xr-interface-syslog",
+      "vendor": "Cisco",
+      "product": "Cisco 8000 Series IOS XR",
+      "product_family": "Service Provider Routing",
+      "domains": [
+        "netops"
+      ],
+      "telemetry_source": "IOS XR interface state syslog",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "VENDOR_DOCUMENTED",
+        "SPLUNK_DOCUMENTED",
+        "MODELED_PAYLOAD"
+      ],
+      "evidence_ids": [
+        "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+        "EVID-CISCO-IOSXR-LINK-UPDOWN",
+        "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+        "EVID-NETSPOUT-RUNTIME"
+      ],
+      "native_contract": {
+        "contract_id": "native-cisco-ios-xr-interface-syslog",
+        "verification_state": "VERIFIED",
+        "format": "IOS XR node-id, timestamp, process/PID, PKT_INFRA-LINK severity/mnemonic, and message text",
+        "schema": "%PKT_INFRA-LINK-3-UPDOWN : Interface <interface>, changed state to <state>",
+        "transports": [
+          {
+            "protocol": "Syslog UDP",
+            "default_port": 514,
+            "encoding": "UTF-8 text"
+          }
+        ],
+        "structural_fields": [
+          "PKT_INFRA",
+          "LINK",
+          "severity 3",
+          "UPDOWN",
+          "Interface ... changed state to ..."
+        ],
+        "evidence_ids": [
+          "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+          "EVID-CISCO-IOSXR-LINK-UPDOWN"
+        ]
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-cisco-ios-xr-interface-syslog",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "input_mechanisms": [
+          "Cisco Enterprise Networking Add-on relationship",
+          "NetSpout local HEC observation"
+        ],
+        "integration_ids": [
+          "splunkbase-cisco-enterprise-networking-7538",
+          "netspout-direct-structured-ingestion"
+        ],
+        "sourcetypes": [
+          {
+            "name": "netspout:cisco:iosxr:syslog",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-cisco-ios-xr-interface-syslog",
+        "verification_state": "VERIFIED",
+        "schema_classification": "MODELED_PAYLOAD",
+        "generator": "allowlist:declarative-native-template",
+        "validator": "validator-ios-xr-interface-syslog",
+        "transports": [
+          "Syslog UDP",
+          "HEC"
+        ],
+        "modeled_fields": [
+          "node_id",
+          "interface_id",
+          "operational_state"
+        ],
+        "structural_fields": [
+          "message category",
+          "group",
+          "severity",
+          "mnemonic",
+          "message structure"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [
+          "MODE_C"
+        ],
+        "runtime_status": "AVAILABLE",
+        "maturity": "GOLDEN",
+        "evidence_ids": [
+          "EVID-NETSPOUT-RUNTIME"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [
+          "_raw",
+          "host",
+          "sourcetype"
+        ],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_scenario_id",
+          "netspout_phase"
+        ],
+        "portable_spl_status": "PARTIALLY_VERIFIED"
+      },
+      "known_limitations": [
+        "Only the documented PKT_INFRA-LINK-3-UPDOWN message is generated.",
+        "The Cisco add-on relationship is established, but its IOS XR sourcetype, extracted fields, and CIM behavior are not runtime validated.",
+        "The netspout:cisco:iosxr:syslog sourcetype is NetSpout-defined and is not represented as an official Splunk sourcetype."
+      ]
+    },
+    {
+      "source_id": "netspout-agentic-activity",
+      "vendor": "NetSpout",
+      "product": "Agentic AI activity schema",
+      "product_family": "Agentic AI",
+      "domains": [
+        "agentic-ai",
+        "secops"
+      ],
+      "telemetry_source": "Agent decision, tool, policy, and downstream-effect records",
+      "applicable_industries": [],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "provenance": [
+        "NETSPOUT_SCHEMA",
+        "MODELED_VALUE"
+      ],
+      "evidence_ids": [
+        "EVID-NETSPOUT-CONTRACT-SCHEMA"
+      ],
+      "native_contract": {
+        "contract_id": "native-netspout-agentic-activity",
+        "verification_state": "UNSUPPORTED",
+        "format": "No external native contract adopted",
+        "schema": null,
+        "transports": [],
+        "structural_fields": [],
+        "evidence_ids": []
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-netspout-agentic-activity",
+        "verification_state": "PARTIALLY_VERIFIED",
+        "input_mechanisms": [
+          "NetSpout direct structured ingestion"
+        ],
+        "integration_ids": [
+          "netspout-direct-structured-ingestion"
+        ],
+        "sourcetypes": [
+          {
+            "name": "netspout:agentic:activity",
+            "authority": "NETSPOUT_DEFINED",
+            "evidence_ids": [
+              "EVID-NETSPOUT-CONTRACT-SCHEMA"
+            ]
+          }
+        ],
+        "cim_mappings": [],
+        "evidence_ids": [
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-netspout-agentic-activity",
+        "verification_state": "VERIFIED",
+        "schema_classification": "NETSPOUT_SCHEMA",
+        "generator": null,
+        "validator": null,
+        "transports": [],
+        "modeled_fields": [
+          "actor",
+          "prompt",
+          "decision",
+          "tool",
+          "policy checkpoint",
+          "downstream effect"
+        ],
+        "structural_fields": [
+          "schema version",
+          "timestamp",
+          "activity type"
+        ],
+        "scenario_ids": [],
+        "generation_modes": [],
+        "runtime_status": "NOT AVAILABLE",
+        "maturity": "BETA",
+        "evidence_ids": [
+          "EVID-NETSPOUT-CONTRACT-SCHEMA"
+        ]
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [
+          "netspout_run_id",
+          "netspout_agent_id",
+          "netspout_tool_id"
+        ],
+        "portable_spl_status": "UNSUPPORTED"
+      },
+      "known_limitations": [
+        "This is explicitly a NETSPOUT-DEFINED schema.",
+        "No authoritative cross-vendor agent telemetry standard is claimed.",
+        "No runtime generator is available in this phase."
+      ]
+    },
+    {
+      "source_id": "windows-security-audit-research",
+      "vendor": "Microsoft",
+      "product": "Windows Security auditing",
+      "product_family": "Windows",
+      "domains": [
+        "secops",
+        "itops"
+      ],
+      "telemetry_source": "Windows Security Event Log",
+      "applicable_industries": [],
+      "verification_state": "RESEARCH_REQUIRED",
+      "provenance": [
+        "RESEARCH_REQUIRED"
+      ],
+      "evidence_ids": [],
+      "native_contract": {
+        "contract_id": "native-windows-security-audit-research",
+        "verification_state": "RESEARCH_REQUIRED",
+        "format": "RESEARCH REQUIRED",
+        "schema": null,
+        "transports": [],
+        "structural_fields": [],
+        "evidence_ids": []
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-windows-security-audit-research",
+        "verification_state": "RESEARCH_REQUIRED",
+        "input_mechanisms": [],
+        "integration_ids": [],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": []
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-windows-security-audit-research",
+        "verification_state": "RESEARCH_REQUIRED",
+        "schema_classification": "RESEARCH_REQUIRED",
+        "generator": null,
+        "validator": null,
+        "transports": [],
+        "modeled_fields": [],
+        "structural_fields": [],
+        "scenario_ids": [],
+        "generation_modes": [],
+        "runtime_status": "RESEARCH REQUIRED",
+        "maturity": "RESEARCH REQUIRED",
+        "evidence_ids": []
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [],
+        "portable_spl_status": "RESEARCH_REQUIRED"
+      },
+      "known_limitations": [
+        "Event identifiers, fields, Splunk integration, CIM, and scenario mappings are not promoted until separately researched."
+      ]
+    },
+    {
+      "source_id": "supply-chain-platform-unselected",
+      "vendor": "Not selected",
+      "product": "Supply chain platform",
+      "product_family": "Software Delivery",
+      "domains": [
+        "supply-chain"
+      ],
+      "telemetry_source": "Platform-specific audit and delivery telemetry",
+      "applicable_industries": [],
+      "verification_state": "UNSUPPORTED",
+      "provenance": [
+        "UNSUPPORTED_TELEMETRY"
+      ],
+      "evidence_ids": [],
+      "native_contract": {
+        "contract_id": "native-supply-chain-platform-unselected",
+        "verification_state": "UNSUPPORTED",
+        "format": "UNSUPPORTED TELEMETRY",
+        "schema": null,
+        "transports": [],
+        "structural_fields": [],
+        "evidence_ids": []
+      },
+      "splunk_contract": {
+        "contract_id": "splunk-supply-chain-platform-unselected",
+        "verification_state": "UNSUPPORTED",
+        "input_mechanisms": [],
+        "integration_ids": [],
+        "sourcetypes": [],
+        "cim_mappings": [],
+        "evidence_ids": []
+      },
+      "netspout_contract": {
+        "contract_id": "netspout-supply-chain-platform-unselected",
+        "verification_state": "UNSUPPORTED",
+        "schema_classification": "UNSUPPORTED_TELEMETRY",
+        "generator": null,
+        "validator": null,
+        "transports": [],
+        "modeled_fields": [],
+        "structural_fields": [],
+        "scenario_ids": [],
+        "generation_modes": [],
+        "runtime_status": "UNSUPPORTED",
+        "maturity": "PLANNED",
+        "evidence_ids": []
+      },
+      "spl_field_scope": {
+        "production_fields": [],
+        "netspout_only_fields": [],
+        "portable_spl_status": "UNSUPPORTED"
+      },
+      "known_limitations": [
+        "No source platform has been selected or researched.",
+        "No vendor event, sourcetype, integration, or schema is generated."
+      ]
+    }
+  ],
+  "source_manifests": [
+    {
+      "manifest_id": "manifest-openconfig-mdt-streaming",
+      "scenario_id": "openconfig_mdt_streaming",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "source_ids": [
+        "openconfig-gnmi-interfaces"
+      ],
+      "notes": "Connects the existing scenario to its native, Splunk, and NetSpout contracts without asserting successful Splunk observation."
+    },
+    {
+      "manifest_id": "manifest-service-provider-cisco",
+      "scenario_id": "service_provider_cisco",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "source_ids": [
+        "ietf-snmpv2c-ifmib"
+      ],
+      "notes": "The native SNMP contract is documented; current container runtime compatibility remains degraded."
+    },
+    {
+      "manifest_id": "manifest-pure-cisco-enterprise",
+      "scenario_id": "pure_cisco_enterprise",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "source_ids": [
+        "ietf-syslog-rfc5424",
+        "cisco-ios-syslog"
+      ],
+      "notes": "Only cataloged sources are included. Other scenario assumptions remain outside this manifest until researched."
+    }
+  ]
+}

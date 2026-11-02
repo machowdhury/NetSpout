@@ -378,16 +378,16 @@ class NativeGnmiServicer(gnmi_pb2_grpc.gNMIServicer):
 
     def Capabilities(
         self,
-        request: gnmi_pb2.CapabilitiesRequest,
+        request: gnmi_pb2.CapabilityRequest,
         context: grpc.ServicerContext,
-    ) -> gnmi_pb2.CapabilitiesResponse:
+    ) -> gnmi_pb2.CapabilityResponse:
         meta = self._authenticate(context)
         self.diagnostics.inc("capabilities_requests")
 
         snap = self._resolve_target_snapshot("", meta, context)
         vprof = get_vendor_profile(snap.vendor_profile)
 
-        resp = gnmi_pb2.CapabilitiesResponse(gNMI_version=GNMI_SEMVER)
+        resp = gnmi_pb2.CapabilityResponse(gNMI_version=GNMI_SEMVER)
         for enc_name in SUPPORTED_ENCODINGS:
             resp.supported_encodings.append( getattr(gnmi_pb2.Encoding, enc_name) )
 

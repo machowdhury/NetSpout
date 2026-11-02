@@ -1,0 +1,350 @@
+vendor_id,sourcetype,category,data_kind,protocol,status,generator,format_verified,ta_validated,indexed_evidence
+amazon_aws,aws:cloudfront:accesslogs,Cloud Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+amazon_aws,aws:cloudtrail,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+amazon_aws,aws:cloudtrail:lake,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+amazon_aws,aws:cloudwatchlogs:vpcflow,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+arista_eos,arista:flow:ipfix,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+atlassian,Confluence:audit log,SaaS Audit,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+barracuda,barracuda:waf:web_firewall,Application Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+beyondtrust,ccx:beyondinsight:passwordsafe,Privileged Access,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+bitdefender,bitdefender:gz,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+broadcom_symantec,bluecoat:proxysg:access:file,Web Security & Proxy,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_aci,cisco:dc:aci:class,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_aci,cisco:dc:aci:health,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+cisco_aci,cisco:dc:nexus9k,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_aci,cisco:dc:nexus9k:syslog,"Cisco DC (ACI, Nexus)",event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+cisco_asa,cisco:asa,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_asa,cisco:cloud_security:dns,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_asa,cisco:cloud_security:firewall,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_asa,cisco:cloud_security:proxy,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_catalyst,cisco:catalyst:clienthealth,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:threat_details,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:verbose,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_catalyst,cisco:catalyst:security:events,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+cisco_catalyst,cisco:catalyst:security:profile_signatures,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_catalyst,cisco:catalyst:threat:summary,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_catalyst,cisco:catalyst:threat:summary:legacy,Cisco Catalyst,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_duo,cisco:duo:administrator,Cisco Duo,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_duo,cisco:duo:remote:vpn,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ios,cisco:ios,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:ios:mdt,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+cisco_ios,cisco:ios:mdt:metric,Cisco Security & Telemetry,metric,hec,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ios,cisco:ios:syslog,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ios,cisco:isovalent,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:isovalent:processConnect,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:isovalent:processExec,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:nvm:flowdata:v2,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:secure_access:security_events_ravpn,Cisco Security & Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:sfw:estreamer,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_ios,cisco:thousandeyes:metric,Cisco Security & Telemetry,metric,hec,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ios,netspout:snmp:poll,Carrier / Core Routing Telemetry,event,snmp,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ios,netspout:snmp:trap,Carrier / Core Routing Telemetry,event,snmp,active,NATIVE_ENGINE,NO,NO,NO
+cisco_ise,cisco:ise:syslog,Cisco Security & Telemetry,event,syslog,active,NATIVE_ENGINE,NO,PARTIAL,NO
+cisco_meraki,cisco:meraki:syslog,Meraki,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_meraki,meraki:assurancealerts,Meraki,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_sdwan,cisco:sdwan:AAA-6-METHOD_LIST_STATE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:BGP-5-ADJCHANGE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:BGP-5-NBR_RESET,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:BGP-6-NEXTHOP,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:BGP_SESSION-5-ADJCHANGE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:DMI-5-AUTH_PASSED,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:DMI-5-CONFIG_I,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:DMI-5-SYNC_COMPLETE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:DMI-5-SYNC_NEEDED,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:DMI-5-SYNC_START,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:ENVIRONMENTAL-1-ALERT,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:EVENTLIB-3-CPUHOG,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:IOSXE-3-PLATFORM,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:LINEPROTO-5-UPDOWN,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:LINK-5-CHANGED,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:LINK-5-UPDOWN,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:MSDP-5-PEER_UPDOWN,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:NDBMAN-5-CONFIG_I,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:OSPF-5-ADJCHG,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:PLATFORM-4-ELEMENT_WARNING,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:SYS-5-CONFIG_P,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:access,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:linkhealth,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+cisco_sdwan,cisco:sdwan:ssetunnels,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:syslog,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:sytem:logs,Cisco SD-WAN,event,syslog,deprecated,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:utd:logs,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+cisco_sdwan,cisco:sdwan:utdhealth,Cisco SD-WAN,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+claroty,claroty:cef,OT & ICS Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+crowdstrike,crowdstrike:events:sensor,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+crushftp,crushftp:sessionlogs,File Transfer & Exfiltration Telemetry,event,syslog_rfc3164,active,NATIVE_ENGINE,YES,NO,YES
+cybereason,cybereason:malops,Endpoint Detection,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+darktrace,darktrace,Network Detection,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+docker,docker_events,Container Platform & DevOps,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+elastic,elasticsearch:json,Search Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+f5_bigip,f5:bigip:ltm,F5 BIG-IP,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+fortinet,fortinet:fortigate:utm,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+github,github:enterprise:audit,Source Control SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+gitlab,gitlab:audit:json,Source Control Self-Managed,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+google_cloud,gcp:audit,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+google_workspace,gsuite:gmail:bigquery,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+google_workspace,gws:reports:login,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+hashicorp,hashicorp_vault_audit_log,Cloud & Secrets Management,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+ibm_mq,ibm:mq:errorlog,Messaging Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+ibm_qradar,ibm:qradar:offense,SIEM & Incident Response,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+imperva,imperva:securesphere:cef,Database & Web Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+juniper_junos,juniper:junos,Juniper Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+kubernetes,kube:audit,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+kubernetes,kube:container:falco,Container & Orchestration Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+linux_infrastructure,auditd,Endpoint & Host Telemetry,event,syslog_rfc3164,active,NATIVE_ENGINE,YES,NO,YES
+linux_infrastructure,dhcpd,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+linux_infrastructure,linux_messages_syslog,Endpoint & Host Telemetry,event,syslog_rfc3164,active,NATIVE_ENGINE,YES,NO,YES
+linux_infrastructure,linux_secure,Endpoint & Host Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_365,MSExchange:Management,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_365,o365:graph:messagetrace,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_365,o365:management:activity,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_365,o365:reporting:messagetrace,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_azure,azure:monitor:aad,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_azure,azure:monitor:activity,Cloud Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:Microsoft-Windows-NTLM/Operational,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:Microsoft-Windows-PowerShell/Operational,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:Microsoft-Windows-Sysmon/Operational,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:Security,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,XmlWinEventLog:System,Endpoint & Host Telemetry,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,iis,Endpoint & Host Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+microsoft_windows,sysmon:linux,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+mikrotik,mikrotik:routeros,Carrier & Enterprise Routing,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+model_context_protocol,mcp:jsonrpc,Agentic AI Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+mongodb,mongodb:log,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+nginx_f5,nginx:access,Web Observability,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+nginx_f5,nginx:plus:access,Web Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+nokia_sr,nokia:sros:syslog,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+nozomi_networks,nozomi:universal_alert,OT & ICS Security,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+okta,OktaIM2:log,Identity & SaaS Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+ollama,ollama:server,Agentic AI Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+opentelemetry,opentelemetry:otlp,Enterprise Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+oracle,oracle:audit:text,Database Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+osquery,osquery:results,Endpoint & Host Telemetry,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+palo_alto,pan:system,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+palo_alto,pan:threat,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+palo_alto,pan:traffic,Palo Alto Networks,event,syslog,active,NATIVE_ENGINE,NO,NO,YES
+pfsense_netgate,pfsense:filterlog,Network Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+proofpoint,proofpoint_tap_siem,Email Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+qualys,qualys:activityLog,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+rapid7,rapid7:insightvm:asset:vulnerability_finding,Vulnerability Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+sailpoint,sailpoint_identitynow,Identity SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+sc4snmp,sc4snmp:event,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+sc4snmp,sc4snmp:metric,Enterprise Telemetry,metric,hec,active,NATIVE_ENGINE,NO,NO,YES
+sc4snmp,snmp:trap,Other,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+sentinelone,sentinelone:channel:threats,Endpoint Security SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+slack,slack:audit,Collaboration SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+splunk,nginx:plus:kv,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+splunk,postgresql:audit,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+suricata_oisf,suricata,Network Intrusion Detection,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+sysdig,SysdigSecureEvents,Cloud Runtime Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+tanium,tanium:discover:managed,Endpoint Management,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+tenable,tenable:io:audit_logs,Exposure Management SaaS,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+traefik,traefik:access:json,Networking & Observability,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+trellix_mcafee,trellix_epo:threat_events,Endpoint Security,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+veeam,veeam_vbr_syslog,Backup Infrastructure,event,hec,active,NATIVE_ENGINE,YES,NO,YES
+vmware_nsx,vmw-syslog,Enterprise Telemetry,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+wazuh,wazuh:alerts,Host IDS & XDR,event,syslog,active,NATIVE_ENGINE,YES,NO,YES
+zeek,bro:conn:json,Network Intrusion Detection,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+zscaler_zia,zscaler:zia,Zscaler SSE Infrastructure,event,syslog,active,NATIVE_ENGINE,NO,NO,NO
+zscaler_zia,zscalernss-web,Zscaler SSE Infrastructure,event,hec_event,active,NATIVE_ENGINE,YES,NO,YES
+a10_networks,a10:acos:cgnat,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+a10_networks,a10:acos:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+aruba_cx,aruba:cx:security,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+aruba_cx,aruba:cx:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+checkpoint,checkpoint:firewall,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+checkpoint,checkpoint:threat,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_aci,cisco:aci:fault,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_aci,cisco:aci:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_catalyst,cisco:catalyst:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_catalyst,cisco:mds:san:fc,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_duo,cisco:duo:auth,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_duo,cisco:duo:push:prompt,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_ios,openconfig:gnmi:telemetry,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_ios,opsec,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_ise,cisco:ise:nac:8021x,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_ise,cisco:ise:trustsec:sgt,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_meraki,meraki:appliance,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_meraki,meraki:security,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cisco_meraki,meraki:securityappliances,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+citrix_netscaler,citrix:netscaler:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+citrix_netscaler,citrix:netscaler:web,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+cloudflare,cloudflare:firewall,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+dell_os10,dell:os10:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+extreme_networks,extreme:exos:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+extreme_networks,extreme:voss:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+forcepoint,forcepoint:ngfw:alert,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+forcepoint,forcepoint:ngfw:traffic,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+fortinet,fortinet:fortigate:event,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+fortinet,fortinet:fortigate:traffic,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+huawei_vrp,huawei:vrp:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+huawei_vrp,huawei:vrp:traffic,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+netskope,netskope:alerts,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+netskope,netskope:events,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+nokia_sr,nokia:sr:syslog,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+palo_alto,pan:ble:iot:sensor,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+palo_alto,pan:config,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+radware,radware:cwaf:waf,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+radware,radware:defensepro:attack,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+sonicwall,sonicwall:firewall,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+sophos,sophos:xg:firewall,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+splunk,netapp:ontap:nas,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+vmware_nsx,vmware:nsx:audit,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+vmware_nsx,vmware:nsx:firewall,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+watchguard,watchguard:fireware:alarm,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+watchguard,watchguard:fireware:traffic,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+zscaler_zia,zscaler:zia:tunnel,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+zscaler_zia,zscaler:zia:web,Enterprise Telemetry,event,syslog,active,NONE,NO,NO,NO
+arista_eos,arista:eos,Arista Networks Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+arista_eos,arista:eos:syslog,Arista Networks Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+arista_eos,arista:telemetry:json,Arista Networks Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+aruba_cx,aruba,Aruba Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+aruba_cx,aruba:authmgr,Aruba Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+aruba_cx,aruba:stm,Aruba Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+aruba_cx,aruba:syslog,Aruba Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+checkpoint,checkpoint:cef,Check Point,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_aci,cisco:dc:aci:events,"Cisco DC (ACI, Nexus)",event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_aci,cisco:nexus,"Cisco DC (ACI, Nexus)",event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_asa,cisco:asa:syslog,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_asa,cisco:ftd:syslog,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:client,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:compliance,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:devicehealth,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:issue,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:networkhealth,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:allowed,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:counts,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:verbose:legacy,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:rogue:wired,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:script:heartbeat,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:security:awips_signatures,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:security:profile,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:security:rules,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:securityadvisory,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:threat:list,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:catalyst:threat:signatures,Cisco Catalyst,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:audit:logs,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:client,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:clienthealth,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:compliance,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:devicehealth,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:issue,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:networkhealth,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:securityadvisory,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_catalyst,cisco:dnac:site:topology,Cisco DNAC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:account,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:activity,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:authentication,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:authentication_v2,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:endpoint,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_duo,cisco:duo:user,Cisco Duo,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:advisories,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:alarms,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:auditrecords,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:compute,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:contracts,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:licenses,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:metrics,Cisco Intersight,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:networkelements,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:networkobjects,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:profiles,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_intersight,cisco:intersight:targets,Cisco Intersight,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:metrics,Cisco Security & Telemetry,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:nvm:flowdata,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:nxos,"Cisco DC (ACI, Nexus)",event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:nxos:syslog,"Cisco DC (ACI, Nexus)",event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:se,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:sfw:policy,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:thousandeyes:event,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco:thousandeyes:path-vis,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,cisco_syslog,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,datablaster:preflight,Other,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ios,datablaster:probe,Other,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ise,cisco:ise:radius:authz:policy,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ise,cisco:ise:radius:policyset,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ise,cisco:ise:tacacs:authz:policy,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_ise,cisco:ise:tacacs:policyset,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:accesspoints,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:airmarshal,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:appliancesdwanstatistics,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:appliancesdwanstatuses,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:devices,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:devicesavailabilitieschangehistory,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:organizationsecurity,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:summarytopappliancesbyutilization,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:summarytopclientsbyusage,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:summarytopdevicesbyusage,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:switchportsbyswitch,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_meraki,meraki:switchportsoverview,Meraki,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_sdwan,cisco:sdwan:sitehealth,Cisco SD-WAN,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_sdwan,cisco:sdwan:system:logs,Cisco SD-WAN,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cisco_sdwan,cisco:sdwan:tunnelhealth,Cisco SD-WAN,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cloudflare,cloudflare:json,Cloudflare Core & R2,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+cloudflare,cloudflare:r2:json,Cloudflare Core & R2,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+extrahop,extrahop:eda:alert,ExtraHop Performance Detection,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+extrahop,extrahop:eda:metrics,ExtraHop Performance Detection,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+f5_bigip,f5:bigip:syslog,F5 BIG-IP,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+fortinet,fgt_event,Fortinet FortiGate,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+fortinet,fgt_traffic,Fortinet FortiGate,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+fortinet,fortigate_event,Fortinet FortiGate,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+fortinet,fortigate_traffic,Fortinet FortiGate,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+fortinet,fortinet:fortigate,Fortinet FortiGate,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+juniper_junos,juniper:junos:syslog,Juniper Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+juniper_junos,juniper:syslog,Juniper Networks,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+netscout,netscout:omnis:alert,NetScout Omnis Core,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+netskope,netskope:json,Netskope SSE Framework,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+netskope,netskope:sse,Netskope SSE Framework,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nokia_sr,nokia:sros,Other,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixPC_disks,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc:syslog,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc:vms,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_alerts,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_cluster_performance,Nutanix PC,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_clusters,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_disk_performance,Nutanix PC,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_events,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_host_performance,Nutanix PC,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_hosts,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_prismCentrals,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_storage_containers,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_syslog,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_vm_performance,Nutanix PC,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_vms,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+nutanix,nutanixpc_volume_groups,Nutanix PC,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+radware,radware:ddos,Radware CSMS & CWAF,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+radware,radware:waf,Radware CSMS & CWAF,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+sc4snmp,kube:container:splunk-connect-for-snmp-traps,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+sc4snmp,kube:container:splunk-connect-for-snmp-worker-sender,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+sc4snmp,kube:container:splunk-connect-for-snmp-worker-trap,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+sophos,sophos:central:cef,Sophos Central,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,geo_tokens:generic,Other,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,httpevent,Cisco Security & Telemetry,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:calico-kube-controllers,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:calico-node,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:controller,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:coredns,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:hostpath-provisioner,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:install-cni,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:metrics,Kubernetes Containers,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:metrics-server,Kubernetes Containers,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:mibserver,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:mongodb,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:redis,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:speaker,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:container:upgrade-ipam,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:events,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,kube:object:pods,Kubernetes Containers,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+splunk,stream:netflow,stream-netflow,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+vmware_nsx,vmware:perf:cpu,vmware-esx-perf,metric,hec,active,SAMPLE_REPLAY,NO,NO,NO
+zscaler_zia,zscaler:tunnel,Zscaler SSE Infrastructure,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO
+zscaler_zia,zscaler:web,Zscaler SSE Infrastructure,event,syslog,active,SAMPLE_REPLAY,NO,NO,NO

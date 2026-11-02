@@ -1,0 +1,130 @@
+{
+ "run_id": "pf-wave2-rawfidelity-1793032345",
+ "session": "wave-2 workstream D (2026-10-26)",
+ "index": "idx_ta_ise_test",
+ "posted": 17,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "w2:estreamer",
+   "sourcetype": "cisco:sfw:estreamer",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:nvmv2",
+   "sourcetype": "cisco:nvm:flowdata:v2",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:ollama",
+   "sourcetype": "ollama:server",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:mcp:call",
+   "sourcetype": "mcp:jsonrpc",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:mcp:done",
+   "sourcetype": "mcp:jsonrpc",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:gws",
+   "sourcetype": "gws:reports:login",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:azure:act",
+   "sourcetype": "azure:monitor:activity",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:vpcflow",
+   "sourcetype": "aws:cloudwatchlogs:vpcflow",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:linuxm",
+   "sourcetype": "linux_messages_syslog",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:defender",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:ntlm",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:kube-audit",
+   "sourcetype": "kube:audit",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:falco",
+   "sourcetype": "kube:container:falco",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w2:crushftp",
+   "sourcetype": "crushftp:sessionlogs",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w1x:4688",
+   "sourcetype": "XmlWinEventLog:Security",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w1x:sysmon7",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w1x:ps4105",
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  }
+ ],
+ "passes": 17,
+ "distinct_sourcetypes": [
+  "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+  "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+  "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+  "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+  "XmlWinEventLog:Security",
+  "aws:cloudwatchlogs:vpcflow",
+  "azure:monitor:activity",
+  "cisco:nvm:flowdata:v2",
+  "cisco:sfw:estreamer",
+  "crushftp:sessionlogs",
+  "gws:reports:login",
+  "kube:audit",
+  "kube:container:falco",
+  "linux_messages_syslog",
+  "mcp:jsonrpc",
+  "ollama:server"
+ ]
+}

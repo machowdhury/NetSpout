@@ -1,0 +1,187 @@
+{
+ "network_01_campus_link": {
+  "Metric scoreca": 5,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_02_vlan_trunk": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_03_stp_storm": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_04_wan_brownout": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_05_dual_isp": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_06_bgp_flap": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_07_ospf_adjacency": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_08_firewall_policy": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_09_ddos_flood": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_10_dns_failure": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_11_dhcp_exhaustion": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_12_dc_congestion": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_13_mtu_pmtud": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_14_wireless_outage": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_15_device_resources": {
+  "Metric scoreca": 4,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_16_retail_uplink": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_17_hospital_mac_auth": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_18_payment_deny": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_19_ips_service": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_20_backend_link": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_21_partial_pool": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_22_authentication_storm": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_23_containment_request": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "network_24_policy_disagreement": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_25_mpls_recovery": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_26_maintenance": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "network_27_stale_sessions": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "telco_01_ran_cell": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "telco_02_registration_auth": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_03_slice_sla": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_04_ims_volte": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "telco_05_mobile_transport": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_06_broadband_cpe": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_07_sdwan_service": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_08_roaming_mobility": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 4,
+  "What happened,": 10
+ },
+ "telco_09_core_user_plane": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ },
+ "telco_10_cross_layer": {
+  "Metric scoreca": 3,
+  "Metric shapes:": 5,
+  "What happened,": 10
+ }
+}

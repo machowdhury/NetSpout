@@ -1,0 +1,149 @@
+{
+ "generated_utc": "2026-10-31T12:13:47.600259+00:00",
+ "collector": "GoFlow2 v2.2.5 + repo forwarder (isolated Docker lab)",
+ "scenarios": {
+  "SEC-P9-A-TRAFFIC-FLOOD": {
+   "run_id": "1e766a2f-2167-4147-8a25-3941dc22f679",
+   "generated": "COMPLETED",
+   "observed_status": "OBSERVED",
+   "stages": {
+    "GENERATED": "PROVEN",
+    "SPLUNK_OBSERVED": "PROVEN",
+    "SOURCETYPE_VERIFIED": "PROVEN",
+    "FIELDS_VERIFIED": "PROVEN"
+   },
+   "collector": {
+    "flows_read_delta": 11,
+    "flows_forwarded_delta": 11,
+    "forward_failures": 0
+   },
+   "indexed_by_sourcetype": {
+    "netflow:collector": 11
+   },
+   "indexed_total": 11,
+   "decoded": {
+    "flows": "11",
+    "sources": "1",
+    "dests": "1",
+    "protos": "1",
+    "bytes": "160880"
+   },
+   "ok": true
+  },
+  "SEC-P9-C-BEACONING": {
+   "run_id": "4c4c33dc-0191-43fe-9f0e-8898edb448b8",
+   "generated": "COMPLETED",
+   "observed_status": "OBSERVED",
+   "stages": {
+    "GENERATED": "PROVEN",
+    "SPLUNK_OBSERVED": "PROVEN",
+    "SOURCETYPE_VERIFIED": "PROVEN",
+    "FIELDS_VERIFIED": "PROVEN"
+   },
+   "collector": {
+    "flows_read_delta": 7,
+    "flows_forwarded_delta": 7,
+    "forward_failures": 0
+   },
+   "indexed_by_sourcetype": {
+    "netflow:collector": 7,
+    "netspout:dns:wire": 4
+   },
+   "indexed_total": 11,
+   "decoded": {
+    "flows": "11",
+    "sources": "1",
+    "dests": "1",
+    "protos": "1",
+    "bytes": "5440"
+   },
+   "ok": true
+  },
+  "SEC-P9-D-INTERNAL-RECON": {
+   "run_id": "a07086ef-2881-4bff-a3fe-e74ede8008bd",
+   "generated": "COMPLETED",
+   "observed_status": "OBSERVED",
+   "stages": {
+    "GENERATED": "PROVEN",
+    "SPLUNK_OBSERVED": "PROVEN",
+    "SOURCETYPE_VERIFIED": "PROVEN",
+    "FIELDS_VERIFIED": "PROVEN"
+   },
+   "collector": {
+    "flows_read_delta": 11,
+    "flows_forwarded_delta": 11,
+    "forward_failures": 0
+   },
+   "indexed_by_sourcetype": {
+    "netflow:collector": 11
+   },
+   "indexed_total": 11,
+   "decoded": {
+    "flows": "11",
+    "sources": "1",
+    "dests": "9",
+    "protos": "1",
+    "bytes": "3840"
+   },
+   "ok": true
+  },
+  "SEC-P9-E-DNS-TUNNEL": {
+   "run_id": "889b5be5-ed5a-4c5c-b8ac-4ffd431bb98b",
+   "generated": "COMPLETED",
+   "observed_status": "OBSERVED",
+   "stages": {
+    "GENERATED": "PROVEN",
+    "SPLUNK_OBSERVED": "PROVEN",
+    "SOURCETYPE_VERIFIED": "PROVEN",
+    "FIELDS_VERIFIED": "PROVEN"
+   },
+   "collector": {
+    "flows_read_delta": 9,
+    "flows_forwarded_delta": 9,
+    "forward_failures": 0
+   },
+   "indexed_by_sourcetype": {
+    "netflow:collector": 9,
+    "netspout:dns:wire": 9
+   },
+   "indexed_total": 18,
+   "decoded": {
+    "flows": "18",
+    "sources": "1",
+    "dests": "2",
+    "protos": "2",
+    "bytes": "3975"
+   },
+   "ok": true
+  },
+  "SEC-P9-F-CROSS-SOURCE": {
+   "run_id": "d8235ad3-28d1-4fb1-b51e-98400df7ce32",
+   "generated": "COMPLETED",
+   "observed_status": "OBSERVED",
+   "stages": {
+    "GENERATED": "PROVEN",
+    "SPLUNK_OBSERVED": "PROVEN",
+    "SOURCETYPE_VERIFIED": "PROVEN",
+    "FIELDS_VERIFIED": "PROVEN"
+   },
+   "collector": {
+    "flows_read_delta": 11,
+    "flows_forwarded_delta": 11,
+    "forward_failures": 0
+   },
+   "indexed_by_sourcetype": {
+    "netflow:collector": 11,
+    "netspout:dns:wire": 4
+   },
+   "indexed_total": 15,
+   "decoded": {
+    "flows": "15",
+    "sources": "1",
+    "dests": "5",
+    "protos": "1",
+    "bytes": "5920"
+   },
+   "ok": true
+  }
+ }
+}

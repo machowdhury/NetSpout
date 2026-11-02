@@ -35,18 +35,25 @@ class TestGate5UX(unittest.TestCase):
         self.assertIn("./assets/index-", content)
 
     def test_02_canonical_navigation(self):
-        """2. Verify canonical 3-mode navigation: Workflow (5-step), Advanced (Canvas), Operations."""
+        """2. Verify unified navigation plus retained legacy workflow/canvas controls."""
         topbar_path = os.path.join(FRONTEND_DIR, "src/components/TopBar.tsx")
         app_path = os.path.join(FRONTEND_DIR, "src/App.tsx")
+        navigation_path = os.path.join(FRONTEND_DIR, "src/app/navigation.ts")
         with open(topbar_path) as f:
             tb = f.read()
         with open(app_path) as f:
             app = f.read()
+        with open(navigation_path) as f:
+            navigation = f.read()
         self.assertIn("Use Cases (5-Step)", tb)
         self.assertIn("Canvas Orchestrator", tb)
         self.assertIn("Operations", tb)
-        self.assertIn("appMode === 'workflow'", app)
-        self.assertIn("appMode === 'operations'", app)
+        self.assertIn("<AppShell", app)
+        self.assertIn("'/generate/scenarios'", app)
+        self.assertIn("'/build/scenario-builder'", app)
+        self.assertIn("Quick Generate", navigation)
+        self.assertIn("Pipeline Health", navigation)
+        self.assertIn("Security Intelligence", navigation)
 
     def test_03_use_cases_from_canonical_metadata(self):
         """3. Verify use cases load from canonical metadata with expected categories."""
@@ -100,20 +107,23 @@ class TestGate5UX(unittest.TestCase):
     def test_07_run_starts(self):
         """7. Verify scenario run starts and returns run_id in NS-YYYYMMDD-xxxxxxxx format."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="bgp_route_leak", time_mode="TEST", seed=101)
+        req = ScenarioRunRequest(scenario_id="service_provider_cisco", time_mode="TEST", seed=101)
         manifest = self.runner.run_scenario(req)
         logs = self.runner.get_run_logs(manifest.run_id)
         self.assertTrue(manifest.run_id.startswith("NS-"))
-        self.assertEqual(manifest.scenario_id, "bgp_route_leak")
+        self.assertEqual(manifest.scenario_id, "service_provider_cisco")
         self.assertGreater(len(logs), 0)
 
     def test_08_phase_updates(self):
-        """8. Verify all 9 phases executed in chronological order."""
+        """8. Verify contracted phases execute in canonical lifecycle order."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="bgp_route_leak", time_mode="TEST", seed=102)
+        req = ScenarioRunRequest(scenario_id="service_provider_cisco", time_mode="TEST", seed=102)
         manifest = self.runner.run_scenario(req)
-        expected = ["INITIALIZE", "BASELINE", "DEGRADE", "FAULT", "PROPAGATE", "FAILOVER", "RECOVER", "VALIDATE", "COMPLETE"]
+        from netspout_core.catalog import NetSpoutCatalog
+        expected = list(dict.fromkeys(["INITIALIZE"] + [p.phase.value for p in NetSpoutCatalog().get_scenario_contract("service_provider_cisco").phases] + ["VALIDATE", "COMPLETE"]))
+        lifecycle = ["INITIALIZE", "BASELINE", "DEGRADE", "FAULT", "PROPAGATE", "FAILOVER", "RECOVER", "VALIDATE", "COMPLETE"]
         self.assertEqual(manifest.phases_executed, expected)
+        self.assertEqual(manifest.phases_executed, sorted(manifest.phases_executed, key=lifecycle.index))
 
     def test_09_run_stops(self):
         """9. Verify cooperative scenario stop mechanism."""
@@ -128,16 +138,17 @@ class TestGate5UX(unittest.TestCase):
     def test_10_manifest_displays(self):
         """10. Verify run manifest contains complete audit metadata and ground truth."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="ransomware_lateral", time_mode="TEST", seed=103)
+        req = ScenarioRunRequest(scenario_id="mixed_edge_breach", time_mode="TEST", seed=103)
         manifest = self.runner.run_scenario(req)
         self.assertIsNotNone(manifest.start_time)
         self.assertIsNotNone(manifest.end_time)
-        self.assertGreaterEqual(len(manifest.ground_truth_records), 9)
+        self.assertEqual(len(manifest.ground_truth_records), len(manifest.phases_executed))
+        self.assertGreaterEqual(len(manifest.ground_truth_records), 7)
 
     def test_11_validation_displays(self):
         """11. Verify validation engine outputs rule-by-rule PASS/FAIL status."""
         from netspout_core.models import ScenarioRunRequest
-        req = ScenarioRunRequest(scenario_id="ddos_syn_flood", time_mode="TEST", seed=104)
+        req = ScenarioRunRequest(scenario_id="ddos_attack", time_mode="TEST", seed=104)
         manifest = self.runner.run_scenario(req)
         self.assertIn(manifest.overall_validation, ["PASS", "FAIL"])
         for vr in manifest.validation_results:
@@ -203,10 +214,14 @@ class TestGate5UX(unittest.TestCase):
 
     def test_18_no_primary_horizontal_overflow(self):
         """18. Verify viewport layout uses overflow-hidden and constrained flex bounds."""
-        app_path = os.path.join(FRONTEND_DIR, "src/App.tsx")
-        with open(app_path) as f:
+        styles_path = os.path.join(FRONTEND_DIR, "src/index.css")
+        with open(styles_path) as f:
             content = f.read()
-        self.assertIn("h-screen w-screen overflow-hidden", content)
+        self.assertIn(".product-shell", content)
+        self.assertIn("width: 100vw", content)
+        self.assertIn("height: 100vh", content)
+        self.assertIn("overflow: hidden", content)
+        self.assertIn("minmax(0, 1fr)", content)
 
     def test_19_deprecated_sourcetype_aliases_hidden(self):
         """19. Verify deprecated aliases from aliases.json are not rendered as primary use cases."""

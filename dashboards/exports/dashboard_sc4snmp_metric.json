@@ -1,0 +1,85 @@
+{
+  "title": "Sc4Snmp Metric Monitor",
+  "description": "Real-time monitoring dashboard for sc4snmp:metric",
+  "visualizations": {
+    "timeseries_viz": {
+      "type": "splunk.line",
+      "title": "Metric Trends",
+      "dataSource": "default",
+      "options": {
+        "query": "index=cisco_mdt_metrics sourcetype=\"sc4snmp:metric\" | timechart span=5m avg(_value) by metric_name",
+        "yAxis": {
+          "title": "Value"
+        }
+      }
+    },
+    "current_value": {
+      "type": "splunk.singlevalue",
+      "title": "Current Status",
+      "dataSource": "default",
+      "options": {
+        "query": "index=cisco_mdt_metrics sourcetype=\"sc4snmp:metric\" | stats latest(_value) as latest_value",
+        "field": "latest_value",
+        "title": "Latest Value"
+      }
+    }
+  },
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time Range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-1h,now"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "default": {
+        "type": "ds.search",
+        "options": {
+          "query": "index=* sourcetype=\"sc4snmp:metric\"",
+          "timeRange": {
+            "type": "relative",
+            "value": "-24h@h"
+          }
+        }
+      }
+    }
+  },
+  "dataSources": {},
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "display": "auto-scale",
+      "width": 1200,
+      "height": 640
+    },
+    "globalInputs": [
+      "input_global_time"
+    ],
+    "structure": [
+      {
+        "item": "timeseries_viz",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 580,
+          "h": 300
+        }
+      },
+      {
+        "item": "current_value",
+        "type": "block",
+        "position": {
+          "x": 600,
+          "y": 0,
+          "w": 580,
+          "h": 300
+        }
+      }
+    ]
+  }
+}

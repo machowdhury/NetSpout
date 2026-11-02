@@ -1,0 +1,3173 @@
+{
+ "dashboards": 138,
+ "distinct_viz_signatures": 5,
+ "largest_signature_groups": [
+  {
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "count": 41
+  },
+  {
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "count": 37
+  },
+  {
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "count": 35
+  },
+  {
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "count": 20
+  },
+  {
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "count": 5
+  }
+ ],
+ "distinct_layout_tab_families": 2,
+ "viz_type_totals": {
+  "markdown": 138,
+  "singlevalue": 138,
+  "column": 138,
+  "bar": 138,
+  "table": 138,
+  "line": 97
+ },
+ "no_drilldown": [],
+ "single_viz_kind": [],
+ "few_panels": [],
+ "rows": [
+  {
+   "view": "pf_AI-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_AI-002",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_AI-003",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_AI-004",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_AI-005",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_AI-006",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_C100-CRI-002",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_C100-DC-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_C100-ENT-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_C100-SEC-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_P12-XD-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_P12-XD-002",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SC-001",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SC-002",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SC-003",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SC-004",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SC-005",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-A-TRAFFIC-FLOOD",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-B-DNS-ANOMALY",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-C-BEACONING",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-D-INTERNAL-RECON",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-E-DNS-TUNNEL",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_SEC-P9-F-CROSS-SOURCE",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_arch_lan_campus_access",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_arch_man_carrier_ring",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_arch_vpn_remote_workforce",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_arch_wlan_meraki_catalyst",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_cisco_aci_microburst",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 4,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 18,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_cisco_campus_rogue",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_cisco_sdwan_brownout",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ddos_attack",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_aero_defense_endpoint_c2",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_agri_edge_gateway_health",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_bank_account_takeover_resilience",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_bank_payments_edge_defense",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_edu_campus_identity_and_collab",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_energy_scada_proxy_intrusion",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_energy_substation_edge_observation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_gov_agency_mail_exfiltration",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_gov_citizen_identity_attack",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_health_clinical_network_edge",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_health_ehr_ransomware_readiness",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_hospitality_guest_network_defense",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_insurance_claims_platform_audit",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_insurance_underwriting_exposure",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_legal_matter_data_exfiltration",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_media_content_delivery_exfil",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_mfg_it_ot_convergence",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_mfg_plant_network_health",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_nonprofit_donor_platform_attack",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_realestate_building_exposure",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_retail_ecommerce_cloud_recon",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_retail_pos_edge_defense",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_saas_platform_runtime_attack",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_telco_access_and_wireless_health",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_telco_change_induced_outage",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ind_transport_fleet_network_change",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_mixed_backbone_optical",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_mixed_edge_breach",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_mixed_sase_degradation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_network_01_campus_link",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_02_vlan_trunk",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_03_stp_storm",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_04_wan_brownout",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_05_dual_isp",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_06_bgp_flap",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_07_ospf_adjacency",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_08_firewall_policy",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_09_ddos_flood",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_10_dns_failure",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_11_dhcp_exhaustion",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_12_dc_congestion",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_13_mtu_pmtud",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_14_wireless_outage",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_15_device_resources",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_16_retail_uplink",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_17_hospital_mac_auth",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_18_payment_deny",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_19_ips_service",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_20_backend_link",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_21_partial_pool",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_22_authentication_storm",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_23_containment_request",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_24_policy_disagreement",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_25_mpls_recovery",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_26_maintenance",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_27_stale_sessions",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_network_security_correlation",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 4,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 18,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_openconfig_mdt_streaming",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 4,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 18,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_paloalto_threat_investigation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_payment_processing_degradation",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 4,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 18,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_rfc5424-link-state-lifecycle",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_agentic_ai_mcp_runtime_hybrid",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_cloud_control_plane_activity",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_edr_and_cloud_activity",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_linux_credential_access",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_web_exploitation_recordings",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_windows_endpoint_process_chain",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_rp_workload_sysmon_ebpf_hybrid",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_service_provider_cisco",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 4,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 18,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_sql_injection",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_telco_01_ran_cell",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_02_registration_auth",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_03_slice_sla",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_04_ims_volte",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_05_mobile_transport",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_06_broadband_cpe",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_07_sdwan_service",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_08_roaming_mobility",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_09_core_user_plane",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_telco_10_cross_layer",
+   "panels": 20,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 3,
+    "bar": 1,
+    "table": 5,
+    "line": 2
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 6,
+   "datasources": 19,
+   "uses_mstats": true,
+   "signature": "bar|column|column|column|line|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 5
+  },
+  {
+   "view": "pf_test-correlated-interface-degradation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub1_ot_proxy_host_hunt",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub2_cloud_identity_mail_hunt",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub2_database_backup_integrity",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub2_ot_edge_routing_observation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub3_database_message_audit",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub3_identity_runtime_audit",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub3_multivendor_edge_observation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub4_endpoint_threat_pipeline",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub4_exposure_infra_logging",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub4_saas_collaboration_audit",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub5_cisco_change_induced_outage",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub5_cisco_nac_radius_outage",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub5_cisco_platform_health_degradation",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub6_catalyst_wireless_rogue_threat",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_ub6_sdwan_utd_threat_pipeline",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_agentic_ai_exfil_attempt",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_aws_recon_escalation",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_bigip_openconfig_itops",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_c2_callback_detection",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_cloud_identity_sso_hunt",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_k8s_container_escape",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_linux_auth_anomaly",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave2_ws_credential_compromise_chain",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave3_cloudmail_exfil",
+   "panels": 19,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 5,
+    "line": 1
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|line|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave3_ebpf_workload_hunt",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 5,
+    "singlevalue": 6,
+    "column": 1,
+    "bar": 1,
+    "table": 4
+   },
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 14,
+   "uses_mstats": false,
+   "signature": "bar|column|markdown|markdown|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  },
+  {
+   "view": "pf_wave3_vsphere_hostpath_triage",
+   "panels": 17,
+   "viz_mix": {
+    "markdown": 3,
+    "singlevalue": 6,
+    "column": 2,
+    "bar": 1,
+    "table": 4,
+    "line": 1
+   },
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "drilldowns": 5,
+   "datasources": 16,
+   "uses_mstats": false,
+   "signature": "bar|column|column|line|markdown|markdown|markdown|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|singlevalue|table|table|table|table",
+   "layout_type": null,
+   "n_inputs": 4
+  }
+ ]
+}

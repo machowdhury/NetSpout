@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark">
-  <label>Network Data Blaster - Analytics Overview &amp; Ingestion Telemetry</label>
+  <label>NetSpout PulseForge - Analytics Overview &amp; Ingestion Telemetry</label>
   <description>Real-time analytics overview tracking multi-vendor log and metric streams ingested across enterprise network, security, wireless, and fabric tiers.</description>
   
   <fieldset submitButton="false" autoRun="true">

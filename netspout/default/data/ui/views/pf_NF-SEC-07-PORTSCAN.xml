@@ -1,0 +1,527 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Network reconnaissance and port scanning</label>
+  <description>Which hosts touch many ports or many destinations with tiny flows, and how does that footprint grow over time?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Network reconnaissance and port scanning",
+  "description": "Which hosts touch many ports or many destinations with tiny flows, and how does that footprint grow over time?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_min_hosts": {
+      "type": "input.text",
+      "title": "Suspect if distinct destinations ≥",
+      "options": {
+        "token": "min_hosts",
+        "defaultValue": "20"
+      }
+    },
+    "input_min_ports": {
+      "type": "input.text",
+      "title": "…or distinct ports ≥",
+      "options": {
+        "token": "min_ports",
+        "defaultValue": "20"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · SEC-07\n**Network reconnaissance and port scanning**  ·  `NF-SEC-07-PORTSCAN`  ·  MITRE ATT&CK T1046  ·  extends `SEC-P9-D-INTERNAL-RECON`\n\n**Question:** Which hosts touch many ports or many destinations with tiny flows, and how does that footprint grow over time?\n\n**Limits:** Connection attempts do not prove access, and approved vulnerability scanners and monitors look the same in flow data.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.scatter",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off",
+        "xAxisTitleText": "distinct destination hosts",
+        "yAxisTitleText": "distinct destination ports"
+      },
+      "title": "Footprint per source: distinct destinations (x) vs distinct ports (y); one dot per source",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 8
+      },
+      "title": "Suspected scanning sources (click a row for the flows)",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" src=\"$row.src.value$\" | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_4": {
+      "type": "splunk.line",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "yAxisTitleText": "distinct hosts"
+      },
+      "title": "Cumulative distinct destination hosts per suspected source",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.line",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "yAxisTitleText": "distinct ports"
+      },
+      "title": "Cumulative distinct ports per suspected source",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Most probed ports (suspected sources)",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Suspected sources",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1
+      },
+      "title": "Avg packets per scan flow",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Avg bytes per scan flow",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true
+    },
+    "viz_10": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Investigation table: flows from suspected sources",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true
+    },
+    "viz_11": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 5
+      },
+      "title": "Suspected-source SYN profile",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true
+    },
+    "viz_12": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-SEC-07-PORTSCAN`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, dest_port, packets, bytes, tcp_flags. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Footprint per source: distinct destinations (x) vs distinct ports (y); one dot per source",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as unique_ports dc(dest) as unique_hosts count as flows avg(packets) as avg_pkts avg(bytes) as avg_bytes by src | table unique_hosts unique_ports"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Suspected scanning sources (click a row for the flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as unique_ports dc(dest) as unique_hosts count as flows avg(packets) as avg_pkts avg(bytes) as avg_bytes by src | where unique_ports>=$min_ports$ OR unique_hosts>=$min_hosts$ | eval avg_pkts=round(avg_pkts,1), avg_bytes=round(avg_bytes,0) | sort - unique_ports | table src unique_hosts unique_ports flows avg_pkts avg_bytes"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Cumulative distinct destination hosts per suspected source",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | sort 0 _time | streamstats dc(dest) as hosts by src | bin _time span=10s | chart max(hosts) over _time by src limit=6 | makecontinuous _time span=10s | filldown"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Cumulative distinct ports per suspected source",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | sort 0 _time | streamstats dc(dest_port) as ports by src | bin _time span=10s | chart max(ports) over _time by src limit=6 | makecontinuous _time span=10s | filldown"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Most probed ports (suspected sources)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | stats count by dest_port | sort - count | head 12 | eval dest_port=\"port \".dest_port"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Suspected sources",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as unique_ports dc(dest) as unique_hosts count as flows avg(packets) as avg_pkts avg(bytes) as avg_bytes by src | where unique_ports>=$min_ports$ OR unique_hosts>=$min_hosts$ | stats count as v | fields v"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Avg packets per scan flow",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | stats avg(packets) as v | fields v"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Avg bytes per scan flow",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | stats avg(bytes) as v | fields v"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Investigation table: flows from suspected sources",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | sort 0 _time | head 300 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Suspected-source SYN profile",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" netspout_run_id=\"$run_tok$\" | stats dc(dest_port) as p dc(dest) as h by src | where p>=$min_ports$ OR h>=$min_hosts$ | fields src ] | stats count as flows count(eval(tcp_flags=2)) as syn_only count(eval(packets<=2)) as tiny by src | eval syn_only_pct=round(100*syn_only/flows,1)"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-SEC-07-PORTSCAN\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_min_hosts",
+      "input_min_ports"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1380,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 820,
+              "h": 400
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 860,
+              "y": 134,
+              "w": 580,
+              "h": 400
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 554,
+              "w": 700,
+              "h": 270
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 554,
+              "w": 700,
+              "h": 270
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 844,
+              "w": 480,
+              "h": 140
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 520,
+              "y": 844,
+              "w": 240,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 780,
+              "y": 844,
+              "w": 240,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 1040,
+              "y": 844,
+              "w": 400,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 520,
+              "y": 994,
+              "w": 920,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 994,
+              "w": 480,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_12",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1264,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Network reconnaissance and port scanning",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

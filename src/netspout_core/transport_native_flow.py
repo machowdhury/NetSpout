@@ -8,7 +8,7 @@ Conforms to Gate 11 Architecture Section 4, 10, 11 and Threat Model.
 import logging
 import socket
 import time
-from typing import List, Tuple, Optional
+from typing import Any, List, Optional, Tuple
 
 from netspout_core.models import FlowRecord, TransportResult, TransportErrorType
 from netspout_core.exporter_session import ExporterSession

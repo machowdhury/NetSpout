@@ -27,7 +27,9 @@ from typing import Any, Dict, List, Optional, Tuple
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(REPO_ROOT, "src")
 BACKEND_DIR = os.path.join(REPO_ROOT, "backend")
-EVIDENCE_DIR = os.path.join(REPO_ROOT, "docs", "acceptance", "evidence", "gate14b")
+from artifact_isolation import artifact_dir
+
+EVIDENCE_DIR = str(artifact_dir("gate14b", "evidence"))
 
 for p in [SRC_DIR, BACKEND_DIR]:
     if p not in sys.path:
@@ -40,8 +42,17 @@ logger = logging.getLogger("gate14b_certifier")
 
 SPLUNK_HEC_URL = os.environ.get("SPLUNK_HEC_URL", "https://127.0.0.1:8088/services/collector")
 SPLUNK_REST_URL = os.environ.get("SPLUNK_REST_URL", "https://127.0.0.1:8089")
-SPLUNK_AUTH = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
-HEC_TOKEN = "00000000-0000-0000-0000-000000000000"
+SPLUNK_USERNAME = os.environ.get("SPLUNK_USERNAME", "")
+SPLUNK_PASSWORD = os.environ.get("SPLUNK_PASSWORD", "")
+SPLUNK_AUTH = (
+    "Basic "
+    + base64.b64encode(
+        f"{SPLUNK_USERNAME}:{SPLUNK_PASSWORD}".encode("utf-8")
+    ).decode("ascii")
+    if SPLUNK_USERNAME and SPLUNK_PASSWORD
+    else ""
+)
+HEC_TOKEN = os.environ.get("SPLUNK_HEC_TOKEN", "")
 FAST_SIM_URL = "http://127.0.0.1:8081"
 OTEL_URL = "http://127.0.0.1:4318"
 

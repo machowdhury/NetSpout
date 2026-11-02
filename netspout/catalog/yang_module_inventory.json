@@ -1,0 +1,101 @@
+{
+ "artifact": "PulseForge YANG module inventory (Workstream C)",
+ "generated_at": "2026-10-27",
+ "generator": "scripts/build_yang_module_inventory.py",
+ "authorities": {
+  "yangmodels_yang": {
+   "repo": "YangModels/yang",
+   "pinned_commit": "7cb93ea27b7ee86ad3dd9f82998146aa838d13b8",
+   "pinned_tree": "5458ceade6e510bb9968d88bf17e9dfb904f069a",
+   "api_calls_consumed": 5,
+   "role": "Vendor\u2011specific YANG module repository; does NOT contain OpenConfig models (they are external)."
+  }
+ },
+ "vendor_directory_presence": {
+  "cisco": {
+   "tree_sha": "b9bb2f40d6d33a2fd2ba9cad3941853c5d7a2168",
+   "type": "tree",
+   "expanded": false,
+   "note": "Submodule indicates the vendor YANG files are tracked in a separate repository; tree indicates they are in\u2011repo."
+  },
+  "juniper": {
+   "tree_sha": "96ad7badc2603aa1033476103aeded2632db9a9a",
+   "type": "submodule",
+   "expanded": false,
+   "note": "Submodule indicates the vendor YANG files are tracked in a separate repository; tree indicates they are in\u2011repo."
+  },
+  "arista": {
+   "tree_sha": null,
+   "type": "tree",
+   "expanded": false,
+   "note": "Submodule indicates the vendor YANG files are tracked in a separate repository; tree indicates they are in\u2011repo."
+  },
+  "huawei": {
+   "tree_sha": "1a069483f2ba7213aa4858f799220734ac3eb0f2",
+   "type": "submodule",
+   "expanded": false,
+   "note": "Submodule indicates the vendor YANG files are tracked in a separate repository; tree indicates they are in\u2011repo."
+  },
+  "nokia": {
+   "tree_sha": "31719c2e9b9b1d990821cab56012b1da581dbeaa",
+   "type": "submodule",
+   "expanded": false,
+   "note": "Submodule indicates the vendor YANG files are tracked in a separate repository; tree indicates they are in\u2011repo."
+  }
+ },
+ "openconfig_modules_referenced": [
+  {
+   "name": "openconfig-interfaces",
+   "prefix": "openconfig-interfaces",
+   "note": "Referenced in scenario `openconfig_mdt_streaming`; YANG models are external (OpenConfig/public repo).",
+   "exists_in_yangmodels": false
+  },
+  {
+   "name": "openconfig-qos",
+   "prefix": "openconfig-qos",
+   "note": "Referenced in scenario `openconfig_mdt_streaming`; YANG models external.",
+   "exists_in_yangmodels": false
+  },
+  {
+   "name": "openconfig-gnmi-interfaces",
+   "prefix": "openconfig-gnmi-interfaces",
+   "note": "Synthetic module used in PulseForge for gNMI\u2011interface telemetry; not a standard OpenConfig YANG module.",
+   "exists_in_yangmodels": false
+  }
+ ],
+ "gnmi_path_mapping": [
+  {
+   "path": "/interfaces/interface/state/counters",
+   "module": "openconfig-interfaces",
+   "source": "scenario_runner.py",
+   "exists_in_yangmodels": false,
+   "note": "OpenConfig interfaces state counters."
+  },
+  {
+   "path": "/qos/interfaces/interface/output/queues",
+   "module": "openconfig-qos",
+   "source": "scenario_runner.py",
+   "exists_in_yangmodels": false,
+   "note": "OpenConfig QoS queue statistics."
+  },
+  {
+   "path": "/openconfig-fabricated/nonexistent/aci/dme/state",
+   "module": null,
+   "source": "scenario_runner.py",
+   "exists_in_yangmodels": false,
+   "note": "Fabricated path for testing; no real YANG module."
+  }
+ ],
+ "summary": {
+  "pinned_commit": "7cb93ea27b7ee86ad3dd9f82998146aa838d13b8",
+  "vendor_directories_count": 5,
+  "openconfig_modules_count": 3,
+  "gnmi_paths_mapped": 3,
+  "coverage_note": "This inventory establishes a denominator of vendor\u2011specific YANG modules available in the YangModels repository and maps PulseForge gNMI paths to OpenConfig module names. It does NOT assert leaf\u2011level XPath coverage."
+ },
+ "notes": [
+  "OpenConfig YANG models are hosted in the OpenConfig/public repository, not in YangModels/yang. This inventory maps PulseForge gNMI paths to OpenConfig module names for documentation, not as proof of YANG\u2011file existence.",
+  "Vendor\u2011specific YANG modules (Cisco\u2011IOS\u2011XR, Juniper, Huawei, etc.) are present in the repository as submodules or in\u2011repo trees. No leaf\u2011level validation is performed.",
+  "Workstream C is intentionally bounded: it enumerates what exists in the pinned repository and maps PulseForge gNMI paths to known YANG modules."
+ ]
+}

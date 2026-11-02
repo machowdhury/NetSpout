@@ -1,0 +1,489 @@
+{
+ "artifact": "PulseForge SNMP/MIB reference authority pins (Workstream B)",
+ "generated_at": "2026-10-27",
+ "purpose": "Byte-exact pinned evidence for leaf-level verification of RAW_MIB_DEFINITIONS OIDs. No coverage claim in PulseForge cites an OID that is not VERIFIED here.",
+ "authorities": {
+  "sc4snmp_compiled_mibs": {
+   "repo": "splunk/splunk-connect-for-snmp-mib-server",
+   "commit": "93da55de9c41203d9ec568e521ba8cec4abddfb4",
+   "path": "mibs/pysnmp",
+   "git_tree_sha": "e630fc6078960332f859a0e453a8727dcc02aa08",
+   "tree_list_sha256": "1e80ebc01da6b5c8c1ee5e588a1b7667caf349650a9212dd354e96ff45875752",
+   "tree_entries": 10656,
+   "tree_python_mibs": 10654,
+   "tree_truncated": false,
+   "license": "Apache-2.0",
+   "repo_last_push": "2021-12-08",
+   "role": "PRIMARY leaf-name -> OID authority. pysmi-compiled single-line `name = MibScalar|MibTableColumn((1,3,...))` declarations generated from vendor/IETF MIB sources."
+  },
+  "pysnmp_mib_index": {
+   "file": "catalog/mib_reference/pysnmp_index.csv.gz",
+   "decompressed_bytes": 6040005,
+   "decompressed_sha256": "568c7170c5b6b19d28dec126c099c2a052af63d5f9b0dc529882e3f015c682ec",
+   "gz_sha256": "28b436df3b2938c457e7b9e54c821cdefd88f90796a5f013e8b2e26eb797baee",
+   "rows": 125728,
+   "unique_modules": 7096,
+   "observed_last_modified": "2026-10-08",
+   "retrieval_url_note": "Downloaded during this engagement from a pysnmp-community MIB index mirror; the exact retrieval URL was not preserved in scratch state. The byte content is hash-pinned above and is the citable artifact.",
+   "role": "SECONDARY coarse authority: module -> registered OID-subtree index (two columns: module,oid). NOT a leaf catalog; used only for module existence + coarse subtree claims."
+  },
+  "rfc1213": {
+   "file": "catalog/mib_reference/rfc/RFC1213.txt",
+   "bytes": 142158,
+   "sha256": "88056a4c7c3385ffa9c1bab173342ab4fd98834995269145eb7c2a4b38d80bac",
+   "url": "https://www.rfc-editor.org/rfc/rfc1213.txt",
+   "publication": "RFC 1213, October 1991 (STD 15; ipRoute* obsoleted for SNMPv2 by IP-MIB / RFC 4293 but still deployed on legacy agents)",
+   "role": "SMIv1 numbering authority for the ipRoute table: ipRouteTable ::= { ip 21 } and column numbers follow the ipRouteEntry SEQUENCE declaration order (SMIv1 implicit numbering)."
+  }
+ },
+ "mib_files": [
+  {
+   "module": "ARISTA-ENTITY-SENSOR-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ARISTA-ENTITY-SENSOR-MIB.py",
+   "bytes": 6920,
+   "sha256": "734c80621da61ec2f2292de4323725519d1782da30d8a6ed1ff489613c8b8cdb",
+   "git_blob_sha1": "b0711dbb49517facf6e3b6aa1c474eabc51c14d7",
+   "pinned_tree_blob_sha1": "b0711dbb49517facf6e3b6aa1c474eabc51c14d7",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "ARISTA-HARDWARE-UTILIZATION-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ARISTA-HARDWARE-UTILIZATION-MIB.py",
+   "bytes": 8774,
+   "sha256": "75aa9d2e34f5f8d40e4db1da959eb122d8d97bcc76bb13a1d443b4ed5a006d40",
+   "git_blob_sha1": "8602b38a3fa3166356eeea461829ea57cea6c999",
+   "pinned_tree_blob_sha1": "8602b38a3fa3166356eeea461829ea57cea6c999",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "ARISTA-PFC-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ARISTA-PFC-MIB.py",
+   "bytes": 4804,
+   "sha256": "bb74ecd704202eca93d52084b65fbafbb4f81d69b542a843813f8e9e007f29e0",
+   "git_blob_sha1": "3190a7c78e8b4c1bf6eee2ef6eef435776a97db8",
+   "pinned_tree_blob_sha1": "3190a7c78e8b4c1bf6eee2ef6eef435776a97db8",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "ARISTA-QOS-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ARISTA-QOS-MIB.py",
+   "bytes": 16967,
+   "sha256": "dc763cd1961090e4140b0d126a09a6d07fab14351b7915d35cef90009785543d",
+   "git_blob_sha1": "13500cbd287d17b3ea158b0bcd2e2e758bb94d24",
+   "pinned_tree_blob_sha1": "13500cbd287d17b3ea158b0bcd2e2e758bb94d24",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "ARISTA-QUEUE-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ARISTA-QUEUE-MIB.py",
+   "bytes": 8984,
+   "sha256": "2b203db7209d01b21156ba534105b2b3c1006d738466b0810faa35822190b8b6",
+   "git_blob_sha1": "ec15bd5a6b7f9c9be28e10f501099ad3bd1a9969",
+   "pinned_tree_blob_sha1": "ec15bd5a6b7f9c9be28e10f501099ad3bd1a9969",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "BGP4-MIB",
+   "file": "catalog/mib_reference/sc4snmp/BGP4-MIB.py",
+   "bytes": 14242,
+   "sha256": "523806e99cc921724a17ea3c656b64047efe22f05be5598fe4f57197c7072ffe",
+   "git_blob_sha1": "8b1ceb0a9466cdf448cdf6a9076a5163d58290e5",
+   "pinned_tree_blob_sha1": "8b1ceb0a9466cdf448cdf6a9076a5163d58290e5",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "CISCO-BGP4-MIB",
+   "file": "catalog/mib_reference/sc4snmp/CISCO-BGP4-MIB.py",
+   "bytes": 43809,
+   "sha256": "e19ceb7ef7c3126795b31adb3ecd88613e898a74f0dac75513e2661fd05e381d",
+   "git_blob_sha1": "29689879e36d84ee324c581d2940bee1f8a17aa4",
+   "pinned_tree_blob_sha1": "29689879e36d84ee324c581d2940bee1f8a17aa4",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "CISCO-ENVMON-MIB",
+   "file": "catalog/mib_reference/sc4snmp/CISCO-ENVMON-MIB.py",
+   "bytes": 23131,
+   "sha256": "b099e2317cfba859138a8241b84ef3f9e5a3689d615ede4209e071fea6237416",
+   "git_blob_sha1": "364e07da94ca61892bb3085e901923a10f92b88d",
+   "pinned_tree_blob_sha1": "364e07da94ca61892bb3085e901923a10f92b88d",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "CISCO-MEMORY-POOL-MIB",
+   "file": "catalog/mib_reference/sc4snmp/CISCO-MEMORY-POOL-MIB.py",
+   "bytes": 11919,
+   "sha256": "76cc6a5a4261e94d74d328ec423590d222c864369e12acdccdda748de582c340",
+   "git_blob_sha1": "b38c68139b22ae6de79827eba4ef8050adabea3b",
+   "pinned_tree_blob_sha1": "b38c68139b22ae6de79827eba4ef8050adabea3b",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "CISCO-PROCESS-MIB",
+   "file": "catalog/mib_reference/sc4snmp/CISCO-PROCESS-MIB.py",
+   "bytes": 61223,
+   "sha256": "b31e5a1488a3b9a1c0889bf3a59ffa6ec54b5825b9ac6e0eeaa1adf61cd3beda",
+   "git_blob_sha1": "f8c3d9fafe9ff2e87ff9c8e06d5c0d9043fd8317",
+   "pinned_tree_blob_sha1": "f8c3d9fafe9ff2e87ff9c8e06d5c0d9043fd8317",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "ENTITY-MIB",
+   "file": "catalog/mib_reference/sc4snmp/ENTITY-MIB.py",
+   "bytes": 20322,
+   "sha256": "cc6a6f8f8f1afaeedcf3acee29420118c0cbf624b75a5645b06a3c4efb823ef0",
+   "git_blob_sha1": "9ab78295d9277a8cefc07c508493c138bb6b35e7",
+   "pinned_tree_blob_sha1": "9ab78295d9277a8cefc07c508493c138bb6b35e7",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "IF-MIB",
+   "file": "catalog/mib_reference/sc4snmp/IF-MIB.py",
+   "bytes": 25587,
+   "sha256": "84d72cc3ae2234b012774b2c4b831349a95a0d7cf3d523d8d10e7e7f338a63f3",
+   "git_blob_sha1": "c70690a38f8580e354026110f10e4d5bf7797b32",
+   "pinned_tree_blob_sha1": "c70690a38f8580e354026110f10e4d5bf7797b32",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "IP-MIB",
+   "file": "catalog/mib_reference/sc4snmp/IP-MIB.py",
+   "bytes": 79161,
+   "sha256": "430ed974fba030e11e66457a32dc22c90b20f57c3e91250ff92bacc4ad7cdcf1",
+   "git_blob_sha1": "3eb4cbce22d180c0d04bdeb9462b0f470cb7f97f",
+   "pinned_tree_blob_sha1": "3eb4cbce22d180c0d04bdeb9462b0f470cb7f97f",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "JUNIPER-ALARM-EXT-MIB",
+   "file": "catalog/mib_reference/sc4snmp/JUNIPER-ALARM-EXT-MIB.py",
+   "bytes": 2947,
+   "sha256": "82ab4f95b8b6e803a1353f93f5f894a0f731de85e40f1301ba054191f4c94e2e",
+   "git_blob_sha1": "335b22c7f850d4227752dce405029a39dd19c35c",
+   "pinned_tree_blob_sha1": "335b22c7f850d4227752dce405029a39dd19c35c",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "JUNIPER-ALARM-MIB",
+   "file": "catalog/mib_reference/sc4snmp/JUNIPER-ALARM-MIB.py",
+   "bytes": 4134,
+   "sha256": "de6097fee1a54e0d3933352d8a1b87053514b7ec8634009b1db98e0f883cb5fa",
+   "git_blob_sha1": "675c64f54346d9cb985ff627353623d584731728",
+   "pinned_tree_blob_sha1": "675c64f54346d9cb985ff627353623d584731728",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "JUNIPER-COS-MIB",
+   "file": "catalog/mib_reference/sc4snmp/JUNIPER-COS-MIB.py",
+   "bytes": 78739,
+   "sha256": "2165d3f91603aa112494e7a29d24ddb9807190ff9c1d08dbf88fefffdbcf360f",
+   "git_blob_sha1": "3fef2fe95d661d80994b2324ae43e4620309d200",
+   "pinned_tree_blob_sha1": "3fef2fe95d661d80994b2324ae43e4620309d200",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "JUNIPER-MIB",
+   "file": "catalog/mib_reference/sc4snmp/JUNIPER-MIB.py",
+   "bytes": 45495,
+   "sha256": "3103a234f0f02b2a21f0847629050a2409b5da2344830c2f1772008d3baf943e",
+   "git_blob_sha1": "fca306c0ec8e078416c09108ee7bf11bbed45ae6",
+   "pinned_tree_blob_sha1": "fca306c0ec8e078416c09108ee7bf11bbed45ae6",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "OSPF-MIB",
+   "file": "catalog/mib_reference/sc4snmp/OSPF-MIB.py",
+   "bytes": 72444,
+   "sha256": "0f5a1e0351bf7fd787b4ce5eb0faff96399f70a081235498d7cb997fc3a52eab",
+   "git_blob_sha1": "f52ed79e084015c2ed84835f1d51e7348f30ec23",
+   "pinned_tree_blob_sha1": "f52ed79e084015c2ed84835f1d51e7348f30ec23",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "SNMPv2-MIB",
+   "file": "catalog/mib_reference/sc4snmp/SNMPv2-MIB.py",
+   "bytes": 16858,
+   "sha256": "fdc049f3ae65806763ce4d664fc4ef5bd27034f99ddff79fa91668cda90d69eb",
+   "git_blob_sha1": "193612b405c0e622344137db4ae85f7d437316c1",
+   "pinned_tree_blob_sha1": "193612b405c0e622344137db4ae85f7d437316c1",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "TCP-MIB",
+   "file": "catalog/mib_reference/sc4snmp/TCP-MIB.py",
+   "bytes": 14395,
+   "sha256": "e5374145d6c808d0542204b5de9bb11deff606dfecce8727125d94353c8cc757",
+   "git_blob_sha1": "1dc18f1e50692d425ff43ed613feb4a1eb52e495",
+   "pinned_tree_blob_sha1": "1dc18f1e50692d425ff43ed613feb4a1eb52e495",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  },
+  {
+   "module": "UDP-MIB",
+   "file": "catalog/mib_reference/sc4snmp/UDP-MIB.py",
+   "bytes": 8480,
+   "sha256": "555f0c1126a710c51680bd9a3e25a97d1ab4eeb2f40f0d959241e5acf20003ef",
+   "git_blob_sha1": "35e587c24f6acb7eee1fb171ceeae138a1987219",
+   "pinned_tree_blob_sha1": "35e587c24f6acb7eee1fb171ceeae138a1987219",
+   "integrity": "git_blob_sha1==pinned_tree_entry"
+  }
+ ],
+ "module_existence": {
+  "ARISTA-ENTITY-SENSOR-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 6,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.30065.3.12",
+    "1.3.6.1.4.1.30065.3.12.0",
+    "1.3.6.1.4.1.30065.3.12.1",
+    "1.3.6.1.4.1.30065.3.12.2",
+    "1.3.6.1.4.1.30065.3.12.2.1",
+    "1.3.6.1.4.1.30065.3.12.2.2"
+   ]
+  },
+  "ARISTA-HARDWARE-UTILIZATION-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": false,
+   "pysnmp_index_root_count": 0,
+   "pysnmp_index_roots_sample": []
+  },
+  "ARISTA-PFC-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.30065.3.11",
+    "1.3.6.1.4.1.30065.3.11.1",
+    "1.3.6.1.4.1.30065.3.11.2",
+    "1.3.6.1.4.1.30065.3.11.2.1",
+    "1.3.6.1.4.1.30065.3.11.2.2"
+   ]
+  },
+  "ARISTA-QOS-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.30065.3.13",
+    "1.3.6.1.4.1.30065.3.13.1",
+    "1.3.6.1.4.1.30065.3.13.2",
+    "1.3.6.1.4.1.30065.3.13.2.1",
+    "1.3.6.1.4.1.30065.3.13.2.2"
+   ]
+  },
+  "ARISTA-QUEUE-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.30065.3.6",
+    "1.3.6.1.4.1.30065.3.6.1",
+    "1.3.6.1.4.1.30065.3.6.2",
+    "1.3.6.1.4.1.30065.3.6.2.1",
+    "1.3.6.1.4.1.30065.3.6.2.2"
+   ]
+  },
+  "ARISTA-RESOURCE-MIB": {
+   "sc4snmp_tree": false,
+   "pysnmp_index": false,
+   "pysnmp_index_root_count": 0,
+   "pysnmp_index_roots_sample": []
+  },
+  "BGP4-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.15.0",
+    "1.3.6.1.2.1.15.7",
+    "1.3.6.1.2.1.15.8",
+    "1.3.6.1.2.1.15.8.1",
+    "1.3.6.1.2.1.15.8.2"
+   ]
+  },
+  "CISCO-BGP4-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 10,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.9.9.187",
+    "1.3.6.1.4.1.9.9.187.0",
+    "1.3.6.1.4.1.9.9.187.1",
+    "1.3.6.1.4.1.9.9.187.1.1",
+    "1.3.6.1.4.1.9.9.187.1.2",
+    "1.3.6.1.4.1.9.9.187.1.3"
+   ]
+  },
+  "CISCO-ENVMON-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 8,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.9.9.13",
+    "1.3.6.1.4.1.9.9.13.1",
+    "1.3.6.1.4.1.9.9.13.2",
+    "1.3.6.1.4.1.9.9.13.3",
+    "1.3.6.1.4.1.9.9.13.3.0",
+    "1.3.6.1.4.1.9.9.13.4"
+   ]
+  },
+  "CISCO-MEMORY-POOL-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 7,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.9.9.48",
+    "1.3.6.1.4.1.9.9.48.1",
+    "1.3.6.1.4.1.9.9.48.2",
+    "1.3.6.1.4.1.9.9.48.2.0",
+    "1.3.6.1.4.1.9.9.48.3",
+    "1.3.6.1.4.1.9.9.48.3.1"
+   ]
+  },
+  "CISCO-PROCESS-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 12,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.9.9.109",
+    "1.3.6.1.4.1.9.9.109.1",
+    "1.3.6.1.4.1.9.9.109.1.1",
+    "1.3.6.1.4.1.9.9.109.1.2",
+    "1.3.6.1.4.1.9.9.109.1.2.5",
+    "1.3.6.1.4.1.9.9.109.1.3"
+   ]
+  },
+  "ENTITY-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 11,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.47",
+    "1.3.6.1.2.1.47.1",
+    "1.3.6.1.2.1.47.1.1",
+    "1.3.6.1.2.1.47.1.2",
+    "1.3.6.1.2.1.47.1.3",
+    "1.3.6.1.2.1.47.1.4"
+   ]
+  },
+  "IF-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 4,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.2",
+    "1.3.6.1.2.1.31.2",
+    "1.3.6.1.2.1.31.2.1",
+    "1.3.6.1.2.1.31.2.2"
+   ]
+  },
+  "IP-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 7,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.4",
+    "1.3.6.1.2.1.4.31",
+    "1.3.6.1.2.1.48",
+    "1.3.6.1.2.1.48.2",
+    "1.3.6.1.2.1.48.2.1",
+    "1.3.6.1.2.1.48.2.2"
+   ]
+  },
+  "JUNIPER-ALARM-EXT-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 2,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.2636.3.72.1",
+    "1.3.6.1.4.1.2636.3.72.1.1"
+   ]
+  },
+  "JUNIPER-ALARM-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 4,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.2636.3.4",
+    "1.3.6.1.4.1.2636.3.4.2",
+    "1.3.6.1.4.1.2636.3.4.2.2",
+    "1.3.6.1.4.1.2636.3.4.2.3"
+   ]
+  },
+  "JUNIPER-COS-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 3,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.4.1.2636.3.15",
+    "1.3.6.1.4.1.2636.3.15.8",
+    "1.3.6.1.4.1.2636.4.17.0"
+   ]
+  },
+  "JUNIPER-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": false,
+   "pysnmp_index_root_count": 0,
+   "pysnmp_index_roots_sample": []
+  },
+  "OSPF-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 10,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.14",
+    "1.3.6.1.2.1.14.1",
+    "1.3.6.1.2.1.14.13",
+    "1.3.6.1.2.1.14.13.1",
+    "1.3.6.1.2.1.14.13.2",
+    "1.3.6.1.2.1.14.13.3"
+   ]
+  },
+  "RFC1213-MIB": {
+   "sc4snmp_tree": false,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 2,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.3",
+    "1.3.6.1.2.1.8"
+   ]
+  },
+  "SNMPv2-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 8,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.1",
+    "1.3.6.1.2.1.11",
+    "1.3.6.1.6.3.1",
+    "1.3.6.1.6.3.1.1.4",
+    "1.3.6.1.6.3.1.1.6",
+    "1.3.6.1.6.3.1.2"
+   ]
+  },
+  "TCP-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.49",
+    "1.3.6.1.2.1.49.2",
+    "1.3.6.1.2.1.49.2.1",
+    "1.3.6.1.2.1.49.2.2",
+    "1.3.6.1.2.1.6"
+   ]
+  },
+  "UDP-MIB": {
+   "sc4snmp_tree": true,
+   "pysnmp_index": true,
+   "pysnmp_index_root_count": 5,
+   "pysnmp_index_roots_sample": [
+    "1.3.6.1.2.1.50",
+    "1.3.6.1.2.1.50.2",
+    "1.3.6.1.2.1.50.2.1",
+    "1.3.6.1.2.1.50.2.2",
+    "1.3.6.1.2.1.7"
+   ]
+  }
+ }
+}

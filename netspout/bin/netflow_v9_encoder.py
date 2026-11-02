@@ -13,7 +13,7 @@ Key features:
 - Template FlowSet (ID 0) with 4-byte word boundary padding
 - Data FlowSet (ID >= 256) with 4-byte word boundary padding
 - Standard 16-field IPv4 Template (Template ID 256, 43 bytes/record)
-- Strict sequence number accounting (tracks total flow records exported per RFC 3954)
+- Strict sequence number accounting (tracks export packets per RFC 3954)
 - Pure Python standard library (struct, socket, ipaddress) with zero external dependencies
 """
 
@@ -190,8 +190,9 @@ class NetFlowV9Encoder:
         now_sec = sim_time_sec if sim_time_sec is not None else int(time.time())
         uptime = sys_uptime_ms if sys_uptime_ms is not None else session.get_sys_uptime_ms()
 
-        # In RFC 3954, sequence number increments by the number of FLOW records exported
-        seq_start, _ = session.advance_sequence(len(data_records))
+        # RFC 3954 §5.1: this is the incremental sequence counter of export
+        # packets sent by the exporting device, unlike IPFIX's data-record count.
+        seq_start, _ = session.advance_sequence(1)
 
         header = struct.pack(
             "!HHIIII",

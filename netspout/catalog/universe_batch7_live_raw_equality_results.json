@@ -1,0 +1,71 @@
+{
+ "run": "20ad995a",
+ "splunk_version": "10.2.7",
+ "posted": 5,
+ "post_failures": [],
+ "indexed_rows": 5,
+ "lab": "tests/lab/ta_validation (isolated)",
+ "events": 5,
+ "indexed": 5,
+ "raw_equal": 5,
+ "sourcetype_equal": 5,
+ "nginx_ta_installed": [],
+ "ta_parsing_checked": false,
+ "raw_equality": [
+  {
+   "sourcetype": "nginx:plus:access",
+   "verdict": "PASS",
+   "matches": 1,
+   "family": "captured_1",
+   "indexed": true,
+   "raw_equal": true,
+   "sourcetype_equal": true,
+   "submitted_sha256": "0875eae9d122b28ea6d1383ec440c8f068bbe23f9df64c2af54c375540bc595f",
+   "indexed_sha256": "0875eae9d122b28ea6d1383ec440c8f068bbe23f9df64c2af54c375540bc595f"
+  },
+  {
+   "sourcetype": "nginx:plus:access",
+   "verdict": "PASS",
+   "matches": 1,
+   "family": "captured_2",
+   "indexed": true,
+   "raw_equal": true,
+   "sourcetype_equal": true,
+   "submitted_sha256": "f9bcfcf51b87fa614582c9a4c2a53b69d89335c6c387e973a35321e56a7450d0",
+   "indexed_sha256": "f9bcfcf51b87fa614582c9a4c2a53b69d89335c6c387e973a35321e56a7450d0"
+  },
+  {
+   "sourcetype": "nginx:plus:access",
+   "verdict": "PASS",
+   "matches": 1,
+   "family": "captured_3",
+   "indexed": true,
+   "raw_equal": true,
+   "sourcetype_equal": true,
+   "submitted_sha256": "2fc5f7b1f71241c4c82c47c72466264cdd179d0237da4cd1dca0b71cb41a8a2c",
+   "indexed_sha256": "2fc5f7b1f71241c4c82c47c72466264cdd179d0237da4cd1dca0b71cb41a8a2c"
+  },
+  {
+   "sourcetype": "nginx:plus:access",
+   "verdict": "PASS",
+   "matches": 1,
+   "family": "captured_4",
+   "indexed": true,
+   "raw_equal": true,
+   "sourcetype_equal": true,
+   "submitted_sha256": "c3eb36b9f8b3914abf99aa94988f11277997313c2776ec4902e9ff026f235fab",
+   "indexed_sha256": "c3eb36b9f8b3914abf99aa94988f11277997313c2776ec4902e9ff026f235fab"
+  },
+  {
+   "sourcetype": "nginx:plus:access",
+   "verdict": "PASS",
+   "matches": 1,
+   "family": "captured_5",
+   "indexed": true,
+   "raw_equal": true,
+   "sourcetype_equal": true,
+   "submitted_sha256": "514e10033d0ffed0dbd1bf556bbd376d92f15fcea7db0281093868e3405cab6c",
+   "indexed_sha256": "514e10033d0ffed0dbd1bf556bbd376d92f15fcea7db0281093868e3405cab6c"
+  }
+ ]
+}

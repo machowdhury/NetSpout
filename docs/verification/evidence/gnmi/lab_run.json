@@ -1,0 +1,47 @@
+{
+ "generated_utc": "2026-10-31T00:50Z",
+ "gnmi_end_to_end": {
+  "suite": "tests/test_gate13d_gnmi_splunk_e2e.py",
+  "result": {
+   "tests": 27,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  },
+  "path": "PulseForge native gNMI server -> external gnmic collector (OpenConfig) -> Splunk HEC -> fresh SPL and mstats",
+  "platforms_covered": [
+   "Cisco IOS-XR",
+   "Cisco IOS-XE",
+   "Arista EOS",
+   "Juniper Junos"
+  ],
+  "collector": [
+   "version : 0.49.0",
+   " commit : Homebrew"
+  ],
+  "destination": "isolated Docker Splunk Enterprise 10.2.7 via NETSPOUT_HEC_URL / NETSPOUT_REST_SEARCH_URL; fixture indexes idx_network_ops and cisco_mdt_metrics"
+ },
+ "protocol_suites": {
+  "suites": [
+   "gate13b gnmi core",
+   "gate13c gnmi collector",
+   "gate13e customer acceptance",
+   "phase5 gnmi internal collector",
+   "phase5 flow forwarder",
+   "native flow loopback",
+   "NetFlow v9 encoder",
+   "IPFIX encoder",
+   "golden flow fixtures",
+   "native OTLP workflow",
+   "native syslog workflow",
+   "native SNMP workflow"
+  ],
+  "result": {
+   "tests": 173,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0
+  }
+ },
+ "note": "These suites need a compatible Splunk destination; without one they fail as lab-dependent (as recorded in the baseline). gNMI interoperability is shown against gnmic only; other collectors are not claimed."
+}

@@ -6,13 +6,18 @@ and real-time WebSocket streaming at 500ms intervals.
 
 import asyncio
 import json
+from pathlib import Path
+import re
 import time
 import csv
 import io
 import os
+import urllib.error
+from contextlib import asynccontextmanager
+from datetime import datetime
 from typing import List, Dict, Set, Optional, Any, Union
 from pydantic import BaseModel
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
+from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
@@ -23,34 +28,204 @@ from app.models import (
     ZoneAnnotation, NodePowerState, NodeHardware,
     TelemetryTransportConfig, SyslogTestRequest,
     FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest, FaultEventRecord,
-    ScenarioRunRequest, RunManifest, ScenarioContract, ValidationRule, ValidationResult
+    ScenarioRunRequest, RunManifest, ScenarioContract, ValidationRule, ValidationResult,
+    ValidationStatus
+)
+from app.transport_credential_updates import (
+    CredentialUpdateError, update_shared_transport,
+)
+from app.telemetry_config_api import (
+    TelemetryConfigRoute, TelemetryConfigUpdate, CONFIG_UPDATE_RESPONSES,
+    invalid_update_error,
 )
 from app.telemetry_dispatcher import dispatcher
-from app.scenario_runner import ScenarioRunner
+from app.scenario_runner import ScenarioRunner, SUPPORTED_SCENARIO_IDS
+from app.authentic_scenario_packs import SCENARIO_PACK_IDS
+from netspout_core.incident_packs import catalog as incident_catalog
+from app.run_progress import RunProgressTracker, RunProgressState
+from app.unified_generation import (
+    GenerationMode,
+    UnifiedGenerationRequest,
+    UnifiedGenerationService,
+)
+from app.scenario_studio import (
+    CustomSourceDraft,
+    SampleAnalysisRequest,
+    ScenarioStudioService,
+    StudioDraftRequest,
+    StudioRunRequest,
+    StudioScenarioPack,
+)
+from app.industry_packs import IndustrySelection
+from app.vendor_coverage import VendorCoverageService
+from app.cisco_scenario_factory import CiscoScenarioFactoryService, ScenarioMaturity
 from app.graph_engine import TopologyGraph
 from app.gnmi_engine import yang_store, gnmi_server
 from app.snmp_engine import snmp_engine
 from app.fault_injection_engine import fault_engine
 
-app = FastAPI(title="NetSpout Telemetry & Simulation API", version="2.0.0")
+# Import destination management
+from app.destination_manager import destination_manager
+from app.destination_api import router as destination_router
+
+from app.release_candidate import (
+    ReleaseCandidateConfiguration,
+    SecuritySourceCatalog,
+)
+from app.use_case_explorer import UseCaseExplorer, load_candidates, load_curated_stories, load_taxonomy
+from app.security_content_lab import (
+    SUPPORTED_RUNTIME_DETECTIONS,
+    validate_index_name,
+    AttackDataReplayService,
+    DetectionEvidenceStore,
+    DetectionValidationOrchestrator,
+    SecurityContentCatalog,
+)
+
+# Enhanced scenario run model
+class EnhancedScenarioRunRequest(BaseModel):
+    """Enhanced scenario run request with destination configuration."""
+    scenario_id: str
+    destination_id: Optional[str] = None
+    start_immediately: bool = True
+    seed: Optional[int] = None
+    duration_minutes: Optional[int] = None
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    global simulation_task
+    simulation_task = asyncio.create_task(run_simulation_loop())
+    try:
+        yield
+    finally:
+        if simulation_task:
+            simulation_task.cancel()
+
+
+app = FastAPI(
+    title="NetSpout Telemetry & Simulation API",
+    version="2.0.0",
+    lifespan=lifespan,
+)
 
 # Enable CORS for frontend development server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[],
+    allow_origin_regex=r"https?://(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Include destination router
+app.include_router(destination_router)
+
 # Global Simulation State
 scenario_runner = ScenarioRunner()
+
+# Initialize progress tracker first
+progress_tracker = None
+
+# Define broadcast function before use
+async def broadcast_progress_event(event):
+    """Broadcast progress events to WebSocket clients."""
+    from app.run_progress import RunProgressEvent
+    event_dict = event.to_dict()
+    await manager.broadcast({
+        "type": "run_progress",
+        **event_dict
+    })
+
+# Progress-aware scenario runner
+try:
+    from app.progress_scenario_runner_v2 import ProgressScenarioRunner
+    from app.run_progress import RunProgressTracker
+    
+    # Create progress tracker
+    progress_tracker = RunProgressTracker(broadcast_callback=broadcast_progress_event)
+    progress_scenario_runner = ProgressScenarioRunner(scenario_runner, progress_tracker)
+except ImportError as e:
+    print(f"Note: ProgressScenarioRunner not available: {e}")
+    # Fallback if module not available
+    progress_scenario_runner = None
+    progress_tracker = None
+unified_generation_service = UnifiedGenerationService(dispatcher=dispatcher)
+scenario_studio_service = ScenarioStudioService(
+    catalog=unified_generation_service.catalog,
+    generation_service=unified_generation_service,
+)
+industry_pack_service = unified_generation_service.catalog.get_industry_pack_service()
+dashboard_recipe_service = (
+    unified_generation_service.catalog.get_dashboard_recipe_service()
+)
+_coverage_catalog = unified_generation_service.catalog.get_telemetry_catalog()
+vendor_coverage_service = VendorCoverageService(
+    registry=unified_generation_service.registry,
+    source_ids={item["source_id"] for item in _coverage_catalog["sources"]},
+    integration_ids={
+        item["integration_id"] for item in _coverage_catalog["integrations"]
+    },
+)
+cisco_scenario_factory_service = CiscoScenarioFactoryService()
+security_source_catalog = SecuritySourceCatalog()
+release_candidate_configuration = ReleaseCandidateConfiguration()
+security_content_catalog = SecurityContentCatalog()
+attack_data_replay_service = AttackDataReplayService(
+    security_content_catalog,
+    dispatcher,
+)
+detection_evidence_store = DetectionEvidenceStore()
+detection_validation_orchestrator = DetectionValidationOrchestrator(
+    security_content_catalog,
+    lambda query: release_candidate_configuration.execute_read_only_search(query),
+    detection_evidence_store,
+)
+def _connection_center_search_target():
+    """(search_url, Authorization header) from Connection Center, or None so callers fall back to env vars."""
+    config = release_candidate_configuration.load()
+    if not config.get("configured") or not release_candidate_configuration.secrets.search_secret:
+        return None
+    return config["search_url"], release_candidate_configuration._search_authorization(config)
+
+
+unified_generation_service.search_provider = _connection_center_search_target
+scenario_runner.search_provider = _connection_center_search_target
 active_scenario: ScenarioType = ScenarioType.NORMAL_TRAFFIC
 active_ecosystem_mode: EcosystemMode = EcosystemMode.MIXED_VENDOR
 simulation_running: bool = False
 simulation_interval_ms: int = 500
 accumulated_logs: List[LogEntry] = []
 MAX_LOG_HISTORY: int = 2000
+
+# =========================================================================
+# LIVE SIMULATION GUARD (D3)
+# =========================================================================
+# Only these 10 scenarios have dedicated telemetry in scenario_runner.execute_step
+LIVE_SIMULATION_SCENARIOS = {
+    ScenarioType.NORMAL_TRAFFIC,
+    ScenarioType.DDOS_ATTACK,
+    ScenarioType.SQL_INJECTION,
+    ScenarioType.LATERAL_MOVEMENT,
+    ScenarioType.CISCO_CAMPUS_ROGUE,
+    ScenarioType.CISCO_SDWAN_BROWNOUT,
+    ScenarioType.CISCO_ACI_MICROBURST,
+    ScenarioType.MIXED_EDGE_BREACH,
+    ScenarioType.MIXED_SASE_DEGRADATION,
+    ScenarioType.MIXED_BACKBONE_OPTICAL,
+}
+
+
+def _live_simulation_refusal_detail(scenario_id: str) -> str:
+    if scenario_id in SUPPORTED_SCENARIO_IDS:
+        return (
+            f"Scenario '{scenario_id}' is not supported by the live-simulation workflow. "
+            "Only scenarios with dedicated telemetry can be used. "
+            f"Use POST /api/scenarios/{scenario_id}/run for native engine scenarios."
+        )
+    return (
+        f"Scenario '{scenario_id}' is not available in this release (live-simulation)."
+    )
 
 # =========================================================================
 # TOPOLOGY PRESETS
@@ -239,7 +414,7 @@ async def run_simulation_loop():
     global accumulated_logs
     while True:
         try:
-            if simulation_running:
+            if simulation_running and active_scenario in LIVE_SIMULATION_SCENARIOS:
                 logs = scenario_runner.execute_step(current_topology, active_scenario)
                 transport = getattr(current_topology, "global_transport", None)
                 for entry in logs:
@@ -259,19 +434,38 @@ async def run_simulation_loop():
             print(f"Simulation loop error: {e}")
             await asyncio.sleep(1.0)
 
-@app.on_event("startup")
-async def startup_event():
-    global simulation_task
-    simulation_task = asyncio.create_task(run_simulation_loop())
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    global simulation_task
-    if simulation_task:
-        simulation_task.cancel()
-
-
 # REST API Endpoints
+@app.get("/api/health")
+async def health_check():
+    """Enhanced health check with destination status."""
+    return {
+        "status": "healthy",
+        "version": "2.0.0",
+        "simulation_running": simulation_running,
+        "active_scenario": active_scenario.value if active_scenario else None,
+        "destination_count": len(destination_manager.destinations),
+        "active_destination": destination_manager.active_destination_id,
+        "destinations": [
+            {
+                "id": dest_id,
+                "name": dest.name,
+                "deployment_type": dest.deployment_type,
+                "validation_status": dest.validation_status,
+                "is_active": dest_id == destination_manager.active_destination_id
+            }
+            for dest_id, dest in destination_manager.destinations.items()
+        ]
+    }
+
+@app.get("/api/destinations/active/transport-config")
+async def get_active_transport_config():
+    """Get transport config for active destination."""
+    transport = destination_manager.get_active_transport_config()
+    if not transport:
+        raise HTTPException(status_code=404, detail="No active destination configured")
+
+    return transport
+
 @app.get("/api/status")
 async def get_status():
     return {
@@ -293,7 +487,12 @@ async def get_topology():
 @app.post("/api/topology", response_model=TopologyState)
 async def update_topology(topology: TopologyState):
     global current_topology
+    # The backend owns the destination and its credentials (Connection Center / /api/telemetry/config). A topology
+    # sync from the UI carries an empty transport and must not wipe them.
+    previous = getattr(current_topology, "global_transport", None)
     current_topology = topology
+    if previous is not None:
+        current_topology.global_transport = previous
     # Notify WebSocket clients of topology update
     await manager.broadcast_log({
         "type": "topology_updated",
@@ -305,6 +504,11 @@ async def update_topology(topology: TopologyState):
 @app.post("/api/scenarios/run")
 async def control_simulation(req: SimulationRequest):
     global simulation_running, active_scenario, simulation_interval_ms, active_ecosystem_mode
+    if req.scenario not in LIVE_SIMULATION_SCENARIOS:
+        raise HTTPException(
+            status_code=400,
+            detail=_live_simulation_refusal_detail(req.scenario.value)
+        )
     simulation_running = req.running
     active_scenario = req.scenario
     if req.speed_ms:
@@ -537,16 +741,29 @@ async def get_telemetry_config():
     }
 
 
-@app.post("/api/telemetry/config")
-async def set_telemetry_config(config: TelemetryTransportConfig):
+telemetry_config_router = APIRouter(route_class=TelemetryConfigRoute)
+
+
+@telemetry_config_router.post("/api/telemetry/config", responses=CONFIG_UPDATE_RESPONSES)
+async def set_telemetry_config(config: TelemetryConfigUpdate):
     global current_topology
-    current_topology.global_transport = config
+    try:
+        payload = (config.model_dump(exclude_unset=True) if hasattr(config, "model_dump")
+                   else config.dict(exclude_unset=True))
+        candidate = update_shared_transport(
+            current_topology.global_transport, payload, TelemetryTransportConfig
+        )
+    except CredentialUpdateError:
+        raise invalid_update_error() from None
+    current_topology.global_transport = candidate
     return {
         "status": "success",
         "message": "Telemetry transport updated",
         "global_transport": current_topology.global_transport
     }
 
+
+app.include_router(telemetry_config_router)
 
 @app.post("/api/faults/inject")
 async def inject_fault_endpoint(req: FaultInjectionRequest):
@@ -732,6 +949,42 @@ class ConnectionTestPayload(BaseModel):
     config: Optional[TelemetryTransportConfig] = None
 
 
+class SetupConfigurationPayload(BaseModel):
+    deployment_mode: str
+    splunk_deployment_type: str
+    hec_url: str
+    search_url: str
+    auth_method: str
+    search_username: Optional[str] = None
+    hec_token: Optional[str] = None
+    search_secret: Optional[str] = None
+    indexes: List[str]
+    collectors: List[str] = []
+    guided_sample: bool = True
+    allow_insecure_tls: bool = False
+
+
+class AttackDataRetrievePayload(BaseModel):
+    dataset_path: str
+
+
+class AttackDataReplayPayload(BaseModel):
+    local_id: str
+    dataset_path: str
+    index: str
+    timestamp_mode: str = "PRESERVE"
+
+
+class DetectionValidationPayload(BaseModel):
+    detection_id: str
+    run_id: str
+    index: str
+    expected_min_matches: int = 1
+    control: str = "POSITIVE"
+    dataset_or_scenario_id: str
+    indexed_event_count: int
+
+
 @app.post("/api/telemetry/test-connection")
 @app.post("/api/telemetry/test-hec")
 @app.post("/api/telemetry/test-pipeline")
@@ -746,7 +999,7 @@ async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTes
             transport = req.config
         else:
             def_url = current_topology.global_transport.hec_url if current_topology and current_topology.global_transport else "https://localhost:8888/services/collector"
-            def_tok = current_topology.global_transport.hec_token if current_topology and current_topology.global_transport else "00000000-0000-0000-0000-000000000000"
+            def_tok = current_topology.global_transport.hec_token if current_topology and current_topology.global_transport else ""
             def_idx = current_topology.global_transport.hec_index if current_topology and current_topology.global_transport else "idx_network_ops"
             transport = TelemetryTransportConfig(
                 hec_url=req.endpoint or req.hec_url or def_url,
@@ -760,7 +1013,7 @@ async def test_connection_endpoint(req: Union[ConnectionTestPayload, PipelineTes
         pipeline = d.get("pipeline", "hec")
         transport = TelemetryTransportConfig(
             hec_url=d.get("endpoint") or d.get("hec_url") or "https://localhost:8888/services/collector",
-            hec_token=d.get("token") or d.get("hec_token") or "00000000-0000-0000-0000-000000000000",
+            hec_token=d.get("token") or d.get("hec_token") or "",
             hec_index=d.get("index") or d.get("hec_index") or "idx_network_ops",
             hec_ssl_verify=d.get("ssl_verify", True),
             hec_allow_insecure_tls=d.get("allow_insecure_tls", False)
@@ -799,7 +1052,8 @@ async def get_run_observation(run_id: str):
             manifest.event_observed_count = evidence.event_observed_count
             manifest.metric_observed_count = evidence.metric_observed_count
             manifest.observation_completeness_pct = evidence.observation_completeness_pct
-        if count > 0:
+        # PASS only when the REQUIRED destinations were observed (a supporting-only hit is not enough).
+        if (evidence.required_evidence_satisfied if evidence else count > 0):
             manifest.destination_validation = "PASS"
             if manifest.overall_validation in ("BLOCKED", "FAIL"):
                 all_pass = all(r.status == ValidationStatus.PASS for r in manifest.validation_results)
@@ -808,10 +1062,13 @@ async def get_run_observation(run_id: str):
         "run_id": run_id,
         "observed_count": count,
         "observation_status": status,
-        "destination_validation": manifest.destination_validation if manifest else ("PASS" if count > 0 else "FAIL"),
+        "schema_version": evidence.schema_version if evidence else None,
+        "observed_at": evidence.observed_at if evidence else None,
+        "required_evidence_satisfied": evidence.required_evidence_satisfied if evidence else False,
+        "destination_validation": manifest.destination_validation if manifest else ("PASS" if (evidence.required_evidence_satisfied if evidence else count > 0) else "FAIL"),
         "event_observed_count": evidence.event_observed_count if evidence else count,
         "metric_observed_count": evidence.metric_observed_count if evidence else 0,
-        "observation_completeness_pct": evidence.observation_completeness_pct if evidence else 100.0,
+        "observation_completeness_pct": evidence.observation_completeness_pct if evidence else 0.0,
         "destinations": [d.dict() for d in evidence.destinations] if evidence else [],
         "evidence_summary": evidence.dict() if evidence else None
     }
@@ -1093,9 +1350,9 @@ def run_scenario_contract(
         if "dispatch_telemetry" in payload:
             dispatch_telemetry = bool(payload["dispatch_telemetry"])
         if "transport_config" in payload and payload["transport_config"]:
-            transport_config = TelemetryTransportConfig(**payload["transport_config"])
-            if current_topology:
-                current_topology.global_transport = transport_config
+            transport_config = _authorize_caller_transport(payload["transport_config"])
+            if current_topology and not release_candidate_configuration.load().get("configured"):
+                current_topology.global_transport = transport_config  # legacy lab behavior only; never replaces a saved Connection Center destination
         if "transport_mode" in payload and payload["transport_mode"] is not None:
             transport_mode = str(payload["transport_mode"])
         if "native_protocol" in payload:
@@ -1152,6 +1409,89 @@ def run_scenario_contract(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return manifest.dict() if hasattr(manifest, "dict") else manifest
+
+
+@app.post("/api/scenarios/run-with-destination")
+def run_scenario_with_destination(req: EnhancedScenarioRunRequest):
+    dest_id = req.destination_id or destination_manager.active_destination_id
+    dest = destination_manager.destinations.get(dest_id)
+    if not dest:
+        raise HTTPException(404, "Destination not found")
+    transport = dest.to_transport_config()
+    if not dest.enabled or not transport.hec_token:
+        raise HTTPException(400, "Destination disabled or HEC credential unavailable")
+    try:
+        manifest = scenario_runner.run_scenario(ScenarioRunRequest(
+            scenario_id=req.scenario_id, seed=req.seed, time_mode="TEST",
+            dispatch_telemetry=True, transport_config=transport,
+        ))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    from app.live_dashboard import observe_run
+    observe_run(manifest, dest)
+    destination_manager.record_event_sent(dest_id, manifest.dispatch_succeeded)
+    return manifest.model_dump(mode="json")
+
+@app.post("/api/scenarios/run-with-progress")
+async def run_scenario_with_progress(req: EnhancedScenarioRunRequest):
+    """Run scenario with real-time progress tracking."""
+    dest_id = req.destination_id or destination_manager.active_destination_id
+    dest = destination_manager.destinations.get(dest_id)
+    if not dest:
+        raise HTTPException(404, "Destination not found")
+    transport = dest.to_transport_config()
+    if not dest.enabled or not transport.hec_token:
+        raise HTTPException(400, "Destination disabled or HEC credential unavailable")
+    
+    try:
+        if progress_scenario_runner:
+            # Use progress-aware runner
+            manifest = await progress_scenario_runner.run_scenario_with_progress(
+                ScenarioRunRequest(
+                    scenario_id=req.scenario_id, 
+                    seed=req.seed, 
+                    time_mode="TEST",
+                    dispatch_telemetry=True, 
+                    transport_config=transport,
+                ),
+                destination_info={
+                    "name": dest.name,
+                    "type": dest.type,
+                    "url": dest.url
+                }
+            )
+        else:
+            # Fallback to regular runner
+            manifest = scenario_runner.run_scenario(ScenarioRunRequest(
+                scenario_id=req.scenario_id, seed=req.seed, time_mode="TEST",
+                dispatch_telemetry=True, transport_config=transport,
+            ))
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
+    
+    from app.live_dashboard import observe_run
+    observe_run(manifest, dest)
+    destination_manager.record_event_sent(dest_id, manifest.dispatch_succeeded)
+    
+    # Return manifest with progress info
+    result = manifest.model_dump(mode="json")
+    result["progress_tracked"] = progress_scenario_runner is not None
+    return result
+
+
+@app.get("/api/acceptance/scenarios")
+def acceptance_scenarios():
+    return [{"id": item, "title": item.replace("_", " ")} for item in sorted(SUPPORTED_SCENARIO_IDS)]
+
+
+@app.post("/api/acceptance/preview/{scenario_id}")
+def acceptance_preview(scenario_id: str):
+    try:
+        runner = ScenarioRunner()
+        manifest = runner.run_scenario(ScenarioRunRequest(scenario_id=scenario_id, seed=42, dispatch_telemetry=False))
+        return {"manifest": manifest.model_dump(mode="json"), "events": [entry.model_dump(mode="json") for entry in runner.get_run_logs(manifest.run_id)[:5]]}
+    except ValueError as exc:
+        raise HTTPException(400, str(exc))
 
 
 # =========================================================================
@@ -1257,13 +1597,493 @@ def get_service_health():
 # =========================================================================
 @app.get("/api/health/pipelines")
 def get_pipelines_health():
-    from app.embedded_pipelines import embedded_pipelines
-    return embedded_pipelines.get_health()
+    return {
+        "components": unified_generation_service.runtime_health(
+            _unified_transport_config()
+        )
+    }
 
 
 # =========================================================================
-# Generation Modes (Modes B, C, D) & Catalog Navigation
+# Unified Generation Experience (Modes A, B, C, and D)
 # =========================================================================
+def _unified_transport_config() -> TelemetryTransportConfig:
+    if current_topology and getattr(current_topology, "global_transport", None):
+        return current_topology.global_transport
+    return TelemetryTransportConfig()
+
+
+@app.get("/api/generation/capabilities")
+def get_unified_generation_capabilities():
+    return unified_generation_service.capabilities(_unified_transport_config())
+
+
+@app.post("/api/generation/preview")
+def preview_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.preview(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/api/generation/preflight")
+def preflight_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.preflight(
+            payload, _unified_transport_config()
+        ).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.post("/api/generation/runs")
+def run_unified_generation(payload: UnifiedGenerationRequest):
+    try:
+        return unified_generation_service.run(
+            payload, _unified_transport_config()
+        ).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.get("/api/generation/runs/{run_id}")
+def get_unified_generation_run(run_id: str):
+    run = unified_generation_service.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    return run.model_dump(mode="json")
+
+
+@app.post("/api/generation/runs/{run_id}/observe")
+def observe_unified_generation_run(run_id: str):
+    try:
+        return unified_generation_service.observe(
+            run_id, _unified_transport_config()
+        ).model_dump(mode="json")
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+
+
+@app.post("/api/generation/runs/{run_id}/investigate/{recipe_id}")
+def investigate_unified_generation_run(run_id: str, recipe_id: str):
+    try:
+        return unified_generation_service.run_investigation(
+            run_id, recipe_id, _unified_transport_config()
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Scenario-Aware Dashboard Studio & Recipe Engine (Phase 11)
+# =========================================================================
+class DashboardLiveValidationRequest(BaseModel):
+    run_id: str
+    index: str = "idx_network_ops"
+
+
+class DashboardVisualValidationRequest(BaseModel):
+    run_id: str
+    evidence_ref: str
+    export_validated: bool
+    browser_rendered: bool
+    scenario_run_binding: bool
+    source_coverage_validated: bool
+    visualization_compatible: bool
+    drilldowns_tested: bool
+    inspector_tested: bool
+    responsive_tested: bool
+
+
+@app.get("/api/dashboards")
+def get_dashboard_catalog():
+    return dashboard_recipe_service.catalog_summary()
+
+
+@app.get("/api/dashboards/{dashboard_id}")
+def get_dashboard_pack(
+    dashboard_id: str,
+    run_id: Optional[str] = Query(default=None),
+    index: str = Query(default="idx_network_ops"),
+):
+    try:
+        return dashboard_recipe_service.generate(
+            dashboard_id, run_id=run_id, index=index
+        ).model_dump(mode="json")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+DASHBOARD_PANEL_RETRIES = 8
+DASHBOARD_PANEL_RETRY_DELAY_S = 4.0
+
+
+@app.post("/api/dashboards/{dashboard_id}/validate")
+def validate_dashboard_pack(
+    dashboard_id: str, payload: DashboardLiveValidationRequest
+):
+    run = unified_generation_service.get_run(payload.run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Generation run not found")
+    try:
+        pack = dashboard_recipe_service.generate(
+            dashboard_id, run_id=payload.run_id, index=payload.index
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    if pack.runtime_scenario_id != (run.scenario_id or run.selection_id):
+        raise HTTPException(
+            status_code=409,
+            detail="run does not belong to the selected dashboard scenario",
+        )
+    panel_results: Dict[str, List[Dict[str, Any]]] = {}
+    failures = []
+    for panel in pack.panels:
+        if not panel.executable or not panel.query:
+            continue
+        # Observed events can lag behind search by a few seconds; retry an empty or short-shaped panel before
+        # concluding it has no data. The verdict still rests only on rows Splunk actually returned.
+        for attempt in range(DASHBOARD_PANEL_RETRIES):
+            rows, error = unified_generation_service.execute_bounded_spl(
+                panel.query, _unified_transport_config()
+            )
+            shaped = bool(rows) and set(panel.expected_shape) <= {f for r in rows for f in r}
+            if error or shaped or attempt == DASHBOARD_PANEL_RETRIES - 1:
+                break
+            time.sleep(DASHBOARD_PANEL_RETRY_DELAY_S)
+        if error:
+            failures.append("{}: {}".format(panel.panel_id, error))
+        else:
+            panel_results[panel.panel_id] = rows
+    evidence = dashboard_recipe_service.validate(
+        pack,
+        panel_results,
+        evidence_refs=["run:{}".format(payload.run_id)],
+        execution_failures=failures,
+        source_coverage_validated=bool(
+            [channel for channel in run.channel_results if channel.required]
+        )
+        and all(
+            any(
+                item.stage == "SPLUNK_OBSERVED"
+                and getattr(item.state, "value", item.state) == "PROVEN"
+                for item in channel.evidence
+            )
+            for channel in run.channel_results
+            if channel.required
+        ),
+        source_observations={
+            channel.source_id: any(
+                item.stage == "SPLUNK_OBSERVED"
+                and getattr(item.state, "value", item.state) == "PROVEN"
+                for item in channel.evidence
+            )
+            for channel in run.channel_results
+            if channel.required
+        },
+    )
+    return evidence.model_dump(mode="json")
+
+
+@app.post("/api/dashboards/{dashboard_id}/validate-visual")
+def validate_dashboard_visuals(
+    dashboard_id: str, payload: DashboardVisualValidationRequest
+):
+    try:
+        evidence = dashboard_recipe_service.mark_visual_validation(
+            dashboard_id=dashboard_id,
+            run_id=payload.run_id,
+            evidence_ref=payload.evidence_ref,
+            export_validated=payload.export_validated,
+            validation_checks={
+                "browser_rendered": payload.browser_rendered,
+                "scenario_run_binding": payload.scenario_run_binding,
+                "source_coverage_validated": payload.source_coverage_validated,
+                "visualization_compatible": payload.visualization_compatible,
+                "drilldowns_tested": payload.drilldowns_tested,
+                "inspector_tested": payload.inspector_tested,
+                "responsive_tested": payload.responsive_tested,
+            },
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    return evidence.model_dump(mode="json")
+
+
+@app.get("/api/dashboards/{dashboard_id}/export")
+def export_dashboard_pack(
+    dashboard_id: str,
+    run_id: Optional[str] = Query(default=None),
+    index: str = Query(default="idx_network_ops"),
+):
+    try:
+        pack = dashboard_recipe_service.generate(
+            dashboard_id, run_id=run_id, index=index
+        )
+        return dashboard_recipe_service.export_dashboard_studio(pack)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+# =========================================================================
+# Industry Studio & Cross-Domain Composition (Phase 10)
+# =========================================================================
+@app.get("/api/industries")
+def get_industry_catalog():
+    return industry_pack_service.catalog()
+
+
+@app.get("/api/industries/{industry_id}")
+def get_industry_pack(industry_id: str):
+    industry = industry_pack_service.get(industry_id)
+    if industry is None:
+        raise HTTPException(status_code=404, detail="Industry Pack not found")
+    return industry_pack_service.describe(industry)
+
+
+@app.post("/api/industries/compose")
+def compose_industry_scenario(payload: IndustrySelection):
+    try:
+        return industry_pack_service.compose(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/industries/{industry_id}/studio-draft")
+def clone_industry_scenario_to_studio(
+    industry_id: str, payload: IndustrySelection
+):
+    if payload.industry_id != industry_id:
+        raise HTTPException(status_code=409, detail="industry selection mismatch")
+    try:
+        composition = industry_pack_service.compose(payload)
+        industry = industry_pack_service.get(industry_id)
+        draft = scenario_studio_service.clone_scenario(composition["scenario_id"])
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+    environment = next(
+        item
+        for item in industry.environments
+        if item.environment_id == payload.environment_id
+    )
+    draft.industry_id = industry_id
+    draft.industry_environment_id = environment.environment_id
+    declared_assumptions = [
+        assumption
+        for impact in industry.business_impacts
+        for assumption in impact.assumptions
+    ]
+    configured_assumptions = payload.modeled_parameters.get(
+        "impact_assumptions", []
+    )
+    draft.business_impact_assumptions = list(
+        dict.fromkeys(declared_assumptions + configured_assumptions)
+    )
+    draft.title = "{} — {} Private Clone".format(
+        industry.name, environment.name
+    )
+    for entity in draft.entities:
+        entity.attributes["industry_id"] = industry_id
+        entity.attributes["industry_environment_id"] = environment.environment_id
+    return draft.model_dump(mode="json")
+
+
+# =========================================================================
+# Scenario Studio & Private Custom Source Packs (Phase 6)
+# =========================================================================
+@app.get("/api/studio")
+def get_scenario_studio_home():
+    return scenario_studio_service.home()
+
+
+@app.post("/api/studio/samples/analyze")
+def analyze_studio_sample(payload: SampleAnalysisRequest):
+    return scenario_studio_service.analyze_sample(payload).model_dump(mode="json")
+
+
+@app.post("/api/studio/custom-sources/validate")
+def validate_studio_custom_source(payload: CustomSourceDraft):
+    return scenario_studio_service.validate_custom_source(payload)
+
+
+@app.post("/api/studio/drafts")
+def create_studio_draft(payload: StudioDraftRequest):
+    try:
+        return scenario_studio_service.create_draft(payload).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.get("/api/studio/packs")
+def list_studio_packs():
+    return [
+        scenario_studio_service.summarize(item)
+        for item in scenario_studio_service.list_packs()
+    ]
+
+
+@app.get("/api/studio/packs/{pack_id}")
+def get_studio_pack(pack_id: str):
+    pack = scenario_studio_service.get_pack(pack_id)
+    if not pack:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    return pack.model_dump(mode="json")
+
+
+@app.post("/api/studio/packs/validate")
+def validate_studio_pack(payload: StudioScenarioPack):
+    return scenario_studio_service.validate_pack(payload).model_dump(mode="json")
+
+
+@app.post("/api/studio/packs")
+def save_studio_pack(payload: StudioScenarioPack):
+    try:
+        return scenario_studio_service.save_pack(payload).model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+@app.delete("/api/studio/packs/{pack_id}")
+def delete_studio_pack(pack_id: str):
+    if not scenario_studio_service.delete_pack(pack_id):
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    return {"deleted": True, "pack_id": pack_id}
+
+
+@app.get("/api/studio/packs/{pack_id}/export-gate")
+def get_studio_export_gate(pack_id: str, public: bool = False):
+    try:
+        return scenario_studio_service.export_gate(pack_id, public=public)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+
+
+@app.post("/api/studio/packs/{pack_id}/run")
+def run_studio_pack(pack_id: str, payload: StudioRunRequest):
+    pack = scenario_studio_service.get_pack(pack_id)
+    if not pack:
+        raise HTTPException(status_code=404, detail="Private Studio pack not found")
+    if pack.definition_only:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Studio definition draft is non-executable: "
+                + "; ".join(pack.execution_blockers)
+            ),
+        )
+    report = scenario_studio_service.validate_pack(pack)
+    if not report.valid:
+        raise HTTPException(
+            status_code=409,
+            detail="Studio pack validation is BLOCKED: {}".format(
+                "; ".join(report.errors)
+            ),
+        )
+    for parameter in pack.parameters:
+        value = payload.parameters.get(parameter.parameter_id, parameter.default)
+        error = parameter.validate_value(value)
+        if error:
+            raise HTTPException(
+                status_code=409,
+                detail="{} {}".format(parameter.parameter_id, error),
+            )
+    _, composition = scenario_studio_service.compile_pack(pack)
+    binding = composition.source_bindings[0]
+    scenario_parameters = dict(payload.parameters)
+    scenario_parameters.update(
+        {
+            "seed": payload.seed,
+            "entity_id": pack.entities[0].entity_id,
+            "studio_shared_state": True,
+            **(
+                {"reference_scenario_id": pack.cloned_from_scenario_id}
+                if pack.cloned_from_scenario_id
+                else {}
+            ),
+            **(
+                {
+                    "security_profile_scenario_id": pack.cloned_from_scenario_id,
+                }
+                if pack.cloned_from_scenario_id
+                and pack.cloned_from_scenario_id.startswith("SEC-P9-")
+                else {}
+            ),
+        }
+    )
+    try:
+        run = unified_generation_service.run(
+            UnifiedGenerationRequest(
+                mode=GenerationMode.SCENARIO,
+                selection_id=pack.scenario_id,
+                transport_id=(
+                    binding.destination_transport_id or binding.transport_id
+                ),
+                destination_id=binding.destination_id,
+                count=1,
+                rate_eps=10,
+                scenario_parameters=scenario_parameters,
+            ),
+            _unified_transport_config(),
+        )
+        return run.model_dump(mode="json")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+
+
+# =========================================================================
+# Legacy Generation Modes (compatibility surface)
+# =========================================================================
+def _authorize_caller_transport(raw: Dict[str, Any]) -> TelemetryTransportConfig:
+    """A caller-supplied transport_config is untrusted input (it carries a destination URL, a token and index names).
+
+    Connection Center not configured: lab/legacy behavior is kept, but index names must be safe.
+    Connection Center configured: the config must point at the configured destination (same host:port) and BOTH the event and
+    metric index it would use (explicit or defaulted) must be on the allowlist; otherwise 403 before anything is sent.
+    """
+    from urllib.parse import urlparse
+    try:
+        cfg = TelemetryTransportConfig(**raw)
+    except Exception as exc:
+        raise HTTPException(status_code=422, detail="Invalid transport_config") from exc
+    indexes = [i for i in (cfg.hec_index, cfg.hec_metric_index) if i]
+    for name in indexes:
+        try:
+            validate_index_name(name)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        return cfg
+    if urlparse(cfg.hec_url or "").netloc.lower() != urlparse(config.get("hec_url") or "").netloc.lower():
+        raise HTTPException(status_code=403, detail="transport_config destination differs from the Connection Center destination")
+    for name in indexes:
+        if name not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    return cfg
+
+
+def _generator_transport(index=None, explicit=None, needs_metric_index=False):
+    """Transport for the generator-mode routes: an explicit request config wins; otherwise the Connection Center
+    destination (global transport) with the requested index; None keeps the pre-existing defaults when none is saved."""
+    if explicit:
+        return _authorize_caller_transport(explicit)
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        return None  # nothing configured: callers keep failing closed (the default transport is not a destination)
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    if gt is not None and getattr(gt, "hec_url", None):
+        effective = index or getattr(gt, "hec_index", None)  # an omitted index falls back to the destination's own index, which must also be allowed
+        if effective and effective not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+        metric_index = getattr(gt, "hec_metric_index", None)
+        if needs_metric_index and metric_index and metric_index not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+        return gt.model_copy(update={"hec_index": index} if index else {})
+    return None
+
+
 @app.post("/api/generate/single-event")
 def post_generate_single_event(payload: Dict[str, Any]):
     from app.generator_modes import generator_service
@@ -1272,13 +2092,17 @@ def post_generate_single_event(payload: Dict[str, Any]):
     event_name = payload.get("event_name")
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_single_event(
-        vendor_id=vendor_id,
-        sourcetype=sourcetype,
-        event_name=event_name,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_single_event(
+            vendor_id=vendor_id,
+            sourcetype=sourcetype,
+            event_name=event_name,
+            dispatch=dispatch,
+            transport_config=_generator_transport(index) if dispatch else None,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/generate/sourcetype")
@@ -1290,14 +2114,19 @@ def post_generate_sourcetype_batch(payload: Dict[str, Any]):
     rate_eps = int(payload.get("rate_eps", 10))
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_sourcetype_batch(
-        vendor_id=vendor_id,
-        sourcetype=sourcetype,
-        count=count,
-        rate_eps=rate_eps,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_sourcetype_batch(
+            vendor_id=vendor_id,
+            sourcetype=sourcetype,
+            count=count,
+            rate_eps=rate_eps,
+            event_families=payload.get("event_families"),
+            dispatch=dispatch,
+            transport_config=_generator_transport(index) if dispatch else None,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/generate/data-source")
@@ -1310,15 +2139,457 @@ def post_generate_data_source(payload: Dict[str, Any]):
     rate_eps = int(payload.get("rate_eps", 10))
     dispatch = bool(payload.get("dispatch", False))
     index = payload.get("index", "idx_network_ops")
-    return generator_service.generate_data_source(
-        vendor_id=vendor_id,
-        product=product,
-        transport=transport,
-        count=count,
-        rate_eps=rate_eps,
-        dispatch=dispatch,
-        index=index
-    )
+    try:
+        return generator_service.generate_data_source(
+            vendor_id=vendor_id,
+            product=product,
+            transport=transport,
+            count=count,
+            rate_eps=rate_eps,
+            dispatch=dispatch,
+            index=index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/generate/scenario-pack")
+def post_generate_universe_scenario_pack(payload: Dict[str, Any]):
+    """Bounded authentic observation packs; separate from graph scenario contracts."""
+    scenario_id = payload.get('scenario_id')
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS as _PACKS
+    from netspout_core.incident_packs import incident_ids
+    incident = incident_ids()
+    if scenario_id in list(_PACKS) + incident:
+        from app.generator_modes import generator_service
+        try:
+            config = payload.get('transport_config')
+            return generator_service.generate_universe_scenario(
+                scenario_id, run_id=payload.get('run_id'), dispatch=bool(payload.get('dispatch', False)),
+                transport_config=_generator_transport(payload.get('index'), config, needs_metric_index=scenario_id in incident) if payload.get('dispatch') else None)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+    raise HTTPException(status_code=400, detail=f"Scenario pack '{scenario_id}' is not available")
+
+
+# =========================================================================
+# Continuous sample replay (Connection Center destination only; no caller transport_config)
+# =========================================================================
+from netspout_core.replay_service import ReplayService, preview as replay_preview, sources as replay_sources
+from netspout_core.sample_replay import DEFAULT_HOST as REPLAY_HOST, DEFAULT_INDEX as REPLAY_INDEX, HecSink, ReplayError
+
+replay_service = ReplayService(Path(os.environ["NETSPOUT_REPLAY_STATE"]) if os.environ.get("NETSPOUT_REPLAY_STATE") else None)
+
+
+def _replay_destination(payload: Dict[str, Any]):
+    """The authorized destination for replay: the saved Connection Center destination, an allowlisted index (default dev_test_replay).
+    A caller-supplied transport_config is refused outright. Outside DOCKER_LAB the index must be a dev_ index and the caller must confirm."""
+    if payload.get("transport_config"):
+        raise HTTPException(status_code=422, detail="Replay uses the Connection Center destination; transport_config is not accepted")
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Connection Center destination is not configured")
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    if gt is None or not getattr(gt, "hec_url", None) or not getattr(gt, "hec_token", None):
+        raise HTTPException(status_code=409, detail="Connection Center HEC destination is not active")
+    index = payload.get("index") or REPLAY_INDEX
+    try:
+        validate_index_name(index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    if config.get("deployment_mode") != "DOCKER_LAB" and not (index.startswith("dev_") and payload.get("confirm_destination") is True):
+        raise HTTPException(status_code=403, detail="Replay outside a lab destination requires a dev_ index and confirm_destination=true")
+    return gt, index, payload.get("host") or REPLAY_HOST
+
+
+@app.get("/api/replay/sources")
+def replay_list_sources():
+    return {"sources": [{k: v for k, v in s.items() if k != "file"} for s in replay_sources()],
+            "defaults": {"index": REPLAY_INDEX, "host": REPLAY_HOST}}
+
+
+@app.get("/api/replay/packs")
+def replay_list_packs():
+    from netspout_core import replay_packs
+    return {"packs": [{**{k: v for k, v in p.items() if k != "phases"}, "correlation_level": replay_packs.correlation_level(p),
+                       "phases": [{"id": ph["id"], "kind": ph["source"]["kind"], "source": ph["source"].get("source_id") or ph["source"].get("pack"),
+                                   "offset_s": ph["offset_s"]} for ph in p["phases"]]} for p in replay_packs.packs()],
+            "defaults": {"index": REPLAY_INDEX, "host": REPLAY_HOST}}
+
+
+@app.post("/api/replay/preview")
+def replay_post_preview(payload: Dict[str, Any]):
+    try:
+        return replay_preview(payload)
+    except ReplayError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.post("/api/replay/sessions")
+def replay_start(payload: Dict[str, Any]):
+    gt, index, host = _replay_destination(payload)
+    def sink(source, sourcetype, idx, hst):
+        return HecSink(gt.hec_url, gt.hec_token, idx, hst, source, sourcetype, getattr(gt, "hec_ssl_verify", True), getattr(gt, "hec_allow_insecure_tls", False))
+    try:
+        return replay_service.create(payload, sink, index=index, host=host).status()
+    except ReplayError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/replay/sessions")
+def replay_list_sessions():
+    return {"sessions": replay_service.list()}
+
+
+@app.get("/api/replay/sessions/{session_id}")
+def replay_get_session(session_id: str):
+    try:
+        return replay_service.status(session_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+
+
+@app.post("/api/replay/sessions/{session_id}/verify")
+def replay_verify(session_id: str):
+    try:
+        return replay_service.verify(session_id, lambda q: release_candidate_configuration.execute_read_only_search(q))
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+
+
+@app.post("/api/replay/sessions/{session_id}/{action}")
+def replay_control(session_id: str, action: str):
+    if action not in ("pause", "resume", "stop"):
+        raise HTTPException(status_code=404, detail="Unknown action")
+    try:
+        return replay_service.control(session_id, action)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown replay session")
+    except ReplayError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+# =========================================================================
+# Live event delivery monitor: one run schema for replay sessions, native/incident packs and single-sourcetype generation.
+# Destination = the saved Connection Center destination only (same authorization as replay); counters are the real delivery counters.
+# =========================================================================
+from netspout_core.delivery_monitor import DeliveryRun, Item, RunMonitorService, replay_snapshot, clean_error, set_service  # noqa: E402
+
+_runs_state = os.environ.get("NETSPOUT_RUNS_STATE") or (str(Path(os.environ["NETSPOUT_CONFIG_DIR"]) / "runs.json") if os.environ.get("NETSPOUT_CONFIG_DIR") else None)
+run_monitor = RunMonitorService(Path(_runs_state) if _runs_state else None)
+set_service(run_monitor)
+_replay_verification: Dict[str, Dict[str, Any]] = {}
+
+
+def _destination_name(gt) -> str:
+    from urllib.parse import urlparse
+    cfg = release_candidate_configuration.load()
+    return "%s · %s" % (cfg.get("deployment_mode") or "destination", urlparse(getattr(gt, "hec_url", "") or "").netloc or "unconfigured")
+
+
+def _hec_item(dispatch_fn, sourcetype, phase, datapoints=0):
+    def send():
+        r = dispatch_fn()
+        h = r.get("hec") or {}
+        state = str(h.get("state") or "").upper()
+        key = {"ACCEPTED": "accepted", "FAILED": "rejected"}.get(state) if state else ("accepted" if h.get("success") else ("rejected" if h.get("success") is False else "unknown"))
+        return (key or "unknown"), (None if key == "accepted" else h.get("message") or h.get("error_class") or "not accepted")
+    return Item(sourcetype, phase, send, datapoints)
+
+
+def _monitor_links(target: str):
+    views = _replay_dashboards()
+    return {"dashboard_view": ("pf_" + target) if target in views else None}
+
+
+@app.post("/api/runs")
+def runs_start(payload: Dict[str, Any]):
+    kind, target = payload.get("kind"), payload.get("target")
+    if kind not in ("scenario", "sourcetype") or not target:
+        raise HTTPException(status_code=422, detail="kind must be scenario or sourcetype and target is required")
+    gt, index, host = _replay_destination(payload)
+    name = _destination_name(gt)
+    from netspout_core import replay_packs, incident_packs, netflow_solution, netflow_wire
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
+    cfg = gt.model_copy(update={"hec_index": index})
+    try:
+        if kind == "scenario" and target in {p["id"] for p in replay_packs.packs()}:
+            def sink(source, sourcetype, idx, hst):
+                return HecSink(gt.hec_url, gt.hec_token, idx, hst, source, sourcetype, getattr(gt, "hec_ssl_verify", True), getattr(gt, "hec_allow_insecure_tls", False))
+            sess = replay_service.create({"pack_id": target, "speed": payload.get("speed", 10), "continuous": bool(payload.get("continuous")), "loops": payload.get("loops", 1),
+                                          "eps_limit": payload.get("eps")}, sink, index=index, host=host)
+            sess.title = replay_packs.get(target)["title"]
+            return replay_snapshot(sess, name, _monitor_links(target))
+        run_id = payload.get("run_id") or "run-" + __import__("uuid").uuid4().hex[:12]
+        eps = payload.get("eps")
+        if eps is not None and not (isinstance(eps, (int, float)) and 0.1 <= eps <= 2000):
+            raise ValueError("eps must be between 0.1 and 2000")
+        if kind == "scenario" and target in SCENARIO_PACK_IDS:
+            items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), e.sourcetype, e.netspout_phase) for e in run_scenario_pack(target, run_id)]
+            title, metric_index = target, None
+        elif kind == "scenario" and target in netflow_solution.IDS:
+            # NetFlow/IPFIX solution: normalized NDJSON flow events over HEC are what the monitor counts; the IPFIX wire export is a separate, separately reported stage
+            seed = int(payload.get("seed", 42))
+            rows = netflow_solution.generate(target, run_id, seed=seed, duration_s=int(payload.get("duration_s", 180)), scale=float(payload.get("scale", 1.0)), params=payload.get("params"))
+            st = payload.get("sourcetype") or netflow_solution.DEFAULT_SOURCETYPE
+            if st not in (netflow_solution.DEFAULT_SOURCETYPE, netflow_solution.REQUESTED_SOURCETYPE):
+                raise ValueError("sourcetype must be %s or %s" % (netflow_solution.DEFAULT_SOURCETYPE, netflow_solution.REQUESTED_SOURCETYPE))
+            pls = netflow_solution.hec_payloads(rows, index, st)
+            items = [Item(st, r["phase"], (lambda pl=pl: (lambda o: ("accepted" if o[0] else "rejected", None if o[0] else (o[1] or "not accepted")))(
+                         dispatcher.emit_hec(pl, cfg.hec_url, cfg.hec_token, ssl_verify=cfg.hec_ssl_verify, allow_insecure_tls=cfg.hec_allow_insecure_tls)))) for r, pl in zip(rows, pls)]
+            title, metric_index = netflow_solution.get(target)["title"], None
+            wire = netflow_wire.export(rows) if payload.get("wire", True) else {"state": "SKIPPED", "generated": len(rows), "note": "wire export disabled for this run"}
+            run = DeliveryRun(kind, target, title, name, index, items, eps_limit=eps if eps is not None else 50, run_id=run_id, links=_monitor_links(target))
+            run.extra = {"flow_wire": wire, "flow_summary": netflow_solution.summary(rows), "sourcetype": st}
+            return run_monitor.start(run).snapshot()
+        elif kind == "scenario" and target in incident_packs.incident_ids():
+            events = incident_packs.generate_pack(target, run_id)
+            metric_index = cfg.hec_metric_index
+            if metric_index not in release_candidate_configuration.load().get("indexes", []):
+                raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+            items = []
+            for e, pl in zip(events, incident_packs.hec_payloads(events, index, metric_index)):
+                items.append(_hec_item(lambda pl=pl: {"hec": (lambda o: {"state": str(o.state), "success": bool(o[0]), "message": o[1]})(dispatcher.emit_hec(pl, cfg.hec_url, cfg.hec_token, ssl_verify=cfg.hec_ssl_verify, allow_insecure_tls=cfg.hec_allow_insecure_tls))},
+                                       e["sourcetype"], e["fields"].get("netspout_phase"), len(e.get("metrics") or {})))
+            title = target
+        elif kind == "scenario":
+            # ScenarioRunner and unified-generation families: the runner owns the loop, so it runs on a worker and the monitor reads the delivery boundary
+            from netspout_core.delivery_monitor import ObservedRun
+            if target in SUPPORTED_SCENARIO_IDS:
+                runner = lambda: scenario_runner.run_scenario(ScenarioRunRequest(scenario_id=target, seed=payload.get("seed"), time_mode="TEST", dispatch_telemetry=True, transport_config=TelemetryTransportConfig(**cfg.model_dump())))
+                run_id = scenario_runner.generate_run_id()
+            else:
+                run_id = str(__import__("uuid").uuid4())
+                ureq = UnifiedGenerationRequest(mode=GenerationMode.SCENARIO, selection_id=target, count=int(payload.get("count", 6)), rate_eps=int(eps or 10))
+                pre = unified_generation_service.preflight(ureq, cfg)
+                if str(getattr(pre.state, "value", pre.state)) == "BLOCKED":
+                    why = "; ".join("%s: %s" % (c.label, c.detail) for c in pre.checks if str(getattr(c.state, "value", c.state)) == "BLOCKED")
+                    raise HTTPException(status_code=409, detail="Preflight is BLOCKED (" + (why or "see /api/generation/preflight") + ")")
+                runner = lambda: unified_generation_service.run(ureq, cfg)
+            obs = ObservedRun("scenario", target, target, name, index, run_id=run_id, links=_monitor_links(target))
+            return run_monitor.run_in_background(obs, runner).snapshot()
+        else:
+            from app.generator_modes import generator_service
+            mode = payload.get("mode", "finite")
+            if mode not in ("finite", "continuous", "duration"):
+                raise ValueError("mode must be finite, continuous or duration")
+            vendor = payload.get("vendor_id") or ""
+            if mode == "finite":
+                entries, prov = generator_service.prepare_sourcetype_entries(vendor, target, int(payload.get("count", 10)), payload.get("event_families"), run_id)
+                items = [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in entries]
+                title, metric_index = target, None
+            else:
+                # continuous / timed streaming of ONE sourcetype; grounding is checked once up front, then events are produced just before each send
+                duration = float(payload["duration_s"]) if mode == "duration" else None
+                if mode == "duration" and not duration or (duration is not None and not 1 <= duration <= 86400):
+                    raise ValueError("duration_s must be between 1 and 86400")
+                _, prov = generator_service.prepare_sourcetype_entries(vendor, target, 1, payload.get("event_families"), run_id)
+                eps = eps if eps is not None else 5
+
+                def produce(n, vendor=vendor, run_id=run_id):
+                    es, _p = generator_service.prepare_sourcetype_entries(vendor, target, n, payload.get("event_families"), run_id)
+                    return [_hec_item(lambda e=e: dispatcher.dispatch_log(e, cfg), target, None) for e in es]
+                from netspout_core.delivery_monitor import ContinuousRun
+                crun = ContinuousRun(kind, target, target, name, index, [], eps_limit=eps, run_id=run_id, links=_monitor_links(target), produce=produce, duration_s=duration,
+                                     max_events=int(payload["count"]) if payload.get("count") and mode == "continuous" else None)
+                crun.source_mode = prov.get("mode")
+                return run_monitor.start(crun).snapshot()
+        run = DeliveryRun(kind, target, title, name, index, items, eps_limit=eps, run_id=run_id, links=_monitor_links(target), metric_index=metric_index)
+        return run_monitor.start(run).snapshot()
+    except HTTPException:
+        raise
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+def _run_snapshot(run_id: str):
+    live = run_monitor.snapshot(run_id)
+    if live:
+        return live
+    try:
+        sess = replay_service.get(run_id)
+        from netspout_core.replay_service import ReplayService  # noqa: F401
+        gt = getattr(current_topology, "global_transport", None)
+        return replay_snapshot(sess, _destination_name(gt) if gt else "destination", _monitor_links(sess.source.split(":")[2] if sess.source.count(":") >= 3 else ""), _replay_verification.get(run_id))
+    except KeyError:
+        h = replay_service.status(run_id) if run_id in replay_service._history else None
+        if h:
+            return {"run_id": run_id, "kind": "replay", "state": h.get("state", "INTERRUPTED"), "mode": "finite", "counters": {"generated": h["counts"]["generated"], "attempts": h["counts"]["delivered"],
+                    "accepted": h["counts"]["accepted"], "rejected": h["counts"]["rejected"], "unknown": h["counts"]["unknown"], "pending": h["counts"]["generated"] - h["counts"]["delivered"], "indexed": None},
+                    "controls": {"pause": False, "resume": False, "stop": False}, "interrupted_note": h.get("note"), "persisted_summary": True}
+    return None
+
+
+@app.get("/api/runs")
+def runs_list():
+    rows = {r["run_id"]: r for r in run_monitor.list()}
+    for s in replay_service.list():
+        rows.setdefault(s["session_id"], {"run_id": s["session_id"], "kind": "replay", "state": s["state"], "target": s.get("source")})
+    return {"runs": list(rows.values())}
+
+
+@app.post("/api/runs/{run_id}/verify")
+def runs_verify(run_id: str):
+    snap = _run_snapshot(run_id)
+    if not snap:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat()
+    try:
+        if snap["kind"] == "replay":
+            v = replay_service.verify(run_id, lambda q: release_candidate_configuration.execute_read_only_search(q))
+            rec = {"status": ("VERIFIED" if v.get("complete") else "INCOMPLETE") if v.get("verified") else "ERROR", "indexed": v.get("indexed"), "accepted": v.get("accepted"), "at": now, "query": v.get("query"), "error": v.get("error")}
+            _replay_verification[run_id] = rec
+            return rec
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    run = run_monitor.get(run_id)
+    idx = snap["destination"]["index"]
+    rows, error = release_candidate_configuration.execute_read_only_search('search index="%s" netspout_run_id="%s" earliest=-30d latest=+1d | stats count as indexed' % (idx, run_id))
+    metric = None
+    if snap["destination"].get("metric_index") and not error:
+        m, merr = release_candidate_configuration.execute_read_only_search('| mstats count(_value) as n WHERE index="%s" AND metric_name=* AND netspout_run_id="%s" earliest=-30d latest=+1d' % (snap["destination"]["metric_index"], run_id))
+        metric = None if merr else int((m[0].get("n") if m else 0) or 0)
+    if error:
+        rec = {"status": "ERROR", "error": clean_error(error), "at": now}
+    else:
+        indexed = int(float((rows[0].get("indexed") if rows else 0) or 0))
+        accepted = snap["counters"]["accepted"]
+        macc = snap.get("metric_accepted") or {"events": 0, "datapoints": 0}
+        logs_expected = accepted - macc["events"]
+        metric_ok = macc["datapoints"] == 0 or metric == macc["datapoints"]
+        done = snap["state"] in ("COMPLETED", "STOPPED")
+        rec = {"status": "VERIFIED" if (done and indexed == logs_expected and metric_ok) else "INCOMPLETE",
+               "indexed": indexed, "accepted": accepted, "expected_log_events": logs_expected, "at": now,
+               "note": "indexed is counted by an independent search; it can trail accepted briefly"}
+        if macc["datapoints"]:
+            rec.update({"metric_datapoints_indexed": metric, "metric_datapoints_expected": macc["datapoints"], "metric_events_accepted": macc["events"]})
+        if run:
+            run.indexed = indexed + (macc["events"] if metric_ok else 0)   # metric events count as indexed only when every datapoint they carry was found
+    if run:
+        run.verification = rec
+    return rec
+
+
+READINESS_GRACE_S = 180   # after delivery ends, indexing may still trail; after this the missing evidence is reported as DEGRADED
+
+
+def _readiness_state(snap: Dict[str, Any], found: Optional[Dict[str, Any]], verification: Optional[Dict[str, Any]], now_s: float) -> Dict[str, Any]:
+    """Pure run-bound readiness. `found` is the independent search result {sourcetypes: {st: n}, phases: {ph: n}, total: n} or None when the search failed.
+    Required evidence = what the run actually delivered with acceptance (accepted sourcetypes, phases, metric datapoints), never unrelated data."""
+    c, st = snap["counters"], snap["state"]
+    out: Dict[str, Any] = {"run_id": snap["run_id"], "run_state": st, "required": {}, "present": {}, "missing": [], "notes": []}
+    if st in ("RUNNING", "PAUSED", "STOPPING", "CREATED"):
+        out["state"] = "GENERATING" if c["attempts"] == 0 else "DELIVERING"
+        return out
+    if st == "FAILED" or c["accepted"] == 0:
+        out["state"] = "FAILED"
+        out["notes"].append(snap.get("error") or "no event was accepted by the destination, so there is nothing to index")
+        return out
+    if found is None:
+        out["state"] = "UNKNOWN"
+        out["notes"].append("the independent Splunk search could not be completed" + (": " + str(verification.get("error")) if verification and verification.get("error") else ""))
+        return out
+    req_st = {k: v.get("accepted", 0) for k, v in snap.get("by_sourcetype", {}).items() if v.get("accepted", 0)}
+    req_ph = [p["phase"] for p in snap.get("by_phase", []) if p.get("accepted", 0)]
+    aligned = sum(found["sourcetypes"].get(k, 0) for k in req_st) == found["total"]   # a TA that rewrites sourcetype would break name matching; then only totals are trusted
+    out["required"] = {"sourcetypes": req_st, "phases": req_ph, "events_expected": (verification or {}).get("expected_log_events")}
+    out["present"] = {"sourcetypes": found["sourcetypes"], "phases": found["phases"], "events_indexed": found["total"]}
+    if aligned:
+        out["missing"] += ["sourcetype " + k for k in req_st if not found["sourcetypes"].get(k)]
+    out["missing"] += ["phase " + p for p in req_ph if not found["phases"].get(p)]
+    complete = bool(verification) and verification.get("status") == "VERIFIED" and not out["missing"]
+    ended = snap.get("ended_at")
+    since = (now_s - __import__("datetime").datetime.fromisoformat(ended).timestamp()) if ended else 0
+    if complete and c["rejected"] == 0 and c["unknown"] == 0:
+        out["state"] = "READY"
+    elif complete:
+        out["state"] = "DEGRADED"
+        out["notes"].append("all accepted events are indexed, but %d were rejected and %d have an unknown outcome" % (c["rejected"], c["unknown"]))
+    elif found["total"] > 0:
+        out["state"] = "PARTIALLY_READY" if since < READINESS_GRACE_S else "DEGRADED"
+    else:
+        out["state"] = "INDEXING" if since < READINESS_GRACE_S else "DEGRADED"
+    if out["state"] in ("INDEXING", "PARTIALLY_READY"):
+        out["notes"].append("indexing and search visibility can lag delivery; this run is re-checked until %ds after delivery ended. No ETA is given because none is measured." % READINESS_GRACE_S)
+    if out["state"] == "DEGRADED" and out["missing"]:
+        out["notes"].append("evidence still missing after the wait window: " + ", ".join(out["missing"]))
+    return out
+
+
+@app.post("/api/runs/{run_id}/readiness")
+def runs_readiness(run_id: str):
+    """Run-bound dashboard readiness: one independent search keyed by this run's id, compared with what the run actually delivered."""
+    snap = _run_snapshot(run_id)
+    if not snap:
+        return {"run_id": run_id, "state": "NOT_STARTED", "notes": ["unknown run id"]}
+    import time as _t
+    found, verification = None, None
+    if snap["state"] in ("COMPLETED", "STOPPED") and snap["counters"]["accepted"]:
+        verification = runs_verify(run_id)
+        if snap["kind"] != "replay" and verification.get("status") != "ERROR":
+            key = "netspout_run_id"
+            rows, err = release_candidate_configuration.execute_read_only_search('search index="%s" %s="%s" earliest=-30d latest=+1d | stats count by sourcetype, netspout_phase' % (snap["destination"]["index"], key, run_id))
+            if not err:
+                found = {"sourcetypes": {}, "phases": {}, "total": 0}
+                for r in rows:
+                    n = int(float(r.get("count") or 0))
+                    found["sourcetypes"][r.get("sourcetype") or ""] = found["sourcetypes"].get(r.get("sourcetype") or "", 0) + n
+                    if r.get("netspout_phase"):
+                        found["phases"][r["netspout_phase"]] = found["phases"].get(r["netspout_phase"], 0) + n
+                    found["total"] += n
+        elif verification.get("status") != "ERROR":
+            found = {"sourcetypes": {}, "phases": {}, "total": int(verification.get("indexed") or 0)}
+    out = _readiness_state(snap, found, verification, _t.time())
+    out["verification"] = verification
+    out["started_at"], out["elapsed_s"] = snap.get("started_at"), snap.get("elapsed_s")
+    out["scenario"], out["title"] = snap.get("target"), snap.get("title")
+    out["counters"] = snap["counters"]
+    out["dashboard"] = _dashboard_handoff(snap, out["state"])
+    run = run_monitor.get(run_id)
+    if run is not None:
+        if out["state"] == "READY" and not getattr(run, "ready_elapsed_s", None):
+            run.ready_elapsed_s = snap.get("elapsed_s")
+        out["elapsed_to_ready_s"] = getattr(run, "ready_elapsed_s", None)
+        run.readiness = out["state"]
+    return out
+
+
+def _dashboard_handoff(snap: Dict[str, Any], state: str) -> Optional[Dict[str, Any]]:
+    view = (snap.get("links") or {}).get("dashboard_view")
+    if not view:
+        return None
+    from datetime import datetime, timedelta, timezone
+    t0 = datetime.fromisoformat(snap["started_at"]) if snap.get("started_at") else datetime.now(timezone.utc)
+    dest = snap.get("destination") or {}
+    idx = {k: v for k, v in (("form.index_tok", dest.get("index")), ("form.mindex_tok", dest.get("metric_index"))) if v}   # dashboards default to dev_test_replay; carry the run's own index
+    return {"view": view, "tokens": {"form.run_tok": snap["run_id"], **idx, "form.global_time.earliest": int((t0 - timedelta(minutes=5)).timestamp()), "form.global_time.latest": int((datetime.now(timezone.utc) + timedelta(minutes=5)).timestamp())},
+            "openable": state in ("READY", "PARTIALLY_READY", "DEGRADED"), "note": "the dashboard is filtered to this run; it stays empty until the run is indexed"}
+
+
+@app.get("/api/runs/{run_id}")
+def runs_get(run_id: str):
+    snap = _run_snapshot(run_id)
+    if not snap:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    return snap
+
+
+@app.post("/api/runs/{run_id}/{action}")
+def runs_control(run_id: str, action: str):
+    if action not in ("pause", "resume", "stop"):
+        raise HTTPException(status_code=404, detail="Unknown action")
+    try:
+        if run_monitor.get(run_id):
+            run_monitor.control(run_id, action)
+        else:
+            replay_service.control(run_id, action)
+        return _run_snapshot(run_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Unknown run")
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @app.post("/api/generate/scenario")
@@ -1367,12 +2638,726 @@ def get_catalog_domains():
 
 @app.get("/api/catalog/provenance")
 def get_catalog_provenance():
+    """Legacy provenance list retained for compatibility."""
     import json
     prov_path = os.path.join(os.path.dirname(__file__), "catalog_data", "telemetry_sources.json")
     if os.path.exists(prov_path):
         with open(prov_path, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
+
+
+@app.get("/api/catalog/telemetry")
+def get_telemetry_catalog():
+    """Strict Native/Splunk/NetSpout telemetry contract catalog."""
+    from app.catalog import catalog
+    return catalog.get_telemetry_catalog()
+
+
+@app.get("/api/catalog/summary")
+def get_telemetry_catalog_summary():
+    from app.catalog import catalog
+    return catalog.get_telemetry_catalog_summary()
+
+
+@app.get("/api/security-sources")
+def get_security_source_coverage():
+    return {
+        "summary": security_source_catalog.summary(),
+        "sources": security_source_catalog.list_sources(),
+    }
+
+
+@app.get("/api/security-sources/{coverage_id}")
+def get_security_source_coverage_detail(coverage_id: str):
+    source = security_source_catalog.get_source(coverage_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail="Security source not found")
+    return source
+
+
+@app.get("/api/security-content/summary")
+def get_security_content_summary():
+    return security_content_catalog.summary()
+
+
+@app.get("/api/security-content/detections")
+def list_security_content_detections(
+    q: Optional[str] = None,
+    story: Optional[str] = None,
+    technique: Optional[str] = None,
+    data_source: Optional[str] = None,
+    sourcetype: Optional[str] = None,
+    detection_type: Optional[str] = None,
+    product: Optional[str] = None,
+    required_ta: Optional[str] = None,
+    data_model: Optional[str] = None,
+    validation_status: Optional[str] = None,
+    compatibility: Optional[str] = None,
+    limit: int = Query(default=100, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+):
+    try:
+        return security_content_catalog.list_detections(
+            query=q,
+            story=story,
+            technique=technique,
+            data_source=data_source,
+            sourcetype=sourcetype,
+            detection_type=detection_type,
+            product=product,
+            required_ta=required_ta,
+            data_model=data_model,
+            validation_status=validation_status,
+            compatibility=compatibility,
+            limit=limit,
+            offset=offset,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/detections/{detection_id:path}")
+def get_security_content_detection(detection_id: str):
+    detection = security_content_catalog.get_detection(detection_id)
+    if detection is None:
+        raise HTTPException(status_code=404, detail="Detection not found")
+    return detection
+
+
+@app.get("/api/security-content/stories")
+def list_security_content_stories(
+    q: Optional[str] = None,
+    limit: int = Query(default=200, ge=1, le=500),
+):
+    return security_content_catalog.list_stories(query=q, limit=limit)
+
+
+@app.get("/api/security-content/datasets")
+def list_attack_datasets(
+    q: Optional[str] = None,
+    technique: Optional[str] = None,
+    limit: int = Query(default=200, ge=1, le=500),
+):
+    return security_content_catalog.list_datasets(
+        query=q, technique=technique, limit=limit
+    )
+
+
+@app.get("/api/security-content/mitre")
+def get_security_content_mitre_coverage():
+    return security_content_catalog.mitre_coverage()
+
+
+@app.post("/api/security-content/datasets/retrieve")
+def retrieve_attack_dataset(payload: AttackDataRetrievePayload):
+    try:
+        return attack_data_replay_service.retrieve(payload.dataset_path)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except (ValueError, urllib.error.URLError, TimeoutError, OSError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/datasets/preview/{local_id}")
+def preview_attack_dataset(
+    local_id: str,
+    limit: int = Query(default=10, ge=1, le=50),
+):
+    try:
+        return attack_data_replay_service.preview(local_id, limit=limit)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+def _authorized_replay_configuration(index: str) -> Dict[str, Any]:
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    token = release_candidate_configuration.secrets.hec_token
+    if not token:
+        raise HTTPException(status_code=409, detail="HEC credential is unavailable")
+    hec_url = config["hec_url"].rstrip("/")
+    if not hec_url.endswith("/event"):
+        hec_url += "/event"
+    return {
+        "hec_url": hec_url,
+        "hec_token": token,
+        "allow_insecure_tls": bool(config.get("allow_insecure_tls")),
+    }
+
+
+@app.post("/api/security-content/replays")
+def replay_attack_dataset(payload: AttackDataReplayPayload):
+    destination = _authorized_replay_configuration(payload.index)
+    try:
+        return attack_data_replay_service.replay(
+            local_id=payload.local_id,
+            dataset_path=payload.dataset_path,
+            index=payload.index,
+            timestamp_mode=payload.timestamp_mode,
+            **destination,
+        )
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/replays/{run_id}")
+def get_attack_data_replay(run_id: str):
+    try:
+        return attack_data_replay_service.get_run(run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/api/security-content/replays/{run_id}/cancel")
+def cancel_attack_data_replay(run_id: str):
+    try:
+        return attack_data_replay_service.cancel(run_id)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.post("/api/security-content/validations")
+def validate_security_content_detection(payload: DetectionValidationPayload):
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    if payload.expected_min_matches < 0 or payload.expected_min_matches > 100:
+        raise HTTPException(status_code=422, detail="Expected match bound is outside policy")
+    try:
+        return detection_validation_orchestrator.validate(**payload.model_dump())
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/api/security-content/validations")
+def list_security_content_validations():
+    return detection_evidence_store.list()
+
+
+# =========================================================================
+# Use Case Explorer (Phase 4E): search + workflow descriptors over existing engines
+# =========================================================================
+_explorer_operational_cache: Dict[str, Any] = {}
+
+
+def _verified_scenario_ids():
+    """(live-verified scenario ids, dashboard-verified scenario ids) from COMMITTED evidence only; empty if the evidence files are not present."""
+    import glob as _glob
+    here = Path(__file__).resolve().parent
+    root = here.parents[1]
+    verified, dashboards = set(), set()
+    files = _glob.glob(str(here / "catalog_data" / "*live_raw_equality_results.json")) + _glob.glob(str(root / "docs/verification/evidence/incident_packs/live_results.json"))
+    for f in files:
+        try:
+            doc = json.loads(Path(f).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        for run in doc.get("scenario_runs", []):
+            if run.get("verdict") == "PASS":
+                verified.add(run["scenario_id"])
+    try:  # replay packs whose every event, phase order and run tag were read back from Splunk in the isolated lab
+        verified |= set(json.loads((root / "docs/verification/evidence/replay/replay_live.json").read_text(encoding="utf-8")).get("packs_indexed_verified", []))
+    except (OSError, ValueError):
+        pass
+    try:  # flow scenarios proven through GoFlow2 + forwarder and read back from Splunk by run id; monitored runs verified by an independent search
+        flow = json.loads((root / "docs/verification/evidence/flow/scenarios.json").read_text(encoding="utf-8"))
+        verified |= {sid for sid, r in flow.get("scenarios", {}).items() if r.get("ok")}
+        dv = json.loads((root / "docs/verification/evidence/dashboards/data_validation.json").read_text(encoding="utf-8"))
+        verified |= {sid for sid, r in dv.get("dashboards", {}).items() if r.get("pass")}   # fresh run's events read back from Splunk by run id and KPIs equal to independent searches
+        live = json.loads((root / "docs/verification/evidence/monitor/live.json").read_text(encoding="utf-8"))
+        verified |= {c["target"] for c in live.get("cases", []) if c.get("ok") and c.get("target") and (c.get("verification") or {}).get("status") == "VERIFIED"}
+    except (OSError, ValueError):
+        pass
+    try:  # NetFlow solution runs: HEC-accepted == independently indexed by run id, readiness READY (scripts/validate_netflow_live.py)
+        nfl = json.loads((root / "docs/verification/evidence/netflow/live_runs.json").read_text(encoding="utf-8"))
+        verified |= {r["scenario_id"] for r in nfl.get("runs", []) if r.get("ok")}
+    except (OSError, ValueError):
+        pass
+    try:
+        visual = json.loads((root / "docs/verification/evidence/phase4f/visual-validation.json").read_text(encoding="utf-8"))
+        if visual.get("verdict", {}).get("maturity") == "DASHBOARD_READY":
+            dashboards.add("SEC-P9-B-DNS-ANOMALY")
+            verified.add("SEC-P9-B-DNS-ANOMALY")
+    except (OSError, ValueError):
+        pass
+    return verified, dashboards
+
+
+def _replay_panels_populated():
+    try:
+        root = Path(__file__).resolve().parents[2]
+        return set(json.loads((root / "docs/verification/evidence/replay/replay_live.json").read_text(encoding="utf-8")).get("packs_panels_populated", []))
+    except (OSError, ValueError):
+        return set()
+
+
+def _replay_dashboards():
+    """scenario id -> installed Dashboard Studio view and the maturity recorded by stored evidence (replay, authentic native and incident packs; never inferred)."""
+    root = Path(__file__).resolve().parents[2]
+    try:
+        doc = json.loads((root / "docs/verification/evidence/dashboards/dashboard_maturity.json").read_text(encoding="utf-8"))
+        out = {pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in doc["dashboards"].items()}
+    except (OSError, ValueError, KeyError):
+        out = {}
+    try:   # NetFlow solution dashboards are validated by their own evidence file (scripts/validate_netflow_dashboards.py)
+        nf_doc = json.loads((root / "docs/verification/evidence/netflow/dashboard_maturity.json").read_text(encoding="utf-8"))
+        out.update({pid: {"view": "pf_" + pid, "maturity": v["maturity"]} for pid, v in nf_doc["dashboards"].items()})
+    except (OSError, ValueError, KeyError):
+        pass
+    return out
+
+
+def _explorer() -> UseCaseExplorer:
+    from app.catalog import catalog
+    if "inputs" not in _explorer_operational_cache:
+        capabilities = unified_generation_service.capabilities(_unified_transport_config())
+        _explorer_operational_cache["inputs"] = {
+            "generation_scenarios": capabilities["scenarios"],
+            "generation_sources": capabilities["sources"],
+            "dashboards": dashboard_recipe_service.catalog_summary()["dashboards"],
+            "catalog_scenarios": catalog.list_scenarios(),
+        }
+    return UseCaseExplorer(
+        taxonomy=load_taxonomy(),
+        security_catalog=security_content_catalog,
+        validations=detection_evidence_store.list,
+        runtime_approved_detections=SUPPORTED_RUNTIME_DETECTIONS,
+        pack_scenario_ids=SCENARIO_PACK_IDS,
+        runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
+        incident_packs=incident_catalog(),
+        replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
+        netflow_packs=__import__('netspout_core.netflow_solution', fromlist=['catalog']).catalog(),
+        replay_panels_populated=_replay_panels_populated(),
+        replay_dashboards=_replay_dashboards(),
+        candidates=load_candidates(),
+        curated_stories=load_curated_stories(),
+        verified_scenarios=_verified_scenario_ids()[0],
+        dashboard_verified=_verified_scenario_ids()[1],
+        **_explorer_operational_cache["inputs"],
+    )
+
+
+@app.get("/api/explorer/summary")
+def explorer_summary():
+    explorer = _explorer()
+    return {**explorer.facets(), "industries": explorer.industries()}
+
+
+@app.get("/api/explorer/entries")
+def explorer_search(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = Query(default=None, pattern="^(operational|security)$"),
+    industry: Optional[str] = None,
+    tier: Optional[str] = None,
+    vendor: Optional[str] = None,
+    readiness: Optional[str] = None,
+    demo_ready: Optional[bool] = None,
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+):
+    return _explorer().search(q=q, kind=kind, industry=industry, tier=tier, vendor=vendor,
+                              readiness=readiness, demo_ready=demo_ready, limit=limit, offset=offset)
+
+
+_search_cache: Dict[str, Any] = {}
+
+
+@app.get("/api/search")
+def universal_search(
+    q: str = Query(default="", max_length=200),
+    kind: Optional[str] = Query(default=None, pattern="^(sourcetype|scenario|dashboard)$"),
+    industry: Optional[str] = None, vendor: Optional[str] = None, protocol: Optional[str] = None, category: Optional[str] = None,
+    execution_mode: Optional[str] = None, maturity: Optional[str] = None,
+    runnable: Optional[bool] = None, dashboard_available: Optional[bool] = None, independently_indexed: Optional[bool] = None,
+    limit: int = Query(default=50, ge=1, le=200), offset: int = Query(default=0, ge=0),
+):
+    """One ranked search over sourcetypes, Explorer scenarios and installed dashboards; statuses are copied from the registries, never upgraded."""
+    from app.catalog import catalog
+    from netspout_core import universal_search as us
+    if "records" not in _search_cache:
+        root = Path(__file__).resolve().parents[2]
+        views = us.dashboard_views(root / "netspout/default/data/ui/views", _replay_dashboards())
+        entries = _explorer().search(q="", limit=200, offset=0)["items"]
+        total = _explorer().search(q="", limit=1)["total"]
+        for off in range(200, total, 200):
+            entries += _explorer().search(q="", limit=200, offset=off)["items"]
+        from app.generator_modes import generator_service
+        sts = catalog.list_sourcetypes(include_deprecated=True)
+        streamable = {}
+        for st in sts:
+            try:
+                streamable[st["splunk_sourcetype"]] = generator_service.prepare_sourcetype_entries(st["vendor_id"], st["splunk_sourcetype"], 1)[1]["mode"]
+            except ValueError:
+                pass   # not grounded: stays searchable as catalog-only
+        _search_cache["records"] = us.build_records(sts, entries, views, streamable)
+    return us.search(_search_cache["records"], q, kind, dict(industry=industry, vendor=vendor, protocol=protocol, category=category, execution_mode=execution_mode, maturity=maturity, runnable=runnable, dashboard_available=dashboard_available, independently_indexed=independently_indexed), limit, offset)
+
+
+@app.get("/api/explorer/entries/{entry_id}")
+def explorer_entry(entry_id: str):
+    entry = _explorer().get(entry_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Explorer entry not found")
+    return entry
+
+
+@app.get("/api/explorer/entries/{entry_id}/prerequisites")
+def explorer_prerequisites(entry_id: str, index: Optional[str] = None):
+    if index is not None:
+        try:
+            validate_index_name(index)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+    try:
+        return _explorer().prerequisites(entry_id, release_candidate_configuration.load(), index=index)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@app.get("/api/explorer/entries/{entry_id}/preview")
+def explorer_preview(entry_id: str):
+    """What a run of this entry will do, before it runs: sourcetypes, phases and volume where they can be calculated, destination, dashboard, and exact blockers."""
+    entry = _explorer().get(entry_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Explorer entry not found")
+    from collections import Counter
+    from netspout_core import incident_packs
+    from netspout_core.authentic_scenario_packs import SCENARIO_PACK_IDS, run_scenario_pack
+    target = entry.get("scenario_id")
+    cfg = release_candidate_configuration.load()
+    gt = getattr(current_topology, "global_transport", None) if current_topology else None
+    volume = {"events": None, "metric_events": None, "phases": [], "basis": "not known before the run"}
+    try:
+        if target in SCENARIO_PACK_IDS:
+            evs = run_scenario_pack(target, "preview")
+            ph = Counter(e.netspout_phase for e in evs if getattr(e, "netspout_phase", None))
+            volume = {"events": len(evs), "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}
+            st = sorted({e.sourcetype for e in evs})
+        elif target in __import__("netspout_core.netflow_solution", fromlist=["IDS"]).IDS:
+            from netspout_core import netflow_solution as nfs
+            rows = nfs.generate(target, "preview")
+            sm = nfs.summary(rows)
+            volume = {"events": sm["flows"], "metric_events": 0, "phases": [{"phase": k, "events": v} for k, v in sm["phases"].items()],
+                      "basis": "deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count"}
+            st = [nfs.DEFAULT_SOURCETYPE]
+        elif target in incident_packs.incident_ids():
+            evs = incident_packs.generate_pack(target, "preview")
+            ph = Counter((e["fields"] or {}).get("netspout_phase") for e in evs if (e["fields"] or {}).get("netspout_phase"))
+            mets = sum(1 for e in evs if e.get("metrics"))
+            volume = {"events": len(evs) - mets, "metric_events": mets, "phases": [{"phase": k, "events": v} for k, v in ph.items()], "basis": "deterministic pack definition"}
+            st = sorted({e["sourcetype"] for e in evs})
+        else:
+            st = None
+    except Exception:   # a preview must never fail the page; the volume simply stays unknown
+        st = None
+    total = (volume["events"] or 0) + (volume["metric_events"] or 0)
+    return {
+        "entry_id": entry_id, "title": entry["title"], "scenario_id": target, "summary": entry.get("summary"), "domain": entry.get("domain"), "category": entry.get("category"),
+        "industries": [i["id"] for i in entry.get("industries") or []], "maturity": (entry.get("maturity") or {}).get("tier"),
+        "runnable": bool(entry.get("runnable")), "blockers": [entry["blocked_reason"]] if entry.get("blocked_reason") else [],
+        "required_sourcetypes": st or list(entry.get("sourcetypes") or []) + list(entry.get("source_ids") or []), "vendors": entry.get("vendors") or [],
+        "volume": volume,
+        "execution": {"path": "HEC" , "destination": _destination_name(gt) if gt else None, "configured": bool(cfg.get("configured")), "indexes": cfg.get("indexes", []),
+                      "metric_index": getattr(gt, "hec_metric_index", None) if gt else None},
+        "dashboard": ({"view": entry["dashboard"].get("splunk_view"), "maturity": entry["dashboard"].get("dashboard_maturity"), "note": "the dashboard stays empty until this run is indexed"} if (entry.get("dashboard") or {}).get("splunk_view") else None),
+        "timing": {"planned_events": total or None, "note": "Timing varies with ingestion, indexing and search availability. PulseForge will verify when your data is ready."},
+    }
+
+
+class ExplorerEnablePayload(BaseModel):
+    index: str
+
+
+class ExplorerObservePayload(BaseModel):
+    index: str
+    run_id: str
+    metric_index: Optional[str] = None
+
+
+@app.post("/api/explorer/detections/{detection_id}/enable")
+def explorer_enable_detection(detection_id: str, payload: ExplorerEnablePayload):
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    try:
+        prepared = detection_validation_orchestrator.prepare_enable(detection_id, payload.index)
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    result = release_candidate_configuration.upsert_saved_search(prepared["saved_search_name"], prepared["spl"])
+    return {
+        **result, "detection_id": prepared["detection_id"], "spl_hash": prepared["spl_hash"],
+        "upstream_commit": prepared["upstream_commit"], "adaptations": prepared["adaptations"],
+        "limitations": ["Enabled means the scheduled saved search exists in Splunk; it does not show that it has fired."],
+    }
+
+
+@app.post("/api/explorer/observe")
+@app.post("/api/explorer/security/observe")
+def explorer_observe_replay(payload: ExplorerObservePayload):
+    """Count run-scoped events actually present in Splunk, so validation never relies on 'events sent'."""
+    config = release_candidate_configuration.load()
+    if not config.get("configured"):
+        raise HTTPException(status_code=409, detail="Complete Connection Center setup first")
+    if payload.index not in config.get("indexes", []):
+        raise HTTPException(status_code=403, detail="Index is not authorized by Connection Center")
+    try:
+        validate_index_name(payload.index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,128}", payload.run_id):
+        raise HTTPException(status_code=422, detail="Invalid run identifier")
+    rows, error = release_candidate_configuration.execute_read_only_search(
+        f'search index="{payload.index}" netspout_run_id="{payload.run_id}" earliest=-24h latest=now | stats count'
+    )
+    if error:
+        return {"status": "ERROR", "indexed_event_count": None, "error": error}
+    count = int(rows[0].get("count", 0)) if rows else 0
+    reply = {"status": "OBSERVED" if count > 0 else "NOT_OBSERVED", "indexed_event_count": count, "error": None}
+    if payload.metric_index:
+        if payload.metric_index not in config.get("indexes", []):
+            raise HTTPException(status_code=403, detail="Metric index is not authorized by Connection Center")
+        try:
+            validate_index_name(payload.metric_index)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        mrows, merror = release_candidate_configuration.execute_read_only_search(
+            f'| mstats count(_value) as datapoints WHERE index="{payload.metric_index}" AND metric_name=* AND netspout_run_id="{payload.run_id}" earliest=-24h latest=now')
+        reply["indexed_metric_datapoints"] = None if merror else (int(mrows[0].get("datapoints", 0)) if mrows else 0)
+        reply["metric_error"] = merror
+    return reply
+
+
+@app.get("/api/setup")
+def get_release_candidate_setup():
+    return release_candidate_configuration.load()
+
+
+def _apply_saved_destination(saved):
+    global current_topology
+    current_topology.global_transport.hec_enabled = True
+    current_topology.global_transport.hec_url = saved["hec_url"]
+    current_topology.global_transport.hec_token = (
+        release_candidate_configuration.secrets.hec_token or ""
+    )
+    # Indexes are stored sorted; use the dispatcher's own rule (a "metric" name means a metric store) so the
+    # alphabetically-first index is not wrongly chosen as the event index.
+    event_indexes = [i for i in saved["indexes"] if "metric" not in i.lower()]
+    metric_indexes = [i for i in saved["indexes"] if "metric" in i.lower()]
+    current_topology.global_transport.hec_index = (event_indexes or saved["indexes"])[0]
+    if metric_indexes:
+        current_topology.global_transport.hec_metric_index = metric_indexes[0]
+    current_topology.global_transport.hec_ssl_verify = not saved["allow_insecure_tls"]
+    current_topology.global_transport.hec_allow_insecure_tls = saved["allow_insecure_tls"]
+
+
+# A restart must not lose the saved destination: rebuild the in-memory transport from the persisted Connection Center config (the token comes from the environment, never the file).
+_saved_at_start = release_candidate_configuration.load()
+if _saved_at_start.get("configured") and release_candidate_configuration.secrets.hec_token:
+    _apply_saved_destination(_saved_at_start)
+
+
+@app.post("/api/setup")
+def save_release_candidate_setup(payload: SetupConfigurationPayload):
+    try:
+        saved = release_candidate_configuration.save(payload.model_dump())
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    _apply_saved_destination(saved)
+    return saved
+
+
+@app.post("/api/setup/validate")
+def validate_release_candidate_setup():
+    return release_candidate_configuration.validate_connection()
+
+
+@app.post("/api/setup/test-connection")
+def test_saved_connection(payload: Dict[str, Any]):
+    """Test the SAVED destination: DNS/TCP/TLS, HEC health, token authentication, one marked synthetic event to an allowlisted index, independent search.
+    Caller-supplied transports or credentials are refused; the test index must be named explicitly and be on the allowlist."""
+    forbidden = {"hec_url", "hec_token", "search_url", "search_secret", "transport_config", "token"} & set(payload)
+    if forbidden:
+        raise HTTPException(status_code=422, detail="The connection test uses the saved Connection Center destination only; remove: " + ", ".join(sorted(forbidden)))
+    test_index = str(payload.get("test_index") or "").strip()
+    if not test_index:
+        raise HTTPException(status_code=422, detail="test_index is required: name the authorized test index explicitly")
+    try:
+        validate_index_name(test_index)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    config = release_candidate_configuration.load()
+    if not config.get("configured") or not release_candidate_configuration.secrets.hec_token:
+        raise HTTPException(status_code=409, detail="Connection Center destination is not configured")
+    from netspout_core.hec_connection_test import run_test
+    has_search = bool(release_candidate_configuration.secrets.search_secret)
+    return run_test(config, release_candidate_configuration.secrets.hec_token, test_index, config.get("indexes", []),
+                    (lambda q: release_candidate_configuration.execute_read_only_search(q, timeout=8)) if has_search else None,
+                    release_candidate_configuration.secrets.search_secret)
+
+
+@app.delete("/api/setup")
+def reset_release_candidate_setup():
+    return release_candidate_configuration.reset()
+
+
+@app.get("/api/catalog/sources")
+def get_telemetry_sources(
+    domain: Optional[str] = None,
+    verification_state: Optional[str] = None,
+):
+    from app.catalog import catalog
+    return catalog.list_telemetry_sources(
+        domain=domain, verification_state=verification_state
+    )
+
+
+@app.get("/api/catalog/sources/{source_id}")
+def get_telemetry_source(source_id: str):
+    from app.catalog import catalog
+    source = catalog.get_telemetry_source(source_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail="Telemetry source not found")
+    return source
+
+
+@app.get("/api/catalog/integrations")
+def get_splunk_integrations():
+    from app.catalog import catalog
+    return catalog.list_splunk_integrations()
+
+
+@app.get("/api/catalog/integrations/{integration_id}")
+def get_splunk_integration(integration_id: str):
+    from app.catalog import catalog
+    integration = catalog.get_splunk_integration(integration_id)
+    if integration is None:
+        raise HTTPException(status_code=404, detail="Splunk integration not found")
+    return integration
+
+
+@app.get("/api/catalog/evidence")
+def get_catalog_evidence():
+    from app.catalog import catalog
+    return catalog.list_catalog_evidence()
+
+
+@app.get("/api/coverage/cisco")
+def get_cisco_coverage():
+    """Evidence-backed Cisco coverage projection over catalog and Pack state."""
+    return vendor_coverage_service.view()
+
+
+@app.get("/api/coverage/cisco/products/{product_id}")
+def get_cisco_coverage_product(product_id: str):
+    product = vendor_coverage_service.product(product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Coverage product not found")
+    return product
+
+
+@app.get("/api/cisco100")
+def get_cisco_100(
+    domain: Optional[str] = None,
+    product: Optional[str] = None,
+    technology: Optional[str] = None,
+    telemetry_source: Optional[str] = None,
+    protocol: Optional[str] = None,
+    integration: Optional[str] = None,
+    maturity: Optional[str] = None,
+    category: Optional[str] = None,
+    difficulty: Optional[str] = None,
+):
+    """Filter the evidence-gated Cisco 100 definition catalog."""
+    return cisco_scenario_factory_service.view(
+        domain=domain,
+        product=product,
+        technology=technology,
+        telemetry_source=telemetry_source,
+        protocol=protocol,
+        integration=integration,
+        maturity=maturity,
+        category=category,
+        difficulty=difficulty,
+    )
+
+
+@app.get("/api/cisco100/matrix")
+def get_cisco_100_matrix():
+    return {"rows": cisco_scenario_factory_service.coverage_matrix()}
+
+
+@app.get("/api/cisco100/dependencies/{dependency_id}")
+def get_cisco_100_dependency_impact(dependency_id: str):
+    return cisco_scenario_factory_service.affected_scenarios(dependency_id)
+
+
+@app.get("/api/cisco100/scenarios/{scenario_id}")
+def get_cisco_100_scenario(scenario_id: str):
+    result = cisco_scenario_factory_service.scenario(scenario_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    return result
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/promotions/{target}")
+def validate_cisco_100_promotion(scenario_id: str, target: ScenarioMaturity):
+    try:
+        return cisco_scenario_factory_service.validate_promotion(scenario_id, target)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/execute")
+def execute_cisco_100_scenario(scenario_id: str):
+    try:
+        return cisco_scenario_factory_service.execution_decision(scenario_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    except ValueError as error:
+        raise HTTPException(status_code=409, detail=str(error))
+
+
+@app.post("/api/cisco100/scenarios/{scenario_id}/studio-draft")
+def clone_cisco_100_definition_to_studio(scenario_id: str):
+    result = cisco_scenario_factory_service.scenario(scenario_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Cisco 100 scenario not found")
+    definition = result["scenario"]
+    runtime_scenario_id = definition.get("runtime_scenario_id")
+    if definition.get("execution_enabled") and runtime_scenario_id:
+        try:
+            draft = scenario_studio_service.clone_scenario(runtime_scenario_id)
+        except ValueError as error:
+            raise HTTPException(status_code=409, detail=str(error))
+        draft.cloned_from_scenario_id = scenario_id
+        draft.title = "{} — Private Clone".format(definition["title"])
+        return draft.model_dump(mode="json")
+    return scenario_studio_service.clone_definition(definition).model_dump(mode="json")
+
+
+@app.get("/api/catalog/source-manifests")
+def get_source_manifests(scenario_id: Optional[str] = None):
+    from app.catalog import catalog
+    return catalog.list_source_manifests(scenario_id=scenario_id)
 
 
 # WebSocket Endpoint
@@ -1406,12 +3391,109 @@ async def websocket_logs_endpoint(websocket: WebSocket):
                     simulation_running = bool(data.get("running", True))
                     await manager.broadcast({"type": "simulation_state", "running": simulation_running})
                 elif action == "set_scenario":
-                    active_scenario = ScenarioType(data.get("scenario", "normal_traffic"))
-                    await manager.broadcast({"type": "scenario_state", "scenario": active_scenario})
+                    requested_scenario = ScenarioType(data.get("scenario", "normal_traffic"))
+                    if requested_scenario not in LIVE_SIMULATION_SCENARIOS:
+                        await websocket.send_json({
+                            "type": "scenario_error",
+                            "scenario": requested_scenario.value,
+                            "detail": _live_simulation_refusal_detail(requested_scenario.value)
+                        })
+                    else:
+                        active_scenario = requested_scenario
+                        await manager.broadcast({"type": "scenario_state", "scenario": active_scenario})
                 elif action == "update_topology":
                     current_topology = TopologyState(**data.get("topology", {}))
             except Exception as e:
                 print(f"WS message error: {e}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+    except Exception as e:
+        manager.disconnect(websocket)
+
+
+@app.websocket("/ws/run-progress")
+async def websocket_run_progress_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for real-time run progress updates."""
+    await manager.connect(websocket)
+    try:
+        # Send initial handshake
+        await websocket.send_json({
+            "type": "connection_established",
+            "message": "Connected to Run Progress Feed",
+            "active_runs": len(progress_tracker.get_all_active_runs())
+        })
+        
+        # Send current active runs
+        active_runs = progress_tracker.get_all_active_runs()
+        for run_id, progress in active_runs.items():
+            await websocket.send_json({
+                "type": "run_progress",
+                "run_id": progress.run_id,
+                "state": progress.state,
+                "timestamp": progress.timestamp.isoformat(),
+                "message": progress.message,
+                "details": progress.details,
+                "current_phase": progress.current_phase,
+                "phases_total": progress.phases_total,
+                "phases_completed": progress.phases_completed,
+                "generated_count": progress.generated_count,
+                "accepted_count": progress.accepted_count,
+                "rejected_count": progress.rejected_count,
+                "indexed_count": progress.indexed_count,
+                "verified_count": progress.verified_count
+            })
+        
+        # Keep connection alive, listening for client messages
+        while True:
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                action = message.get("action")
+                
+                if action == "get_run_progress":
+                    run_id = message.get("run_id")
+                    if run_id:
+                        progress = progress_tracker.get_run_progress(run_id)
+                        if progress:
+                            await websocket.send_json({
+                                "type": "run_progress",
+                                "run_id": progress.run_id,
+                                "state": progress.state,
+                                "timestamp": progress.timestamp.isoformat(),
+                                "message": progress.message,
+                                "details": progress.details
+                            })
+                        else:
+                            await websocket.send_json({
+                                "type": "error",
+                                "message": f"Run {run_id} not found"
+                            })
+                
+                elif action == "cancel_run":
+                    run_id = message.get("run_id")
+                    reason = message.get("reason", "User requested cancellation")
+                    if run_id:
+                        cancelled = progress_tracker.cancel_run(run_id, reason)
+                        if cancelled:
+                            await websocket.send_json({
+                                "type": "run_cancelled",
+                                "run_id": run_id,
+                                "reason": reason
+                            })
+                        else:
+                            await websocket.send_json({
+                                "type": "error",
+                                "message": f"Run {run_id} not found or already completed"
+                            })
+                
+                elif action == "ping":
+                    await websocket.send_json({"type": "pong", "timestamp": datetime.now().isoformat()})
+                    
+            except json.JSONDecodeError:
+                await websocket.send_json({"type": "error", "message": "Invalid JSON"})
+            except Exception as e:
+                await websocket.send_json({"type": "error", "message": str(e)})
+                
     except WebSocketDisconnect:
         manager.disconnect(websocket)
     except Exception as e:
@@ -1435,3 +3517,6 @@ if os.path.exists(FRONTEND_DIST_DIR):
             return FileResponse(file_path)
         return FileResponse(os.path.join(FRONTEND_DIST_DIR, "index.html"))
 
+
+from app.live_dashboard import register_live_dashboard
+register_live_dashboard(app, scenario_runner, destination_manager)

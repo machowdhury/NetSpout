@@ -1,0 +1,486 @@
+{
+ "run_id": "NS-20261029-f3f9d813",
+ "scenario_id": "cisco_aci_microburst",
+ "scenario_name": "Data Center Fabric ACI Ingress Microburst Traffic",
+ "topology_id": "cisco_aci",
+ "scenario_maturity": "GOLDEN_PATH_CERTIFIED",
+ "seed": 51040,
+ "time_mode": "TEST",
+ "transport_mode": "DIRECT_TO_SPLUNK",
+ "native_protocol": null,
+ "start_time": 1793282257.194099,
+ "end_time": 1793282258.8120372,
+ "duration_sec": 1.618,
+ "phases_executed": [
+  "INITIALIZE",
+  "BASELINE",
+  "FAULT",
+  "PROPAGATE",
+  "FAILOVER",
+  "RECOVER",
+  "VALIDATE",
+  "COMPLETE"
+ ],
+ "affected_devices": [
+  "cisco_aci"
+ ],
+ "expected_sourcetypes": [
+  "cisco:dc:nexus9k:syslog",
+  "cisco:dc:aci:health",
+  "cisco:ios:mdt"
+ ],
+ "actual_generated_counts": {
+  "cisco:ios:mdt": 4,
+  "cisco:dc:aci:health": 5,
+  "cisco:dc:nexus9k:syslog": 5
+ },
+ "total_events_generated": 14,
+ "ground_truth_records": [
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "INITIALIZE",
+   "timestamp": 1793282257.19454,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "node-incast-clients",
+    "node-leaf-nexus",
+    "node-spine1",
+    "node-spine2",
+    "node-leaf-dst"
+   ],
+   "affected_edges": [
+    "e-aci1",
+    "e-aci2",
+    "e-aci3",
+    "e-aci4",
+    "e-aci5"
+   ],
+   "expected_observations": [
+    "Topology initialized",
+    "Initial graph state snapshotted"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "BASELINE",
+   "timestamp": 1793282257.194546,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Buffer utilization < 20%"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "FAULT",
+   "timestamp": 1793282257.2310882,
+   "intentional_fault": {
+    "type": "primary_fault",
+    "description": "High-bandwidth Incast Traffic Burst saturating Switch ASIC Buffers"
+   },
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "cisco_aci"
+   ],
+   "affected_edges": [],
+   "expected_observations": [
+    "Buffer watermark > 90%",
+    "PFC pause frames sent"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "PROPAGATE",
+   "timestamp": 1793282257.254134,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "cisco:aci:health drop events"
+   ],
+   "expected_secondary_effects": [
+    "Cascading buffer incast",
+    "Neighbor flap alert"
+   ]
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "FAILOVER",
+   "timestamp": 1793282257.2728891,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Buffer headroom expanded",
+    "ASIC drops mitigated"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "RECOVER",
+   "timestamp": 1793282257.283434,
+   "intentional_fault": null,
+   "intentional_recovery": {
+    "type": "full_restoration",
+    "status": "restored"
+   },
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Buffer watermarks normalize"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "VALIDATE",
+   "timestamp": 1793282257.299382,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Zero active drop alarms"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-f3f9d813",
+   "scenario_id": "cisco_aci_microburst",
+   "phase": "COMPLETE",
+   "timestamp": 1793282257.2995222,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Scenario lifecycle complete"
+   ],
+   "expected_secondary_effects": []
+  }
+ ],
+ "validation_results": [
+  {
+   "rule_id": "aci-val-01",
+   "rule_name": "ACI Health Telemetry Emitted",
+   "status": "PASS",
+   "message": "Count 5 >= 1 -> PASS",
+   "observed_value": 5,
+   "expected_value": 1,
+   "evidence": {
+    "count": 5,
+    "comparison": ">="
+   }
+  },
+  {
+   "rule_id": "aci-val-02",
+   "rule_name": "Degradation Status Logged",
+   "status": "PASS",
+   "message": "Observed 6 event(s) matching criteria (expected >= 1)",
+   "observed_value": 6,
+   "expected_value": 1,
+   "evidence": {
+    "matched_count": 6
+   }
+  },
+  {
+   "rule_id": "aci-val-03",
+   "rule_name": "Nexus 9K ASIC Congestion Logged",
+   "status": "PASS",
+   "message": "Count 5 >= 1 -> PASS",
+   "observed_value": 5,
+   "expected_value": 1,
+   "evidence": {
+    "count": 5,
+    "comparison": ">="
+   }
+  },
+  {
+   "rule_id": "aci-val-04",
+   "rule_name": "Health Restored to Nominal",
+   "status": "PASS",
+   "message": "Observed 3 event(s) matching criteria (expected >= 1)",
+   "observed_value": 3,
+   "expected_value": 1,
+   "evidence": {
+    "matched_count": 3
+   }
+  }
+ ],
+ "overall_validation": "BLOCKED",
+ "dispatch_results": {
+  "evt-35bd9054": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ac024047": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-3f1ac1cd": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-65771bf4": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-45d6ba62": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-5a089b68": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-cb5e03b4": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-1f324cf0": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-da849881": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-8eb37e6e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-c6aa8dc7": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-3d605fe9": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bd0ae94e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-6fc90135": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  }
+ },
+ "dispatch_attempted": 14,
+ "dispatch_succeeded": 14,
+ "dispatch_failed": 0,
+ "observed_count": 0,
+ "observation_status": "OBSERVATION_PENDING",
+ "destination_validation": "PENDING",
+ "splunk_search_query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-f3f9d813\"",
+ "splunk_metric_query": "| mstats count where index=idx_performance_metrics metric_name=* AND netspout_run_id=\"NS-20261029-f3f9d813\"",
+ "event_observed_count": 0,
+ "metric_observed_count": 0,
+ "observation_completeness_pct": 0.0,
+ "evidence_summary": {
+  "run_id": "NS-20261029-f3f9d813",
+  "scenario_id": "cisco_aci_microburst",
+  "destinations": [
+   {
+    "destination_id": "splunk_metric_idx_performance_metrics",
+    "name": "Splunk Metric Store (idx_performance_metrics)",
+    "telemetry_type": "METRIC",
+    "target_index": "idx_performance_metrics",
+    "query_mechanism": "MSTATS",
+    "query": "| mstats count where index=idx_performance_metrics metric_name=* AND netspout_run_id=\"NS-20261029-f3f9d813\"",
+    "observed_count": 0,
+    "expected_count": 4,
+    "status": "ERROR",
+    "role": "SUPPORTING",
+    "errors": [
+     "Splunk search credentials are not configured"
+    ]
+   },
+   {
+    "destination_id": "splunk_event_idx_network_ops",
+    "name": "Splunk Event Index (idx_network_ops)",
+    "telemetry_type": "EVENT",
+    "target_index": "idx_network_ops",
+    "query_mechanism": "SPL_SEARCH",
+    "query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-f3f9d813\"",
+    "observed_count": 0,
+    "expected_count": 10,
+    "status": "ERROR",
+    "role": "REQUIRED",
+    "errors": [
+     "Splunk search credentials are not configured"
+    ]
+   }
+  ],
+  "total_generated": 14,
+  "total_dispatched": 14,
+  "total_observed": 0,
+  "event_observed_count": 0,
+  "event_expected_count": 10,
+  "metric_observed_count": 0,
+  "metric_expected_count": 4,
+  "observation_completeness_pct": 0.0,
+  "observation_status": "PENDING",
+  "contract_validation": "NOT_RUN",
+  "required_evidence_satisfied": false,
+  "errors": [
+   "Splunk search credentials are not configured",
+   "Splunk search credentials are not configured"
+  ]
+ },
+ "timing_claim": null,
+ "timing_value": null,
+ "timing_unit": null,
+ "timing_classification": "NOT_APPLICABLE",
+ "timing_notes": null,
+ "errors": [],
+ "native_transport_result": null,
+ "companion_manifest": null,
+ "native_flow_records": [],
+ "native_snmp_result": null,
+ "native_snmp_pdus": [],
+ "snmp_e2e_scorecard": null,
+ "snmp_normalized_events": [],
+ "snmp_polling_evidence": null,
+ "gnmi_e2e_scorecard": null,
+ "gnmi_collector_result": null,
+ "gnmi_normalized_records": [],
+ "generation_wall_seconds": 1.62,
+ "event_index": "idx_network_ops",
+ "metric_index": "idx_performance_metrics",
+ "hec_url": "https://127.0.0.1:18088/services/collector",
+ "started_at_utc": "2026-10-29T13:57:37.194080+00:00",
+ "generated_records": 14,
+ "generated_by_sourcetype": {
+  "cisco:ios:mdt": 4,
+  "cisco:dc:aci:health": 5,
+  "cisco:dc:nexus9k:syslog": 5
+ },
+ "generated_metric_points": 12,
+ "hec_accepted_records": 14,
+ "hec_rejected_records": 0,
+ "hec_reject_reasons": [],
+ "indexed_event_records": 10,
+ "indexed_by_sourcetype": {
+  "cisco:dc:aci:health": 5,
+  "cisco:dc:nexus9k:syslog": 5
+ },
+ "indexed_indexes": [
+  "idx_network_ops"
+ ],
+ "event_spl": "index=* netspout_run_id=\"NS-20261029-f3f9d813\" | stats count by sourcetype, index",
+ "event_spl_rows": [
+  {
+   "sourcetype": "cisco:dc:aci:health",
+   "index": "idx_network_ops",
+   "count": "5"
+  },
+  {
+   "sourcetype": "cisco:dc:nexus9k:syslog",
+   "index": "idx_network_ops",
+   "count": "5"
+  }
+ ],
+ "metric_query_spl": "| mstats avg(*) span=1m where index=idx_performance_metrics netspout_run_id=\"NS-20261029-f3f9d813\"",
+ "indexed_metric_rows": [
+  {
+   "_time": "2026-10-29 13:57:00.000 GMT",
+   "avg(buffer_utilization)": "56.025",
+   "avg(egress_drops)": "1420",
+   "avg(queue_depth)": "14512500"
+  }
+ ],
+ "indexed_metric_names": [
+  "buffer_utilization",
+  "egress_drops",
+  "queue_depth"
+ ],
+ "indexed_metric_points": 3,
+ "metric_query_spl_extended_rows": []
+}

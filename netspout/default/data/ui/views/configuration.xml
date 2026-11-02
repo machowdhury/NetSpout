@@ -1,7 +1,78 @@
 <dashboard version="1.1" theme="dark" script="configuration.js">
-  <label>App Configuration &amp; Setup</label>
+  <label>NetSpout PulseForge Destination Manager &amp; Setup</label>
   <description>Configure destination Splunk HEC endpoints, security tokens, SSL certificate validation modes, default index targets, and run real-time 5-point preflight environment validation checks.</description>
 
+  <row>
+    <panel><html>
+      <section id="destination-manager" style="padding:16px;">
+        <h2>NetSpout PulseForge Destination Manager</h2>
+        <p>Named destinations share the existing transport validators and credential store. Local Splunk, Remote Splunk and External Platform describe your target; they do not change protocol support or authorization. Existing allowlists and transport safety policies still apply. Diagnostics explicitly send one synthetic request, except forwarding readiness, which sends no events.</p>
+        <p>HEC supports logs/metrics; OTLP supports HTTP/JSON logs and synthetic gauges; syslog supports logs; SNMP supports synthetic v2c trap/inform events; Splunk-managed forwarding supports log envelopes. No universal delivery acknowledgement exists. Disabled or missing selected destinations block runs. Legacy transport settings remain available below.</p>
+        <button id="destination-refresh" type="button">Refresh destinations</button>
+        <div id="destination-list" aria-live="polite"></div>
+        <h3>Add or edit destination</h3>
+        <button id="destination-new" type="button">New destination</button>
+        <label>Name <input id="destination-name" type="text" maxlength="80"/></label>
+        <label>Protocol <select id="destination-protocol"><option value="hec">HEC</option><option value="syslog">Syslog</option><option value="otlp">OTLP HTTP/JSON</option><option value="snmp">SNMPv2c</option><option value="forwarding">Splunk-managed forwarding</option></select></label>
+        <label>Target <select id="destination-class"><option value="local_splunk">Local Splunk</option><option value="remote_splunk">Remote Splunk</option><option value="external_platform">External Platform</option></select></label>
+        <label><input id="destination-enabled" type="checkbox" checked="checked"/>Enabled</label>
+        <div id="destination-fields"></div>
+        <label>New credential (blank keeps existing; required for initial HEC/SNMP or authenticated OTLP) <input id="destination-credential" type="password" autocomplete="new-password"/></label>
+        <button id="destination-save" type="button">Save destination</button>
+        <pre id="destination-manager-status" aria-live="polite">Loading destinations…</pre>
+      </section>
+      <section id="forwarding-settings" style="padding:16px;">
+        <h2>PulseForge Splunk-managed forwarding</h2>
+        <p>Publishes logs to a private spool drained by the pulseforge_spool modular input. An administrator must enable pulseforge_spool://native in this app's local/inputs.conf and set _TCP_ROUTING to an existing tcpout group. PulseForge never writes outputs.conf. Create the event index at the receiver first. READY means configuration readiness, not connectivity or delivery proof.</p>
+        <p>Original log text is preserved in original_event within a JSON correlation envelope. XML metadata retains host, source, sourcetype and generation timestamp. Existing vendor TA parsing may require explicit mapping; correlation can be extracted with spath. Metrics and indexing/forwarding verification are unsupported. Spool limits: 100 pending files, 10 MiB total, 64 KiB/event; full spool stops the producer without discarding unread events. Maximum 100 events/s and 1000 events/run. Pipe handoff is not ingestion; a crash can duplicate an event. No credential or receiver endpoint is requested here.</p>
+        <label>Existing forwarding group <input id="cfg-forwarding-group" type="text"/></label>
+        <label>Destination event index <input id="cfg-forwarding-index" type="text" value="idx_network_ops"/></label>
+        <label><input id="cfg-forwarding-active" type="checkbox"/>Activate Splunk-managed forwarding for future scenarios</label>
+        <button id="btn-save-forwarding" type="button" disabled="disabled">Save forwarding settings</button>
+        <button id="btn-test-forwarding" type="button" disabled="disabled">Check readiness (no events)</button>
+        <pre id="forwarding-status" aria-live="polite">Loading forwarding settings…</pre>
+      </section>
+      <section id="snmp-settings" style="padding:16px;">
+        <h2>PulseForge native SNMP destination</h2>
+        <p>SNMPv2c UDP traps or informs, private/loopback IPv4, receiver ports 1024–65535. Community is sent in plaintext on the wire. Synthetic 1.3.6.1.4.1.59999.101 varbinds carry run/scenario/device/phase and original log text; this is not a vendor MIB. Metrics, polling, v1/v3, TLS, DNS/IPv6, arbitrary OID mappings and Splunk indexing verification are unsupported. Maximum 50 traps/s or 25 informs/s, 1000 notifications/run, 1472 bytes/message. Informs wait up to 500 ms without retries.</p>
+        <label>Receiver IPv4 <input id="cfg-snmp-host" type="text" value="127.0.0.1"/></label>
+        <label>UDP port <input id="cfg-snmp-port" type="number" min="1024" max="65535" value="1162"/></label>
+        <label>Message type <select id="cfg-snmp-message-type"><option value="trap">v2c Trap (local send only)</option><option value="inform">v2c Inform (matching response)</option></select></label>
+        <label>New community (blank keeps saved credential) <input id="cfg-snmp-community" type="password" autocomplete="new-password"/></label>
+        <label><input id="cfg-snmp-active" type="checkbox"/>Activate SNMP for future native scenarios</label>
+        <button id="btn-save-snmp" type="button" disabled="disabled">Save SNMP settings</button>
+        <button id="btn-test-snmp" type="button" disabled="disabled">Send one diagnostic to saved receiver</button>
+        <pre id="snmp-status" aria-live="polite">Loading SNMP settings…</pre>
+      </section>
+      <section id="otlp-settings" style="padding:16px;">
+        <h2>Native OTLP destination</h2>
+        <p>HTTP/JSON logs and synthetic metric gauges only. gRPC, protobuf, traces and Splunk indexing verification are unsupported. HTTPS certificates are verified. Collector acknowledgement is not indexing proof.</p>
+        <label>Endpoint base URL <input id="cfg-otlp-endpoint" type="text" value="https://127.0.0.1:4318"/></label>
+        <label>Signals <select id="cfg-otlp-signal"><option value="logs">Logs</option><option value="metrics">Metrics</option><option value="both">Logs and metrics</option></select></label>
+        <label>Authentication <select id="cfg-otlp-auth"><option value="none">None</option><option value="bearer">Bearer token (HTTPS only)</option></select></label>
+        <label>New token (blank preserves saved token) <input id="cfg-otlp-token" type="password" autocomplete="new-password"/></label>
+        <label><input id="cfg-otlp-active" type="checkbox"/>Use OTLP for future native scenarios</label>
+        <button id="btn-save-otlp" type="button" disabled="disabled">Save OTLP settings</button>
+        <button id="btn-test-otlp" type="button" disabled="disabled">Send one diagnostic to saved destination</button>
+        <pre id="otlp-status" aria-live="polite">Loading OTLP settings…</pre>
+      </section>
+      <section id="syslog-settings" style="padding:16px;">
+        <h2>Native scenario destination — Syslog</h2>
+        <p>Choose the output for future native scenario launches. Explicit HEC sample/onboarding actions remain HEC. Syslog supports single-line log scenarios; metric scenarios are rejected.</p>
+        <label>Scenario output <select id="cfg-native-transport"><option value="">Keep current scenario output</option><option value="hec">Splunk HEC</option><option value="syslog">Syslog</option></select></label>
+        <label>Host (IPv4 or DNS) <input id="cfg-syslog-host" type="text" value="127.0.0.1"/></label>
+        <label>Port <input id="cfg-syslog-port" type="number" min="1" max="65535" value="1514"/></label>
+        <label>Transport <select id="cfg-syslog-protocol"><option value="udp">UDP datagram</option><option value="tcp">TCP newline framing</option></select></label>
+        <label>Format <select id="cfg-syslog-format"><option value="rfc5424">RFC5424</option><option value="rfc3164">RFC3164</option></select></label>
+        <label>Facility (0–23) <input id="cfg-syslog-facility" type="number" min="0" max="23" value="16"/></label>
+        <label>Severity (0–7) <input id="cfg-syslog-severity" type="number" min="0" max="7" value="6"/></label>
+        <button id="btn-save-syslog" type="button" disabled="disabled">Save scenario destination</button>
+        <button id="btn-test-syslog" type="button" disabled="disabled">Send one diagnostic to saved destination</button>
+        <pre id="syslog-status" aria-live="polite">Loading saved syslog configuration…</pre>
+        <p>SENT means only that the local socket send completed. Receiver delivery, collector acceptance and Splunk indexing are unverified. TLS, IPv6 and metric forwarding are unsupported.</p>
+      </section>
+    </html></panel>
+  </row>
   <row>
     <panel>
       <html>
@@ -37,24 +108,25 @@
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                   HEC Target URL <span style="color: #ef4444;">*</span>
                 </label>
-                <input type="text" id="cfg-hec-url" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="https://127.0.0.1:8888/services/collector" />
+                <input type="text" id="cfg-hec-url" style="width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="https://127.0.0.1:8088/services/collector" />
                 <p style="color: #64748b; font-size: 11px; margin: 3px 0 0 0;">
-                  Default container mapping: <code>https://127.0.0.1:8888/services/collector</code> (auto-resolves to <code>:8088</code> inside container).
+                  Use the exact HTTPS HEC endpoint. Remote hosts and ports must already be permitted by the server configuration.
                 </p>
               </div>
 
               <div style="margin-bottom: 14px;">
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
-                  HEC Authorization Token <span style="color: #ef4444;">*</span>
+                  HEC Authorization Token (required for initial setup)
                 </label>
                 <div style="display: flex; gap: 6px;">
-                  <input type="password" id="cfg-hec-token" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="00000000-0000-0000-0000-000000000000" />
+                  <input type="password" id="cfg-hec-token" autocomplete="off" style="flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 4px; padding: 8px 10px; color: #f8fafc; font-family: monospace; font-size: 12px; box-sizing: border-box;" value="" />
                   <button type="button" id="btn-toggle-token" style="background: #334155; border: 1px solid #475569; color: #cbd5e1; border-radius: 4px; padding: 0 12px; font-size: 11px; cursor: pointer;">
                     Show
                   </button>
                 </div>
               </div>
 
+              <p style="color: #94a3b8; font-size: 11px;">Leave the token blank to retain the active token. Tokens are saved only in Splunk's credential store and are never displayed after saving.</p>
               <div style="margin-bottom: 14px;">
                 <label style="display: block; color: #cbd5e1; font-size: 11px; font-weight: 600; margin-bottom: 4px;">
                   SSL Certificate Verification (<code>ssl_verify</code>)

@@ -1,0 +1,1131 @@
+{
+ "schema_version": "1.0",
+ "registry_version": "universe-batch5-2026-10-30",
+ "purpose": "Cisco IOS-XE change, fault and health device syslog: vendor-native lines from captured device messages; correlated change-to-outage, platform health and NAC/RADIUS outage scenarios.",
+ "baseline_counts": {
+  "native_generators": 112,
+  "sourcetypes": 348
+ },
+ "engine_module": "src/netspout_core/universe_batch5_engine.py",
+ "provenance": "Captured IOS-XE messages in netspout/appserver/static/samples/cisco-sdwan-* (Network Assurance replay). Splunk TA parsing for these sourcetypes is NOT verified; source name alone is not verification.",
+ "sources": [
+  {
+   "batch_source_id": "AAA-6-METHOD_LIST_STATE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+   "generator": "format_universe_batch5_log",
+   "facility": "AAA",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "dead",
+    "alive"
+   ],
+   "families": [
+    {
+     "id": "dead",
+     "body": "%AAA-6-METHOD_LIST_STATE: authen mlist  pvt_authen_0 of DOT1X service is marked for notifyingstate and its current state is : DEAD",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-6-method-list-state",
+     "sample_line": 28
+    },
+    {
+     "id": "alive",
+     "body": "%AAA-6-METHOD_LIST_STATE: authen mlist  pvt_authen_0 of DOT1X service is marked for notifyingstate and its current state is : ALIVE",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-6-method-list-state",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "generator": "format_universe_batch5_log",
+   "facility": "AAA",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "dead",
+    "alive"
+   ],
+   "families": [
+    {
+     "id": "dead",
+     "body": "%AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: Notifying state of authentication method list  pvt_authen_0 of DOT1X service as DEAD",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client",
+     "sample_line": 28
+    },
+    {
+     "id": "alive",
+     "body": "%AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: Notifying state of authentication method list  pvt_authen_0 of DOT1X service as ALIVE",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-6-notify-mlist-state-to-aaa-client",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+   "generator": "format_universe_batch5_log",
+   "facility": "AAA_AUDIT_MESSAGE",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE: Switch 1 R0/0: sessmgrd: mlist default of 8021X service is marked for notifying  state and its current state is : ALIVE",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-audit-message-6-method-list-state",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "generator": "format_universe_batch5_log",
+   "facility": "AAA_AUDIT_MESSAGE",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT: Switch 1 R0/0: sessmgrd: Notifying state of authentication method list default of 8021X service as ALIVE",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-aaa-audit-message-6-notify-mlist-state-to-aaa-client",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "BGP-5-ADJCHANGE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+   "generator": "format_universe_batch5_log",
+   "facility": "BGP",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "vrf_down",
+    "up"
+   ],
+   "families": [
+    {
+     "id": "vrf_down",
+     "body": "%BGP-5-ADJCHANGE: neighbor {neighbor} vpn vrf {vrf} Down Neighbor deleted",
+     "star": true,
+     "params": {
+      "neighbor": "10.201.152.1",
+      "vrf": "UBC_TENANT"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-bgp-5-adjchange"
+    },
+    {
+     "id": "up",
+     "body": "%BGP-5-ADJCHANGE: neighbor {neighbor} Up ",
+     "star": true,
+     "params": {
+      "neighbor": "10.201.48.118"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-bgp-5-adjchange"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "BGP-5-NBR_RESET",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:BGP-5-NBR_RESET",
+   "generator": "format_universe_batch5_log",
+   "facility": "BGP",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "peer_closed"
+   ],
+   "families": [
+    {
+     "id": "peer_closed",
+     "body": "%BGP-5-NBR_RESET: Neighbor {neighbor} passive reset (Peer closed the session)",
+     "star": true,
+     "params": {
+      "neighbor": "10.201.130.61"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-bgp-5-nbr-reset"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "BGP-6-NEXTHOP",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:BGP-6-NEXTHOP",
+   "generator": "format_universe_batch5_log",
+   "facility": "BGP",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%BGP-6-NEXTHOP: Invalid next hop (0.0.0.0) received from 10.201.48.114: martian next hop",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-bgp-6-nexthop",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "BGP_SESSION-5-ADJCHANGE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+   "generator": "format_universe_batch5_log",
+   "facility": "BGP_SESSION",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%BGP_SESSION-5-ADJCHANGE: neighbor 10.201.152.1 IPv4 Unicast vpn vrf UBC_TENANT topology base removed from session  Neighbor deleted",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-bgp-session-5-adjchange",
+     "sample_line": 28
+    },
+    {
+     "id": "captured_2",
+     "body": "%BGP_SESSION-5-ADJCHANGE: neighbor 10.201.48.118 L2VPN Evpn topology base removed from session  NSF peer closed the session",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-bgp-session-5-adjchange",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "CDP-4-NATIVE_VLAN_MISMATCH",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+   "generator": "format_universe_batch5_log",
+   "facility": "CDP",
+   "severity": 4,
+   "status": "warning",
+   "event_families": [
+    "vlan_mismatch"
+   ],
+   "families": [
+    {
+     "id": "vlan_mismatch",
+     "body": "%CDP-4-NATIVE_VLAN_MISMATCH: Native VLAN mismatch discovered on {interface} ({vlan}), with {peer} {peer_interface} ({peer_vlan}).",
+     "star": true,
+     "params": {
+      "interface": "GigabitEthernet1/0/4",
+      "vlan": "1",
+      "peer": "switch2",
+      "peer_interface": "GigabitEthernet0/1",
+      "peer_vlan": "201"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-cdp-4-native-vlan-mismatch"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "CRYPTO-6-ISAKMP_ON_OFF",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF",
+   "generator": "format_universe_batch5_log",
+   "facility": "CRYPTO",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%CRYPTO-6-ISAKMP_ON_OFF: ISAKMP is ON",
+     "star": false,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-crypto-6-isakmp-on-off",
+     "sample_line": 32
+    }
+   ]
+  },
+  {
+   "batch_source_id": "CTS-3-AAA_NO_RADIUS_SERVER",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+   "generator": "format_universe_batch5_log",
+   "facility": "CTS",
+   "severity": 3,
+   "status": "error",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%CTS-3-AAA_NO_RADIUS_SERVER: No RADIUS servers available for CTS AAA request for CTS env-data SM",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-cts-3-aaa-no-radius-server",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "DMI-5-AUTH_PASSED",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:DMI-5-AUTH_PASSED",
+   "generator": "format_universe_batch5_log",
+   "facility": "DMI",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%DMI-5-AUTH_PASSED: R0/0: dmiauthd: User 'vmanage-admin' authenticated successfully from 1.1.1.105:36298  for netconf over ssh. External groups:",
+     "star": false,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-dmi-5-auth-passed",
+     "sample_line": 32
+    }
+   ]
+  },
+  {
+   "batch_source_id": "DMI-5-CONFIG_I",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:DMI-5-CONFIG_I",
+   "generator": "format_universe_batch5_log",
+   "facility": "DMI",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%DMI-5-CONFIG_I: R0/0: dmiauthd: Configured from NETCONF/RESTCONF by system-ompd-fwd, transaction-id 682279",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-dmi-5-config-i",
+     "sample_line": 32
+    }
+   ]
+  },
+  {
+   "batch_source_id": "DMI-5-SYNC_COMPLETE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+   "generator": "format_universe_batch5_log",
+   "facility": "DMI",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%DMI-5-SYNC_COMPLETE: Switch 1 R0/0: dmiauthd: The running configuration has been synchronized to the NETCONF running data store.",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-dmi-5-sync-complete",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "DMI-5-SYNC_NEEDED",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:DMI-5-SYNC_NEEDED",
+   "generator": "format_universe_batch5_log",
+   "facility": "DMI",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "sync_needed"
+   ],
+   "families": [
+    {
+     "id": "sync_needed",
+     "body": "%DMI-5-SYNC_NEEDED: Switch 1 R0/0: dmiauthd: Configuration change requiring running configuration sync detected - '{command}'. The running configuration will be synchronized  to the NETCONF running data store.",
+     "star": true,
+     "params": {
+      "command": "switchport trunk allowed vlan 2052"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-dmi-5-sync-needed"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "DMI-5-SYNC_START",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:DMI-5-SYNC_START",
+   "generator": "format_universe_batch5_log",
+   "facility": "DMI",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%DMI-5-SYNC_START: Switch 1 R0/0: dmiauthd: Synchronization of the running configuration to the NETCONF running data store has started.",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-dmi-5-sync-start",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "ENVIRONMENTAL-1-ALERT",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+   "generator": "format_universe_batch5_log",
+   "facility": "ENVIRONMENTAL",
+   "severity": 1,
+   "status": "critical",
+   "event_families": [
+    "temperature"
+   ],
+   "families": [
+    {
+     "id": "temperature",
+     "body": "%ENVIRONMENTAL-1-ALERT: Temp: Inlet 1, Location: R0, State: Warning, Reading: {reading} Celsius",
+     "star": false,
+     "params": {
+      "reading": "43"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-environmental-1-alert"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "EVENTLIB-3-CPUHOG",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+   "generator": "format_universe_batch5_log",
+   "facility": "EVENTLIB",
+   "severity": 3,
+   "status": "error",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%EVENTLIB-3-CPUHOG: Switch 1 R0/0: hman: undefined: 1026ms, Traceback=1#9c98bc34b8a46399248b88656ef73fd3  c:7F7229A64000+42630 c:7F7229A64000+FE9AD c:7F7229A64000+86F9E c:7F7229A64000+8804A c:7F7229A64000+65A4C c:7F7229A64000+58469 procmib_lib:7F722BC6A000+8309 :5B96778E7000+426F1 evlib:7F722D007000+9336 evlib:7F722D007000+9D70 orchestrator_lib:7F722BFB6000+12BE4",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-eventlib-3-cpuhog",
+     "sample_line": 28
+    },
+    {
+     "id": "captured_2",
+     "body": "%EVENTLIB-3-CPUHOG: Switch 1 R0/0: hman: undefined: 1262ms, Traceback=1#9c98bc34b8a46399248b88656ef73fd3  c:77FDE02A3000+42630 c:77FDE02A3000+FE9AD c:77FDE02A3000+86F9E c:77FDE02A3000+8804A c:77FDE02A3000+65A4C c:77FDE02A3000+58469 procmib_lib:77FDE24A9000+8309 :5B4990CB0000+426F1 evlib:77FDE3846000+9336 evlib:77FDE3846000+9D70 orchestrator_lib:77FDE27F5000+12BE4",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-eventlib-3-cpuhog",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "IOSXE-3-PLATFORM",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+   "generator": "format_universe_batch5_log",
+   "facility": "IOSXE",
+   "severity": 3,
+   "status": "error",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%IOSXE-3-PLATFORM: Switch 1 R0/0: kernel: eth2: mtu greater than device maximum",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-iosxe-3-platform",
+     "sample_line": 28
+    },
+    {
+     "id": "captured_2",
+     "body": "%IOSXE-3-PLATFORM: Switch 1 R0/0: kernel: ata1.00: status: { DRDY }",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-iosxe-3-platform",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+   "generator": "format_universe_batch5_log",
+   "facility": "IOSXE_INFRA",
+   "severity": 4,
+   "status": "warning",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%IOSXE_INFRA-4-NO_PUNT_KEEPALIVE:  Keepalive not received for 20 seconds",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-iosxe-infra-4-no-punt-keepalive",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+   "generator": "format_universe_batch5_log",
+   "facility": "IOSXE_RP_PAE_NOT",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%IOSXE_RP_PAE_NOT-6-PAE_STARTUP: Product Analytics is Disabled",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-iosxe-rp-pae-not-6-pae-startup",
+     "sample_line": 28
+    }
+   ]
+  },
+  {
+   "batch_source_id": "LINEPROTO-5-UPDOWN",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:LINEPROTO-5-UPDOWN",
+   "generator": "format_universe_batch5_log",
+   "facility": "LINEPROTO",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "line_protocol"
+   ],
+   "families": [
+    {
+     "id": "line_protocol",
+     "body": "%LINEPROTO-5-UPDOWN: Line protocol on Interface {interface}, changed state to {state}",
+     "star": true,
+     "params": {
+      "interface": "GigabitEthernet1/0/5",
+      "state": "up"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-lineproto-5-updown"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "LINK-5-CHANGED",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:LINK-5-CHANGED",
+   "generator": "format_universe_batch5_log",
+   "facility": "LINK",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "admin_down"
+   ],
+   "families": [
+    {
+     "id": "admin_down",
+     "body": "%LINK-5-CHANGED: Interface {interface}, changed state to administratively down",
+     "star": true,
+     "params": {
+      "interface": "GigabitEthernet1/0/5"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-link-5-changed"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "LINK-5-UPDOWN",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:LINK-5-UPDOWN",
+   "generator": "format_universe_batch5_log",
+   "facility": "LINK",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "link_state"
+   ],
+   "families": [
+    {
+     "id": "link_state",
+     "body": "%LINK-5-UPDOWN: Interface {interface}, changed state to {state}",
+     "star": true,
+     "params": {
+      "interface": "GigabitEthernet1/0/5",
+      "state": "up"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-link-5-updown"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "MDT_CONNECTION-6-STATE_CHANGED",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+   "generator": "format_universe_batch5_log",
+   "facility": "MDT_CONNECTION",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "connection_state"
+   ],
+   "families": [
+    {
+     "id": "connection_state",
+     "body": "%MDT_CONNECTION-6-STATE_CHANGED: Switch 1 R0/0: pubd: Connection state changed (id {conn_id} - 10.20.1.16:25103:0:{device_ip}): {state}",
+     "star": true,
+     "params": {
+      "conn_id": "6",
+      "device_ip": "10.201.48.120",
+      "state": "DOWN"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-mdt-connection-6-state-changed"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "MSDP-5-PEER_UPDOWN",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+   "generator": "format_universe_batch5_log",
+   "facility": "MSDP",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "peer_state"
+   ],
+   "families": [
+    {
+     "id": "peer_state",
+     "body": "%MSDP-5-PEER_UPDOWN: Session to peer {neighbor} going {state}",
+     "star": true,
+     "params": {
+      "neighbor": "10.201.151.1",
+      "state": "down"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-msdp-5-peer-updown"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "NDBMAN-5-CONFIG_I",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+   "generator": "format_universe_batch5_log",
+   "facility": "NDBMAN",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1",
+    "captured_2"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%NDBMAN-5-CONFIG_I: Switch 1 R0/0: ndbmand: Configured feature 'yang-mapping' from 127.0.0.1:0 via INTERNAL-API user yang_mgmt_infra session 20, transaction-id 102",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-ndbman-5-config-i",
+     "sample_line": 28
+    },
+    {
+     "id": "captured_2",
+     "body": "%NDBMAN-5-CONFIG_I: Switch 1 R0/0: ndbmand: Configured feature 'yang-mapping' from 127.0.0.1:0 via INTERNAL-API user yang_mgmt_infra session 20, transaction-id 166",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-ndbman-5-config-i",
+     "sample_line": 34
+    }
+   ]
+  },
+  {
+   "batch_source_id": "OSPF-5-ADJCHG",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:OSPF-5-ADJCHG",
+   "generator": "format_universe_batch5_log",
+   "facility": "OSPF",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "adjacency"
+   ],
+   "families": [
+    {
+     "id": "adjacency",
+     "body": "%OSPF-5-ADJCHG: Process 1, Nbr {neighbor} on {interface} from {from_state} to {to_state}, {reason}",
+     "star": true,
+     "params": {
+      "neighbor": "10.201.48.120",
+      "interface": "GigabitEthernet1/0/5",
+      "from_state": "FULL",
+      "to_state": "DOWN",
+      "reason": "Neighbor Down: Dead timer expired"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-ospf-5-adjchg"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "PKI-6-AUTHORITATIVE_CLOCK",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+   "generator": "format_universe_batch5_log",
+   "facility": "PKI",
+   "severity": 6,
+   "status": "info",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%PKI-6-AUTHORITATIVE_CLOCK: The system clock has been set.",
+     "star": false,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-pki-6-authoritative-clock",
+     "sample_line": 32
+    }
+   ]
+  },
+  {
+   "batch_source_id": "PLATFORM-4-ELEMENT_WARNING",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+   "generator": "format_universe_batch5_log",
+   "facility": "PLATFORM",
+   "severity": 4,
+   "status": "warning",
+   "event_families": [
+    "load_average"
+   ],
+   "families": [
+    {
+     "id": "load_average",
+     "body": "%PLATFORM-4-ELEMENT_WARNING: R0/0: smand: RP/0: 5-Minute Load Average value {load} exceeds warning level 6.10.",
+     "star": false,
+     "params": {
+      "load": "6.11"
+     },
+     "origin": "linked",
+     "sample": "cisco-sdwan-platform-4-element-warning"
+    }
+   ]
+  },
+  {
+   "batch_source_id": "SYS-5-CONFIG_P",
+   "vendor": "cisco_sdwan",
+   "product": "IOS-XE device syslog (Catalyst / SD-WAN edge)",
+   "splunk_sourcetype": "cisco:sdwan:SYS-5-CONFIG_P",
+   "generator": "format_universe_batch5_log",
+   "facility": "SYS",
+   "severity": 5,
+   "status": "notice",
+   "event_families": [
+    "captured_1"
+   ],
+   "families": [
+    {
+     "id": "captured_1",
+     "body": "%SYS-5-CONFIG_P: Configured programmatically by process iosp_dmiauthd_conn_100001_vty_100001 from console as system-ompd-fwd on vty4294966494",
+     "star": true,
+     "params": {},
+     "origin": "captured",
+     "sample": "cisco-sdwan-sys-5-config-p",
+     "sample_line": 32
+    }
+   ]
+  }
+ ],
+ "scenarios": {
+  "ub5_cisco_change_induced_outage": [
+   {
+    "phase": "BASELINE",
+    "sourcetype": "OSPF-5-ADJCHG",
+    "family": "adjacency",
+    "params": {
+     "from_state": "LOADING",
+     "to_state": "FULL",
+     "reason": "Loading Done"
+    }
+   },
+   {
+    "phase": "BASELINE",
+    "sourcetype": "BGP-5-ADJCHANGE",
+    "family": "up",
+    "params": {}
+   },
+   {
+    "phase": "BASELINE",
+    "sourcetype": "MSDP-5-PEER_UPDOWN",
+    "family": "peer_state",
+    "params": {
+     "state": "up"
+    }
+   },
+   {
+    "phase": "CHANGE",
+    "sourcetype": "DMI-5-SYNC_NEEDED",
+    "family": "sync_needed",
+    "params": {
+     "command": "switchport trunk allowed vlan 2052"
+    }
+   },
+   {
+    "phase": "CHANGE",
+    "sourcetype": "DMI-5-SYNC_START",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "CHANGE",
+    "sourcetype": "DMI-5-SYNC_COMPLETE",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "CHANGE",
+    "sourcetype": "NDBMAN-5-CONFIG_I",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "CDP-4-NATIVE_VLAN_MISMATCH",
+    "family": "vlan_mismatch",
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "LINK-5-CHANGED",
+    "family": "admin_down",
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "LINK-5-UPDOWN",
+    "family": "link_state",
+    "params": {
+     "state": "down"
+    }
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "LINEPROTO-5-UPDOWN",
+    "family": "line_protocol",
+    "params": {
+     "state": "down"
+    }
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "OSPF-5-ADJCHG",
+    "family": "adjacency",
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "BGP-5-ADJCHANGE",
+    "family": "vrf_down",
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "BGP-5-NBR_RESET",
+    "family": "peer_closed",
+    "params": {}
+   },
+   {
+    "phase": "FAULT",
+    "sourcetype": "MSDP-5-PEER_UPDOWN",
+    "family": "peer_state",
+    "params": {
+     "state": "down"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "LINK-5-UPDOWN",
+    "family": "link_state",
+    "params": {
+     "state": "up"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "LINEPROTO-5-UPDOWN",
+    "family": "line_protocol",
+    "params": {
+     "state": "up"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "OSPF-5-ADJCHG",
+    "family": "adjacency",
+    "params": {
+     "from_state": "LOADING",
+     "to_state": "FULL",
+     "reason": "Loading Done"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "BGP-5-ADJCHANGE",
+    "family": "up",
+    "params": {}
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "MSDP-5-PEER_UPDOWN",
+    "family": "peer_state",
+    "params": {
+     "state": "up"
+    }
+   }
+  ],
+  "ub5_cisco_platform_health_degradation": [
+   {
+    "phase": "BASELINE",
+    "sourcetype": "PKI-6-AUTHORITATIVE_CLOCK",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "BASELINE",
+    "sourcetype": "MDT_CONNECTION-6-STATE_CHANGED",
+    "family": "connection_state",
+    "params": {
+     "state": "UP"
+    }
+   },
+   {
+    "phase": "DEGRADE",
+    "sourcetype": "ENVIRONMENTAL-1-ALERT",
+    "family": "temperature",
+    "params": {
+     "reading": "43"
+    }
+   },
+   {
+    "phase": "DEGRADE",
+    "sourcetype": "PLATFORM-4-ELEMENT_WARNING",
+    "family": "load_average",
+    "params": {
+     "load": "6.11"
+    }
+   },
+   {
+    "phase": "DEGRADE",
+    "sourcetype": "EVENTLIB-3-CPUHOG",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "DEGRADE",
+    "sourcetype": "IOSXE-3-PLATFORM",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "IMPACT",
+    "sourcetype": "IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "IMPACT",
+    "sourcetype": "MDT_CONNECTION-6-STATE_CHANGED",
+    "family": "connection_state",
+    "params": {
+     "state": "DOWN"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "MDT_CONNECTION-6-STATE_CHANGED",
+    "family": "connection_state",
+    "params": {
+     "state": "UP"
+    }
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "ENVIRONMENTAL-1-ALERT",
+    "family": "temperature",
+    "params": {
+     "reading": "36"
+    }
+   }
+  ],
+  "ub5_cisco_nac_radius_outage": [
+   {
+    "phase": "BASELINE",
+    "sourcetype": "AAA-6-METHOD_LIST_STATE",
+    "family": "alive",
+    "params": {}
+   },
+   {
+    "phase": "OUTAGE",
+    "sourcetype": "CTS-3-AAA_NO_RADIUS_SERVER",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "OUTAGE",
+    "sourcetype": "AAA-6-METHOD_LIST_STATE",
+    "family": "dead",
+    "params": {}
+   },
+   {
+    "phase": "OUTAGE",
+    "sourcetype": "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "family": "dead",
+    "params": {}
+   },
+   {
+    "phase": "OUTAGE",
+    "sourcetype": "AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+    "family": null,
+    "params": {}
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "AAA-6-METHOD_LIST_STATE",
+    "family": "alive",
+    "params": {}
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "family": "alive",
+    "params": {}
+   },
+   {
+    "phase": "RECOVERY",
+    "sourcetype": "AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+    "family": null,
+    "params": {}
+   }
+  ]
+ },
+ "counts_summary": {
+  "new_native_sourcetypes": 31,
+  "families": 38,
+  "scenario_packs": 3
+ }
+}

@@ -12,6 +12,9 @@ from typing import Dict, List, Set, Tuple, Any
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
+sys.path.insert(0, os.path.join(REPO_ROOT, "src"))
+
+from netspout_core.catalog_contracts import TelemetryCatalog
 
 
 def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
@@ -34,6 +37,7 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
         "topologies.json",
         "samples.json",
         "telemetry_protocols.json",
+        "telemetry_catalog.json",
         "aliases.json"
     ]
     catalog_data = {}
@@ -58,7 +62,14 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
     topologies = catalog_data["topologies.json"]
     samples = catalog_data["samples.json"]
     protocols = catalog_data["telemetry_protocols.json"]
+    telemetry_catalog_raw = catalog_data["telemetry_catalog.json"]
     aliases = catalog_data["aliases.json"]
+
+    try:
+        telemetry_catalog = TelemetryCatalog.model_validate(telemetry_catalog_raw)
+    except Exception as exc:
+        errors.append(f"[Telemetry Catalog] Schema or relationship validation failed: {exc}")
+        telemetry_catalog = None
 
     # 2. Check Uniqueness of IDs
     def check_unique_ids(items, id_field, domain_name):
@@ -135,6 +146,21 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
                         errors.append(f"[Scenarios] Scenario '{sid}' references alias '{st_ref}' whose target '{target_st}' is unknown")
                 else:
                     errors.append(f"[Scenarios] Scenario '{sid}' references unknown sourcetype '{st_ref}'")
+
+    if telemetry_catalog:
+        for source in telemetry_catalog.sources:
+            for scenario_id in source.netspout_contract.scenario_ids:
+                if scenario_id not in scenario_map:
+                    errors.append(
+                        f"[Telemetry Catalog] Source '{source.source_id}' references "
+                        f"unknown scenario '{scenario_id}'"
+                    )
+        for manifest in telemetry_catalog.source_manifests:
+            if manifest.scenario_id not in scenario_map:
+                errors.append(
+                    f"[Telemetry Catalog] Manifest '{manifest.manifest_id}' references "
+                    f"unknown scenario '{manifest.scenario_id}'"
+                )
 
     # 5. Validate Sample References
     for s in samples:
@@ -215,6 +241,21 @@ def validate_catalog() -> Tuple[bool, List[str], Dict[str, Any]]:
                         errors.append(f"[Catalog Mirror] Scenario count mismatch in {label}: expected {len(scenarios)}, got {len(m_data)}")
                 except Exception as e:
                     errors.append(f"[Catalog Mirror] Failed reading {label}/scenarios.json: {e}")
+            canonical_telemetry = os.path.join(CATALOG_DIR, "telemetry_catalog.json")
+            mirrored_telemetry = os.path.join(mdir, "telemetry_catalog.json")
+            if not os.path.exists(mirrored_telemetry):
+                errors.append(
+                    f"[Catalog Mirror] Missing telemetry_catalog.json in {label}"
+                )
+            else:
+                with open(canonical_telemetry, "rb") as canonical_file:
+                    canonical_bytes = canonical_file.read()
+                with open(mirrored_telemetry, "rb") as mirror_file:
+                    mirror_bytes = mirror_file.read()
+                if canonical_bytes != mirror_bytes:
+                    errors.append(
+                        f"[Catalog Mirror] telemetry_catalog.json differs in {label}"
+                    )
 
     is_valid = len(errors) == 0
     return is_valid, errors, orphans

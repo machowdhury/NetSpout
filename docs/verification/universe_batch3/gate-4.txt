@@ -1,0 +1,274 @@
+==========================================================================
+🔍 NetSpout Architecture Guardrail: Single Python Source of Truth Audit
+==========================================================================
+
+>> 1. Verifying Canonical Core (src/netspout_core/)...
+  [PASS] Canonical models.py (63.3 KB)
+  [PASS] Canonical graph_engine.py (22.4 KB)
+  [PASS] Canonical log_engine.py (64.7 KB)
+  [PASS] Canonical universe_batch1_engine.py (17.1 KB)
+  [PASS] Canonical universe_batch2_engine.py (8.9 KB)
+  [PASS] Canonical universe_batch3_engine.py (8.0 KB)
+  [PASS] Canonical authentic_scenario_packs.py (43.2 KB)
+  [PASS] Canonical wave1_authentic_engine.py (64.7 KB)
+  [PASS] Canonical wave2_authentic_engine.py (42.7 KB)
+  [PASS] Canonical wave3_authentic_engine.py (78.8 KB)
+  [PASS] Canonical scenario_runner.py (212.1 KB)
+  [PASS] Canonical snmp_engine.py (100.8 KB)
+  [PASS] Canonical gnmi_engine.py (21.9 KB)
+  [PASS] Canonical fault_injection_engine.py (36.3 KB)
+  [PASS] Canonical telemetry_dispatcher.py (51.1 KB)
+  [PASS] Canonical cisco_sample_provider.py (2.2 KB)
+  [PASS] Canonical spl_engine.py (16.2 KB)
+  [PASS] Canonical use_case_repo.py (15.2 KB)
+  [PASS] Canonical noc_soc_metrics.py (11.3 KB)
+  [PASS] Canonical catalog.py (24.7 KB)
+  [PASS] Canonical catalog_contracts.py (20.2 KB)
+  [PASS] Canonical pack_contracts.py (41.6 KB)
+  [PASS] Canonical phase8c_reference_packs.py (22.3 KB)
+  [PASS] Canonical phase9_security_packs.py (31.3 KB)
+  [PASS] Canonical phase12_security_packs.py (36.3 KB)
+  [PASS] Canonical release_candidate.py (16.2 KB)
+  [PASS] Canonical industry_packs.py (19.9 KB)
+  [PASS] Canonical dashboard_recipes.py (45.1 KB)
+  [PASS] Canonical security_state.py (11.1 KB)
+  [PASS] Canonical security_analytics.py (12.7 KB)
+  [PASS] Canonical dns_wire.py (7.9 KB)
+  [PASS] Canonical unified_generation.py (101.4 KB)
+  [PASS] Canonical native_runtime.py (58.4 KB)
+  [PASS] Canonical scenario_studio.py (86.6 KB)
+  [PASS] Canonical vendor_catalog.py (1.6 KB)
+  [PASS] Canonical exporter_session.py (4.3 KB)
+  [PASS] Canonical netflow_v9_encoder.py (8.8 KB)
+  [PASS] Canonical ipfix_encoder.py (8.8 KB)
+  [PASS] Canonical transport_safety.py (3.7 KB)
+  [PASS] Canonical rate_limiter.py (2.8 KB)
+  [PASS] Canonical transport_native_flow.py (8.3 KB)
+  [PASS] Canonical companion_manifest.py (10.3 KB)
+  [PASS] Canonical collector_evidence.py (21.5 KB)
+  [PASS] Canonical snmp_ber.py (35.5 KB)
+  [PASS] Canonical transport_native_snmp.py (32.4 KB)
+  [PASS] Canonical snmp_agent.py (63.5 KB)
+  [PASS] Canonical snmp_splunk_e2e.py (101.1 KB)
+  [PASS] Canonical embedded_pipelines.py (9.1 KB)
+  [PASS] Canonical generator_modes.py (19.3 KB)
+  [PASS] Canonical __init__.py (0.3 KB)
+  [PASS] Canonical gnmi/__init__.py (4.1 KB)
+  [PASS] Canonical gnmi/vendor_profiles.py (13.8 KB)
+  [PASS] Canonical gnmi/state_store.py (30.2 KB)
+  [PASS] Canonical gnmi/path_parser.py (10.1 KB)
+  [PASS] Canonical gnmi/encoding.py (5.8 KB)
+  [PASS] Canonical gnmi/sensor_registry.py (71.4 KB)
+  [PASS] Canonical gnmi/subscription.py (4.8 KB)
+  [PASS] Canonical gnmi/server.py (42.8 KB)
+  [PASS] Canonical gnmi/collector_pipeline.py (88.2 KB)
+  [PASS] Canonical gnmi/splunk_e2e.py (132.8 KB)
+  [PASS] Canonical gnmi/proto/__init__.py (0.2 KB)
+  [PASS] Canonical gnmi/proto/gnmi_ext.proto (1.6 KB)
+  [PASS] Canonical gnmi/proto/gnmi.proto (5.2 KB)
+  [PASS] Canonical gnmi/proto/gnmi_ext_pb2.py (2.9 KB)
+  [PASS] Canonical gnmi/proto/gnmi_pb2.py (12.6 KB)
+  [PASS] Canonical gnmi/proto/gnmi_pb2_grpc.py (6.6 KB)
+
+>> 2. Verifying Packaged Splunk Core (netspout/bin/netspout_core/)...
+  [PASS] models.py matches canonical SHA-256 (f3d0be8c2c0c...)
+  [PASS] graph_engine.py matches canonical SHA-256 (b2ad76fad8b5...)
+  [PASS] log_engine.py matches canonical SHA-256 (ffe09be3d7f6...)
+  [PASS] universe_batch1_engine.py matches canonical SHA-256 (deb9c4b5d9d9...)
+  [PASS] universe_batch2_engine.py matches canonical SHA-256 (81860e847d32...)
+  [PASS] universe_batch3_engine.py matches canonical SHA-256 (023b3b28fe9d...)
+  [PASS] authentic_scenario_packs.py matches canonical SHA-256 (801fc647fd6d...)
+  [PASS] wave1_authentic_engine.py matches canonical SHA-256 (94c66604c6d4...)
+  [PASS] wave2_authentic_engine.py matches canonical SHA-256 (1bfb230f0f35...)
+  [PASS] wave3_authentic_engine.py matches canonical SHA-256 (0278125c8378...)
+  [PASS] scenario_runner.py matches canonical SHA-256 (236849978c10...)
+  [PASS] snmp_engine.py matches canonical SHA-256 (ce9de7168c43...)
+  [PASS] gnmi_engine.py matches canonical SHA-256 (bdd68ad11e5e...)
+  [PASS] fault_injection_engine.py matches canonical SHA-256 (fdcbf4109c7f...)
+  [PASS] telemetry_dispatcher.py matches canonical SHA-256 (d96cc7797633...)
+  [PASS] cisco_sample_provider.py matches canonical SHA-256 (e019eb22b3a5...)
+  [PASS] spl_engine.py matches canonical SHA-256 (ba341dbf7d54...)
+  [PASS] use_case_repo.py matches canonical SHA-256 (51b75e3f2b73...)
+  [PASS] noc_soc_metrics.py matches canonical SHA-256 (a7e38c53669f...)
+  [PASS] catalog.py matches canonical SHA-256 (d216579c993c...)
+  [PASS] catalog_contracts.py matches canonical SHA-256 (0cae49d05e89...)
+  [PASS] pack_contracts.py matches canonical SHA-256 (e1c79e8f0967...)
+  [PASS] phase8c_reference_packs.py matches canonical SHA-256 (040f1b3d38e3...)
+  [PASS] phase9_security_packs.py matches canonical SHA-256 (c2ab253aeadd...)
+  [PASS] phase12_security_packs.py matches canonical SHA-256 (e4678764ee7a...)
+  [PASS] release_candidate.py matches canonical SHA-256 (e06f80cdb178...)
+  [PASS] industry_packs.py matches canonical SHA-256 (a24b1d131c2a...)
+  [PASS] dashboard_recipes.py matches canonical SHA-256 (e941b009eb8f...)
+  [PASS] security_state.py matches canonical SHA-256 (842dfa88668c...)
+  [PASS] security_analytics.py matches canonical SHA-256 (869060939fe7...)
+  [PASS] dns_wire.py matches canonical SHA-256 (336a8a0e52eb...)
+  [PASS] unified_generation.py matches canonical SHA-256 (e1e208f42ce7...)
+  [PASS] native_runtime.py matches canonical SHA-256 (8bde4f16961b...)
+  [PASS] scenario_studio.py matches canonical SHA-256 (f004ee1ada3d...)
+  [PASS] vendor_catalog.py matches canonical SHA-256 (fce0852d8af1...)
+  [PASS] exporter_session.py matches canonical SHA-256 (c36aec0ab8b9...)
+  [PASS] netflow_v9_encoder.py matches canonical SHA-256 (3b880df2c9fe...)
+  [PASS] ipfix_encoder.py matches canonical SHA-256 (b859eeda6675...)
+  [PASS] transport_safety.py matches canonical SHA-256 (97b311d7bb05...)
+  [PASS] rate_limiter.py matches canonical SHA-256 (9398edb11786...)
+  [PASS] transport_native_flow.py matches canonical SHA-256 (32f51e7e8884...)
+  [PASS] companion_manifest.py matches canonical SHA-256 (e85dd0ff50c0...)
+  [PASS] collector_evidence.py matches canonical SHA-256 (2f0176be8e8a...)
+  [PASS] snmp_ber.py matches canonical SHA-256 (667278d7a431...)
+  [PASS] transport_native_snmp.py matches canonical SHA-256 (860a9cef93d6...)
+  [PASS] snmp_agent.py matches canonical SHA-256 (42fe68448c67...)
+  [PASS] snmp_splunk_e2e.py matches canonical SHA-256 (c9d29dc44f6c...)
+  [PASS] embedded_pipelines.py matches canonical SHA-256 (698edd168e3a...)
+  [PASS] generator_modes.py matches canonical SHA-256 (a07f8266bae9...)
+  [PASS] __init__.py matches canonical SHA-256 (61eb65afaa5b...)
+  [PASS] gnmi/__init__.py matches canonical SHA-256 (28ce0ffec169...)
+  [PASS] gnmi/vendor_profiles.py matches canonical SHA-256 (2540b4006097...)
+  [PASS] gnmi/state_store.py matches canonical SHA-256 (45f19d946edd...)
+  [PASS] gnmi/path_parser.py matches canonical SHA-256 (f2b92d2d757e...)
+  [PASS] gnmi/encoding.py matches canonical SHA-256 (bb23868d5be9...)
+  [PASS] gnmi/sensor_registry.py matches canonical SHA-256 (762625f4473b...)
+  [PASS] gnmi/subscription.py matches canonical SHA-256 (8b3fb4522ee7...)
+  [PASS] gnmi/server.py matches canonical SHA-256 (13ef521770cb...)
+  [PASS] gnmi/collector_pipeline.py matches canonical SHA-256 (b4fd51bb96f7...)
+  [PASS] gnmi/splunk_e2e.py matches canonical SHA-256 (9e6fdb76fb20...)
+  [PASS] gnmi/proto/__init__.py matches canonical SHA-256 (ed1dd7e3a897...)
+  [PASS] gnmi/proto/gnmi_ext.proto matches canonical SHA-256 (ddf466b32138...)
+  [PASS] gnmi/proto/gnmi.proto matches canonical SHA-256 (4cedfec857b9...)
+  [PASS] gnmi/proto/gnmi_ext_pb2.py matches canonical SHA-256 (2f1fecaf94ea...)
+  [PASS] gnmi/proto/gnmi_pb2.py matches canonical SHA-256 (7fedd25ca1b3...)
+  [PASS] gnmi/proto/gnmi_pb2_grpc.py matches canonical SHA-256 (675c40c5ca19...)
+
+>> 2b. Verifying Backend gNMI Subpackage (backend/app/gnmi/)...
+  [PASS] backend/app/gnmi/__init__.py matches canonical SHA-256 (28ce0ffec169...)
+  [PASS] backend/app/gnmi/vendor_profiles.py matches canonical SHA-256 (2540b4006097...)
+  [PASS] backend/app/gnmi/state_store.py matches canonical SHA-256 (45f19d946edd...)
+  [PASS] backend/app/gnmi/path_parser.py matches canonical SHA-256 (f2b92d2d757e...)
+  [PASS] backend/app/gnmi/encoding.py matches canonical SHA-256 (bb23868d5be9...)
+  [PASS] backend/app/gnmi/sensor_registry.py matches canonical SHA-256 (762625f4473b...)
+  [PASS] backend/app/gnmi/subscription.py matches canonical SHA-256 (8b3fb4522ee7...)
+  [PASS] backend/app/gnmi/server.py matches canonical SHA-256 (13ef521770cb...)
+  [PASS] backend/app/gnmi/collector_pipeline.py matches canonical SHA-256 (b4fd51bb96f7...)
+  [PASS] backend/app/gnmi/splunk_e2e.py matches canonical SHA-256 (9e6fdb76fb20...)
+  [PASS] backend/app/gnmi/proto/__init__.py matches canonical SHA-256 (ed1dd7e3a897...)
+  [PASS] backend/app/gnmi/proto/gnmi_ext.proto matches canonical SHA-256 (ddf466b32138...)
+  [PASS] backend/app/gnmi/proto/gnmi.proto matches canonical SHA-256 (4cedfec857b9...)
+  [PASS] backend/app/gnmi/proto/gnmi_ext_pb2.py matches canonical SHA-256 (2f1fecaf94ea...)
+  [PASS] backend/app/gnmi/proto/gnmi_pb2.py matches canonical SHA-256 (7fedd25ca1b3...)
+  [PASS] backend/app/gnmi/proto/gnmi_pb2_grpc.py matches canonical SHA-256 (675c40c5ca19...)
+
+>> 3. Verifying Splunk Bin Generated Copies (netspout/bin/)...
+  [PASS] netspout/bin/models.py matches canonical source
+  [PASS] netspout/bin/graph_engine.py matches canonical source
+  [PASS] netspout/bin/log_engine.py matches canonical source
+  [PASS] netspout/bin/universe_batch1_engine.py matches canonical source
+  [PASS] netspout/bin/universe_batch2_engine.py matches canonical source
+  [PASS] netspout/bin/universe_batch3_engine.py matches canonical source
+  [PASS] netspout/bin/authentic_scenario_packs.py matches canonical source
+  [PASS] netspout/bin/wave1_authentic_engine.py matches canonical source
+  [PASS] netspout/bin/wave2_authentic_engine.py matches canonical source
+  [PASS] netspout/bin/wave3_authentic_engine.py matches canonical source
+  [PASS] netspout/bin/scenario_runner.py matches canonical source
+  [PASS] netspout/bin/snmp_engine.py matches canonical source
+  [PASS] netspout/bin/gnmi_engine.py matches canonical source
+  [PASS] netspout/bin/fault_injection_engine.py matches canonical source
+  [PASS] netspout/bin/telemetry_dispatcher.py matches canonical source
+  [PASS] netspout/bin/cisco_sample_provider.py matches canonical source
+  [PASS] netspout/bin/spl_engine.py matches canonical source
+  [PASS] netspout/bin/use_case_repo.py matches canonical source
+  [PASS] netspout/bin/noc_soc_metrics.py matches canonical source
+  [PASS] netspout/bin/catalog.py matches canonical source
+  [PASS] netspout/bin/catalog_contracts.py matches canonical source
+  [PASS] netspout/bin/pack_contracts.py matches canonical source
+  [PASS] netspout/bin/phase8c_reference_packs.py matches canonical source
+  [PASS] netspout/bin/phase9_security_packs.py matches canonical source
+  [PASS] netspout/bin/phase12_security_packs.py matches canonical source
+  [PASS] netspout/bin/release_candidate.py matches canonical source
+  [PASS] netspout/bin/industry_packs.py matches canonical source
+  [PASS] netspout/bin/dashboard_recipes.py matches canonical source
+  [PASS] netspout/bin/security_state.py matches canonical source
+  [PASS] netspout/bin/security_analytics.py matches canonical source
+  [PASS] netspout/bin/dns_wire.py matches canonical source
+  [PASS] netspout/bin/unified_generation.py matches canonical source
+  [PASS] netspout/bin/native_runtime.py matches canonical source
+  [PASS] netspout/bin/scenario_studio.py matches canonical source
+  [PASS] netspout/bin/vendor_catalog.py matches canonical source
+  [PASS] netspout/bin/exporter_session.py matches canonical source
+  [PASS] netspout/bin/netflow_v9_encoder.py matches canonical source
+  [PASS] netspout/bin/ipfix_encoder.py matches canonical source
+  [PASS] netspout/bin/transport_safety.py matches canonical source
+  [PASS] netspout/bin/rate_limiter.py matches canonical source
+  [PASS] netspout/bin/transport_native_flow.py matches canonical source
+  [PASS] netspout/bin/companion_manifest.py matches canonical source
+  [PASS] netspout/bin/collector_evidence.py matches canonical source
+  [PASS] netspout/bin/snmp_ber.py matches canonical source
+  [PASS] netspout/bin/transport_native_snmp.py matches canonical source
+  [PASS] netspout/bin/snmp_agent.py matches canonical source
+  [PASS] netspout/bin/snmp_splunk_e2e.py matches canonical source
+  [PASS] netspout/bin/embedded_pipelines.py matches canonical source
+  [PASS] netspout/bin/generator_modes.py matches canonical source
+
+>> 4. Verifying Backend App Generated Copies (backend/app/)...
+  [PASS] backend/app/models.py matches canonical source
+  [PASS] backend/app/graph_engine.py matches canonical source
+  [PASS] backend/app/log_engine.py matches canonical source
+  [PASS] backend/app/universe_batch1_engine.py matches canonical source
+  [PASS] backend/app/universe_batch2_engine.py matches canonical source
+  [PASS] backend/app/universe_batch3_engine.py matches canonical source
+  [PASS] backend/app/authentic_scenario_packs.py matches canonical source
+  [PASS] backend/app/wave1_authentic_engine.py matches canonical source
+  [PASS] backend/app/wave2_authentic_engine.py matches canonical source
+  [PASS] backend/app/wave3_authentic_engine.py matches canonical source
+  [PASS] backend/app/scenario_runner.py matches canonical source
+  [PASS] backend/app/snmp_engine.py matches canonical source
+  [PASS] backend/app/gnmi_engine.py matches canonical source
+  [PASS] backend/app/fault_injection_engine.py matches canonical source
+  [PASS] backend/app/telemetry_dispatcher.py matches canonical source
+  [PASS] backend/app/cisco_sample_provider.py matches canonical source
+  [PASS] backend/app/spl_engine.py matches canonical source
+  [PASS] backend/app/use_case_repo.py matches canonical source
+  [PASS] backend/app/noc_soc_metrics.py matches canonical source
+  [PASS] backend/app/catalog.py matches canonical source
+  [PASS] backend/app/catalog_contracts.py matches canonical source
+  [PASS] backend/app/pack_contracts.py matches canonical source
+  [PASS] backend/app/phase8c_reference_packs.py matches canonical source
+  [PASS] backend/app/phase9_security_packs.py matches canonical source
+  [PASS] backend/app/phase12_security_packs.py matches canonical source
+  [PASS] backend/app/release_candidate.py matches canonical source
+  [PASS] backend/app/industry_packs.py matches canonical source
+  [PASS] backend/app/dashboard_recipes.py matches canonical source
+  [PASS] backend/app/security_state.py matches canonical source
+  [PASS] backend/app/security_analytics.py matches canonical source
+  [PASS] backend/app/dns_wire.py matches canonical source
+  [PASS] backend/app/unified_generation.py matches canonical source
+  [PASS] backend/app/native_runtime.py matches canonical source
+  [PASS] backend/app/scenario_studio.py matches canonical source
+  [PASS] backend/app/vendor_catalog.py matches canonical source
+  [PASS] backend/app/exporter_session.py matches canonical source
+  [PASS] backend/app/netflow_v9_encoder.py matches canonical source
+  [PASS] backend/app/ipfix_encoder.py matches canonical source
+  [PASS] backend/app/transport_safety.py matches canonical source
+  [PASS] backend/app/rate_limiter.py matches canonical source
+  [PASS] backend/app/transport_native_flow.py matches canonical source
+  [PASS] backend/app/companion_manifest.py matches canonical source
+  [PASS] backend/app/collector_evidence.py matches canonical source
+  [PASS] backend/app/snmp_ber.py matches canonical source
+  [PASS] backend/app/transport_native_snmp.py matches canonical source
+  [PASS] backend/app/snmp_agent.py matches canonical source
+  [PASS] backend/app/snmp_splunk_e2e.py matches canonical source
+  [PASS] backend/app/embedded_pipelines.py matches canonical source
+  [PASS] backend/app/generator_modes.py matches canonical source
+
+>> 5. Verifying Canonical Catalog Data Synchronization...
+  [PASS] 39 catalog JSONs verified in netspout/bin/netspout_core/catalog_data
+  [PASS] 41 catalog JSONs verified in netspout/bin/catalog_data
+  [PASS] 41 catalog JSONs verified in backend/app/catalog_data
+  [PASS] 39 catalog JSONs verified in netspout/catalog
+
+>> 6. Verifying Catalog Schema & Static Vendor JSON Mirror...
+  [PASS] Canonical catalog schema and reference integrity valid (0 errors)
+  [PASS] Static vendor_catalog.json mirror matches canonical catalog (76 vendors)
+
+==========================================================================
+✅ Single Source of Truth Audit: 100% PASSED
+   All simulation logic is centralized in src/netspout_core/.
+==========================================================================

@@ -18,6 +18,7 @@ Every log entry adheres to Splunk CIM Network Traffic and Security Data Models.
 import time
 import random
 import json
+import zlib
 from datetime import datetime
 from typing import Dict, Any, Optional
 try:
@@ -37,7 +38,9 @@ class SplunkLogEngine:
 
     @staticmethod
     def current_timestamp_syslog() -> str:
-        return datetime.utcnow().strftime("%b %d %H:%M:%S")
+        now = datetime.utcnow()
+        day = f"{now.day:2d}"
+        return f"{now.strftime('%b')} {day} {now.strftime('%H:%M:%S')}"
 
     @staticmethod
     def format_cisco_asa_log(
@@ -50,23 +53,49 @@ class SplunkLogEngine:
         action: str,
         signature: str,
         status: str,
-        duration_ms: int = 12
+        duration_ms: int = 12,
+        connection_id: Optional[int] = None,
+        event_type: str = "build",
+        mapped_src: Optional[str] = None,
+        mapped_dest: Optional[str] = None,
+        src_interface: str = "outside",
+        dest_interface: str = "inside",
+        bytes_count: int = 0,
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
         
-        asa_action = "Deny" if action in ("blocked", "dropped") else "Permit"
-        code = "%ASA-4-106023" if asa_action == "Deny" else "%ASA-6-302013"
-        
-        # Raw Cisco ASA Syslog with embedded Splunk KV attributes
-        raw = (
-            f"{now_syslog} {dev_id} {code}: {asa_action} {proto.lower()} src outside:{src_ip}/{src_port} "
-            f"dst inside:{dest_ip}/{dest_port} by access-group \"OUTSIDE_IN\" [0x0, 0x0] "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"src_port={src_port} dest_port={dest_port} protocol={proto} duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
-        )
+        # Cisco ASA 302013/14 (TCP), 302015/16 (UDP), 106023 (deny).
+        # Simulation annotations remain on LogEntry, never inside the vendor body.
+        protocol = proto.upper()
+        if protocol not in {"TCP", "UDP"} or event_type not in {"build", "teardown"}:
+            raise ValueError("Unsupported ASA connection event")
+        if connection_id is None:
+            identity = f"{device.id}|{src_ip}|{src_port}|{dest_ip}|{dest_port}|{protocol}"
+            connection_id = zlib.crc32(identity.encode("utf-8")) & 0x7fffffff
+        if (type(connection_id) is not int or connection_id < 0 or
+                type(bytes_count) is not int or bytes_count < 0 or duration_ms < 0):
+            raise ValueError("Invalid ASA connection counters")
+        source = f"{src_interface}:{src_ip}/{src_port}"
+        destination = f"{dest_interface}:{dest_ip}/{dest_port}"
+        if action in {"blocked", "dropped"}:
+            message = (f'%ASA-4-106023: Deny {protocol.lower()} src {source} '
+                       f'dst {destination} by access-group "OUTSIDE_IN" [0x0, 0x0]')
+        elif event_type == "teardown":
+            code = 302014 if protocol == "TCP" else 302016
+            seconds = int(duration_ms // 1000)
+            duration = f"{seconds // 3600}:{seconds // 60 % 60:02}:{seconds % 60:02}"
+            reason = " TCP FINs" if protocol == "TCP" else ""
+            message = (f"%ASA-6-{code}: Teardown {protocol} connection {connection_id} "
+                       f"for {source} to {destination} duration {duration} bytes {bytes_count}{reason}")
+        else:
+            code = 302013 if protocol == "TCP" else 302015
+            # Identity translation unless explicit mapped socket values are supplied.
+            message = (f"%ASA-6-{code}: Built inbound {protocol} connection {connection_id} "
+                       f"for {source} ({mapped_src or f'{src_ip}/{src_port}'}) "
+                       f"to {destination} ({mapped_dest or f'{dest_ip}/{dest_port}'})")
+        raw = f"{now_syslog} {dev_id} {message}"
 
         return LogEntry(
             timestamp=now_ts,
@@ -127,7 +156,6 @@ class SplunkLogEngine:
             vendor="palo_alto",
             sourcetype="pan:traffic"
         )
-
     @staticmethod
     def format_nginx_web_log(
         device: Node,
@@ -190,10 +218,7 @@ class SplunkLogEngine:
 
         raw = (
             f"{now_syslog} {dev_id} local/tmm[1104]: 01070727:3: Pool /Common/web_farm member /Common/{backend_ip}:{backend_port} "
-            f"connection established client={src_ip} vip={dest_ip}:80 target={backend_ip}:{backend_port} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"backend_server={backend_ip}:{backend_port} protocol=TCP duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
+            f"connection established client={src_ip} vip={dest_ip}:80 target={backend_ip}:{backend_port}"
         )
 
         return LogEntry(
@@ -271,10 +296,7 @@ class SplunkLogEngine:
 
         raw = (
             f"{now_syslog} {dev_id} %ROUTING-5-FLOW: Ingress interface {interface} forward packet "
-            f"from {src_ip} to {dest_ip} via BGP-RIB "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={src_ip} dest_ip={dest_ip} "
-            f"interface={interface} protocol={proto} duration={duration_ms}ms "
-            f"action={action} signature=\"{signature}\" status={status}"
+            f"from {src_ip} to {dest_ip} via BGP-RIB"
         )
 
         return LogEntry(
@@ -315,9 +337,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %CATALYST_SEC-4-ROGUE_ALERT: Rogue AP detected on campus RF matrix. "
-            f"rogue_mac={rogue_mac} bssid={bssid} ssid=\"{ssid}\" channel={channel} rssi={rssi}dBm "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip=0.0.0.0 dest_ip=255.255.255.255 "
-            f"protocol=802.11 duration=0ms action={action} signature=\"{signature}\" status={status}"
+            f"rogue_mac={rogue_mac} bssid={bssid} ssid=\"{ssid}\" channel={channel} rssi={rssi}dBm"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -342,7 +362,7 @@ class SplunkLogEngine:
         client_mac: str = "00:1A:2B:3C:4D:5E",
         client_ip: str = "10.10.30.50",
         user: str = "corporate_user",
-        auth_status: str = "SUCCESS",
+        auth_status: Optional[str] = None,
         profile: str = "Corporate-Access",
         action: str = "allowed",
         status: str = "normal",
@@ -355,13 +375,29 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         c_mac = kwargs.get("mac_address", client_mac)
         c_prof = kwargs.get("endpoint_profile", profile)
+        outcome = (auth_status or ("FAILED" if action in {"blocked", "dropped"} else "SUCCESS")).upper()
+        if outcome == "PASSED":
+            outcome = "SUCCESS"
+        if outcome not in {"SUCCESS", "FAILED", "FAILURE"}:
+            raise ValueError("Unsupported ISE authentication outcome")
+        success = outcome == "SUCCESS"
+        category = "CISE_Passed_Authentications" if success else "CISE_Failed_Attempts"
+        code = 5200 if success else 5400
+        classification = "Passed-Authentication" if success else "Failed-Attempt"
+        description = "Authentication succeeded" if success else "Authentication failed"
+        response = "AccessAccept" if success else "AccessReject"
+        # Local store timestamp includes numeric timezone; remote transport header
+        # precedes it. Counters may be supplied by a correlated synthetic timeline.
+        local_ts = now_ts.removesuffix(" UTC") + " +00:00"
+        sequence = kwargs.get("sequence_num", 1)
+        if type(sequence) is not int or not 0 <= sequence <= 9999999999:
+            raise ValueError("Invalid ISE sequence")
         raw = (
-            f"{now_syslog} {dev_id} CISE_Failed_Authentications 0000042812 1 0 {now_ts} "
-            f"Event-Timestamp={int(time.time())}, User-Name={user}, Calling-Station-Id={c_mac}, "
-            f"Framed-IP-Address={client_ip}, Audit-Session-Id=0A0101010000005C61, "
-            f"Failure-Reason=Unauthorized_Supplicant, Authorization-Profile={c_prof}, "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={client_ip} dest_ip=10.0.0.1 "
-            f"protocol=RADIUS duration=14ms action={action} signature=\"{signature}\" status={status}"
+            f"<181>{now_syslog} {dev_id} {category} {sequence:010d} 1 0 "
+            f"{local_ts} {sequence:010d} {code} NOTICE {classification}: {description}, "
+            f"User-Name={user}, Calling-Station-ID={c_mac}, Framed-IP-Address={client_ip}, "
+            f"NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles={c_prof}, "
+            f"Response={{RadiusPacketType={response};}}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -381,6 +417,46 @@ class SplunkLogEngine:
         )
 
     @staticmethod
+    def format_cisco_ise_coa_log(
+        device: Node,
+        client_mac: str,
+        client_ip: str,
+        user: str,
+        profile: str,
+        action: str,
+        status: str,
+        signature: str,
+        sequence_num: int = 1,
+    ) -> LogEntry:
+        """Simulate Cisco ISE 5205: dynamic authorization succeeded.
+
+        Cisco ISE Syslogs, Passed Authentications, printed pp. 491-492:
+        NOTICE Dynamic-Authorization, not authentication or proof of quarantine.
+        The category groups this event with passed authentications, but the code
+        and message class distinguish it from 5200. No CoA is actually issued.
+        """
+        if type(sequence_num) is not int or not 1 <= sequence_num <= 4294967295:
+            raise ValueError("Invalid ISE CoA sequence")
+        now_ts = SplunkLogEngine.current_timestamp_iso()
+        local_ts = now_ts.removesuffix(" UTC") + " +00:00"
+        dev_id = device.name or device.id
+        raw = (
+            f"<181>{SplunkLogEngine.current_timestamp_syslog()} {dev_id} "
+            f"CISE_Passed_Authentications {sequence_num:010d} 1 0 "
+            f"{local_ts} {sequence_num:010d} 5205 NOTICE Dynamic-Authorization: "
+            f"Dynamic Authorization succeeded, User-Name={user}, Calling-Station-ID={client_mac}"
+        )
+        return LogEntry(
+            timestamp=now_ts, device_id=dev_id, src_ip=client_ip,
+            dest_ip=device.ip_address, protocol="RADIUS", duration="14ms",
+            action=action, status=status,
+            signature=(f"{signature} [SIMULATED CoA success; profile={profile}; "
+                       "quarantine enforcement unverified]"),
+            raw_log=raw, node_type=device.type.value, node_id=device.id,
+            vendor="cisco_ise", sourcetype="cisco:ise:syslog",
+        )
+
+    @staticmethod
     def format_cisco_mac_flap_log(
         device: Node,
         mac: str,
@@ -394,11 +470,14 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
+        # Cisco prints Ethernet addresses in dotted hexadecimal notation.
+        compact_mac = mac.replace(":", "").replace("-", "").replace(".", "")
+        if len(compact_mac) != 12 or any(c not in "0123456789abcdefABCDEF" for c in compact_mac):
+            raise ValueError("Invalid MAC address")
+        native_mac = ".".join(compact_mac[i:i + 4].lower() for i in (0, 4, 8))
         raw = (
-            f"{now_syslog} {dev_id} %SW_MATM-4-MACFLAP_NOTIF: Host {mac} in vlan {vlan} "
-            f"is flapping between port {port1} and port {port2} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip=10.0.1.1 dest_ip=10.0.1.254 "
-            f"protocol=ETHERNET duration=1ms action={action} signature=\"{signature}\" status={status}"
+            f"{now_syslog} {dev_id} %SW_MATM-4-MACFLAP_NOTIF: Host {native_mac} in vlan {vlan} "
+            f"is flapping between port {port1} and port {port2}."
         )
         return LogEntry(
             timestamp=now_ts,
@@ -432,9 +511,7 @@ class SplunkLogEngine:
         sig = signature or f"Catalyst Security Event: {event_type}"
         raw = (
             f"{now_syslog} {dev_id} %CATALYST_SEC-6-EVENT: event_type=\"{event_type}\" "
-            f"client_mac=\"{client_mac}\" timestamp=\"{now_ts}\" device_id=\"{dev_id}\" "
-            f"src_ip={device.ip_address} dest_ip=255.255.255.255 protocol=802.1X "
-            f"duration=1ms action={action} signature=\"{sig}\" status={status}"
+            f"client_mac=\"{client_mac}\""
         )
         return LogEntry(
             timestamp=now_ts,
@@ -471,10 +548,7 @@ class SplunkLogEngine:
         raw = (
             f"{now_syslog} {dev_id} SDWAN-BFD-SLA[512]: local_color=biz-internet remote_color=mpls "
             f"remote_system_ip={remote_system_ip} latency={latency_ms:.1f}ms jitter={jitter_ms:.1f}ms "
-            f"loss={loss_pct:.1f}% sla_class=VoIP_Gold sla_compliance={sla_status} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={remote_system_ip} protocol=BFD duration=8ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"loss={loss_pct:.1f}% sla_class=VoIP_Gold sla_compliance={sla_status}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -507,10 +581,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %BGP-5-ADJCHANGE: neighbor {neighbor_ip} vpn 10 {state_change} "
-            f"BFD session down; failover to secondary LTE/Broadband transport engaged "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={neighbor_ip} protocol=BGP duration=3ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"BFD session down; failover to secondary LTE/Broadband transport engaged"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -582,10 +653,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} %BUFFER_MGR-3-QUEUE_DROP: Ingress queue threshold exceeded on {asic_interface}. "
-            f"buffer_util={buffer_util_pct:.1f}% dropped_packets={dropped_packets} fabricHealthScore={fabric_health} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.255.0.1 protocol=DC-ETHERNET duration=1ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"buffer_util={buffer_util_pct:.1f}% dropped_packets={dropped_packets} fabricHealthScore={fabric_health}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -617,9 +685,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         sig = signature or f"ACI Fabric Health Score: {fabric_health}/100"
         raw = (
-            f"{now_syslog} {dev_id} %ACI-HEALTH-4-SCORE: fabricHealthScore={fabric_health} "
-            f"status={status} timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.255.0.1 protocol=DC-ETHERNET duration=1ms action={action} signature=\"{sig}\""
+            f"{now_syslog} {dev_id} %ACI-HEALTH-4-SCORE: fabricHealthScore={fabric_health}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -754,7 +820,6 @@ class SplunkLogEngine:
             vendor="palo_alto",
             sourcetype="pan:threat"
         )
-
     @staticmethod
     def format_fortinet_ips_log(
         device: Node,
@@ -771,17 +836,21 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         dev_id = device.name or device.id
         sig = signature or f"FortiGate IPS Detection: {attack}"
-        forti_action = "dropped" if action in ("dropped", "blocked") else "pass"
+        # FortiOS 7.2.0 IPS signature event subset (logid 0419016384).
+        # Non-blocking detection is 'detected', not a claim that a session passed.
+        forti_action = "dropped" if action in ("dropped", "blocked") else "detected"
+        # This bounded formatter rejects characters whose native escaping has not
+        # been established, rather than inventing a general FortiOS string codec.
+        if any(c in str(value) for value in (dev_id, attack) for c in ('"', "\\", "\r", "\n")):
+            raise ValueError("Unsupported FortiOS quoted value")
         now_utc = datetime.utcnow()
         raw = (
             f"<189>date={now_utc.strftime('%Y-%m-%d')} time={now_utc.strftime('%H:%M:%S')} "
-            f"devname=\"{dev_id}\" devid=\"FG60ET4619000000\" logid=\"0419016384\" "
-            f"type=\"utm\" subtype=\"ips\" level=\"alert\" severity=\"high\" "
+            f"tz=\"+0000\" devname=\"{dev_id}\" devid=\"FG60ET4619000000\" logid=\"0419016384\" "
+            f"type=\"utm\" subtype=\"ips\" eventtype=\"signature\" level=\"alert\" severity=\"high\" "
             f"srcip={src_ip} srcport={src_port} srcintf=\"port1\" "
             f"dstip={dest_ip} dstport={dest_port} dstintf=\"port2\" proto=6 "
-            f"action=\"{forti_action}\" attack=\"{attack}\" msg=\"IPS: {attack}\" "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" duration={duration_ms}ms "
-            f"action={action} signature=\"{sig}\" status={status}"
+            f"action=\"{forti_action}\" attack=\"{attack}\" msg=\"IPS: {attack}\""
         )
         return LogEntry(
             timestamp=now_ts,
@@ -850,10 +919,7 @@ class SplunkLogEngine:
         dev_id = device.name or device.id
         raw = (
             f"{now_syslog} {dev_id} Base %ROUTING-3-OPTICAL_LOS: Optical DWDM port {port_id} Loss of Signal. "
-            f"RSVP-TE LSP {lsp_name} path failed. Fast Reroute (FRR) facility bypass engaged. "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip=10.200.0.2 protocol=MPLS-RSVP duration=2ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"RSVP-TE LSP {lsp_name} path failed. Fast Reroute (FRR) facility bypass engaged."
         )
         return LogEntry(
             timestamp=now_ts,
@@ -885,12 +951,13 @@ class SplunkLogEngine:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
         dev_id = device.name or device.id
+        # The documented event reports a path change, not confirmed FRR enforcement.
+        # Legacy callers decorate next hops with display labels; keep those out of raw.
+        from ipaddress import ip_address
+        route = str(ip_address(primary_nh.split()[0]))
         raw = (
-            f"{now_syslog} {dev_id} rpd[2941]: RPD_MPLS_LSP_CHANGE: LSP {lsp_name}: "
-            f"Primary next-hop {primary_nh} DOWN. Switched to Fast-Reroute Bypass next-hop {bypass_nh} "
-            f"timestamp=\"{now_ts}\" device_id=\"{dev_id}\" src_ip={device.ip_address} "
-            f"dest_ip={bypass_nh} protocol=MPLS duration=1ms action={action} "
-            f"signature=\"{signature}\" status={status}"
+            f"{now_syslog} {dev_id} rpd[2941]: RPD_MPLS_LSP_CHANGE: "
+            f"MPLS LSP {lsp_name} change on primary(any) Route  {route}"
         )
         return LogEntry(
             timestamp=now_ts,
@@ -1214,7 +1281,7 @@ class SplunkLogEngine:
         else:
             msg = f"%CATALYST_SEC-5-STATUS: Interface {interface} vlan {vlan_id} security event {event_code}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_code={event_code} interface={interface} rogue_ip={rogue_ip} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1320,7 +1387,7 @@ class SplunkLogEngine:
             sig = signature or f"BGP Routing Event: {event_type}"
             msg = f"%ROUTING-BGP-6-INFO: Peering {neighbor_ip} state={event_type}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1370,7 +1437,7 @@ class SplunkLogEngine:
             sig = signature or f"WLAN Telemetry: {event_type}"
             msg = f"%DOT11-6-INFO: Radio 1 channel={channel} util={util_pct}%"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1417,7 +1484,7 @@ class SplunkLogEngine:
             sig = signature or f"G.8032 ERPS Ring Event: {event_type}"
             msg = f"%ETH_RING-6-INFO: Ring {ring_id} port {port_id} state={event_type}"
 
-        raw = f"{now_syslog} {dev_id} {msg} event_type={event_type} action={action} signature=\"{sig}\" status={status}"
+        raw = f"{now_syslog} {dev_id} {msg}"
         return LogEntry(
             timestamp=now_ts,
             device_id=dev_id,
@@ -1435,3 +1502,248 @@ class SplunkLogEngine:
             sourcetype=sourcetype
         )
 
+
+# ---------------------------------------------------------------------------
+# Wave-1 authentic source expansion (2026-10-26)
+# Genuinely new vendor-native source families (Windows/CrowdStrike/AWS/M365/
+# Azure/Suricata/auditd/Okta/osquery), implemented in a dedicated module with
+# pinned-upstream RAW references. Delegated here so SplunkLogEngine consumers
+# (scenario runners, PulseForge lab harness) can emit them directly.
+# Correlation metadata remains HEC-side only; RAW is vendor-native.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave1_authentic_engine import (
+        Wave1AuthenticEngine as _Wave1Engine,
+        SOURCETYPE_WINDOWS_SECURITY as _W1_ST_SEC,
+        SOURCETYPE_WINDOWS_SYSMON as _W1_ST_SYSMON,
+        SOURCETYPE_WINDOWS_POWERSHELL as _W1_ST_PS,
+        SOURCETYPE_CROWDSTRIKE_SENSOR as _W1_ST_CS,
+        SOURCETYPE_SYSMON_LINUX as _W1_ST_SL,
+        SOURCETYPE_AWS_CLOUDTRAIL as _W1_ST_CT,
+        SOURCETYPE_O365_MANAGEMENT as _W1_ST_O365,
+        SOURCETYPE_AZURE_AAD as _W1_ST_AZ,
+        SOURCETYPE_SURICATA as _W1_ST_SURICATA,
+        SOURCETYPE_AUDITD as _W1_ST_AUDITD,
+        SOURCETYPE_OKTA as _W1_ST_OKTA,
+        SOURCETYPE_OSQUERY as _W1_ST_OSQUERY,
+    )
+
+    WAVE1_SOURCE_SOURCETYPES = {
+        _W1_ST_SEC: "format_windows_security_xml_log",
+        _W1_ST_SYSMON: "format_windows_sysmon_xml_log",
+        _W1_ST_PS: "format_windows_powershell_xml_log",
+        _W1_ST_CS: "format_crowdstrike_falcon_sensor_log",
+        _W1_ST_SL: "format_sysmon_linux_log",
+        _W1_ST_CT: "format_aws_cloudtrail_log",
+        _W1_ST_O365: "format_o365_management_log",
+        _W1_ST_AZ: "format_azure_monitor_aad_log",
+        _W1_ST_SURICATA: "format_suricata_eve_log",
+        _W1_ST_AUDITD: "format_linux_auditd_log",
+        _W1_ST_OKTA: "format_okta_log",
+        _W1_ST_OSQUERY: "format_osquery_results_log",
+    }
+
+    SplunkLogEngine.WAVE1_SOURCE_SOURCETYPES = WAVE1_SOURCE_SOURCETYPES
+
+    def _w1_delegate(name):
+        engine_method = getattr(_Wave1Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    SplunkLogEngine.format_windows_security_xml_log = _w1_delegate(
+        "format_windows_security_xml_log")
+    SplunkLogEngine.format_windows_sysmon_xml_log = _w1_delegate(
+        "format_windows_sysmon_xml_log")
+    SplunkLogEngine.format_windows_powershell_xml_log = _w1_delegate(
+        "format_windows_powershell_xml_log")
+    SplunkLogEngine.format_crowdstrike_falcon_sensor_log = _w1_delegate(
+        "format_crowdstrike_falcon_sensor_log")
+    SplunkLogEngine.format_sysmon_linux_log = _w1_delegate(
+        "format_sysmon_linux_log")
+    SplunkLogEngine.format_aws_cloudtrail_log = _w1_delegate(
+        "format_aws_cloudtrail_log")
+    SplunkLogEngine.format_o365_management_log = _w1_delegate(
+        "format_o365_management_log")
+    SplunkLogEngine.format_azure_monitor_aad_log = _w1_delegate(
+        "format_azure_monitor_aad_log")
+    SplunkLogEngine.format_suricata_eve_log = _w1_delegate(
+        "format_suricata_eve_log")
+    SplunkLogEngine.format_linux_auditd_log = _w1_delegate(
+        "format_linux_auditd_log")
+    SplunkLogEngine.format_okta_log = _w1_delegate(
+        "format_okta_log")
+    SplunkLogEngine.format_osquery_results_log = _w1_delegate(
+        "format_osquery_results_log")
+except ImportError:  # pragma: no cover - wave-1 module unavailable
+    pass
+
+# ---------------------------------------------------------------------------
+# Wave-2 authentic source expansion (2026-10-26)
+# 12 new vendor-native sourcetypes (Defender/NTLM XML, ollama, MCP, Google
+# Workspace login, Azure Activity Log, AWS VPC Flow, /var/log/messages,
+# Kubernetes audit, Falco, CrushFTP) plus full generator support for the
+# existing cisco:sfw:estreamer row. Same guarantees as Wave-1: RAW is pure
+# vendor-native, correlation metadata stays in LogEntry fields only.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave2_authentic_engine import (
+        Wave2AuthenticEngine as _Wave2Engine,
+        WAVE2_SOURCE_SOURCETYPES as _W2_MAP,
+    )
+
+    SplunkLogEngine.WAVE2_SOURCE_SOURCETYPES = _W2_MAP
+
+    def _w2_delegate(name):
+        engine_method = getattr(_Wave2Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _w2_fmt in _W2_MAP.values():
+        setattr(SplunkLogEngine, _w2_fmt, _w2_delegate(_w2_fmt))
+except ImportError:  # pragma: no cover - wave-2 module unavailable
+    pass
+
+# ---------------------------------------------------------------------------
+# Wave-3 authentic source expansion (2026-10-26)
+# Splunkbase-scale batch: VMware vSphere, Cisco Cloud Security (firewall/ns
+# DNS/proxy), Cisco Isovalent Tetragon, CloudTrail Lake, linux_secure, IIS,
+# Zeek conn, MSExchange Management, CloudFront, M365/Gmail traces, Zscaler NSS,
+# Secure Access RA-VPN, SD-WAN, IOS SEC_LOGIN, Meraki syslog, dhcpd, GCP audit,
+# OpenTelemetry OTLP, Windows System channel XML plus the cisco:duo:administrator
+# generator-gap fill. Same guarantees as Wave-1/2.
+# ---------------------------------------------------------------------------
+try:
+    from netspout_core.wave3_authentic_engine import (
+        Wave3AuthenticEngine as _Wave3Engine,
+        WAVE3_SOURCE_SOURCETYPES as _W3_MAP,
+    )
+
+    SplunkLogEngine.WAVE3_SOURCE_SOURCETYPES = _W3_MAP
+
+    def _w3_delegate(name):
+        engine_method = getattr(_Wave3Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _w3_fmt in _W3_MAP.values():
+        setattr(SplunkLogEngine, _w3_fmt, _w3_delegate(_w3_fmt))
+except ImportError:  # pragma: no cover - wave-3 module unavailable
+    pass
+
+# ---------------------------------------------------------------------------
+# Universal Vendor Coverage — evidence-backed generator batch 1 (2026-10-26)
+# Bounded multi-vendor batch: docker_events, bluecoat:proxysg:access:file,
+# wazuh:alerts, nozomi:universal_alert. Same guarantees as the wave engines.
+# ---------------------------------------------------------------------------
+try:
+    try:
+        from netspout_core.universe_batch1_engine import (
+            UniverseBatch1Engine as _UB1Engine,
+            UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+        )
+    except ImportError:
+        try:
+            from app.universe_batch1_engine import (
+                UniverseBatch1Engine as _UB1Engine,
+                UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+            )
+        except ImportError:
+            from universe_batch1_engine import (
+                UniverseBatch1Engine as _UB1Engine,
+                UNIVERSE_BATCH1_SOURCE_SOURCETYPES as _UB1_MAP,
+            )
+
+    SplunkLogEngine.UNIVERSE_BATCH1_SOURCE_SOURCETYPES = _UB1_MAP
+
+    def _ub1_delegate(name):
+        engine_method = getattr(_UB1Engine, name)
+
+        @classmethod
+        def delegate(cls, *args, **kwargs):
+            return engine_method(*args, **kwargs)
+
+        return delegate
+
+    for _ub1_fmt in _UB1_MAP.values():
+        setattr(SplunkLogEngine, _ub1_fmt, _ub1_delegate(_ub1_fmt))
+except ImportError:  # pragma: no cover - batch-1 module unavailable
+    pass
+
+
+# Batch 2: exact sourcetype/family dispatch; unsupported families fail closed.
+try:
+    from netspout_core.universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch2_engine import UniverseBatch2Engine, UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH2_SOURCE_SOURCETYPES = UNIVERSE_BATCH2_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch2_log = UniverseBatch2Engine.format_universe_batch2_log
+
+# Batch 3 native source/family dispatch, including specialized infrastructure formats.
+try:
+    from netspout_core.universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch3_engine import UniverseBatch3Engine, UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH3_SOURCE_SOURCETYPES = UNIVERSE_BATCH3_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch3_log = UniverseBatch3Engine.format_universe_batch3_log
+
+# Batch 4 native source/family dispatch for SaaS audit, endpoint threat and exposure logs.
+try:
+    from netspout_core.universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch4_engine import UniverseBatch4Engine, UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH4_SOURCE_SOURCETYPES = UNIVERSE_BATCH4_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch4_log = UniverseBatch4Engine.format_universe_batch4_log
+
+# Batch 5 native source/family dispatch for Cisco IOS-XE change, fault and health device syslog.
+try:
+    from netspout_core.universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch5_engine import UniverseBatch5Engine, UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH5_SOURCE_SOURCETYPES = UNIVERSE_BATCH5_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch5_log = UniverseBatch5Engine.format_universe_batch5_log
+
+# Batch 6 native source/family dispatch for captured Cisco Catalyst Center, SD-WAN, ACI and Nexus records.
+try:
+    from netspout_core.universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch6_engine import UniverseBatch6Engine, UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH6_SOURCE_SOURCETYPES = UNIVERSE_BATCH6_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch6_log = UniverseBatch6Engine.format_universe_batch6_log
+
+# Batch 7 native source/family dispatch for authentic NGINX Plus key=value access records.
+try:
+    from netspout_core.universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+except ImportError:
+    try:
+        from app.universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+    except ImportError:
+        from universe_batch7_engine import UniverseBatch7Engine, UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+SplunkLogEngine.UNIVERSE_BATCH7_SOURCE_SOURCETYPES = UNIVERSE_BATCH7_SOURCE_SOURCETYPES
+SplunkLogEngine.format_universe_batch7_log = UniverseBatch7Engine.format_universe_batch7_log

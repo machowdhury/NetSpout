@@ -14,7 +14,8 @@ try:
     from pydantic import BaseModel, Field
 except ImportError:
     class _FieldDefault:
-        def __init__(self, default=None, default_factory=None):
+        def __init__(self, default=None, default_factory=None, exclude=False):
+            self.exclude = exclude
             self.default = default
             self.default_factory = default_factory
         def get_value(self):
@@ -23,7 +24,7 @@ except ImportError:
             return self.default
 
     def Field(default=None, *, default_factory=None, **kwargs):
-        return _FieldDefault(default=default, default_factory=default_factory)
+        return _FieldDefault(default=default, default_factory=default_factory, exclude=kwargs.get("exclude", False))
 
     class BaseModel:
         def __init__(self, **kwargs):
@@ -33,13 +34,28 @@ except ImportError:
                         continue
                     if isinstance(v, _FieldDefault):
                         setattr(self, k, v.get_value())
-                    elif not callable(v):
+                    elif not callable(v) and not isinstance(v, property):
                         setattr(self, k, v)
             for k, v in kwargs.items():
                 setattr(self, k, v)
 
         def dict(self, *args, **kwargs):
-            return {k: (v.dict() if hasattr(v, "dict") else v) for k, v in self.__dict__.items() if not k.startswith("_")}
+            def serialize(value):
+                if isinstance(value, BaseModel):
+                    return value.dict()
+                if isinstance(value, dict):
+                    return {k: serialize(v) for k, v in value.items()}
+                if isinstance(value, (list, tuple)):
+                    return [serialize(v) for v in value]
+                return value
+
+            excluded = {
+                name for cls in self.__class__.__mro__
+                for name, field in vars(cls).items()
+                if isinstance(field, _FieldDefault) and field.exclude
+            }
+            return {k: serialize(v) for k, v in self.__dict__.items()
+                    if not k.startswith("_") and k not in excluded}
 
         def model_dump(self, *args, **kwargs):
             return self.dict(*args, **kwargs)
@@ -200,44 +216,29 @@ class DeploymentProfile(str, Enum):
     DEMO = "demo"
     SECURE = "secure"
 
-DEMO_HEC_TOKEN: str = "00000000-0000-0000-0000-000000000000"
-DEMO_SPLUNK_PASSWORD: str = "SplunkPassword123!"
-
 def get_deployment_profile() -> DeploymentProfile:
-    val = os.environ.get("NETSPOUT_PROFILE", "demo").strip().lower()
+    val = os.environ.get("NETSPOUT_PROFILE", "secure").strip().lower()
     if val in ("secure", "external", "prod", "production"):
         return DeploymentProfile.SECURE
     return DeploymentProfile.DEMO
 
 def resolve_hec_token(requested_token: Optional[str] = None) -> str:
     """
-    Resolves the active HEC token according to deployment profile:
-    - In DEMO mode: defaults to DEMO_HEC_TOKEN if none provided.
-    - In SECURE mode: requires user-provided or environment token, rejecting the demo token.
+    Resolves the active HEC token without defining a repository default.
     """
     token = requested_token or os.environ.get("NETSPOUT_HEC_TOKEN")
-    profile = get_deployment_profile()
-    if profile == DeploymentProfile.SECURE:
-        if not token:
-            raise ValueError("SECURE profile requires user-supplied HEC token via NETSPOUT_HEC_TOKEN or config.")
-        if token == DEMO_HEC_TOKEN:
-            raise ValueError("SECURE profile rejects disposable DEMO_HEC_TOKEN. Please provide a secure production token.")
-        return token
-    return token or DEMO_HEC_TOKEN
+    if not token:
+        raise ValueError("A HEC token must be supplied through the environment or secure setup.")
+    return token
 
 def resolve_splunk_password(requested_password: Optional[str] = None) -> str:
     """
     Resolves the Splunk management password according to deployment profile.
     """
     pwd = requested_password or os.environ.get("NETSPOUT_SPLUNK_PASSWORD")
-    profile = get_deployment_profile()
-    if profile == DeploymentProfile.SECURE:
-        if not pwd:
-            raise ValueError("SECURE profile requires user-supplied Splunk password via NETSPOUT_SPLUNK_PASSWORD.")
-        if pwd == DEMO_SPLUNK_PASSWORD:
-            raise ValueError("SECURE profile rejects disposable DEMO_SPLUNK_PASSWORD. Please provide a secure production password.")
-        return pwd
-    return pwd or DEMO_SPLUNK_PASSWORD
+    if not pwd:
+        raise ValueError("A Splunk management credential must be supplied through the environment or secure setup.")
+    return pwd
 
 def mask_secret(secret: Optional[str]) -> str:
     """
@@ -257,14 +258,30 @@ DEFAULT_SPLUNK_HEC_URL: str = "https://127.0.0.1:8088/services/collector"
 # Multi-Pipeline Telemetry Transport Configuration
 # =========================================================================
 class TelemetryTransportConfig(BaseModel):
+    # Secrets remain backend attributes; all public model serialization omits them.
+    if not hasattr(BaseModel, "model_copy"):
+        def model_copy(self, *, update=None, deep=False):
+            """Copy backend configuration without using public serialization."""
+            from copy import copy, deepcopy
+            result = deepcopy(self) if deep else copy(self)
+            result.__dict__.update(update or {})
+            return result
+
+    def copy(self, *, include=None, exclude=None, update=None, deep=False):
+        """Keep legacy destination copies credential-bearing (also on Pydantic v1)."""
+        if include is None and exclude is None:
+            return self.model_copy(update=update, deep=deep)
+        # Preserve the framework's explicit filtering semantics when requested.
+        return super().copy(include=include, exclude=exclude, update=update, deep=deep)
+
     # 1. Splunk HEC Pipeline
     hec_enabled: bool = True
     hec_url: str = DEFAULT_SPLUNK_HEC_URL
-    hec_token: str = DEMO_HEC_TOKEN
+    hec_token: str = Field(default="", exclude=True)
     hec_index: str = "idx_network_ops"
     hec_metric_index: str = "cisco_mdt_metrics"
-    hec_ssl_verify: bool = False
-    hec_allow_insecure_tls: bool = True
+    hec_ssl_verify: bool = True
+    hec_allow_insecure_tls: bool = False
     default_index: Optional[str] = None
     hec_endpoint: Optional[str] = None
 
@@ -279,6 +296,8 @@ class TelemetryTransportConfig(BaseModel):
             data["hec_index"] = data["index"]
         if "token" in data and ("hec_token" not in data or not data["hec_token"]):
             data["hec_token"] = data["token"]
+        # The fallback retains extra attributes, so discard the consumed secret alias.
+        data.pop("token", None)
         if "hec_token" not in data or not data["hec_token"]:
             try:
                 data["hec_token"] = resolve_hec_token()
@@ -295,7 +314,7 @@ class TelemetryTransportConfig(BaseModel):
     otel_endpoint: str = "http://127.0.0.1:4318"
     otel_metrics_path: str = "/v1/metrics"
     otel_logs_path: str = "/v1/logs"
-    otel_headers: Dict[str, str] = Field(default_factory=dict)
+    otel_headers: Dict[str, str] = Field(default_factory=dict, exclude=True)
     otel_service_name: str = "netspout-telemetry-engine"
 
     # 3. Telegraf Pipeline (HTTP / Influx Line Protocol or JSON)
@@ -328,7 +347,7 @@ class TelemetryTransportConfig(BaseModel):
     native_snmp_pdu_mode: str = "TRAP"  # TRAP, INFORM, MIXED
     native_snmp_receiver_host: str = "127.0.0.1"
     native_snmp_receiver_port: int = 1162
-    native_snmp_community: str = "netspout-lab"
+    native_snmp_community: str = Field(default="netspout-lab", exclude=True)
     native_snmp_trap_rate_pps: int = 50
     native_snmp_inform_rate_pps: int = 25
     native_snmp_packet_cap: int = 1000
@@ -761,6 +780,8 @@ class EvidenceObservation(BaseModel):
 
 
 class UnifiedRunEvidence(BaseModel):
+    schema_version: str = "1.0"  # bump on any breaking change; contract in docs/architecture/NETSPOUT_GATE_8_UNIFIED_EVIDENCE.md
+    observed_at: float = Field(default_factory=time.time)  # when Splunk was queried, not when events were generated
     run_id: str
     scenario_id: str
     destinations: List[EvidenceObservation] = Field(default_factory=list)

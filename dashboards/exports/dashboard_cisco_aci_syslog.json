@@ -1,0 +1,65 @@
+{
+  "title": "Cisco ACI Nexus syslog",
+  "description": "PulseForge indexed run evidence",
+  "inputs": {
+    "time": {
+      "type": "input.timerange",
+      "title": "Time",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-1h,now"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "dataSources": {
+    "events": {
+      "type": "ds.search",
+      "options": {
+        "query": "index=idx_network_ops sourcetype=\"cisco:dc:nexus9k:syslog\" | table _time host sourcetype netspout_phase _raw"
+      }
+    }
+  },
+  "visualizations": {
+    "table": {
+      "type": "splunk.table",
+      "title": "Indexed scenario events",
+      "dataSources": {
+        "primary": "events"
+      }
+    }
+  },
+  "layout": {
+    "type": "absolute",
+    "options": {
+      "width": 1200,
+      "height": 600
+    },
+    "globalInputs": [
+      "time"
+    ],
+    "structure": [
+      {
+        "item": "table",
+        "type": "block",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "w": 1200,
+          "h": 550
+        }
+      }
+    ]
+  }
+}

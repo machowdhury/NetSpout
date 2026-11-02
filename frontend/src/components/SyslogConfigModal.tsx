@@ -25,7 +25,7 @@ export const SyslogConfigModal: React.FC<SyslogConfigModalProps> = ({
   // HEC Settings
   const [hecEnabled, setHecEnabled] = useState(config.hec_enabled);
   const [hecUrl, setHecUrl] = useState(config.hec_url || 'https://127.0.0.1:8088/services/collector');
-  const [hecToken, setHecToken] = useState(config.hec_token || '00000000-0000-0000-0000-000000000000');
+  const [hecToken, setHecToken] = useState(config.hec_token || '');
   const [hecIndex, setHecIndex] = useState(config.hec_index || 'idx_network_ops');
 
   // Test Syslog State

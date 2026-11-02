@@ -1,0 +1,14 @@
+May  8 14:27:22 192.168.8.233 2025-05-08T14:25:34.138Z localhost.localdomain shell[290708]: [root]: cat /etc/vmware-vpx/vcdb.properties
+
+May  8 14:27:00 192.168.8.233 2025-05-08T14:25:11.250Z localhost.localdomain shell[290708]: [root]: cat /etc/shadow
+May  8 14:25:09 192.168.8.233 2025-05-06T15:57:34.468Z localhost.localdomain shell[290708]: [root]: cat /etc/shadow
+May  8 14:23:57 192.168.8.233 2025-01-08T15:23:30.532Z localhost.localdomain shell[288192]: [root]: cat /etc/shadow 
+May  8 14:22:23 192.168.8.233 2025-01-08T15:21:57.081Z localhost.localdomain shell[264232]: [root]: cat /etc/vmware-vpx/vcdb.properties
+
+May  8 14:21:19 192.168.8.233 2025-01-08T15:20:52.758Z localhost.localdomain shell[264232]: [root]: cat /etc/shadow
+
+May  8 14:21:13 192.168.8.233 2025-01-08T15:20:46.873Z localhost.localdomain shell[264232]: [root]: cat /etc/security/dcui-access.conf 
+May  8 14:21:05 192.168.8.233 2025-01-08T15:20:38.708Z localhost.localdomain shell[264232]: [root]: cat /etc/security/opasswd 
+May  8 14:20:56 192.168.8.233 2025-01-08T15:20:29.814Z localhost.localdomain shell[264232]: [root]: cat /etc/security/access.conf 
+May  8 14:16:58 192.168.8.233 2025-01-08T15:16:32.019Z localhost.localdomain shell[264232]: [root]: cat /etc/vmware-vpx/vcdb.properties
+

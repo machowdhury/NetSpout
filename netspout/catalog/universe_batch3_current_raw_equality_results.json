@@ -1,0 +1,258 @@
+{
+  "run_id": "pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+  "source": "pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6",
+  "index": "idx_ta_ise_test",
+  "posted": 20,
+  "indexed_rows": 20,
+  "post_failures": [],
+  "raw_equality": [
+    {
+      "label": "ub3_identity_runtime_audit-BASELINE-1",
+      "sourcetype": "sailpoint_identitynow",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 929,
+      "indexed_bytes": 929,
+      "submitted_sha256": "70b8bc484ce341e093e9d7cb789bc0d1719f0c28b8763fad1fe613021e072b96",
+      "indexed_sha256": "70b8bc484ce341e093e9d7cb789bc0d1719f0c28b8763fad1fe613021e072b96",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-BASELINE-2",
+      "sourcetype": "sailpoint_identitynow",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1312,
+      "indexed_bytes": 1312,
+      "submitted_sha256": "4645192791f643246a42991e274952f3ec19260421b96f7f92afda8f1eabc03a",
+      "indexed_sha256": "4645192791f643246a42991e274952f3ec19260421b96f7f92afda8f1eabc03a",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-BASELINE-3",
+      "sourcetype": "ccx:beyondinsight:passwordsafe",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 173,
+      "indexed_bytes": 173,
+      "submitted_sha256": "d21a4f6a2f25f44f0b2471edeba2ef722dc2b35a8be97f9a5e84a211387486d5",
+      "indexed_sha256": "d21a4f6a2f25f44f0b2471edeba2ef722dc2b35a8be97f9a5e84a211387486d5",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-OBSERVE-1",
+      "sourcetype": "tenable:io:audit_logs",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 616,
+      "indexed_bytes": 616,
+      "submitted_sha256": "d9eeaca3b527f67c37b923a8edee6d99797fc4c9e48c052bc09c571097472438",
+      "indexed_sha256": "d9eeaca3b527f67c37b923a8edee6d99797fc4c9e48c052bc09c571097472438",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-OBSERVE-2",
+      "sourcetype": "tenable:io:audit_logs",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 367,
+      "indexed_bytes": 367,
+      "submitted_sha256": "626ea120c05e5e6356995bc20a6dd9f21fe4b71e8c537ae1027dc91477c46cd2",
+      "indexed_sha256": "626ea120c05e5e6356995bc20a6dd9f21fe4b71e8c537ae1027dc91477c46cd2",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-OBSERVE-3",
+      "sourcetype": "tenable:io:audit_logs",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 365,
+      "indexed_bytes": 365,
+      "submitted_sha256": "5fef47b2779ac9831c15feb75282f959127e4e788bbaf7ed68004fce8e214b89",
+      "indexed_sha256": "5fef47b2779ac9831c15feb75282f959127e4e788bbaf7ed68004fce8e214b89",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-VALIDATE-1",
+      "sourcetype": "SysdigSecureEvents",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1011,
+      "indexed_bytes": 1011,
+      "submitted_sha256": "1fb46f0b91a568ca6d1a8bebe260f74e564c0c7eef2fa8f7bc6a694077a9c18a",
+      "indexed_sha256": "1fb46f0b91a568ca6d1a8bebe260f74e564c0c7eef2fa8f7bc6a694077a9c18a",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_identity_runtime_audit-VALIDATE-2",
+      "sourcetype": "SysdigSecureEvents",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 2341,
+      "indexed_bytes": 2341,
+      "submitted_sha256": "5f617453f4c5a1488cdb971974e78a2547303756d0f53de46762cb78b0050831",
+      "indexed_sha256": "5f617453f4c5a1488cdb971974e78a2547303756d0f53de46762cb78b0050831",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-BASELINE-1",
+      "sourcetype": "pfsense:filterlog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 193,
+      "indexed_bytes": 193,
+      "submitted_sha256": "e267cc874c0e83a94af03f0508b2f177c9a903da69ee465b8b18a64a260329bf",
+      "indexed_sha256": "e267cc874c0e83a94af03f0508b2f177c9a903da69ee465b8b18a64a260329bf",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-BASELINE-2",
+      "sourcetype": "pfsense:filterlog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 149,
+      "indexed_bytes": 149,
+      "submitted_sha256": "2cc6081e67d343043c9ace48f66e6955eee0348018cce0ae665f408f19900b6f",
+      "indexed_sha256": "2cc6081e67d343043c9ace48f66e6955eee0348018cce0ae665f408f19900b6f",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-BASELINE-3",
+      "sourcetype": "pfsense:filterlog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 140,
+      "indexed_bytes": 140,
+      "submitted_sha256": "39f9546afd861a682b852c05225f40e97b7a342957212a35fa0c463ec555df17",
+      "indexed_sha256": "39f9546afd861a682b852c05225f40e97b7a342957212a35fa0c463ec555df17",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-OBSERVE-1",
+      "sourcetype": "barracuda:waf:web_firewall",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 476,
+      "indexed_bytes": 476,
+      "submitted_sha256": "8da638adfbbb4f4c811f1daca1690a3346039ea989a1cac42f330bc70397c7ca",
+      "indexed_sha256": "8da638adfbbb4f4c811f1daca1690a3346039ea989a1cac42f330bc70397c7ca",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-OBSERVE-2",
+      "sourcetype": "barracuda:waf:web_firewall",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 280,
+      "indexed_bytes": 280,
+      "submitted_sha256": "fd062da8cb609b0436623f44777d9f68f74e89c571b852f8c1b115b1080e4353",
+      "indexed_sha256": "fd062da8cb609b0436623f44777d9f68f74e89c571b852f8c1b115b1080e4353",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-OBSERVE-3",
+      "sourcetype": "imperva:securesphere:cef",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 150,
+      "indexed_bytes": 150,
+      "submitted_sha256": "46210d42c27b16f008e072a79eeefb6f993d7929da06dc8538e91680a8c38c0c",
+      "indexed_sha256": "46210d42c27b16f008e072a79eeefb6f993d7929da06dc8538e91680a8c38c0c",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-VALIDATE-1",
+      "sourcetype": "imperva:securesphere:cef",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 1163,
+      "indexed_bytes": 1163,
+      "submitted_sha256": "78721f0b7a87cf053f9e223669abd0fd972834295a9197ac83f28ded72bcd71f",
+      "indexed_sha256": "78721f0b7a87cf053f9e223669abd0fd972834295a9197ac83f28ded72bcd71f",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-VALIDATE-2",
+      "sourcetype": "darktrace",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 3454,
+      "indexed_bytes": 3454,
+      "submitted_sha256": "5e62d22ad566b211e1767c4ce8619ad1f20c0c89a4613595e52f5801da5e700b",
+      "indexed_sha256": "5e62d22ad566b211e1767c4ce8619ad1f20c0c89a4613595e52f5801da5e700b",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_multivendor_edge_observation-VALIDATE-3",
+      "sourcetype": "darktrace",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 3336,
+      "indexed_bytes": 3336,
+      "submitted_sha256": "fc088e6e110241f903033ea1af8a0547d1ef634cb1c7488241b20d5301b8ede9",
+      "indexed_sha256": "fc088e6e110241f903033ea1af8a0547d1ef634cb1c7488241b20d5301b8ede9",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_database_message_audit-BASELINE-1",
+      "sourcetype": "oracle:audit:text",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 439,
+      "indexed_bytes": 439,
+      "submitted_sha256": "466b7f268e90013c58f6dddc66b20a13d7fbcbaeba6dc59dea77677a5d6194dd",
+      "indexed_sha256": "466b7f268e90013c58f6dddc66b20a13d7fbcbaeba6dc59dea77677a5d6194dd",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_database_message_audit-OBSERVE-1",
+      "sourcetype": "ibm:mq:errorlog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 293,
+      "indexed_bytes": 293,
+      "submitted_sha256": "89b4a0ad9cbedd429fb84ecb1e5a08da4033de8599fd023c9abf5ff44e3081cd",
+      "indexed_sha256": "89b4a0ad9cbedd429fb84ecb1e5a08da4033de8599fd023c9abf5ff44e3081cd",
+      "correlation_leak": false
+    },
+    {
+      "label": "ub3_database_message_audit-VALIDATE-1",
+      "sourcetype": "ibm:mq:errorlog",
+      "matches": 1,
+      "verdict": "PASS",
+      "submitted_bytes": 325,
+      "indexed_bytes": 325,
+      "submitted_sha256": "30e83d07a2b816b93fff1bc192d80eabfa0166b0845f7f918584fccf7b08c5bb",
+      "indexed_sha256": "30e83d07a2b816b93fff1bc192d80eabfa0166b0845f7f918584fccf7b08c5bb",
+      "correlation_leak": false
+    }
+  ],
+  "passes": 20,
+  "distinct_sourcetypes": [
+    "SysdigSecureEvents",
+    "barracuda:waf:web_firewall",
+    "ccx:beyondinsight:passwordsafe",
+    "darktrace",
+    "ibm:mq:errorlog",
+    "imperva:securesphere:cef",
+    "oracle:audit:text",
+    "pfsense:filterlog",
+    "sailpoint_identitynow",
+    "tenable:io:audit_logs"
+  ],
+  "installed_ta_inventory": [
+    {
+      "id": "Splunk_TA_cisco-ise",
+      "version": "5.0.0"
+    }
+  ],
+  "ta_parser_checks_performed": 0,
+  "detection_checks_performed": 0,
+  "search_attempts": 2,
+  "query": "search index=idx_ta_ise_test earliest=-15m source=\"pulseforge:universe:raw-check:pf-ub3-current-8e6a1d9e-d565-40e0-a9ab-653eb6eabcb6\" | table _raw sourcetype netspout_event_id",
+  "configuration_changes": 0,
+  "engine_sha256": "023b3b28fe9daf1b13691e48e3fc0cd03d93a3aadbcf009706e8195313ed4bc9",
+  "generator_module": "src/netspout_core/universe_batch3_engine.py",
+  "scenario_module_sha256": "801fc647fd6de8308ecf60a2e652db9e77ee152af1a4937d21b93b46ce627ef0",
+  "method": "Current host-generated UTF-8 bytes, existing isolated HEC input, exact indexed byte and sourcetype comparison"
+}

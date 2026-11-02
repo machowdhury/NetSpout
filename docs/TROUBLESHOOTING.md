@@ -1,4 +1,4 @@
-# NetSpout — Troubleshooting & Diagnostics
+# NetSpout PulseForge — Troubleshooting & Diagnostics
 
 This guide provides troubleshooting steps and diagnostics for common preflight, collector, network socket, and Splunk ingestion issues.
 

@@ -1,0 +1,538 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · DNS-tunneling indicators (flow-only, limited evidence)</label>
+  <description>Which clients send unusually many or unusually large DNS flows, and is request/response volume imbalanced?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · DNS-tunneling indicators (flow-only, limited evidence)",
+  "description": "Which clients send unusually many or unusually large DNS flows, and is request/response volume imbalanced?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    },
+    "input_z_tok": {
+      "type": "input.text",
+      "title": "Outlier if z-score ≥",
+      "options": {
+        "token": "z_tok",
+        "defaultValue": "3"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · SEC-10\n**DNS-tunneling indicators (flow-only, limited evidence)**  ·  `NF-SEC-10-DNS-FLOW`  ·  MITRE ATT&CK T1071.004, T1048.003  ·  extends `SEC-P9-E-DNS-TUNNEL`\n\n**Question:** Which clients send unusually many or unusually large DNS flows, and is request/response volume imbalanced?\n\n**Limits:** LIMITED EVIDENCE. Flow records contain no query names, label lengths or entropy, so encoded DNS labels cannot be detected here. Correlate with DNS logs (for example the SEC-P9 DNS wire events) to go further.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.area",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5"
+        ],
+        "legendDisplay": "bottom",
+        "stackMode": "stacked"
+      },
+      "title": "DNS bytes over time by direction",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "DNS flow records",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Clients",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Outlier clients",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Resolvers",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 2
+      },
+      "title": "Median response/request ratio",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true
+    },
+    "viz_8": {
+      "type": "splunk.scatter",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off",
+        "xAxisTitleText": "average request bytes per flow",
+        "yAxisTitleText": "query flows"
+      },
+      "title": "Clients: average request size (x) vs query flows (y); one dot per client",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 8
+      },
+      "title": "Client behaviour (click a row for the DNS flows)",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" (src=\"$row.client.value$\" OR dest=\"$row.client.value$\") | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_10": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 5
+      },
+      "title": "Resolver behaviour",
+      "dataSources": {
+        "primary": "ds_9"
+      },
+      "showProgressBar": true
+    },
+    "viz_11": {
+      "type": "splunk.column",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "off"
+      },
+      "title": "Response/request byte ratio, top 10 clients by query flows",
+      "dataSources": {
+        "primary": "ds_10"
+      },
+      "showProgressBar": true
+    },
+    "viz_12": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Supporting DNS flow evidence (outlier clients)",
+      "dataSources": {
+        "primary": "ds_11"
+      },
+      "showProgressBar": true
+    },
+    "viz_13": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-SEC-10-DNS-FLOW`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, src_port, dest_port, bytes, packets; statistical outliers are peer-relative, not a threshold on query content. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "DNS bytes over time by direction",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | bin _time span=15s | chart sum(bytes) over _time by dir limit=6 | makecontinuous _time span=15s | fillnull value=0"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "DNS flow records",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats count as v | fields v"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Clients",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats dc(client) as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Outlier clients",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | where outlier!=\"\" | stats count as v | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Resolvers",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats dc(resolver) as v | fields v"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Median response/request ratio",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | stats median(resp_req_ratio) as v | fields v"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Clients: average request size (x) vs query flows (y); one dot per client",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | table avg_req_bytes query_flows"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Client behaviour (click a row for the DNS flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | sort - z_flows | table client query_flows avg_req_bytes resp_req_ratio z_flows z_size outlier"
+      }
+    },
+    "ds_9": {
+      "type": "ds.search",
+      "name": "Resolver behaviour",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats dc(client) as clients count as flows sum(bytes) as bytes by resolver | sort - bytes"
+      }
+    },
+    "ds_10": {
+      "type": "ds.search",
+      "name": "Response/request byte ratio, top 10 clients by query flows",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | sort - query_flows | head 10 | table client resp_req_ratio"
+      }
+    },
+    "ds_11": {
+      "type": "ds.search",
+      "name": "Supporting DNS flow evidence (outlier clients)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" [ search index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" netspout_run_id=\"$run_tok$\" | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | stats sum(eval(if(dest_port=53,bytes,0))) as req_bytes sum(eval(if(src_port=53,bytes,0))) as resp_bytes count(eval(dest_port=53)) as query_flows dc(resolver) as resolvers by client | eval avg_req_bytes=round(req_bytes/query_flows,0), resp_req_ratio=round(resp_bytes/req_bytes,2) | eventstats avg(query_flows) as mq stdev(query_flows) as sq avg(avg_req_bytes) as ma stdev(avg_req_bytes) as sa | eval z_flows=round((query_flows-mq)/sq,1), z_size=round((avg_req_bytes-ma)/sa,1) | eval outlier=if(z_flows>=$z_tok$ OR z_size>=$z_tok$,\"outlier vs peers\",\"\") | where outlier!=\"\" | eval src=client | fields src ] | where src_port=53 OR dest_port=53 | eval dir=if(dest_port=53,\"query (client to resolver)\",\"response (resolver to client)\"), client=if(dest_port=53,src,dest), resolver=if(dest_port=53,dest,src) | sort 0 _time | head 300 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-SEC-10-DNS-FLOW\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st",
+      "input_z_tok"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1460,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 700,
+              "h": 290
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 134,
+              "w": 230,
+              "h": 140
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 134,
+              "w": 230,
+              "h": 140
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 1220,
+              "y": 134,
+              "w": 220,
+              "h": 140
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 294,
+              "w": 230,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 980,
+              "y": 294,
+              "w": 460,
+              "h": 130
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 444,
+              "w": 700,
+              "h": 360
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 444,
+              "w": 700,
+              "h": 360
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 824,
+              "w": 560,
+              "h": 230
+            }
+          },
+          {
+            "item": "viz_11",
+            "type": "block",
+            "position": {
+              "x": 600,
+              "y": 824,
+              "w": 840,
+              "h": 230
+            }
+          },
+          {
+            "item": "viz_12",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1074,
+              "w": 1420,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_13",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1344,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "DNS-tunneling indicators (flow-only, limited evidence)",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

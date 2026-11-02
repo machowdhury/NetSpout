@@ -1,0 +1,9 @@
+{
+  "runId": "f7df21e1-c966-4410-9d10-d2536c71f0e9",
+  "independent": {
+    "count": "9",
+    "nx": "6",
+    "dq": "9"
+  },
+  "dashboard_url": "/en-US/app/netspout/pulseforge_dns_anomaly_studio?tab=layout_1&form.run_tok=f7df21e1-c966-4410-9d10-d2536c71f0e9&form.global_time.earliest=-24h%40h&form.global_time.latest=now&form.phase_tok=SUSPICIOUS_ACTIVITY&form.client_tok=192.0.2.25"
+}

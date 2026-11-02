@@ -1,5 +1,5 @@
 /*
- * Splunk App: TA-network-data-blaster
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: datablaster_console.js
  * Clean enterprise network engineering interface
  */
@@ -10,6 +10,122 @@ require([
   'splunkjs/mvc/simplexml/ready!'
 ], function($, mvc) {
   'use strict';
+  // Native server-owned run history. Text nodes prevent event/config HTML rendering.
+  function mountNativeRunMonitor() {
+    if (document.getElementById('native-run-monitor')) return;
+    var anchor = document.getElementById('console-log-output') || document.getElementById('wizard-verification-container');
+    if (!anchor || !anchor.parentNode) return;
+    var panel = document.createElement('section');
+    panel.id = 'native-run-monitor';
+    panel.style.cssText = 'padding:12px;margin:12px 0;border:1px solid #64748b;white-space:pre-wrap;';
+    var title = document.createElement('h3'); title.textContent = 'Native runs — collector acceptance is not indexing';
+    var select = document.createElement('select'); select.setAttribute('aria-label', 'Select native run');
+    var refresh = document.createElement('button'); refresh.textContent = 'Refresh runs';
+    var verify = document.createElement('button'); verify.textContent = 'Verify in Splunk';
+    var output = document.createElement('pre'); output.setAttribute('aria-live', 'polite');
+    [title, select, refresh, verify, output].forEach(function(el) { panel.appendChild(el); });
+    anchor.parentNode.insertBefore(panel, anchor);
+    var choice=document.createElement('select');choice.id='native-destination-choice';choice.setAttribute('aria-label','Scenario destination');
+    var defaultChoice=document.createElement('option');defaultChoice.value='';defaultChoice.textContent='Server-selected destination';choice.appendChild(defaultChoice);
+    panel.appendChild(choice);
+    fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify({action:'list_destinations'})})
+      .then(function(r){if(!r.ok) throw new Error('unavailable');return r.json();}).then(function(data){
+        (data.destinations||[]).forEach(function(d){var option=document.createElement('option');option.value=d.id;option.textContent=d.name+' ('+d.protocol+', '+(d.enabled?'enabled':'disabled')+')';choice.appendChild(option);});
+        choice.value=data.selected_id||'';
+      }).catch(function(){defaultChoice.textContent='Server-selected destination (list unavailable)';});
+    var runs = [];
+    function render(run) {
+      // Splunk search verification supports LOG and mixed log/metric runs; unsupported
+      // transports, unsupported correlation and unscoped runs keep the Verify action off.
+      verify.disabled = !run || run.correlation !== 'SUPPORTED' || (run.classification !== 'LOG' && run.classification !== 'MIXED') || !run.indexes.length;
+      if (!run) { output.textContent = 'No retained native runs. Delivery metrics are not measured.'; return; }
+      var lines = ['Run: ' + run.run_id, 'Execution: ' + run.execution_state,
+        'Correlation: ' + run.correlation, 'Telemetry: ' + run.classification,
+        'Indexes: ' + (run.indexes.join(', ') || 'not measured')];
+      ['generated','attempted','accepted','failed','unknown'].forEach(function(k) {
+        var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
+      });
+      if(run.named_destination) lines.push('Named destination: '+run.named_destination.name+' ['+run.named_destination.id+'] '+run.named_destination.target_class);
+      lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.forwarding_delivery) {
+        ['published','failed','unknown'].forEach(function(key){
+          var value=run.forwarding_delivery[key];
+          lines.push('Local spool '+key+': '+(value===null||value===undefined?'not measured':value));
+        });
+        lines.push('Splunk pipe handoff, ingestion and downstream forwarding: not measured. Local publication is not delivery proof.');
+      }
+      if (run.snmp_delivery) {
+        ['attempted','sent','acknowledged','failed','unknown'].forEach(function(key) {
+          var value = run.snmp_delivery[key];
+          lines.push('SNMP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Synthetic SNMPv2c notifications. Local send and inform response are distinct; Splunk indexing verification is unsupported.');
+      }
+      if (run.otlp_delivery) {
+        ['attempted','acknowledged','rejected','failed','unknown'].forEach(function(key) {
+          var value = run.otlp_delivery[key];
+          lines.push('OTLP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Units: log records / metric data points. Collector acknowledgement is not Splunk indexing; OTLP search verification is unsupported.');
+      }
+      if (run.syslog_delivery) {
+        ['attempted','sent','failed','unknown'].forEach(function(key) {
+          var value = run.syslog_delivery[key];
+          lines.push('Syslog local ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Socket send evidence does not establish receiver delivery or Splunk indexing.');
+      }
+      lines.push('Splunk indexing: ' + run.verification.state + ' — ' + run.verification.message);
+      if (run.verification.matching_events !== null && run.verification.matching_events !== undefined)
+        lines.push('Matching indexed events: ' + run.verification.matching_events);
+      if (run.verification.matching_metric_points !== null && run.verification.matching_metric_points !== undefined)
+        lines.push('Matching indexed metric points: ' + run.verification.matching_metric_points);
+      if (verify.disabled) lines.push('Search verification is unsupported for this correlation path or scope.');
+      output.textContent = lines.join('\n');
+    }
+    function request(payload) {
+      return fetch(getRestUrl(), {method:'POST', headers:getHeaders(), body:JSON.stringify(payload)})
+        .then(function(r) { if (!r.ok) throw new Error('unavailable'); return r.json(); })
+        .then(function(data) { if (data.status !== 'success') throw new Error('unavailable'); return data; });
+    }
+    function reload() {
+      var selected = select.value;
+      refresh.disabled = true;
+      return request({action:'native_runs'}).then(function(data) {
+        runs = data.runs.slice().sort(function(a,b) { return b.started_at - a.started_at; });
+        select.textContent = '';
+        runs.forEach(function(run) { var option = document.createElement('option'); option.value = run.run_id;
+          option.textContent = new Date(run.started_at * 1000).toISOString() + ' ' + run.execution.action + ' ' + run.run_id;
+          select.appendChild(option); });
+        if (runs.some(function(r) { return r.run_id === selected; })) select.value = selected;
+        render(runs.find(function(r) { return r.run_id === select.value; }));
+      }).catch(function() { output.textContent = 'Run history unavailable. No delivery or indexing conclusion can be drawn.'; verify.disabled = true; })
+        .finally(function() { refresh.disabled = false; });
+    }
+    select.onchange = function() { render(runs.find(function(r) { return r.run_id === select.value; })); };
+    refresh.onclick = reload;
+    window.addEventListener('netspout-native-run', reload);
+    verify.onclick = function() {
+      verify.disabled = true;
+      request({action:'verify_native_run',run_id:select.value}).then(function(data) {
+        var index = runs.findIndex(function(r) { return r.run_id === data.run.run_id; });
+        if (index >= 0) runs[index] = data.run;
+        render(data.run);
+      }).catch(function() { output.textContent = 'Verification ERROR: service unavailable; indexing is not verified.';
+        renderErrorRetry(); });
+    };
+    function renderErrorRetry() { verify.disabled = false; }
+    reload();
+  }
+  // Native SimpleXML views may finish mounting after this script loads.
+  var nativeMonitorMountAttempts = 0;
+  function mountNativeMonitorWhenReady() {
+    mountNativeRunMonitor();
+    if (!document.getElementById('native-run-monitor') && ++nativeMonitorMountAttempts < 30)
+      setTimeout(mountNativeMonitorWhenReady, 100);
+  }
+  mountNativeMonitorWhenReady();
+
 
   function getRestUrl(queryStr) {
     var base = '';
@@ -63,6 +179,7 @@ require([
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
       log('<span style="color: #f59e0b; font-weight: bold;">STOPPED:</span> ' + (data.message || 'Simulation terminated.'));
     })
     .catch(function(err) {
@@ -74,7 +191,7 @@ require([
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8888/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
+    var token = cfg.hec_token || "";
     var eps = cfg.target_eps || 1000;
 
     log('<span style="color: #0284c7; font-weight: bold;">LAUNCHING SCENARIO:</span> ' + name + ' (' + filename + ') at ' + eps + ' EPS...');
@@ -84,16 +201,18 @@ require([
       headers: getHeaders(),
       body: JSON.stringify({
         action: 'start',
+        destination_id:(document.getElementById('native-destination-choice')||{}).value||undefined,
         scenario: filename,
         eps: eps,
-        hec: hecUrl,
-        token: token
+
+
       })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
       if (data.status === 'success' || data.code === 200 || data.pid) {
-        log('<span style="color: #22c55e; font-weight: bold;">INGESTION ACTIVE:</span> Process PID ' + (data.pid || 'active') + ' streaming telemetry to Splunk HEC.');
+        log('<span style="color: #22c55e; font-weight: bold;">EXECUTION LAUNCHED:</span> Process PID ' + (data.pid || 'active') + ' launched; collector acceptance and indexing are not measured here.');
       } else {
         log('<span style="color: #ef4444;">RESPONSE:</span> ' + (data.message || JSON.stringify(data)));
       }
@@ -121,6 +240,7 @@ require([
     fetch(getRestUrl('action=get_config'), { headers: getHeaders() })
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
       if (data && data.config) {
         var c = data.config;
         log('Runtime initialized. Target HEC: ' + c.hec_url + ' | Default Rate: ' + c.target_eps + ' EPS');

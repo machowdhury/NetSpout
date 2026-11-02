@@ -13,6 +13,7 @@ import urllib.parse
 import urllib.request
 from typing import Dict, Any, List
 
+from artifact_isolation import artifact_dir
 from netspout_core.models import FlowRecord
 from netspout_core.exporter_session import ExporterSession
 from netspout_core.collector_evidence import CollectorEvidenceAdapter
@@ -25,7 +26,7 @@ def query_splunk_record(obs_id: int, max_wait: float = 6.0) -> Tuple[bool, float
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
     
-    auth_header = "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh"
+    auth_header = "Basic [REDACTED]"
     search_url = "https://localhost:8889/services/search/jobs/export"
     query = f"search index=idx_network_ops sourcetype=netflow:collector (ObservationDomainID={obs_id} OR observation_domain_id={obs_id} OR ObservationDomainId={obs_id}) | head 1"
     
@@ -151,8 +152,7 @@ def main():
         bench_results.append(res)
         time.sleep(0.5)
 
-    out_file = "docs/acceptance/gate11d_performance_benchmark.json"
-    os.makedirs(os.path.dirname(out_file), exist_ok=True)
+    out_file = artifact_dir("gate11d", "evidence") / "gate11d_performance_benchmark.json"
     with open(out_file, "w") as f:
         json.dump({
             "timestamp": time.time(),

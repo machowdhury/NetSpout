@@ -1,0 +1,187 @@
+{
+  "run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+  "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+  "events": [
+    {
+      "event": "Mar 11 19:59:35 10.0.10.197 Mar 11 23:59:35 maple-ise01 CISE_Administrative_and_Operational_Audit 0016592997 1 0 2026-03-11 23:59:35.197 +00:00 0268072962 58005 NOTICE Process-Management: ISE process was restarted by watchdog service, ConfigVersionId=96, FailureFlag=true, RequestResponseType=final, AdminInterface=CLI, AdminIPAddress=127.0.0.1, AdminName=system, OperationMessageText=Process: 'ISE RabbitMQ Service' started by ISE watchdog process, AcsInstance=maple-ise01,",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "Mar 11 19:59:52 10.0.10.197 Mar 11 23:59:52 maple-ise01 CISE_Passed_Authentications 0016593084 1 0 2026-03-11 23:59:52.420 +00:00 0268074838 5201 NOTICE Passed-Authentication: Authentication succeeded, ConfigVersionId=96, Device IP Address=10.0.10.2, DestinationIPAddress=10.0.10.197, DestinationPort=49, UserName=splunk, Protocol=Tacacs, NetworkDeviceName=OTT-CORE01, Type=Authentication, Action=Login, Privilege-Level=1, Authen-Type=PAP, Service=Login, User=splunk, Port=0, Remote-Address=10.0.10.104, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, AcsSessionID=maple-ise01/552251217/16069820, AuthenticationIdentityStore=MapleAD, AuthenticationMethod=PAP_ASCII, SelectedAccessService=Default Device Admin, SelectedShellProfile=NexusShellProfile, IsMachineAuthentication=false, RequestLatency=10, Step=13013, Step=15049, Step=15008, Step=15041, Step=15013, Step=24430, Step=24325, Step=24313, Step=24319, Step=24323, Step=24343, Step=24402, Step=22037, Step=15036, Step=15048, Step=24432, Step=24355, Step=24416, Step=15048, Step=13015, SelectedAuthenticationIdentityStores=MapleAD, AuthenticationStatus=AuthenticationPassed, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#Nexus, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, AuthorizationPolicyMatchedRule=Nexus Service Accounts, CPMSessionID=413401935010.0.10.258820Authentication4134019350, ISEPolicySetName=Default, IdentitySelectionMatchedRule=Default, StepLatency=1=1\\;2=0\\;3=1\\;4=0\\;5=0\\;6=2\\;7=0\\;8=0\\;9=0\\;10=3\\;11=0\\;12=0\\;13=0\\;14=0\\;15=1\\;16=1\\;17=0\\;18=1\\;19=0, AD-User-Resolved-Identities=splunk@maple.ciscolabs.com, AD-User-Candidate-Identities=splunk@maple.ciscolabs.com, AD-User-Join-Point=MAPLE.CISCOLABS.COM, StepData=4=MapleAD, StepData=5=MapleAD, StepData=6=splunk, StepData=7=maple.ciscolabs.com, StepData=8=maple.ciscolabs.com, StepData=10=splunk@maple.ciscolabs.com, StepData=11=MapleAD, StepData=14= DEVICE.Device Type, StepData=15=MapleAD, StepData=16=maple.ciscolabs.com, StepData=17=MapleAD, StepData=18= MapleAD.ExternalGroups, TotalAuthenLatency=10, ClientLatency=0, AD-User-Resolved-DNs=CN=splunk\\,CN=Users\\,DC=maple\\,DC=ciscolabs\\,DC=com, AD-User-DNS-Domain=maple.ciscolabs.com, AD-Groups-Names=maple.ciscolabs.com/Builtin/Users, AD-Groups-Names=maple.ciscolabs.com/MAPLE_GROUPS/maple_service_accounts, AD-User-NetBios-Name=MAPLE, IsMachineIdentity=false, UserAccountControl=66048, AD-User-SamAccount-Name=splunk, AD-User-Qualified-Name=splunk@maple.ciscolabs.com, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#Nexus, IPSEC=IPSEC#Is IPSEC Device#No, ExternalGroups=maple.ciscolabs.com/S-1-5-32-545, ExternalGroups=S-1-5-21-3674020794-2337252713-2420613497-1178, IdentityAccessRestricted=false, Response={Authen-Reply-Status=Pass; },",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "Mar 11 19:59:58 10.0.10.197 Mar 11 23:59:58 maple-ise01 CISE_Failed_Attempts 0016593100 1 0 2026-03-11 23:59:58.700 +00:00 0268075175 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=96, Device IP Address=10.0.0.1, Device Port=15465, DestinationIPAddress=10.0.10.197, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=assiutdotcom, Protocol=Radius, NetworkDeviceName=FTD-DOVETAIL01, User-Name=assiutdotcom, NAS-IP-Address=10.0.0.1, NAS-Port=155668480, Called-Station-ID=64.100.57.98, Calling-Station-ID=45.149.145.155, Proxy-State=FirstProxy=10.0.10.197, NAS-Port-Type=Virtual, Tunnel-Client-Endpoint=(tag=0) 45.149.145.155, cisco-av-pair=audit-session-id=0a0000010947500069b201fe, cisco-av-pair=ip:source-ip=45.149.145.155, cisco-av-pair=coa-push=true, cisco-av-pair=proxy-flow=[10.0.0.1\\,10.0.10.197], CVPN3000/ASA/PIX7x-Tunnel-Group-Name=MAPLE-DUO, NetworkDeviceProfileName=Cisco, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, IsThirdPartyDeviceFlow=false, SSID=64.100.57.98, CVPN3000/ASA/PIX7x-Client-Type=2, AcsSessionID=maple-ise01/552251217/16069836, SelectedAccessService=DUO_Sequence, RequestLatency=14, FailureReason=11368 Please review logs on the External RADIUS Server to determine the precise failure reason., Step=11001, Step=11017, Step=15049, Step=15008, Step=15048, Step=15048, Step=15048, Step=11358, Step=11361, Step=11355, Step=11365, Step=11100, Step=11101, Step=11368, Step=11357, Step=11003, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#FTD, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, CPMSessionID=0a0000010947500069b201fe, ISEPolicySetName=Remote VPN DUO, StepLatency=1=0\\;2=1\\;3=0\\;4=1\\;5=0\\;6=0\\;7=1\\;8=0\\;9=0\\;10=0\\;11=0\\;12=11\\;13=0\\;14=0\\;15=0, StepData=4= DEVICE.Device Type, StepData=5= Network Access.Device IP Address, StepData=6= Cisco-VPN3000.CVPN3000/ASA/PIX7x-Tunnel-Group-Name, StepData=11=( port = 1812 ), TotalAuthenLatency=14, ClientLatency=0, DTLSSupport=Unknown, EndPointIPAddress=45.149.145.155, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#FTD, IPSEC=IPSEC#Is IPSEC Device#No, Response={RadiusPacketType=AccessReject; Reply-Message=Invalid User; },",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "Mar 11 19:59:57 10.0.10.197 Mar 11 23:59:57 maple-ise01 CISE_RADIUS_Diagnostics 0016593099 1 0 2026-03-11 23:59:57.129 +00:00 0268075156 11036 WARN  RADIUS: The Message-Authenticator RADIUS attribute is invalid, ConfigVersionId=96, Device IP Address=10.0.10.9, Device Port=56974, DestinationIPAddress=10.0.10.197, DestinationPort=1812, RadiusIdentifier=67, User-Name=CTS client, NAS-IP-Address=10.0.10.9, Service-Type=Framed, Calling-Station-ID=74ad986c9f20, NAS-Port-Type=Async, cisco-av-pair=AAA:service-type=cts-pac-provisioning, AcsSessionID=maple-ise01/552251217/16069835,",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "Mar 11 19:58:36 10.0.10.197 Mar 11 23:58:36 maple-ise01 CISE_TACACS_Accounting 0016592967 1 0 2026-03-11 23:58:36.425 +00:00 0268072480 3302 NOTICE Tacacs-Accounting: TACACS+ Accounting STOP, ConfigVersionId=96, Device IP Address=10.0.10.3, NetworkDeviceName=OTT-CORE02, Type=Accounting, Privilege-Level=0, Service=None, User=intersight, Port=0, Authen-Method=TacacsPlus, AVPair=task_id=nginx, AVPair=start_time=1773273516, AVPair=timezone=EST, AVPair=stop_time=1773273516, AcctRequest-Flags=Stop, Service-Argument=none, AcsSessionID=maple-ise01/552251217/16069705, SelectedAccessService=Default Device Admin, RequestLatency=2, Step=13006, Step=15049, Step=15008, Step=22094, Step=13035, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#Nexus, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, CPMSessionID=287280036510.0.10.360466Accounting2872800365, TotalAuthenLatency=2, ClientLatency=0, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#Nexus, IPSEC=IPSEC#Is IPSEC Device#No, Response={AcctReply-Status=Success; },",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessAccept;}",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Failed_Attempts 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5400 NOTICE Failed-Attempt: Authentication failed, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessReject;}",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    },
+    {
+      "event": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5205 NOTICE Dynamic-Authorization: Dynamic Authorization succeeded, User-Name=parser.training, Calling-Station-ID=00:1a:2b:3c:4d:5e",
+      "sourcetype": "cisco:ise:syslog",
+      "source": "pulseforge:ta-parser:pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub3-ise-parser-cafa386e-8a95-4545-be6c-95a701616cda"
+      }
+    }
+  ],
+  "raw_stream": [
+    "<181>Jan  1 01:02:03 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2001-01-01 01:02:03.004 +00:00 0000000001 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessAccept;}",
+    "<181>Jan  1 01:02:03 ise-parser.example.test CISE_Failed_Attempts 0000000001 1 0 2001-01-01 01:02:03.004 +00:00 0000000001 5400 NOTICE Failed-Attempt: Authentication failed, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessReject;}"
+  ],
+  "expected": [
+    {
+      "label": "original-line-104",
+      "raw": "Mar 11 19:59:35 10.0.10.197 Mar 11 23:59:35 maple-ise01 CISE_Administrative_and_Operational_Audit 0016592997 1 0 2026-03-11 23:59:35.197 +00:00 0268072962 58005 NOTICE Process-Management: ISE process was restarted by watchdog service, ConfigVersionId=96, FailureFlag=true, RequestResponseType=final, AdminInterface=CLI, AdminIPAddress=127.0.0.1, AdminName=system, OperationMessageText=Process: 'ISE RabbitMQ Service' started by ISE watchdog process, AcsInstance=maple-ise01,",
+      "fields": {
+        "MESSAGE_CODE": "58005",
+        "user": "system",
+        "src_ip": "127.0.0.1"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "original-line-17",
+      "raw": "Mar 11 19:59:52 10.0.10.197 Mar 11 23:59:52 maple-ise01 CISE_Passed_Authentications 0016593084 1 0 2026-03-11 23:59:52.420 +00:00 0268074838 5201 NOTICE Passed-Authentication: Authentication succeeded, ConfigVersionId=96, Device IP Address=10.0.10.2, DestinationIPAddress=10.0.10.197, DestinationPort=49, UserName=splunk, Protocol=Tacacs, NetworkDeviceName=OTT-CORE01, Type=Authentication, Action=Login, Privilege-Level=1, Authen-Type=PAP, Service=Login, User=splunk, Port=0, Remote-Address=10.0.10.104, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, AcsSessionID=maple-ise01/552251217/16069820, AuthenticationIdentityStore=MapleAD, AuthenticationMethod=PAP_ASCII, SelectedAccessService=Default Device Admin, SelectedShellProfile=NexusShellProfile, IsMachineAuthentication=false, RequestLatency=10, Step=13013, Step=15049, Step=15008, Step=15041, Step=15013, Step=24430, Step=24325, Step=24313, Step=24319, Step=24323, Step=24343, Step=24402, Step=22037, Step=15036, Step=15048, Step=24432, Step=24355, Step=24416, Step=15048, Step=13015, SelectedAuthenticationIdentityStores=MapleAD, AuthenticationStatus=AuthenticationPassed, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#Nexus, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, AuthorizationPolicyMatchedRule=Nexus Service Accounts, CPMSessionID=413401935010.0.10.258820Authentication4134019350, ISEPolicySetName=Default, IdentitySelectionMatchedRule=Default, StepLatency=1=1\\;2=0\\;3=1\\;4=0\\;5=0\\;6=2\\;7=0\\;8=0\\;9=0\\;10=3\\;11=0\\;12=0\\;13=0\\;14=0\\;15=1\\;16=1\\;17=0\\;18=1\\;19=0, AD-User-Resolved-Identities=splunk@maple.ciscolabs.com, AD-User-Candidate-Identities=splunk@maple.ciscolabs.com, AD-User-Join-Point=MAPLE.CISCOLABS.COM, StepData=4=MapleAD, StepData=5=MapleAD, StepData=6=splunk, StepData=7=maple.ciscolabs.com, StepData=8=maple.ciscolabs.com, StepData=10=splunk@maple.ciscolabs.com, StepData=11=MapleAD, StepData=14= DEVICE.Device Type, StepData=15=MapleAD, StepData=16=maple.ciscolabs.com, StepData=17=MapleAD, StepData=18= MapleAD.ExternalGroups, TotalAuthenLatency=10, ClientLatency=0, AD-User-Resolved-DNs=CN=splunk\\,CN=Users\\,DC=maple\\,DC=ciscolabs\\,DC=com, AD-User-DNS-Domain=maple.ciscolabs.com, AD-Groups-Names=maple.ciscolabs.com/Builtin/Users, AD-Groups-Names=maple.ciscolabs.com/MAPLE_GROUPS/maple_service_accounts, AD-User-NetBios-Name=MAPLE, IsMachineIdentity=false, UserAccountControl=66048, AD-User-SamAccount-Name=splunk, AD-User-Qualified-Name=splunk@maple.ciscolabs.com, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#Nexus, IPSEC=IPSEC#Is IPSEC Device#No, ExternalGroups=maple.ciscolabs.com/S-1-5-32-545, ExternalGroups=S-1-5-21-3674020794-2337252713-2420613497-1178, IdentityAccessRestricted=false, Response={Authen-Reply-Status=Pass; },",
+      "fields": {
+        "MESSAGE_CODE": "5201",
+        "user": "splunk",
+        "src_ip": "10.0.10.104"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "original-line-1",
+      "raw": "Mar 11 19:59:58 10.0.10.197 Mar 11 23:59:58 maple-ise01 CISE_Failed_Attempts 0016593100 1 0 2026-03-11 23:59:58.700 +00:00 0268075175 5400 NOTICE Failed-Attempt: Authentication failed, ConfigVersionId=96, Device IP Address=10.0.0.1, Device Port=15465, DestinationIPAddress=10.0.10.197, DestinationPort=1812, RadiusPacketType=AccessRequest, UserName=assiutdotcom, Protocol=Radius, NetworkDeviceName=FTD-DOVETAIL01, User-Name=assiutdotcom, NAS-IP-Address=10.0.0.1, NAS-Port=155668480, Called-Station-ID=64.100.57.98, Calling-Station-ID=45.149.145.155, Proxy-State=FirstProxy=10.0.10.197, NAS-Port-Type=Virtual, Tunnel-Client-Endpoint=(tag=0) 45.149.145.155, cisco-av-pair=audit-session-id=0a0000010947500069b201fe, cisco-av-pair=ip:source-ip=45.149.145.155, cisco-av-pair=coa-push=true, cisco-av-pair=proxy-flow=[10.0.0.1\\,10.0.10.197], CVPN3000/ASA/PIX7x-Tunnel-Group-Name=MAPLE-DUO, NetworkDeviceProfileName=Cisco, NetworkDeviceProfileId=b0699505-3150-4215-a80e-6753d45bf56c, IsThirdPartyDeviceFlow=false, SSID=64.100.57.98, CVPN3000/ASA/PIX7x-Client-Type=2, AcsSessionID=maple-ise01/552251217/16069836, SelectedAccessService=DUO_Sequence, RequestLatency=14, FailureReason=11368 Please review logs on the External RADIUS Server to determine the precise failure reason., Step=11001, Step=11017, Step=15049, Step=15008, Step=15048, Step=15048, Step=15048, Step=11358, Step=11361, Step=11355, Step=11365, Step=11100, Step=11101, Step=11368, Step=11357, Step=11003, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#FTD, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, CPMSessionID=0a0000010947500069b201fe, ISEPolicySetName=Remote VPN DUO, StepLatency=1=0\\;2=1\\;3=0\\;4=1\\;5=0\\;6=0\\;7=1\\;8=0\\;9=0\\;10=0\\;11=0\\;12=11\\;13=0\\;14=0\\;15=0, StepData=4= DEVICE.Device Type, StepData=5= Network Access.Device IP Address, StepData=6= Cisco-VPN3000.CVPN3000/ASA/PIX7x-Tunnel-Group-Name, StepData=11=( port = 1812 ), TotalAuthenLatency=14, ClientLatency=0, DTLSSupport=Unknown, EndPointIPAddress=45.149.145.155, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#FTD, IPSEC=IPSEC#Is IPSEC Device#No, Response={RadiusPacketType=AccessReject; Reply-Message=Invalid User; },",
+      "fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "assiutdotcom",
+        "src_ip": "45.149.145.155"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "original-line-2",
+      "raw": "Mar 11 19:59:57 10.0.10.197 Mar 11 23:59:57 maple-ise01 CISE_RADIUS_Diagnostics 0016593099 1 0 2026-03-11 23:59:57.129 +00:00 0268075156 11036 WARN  RADIUS: The Message-Authenticator RADIUS attribute is invalid, ConfigVersionId=96, Device IP Address=10.0.10.9, Device Port=56974, DestinationIPAddress=10.0.10.197, DestinationPort=1812, RadiusIdentifier=67, User-Name=CTS client, NAS-IP-Address=10.0.10.9, Service-Type=Framed, Calling-Station-ID=74ad986c9f20, NAS-Port-Type=Async, cisco-av-pair=AAA:service-type=cts-pac-provisioning, AcsSessionID=maple-ise01/552251217/16069835,",
+      "fields": {
+        "MESSAGE_CODE": "11036",
+        "user": "CTS client",
+        "src_ip": "10.0.10.9"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "original-line-134",
+      "raw": "Mar 11 19:58:36 10.0.10.197 Mar 11 23:58:36 maple-ise01 CISE_TACACS_Accounting 0016592967 1 0 2026-03-11 23:58:36.425 +00:00 0268072480 3302 NOTICE Tacacs-Accounting: TACACS+ Accounting STOP, ConfigVersionId=96, Device IP Address=10.0.10.3, NetworkDeviceName=OTT-CORE02, Type=Accounting, Privilege-Level=0, Service=None, User=intersight, Port=0, Authen-Method=TacacsPlus, AVPair=task_id=nginx, AVPair=start_time=1773273516, AVPair=timezone=EST, AVPair=stop_time=1773273516, AcctRequest-Flags=Stop, Service-Argument=none, AcsSessionID=maple-ise01/552251217/16069705, SelectedAccessService=Default Device Admin, RequestLatency=2, Step=13006, Step=15049, Step=15008, Step=22094, Step=13035, NetworkDeviceGroups=Location#All Locations#OTT02, NetworkDeviceGroups=Device Type#All Device Types#Nexus, NetworkDeviceGroups=IPSEC#Is IPSEC Device#No, CPMSessionID=287280036510.0.10.360466Accounting2872800365, TotalAuthenLatency=2, ClientLatency=0, Network Device Profile=Cisco, Location=Location#All Locations#OTT02, Device Type=Device Type#All Device Types#Nexus, IPSEC=IPSEC#Is IPSEC Device#No, Response={AcctReply-Status=Success; },",
+      "fields": {
+        "MESSAGE_CODE": "3302",
+        "user": "intersight",
+        "src_ip": "10.0.10.3"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "current-generator-5200",
+      "raw": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessAccept;}",
+      "fields": {
+        "MESSAGE_CODE": "5200",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "current-generator-5400",
+      "raw": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Failed_Attempts 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5400 NOTICE Failed-Attempt: Authentication failed, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessReject;}",
+      "fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "current-generator-5205",
+      "raw": "<181>Oct 26 20:53:47 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2026-10-26 20:53:47.802 +00:00 0000000001 5205 NOTICE Dynamic-Authorization: Dynamic Authorization succeeded, User-Name=parser.training, Calling-Station-ID=00:1a:2b:3c:4d:5e",
+      "fields": {
+        "MESSAGE_CODE": "5205",
+        "user": "parser.training",
+        "src_mac": "00:1a:2b:3c:4d:5e"
+      },
+      "framing": "HEC_EVENT"
+    },
+    {
+      "label": "raw-stream-old-time-5200",
+      "raw": "<181>Jan  1 01:02:03 ise-parser.example.test CISE_Passed_Authentications 0000000001 1 0 2001-01-01 01:02:03.004 +00:00 0000000001 5200 NOTICE Passed-Authentication: Authentication succeeded, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessAccept;}",
+      "fields": {
+        "MESSAGE_CODE": "5200",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "framing": "HEC_RAW_STREAM"
+    },
+    {
+      "label": "raw-stream-old-time-5400",
+      "raw": "<181>Jan  1 01:02:03 ise-parser.example.test CISE_Failed_Attempts 0000000001 1 0 2001-01-01 01:02:03.004 +00:00 0000000001 5400 NOTICE Failed-Attempt: Authentication failed, User-Name=parser.training, Calling-Station-ID=00:1A:2B:3C:4D:5E, Framed-IP-Address=192.0.2.50, NAS-IP-Address=10.0.0.1, Protocol=Radius, AuthorizationProfiles=Corporate-Access, Response={RadiusPacketType=AccessReject;}",
+      "fields": {
+        "MESSAGE_CODE": "5400",
+        "user": "parser.training",
+        "src_ip": "192.0.2.50"
+      },
+      "framing": "HEC_RAW_STREAM"
+    }
+  ],
+  "channel": "bfd1d00e-c81c-4f61-bcc1-4377b3e5976d",
+  "submitted_at_epoch": 1793048027.8034818,
+  "resume": true
+}

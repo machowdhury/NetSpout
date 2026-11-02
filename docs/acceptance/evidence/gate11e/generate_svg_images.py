@@ -1,7 +1,14 @@
 import os
+import sys
 
-IMG_DIR = "/Users/mahamudc/Documents/NetSpout/docs/acceptance/images/gate11e"
-os.makedirs(IMG_DIR, exist_ok=True)
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
+SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
+if SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, SCRIPTS_DIR)
+
+from artifact_isolation import artifact_dir
+
+IMG_DIR = str(artifact_dir("gate11e", "screenshots"))
 
 def create_card_svg(filename, title, subtitle, badge, status, details):
     badge_color = "#3b82f6" if badge == "NATIVE TRANSPORT" else "#10b981"

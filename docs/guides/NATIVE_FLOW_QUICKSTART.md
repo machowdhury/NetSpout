@@ -181,3 +181,16 @@ To completely tear down containers and volumes:
 ```bash
 python3 deploy/collector/manage_collector.py down
 ```
+
+---
+
+## Pointing the collector at your Splunk (lab or production)
+The compose file reads `SPLUNK_HEC_URL` (default `https://host.docker.internal:8888/services/collector/event`) and `SPLUNK_INDEX` (default `idx_network_ops`) from the environment, next to the required `SPLUNK_HEC_TOKEN`. Example for the Docker lab (loopback certificate, so insecure TLS is allowed there only):
+```bash
+SPLUNK_HEC_TOKEN=... SPLUNK_HEC_URL=https://host.docker.internal:<hec-host-port>/services/collector/event SPLUNK_HEC_ALLOW_INSECURE_TLS=true SPLUNK_INDEX=<allowed index> \
+  docker compose -p pf-flow -f deploy/collector/docker-compose.collector.yml up -d --build
+```
+Then start the engine with `NETSPOUT_GOFLOW_METRICS_URL=http://127.0.0.1:8080/metrics`, `NETSPOUT_FLOW_FORWARDER_STATUS_URL=http://127.0.0.1:8082` and `NETSPOUT_COLLECTOR_HOST=127.0.0.1`. The preflight of the five flow scenarios (SEC-P9-A, C, D, E, F) then reports READY instead of BLOCKED.
+
+## Verified flow scenarios
+`python scripts/validate_flow_scenarios.py` runs the five scenarios through the engine and checks, for each: generation of native IPFIX over UDP, the forwarder's own counters, the engine's SPLUNK_OBSERVED / SOURCETYPE_VERIFIED / FIELDS_VERIFIED stages, and the decoded flows read back from Splunk by run id (`docs/verification/evidence/flow/scenarios.json`). Flows are decoded by GoFlow2 v2.2.5, not by NetSpout; the DNS wire events that three of the scenarios also send are separate `netspout:dns:wire` records. Decoded values are whatever GoFlow2 reports for the exporter's records; nothing is added to them except the correlation fields the forwarder attaches.

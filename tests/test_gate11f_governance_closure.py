@@ -45,7 +45,9 @@ class TestGate11FGovernanceClosure(unittest.TestCase):
 
         counts = Counter(s.get("maturity") for s in scenarios)
         self.assertEqual(counts["GOLDEN_PATH_CERTIFIED"], 13)
-        self.assertEqual(counts["E2E_VALIDATED"], 1)
+        # 4 = ddos_attack plus the three Phase 4C scenarios promoted on live
+        # runner -> HEC -> Splunk evidence (docs/verification/pulseforge_phase4c_*.json)
+        self.assertEqual(counts["E2E_VALIDATED"], 4)
         self.assertEqual(counts["FORMAT_VALIDATED"], 2)
         self.assertGreaterEqual(counts["CONTRACTED"], 13)
 

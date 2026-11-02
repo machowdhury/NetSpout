@@ -1,0 +1,2669 @@
+{
+  "baseline_commit": "b1ad10ab26adc4bc4c256431f15aae1ba3cc13ad",
+  "vendors": [
+    {
+      "vendor_key": "cisco_other",
+      "app_count": 22,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "proofpoint",
+      "app_count": 11,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "ibm_qradar",
+      "app_count": 10,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "pavo_metrics",
+      "app_count": 9,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "trellix_mcafee",
+      "app_count": 9,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "akamai",
+      "app_count": 8,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "atlassian",
+      "app_count": 8,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "oracle",
+      "app_count": 7,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "tenable",
+      "app_count": 6,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "vectra_ai",
+      "app_count": 6,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "beyondtrust",
+      "app_count": 6,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "manageengine_zoho",
+      "app_count": 6,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "hitachi_vantara",
+      "app_count": 6,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "hashicorp",
+      "app_count": 5,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "ivanti",
+      "app_count": 4,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "servicenow",
+      "app_count": 4,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "slack",
+      "app_count": 4,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "ubiquiti",
+      "app_count": 4,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "elastic",
+      "app_count": 4,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "qualys",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "sailpoint",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "netapp",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "varonis",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "rapid7",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "onelogin",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "sysdig",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "sentinelone",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "pure_storage",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "docusign",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "salesforce",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "eset",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "gitlab",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "bitdefender",
+      "app_count": 3,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "tanium",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "imperva",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "corelight",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "cybereason",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "malwarebytes",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "github",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "zyxel",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "cribl",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "claroty",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "pfsense_netgate",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "commvault",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "barracuda",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "threatconnect",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "cyberark",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "virustotal",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "traefik",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "cilium_isovalent",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "misp_project",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "clickhouse",
+      "app_count": 2,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "ping_identity",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "darktrace",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "mikrotik",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "greynoise",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "kaspersky",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "solarwinds",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "wireguard",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "eclecticiq",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "mongodb",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "veritas",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "trend_micro",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "veeam",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "hp_enterprise",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    },
+    {
+      "vendor_key": "nginx_f5",
+      "app_count": 1,
+      "status": "EVIDENCE_AND_TA_REVIEW_REQUIRED"
+    }
+  ],
+  "products": [
+    [
+      "proxmox",
+      3
+    ],
+    [
+      "fortra dlp",
+      2
+    ],
+    [
+      "airlock digital",
+      2
+    ],
+    [
+      "forescout",
+      2
+    ],
+    [
+      "illumio",
+      2
+    ],
+    [
+      "dtex intercept insider risk intelligence and endpoint telemetry",
+      2
+    ],
+    [
+      "netapp storagegrid",
+      2
+    ],
+    [
+      "vulndb",
+      2
+    ],
+    [
+      "tenable",
+      2
+    ],
+    [
+      "observeit (proofpoint) on-prem",
+      2
+    ],
+    [
+      "proofpoint on demand email security",
+      2
+    ],
+    [
+      "servicenow security operations event ingestion",
+      2
+    ],
+    [
+      "threatquotient",
+      2
+    ],
+    [
+      "securityscorecard",
+      2
+    ],
+    [
+      "flashpoint",
+      2
+    ],
+    [
+      "druva",
+      2
+    ],
+    [
+      "armis",
+      2
+    ],
+    [
+      "webex",
+      2
+    ],
+    [
+      "orca security",
+      2
+    ],
+    [
+      "sysdig",
+      2
+    ],
+    [
+      "lansweeper",
+      2
+    ],
+    [
+      "safebreach",
+      2
+    ],
+    [
+      "onelogin",
+      2
+    ],
+    [
+      "cyfirma decyfir",
+      2
+    ],
+    [
+      "clockify",
+      2
+    ],
+    [
+      "google scc",
+      2
+    ],
+    [
+      "ctm360",
+      2
+    ],
+    [
+      "admin ninja",
+      2
+    ],
+    [
+      "picus security",
+      2
+    ],
+    [
+      "vectra xdr",
+      2
+    ],
+    [
+      "browsermon",
+      2
+    ],
+    [
+      "akamai guardicore",
+      2
+    ],
+    [
+      "syscloud",
+      2
+    ],
+    [
+      "auguria skl",
+      2
+    ],
+    [
+      "hitachi vsp one object v3.x",
+      2
+    ],
+    [
+      "insitzes",
+      2
+    ],
+    [
+      "data dictionary",
+      2
+    ],
+    [
+      "hitachi vsp one block",
+      2
+    ],
+    [
+      "netkit",
+      2
+    ],
+    [
+      "scaleway",
+      2
+    ],
+    [
+      "xage",
+      2
+    ],
+    [
+      "ssl certificate monitor",
+      2
+    ],
+    [
+      "perseeva lakeview",
+      2
+    ],
+    [
+      "cef extraction",
+      1
+    ],
+    [
+      "pavo getwatchlist",
+      1
+    ],
+    [
+      "pingfederate",
+      1
+    ],
+    [
+      "uberagent log collector",
+      1
+    ],
+    [
+      "netflow",
+      1
+    ],
+    [
+      "user agents",
+      1
+    ],
+    [
+      "netmotion mobile iq",
+      1
+    ],
+    [
+      "collectd",
+      1
+    ],
+    [
+      "proofpoint - et",
+      1
+    ],
+    [
+      "stormshield network security",
+      1
+    ],
+    [
+      "qualyscloudplatform",
+      1
+    ],
+    [
+      "uberagent indexer",
+      1
+    ],
+    [
+      "pagerduty",
+      1
+    ],
+    [
+      "singapore transport tiwtter monitoring",
+      1
+    ],
+    [
+      "ntp nix",
+      1
+    ],
+    [
+      "ntp win",
+      1
+    ],
+    [
+      "broken hosts",
+      1
+    ],
+    [
+      "insightfinder",
+      1
+    ],
+    [
+      "forescout adaptive response",
+      1
+    ],
+    [
+      "trapx deceptiongrid",
+      1
+    ],
+    [
+      "demisto",
+      1
+    ],
+    [
+      "rirstats",
+      1
+    ],
+    [
+      "darktrace",
+      1
+    ],
+    [
+      "proofpoint tap",
+      1
+    ],
+    [
+      "swimlane",
+      1
+    ],
+    [
+      "bluecat dns edge technical",
+      1
+    ],
+    [
+      "corelight",
+      1
+    ],
+    [
+      "corelightfor",
+      1
+    ],
+    [
+      "hangsout chat webhook",
+      1
+    ],
+    [
+      "servicenow security operations",
+      1
+    ],
+    [
+      "metricator for nmon",
+      1
+    ],
+    [
+      "collectd2",
+      1
+    ],
+    [
+      "metricator hec for nmon",
+      1
+    ],
+    [
+      "smseagle sms alerting",
+      1
+    ],
+    [
+      "ipinfo",
+      1
+    ],
+    [
+      "mimecast",
+      1
+    ],
+    [
+      "sailpoint identity security cloud auditevent",
+      1
+    ],
+    [
+      "zimperium",
+      1
+    ],
+    [
+      "webtools",
+      1
+    ],
+    [
+      "via verde",
+      1
+    ],
+    [
+      "malwarebytes",
+      1
+    ],
+    [
+      "rundeck enterprise",
+      1
+    ],
+    [
+      "entrust identity as a service",
+      1
+    ],
+    [
+      "pavo authentication",
+      1
+    ],
+    [
+      "pavo malware",
+      1
+    ],
+    [
+      "pavo network traffic",
+      1
+    ],
+    [
+      "pavo vulnerabilities",
+      1
+    ],
+    [
+      "pavo web proxies",
+      1
+    ],
+    [
+      "securosys primus hsm",
+      1
+    ],
+    [
+      "varonis",
+      1
+    ],
+    [
+      "synack",
+      1
+    ],
+    [
+      "mvdiff",
+      1
+    ],
+    [
+      "akamai siem",
+      1
+    ],
+    [
+      "vynamic security",
+      1
+    ],
+    [
+      "arcus data uber",
+      1
+    ],
+    [
+      "fail2ban",
+      1
+    ],
+    [
+      "tanium",
+      1
+    ],
+    [
+      "psono password manager",
+      1
+    ],
+    [
+      "jsonar",
+      1
+    ],
+    [
+      "egnyte secure and govern",
+      1
+    ],
+    [
+      "sap process orchestration",
+      1
+    ],
+    [
+      "telemetry privacy",
+      1
+    ],
+    [
+      "prtg input",
+      1
+    ],
+    [
+      "guardium",
+      1
+    ],
+    [
+      "mitre framework",
+      1
+    ],
+    [
+      "xpanse technical",
+      1
+    ],
+    [
+      "mothership",
+      1
+    ],
+    [
+      "ivanti service manager",
+      1
+    ],
+    [
+      "kaspersky",
+      1
+    ],
+    [
+      "ibm datapower",
+      1
+    ],
+    [
+      "crestron",
+      1
+    ],
+    [
+      "pavo intrusion",
+      1
+    ],
+    [
+      "es mothership",
+      1
+    ],
+    [
+      "kiteworks ciso dashboard",
+      1
+    ],
+    [
+      "onapsis",
+      1
+    ],
+    [
+      "whoisxmlapiquery",
+      1
+    ],
+    [
+      "sap api management monitoring",
+      1
+    ],
+    [
+      "apigee api management monitoring",
+      1
+    ],
+    [
+      "snaplogic monitoring",
+      1
+    ],
+    [
+      "dg_arc",
+      1
+    ],
+    [
+      "ivanti security controls",
+      1
+    ],
+    [
+      "assetnote",
+      1
+    ],
+    [
+      "sap cloud integration monitoring",
+      1
+    ],
+    [
+      "cyware ctix",
+      1
+    ],
+    [
+      "racing telemetry",
+      1
+    ],
+    [
+      "syslog priority extractor",
+      1
+    ],
+    [
+      "ibm cics performance analyzer for z/os sample",
+      1
+    ],
+    [
+      "open banking",
+      1
+    ],
+    [
+      "os ticket add on",
+      1
+    ],
+    [
+      "alibaba cloud log service",
+      1
+    ],
+    [
+      "enterprise sap solman",
+      1
+    ],
+    [
+      "jira service desk simple addon",
+      1
+    ],
+    [
+      "uptimerobot input",
+      1
+    ],
+    [
+      "anvilogic",
+      1
+    ],
+    [
+      "slack",
+      1
+    ],
+    [
+      "siemplify",
+      1
+    ],
+    [
+      "sandfly security",
+      1
+    ],
+    [
+      "zerofox",
+      1
+    ],
+    [
+      "lanscope on-premises",
+      1
+    ],
+    [
+      "certmanager",
+      1
+    ],
+    [
+      "cryptosuite",
+      1
+    ],
+    [
+      "bigpanda",
+      1
+    ],
+    [
+      "hashicorp vault",
+      1
+    ],
+    [
+      "rapid7 insightvm",
+      1
+    ],
+    [
+      "code42 insider threats add on",
+      1
+    ],
+    [
+      "gogs",
+      1
+    ],
+    [
+      "slashnext siem",
+      1
+    ],
+    [
+      "pavo dns",
+      1
+    ],
+    [
+      "auth0",
+      1
+    ],
+    [
+      "domaintools",
+      1
+    ],
+    [
+      "pavo endpoint",
+      1
+    ],
+    [
+      "microsoft smtp",
+      1
+    ],
+    [
+      "authentic8 silo",
+      1
+    ],
+    [
+      "cofense triage",
+      1
+    ],
+    [
+      "zabbix",
+      1
+    ],
+    [
+      "red hat advanced cluster security",
+      1
+    ],
+    [
+      "honeydb",
+      1
+    ],
+    [
+      "thehive cortex",
+      1
+    ],
+    [
+      "cenoti",
+      1
+    ],
+    [
+      "proofpoint casb",
+      1
+    ],
+    [
+      "pingaccess",
+      1
+    ],
+    [
+      "databricks",
+      1
+    ],
+    [
+      "ipqualityscore",
+      1
+    ],
+    [
+      "sentinelone",
+      1
+    ],
+    [
+      "technical add on sentinelone",
+      1
+    ],
+    [
+      "input add on for sentinelone",
+      1
+    ],
+    [
+      "claroty continuous threat detection (ctd)",
+      1
+    ],
+    [
+      "orion malware (omw)",
+      1
+    ],
+    [
+      "boomi monitoring",
+      1
+    ],
+    [
+      "akamai mfa",
+      1
+    ],
+    [
+      "fronius",
+      1
+    ],
+    [
+      "acunetix 360",
+      1
+    ],
+    [
+      "netsparker enterprise",
+      1
+    ],
+    [
+      "everpure unified",
+      1
+    ],
+    [
+      "purestorage unified",
+      1
+    ],
+    [
+      "proofpoint isolation",
+      1
+    ],
+    [
+      "pingdirectory",
+      1
+    ],
+    [
+      "n2ws",
+      1
+    ],
+    [
+      "opswat metaaccess",
+      1
+    ],
+    [
+      "jira tracking add on",
+      1
+    ],
+    [
+      "owl diode sender",
+      1
+    ],
+    [
+      "owl diode receiver",
+      1
+    ],
+    [
+      "pfsense",
+      1
+    ],
+    [
+      "beyond identity",
+      1
+    ],
+    [
+      "ionix",
+      1
+    ],
+    [
+      "egnyte collaborate",
+      1
+    ],
+    [
+      "qualys edr",
+      1
+    ],
+    [
+      "cyences",
+      1
+    ],
+    [
+      "docusign monitor dashboards and alerts",
+      1
+    ],
+    [
+      "solace monitoring",
+      1
+    ],
+    [
+      "twilio alertaction",
+      1
+    ],
+    [
+      "twilio",
+      1
+    ],
+    [
+      "miro",
+      1
+    ],
+    [
+      "defender atp status check",
+      1
+    ],
+    [
+      "googlebigquery",
+      1
+    ],
+    [
+      "microsoft graph security score",
+      1
+    ],
+    [
+      "mojimoji",
+      1
+    ],
+    [
+      "linode",
+      1
+    ],
+    [
+      "commvault",
+      1
+    ],
+    [
+      "avanan siem",
+      1
+    ],
+    [
+      "hashicorp cloud platform",
+      1
+    ],
+    [
+      "slack app alert",
+      1
+    ],
+    [
+      "asana",
+      1
+    ],
+    [
+      "axonius",
+      1
+    ],
+    [
+      "cisco cyber vision",
+      1
+    ],
+    [
+      "cisco_cybervision",
+      1
+    ],
+    [
+      "dnslookup",
+      1
+    ],
+    [
+      "automox",
+      1
+    ],
+    [
+      "mandiant advantage",
+      1
+    ],
+    [
+      "restart_it",
+      1
+    ],
+    [
+      "jupiterone",
+      1
+    ],
+    [
+      "jira issue input",
+      1
+    ],
+    [
+      "maxmind geoip2",
+      1
+    ],
+    [
+      "zyxel",
+      1
+    ],
+    [
+      "menlo security",
+      1
+    ],
+    [
+      "securitybridge for sap",
+      1
+    ],
+    [
+      "icmp",
+      1
+    ],
+    [
+      "infoblox gridmanager",
+      1
+    ],
+    [
+      "constella dome",
+      1
+    ],
+    [
+      "cynalytica ics monitoring",
+      1
+    ],
+    [
+      "securelink",
+      1
+    ],
+    [
+      "island",
+      1
+    ],
+    [
+      "luminar iocs and leaked credentials",
+      1
+    ],
+    [
+      "salem",
+      1
+    ],
+    [
+      "splunkdiode sender addon",
+      1
+    ],
+    [
+      "splunkdiode receiver addon",
+      1
+    ],
+    [
+      "spycloud",
+      1
+    ],
+    [
+      "palo_alto_cortex_xdr_endpoint_retriever",
+      1
+    ],
+    [
+      "cisco secure network analytics (stealthwatch)",
+      1
+    ],
+    [
+      "cyware orchestrate",
+      1
+    ],
+    [
+      "cybereason",
+      1
+    ],
+    [
+      "alert_forwarder",
+      1
+    ],
+    [
+      "hatching triage",
+      1
+    ],
+    [
+      "gencon event analysis",
+      1
+    ],
+    [
+      "dragos ot",
+      1
+    ],
+    [
+      "tcpcheck",
+      1
+    ],
+    [
+      "nodezero",
+      1
+    ],
+    [
+      "trinity cyber",
+      1
+    ],
+    [
+      "microsoft 365 defender threat vulnerability",
+      1
+    ],
+    [
+      "certificates expiry",
+      1
+    ],
+    [
+      "elasticspl",
+      1
+    ],
+    [
+      "monday.com",
+      1
+    ],
+    [
+      "dataminr agentic tip",
+      1
+    ],
+    [
+      "risk superhandler",
+      1
+    ],
+    [
+      "claroty xdome",
+      1
+    ],
+    [
+      "vade for m365",
+      1
+    ],
+    [
+      "ibm qradar soar",
+      1
+    ],
+    [
+      "confluent kafka monitoring",
+      1
+    ],
+    [
+      "aishield ai security monitoring",
+      1
+    ],
+    [
+      "lanscope cloud",
+      1
+    ],
+    [
+      "splunkadmins",
+      1
+    ],
+    [
+      "sepio",
+      1
+    ],
+    [
+      "nexpose",
+      1
+    ],
+    [
+      "zero networks",
+      1
+    ],
+    [
+      "bigid audit logs",
+      1
+    ],
+    [
+      "add on for apple unified logging",
+      1
+    ],
+    [
+      "eclecticiq intelligence center",
+      1
+    ],
+    [
+      "aiops sfcc logs",
+      1
+    ],
+    [
+      "salesforce monitoring",
+      1
+    ],
+    [
+      "rst threat feed",
+      1
+    ],
+    [
+      "xm cyber",
+      1
+    ],
+    [
+      "hispasec",
+      1
+    ],
+    [
+      "saviynt events",
+      1
+    ],
+    [
+      "virustotal app",
+      1
+    ],
+    [
+      "wiz",
+      1
+    ],
+    [
+      "digital shadows searchlight",
+      1
+    ],
+    [
+      "lumu",
+      1
+    ],
+    [
+      "domain controller (dc) monitoring",
+      1
+    ],
+    [
+      "ibm maas360",
+      1
+    ],
+    [
+      "ip_fabric",
+      1
+    ],
+    [
+      "fwlog_eventgen",
+      1
+    ],
+    [
+      "apache_access_eventgen",
+      1
+    ],
+    [
+      "squid_proxy_eventgen",
+      1
+    ],
+    [
+      "mailchimp",
+      1
+    ],
+    [
+      "freshdesk",
+      1
+    ],
+    [
+      "bluecat_ipam",
+      1
+    ],
+    [
+      "pingone",
+      1
+    ],
+    [
+      "soc prime ccm",
+      1
+    ],
+    [
+      "liveagent",
+      1
+    ],
+    [
+      "supportbee",
+      1
+    ],
+    [
+      "openai api",
+      1
+    ],
+    [
+      "mural",
+      1
+    ],
+    [
+      "vision one",
+      1
+    ],
+    [
+      "bookstack",
+      1
+    ],
+    [
+      "edgescan",
+      1
+    ],
+    [
+      "microsoft exchange smtp",
+      1
+    ],
+    [
+      "fortidlp",
+      1
+    ],
+    [
+      "analyst1",
+      1
+    ],
+    [
+      "nessus security scans dashboards",
+      1
+    ],
+    [
+      "knowledge object purge master",
+      1
+    ],
+    [
+      "gitlab",
+      1
+    ],
+    [
+      "aiops magento",
+      1
+    ],
+    [
+      "spycloud investigations",
+      1
+    ],
+    [
+      "cisco enterprise networking netflow",
+      1
+    ],
+    [
+      "microsoft public ip generic",
+      1
+    ],
+    [
+      "emby",
+      1
+    ],
+    [
+      "network monitoring",
+      1
+    ],
+    [
+      "ignio integration",
+      1
+    ],
+    [
+      "detection backfill",
+      1
+    ],
+    [
+      "fortindr cloud",
+      1
+    ],
+    [
+      "s3spl",
+      1
+    ],
+    [
+      "beyondtrust privileged remote access",
+      1
+    ],
+    [
+      "conceal",
+      1
+    ],
+    [
+      "conceal add on",
+      1
+    ],
+    [
+      "tripwire enterprise",
+      1
+    ],
+    [
+      "hetrix",
+      1
+    ],
+    [
+      "guard detect",
+      1
+    ],
+    [
+      "transmit security events",
+      1
+    ],
+    [
+      "soc prime attack detective",
+      1
+    ],
+    [
+      "ccx extensions for slack",
+      1
+    ],
+    [
+      "varonis search and reporting",
+      1
+    ],
+    [
+      "ipurl ioc ingestion",
+      1
+    ],
+    [
+      "cyberark next-gen access",
+      1
+    ],
+    [
+      "linked data",
+      1
+    ],
+    [
+      "windows firewall status check",
+      1
+    ],
+    [
+      "windows certificate store",
+      1
+    ],
+    [
+      "green alerts",
+      1
+    ],
+    [
+      "trellix mvision epo",
+      1
+    ],
+    [
+      "mongo audit",
+      1
+    ],
+    [
+      "abuseipdb",
+      1
+    ],
+    [
+      "psnc framework",
+      1
+    ],
+    [
+      "bugfender",
+      1
+    ],
+    [
+      "obsidian security",
+      1
+    ],
+    [
+      "cyberint argos",
+      1
+    ],
+    [
+      "nvd cve fetcher",
+      1
+    ],
+    [
+      "sysdig vm",
+      1
+    ],
+    [
+      "lookout mobile threat defense",
+      1
+    ],
+    [
+      "ansible awx",
+      1
+    ],
+    [
+      "trellix epo saas connector",
+      1
+    ],
+    [
+      "evolven app",
+      1
+    ],
+    [
+      "clickup",
+      1
+    ],
+    [
+      "hubspot",
+      1
+    ],
+    [
+      "o11y (splunk observability)",
+      1
+    ],
+    [
+      "workspaceone",
+      1
+    ],
+    [
+      "oodrive_logs_fetching",
+      1
+    ],
+    [
+      "apto solutions telemetry technical",
+      1
+    ],
+    [
+      "gigamon_deep_observability_app",
+      1
+    ],
+    [
+      "honeywell",
+      1
+    ],
+    [
+      "cybelangel",
+      1
+    ],
+    [
+      "gitlab (saas)",
+      1
+    ],
+    [
+      "snyk",
+      1
+    ],
+    [
+      "mandiant threat intelligence",
+      1
+    ],
+    [
+      "puppet alert orchestrator",
+      1
+    ],
+    [
+      "input control center",
+      1
+    ],
+    [
+      "cyera",
+      1
+    ],
+    [
+      "cyberwatch syslog",
+      1
+    ],
+    [
+      "mesh",
+      1
+    ],
+    [
+      "team cymru scout",
+      1
+    ],
+    [
+      "google threat intelligence",
+      1
+    ],
+    [
+      "rapid7 insightappsec",
+      1
+    ],
+    [
+      "youtube",
+      1
+    ],
+    [
+      "ipgeolocation.io",
+      1
+    ],
+    [
+      "threatworx",
+      1
+    ],
+    [
+      "silent push",
+      1
+    ],
+    [
+      "veritas netbackup flex",
+      1
+    ],
+    [
+      "index health",
+      1
+    ],
+    [
+      "wiz discovered vms",
+      1
+    ],
+    [
+      "manageengine endpoint central",
+      1
+    ],
+    [
+      "manageengine vulnerability manager plus",
+      1
+    ],
+    [
+      "infoblox",
+      1
+    ],
+    [
+      "vade for google workspace",
+      1
+    ],
+    [
+      "mac oui lookup",
+      1
+    ],
+    [
+      "opencti",
+      1
+    ],
+    [
+      "unifi cloud",
+      1
+    ],
+    [
+      "cortex xsoar analytics",
+      1
+    ],
+    [
+      "gigamon cim",
+      1
+    ],
+    [
+      "pingone advanced identity cloud",
+      1
+    ],
+    [
+      "cohesity",
+      1
+    ],
+    [
+      "auvik networks",
+      1
+    ],
+    [
+      "uxm - waterfall visualization",
+      1
+    ],
+    [
+      "uxm - worldmap visualization",
+      1
+    ],
+    [
+      "uxm - indexer",
+      1
+    ],
+    [
+      "nextdns api",
+      1
+    ],
+    [
+      "cisco enterprise networking",
+      1
+    ],
+    [
+      "ip2location ip geolocation",
+      1
+    ],
+    [
+      "splunk add on for ibm ns1",
+      1
+    ],
+    [
+      "alert to mqtt",
+      1
+    ],
+    [
+      "threatmodeler",
+      1
+    ],
+    [
+      "ibm storage defender",
+      1
+    ],
+    [
+      "cloudsek threat intelligence",
+      1
+    ],
+    [
+      "abusech",
+      1
+    ],
+    [
+      "dissect",
+      1
+    ],
+    [
+      "trend micro ddi",
+      1
+    ],
+    [
+      "qumulo",
+      1
+    ],
+    [
+      "trustlogin",
+      1
+    ],
+    [
+      "axur data connector",
+      1
+    ],
+    [
+      "eset cloud protect",
+      1
+    ],
+    [
+      "gdoa_cef",
+      1
+    ],
+    [
+      "swift agi",
+      1
+    ],
+    [
+      "bitdefender gravityzone for splunk dashboard",
+      1
+    ],
+    [
+      "gravityzone",
+      1
+    ],
+    [
+      "trend micro deep security",
+      1
+    ],
+    [
+      "mad",
+      1
+    ],
+    [
+      "reco",
+      1
+    ],
+    [
+      "inputs conf generator - ds",
+      1
+    ],
+    [
+      "inputs conf generator - sh",
+      1
+    ],
+    [
+      "cynerio",
+      1
+    ],
+    [
+      "torq_cases",
+      1
+    ],
+    [
+      "get diag",
+      1
+    ],
+    [
+      "searchlight cyber for splunk - darkiq",
+      1
+    ],
+    [
+      "right-hand cybersecurity hrm",
+      1
+    ],
+    [
+      "prisma cloud audit",
+      1
+    ],
+    [
+      "stocks",
+      1
+    ],
+    [
+      "clickhouse cloud audit",
+      1
+    ],
+    [
+      "databee",
+      1
+    ],
+    [
+      "rootly",
+      1
+    ],
+    [
+      "riskrecon",
+      1
+    ],
+    [
+      "ds management",
+      1
+    ],
+    [
+      "manageengine oputils",
+      1
+    ],
+    [
+      "netapp_cloud_insights_secure",
+      1
+    ],
+    [
+      "bastille",
+      1
+    ],
+    [
+      "stairwell",
+      1
+    ],
+    [
+      "team cymru insights feed",
+      1
+    ],
+    [
+      "splunkbase",
+      1
+    ],
+    [
+      "spex add-on for microsoft m365",
+      1
+    ],
+    [
+      "companies house",
+      1
+    ],
+    [
+      "ncm security central",
+      1
+    ],
+    [
+      "digicert one",
+      1
+    ],
+    [
+      "bloodhound enterprise",
+      1
+    ],
+    [
+      "security threat intel",
+      1
+    ],
+    [
+      "manageengine site24x7",
+      1
+    ],
+    [
+      "elasticsearch",
+      1
+    ],
+    [
+      "microsoft edge for business",
+      1
+    ],
+    [
+      "teamviewer",
+      1
+    ],
+    [
+      "threatmon threat intelligence",
+      1
+    ],
+    [
+      "ermes browser security",
+      1
+    ],
+    [
+      "mandiant digital threat monitoring",
+      1
+    ],
+    [
+      "red hat event driven ansible",
+      1
+    ],
+    [
+      "hunt.io",
+      1
+    ],
+    [
+      "socradar incidents",
+      1
+    ],
+    [
+      "socradar feeds",
+      1
+    ],
+    [
+      "socradar taxii21",
+      1
+    ],
+    [
+      "apto nist dashboarding",
+      1
+    ],
+    [
+      "virustotal",
+      1
+    ],
+    [
+      "security onion",
+      1
+    ],
+    [
+      "proofpoint incidents",
+      1
+    ],
+    [
+      "llm command scoring",
+      1
+    ],
+    [
+      "govslack",
+      1
+    ],
+    [
+      "keeper.io",
+      1
+    ],
+    [
+      "cirrus identity bridge",
+      1
+    ],
+    [
+      "nvd cve",
+      1
+    ],
+    [
+      "armory",
+      1
+    ],
+    [
+      "crogl add on",
+      1
+    ],
+    [
+      "elasticsearch to splunkedgeprocessor",
+      1
+    ],
+    [
+      "nessus cim mapper",
+      1
+    ],
+    [
+      "onetrust_assessments",
+      1
+    ],
+    [
+      "apto solutions on-prem telemetry",
+      1
+    ],
+    [
+      "datalake2splunk v3",
+      1
+    ],
+    [
+      "torq",
+      1
+    ],
+    [
+      "alphalevel alert refinery",
+      1
+    ],
+    [
+      "hpe networking clearpass",
+      1
+    ],
+    [
+      "threat intel enrichment ai",
+      1
+    ],
+    [
+      "netbrain automation",
+      1
+    ],
+    [
+      "1password cli tool",
+      1
+    ],
+    [
+      "get public ip",
+      1
+    ],
+    [
+      "ufdbguard",
+      1
+    ],
+    [
+      "vulncheck exploit intelligence",
+      1
+    ],
+    [
+      "bitbucket",
+      1
+    ],
+    [
+      "manageengine alert action",
+      1
+    ],
+    [
+      "nats",
+      1
+    ],
+    [
+      "suhlabs emass",
+      1
+    ],
+    [
+      "linkshadowndr",
+      1
+    ],
+    [
+      "any.run",
+      1
+    ],
+    [
+      "gemini",
+      1
+    ],
+    [
+      "sectigo audit",
+      1
+    ],
+    [
+      "macos",
+      1
+    ],
+    [
+      "nsf sangfor",
+      1
+    ],
+    [
+      "cribl decrypt",
+      1
+    ],
+    [
+      "guardium api",
+      1
+    ],
+    [
+      "telegram",
+      1
+    ],
+    [
+      "vs code audit",
+      1
+    ],
+    [
+      "send pdf dashboard alert action",
+      1
+    ],
+    [
+      "hitachi hcp classic",
+      1
+    ],
+    [
+      "dropzone ai",
+      1
+    ],
+    [
+      "ransomware",
+      1
+    ],
+    [
+      "trellix epo",
+      1
+    ],
+    [
+      "lcs plug in",
+      1
+    ],
+    [
+      "splunklint",
+      1
+    ],
+    [
+      "alpha level linux",
+      1
+    ],
+    [
+      "alpha level windows",
+      1
+    ],
+    [
+      "vercel drains",
+      1
+    ],
+    [
+      "opencti for splunk enterprise",
+      1
+    ],
+    [
+      "brandefense",
+      1
+    ],
+    [
+      "spaces",
+      1
+    ],
+    [
+      "stig compliance",
+      1
+    ],
+    [
+      "dark web scan by bechtle",
+      1
+    ],
+    [
+      "viavi observer apex",
+      1
+    ],
+    [
+      "smime mailer",
+      1
+    ],
+    [
+      "aviatrix",
+      1
+    ],
+    [
+      "upstream",
+      1
+    ],
+    [
+      "qualibooth",
+      1
+    ],
+    [
+      "csmon",
+      1
+    ],
+    [
+      "maxmind geoip",
+      1
+    ],
+    [
+      "deslicer ai insights",
+      1
+    ],
+    [
+      "cato networks cim",
+      1
+    ],
+    [
+      "cato networks security",
+      1
+    ],
+    [
+      "nucleus user logs",
+      1
+    ],
+    [
+      "spoofsentry",
+      1
+    ],
+    [
+      "ensign_elasticsearch_add on modular_input",
+      1
+    ],
+    [
+      "ensign akamai web security",
+      1
+    ],
+    [
+      "red river zero trust gap analysis",
+      1
+    ],
+    [
+      "elastic search",
+      1
+    ],
+    [
+      "whisper security graph",
+      1
+    ],
+    [
+      "terrace",
+      1
+    ],
+    [
+      "anchore",
+      1
+    ],
+    [
+      "anthropic_compliance_api",
+      1
+    ],
+    [
+      "ad overview",
+      1
+    ],
+    [
+      "shieldworkz ndr",
+      1
+    ],
+    [
+      "confluence and jira audit",
+      1
+    ],
+    [
+      "cryptview",
+      1
+    ],
+    [
+      "usom cti",
+      1
+    ],
+    [
+      "windows_uf_upgrade_parsing",
+      1
+    ],
+    [
+      "windows_uf_upgrade_automation",
+      1
+    ],
+    [
+      "uk open data",
+      1
+    ],
+    [
+      "crytica app for alerting",
+      1
+    ],
+    [
+      "withsecure elements",
+      1
+    ],
+    [
+      "webtools pro",
+      1
+    ],
+    [
+      "cms technical",
+      1
+    ],
+    [
+      "postfix mail",
+      1
+    ],
+    [
+      "whiteboard",
+      1
+    ],
+    [
+      "mars alert forwarding",
+      1
+    ],
+    [
+      "darkstrata threat intelligence",
+      1
+    ],
+    [
+      "uxm - unified timeline visualization",
+      1
+    ],
+    [
+      "sapience core",
+      1
+    ],
+    [
+      "cryptview collector",
+      1
+    ],
+    [
+      "llmgateway",
+      1
+    ],
+    [
+      "missioncontrol inventory",
+      1
+    ],
+    [
+      "carbide",
+      1
+    ],
+    [
+      "vali cyber zerolock",
+      1
+    ],
+    [
+      "keri borealis",
+      1
+    ],
+    [
+      "qualys cloud connector",
+      1
+    ],
+    [
+      "appgate_sdp",
+      1
+    ],
+    [
+      "guardrails",
+      1
+    ],
+    [
+      "rubric protocol",
+      1
+    ],
+    [
+      "flare",
+      1
+    ],
+    [
+      "bxti global relay splunk ta",
+      1
+    ],
+    [
+      "airspace watch",
+      1
+    ],
+    [
+      "carbonio mail",
+      1
+    ],
+    [
+      "attack path intelligence",
+      1
+    ],
+    [
+      "active directory monitoring",
+      1
+    ],
+    [
+      "nordstellar",
+      1
+    ],
+    [
+      "siemens tc",
+      1
+    ],
+    [
+      "posthog activity logs",
+      1
+    ],
+    [
+      "ptnad",
+      1
+    ],
+    [
+      "quantumgenie",
+      1
+    ],
+    [
+      "leakdata exposure monitoring",
+      1
+    ],
+    [
+      "airtable auditlogs",
+      1
+    ],
+    [
+      "statseeker",
+      1
+    ],
+    [
+      "ransomleak",
+      1
+    ],
+    [
+      "macadress",
+      1
+    ],
+    [
+      "invicti platform",
+      1
+    ],
+    [
+      "windows firewall posture",
+      1
+    ],
+    [
+      "trustmodel",
+      1
+    ],
+    [
+      "cip ti feed",
+      1
+    ],
+    [
+      "oracle cloud infrastructure",
+      1
+    ],
+    [
+      "xaidr",
+      1
+    ],
+    [
+      "cyberhaven data security",
+      1
+    ],
+    [
+      "appgate demo",
+      1
+    ],
+    [
+      "wallix bastion",
+      1
+    ],
+    [
+      "vulnerability catalog",
+      1
+    ],
+    [
+      "e2g plant asset integrity",
+      1
+    ],
+    [
+      "genesys cloud",
+      1
+    ],
+    [
+      "openai compliance",
+      1
+    ],
+    [
+      "eol",
+      1
+    ],
+    [
+      "astelia",
+      1
+    ],
+    [
+      "unifi network",
+      1
+    ],
+    [
+      "unifi",
+      1
+    ],
+    [
+      "log10x",
+      1
+    ],
+    [
+      "socradar incidents mssp",
+      1
+    ],
+    [
+      "gitlab self-managed",
+      1
+    ],
+    [
+      "glpi",
+      1
+    ],
+    [
+      "hexnode uem",
+      1
+    ],
+    [
+      "socradar vulnerability",
+      1
+    ],
+    [
+      "phosphorus",
+      1
+    ],
+    [
+      "rovix universal api",
+      1
+    ],
+    [
+      "openai decisions",
+      1
+    ],
+    [
+      "bxti method security",
+      1
+    ],
+    [
+      "ptsandbox",
+      1
+    ],
+    [
+      "openappsec npm",
+      1
+    ],
+    [
+      "smartermail",
+      1
+    ]
+  ]
+}

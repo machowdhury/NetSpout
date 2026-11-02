@@ -1,0 +1,336 @@
+{
+ "catalog_only_total": 224,
+ "documented_candidates": 209,
+ "candidates_with_any_sourcetype_binding": 2,
+ "contract_only": 15,
+ "contract_only_with_all_sourcetypes_streamable": 7,
+ "candidate_industries": {
+  "unmapped": 60,
+  "telecommunications": 27,
+  "government-public-sector": 15,
+  "energy-utilities": 13,
+  "transportation-logistics": 11,
+  "manufacturing": 11,
+  "banking-financial-services": 9,
+  "education": 9
+ },
+ "contract_rows": [
+  {
+   "scenario_id": "normal_traffic",
+   "maturity": "FORMAT_VALIDATED",
+   "sourcetypes": {
+    "cisco:asa": "grounded_sample",
+    "pan:traffic": "grounded_sample",
+    "f5:bigip:ltm": "grounded_sample",
+    "nginx:plus:kv": "not_streamable",
+    "postgresql:audit": "not_streamable"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "secure"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "lateral_movement",
+   "maturity": "FORMAT_VALIDATED",
+   "sourcetypes": {
+    "cisco:ios:syslog": "grounded_sample",
+    "cisco:asa": "grounded_sample",
+    "postgresql:audit": "not_streamable"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "lateral"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:catalyst:networkhealth": "grounded_sample",
+    "cisco:ios:syslog": "grounded_sample",
+    "cisco:ise:trustsec:sgt": "not_streamable"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_can_multi_building"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "wireless_connected_core_cisco",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:catalyst:clienthealth": "grounded_sample",
+    "cisco:catalyst:rogue:threat_details": "grounded_sample",
+    "cisco:ise:nac:8021x": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "wireless_connected_core_cisco"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "wireless_connected_core_mixed",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "meraki:accesspoints": "grounded_sample",
+    "pan:traffic": "grounded_sample",
+    "arista:telemetry:json": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "wireless_connected_core_mixed"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_epn_isolated_intranet",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:ios:syslog": "grounded_sample",
+    "cisco:sdwan:linkhealth": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_epn_isolated_intranet"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_gan_subsea_cloud",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:ios:mdt:metric": "grounded_sample",
+    "zscaler:zia": "grounded_sample",
+    "cisco:thousandeyes:metric": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_gan_subsea_cloud"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "mixed_vendor_enterprise",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "meraki:assurancealerts": "grounded_sample",
+    "pan:threat": "grounded_sample",
+    "pan:traffic": "grounded_sample",
+    "fortinet:fortigate:utm": "not_streamable",
+    "nginx:plus:kv": "not_streamable"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "mixed_vendor_enterprise"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "netapp:ontap:nas": "not_streamable",
+    "arista:telemetry:json": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_nas_storage_cluster"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_pan_iot_mesh",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "pan:ble:iot:sensor": "not_streamable",
+    "cisco:ios:syslog": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_pan_iot_mesh"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "pure_cisco_enterprise",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:catalyst:networkhealth": "grounded_sample",
+    "cisco:ise:nac:8021x": "grounded_sample",
+    "cisco:ise:trustsec:sgt": "not_streamable",
+    "cisco:catalyst:rogue:threat_details": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "pure_cisco_enterprise"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_san_fibre_channel",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:mds:san:fc": "not_streamable",
+    "cisco:dc:nexus9k:syslog": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": false,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_san_fibre_channel"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "sdwan_connected_core",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:sdwan:linkhealth": "grounded_sample",
+    "cisco:sdwan:BGP-5-ADJCHANGE": "native",
+    "cisco:ios:syslog": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "sdwan_connected_core"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "service_provider_mixed",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "juniper:junos": "grounded_sample",
+    "nokia:sros:syslog": "grounded_sample",
+    "cisco:ios:mdt:metric": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "service_provider_mixed"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  },
+  {
+   "scenario_id": "arch_wan_global_backbone",
+   "maturity": "CONTRACTED",
+   "sourcetypes": {
+    "cisco:ios:mdt:metric": "grounded_sample",
+    "cisco:ios:syslog": "grounded_sample",
+    "juniper:junos": "grounded_sample"
+   },
+   "all_sourcetypes_streamable": true,
+   "expected_phases": [
+    "baseline",
+    "trigger_event",
+    "telemetry_spike",
+    "policy_enforcement",
+    "steady_state"
+   ],
+   "affected_entities": [
+    "arch_wan_global_backbone"
+   ],
+   "missing_for_authentic_run": "per-phase telemetry mapping and correlated entities (the catalog gives generic phase names and one affected entity)"
+  }
+ ],
+ "conclusion": "No scenario was converted. Candidates are titles with no sourcetype binding or phases; contracts have generic phases and no per-phase telemetry mapping. Tagging recorded samples with phase names would invent a correlation."
+}

@@ -16,6 +16,7 @@ import datetime
 import re
 import json
 import base64
+import os
 import urllib.request
 import urllib.parse
 import ssl
@@ -32,7 +33,9 @@ try:
     )
     from netspout_core.graph_engine import TopologyGraph
     from netspout_core.log_engine import SplunkLogEngine
-    from netspout_core.telemetry_dispatcher import dispatcher
+    from netspout_core.panos_generator import PanOsGenerator, to_log_entry
+    from netspout_core.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
+    from netspout_core.telemetry_dispatcher import dispatcher, is_metric_sourcetype
     from netspout_core.spl_engine import SPLExecutionEngine
     from netspout_core.catalog import catalog_instance, NetSpoutCatalog
     from netspout_core.exporter_session import ExporterSession
@@ -48,7 +51,9 @@ except ImportError:
         )
         from app.graph_engine import TopologyGraph
         from app.log_engine import SplunkLogEngine
-        from app.telemetry_dispatcher import dispatcher
+        from app.panos_generator import PanOsGenerator, to_log_entry
+        from app.snmp_metrics import SnmpMetricGenerator, to_log_entry as snmp_to_log_entry
+        from app.telemetry_dispatcher import dispatcher, is_metric_sourcetype
         from app.spl_engine import SPLExecutionEngine
         from app.catalog import catalog_instance, NetSpoutCatalog
         from app.exporter_session import ExporterSession
@@ -64,7 +69,18 @@ except ImportError:
         from graph_engine import TopologyGraph
         from log_engine import SplunkLogEngine
         from exporter_session import ExporterSession
-        from telemetry_dispatcher import dispatcher
+        from telemetry_dispatcher import dispatcher, is_metric_sourcetype
+        try:
+            from panos_generator import PanOsGenerator, to_log_entry
+        except ImportError:
+            PanOsGenerator = None
+            to_log_entry = None
+        try:
+            from snmp_metrics import SnmpMetricGenerator
+            from snmp_metrics import to_log_entry as snmp_to_log_entry
+        except ImportError:
+            SnmpMetricGenerator = None
+            snmp_to_log_entry = None
         try:
             from spl_engine import SPLExecutionEngine
         except ImportError:
@@ -949,11 +965,78 @@ class ValidationEngine:
 # ScenarioRunner Engine (Stateful Orchestrator & Ground Truth Generator)
 # =========================================================================
 
+# Only canonical IDs with dedicated phase telemetry are executable in this release.
+SUPPORTED_SCENARIO_IDS = frozenset({
+    "arch_lan_campus_access",
+    "arch_man_carrier_ring",
+    "arch_vpn_remote_workforce",
+    "arch_wlan_meraki_catalyst",
+    "cisco_aci_microburst",
+    "cisco_campus_rogue",
+    "cisco_sdwan_brownout",
+    "ddos_attack",
+    "mixed_backbone_optical",
+    "mixed_edge_breach",
+    "mixed_sase_degradation",
+    "network_security_correlation",
+    "openconfig_mdt_streaming",
+    "paloalto_threat_investigation",
+    "payment_processing_degradation",
+    "service_provider_cisco",
+    "sql_injection",
+})
+
+
 class ScenarioRunner:
+    #: Maps the engine's ScenarioPhase names onto PAN-OS generator incident phases.
+    _PANOS_PHASE_BY_RUN_PHASE = {
+        ScenarioPhase.INITIALIZE.value: "baseline",
+        ScenarioPhase.BASELINE.value: "baseline",
+        ScenarioPhase.DEGRADE.value: "suspicious",
+        ScenarioPhase.FAULT.value: "detection",
+        ScenarioPhase.PROPAGATE.value: "detection",
+        ScenarioPhase.FAILOVER.value: "containment",
+        ScenarioPhase.RECOVER.value: "recovery",
+        ScenarioPhase.VALIDATE.value: "recovery",
+        ScenarioPhase.COMPLETE.value: "recovery",
+    }
+
+    #: Per-phase native PAN-OS record counts. Honoured exactly by the generator,
+    #: so "count=N" really does produce N events for every phase.
+    _PANOS_COUNTS = {
+        "baseline": {"traffic": 4, "threat": 1, "system": 1},
+        "suspicious": {"traffic": 6, "threat": 3, "system": 2},
+        "detection": {"traffic": 5, "threat": 6, "system": 2},
+        "containment": {"traffic": 6, "threat": 2, "system": 3},
+        "recovery": {"traffic": 4, "threat": 1, "system": 1},
+    }
+
+    #: Cross-source scenario keeps the security mix leaner so the Cisco-side
+    #: degradation signal stays attributable next to the PAN-OS evidence.
+    _PANOS_CORRELATION_COUNTS = {
+        "baseline": {"traffic": 3, "threat": 0, "system": 1},
+        "suspicious": {"traffic": 4, "threat": 2, "system": 1},
+        "detection": {"traffic": 4, "threat": 4, "system": 2},
+        "containment": {"traffic": 4, "threat": 1, "system": 2},
+        "recovery": {"traffic": 3, "threat": 0, "system": 1},
+    }
+
+    #: Modeled SNMP metric samples per phase for the metric-bearing scenarios.
+    _SNMP_COUNTS = {
+        "baseline": 2,
+        "suspicious": 3,
+        "detection": 4,
+        "containment": 3,
+        "recovery": 2,
+    }
+
     def __init__(self):
         self.round_robin_counter = 0
         self.lateral_step = 0
         self.telemetry_tick = 0
+        #: Scenario-id -> SnmpMetricGenerator, so counter state persists across
+        #: phases within a scenario (see _emit_snmp_metrics).
+        self._snmp_generators: Dict[str, Any] = {}
         self.malicious_ips = [
             "198.51.100.42", "203.0.113.88", "198.51.100.199",
             "45.33.32.156", "185.220.101.5", "194.26.29.112",
@@ -1012,8 +1095,6 @@ class ScenarioRunner:
             log.netspout_event_id = f"evt-{uuid.uuid4().hex[:8]}"
         if getattr(log, "netspout_ground_truth", None) is None:
             log.netspout_ground_truth = "true" if ground_truth else "false"
-        if log.raw_log and "netspout_run_id=" not in log.raw_log:
-            log.raw_log = f"{log.raw_log} netspout_run_id=\"{log.netspout_run_id}\" netspout_scenario_id=\"{log.netspout_scenario_id}\" netspout_phase=\"{log.netspout_phase}\" netspout_event_id=\"{log.netspout_event_id}\""
         return log
 
     def record_ground_truth(
@@ -1495,41 +1576,66 @@ class ScenarioRunner:
     # Scenario Contract Topology Resolution
     # -------------------------------------------------------------------------
     def _get_topology_for_scenario(self, contract: Any) -> TopologyState:
-        top_id = (getattr(contract, "topology_id", None) or (contract.get("topology_id") if isinstance(contract, dict) else "") or "").lower()
-        scen_id = (getattr(contract, "id", None) or (contract.get("id") if isinstance(contract, dict) else "") or "").lower()
-
-        if "arch_lan_campus_access" in top_id or "arch_lan_campus_access" in scen_id:
-            return get_arch_lan_campus_access_topology()
-        elif "arch_vpn_remote_workforce" in top_id or "arch_vpn_remote_workforce" in scen_id:
-            return get_arch_vpn_remote_workforce_topology()
-        elif "service_provider_cisco" in top_id or "service_provider_cisco" in scen_id:
-            return get_service_provider_cisco_topology()
-        elif "arch_wlan_meraki_catalyst" in top_id or "arch_wlan_meraki_catalyst" in scen_id:
-            return get_arch_wlan_meraki_catalyst_topology()
-        elif "arch_man_carrier_ring" in top_id or "arch_man_carrier_ring" in scen_id:
-            return get_arch_man_carrier_ring_topology()
-        elif "sdwan" in top_id or "sdwan" in scen_id or "brownout" in scen_id:
-            return get_cisco_sdwan_topology()
-        elif "campus" in top_id or "rogue" in scen_id or "campus" in scen_id:
-            return get_cisco_campus_topology()
-        elif "aci" in top_id or "microburst" in scen_id or "nexus" in top_id:
-            return get_cisco_aci_topology()
-        elif "sase" in top_id or "sase" in scen_id:
-            return get_mixed_sase_topology()
-        elif "optical" in top_id or "optical" in scen_id:
-            return get_mixed_optical_topology()
-        elif "openconfig" in top_id or "openconfig" in scen_id or "mdt" in scen_id:
-            return get_openconfig_core_topology()
-        elif "bypassed" in top_id or "sql_injection" in scen_id:
-            return get_bypassed_topology()
-        elif "edge" in top_id or "breach" in scen_id or "mixed_edge" in top_id:
-            return get_mixed_edge_topology()
-        else:
-            return get_default_secure_topology()
+        scen_id = getattr(contract, "id", None) or (contract.get("id") if isinstance(contract, dict) else "")
+        topology_factories = {
+            "arch_lan_campus_access": get_arch_lan_campus_access_topology,
+            "arch_vpn_remote_workforce": get_arch_vpn_remote_workforce_topology,
+            "service_provider_cisco": get_service_provider_cisco_topology,
+            "arch_wlan_meraki_catalyst": get_arch_wlan_meraki_catalyst_topology,
+            "arch_man_carrier_ring": get_arch_man_carrier_ring_topology,
+            "cisco_sdwan_brownout": get_cisco_sdwan_topology,
+            "cisco_campus_rogue": get_cisco_campus_topology,
+            "cisco_aci_microburst": get_cisco_aci_topology,
+            "mixed_sase_degradation": get_mixed_sase_topology,
+            "mixed_backbone_optical": get_mixed_optical_topology,
+            "openconfig_mdt_streaming": get_openconfig_core_topology,
+            "sql_injection": get_bypassed_topology,
+            "mixed_edge_breach": get_mixed_edge_topology,
+            "ddos_attack": get_default_secure_topology,
+            # Phase 4C recovery: PAN-native and cross-source correlation scenarios.
+            # Reuse the mixed-edge fabric, which already carries a Palo Alto NGFW,
+            # a Catalyst switch and an internal app server.
+            "paloalto_threat_investigation": get_mixed_edge_topology,
+            "network_security_correlation": get_mixed_edge_topology,
+            "payment_processing_degradation": get_mixed_edge_topology,
+        }
+        factory = topology_factories.get(scen_id)
+        if factory is None:
+            raise ValueError(f"Scenario '{scen_id}' is not available in this release")
+        return factory()
 
     # -------------------------------------------------------------------------
     # Specialized Phase Telemetry Generator
     # -------------------------------------------------------------------------
+    def _emit_snmp_metrics(
+        self, scen_id: str, phase: str, pan_phase: str, count: int
+    ) -> List[LogEntry]:
+        """Modeled SNMP metric samples for a scenario phase.
+
+        Deliberately labelled *modeled*: no socket is opened and no device is
+        polled. Records carry the catalog-classified metric sourcetype so the
+        dispatcher routes them to the metrics index through the existing path.
+        """
+        if SnmpMetricGenerator is None or snmp_to_log_entry is None:
+            raise RuntimeError(
+                "snmp_metrics is unavailable in this runtime; cannot emit "
+                "SNMP-derived metric telemetry"
+            )
+        # One generator per scenario id, held on the runner, so counter state
+        # accumulates across phases and rollover/reset maths is exercised for
+        # real instead of being asserted.
+        cache = self._snmp_generators.setdefault(
+            scen_id,
+            SnmpMetricGenerator(seed=f"{scen_id}|snmp"),
+        )
+        out: List[LogEntry] = []
+        for rec in cache.generate(count=count, phase=pan_phase):
+            entry = snmp_to_log_entry(rec)
+            entry.netspout_scenario_id = scen_id
+            entry.netspout_phase = phase
+            out.append(entry)
+        return out
+
     def _generate_phase_telemetry(
         self,
         phase: str,
@@ -1539,7 +1645,7 @@ class ScenarioRunner:
     ) -> List[LogEntry]:
         """Generates domain-correlated telemetry logs for a given scenario phase."""
         logs: List[LogEntry] = []
-        scen_id = contract.id.lower()
+        scen_id = contract.id
 
         # Nodes lookup with graceful fallbacks
         switches = graph.find_nodes_by_type(NodeType.SWITCH) or graph.topology.nodes
@@ -1560,7 +1666,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # GATE 10: ARCH_LAN_CAMPUS_ACCESS
         # ---------------------------------------------------------------------
-        if "arch_lan_campus_access" in scen_id:
+        if scen_id == "arch_lan_campus_access":
             cat_sw = node_map.get("node-cat9300-access01") or switch_node
             core_sw = node_map.get("node-cat9600-core") or router_node
             ise_node = node_map.get("node-ise-trustsec") or fw_node
@@ -1638,7 +1744,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # GATE 10: ARCH_VPN_REMOTE_WORKFORCE
         # ---------------------------------------------------------------------
-        elif "arch_vpn_remote_workforce" in scen_id:
+        elif scen_id == "arch_vpn_remote_workforce":
             asa_vpn = node_map.get("node-asa-vpn") or fw_node
             duo_node = node_map.get("node-duo-mfa") or fw_node
 
@@ -1712,7 +1818,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # GATE 10: SERVICE_PROVIDER_CISCO
         # ---------------------------------------------------------------------
-        elif "service_provider_cisco" in scen_id:
+        elif scen_id == "service_provider_cisco":
             c8k = node_map.get("cisco-asr9k-pe1") or router_node
             asr_node = node_map.get("cisco-asr9k-pe1") or router_node
 
@@ -1771,7 +1877,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # GATE 10: ARCH_WLAN_MERAKI_CATALYST
         # ---------------------------------------------------------------------
-        elif "arch_wlan_meraki_catalyst" in scen_id:
+        elif scen_id == "arch_wlan_meraki_catalyst":
             ap_node = node_map.get("node-cat9130-ap") or switch_node
             meraki_node = node_map.get("node-meraki-mr56") or switch_node
             wlc_node = node_map.get("node-cat9800-wlc") or switch_node
@@ -1831,7 +1937,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # GATE 10: ARCH_MAN_CARRIER_RING
         # ---------------------------------------------------------------------
-        elif "arch_man_carrier_ring" in scen_id:
+        elif scen_id == "arch_man_carrier_ring":
             nokia_a = node_map.get("node-nokia-ring-A") or router_node
             nokia_b = node_map.get("node-nokia-ring-B") or router_node
             juniper_c = node_map.get("node-juniper-ring-C") or router_node
@@ -1892,7 +1998,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # CISCO SD-WAN BROWNOUT
         # ---------------------------------------------------------------------
-        elif "sdwan" in scen_id or "brownout" in scen_id:
+        elif scen_id == "cisco_sdwan_brownout":
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_cisco_sdwan_linkhealth_log(
                     device=router_node, remote_system_ip="198.51.100.1", latency_ms=15.0,
@@ -1955,7 +2061,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # CISCO CAMPUS ROGUE AP
         # ---------------------------------------------------------------------
-        elif "campus" in scen_id or "rogue" in scen_id:
+        elif scen_id == "cisco_campus_rogue":
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
                     device=switch_node, client_mac="00:11:22:33:44:55",
@@ -1991,9 +2097,9 @@ class ScenarioRunner:
                     signature="Port Security Violation: Host Flap Threshold Exceeded"
                 ))
             elif phase == ScenarioPhase.FAILOVER.value:
-                logs.append(SplunkLogEngine.format_cisco_ise_log(
+                logs.append(SplunkLogEngine.format_cisco_ise_coa_log(
                     device=fw_node, client_mac="00:1A:2B:3C:4D:5E", client_ip="10.10.20.142",
-                    user="rogue_attacker", auth_status="CONTAINED", profile="Quarantine_Restricted_VLAN",
+                    user="rogue_attacker", profile="Quarantine_Restricted_VLAN",
                     action="blocked", status="blocked", signature="ISE CoA Dynamic Quarantine Profile Enforced"
                 ))
                 logs.append(SplunkLogEngine.format_cisco_catalyst_security_event(
@@ -2016,7 +2122,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # CISCO ACI MICROBURST
         # ---------------------------------------------------------------------
-        elif "aci" in scen_id or "microburst" in scen_id:
+        elif scen_id == "cisco_aci_microburst":
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_cisco_mdt_log(
                     device=switch_node, sensor_path="Cisco-NX-OS-buffer-stats:queue-depth",
@@ -2092,7 +2198,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # MIXED VENDOR / EDGE BREACH
         # ---------------------------------------------------------------------
-        elif "mixed_edge" in scen_id or "breach" in scen_id:
+        elif scen_id == "mixed_edge_breach":
             if phase == ScenarioPhase.BASELINE.value:
                 logs.append(SplunkLogEngine.format_palo_alto_log(
                     device=fw_node, src_ip="198.51.100.42", dest_ip="10.128.2.10",
@@ -2154,27 +2260,9 @@ class ScenarioRunner:
                 ))
 
         # ---------------------------------------------------------------------
-        # SNMP FAULT STORM
-        # ---------------------------------------------------------------------
-        elif "snmp" in scen_id or "trap" in scen_id:
-            if phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
-                for i in range(3):
-                    logs.append(SplunkLogEngine.format_snmp_trap(
-                        device=switch_node, trap_type="linkDown",
-                        interface_name=f"GigabitEthernet1/0/{i+1}",
-                        action="alerted", status="warning"
-                    ))
-            elif phase == ScenarioPhase.RECOVER.value:
-                logs.append(SplunkLogEngine.format_snmp_trap(
-                    device=switch_node, trap_type="linkUp",
-                    interface_name="GigabitEthernet1/0/1",
-                    action="alerted", status="normal"
-                ))
-
-        # ---------------------------------------------------------------------
         # SASE CLOUD INGRESS DEGRADATION (Mode B2)
         # ---------------------------------------------------------------------
-        elif "sase" in scen_id:
+        elif scen_id == "mixed_sase_degradation":
             zscaler_node = node_map.get("node-zscaler") or (graph.find_nodes_by_type(NodeType.SASE_PROXY) or [None])[0] or Node(id="node-zscaler", name="Zscaler-ZIA-CloudEdge", type=NodeType.SASE_PROXY, ip_address="165.225.10.1", vendor="zscaler", sourcetype="zscaler:zia")
             pan_node = node_map.get("node-pan-sdwan") or fw_node
             nexus_node = node_map.get("node-nexus-core") or switch_node
@@ -2250,7 +2338,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # OPTICAL CARRIER SHIFT & FRR (Mode B3)
         # ---------------------------------------------------------------------
-        elif "optical" in scen_id:
+        elif scen_id == "mixed_backbone_optical":
             nokia_node = node_map.get("node-nokia-core") or (graph.find_nodes_by_type(NodeType.OPTICAL_CORE) or [None])[0] or Node(id="node-nokia-core", name="Nokia-7750-SR12-Transport", type=NodeType.OPTICAL_CORE, ip_address="10.200.0.1", vendor="nokia_sros", sourcetype="nokia:sros:syslog")
             juniper_node = node_map.get("node-juniper-pe") or router_node
             arista_node = node_map.get("node-arista-leaf") or switch_node
@@ -2310,7 +2398,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # OPENCONFIG / MDT STREAMING TELEMETRY (Mode C1)
         # ---------------------------------------------------------------------
-        elif "openconfig" in scen_id or "mdt" in scen_id:
+        elif scen_id == "openconfig_mdt_streaming":
             c8k_node = node_map.get("node-cisco8k") or router_node
             juniper_node = node_map.get("node-juniper-ptx") or router_node
             cat_node = node_map.get("node-cat-leaf") or switch_node
@@ -2394,7 +2482,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # SQL INJECTION / APPLICATION SECURITY (Mode S1)
         # ---------------------------------------------------------------------
-        elif "sql" in scen_id:
+        elif scen_id == "sql_injection":
             fw = node_map.get("node-fw") or fw_node
             web = node_map.get("node-web1") or srv_node
             db = node_map.get("node-db") or Node(id="node-db", name="Production Database", type=NodeType.DATABASE, ip_address="10.0.2.50", vendor="postgresql", sourcetype="postgresql:audit")
@@ -2463,7 +2551,7 @@ class ScenarioRunner:
         # ---------------------------------------------------------------------
         # DDOS SYN FLOOD / PERIMETER DEFENSE (Mode D1)
         # ---------------------------------------------------------------------
-        elif "ddos" in scen_id:
+        elif scen_id == "ddos_attack":
             fw = node_map.get("node-fw") or fw_node
             lb = node_map.get("node-lb") or (graph.find_nodes_by_type(NodeType.LOAD_BALANCER) or [None])[0] or Node(id="node-lb", name="Core Load Balancer", type=NodeType.LOAD_BALANCER, ip_address="10.0.1.5", vendor="f5", sourcetype="f5:bigip:ltm")
             web = node_map.get("node-web1") or srv_node
@@ -2530,39 +2618,110 @@ class ScenarioRunner:
                 ))
 
         # ---------------------------------------------------------------------
-        # GENERAL FALLBACK (Synthesize from Contract Sourcetypes)
+        # PHASE 4C: NATIVE PAN-OS + CROSS-SOURCE CORRELATION SCENARIOS
+        # Telemetry comes from PanOsGenerator (native PAN-OS CSV, canonical
+        # pan:* sourcetypes) bridged onto LogEntry so it flows through the
+        # existing TelemetryDispatcher -> HEC path. Counts are honoured exactly.
         # ---------------------------------------------------------------------
-        else:
-            now_ts = SplunkLogEngine.current_timestamp_iso()
-            for st in (contract.sourcetypes[:2] or ["cisco:ios:syslog"]):
-                status = "normal"
-                if phase in (ScenarioPhase.DEGRADE.value, ScenarioPhase.FAULT.value):
-                    status = "degraded"
-                elif phase == ScenarioPhase.RECOVER.value:
-                    status = "restored"
+        elif scen_id in ("paloalto_threat_investigation",
+                         "network_security_correlation",
+                         "payment_processing_degradation"):
+            pan_phase = self._PANOS_PHASE_BY_RUN_PHASE.get(phase, "baseline")
+            if PanOsGenerator is None or to_log_entry is None:
+                raise RuntimeError(
+                    "panos_generator is unavailable in this runtime; the PAN-OS "
+                    "scenarios cannot emit native telemetry without it"
+                )
+            pan_gen = PanOsGenerator(
+                # Stable string seed => byte-reproducible values for a given
+                # (scenario, phase) without depending on PYTHONHASHSEED.
+                seed=f"{scen_id}|{phase}",
+                devices=[fw_node.name or fw_node.id],
+            )
 
-                logs.append(LogEntry(
-                    timestamp=now_ts,
-                    device_id=switch_node.name or switch_node.id,
-                    src_ip="10.0.1.1",
-                    dest_ip="10.0.2.1",
-                    protocol="TCP",
-                    duration="5ms",
-                    action="allowed" if status in ("normal", "restored") else "alerted",
-                    signature=f"NetSpout Simulated Telemetry - Phase {phase}",
-                    status=status,
-                    raw_log=f"{now_ts} {switch_node.name} %NETSPOUT-6-INFO: phase={phase} status={status} sourcetype={st}",
-                    node_type=switch_node.type.value,
-                    node_id=switch_node.id,
-                    vendor=switch_node.vendor,
-                    sourcetype=st
+            if scen_id == "paloalto_threat_investigation":
+                counts = self._PANOS_COUNTS[pan_phase]
+                for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                threats = pan_gen.generate("THREAT", counts["threat"], phase=pan_phase)
+                correlation = threats[0].raw[:32] if threats else ""
+                for rec in threats:
+                    logs.append(to_log_entry(rec, correlation_id=correlation))
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    # Traffic that shares the threat session carries the same
+                    # correlation id so an investigation can pivot on it.
+                    logs.append(to_log_entry(rec, correlation_id=correlation))
+
+            elif scen_id == "network_security_correlation":
+                counts = self._PANOS_CORRELATION_COUNTS[pan_phase]
+                # Cross-source: Cisco interface/syslog + PAN-OS security telemetry
+                # on the same incident window, so a degradation can be correlated
+                # with the security event that caused it.
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("THREAT", counts["threat"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                if counts["system"]:
+                    for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                        logs.append(to_log_entry(rec))
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=switch_node,
+                    src_ip=getattr(switch_node, "ip_address", "") or "10.128.0.1",
+                    dest_ip=getattr(srv_node, "ip_address", "") or "10.128.2.10",
+                    interface="GigabitEthernet1/0/24",
+                    action=("alerted" if pan_phase in ("detection", "containment") else "allowed"),
+                    status=("degraded" if pan_phase in ("detection", "containment") else "normal"),
+                    signature=(
+                        "%LINECARD-3-IF_XCVR_RXCD_ERROR: Rx CD error on GigabitEthernet1/0/24 "
+                        "correlated to firewall security deny"
+                        if pan_phase in ("detection", "containment")
+                        else "Interface Link Up / Normal Forwarding Baseline"
+                    ),
                 ))
+                # SNMP-derived performance metrics for the same window, so the
+                # capacity side of the correlation is measurable, not narrated.
+                logs.extend(self._emit_snmp_metrics(
+                    scen_id, phase, pan_phase, self._SNMP_COUNTS[pan_phase]
+                ))
+
+            else:  # payment_processing_degradation
+                counts = self._PANOS_COUNTS[pan_phase]
+                for rec in pan_gen.generate("TRAFFIC", counts["traffic"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("THREAT", counts["threat"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                for rec in pan_gen.generate("SYSTEM", counts["system"], phase=pan_phase):
+                    logs.append(to_log_entry(rec))
+                # Payment-path application delivery evidence on the access switch
+                logs.append(SplunkLogEngine.format_router_switch_log(
+                    device=switch_node,
+                    src_ip=getattr(srv_node, "ip_address", "") or "10.128.2.10",
+                    dest_ip=getattr(fw_node, "ip_address", "") or "10.128.1.1",
+                    interface="GigabitEthernet1/0/12",
+                    action=("dropped" if pan_phase in ("detection", "containment") else "allowed"),
+                    status=("degraded" if pan_phase in ("detection", "containment") else "normal"),
+                    signature=(
+                        "%SYS-3-AUTH_KFAIL: Payment edge authorization path degraded "
+                        "while firewall inspection denied sessions"
+                        if pan_phase in ("detection", "containment")
+                        else "Payment Edge Forwarding Healthy"
+                    ),
+                ))
+                logs.extend(self._emit_snmp_metrics(
+                    scen_id, phase, pan_phase, self._SNMP_COUNTS[pan_phase]
+                ))
+
+        else:
+            raise ValueError(f"Scenario '{contract.id}' is not available in this release")
 
         return logs
 
     # -------------------------------------------------------------------------
     # Destination Observation & Evidence Verification (Gate 6)
     # -------------------------------------------------------------------------
+    # Optional Connection Center hook: () -> (search_url, authorization_header) or None; env vars remain the fallback.
+    search_provider = None
+
     def _execute_splunk_rest_query(
         self,
         query: str,
@@ -2586,7 +2745,18 @@ class ScenarioRunner:
         rest_candidates.append("https://127.0.0.1:8889/services/search/jobs/export")
         rest_candidates.append("https://localhost:8889/services/search/jobs/export")
 
-        auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+        configured = self.search_provider() if self.search_provider is not None else None
+        if configured:
+            rest_candidates = [configured[0]]
+            auth_header = configured[1]
+        else:
+            search_user = os.environ.get("NETSPOUT_SPLUNK_USER", "").strip()
+            search_password = os.environ.get("NETSPOUT_SPLUNK_PASSWORD", "")
+            if not search_user or not search_password:
+                return 0, "Splunk search credentials are not configured"
+            auth_header = "Basic " + base64.b64encode(
+                f"{search_user}:{search_password}".encode("utf-8")
+            ).decode("ascii")
         ssl_verify = getattr(transport, "hec_ssl_verify", True) if transport else True
         allow_insecure = getattr(transport, "hec_allow_insecure_tls", False) if transport else False
         ctx = ssl.create_default_context()
@@ -2672,10 +2842,8 @@ class ScenarioRunner:
         if logs:
             for entry in logs:
                 st = entry.sourcetype or "cisco:ios"
-                is_metric = (
-                    st in ("cisco:ios:mdt", "cisco:ios:mdt:metric") or
-                    (transport.hec_metric_index and st == transport.hec_metric_index)
-                )
+                # Same catalog-driven classification the dispatcher routes by, so evidence queries the index the data went to.
+                is_metric = is_metric_sourcetype(st) or bool(transport.hec_metric_index and st == transport.hec_metric_index)
 
                 if is_metric:
                     dest_key = f"metric_{metric_index}"
@@ -2691,7 +2859,9 @@ class ScenarioRunner:
                             "role": EvidenceRole.REQUIRED if any(rst in st for rst in required_sourcetypes) else EvidenceRole.SUPPORTING,
                             "sourcetypes": set()
                         }
-                    dest_map[dest_key]["expected_count"] += 1
+                    # mstats counts datapoints, so the expectation is the number of measurements, not events.
+                    datapoints = sum(1 for k in dispatcher.extract_metric_fields(entry) if k.startswith("metric_name:"))
+                    dest_map[dest_key]["expected_count"] += max(datapoints, 1)
                     dest_map[dest_key]["sourcetypes"].add(st)
                 else:
                     dest_key = f"event_{event_index}"
@@ -2721,18 +2891,6 @@ class ScenarioRunner:
                 "role": EvidenceRole.REQUIRED,
                 "sourcetypes": set(manifest.expected_sourcetypes) if manifest else set()
             }
-            if manifest and any("mdt" in st.lower() or "metric" in st.lower() for st in manifest.expected_sourcetypes):
-                dest_map[f"metric_{metric_index}"] = {
-                    "destination_id": f"splunk_metric_{metric_index}",
-                    "name": f"Splunk Metric Store ({metric_index})",
-                    "telemetry_type": TelemetryType.METRIC,
-                    "target_index": metric_index,
-                    "query_mechanism": QueryMechanism.MSTATS,
-                    "query": f'| mstats count where index={metric_index} metric_name=* AND netspout_run_id="{run_id}"',
-                    "expected_count": 4,
-                    "role": EvidenceRole.SUPPORTING,
-                    "sourcetypes": {"cisco:ios:mdt:metric"}
-                }
 
         observations: List[EvidenceObservation] = []
         for dest_info in dest_map.values():
@@ -2763,14 +2921,16 @@ class ScenarioRunner:
             observations.append(obs)
 
         total_gen = len(logs) if logs else (manifest.total_events_generated if manifest else 0)
-        total_disp = manifest.dispatch_succeeded if manifest else total_gen
+        total_disp = manifest.dispatch_succeeded if manifest else 0  # unknown without a manifest; never assume success
         evt_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
         evt_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.EVENT)
         met_obs = sum(o.observed_count for o in observations if o.telemetry_type == TelemetryType.METRIC)
         met_exp = sum(o.expected_count for o in observations if o.telemetry_type == TelemetryType.METRIC)
         total_obs = evt_obs + met_obs
 
-        completeness_pct = round((total_obs / total_gen * 100.0), 1) if total_gen > 0 else 0.0
+        # Denominator is what was expected at the destinations (events + metric datapoints), so the ratio is like-for-like.
+        total_expected = evt_exp + met_exp
+        completeness_pct = round((total_obs / total_expected * 100.0), 1) if total_expected > 0 else 0.0
         req_satisfied = all(o.status in ("PASS", "PARTIAL") and o.observed_count > 0 for o in observations if o.role == EvidenceRole.REQUIRED)
 
         if total_obs == 0:
@@ -2842,6 +3002,18 @@ class ScenarioRunner:
         request: ScenarioRunRequest,
         topology: Optional[TopologyState] = None
     ) -> RunManifest:
+        from netspout_core.delivery_monitor import observed_run
+        transport = request.transport_config or (topology.global_transport if topology else None)
+        if request.scenario_id not in SUPPORTED_SCENARIO_IDS:   # refused by _run_scenario before any run id exists; nothing to monitor
+            return self._run_scenario(request, topology)
+        with observed_run("scenario", request.scenario_id, self.generate_run_id(), transport):
+            return self._run_scenario(request, topology)
+
+    def _run_scenario(
+        self,
+        request: ScenarioRunRequest,
+        topology: Optional[TopologyState] = None
+    ) -> RunManifest:
         """
         Executes a complete, deterministic, multi-phase scenario lifecycle.
         Progresses through:
@@ -2890,15 +3062,8 @@ class ScenarioRunner:
             except Exception:
                 pass
 
-        if not contract:
-            contract = ScenarioContract(
-                id=scenario_id,
-                display_name=scenario_id.replace("_", " ").title(),
-                topology_id="default_secure",
-                vendor_scope=["generic"],
-                sourcetypes=["cisco:ios:syslog"],
-                phases=[]
-            )
+        if not contract or scenario_id not in SUPPORTED_SCENARIO_IDS:
+            raise ValueError(f"Scenario '{request.scenario_id}' is not available in this release")
 
         # 3b. Validate Native Transport Request (F-12E-01 & Controlled Failure 6: No silent downgrade to Mode A)
         self.validate_native_transport_request(request, contract.id)
@@ -2914,7 +3079,8 @@ class ScenarioRunner:
         initial_snapshot = graph.snapshot_state()
 
         # 5. Initialize Run Manifest & State
-        run_id = self.generate_run_id()
+        from netspout_core.delivery_monitor import observed_id
+        run_id = observed_id() or self.generate_run_id()
         effective_mode = (
             "NATIVE_TRANSPORT"
             if (getattr(request, "transport_mode", "DIRECT_TO_SPLUNK") == "NATIVE_TRANSPORT" or getattr(request, "native_snmp_e2e", False))

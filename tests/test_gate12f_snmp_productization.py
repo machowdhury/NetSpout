@@ -118,6 +118,20 @@ class TestGate12FSnmpProductization(unittest.TestCase):
     def setUpClass(cls):
         cls.client = _AsgiClient(app)
 
+    def test_00_splunk_bridge_accepts_standard_environment_names(self):
+        """Gate 12F live checks consume the same environment names as the guarded harness."""
+        with patch.dict(
+            os.environ,
+            {
+                "SPLUNK_PASSWORD": "nonfunctional-test-password",
+                "SPLUNK_HEC_TOKEN": "nonfunctional-test-token",
+            },
+            clear=True,
+        ):
+            bridge = SnmpSplunkE2EOrchestrator().splunk_bridge
+        self.assertEqual(bridge.rest_password, "nonfunctional-test-password")
+        self.assertEqual(bridge.hec_token, "nonfunctional-test-token")
+
     def test_01_f12e01_customer_workflow_native_snmp_execution(self):
         """F-12E-01: ScenarioRunner executes Native SNMPv2c E2E when transport_mode=NATIVE_TRANSPORT."""
         req = ScenarioRunRequest(

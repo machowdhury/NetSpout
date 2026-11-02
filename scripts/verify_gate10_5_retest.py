@@ -24,6 +24,8 @@ import urllib.request
 import urllib.parse
 import base64
 
+from artifact_isolation import artifact_dir
+
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(REPO_ROOT, "src")
 if SRC_DIR not in sys.path:
@@ -40,7 +42,14 @@ def execute_splunk_rest_query(query: str, max_results: int = 10) -> list:
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
 
-    auth_header = "Basic " + base64.b64encode(b"admin:SplunkPassword123!").decode("ascii")
+    username = os.environ.get("SPLUNK_USERNAME", "")
+    password = os.environ.get("SPLUNK_PASSWORD", "")
+    if not username or not password:
+        print("    [WARN] SPLUNK_USERNAME/SPLUNK_PASSWORD are not configured")
+        return []
+    auth_header = "Basic " + base64.b64encode(
+        f"{username}:{password}".encode("utf-8")
+    ).decode("ascii")
 
     clean_query = query.strip()
     if not clean_query.startswith("search ") and not clean_query.startswith("|"):
@@ -80,7 +89,7 @@ def run_focused_retest():
     transport = TelemetryTransportConfig(
         hec_enabled=True,
         hec_url="https://127.0.0.1:8888/services/collector",
-        hec_token="00000000-0000-0000-0000-000000000000",
+        hec_token=os.environ.get("SPLUNK_HEC_TOKEN", ""),
         hec_index="idx_network_ops",
         hec_metric_index="cisco_mdt_metrics",
         hec_allow_insecure_tls=True
@@ -189,7 +198,7 @@ def run_focused_retest():
     print("================================================================================")
 
     # Save results to json for report generation
-    out_file = os.path.join(REPO_ROOT, "docs", "acceptance", "focused_retest_results.json")
+    out_file = artifact_dir("gate10-5", "evidence") / "focused_retest_results.json"
     serializable = {}
     for k, v in retest_results.items():
         serializable[k] = {

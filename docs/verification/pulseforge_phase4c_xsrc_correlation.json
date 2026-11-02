@@ -1,0 +1,792 @@
+{
+ "run_id": "NS-20261029-58818c7d",
+ "scenario_id": "network_security_correlation",
+ "scenario_name": "Network Degradation With Security Correlation",
+ "topology_id": "mixed_edge",
+ "scenario_maturity": "CONTRACTED",
+ "seed": 51002,
+ "time_mode": "TEST",
+ "transport_mode": "DIRECT_TO_SPLUNK",
+ "native_protocol": null,
+ "start_time": 1793279316.674902,
+ "end_time": 1793279318.528349,
+ "duration_sec": 1.853,
+ "phases_executed": [
+  "INITIALIZE",
+  "BASELINE",
+  "DEGRADE",
+  "FAULT",
+  "FAILOVER",
+  "RECOVER",
+  "VALIDATE",
+  "COMPLETE"
+ ],
+ "affected_devices": [
+  "cisco_catalyst",
+  "palo_alto"
+ ],
+ "expected_sourcetypes": [
+  "cisco:ios",
+  "pan:traffic",
+  "pan:threat",
+  "pan:system",
+  "sc4snmp:metric"
+ ],
+ "actual_generated_counts": {
+  "pan:traffic": 18,
+  "pan:system": 7,
+  "cisco:catalyst:security:events": 5,
+  "sc4snmp:metric": 14,
+  "pan:threat": 7
+ },
+ "total_events_generated": 51,
+ "ground_truth_records": [
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "INITIALIZE",
+   "timestamp": 1793279316.675339,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "node-meraki-ap",
+    "node-cat-switch",
+    "node-pan-fw",
+    "node-internal-srv"
+   ],
+   "affected_edges": [
+    "e-b1",
+    "e-b2",
+    "e-b3"
+   ],
+   "expected_observations": [
+    "Topology initialized",
+    "Initial graph state snapshotted"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "BASELINE",
+   "timestamp": 1793279316.675344,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "no interface error syslog",
+    "allow dominated traffic"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "DEGRADE",
+   "timestamp": 1793279316.740829,
+   "intentional_fault": {
+    "type": "link_degradation",
+    "target_edge": "e-b1",
+    "loss_pct": 14.5,
+    "latency_ms": 185.0
+   },
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [
+    "e-b1"
+   ],
+   "expected_observations": [
+    "first threat records",
+    "interface counters rising"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "FAULT",
+   "timestamp": 1793279316.804478,
+   "intentional_fault": {
+    "type": "primary_fault",
+    "description": "Traffic surge that degrades an interface and triggers firewall denies"
+   },
+   "intentional_recovery": null,
+   "affected_nodes": [
+    "cisco_catalyst",
+    "palo_alto"
+   ],
+   "affected_edges": [],
+   "expected_observations": [
+    "interface error syslog",
+    "high or critical threats"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "FAILOVER",
+   "timestamp": 1793279316.906386,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "deny/drop dominant",
+    "critical system severity"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "RECOVER",
+   "timestamp": 1793279316.9678028,
+   "intentional_fault": null,
+   "intentional_recovery": {
+    "type": "full_restoration",
+    "status": "restored"
+   },
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "no threats",
+    "allow dominated traffic"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "VALIDATE",
+   "timestamp": 1793279317.002482,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Evaluating validation rules against generated telemetry"
+   ],
+   "expected_secondary_effects": []
+  },
+  {
+   "run_id": "NS-20261029-58818c7d",
+   "scenario_id": "network_security_correlation",
+   "phase": "COMPLETE",
+   "timestamp": 1793279317.002509,
+   "intentional_fault": null,
+   "intentional_recovery": null,
+   "affected_nodes": [],
+   "affected_edges": [],
+   "expected_observations": [
+    "Scenario lifecycle complete"
+   ],
+   "expected_secondary_effects": []
+  }
+ ],
+ "validation_results": [],
+ "overall_validation": "BLOCKED",
+ "dispatch_results": {
+  "evt-97417226": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-e8988261": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-61b89979": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-63892eca": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-102316b6": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-0e2767ae": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-60f9fb2b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-3eccd3a3": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-e9d302a2": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ed811abc": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-e8bbd798": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a51f56d0": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-9097876b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-979be411": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-cc74099e": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a57c4c71": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-577cd033": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-3c342395": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-19b3fc8f": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-b37d46c8": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a9491acd": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-c886dcc3": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-1c3896a8": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-8554ad51": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-9d70dbc7": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-4af8a285": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-d228634b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-b0a683c5": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a71634fa": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-6766e8fc": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-8463ad01": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-43084f21": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-0b216e5a": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-9e1879e5": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-4ccc54f0": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-b3ab4a78": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-c7ba55da": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ba991a26": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-bc7ac439": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-e897d4eb": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-63f644f2": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-1b6810dd": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-ef98bacd": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-0680fc17": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-440bab9b": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-4bb90865": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-143d899f": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-e5b4b7c3": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-6966d515": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-d71e454c": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  },
+  "evt-a30fb9ac": {
+   "hec": {
+    "success": true,
+    "message": "HEC HTTP 200",
+    "state": "ACCEPTED",
+    "http_status": 200,
+    "error_class": null
+   }
+  }
+ },
+ "dispatch_attempted": 51,
+ "dispatch_succeeded": 51,
+ "dispatch_failed": 0,
+ "observed_count": 0,
+ "observation_status": "OBSERVATION_PENDING",
+ "destination_validation": "PENDING",
+ "splunk_search_query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-58818c7d\"",
+ "splunk_metric_query": null,
+ "event_observed_count": 0,
+ "metric_observed_count": 0,
+ "observation_completeness_pct": 0.0,
+ "evidence_summary": {
+  "run_id": "NS-20261029-58818c7d",
+  "scenario_id": "network_security_correlation",
+  "destinations": [
+   {
+    "destination_id": "splunk_event_idx_network_ops",
+    "name": "Splunk Event Index (idx_network_ops)",
+    "telemetry_type": "EVENT",
+    "target_index": "idx_network_ops",
+    "query_mechanism": "SPL_SEARCH",
+    "query": "search index=idx_network_ops netspout_run_id=\"NS-20261029-58818c7d\"",
+    "observed_count": 0,
+    "expected_count": 51,
+    "status": "ERROR",
+    "role": "REQUIRED",
+    "errors": [
+     "Splunk search credentials are not configured"
+    ]
+   }
+  ],
+  "total_generated": 51,
+  "total_dispatched": 51,
+  "total_observed": 0,
+  "event_observed_count": 0,
+  "event_expected_count": 51,
+  "metric_observed_count": 0,
+  "metric_expected_count": 0,
+  "observation_completeness_pct": 0.0,
+  "observation_status": "PENDING",
+  "contract_validation": "NOT_RUN",
+  "required_evidence_satisfied": false,
+  "errors": [
+   "Splunk search credentials are not configured"
+  ]
+ },
+ "timing_claim": null,
+ "timing_value": null,
+ "timing_unit": null,
+ "timing_classification": "NOT_APPLICABLE",
+ "timing_notes": null,
+ "errors": [],
+ "native_transport_result": null,
+ "companion_manifest": null,
+ "native_flow_records": [],
+ "native_snmp_result": null,
+ "native_snmp_pdus": [],
+ "snmp_e2e_scorecard": null,
+ "snmp_normalized_events": [],
+ "snmp_polling_evidence": null,
+ "gnmi_e2e_scorecard": null,
+ "gnmi_collector_result": null,
+ "gnmi_normalized_records": [],
+ "generation_wall_seconds": 1.85,
+ "event_index": "idx_network_ops",
+ "metric_index": "idx_performance_metrics",
+ "hec_url": "https://127.0.0.1:18088/services/collector",
+ "started_at_utc": "2026-10-29T13:08:36.674884+00:00",
+ "generated_records": 51,
+ "generated_by_sourcetype": {
+  "pan:traffic": 18,
+  "pan:system": 7,
+  "cisco:catalyst:security:events": 5,
+  "sc4snmp:metric": 14,
+  "pan:threat": 7
+ },
+ "generated_metric_points": 198,
+ "hec_accepted_records": 51,
+ "hec_rejected_records": 0,
+ "hec_reject_reasons": [],
+ "indexed_event_records": 37,
+ "indexed_by_sourcetype": {
+  "cisco:catalyst:security:events": 5,
+  "pan:system": 7,
+  "pan:threat": 7,
+  "pan:traffic": 18
+ },
+ "indexed_indexes": [
+  "idx_network_ops"
+ ],
+ "event_spl": "index=* netspout_run_id=\"NS-20261029-58818c7d\" | stats count by sourcetype, index",
+ "event_spl_rows": [
+  {
+   "sourcetype": "cisco:catalyst:security:events",
+   "index": "idx_network_ops",
+   "count": "5"
+  },
+  {
+   "sourcetype": "pan:system",
+   "index": "idx_network_ops",
+   "count": "7"
+  },
+  {
+   "sourcetype": "pan:threat",
+   "index": "idx_network_ops",
+   "count": "7"
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "index": "idx_network_ops",
+   "count": "18"
+  }
+ ],
+ "metric_query_spl": "| mstats avg(*) span=1m where index=idx_performance_metrics netspout_run_id=\"NS-20261029-58818c7d\"",
+ "indexed_metric_rows": [
+  {
+   "_time": "2026-10-29 13:08:00.000 GMT",
+   "avg(hrProcessorLoad)": "54.66785714285715",
+   "avg(ifHCInOctets)": "63363411504.28571",
+   "avg(ifHCInOctetsRate)": "4140587040.06675",
+   "avg(ifHCOutOctets)": "63249613927.21429",
+   "avg(ifHCOutOctetsRate)": "4112613779.8890004",
+   "avg(ifInErrors)": "264.92857142857144",
+   "avg(ifOutErrors)": "145.21428571428572",
+   "avg(ifSpeed)": "6142857142.857142",
+   "avg(interface_utilization_percent)": "50.14785714285714"
+  }
+ ],
+ "indexed_metric_names": [
+  "hrProcessorLoad",
+  "ifHCInOctets",
+  "ifHCInOctetsRate",
+  "ifHCOutOctets",
+  "ifHCOutOctetsRate",
+  "ifInErrors",
+  "ifOutErrors",
+  "ifSpeed",
+  "interface_utilization_percent"
+ ],
+ "indexed_metric_points": 9,
+ "metric_query_spl_extended_rows": []
+}

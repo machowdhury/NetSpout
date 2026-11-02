@@ -1,0 +1,1373 @@
+{
+ "generated_utc": "2026-11-01T15:10+00:00",
+ "index": "idx_network_ops",
+ "dashboards": {
+  "NF-NOC-01-ELEPHANT": {
+   "scenario_id": "NF-NOC-01-ELEPHANT",
+   "run_id": "run-f3b93ba9245e",
+   "panels": {
+    "Flow records": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "224"
+     }
+    },
+    "Volume (GB)": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "10.98"
+     }
+    },
+    "Elephant flows (\u2265 threshold)": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "4"
+     }
+    },
+    "Top talker share of bytes": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "30.2"
+     }
+    },
+    "Peak utilization (needs capacity)": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {}
+    },
+    "Estimated throughput (Mbps, 10 s buckets)": {
+     "type": "splunk.area",
+     "rows": 19,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:51:40.000+00:00",
+      "Throughput_Mbps": "0.3",
+      "_span": "10"
+     }
+    },
+    "Top source talkers (GB)": {
+     "type": "splunk.bar",
+     "rows": 10,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "192.0.2.51",
+      "GB": "3.311"
+     }
+    },
+    "Elephant flows (click a row to see its flow records)": {
+     "type": "splunk.table",
+     "rows": 4,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:52:07",
+      "src": "192.0.2.51",
+      "dest": "192.0.2.201",
+      "dest_port": "873",
+      "app": "rsync",
+      "dur_s": "63.6",
+      "MB": "3310.5",
+      "avg_Mbps": "416.5",
+      "exporter_ip": "192.0.2.1",
+      "snmp_in": "1",
+      "snmp_out": "2"
+     }
+    },
+    "Volume by destination, split by application (GB, port-based app)": {
+     "type": "splunk.bar",
+     "rows": 12,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "192.0.2.11",
+      "https": "0.000"
+     }
+    },
+    "Duration vs volume per flow (seconds vs MB)": {
+     "type": "splunk.scatter",
+     "rows": 224,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "duration_s": "0.1",
+      "MB": "0.00"
+     }
+    },
+    "Flow evidence (largest 100)": {
+     "type": "splunk.table",
+     "rows": 100,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:52:07",
+      "exporter_ip": "192.0.2.1",
+      "src": "192.0.2.51",
+      "src_port": "40001",
+      "dest": "192.0.2.201",
+      "dest_port": "873",
+      "transport": "tcp",
+      "app": "rsync",
+      "tcp_flags_text": "PSH|ACK",
+      "dscp": "0",
+      "packets": "2286282",
+      "bytes": "3310537086",
+      "duration_ms": "63588",
+      "snmp_in": "1",
+      "snmp_out": "2",
+      "label_meta.is_malicious": "false"
+     }
+    }
+   },
+   "drilldowns": {
+    "Top source talkers (GB)": {
+     "rows": 1,
+     "error": null,
+     "from_row": {
+      "src": "192.0.2.51",
+      "GB": "3.311"
+     }
+    },
+    "Elephant flows (click a row to see its flow records)": {
+     "rows": 1,
+     "error": null,
+     "from_row": {
+      "start": "14:52:07",
+      "src": "192.0.2.51",
+      "dest": "192.0.2.201"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-NOC-02-DSCP": {
+   "scenario_id": "NF-NOC-02-DSCP",
+   "run_id": "run-e8dd126e2d25",
+   "panels": {
+    "Policy compliance (% of voice/video flows)": {
+     "type": "splunk.markergauge",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "68.8"
+     }
+    },
+    "DSCP distribution (all flows)": {
+     "type": "splunk.pie",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dscp": "DSCP 0",
+      "count": "161"
+     }
+    },
+    "Marked as policy vs not marked as policy, over time": {
+     "type": "splunk.column",
+     "rows": 13,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:52:30.000+00:00",
+      "compliant": "1",
+      "noncompliant": "0",
+      "_span": "15"
+     }
+    },
+    "Result by class": {
+     "type": "splunk.bar",
+     "rows": 2,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "cls": "video",
+      "compliant": "60",
+      "noncompliant": "27"
+     }
+    },
+    "Noncompliant endpoints (click a row for their flows)": {
+     "type": "splunk.table",
+     "rows": 5,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.120",
+      "class": [
+       "video",
+       "voice"
+      ],
+      "expected_dscp": [
+       "34",
+       "46"
+      ],
+      "observed_dscp": [
+       "0",
+       "46"
+      ],
+      "flows": "21",
+      "noncompliant": "19",
+      "pct_noncompliant": "90.5",
+      "bytes": "718820",
+      "interfaces": "3"
+     }
+    },
+    "Observed DSCP by class and interface (voice/video flows)": {
+     "type": "splunk.table",
+     "rows": 4,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "cls": "video",
+      "expected": "34",
+      "dscp": "34",
+      "snmp_in": "3",
+      "flows": "60"
+     }
+    },
+    "Noncompliant flow evidence": {
+     "type": "splunk.table",
+     "rows": 81,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:55:37",
+      "exporter_ip": "192.0.2.2",
+      "src": "198.51.100.124",
+      "src_port": "23131",
+      "dest": "192.0.2.92",
+      "dest_port": "20534",
+      "transport": "udp",
+      "app": "-",
+      "tcp_flags_text": "-",
+      "dscp": "0",
+      "packets": "44",
+      "bytes": "7568",
+      "duration_ms": "3143",
+      "snmp_in": "3",
+      "snmp_out": "4",
+      "label_meta.is_malicious": "false"
+     }
+    }
+   },
+   "drilldowns": {
+    "Noncompliant endpoints (click a row for their flows)": {
+     "rows": 21,
+     "error": null,
+     "from_row": {
+      "src": "198.51.100.120",
+      "class": [
+       "video",
+       "voice"
+      ],
+      "expected_dscp": [
+       "34",
+       "46"
+      ]
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-NOC-03-ROUTING-LOOP": {
+   "scenario_id": "NF-NOC-03-ROUTING-LOOP",
+   "run_id": "run-76336267f6be",
+   "panels": {
+    "Flagged pairs": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "3"
+     }
+    },
+    "Indicator flows": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "120"
+     }
+    },
+    "Exporters involved": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "2"
+     }
+    },
+    "Share of all flows": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "42.9"
+     }
+    },
+    "Flagged source/destination pairs (click a row for the supporting flows)": {
+     "type": "splunk.table",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.100",
+      "dest": "192.0.2.130",
+      "dest_port": "443",
+      "observations": "40",
+      "exporters": "2",
+      "exporter_list": [
+       "192.0.2.1",
+       "192.0.2.2"
+      ],
+      "ingress_if": [
+       "1",
+       "2"
+      ],
+      "egress_if": [
+       "1",
+       "2"
+      ],
+      "avg_pkts": "2.0",
+      "first_seen": "14:54:16",
+      "last_seen": "14:56:08"
+     }
+    },
+    "Anomaly trend: indicator flows vs all flows": {
+     "type": "splunk.line",
+     "rows": 13,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:53:15.000+00:00",
+      "all_flows": "3",
+      "indicator_flows": "0",
+      "_span": "15"
+     }
+    },
+    "Affected exporter / interface path (indicator flows)": {
+     "type": "splunk.bar",
+     "rows": 2,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "path": "192.0.2.1  if1\u21922",
+      "count": "60"
+     }
+    },
+    "Supporting flow evidence (flagged pairs)": {
+     "type": "splunk.table",
+     "rows": 120,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:56:11",
+      "exporter_ip": "192.0.2.2",
+      "src": "198.51.100.102",
+      "src_port": "41002",
+      "dest": "192.0.2.132",
+      "dest_port": "443",
+      "transport": "tcp",
+      "app": "https",
+      "tcp_flags_text": "ACK",
+      "dscp": "0",
+      "packets": "1",
+      "bytes": "96",
+      "duration_ms": "56",
+      "snmp_in": "2",
+      "snmp_out": "1",
+      "label_meta.is_malicious": "false"
+     }
+    }
+   },
+   "drilldowns": {
+    "Flagged source/destination pairs (click a row for the supporting flows)": {
+     "rows": 40,
+     "error": null,
+     "from_row": {
+      "src": "198.51.100.100",
+      "dest": "192.0.2.130",
+      "dest_port": "443"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-NOC-04-ASYMMETRY": {
+   "scenario_id": "NF-NOC-04-ASYMMETRY",
+   "run_id": "run-a080726e2d70",
+   "panels": {
+    "Pair classification": {
+     "type": "splunk.pie",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "verdict": "reverse at different exporter",
+      "count": "12"
+     }
+    },
+    "Forward vs reverse volume, top 12 pairs (MB)": {
+     "type": "splunk.bar",
+     "rows": 12,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "pair": "198.51.100.74 \u21c4 192.0.2.24",
+      "forward_MB": "0.03",
+      "reverse_MB": "0.29"
+     }
+    },
+    "Pairs analysed": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "60"
+     }
+    },
+    "Reverse at different exporter": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "20.0"
+     }
+    },
+    "Reverse not observed": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "10.0"
+     }
+    },
+    "Pairs with a non-symmetric result (click a row for the flows)": {
+     "type": "splunk.table",
+     "rows": 18,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "client": "198.51.100.77",
+      "server": "192.0.2.27",
+      "verdict": "reverse at different exporter",
+      "fwd_exporters": "192.0.2.1",
+      "rev_exporters": "192.0.2.2",
+      "fwd_MB": "0.03",
+      "rev_MB": "0.38",
+      "fwd_flows": "1",
+      "rev_flows": "1"
+     }
+    },
+    "Observation-point evidence: flows by exporter and direction": {
+     "type": "splunk.table",
+     "rows": 2,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "exporter_ip": "192.0.2.1",
+      "forward": "60",
+      "reverse": "42"
+     }
+    },
+    "Flow evidence for non-symmetric pairs": {
+     "type": "splunk.table",
+     "rows": 114,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:55:47",
+      "exporter_ip": "192.0.2.1",
+      "src": "198.51.100.20",
+      "src_port": "30000",
+      "dest": "192.0.2.10",
+      "dest_port": "443",
+      "transport": "tcp",
+      "app": "https",
+      "tcp_flags_text": "PSH|ACK",
+      "dscp": "0",
+      "packets": "32",
+      "bytes": "28299",
+      "duration_ms": "504",
+      "snmp_in": "1",
+      "snmp_out": "2",
+      "label_meta.is_malicious": "false"
+     }
+    }
+   },
+   "drilldowns": {
+    "Pairs with a non-symmetric result (click a row for the flows)": {
+     "rows": 2,
+     "error": null,
+     "from_row": {
+      "client": "198.51.100.77",
+      "server": "192.0.2.27",
+      "verdict": "reverse at different exporter"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-NOC-05-BASELINE-DRIFT": {
+   "scenario_id": "NF-NOC-05-BASELINE-DRIFT",
+   "run_id": "run-81cac8b9b3de",
+   "panels": {
+    "Largest duration ratio": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "2.42"
+     }
+    },
+    "Destinations flagged": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Flow records": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "420"
+     }
+    },
+    "Baseline vs observed per destination": {
+     "type": "splunk.table",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "192.0.2.80",
+      "baseline_ms": "596",
+      "observed_ms": "1443",
+      "duration_ratio": "2.42",
+      "baseline_bytes": "16967",
+      "observed_bytes": "24558",
+      "bytes_ratio": "1.45",
+      "flows": "115"
+     }
+    },
+    "Average flow duration over time, by destination (ms)": {
+     "type": "splunk.line",
+     "rows": 10,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:54:40.000+00:00",
+      "192.0.2.80": "571.1111111111111",
+      "192.0.2.81": "566.4285714285714",
+      "192.0.2.82": "523.75",
+      "_span": "20"
+     }
+    },
+    "Baseline vs observed average duration (ms)": {
+     "type": "splunk.column",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "192.0.2.80",
+      "baseline_ms": "596",
+      "observed_ms": "1443"
+     }
+    },
+    "Total bytes over time, by destination": {
+     "type": "splunk.line",
+     "rows": 10,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:54:40.000+00:00",
+      "192.0.2.80": "140674",
+      "192.0.2.81": "105807",
+      "192.0.2.82": "73939",
+      "_span": "20"
+     }
+    },
+    "Observed-period bytes by destination and port (port-based app label)": {
+     "type": "splunk.bar",
+     "rows": 3,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "192.0.2.80",
+      "https :443": "1596"
+     }
+    },
+    "Flow evidence (longest 100)": {
+     "type": "splunk.table",
+     "rows": 100,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:57:06",
+      "exporter_ip": "192.0.2.1",
+      "src": "198.51.100.35",
+      "src_port": "50954",
+      "dest": "192.0.2.80",
+      "dest_port": "443",
+      "transport": "tcp",
+      "app": "https",
+      "tcp_flags_text": "PSH|ACK",
+      "dscp": "0",
+      "packets": "36",
+      "bytes": "23274",
+      "duration_ms": "2646",
+      "snmp_in": "1",
+      "snmp_out": "2",
+      "label_meta.is_malicious": "false"
+     }
+    }
+   },
+   "drilldowns": {
+    "Baseline vs observed per destination": {
+     "rows": 115,
+     "error": null,
+     "from_row": {
+      "dest": "192.0.2.80",
+      "baseline_ms": "596",
+      "observed_ms": "1443"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-SEC-06-DDOS": {
+   "scenario_id": "NF-SEC-06-DDOS",
+   "run_id": "run-736f2720ea63",
+   "panels": {
+    "Packet rate (packets per second, 5 s buckets)": {
+     "type": "splunk.area",
+     "rows": 36,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T15:01:40.000+00:00",
+      "pps": "21.2",
+      "_span": "5"
+     }
+    },
+    "Peak packets/s": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "72.8"
+     }
+    },
+    "Flows": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "820"
+     }
+    },
+    "SYN-only flows": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "68.3"
+     }
+    },
+    "Distinct sources": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "258"
+     }
+    },
+    "Destinations receiving SYN-only flows": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "TCP flags over time": {
+     "type": "splunk.column",
+     "rows": 13,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T15:01:30.000+00:00",
+      "PSH|ACK": "2",
+      "SYN": "0",
+      "_span": "15"
+     }
+    },
+    "Packets by protocol": {
+     "type": "splunk.pie",
+     "rows": 2,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "transport": "tcp",
+      "packets": "4178"
+     }
+    },
+    "Targeted assets (packets)": {
+     "type": "splunk.bar",
+     "rows": 8,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "192.0.2.80",
+      "packets": "560"
+     }
+    },
+    "Attack progression: distinct sources per 15 s": {
+     "type": "splunk.line",
+     "rows": 13,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T15:01:30.000+00:00",
+      "distinct_sources": "3",
+      "_span": "15"
+     }
+    },
+    "Top sources by packets (click for flow evidence)": {
+     "type": "splunk.table",
+     "rows": 50,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.52",
+      "packets": "197",
+      "flows": "3",
+      "ports": "443",
+      "flags": "PSH|ACK",
+      "proto": "tcp"
+     }
+    }
+   },
+   "drilldowns": {
+    "Targeted assets (packets)": {
+     "rows": 560,
+     "error": null,
+     "from_row": {
+      "dest": "192.0.2.80",
+      "packets": "560"
+     }
+    },
+    "Top sources by packets (click for flow evidence)": {
+     "rows": 3,
+     "error": null,
+     "from_row": {
+      "src": "198.51.100.52",
+      "packets": "197",
+      "flows": "3"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-SEC-07-PORTSCAN": {
+   "scenario_id": "NF-SEC-07-PORTSCAN",
+   "run_id": "run-ce4c66af7236",
+   "panels": {
+    "Footprint per source: distinct destinations (x) vs distinct ports (y); one dot per source": {
+     "type": "splunk.scatter",
+     "rows": 56,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "unique_hosts": "1",
+      "unique_ports": "1"
+     }
+    },
+    "Suspected scanning sources (click a row for the flows)": {
+     "type": "splunk.table",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.77",
+      "unique_hosts": "60",
+      "unique_ports": "42",
+      "flows": "100",
+      "avg_pkts": "1.0",
+      "avg_bytes": "44"
+     }
+    },
+    "Cumulative distinct destination hosts per suspected source": {
+     "type": "splunk.line",
+     "rows": 14,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:57:30.000+00:00",
+      "198.51.100.77": "5",
+      "_span": "10"
+     }
+    },
+    "Cumulative distinct ports per suspected source": {
+     "type": "splunk.line",
+     "rows": 14,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:57:30.000+00:00",
+      "198.51.100.77": "2",
+      "_span": "10"
+     }
+    },
+    "Most probed ports (suspected sources)": {
+     "type": "splunk.bar",
+     "rows": 12,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest_port": "port 3389",
+      "count": "24"
+     }
+    },
+    "Suspected sources": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Avg packets per scan flow": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Avg bytes per scan flow": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "44"
+     }
+    },
+    "Investigation table: flows from suspected sources": {
+     "type": "splunk.table",
+     "rows": 100,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:57:34",
+      "exporter_ip": "192.0.2.1",
+      "src": "198.51.100.77",
+      "src_port": "56062",
+      "dest": "192.0.2.10",
+      "dest_port": "22",
+      "transport": "tcp",
+      "app": "ssh",
+      "tcp_flags_text": "SYN",
+      "dscp": "0",
+      "packets": "1",
+      "bytes": "44",
+      "duration_ms": "2",
+      "snmp_in": "1",
+      "snmp_out": "2",
+      "label_meta.is_malicious": "true"
+     }
+    },
+    "Suspected-source SYN profile": {
+     "type": "splunk.table",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.77",
+      "flows": "100",
+      "syn_only": "100",
+      "tiny": "100",
+      "syn_only_pct": "100.0"
+     }
+    }
+   },
+   "drilldowns": {
+    "Suspected scanning sources (click a row for the flows)": {
+     "rows": 100,
+     "error": null,
+     "from_row": {
+      "src": "198.51.100.77",
+      "unique_hosts": "60",
+      "unique_ports": "42"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-SEC-08-EXFIL": {
+   "scenario_id": "NF-SEC-08-EXFIL",
+   "run_id": "run-4f7427b7a3a4",
+   "panels": {
+    "Outbound volume: internal source \u2192 external destination (MB)": {
+     "type": "splunk.sankey",
+     "rows": 6,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "192.0.2.120",
+      "dest": "203.0.113.50",
+      "MB": "900.0"
+     }
+    },
+    "Outbound volume (MB)": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "902.7"
+     }
+    },
+    "External destinations": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "26"
+     }
+    },
+    "Top source vs median source": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "11859.4"
+     }
+    },
+    "Outbound transfer timeline (Mbps, bytes spread over each flow)": {
+     "type": "splunk.area",
+     "rows": 18,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:57:50.000+00:00",
+      "Mbps": "0.1",
+      "_span": "10"
+     }
+    },
+    "Top internal sources (MB out)": {
+     "type": "splunk.bar",
+     "rows": 8,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "192.0.2.120",
+      "MB": "900.0"
+     }
+    },
+    "Destination and port analysis": {
+     "type": "splunk.table",
+     "rows": 27,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest": "203.0.113.50",
+      "dest_port": "443",
+      "MB": "675.0",
+      "flows": "9",
+      "sources": "1",
+      "first": "14:59:27",
+      "last": "15:00:42"
+     }
+    },
+    "Outbound bytes by port (port-based label)": {
+     "type": "splunk.pie",
+     "rows": 2,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "dest_port": "port 443",
+      "bytes": "677686025"
+     }
+    },
+    "Evidence: outbound flows above threshold": {
+     "type": "splunk.table",
+     "rows": 12,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "15:00:05",
+      "exporter_ip": "192.0.2.2",
+      "src": "192.0.2.120",
+      "src_port": "44008",
+      "dest": "203.0.113.50",
+      "dest_port": "22",
+      "transport": "tcp",
+      "app": "ssh",
+      "tcp_flags_text": "PSH|ACK",
+      "dscp": "0",
+      "packets": "51795",
+      "bytes": "75000000",
+      "duration_ms": "14400",
+      "snmp_in": "5",
+      "snmp_out": "6",
+      "label_meta.is_malicious": "true"
+     }
+    }
+   },
+   "drilldowns": {
+    "Top internal sources (MB out)": {
+     "rows": 12,
+     "error": null,
+     "from_row": {
+      "src": "192.0.2.120",
+      "MB": "900.0"
+     }
+    },
+    "Destination and port analysis": {
+     "rows": 9,
+     "error": null,
+     "from_row": {
+      "dest": "203.0.113.50",
+      "dest_port": "443",
+      "MB": "675.0"
+     }
+    }
+   },
+   "runs_dropdown_rows": 4,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-SEC-09-BEACON": {
+   "scenario_id": "NF-SEC-09-BEACON",
+   "run_id": "run-7d42822b0196",
+   "panels": {
+    "Inter-arrival interval distribution (seconds between consecutive flow starts per pair)": {
+     "type": "splunk.column",
+     "rows": 11,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "gap_s": "0-5",
+      "count": "34"
+     }
+    },
+    "Pairs analysed": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "9"
+     }
+    },
+    "High-regularity pairs": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Lowest CV": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "0.058"
+     }
+    },
+    "Pairs ranked by regularity (lowest coefficient of variation first; click a row for the flows)": {
+     "type": "splunk.table",
+     "rows": 9,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "src": "198.51.100.140",
+      "dest": "203.0.113.66",
+      "intervals": "8",
+      "mean_s": "20.4",
+      "sd_s": "1.2",
+      "cv": "0.058",
+      "regularity": "high",
+      "min_s": "18.6",
+      "max_s": "21.9",
+      "bytes": "3291"
+     }
+    },
+    "Periodicity timeline: contacts per 5 s for the 3 most regular pairs": {
+     "type": "splunk.column",
+     "rows": 34,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:58:30.000+00:00",
+      "198.51.100.140 \u2192 203.0.113.66": "1",
+      "198.51.100.154 \u2192 203.0.113.14": "0",
+      "198.51.100.157 \u2192 203.0.113.17": "1",
+      "_span": "5"
+     }
+    },
+    "Coefficient of variation, 10 most regular pairs": {
+     "type": "splunk.bar",
+     "rows": 9,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "pair": "198.51.100.140 \u2192 203.0.113.66",
+      "cv": "0.058"
+     }
+    },
+    "Flow evidence (regular pairs)": {
+     "type": "splunk.table",
+     "rows": 9,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:58:30",
+      "exporter_ip": "192.0.2.2",
+      "src": "198.51.100.140",
+      "src_port": "45000",
+      "dest": "203.0.113.66",
+      "dest_port": "443",
+      "transport": "tcp",
+      "app": "https",
+      "tcp_flags_text": "PSH|ACK",
+      "dscp": "0",
+      "packets": "4",
+      "bytes": "385",
+      "duration_ms": "108",
+      "snmp_in": "5",
+      "snmp_out": "6",
+      "label_meta.is_malicious": "true"
+     }
+    }
+   },
+   "drilldowns": {
+    "Pairs ranked by regularity (lowest coefficient of variation first; click a row for the flows)": {
+     "rows": 9,
+     "error": null,
+     "from_row": {
+      "src": "198.51.100.140",
+      "dest": "203.0.113.66",
+      "intervals": "8"
+     }
+    }
+   },
+   "runs_dropdown_rows": 7,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  },
+  "NF-SEC-10-DNS-FLOW": {
+   "scenario_id": "NF-SEC-10-DNS-FLOW",
+   "run_id": "run-28e135755b65",
+   "panels": {
+    "DNS bytes over time by direction": {
+     "type": "splunk.area",
+     "rows": 13,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "_time": "2026-11-01T14:59:00.000+00:00",
+      "query (client to resolver)": "140",
+      "response (resolver to client)": "313",
+      "_span": "15"
+     }
+    },
+    "DNS flow records": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "720"
+     }
+    },
+    "Clients": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "31"
+     }
+    },
+    "Outlier clients": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Resolvers": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "1"
+     }
+    },
+    "Median response/request ratio": {
+     "type": "splunk.singlevalue",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "v": "2.10"
+     }
+    },
+    "Clients: average request size (x) vs query flows (y); one dot per client": {
+     "type": "splunk.scatter",
+     "rows": 31,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "avg_req_bytes": "77",
+      "query_flows": "8"
+     }
+    },
+    "Client behaviour (click a row for the DNS flows)": {
+     "type": "splunk.table",
+     "rows": 31,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "client": "198.51.100.200",
+      "query_flows": "140",
+      "avg_req_bytes": "294",
+      "resp_req_ratio": "2.63",
+      "z_flows": "5.4",
+      "z_size": "5.4",
+      "outlier": "outlier vs peers"
+     }
+    },
+    "Resolver behaviour": {
+     "type": "splunk.table",
+     "rows": 1,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "resolver": "192.0.2.53",
+      "clients": "31",
+      "flows": "720",
+      "bytes": "200327"
+     }
+    },
+    "Response/request byte ratio, top 10 clients by query flows": {
+     "type": "splunk.column",
+     "rows": 10,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "client": "198.51.100.200",
+      "resp_req_ratio": "2.63"
+     }
+    },
+    "Supporting DNS flow evidence (outlier clients)": {
+     "type": "splunk.table",
+     "rows": 140,
+     "error": null,
+     "unresolved_tokens": [],
+     "sample": {
+      "start": "14:59:38",
+      "exporter_ip": "192.0.2.1",
+      "src": "198.51.100.200",
+      "src_port": "53791",
+      "dest": "192.0.2.53",
+      "dest_port": "53",
+      "transport": "udp",
+      "app": "dns",
+      "tcp_flags_text": "-",
+      "dscp": "0",
+      "packets": "2",
+      "bytes": "268",
+      "duration_ms": "20",
+      "snmp_in": "3",
+      "snmp_out": "4",
+      "label_meta.is_malicious": "true"
+     }
+    }
+   },
+   "drilldowns": {
+    "Client behaviour (click a row for the DNS flows)": {
+     "rows": 280,
+     "error": null,
+     "from_row": {
+      "client": "198.51.100.200",
+      "query_flows": "140",
+      "avg_req_bytes": "294"
+     }
+    }
+   },
+   "runs_dropdown_rows": 13,
+   "empty_panels": [],
+   "bad_drilldowns": [],
+   "pass": true
+  }
+ }
+}

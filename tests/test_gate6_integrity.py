@@ -172,9 +172,15 @@ class TestGate6Integrity(unittest.TestCase):
     # -------------------------------------------------------------------------
     def test_07_successful_hec(self):
         """Verify live or reachable HEC returns REACHABLE with latency measurement."""
+        token = os.environ.get("NETSPOUT_HEC_TOKEN")
+        if not token:
+            self.skipTest("NETSPOUT_HEC_TOKEN is required for live HEC validation")
         res = self.dispatcher.test_connection(
-            endpoint='https://127.0.0.1:8888/services/collector',
-            token='00000000-0000-0000-0000-000000000000',
+            endpoint=os.environ.get(
+                "NETSPOUT_HEC_URL",
+                "https://127.0.0.1:8088/services/collector",
+            ).removesuffix("/event"),
+            token=token,
             index='idx_network_ops',
             allow_insecure_tls=True
         )

@@ -1,0 +1,9 @@
+#pf-discovery { padding: 16px; }
+#pf-search { width: min(850px, 90%); padding: 10px; display: block; }
+.pf-discovery-layout { display: grid; grid-template-columns: minmax(180px,1fr) minmax(240px,2fr) minmax(300px,3fr); gap: 20px; }
+#pf-filters details { margin-bottom: 12px; max-height: 250px; overflow: auto; }
+#pf-filters label, #pf-results button, #pf-detail a, #pf-detail label { display: block; margin: 6px 0; }
+#pf-results button { width: 100%; text-align: left; padding: 10px; white-space: normal; }
+#pf-detail { overflow-wrap: anywhere; }
+#pf-detail button { margin: 4px; }
+@media (max-width: 1000px) { .pf-discovery-layout { grid-template-columns: 1fr; } }

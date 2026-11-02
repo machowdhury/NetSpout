@@ -21,6 +21,8 @@ SRC_DIR = os.path.join(REPO_ROOT, "src")
 if SRC_DIR not in sys.path:
     sys.path.insert(0, SRC_DIR)
 
+from scripts.artifact_isolation import artifact_dir
+
 from netspout_core.gnmi.splunk_e2e import (
     DEFAULT_EVENT_INDEX,
     DEFAULT_EVENT_SOURCETYPE,
@@ -97,11 +99,10 @@ class TestGate13DGnmiSplunkE2E(unittest.TestCase):
 
     @classmethod
     def _write_evidence_artifacts(cls) -> None:
-        ev_dir = os.path.join(REPO_ROOT, "docs", "acceptance", "evidence", "gate13d")
-        os.makedirs(ev_dir, exist_ok=True)
+        ev_dir = artifact_dir("gate13d", "evidence")
 
         def _dump(filename: str, payload: Any) -> None:
-            path = os.path.join(ev_dir, filename)
+            path = ev_dir / filename
             with open(path, "w", encoding="utf-8") as f:
                 json.dump(payload, f, indent=2, sort_keys=True, default=str)
 

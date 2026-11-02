@@ -1,0 +1,104 @@
+// Browser check of the universal search inside the INSTALLED app (Splunk Web iframe). Run from frontend/: node ../scripts/render_search_live.mjs
+import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
+const { chromium } = createRequire(path.join(process.cwd(), 'package.json'))('@playwright/test');
+const root = path.resolve(process.cwd(), '..');
+const env = Object.fromEntries(fs.readFileSync(path.join(root, (process.env.LAB_ENV_DIR ?? 'tests/lab/ta_validation') + '/.env.lab'), 'utf8').split('\n').filter((l) => l.includes('=')).map((l) => [l.slice(0, l.indexOf('=')), l.slice(l.indexOf('=') + 1).trim()]));
+const evDir = path.join(root, 'docs/verification/evidence/search');
+fs.mkdirSync(path.join(evDir, 'screens'), { recursive: true });
+const base = `http://127.0.0.1:${env.LAB_WEB_PORT}`;
+const cached = path.join(process.env.HOME, 'Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell');
+const browser = await chromium.launch(fs.existsSync(cached) ? { executablePath: cached } : {});
+const page = await (await browser.newContext({ viewport: { width: 1500, height: 1200 } })).newPage();
+await page.goto(`${base}/en-US/account/login`, { waitUntil: 'domcontentloaded' });
+await page.fill('input[name="username"]', 'admin');
+await page.fill('input[name="password"]', env.LAB_SPLUNK_PASSWORD);
+await page.keyboard.press('Enter');
+await page.waitForURL((u) => !u.pathname.includes('/account/login'), { timeout: 60000 });
+const open = async () => { await page.goto(`${base}/en-US/app/netspout/use_case_explorer`, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(14000); return page.frames().find((f) => f !== page.mainFrame()); };
+const r = {};
+let app = await open();
+const find = app.locator('input[aria-label="Universal search"]');
+const count = async () => (await app.locator('[data-testid="universal-search"] .ux-count').innerText()).replace(/\s+/g, ' ');
+await find.fill('bgp'); await app.waitForTimeout(1500);
+r.bgp = await count();
+r.kinds_in_bgp = await app.locator('[data-testid="universal-search"] li').evaluateAll((l) => [...new Set(l.map((x) => x.dataset.kind))]);
+await app.locator('select[aria-label="Result type"]').selectOption('dashboard'); await app.waitForTimeout(1200);
+r.dashboard_filter = await count();
+r.dashboard_href = await app.locator('[data-testid="universal-search"] li a').first().getAttribute('href');
+await app.locator('select[aria-label="Result type"]').selectOption('sourcetype'); await find.fill('cloudtrail'); await app.waitForTimeout(1200);
+r.sourcetype = await count();
+r.sourcetype_catalog_only_visible = await app.locator('[data-testid="universal-search"] li', { hasText: 'catalog only' }).count();
+await page.screenshot({ path: path.join(evDir, 'screens/search_sourcetype.jpg'), type: 'jpeg', quality: 60 });
+await app.locator('select[aria-label="Result type"]').selectOption('scenario'); await find.fill('credential'); await app.waitForTimeout(1200);
+await page.screenshot({ path: path.join(evDir, 'screens/search_scenario.jpg'), type: 'jpeg', quality: 60 });
+await app.locator('[data-testid="universal-search"] li button').first().click(); await app.waitForTimeout(3000);
+r.scenario_opens_workflow = await app.locator('.ux-detail h2').count();
+app = await open(); // reload: state preserved
+r.state_preserved = await app.locator('input[aria-label="Universal search"]').inputValue();
+// moderate load: a second continuous stream (different sourcetype) runs on the engine during the browser stream test
+const ENGINE = process.env.NETSPOUT_ENGINE || 'http://127.0.0.1:8091';
+const api = async (m, u, b) => (await fetch(ENGINE + u, { method: m, headers: { 'content-type': 'application/json' }, body: b ? JSON.stringify(b) : undefined })).json();
+const load = await api('POST', '/api/runs', { kind: 'sourcetype', target: 'arista:eos:syslog', vendor_id: 'arista_eos', index: (process.env.LAB_INDEX ?? 'dev_test_replay'), mode: 'continuous', eps: 25 });
+// single-sourcetype continuous streaming from a search result, with refresh recovery
+await app.locator('input[aria-label="Universal search"]').fill('cisco:dc:aci:class'); await app.locator('select[aria-label="Result type"]').selectOption('sourcetype'); await app.waitForTimeout(1500);
+await app.locator('[data-testid="stream-sourcetype"]').first().click();
+await app.locator('select[aria-label="Index"]').selectOption((process.env.LAB_INDEX ?? 'dev_test_replay'));
+await app.locator('input[aria-label="Events per second"]').fill('8');
+await app.locator('[data-testid="start-streaming"]').click();
+await app.waitForSelector('.pf-mon', { timeout: 30000 }); await app.waitForTimeout(6000);
+const tile = async (a, l) => Number((await a.locator(`.pf-mon div:has(> span:text-is("${l}")) > b`).first().innerText()).replace(/,/g, ''));
+r.stream = { mode_text: await app.locator('.pf-mon').innerText().then((t) => /continuous/i.test(t)), a1: await tile(app, 'HEC accepted') };
+await page.screenshot({ path: path.join(evDir, 'screens/stream_running.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+app = await open();
+await app.locator('input[aria-label="Universal search"]').waitFor();
+await app.locator('[data-testid="stream-sourcetype"]').first().click();
+await app.waitForSelector('.pf-mon', { timeout: 20000 }); await app.waitForTimeout(2500);
+r.stream.after_refresh = await tile(app, 'HEC accepted'); r.stream.state_after_refresh = await app.locator('.pf-mon-state').innerText();
+r.stream.posts = []; const lat = []; const t0s = new Map();
+app.page().on('request', (rq) => { if (rq.method() === 'GET' && /runs\//.test(rq.url())) t0s.set(rq, Date.now()); });
+app.page().on('requestfinished', (rq) => { if (t0s.has(rq)) lat.push(Date.now() - t0s.get(rq)); });
+app.page().on('response', (resp) => { if (resp.request().method() === 'POST') r.stream.posts.push(resp.url().split('/api/')[1] + ' ' + resp.status()); });
+app.page().on('requestfailed', (rq) => r.stream.posts.push('FAILED ' + rq.url().split('/api/')[1]));
+await app.locator('.pf-mon-actions button', { hasText: /^Pause$/ }).click();
+for (let i = 0; i < 20 && (await app.locator('.pf-mon-state').innerText()) !== 'PAUSED'; i++) await app.waitForTimeout(500);
+r.stream.paused_state = await app.locator('.pf-mon-state').innerText(); r.stream.warn = await app.locator('.pf-mon-warn').allInnerTexts(); const pa = await tile(app, 'HEC accepted'); await app.waitForTimeout(3000); r.stream.held = (await tile(app, 'HEC accepted')) === pa;
+r.stream.err_text = await app.locator('.pf-mon').innerText().then((t) => t.slice(0, 400)); await app.locator('.pf-mon-actions button', { hasText: /^Resume$/ }).click({ timeout: 8000 }).catch((e) => { r.stream.resume_click = String(e).slice(0, 80); }); for (let i = 0; i < 20 && !((await tile(app, 'HEC accepted')) > pa); i++) await app.waitForTimeout(500);
+r.stream.resumed = (await tile(app, 'HEC accepted')) > pa;
+await app.locator('.pf-mon-actions button', { hasText: /^Stop$/ }).click();
+for (let i = 0; i < 30 && (await app.locator('.pf-mon-state').innerText()) !== 'STOPPED'; i++) await app.waitForTimeout(500);
+r.stream.final = await app.locator('.pf-mon-state').innerText();
+r.stream.get_latency_ms = { n: lat.length, max: Math.max(0, ...lat), p50: lat.sort((a, b) => a - b)[Math.floor(lat.length / 2)] ?? null };
+await api('POST', '/api/runs/' + load.run_id + '/stop');
+r.stream.control_posts = { pause: r.stream.posts.filter((x) => /\/pause 200/.test(x)).length, resume: r.stream.posts.filter((x) => /\/resume 200/.test(x)).length, stop: r.stream.posts.filter((x) => /\/stop 200/.test(x)).length };
+await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click();
+for (let i = 0; i < 12; i++) { await app.waitForTimeout(4000); r.stream.verification = await app.locator('.pf-mon-verify').innerText().catch(() => ''); if (/VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification)) break; await app.locator('.pf-mon-actions button', { hasText: 'Verify in Splunk' }).click(); }
+await page.screenshot({ path: path.join(evDir, 'screens/stream_stopped_verified.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+await new Promise((res) => setTimeout(res, 3000));
+const act = ((await api('GET', '/api/runs')).runs || []).filter((x) => ['RUNNING', 'PAUSED', 'STOPPING'].includes(x.state));
+r.stream.orphans = act.length;
+r.stream.ok = act.length === 0 && r.stream.control_posts.pause === 1 && r.stream.control_posts.resume === 1 && r.stream.control_posts.stop === 1 && r.stream.mode_text && r.stream.after_refresh >= r.stream.a1 && r.stream.state_after_refresh === 'RUNNING' && r.stream.paused_state === 'PAUSED' && r.stream.held && r.stream.resumed && r.stream.final === 'STOPPED' && /VERIFIED/.test(r.stream.verification) && !/INCOMPLETE/.test(r.stream.verification);
+// finite scenario run: search -> workflow -> monitor -> readiness READY -> run-bound dashboard
+await app.locator('input[aria-label="Universal search"]').fill('Campus Core L2/3 Disturbance'); await app.locator('select[aria-label="Result type"]').selectOption('scenario');
+await app.waitForFunction(() => (document.querySelector('[data-testid="universal-search"] li')?.innerText || '').includes('Campus Core'), null, { timeout: 30000 });
+await app.locator('[data-testid="universal-search"] li button').first().click();
+await app.locator('[data-testid="monitored-run"]').click({ timeout: 60000 });
+await app.waitForSelector('[data-testid="readiness"]', { timeout: 60000 });
+const states = new Set();
+for (let i = 0; i < 90; i++) { const st = await app.locator('[data-testid="readiness-state"]').innerText().catch(() => ''); if (st) states.add(st); if (['READY', 'DEGRADED', 'FAILED'].includes(st)) break; await app.waitForTimeout(2000); }
+r.readiness = { states: [...states], toast: await app.locator('[data-testid="readiness-toast"]').innerText().catch(() => null) };
+r.readiness.href = await app.locator('[data-testid="readiness-toast"] a', { hasText: 'Open dashboard' }).getAttribute('href').catch(() => null);
+await page.screenshot({ path: path.join(evDir, 'screens/readiness_ready.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+if (r.readiness.href) {
+  await page.goto(base + r.readiness.href, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(25000);
+  const body = await page.locator('body').innerText();
+  const runTok = decodeURIComponent((r.readiness.href.match(/run_tok=([^&]+)/) || [])[1] || '');
+  r.dashboard = { run_id_visible: body.includes(runTok), no_results_panels: (body.match(/No results found/g) || []).length, empty_state_panels: (body.match(/Search did not return any results|No data/gi) || []).length };
+  await page.screenshot({ path: path.join(evDir, 'screens/dashboard_run_bound.jpg'), type: 'jpeg', quality: 60, fullPage: true });
+}
+r.readiness.ok = r.readiness.states.includes('READY') && !!r.readiness.href && /ready in Splunk/.test(r.readiness.toast || '');
+r.ok = r.stream.ok && r.readiness.ok && /dashboard/.test(r.bgp) && r.kinds_in_bgp.length === 3 && !!r.dashboard_href && /sourcetype/.test(r.sourcetype) && r.scenario_opens_workflow > 0 && r.state_preserved === 'credential';
+fs.writeFileSync(path.join(evDir, 'browser.json'), JSON.stringify({ generated_utc: new Date().toISOString(), result: r }, null, 1) + '\n');
+console.log(r.ok ? 'PASS' : 'FAIL', JSON.stringify(r));
+await browser.close();

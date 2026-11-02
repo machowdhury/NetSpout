@@ -1,0 +1,118 @@
+{
+  "artifact": "PulseForge universal vendor coverage matrix (Workstream D)",
+  "generated_at": "2026-10-27",
+  "scope": {
+    "total_vendors": 0,
+    "total_platforms": 0,
+    "total_protocols": 0,
+    "batch4_sources": 12,
+    "batch4_scenarios": 3,
+    "snmp_verified_oids": 307,
+    "snmp_rejected_oids": 26,
+    "yang_vendor_directories": 5,
+    "yang_openconfig_modules": 3
+  },
+  "authorities": {
+    "snmp": {
+      "sc4snmp_compiled_mib_files_verified": 21,
+      "tree_blob_integrity": "git blob sha1 of each committed file equals the pinned tree entry",
+      "pysnmp_index_role": "SECONDARY coarse authority: module -> registered OID-subtree index (two columns: module,oid). NOT a leaf catalog; used only for module existence + coarse subtree claims."
+    },
+    "yang": {
+      "yangmodels_yang": {
+        "repo": "YangModels/yang",
+        "pinned_commit": "7cb93ea27b7ee86ad3dd9f82998146aa838d13b8",
+        "pinned_tree": "5458ceade6e510bb9968d88bf17e9dfb904f069a",
+        "api_calls_consumed": 5,
+        "role": "Vendor\u2011specific YANG module repository; does NOT contain OpenConfig models (they are external)."
+      }
+    }
+  },
+  "per_vendor_snmp": {
+    "RFC": 232,
+    "Cisco": 61,
+    "Juniper": 14
+  },
+  "per_vendor_yang": [
+    "cisco",
+    "juniper",
+    "arista",
+    "huawei",
+    "nokia"
+  ],
+  "csv_rows": [
+    {
+      "vendor_id": "TOTAL",
+      "vendor_name": "ALL",
+      "platform": "ALL",
+      "protocol": "ALL",
+      "mib_module_count": 307,
+      "yang_module_count": 3,
+      "evidence_level": "AGGREGATE",
+      "generator": "multiple",
+      "splunk_verification": "PARTIAL"
+    }
+  ],
+  "notes": [
+    "SNMP OID verification uses the SC4SNMP compiled\u2011MIB authority (pinned).",
+    "YANG modules are enumerated from YangModels/yang vendor directories; OpenConfig modules are external.",
+    "Evidence levels: INTEGRATION_TEST_RAW (Batch 4), LEGACY_REFERENCE (pre\u2011existing).",
+    "Splunk verification column: MAPPING_ONLY (sourcetype mapping exists), NOT_VERIFIED (no TA parser).",
+    "Updated 2026-10-27 10:48:10: Enhanced SNMP generation verified for all 307 verified OIDs.",
+    "SNMP generator now uses data-type specific value ranges and vendor context.",
+    "YANG/OpenConfig generation uses existing gNMI engine with realistic telemetry.",
+    "Evidence levels distinguish schema verification, generator implementation, and testing."
+  ],
+  "evidence_levels": {
+    "snmp": {
+      "schema_verified": true,
+      "generator_implemented": true,
+      "generator_tested": true,
+      "splunk_ingestion_verified": false,
+      "real_protocol_verified": false,
+      "ta_parser_verified": false,
+      "verification_timestamp": 1793112404.278742,
+      "verified_oids": 307,
+      "total_oids": 307
+    },
+    "yang": {
+      "schema_verified": true,
+      "generator_implemented": true,
+      "generator_tested": true,
+      "splunk_ingestion_verified": false,
+      "real_protocol_verified": false,
+      "ta_parser_verified": false,
+      "vendor_directories": 5,
+      "openconfig_modules": 3
+    },
+    "batch4": {
+      "sources_count": 12,
+      "scenarios_count": 50,
+      "live_raw_equality_verified": true,
+      "ta_parser_verified_sourcetypes": 1,
+      "evidence_level": "INTEGRATION_TEST_RAW"
+    }
+  },
+  "verification_summary": {
+    "updated_at": "2026-10-27T10:48:10.440698",
+    "snmp_coverage_status": "GENERATOR_IMPLEMENTED_AND_TESTED",
+    "yang_coverage_status": "GENERATOR_IMPLEMENTED",
+    "pending_vendors": 20,
+    "blocked_vendors": 1,
+    "rejected_vendors": 1,
+    "total_vendors": 88,
+    "total_sourcetypes": 348,
+    "total_scenarios": 50
+  },
+  "evidence_references": {
+    "snmp_inventory": "catalog/snmp_mib_oid_inventory.json",
+    "snmp_generation_evidence": "docs/verification/snmp_generation_evidence.json",
+    "yang_inventory": "catalog/yang_module_inventory.json",
+    "universe_batch4": "catalog/universe_batch4.json",
+    "vendor_universe": "catalog/vendor_universe.json",
+    "provenance_pins": {
+      "sc4snmp": "catalog/mib_reference/provenance.json",
+      "yangmodels": "catalog/yang_module_inventory.json#authorities"
+    }
+  }
+}

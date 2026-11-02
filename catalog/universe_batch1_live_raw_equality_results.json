@@ -1,0 +1,70 @@
+{
+ "run_id": "pf-ub1-rawfidelity-1793041105",
+ "session": "Universal Vendor Coverage batch-1 (live batch)",
+ "index": "idx_ta_ise_test",
+ "posted": 9,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "ub1:docker-c",
+   "sourcetype": "docker_events",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:docker-n",
+   "sourcetype": "docker_events",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:docker-v",
+   "sourcetype": "docker_events",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:sg-obs",
+   "sourcetype": "bluecoat:proxysg:access:file",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:sg-dny",
+   "sourcetype": "bluecoat:proxysg:access:file",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:wz-proc",
+   "sourcetype": "wazuh:alerts",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:wz-file",
+   "sourcetype": "wazuh:alerts",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:nm-pc",
+   "sourcetype": "nozomi:universal_alert",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "ub1:nm-ta",
+   "sourcetype": "nozomi:universal_alert",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  }
+ ],
+ "passes": 9,
+ "distinct_sourcetypes": [
+  "bluecoat:proxysg:access:file",
+  "docker_events",
+  "nozomi:universal_alert",
+  "wazuh:alerts"
+ ]
+}

@@ -1,0 +1,1640 @@
+{
+ "index": "idx_network_ops",
+ "metric_index": "cisco_mdt_metrics",
+ "telemetry": "MODELED_NETSPOUT_SCHEMA",
+ "ta_parser_checks_performed": 0,
+ "detection_checks_performed": 0,
+ "scenario_runs": [
+  {
+   "scenario_id": "network_01_campus_link",
+   "run_id": "pf-incident-ee414402-fc17-448b-be91-47e52973491e",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 50,
+   "metric_datapoints_expected": 50,
+   "metric_names": [
+    "interface.errors.rate",
+    "interface.input.errors",
+    "interface.operational.up",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_02_vlan_trunk",
+   "run_id": "pf-incident-e2e5fb74-7720-4e30-b7f3-0c04647bc805",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "vlan.discard.rate"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_03_stp_storm",
+   "run_id": "pf-incident-76b1ffdb-fbd0-4dce-93c3-9559e0bd6d35",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "broadcast.packets.rate",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_04_wan_brownout",
+   "run_id": "pf-incident-2d8e7ba1-5128-4616-aabf-373dd981e771",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "wan.latency.ms"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_05_dual_isp",
+   "run_id": "pf-incident-1a72faf0-868c-4b6d-a6a3-e3785cd18cee",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "wan.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_06_bgp_flap",
+   "run_id": "pf-incident-b3f48aaa-e415-4180-9b36-a756fcc38d29",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "bgp.withdrawn.prefixes",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_07_ospf_adjacency",
+   "run_id": "pf-incident-fa0e4352-8415-4464-9504-1bbe121b8105",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "ospf.adjacency.down"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_08_firewall_policy",
+   "run_id": "pf-incident-7bc76e4e-4dad-41f9-9365-f77fc653d339",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "firewall.denied.sessions.rate",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_09_ddos_flood",
+   "run_id": "pf-incident-ba36ab43-7195-4b6c-ab0d-fceb5289a430",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "security.flood.packets.rate"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_10_dns_failure",
+   "run_id": "pf-incident-97d00acf-3efc-40ff-bcbc-77e7b5a7a482",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "dns.query.failure.percent",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_11_dhcp_exhaustion",
+   "run_id": "pf-incident-e1b677bf-d02c-4a7e-9e29-19e701a511f6",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "dhcp.pool.utilization.percent",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_12_dc_congestion",
+   "run_id": "pf-incident-836c7a78-bff1-42cd-ad06-6f82872b6b29",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "interface.queue.drops.rate",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_13_mtu_pmtud",
+   "run_id": "pf-incident-0ba128de-618e-4925-850c-1b8d8f02b335",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.large_probe.failure.percent",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_14_wireless_outage",
+   "run_id": "pf-incident-cbc6f72a-4a10-47d3-a906-619975fc2faa",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "network.latency.ms",
+    "network.packet_loss.percent",
+    "wireless.ap.unreachable"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_15_device_resources",
+   "run_id": "pf-incident-8b99ce6c-a1d1-4a3e-9605-d7c36228fdd9",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 40,
+   "metric_datapoints_expected": 40,
+   "metric_names": [
+    "device.cpu.percent",
+    "device.memory.utilization.percent",
+    "network.latency.ms",
+    "network.packet_loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_16_retail_uplink",
+   "run_id": "pf-incident-d37ded21-37d2-431c-a41a-b68bc2819097",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "checkout.failure.percent",
+    "session.failure.percent",
+    "uplink.down"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_17_hospital_mac_auth",
+   "run_id": "pf-incident-af04b8b0-87da-40a0-9786-6409a1990848",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "authentication.failure.percent",
+    "login.latency.ms",
+    "mac.moves.per_minute"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_18_payment_deny",
+   "run_id": "pf-incident-92fcd5a6-8de0-4d43-a556-2bd5cd5ce33c",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "payment.failure.percent",
+    "payment.latency.ms",
+    "policy.denies.per_second"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_19_ips_service",
+   "run_id": "pf-incident-32a9d451-e89f-432f-9438-b29afd746615",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "ips.detections.per_second",
+    "legitimate.session.failure.percent",
+    "service.latency.ms"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_20_backend_link",
+   "run_id": "pf-incident-dcf09532-26ec-4ba1-96a7-52d54a3b9e23",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "application.failure.percent",
+    "backend.link.down",
+    "pool.member.unavailable.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_21_partial_pool",
+   "run_id": "pf-incident-7ff6e074-5aaf-408b-8313-9057ef61a593",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "application.failure.percent",
+    "application.latency.ms",
+    "pool.member.unavailable.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_22_authentication_storm",
+   "run_id": "pf-incident-11850156-82ed-4c5a-a614-5ae3b190bf78",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "authentication.attempts.per_second",
+    "authentication.failure.percent",
+    "login.latency.ms"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_23_containment_request",
+   "run_id": "pf-incident-cda10e04-01c1-4bdb-96dc-3e790463fd66",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "containment.pending.requests",
+    "modeled.restricted.sessions",
+    "service.access.failure.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_24_policy_disagreement",
+   "run_id": "pf-incident-b6916445-7622-43f2-841e-4b8207819ce7",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "policy.conflicting.flow.percent",
+    "policy.disagreeing.flows",
+    "transaction.failure.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_25_mpls_recovery",
+   "run_id": "pf-incident-e99c8e7f-627e-44ff-8272-f26d3e2e240b",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "branch.latency.ms",
+    "branch.sla.breach.percent",
+    "mpls.path.changes.per_minute"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_26_maintenance",
+   "run_id": "pf-incident-ea3c9134-9fb6-41ae-9a89-4c109a94bf96",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "application.failure.percent",
+    "business.unplanned.impact.percent",
+    "maintenance.path.down"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "network_27_stale_sessions",
+   "run_id": "pf-incident-2aaa2c74-fd0c-421c-99fe-c071ec3615b4",
+   "family": "network",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "authentication.failure.percent",
+    "perimeter.stale.sessions",
+    "service.access.failure.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:network:syslog"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_01_ran_cell",
+   "run_id": "pf-incident-c9b6dd0e-5f7f-437a-a895-5e1f71ed308e",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "ran.downlink.bler.percent",
+    "ran.prb.utilization.percent",
+    "ran.user.throughput.mbps"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_02_registration_auth",
+   "run_id": "pf-incident-054a8c83-5b77-4f79-b915-9ff4cfb8b1b5",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "authentication.latency.ms",
+    "registration.failure.percent",
+    "registration.success.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_03_slice_sla",
+   "run_id": "pf-incident-bb6209f5-45a9-4d34-b2de-3889541dd7c5",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "slice.latency.ms",
+    "slice.packet_loss.percent",
+    "slice.throughput.mbps"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_04_ims_volte",
+   "run_id": "pf-incident-b9bf6177-640e-40b0-a9cb-bfdc696e2beb",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "voice.estimated_mos",
+    "voice.rtp.jitter.ms",
+    "voice.rtp.loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_05_mobile_transport",
+   "run_id": "pf-incident-e75d30d9-ba59-4461-ad48-b440cb856461",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "fronthaul.one_way_latency.ms",
+    "fronthaul.packet_loss.percent",
+    "fronthaul.queue.utilization.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_06_broadband_cpe",
+   "run_id": "pf-incident-e8341098-a37f-45d6-829a-5b291338cfd5",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "broadband.active_sessions",
+    "broadband.probe.failure.percent",
+    "broadband.service.availability.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_07_sdwan_service",
+   "run_id": "pf-incident-04c74f6b-3acb-4b1e-9238-21d7b73d1c8b",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "sdwan.application.jitter.ms",
+    "sdwan.application.latency.ms",
+    "sdwan.application.loss.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_08_roaming_mobility",
+   "run_id": "pf-incident-e9b23c9f-f6ae-4038-8fe3-47933aa1e90f",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "mobility.handover.failure.percent",
+    "mobility.interruption.ms",
+    "mobility.session.drop.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_09_core_user_plane",
+   "run_id": "pf-incident-d2384327-9727-49e4-8396-f621686f0c66",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "upf.data.latency.ms",
+    "upf.forwarding.packets_per_second",
+    "upf.packet_drop.percent"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  },
+  {
+   "scenario_id": "telco_10_cross_layer",
+   "run_id": "pf-incident-2640992a-194b-4eb9-ba00-01de93e466ae",
+   "family": "telecom",
+   "hec_accepted": 40,
+   "generated": 40,
+   "log_events_by_phase_indexed": {
+    "BASELINE": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "INTERVENTION": 3,
+    "NETWORK_IMPACT": 3,
+    "RECONVERGENCE": 3,
+    "RECOVERY": 3,
+    "USER_IMPACT": 3,
+    "VERIFIED_HEALTHY": 3,
+    "WARNING": 3
+   },
+   "log_events_by_phase_expected": {
+    "BASELINE": 3,
+    "WARNING": 3,
+    "DEGRADATION": 3,
+    "FAILURE": 3,
+    "NETWORK_IMPACT": 3,
+    "USER_IMPACT": 3,
+    "INTERVENTION": 3,
+    "RECOVERY": 3,
+    "RECONVERGENCE": 3,
+    "VERIFIED_HEALTHY": 3
+   },
+   "metric_datapoints_indexed": 30,
+   "metric_datapoints_expected": 30,
+   "metric_names": [
+    "telecom.affected.cohort.percent",
+    "telecom.service.availability.percent",
+    "telecom.service.latency.ms"
+   ],
+   "metric_values_match_generator": true,
+   "dimension_rows": 10,
+   "sourcetypes_indexed": [
+    "netspout:telecom:log"
+   ],
+   "verdict": "PASS"
+  }
+ ]
+}

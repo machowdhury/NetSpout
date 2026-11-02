@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "browser_rendered": true,
+    "scenario_run_binding": true,
+    "visualization_compatible": true,
+    "drilldowns_tested": true,
+    "inspector_tested": true,
+    "responsive_tested": true
+  },
+  "note": {},
+  "verdict": {
+    "status": 200,
+    "maturity": "DASHBOARD_READY",
+    "detail": null
+  }
+}

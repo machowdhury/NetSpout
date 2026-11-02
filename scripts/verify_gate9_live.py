@@ -20,7 +20,7 @@ def main():
     transport = TelemetryTransportConfig(
         hec_enabled=True,
         hec_url="https://127.0.0.1:8888/services/collector",
-        hec_token="00000000-0000-0000-0000-000000000000",
+        hec_token=os.environ.get("SPLUNK_HEC_TOKEN", ""),
         hec_index="idx_network_ops",
         hec_metric_index="cisco_mdt_metrics",
         hec_allow_insecure_tls=True

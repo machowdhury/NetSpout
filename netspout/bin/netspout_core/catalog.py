@@ -14,7 +14,25 @@ Authoritative source for:
 import os
 import json
 import re
+from collections import Counter
 from typing import Dict, List, Any, Optional, Tuple, Set
+
+from netspout_core.catalog_contracts import TelemetryCatalog
+from netspout_core.pack_contracts import PackRegistry
+from netspout_core.phase8c_reference_packs import extend_registry
+from netspout_core.phase9_security_packs import (
+    extend_registry as extend_phase9_registry,
+)
+from netspout_core.phase12_security_packs import (
+    extend_registry as extend_phase12_registry,
+)
+from netspout_core.industry_packs import (
+    IndustryPackService,
+    IndustryRegistry,
+    extend_registry as extend_industry_registry,
+)
+from netspout_core.dashboard_recipes import DashboardRecipeService
+from netspout_core.cisco_scenario_factory import CiscoScenarioFactoryService
 
 
 def _find_catalog_dir() -> str:
@@ -53,6 +71,11 @@ class NetSpoutCatalog:
         self._samples: List[Dict[str, Any]] = []
         self._protocols: List[Dict[str, Any]] = []
         self._aliases: Dict[str, Dict[str, Any]] = {}
+        self._telemetry_catalog: Optional[TelemetryCatalog] = None
+        self._extension_packs: Optional[PackRegistry] = None
+        self._industry_registry: Optional[IndustryRegistry] = None
+        self._industry_service: Optional[IndustryPackService] = None
+        self._dashboard_service: Optional[DashboardRecipeService] = None
 
         self._vendors_by_id: Dict[str, Dict[str, Any]] = {}
         self._sourcetypes_by_st: Dict[str, Dict[str, Any]] = {}
@@ -81,6 +104,58 @@ class NetSpoutCatalog:
         self._samples = _read_json("samples.json")
         self._protocols = _read_json("telemetry_protocols.json")
         self._aliases = _read_json("aliases.json")
+        self._telemetry_catalog = TelemetryCatalog.model_validate(
+            _read_json("telemetry_catalog.json")
+        )
+        extension_registry = _read_json("extension_packs.json")
+        phase8c_specification = _read_json("phase8c_reference_packs.json")
+        if phase8c_specification:
+            extension_registry = extend_registry(
+                extension_registry, phase8c_specification
+            )
+        phase9_specification = _read_json("phase9_security_packs.json")
+        if phase9_specification:
+            extension_registry = extend_phase9_registry(
+                extension_registry, phase9_specification
+            )
+        industry_specification = _read_json("industry_packs.json")
+        if industry_specification:
+            extension_registry = extend_industry_registry(
+                extension_registry, industry_specification
+            )
+        phase12_specification = _read_json("phase12_security_packs.json")
+        if phase12_specification:
+            extension_registry = extend_phase12_registry(
+                extension_registry, phase12_specification
+            )
+        self._extension_packs = PackRegistry.model_validate(extension_registry)
+        self._extension_packs.validate_against_catalog(self._telemetry_catalog)
+        if industry_specification:
+            self._industry_registry = IndustryRegistry.model_validate(
+                industry_specification
+            )
+            self._industry_service = IndustryPackService(
+                self._industry_registry, self._extension_packs
+            )
+        dashboard_specification = _read_json("dashboard_recipes.json")
+        phase12_dashboard_specification = _read_json(
+            "phase12_dashboard_recipes.json"
+        )
+        if dashboard_specification and phase12_dashboard_specification:
+            dashboard_specification["registry_version"] = (
+                phase12_dashboard_specification["registry_version"]
+            )
+            dashboard_specification["recipes"].extend(
+                phase12_dashboard_specification["recipes"]
+            )
+        if dashboard_specification:
+            self._dashboard_service = DashboardRecipeService(
+                dashboard_specification,
+                self,
+                self._extension_packs,
+                self._industry_registry,
+                CiscoScenarioFactoryService().catalog.scenarios,
+            )
 
         # Build fast lookup indexes
         for v in self._vendors:
@@ -111,6 +186,23 @@ class NetSpoutCatalog:
 
         for pr in self._protocols:
             self._protocols_by_id[pr["id"]] = pr
+
+        scenario_ids = set(self._scenarios_by_id)
+        for source in self._telemetry_catalog.sources:
+            unknown = sorted(set(source.netspout_contract.scenario_ids) - scenario_ids)
+            if unknown:
+                raise ValueError(
+                    "Telemetry source '{}' references unknown scenarios: {}".format(
+                        source.source_id, ", ".join(unknown)
+                    )
+                )
+        for manifest in self._telemetry_catalog.source_manifests:
+            if manifest.scenario_id not in scenario_ids:
+                raise ValueError(
+                    "Source manifest '{}' references unknown scenario '{}'".format(
+                        manifest.manifest_id, manifest.scenario_id
+                    )
+                )
 
     # -------------------------------------------------------------------------
     # Vendors API
@@ -344,6 +436,124 @@ class NetSpoutCatalog:
 
     def list_protocols(self) -> List[Dict[str, Any]]:
         return list(self._protocols)
+
+    # -------------------------------------------------------------------------
+    # Authoritative Telemetry Contract Catalog
+    # -------------------------------------------------------------------------
+    def get_telemetry_catalog(self) -> Dict[str, Any]:
+        return self._telemetry_catalog.model_dump(mode="json", by_alias=True)
+
+    def get_extension_pack_registry(self) -> Dict[str, Any]:
+        """Return validated declarative pack metadata without executing pack code."""
+        return self._extension_packs.model_dump(mode="json", by_alias=True)
+
+    def get_industry_pack_service(self) -> IndustryPackService:
+        if self._industry_service is None:
+            raise ValueError("industry packs are unavailable")
+        return self._industry_service
+
+    def get_industry_catalog(self) -> Dict[str, Any]:
+        return self.get_industry_pack_service().catalog()
+
+    def get_dashboard_recipe_service(self) -> DashboardRecipeService:
+        if self._dashboard_service is None:
+            raise ValueError("dashboard recipes are unavailable")
+        return self._dashboard_service
+
+    def get_dashboard_catalog(self) -> Dict[str, Any]:
+        return self.get_dashboard_recipe_service().catalog_summary()
+
+    def list_telemetry_sources(
+        self,
+        domain: Optional[str] = None,
+        verification_state: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        sources = self._telemetry_catalog.sources
+        if domain:
+            sources = [source for source in sources if domain in source.domains]
+        if verification_state:
+            sources = [
+                source
+                for source in sources
+                if source.verification_state.value == verification_state
+            ]
+        return [
+            source.model_dump(mode="json", by_alias=True) for source in sources
+        ]
+
+    def get_telemetry_source(self, source_id: str) -> Optional[Dict[str, Any]]:
+        for source in self._telemetry_catalog.sources:
+            if source.source_id == source_id:
+                return source.model_dump(mode="json", by_alias=True)
+        return None
+
+    def list_splunk_integrations(self) -> List[Dict[str, Any]]:
+        return [
+            integration.model_dump(mode="json", by_alias=True)
+            for integration in self._telemetry_catalog.integrations
+        ]
+
+    def get_splunk_integration(
+        self, integration_id: str
+    ) -> Optional[Dict[str, Any]]:
+        for integration in self._telemetry_catalog.integrations:
+            if integration.integration_id == integration_id:
+                return integration.model_dump(mode="json", by_alias=True)
+        return None
+
+    def list_catalog_evidence(self) -> List[Dict[str, Any]]:
+        return [
+            evidence.model_dump(mode="json", by_alias=True)
+            for evidence in self._telemetry_catalog.evidence
+        ]
+
+    def list_source_manifests(
+        self, scenario_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        manifests = self._telemetry_catalog.source_manifests
+        if scenario_id:
+            manifests = [
+                manifest
+                for manifest in manifests
+                if manifest.scenario_id == scenario_id
+            ]
+        return [
+            manifest.model_dump(mode="json", by_alias=True)
+            for manifest in manifests
+        ]
+
+    def get_telemetry_catalog_summary(self) -> Dict[str, Any]:
+        sources = self._telemetry_catalog.sources
+        verification = Counter(
+            source.verification_state.value for source in sources
+        )
+        provenance = Counter(
+            state.value for source in sources for state in source.provenance
+        )
+        domains = Counter(domain for source in sources for domain in source.domains)
+        sourcetypes = [
+            claim
+            for source in sources
+            for claim in source.splunk_contract.sourcetypes
+        ]
+        return {
+            "schema_version": self._telemetry_catalog.schema_version,
+            "catalog_version": self._telemetry_catalog.catalog_version,
+            "source_count": len(sources),
+            "integration_count": len(self._telemetry_catalog.integrations),
+            "evidence_count": len(self._telemetry_catalog.evidence),
+            "source_manifest_count": len(
+                self._telemetry_catalog.source_manifests
+            ),
+            "verification_counts": dict(sorted(verification.items())),
+            "provenance_counts": dict(sorted(provenance.items())),
+            "domain_counts": dict(sorted(domains.items())),
+            "sourcetype_counts": dict(
+                sorted(
+                    Counter(claim.authority.value for claim in sourcetypes).items()
+                )
+            ),
+        }
 
     # -------------------------------------------------------------------------
     # Aliases API

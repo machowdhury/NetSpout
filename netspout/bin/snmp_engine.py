@@ -645,6 +645,226 @@ class SNMPEngine:
             ]
         return results
 
+    def _generate_mib_value(
+        self,
+        mib: SNMPMibDefinition,
+        node: Node,
+        is_down: bool = False,
+        cpu_val: float = 22.4,
+        mem_val: float = 38.0,
+        temp_val: float = 42.0
+    ) -> Tuple[float, Dict[str, Any]]:
+        """
+        Generate realistic SNMP values based on MIB definition data type,
+        vendor context, and naming conventions.
+        Returns (value, dimensions) where value is a float suitable for Splunk metrics.
+        """
+        # Base dimensions (will be extended with vendor-specific context)
+        dimensions = {
+            "oid": mib.oid,
+            "mib_module": mib.mib_module,
+            "vendor": node.vendor or mib.vendor.lower(),
+            "device": node.name or node.id,
+            "host": f"{node.name or node.id}.corp.internal",
+            "source": "sc4snmp",
+            "sourcetype": "sc4snmp:metric"
+        }
+
+        # First, handle data-type specific value ranges
+        value = 0.0
+        
+        # Determine plausible value based on data type
+        if mib.data_type == "Counter32":
+            # 32-bit counter: 0 to 2^32-1, monotonically increasing, may wrap
+            # Use realistic traffic values for traffic counters, small numbers for others
+            if "Octets" in mib.name:
+                value = float(random.randint(10000000, 999999999))
+            elif "Pkts" in mib.name:
+                value = float(random.randint(10000, 999999))
+            elif "Errors" in mib.name or "Discards" in mib.name:
+                value = float(random.randint(0, 50) if is_down else random.randint(0, 5))
+            else:
+                value = float(random.randint(1, 1000000))
+                
+        elif mib.data_type == "Counter64":
+            # 64-bit counter: 0 to 2^64-1, larger ranges for high-capacity interfaces
+            if "Octets" in mib.name:
+                value = float(random.randint(1000000000, 999999999999))
+            elif "Pkts" in mib.name:
+                value = float(random.randint(1000000, 99999999))
+            else:
+                value = float(random.randint(1000000, 1000000000))
+                
+        elif mib.data_type == "Gauge32":
+            # Gauge: 0 to 2^32-1, can increase or decrease
+            if "Speed" in mib.name or "HighSpeed" in mib.name:
+                value = float(random.choice([10, 100, 1000, 10000]))  # Mbps
+            elif "QLen" in mib.name:
+                value = float(random.randint(0, 1000))
+            elif "Utilization" in mib.name:
+                value = float(random.randint(10, 90))
+            else:
+                value = float(random.randint(0, 10000))
+                
+        elif mib.data_type == "Integer32":
+            # Signed 32-bit integer, handle specific enumerations
+            if "Status" in mib.name or "State" in mib.name:
+                if "OperStatus" in mib.name:
+                    value = 2.0 if is_down else 1.0  # 1=up, 2=down
+                elif "AdminStatus" in mib.name:
+                    value = 1.0  # 1=up
+                elif "PeerState" in mib.name:
+                    value = 1.0 if is_down else 6.0  # 1=idle, 6=established
+                elif "NbrState" in mib.name:
+                    value = 1.0 if is_down else 8.0  # 1=down, 8=full
+                elif "TempState" in mib.name or "EnvMon" in mib.name:
+                    value = float(random.choice([1, 2, 3]))  # 1=normal, 2=warning, 3=critical
+                else:
+                    value = float(random.randint(1, 10))
+            elif "Index" in mib.name:
+                value = float(random.randint(1, 100))
+            elif "Type" in mib.name:
+                if "ifType" in mib.name:
+                    value = 6.0  # ethernetCsmacd
+                else:
+                    value = float(random.randint(1, 50))
+            elif "Mtu" in mib.name:
+                value = float(random.choice([1500, 4470, 9000]))
+            else:
+                value = float(random.randint(1, 100))
+                
+        elif mib.data_type == "TimeTicks":
+            # Hundredths of seconds, often sysUpTime or timestamps
+            if "sysUpTime" in mib.name:
+                value = float(8640000)  # 1 day in hundredths of seconds
+            elif "LastChange" in mib.name or "Change" in mib.name:
+                value = float(random.randint(1000, 8640000))
+            else:
+                value = float(random.randint(0, 1000000))
+                
+        elif mib.data_type == "OctetString":
+            # Convert to numeric representation for metric value
+            # For interface names, use length; for MAC addresses, convert hex
+            if "Descr" in mib.name or "Name" in mib.name or "Alias" in mib.name:
+                # Use length of typical interface name
+                value = float(len("GigabitEthernet0/0/1"))
+            elif "PhysAddress" in mib.name:
+                # MAC address length
+                value = 6.0  # 6 bytes
+            elif "Contact" in mib.name or "Location" in mib.name:
+                value = float(random.randint(10, 50))
+            else:
+                value = float(random.randint(1, 255))
+                
+        elif mib.data_type == "IpAddress":
+            # Convert IP to numeric representation
+            value = float(random.randint(16777216, 3758096383))  # 1.0.0.0 to 223.255.255.255
+            
+        elif mib.data_type == "ObjectIdentifier":
+            # OID - use numeric representation
+            value = float(len(mib.oid.split(".")))
+            
+        else:
+            # Fallback
+            value = float(random.randint(1, 100))
+
+        # Vendor-specific adjustments
+        if mib.vendor == "Cisco":
+            if "ciscoMemoryPool" in mib.name:
+                if "Used" in mib.name:
+                    value = float(mem_val * 10485760.0)  # bytes
+                elif "Free" in mib.name:
+                    value = float((100.0 - mem_val) * 10485760.0)
+                elif "LargestFree" in mib.name:
+                    value = float(random.randint(4096, 65536))
+                elif "Alloc" in mib.name:
+                    value = float(random.randint(1000, 100000))
+                elif "Utilization" in mib.name:
+                    value = float(random.randint(10, 90))
+            elif "ciscoEnvMon" in mib.name:
+                if "Temperature" in mib.name:
+                    value = float(temp_val)
+                elif "Voltage" in mib.name:
+                    value = float(random.uniform(3.3, 12.0))
+                elif "State" in mib.name:
+                    value = float(random.choice([1, 2, 3]))
+            elif "cpmCPU" in mib.name:
+                value = float(cpu_val)
+            elif "cbgpPeer" in mib.name:
+                # BGP peer metrics
+                if "Updates" in mib.name:
+                    value = float(random.randint(100, 10000))
+                elif "Prefix" in mib.name:
+                    value = float(random.randint(10, 1000))
+                elif "Messages" in mib.name:
+                    value = float(random.randint(1000, 50000))
+                elif "Time" in mib.name:
+                    value = float(random.randint(1000, 8640000))
+                    
+        elif mib.vendor == "Juniper":
+            if "jnx" in mib.name.lower():
+                if "Alarm" in mib.name:
+                    if "Count" in mib.name:
+                        value = float(random.randint(0, 10))
+                    elif "State" in mib.name:
+                        value = float(random.choice([1, 2, 3]))
+                elif "Fru" in mib.name:
+                    if "State" in mib.name:
+                        value = float(random.choice([1, 2, 3, 4]))  # 1=online, 2=offline, 3=testing, 4=failed
+                elif "Cos" in mib.name or "Qos" in mib.name:
+                    value = float(random.randint(0, 1000000))
+                elif "Redundancy" in mib.name:
+                    value = float(random.choice([1, 2, 3]))  # 1=active, 2=standby, 3=disabled
+                    
+        elif mib.vendor == "Arista":
+            if "arista" in mib.name.lower():
+                if "Queue" in mib.name:
+                    if "Drop" in mib.name or "Dropped" in mib.name:
+                        value = float(random.randint(0, 1000))
+                    elif "Buffer" in mib.name:
+                        value = float(random.randint(1000, 1000000))
+                    elif "Pkts" in mib.name:
+                        value = float(random.randint(10000, 1000000))
+                elif "Pfc" in mib.name:
+                    value = float(random.randint(0, 1000))
+                elif "Ecn" in mib.name:
+                    value = float(random.randint(0, 1000))
+                elif "HardwareUtilization" in mib.name:
+                    value = float(random.randint(10, 90))
+                elif "Sensor" in mib.name:
+                    if "Value" in mib.name:
+                        value = float(random.randint(20, 70))
+
+        # Add vendor-specific dimensions
+        if mib.vendor == "Cisco":
+            dimensions["cisco_device_type"] = "router"
+            dimensions["ios_version"] = "17.09.01"
+        elif mib.vendor == "Juniper":
+            dimensions["junos_version"] = "23.4R1"
+            dimensions["junos_platform"] = "mx104"
+        elif mib.vendor == "Arista":
+            dimensions["arista_eos_version"] = "4.31.0F"
+            dimensions["arista_model"] = "DCS-7280SR3K-48C8"
+        elif mib.vendor == "RFC":
+            dimensions["rfc_compliant"] = "true"
+
+        # Add table index dimensions for table entries
+        if mib.is_table:
+            dimensions["ifIndex"] = "1"
+            if "bgpPeer" in mib.name:
+                dimensions["bgpPeerRemoteAddr"] = "10.255.0.2"
+                dimensions["bgpPeerLocalAddr"] = "10.255.0.1"
+                dimensions["bgpPeerRemoteAs"] = "65002"
+            elif "ospfNbr" in mib.name:
+                dimensions["ospfNbrIpAddr"] = "10.255.0.2"
+                dimensions["ospfNbrRtrId"] = "10.0.2.2"
+            elif "cpmCore" in mib.name or "cpmProcess" in mib.name:
+                dimensions["cpmCoreIndex"] = "0"
+            elif "ciscoMemoryPool" in mib.name:
+                dimensions["ciscoMemoryPoolIndex"] = "0"
+
+        return value, dimensions
+
     def simulate_snmp_poll(
         self,
         node: Node,
@@ -671,56 +891,16 @@ class SNMPEngine:
         is_down = (node.status in ("degraded", "breached", "stopped"))
 
         for m in mibs:
-            val = 0.0
-            dimensions = {
-                "oid": m.oid,
-                "mib_module": m.mib_module,
-                "vendor": node.vendor or "cisco",
+            # Use enhanced value generation based on data type, vendor, and context
+            val, dimensions = self._generate_mib_value(
+                m, node, is_down, cpu_val, mem_val, temp_val
+            )
+            
+            # Ensure dimensions have required fields
+            dimensions.update({
                 "device": hostname,
                 "host": f"{hostname}.corp.internal",
-                "source": "sc4snmp",
-                "sourcetype": "sc4snmp:metric"
-            }
-
-            # Generate realistic values based on metric name & data type
-            if "Octets" in m.name:
-                val = float(random.randint(15000000, 99000000))
-                dimensions["ifIndex"] = "1"
-                dimensions["ifDescr"] = intf_name
-            elif "Pkts" in m.name:
-                val = float(random.randint(12000, 95000))
-                dimensions["ifIndex"] = "1"
-                dimensions["ifDescr"] = intf_name
-            elif "Errors" in m.name or "Discards" in m.name:
-                val = float(random.randint(0, 5) if is_down else 0)
-                dimensions["ifIndex"] = "1"
-                dimensions["ifDescr"] = intf_name
-            elif m.name == "ifOperStatus":
-                val = 2.0 if is_down else 1.0  # 1=up, 2=down
-                dimensions["ifIndex"] = "1"
-                dimensions["ifDescr"] = intf_name
-            elif m.name == "ifAdminStatus":
-                val = 1.0
-                dimensions["ifIndex"] = "1"
-                dimensions["ifDescr"] = intf_name
-            elif "CPU" in m.name or "cpmCPUTotal" in m.name:
-                val = float(cpu_val)
-            elif "Memory" in m.name or "ciscoMemoryPoolUsed" in m.name:
-                val = float(mem_val * 10485760.0)  # bytes
-            elif "ciscoMemoryPoolFree" in m.name:
-                val = float((100.0 - mem_val) * 10485760.0)
-            elif "Temp" in m.name:
-                val = float(temp_val)
-            elif "sysUpTime" in m.name:
-                val = float(8640000)
-            elif "bgpPeerState" in m.name:
-                val = 1.0 if is_down else 6.0  # 1=idle, 6=established
-                dimensions["bgpPeerRemoteAddr"] = "10.255.0.2"
-            elif "ospfNbrState" in m.name:
-                val = 1.0 if is_down else 8.0  # 1=down, 8=full
-                dimensions["ospfNbrIpAddr"] = "10.255.0.2"
-            else:
-                val = float(random.randint(1, 100))
+            })
 
             # Strictly compliant Splunk HEC metric event payload:
             hec_metric_event = {

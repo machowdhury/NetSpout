@@ -1,0 +1,256 @@
+{
+ "schema_version": "1.0",
+ "note": "Authentic recorded samples; replay changes only the selected timestamp bytes. Sourcetype null = not recorded in provenance.json (caller must choose).",
+ "sources": [
+  {
+   "id": "linux_syslog_messages",
+   "title": "Linux /var/log/messages",
+   "file": "catalog/raw_reference/linux_messages_syslog.head.bin",
+   "sha256": "9ac4f910e111124407e3c0424fdefc51396b24265e6aae0b97f0c4195218b75a",
+   "format": "syslog",
+   "sourcetype": "linux_messages_syslog",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "^([A-Z][a-z]{2} +\\d{1,2} \\d\\d:\\d\\d:\\d\\d)",
+    "fmt": "syslog3164",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 715,
+   "span_s": 157781.0,
+   "out_of_order_clamped": 0,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+    "declared_size_bytes": 72834,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "auditd",
+   "title": "Linux auditd (credential file access)",
+   "file": "catalog/raw_reference/auditd.head.bin",
+   "sha256": "28f04ee54387630994d5c5be34ae44f31bf161dd8648242b7bdcd356a3664ff4",
+   "format": "text",
+   "sourcetype": "auditd",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "audit\\((\\d\\d/\\d\\d/\\d{4} \\d\\d:\\d\\d:\\d\\d\\.\\d+):",
+    "fmt": "%m/%d/%Y %H:%M:%S.%f",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 91,
+   "span_s": 0.0,
+   "out_of_order_clamped": 88,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1003.008/linux_auditd_access_credential/auditd_proctitle_access_cred.log",
+    "declared_size_bytes": 8874,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "nginx_access_combined",
+   "title": "NGINX combined access log",
+   "file": "catalog/raw_reference/universe_batch2/nginx.bin",
+   "sha256": "816a60d2906b043ce188b3062a68495c8851156da1af3e8f77e3254d7f7816d3",
+   "format": "apache",
+   "sourcetype": "nginx:access",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "\\[([^\\]]+)\\]",
+    "fmt": "%d/%b/%Y:%H:%M:%S %z",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 14,
+   "span_s": 114330366.0,
+   "out_of_order_clamped": 0,
+   "provenance": {
+    "pinned_commit": null,
+    "upstream_path": null,
+    "declared_size_bytes": null,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "suricata_eve",
+   "title": "Suricata EVE JSON",
+   "file": "catalog/raw_reference/suricata.head.bin",
+   "sha256": "8dc429a3e0241657320748f91e3c2ef2e6dd346734111f26b19d8ad0d3e58fb1",
+   "format": "jsonl",
+   "sourcetype": "suricata",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "json_path",
+    "locator": "timestamp",
+    "fmt": "iso8601",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 94,
+   "span_s": 49.051,
+   "out_of_order_clamped": 81,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1071.001/http_user_agents/suricata_c2.log",
+    "declared_size_bytes": 62479,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "aws_cloudtrail",
+   "title": "AWS CloudTrail",
+   "file": "catalog/raw_reference/aws_cloudtrail.head.bin",
+   "sha256": "0d20787d8db59111b0e07ecbf35092c18e68a0909f531e3d8474ccf573092052",
+   "format": "jsonl",
+   "sourcetype": "aws:cloudtrail",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "json_path",
+    "locator": "eventTime",
+    "fmt": "iso8601",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 12,
+   "span_s": 14.0,
+   "out_of_order_clamped": 0,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1021.008/aws_ec2_multiple_ssh_public_keys_uploaded/aws_ec2_multiple_ssh_public_keys_uploaded.json",
+    "declared_size_bytes": 19944,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "crowdstrike_sensor",
+   "title": "CrowdStrike Falcon sensor events",
+   "file": "catalog/raw_reference/crowdstrike_events_sensor.head.bin",
+   "sha256": "9eb639b8642f067f76ddb8b4ab66494deb9893eed528bcb02063802c2dbff140",
+   "format": "jsonl",
+   "sourcetype": "crowdstrike:events:sensor",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "json_path",
+    "locator": "timestamp",
+    "fmt": "epoch_ms",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 43,
+   "span_s": 0.0,
+   "out_of_order_clamped": 42,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1003.001/atomic_red_team/crowdstrike_falcon.log",
+    "declared_size_bytes": 77504,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "crushftp_sessions",
+   "title": "CrushFTP session log",
+   "file": "catalog/raw_reference/crushftp_sessionlogs.head.bin",
+   "sha256": "92410bcbef672a8141a4cc4d33f338ba1a46784a75ac8811bf9b366ada374d63",
+   "format": "text",
+   "sourcetype": "crushftp:sessionlogs",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "\\|(\\d\\d/\\d\\d/\\d{4} \\d\\d:\\d\\d:\\d\\d\\.\\d+)\\|",
+    "fmt": "%m/%d/%Y %H:%M:%S.%f",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 10,
+   "span_s": 0.0,
+   "out_of_order_clamped": 9,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1190/crushftp/crushftp.log",
+    "declared_size_bytes": 2295,
+    "excerpt_only": false
+   }
+  },
+  {
+   "id": "mcp_jsonrpc",
+   "title": "MCP JSON-RPC server log",
+   "file": "catalog/raw_reference/mcp_jsonrpc.head.bin",
+   "sha256": "3de2a8fa34da8aae3443eeaa0562bf8af83b0c4c408803d39a3a50ad0f800f6d",
+   "format": "jsonl",
+   "sourcetype": "mcp:jsonrpc",
+   "drop_last_record": true,
+   "timestamp_rule": {
+    "kind": "json_path",
+    "locator": "timestamp",
+    "fmt": "iso8601",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 524,
+   "span_s": 81401.865,
+   "out_of_order_clamped": 392,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/mcp/mcp.log",
+    "declared_size_bytes": 637913,
+    "excerpt_only": true
+   }
+  },
+  {
+   "id": "windows_sysmon_xml",
+   "title": "Windows Sysmon XML events",
+   "file": "catalog/raw_reference/XmlWinEventLog.head.bin",
+   "sha256": "30a937fafe90e06078629108b56db4a169d947672cd7900f5be3553c2a2418a7",
+   "format": "windows_xml",
+   "sourcetype": "XmlWinEventLog",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "SystemTime='([^']+)'",
+    "fmt": "iso8601",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 102,
+   "span_s": 0.0,
+   "out_of_order_clamped": 101,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/apt_simulations/ActiveMQ_exploit_Lockbit_Ransomware/windows-sysmon.log",
+    "declared_size_bytes": 20699440,
+    "excerpt_only": true
+   }
+  },
+  {
+   "id": "sysmon_linux_xml",
+   "title": "Sysmon for Linux XML events",
+   "file": "catalog/raw_reference/sysmon_linux.head.bin",
+   "sha256": "84db6134f3eca13ada8f90441a3796b9d878cfa9c92f181342e4667d592d54f7",
+   "format": "windows_xml",
+   "sourcetype": "sysmon:linux",
+   "drop_last_record": false,
+   "timestamp_rule": {
+    "kind": "regex",
+    "locator": "SystemTime=\"([^\"]+)\"",
+    "fmt": "iso8601",
+    "tz": "UTC",
+    "assume_year": 2000
+   },
+   "records": 129,
+   "span_s": 17.745,
+   "out_of_order_clamped": 0,
+   "provenance": {
+    "pinned_commit": "4389fa7a4e74a7c083c0fbe448fa2c7c32378981",
+    "upstream_path": "/datasets/attack_techniques/T1003.008/copy_file_stdoutpipe/sysmon_linux.log",
+    "declared_size_bytes": 11130080,
+    "excerpt_only": true
+   }
+  }
+ ]
+}

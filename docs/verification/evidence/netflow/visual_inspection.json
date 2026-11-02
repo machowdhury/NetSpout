@@ -1,0 +1,15 @@
+{
+ "note": "Screenshots opened and inspected by the engineer in the final or immediately preceding build (layout unchanged except NOC-05 panel and null-to-dash cell text).",
+ "inspected": {
+  "NF-NOC-01-ELEPHANT": "throughput area, talker bars, elephant table, destination/app bars, scatter; KPI value bug (raw bytes shown) found and fixed before this record",
+  "NF-NOC-02-DSCP": "gauge, DSCP pie, stacked compliance timeline, noncompliant endpoint table render with data",
+  "NF-NOC-03-ROUTING-LOOP": "indicator table, trend and path bars render; caveat banner readable",
+  "NF-NOC-04-ASYMMETRY": "pair classification pie, forward/reverse bars, non-symmetric pair table render",
+  "NF-NOC-05-BASELINE-DRIFT": "duration lines, baseline vs observed columns, per-destination table render; pie replaced by bar after inspection",
+  "NF-SEC-06-DDOS": "packet-rate hero, KPIs, flags/protocol/targets/progression render",
+  "NF-SEC-07-PORTSCAN": "scatter (bubble replaced after inspection), cumulative curves, tables render",
+  "NF-SEC-08-EXFIL": "sankey, KPIs, timeline, destination tables render; sankey is dominated by one transfer by design of the data",
+  "NF-SEC-09-BEACON": "interval histogram, CV ranking, periodicity timeline render",
+  "NF-SEC-10-DNS-FLOW": "direction area, client scatter, outlier table, ratio columns render; limited-evidence banner readable"
+ }
+}

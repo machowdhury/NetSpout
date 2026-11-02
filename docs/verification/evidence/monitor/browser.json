@@ -1,0 +1,392 @@
+{
+ "generated_utc": "2026-10-31T13:12:07.323Z",
+ "results": {
+  "replay_pack": {
+   "search": "credential-file access with system",
+   "engine_card": "OPERATIONAL CONTRACTED ONLY Linux credential-file access with system context (replayed rec",
+   "samples": [
+    {
+     "state": "RUNNING",
+     "generated": 7,
+     "accepted": 3
+    },
+    {
+     "state": "RUNNING",
+     "generated": 16,
+     "accepted": 16
+    },
+    {
+     "state": "RUNNING",
+     "generated": 31,
+     "accepted": 31
+    },
+    {
+     "state": "RUNNING",
+     "generated": 35,
+     "accepted": 35
+    },
+    {
+     "state": "RUNNING",
+     "generated": 40,
+     "accepted": 40
+    },
+    {
+     "state": "RUNNING",
+     "generated": 131,
+     "accepted": 114
+    },
+    {
+     "state": "COMPLETED",
+     "generated": 131,
+     "accepted": 131
+    }
+   ],
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 131,
+    "attempts": 131,
+    "accepted": 131,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_before_verify": "Not verified",
+   "verification": "Verification: VERIFIED — 131 indexed of 131 accepted",
+   "indexed_after_verify": "131",
+   "controls_note": "accepted is the transport acknowledgement, not proof of indexing; indexed comes only from an independent Splunk search",
+   "rows": 4,
+   "after_refresh": {
+    "state": "COMPLETED",
+    "accepted": 131
+   },
+   "refresh_recovered": true,
+   "ok": true
+  },
+  "unified_generation": {
+   "search": "Golden Scenario",
+   "engine_card": "OPERATIONAL CERTIFIED Cisco IOS XR Interface Degradation — Golden Scenario An evidence-bou",
+   "samples": [
+    {
+     "state": "RUNNING",
+     "generated": 0,
+     "accepted": 0
+    },
+    {
+     "state": "RUNNING",
+     "generated": 0,
+     "accepted": 0
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 2,
+     "accepted": 2
+    },
+    {
+     "state": "RUNNING",
+     "generated": 2,
+     "accepted": 2
+    },
+    {
+     "state": "RUNNING",
+     "generated": 3,
+     "accepted": 3
+    },
+    {
+     "state": "RUNNING",
+     "generated": 4,
+     "accepted": 4
+    },
+    {
+     "state": "RUNNING",
+     "generated": 4,
+     "accepted": 4
+    }
+   ],
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 4,
+    "attempts": 4,
+    "accepted": 4,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_before_verify": "Not verified",
+   "verification": "Verification: VERIFIED — 4 indexed of 4 accepted",
+   "indexed_after_verify": "4",
+   "controls_note": "This runner executes synchronously inside the engine; pause, resume and stop are not supported. Counters are read at the delivery boundary.",
+   "rows": 5,
+   "after_refresh": {
+    "state": "COMPLETED",
+    "accepted": 4
+   },
+   "refresh_recovered": true,
+   "ok": true
+  },
+  "scenario_runner": {
+   "search": "Campus Core L2/3 Disturbance",
+   "engine_card": "OPERATIONAL CERTIFIED Campus Core L2/3 Disturbance & Rogue AP Unsanctioned Rogue AP connec",
+   "samples": [
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    },
+    {
+     "state": "RUNNING",
+     "generated": 1,
+     "accepted": 1
+    }
+   ],
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 10,
+    "attempts": 10,
+    "accepted": 10,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_before_verify": "Not verified",
+   "verification": "Verification: VERIFIED — 10 indexed of 10 accepted",
+   "indexed_after_verify": "10",
+   "controls_note": "This runner executes synchronously inside the engine; pause, resume and stop are not supported. Counters are read at the delivery boundary.",
+   "rows": 9,
+   "after_refresh": {
+    "state": "COMPLETED",
+    "accepted": 10
+   },
+   "refresh_recovered": true,
+   "ok": true
+  },
+  "native_pack": {
+   "search": "AWS CloudTrail Recon",
+   "engine_card": "OPERATIONAL CONTRACTED ONLY AWS CloudTrail Recon & Escalation (Wave-2 pack) AWS console lo",
+   "samples": [
+    {
+     "state": "RUNNING",
+     "generated": 10,
+     "accepted": 1
+    },
+    {
+     "state": "COMPLETED",
+     "generated": 10,
+     "accepted": 10
+    }
+   ],
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 10,
+    "attempts": 10,
+    "accepted": 10,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_before_verify": "Not verified",
+   "verification": "Verification: VERIFIED — 10 indexed of 10 accepted",
+   "indexed_after_verify": "10",
+   "controls_note": "accepted is the transport acknowledgement, not proof of indexing; indexed comes only from an independent Splunk search",
+   "rows": 6,
+   "after_refresh": {
+    "state": "COMPLETED",
+    "accepted": 10
+   },
+   "refresh_recovered": true,
+   "ok": true
+  },
+  "incident_pack": {
+   "search": "5G core user-plane degradation",
+   "engine_card": "OPERATIONAL CONTRACTED ONLY 5G core user-plane degradation Finite telecom incident pack: 3",
+   "samples": [
+    {
+     "state": "RUNNING",
+     "generated": 40,
+     "accepted": 3
+    },
+    {
+     "state": "COMPLETED",
+     "generated": 40,
+     "accepted": 40
+    }
+   ],
+   "final_state": "COMPLETED",
+   "counters": {
+    "generated": 40,
+    "attempts": 40,
+    "accepted": 40,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0
+   },
+   "indexed_before_verify": "Not verified",
+   "verification": "Verification: VERIFIED — 30 indexed of 40 accepted",
+   "indexed_after_verify": "40",
+   "controls_note": "accepted is the transport acknowledgement, not proof of indexing; indexed comes only from an independent Splunk search",
+   "rows": 12,
+   "after_refresh": {
+    "state": "COMPLETED",
+    "accepted": 40
+   },
+   "refresh_recovered": true,
+   "ok": true
+  },
+  "replay_controls": {
+   "search": "credential-file access with system",
+   "posts": [
+    "REQ runs/rp-60cf50a416d3/resume",
+    "RESP runs/rp-60cf50a416d3/resume 200",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ runs/rp-60cf50a416d3/stop",
+    "RESP runs/rp-60cf50a416d3/stop 200",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID",
+    "REQ undefined",
+    "FAILED undefined net::ERR_CERT_AUTHORITY_INVALID"
+   ],
+   "seq": [
+    "RUNNING:140",
+    "RUNNING:161",
+    "RUNNING:161",
+    "RUNNING:161",
+    "RUNNING:161",
+    "RUNNING:161",
+    "RUNNING:161",
+    "RUNNING:161"
+   ],
+   "paused": {
+    "state": "PAUSED",
+    "accepted": 47
+   },
+   "held_while_paused": true,
+   "resumed": {
+    "state": "RUNNING",
+    "accepted": 161
+   },
+   "final_state": "STOPPED",
+   "counters": {
+    "accepted": 407,
+    "pending": 2
+   },
+   "ok": true
+  }
+ }
+}

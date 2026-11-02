@@ -6,6 +6,7 @@ __pycache__/
 # Environments
 .env
 .venv
+.venv-*/
 env/
 venv/
 ENV/
@@ -14,6 +15,9 @@ ENV/
 node_modules/
 frontend/dist/
 frontend/dist-ssr/
+frontend/test-results/
+frontend/playwright-report/
+.artifacts/
 *.local
 
 # Splunk App Symlinks
@@ -34,3 +38,10 @@ netspout/bin/app
 .Trashes
 ehthumbs.db
 Thumbs.db
+backend/.env
+
+# Phase 4E lab credentials
+tests/lab/**/.env*
+.cloud_stage/
+pulseforge-engine.tar.gz
+.lab_engine_cfg/

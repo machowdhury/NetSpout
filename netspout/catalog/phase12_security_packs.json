@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase12",
+  "protocol_versions": {
+    "mcp": "2025-11-25",
+    "a2a": "1.0.0",
+    "slsa": "1.1"
+  },
+  "evidence": [
+    {
+      "evidence_id": "EVID-P12-MCP-TOOLS",
+      "title": "Model Context Protocol 2025-11-25 — Tools",
+      "publisher": "Model Context Protocol",
+      "reference": "https://modelcontextprotocol.io/specification/2025-11-25/server/tools",
+      "version": "2025-11-25",
+      "retrieved_at": "2026-10-08",
+      "supports": ["tools/list and tools/call protocol structures", "tool input and result validation guidance"],
+      "verification_state": "VERIFIED",
+      "notes": "Supports protocol fields only; NetSpout audit and scenario metadata are explicitly separate."
+    },
+    {
+      "evidence_id": "EVID-P12-MCP-RESOURCES",
+      "title": "Model Context Protocol 2025-11-25 — Resources and Prompts",
+      "publisher": "Model Context Protocol",
+      "reference": "https://modelcontextprotocol.io/specification/2025-11-25/server/resources",
+      "version": "2025-11-25",
+      "retrieved_at": "2026-10-08",
+      "supports": ["resources/list and resources/read protocol structures", "resource URI and content structures"],
+      "verification_state": "VERIFIED",
+      "notes": "Prompt interactions are modeled only where the official protocol defines prompts/list and prompts/get."
+    },
+    {
+      "evidence_id": "EVID-P12-MCP-AUTH",
+      "title": "Model Context Protocol 2025-11-25 — Authorization",
+      "publisher": "Model Context Protocol",
+      "reference": "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization",
+      "version": "2025-11-25",
+      "retrieved_at": "2026-10-08",
+      "supports": ["OAuth 2.1 authorization context", "resource indicators, PKCE, and audience validation"],
+      "verification_state": "VERIFIED",
+      "notes": "Authorization decisions are instrumentation audit evidence and are not invented MCP message fields."
+    },
+    {
+      "evidence_id": "EVID-P12-A2A",
+      "title": "Agent2Agent Protocol Specification",
+      "publisher": "A2A Project",
+      "reference": "https://a2a-protocol.org/v1.0.0/specification/",
+      "version": "1.0.0",
+      "retrieved_at": "2026-10-08",
+      "supports": ["Agent Card, Task, Message, Part, Artifact", "taskId, contextId, status and update events"],
+      "verification_state": "VERIFIED",
+      "notes": "Authorization remains implementation-specific after authentication; an exchange does not prove malicious intent."
+    },
+    {
+      "evidence_id": "EVID-P12-OWASP-AGENTIC",
+      "title": "OWASP Agentic AI Threats and Mitigations",
+      "publisher": "OWASP Foundation",
+      "reference": "https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/",
+      "version": "2026",
+      "retrieved_at": "2026-10-08",
+      "supports": ["prompt injection, tool misuse, identity and delegation threat modeling", "least privilege and external authorization controls"],
+      "verification_state": "VERIFIED",
+      "notes": "Threat taxonomy support does not establish standards compliance."
+    },
+    {
+      "evidence_id": "EVID-P12-SLSA",
+      "title": "SLSA v1.1 Provenance",
+      "publisher": "OpenSSF / SLSA",
+      "reference": "https://slsa.dev/spec/v1.1/provenance",
+      "version": "1.1",
+      "retrieved_at": "2026-10-08",
+      "supports": ["in-toto provenance predicate", "buildDefinition, runDetails, builder.id, subject digests"],
+      "verification_state": "VERIFIED",
+      "notes": "Missing provenance is modeled as a validation gap, never automatic proof of malicious activity."
+    },
+    {
+      "evidence_id": "EVID-P12-RUNTIME",
+      "title": "NetSpout Phase 12 deterministic audit runtime",
+      "publisher": "NetSpout",
+      "reference": "src/netspout_core/phase12_security_packs.py",
+      "version": "1.0.0",
+      "retrieved_at": "2026-10-08",
+      "supports": ["offline deterministic audit generation", "secret redaction, fail-closed endpoint and payload policy"],
+      "verification_state": "PARTIALLY_VERIFIED",
+      "notes": "Runtime evidence is NetSpout-defined and does not validate an external MCP, A2A, repository, registry, or CI implementation."
+    }
+  ],
+  "references": [
+    {"scenario_id": "AI-001", "title": "Indirect Prompt Injection", "domain": "Agentic AI Security", "category": "PROMPT_INJECTION", "source": "phase12-agentic-audit", "threat": "A lower-trust artifact attempts to redirect an authorized agent task.", "boundary": "Untrusted artifact to agent planning context", "outcome": "BLOCKED", "protocol": "MCP", "simple": "An untrusted document asks the agent to ignore its assigned job.", "advanced": "Correlate artifact provenance, policy evaluation, agent decision, and attempted tool use without treating the instruction as a compromise."},
+    {"scenario_id": "AI-002", "title": "Unauthorized Tool Invocation", "domain": "Agentic AI Security", "category": "TOOL_AUTHORIZATION", "source": "phase12-agentic-audit", "threat": "An agent requests a capability outside its assigned permissions.", "boundary": "Agent runtime to tool authorization service", "outcome": "DENIED", "protocol": "MCP", "simple": "The agent asks for a tool it is not allowed to use.", "advanced": "Validate requested capability, policy subject, resource audience, denial, and absence of a downstream action."},
+    {"scenario_id": "AI-003", "title": "MCP Tool Output Manipulation", "domain": "Agentic AI Security", "category": "MCP_TOOL_OUTPUT", "source": "phase12-agentic-audit", "threat": "Attacker-controlled tool output attempts to influence a later agent decision.", "boundary": "MCP server result to agent continuation", "outcome": "CONTAINED", "protocol": "MCP", "simple": "A tool response contains instructions that should be treated as data.", "advanced": "Compare protocol result content with instrumentation provenance, trust classification, and continuation policy."},
+    {"scenario_id": "AI-004", "title": "Agent Identity and Privilege Drift", "domain": "Agentic AI Security", "category": "IDENTITY_DRIFT", "source": "phase12-agentic-audit", "threat": "A session attempts to use authorization context broader than its original grant.", "boundary": "Agent session to authorization context", "outcome": "DENIED", "protocol": "MCP", "simple": "The agent's apparent privileges change during one session.", "advanced": "Correlate stable session identity, original grant, changed claims, policy version, and denied tool request."},
+    {"scenario_id": "AI-005", "title": "A2A Delegation Abuse", "domain": "Agentic AI Security", "category": "A2A_DELEGATION", "source": "phase12-agentic-audit", "threat": "An agent delegates work to a peer with unexpected scope.", "boundary": "Delegating agent to A2A peer", "outcome": "REJECTED", "protocol": "A2A", "simple": "One agent gives another agent more work than policy allows.", "advanced": "Trace taskId, contextId, delegation parent, scope, peer identity, and rejection without inferring malicious intent from exchange alone."},
+    {"scenario_id": "AI-006", "title": "Multi-Agent Incident", "domain": "Agentic AI Security", "category": "MULTI_AGENT_INCIDENT", "source": "phase12-agentic-audit", "threat": "A lower-trust artifact drives a multi-step attempted resource request through two agents.", "boundary": "Artifact through agent and tool boundaries", "outcome": "DENIED", "protocol": "MCP+A2A", "simple": "Several agent actions form one connected incident.", "advanced": "Use shared run, session, task, invocation, policy, and causal parent identifiers to prove continuity while preserving denied-versus-successful semantics."},
+    {"scenario_id": "SC-001", "title": "Suspicious Dependency Change", "domain": "Software Supply Chain Security", "category": "DEPENDENCY_CHANGE", "source": "phase12-supply-chain-audit", "threat": "A synthetic pull request introduces an unexpected dependency version.", "boundary": "Pull request change to dependency policy", "outcome": "REVIEW_REQUIRED", "protocol": "SLSA", "simple": "A pull request changes a dependency in an unusual way.", "advanced": "Correlate repository, commit, pull request, dependency metadata, policy evaluation, and build context without installing the package."},
+    {"scenario_id": "SC-002", "title": "CI Workflow Permission Escalation", "domain": "Software Supply Chain Security", "category": "CI_PERMISSION_CHANGE", "source": "phase12-supply-chain-audit", "threat": "A workflow modification requests broader repository permissions.", "boundary": "Repository workflow to CI authorization", "outcome": "DENIED", "protocol": "SLSA", "simple": "A build workflow asks for more permissions than before.", "advanced": "Compare original and requested permissions, reviewer decision, synthetic workflow identity, and non-execution evidence."},
+    {"scenario_id": "SC-003", "title": "Build Artifact Provenance Gap", "domain": "Software Supply Chain Security", "category": "PROVENANCE_GAP", "source": "phase12-supply-chain-audit", "threat": "A synthetic artifact lacks the required provenance statement.", "boundary": "Build output to artifact admission policy", "outcome": "VALIDATION_FAILED", "protocol": "SLSA", "simple": "A build artifact is missing information about how it was produced.", "advanced": "Validate subject digest, expected predicate type, builder identity, and absent attestation while avoiding a malicious verdict."},
+    {"scenario_id": "SC-004", "title": "Repository Automation Abuse", "domain": "Software Supply Chain Security", "category": "AUTOMATION_AUTHORIZATION", "source": "phase12-supply-chain-audit", "threat": "A synthetic automation identity requests an unauthorized repository operation.", "boundary": "Automation identity to repository authorization", "outcome": "DENIED", "protocol": "SLSA", "simple": "A bot attempts a repository action it cannot perform.", "advanced": "Correlate automation subject, requested operation, repository resource, policy decision, and absence of mutation."},
+    {"scenario_id": "SC-005", "title": "Supply Chain to Runtime Correlation", "domain": "Software Supply Chain Security", "category": "BUILD_RUNTIME_CORRELATION", "source": "phase12-supply-chain-audit", "threat": "A synthetic repository change and artifact are linked to a modeled runtime observation.", "boundary": "Build artifact to simulated deployment environment", "outcome": "MODELED_DEPLOYMENT", "protocol": "SLSA", "simple": "A source change is connected to a later application observation.", "advanced": "Join commit, build, subject digest, deployment identity, runtime entity, and independently labeled modeled observation."},
+    {"scenario_id": "P12-XD-001", "title": "AI Agent to Infrastructure", "domain": "Cross-Domain Incident", "category": "AGENT_INFRASTRUCTURE", "source": "phase12-cross-domain-audit", "threat": "An agent requests an infrastructure operation and policy blocks it before change.", "boundary": "Agent tool authorization to infrastructure control plane", "outcome": "DENIED", "protocol": "MCP", "simple": "An agent tries to change infrastructure but policy stops it.", "advanced": "Correlate agent, invocation, policy denial, unchanged infrastructure state, and network observation from one shared causal graph."},
+    {"scenario_id": "P12-XD-002", "title": "Supply Chain to Application", "domain": "Cross-Domain Incident", "category": "SUPPLY_CHAIN_APPLICATION", "source": "phase12-cross-domain-audit", "threat": "A synthetic build artifact is admitted to a modeled application environment with runtime evidence.", "boundary": "Artifact admission to application runtime", "outcome": "MODELED_DEPLOYMENT", "protocol": "SLSA", "simple": "A verified synthetic build is connected to application behavior.", "advanced": "Correlate repository, build, provenance, artifact digest, deployment, application entity, and runtime evidence while labeling modeled causality."}
+  ]
+}

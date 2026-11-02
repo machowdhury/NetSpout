@@ -1,0 +1,2 @@
+vendor_id,vendor_name,platform,protocol,mib_module_count,yang_module_count,evidence_level,generator,splunk_verification
+TOTAL,ALL,ALL,ALL,307,3,AGGREGATE,multiple,PARTIAL

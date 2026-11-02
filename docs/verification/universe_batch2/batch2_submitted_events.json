@@ -1,0 +1,255 @@
+{
+  "run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+  "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+  "events": [
+    {
+      "event": "{\"time\":\"2026-10-26T20:15:33.431187Z\",\"type\":\"request\",\"auth\":{\"client_token\":\"hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327\",\"accessor\":\"hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931\",\"display_name\":\"oidc-12349999999999999999\",\"policies\":[\"default\",\"group-admin\"],\"token_policies\":[\"default\",\"group-admin\"],\"metadata\":{\"account_id\":\"12349999999999999999\",\"email\":\"example@gmail.com\",\"role\":\"gmail\"},\"entity_id\":\"e4f5c67a-6f7e-789d-ae56-a1fe3ae23046\",\"token_type\":\"service\",\"token_ttl\":3600,\"token_issue_time\":\"2020-12-01T20:28:40Z\"},\"request\":{\"id\":\"99ef58fd-6c8c-5389-8cf7-811f1203b825\",\"operation\":\"update\",\"mount_type\":\"system\",\"client_token\":\"hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327\",\"client_token_accessor\":\"hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931\",\"namespace\":{\"id\":\"root\"},\"path\":\"sys/capabilities-self\",\"data\":{\"paths\":[\"hmac-sha256:fd04b28916cb60f622b1ebce308b339b468f5da93fa735f985f4435049627a27\"]},\"remote_address\":\"203.0.113.66\"}}",
+      "sourcetype": "hashicorp_vault_audit_log",
+      "host": "ub2-vault",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-000"
+      }
+    },
+    {
+      "event": "{\"time\":\"2026-10-26T20:15:33.431187Z\",\"type\":\"response\",\"auth\":{\"client_token\":\"hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327\",\"accessor\":\"hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931\",\"display_name\":\"oidc-12349999999999999999\",\"policies\":[\"default\",\"group-admin\"],\"token_policies\":[\"default\",\"group-admin\"],\"metadata\":{\"account_id\":\"12349999999999999999\",\"email\":\"example@gmail.com\",\"role\":\"gmail\"},\"entity_id\":\"e4f5c67a-6f7e-789d-ae56-a1fe3ae23046\",\"token_type\":\"service\",\"token_ttl\":3600,\"token_issue_time\":\"2020-12-01T20:28:40Z\"},\"request\":{\"id\":\"99ef58fd-6c8c-5389-8cf7-811f1203b825\",\"operation\":\"update\",\"mount_type\":\"system\",\"client_token\":\"hmac-sha256:9cc3baa3c2bd7a4b233ca1fdcf69df91c8f2a9f14ddda54a4039190f581dd327\",\"client_token_accessor\":\"hmac-sha256:eb605bd7f8a5ceb951b9ab42cae6d6c3f12f203cb2c2a78e33e899f77dceb931\",\"namespace\":{\"id\":\"root\"},\"path\":\"sys/capabilities-self\",\"data\":{\"paths\":[\"hmac-sha256:fd04b28916cb60f622b1ebce308b339b468f5da93fa735f985f4435049627a27\"]},\"remote_address\":\"203.0.113.66\"},\"response\":{\"mount_type\":\"system\",\"data\":{\"capabilities\":[\"hmac-sha256:b77b79078c7bad1402a1ec74613454fd85efa203f1aa557fd2a9718cfd4ef367\",\"hmac-sha256:8d0bb80a69f442489908170e1831503c65b2f9d45a3250eac21fc16840416e5a\",\"hmac-sha256:c5086738f6225235066f69681e94111d94a45a268e9f0c64c6105073e32e8176\",\"hmac-sha256:3d439b7d92cbd8123fda8462716af05ae15710c8e2905eaba8d5452fccbad2f2\",\"hmac-sha256:5622a2d8fedf53e4671d6f371c59e40f3379030815fd4bb4126fdedce5fc87bb\"],\"secret/metadata/apps/github-runner/ca-cert\":[\"hmac-sha256:b77b79078c7bad1402a1ec74613454fd85efa203f1aa557fd2a9718cfd4ef367\",\"hmac-sha256:8d0bb80a69f442489908170e1831503c65b2f9d45a3250eac21fc16840416e5a\",\"hmac-sha256:c5086738f6225235066f69681e94111d94a45a268e9f0c64c6105073e32e8176\",\"hmac-sha256:3d439b7d92cbd8123fda8462716af05ae15710c8e2905eaba8d5452fccbad2f2\",\"hmac-sha256:5622a2d8fedf53e4671d6f371c59e40f3379030815fd4bb4126fdedce5fc87bb\"]}}}",
+      "sourcetype": "hashicorp_vault_audit_log",
+      "host": "ub2-vault",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-001",
+        "netspout_parent_event_id": "ub2_cloud_identity_mail_hunt-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"author\":{\"type\":\"user\",\"displayName\":\"training.operator\",\"operations\":null,\"isExternalCollaborator\":false,\"username\":\"df856b17d84fcf010f11fcfcc6be4267\",\"userKey\":\"26971c016361d1f6a3eb8f62461f1e4e\",\"accountId\":\"df856b17d84fcf010f11fcfcc6be4267\",\"accountType\":\"\",\"publicName\":\"Unknown user\",\"externalCollaborator\":false},\"remoteAddress\":\"203.0.113.66\",\"creationDate\":1793045733431,\"summary\":\"Space created\",\"description\":\"\",\"category\":\"Spaces\",\"sysAdmin\":false,\"superAdmin\":false,\"affectedObject\":{\"name\":\"Service Catalogue\",\"objectType\":\"Space\"},\"changedValues\":[{\"name\":\"Space type\",\"oldValue\":\"\",\"newValue\":\"global\",\"hiddenOldValue\":\"\",\"hiddenNewValue\":\"\"},{\"name\":\"Space status\",\"oldValue\":\"\",\"newValue\":\"CURRENT\",\"hiddenOldValue\":\"\",\"hiddenNewValue\":\"\"},{\"name\":\"Name\",\"oldValue\":\"\",\"newValue\":\"Service Catalogue\",\"hiddenOldValue\":\"\",\"hiddenNewValue\":\"\"},{\"name\":\"Space key\",\"oldValue\":\"\",\"newValue\":\"SC\",\"hiddenOldValue\":\"\",\"hiddenNewValue\":\"\"}],\"associatedObjects\":[]}",
+      "sourcetype": "Confluence:audit log",
+      "host": "ub2-confluence",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-002",
+        "netspout_parent_event_id": "ub2_cloud_identity_mail_hunt-BASELINE-2"
+      }
+    },
+    {
+      "event": "{\"author\":{\"type\":\"user\",\"displayName\":\"training.operator\",\"operations\":null,\"isExternalCollaborator\":false,\"accountType\":\"\",\"publicName\":\"Unknown user\",\"externalCollaborator\":false},\"remoteAddress\":\"203.0.113.66\",\"creationDate\":1793045733431,\"summary\":\"User added to group\",\"description\":\"\",\"category\":\"Users and groups\",\"sysAdmin\":false,\"superAdmin\":false,\"affectedObject\":{\"name\":\"jira-software-users:b8d81944-e737-4da0-94ca-165fa5c0635c\",\"objectType\":\"Group\"},\"changedValues\":[],\"associatedObjects\":[{\"name\":\"ASP\",\"objectType\":\"User\"}]}",
+      "sourcetype": "Confluence:audit log",
+      "host": "ub2-confluence",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-003",
+        "netspout_parent_event_id": "ub2_cloud_identity_mail_hunt-OBSERVE-1"
+      }
+    },
+    {
+      "event": "{\"spamScore\":0,\"phishScore\":0,\"threatsInfoMap\":[{\"threatID\":\"dhgonvjabcdefghijkabcdefghijkabcdefghijkabcdefghijkhlonvjdsabcdefgh\",\"threatStatus\":\"active\",\"classification\":\"malware\",\"threatUrl\":\"https://threatinsight.proofpoint.com/adhgon-vjdsd-efghjikhlon-abcdefghij/threat/email/792e8d28448xxxxxxxxxxxxxxxxx8448c792xxxxx1af132onvjdsvsbnvjd\",\"threatTime\":\"2026-10-26T20:15:33.431187Z\",\"threat\":\"example.com/xyz/\",\"campaignID\":null,\"threatType\":\"url\"}],\"messageTime\":\"2026-10-26T20:15:33.431187Z\",\"impostorScore\":0.0,\"malwareScore\":100,\"cluster\":\"pharmtech_hosted\",\"subject\":\"Re: Delayed Mail (still being retried)\",\"quarantineFolder\":null,\"quarantineRule\":null,\"policyRoutes\":[\"default_inbound\"],\"modulesRun\":[\"av\",\"zerohour\",\"dkimv\",\"spf\",\"spam\",\"dmarc\",\"pdr\"],\"messageSize\":3102,\"headerFrom\":\"<info@example.com>\",\"headerReplyTo\":null,\"fromAddress\":[\"info@example.com\"],\"ccAddresses\":[],\"replyToAddress\":[],\"toAddresses\":[\"mailer-daemon@example.com\"],\"xmailer\":\"Microsoft Outlook 16.0\",\"messageParts\":[{\"disposition\":\"inline\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"text.html\",\"sandboxStatus\":null,\"oContentType\":\"text/html\",\"contentType\":\"text/html\"}],\"completelyRewritten\":false,\"id\":\"709c3e4f-a006-5d86-b919-d592b5314e19\",\"QID\":\"3XXXXgaXXX-1\",\"GUID\":\"qxxlnx-xxxxxNxXGxQxWxPxxxxx0\",\"sender\":\"info@example.com\",\"recipient\":[\"mailer-daemon@example.com\"],\"senderIP\":\"203.0.113.66\",\"messageID\":\"<3f208x0sga-1@m0116781.example.com>\"}",
+      "sourcetype": "proofpoint_tap_siem",
+      "host": "ub2-proofpoint",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub2-004",
+        "netspout_parent_event_id": "ub2_cloud_identity_mail_hunt-OBSERVE-2"
+      }
+    },
+    {
+      "event": "{\"spamScore\":100,\"phishScore\":100,\"threatsInfoMap\":[{\"threatID\":\"cfdhgondhgonvjdsdefghjikhlonvjdsvsbnvjd56546ghjikhlonvjdsvsbnvjd\",\"threatStatus\":\"active\",\"classification\":\"phish\",\"threatUrl\":\"https://threatinsight.proofpoint.com/adhgon-vjdsdef-ghjikhlonv-abcdefghij/threat/email/7921af132d1aa6a88fdbdadkhlonvj1a8xxxxxxxxxxxxxxxxxxxxxdkhlonvj1\",\"threatTime\":\"2026-10-26T20:15:33.431187Z\",\"threat\":\"https://example.com/\",\"campaignID\":null,\"threatType\":\"url\"},{\"threatID\":\"124563bcdefghijkabcdefghi201256abcdefghijk201256aswe20abc\",\"threatStatus\":\"active\",\"classification\":\"phish\",\"threatUrl\":\"https://threatinsight.proofpoint.com/abcdefgh-1234-1234-1234-1234-abcdefgh/threat/email/85738a8x9x7x1x04x5329xaadc9x425925abdf84089wcwe3x022xx4x19x123\",\"threatTime\":\"2026-10-26T20:15:33.431187Z\",\"threat\":\"example.com\",\"campaignID\":null,\"threatType\":\"url\"}],\"messageTime\":\"2026-10-26T20:15:33.431187Z\",\"impostorScore\":0.0,\"malwareScore\":0,\"cluster\":\"pharmtech_hosted\",\"subject\":\"Statement From (Trinity Groundwater)\",\"quarantineFolder\":null,\"quarantineRule\":null,\"policyRoutes\":[\"default_inbound\",\"allow_relay\"],\"modulesRun\":[\"av\",\"zerohour\",\"dkimv\",\"spf\",\"spam\",\"dmarc\"],\"messageSize\":111091,\"headerFrom\":\"Laura Schumacher <abc@example.com>\",\"headerReplyTo\":null,\"fromAddress\":[\"abc@example.com\"],\"ccAddresses\":[],\"replyToAddress\":[],\"toAddresses\":[\"mail@example.com\",\"abc@example.com\"],\"xmailer\":null,\"messageParts\":[{\"disposition\":\"inline\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"text.html\",\"sandboxStatus\":null,\"oContentType\":\"text/html\",\"contentType\":\"text/html\"},{\"disposition\":\"inline\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"text.txt\",\"sandboxStatus\":null,\"oContentType\":\"text/plain\",\"contentType\":\"text/plain\"},{\"disposition\":\"inline\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"text.txt\",\"sandboxStatus\":null,\"oContentType\":\"text/plain\",\"contentType\":\"text/plain\"},{\"disposition\":\"inline\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"text.html\",\"sandboxStatus\":null,\"oContentType\":\"text/html\",\"contentType\":\"text/html\"},{\"disposition\":\"attached\",\"sha256\":\"a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e\",\"md5\":\"b10a8db164e0754105b7a99be72e3fe5\",\"filename\":\"image001.png\",\"sandboxStatus\":null,\"oContentType\":\"image/png\",\"contentType\":\"image/png\"}],\"completelyRewritten\":false,\"id\":\"c29b5a5d-9654-5db8-80f3-9fa1d7024bfe\",\"QID\":\"0XX0XXXXaX3XXX-X1\",\"GUID\":\"_pxxxxOxQxxXxx4wxjxtx2xxxTxxxYxxx\",\"sender\":\"abc@example.com\",\"recipient\":[\"mailer-daemon@example.com\"],\"senderIP\":\"203.0.113.66\",\"messageID\":\"<77F0EA74-7D6F-453A-AB7F-31B192481AE8@example.com>\"}",
+      "sourcetype": "proofpoint_tap_siem",
+      "host": "ub2-proofpoint",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_cloud_identity_mail_hunt",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub2-005",
+        "netspout_parent_event_id": "ub2_cloud_identity_mail_hunt-VALIDATE-1"
+      }
+    },
+    {
+      "event": "oct/26 20:15:33 system,info,account user training.operator logged in from 203.0.113.66 via winbox",
+      "sourcetype": "mikrotik:routeros",
+      "host": "ub2-mikrotik",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-006"
+      }
+    },
+    {
+      "event": "20:15:33 route,ospf,debug SEND: Hello Packet 198.51.100.10 -> 224.0.0.5 on lo0",
+      "sourcetype": "mikrotik:routeros",
+      "host": "ub2-mikrotik",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-007",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"BackendAddr\":\"10.10.10.10:80\",\"BackendName\":\"backend-backend-docker\",\"BackendURL\":{\"Scheme\":\"http\",\"Opaque\":\"\",\"User\":null,\"Host\":\"10.10.10.20:80\",\"Path\":\"\",\"RawPath\":\"\",\"ForceQuery\":false,\"RawQuery\":\"\",\"Fragment\":\"\"},\"ClientAddr\":\"203.0.113.66:12345\",\"ClientHost\":\"203.0.113.66\",\"ClientPort\":\"12345\",\"ClientUsername\":\"-\",\"DownstreamContentSize\":383,\"DownstreamStatus\":200,\"DownstreamStatusLine\":\"200 OK\",\"Duration\":100000,\"FrontendName\":\"Host-backend-docker-docker-localhost-2\",\"OriginContentSize\":383,\"OriginDuration\":2155389,\"OriginStatus\":200,\"OriginStatusLine\":\"200 OK\",\"Overhead\":879375,\"RequestAddr\":\"backend.docker.docker.localhost\",\"RequestContentSize\":0,\"RequestCount\":27,\"RequestHost\":\"backend.docker.docker.localhost\",\"RequestLine\":\"GET / HTTP/1.1\",\"RequestMethod\":\"GET\",\"RequestPath\":\"/\",\"RequestPort\":\"-\",\"RequestProtocol\":\"HTTP/1.1\",\"RetryAttempts\":0,\"StartLocal\":\"2026-10-26T20:15:33.431538Z\",\"StartUTC\":\"2026-10-26T20:15:33.431538Z\",\"downstream_Content-Length\":\"383\",\"downstream_Content-Type\":\"text/plain; charset=utf-8\",\"downstream_Date\":\"Tue, 16 Mar 2021 19:08:41 GMT\",\"level\":\"info\",\"msg\":\"\",\"origin_Content-Length\":\"383\",\"origin_Content-Type\":\"text/plain; charset=utf-8\",\"origin_Date\":\"Tue, 16 Mar 2021 19:08:41 GMT\",\"request_Accept\":\"*/*\",\"request_User-Agent\":\"curl/7.64.1\",\"time\":\"2026-10-26T20:15:33Z\"}",
+      "sourcetype": "traefik:access:json",
+      "host": "ub2-traefik",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-008",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-BASELINE-2"
+      }
+    },
+    {
+      "event": "<14> 1 2026-10-26T20:15:33Z Site syslog-Alert-Default - - - CEF:0|Claroty|CTD|4.10.0|Alert/New Asset|New Asset|10|CtdSourceIp=203.0.113.66 CtdDestinationIp=198.51.100.12 CtdSourceMac=00:50:56:b9:e2:ad CtdDestinationMac=00:1d:9c:c0:04:9d CtdSourceHost=EP-1002321 CtdDestinationHost=EP-1002562 CtdTimeGenerated=Oct 26 2026 20:15:33 CtdExternalId=47 CtdDeviceExternalId=Default CtdMessage=New asset Alert: A new plc was detec- ted in the \u201cPLC: Rockwell\u201d zone, which is a non-risky zone. It performed protocol operation communication: 198.51.100.12:Card 2 \\ Addr 255 CtdProtocol=TFTP CtdCategory=Integrity/New Asset CtdSourceAssetType=PLC CtdDestinationAssetType=HMI CtdSourceZone=PLC: Rockwell CtdDestinationZone=HMI: Rockwell CtdAlertLink=http://localhost:4200/detection/alert/31-1 CtdAlertScore=100 CtdAlertTypeId=1001 CtdAlertStatus=Unresolved CtdResolvedAs=Unresolved CtdResolvedBy=Bob CtdAssignedTo=Alice CtdStoryId=87 CtdMitreAttackTacticNames=Command and Control CtdMitreAttackTechniqueIds=T1548 CtdSignatureId=22061 CtdSignatureName=MALWARE-OTHER Alureon - Malicious IFRAME load attempt CtdSignatureCriticality=High CtdSignatureConfidence=100% CtdSignatureTags=Generic Malware CtdSignatureExternalLinks=https://attack.mitre.org/techniques/T1102 CtdSignatureLastUpdatedByClaroty=27 Aug 2023, 14:54 CtdSignaturePoweredBy=Other",
+      "sourcetype": "claroty:cef",
+      "host": "ub2-claroty",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-009",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-BASELINE-3"
+      }
+    },
+    {
+      "event": "<14>1 2026-10-26T20:15:33Z Site syslog-Event-Default - - - CEF:0|Claroty|CTD|4.10.0|Event/Asset Information Change|Asset Information Change|10|CtdSourceIp=203.0.113.66 CtdDestinationIp=198.51.100.12 CtdSourceMac=00:1D:9C:C0:04:9D CtdDestinationMac=FF:FF:FF:FF:FF:FF CtdSourceHost=Endpoint1 CtdDestinationHost=Endpoint2 CtdTimeGenerated=Oct 26 2026 20:15:33 CtdExternalId=150 CtdDeviceExternalId=Default CtdMessage=Information change has been detected on eModel to Model: 1756-ENBT/A CtdProtocol=tftp CtdCategory=Integrity/Asset Information Change CtdSourceAssetType=PLC CtdDestinationAssetType=Endpoint, HMI, PLC, PLC, PLC, HMI CtdSourceZone=PLC: Rockwell CtdDestinationZone=Broadcast/Multicast: Other CtdAlertLink=http://localhost:4200/detection/alert/5-1 CtdAlertId=5 CtdStoryId=3 CtdEventTypeId=4 CtdResolvedAs=Unresolved",
+      "sourcetype": "claroty:cef",
+      "host": "ub2-claroty",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-010",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-OBSERVE-1"
+      }
+    },
+    {
+      "event": "<134>1 2026-10-26T20:15:33Z Site syslog-HealthCheck-Default - - - CEF:0|Claroty|CTD|4.10.0|HealthCheck|Health|0|CtdRealTime=Oct 26 2026 20:15:33 CtdTimeGenerated=Oct 26 2026 20:15:33 CtdMessage=Successfully ran health monitoring CtdSite=Default CtdCpu=12.21 CtdMem=13.31 CtdUsedOptIcsranger=14.41 CtdUsedVar=15.51 CtdUsedTmp=16.61 CtdUsedEtc=17.71 CtdBusyFd=0.11 CtdBusySda=0.22 CtdBusySdaA=0.33 CtdBusySdaB=0.44 CtdBusySr=0.55 CtdBusyDm=0.66 CtdBusyDmA=0.77 CtdQuBaselineTracker=1 CtdQuBridge=2 CtdQuCentralBridge=3 CtdQuConcluding=4 CtdQuDiodeFeeder=5 CtdQuDissector=6 CtdQuDissectorA=7 CtdQuDissectorNg=8 CtdQuIndicatorService=9 CtdQuLeecher=10 CtdQuMonitor=11 CtdQuNetworkStatistics=12 CtdQuPackets=13 CtdQuPacketsErrors=14 CtdQuPreprocessing=15 CtdQuPreprocessingNg=16 CtdQuPriorityProcessing=17 CtdQuProcessing=18 CtdQuProcessingHigh=19 CtdQuStatisticsNg=20 CtdQuZordonUpdates=21 CtdQueuePurge=22 CtdQuSyslogAlerts=23 CtdQuSyslogEvents=24 CtdQuSyslogInsights=25 CtdRdDissector=26 CtdRdDissectorA=27 CtdRdDissectorNg=28 CtdRdPreprocessing=29 CtdRdPreprocessingNg=30 CtdSvcMariaDb=Down CtdSvcPostgres=Down CtdSvcRedis=Down CtdSvcRabbitMq=Down CtdSvcIcsranger=Down CtdSvcWatchdog=Down CtdSvcFirewalld=Down CtdSvcNetunnel=Down CtdSvcJwthenticator=Down CtdSvcDocker=Down CtdExceptions=31 CtdInputPacketDrops=32 CtdOutputPacketDrops=33 CtdFullOutputPacketDrops=34 CtdDissectorNgPacketDrops=35 CtdTagArtifactsDropsPreprocessor=36 CtdTagArtifactsDropsPreprocessorSum=37 CtdTagArtifactsDropsProcessor=38 CtdTagArtifactsDropsProcessorSum=39 CtdTagArtifactsDropsSniffer=40 CtdTagArtifactsDropsSnifferSum=41 CtdTagArtifactsDropsDissectorPypy=42 CtdTagArtifactsDropsDissectorPypySum=43 CtdCapsaverFolderCleanup=TRUE CtdDissectionCoverage=44 CtdCapsaverUtilzationTest=N/A CtdYaraScannerTest=45 CtdWrkrWorkersStop=46 CtdWrkrWorkersRestart=47 CtdWrkrActiveExecuter={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrSensor={'api': 'Available', 'last_restart': '18 min, 34 sec'} CtdWrkrAuthentication={'api': 'Not Available', 'last_restart': '21 min, 18 sec'} CtdWrkrMailer={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrMitre={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrNotifications={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrProcessor={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrCloudAgent={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrCloudClient={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrScheduler={'api': 'Available', 'last_restart': '21 min, 19 sec'} CtdWrkrknownThreats={'api': 'Available', 'last_restart': '18 min, 58 sec'} CtdWrkrCacher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrInsights={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrActive={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrEnricher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrIndicators={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrIndicatorsApi={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrConcluder={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrPreprocessor={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrLeecher={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrSyncManager={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrBridge={'api': 'Not Available', 'last_restart': '19316 days, 15 hrs, 56 min, 43 sec'} CtdWrkrWebRanger={'api': 'Not Available', 'last_restart': '21 min, 6 sec'} CtdWrkrWebWs={'api': 'Not Available', 'last_restart': '21 min, 1 sec'} CtdWrkrWebAuth={'api': 'Not Available', 'last_restart': '21 min, 1 sec'} CtdWrkrWeb",
+      "sourcetype": "claroty:cef",
+      "host": "ub2-claroty",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub2-011",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-OBSERVE-2"
+      }
+    },
+    {
+      "event": "203.0.113.66 - - [26/Oct/2026:20:15:33 +0000] \"GET / HTTP/1.1\" 200 612 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36\"",
+      "sourcetype": "nginx:access",
+      "host": "ub2-nginx",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_ot_edge_routing_observation",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub2-012",
+        "netspout_parent_event_id": "ub2_ot_edge_routing_observation-VALIDATE-1"
+      }
+    },
+    {
+      "event": "{\"t\":{\"$date\":\"2026-10-26T20:15:33.431+00:00\"},\"s\":\"I\",\"c\":\"STORAGE\",\"id\":4615611,\"ctx\":\"initandlisten\",\"msg\":\"MongoDB starting\",\"attr\":{\"pid\":1,\"port\":27017,\"dbPath\":\"/data/db\",\"architecture\":\"64-bit\",\"host\":\"mongodb-01.example.test\"}}",
+      "sourcetype": "mongodb:log",
+      "host": "ub2-mongodb",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_database_backup_integrity",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-013"
+      }
+    },
+    {
+      "event": "{\"t\":{\"$date\":\"2026-10-26T20:15:33.431+00:00\"},\"s\":\"I\",\"c\":\"INDEX\",\"id\":20345,\"ctx\":\"initandlisten\",\"msg\":\"Index build: done building\",\"attr\":{\"buildUUID\":null,\"namespace\":\"admin.system.version\",\"index\":\"_id_\",\"commitTimestamp\":{\"$timestamp\":{\"t\":0,\"i\":0}}}}",
+      "sourcetype": "mongodb:log",
+      "host": "ub2-mongodb",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_database_backup_integrity",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub2-014",
+        "netspout_parent_event_id": "ub2_database_backup_integrity-BASELINE-1"
+      }
+    },
+    {
+      "event": "[categoryId=0 instanceId=110 JobSessionID=\"77640120-7ae8-5e56-ace3-17685739dc86\" JobID=\"69a2b574-5356-508b-a964-a95933f8462c\" JobType=\"0\" Platform=\"0\" Flags=\"1\" SourceType=\"2\" VbrHostName=\"veeam-01.example.test\" VbrVersion=\"13.1.0.411\" Version=\"1\" Description=\"Backup job 'Backup-Job-01' has been started by user EXAMPLE\\alice.johnson.\"]",
+      "sourcetype": "veeam_vbr_syslog",
+      "host": "ub2-veeam",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_database_backup_integrity",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-015",
+        "netspout_parent_event_id": "ub2_database_backup_integrity-BASELINE-2"
+      }
+    },
+    {
+      "event": "[categoryId=0 instanceId=190 JobSessionID=\"77640120-7ae8-5e56-ace3-17685739dc86\" JobID=\"69a2b574-5356-508b-a964-a95933f8462c\" JobResult=\"0\" JobType=\"0\" Platform=\"0\" WillBeRetried=\"False\" JobName=\"Backup-Job-01\" SourceType=\"2\" VbrHostName=\"veeam-01.example.test\" VbrVersion=\"13.1.0.411\" Version=\"1\" Description=\"Backup job 'Backup-Job-01' finished with Success. All objects have been backed up successfully.\"]",
+      "sourcetype": "veeam_vbr_syslog",
+      "host": "ub2-veeam",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_database_backup_integrity",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub2-016",
+        "netspout_parent_event_id": "ub2_database_backup_integrity-OBSERVE-1"
+      }
+    },
+    {
+      "event": "[WRN] [categoryId=0 instanceId=41600 DetectionTimeUTC=\"10/26/2026 20:15:33\" OibID=\"ea0e891f-1b7a-5632-b6c6-b603ba31ec5a\" ActivityType=\"AntivirusScan\" UserName=\"SYSTEM\" UserFullInfo=\"<ModifiedUserInfo fullName=\"SYSTEM\" loginType=\"4\" />\" ObjectName=\"vm-web-01\" CreationTimeUTC=\"09/16/2026 08:22:33\" VbrHostName=\"veeam-01.example.test\" VbrVersion=\"13.1.1.18\" Version=\"1\" Description=\"Malware detected by Veeam Threat Hunter, see antivirus scan log on mount server [vbr-01] in [FLRSessions\\Windows\\FLR__vm-web-01_\\Antivirus] Volume{3a6975d1-5614-5a29-9e9e-0aac8bb81af3}: Infected for OIB: ea0e891f-1b7a-5632-b6c6-b603ba31ec5a (vm-web-01), rule: Antivirus scan by user: SYSTEM.\"]",
+      "sourcetype": "veeam_vbr_syslog",
+      "host": "ub2-veeam",
+      "source": "pulseforge:universe:raw-check:pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub2-current-11501fb3-dfb7-49b7-83ff-6dcc3a031f93",
+        "netspout_scenario_id": "ub2_database_backup_integrity",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub2-017",
+        "netspout_parent_event_id": "ub2_database_backup_integrity-OBSERVE-2"
+      }
+    }
+  ]
+}

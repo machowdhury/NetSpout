@@ -3,14 +3,41 @@
 # Includes:
 #   - Splunk Enterprise 10.2 pre-configured
 #   - NetSpout Splunk App with Dark NOC Canvas UI
-#   - Pre-configured HEC on port 8088 (Token: 00000000-0000-0000-0000-000000000000)
+#   - Pre-configured HEC on port 8088 (credential supplied at runtime)
 #   - Pre-configured cisco_mdt_metrics (500GB Metric Index tier)
 #   - Pre-configured Event Indexes (idx_network_ops, idx_security_fw, etc.)
 #   - 333 SC4SNMP MIBs and OpenConfig YANG Schema Engine
 #   - Universal Multi-Pipeline Telemetry Dispatcher (HEC, OTel, Telegraf, Syslog)
 # =========================================================================
 
-FROM --platform=linux/amd64 splunk/splunk:10.2
+FROM --platform=$BUILDPLATFORM node:22-bookworm-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392 AS frontend-build
+
+WORKDIR /build/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+FROM otel/opentelemetry-collector-contrib:0.96.0@sha256:7ef2a2ff46b9e432321fdd63df104bfeedaf7b4e276950f42c634d0f23521fc4 AS otel-collector-binary
+
+# The upstream collector image is distroless and cannot execute an HTTP
+# healthcheck. This target adds only BusyBox wget and a non-root account.
+FROM alpine:3.20@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc AS otel-collector-health
+COPY --from=otel-collector-binary /otelcol-contrib /otelcol-contrib
+RUN addgroup -g 10001 otel && \
+    adduser -D -H -u 10001 -G otel otel && \
+    mkdir -p /etc/otelcol-contrib && \
+    printf '%s\n' \
+      'extensions:' \
+      '  health_check:' \
+      '    endpoint: 0.0.0.0:13133' \
+      'service:' \
+      '  extensions: [health_check]' \
+      > /etc/otelcol-contrib/health.yaml
+USER 10001:10001
+ENTRYPOINT ["/otelcol-contrib"]
+
+FROM --platform=linux/amd64 splunk/splunk:10.2@sha256:da47bf2f183fc815f9e36dff3202dd1232bf475c44b2f71b958c54a9a004d6d7
 
 LABEL maintainer="Mahamudul Chowdhury <machowdhury@yahoo.com>"
 LABEL description="Standalone Splunk Enterprise with pre-installed NetSpout Network Simulator and Telemetry App by Mahamudul Chowdhury"
@@ -19,39 +46,40 @@ USER root
 
 # Install Python packages for standalone fast simulation engine and gNMI
 RUN microdnf update -y && \
-    microdnf install -y python39 python39-pip python39-setuptools python39-devel gcc && \
-    python3.9 -m pip install --no-cache-dir --upgrade pip && \
-    python3.9 -m pip install --no-cache-dir \
-        fastapi==0.115.0 \
-        uvicorn==0.30.6 \
-        pydantic==2.8.2 \
-        websockets==12.0 \
-        grpcio>=1.59.0 \
-        protobuf>=4.25.0 \
-        cryptography>=41.0.0 && \
-    ln -sf /usr/bin/python3.13 /usr/bin/python3 && \
+    microdnf install -y gcc net-snmp net-snmp-utils && \
+    python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir \
+        fastapi==0.143.0 \
+        uvicorn==0.54.0 \
+        pydantic==2.14.0 \
+        websockets==17.2 \
+        grpcio==1.84.0 \
+        protobuf==7.36.2 \
+        cryptography==50.0.2 && \
     microdnf clean all
 
 # Synchronize default Splunk apps from /opt/splunk-etc into /opt/splunk/etc
 RUN cp -rn /opt/splunk-etc/* /opt/splunk/etc/ || true
 
 # Copy NetSpout Splunk App into both /opt/splunk-etc/apps and /opt/splunk/etc/apps
-COPY netspout /opt/splunk-etc/apps/netspout
-COPY netspout.spl /opt/splunk-etc/apps/netspout.spl
-COPY netspout /opt/splunk/etc/apps/netspout
-COPY netspout.spl /opt/splunk/etc/apps/netspout.spl
+COPY --chown=splunk:splunk netspout /opt/splunk-etc/apps/netspout
+COPY --chown=splunk:splunk netspout.spl /opt/splunk-etc/apps/netspout.spl
+COPY --chown=splunk:splunk netspout /opt/splunk/etc/apps/netspout
+COPY --chown=splunk:splunk netspout.spl /opt/splunk/etc/apps/netspout.spl
 
 # Copy Companion Fast Simulation Engine and Core Libraries
-COPY backend /opt/netspout-backend
-COPY src /opt/netspout-src
+COPY --chown=splunk:splunk backend /opt/netspout-backend
+COPY --chown=splunk:splunk src /opt/netspout-src
+COPY --chown=splunk:splunk --from=frontend-build /build/frontend/dist /opt/frontend/dist
 
 # Pre-configure HEC and Indexes for zero-touch instant boot
-RUN mkdir -p /opt/splunk-etc/apps/netspout/local /opt/splunk/etc/apps/netspout/local
-COPY docker/standalone/inputs.conf /opt/splunk-etc/apps/netspout/local/inputs.conf
-COPY docker/standalone/indexes.conf /opt/splunk-etc/apps/netspout/local/indexes.conf
-COPY docker/standalone/inputs.conf /opt/splunk/etc/apps/netspout/local/inputs.conf
-COPY docker/standalone/indexes.conf /opt/splunk/etc/apps/netspout/local/indexes.conf
-RUN chown -R splunk:splunk /opt/splunk /opt/splunk-etc /opt/netspout-backend
+RUN install -d -o splunk -g splunk \
+    /opt/splunk-etc/apps/netspout/local \
+    /opt/splunk/etc/apps/netspout/local
+COPY --chown=splunk:splunk docker/standalone/inputs.conf /opt/splunk-etc/apps/netspout/local/inputs.conf
+COPY --chown=splunk:splunk docker/standalone/indexes.conf /opt/splunk-etc/apps/netspout/local/indexes.conf
+COPY --chown=splunk:splunk docker/standalone/inputs.conf /opt/splunk/etc/apps/netspout/local/inputs.conf
+COPY --chown=splunk:splunk docker/standalone/indexes.conf /opt/splunk/etc/apps/netspout/local/indexes.conf
 
 # Set up custom startup wrapper
 COPY entrypoint-standalone.sh /sbin/entrypoint-standalone.sh
@@ -60,15 +88,16 @@ RUN chmod +x /sbin/entrypoint-standalone.sh
 # Environment variables for zero-prompt Splunk license acceptance
 ENV SPLUNK_START_ARGS="--accept-license" \
     SPLUNK_GENERAL_TERMS="--accept-sgt-current-at-splunk-com" \
-    SPLUNK_PASSWORD="SplunkPassword123!" \
     SPLUNK_HEC_PORT="8088" \
     SPLUNK_ROLE="splunk_standalone" \
-    SPLUNK_HOME_OWNERSHIP_ENFORCEMENT="false" \
     FAST_SIMULATION_PORT="8081"
 
 EXPOSE 8000 8088 8089 8081 514/udp 514/tcp
 
-USER splunk
+# Preserve the upstream image's non-root bootstrap account. Its entrypoint
+# uses narrowly scoped sudo during first-run volume initialization, then runs
+# Splunk as the dedicated splunk account.
+USER ansible
 
 ENTRYPOINT ["/sbin/entrypoint-standalone.sh"]
 CMD ["start-service"]

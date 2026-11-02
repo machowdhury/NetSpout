@@ -1,0 +1,204 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase8c",
+  "evidence": [
+    {
+      "evidence_id": "EVID-P8C-CISCO-IOSXE-LINK-SYSLOG",
+      "title": "Cisco IOS XE 17.17 Catalyst 9600 system-message logging examples",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9600/software/release/17-17/configuration_guide/sys_mgmt/b_1717_sys_mgmt_9600_cg/configuring_system_message_logs.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents the %LINK-3-UPDOWN interface state message body. Outer PRI, hostname, and timestamp framing remain deployment-profile dependent."
+    },
+    {
+      "evidence_id": "EVID-P8C-CISCO-NXOS-LINK-SYSLOG",
+      "title": "Cisco Nexus 9000 link-flap troubleshooting",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://www.cisco.com/c/en/us/support/docs/switches/nexus-9000-series-switches/221572-troubleshoot-link-flap-issue-on-nexus-90.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents ETHPORT interface-down and interface-up lifecycle messages on Nexus 9000. Only message structures shown by Cisco are modeled."
+    },
+    {
+      "evidence_id": "EVID-P8C-CISCO-ASA-302013-302014",
+      "title": "Cisco Secure Firewall ASA syslog messages 302013 and 302014",
+      "publisher": "Cisco Systems, Inc.",
+      "reference": "https://www.cisco.com/c/en/us/td/docs/security/asa/syslog/asa-syslog/syslog-messages-302003-to-342008.html",
+      "provenance": "VENDOR_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Documents TCP connection creation and teardown message structures. A connection event is not itself evidence of malicious activity."
+    },
+    {
+      "evidence_id": "EVID-P8C-NETSPOUT-DECLARATIVE-RUNTIME",
+      "title": "NetSpout Phase 8C declarative multi-domain runtime validation",
+      "publisher": "NetSpout",
+      "reference": "docs/implementation/FIGMA_V3_PHASE_8C_MULTI_DOMAIN_VALIDATION.md",
+      "provenance": "NETSPOUT_SCHEMA",
+      "verification_state": "VERIFIED",
+      "notes": "Guarded native receiver, HEC, authenticated source-scoped Splunk, and investigation evidence is recorded in the Phase 8C report and accepted evidence summary."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "cisco-ios-xe-interface-syslog",
+      "vendor": "Cisco",
+      "product": "Catalyst 9600 / IOS XE 17.17",
+      "product_family": "Catalyst Switching",
+      "domains": ["netops"],
+      "telemetry_source": "IOS XE interface link-state syslog",
+      "evidence_ids": ["EVID-P8C-CISCO-IOSXE-LINK-SYSLOG"],
+      "contract_id": "native-cisco-ios-xe-interface-syslog",
+      "format": "IOS XE LINK-3-UPDOWN syslog message",
+      "structural_fields": ["LINK", "3", "UPDOWN", "Interface", "changed state to"],
+      "sourcetype": "netspout:cisco:iosxe:syslog",
+      "profile_id": "template-cisco-ios-xe-link-updown",
+      "validator_id": "validator-cisco-ios-xe-link-syslog",
+      "template": "{timestamp}: %LINK-3-UPDOWN: Interface {interface_id}, changed state to {operational_state}",
+      "phase_templates": {},
+      "modeled_fields": ["interface_id", "operational_state"],
+      "derived_fields": ["timestamp"],
+      "supported_state_keys": ["interface.status"],
+      "phase_values": {
+        "BASELINE": {"operational_state": "up"},
+        "DEGRADE": {"operational_state": "up"},
+        "FAILOVER": {"operational_state": "down"},
+        "RECOVERY": {"operational_state": "up"}
+      },
+      "known_limitations": [
+        "The NetSpout-defined sourcetype is lab-only; current Cisco add-on sourcetype and CIM behavior are not claimed.",
+        "The outer syslog header is modeled and not asserted as a universal IOS XE wire prefix."
+      ]
+    },
+    {
+      "source_id": "cisco-nx-os-interface-syslog",
+      "vendor": "Cisco",
+      "product": "Nexus 9000 / NX-OS",
+      "product_family": "Data Center Switching",
+      "domains": ["netops"],
+      "telemetry_source": "NX-OS ETHPORT link-state syslog",
+      "evidence_ids": ["EVID-P8C-CISCO-NXOS-LINK-SYSLOG"],
+      "contract_id": "native-cisco-nx-os-interface-syslog",
+      "format": "NX-OS ETHPORT interface state syslog message",
+      "structural_fields": ["ETHPORT", "5", "IF_DOWN_LINK_FAILURE", "IF_UP", "Interface"],
+      "sourcetype": "netspout:cisco:nxos:syslog",
+      "profile_id": "template-cisco-nx-os-link-lifecycle",
+      "validator_id": "validator-cisco-nx-os-link-syslog",
+      "template": "{timestamp} {node_id} %ETHPORT-5-IF_UP: Interface {interface_id} is up in Layer3",
+      "phase_templates": {
+        "FAILOVER": "{timestamp} {node_id} %ETHPORT-5-IF_DOWN_LINK_FAILURE: Interface {interface_id} is down (Link failure)"
+      },
+      "modeled_fields": ["node_id", "interface_id"],
+      "derived_fields": ["timestamp"],
+      "supported_state_keys": ["interface.status"],
+      "phase_values": {
+        "BASELINE": {},
+        "DEGRADE": {},
+        "FAILOVER": {},
+        "RECOVERY": {}
+      },
+      "known_limitations": [
+        "The NetSpout-defined sourcetype is lab-only; current add-on sourcetype and CIM behavior are not claimed.",
+        "Link-state messages do not by themselves establish application impact or root cause."
+      ]
+    },
+    {
+      "source_id": "cisco-asa-connection-syslog",
+      "vendor": "Cisco",
+      "product": "Secure Firewall ASA",
+      "product_family": "Network Security",
+      "domains": ["secops"],
+      "telemetry_source": "ASA TCP connection lifecycle syslog",
+      "evidence_ids": ["EVID-P8C-CISCO-ASA-302013-302014"],
+      "contract_id": "native-cisco-asa-connection-syslog",
+      "format": "ASA 302013/302014 TCP connection syslog message",
+      "structural_fields": ["ASA", "6", "302013", "302014", "Built outbound TCP connection", "Teardown TCP connection"],
+      "sourcetype": "netspout:cisco:asa:syslog",
+      "profile_id": "template-cisco-asa-connection-lifecycle",
+      "validator_id": "validator-cisco-asa-connection-syslog",
+      "template": "{timestamp} {node_id} %ASA-6-302013: Built outbound TCP connection {process_id}{event_ordinal} for outside:192.0.2.80/443 (192.0.2.80/443) to inside:198.51.100.25/{source_port} (198.51.100.25/{source_port})",
+      "phase_templates": {
+        "RECOVERY": "{timestamp} {node_id} %ASA-6-302014: Teardown TCP connection {process_id}{event_ordinal} for outside:192.0.2.80/443 to inside:198.51.100.25/{source_port} duration 0:00:30 bytes 2048 TCP FINs"
+      },
+      "modeled_fields": ["node_id", "source_port"],
+      "derived_fields": ["timestamp", "process_id", "event_ordinal"],
+      "supported_state_keys": ["security.connection_rate"],
+      "phase_values": {
+        "BASELINE": {"source_port": "49152", "_event_count": "1"},
+        "DEGRADE": {"source_port": "50000", "_event_count": "3"},
+        "FAILOVER": {"source_port": "51000", "_event_count": "6"},
+        "RECOVERY": {"source_port": "49152", "_event_count": "1"}
+      },
+      "known_limitations": [
+        "The connection burst is modeled with reserved RFC 5737 addresses and does not represent an attack attribution.",
+        "The NetSpout-defined sourcetype is lab-only; official Splunk parsing and CIM behavior remain unvalidated."
+      ]
+    }
+  ],
+  "references": [
+    {
+      "scenario_id": "C100-ENT-001",
+      "title": "Campus Access Link Degradation — IOS XE Reference",
+      "domain": "Enterprise Networking",
+      "category": "INTERFACE_HEALTH",
+      "story": "A fictional Catalyst campus uplink transitions down and recovers while the lab preserves the Cisco-documented LINK-3-UPDOWN body.",
+      "technical_description": "The reference emits an ordered IOS XE interface lifecycle over the bundled native syslog receiver and then the separate HEC destination path.",
+      "business_impact": "A modeled campus access path becomes unavailable until the uplink recovers.",
+      "technology_ids": ["cisco-ios-xe", "catalyst-9600", "syslog-udp"],
+      "source_ids": ["cisco-ios-xe-interface-syslog"],
+      "entity_ids": ["catalyst-9600-campus01"],
+      "interface_ids": ["GigabitEthernet0/1"],
+      "evidence_ids": ["EVID-P8C-CISCO-IOSXE-LINK-SYSLOG"],
+      "operation_ids": ["ios-xe-show-interfaces-gigabitethernet"],
+      "production_guide_id": "guide-phase8c-ios-xe-campus-link"
+    },
+    {
+      "scenario_id": "C100-DC-001",
+      "title": "Nexus Fabric Uplink Degradation — NX-OS Reference",
+      "domain": "Data Center & AI Cloud",
+      "category": "INTERFACE_HEALTH",
+      "story": "A fictional Nexus fabric uplink reports a documented link failure and subsequent Layer 3 recovery.",
+      "technical_description": "The reference selects documented NX-OS ETHPORT message structures by lifecycle phase without inventing speed or mode suffixes.",
+      "business_impact": "A modeled east-west fabric path is impaired until the uplink recovers.",
+      "technology_ids": ["cisco-nx-os", "nexus-9000", "syslog-udp"],
+      "source_ids": ["cisco-nx-os-interface-syslog"],
+      "entity_ids": ["nexus-9000-leaf01"],
+      "interface_ids": ["Ethernet1/31"],
+      "evidence_ids": ["EVID-P8C-CISCO-NXOS-LINK-SYSLOG"],
+      "operation_ids": ["nx-os-show-interface", "nx-os-show-logging-logfile"],
+      "production_guide_id": "guide-phase8c-nx-os-fabric-link"
+    },
+    {
+      "scenario_id": "C100-SEC-001",
+      "title": "Secure Firewall Suspicious Connection Burst — ASA Reference",
+      "domain": "Security & SASE",
+      "category": "FIREWALL_ACTIVITY",
+      "story": "A fictional ASA observes a modeled rise in outbound TCP connection creations followed by a teardown event.",
+      "technical_description": "The reference emits Cisco-documented ASA 302013 and 302014 structures with reserved addresses. Rate change is modeled; malicious intent is not asserted.",
+      "business_impact": "Security operators must distinguish an unusual modeled connection-rate increase from normal workload behavior.",
+      "technology_ids": ["cisco-secure-firewall-asa", "syslog-udp"],
+      "source_ids": ["cisco-asa-connection-syslog"],
+      "entity_ids": ["asa-edge01"],
+      "interface_ids": ["outside"],
+      "evidence_ids": ["EVID-P8C-CISCO-ASA-302013-302014"],
+      "operation_ids": ["asa-show-conn", "asa-show-logging"],
+      "production_guide_id": "guide-phase8c-asa-connection-burst"
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "title": "Telecom Operations Network Degradation — Correlated Reference",
+      "domain": "Sovereign Critical Infrastructure & Mixed Cross-Domain",
+      "category": "TELECOMMUNICATIONS",
+      "story": "A fictional operations campus and carrier edge report a correlated interface disruption on one ordered simulation clock.",
+      "technical_description": "IOS XE and IOS XR source-native syslog structures are generated from one shared state lifecycle while retaining independent device and interface identities.",
+      "business_impact": "A modeled operations path loses reliable connectivity alongside its carrier dependency.",
+      "technology_ids": ["cisco-ios-xe", "cisco-ios-xr", "syslog-udp"],
+      "source_ids": ["cisco-ios-xe-interface-syslog", "cisco-ios-xr-interface-syslog"],
+      "entity_ids": ["catalyst-9600-operations01", "cisco-asr9k-pe1"],
+      "interface_ids": ["GigabitEthernet0/1", "HundredGigE0/0/0/1"],
+      "evidence_ids": ["EVID-P8C-CISCO-IOSXE-LINK-SYSLOG", "EVID-CISCO-IOSXR-LINK-UPDOWN"],
+      "operation_ids": ["ios-xe-show-interfaces-gigabitethernet", "cisco-ios-xr-show-interfaces"],
+      "production_guide_id": "guide-phase8c-correlated-operations-link"
+    }
+  ]
+}

@@ -18,3 +18,10 @@ event_index = <value>
 
 interval = <value>
 * Polling and stream generation interval in seconds
+
+[pulseforge_spool://native]
+* App-owned bounded spool; disabled until the operator configures forwarding.
+spool_mode = native
+* Only the dedicated native spool is supported; arbitrary paths are not accepted.
+_TCP_ROUTING = <existing-tcpout-group>
+* Operator-selected existing group. PulseForge does not create outputs.conf.

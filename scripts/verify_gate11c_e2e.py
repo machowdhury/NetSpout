@@ -28,6 +28,8 @@ import urllib.parse
 import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 
+from artifact_isolation import artifact_dir
+
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(REPO_ROOT, "src")
 if SRC_DIR not in sys.path:
@@ -65,7 +67,7 @@ def query_splunk(query: str, earliest: str = "-15m", latest: str = "now", max_wa
     }).encode("utf-8")
 
     req = urllib.request.Request("https://127.0.0.1:8889/services/search/jobs/export", data=data, method="POST")
-    req.add_header("Authorization", "Basic YWRtaW46U3BsdW5rUGFzc3dvcmQxMjMh")
+    req.add_header("Authorization", "Basic [REDACTED]")
 
     start = time.time()
     while time.time() - start < max_wait_sec:
@@ -133,7 +135,10 @@ def run_e2e_verification() -> Dict[str, Any]:
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
         h_req = urllib.request.Request("https://127.0.0.1:8888/services/collector/health")
-        h_req.add_header("Authorization", "Splunk 00000000-0000-0000-0000-000000000000")
+        hec_token = os.environ.get("SPLUNK_HEC_TOKEN", "")
+        if not hec_token:
+            raise RuntimeError("SPLUNK_HEC_TOKEN is required for live Gate 11C validation")
+        h_req.add_header("Authorization", f"Splunk {hec_token}")
         with urllib.request.urlopen(h_req, context=ctx, timeout=3) as resp:
             splunk_hec_healthy = (resp.status == 200)
     except Exception as exc:
@@ -461,7 +466,7 @@ def run_e2e_verification() -> Dict[str, Any]:
     print("==========================================================================")
 
     # Save verification JSON artifact
-    out_file = os.path.join(REPO_ROOT, "docs/acceptance/gate11c_e2e_verification_results.json")
+    out_file = artifact_dir("gate11c", "evidence") / "gate11c_e2e_verification_results.json"
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     print(f"Results written to: {out_file}\n")

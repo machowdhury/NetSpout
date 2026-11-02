@@ -1,0 +1,1592 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase5",
+  "catalog_evidence_ids": [
+    "EVID-IETF-RFC5424",
+    "EVID-IETF-RFC3416",
+    "EVID-IETF-RFC2863",
+    "EVID-IETF-RFC3954",
+    "EVID-IETF-RFC7011-7012",
+    "EVID-OPENCONFIG-GNMI",
+    "EVID-OPENCONFIG-INTERFACES",
+    "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+    "EVID-CISCO-IOSXR-LINK-UPDOWN",
+    "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES",
+    "EVID-CISCO-IOSXR-SNMP-IFMIB",
+    "EVID-SPLUNK-CISCO-ENTERPRISE-7538",
+    "EVID-NETSPOUT-CONTRACT-SCHEMA",
+    "EVID-NETSPOUT-RUNTIME"
+  ],
+  "catalog_integration_ids": [
+    "netspout-direct-structured-ingestion",
+    "splunkbase-cisco-enterprise-networking-7538"
+  ],
+  "catalog_source_bindings": [
+    {
+      "source_id": "ietf-syslog-rfc5424",
+      "verification_state": "VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-rfc5424-modeled"
+      ],
+      "validator_ids": [
+        "validator-rfc5424-structure"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-syslog-udp",
+        "transport-local-hec"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "cisco-ios-xr-interface-syslog",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-declarative-native-template"
+      ],
+      "validator_ids": [
+        "validator-ios-xr-interface-syslog"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-syslog-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-snmpv2c-ifmib",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-snmp-ifmib"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-snmp-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "openconfig-gnmi-interfaces",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-gnmi-interfaces"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-gnmi-grpc"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-netflow-v9",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-netflow-v9"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-netflow-v9-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    },
+    {
+      "source_id": "ietf-ipfix",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "runtime_status": "AVAILABLE",
+      "generator_ids": [
+        "generator-native-ipfix"
+      ],
+      "validator_ids": [
+        "validator-native-receiver-boundary"
+      ],
+      "compatible_transport_ids": [
+        "transport-native-ipfix-udp"
+      ],
+      "raw_fidelity": {
+        "preserve_native_raw": true,
+        "modeled_values_may_change": true,
+        "structural_mutation_allowed": false,
+        "normalization_owner": "SPLUNK_INTEGRATION",
+        "cim_validation_stage": "CIM_VERIFIED"
+      }
+    }
+  ],
+  "packs": [
+    {
+      "pack_id": "netspout-rfc5424-generation",
+      "pack_version": "1.0.0",
+      "kind": "PROTOCOL_TELEMETRY",
+      "display_name": "RFC 5424 Modeled Generation",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [
+        {
+          "generator_id": "generator-rfc5424-modeled",
+          "implementation_ref": "allowlist:rfc5424-modeled",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "signals": [
+            "EVENTS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-snmp-ifmib",
+          "implementation_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp",
+          "source_ids": [
+            "ietf-snmpv2c-ifmib"
+          ],
+          "signals": [
+            "METRICS",
+            "EVENTS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC3416",
+            "EVID-IETF-RFC2863",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-gnmi-interfaces",
+          "implementation_ref": "netspout_core.gnmi.sensor_registry.TelemetrySensorRegistry",
+          "source_ids": [
+            "openconfig-gnmi-interfaces"
+          ],
+          "signals": [
+            "METRICS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-OPENCONFIG-GNMI",
+            "EVID-OPENCONFIG-INTERFACES",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-netflow-v9",
+          "implementation_ref": "netspout_core.netflow_v9_encoder",
+          "source_ids": [
+            "ietf-netflow-v9"
+          ],
+          "signals": [
+            "FLOWS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC3954",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        },
+        {
+          "generator_id": "generator-native-ipfix",
+          "implementation_ref": "netspout_core.ipfix_encoder",
+          "source_ids": [
+            "ietf-ipfix"
+          ],
+          "signals": [
+            "FLOWS"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-IETF-RFC7011-7012",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "validators": [
+        {
+          "validator_id": "validator-rfc5424-structure",
+          "implementation_ref": "allowlist:rfc5424-structure",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "SPLUNK_OBSERVED",
+            "SOURCETYPE_VERIFIED",
+            "FIELDS_VERIFIED"
+          ],
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "validator_id": "validator-native-receiver-boundary",
+          "implementation_ref": "netspout_core.native_runtime.NativeRuntimeFacade",
+          "source_ids": [
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces",
+            "ietf-netflow-v9",
+            "ietf-ipfix"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "RECEIVER_OBSERVED",
+            "SPLUNK_OBSERVED"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "transports": [
+        {
+          "transport_id": "transport-native-syslog-udp",
+          "component": "Bundled EmbeddedSyslogServer receiver",
+          "protocol": "RFC 5424 Syslog over UDP",
+          "signals": [
+            "LOGS",
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-syslog-rfc5424",
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC5424",
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native UDP terminates at the bundled receiver before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-snmp-udp",
+          "component": "Bundled SNMP receiver/poller bridge",
+          "protocol": "SNMPv2c over UDP",
+          "signals": [
+            "METRICS",
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-snmpv2c-ifmib"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC3416",
+            "EVID-IETF-RFC2863",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native SNMP terminates at the bundled receiver/poller bridge before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-gnmi-grpc",
+          "component": "Bundled gNMI subscriber bridge",
+          "protocol": "gNMI Subscribe over gRPC",
+          "signals": [
+            "METRICS"
+          ],
+          "compatible_source_ids": [
+            "openconfig-gnmi-interfaces"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-OPENCONFIG-GNMI",
+            "EVID-OPENCONFIG-INTERFACES",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native gNMI terminates at the bundled subscriber bridge before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-netflow-v9-udp",
+          "component": "Bundled GoFlow2 collector and forwarder",
+          "protocol": "NetFlow v9 over UDP",
+          "signals": [
+            "FLOWS"
+          ],
+          "compatible_source_ids": [
+            "ietf-netflow-v9"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC3954",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native flow export terminates at the bundled collector before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-native-ipfix-udp",
+          "component": "Bundled GoFlow2 collector and forwarder",
+          "protocol": "IPFIX over UDP",
+          "signals": [
+            "FLOWS"
+          ],
+          "compatible_source_ids": [
+            "ietf-ipfix"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-IETF-RFC7011-7012",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Source-native IPFIX terminates at the bundled collector before separate HEC delivery."
+        },
+        {
+          "transport_id": "transport-local-hec",
+          "component": "NetSpout telemetry dispatcher",
+          "protocol": "HEC",
+          "signals": [
+            "EVENTS"
+          ],
+          "compatible_source_ids": [
+            "ietf-syslog-rfc5424",
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces",
+            "ietf-netflow-v9",
+            "ietf-ipfix"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "implemented": true,
+          "evidence_ids": [
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Lab delivery path; HEC is not the source's native syslog transport."
+        }
+      ],
+      "destinations": [
+        {
+          "destination_id": "destination-local-docker-splunk",
+          "destination_type": "LOCAL_DOCKER_SPLUNK",
+          "accepted_transport_ids": [
+            "transport-local-hec"
+          ],
+          "verification_state": "PARTIALLY_VERIFIED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "integration_recommendations": [
+        {
+          "recommendation_id": "recommend-rfc5424-direct-ingestion",
+          "source_id": "ietf-syslog-rfc5424",
+          "integration_id": "netspout-direct-structured-ingestion",
+          "requirement": "REQUIRED",
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
+          ],
+          "notes": "Required only for the NetSpout-defined HEC sourcetype used by this lab workflow."
+        }
+      ],
+      "scenarios": [],
+      "investigations": [],
+      "industries": []
+    },
+    {
+      "pack_id": "netspout-rfc5424-investigation",
+      "pack_version": "1.1.0",
+      "kind": "INVESTIGATION",
+      "display_name": "RFC 5424 Lab Investigation",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [],
+      "validators": [],
+      "transports": [],
+      "destinations": [],
+      "integration_recommendations": [],
+      "scenarios": [],
+      "investigations": [
+        {
+          "recipe_id": "investigate-rfc5424-run",
+          "title": "Trace the modeled link-state lifecycle",
+          "objective": "Find the current run and reconstruct its ordered link-state lifecycle.",
+          "question": "Which modeled entity changed state, and did Splunk observe the complete lifecycle?",
+          "expected_finding": "Six events for one run show the fictional edge router progressing from baseline through recovery.",
+          "explanation": "The run identifier is NetSpout-specific correlation metadata. The ordered phase field connects each event to the same modeled enterprise-state transition.",
+          "hint": "Start by confirming one run identifier and then compare event order by time and phase.",
+          "portability": "NETSPOUT_SPECIFIC",
+          "spl": "search index=idx_network_ops sourcetype=\"netspout:rfc5424\" netspout_run_id=\"$run_id$\" | sort 0 _time",
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "required_fields": [
+            "netspout_phase",
+            "netspout_run_id"
+          ],
+          "cim_requirements": [],
+          "netspout_only_fields": [
+            "netspout_phase",
+            "netspout_run_id"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA"
+          ]
+        },
+        {
+          "recipe_id": "investigate-correlated-interface-degradation",
+          "title": "Correlate Cisco IOS XR interface degradation evidence",
+          "objective": "Reconstruct one interface degradation from three independent native receiver observations.",
+          "question": "Do IOS XR syslog, IF-MIB SNMP, and OpenConfig gNMI describe the same bounded interface lifecycle?",
+          "expected_finding": "Receiver-observed records share the test run, entity, interface, and ordered lifecycle while retaining distinct native evidence boundaries.",
+          "explanation": "Correlation fields are NetSpout lab metadata added after native receipt; they do not claim a vendor-defined cross-protocol schema.",
+          "hint": "Confirm receiver observation for each source before comparing the correlated phase and interface fields.",
+          "portability": "NETSPOUT_SPECIFIC",
+          "spl": "search index=idx_network_ops netspout_scenario_id=\"test-correlated-interface-degradation\" netspout_run_id=\"$run_id$\" (sourcetype=\"netspout:cisco:iosxr:syslog\" OR sourcetype=\"netspout:snmp:*\" OR sourcetype=\"netspout:gnmi:event\") | stats values(netspout_phase) by sourcetype netspout_device_id",
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog",
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces"
+          ],
+          "required_fields": [
+            "netspout_scenario_id",
+            "netspout_run_id",
+            "netspout_phase",
+            "netspout_device_id",
+            "sourcetype"
+          ],
+          "cim_requirements": [],
+          "netspout_only_fields": [
+            "netspout_scenario_id",
+            "netspout_run_id",
+            "netspout_phase"
+          ],
+          "evidence_ids": [
+            "EVID-NETSPOUT-CONTRACT-SCHEMA",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "industries": []
+    },
+    {
+      "pack_id": "netspout-rfc5424-scenario",
+      "pack_version": "1.1.0",
+      "kind": "SCENARIO",
+      "display_name": "Modeled Link-State Lifecycle",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [],
+      "validators": [],
+      "transports": [],
+      "destinations": [],
+      "integration_recommendations": [],
+      "scenarios": [
+        {
+          "scenario_id": "rfc5424-link-state-lifecycle",
+          "title": "Modeled Link-State Lifecycle",
+          "description": "A standards-structured lab scenario showing an interface transition from baseline through recovery.",
+          "story": "A fictional branch uplink deteriorates, goes down, is detected, and returns to service.",
+          "domain": "NETOPS",
+          "category": "OPERATIONAL_RESILIENCE",
+          "technical_description": "One modeled interface lifecycle is encoded as six RFC 5424 structured messages and delivered to the configured local Splunk destination over the declared HEC lab path.",
+          "difficulty": "BEGINNER",
+          "expected_duration_minutes": 1,
+          "learning_objectives": [
+            "Distinguish generated, sent, and Splunk-observed evidence.",
+            "Follow one correlated incident through ordered lifecycle phases."
+          ],
+          "skills_practiced": [
+            "Timeline reconstruction",
+            "Evidence-stage interpretation",
+            "Run-scoped Splunk investigation"
+          ],
+          "expected_outcome": "The user proves that all six modeled lifecycle events were generated, dispatched, indexed with the expected sourcetype, and correlated to one run.",
+          "baseline_description": "The fictional branch user depends on an edge-router uplink that begins in a healthy modeled state.",
+          "incident_description": "The modeled uplink degrades and transitions down, affecting the fictional user path before recovering.",
+          "discovery_prompt": "Determine which entity changed state and whether Splunk observed the complete modeled lifecycle.",
+          "learning_hints": [
+            "Compare generated and Splunk-observed counts before interpreting the timeline.",
+            "Use the run identifier only for this NetSpout lab; it is not a production field."
+          ],
+          "business_impact": "Demonstrates how loss of a branch uplink can interrupt application reachability.",
+          "prerequisites": [
+            "Configured local Docker Splunk destination"
+          ],
+          "technology_ids": [
+            "rfc5424",
+            "splunk-hec"
+          ],
+          "source_ids": [
+            "ietf-syslog-rfc5424"
+          ],
+          "entities": [
+            "Fictional branch user",
+            "Fictional edge router",
+            "Local Splunk"
+          ],
+          "zones": [
+            {
+              "zone_id": "branch-zone",
+              "label": "Fictional Branch"
+            },
+            {
+              "zone_id": "observability-zone",
+              "label": "Observability"
+            }
+          ],
+          "nodes": [
+            {
+              "node_id": "branch-user",
+              "technology_id": "generic-user",
+              "zone_id": "branch-zone",
+              "role": "user",
+              "label": "Branch User",
+              "entity_id": "fictional-branch-user",
+              "description": "A fictional user whose application path depends on the modeled uplink.",
+              "source_ids": []
+            },
+            {
+              "node_id": "edge-router",
+              "technology_id": "rfc5424",
+              "zone_id": "branch-zone",
+              "role": "router",
+              "label": "Edge Router",
+              "entity_id": "fictional-edge-router",
+              "description": "A neutral modeled router entity producing RFC 5424 lifecycle evidence.",
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ]
+            },
+            {
+              "node_id": "splunk-local",
+              "technology_id": "splunk-hec",
+              "zone_id": "observability-zone",
+              "role": "splunk",
+              "label": "Local Splunk",
+              "entity_id": "local-splunk-destination",
+              "description": "The configured local lab destination used for indexed observation.",
+              "source_ids": []
+            }
+          ],
+          "relationships": [
+            {
+              "relationship_id": "branch-to-router",
+              "source_node_id": "branch-user",
+              "target_node_id": "edge-router",
+              "relationship_type": "depends-on",
+              "purpose": "The fictional user path depends on edge-router reachability.",
+              "telemetry_source_ids": [],
+              "incident_relevance": "User impact follows loss of the modeled uplink."
+            },
+            {
+              "relationship_id": "router-to-splunk",
+              "source_node_id": "edge-router",
+              "target_node_id": "splunk-local",
+              "relationship_type": "forwards-telemetry-to",
+              "protocol": "HEC",
+              "purpose": "Deliver modeled RFC 5424 events through the declared lab transport.",
+              "telemetry_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_relevance": null
+            }
+          ],
+          "telemetry_paths": [
+            {
+              "path_id": "rfc5424-to-splunk",
+              "source_id": "ietf-syslog-rfc5424",
+              "producer_node_id": "edge-router",
+              "observer_node_id": "splunk-local",
+              "label": "RFC 5424 events",
+              "protocol": "HEC"
+            }
+          ],
+          "incident_path": [
+            "edge-router",
+            "branch-user"
+          ],
+          "incident_summary": "The modeled uplink state change propagates from the edge router to the fictional user's application path.",
+          "runtime_state_keys": [
+            "normal",
+            "active",
+            "degraded",
+            "affected",
+            "recovering",
+            "recovered"
+          ],
+          "timeline": [
+            {
+              "step_id": "baseline",
+              "stage": "BASELINE",
+              "description": "The modeled uplink is healthy.",
+              "state_changes": {
+                "edge-router": "normal"
+              },
+              "entity_state_changes": {
+                "edge-router": "normal",
+                "branch-user": "normal"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "One baseline event describes the modeled healthy state."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "precursor",
+              "stage": "PRECURSOR",
+              "description": "Modeled error indicators increase.",
+              "state_changes": {
+                "edge-router": "degraded"
+              },
+              "entity_state_changes": {
+                "edge-router": "degraded"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "A precursor event marks increasing modeled error indicators."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "incident",
+              "stage": "INCIDENT",
+              "description": "The modeled uplink transitions down.",
+              "state_changes": {
+                "edge-router": "affected"
+              },
+              "entity_state_changes": {
+                "edge-router": "affected"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "The edge-router event reports the modeled interface-down transition."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "impact",
+              "stage": "IMPACT",
+              "description": "The fictional branch application path is unavailable.",
+              "state_changes": {
+                "branch-user": "affected"
+              },
+              "entity_state_changes": {
+                "branch-user": "affected"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "ACTIVE"
+              },
+              "expected_observations": [
+                "The timeline associates user-path impact with the same modeled incident."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "detection",
+              "stage": "DETECTION",
+              "description": "Splunk receives the correlated modeled lifecycle.",
+              "state_changes": {
+                "splunk-local": "normal"
+              },
+              "entity_state_changes": {
+                "splunk-local": "active"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "OBSERVED"
+              },
+              "expected_observations": [
+                "Authenticated search should find the run after indexing completes."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": [
+                "modeled-link-state-change"
+              ]
+            },
+            {
+              "step_id": "recovery",
+              "stage": "RECOVERY",
+              "description": "The modeled uplink returns to service.",
+              "state_changes": {
+                "edge-router": "recovered",
+                "branch-user": "recovered"
+              },
+              "entity_state_changes": {
+                "edge-router": "recovered",
+                "branch-user": "recovered"
+              },
+              "telemetry_state_changes": {
+                "ietf-syslog-rfc5424": "OBSERVED"
+              },
+              "expected_observations": [
+                "The final event reports the modeled return to service."
+              ],
+              "evidence_source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "incident_ids": []
+            }
+          ],
+          "incidents": [
+            {
+              "incident_id": "modeled-link-state-change",
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ],
+              "assertion": "One modeled RFC 5424 source represents the fictional link-state transition.",
+              "corroboration_required": false
+            }
+          ],
+          "parameters": [
+            {
+              "parameter_id": "intensity",
+              "value_type": "integer",
+              "changes_modeled_values_only": true
+            }
+          ],
+          "integration_recommendation_ids": [
+            "recommend-rfc5424-direct-ingestion"
+          ],
+          "expected_evidence": [
+            "Six ordered RFC 5424 events sharing one NetSpout run identifier."
+          ],
+          "investigation_recipe_ids": [
+            "investigate-rfc5424-run"
+          ],
+          "investigation_steps": [
+            {
+              "step_id": "find-modeled-lifecycle",
+              "recipe_id": "investigate-rfc5424-run",
+              "title": "Find and order the modeled lifecycle",
+              "question": "Which modeled entity changed state, and did Splunk observe every lifecycle phase?",
+              "expected_finding": "Six events for the fictional edge router share one run identifier and progress from BASELINE through RECOVERY.",
+              "explanation": "The events are separate observations of one modeled enterprise-state transition. The NetSpout run identifier scopes this lab only.",
+              "hint": "Confirm the result count first, then inspect phase order.",
+              "node_ids": [
+                "edge-router",
+                "splunk-local"
+              ],
+              "source_ids": [
+                "ietf-syslog-rfc5424"
+              ]
+            }
+          ],
+          "validation_expectations": [
+            {
+              "validation_id": "generated-events",
+              "label": "Expected raw events generated",
+              "evidence_stage": "GENERATED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "transport-sent",
+              "label": "Declared transport accepted every event",
+              "evidence_stage": "SENT",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "splunk-observed",
+              "label": "Splunk observed the run",
+              "evidence_stage": "SPLUNK_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            },
+            {
+              "validation_id": "sourcetype-observed",
+              "label": "Expected NetSpout-defined sourcetype observed",
+              "evidence_stage": "SOURCETYPE_VERIFIED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-syslog-rfc5424"
+            }
+          ],
+          "visualization": {
+            "mode": "AUTOMATIC",
+            "direction": "LEFT_TO_RIGHT",
+            "curated_layout_ref": null
+          },
+          "replay_policy": {
+            "creates_new_run_id": true,
+            "preserves_history": true,
+            "reset_to_step": "RUN"
+          },
+          "troubleshooting_steps": [
+            "Confirm the configured destination passed preflight.",
+            "Compare sent count with Splunk-observed count."
+          ],
+          "cim_validation": [],
+          "production_replication_guidance": [
+            "Replace the NetSpout-defined sourcetype and run identifier with the production integration's verified parsing contract."
+          ],
+          "curated_layout_ref": null
+        },
+        {
+          "scenario_id": "test-correlated-interface-degradation",
+          "title": "Cisco IOS XR Interface Degradation — Golden Scenario",
+          "description": "An evidence-bounded Cisco 8000 IOS XR scenario correlating documented interface syslog, IF-MIB SNMP, and OpenConfig gNMI from one shared enterprise state plan.",
+          "story": "The primary uplink on a fictional Cisco 8000 IOS XR edge degrades and recovers while native syslog, SNMP, and gNMI independently describe the same interface state.",
+          "domain": "NETOPS",
+          "category": "OPERATIONAL_RESILIENCE",
+          "technical_description": "The fictional Cisco 8000 IOS XR target and HundredGigE0/0/0/1 drive three native paths. Syslog uses only the documented PKT_INFRA-LINK-3-UPDOWN structure, SNMP uses IF-MIB ifIndex.1, and gNMI uses the documented OpenConfig interfaces path.",
+          "difficulty": "INTERMEDIATE",
+          "expected_duration_minutes": 5,
+          "learning_objectives": [
+            "Separate source-native transport evidence from destination HEC delivery.",
+            "Correlate one interface lifecycle without assuming vendor-specific field semantics."
+          ],
+          "skills_practiced": [
+            "Cross-source timeline correlation",
+            "Receiver-boundary evidence interpretation"
+          ],
+          "expected_outcome": "The user identifies one shared test interface lifecycle and verifies each native receiver boundary independently of HEC delivery.",
+          "baseline_description": "The fictional test uplink begins within its modeled healthy bounds.",
+          "incident_description": "Modeled error and utilization indicators rise, the test interface degrades, and the same interface later recovers.",
+          "discovery_prompt": "Determine whether all required native channels observed the same test entity and interface lifecycle.",
+          "learning_hints": [
+            "A successful UDP send does not prove collector receipt.",
+            "Treat NetSpout correlation fields as lab-only metadata."
+          ],
+          "business_impact": "Models reduced application reachability through one fictional enterprise uplink without asserting production or vendor behavior.",
+          "prerequisites": [
+            "Bundled native receivers and local Docker Splunk destination configured for test use"
+          ],
+          "technology_ids": [
+            "cisco-ios-xr-syslog",
+            "snmpv2-ifmib",
+            "openconfig-gnmi",
+            "splunk-hec"
+          ],
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog",
+            "ietf-snmpv2c-ifmib",
+            "openconfig-gnmi-interfaces"
+          ],
+          "entities": [
+            "cisco-asr9k-pe1",
+            "HundredGigE0/0/0/1"
+          ],
+          "zones": [
+            {
+              "zone_id": "test-enterprise-zone",
+              "label": "Reserved Test Enterprise"
+            },
+            {
+              "zone_id": "bundled-receiver-zone",
+              "label": "Bundled Native Receivers"
+            },
+            {
+              "zone_id": "destination-zone",
+              "label": "HEC Destination"
+            }
+          ],
+          "nodes": [
+            {
+              "node_id": "cisco-asr9k-pe1",
+              "technology_id": "standards-test-device",
+              "zone_id": "test-enterprise-zone",
+              "role": "fictional-enterprise-edge",
+              "label": "TEST Enterprise Edge 01",
+              "entity_id": "cisco-asr9k-pe1",
+              "description": "Evidence-backed service_provider_cisco target hosting interface HundredGigE0/0/0/1.",
+              "source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ]
+            },
+            {
+              "node_id": "bundled-syslog-receiver",
+              "technology_id": "syslog-udp",
+              "zone_id": "bundled-receiver-zone",
+              "role": "receiver",
+              "label": "Bundled Syslog Receiver",
+              "entity_id": "test-component-syslog-receiver",
+              "description": "Terminates the native IOS XR syslog UDP path before HEC delivery.",
+              "source_ids": []
+            },
+            {
+              "node_id": "bundled-snmp-receiver",
+              "technology_id": "snmpv2-ifmib",
+              "zone_id": "bundled-receiver-zone",
+              "role": "receiver-poller",
+              "label": "Bundled SNMP Receiver",
+              "entity_id": "test-component-snmp-receiver",
+              "description": "Terminates the source-native SNMP/UDP test path.",
+              "source_ids": []
+            },
+            {
+              "node_id": "bundled-gnmi-subscriber",
+              "technology_id": "openconfig-gnmi",
+              "zone_id": "bundled-receiver-zone",
+              "role": "subscriber",
+              "label": "Bundled gNMI Subscriber",
+              "entity_id": "test-component-gnmi-subscriber",
+              "description": "Terminates the source-native gNMI Subscribe test path.",
+              "source_ids": []
+            },
+            {
+              "node_id": "bundled-hec-forwarder",
+              "technology_id": "splunk-hec",
+              "zone_id": "destination-zone",
+              "role": "destination-forwarder",
+              "label": "Bundled HEC Forwarder",
+              "entity_id": "test-component-hec-forwarder",
+              "description": "Begins the destination transport after native receiver observation.",
+              "source_ids": []
+            },
+            {
+              "node_id": "test-local-splunk",
+              "technology_id": "splunk-hec",
+              "zone_id": "destination-zone",
+              "role": "splunk",
+              "label": "TEST Local Splunk",
+              "entity_id": "test-local-splunk.invalid",
+              "description": "Reserved local test destination; no production identity is represented.",
+              "source_ids": []
+            }
+          ],
+          "relationships": [
+            {
+              "relationship_id": "edge-native-syslog-to-receiver",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-syslog-receiver",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "Syslog/UDP",
+              "purpose": "Deliver documented IOS XR interface state messages to the bundled receiver.",
+              "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog"
+              ],
+              "incident_relevance": "Carries PKT_INFRA-LINK-3-UPDOWN state for HundredGigE0/0/0/1."
+            },
+            {
+              "relationship_id": "edge-native-snmp-to-receiver",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-snmp-receiver",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "SNMPv2c/UDP",
+              "purpose": "Deliver source-native IF-MIB observations to the bundled receiver/poller.",
+              "telemetry_source_ids": [
+                "ietf-snmpv2c-ifmib"
+              ],
+              "incident_relevance": "Carries IF-MIB state for HundredGigE0/0/0/1 through ifIndex.1."
+            },
+            {
+              "relationship_id": "edge-native-gnmi-to-subscriber",
+              "source_node_id": "cisco-asr9k-pe1",
+              "target_node_id": "bundled-gnmi-subscriber",
+              "relationship_type": "source-native-telemetry",
+              "protocol": "gNMI Subscribe/gRPC",
+              "purpose": "Publish OpenConfig interface state to the bundled subscriber.",
+              "telemetry_source_ids": [
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": "Carries OpenConfig state for HundredGigE0/0/0/1."
+            },
+            {
+              "relationship_id": "syslog-receiver-to-hec-forwarder",
+              "source_node_id": "bundled-syslog-receiver",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt syslog record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog"
+              ],
+              "incident_relevance": null
+            },
+            {
+              "relationship_id": "snmp-receiver-to-hec-forwarder",
+              "source_node_id": "bundled-snmp-receiver",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt SNMP record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "ietf-snmpv2c-ifmib"
+              ],
+              "incident_relevance": null
+            },
+            {
+              "relationship_id": "gnmi-subscriber-to-hec-forwarder",
+              "source_node_id": "bundled-gnmi-subscriber",
+              "target_node_id": "bundled-hec-forwarder",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver the post-receipt gNMI record over the destination HEC path.",
+              "telemetry_source_ids": [
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": null
+            },
+            {
+              "relationship_id": "hec-forwarder-to-splunk",
+              "source_node_id": "bundled-hec-forwarder",
+              "target_node_id": "test-local-splunk",
+              "relationship_type": "destination-delivery",
+              "protocol": "HEC",
+              "purpose": "Deliver post-receipt records to the configured local Splunk destination.",
+              "telemetry_source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_relevance": null
+            }
+          ],
+          "telemetry_paths": [
+            {
+              "path_id": "native-ios-xr-syslog-path",
+              "source_id": "cisco-ios-xr-interface-syslog",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-syslog-receiver",
+              "label": "Source-native IOS XR syslog receiver boundary",
+              "protocol": "Syslog/UDP"
+            },
+            {
+              "path_id": "native-snmp-receiver-path",
+              "source_id": "ietf-snmpv2c-ifmib",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-snmp-receiver",
+              "label": "Source-native SNMP receiver boundary",
+              "protocol": "SNMPv2c/UDP"
+            },
+            {
+              "path_id": "native-gnmi-subscriber-path",
+              "source_id": "openconfig-gnmi-interfaces",
+              "producer_node_id": "cisco-asr9k-pe1",
+              "observer_node_id": "bundled-gnmi-subscriber",
+              "label": "Source-native gNMI subscriber boundary",
+              "protocol": "gNMI Subscribe/gRPC"
+            }
+          ],
+          "incident_path": [
+            "cisco-asr9k-pe1"
+          ],
+          "incident_summary": "One reserved test interface on one fictional enterprise entity degrades and recovers.",
+          "runtime_state_keys": [
+            "normal",
+            "degraded",
+            "affected",
+            "observed",
+            "recovered"
+          ],
+          "timeline": [
+            {
+              "step_id": "test-baseline",
+              "stage": "BASELINE",
+              "description": "HundredGigE0/0/0/1 is within modeled healthy bounds.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "normal"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "normal"
+              },
+              "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "Each native channel emits baseline evidence for the same test interface."
+              ],
+              "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "test-degrade",
+              "stage": "DEGRADE",
+              "description": "The shared interface error counters increase and oper state degrades.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "degraded"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "degraded"
+              },
+              "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "Native SNMP and gNMI observations are projected from the same shared snapshot."
+              ],
+              "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            },
+            {
+              "step_id": "test-failover",
+              "stage": "FAILOVER",
+              "description": "The modeled test interface crosses its degradation threshold.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "affected"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "affected"
+              },
+              "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "ACTIVE",
+                "ietf-snmpv2c-ifmib": "ACTIVE",
+                "openconfig-gnmi-interfaces": "ACTIVE"
+              },
+              "expected_observations": [
+                "SNMP IF-MIB and gNMI OpenConfig state agree on the bounded interface condition."
+              ],
+              "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": [
+                "test-interface-degradation"
+              ]
+            },
+            {
+              "step_id": "test-recovery",
+              "stage": "RECOVERY",
+              "description": "The modeled test interface returns to healthy bounds.",
+              "state_changes": {
+                "HundredGigE0/0/0/1": "recovered"
+              },
+              "entity_state_changes": {
+                "cisco-asr9k-pe1": "recovered"
+              },
+              "telemetry_state_changes": {
+                "cisco-ios-xr-interface-syslog": "OBSERVED",
+                "ietf-snmpv2c-ifmib": "OBSERVED",
+                "openconfig-gnmi-interfaces": "OBSERVED"
+              },
+              "expected_observations": [
+                "All required native channels complete the same test run and interface lifecycle."
+              ],
+              "evidence_source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "incident_ids": []
+            }
+          ],
+          "incidents": [
+            {
+              "incident_id": "test-interface-degradation",
+              "source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ],
+              "assertion": "Documented IOS XR syslog, IF-MIB SNMP, and OpenConfig gNMI corroborate one modeled degradation of cisco-asr9k-pe1 HundredGigE0/0/0/1.",
+              "corroboration_required": true
+            }
+          ],
+          "parameters": [
+            {
+              "parameter_id": "intensity",
+              "value_type": "integer",
+              "changes_modeled_values_only": true
+            }
+          ],
+          "integration_recommendation_ids": [],
+          "expected_evidence": [
+            "Receiver-observed syslog, SNMP, and gNMI evidence sharing one run, entity, interface, ordered clock, and state lifecycle.",
+            "Separate HEC destination-delivery evidence after each native receiver boundary."
+          ],
+          "investigation_recipe_ids": [
+            "investigate-correlated-interface-degradation"
+          ],
+          "investigation_steps": [
+            {
+              "step_id": "correlate-test-interface",
+              "recipe_id": "investigate-correlated-interface-degradation",
+              "title": "Correlate the test interface lifecycle",
+              "question": "Did IOS XR syslog, native SNMP, and gNMI observe the shared interface lifecycle, including recovery?",
+              "expected_finding": "All three native paths agree with the shared ordered state plan and precede separate HEC destination evidence.",
+              "explanation": "The source protocols remain distinct; the shared enterprise store drives their native values.",
+              "hint": "Check receiver-observed stages before Splunk-observed stages.",
+              "node_ids": [
+                "cisco-asr9k-pe1",
+                "bundled-syslog-receiver",
+                "bundled-snmp-receiver",
+                "bundled-gnmi-subscriber",
+                "test-local-splunk"
+              ],
+              "source_ids": [
+                "cisco-ios-xr-interface-syslog",
+                "ietf-snmpv2c-ifmib",
+                "openconfig-gnmi-interfaces"
+              ]
+            }
+          ],
+          "validation_expectations": [
+            {
+              "validation_id": "test-syslog-receiver-observed",
+              "label": "Bundled syslog receiver observed the documented IOS XR message",
+              "evidence_stage": "RECEIVER_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "cisco-ios-xr-interface-syslog"
+            },
+            {
+              "validation_id": "test-snmp-receiver-observed",
+              "label": "Bundled SNMP receiver observed the native PDU",
+              "evidence_stage": "RECEIVER_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "ietf-snmpv2c-ifmib"
+            },
+            {
+              "validation_id": "test-gnmi-subscriber-observed",
+              "label": "Bundled gNMI subscriber observed the native update",
+              "evidence_stage": "COLLECTOR_RECEIVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED",
+              "source_id": "openconfig-gnmi-interfaces"
+            },
+            {
+              "validation_id": "test-hec-destination-observed",
+              "label": "Local Splunk observed post-receipt HEC delivery",
+              "evidence_stage": "SPLUNK_OBSERVED",
+              "expected_state": "PROVEN",
+              "requirement": "REQUIRED"
+            }
+          ],
+          "visualization": {
+            "mode": "AUTOMATIC",
+            "direction": "LEFT_TO_RIGHT",
+            "curated_layout_ref": null
+          },
+          "replay_policy": {
+            "creates_new_run_id": true,
+            "preserves_history": true,
+            "reset_to_step": "RUN"
+          },
+          "troubleshooting_steps": [
+            "Verify each bundled native receiver independently before checking HEC delivery.",
+            "Do not promote UDP send evidence to receiver observation."
+          ],
+          "cim_validation": [],
+          "production_replication_guidance": [
+            "Collect IOS XR syslog, IF-MIB SNMP, and OpenConfig interface telemetry using Cisco-supported production configuration.",
+            "Install and validate the Cisco Enterprise Networking Add-on where required; its sourcetype and CIM behavior remain unvalidated here.",
+            "Replace reserved test identities and NetSpout-only correlation fields with production entity mappings."
+          ],
+          "troubleshooting_operation_ids": [
+            "cisco-ios-xr-show-interfaces"
+          ],
+          "production_guide_id": "guide-cisco-ios-xr-interface-degradation",
+          "curated_layout_ref": null
+        }
+      ],
+      "investigations": [],
+      "industries": []
+    },
+    {
+      "pack_id": "cisco-ios-xr-coverage",
+      "pack_version": "1.0.0",
+      "kind": "VENDOR_PRODUCT",
+      "display_name": "Cisco 8000 IOS XR Coverage",
+      "maturity": "BETA",
+      "verification_state": "PARTIALLY_VERIFIED",
+      "dependencies": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation",
+        "netspout-rfc5424-scenario"
+      ],
+      "evidence": [],
+      "sources": [],
+      "integrations": [],
+      "generators": [
+        {
+          "generator_id": "generator-declarative-native-template",
+          "implementation_ref": "allowlist:declarative-native-template",
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "signals": [
+            "LOGS",
+            "EVENTS"
+          ],
+          "verification_state": "VERIFIED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN",
+            "EVID-NETSPOUT-RUNTIME"
+          ]
+        }
+      ],
+      "validators": [
+        {
+          "validator_id": "validator-ios-xr-interface-syslog",
+          "implementation_ref": "allowlist:declarative-native-template-validator",
+          "source_ids": [
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "stages": [
+            "RAW_VERIFIED",
+            "SENT",
+            "RECEIVER_OBSERVED",
+            "SPLUNK_OBSERVED"
+          ],
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN"
+          ]
+        }
+      ],
+      "transports": [],
+      "destinations": [],
+      "declarative_templates": [
+        {
+          "profile_id": "template-cisco-ios-xr-link-updown",
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "format": "IOS XR interface state syslog",
+          "sourcetype": "netspout:cisco:iosxr:syslog",
+          "template": "{node_id}:{timestamp} : ifmgr[{process_id}]: %PKT_INFRA-LINK-3-UPDOWN : Interface {interface_id}, changed state to {operational_state}",
+          "structural_fields": [
+            "PKT_INFRA",
+            "LINK",
+            "3",
+            "UPDOWN"
+          ],
+          "modeled_fields": [
+            "node_id",
+            "interface_id",
+            "operational_state"
+          ],
+          "derived_fields": [
+            "timestamp",
+            "process_id"
+          ],
+          "supported_state_keys": [
+            "interface.status"
+          ],
+          "phase_values": {
+            "BASELINE": {
+              "operational_state": "Up"
+            },
+            "DEGRADE": {
+              "operational_state": "Up"
+            },
+            "FAILOVER": {
+              "operational_state": "Down"
+            },
+            "RECOVERY": {
+              "operational_state": "Up"
+            }
+          },
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SYSLOG-FORMAT",
+            "EVID-CISCO-IOSXR-LINK-UPDOWN"
+          ]
+        }
+      ],
+      "integration_recommendations": [
+        {
+          "recommendation_id": "recommend-cisco-enterprise-networking-7538-ios-xr",
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "integration_id": "splunkbase-cisco-enterprise-networking-7538",
+          "requirement": "RECOMMENDED",
+          "evidence_ids": [
+            "EVID-SPLUNK-CISCO-ENTERPRISE-7538"
+          ],
+          "notes": "The relationship is documented; sourcetype and CIM behavior remain runtime-unvalidated."
+        },
+        {
+          "recommendation_id": "research-ios-xr-snmp-splunk-integration",
+          "source_id": "ietf-snmpv2c-ifmib",
+          "integration_id": null,
+          "requirement": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-SNMP-IFMIB"
+          ],
+          "notes": "No official Splunk integration relationship is asserted."
+        },
+        {
+          "recommendation_id": "research-ios-xr-gnmi-splunk-integration",
+          "source_id": "openconfig-gnmi-interfaces",
+          "integration_id": null,
+          "requirement": "RESEARCH_REQUIRED",
+          "evidence_ids": [
+            "EVID-CISCO-IOSXR-GNMI-OC-INTERFACES"
+          ],
+          "notes": "No official Splunk integration relationship is asserted."
+        }
+      ],
+      "scenarios": [],
+      "investigations": [],
+      "industries": []
+    }
+  ],
+  "compositions": [
+    {
+      "composition_id": "compose-rfc5424-link-state-local",
+      "scenario_id": "rfc5424-link-state-lifecycle",
+      "pack_ids": [
+        "netspout-rfc5424-generation",
+        "netspout-rfc5424-investigation",
+        "netspout-rfc5424-scenario"
+      ],
+      "source_bindings": [
+        {
+          "source_id": "ietf-syslog-rfc5424",
+          "generator_id": "generator-rfc5424-modeled",
+          "transport_id": "transport-local-hec",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "validator_ids": [
+            "validator-rfc5424-structure"
+          ]
+        }
+      ],
+      "investigation_recipe_ids": [
+        "investigate-rfc5424-run"
+      ]
+    },
+    {
+      "composition_id": "compose-test-correlated-interface-degradation-local",
+      "scenario_id": "test-correlated-interface-degradation",
+      "pack_ids": [
+        "netspout-rfc5424-scenario",
+        "cisco-ios-xr-coverage"
+      ],
+      "source_bindings": [
+        {
+          "source_id": "cisco-ios-xr-interface-syslog",
+          "generator_id": "generator-declarative-native-template",
+          "transport_id": "transport-native-syslog-udp",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_syslog",
+          "payload_profile_id": "template-cisco-ios-xr-link-updown",
+          "receiver_component_id": "bundled-syslog-receiver",
+          "required": true,
+          "validator_ids": [
+            "validator-ios-xr-interface-syslog"
+          ]
+        },
+        {
+          "source_id": "ietf-snmpv2c-ifmib",
+          "generator_id": "generator-native-snmp-ifmib",
+          "transport_id": "transport-native-snmp-udp",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_snmp",
+          "receiver_component_id": "bundled-snmp-receiver",
+          "required": true,
+          "validator_ids": [
+            "validator-native-receiver-boundary"
+          ]
+        },
+        {
+          "source_id": "openconfig-gnmi-interfaces",
+          "generator_id": "generator-native-gnmi-interfaces",
+          "transport_id": "transport-native-gnmi-grpc",
+          "destination_transport_id": "transport-local-hec",
+          "destination_id": "destination-local-docker-splunk",
+          "runtime_adapter_ref": "netspout_core.native_runtime.NativeRuntimeFacade.run_gnmi",
+          "receiver_component_id": "bundled-gnmi-subscriber",
+          "required": true,
+          "validator_ids": [
+            "validator-native-receiver-boundary"
+          ]
+        }
+      ],
+      "investigation_recipe_ids": [
+        "investigate-correlated-interface-degradation"
+      ],
+      "execution_mode": "SHARED_STATE_LIFECYCLE",
+      "state_profile_scenario_id": "test-correlated-interface-degradation",
+      "state_entity_id": "cisco-asr9k-pe1",
+      "state_interface_id": "HundredGigE0/0/0/1",
+      "correlate_native_channels": true
+    }
+  ]
+}

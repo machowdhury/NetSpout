@@ -1,0 +1,401 @@
+{
+  "schema_version": "1.0.0",
+  "taxonomy_version": "2026.10-approved",
+  "taxonomy_status": "APPROVED",
+  "taxonomy_note": "Approved 18-industry list with four Government subdomains. Scenario-to-industry mappings remain editorial unless an industry pack binds them (see mapping basis); no scenario is mapped to a Government subdomain, and industries without a supported scenario show 0 rather than being padded.",
+  "mapping_basis_legend": {
+    "industry_pack": "Dashboard/industry pack in the catalog explicitly binds this scenario to the industry.",
+    "editorial": "Maintainer judgement that the scenario's telemetry is typical for the industry. Not a customer-validated claim."
+  },
+  "industries": [
+    {
+      "id": "banking-financial-services",
+      "name": "Banking and Financial Services"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare"
+    },
+    {
+      "id": "retail-ecommerce",
+      "name": "Retail and E-commerce"
+    },
+    {
+      "id": "manufacturing",
+      "name": "Manufacturing"
+    },
+    {
+      "id": "energy-utilities",
+      "name": "Energy and Utilities"
+    },
+    {
+      "id": "telecommunications",
+      "name": "Telecommunications"
+    },
+    {
+      "id": "government-public-sector",
+      "name": "Government and Public Sector",
+      "subdomains": [
+        {
+          "id": "gov-national-security",
+          "name": "National Security, Defense and Intelligence"
+        },
+        {
+          "id": "gov-state-local",
+          "name": "State, Local and Citizen Services"
+        },
+        {
+          "id": "gov-federal-civilian",
+          "name": "Federal Civilian and Compliance"
+        },
+        {
+          "id": "gov-critical-infrastructure",
+          "name": "Critical National Infrastructure"
+        }
+      ]
+    },
+    {
+      "id": "transportation-logistics",
+      "name": "Transportation and Logistics"
+    },
+    {
+      "id": "education",
+      "name": "Education"
+    },
+    {
+      "id": "technology-saas",
+      "name": "Technology and SaaS"
+    },
+    {
+      "id": "media-entertainment",
+      "name": "Media and Entertainment"
+    },
+    {
+      "id": "hospitality-travel",
+      "name": "Hospitality and Travel"
+    },
+    {
+      "id": "aerospace-defense",
+      "name": "Aerospace and Defense"
+    },
+    {
+      "id": "legal-compliance-professional-services",
+      "name": "Legal, Compliance and Professional Services"
+    },
+    {
+      "id": "agriculture-agritech",
+      "name": "Agriculture and Agritech"
+    },
+    {
+      "id": "real-estate-proptech-construction",
+      "name": "Real Estate, PropTech and Construction"
+    },
+    {
+      "id": "insurance-insurtech",
+      "name": "Insurance and InsurTech"
+    },
+    {
+      "id": "nonprofit-ngo-global-aid",
+      "name": "Non-Profit, NGOs and Global Aid"
+    }
+  ],
+  "scenario_industries": [
+    {
+      "scenario_id": "payment_processing_degradation",
+      "basis": "industry_pack",
+      "industries": [
+        "banking-financial-services"
+      ]
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "basis": "industry_pack",
+      "industries": [
+        "banking-financial-services"
+      ]
+    },
+    {
+      "scenario_id": "C100-ENT-001",
+      "basis": "industry_pack",
+      "industries": [
+        "healthcare"
+      ]
+    },
+    {
+      "scenario_id": "C100-DC-001",
+      "basis": "industry_pack",
+      "industries": [
+        "manufacturing"
+      ]
+    },
+    {
+      "scenario_id": "C100-CRI-002",
+      "basis": "editorial",
+      "industries": [
+        "energy-utilities",
+        "government-public-sector"
+      ]
+    },
+    {
+      "scenario_id": "C100-SP-001",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "arch_man_carrier_ring",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "service_provider_cisco",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "service_provider_mixed",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "arch_wlan_meraki_catalyst",
+      "basis": "editorial",
+      "industries": [
+        "education",
+        "hospitality-travel",
+        "retail-ecommerce"
+      ]
+    },
+    {
+      "scenario_id": "cisco_campus_rogue",
+      "basis": "editorial",
+      "industries": [
+        "education",
+        "hospitality-travel"
+      ]
+    },
+    {
+      "scenario_id": "arch_pan_iot_mesh",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "agriculture-agritech"
+      ]
+    },
+    {
+      "scenario_id": "ub1_ot_proxy_host_hunt",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "energy-utilities"
+      ]
+    },
+    {
+      "scenario_id": "ub2_ot_edge_routing_observation",
+      "basis": "editorial",
+      "industries": [
+        "manufacturing",
+        "energy-utilities"
+      ]
+    },
+    {
+      "scenario_id": "arch_vpn_remote_workforce",
+      "basis": "editorial",
+      "industries": [
+        "legal-compliance-professional-services",
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "mixed_sase_degradation",
+      "basis": "editorial",
+      "industries": [
+        "legal-compliance-professional-services",
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "wave2_agentic_ai_exfil_attempt",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-001",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-002",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-003",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-004",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-005",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "AI-006",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "SC-001",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "SC-002",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "SC-003",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "SC-004",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "SC-005",
+      "basis": "editorial",
+      "industries": [
+        "technology-saas"
+      ]
+    },
+    {
+      "scenario_id": "network_16_retail_uplink",
+      "basis": "editorial",
+      "industries": [
+        "retail-ecommerce"
+      ]
+    },
+    {
+      "scenario_id": "network_17_hospital_mac_auth",
+      "basis": "editorial",
+      "industries": [
+        "healthcare"
+      ]
+    },
+    {
+      "scenario_id": "network_18_payment_deny",
+      "basis": "editorial",
+      "industries": [
+        "banking-financial-services",
+        "retail-ecommerce"
+      ]
+    },
+    {
+      "scenario_id": "telco_01_ran_cell",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_02_registration_auth",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_03_slice_sla",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_04_ims_volte",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_05_mobile_transport",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_06_broadband_cpe",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_07_sdwan_service",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_08_roaming_mobility",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_09_core_user_plane",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    },
+    {
+      "scenario_id": "telco_10_cross_layer",
+      "basis": "editorial",
+      "industries": [
+        "telecommunications"
+      ]
+    }
+  ]
+}

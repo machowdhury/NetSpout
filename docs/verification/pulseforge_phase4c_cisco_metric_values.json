@@ -1,0 +1,34 @@
+{
+  "scenario_id": "cisco_aci_microburst",
+  "seed": 51040,
+  "run_id": "NS-20261029-f3f9d813",
+  "metric_index": "idx_performance_metrics",
+  "tolerance": 1e-06,
+  "metrics_checked": 3,
+  "all_values_match": true,
+  "failures": 0,
+  "per_metric": {
+    "buffer_utilization": {
+      "expected_avg": 56.025,
+      "observed_avg": 56.025,
+      "samples": 4,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "egress_drops": {
+      "expected_avg": 1420.0,
+      "observed_avg": 1420.0,
+      "samples": 4,
+      "relative_error": 0.0,
+      "match": true
+    },
+    "queue_depth": {
+      "expected_avg": 14512500.0,
+      "observed_avg": 14512500.0,
+      "samples": 4,
+      "relative_error": 0.0,
+      "match": true
+    }
+  },
+  "note": "Values are modeled SNMP-derived measurements replayed from the seeded generator; no device was polled."
+}

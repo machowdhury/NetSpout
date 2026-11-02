@@ -1,5 +1,5 @@
 <dashboard version="1.1" theme="dark" script="datablaster_console.js">
-  <label>Data Blaster Console</label>
+  <label>NetSpout PulseForge Run Console</label>
   <description>Executive mission-control console for high-rate network telemetry simulation, live scenario execution dispatch, and infrastructure ingestion metrics.</description>
 
   <!-- Consolidated Ingestion & Blast Hub Switcher -->
@@ -299,7 +299,7 @@
               </div>
             </div>
             <div id="console-log-output" style="background: #020617; border: 1px solid #1e293b; border-radius: 4px; padding: 10px 12px; font-family: monospace; font-size: 11px; color: #38bdf8; min-height: 120px; max-height: 220px; overflow-y: auto; line-height: 1.5;">
-              <div>[SYSTEM READY] Data Blaster Console initialized. All multi-vendor engines online.</div>
+              <div>[SYSTEM READY] PulseForge Run Console initialized. All multi-vendor engines online.</div>
               <div>[PIPELINE] Target HEC: https://127.0.0.1:8888/services/collector (Auto-fallback to :8088 enabled)</div>
               <div>[INDEXES] idx_network_ops, idx_security_fw, idx_wireless_ops, idx_performance_metrics verified.</div>
             </div>
@@ -309,4 +309,55 @@
       </html>
     </panel>
   </row>
+  <row><panel><html>
+    <section id="network-incident-packs">
+      <h2>PulseForge Network Incident Packs</h2>
+      <p>Select a named destination above, then launch one bounded incident. Each seed-42 run has 30 ordered logs and up to 10 metric envelopes (30–50 OTLP gauge points). Logs-only destinations receive logs. Delivery evidence is distinct from indexing; use independent ingestion verification where supported. Synthetic vendor-style messages do not claim firmware or vendor TA fidelity.</p>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_01_campus_link.yml" data-name="Campus link failure/recovery">Campus link failure/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_02_vlan_trunk.yml" data-name="VLAN/trunk misconfiguration">VLAN/trunk misconfiguration</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_03_stp_storm.yml" data-name="STP loop/broadcast storm">STP loop/broadcast storm</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_04_wan_brownout.yml" data-name="WAN latency/jitter/packet-loss brownout">WAN latency/jitter/packet-loss brownout</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_05_dual_isp.yml" data-name="Dual-ISP failover/recovery">Dual-ISP failover/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_06_bgp_flap.yml" data-name="BGP neighbor flap/route withdrawal">BGP neighbor flap/route withdrawal</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_07_ospf_adjacency.yml" data-name="OSPF adjacency failure/reconvergence">OSPF adjacency failure/reconvergence</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_08_firewall_policy.yml" data-name="Firewall policy misconfiguration">Firewall policy misconfiguration</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_09_ddos_flood.yml" data-name="DDoS/traffic flood/mitigation">DDoS/traffic flood/mitigation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_10_dns_failure.yml" data-name="DNS resolver failure/recovery">DNS resolver failure/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_11_dhcp_exhaustion.yml" data-name="DHCP pool exhaustion/recovery">DHCP pool exhaustion/recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_12_dc_congestion.yml" data-name="Data-center congestion/queue drops">Data-center congestion/queue drops</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_13_mtu_pmtud.yml" data-name="MTU mismatch/PMTUD failure">MTU mismatch/PMTUD failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_14_wireless_outage.yml" data-name="Wireless controller/AP outage">Wireless controller/AP outage</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_15_device_resources.yml" data-name="Device CPU/memory exhaustion">Device CPU/memory exhaustion</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_27_stale_sessions.yml" data-name="Authentication recovery with stale perimeter sessions">Authentication recovery with stale perimeter sessions</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_26_maintenance.yml" data-name="Planned maintenance versus unplanned service outage">Planned maintenance versus unplanned service outage</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_25_mpls_recovery.yml" data-name="Primary MPLS path-change observation and branch SLA recovery">Primary MPLS path-change observation and branch SLA recovery</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_24_policy_disagreement.yml" data-name="Multi-firewall path-policy disagreement">Multi-firewall path-policy disagreement</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_23_containment_request.yml" data-name="Simulated NAC containment request and service-access change">Simulated NAC containment request and service-access change</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_22_authentication_storm.yml" data-name="Campus authentication retry storm at perimeter">Campus authentication retry storm at perimeter</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_21_partial_pool.yml" data-name="Partial load-balancer pool outage with perimeter demand">Partial load-balancer pool outage with perimeter demand</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_20_backend_link.yml" data-name="Distribution-link loss and backend monitor failure">Distribution-link loss and backend monitor failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_19_ips_service.yml" data-name="IPS attack burst and legitimate-session degradation">IPS attack burst and legitimate-session degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_18_payment_deny.yml" data-name="Perimeter deny burst and payment availability loss">Perimeter deny burst and payment availability loss</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_17_hospital_mac_auth.yml" data-name="Hospital access MAC instability and login retries">Hospital access MAC instability and login retries</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_network_16_retail_uplink.yml" data-name="Retail branch uplink flap and checkout interruption">Retail branch uplink flap and checkout interruption</button>
+    </section>
+  </html></panel></row>
+
+  <row><panel><html>
+    <section id="telecom-incident-packs">
+      <h2>PulseForge Telecommunications &amp; 5G Scenarios</h2>
+      <p>Select a named destination above. Each bounded, seed-42 incident emits 30 logs and up to 10 KPI envelopes (30 OTLP gauge points). All measurements, alarms and operator actions are simulated. No subscriber PII, equipment signaling or remediation is performed. Collector acknowledgement is not indexing proof.</p>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_01_ran_cell.yml" data-name="5G RAN cell degradation">5G RAN cell degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_02_registration_auth.yml" data-name="5G registration/authentication failure">5G registration/authentication failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_03_slice_sla.yml" data-name="5G network slice SLA violation">5G network slice SLA violation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_04_ims_volte.yml" data-name="IMS/VoLTE call-quality degradation">IMS/VoLTE call-quality degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_05_mobile_transport.yml" data-name="Mobile transport/fronthaul congestion">Mobile transport/fronthaul congestion</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_06_broadband_cpe.yml" data-name="Broadband CPE service outage">Broadband CPE service outage</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_07_sdwan_service.yml" data-name="SD-WAN service degradation">SD-WAN service degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_08_roaming_mobility.yml" data-name="Roaming/mobility failure">Roaming/mobility failure</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_09_core_user_plane.yml" data-name="5G core user-plane degradation">5G core user-plane degradation</button>
+      <button type="button" class="btn-launch-scenario" data-scenario="scenario_telco_10_cross_layer.yml" data-name="Cross-layer telecom service outage and SLA impact">Cross-layer telecom service outage and SLA impact</button>
+    </section>
+  </html></panel></row>
+
 </dashboard>

@@ -1,0 +1,3138 @@
+{
+ "sources": [
+  {
+   "sourcetype": "a10:acos:cgnat",
+   "vendor": "a10_networks",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "a10:acos:syslog",
+   "vendor": "a10_networks",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "arista:eos",
+   "vendor": "arista_eos",
+   "required_ta": "Arista Networks App for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "arista:eos:syslog",
+   "vendor": "arista_eos",
+   "required_ta": "Arista Networks Telemetry for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "arista:flow:ipfix",
+   "vendor": "arista_eos",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "arista:telemetry:json",
+   "vendor": "arista_eos",
+   "required_ta": "Arista Networks Telemetry for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba",
+   "vendor": "aruba_cx",
+   "required_ta": "Splunk Add-on for Aruba Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba:authmgr",
+   "vendor": "aruba_cx",
+   "required_ta": "Splunk Add-on for Aruba Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba:cx:security",
+   "vendor": "aruba_cx",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba:cx:syslog",
+   "vendor": "aruba_cx",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba:stm",
+   "vendor": "aruba_cx",
+   "required_ta": "Splunk Add-on for Aruba Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aruba:syslog",
+   "vendor": "aruba_cx",
+   "required_ta": "Aruba Networks Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "checkpoint:cef",
+   "vendor": "checkpoint",
+   "required_ta": "CCX Unified Splunk Add-on for Check Point",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "checkpoint:firewall",
+   "vendor": "checkpoint",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "checkpoint:threat",
+   "vendor": "checkpoint",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:aci:fault",
+   "vendor": "cisco_aci",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:aci:syslog",
+   "vendor": "cisco_aci",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:asa",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco ASA",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:asa:syslog",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco ASA",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:client",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:clienthealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:compliance",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:devicehealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:issue",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:networkhealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:allowed",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:counts",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:threat_details",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:verbose",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:verbose:legacy",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:rogue:wired",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:script:heartbeat",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:security:awips_signatures",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:security:events",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:security:profile",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:security:profile_signatures",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:security:rules",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:securityadvisory",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:syslog",
+   "vendor": "cisco_catalyst",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:threat:list",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:threat:signatures",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:threat:summary",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:catalyst:threat:summary:legacy",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dc:aci:class",
+   "vendor": "cisco_aci",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dc:aci:events",
+   "vendor": "cisco_aci",
+   "required_ta": "Cisco ACI Add-on for Splunk Enterprise",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dc:aci:health",
+   "vendor": "cisco_aci",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dc:nexus9k",
+   "vendor": "cisco_aci",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dc:nexus9k:syslog",
+   "vendor": "cisco_aci",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:audit:logs",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:client",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:clienthealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:compliance",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:devicehealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:issue",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:networkhealth",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:securityadvisory",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:dnac:site:topology",
+   "vendor": "cisco_catalyst",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:account",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:activity",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:administrator",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:auth",
+   "vendor": "cisco_duo",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:authentication",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:authentication_v2",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:endpoint",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:push:prompt",
+   "vendor": "cisco_duo",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:remote:vpn",
+   "vendor": "cisco_duo",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:duo:user",
+   "vendor": "cisco_duo",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ftd:syslog",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco ASA",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:advisories",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:alarms",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:auditrecords",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:compute",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:contracts",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:licenses",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:metrics",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:networkelements",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:networkobjects",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:profiles",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:intersight:targets",
+   "vendor": "cisco_intersight",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ios",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ios:mdt",
+   "vendor": "cisco_ios",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ios:mdt:metric",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Cisco IOS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ios:syslog",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Cisco IOS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:nac:8021x",
+   "vendor": "cisco_ise",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:radius:authz:policy",
+   "vendor": "cisco_ise",
+   "required_ta": "Splunk Add-on for Cisco ISE",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:radius:policyset",
+   "vendor": "cisco_ise",
+   "required_ta": "Splunk Add-on for Cisco ISE",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:syslog",
+   "vendor": "cisco_ise",
+   "required_ta": "Splunk Add-on for Cisco ISE",
+   "installed_app": "Splunk_TA_cisco-ise",
+   "status": "ACTUAL_EXECUTION_PARTIAL_WITH_BLOCKER",
+   "evidence": "catalog/universe_batch3_ise_parser_results.json",
+   "blocker": "5205 colon-delimited MAC extracted into truncated src_ip; src_mac absent"
+  },
+  {
+   "sourcetype": "cisco:ise:tacacs:authz:policy",
+   "vendor": "cisco_ise",
+   "required_ta": "Splunk Add-on for Cisco ISE",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:tacacs:policyset",
+   "vendor": "cisco_ise",
+   "required_ta": "Splunk Add-on for Cisco ISE",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:ise:trustsec:sgt",
+   "vendor": "cisco_ise",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:mds:san:fc",
+   "vendor": "cisco_catalyst",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:metrics",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:nexus",
+   "vendor": "cisco_aci",
+   "required_ta": "Cisco Nexus Add-on for Splunk Enterprise",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:nvm:flowdata",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:nxos",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco Nexus Add-on for Splunk Enterprise",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:nxos:syslog",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco Nexus Add-on for Splunk Enterprise",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:AAA-6-METHOD_LIST_STATE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:BGP-5-NBR_RESET",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:BGP-6-NEXTHOP",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:BGP_SESSION-5-ADJCHANGE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:DMI-5-AUTH_PASSED",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:DMI-5-CONFIG_I",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_COMPLETE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_NEEDED",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:DMI-5-SYNC_START",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:ENVIRONMENTAL-1-ALERT",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:EVENTLIB-3-CPUHOG",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:IOSXE-3-PLATFORM",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:LINEPROTO-5-UPDOWN",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:LINK-5-CHANGED",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:LINK-5-UPDOWN",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:MSDP-5-PEER_UPDOWN",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:NDBMAN-5-CONFIG_I",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:OSPF-5-ADJCHG",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:SYS-5-CONFIG_P",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:linkhealth",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:sitehealth",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:ssetunnels",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:syslog",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:system:logs",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:sytem:logs",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:tunnelhealth",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:utd:logs",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:utdhealth",
+   "vendor": "cisco_sdwan",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:se",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sfw:estreamer",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sfw:policy",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:thousandeyes:event",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:thousandeyes:metric",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:thousandeyes:path-vis",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco_syslog",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "citrix:netscaler:syslog",
+   "vendor": "citrix_netscaler",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "citrix:netscaler:web",
+   "vendor": "citrix_netscaler",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cloudflare:firewall",
+   "vendor": "cloudflare",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cloudflare:json",
+   "vendor": "cloudflare",
+   "required_ta": "Cloudflare App for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cloudflare:r2:json",
+   "vendor": "cloudflare",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "datablaster:preflight",
+   "vendor": "cisco_ios",
+   "required_ta": "NetSpout Telemetry App",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "datablaster:probe",
+   "vendor": "cisco_ios",
+   "required_ta": "NetSpout Telemetry App",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "dell:os10:syslog",
+   "vendor": "dell_os10",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "extrahop:eda:alert",
+   "vendor": "extrahop",
+   "required_ta": "ExtraHop Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "extrahop:eda:metrics",
+   "vendor": "extrahop",
+   "required_ta": "ExtraHop Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "extreme:exos:syslog",
+   "vendor": "extreme_networks",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "extreme:voss:syslog",
+   "vendor": "extreme_networks",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "f5:bigip:ltm",
+   "vendor": "f5_bigip",
+   "required_ta": "F5 Networks Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "f5:bigip:syslog",
+   "vendor": "f5_bigip",
+   "required_ta": "Splunk Add-on for F5 BIG-IP",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fgt_event",
+   "vendor": "fortinet",
+   "required_ta": "Fortinet FortiGate Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fgt_traffic",
+   "vendor": "fortinet",
+   "required_ta": "Fortinet FortiGate Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "forcepoint:ngfw:alert",
+   "vendor": "forcepoint",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "forcepoint:ngfw:traffic",
+   "vendor": "forcepoint",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortigate_event",
+   "vendor": "fortinet",
+   "required_ta": "Fortinet FortiGate Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortigate_traffic",
+   "vendor": "fortinet",
+   "required_ta": "Fortinet FortiGate Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortinet:fortigate",
+   "vendor": "fortinet",
+   "required_ta": "Fortinet FortiGate Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortinet:fortigate:event",
+   "vendor": "fortinet",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortinet:fortigate:traffic",
+   "vendor": "fortinet",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "fortinet:fortigate:utm",
+   "vendor": "fortinet",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "geo_tokens:generic",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "httpevent",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "huawei:vrp:syslog",
+   "vendor": "huawei_vrp",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "huawei:vrp:traffic",
+   "vendor": "huawei_vrp",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "juniper:junos",
+   "vendor": "juniper_junos",
+   "required_ta": "Juniper Networks Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "juniper:junos:syslog",
+   "vendor": "juniper_junos",
+   "required_ta": "Juniper Networks Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "juniper:syslog",
+   "vendor": "juniper_junos",
+   "required_ta": "Splunk Add-on for Juniper",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:calico-kube-controllers",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:calico-node",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:controller",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:coredns",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:hostpath-provisioner",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:install-cni",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:metrics",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:metrics-server",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:mibserver",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:mongodb",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:redis",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:speaker",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:splunk-connect-for-snmp-traps",
+   "vendor": "sc4snmp",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:splunk-connect-for-snmp-worker-sender",
+   "vendor": "sc4snmp",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:splunk-connect-for-snmp-worker-trap",
+   "vendor": "sc4snmp",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:upgrade-ipam",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:events",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:object:pods",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:accesspoints",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:airmarshal",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:appliance",
+   "vendor": "cisco_meraki",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:appliancesdwanstatistics",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:appliancesdwanstatuses",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:assurancealerts",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:devices",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:devicesavailabilitieschangehistory",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:organizationsecurity",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:security",
+   "vendor": "cisco_meraki",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:securityappliances",
+   "vendor": "cisco_meraki",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:summarytopappliancesbyutilization",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:summarytopclientsbyusage",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:summarytopdevicesbyusage",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:switchportsbyswitch",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "meraki:switchportsoverview",
+   "vendor": "cisco_meraki",
+   "required_ta": "Splunk Add-on for Cisco Meraki",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netapp:ontap:nas",
+   "vendor": "splunk",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netscout:omnis:alert",
+   "vendor": "netscout",
+   "required_ta": "NetScout Omnis Cyber Intelligence Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netskope:alerts",
+   "vendor": "netskope",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netskope:events",
+   "vendor": "netskope",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netskope:json",
+   "vendor": "netskope",
+   "required_ta": "Netskope Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netskope:sse",
+   "vendor": "netskope",
+   "required_ta": "TA-NetSkopeAppForSplunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netspout:snmp:poll",
+   "vendor": "cisco_ios",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "netspout:snmp:trap",
+   "vendor": "cisco_ios",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nginx:plus:kv",
+   "vendor": "splunk",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nokia:sr:syslog",
+   "vendor": "nokia_sr",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nokia:sros",
+   "vendor": "nokia_sr",
+   "required_ta": "Nokia SR OS Splunk Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nokia:sros:syslog",
+   "vendor": "nokia_sr",
+   "required_ta": "Nokia SR OS Splunk Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixPC_disks",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc:syslog",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Technology Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc:vms",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Technology Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_alerts",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_cluster_performance",
+   "vendor": "nutanix",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_clusters",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_disk_performance",
+   "vendor": "nutanix",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_events",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_host_performance",
+   "vendor": "nutanix",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_hosts",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_prismCentrals",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_storage_containers",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_syslog",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_vm_performance",
+   "vendor": "nutanix",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_vms",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nutanixpc_volume_groups",
+   "vendor": "nutanix",
+   "required_ta": "Nutanix Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "openconfig:gnmi:telemetry",
+   "vendor": "cisco_ios",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "opsec",
+   "vendor": "cisco_ios",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pan:ble:iot:sensor",
+   "vendor": "palo_alto",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pan:config",
+   "vendor": "palo_alto",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pan:system",
+   "vendor": "palo_alto",
+   "required_ta": "Splunk Add-on for Palo Alto Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pan:threat",
+   "vendor": "palo_alto",
+   "required_ta": "Splunk Add-on for Palo Alto Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pan:traffic",
+   "vendor": "palo_alto",
+   "required_ta": "Splunk Add-on for Palo Alto Networks",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "postgresql:audit",
+   "vendor": "splunk",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "radware:cwaf:waf",
+   "vendor": "radware",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "radware:ddos",
+   "vendor": "radware",
+   "required_ta": "Radware CSMS & CWAF Event Collector",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "radware:defensepro:attack",
+   "vendor": "radware",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "radware:waf",
+   "vendor": "radware",
+   "required_ta": "Radware CSMS & CWAF Event Collector",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sc4snmp:event",
+   "vendor": "sc4snmp",
+   "required_ta": "SC4SNMP Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sc4snmp:metric",
+   "vendor": "sc4snmp",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "snmp:trap",
+   "vendor": "sc4snmp",
+   "required_ta": "SC4SNMP Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sonicwall:firewall",
+   "vendor": "sonicwall",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sophos:central:cef",
+   "vendor": "sophos",
+   "required_ta": "Sophos Central Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sophos:xg:firewall",
+   "vendor": "sophos",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "stream:netflow",
+   "vendor": "splunk",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "vmware:nsx:audit",
+   "vendor": "vmware_nsx",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "vmware:nsx:firewall",
+   "vendor": "vmware_nsx",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "vmware:perf:cpu",
+   "vendor": "vmware_nsx",
+   "required_ta": "Splunk Add-on for Cisco Telemetry (TA-cisco-telemetry)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "watchguard:fireware:alarm",
+   "vendor": "watchguard",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "watchguard:fireware:traffic",
+   "vendor": "watchguard",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscaler:tunnel",
+   "vendor": "zscaler_zia",
+   "required_ta": "Zscaler Technical Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscaler:web",
+   "vendor": "zscaler_zia",
+   "required_ta": "Zscaler Technical Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscaler:zia",
+   "vendor": "zscaler_zia",
+   "required_ta": "TA-Zscaler_CIM",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscaler:zia:tunnel",
+   "vendor": "zscaler_zia",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscaler:zia:web",
+   "vendor": "zscaler_zia",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:Security",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "crowdstrike:events:sensor",
+   "vendor": "crowdstrike",
+   "required_ta": "Splunk Add-on for CrowdStrike FDR",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sysmon:linux",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Sysmon on Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aws:cloudtrail",
+   "vendor": "amazon_aws",
+   "required_ta": "Splunk Add-on for AWS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "o365:management:activity",
+   "vendor": "microsoft_365",
+   "required_ta": "Splunk Add-on for Microsoft Office 365",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "azure:monitor:aad",
+   "vendor": "microsoft_azure",
+   "required_ta": "Splunk Add-on for Microsoft Cloud Services",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "suricata",
+   "vendor": "suricata_oisf",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "auditd",
+   "vendor": "linux_infrastructure",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "OktaIM2:log",
+   "vendor": "okta",
+   "required_ta": "Okta Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "osquery:results",
+   "vendor": "osquery",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "ollama:server",
+   "vendor": "ollama",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "mcp:jsonrpc",
+   "vendor": "model_context_protocol",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "gws:reports:login",
+   "vendor": "google_workspace",
+   "required_ta": "Add-on for Google Workspace",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "azure:monitor:activity",
+   "vendor": "microsoft_azure",
+   "required_ta": "Splunk Add-on for Microsoft Cloud Services",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aws:cloudwatchlogs:vpcflow",
+   "vendor": "amazon_aws",
+   "required_ta": "Splunk Add-on for AWS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "linux_messages_syslog",
+   "vendor": "linux_infrastructure",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:audit",
+   "vendor": "kubernetes",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "kube:container:falco",
+   "vendor": "kubernetes",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "crushftp:sessionlogs",
+   "vendor": "crushftp",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:nvm:flowdata:v2",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco Security OpenVAD Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "vmw-syslog",
+   "vendor": "vmware_nsx",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:cloud_security:firewall",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco Cloud Security",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:cloud_security:dns",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco Cloud Security",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:cloud_security:proxy",
+   "vendor": "cisco_asa",
+   "required_ta": "Splunk Add-on for Cisco Cloud Security",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:isovalent",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco OpenVAD Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:isovalent:processExec",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco OpenVAD Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:isovalent:processConnect",
+   "vendor": "cisco_ios",
+   "required_ta": "Cisco OpenVAD Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aws:cloudtrail:lake",
+   "vendor": "amazon_aws",
+   "required_ta": "Splunk Add-on for AWS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "linux_secure",
+   "vendor": "linux_infrastructure",
+   "required_ta": "Splunk Add-on for Unix and Linux",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "iis",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft IIS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "bro:conn:json",
+   "vendor": "zeek",
+   "required_ta": "Splunk Add-on for Zeek",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "MSExchange:Management",
+   "vendor": "microsoft_365",
+   "required_ta": "Splunk Add-on for Microsoft Exchange",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "aws:cloudfront:accesslogs",
+   "vendor": "amazon_aws",
+   "required_ta": "Splunk Add-on for AWS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "o365:reporting:messagetrace",
+   "vendor": "microsoft_365",
+   "required_ta": "Splunk Add-on for Microsoft Office 365",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "o365:graph:messagetrace",
+   "vendor": "microsoft_365",
+   "required_ta": "Splunk Add-on for Microsoft Office 365",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "gsuite:gmail:bigquery",
+   "vendor": "google_workspace",
+   "required_ta": "Splunk Add-on for Google Workspace",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "zscalernss-web",
+   "vendor": "zscaler_zia",
+   "required_ta": "Zscaler App for Splunk (NSS)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:secure_access:security_events_ravpn",
+   "vendor": "cisco_ios",
+   "required_ta": "Splunk Add-on for Cisco Secure Access",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:sdwan:access",
+   "vendor": "cisco_sdwan",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cisco:meraki:syslog",
+   "vendor": "cisco_meraki",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "dhcpd",
+   "vendor": "linux_infrastructure",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "gcp:audit",
+   "vendor": "google_cloud",
+   "required_ta": "Splunk Add-on for Google Cloud Platform",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "opentelemetry:otlp",
+   "vendor": "opentelemetry",
+   "required_ta": null,
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "XmlWinEventLog:System",
+   "vendor": "microsoft_windows",
+   "required_ta": "Splunk Add-on for Microsoft Windows",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "docker_events",
+   "vendor": "docker",
+   "required_ta": "Docker Monitoring (monitoringdocker Add-on)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "bluecoat:proxysg:access:file",
+   "vendor": "broadcom_symantec",
+   "required_ta": "Splunk Add-on for Symantec Blue Coat ProxySG",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "wazuh:alerts",
+   "vendor": "wazuh",
+   "required_ta": "Wazuh Splunk Integration (alerts.log file monitor)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nozomi:universal_alert",
+   "vendor": "nozomi_networks",
+   "required_ta": "Nozomi Networks Universal Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "hashicorp_vault_audit_log",
+   "vendor": "hashicorp",
+   "required_ta": "HashiCorp Vault App for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "traefik:access:json",
+   "vendor": "traefik",
+   "required_ta": "Add On for Traefik Proxy",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "claroty:cef",
+   "vendor": "claroty",
+   "required_ta": "Claroty Continuous Threat Detection (CTD) Add-On for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "mongodb:log",
+   "vendor": "mongodb",
+   "required_ta": "Mapping pending",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "Confluence:audit log",
+   "vendor": "atlassian",
+   "required_ta": "Confluence and Jira Audit Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "nginx:access",
+   "vendor": "nginx_f5",
+   "required_ta": "Mapping pending",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "proofpoint_tap_siem",
+   "vendor": "proofpoint",
+   "required_ta": "Proofpoint TAP Modular Input",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "veeam_vbr_syslog",
+   "vendor": "veeam",
+   "required_ta": "CCX Splunk Add-on for Veeam VBR",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "mikrotik:routeros",
+   "vendor": "mikrotik",
+   "required_ta": "Technology Add-On for Mikrotik RouterOS",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "pfsense:filterlog",
+   "vendor": "pfsense_netgate",
+   "required_ta": "Mapping pending: Pfsense Add-On for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "SysdigSecureEvents",
+   "vendor": "sysdig",
+   "required_ta": "Sysdig Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sailpoint_identitynow",
+   "vendor": "sailpoint",
+   "required_ta": "SailPoint Identity Security Cloud AuditEvent Add-on",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "imperva:securesphere:cef",
+   "vendor": "imperva",
+   "required_ta": "Mapping pending: Imperva AppSecurity View",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "barracuda:waf:web_firewall",
+   "vendor": "barracuda",
+   "required_ta": "Mapping pending: CCX Unified Splunk Add-on for Barracuda",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "oracle:audit:text",
+   "vendor": "oracle",
+   "required_ta": "Splunk Add-on for Oracle Database",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "darktrace",
+   "vendor": "darktrace",
+   "required_ta": "Darktrace App for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "ccx:beyondinsight:passwordsafe",
+   "vendor": "beyondtrust",
+   "required_ta": "CCX Add-on for BeyondTrust Products",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "tenable:io:audit_logs",
+   "vendor": "tenable",
+   "required_ta": "Tenable Add-On for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "ibm:mq:errorlog",
+   "vendor": "ibm_mq",
+   "required_ta": "Mapping pending: Source type add-on for IBM MQ error logs",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "slack:audit",
+   "vendor": "slack",
+   "required_ta": "Slack Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "github:enterprise:audit",
+   "vendor": "github",
+   "required_ta": "GitHub Dashboard Collection",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "gitlab:audit:json",
+   "vendor": "gitlab",
+   "required_ta": "GitLab Self-Managed Add-on for Splunk (CIM)",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "cybereason:malops",
+   "vendor": "cybereason",
+   "required_ta": "Cybereason Addon For Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "qualys:activityLog",
+   "vendor": "qualys",
+   "required_ta": "Qualys Technology Add-on (TA) for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "rapid7:insightvm:asset:vulnerability_finding",
+   "vendor": "rapid7",
+   "required_ta": "Rapid7 InsightVM Technology Add-On for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "sentinelone:channel:threats",
+   "vendor": "sentinelone",
+   "required_ta": "SentinelOne App For Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "tanium:discover:managed",
+   "vendor": "tanium",
+   "required_ta": "TA-Tanium",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "trellix_epo:threat_events",
+   "vendor": "trellix_mcafee",
+   "required_ta": "Trellix ePO All in one",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "bitdefender:gz",
+   "vendor": "bitdefender",
+   "required_ta": "Gravityzone Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "ibm:qradar:offense",
+   "vendor": "ibm_qradar",
+   "required_ta": "Mapping pending: IBM QRadar SOAR Add-on for Splunk",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  },
+  {
+   "sourcetype": "elasticsearch:json",
+   "vendor": "elastic",
+   "required_ta": "Add-on for Elasticsearch",
+   "installed_app": null,
+   "status": "MAPPING_ONLY_NO_INSTALLED_VENDOR_PARSER_EVIDENCE",
+   "evidence": null,
+   "blocker": "Required vendor parser unavailable in inspected installed apps/local authorized packages; source name alone is not verification"
+  }
+ ],
+ "new_verified_sourcetypes": 0,
+ "scope": "Mapping assessment for every canonical row; actual execution only for the installed ISE TA (evidence retained from Batch 3). Built-in sourcetype behavior is not counted as installed vendor TA verification."
+}

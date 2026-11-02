@@ -1,0 +1,219 @@
+{
+ "run_id": "pf-wave3-rawfidelity-1793037054",
+ "session": "wave-3 Splunkbase-scale expansion (live batch)",
+ "index": "idx_ta_ise_test",
+ "posted": 30,
+ "post_failures": [],
+ "raw_equality": [
+  {
+   "label": "w3:vmw",
+   "sourcetype": "vmw-syslog",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:cfw-c2s",
+   "sourcetype": "cisco:cloud_security:firewall",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:cfw-icmp",
+   "sourcetype": "cisco:cloud_security:firewall",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:cdns",
+   "sourcetype": "cisco:cloud_security:dns",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:cproxy",
+   "sourcetype": "cisco:cloud_security:proxy",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:iso-exe",
+   "sourcetype": "cisco:isovalent",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:iso-pexec",
+   "sourcetype": "cisco:isovalent:processExec",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:iso-conn",
+   "sourcetype": "cisco:isovalent:processConnect",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:lake",
+   "sourcetype": "aws:cloudtrail:lake",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:linsec",
+   "sourcetype": "linux_secure",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:iis",
+   "sourcetype": "iis",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:zeek",
+   "sourcetype": "bro:conn:json",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:msex-cmd",
+   "sourcetype": "MSExchange:Management",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:msex-ecp",
+   "sourcetype": "MSExchange:Management",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:cf",
+   "sourcetype": "aws:cloudfront:accesslogs",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:mt",
+   "sourcetype": "o365:reporting:messagetrace",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:gmt",
+   "sourcetype": "o365:graph:messagetrace",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:gmail",
+   "sourcetype": "gsuite:gmail:bigquery",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:zs-block",
+   "sourcetype": "zscalernss-web",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:zs-allow",
+   "sourcetype": "zscalernss-web",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:ravpn",
+   "sourcetype": "cisco:secure_access:security_events_ravpn",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:sdw-sys",
+   "sourcetype": "cisco:sdwan:syslog",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:sdw-acc",
+   "sourcetype": "cisco:sdwan:access",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:ios",
+   "sourcetype": "cisco:ios",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:meraki",
+   "sourcetype": "cisco:meraki:syslog",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:dhcpd",
+   "sourcetype": "dhcpd",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:gcp",
+   "sourcetype": "gcp:audit",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:otel",
+   "sourcetype": "opentelemetry:otlp",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:winsys",
+   "sourcetype": "XmlWinEventLog:System",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  },
+  {
+   "label": "w3:duo",
+   "sourcetype": "cisco:duo:administrator",
+   "verdict": "PASS",
+   "detail": "raw-equality byte-OK, no leak"
+  }
+ ],
+ "passes": 30,
+ "distinct_sourcetypes": [
+  "MSExchange:Management",
+  "XmlWinEventLog:System",
+  "aws:cloudfront:accesslogs",
+  "aws:cloudtrail:lake",
+  "bro:conn:json",
+  "cisco:cloud_security:dns",
+  "cisco:cloud_security:firewall",
+  "cisco:cloud_security:proxy",
+  "cisco:duo:administrator",
+  "cisco:ios",
+  "cisco:isovalent",
+  "cisco:isovalent:processConnect",
+  "cisco:isovalent:processExec",
+  "cisco:meraki:syslog",
+  "cisco:sdwan:access",
+  "cisco:sdwan:syslog",
+  "cisco:secure_access:security_events_ravpn",
+  "dhcpd",
+  "gcp:audit",
+  "gsuite:gmail:bigquery",
+  "iis",
+  "linux_secure",
+  "o365:graph:messagetrace",
+  "o365:reporting:messagetrace",
+  "opentelemetry:otlp",
+  "vmw-syslog",
+  "zscalernss-web"
+ ]
+}

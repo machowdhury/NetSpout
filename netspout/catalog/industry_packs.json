@@ -1,0 +1,441 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "2026.10-phase10",
+  "evidence": [
+    {
+      "evidence_id": "EVID-P10-FFIEC-AIO",
+      "title": "Architecture, Infrastructure, and Operations",
+      "publisher": "Federal Financial Institutions Examination Council",
+      "reference": "https://ithandbook.ffiec.gov/it-booklets/architecture-infrastructure-and-operations.aspx",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Industry context for resilient financial-services architecture and infrastructure dependencies; not a telemetry contract."
+    },
+    {
+      "evidence_id": "EVID-P10-HHS-HICP",
+      "title": "Health Industry Cybersecurity Practices",
+      "publisher": "U.S. Department of Health and Human Services",
+      "reference": "https://405d.hhs.gov/Documents/HICP-Main-508.pdf",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Industry context for healthcare technology dependencies; no patient data or clinical outcome claim is derived."
+    },
+    {
+      "evidence_id": "EVID-P10-NIST-SP800-82R3",
+      "title": "Guide to Operational Technology Security, Revision 3",
+      "publisher": "National Institute of Standards and Technology",
+      "reference": "https://csrc.nist.gov/pubs/sp/800/82/r3/final",
+      "provenance": "STANDARD_DOCUMENTED",
+      "verification_state": "VERIFIED",
+      "notes": "Industry context for IT/OT segmentation and monitoring dependencies; no industrial protocol contract is inferred."
+    },
+    {
+      "evidence_id": "EVID-P10-NETSPOUT-IMPACT",
+      "title": "NetSpout Phase 10 dependency and impact schema",
+      "publisher": "NetSpout",
+      "reference": "docs/implementation/FIGMA_V3_PHASE_10_INDUSTRY_STUDIO.md",
+      "provenance": "NETSPOUT_SCHEMA",
+      "verification_state": "VERIFIED",
+      "notes": "Defines deterministic dependency propagation and explicit OBSERVED/MODELED/INFERRED/NOT_ESTABLISHED separation."
+    }
+  ],
+  "industries": [
+    {
+      "pack_id": "industry-financial-services",
+      "industry_id": "financial-services",
+      "pack_version": "1.0.0",
+      "name": "Financial Services",
+      "description": "A bounded branch-connectivity reference showing how verified network evidence can inform a modeled payment-service dependency risk.",
+      "implemented_scope": "One synthetic branch/WAN degradation reference; not comprehensive financial-services support.",
+      "maturity": "SPLUNK_VALIDATED",
+      "business_capabilities": [
+        {
+          "capability_id": "financial-branch-payments",
+          "name": "Branch payment servicing",
+          "description": "Modeled capability representing branch access to a payment application.",
+          "objective": "Maintain technical reachability between the branch and supporting payment service.",
+          "entity_id": "financial-capability-payments"
+        }
+      ],
+      "environments": [
+        {
+          "environment_id": "financial-retail-branch",
+          "name": "Retail branch connectivity",
+          "description": "Synthetic branch, WAN, payment application, and business capability dependencies.",
+          "infrastructure_archetype": "branch-wan-to-shared-service",
+          "entity_ids": [
+            "financial-device-branch-edge",
+            "financial-network-wan",
+            "financial-app-payment-service",
+            "financial-capability-payments"
+          ],
+          "dependency_ids": [
+            "financial-dep-edge-wan",
+            "financial-dep-wan-app",
+            "financial-dep-app-capability"
+          ],
+          "scenario_ids": ["C100-CRI-002"],
+          "default_scenario_id": "C100-CRI-002",
+          "telemetry_source_ids": [
+            "cisco-ios-xe-interface-syslog",
+            "cisco-ios-xr-interface-syslog"
+          ],
+          "investigation_objectives": [
+            "Find the interface incident and order its technical timeline.",
+            "Trace the modeled dependency path to the payment-service capability.",
+            "Validate technical recovery before clearing modeled business risk."
+          ]
+        }
+      ],
+      "entities": [
+        {
+          "entity_id": "financial-device-branch-edge",
+          "label": "Synthetic Branch Edge",
+          "entity_kind": "DEVICE",
+          "zone_id": "branch",
+          "description": "Fictional edge device represented by existing verified network telemetry.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "financial-network-wan",
+          "label": "Branch WAN Service",
+          "entity_kind": "NETWORK",
+          "zone_id": "wan",
+          "description": "Modeled network-service dependency; no carrier SLA is asserted.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "financial-app-payment-service",
+          "label": "Payment Application Reachability",
+          "entity_kind": "APPLICATION",
+          "zone_id": "services",
+          "description": "Modeled application dependency; no transaction events are generated.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        },
+        {
+          "entity_id": "financial-capability-payments",
+          "label": "Branch Payment Servicing",
+          "entity_kind": "BUSINESS_CAPABILITY",
+          "zone_id": "business",
+          "description": "Modeled capability risk only; transaction volume and financial loss are not established.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_id": "financial-dep-edge-wan",
+          "source_entity_id": "financial-device-branch-edge",
+          "target_entity_id": "financial-network-wan",
+          "relationship_type": "PROVIDES_CONNECTIVITY_TO",
+          "criticality": "HIGH",
+          "assumption": "The synthetic branch uses the modeled edge path for WAN reachability."
+        },
+        {
+          "dependency_id": "financial-dep-wan-app",
+          "source_entity_id": "financial-network-wan",
+          "target_entity_id": "financial-app-payment-service",
+          "relationship_type": "ENABLES_REACHABILITY_TO",
+          "criticality": "HIGH",
+          "assumption": "No independently instrumented alternate application path is modeled."
+        },
+        {
+          "dependency_id": "financial-dep-app-capability",
+          "source_entity_id": "financial-app-payment-service",
+          "target_entity_id": "financial-capability-payments",
+          "relationship_type": "SUPPORTS",
+          "criticality": "HIGH",
+          "assumption": "The capability depends on application reachability, not on any modeled transaction count."
+        }
+      ],
+      "operational_objectives": [
+        {
+          "objective_id": "financial-objective-reachability",
+          "name": "Branch service reachability",
+          "statement": "Restore observed network state before clearing modeled branch-service risk.",
+          "measurement_status": "MODELED"
+        }
+      ],
+      "business_impacts": [
+        {
+          "impact_id": "financial-impact-payment-risk",
+          "title": "Payment-service availability risk",
+          "statement": "Branch payment servicing may be disrupted while its only modeled network dependency is degraded.",
+          "classification": "MODELED",
+          "trigger_entity_ids": ["financial-device-branch-edge"],
+          "impacted_entity_ids": ["financial-app-payment-service", "financial-capability-payments"],
+          "dependency_ids": ["financial-dep-edge-wan", "financial-dep-wan-app", "financial-dep-app-capability"],
+          "assumptions": ["The modeled WAN path is required.", "No alternate path is instrumented in this reference."],
+          "exclusions": ["No payment transaction, cardholder data, transaction count, revenue loss, or customer outcome is generated or asserted."]
+        }
+      ],
+      "telemetry_requirements": [
+        {"source_id": "cisco-ios-xe-interface-syslog", "role": "Branch-side interface state", "required": true, "evidence_classification": "OBSERVED", "notes": "Reused verified NetSpout contract."},
+        {"source_id": "cisco-ios-xr-interface-syslog", "role": "Supporting path interface state", "required": true, "evidence_classification": "OBSERVED", "notes": "Reused verified NetSpout contract."}
+      ],
+      "provenance_evidence_ids": ["EVID-P10-FFIEC-AIO", "EVID-P10-NETSPOUT-IMPACT"],
+      "validation_requirements": ["Both network channels receiver-observed", "Fresh Splunk observation", "Dependency impact remains MODELED", "Recovery evidence proven"]
+    },
+    {
+      "pack_id": "industry-healthcare",
+      "industry_id": "healthcare",
+      "pack_version": "1.0.0",
+      "name": "Healthcare",
+      "description": "A bounded hospital-campus reference showing network reachability evidence and modeled clinical-application dependency risk.",
+      "implemented_scope": "One synthetic clinical application connectivity reference; not comprehensive healthcare support.",
+      "maturity": "SPLUNK_VALIDATED",
+      "business_capabilities": [
+        {
+          "capability_id": "healthcare-clinical-workflow",
+          "name": "Clinical application access",
+          "description": "Modeled workforce access to a synthetic clinical application.",
+          "objective": "Maintain network reachability to the synthetic clinical application.",
+          "entity_id": "healthcare-capability-clinical-access"
+        }
+      ],
+      "environments": [
+        {
+          "environment_id": "healthcare-hospital-campus",
+          "name": "Hospital campus connectivity",
+          "description": "Synthetic campus edge, segmented network, clinical application, and workflow dependencies.",
+          "infrastructure_archetype": "campus-segment-to-clinical-application",
+          "entity_ids": [
+            "healthcare-device-campus-edge",
+            "healthcare-network-clinical-segment",
+            "healthcare-app-clinical-service",
+            "healthcare-capability-clinical-access"
+          ],
+          "dependency_ids": [
+            "healthcare-dep-edge-segment",
+            "healthcare-dep-segment-app",
+            "healthcare-dep-app-capability"
+          ],
+          "scenario_ids": ["C100-ENT-001"],
+          "default_scenario_id": "C100-ENT-001",
+          "telemetry_source_ids": ["cisco-ios-xe-interface-syslog"],
+          "investigation_objectives": [
+            "Find the campus connectivity transition.",
+            "Trace modeled clinical-application reachability dependencies.",
+            "Validate network recovery without asserting a clinical outcome."
+          ]
+        }
+      ],
+      "entities": [
+        {
+          "entity_id": "healthcare-device-campus-edge",
+          "label": "Synthetic Hospital Edge",
+          "entity_kind": "DEVICE",
+          "zone_id": "campus",
+          "description": "Fictional campus device represented by verified interface telemetry.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "healthcare-network-clinical-segment",
+          "label": "Clinical Application Segment",
+          "entity_kind": "NETWORK",
+          "zone_id": "clinical-network",
+          "description": "Modeled segmented network dependency; no medical-device protocol is generated.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "healthcare-app-clinical-service",
+          "label": "Synthetic Clinical Application",
+          "entity_kind": "APPLICATION",
+          "zone_id": "applications",
+          "description": "Synthetic application dependency with no patient or clinical record data.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        },
+        {
+          "entity_id": "healthcare-capability-clinical-access",
+          "label": "Clinical Application Access",
+          "entity_kind": "BUSINESS_CAPABILITY",
+          "zone_id": "care-operations",
+          "description": "Hypothetical operational risk only; patient-care impact is not established.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_id": "healthcare-dep-edge-segment",
+          "source_entity_id": "healthcare-device-campus-edge",
+          "target_entity_id": "healthcare-network-clinical-segment",
+          "relationship_type": "PROVIDES_CONNECTIVITY_TO",
+          "criticality": "HIGH",
+          "assumption": "The synthetic segment uses the modeled campus edge."
+        },
+        {
+          "dependency_id": "healthcare-dep-segment-app",
+          "source_entity_id": "healthcare-network-clinical-segment",
+          "target_entity_id": "healthcare-app-clinical-service",
+          "relationship_type": "ENABLES_REACHABILITY_TO",
+          "criticality": "HIGH",
+          "assumption": "No alternate clinical application path is instrumented."
+        },
+        {
+          "dependency_id": "healthcare-dep-app-capability",
+          "source_entity_id": "healthcare-app-clinical-service",
+          "target_entity_id": "healthcare-capability-clinical-access",
+          "relationship_type": "SUPPORTS",
+          "criticality": "HIGH",
+          "assumption": "Network reachability is one technical dependency, not proof of clinical availability."
+        }
+      ],
+      "operational_objectives": [
+        {
+          "objective_id": "healthcare-objective-reachability",
+          "name": "Clinical application reachability",
+          "statement": "Restore observed campus connectivity before clearing modeled application-access risk.",
+          "measurement_status": "MODELED"
+        }
+      ],
+      "business_impacts": [
+        {
+          "impact_id": "healthcare-impact-clinical-access",
+          "title": "Clinical application reachability risk",
+          "statement": "Access to the synthetic clinical application may be impaired while its modeled campus dependency is degraded.",
+          "classification": "MODELED",
+          "trigger_entity_ids": ["healthcare-device-campus-edge"],
+          "impacted_entity_ids": ["healthcare-app-clinical-service", "healthcare-capability-clinical-access"],
+          "dependency_ids": ["healthcare-dep-edge-segment", "healthcare-dep-segment-app", "healthcare-dep-app-capability"],
+          "assumptions": ["The modeled path is required.", "Application health is not independently instrumented."],
+          "exclusions": ["No patient identity, health record, medical-device message, care delay, or clinical harm is generated or asserted."]
+        }
+      ],
+      "telemetry_requirements": [
+        {"source_id": "cisco-ios-xe-interface-syslog", "role": "Campus interface state", "required": true, "evidence_classification": "OBSERVED", "notes": "Reused verified NetSpout contract."}
+      ],
+      "provenance_evidence_ids": ["EVID-P10-HHS-HICP", "EVID-P10-NETSPOUT-IMPACT"],
+      "validation_requirements": ["Network source receiver-observed", "Fresh Splunk observation", "Clinical consequence remains MODELED", "Recovery evidence proven"]
+    },
+    {
+      "pack_id": "industry-manufacturing",
+      "industry_id": "manufacturing",
+      "pack_version": "1.0.0",
+      "name": "Manufacturing",
+      "description": "A bounded IT/OT-boundary reference showing verified network degradation and modeled production-monitoring visibility risk.",
+      "implemented_scope": "One synthetic production-monitoring connectivity reference; no control-system protocol support is claimed.",
+      "maturity": "SPLUNK_VALIDATED",
+      "business_capabilities": [
+        {
+          "capability_id": "manufacturing-production-monitoring",
+          "name": "Production monitoring visibility",
+          "description": "Modeled monitoring capability across a synthetic IT/OT boundary.",
+          "objective": "Maintain network reachability for production-monitoring visibility.",
+          "entity_id": "manufacturing-capability-monitoring"
+        }
+      ],
+      "environments": [
+        {
+          "environment_id": "manufacturing-factory-boundary",
+          "name": "Factory IT/OT boundary",
+          "description": "Synthetic data-center uplink, IT/OT boundary, monitoring service, and visibility dependencies.",
+          "infrastructure_archetype": "enterprise-to-factory-monitoring-boundary",
+          "entity_ids": [
+            "manufacturing-device-factory-uplink",
+            "manufacturing-network-it-ot-boundary",
+            "manufacturing-service-production-monitoring",
+            "manufacturing-capability-monitoring"
+          ],
+          "dependency_ids": [
+            "manufacturing-dep-uplink-boundary",
+            "manufacturing-dep-boundary-monitoring",
+            "manufacturing-dep-monitoring-capability"
+          ],
+          "scenario_ids": ["C100-DC-001"],
+          "default_scenario_id": "C100-DC-001",
+          "telemetry_source_ids": ["cisco-nx-os-interface-syslog"],
+          "investigation_objectives": [
+            "Find the data-center/factory uplink incident.",
+            "Trace modeled monitoring-visibility dependencies.",
+            "Validate network recovery without issuing an industrial command."
+          ]
+        }
+      ],
+      "entities": [
+        {
+          "entity_id": "manufacturing-device-factory-uplink",
+          "label": "Synthetic Factory Uplink",
+          "entity_kind": "DEVICE",
+          "zone_id": "enterprise-it",
+          "description": "Fictional uplink represented by verified NX-OS interface telemetry.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "manufacturing-network-it-ot-boundary",
+          "label": "IT/OT Connectivity Boundary",
+          "entity_kind": "SECURITY_ZONE",
+          "zone_id": "ot-boundary",
+          "description": "Modeled connectivity dependency; no firewall or industrial protocol event is generated.",
+          "attributes": {"data_classification": "synthetic", "view": "technical"}
+        },
+        {
+          "entity_id": "manufacturing-service-production-monitoring",
+          "label": "Production Monitoring Service",
+          "entity_kind": "INFRASTRUCTURE_SERVICE",
+          "zone_id": "industrial-services",
+          "description": "Modeled monitoring service; no PLC registers or control messages exist.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        },
+        {
+          "entity_id": "manufacturing-capability-monitoring",
+          "label": "Production Monitoring Visibility",
+          "entity_kind": "BUSINESS_CAPABILITY",
+          "zone_id": "operations",
+          "description": "Modeled visibility risk only; production output or loss is not established.",
+          "attributes": {"data_classification": "synthetic", "view": "business"}
+        }
+      ],
+      "dependencies": [
+        {
+          "dependency_id": "manufacturing-dep-uplink-boundary",
+          "source_entity_id": "manufacturing-device-factory-uplink",
+          "target_entity_id": "manufacturing-network-it-ot-boundary",
+          "relationship_type": "PROVIDES_CONNECTIVITY_TO",
+          "criticality": "HIGH",
+          "assumption": "The modeled uplink is required for visibility across the synthetic boundary."
+        },
+        {
+          "dependency_id": "manufacturing-dep-boundary-monitoring",
+          "source_entity_id": "manufacturing-network-it-ot-boundary",
+          "target_entity_id": "manufacturing-service-production-monitoring",
+          "relationship_type": "ENABLES_TELEMETRY_VISIBILITY_FOR",
+          "criticality": "HIGH",
+          "assumption": "No out-of-band monitoring path is instrumented."
+        },
+        {
+          "dependency_id": "manufacturing-dep-monitoring-capability",
+          "source_entity_id": "manufacturing-service-production-monitoring",
+          "target_entity_id": "manufacturing-capability-monitoring",
+          "relationship_type": "SUPPORTS",
+          "criticality": "HIGH",
+          "assumption": "Monitoring visibility is modeled separately from production control and output."
+        }
+      ],
+      "operational_objectives": [
+        {
+          "objective_id": "manufacturing-objective-visibility",
+          "name": "Production monitoring visibility",
+          "statement": "Restore observed network state before clearing modeled monitoring-visibility risk.",
+          "measurement_status": "MODELED"
+        }
+      ],
+      "business_impacts": [
+        {
+          "impact_id": "manufacturing-impact-visibility",
+          "title": "Production-monitoring visibility risk",
+          "statement": "Production monitoring visibility may be reduced while the only modeled IT/OT connectivity dependency is degraded.",
+          "classification": "MODELED",
+          "trigger_entity_ids": ["manufacturing-device-factory-uplink"],
+          "impacted_entity_ids": ["manufacturing-service-production-monitoring", "manufacturing-capability-monitoring"],
+          "dependency_ids": ["manufacturing-dep-uplink-boundary", "manufacturing-dep-boundary-monitoring", "manufacturing-dep-monitoring-capability"],
+          "assumptions": ["The modeled path is required.", "No out-of-band path is instrumented."],
+          "exclusions": ["No PLC, fieldbus, industrial register, safety-system, control command, production count, downtime, or financial loss is generated or asserted."]
+        }
+      ],
+      "telemetry_requirements": [
+        {"source_id": "cisco-nx-os-interface-syslog", "role": "Factory-facing uplink state", "required": true, "evidence_classification": "OBSERVED", "notes": "Reused verified NetSpout contract; not OT telemetry."}
+      ],
+      "provenance_evidence_ids": ["EVID-P10-NIST-SP800-82R3", "EVID-P10-NETSPOUT-IMPACT"],
+      "validation_requirements": ["Network source receiver-observed", "Fresh Splunk observation", "Industrial impact remains MODELED", "No control command emitted", "Recovery evidence proven"]
+    }
+  ]
+}

@@ -1,11 +1,16 @@
 import json
 import os
+import sys
 
-REPO_ROOT = "/Users/mahamudc/Documents/NetSpout"
-EV_DIR = os.path.join(REPO_ROOT, "docs", "acceptance", "evidence", "gate11e")
-IMG_DIR = os.path.join(REPO_ROOT, "docs", "acceptance", "images", "gate11e")
-os.makedirs(EV_DIR, exist_ok=True)
-os.makedirs(IMG_DIR, exist_ok=True)
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../"))
+SCRIPTS_DIR = os.path.join(REPO_ROOT, "scripts")
+if SCRIPTS_DIR not in sys.path:
+    sys.path.insert(0, SCRIPTS_DIR)
+
+from artifact_isolation import artifact_dir
+
+EV_DIR = str(artifact_dir("gate11e", "evidence"))
+IMG_DIR = str(artifact_dir("gate11e", "screenshots"))
 
 scorecard_file = os.path.join(REPO_ROOT, "docs", "acceptance", "gate11e_native_flow_scorecard.json")
 with open(scorecard_file, "r") as f:

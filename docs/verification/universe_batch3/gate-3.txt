@@ -1,0 +1,205 @@
+⚡ NetSpout: Synchronizing Canonical Core from /Volumes/AI-Storage/AI-Projects/GitHub-Work/worktrees/machowdhury__NetSpout/ns-sec2b-credential-updates/src/netspout_core...
+  [CORE_COPY] credential_transitions.py -> netspout/bin/netspout_core/credential_transitions.py
+  [CORE_COPY] transport_credential_updates.py -> netspout/bin/netspout_core/transport_credential_updates.py
+  [CORE_COPY] telemetry_config_api.py -> netspout/bin/netspout_core/telemetry_config_api.py
+  [CORE_COPY] models.py -> netspout/bin/netspout_core/models.py
+  [CORE_COPY] graph_engine.py -> netspout/bin/netspout_core/graph_engine.py
+  [CORE_COPY] log_engine.py -> netspout/bin/netspout_core/log_engine.py
+  [CORE_COPY] universe_batch1_engine.py -> netspout/bin/netspout_core/universe_batch1_engine.py
+  [CORE_COPY] universe_batch2_engine.py -> netspout/bin/netspout_core/universe_batch2_engine.py
+  [CORE_COPY] universe_batch3_engine.py -> netspout/bin/netspout_core/universe_batch3_engine.py
+  [CORE_COPY] scenario_runner.py -> netspout/bin/netspout_core/scenario_runner.py
+  [CORE_COPY] snmp_engine.py -> netspout/bin/netspout_core/snmp_engine.py
+  [CORE_COPY] gnmi_engine.py -> netspout/bin/netspout_core/gnmi_engine.py
+  [CORE_COPY] fault_injection_engine.py -> netspout/bin/netspout_core/fault_injection_engine.py
+  [CORE_COPY] telemetry_dispatcher.py -> netspout/bin/netspout_core/telemetry_dispatcher.py
+  [CORE_COPY] cisco_sample_provider.py -> netspout/bin/netspout_core/cisco_sample_provider.py
+  [CORE_COPY] spl_engine.py -> netspout/bin/netspout_core/spl_engine.py
+  [CORE_COPY] use_case_repo.py -> netspout/bin/netspout_core/use_case_repo.py
+  [CORE_COPY] noc_soc_metrics.py -> netspout/bin/netspout_core/noc_soc_metrics.py
+  [CORE_COPY] catalog.py -> netspout/bin/netspout_core/catalog.py
+  [CORE_COPY] catalog_contracts.py -> netspout/bin/netspout_core/catalog_contracts.py
+  [CORE_COPY] pack_contracts.py -> netspout/bin/netspout_core/pack_contracts.py
+  [CORE_COPY] phase8c_reference_packs.py -> netspout/bin/netspout_core/phase8c_reference_packs.py
+  [CORE_COPY] phase9_security_packs.py -> netspout/bin/netspout_core/phase9_security_packs.py
+  [CORE_COPY] phase12_security_packs.py -> netspout/bin/netspout_core/phase12_security_packs.py
+  [CORE_COPY] wave1_authentic_engine.py -> netspout/bin/netspout_core/wave1_authentic_engine.py
+  [CORE_COPY] wave2_authentic_engine.py -> netspout/bin/netspout_core/wave2_authentic_engine.py
+  [CORE_COPY] wave3_authentic_engine.py -> netspout/bin/netspout_core/wave3_authentic_engine.py
+  [CORE_COPY] authentic_scenario_packs.py -> netspout/bin/netspout_core/authentic_scenario_packs.py
+  [CORE_COPY] release_candidate.py -> netspout/bin/netspout_core/release_candidate.py
+  [CORE_COPY] security_content_lab.py -> netspout/bin/netspout_core/security_content_lab.py
+  [CORE_COPY] industry_packs.py -> netspout/bin/netspout_core/industry_packs.py
+  [CORE_COPY] dashboard_recipes.py -> netspout/bin/netspout_core/dashboard_recipes.py
+  [CORE_COPY] security_state.py -> netspout/bin/netspout_core/security_state.py
+  [CORE_COPY] security_analytics.py -> netspout/bin/netspout_core/security_analytics.py
+  [CORE_COPY] dns_wire.py -> netspout/bin/netspout_core/dns_wire.py
+  [CORE_COPY] unified_generation.py -> netspout/bin/netspout_core/unified_generation.py
+  [CORE_COPY] native_runtime.py -> netspout/bin/netspout_core/native_runtime.py
+  [CORE_COPY] scenario_studio.py -> netspout/bin/netspout_core/scenario_studio.py
+  [CORE_COPY] vendor_coverage.py -> netspout/bin/netspout_core/vendor_coverage.py
+  [CORE_COPY] cisco_scenario_factory.py -> netspout/bin/netspout_core/cisco_scenario_factory.py
+  [CORE_COPY] vendor_catalog.py -> netspout/bin/netspout_core/vendor_catalog.py
+  [CORE_COPY] exporter_session.py -> netspout/bin/netspout_core/exporter_session.py
+  [CORE_COPY] netflow_v9_encoder.py -> netspout/bin/netspout_core/netflow_v9_encoder.py
+  [CORE_COPY] ipfix_encoder.py -> netspout/bin/netspout_core/ipfix_encoder.py
+  [CORE_COPY] transport_safety.py -> netspout/bin/netspout_core/transport_safety.py
+  [CORE_COPY] rate_limiter.py -> netspout/bin/netspout_core/rate_limiter.py
+  [CORE_COPY] transport_native_flow.py -> netspout/bin/netspout_core/transport_native_flow.py
+  [CORE_COPY] companion_manifest.py -> netspout/bin/netspout_core/companion_manifest.py
+  [CORE_COPY] collector_evidence.py -> netspout/bin/netspout_core/collector_evidence.py
+  [CORE_COPY] snmp_ber.py -> netspout/bin/netspout_core/snmp_ber.py
+  [CORE_COPY] transport_native_snmp.py -> netspout/bin/netspout_core/transport_native_snmp.py
+  [CORE_COPY] snmp_agent.py -> netspout/bin/netspout_core/snmp_agent.py
+  [CORE_COPY] snmp_splunk_e2e.py -> netspout/bin/netspout_core/snmp_splunk_e2e.py
+  [CORE_COPY] embedded_pipelines.py -> netspout/bin/netspout_core/embedded_pipelines.py
+  [CORE_COPY] generator_modes.py -> netspout/bin/netspout_core/generator_modes.py
+  [GNMI_COPY] gnmi/__init__.py -> netspout/bin/netspout_core/gnmi/__init__.py
+  [GNMI_COPY] gnmi/__init__.py -> backend/app/gnmi/__init__.py
+  [GNMI_COPY] gnmi/vendor_profiles.py -> netspout/bin/netspout_core/gnmi/vendor_profiles.py
+  [GNMI_COPY] gnmi/vendor_profiles.py -> backend/app/gnmi/vendor_profiles.py
+  [GNMI_COPY] gnmi/state_store.py -> netspout/bin/netspout_core/gnmi/state_store.py
+  [GNMI_COPY] gnmi/state_store.py -> backend/app/gnmi/state_store.py
+  [GNMI_COPY] gnmi/path_parser.py -> netspout/bin/netspout_core/gnmi/path_parser.py
+  [GNMI_COPY] gnmi/path_parser.py -> backend/app/gnmi/path_parser.py
+  [GNMI_COPY] gnmi/encoding.py -> netspout/bin/netspout_core/gnmi/encoding.py
+  [GNMI_COPY] gnmi/encoding.py -> backend/app/gnmi/encoding.py
+  [GNMI_COPY] gnmi/sensor_registry.py -> netspout/bin/netspout_core/gnmi/sensor_registry.py
+  [GNMI_COPY] gnmi/sensor_registry.py -> backend/app/gnmi/sensor_registry.py
+  [GNMI_COPY] gnmi/subscription.py -> netspout/bin/netspout_core/gnmi/subscription.py
+  [GNMI_COPY] gnmi/subscription.py -> backend/app/gnmi/subscription.py
+  [GNMI_COPY] gnmi/server.py -> netspout/bin/netspout_core/gnmi/server.py
+  [GNMI_COPY] gnmi/server.py -> backend/app/gnmi/server.py
+  [GNMI_COPY] gnmi/collector_pipeline.py -> netspout/bin/netspout_core/gnmi/collector_pipeline.py
+  [GNMI_COPY] gnmi/collector_pipeline.py -> backend/app/gnmi/collector_pipeline.py
+  [GNMI_COPY] gnmi/splunk_e2e.py -> netspout/bin/netspout_core/gnmi/splunk_e2e.py
+  [GNMI_COPY] gnmi/splunk_e2e.py -> backend/app/gnmi/splunk_e2e.py
+  [GNMI_COPY] gnmi/proto/__init__.py -> netspout/bin/netspout_core/gnmi/proto/__init__.py
+  [GNMI_COPY] gnmi/proto/__init__.py -> backend/app/gnmi/proto/__init__.py
+  [GNMI_COPY] gnmi/proto/gnmi_ext.proto -> netspout/bin/netspout_core/gnmi/proto/gnmi_ext.proto
+  [GNMI_COPY] gnmi/proto/gnmi_ext.proto -> backend/app/gnmi/proto/gnmi_ext.proto
+  [GNMI_COPY] gnmi/proto/gnmi.proto -> netspout/bin/netspout_core/gnmi/proto/gnmi.proto
+  [GNMI_COPY] gnmi/proto/gnmi.proto -> backend/app/gnmi/proto/gnmi.proto
+  [GNMI_COPY] gnmi/proto/gnmi_ext_pb2.py -> netspout/bin/netspout_core/gnmi/proto/gnmi_ext_pb2.py
+  [GNMI_COPY] gnmi/proto/gnmi_ext_pb2.py -> backend/app/gnmi/proto/gnmi_ext_pb2.py
+  [GNMI_COPY] gnmi/proto/gnmi_pb2.py -> netspout/bin/netspout_core/gnmi/proto/gnmi_pb2.py
+  [GNMI_COPY] gnmi/proto/gnmi_pb2.py -> backend/app/gnmi/proto/gnmi_pb2.py
+  [GNMI_COPY] gnmi/proto/gnmi_pb2_grpc.py -> netspout/bin/netspout_core/gnmi/proto/gnmi_pb2_grpc.py
+  [GNMI_COPY] gnmi/proto/gnmi_pb2_grpc.py -> backend/app/gnmi/proto/gnmi_pb2_grpc.py
+  [SPLUNK_COPY] netspout/bin/credential_transitions.py
+  [SPLUNK_COPY] netspout/bin/transport_credential_updates.py
+  [SPLUNK_COPY] netspout/bin/telemetry_config_api.py
+  [SPLUNK_COPY] netspout/bin/models.py
+  [SPLUNK_COPY] netspout/bin/graph_engine.py
+  [SPLUNK_COPY] netspout/bin/log_engine.py
+  [SPLUNK_COPY] netspout/bin/universe_batch1_engine.py
+  [SPLUNK_COPY] netspout/bin/universe_batch2_engine.py
+  [SPLUNK_COPY] netspout/bin/universe_batch3_engine.py
+  [SPLUNK_COPY] netspout/bin/scenario_runner.py
+  [SPLUNK_COPY] netspout/bin/snmp_engine.py
+  [SPLUNK_COPY] netspout/bin/gnmi_engine.py
+  [SPLUNK_COPY] netspout/bin/fault_injection_engine.py
+  [SPLUNK_COPY] netspout/bin/telemetry_dispatcher.py
+  [SPLUNK_COPY] netspout/bin/cisco_sample_provider.py
+  [SPLUNK_COPY] netspout/bin/spl_engine.py
+  [SPLUNK_COPY] netspout/bin/use_case_repo.py
+  [SPLUNK_COPY] netspout/bin/noc_soc_metrics.py
+  [SPLUNK_COPY] netspout/bin/catalog.py
+  [SPLUNK_COPY] netspout/bin/catalog_contracts.py
+  [SPLUNK_COPY] netspout/bin/pack_contracts.py
+  [SPLUNK_COPY] netspout/bin/phase8c_reference_packs.py
+  [SPLUNK_COPY] netspout/bin/phase9_security_packs.py
+  [SPLUNK_COPY] netspout/bin/phase12_security_packs.py
+  [SPLUNK_COPY] netspout/bin/wave1_authentic_engine.py
+  [SPLUNK_COPY] netspout/bin/wave2_authentic_engine.py
+  [SPLUNK_COPY] netspout/bin/wave3_authentic_engine.py
+  [SPLUNK_COPY] netspout/bin/authentic_scenario_packs.py
+  [SPLUNK_COPY] netspout/bin/release_candidate.py
+  [SPLUNK_COPY] netspout/bin/security_content_lab.py
+  [SPLUNK_COPY] netspout/bin/industry_packs.py
+  [SPLUNK_COPY] netspout/bin/dashboard_recipes.py
+  [SPLUNK_COPY] netspout/bin/security_state.py
+  [SPLUNK_COPY] netspout/bin/security_analytics.py
+  [SPLUNK_COPY] netspout/bin/dns_wire.py
+  [SPLUNK_COPY] netspout/bin/unified_generation.py
+  [SPLUNK_COPY] netspout/bin/native_runtime.py
+  [SPLUNK_COPY] netspout/bin/scenario_studio.py
+  [SPLUNK_COPY] netspout/bin/vendor_coverage.py
+  [SPLUNK_COPY] netspout/bin/cisco_scenario_factory.py
+  [SPLUNK_COPY] netspout/bin/vendor_catalog.py
+  [SPLUNK_COPY] netspout/bin/exporter_session.py
+  [SPLUNK_COPY] netspout/bin/netflow_v9_encoder.py
+  [SPLUNK_COPY] netspout/bin/ipfix_encoder.py
+  [SPLUNK_COPY] netspout/bin/transport_safety.py
+  [SPLUNK_COPY] netspout/bin/rate_limiter.py
+  [SPLUNK_COPY] netspout/bin/transport_native_flow.py
+  [SPLUNK_COPY] netspout/bin/companion_manifest.py
+  [SPLUNK_COPY] netspout/bin/collector_evidence.py
+  [SPLUNK_COPY] netspout/bin/snmp_ber.py
+  [SPLUNK_COPY] netspout/bin/transport_native_snmp.py
+  [SPLUNK_COPY] netspout/bin/snmp_agent.py
+  [SPLUNK_COPY] netspout/bin/snmp_splunk_e2e.py
+  [SPLUNK_COPY] netspout/bin/embedded_pipelines.py
+  [SPLUNK_COPY] netspout/bin/generator_modes.py
+  [BACKEND_COPY] backend/app/credential_transitions.py
+  [BACKEND_COPY] backend/app/transport_credential_updates.py
+  [BACKEND_COPY] backend/app/telemetry_config_api.py
+  [BACKEND_COPY] backend/app/models.py
+  [BACKEND_COPY] backend/app/graph_engine.py
+  [BACKEND_COPY] backend/app/log_engine.py
+  [BACKEND_COPY] backend/app/universe_batch1_engine.py
+  [BACKEND_COPY] backend/app/universe_batch2_engine.py
+  [BACKEND_COPY] backend/app/universe_batch3_engine.py
+  [BACKEND_COPY] backend/app/scenario_runner.py
+  [BACKEND_COPY] backend/app/snmp_engine.py
+  [BACKEND_COPY] backend/app/gnmi_engine.py
+  [BACKEND_COPY] backend/app/fault_injection_engine.py
+  [BACKEND_COPY] backend/app/telemetry_dispatcher.py
+  [BACKEND_COPY] backend/app/cisco_sample_provider.py
+  [BACKEND_COPY] backend/app/spl_engine.py
+  [BACKEND_COPY] backend/app/use_case_repo.py
+  [BACKEND_COPY] backend/app/noc_soc_metrics.py
+  [BACKEND_COPY] backend/app/catalog.py
+  [BACKEND_COPY] backend/app/catalog_contracts.py
+  [BACKEND_COPY] backend/app/pack_contracts.py
+  [BACKEND_COPY] backend/app/phase8c_reference_packs.py
+  [BACKEND_COPY] backend/app/phase9_security_packs.py
+  [BACKEND_COPY] backend/app/phase12_security_packs.py
+  [BACKEND_COPY] backend/app/wave1_authentic_engine.py
+  [BACKEND_COPY] backend/app/wave2_authentic_engine.py
+  [BACKEND_COPY] backend/app/wave3_authentic_engine.py
+  [BACKEND_COPY] backend/app/authentic_scenario_packs.py
+  [BACKEND_COPY] backend/app/release_candidate.py
+  [BACKEND_COPY] backend/app/security_content_lab.py
+  [BACKEND_COPY] backend/app/industry_packs.py
+  [BACKEND_COPY] backend/app/dashboard_recipes.py
+  [BACKEND_COPY] backend/app/security_state.py
+  [BACKEND_COPY] backend/app/security_analytics.py
+  [BACKEND_COPY] backend/app/dns_wire.py
+  [BACKEND_COPY] backend/app/unified_generation.py
+  [BACKEND_COPY] backend/app/native_runtime.py
+  [BACKEND_COPY] backend/app/scenario_studio.py
+  [BACKEND_COPY] backend/app/vendor_coverage.py
+  [BACKEND_COPY] backend/app/cisco_scenario_factory.py
+  [BACKEND_COPY] backend/app/vendor_catalog.py
+  [BACKEND_COPY] backend/app/exporter_session.py
+  [BACKEND_COPY] backend/app/netflow_v9_encoder.py
+  [BACKEND_COPY] backend/app/ipfix_encoder.py
+  [BACKEND_COPY] backend/app/transport_safety.py
+  [BACKEND_COPY] backend/app/rate_limiter.py
+  [BACKEND_COPY] backend/app/transport_native_flow.py
+  [BACKEND_COPY] backend/app/companion_manifest.py
+  [BACKEND_COPY] backend/app/collector_evidence.py
+  [BACKEND_COPY] backend/app/snmp_ber.py
+  [BACKEND_COPY] backend/app/transport_native_snmp.py
+  [BACKEND_COPY] backend/app/snmp_agent.py
+  [BACKEND_COPY] backend/app/snmp_splunk_e2e.py
+  [BACKEND_COPY] backend/app/embedded_pipelines.py
+  [BACKEND_COPY] backend/app/generator_modes.py
+  [CATALOG_SYNC] 39 catalog JSONs -> netspout/bin/netspout_core/catalog_data
+  [CATALOG_SYNC] 41 catalog JSONs -> netspout/bin/catalog_data
+  [CATALOG_SYNC] 41 catalog JSONs -> backend/app/catalog_data
+  [CATALOG_SYNC] 39 catalog JSONs -> netspout/catalog
+  [VENDOR_JSON] Generated /Volumes/AI-Storage/AI-Projects/GitHub-Work/worktrees/machowdhury__NetSpout/ns-sec2b-credential-updates/netspout/appserver/static/vendor_catalog.json (76 vendors)
+✅ Canonical Core synchronization complete.
+✅ Native discovery projection, dashboards and recipe mirrors synchronized.

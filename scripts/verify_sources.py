@@ -23,6 +23,23 @@ CORE_MODULES = [
     "models.py",
     "graph_engine.py",
     "log_engine.py",
+    "universe_batch1_engine.py",
+    "universe_batch2_engine.py",
+    "universe_batch3_engine.py",
+    "universe_batch4_engine.py",
+    "universe_batch5_engine.py",
+    "universe_batch6_engine.py",
+    "universe_batch7_engine.py",
+    "sample_replay.py",
+    "replay_service.py",
+    "replay_packs.py",
+    "delivery_monitor.py",
+    "hec_connection_test.py",
+    "incident_packs.py",
+    "authentic_scenario_packs.py",
+    "wave1_authentic_engine.py",
+    "wave2_authentic_engine.py",
+    "wave3_authentic_engine.py",
     "scenario_runner.py",
     "snmp_engine.py",
     "gnmi_engine.py",
@@ -33,6 +50,20 @@ CORE_MODULES = [
     "use_case_repo.py",
     "noc_soc_metrics.py",
     "catalog.py",
+    "catalog_contracts.py",
+    "pack_contracts.py",
+    "phase8c_reference_packs.py",
+    "phase9_security_packs.py",
+    "phase12_security_packs.py",
+    "release_candidate.py",
+    "industry_packs.py",
+    "dashboard_recipes.py",
+    "security_state.py",
+    "security_analytics.py",
+    "dns_wire.py",
+    "unified_generation.py",
+    "native_runtime.py",
+    "scenario_studio.py",
     "vendor_catalog.py",
     "exporter_session.py",
     "netflow_v9_encoder.py",
@@ -45,7 +76,9 @@ CORE_MODULES = [
     "snmp_ber.py",
     "transport_native_snmp.py",
     "snmp_agent.py",
-    "snmp_splunk_e2e.py"
+    "snmp_splunk_e2e.py",
+    "embedded_pipelines.py",
+    "generator_modes.py",
 ]
 
 GNMI_SUBPACKAGE_FILES = [
@@ -201,10 +234,23 @@ def verify_sources() -> bool:
         os.path.join(BACKEND_APP_DIR, "catalog_data"),
         os.path.join(REPO_ROOT, "netspout", "catalog")
     ]
+    external_metadata_catalogs = {
+        "phase13a_splunk_security_content.json",
+        "phase13a_security_content_coverage.json",
+    }
+    external_targets = {
+        os.path.join(SPLUNK_BIN_DIR, "catalog_data"),
+        os.path.join(BACKEND_APP_DIR, "catalog_data"),
+    }
     json_files = sorted([f for f in os.listdir(CANONICAL_CATALOG_DIR) if f.endswith(".json")])
     for target in catalog_targets:
         target_rel = os.path.relpath(target, REPO_ROOT)
-        for jf in json_files:
+        expected_files = [
+            jf
+            for jf in json_files
+            if jf not in external_metadata_catalogs or target in external_targets
+        ]
+        for jf in expected_files:
             src_json = os.path.join(CANONICAL_CATALOG_DIR, jf)
             dst_json = os.path.join(target, jf)
             if not os.path.exists(dst_json):
@@ -216,7 +262,7 @@ def verify_sources() -> bool:
             if h_src != h_dst:
                 print(f"  [FAIL] Drift in {target_rel}/{jf}!")
                 all_passed = False
-        print(f"  [PASS] {len(json_files)} catalog JSONs verified in {target_rel}")
+        print(f"  [PASS] {len(expected_files)} catalog JSONs verified in {target_rel}")
 
     # 6. Verify Catalog Schema & Static Vendor JSON Mirror
     print("\n>> 6. Verifying Catalog Schema & Static Vendor JSON Mirror...")

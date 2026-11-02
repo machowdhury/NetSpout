@@ -1,0 +1,18 @@
+** Alert 1668497757.1838662: - ossec,rootcheck,
+2022 Nov 15 09:35:57 (Ubuntu) any->rootcheck
+Rule: 521 (level 11) -> 'Possible kernel level rootkit'
+Process '659' hidden from /proc. Possible kernel level rootkit.
+title: Process '659' hidden from /proc.
+
+** Alert 1668497750.1838326: - ossec,rootcheck,pci_dss_10.6.1,gdpr_IV_35.7.d,
+2022 Nov 15 09:35:50 (Ubuntu) any->rootcheck
+Rule: 510 (level 7) -> 'Host-based anomaly detection event (rootcheck).'
+Rootkit 't0rn' detected by the presence of file '/usr/bin/.t0rn'.
+title: Rootkit 't0rn' detected by the presence of file '/usr/bin/.t0rn'.
+
+** Alert 1668498534.1862633: - ossec,rootcheck,pci_dss_10.6.1,gdpr_IV_35.7.d,
+2022 Nov 15 09:48:54 (Ubuntu) any->rootcheck
+Rule: 510 (level 7) -> 'Host-based anomaly detection event (rootcheck).'
+File '/dev/.hidden' present on /dev. Possible hidden file.
+title: File present on /dev.
+file: /dev/.hidden

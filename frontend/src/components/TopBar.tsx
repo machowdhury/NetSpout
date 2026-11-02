@@ -137,14 +137,11 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-1.5">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-cyan-400 to-emerald-400 font-black text-sm font-mono tracking-wide">
+            <span className="text-cyan-300 font-black text-sm font-mono tracking-wide">
               NetSpout
             </span>
-            <span className="text-[10px] bg-violet-950/80 text-violet-300 px-1.5 py-0.2 rounded border border-violet-700/60 font-mono font-bold">
-              v2.0
-            </span>
-            <span className="text-[10px] bg-amber-950/90 text-amber-300 px-1.5 py-0.2 rounded border border-amber-600/70 font-mono font-bold tracking-tight">
-              DEMO / LOCAL LAB
+            <span className="text-[9px] bg-slate-900 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700 font-mono font-bold tracking-tight">
+              UNIFIED TELEMETRY LAB
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-mono">

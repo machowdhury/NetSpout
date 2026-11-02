@@ -9,7 +9,7 @@ import ipaddress
 import logging
 import os
 import socket
-from typing import List
+from typing import List, Union
 
 logger = logging.getLogger("netspout.security")
 
@@ -41,7 +41,9 @@ class RateLimitExceededException(RuntimeError):
     pass
 
 
-def is_safe_ip(ip_addr: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+def is_safe_ip(
+    ip_addr: Union[ipaddress.IPv4Address, ipaddress.IPv6Address]
+) -> bool:
     """Checks whether an IP address belongs to RFC 1918, Loopback, or Link-Local."""
     return any(ip_addr in network for network in SAFE_NETWORKS)
 

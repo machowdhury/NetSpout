@@ -1,0 +1,419 @@
+<dashboard version="2" theme="dark">
+  <label>PulseForge · Asymmetric-routing indicators</label>
+  <description>For which endpoint pairs is the reverse direction seen at a different exporter, or not seen at all?</description>
+  <definition><![CDATA[
+{
+  "title": "PulseForge · Asymmetric-routing indicators",
+  "description": "For which endpoint pairs is the reverse direction seen at a different exporter, or not seen at all?",
+  "inputs": {
+    "input_global_time": {
+      "type": "input.timerange",
+      "title": "Time range",
+      "options": {
+        "token": "global_time",
+        "defaultValue": "-24h@h,now"
+      }
+    },
+    "input_run": {
+      "type": "input.dropdown",
+      "title": "Scenario run",
+      "options": {
+        "token": "run_tok",
+        "defaultValue": "*",
+        "items": [
+          {
+            "label": "All runs",
+            "value": "*"
+          }
+        ],
+        "createSearchJobOnChange": false,
+        "clearDefaultOnSelection": false
+      },
+      "dataSources": {
+        "primary": "ds_runs"
+      },
+      "context": {}
+    },
+    "input_index": {
+      "type": "input.text",
+      "title": "Index",
+      "options": {
+        "token": "index_tok",
+        "defaultValue": "dev_test_replay"
+      }
+    },
+    "input_st": {
+      "type": "input.text",
+      "title": "Sourcetype",
+      "options": {
+        "token": "st_tok",
+        "defaultValue": "netflow:collector"
+      }
+    }
+  },
+  "defaults": {
+    "dataSources": {
+      "ds.search": {
+        "options": {
+          "queryParameters": {
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$"
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "viz_1": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "### **PulseForge** · NetFlow/IPFIX · NOC-04\n**Asymmetric-routing indicators**  ·  `NF-NOC-04-ASYMMETRY`\n\n**Question:** For which endpoint pairs is the reverse direction seen at a different exporter, or not seen at all?\n\n**Limits:** A missing reverse flow is not proof of asymmetric routing: sampling, observation coverage and collection gaps look identical. Pairs are indicators, not findings.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#17191b",
+        "fontSize": "default"
+      }
+    },
+    "viz_2": {
+      "type": "splunk.pie",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#6fa387",
+          "#c9a24a",
+          "#c9786f"
+        ],
+        "legendDisplay": "right"
+      },
+      "title": "Pair classification",
+      "dataSources": {
+        "primary": "ds_1"
+      },
+      "showProgressBar": true
+    },
+    "viz_3": {
+      "type": "splunk.bar",
+      "options": {
+        "backgroundColor": "#22262a",
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5"
+        ],
+        "legendDisplay": "bottom",
+        "yAxisTitleText": ""
+      },
+      "title": "Forward vs reverse volume, top 12 pairs (MB)",
+      "dataSources": {
+        "primary": "ds_2"
+      },
+      "showProgressBar": true
+    },
+    "viz_4": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#d4764f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 0
+      },
+      "title": "Pairs analysed",
+      "dataSources": {
+        "primary": "ds_3"
+      },
+      "showProgressBar": true
+    },
+    "viz_5": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9a24a",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "%"
+      },
+      "title": "Reverse at different exporter",
+      "dataSources": {
+        "primary": "ds_4"
+      },
+      "showProgressBar": true
+    },
+    "viz_6": {
+      "type": "splunk.singlevalue",
+      "options": {
+        "backgroundColor": "#22262a",
+        "majorColor": "#c9786f",
+        "majorFontSize": 40,
+        "trendDisplay": "off",
+        "sparklineDisplay": "off",
+        "numberPrecision": 1,
+        "unit": "%"
+      },
+      "title": "Reverse not observed",
+      "dataSources": {
+        "primary": "ds_5"
+      },
+      "showProgressBar": true
+    },
+    "viz_7": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 7
+      },
+      "title": "Pairs with a non-symmetric result (click a row for the flows)",
+      "dataSources": {
+        "primary": "ds_6"
+      },
+      "showProgressBar": true,
+      "eventHandlers": [
+        {
+          "type": "drilldown.linkToSearch",
+          "options": {
+            "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" (src=\"$row.client.value$\" dest=\"$row.server.value$\") OR (src=\"$row.server.value$\" dest=\"$row.client.value$\") | sort 0 _time | head 1000",
+            "earliest": "$global_time.earliest$",
+            "latest": "$global_time.latest$",
+            "type": "custom",
+            "newTab": true
+          }
+        }
+      ]
+    },
+    "viz_8": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Observation-point evidence: flows by exporter and direction",
+      "dataSources": {
+        "primary": "ds_7"
+      },
+      "showProgressBar": true
+    },
+    "viz_9": {
+      "type": "splunk.table",
+      "options": {
+        "backgroundColor": "#22262a",
+        "count": 6
+      },
+      "title": "Flow evidence for non-symmetric pairs",
+      "dataSources": {
+        "primary": "ds_8"
+      },
+      "showProgressBar": true
+    },
+    "viz_10": {
+      "type": "splunk.markdown",
+      "options": {
+        "markdown": "**Data prerequisites.** Events: index `$index_tok$`, sourcetype `$st_tok$`, source `netspout:netflow:normalized`, scenario `NF-NOC-04-ASYMMETRY`, filtered by run (`netspout_run_id`). Flows are synthetic (RFC 5737 documentation addresses); `label_meta` is scenario truth, not exporter data. Fields used: src, dest, src_port, dest_port, exporter_ip, bytes, snmp_in, snmp_out. **If every panel is empty:** no run of this scenario is indexed in the selected time range and index. Start it from the PulseForge Use Case Explorer (Run scenario with live delivery monitor) and wait for Dashboard READY. CIM names (`src`, `dest`, `transport`) come from the app's props.conf; no accelerated data model is assumed.",
+        "fontColor": "#ececea",
+        "backgroundColor": "#22262a",
+        "fontSize": "default"
+      }
+    }
+  },
+  "dataSources": {
+    "ds_1": {
+      "type": "ds.search",
+      "name": "Pair classification",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | stats count by verdict"
+      }
+    },
+    "ds_2": {
+      "type": "ds.search",
+      "name": "Forward vs reverse volume, top 12 pairs (MB)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | sort - fwd_bytes | head 12 | eval pair=client.\" ⇄ \".server, forward_MB=round(fwd_bytes/1e6,2), reverse_MB=round(rev_bytes/1e6,2) | table pair forward_MB reverse_MB"
+      }
+    },
+    "ds_3": {
+      "type": "ds.search",
+      "name": "Pairs analysed",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | stats count as v | fields v"
+      }
+    },
+    "ds_4": {
+      "type": "ds.search",
+      "name": "Reverse at different exporter",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | stats count(eval(verdict=\"reverse at different exporter\")) as d count as n | eval v=round(100*d/n,1) | fields v"
+      }
+    },
+    "ds_5": {
+      "type": "ds.search",
+      "name": "Reverse not observed",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | stats count(eval(verdict=\"reverse not observed\")) as d count as n | eval v=round(100*d/n,1) | fields v"
+      }
+    },
+    "ds_6": {
+      "type": "ds.search",
+      "name": "Pairs with a non-symmetric result (click a row for the flows)",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port) | eval client=if(dest_port=svc,src,dest), server=if(dest_port=svc,dest,src), dir=if(dest_port=svc,\"forward\",\"reverse\") | stats sum(eval(if(dir=\"forward\",bytes,0))) as fwd_bytes sum(eval(if(dir=\"reverse\",bytes,0))) as rev_bytes count(eval(dir=\"forward\")) as fwd_flows count(eval(dir=\"reverse\")) as rev_flows values(eval(if(dir=\"forward\",exporter_ip,null()))) as fwd_exp values(eval(if(dir=\"reverse\",exporter_ip,null()))) as rev_exp by client server svc | eval fwd_exporters=mvjoin(fwd_exp,\",\"), rev_exporters=mvjoin(rev_exp,\",\") | eval verdict=case(rev_flows=0,\"reverse not observed\", fwd_exporters=rev_exporters,\"symmetric (same exporter)\", true(),\"reverse at different exporter\") | where verdict!=\"symmetric (same exporter)\" | eval fwd_MB=round(fwd_bytes/1e6,2), rev_MB=round(rev_bytes/1e6,2) | sort - fwd_bytes | table client server verdict fwd_exporters rev_exporters fwd_MB rev_MB fwd_flows rev_flows"
+      }
+    },
+    "ds_7": {
+      "type": "ds.search",
+      "name": "Observation-point evidence: flows by exporter and direction",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port), dir=if(dest_port=svc,\"forward\",\"reverse\") | chart count over exporter_ip by dir"
+      }
+    },
+    "ds_8": {
+      "type": "ds.search",
+      "name": "Flow evidence for non-symmetric pairs",
+      "options": {
+        "query": "index=$index_tok$ sourcetype=$st_tok$ source=\"netspout:netflow:normalized\" netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" netspout_run_id=\"$run_tok$\" | eval svc=min(src_port,dest_port), client=if(dest_port=svc,src,dest), dir=if(dest_port=svc,\"forward\",\"reverse\") | sort 0 client _time | head 300 | eval start=strftime(flowStartMilliseconds/1000,\"%H:%M:%S\") | foreach app tcp_flags_text [eval <<FIELD>>=if(isnull(<<FIELD>>) OR <<FIELD>>=\"null\",\"-\",<<FIELD>>)] | table start exporter_ip src src_port dest dest_port transport app tcp_flags_text dscp packets bytes duration_ms snmp_in snmp_out label_meta.is_malicious"
+      }
+    },
+    "ds_runs": {
+      "type": "ds.search",
+      "name": "Run list",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"NF-NOC-04-ASYMMETRY\" | stats latest(_time) as t count by netspout_run_id | sort - t | eval label=netspout_run_id.\" · \".strftime(t,\"%m-%d %H:%M\").\" · \".count.\" flows\" | table label netspout_run_id"
+      }
+    }
+  },
+  "layout": {
+    "globalInputs": [
+      "input_global_time",
+      "input_run",
+      "input_index",
+      "input_st"
+    ],
+    "layoutDefinitions": {
+      "layout_1": {
+        "type": "absolute",
+        "options": {
+          "width": 1460,
+          "height": 1160,
+          "display": "auto-scale",
+          "backgroundColor": "#17191b"
+        },
+        "structure": [
+          {
+            "item": "viz_1",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 0,
+              "w": 1420,
+              "h": 124
+            }
+          },
+          {
+            "item": "viz_2",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 134,
+              "w": 460,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_3",
+            "type": "block",
+            "position": {
+              "x": 500,
+              "y": 134,
+              "w": 940,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_4",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 454,
+              "w": 220,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_5",
+            "type": "block",
+            "position": {
+              "x": 260,
+              "y": 454,
+              "w": 220,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_6",
+            "type": "block",
+            "position": {
+              "x": 500,
+              "y": 454,
+              "w": 220,
+              "h": 120
+            }
+          },
+          {
+            "item": "viz_7",
+            "type": "block",
+            "position": {
+              "x": 740,
+              "y": 454,
+              "w": 700,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_8",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 594,
+              "w": 700,
+              "h": 160
+            }
+          },
+          {
+            "item": "viz_9",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 774,
+              "w": 1420,
+              "h": 250
+            }
+          },
+          {
+            "item": "viz_10",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1044,
+              "w": 1420,
+              "h": 96
+            }
+          }
+        ]
+      }
+    },
+    "tabs": {
+      "items": [
+        {
+          "label": "Asymmetric-routing indicators",
+          "layoutId": "layout_1"
+        }
+      ]
+    }
+  },
+  "expressions": {},
+  "applicationProperties": {
+    "hideEdit": false,
+    "hideExport": false
+  }
+}
+]]></definition>
+</dashboard>

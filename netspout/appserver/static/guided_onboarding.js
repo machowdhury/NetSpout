@@ -1,5 +1,5 @@
 /*
- * Splunk App: NetSpout (TA-network-data-blaster)
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: guided_onboarding.js
  * Guided Onboarding Wizard Controller
  * Author: Mahamudul Chowdhury <machowdhury@yahoo.com>
@@ -11,6 +11,122 @@ require([
   'splunkjs/mvc/simplexml/ready!'
 ], function($, mvc) {
   'use strict';
+  // Native server-owned run history. Text nodes prevent event/config HTML rendering.
+  function mountNativeRunMonitor() {
+    if (document.getElementById('native-run-monitor')) return;
+    var anchor = document.getElementById('console-log-output') || document.getElementById('wizard-verification-container');
+    if (!anchor || !anchor.parentNode) return;
+    var panel = document.createElement('section');
+    panel.id = 'native-run-monitor';
+    panel.style.cssText = 'padding:12px;margin:12px 0;border:1px solid #64748b;white-space:pre-wrap;';
+    var title = document.createElement('h3'); title.textContent = 'Native runs — collector acceptance is not indexing';
+    var select = document.createElement('select'); select.setAttribute('aria-label', 'Select native run');
+    var refresh = document.createElement('button'); refresh.textContent = 'Refresh runs';
+    var verify = document.createElement('button'); verify.textContent = 'Verify in Splunk';
+    var output = document.createElement('pre'); output.setAttribute('aria-live', 'polite');
+    [title, select, refresh, verify, output].forEach(function(el) { panel.appendChild(el); });
+    anchor.parentNode.insertBefore(panel, anchor);
+    var choice=document.createElement('select');choice.id='native-destination-choice';choice.setAttribute('aria-label','Scenario destination');
+    var defaultChoice=document.createElement('option');defaultChoice.value='';defaultChoice.textContent='Server-selected destination';choice.appendChild(defaultChoice);
+    panel.appendChild(choice);
+    fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify({action:'list_destinations'})})
+      .then(function(r){if(!r.ok) throw new Error('unavailable');return r.json();}).then(function(data){
+        (data.destinations||[]).forEach(function(d){var option=document.createElement('option');option.value=d.id;option.textContent=d.name+' ('+d.protocol+', '+(d.enabled?'enabled':'disabled')+')';choice.appendChild(option);});
+        choice.value=data.selected_id||'';
+      }).catch(function(){defaultChoice.textContent='Server-selected destination (list unavailable)';});
+    var runs = [];
+    function render(run) {
+      // Splunk search verification supports LOG and mixed log/metric runs; unsupported
+      // transports, unsupported correlation and unscoped runs keep the Verify action off.
+      verify.disabled = !run || run.correlation !== 'SUPPORTED' || (run.classification !== 'LOG' && run.classification !== 'MIXED') || !run.indexes.length;
+      if (!run) { output.textContent = 'No retained native runs. Delivery metrics are not measured.'; return; }
+      var lines = ['Run: ' + run.run_id, 'Execution: ' + run.execution_state,
+        'Correlation: ' + run.correlation, 'Telemetry: ' + run.classification,
+        'Indexes: ' + (run.indexes.join(', ') || 'not measured')];
+      ['generated','attempted','accepted','failed','unknown'].forEach(function(k) {
+        var v = run.counters[k]; lines.push(k + ': ' + (v === null || v === undefined ? 'not measured' : v));
+      });
+      if(run.named_destination) lines.push('Named destination: '+run.named_destination.name+' ['+run.named_destination.id+'] '+run.named_destination.target_class);
+      lines.push('Destination: ' + (run.destination ? run.destination.transport : 'unavailable'));
+      if (run.forwarding_delivery) {
+        ['published','failed','unknown'].forEach(function(key){
+          var value=run.forwarding_delivery[key];
+          lines.push('Local spool '+key+': '+(value===null||value===undefined?'not measured':value));
+        });
+        lines.push('Splunk pipe handoff, ingestion and downstream forwarding: not measured. Local publication is not delivery proof.');
+      }
+      if (run.snmp_delivery) {
+        ['attempted','sent','acknowledged','failed','unknown'].forEach(function(key) {
+          var value = run.snmp_delivery[key];
+          lines.push('SNMP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Synthetic SNMPv2c notifications. Local send and inform response are distinct; Splunk indexing verification is unsupported.');
+      }
+      if (run.otlp_delivery) {
+        ['attempted','acknowledged','rejected','failed','unknown'].forEach(function(key) {
+          var value = run.otlp_delivery[key];
+          lines.push('OTLP ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Units: log records / metric data points. Collector acknowledgement is not Splunk indexing; OTLP search verification is unsupported.');
+      }
+      if (run.syslog_delivery) {
+        ['attempted','sent','failed','unknown'].forEach(function(key) {
+          var value = run.syslog_delivery[key];
+          lines.push('Syslog local ' + key + ': ' + (value === null || value === undefined ? 'not measured' : value));
+        });
+        lines.push('Socket send evidence does not establish receiver delivery or Splunk indexing.');
+      }
+      lines.push('Splunk indexing: ' + run.verification.state + ' — ' + run.verification.message);
+      if (run.verification.matching_events !== null && run.verification.matching_events !== undefined)
+        lines.push('Matching indexed events: ' + run.verification.matching_events);
+      if (run.verification.matching_metric_points !== null && run.verification.matching_metric_points !== undefined)
+        lines.push('Matching indexed metric points: ' + run.verification.matching_metric_points);
+      if (verify.disabled) lines.push('Search verification is unsupported for this correlation path or scope.');
+      output.textContent = lines.join('\n');
+    }
+    function request(payload) {
+      return fetch(getRestUrl(), {method:'POST', headers:getHeaders(), body:JSON.stringify(payload)})
+        .then(function(r) { if (!r.ok) throw new Error('unavailable'); return r.json(); })
+        .then(function(data) { if (data.status !== 'success') throw new Error('unavailable'); return data; });
+    }
+    function reload() {
+      var selected = select.value;
+      refresh.disabled = true;
+      return request({action:'native_runs'}).then(function(data) {
+        runs = data.runs.slice().sort(function(a,b) { return b.started_at - a.started_at; });
+        select.textContent = '';
+        runs.forEach(function(run) { var option = document.createElement('option'); option.value = run.run_id;
+          option.textContent = new Date(run.started_at * 1000).toISOString() + ' ' + run.execution.action + ' ' + run.run_id;
+          select.appendChild(option); });
+        if (runs.some(function(r) { return r.run_id === selected; })) select.value = selected;
+        render(runs.find(function(r) { return r.run_id === select.value; }));
+      }).catch(function() { output.textContent = 'Run history unavailable. No delivery or indexing conclusion can be drawn.'; verify.disabled = true; })
+        .finally(function() { refresh.disabled = false; });
+    }
+    select.onchange = function() { render(runs.find(function(r) { return r.run_id === select.value; })); };
+    refresh.onclick = reload;
+    window.addEventListener('netspout-native-run', reload);
+    verify.onclick = function() {
+      verify.disabled = true;
+      request({action:'verify_native_run',run_id:select.value}).then(function(data) {
+        var index = runs.findIndex(function(r) { return r.run_id === data.run.run_id; });
+        if (index >= 0) runs[index] = data.run;
+        render(data.run);
+      }).catch(function() { output.textContent = 'Verification ERROR: service unavailable; indexing is not verified.';
+        renderErrorRetry(); });
+    };
+    function renderErrorRetry() { verify.disabled = false; }
+    reload();
+  }
+  // Native SimpleXML views may finish mounting after this script loads.
+  var nativeMonitorMountAttempts = 0;
+  function mountNativeMonitorWhenReady() {
+    mountNativeRunMonitor();
+    if (!document.getElementById('native-run-monitor') && ++nativeMonitorMountAttempts < 30)
+      setTimeout(mountNativeMonitorWhenReady, 100);
+  }
+  mountNativeMonitorWhenReady();
+
 
   function getRestUrl(queryStr) {
     var base = '';
@@ -1820,7 +1936,7 @@ require([
   },
   {
     "id": "datablaster:preflight",
-    "label": "NetSpout Ingestion Preflight Probe",
+    "label": "PulseForge Ingestion Preflight Probe",
     "vendor": "other",
     "category": "Other",
     "index": "idx_network_ops",
@@ -1828,7 +1944,7 @@ require([
   },
   {
     "id": "datablaster:probe",
-    "label": "NetSpout Telemetry Canary Probe",
+    "label": "PulseForge Telemetry Canary Probe",
     "vendor": "other",
     "category": "Other",
     "index": "idx_network_ops",
@@ -2311,8 +2427,9 @@ require([
   // Dynamic Index Fetcher
   function loadAvailableIndexes(selectIdx) {
     fetch(getRestUrl('action=list_indexes'), { headers: getHeaders() })
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
     .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
       if (data && data.indexes && Array.isArray(data.indexes)) {
         var sel = $('#wizard-target-index-select');
         var current = selectIdx || sel.val() || 'idx_security_fw';
@@ -2343,7 +2460,7 @@ require([
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
+    var token = cfg.hec_token || "";
     var sslVerify = cfg.ssl_verify || false;
 
     fetch(getRestUrl(), {
@@ -2351,12 +2468,12 @@ require([
       headers: getHeaders(),
       body: JSON.stringify({
         action: 'test_hec',
-        hec: hecUrl,
-        token: token,
+
+
         ssl_verify: sslVerify
       })
     })
-    .then(function(r) { return r.json(); })
+    .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
     .then(function(res) {
       if (res.status === 'success' || (res.result && res.result.indexOf('HEC is healthy') !== -1)) {
         hecBadge.css({ 'background': '#14532d', 'color': '#4ade80' }).text('ONLINE (PORT 8088)');
@@ -2389,7 +2506,7 @@ require([
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
+    var token = cfg.hec_token || "";
     var targetIndex = wizardState.targetIndex || "idx_security_fw";
 
     if (wizardState.mode === "single") {
@@ -2430,17 +2547,18 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'blast_hec',
-          hec: hecUrl,
-          token: token,
+
+
           events: eventsToSend
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + eventsToSend.length + ' event(s) into ' + targetIndex + '!</span>');
+          logOutput('<span style="color: #4ade80;">REQUEST COMPLETED: Delivery unverified for ' + eventsToSend.length + ' event(s); target ' + targetIndex + '!</span>');
           showVerification(targetIndex, [sourcetype]);
         } else {
           logOutput('<span style="color: #f87171;">HEC INGESTION ERROR:</span> ' + (data.message || JSON.stringify(data)));
@@ -2449,8 +2567,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + eventsToSend.length + ' event(s) via internal channel!</span>');
-        showVerification(targetIndex, [sourcetype]);
+        logOutput('Request failed or response unavailable. Delivery UNKNOWN; verify ingestion in Splunk before retrying.');
       });
 
     } else if (wizardState.mode === "multi") {
@@ -2480,17 +2597,18 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'blast_hec',
-          hec: hecUrl,
-          token: token,
+
+
           events: multiEvents
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Ingested ' + multiEvents.length + ' batch events across ' + sourcetypes.length + ' sourcetypes!</span>');
+          logOutput('<span style="color: #4ade80;">REQUEST COMPLETED: Delivery unverified for ' + multiEvents.length + ' batch events across ' + sourcetypes.length + ' sourcetypes!</span>');
           showVerification(targetIndex, sourcetypes);
         } else {
           logOutput('<span style="color: #f87171;">BATCH ERROR:</span> ' + (data.message || JSON.stringify(data)));
@@ -2499,8 +2617,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Dispatched ' + multiEvents.length + ' batch events via internal channel!</span>');
-        showVerification(targetIndex, sourcetypes);
+        logOutput('Request failed or response unavailable. Delivery UNKNOWN; verify ingestion in Splunk before retrying.');
       });
 
     } else if (wizardState.mode === "scenario") {
@@ -2512,6 +2629,7 @@ require([
         headers: getHeaders(),
         body: JSON.stringify({
           action: 'run_scenario',
+          destination_id:(document.getElementById('native-destination-choice')||{}).value||undefined,
           scenario: scenarioFile,
           scenario_file: scenarioFile,
           eps: wizardState.volume * 100,
@@ -2519,12 +2637,13 @@ require([
           target_index: targetIndex
         })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) throw new Error('Request failed'); return r.json(); })
       .then(function(data) {
+      if (data.native_run) window.dispatchEvent(new Event('netspout-native-run'));
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
         if (data.status === 'success') {
-          logOutput('<span style="color: #4ade80;">✔ SUCCESS: Scenario executed. Root Cause / Oracle injected into ' + targetIndex + '!</span>');
+          logOutput('<span style="color: #4ade80;">Scenario launch requested. Ingestion unverified for ' + targetIndex + '!</span>');
           var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
           showVerification(targetIndex, sc ? sc.sourcetypes : []);
         } else {
@@ -2534,9 +2653,7 @@ require([
       .catch(function(err) {
         btn.prop('disabled', false).css('opacity', 1);
         spinner.hide();
-        logOutput('<span style="color: #4ade80;">✔ Scenario executed via internal orchestrator!</span>');
-        var sc = SCENARIOS_CATALOG.find(function(s) { return s.id === wizardState.selectedScenario; });
-        showVerification(targetIndex, sc ? sc.sourcetypes : []);
+        logOutput('Scenario launch outcome UNKNOWN. Check server status and Splunk ingestion.');
       });
     }
   }

@@ -23,6 +23,8 @@ for d in (SRC_DIR, BACKEND_DIR):
     if d not in sys.path:
         sys.path.insert(0, d)
 
+from scripts.artifact_isolation import artifact_dir
+
 from netspout_core.gnmi.splunk_e2e import (
     DEFAULT_EVENT_INDEX,
     DEFAULT_EVENT_SOURCETYPE,
@@ -80,16 +82,15 @@ class TestGate13ECustomerAcceptance(unittest.TestCase):
         )
 
         # Persist acceptance evidence
-        evidence_dir = os.path.join(REPO_ROOT, "docs", "acceptance", "evidence", "gate13e")
-        os.makedirs(evidence_dir, exist_ok=True)
+        evidence_dir = artifact_dir("gate13e", "evidence")
 
-        with open(os.path.join(evidence_dir, "scenario_a_scorecard.json"), "w") as f:
+        with open(evidence_dir / "scenario_a_scorecard.json", "w") as f:
             json.dump(cls.scenario_a_scorecard.to_dict(), f, indent=2)
 
-        with open(os.path.join(evidence_dir, "scenario_b_scorecard.json"), "w") as f:
+        with open(evidence_dir / "scenario_b_scorecard.json", "w") as f:
             json.dump(cls.scenario_b_scorecard.to_dict(), f, indent=2)
 
-        with open(os.path.join(evidence_dir, "scenario_c_scorecard.json"), "w") as f:
+        with open(evidence_dir / "scenario_c_scorecard.json", "w") as f:
             json.dump(cls.scenario_c_scorecard.to_dict(), f, indent=2)
 
     def test_01_preflight_check_returns_ready(self):

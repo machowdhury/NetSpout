@@ -1,0 +1,31 @@
+{
+  "path": "POST /api/scenarios/run-with-destination (the UI's actual call)",
+  "run_id": "NS-20261029-0ff65599",
+  "scenario_id": "paloalto_threat_investigation",
+  "scenario_name": "Palo Alto Networks Threat Investigation",
+  "seed": 51031,
+  "scenario_maturity_at_run": "E2E_VALIDATED",
+  "credentials": "post-rotation admin credential + lab HEC token, resolved from environment only",
+  "generated_records": 47,
+  "hec_accepted_records": 47,
+  "hec_rejected_records": 0,
+  "dispatch_result_classes": {
+    "state=ACCEPTED http=200 error_class=None": 47
+  },
+  "indexed_event_records": 47,
+  "indexed_by_sourcetype": {
+    "pan:system": 9,
+    "pan:threat": 13,
+    "pan:traffic": 25
+  },
+  "indexed_indexes": [
+    "idx_network_ops"
+  ],
+  "event_counts_exact": true,
+  "event_spl": "index=* netspout_run_id=\"NS-20261029-0ff65599\" | stats count by sourcetype, index",
+  "runner_self_validation": "BLOCKED",
+  "runner_observation_status": "OBSERVATION_PENDING",
+  "runner_validation_note": "contracts declare no ValidationRules, so these runner fields stay BLOCKED/OBSERVATION_PENDING; the indexed counts above come from an independent Splunk query (Phase 4D C-1/C-3 own them)",
+  "taken_at_utc": "2026-10-29T14:08:02+00:00",
+  "dispatch_result_shape_note": "the endpoint nests per-record transport status under 'hec'; aggregating the top level silently yields all-None, which is the \u00a73.5 reporting trap in a different place"
+}

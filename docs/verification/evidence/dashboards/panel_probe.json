@@ -1,0 +1,537 @@
+{
+ "rp_linux_credential_access": {
+  "users": false
+ },
+ "rp_cloud_control_plane_activity": {
+  "users": false
+ },
+ "rp_windows_endpoint_process_chain": {
+  "users": true
+ },
+ "rp_web_exploitation_recordings": {
+  "users": false
+ },
+ "rp_edr_and_cloud_activity": {
+  "users": false
+ },
+ "rp_agentic_ai_mcp_runtime_hybrid": {
+  "users": false
+ },
+ "rp_workload_sysmon_ebpf_hybrid": {
+  "users": false
+ },
+ "ind_bank_account_takeover_resilience": {
+  "users": true
+ },
+ "ind_bank_payments_edge_defense": {
+  "users": true
+ },
+ "ind_telco_change_induced_outage": {
+  "users": false
+ },
+ "ind_telco_access_and_wireless_health": {
+  "users": false
+ },
+ "ind_health_ehr_ransomware_readiness": {
+  "users": true
+ },
+ "ind_health_clinical_network_edge": {
+  "users": false
+ },
+ "ind_mfg_it_ot_convergence": {
+  "users": false
+ },
+ "ind_mfg_plant_network_health": {
+  "users": false
+ },
+ "ind_energy_substation_edge_observation": {
+  "users": false
+ },
+ "ind_energy_scada_proxy_intrusion": {
+  "users": false
+ },
+ "ind_insurance_claims_platform_audit": {
+  "users": true
+ },
+ "ind_insurance_underwriting_exposure": {
+  "users": false
+ },
+ "ind_gov_citizen_identity_attack": {
+  "users": true
+ },
+ "ind_gov_agency_mail_exfiltration": {
+  "users": true
+ },
+ "ind_retail_pos_edge_defense": {
+  "users": false
+ },
+ "ind_retail_ecommerce_cloud_recon": {
+  "users": true
+ },
+ "ind_edu_campus_identity_and_collab": {
+  "users": true
+ },
+ "ind_saas_platform_runtime_attack": {
+  "users": true
+ },
+ "ind_media_content_delivery_exfil": {
+  "users": true
+ },
+ "ind_hospitality_guest_network_defense": {
+  "users": true
+ },
+ "ind_aero_defense_endpoint_c2": {
+  "users": false
+ },
+ "ind_legal_matter_data_exfiltration": {
+  "users": true
+ },
+ "ind_agri_edge_gateway_health": {
+  "users": false
+ },
+ "ind_realestate_building_exposure": {
+  "users": false
+ },
+ "ind_nonprofit_donor_platform_attack": {
+  "users": true
+ },
+ "ind_transport_fleet_network_change": {
+  "users": false
+ },
+ "wave2_ws_credential_compromise_chain": {
+  "users": true
+ },
+ "wave2_cloud_identity_sso_hunt": {
+  "users": true
+ },
+ "wave2_aws_recon_escalation": {
+  "users": true
+ },
+ "wave2_linux_auth_anomaly": {
+  "users": false
+ },
+ "wave2_agentic_ai_exfil_attempt": {
+  "users": false
+ },
+ "wave2_k8s_container_escape": {
+  "users": true
+ },
+ "wave2_c2_callback_detection": {
+  "users": false
+ },
+ "wave2_bigip_openconfig_itops": {
+  "users": false
+ },
+ "wave3_ebpf_workload_hunt": {
+  "users": false
+ },
+ "wave3_cloudmail_exfil": {
+  "users": true
+ },
+ "wave3_vsphere_hostpath_triage": {
+  "users": false
+ },
+ "ub1_ot_proxy_host_hunt": {
+  "users": false
+ },
+ "ub2_cloud_identity_mail_hunt": {
+  "users": false
+ },
+ "ub2_ot_edge_routing_observation": {
+  "users": false
+ },
+ "ub2_database_backup_integrity": {
+  "users": false
+ },
+ "ub3_identity_runtime_audit": {
+  "users": false
+ },
+ "ub3_multivendor_edge_observation": {
+  "users": false
+ },
+ "ub3_database_message_audit": {
+  "users": false
+ },
+ "ub4_saas_collaboration_audit": {
+  "users": false
+ },
+ "ub4_endpoint_threat_pipeline": {
+  "users": false
+ },
+ "ub4_exposure_infra_logging": {
+  "users": false
+ },
+ "ub5_cisco_change_induced_outage": {
+  "users": false
+ },
+ "ub5_cisco_platform_health_degradation": {
+  "users": false
+ },
+ "ub5_cisco_nac_radius_outage": {
+  "users": false
+ },
+ "ub6_sdwan_utd_threat_pipeline": {
+  "users": false
+ },
+ "ub6_catalyst_wireless_rogue_threat": {
+  "users": false
+ },
+ "network_01_campus_link": {
+  "users": false
+ },
+ "network_02_vlan_trunk": {
+  "users": false
+ },
+ "network_03_stp_storm": {
+  "users": false
+ },
+ "network_04_wan_brownout": {
+  "users": false
+ },
+ "network_05_dual_isp": {
+  "users": false
+ },
+ "network_06_bgp_flap": {
+  "users": false
+ },
+ "network_07_ospf_adjacency": {
+  "users": false
+ },
+ "network_08_firewall_policy": {
+  "users": false
+ },
+ "network_09_ddos_flood": {
+  "users": false
+ },
+ "network_10_dns_failure": {
+  "users": false
+ },
+ "network_11_dhcp_exhaustion": {
+  "users": false
+ },
+ "network_12_dc_congestion": {
+  "users": false
+ },
+ "network_13_mtu_pmtud": {
+  "users": false
+ },
+ "network_14_wireless_outage": {
+  "users": false
+ },
+ "network_15_device_resources": {
+  "users": false
+ },
+ "network_16_retail_uplink": {
+  "users": false
+ },
+ "network_17_hospital_mac_auth": {
+  "users": false
+ },
+ "network_18_payment_deny": {
+  "users": false
+ },
+ "network_19_ips_service": {
+  "users": false
+ },
+ "network_20_backend_link": {
+  "users": false
+ },
+ "network_21_partial_pool": {
+  "users": false
+ },
+ "network_22_authentication_storm": {
+  "users": false
+ },
+ "network_23_containment_request": {
+  "users": false
+ },
+ "network_24_policy_disagreement": {
+  "users": false
+ },
+ "network_25_mpls_recovery": {
+  "users": false
+ },
+ "network_26_maintenance": {
+  "users": false
+ },
+ "network_27_stale_sessions": {
+  "users": false
+ },
+ "telco_01_ran_cell": {
+  "users": false
+ },
+ "telco_02_registration_auth": {
+  "users": false
+ },
+ "telco_03_slice_sla": {
+  "users": false
+ },
+ "telco_04_ims_volte": {
+  "users": false
+ },
+ "telco_05_mobile_transport": {
+  "users": false
+ },
+ "telco_06_broadband_cpe": {
+  "users": false
+ },
+ "telco_07_sdwan_service": {
+  "users": false
+ },
+ "telco_08_roaming_mobility": {
+  "users": false
+ },
+ "telco_09_core_user_plane": {
+  "users": false
+ },
+ "telco_10_cross_layer": {
+  "users": false
+ },
+ "arch_lan_campus_access": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_man_carrier_ring": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_vpn_remote_workforce": {
+  "users": false,
+  "metrics": false
+ },
+ "arch_wlan_meraki_catalyst": {
+  "users": false,
+  "metrics": false
+ },
+ "cisco_aci_microburst": {
+  "users": false,
+  "metrics": true
+ },
+ "cisco_campus_rogue": {
+  "users": false,
+  "metrics": false
+ },
+ "cisco_sdwan_brownout": {
+  "users": false,
+  "metrics": false
+ },
+ "ddos_attack": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_backbone_optical": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_edge_breach": {
+  "users": false,
+  "metrics": false
+ },
+ "mixed_sase_degradation": {
+  "users": true,
+  "metrics": false
+ },
+ "network_security_correlation": {
+  "users": false,
+  "metrics": true
+ },
+ "openconfig_mdt_streaming": {
+  "users": false,
+  "metrics": true
+ },
+ "paloalto_threat_investigation": {
+  "users": false,
+  "metrics": false
+ },
+ "payment_processing_degradation": {
+  "users": false,
+  "metrics": true
+ },
+ "service_provider_cisco": {
+  "users": false,
+  "metrics": true
+ },
+ "sql_injection": {
+  "users": true,
+  "metrics": false
+ },
+ "rfc5424-link-state-lifecycle": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:rfc5424"
+  ],
+  "metrics": false
+ },
+ "test-correlated-interface-degradation": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxr:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-ENT-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxe:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-DC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:nxos:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-SEC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:asa:syslog"
+  ],
+  "metrics": false
+ },
+ "C100-CRI-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:cisco:iosxe:syslog",
+   "netspout:cisco:iosxr:syslog"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-A-TRAFFIC-FLOOD": {
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-B-DNS-ANOMALY": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:dns:wire"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-C-BEACONING": {
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-D-INTERNAL-RECON": {
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-E-DNS-TUNNEL": {
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
+ },
+ "SEC-P9-F-CROSS-SOURCE": {
+  "users": false,
+  "sourcetypes": [
+   "netflow:collector",
+   "netspout:dns:wire"
+  ],
+  "metrics": false
+ },
+ "AI-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-003": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-004": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-005": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "AI-006": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:agentic"
+  ],
+  "metrics": false
+ },
+ "SC-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-003": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-004": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "SC-005": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:supply_chain"
+  ],
+  "metrics": false
+ },
+ "P12-XD-001": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:cross_domain"
+  ],
+  "metrics": false
+ },
+ "P12-XD-002": {
+  "users": false,
+  "sourcetypes": [
+   "netspout:phase12:cross_domain"
+  ],
+  "metrics": false
+ }
+}

@@ -1,5 +1,5 @@
 /*
- * Splunk App: TA-network-data-blaster
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: configuration.js
  * Clean enterprise network engineering interface
  */
@@ -47,10 +47,285 @@ require([
     return h;
   }
 
+  function initDestinationManager() {
+    var root=document.getElementById('destination-manager'), status=document.getElementById('destination-manager-status');
+    var list=document.getElementById('destination-list'), name=document.getElementById('destination-name');
+    var protocol=document.getElementById('destination-protocol'), target=document.getElementById('destination-class');
+    var enabled=document.getElementById('destination-enabled'), fields=document.getElementById('destination-fields');
+    var secret=document.getElementById('destination-credential'), save=document.getElementById('destination-save');
+    var current=null, records=[], selected=null;
+    var schemas={
+      hec:[['hec_url','HTTPS HEC endpoint','text','https://127.0.0.1:8088/services/collector'],['ssl_verify','Verify TLS certificate','bool',true],['idx_network_ops','Log index','text','idx_network_ops'],['cisco_mdt_metrics','Metric index','text','cisco_mdt_metrics']],
+      syslog:[['syslog_host','Receiver host','text','127.0.0.1'],['syslog_port','Port','number',1514],['syslog_protocol','Transport','udp,tcp','udp'],['syslog_format','Format','rfc5424,rfc3164','rfc5424'],['syslog_facility','Facility','number',16],['syslog_severity','Severity','number',6]],
+      otlp:[['otlp_endpoint','HTTP/JSON base endpoint','text','https://127.0.0.1:4318'],['otlp_signal','Signals','logs,metrics,both','logs'],['otlp_auth','Authentication','none,bearer','none']],
+      snmp:[['snmp_host','Receiver IPv4','text','127.0.0.1'],['snmp_port','UDP port','number',1162],['snmp_message_type','SNMPv2c notification','trap,inform','trap']],
+      forwarding:[['forwarding_group','Existing Splunk forwarding group','text',''],['forwarding_index','Event index','text','idx_network_ops']]
+    };
+    function request(payload) {
+      return fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify(payload)}).then(function(r){
+        return r.json().then(function(data){if(!r.ok||data.status!=='success') throw new Error('not confirmed');return data;});
+      });
+    }
+    function renderFields(settings) {
+      fields.textContent=''; secret.value='';
+      schemas[protocol.value].forEach(function(spec){
+        var label=document.createElement('label');label.textContent=spec[1]+' ';
+        var input=document.createElement(spec[2].indexOf(',')>=0?'select':'input');input.id='destination-setting-'+spec[0];
+        if(spec[2].indexOf(',')>=0) spec[2].split(',').forEach(function(value){var o=document.createElement('option');o.value=value;o.textContent=value;input.appendChild(o);});
+        else input.type=spec[2]==='bool'?'checkbox':spec[2];
+        var value=Object.prototype.hasOwnProperty.call(settings,spec[0])?settings[spec[0]]:spec[3];
+        if(spec[2]==='bool') input.checked=value;else input.value=value;
+        label.appendChild(input);fields.appendChild(label);
+      });
+      secret.disabled=['hec','otlp','snmp'].indexOf(protocol.value)<0;
+    }
+    function edit(record) {
+      current=record;protocol.disabled=!!record;protocol.value=record?record.protocol:'hec';
+      name.value=record?record.name:'';target.value=record?record.target_class:'local_splunk';enabled.checked=record?record.enabled:true;
+      renderFields(record?record.settings:{});
+    }
+    function render() {
+      list.textContent='';
+      records.forEach(function(d){
+        var row=document.createElement('div');row.style.cssText='padding:8px;border-bottom:1px solid #64748b';
+        var text=document.createElement('span');text.textContent=d.name+' | '+d.protocol+' | '+d.target_class+' | '+d.signals.join(', ')+' | '+(d.enabled?'enabled':'disabled')+(d.id===selected?' | selected':'')+(d.legacy?' | legacy settings; diagnostic required':'');row.appendChild(text);
+        [['Edit',function(){edit(d);}],[d.id===selected?'Selected':'Use by default',function(){act('select_destination',d.id);}],[d.enabled?'Disable':'Disabled',function(){act('disable_destination',d.id);}],[d.protocol==='forwarding'?'Readiness':'Send one diagnostic',function(){act('diagnose_destination',d.id);}]].forEach(function(item){
+          var b=document.createElement('button');b.type='button';b.textContent=item[0];
+          b.disabled=!d.enabled && item[0]!=='Edit';b.onclick=item[1];row.appendChild(b);
+        });list.appendChild(row);
+      });
+    }
+    function reload() {return request({action:'list_destinations'}).then(function(data){records=data.destinations;selected=data.selected_id;render();});}
+    function act(action,id) {
+      status.textContent='Working…';
+      return request({action:action,destination_id:id}).then(function(data){
+        if(action==='diagnose_destination') {
+          var result=data.result;status.textContent='Diagnostic for '+data.destination.name+'\n'+
+            ['state','status','message','http_status','attempted','sent','acknowledged','rejected','failed','unknown'].filter(function(k){return result[k]!==undefined;}).map(function(k){return k+': '+(result[k]===null?'not measured':result[k]);}).join('\n')+'\nIndexing: not verified';
+        } else {status.textContent='Destination change saved.';return reload();}
+      }).catch(function(){status.textContent='Operation not confirmed. Check settings, credentials and enabled state; no delivery is verified.';});
+    }
+    protocol.onchange=function(){renderFields({});};
+    document.getElementById('destination-new').onclick=function(){edit(null);status.textContent='New destination; no settings saved yet.';};
+    document.getElementById('destination-refresh').onclick=function(){reload().catch(function(){status.textContent='Destination list unavailable.';});};
+    save.onclick=function(){
+      var settings={};schemas[protocol.value].forEach(function(spec){var input=document.getElementById('destination-setting-'+spec[0]);settings[spec[0]]=spec[2]==='bool'?input.checked:spec[2]==='number'?Number(input.value):input.value;});
+      var payload={action:current?'update_destination':'create_destination',name:name.value,protocol:protocol.value,target_class:target.value,enabled:enabled.checked,settings:settings};
+      if(current) payload.destination_id=current.id;
+      if(secret.value) payload.credential=secret.value;secret.value='';save.disabled=true;
+      return request(payload).then(function(){status.textContent='Destination saved.';edit(null);return reload();})
+        .catch(function(){status.textContent='Save not confirmed. Previous settings remain active; reload before retrying.';}).finally(function(){save.disabled=false;});
+    };
+    edit(null);reload().then(function(){status.textContent='Destinations loaded. Diagnostics send only when explicitly invoked.';})
+      .catch(function(){status.textContent='Destination list unavailable; no automatic selection was made.';});
+  }
+  var destinationMountAttempts=0;
+  function mountDestinationManager(){
+    if(document.getElementById('destination-manager')) initDestinationManager();
+    else if(++destinationMountAttempts<30) setTimeout(mountDestinationManager,100);
+  }
+  mountDestinationManager();
+
+  function initNativeForwarding() {
+    var status = document.getElementById('forwarding-status');
+    var save = document.getElementById('btn-save-forwarding'), test = document.getElementById('btn-test-forwarding');
+    function element(key) { return document.getElementById('cfg-forwarding-' + key); }
+    function busy(value) { save.disabled=value; test.disabled=value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(),{method:'POST',headers:getHeaders(),body:JSON.stringify(payload)}).then(function(response) {
+        return response.json().then(function(data) {
+          if (diagnostic && [200,503].indexOf(response.status)>=0 && data.state) return data;
+          if (!response.ok || data.status!=='success') throw new Error('not confirmed');
+          return data;
+        });
+      });
+    }
+    function apply(data) {
+      element('group').value=data.config.forwarding_group;
+      element('index').value=data.config.forwarding_index;
+      element('active').checked=data.native_transport==='forwarding';
+      var transport=document.getElementById('cfg-native-transport');
+      if(transport) transport.value=['otlp','snmp','forwarding'].indexOf(data.native_transport)>=0?'':data.native_transport;
+    }
+    save.onclick=function() {
+      var payload={action:'configure_forwarding',forwarding_group:element('group').value,forwarding_index:element('index').value};
+      if(element('active').checked) payload.native_transport='forwarding';
+      busy(true);status.textContent='Saving forwarding settings…';
+      return request(payload).then(function(data) {apply(data);status.textContent='Forwarding settings saved. Enable the dedicated Splunk input and existing output group; delivery is unverified.';})
+        .catch(function(){status.textContent='Save not confirmed. Check settings and pending spool before retrying.';}).finally(function(){busy(false);});
+    };
+    test.onclick=function(){
+      busy(true);status.textContent='Checking effective Splunk input and forwarding configuration…';
+      return request({action:'test_forwarding'},true).then(function(data){status.textContent=data.state+': '+data.message+'\nIngestion: not measured; downstream forwarding: not measured.';})
+        .catch(function(){status.textContent='Readiness unavailable. Delivery is unverified.';}).finally(function(){busy(false);});
+    };
+    request({action:'get_forwarding_config'}).then(function(data){apply(data);busy(false);status.textContent='Saved settings loaded. No telemetry published.';})
+      .catch(function(){busy(true);status.textContent='Forwarding settings unavailable.';});
+  }
+  var forwardingMountAttempts=0;
+  function mountForwardingWhenReady(){
+    if(document.getElementById('forwarding-settings')) initNativeForwarding();
+    else if(++forwardingMountAttempts<30) setTimeout(mountForwardingWhenReady,100);
+  }
+  mountForwardingWhenReady();
+
+  function initNativeSnmp() {
+    var status = document.getElementById('snmp-status');
+    var save = document.getElementById('btn-save-snmp'), test = document.getElementById('btn-test-snmp');
+    function element(key) { return document.getElementById('cfg-snmp-' + key); }
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(response) { return response.json().then(function(data) {
+          if (diagnostic && [200,502].indexOf(response.status) >= 0 && data.attempted !== undefined) return data;
+          if (!response.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(data) {
+      element('host').value = data.config.snmp_host;
+      element('port').value = data.config.snmp_port;
+      element('message-type').value = data.config.snmp_message_type;
+      element('active').checked = data.native_transport === 'snmp';
+      element('community').value = '';
+      var transport = document.getElementById('cfg-native-transport');
+      if (transport) transport.value = ['otlp','snmp','forwarding'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
+    }
+    save.onclick = function() {
+      var payload = {action:'configure_snmp',snmp_host:element('host').value,snmp_port:Number(element('port').value),
+        snmp_version:'2c',snmp_protocol:'udp',snmp_message_type:element('message-type').value};
+      if (element('active').checked) payload.native_transport = 'snmp';
+      if (element('community').value) payload.snmp_community = element('community').value;
+      element('community').value = '';
+      busy(true); status.textContent = 'Saving SNMP settings…';
+      return request(payload).then(function(data) { apply(data); status.textContent = 'SNMP settings saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one synthetic SNMP diagnostic…';
+      return request({action:'test_snmp'},true).then(function(data) {
+        status.textContent = data.message + '\n' + ['attempted','sent','acknowledged','failed','unknown'].map(function(k) {
+          return k + ': ' + (data[k] === null || data[k] === undefined ? 'not measured' : data[k]);
+        }).join(', ') + '\nLocal send or inform response is not Splunk indexing proof.';
+      }).catch(function() { status.textContent = 'Diagnostic unavailable. Delivery is unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_snmp_config'}).then(function(data) { apply(data); busy(false); status.textContent = 'Saved SNMP settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved SNMP settings unavailable.'; });
+  }
+  var snmpMountAttempts = 0;
+  function mountSnmpWhenReady() {
+    if (document.getElementById('snmp-settings')) initNativeSnmp();
+    else if (++snmpMountAttempts < 30) setTimeout(mountSnmpWhenReady,100);
+  }
+  mountSnmpWhenReady();
+
+  function initNativeOtlp() {
+    var status = document.getElementById('otlp-status');
+    var save = document.getElementById('btn-save-otlp'), test = document.getElementById('btn-test-otlp');
+    function element(key) { return document.getElementById('cfg-otlp-' + key); }
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload, diagnostic) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(response) { return response.json().then(function(data) {
+          if (diagnostic && [200,502].indexOf(response.status) >= 0 && data.attempted !== undefined) return data;
+          if (!response.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(data) {
+      ['endpoint','signal','auth'].forEach(function(key) { element(key).value = data.config['otlp_' + key]; });
+      element('active').checked = data.native_transport === 'otlp';
+      element('token').value = '';
+      var transport = document.getElementById('cfg-native-transport');
+      if (transport) transport.value = ['otlp','snmp','forwarding'].indexOf(data.native_transport) >= 0 ? '' : data.native_transport;
+    }
+    save.onclick = function() {
+      var payload = {action:'configure_otlp',otlp_transport:'http_json'};
+      ['endpoint','signal','auth'].forEach(function(key) { payload['otlp_' + key] = element(key).value; });
+      if (element('active').checked) payload.native_transport = 'otlp';
+      if (element('token').value) payload.otlp_token = element('token').value;
+      element('token').value = '';
+      busy(true); status.textContent = 'Saving OTLP settings…';
+      return request(payload).then(function(data) { apply(data); status.textContent = 'OTLP settings saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one request to the saved OTLP destination…';
+      return request({action:'test_otlp'},true).then(function(data) {
+        status.textContent = data.message + '\nUnit: ' + data.counter_unit + '\n' +
+          ['attempted','acknowledged','rejected','failed','unknown'].map(function(k) {
+            return k + ': ' + (data[k] === null || data[k] === undefined ? 'not measured' : data[k]);
+          }).join(', ') + '\nSplunk indexing: unsupported';
+      }).catch(function() { status.textContent = 'Diagnostic unavailable. Delivery is unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_otlp_config'}).then(function(data) { apply(data); busy(false); status.textContent = 'Saved OTLP settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved OTLP settings unavailable.'; });
+  }
+  var otlpMountAttempts = 0;
+  function mountOtlpWhenReady() {
+    if (document.getElementById('otlp-settings')) initNativeOtlp();
+    else if (++otlpMountAttempts < 30) setTimeout(mountOtlpWhenReady,100);
+  }
+  mountOtlpWhenReady();
+
+  function initNativeSyslog() {
+    if (!document.getElementById('syslog-settings')) return;
+    var names = ['native_transport','syslog_host','syslog_port','syslog_protocol','syslog_format','syslog_facility','syslog_severity'];
+    var ids = ['cfg-native-transport','cfg-syslog-host','cfg-syslog-port','cfg-syslog-protocol','cfg-syslog-format','cfg-syslog-facility','cfg-syslog-severity'];
+    var status = document.getElementById('syslog-status');
+    var save = document.getElementById('btn-save-syslog'), test = document.getElementById('btn-test-syslog');
+    function busy(value) { save.disabled = value; test.disabled = value; }
+    function request(payload) {
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify(payload)})
+        .then(function(r) { return r.json().then(function(data) {
+          if (!r.ok || data.status !== 'success') throw new Error('not confirmed');
+          return data;
+        }); });
+    }
+    function apply(config) { names.forEach(function(key, i) {
+      document.getElementById(ids[i]).value = key === 'native_transport' && ['otlp','snmp','forwarding'].indexOf(config[key]) >= 0 ? '' : String(config[key]);
+    }); }
+    save.onclick = function() {
+      var payload = {action:'configure_syslog'};
+      names.forEach(function(key, i) { var value = document.getElementById(ids[i]).value;
+        if (key === 'native_transport' && value === '') return;
+        payload[key] = ['syslog_port','syslog_facility','syslog_severity'].indexOf(key) >= 0 ? Number(value) : value;
+      });
+      busy(true); status.textContent = 'Saving destination…';
+      return request(payload).then(function(data) { apply(data.config); status.textContent = 'Destination saved. No telemetry sent.'; })
+        .catch(function() { status.textContent = 'Save not confirmed. Check settings and reload saved configuration before retrying.'; })
+        .finally(function() { busy(false); });
+    };
+    test.onclick = function() {
+      busy(true); status.textContent = 'Sending one synthetic diagnostic to the saved destination…';
+      return fetch(getRestUrl(), {method:'POST',headers:getHeaders(),body:JSON.stringify({action:'test_syslog'})})
+        .then(function(r) { return r.json().then(function(data) {
+          if (!data.delivery_state || [200,502].indexOf(r.status) < 0) throw new Error('unavailable');
+          status.textContent = data.delivery_state + ': ' + data.message + '\nAttempted: ' + data.attempted + ', sent: ' + data.sent + ', failed: ' + data.failed + ', unknown: ' + data.unknown;
+        }); })
+        .catch(function() { status.textContent = 'Diagnostic unavailable. Delivery and indexing are unverified.'; })
+        .finally(function() { busy(false); });
+    };
+    request({action:'get_syslog_config'}).then(function(data) { apply(data.config); busy(false); status.textContent = 'Saved settings loaded. No telemetry sent.'; })
+      .catch(function() { busy(true); status.textContent = 'Saved syslog settings unavailable.'; });
+  }
+
+  var syslogMountAttempts = 0;
+  function mountSyslogWhenReady() {
+    if (document.getElementById('syslog-settings')) initNativeSyslog();
+    else if (++syslogMountAttempts < 30) setTimeout(mountSyslogWhenReady, 100);
+  }
+  mountSyslogWhenReady();
+
   var defaultCfg = {
-    hec_url: "https://127.0.0.1:8888/services/collector",
-    hec_token: "00000000-0000-0000-0000-000000000000",
-    ssl_verify: false,
+    hec_url: "https://127.0.0.1:8088/services/collector",
+
+
+    ssl_verify: true,
     target_eps: 1000,
     default_scenario: "scenario_custom_multivendor_enterprise_stack.yml",
     idx_network_ops: "idx_network_ops",
@@ -116,8 +391,11 @@ require([
 
   function applyConfigToForm(c) {
     if (document.getElementById('cfg-hec-url')) document.getElementById('cfg-hec-url').value = c.hec_url || defaultCfg.hec_url;
-    if (document.getElementById('cfg-hec-token')) document.getElementById('cfg-hec-token').value = c.hec_token || defaultCfg.hec_token;
-    if (document.getElementById('cfg-ssl-verify')) document.getElementById('cfg-ssl-verify').value = String(c.ssl_verify !== undefined ? c.ssl_verify : false);
+    var credentialInput = document.getElementById('cfg-hec-token');
+    if (credentialInput) { credentialInput.value = ''; credentialInput.disabled = false; credentialInput.placeholder = c.hec_token_configured ? 'Leave blank to retain the existing token' : 'Enter a standard Splunk HEC token'; }
+    var destinationInput = document.getElementById('cfg-hec-url');
+    if (destinationInput) { destinationInput.disabled = false; destinationInput.value = c.hec_url || defaultCfg.hec_url; }
+    if (document.getElementById('cfg-ssl-verify')) document.getElementById('cfg-ssl-verify').value = String(c.ssl_verify !== undefined ? c.ssl_verify : true);
     if (document.getElementById('cfg-target-eps')) document.getElementById('cfg-target-eps').value = c.target_eps || defaultCfg.target_eps;
     if (document.getElementById('cfg-default-scenario')) document.getElementById('cfg-default-scenario').value = c.default_scenario || defaultCfg.default_scenario;
     if (document.getElementById('cfg-idx-network')) document.getElementById('cfg-idx-network').value = c.idx_network_ops || defaultCfg.idx_network_ops;
@@ -144,7 +422,7 @@ require([
 
   window.datablasterTestHec = function() {
     var url = (document.getElementById('cfg-hec-url') || {}).value || defaultCfg.hec_url;
-    var tok = (document.getElementById('cfg-hec-token') || {}).value || defaultCfg.hec_token;
+    
     var sslVerify = (document.getElementById('cfg-ssl-verify') || {}).value === 'true';
 
     setBadge('probing', 'Testing HEC...');
@@ -157,7 +435,7 @@ require([
     fetch(getRestUrl(), {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify({ action: 'test_hec', hec: url.trim(), token: tok.trim(), ssl_verify: sslVerify })
+      body: JSON.stringify({ action: 'test_hec', ssl_verify: sslVerify })
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -184,7 +462,7 @@ require([
 
   window.datablasterRunPreflight = function() {
     var url = (document.getElementById('cfg-hec-url') || {}).value || defaultCfg.hec_url;
-    var tok = (document.getElementById('cfg-hec-token') || {}).value || defaultCfg.hec_token;
+    
     var sslVerify = (document.getElementById('cfg-ssl-verify') || {}).value === 'true';
 
     setBadge('probing', 'Running Validation...');
@@ -200,8 +478,8 @@ require([
       headers: getHeaders(),
       body: JSON.stringify({
         action: 'validate_environment',
-        hec: url.trim(),
-        token: tok.trim(),
+
+
         ssl_verify: sslVerify
       })
     })
@@ -283,7 +561,6 @@ require([
   window.datablasterSaveConfig = function() {
     var cfg = {
       hec_url: document.getElementById('cfg-hec-url').value.trim(),
-      hec_token: document.getElementById('cfg-hec-token').value.trim(),
       ssl_verify: document.getElementById('cfg-ssl-verify').value === 'true',
       target_eps: parseInt(document.getElementById('cfg-target-eps').value, 10) || 1000,
       default_scenario: document.getElementById('cfg-default-scenario').value,
@@ -294,27 +571,51 @@ require([
       cisco_mdt_metrics: document.getElementById('cfg-idx-mdt').value.trim()
     };
 
-    try {
-      localStorage.setItem('datablaster_config', JSON.stringify(cfg));
-      localStorage.setItem('datablaster_hec_url', cfg.hec_url);
-      localStorage.setItem('datablaster_hec_token', cfg.hec_token);
-      localStorage.setItem('datablaster_ssl_verify', String(cfg.ssl_verify));
-    } catch(e) {}
+    var input = document.getElementById('cfg-hec-token');
+    var payload = Object.assign({ action: 'configure_hec' }, cfg);
+    if (input.value !== '') payload.hec_token = input.value;
+    var saveButton = document.getElementById('btn-save-config');
+    saveButton.disabled = true;
+    setBadge('probing', 'Saving configuration...');
 
-    fetch(getRestUrl(), {
+    return fetch(getRestUrl(), {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify(Object.assign({ action: 'save_config' }, cfg))
+      body: JSON.stringify(payload)
     })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      showAlert('<b>Configuration Saved:</b> Parameters persisted to backend and browser cache successfully.', true);
-      setBadge('ok', 'Configuration Saved');
+    .then(function(r) {
+      return r.json().then(function(data) {
+        if (!r.ok || !data || data.status !== 'success' || !data.config) {
+          var message = 'Configuration was not saved. Check settings and server availability.';
+          if (r.status === 403) message = 'A Splunk administrator with netspout_admin is required.';
+          else if (data && data.code === 'invalid_setup') message = 'Invalid settings. Use an allowed HTTPS destination and valid values.';
+          else if (data && data.code === 'token_required') message = 'Enter a HEC token for initial setup.';
+          else if (data && data.code === 'credential_store_failed') message = 'Credential storage failed. Active configuration is unchanged.';
+          else if (data && data.code === 'publication_failed') message = 'Configuration publication failed. Active configuration is unchanged.';
+          showAlert(message, false);
+          setBadge('error', 'Not saved');
+          return;
+        }
+        input.value = '';
+        input.type = 'password';
+        applyConfigToForm(data.config);
+        var cached = Object.assign({}, data.config);
+        delete cached.hec_credential_ref;
+        delete cached.hec_token;
+        delete cached.token;
+        try {
+          localStorage.setItem('datablaster_config', JSON.stringify(cached));
+          localStorage.setItem('datablaster_ssl_verify', String(cached.ssl_verify));
+        } catch(e) {}
+        showAlert('HEC configuration saved on the server.', true);
+        setBadge('ok', 'Configuration Saved');
+      });
     })
-    .catch(function(err) {
-      showAlert('Saved to browser cache. Backend notice: ' + err.message, true);
-      setBadge('ok', 'Saved to Cache');
-    });
+    .catch(function() {
+      showAlert('Save status is unknown. Reload server configuration before trying again.', false);
+      setBadge('error', 'Save status unknown');
+    })
+    .finally(function() { saveButton.disabled = false; });
   };
 
   
@@ -333,7 +634,7 @@ require([
       return;
     }
 
-    var cfg = readFormConfig();
+    var cfg = {ssl_verify: document.getElementById('cfg-ssl-verify').value === 'true'};
     statusMsg.html('<span style="color:#38bdf8;">Saving sample &amp; blasting into HEC...</span>');
 
     fetch(getRestUrl(), {
@@ -344,8 +645,8 @@ require([
         sourcetype: sourcetype,
         index: indexTarget,
         sample_content: content,
-        hec: cfg.hec_url,
-        token: cfg.hec_token,
+
+
         ssl_verify: cfg.ssl_verify
       })
     })
@@ -548,19 +849,29 @@ require([
 
     // Auto-load config
     var local = {};
-    try { local = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
+    try {
+      local = JSON.parse(localStorage.getItem('datablaster_config') || '{}');
+      delete local.hec_token;
+      delete local.token;
+      localStorage.removeItem('datablaster_hec_token');
+      localStorage.setItem('datablaster_config', JSON.stringify(local));
+    } catch(e) {}
 
     fetch(getRestUrl('action=get_config'), { headers: getHeaders() })
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      var c = (data && data.config) ? Object.assign({}, defaultCfg, data.config, local) : Object.assign({}, defaultCfg, local);
+      if (!data || data.status !== 'success' || !data.config) throw new Error('Configuration unavailable');
+      var c = Object.assign({}, defaultCfg, local, data.config);
       applyConfigToForm(c);
-      setBadge('ok', 'Ready');
+      setBadge(c.hec_token_configured ? 'ok' : 'probing', c.hec_token_configured ? 'Ready' : 'HEC setup required');
     })
     .catch(function() {
       var c = Object.assign({}, defaultCfg, local);
       applyConfigToForm(c);
-      setBadge('probing', 'Default Config');
+      document.getElementById('btn-save-config').disabled = true;
+      document.getElementById('cfg-hec-token').disabled = true;
+      document.getElementById('cfg-hec-url').disabled = true;
+      setBadge('error', 'Configuration unavailable');
     });
   }
 

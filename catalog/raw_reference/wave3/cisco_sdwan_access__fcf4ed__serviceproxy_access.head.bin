@@ -1,0 +1,3 @@
+[2026-03-04T18:28:05.057Z] "GET /reports/data/opt/data/containers/config/data-collection-agent/.dca HTTP/1.1" 200 - 0 32 4 - "172.16.1.1" "python-requests/2.31.0" "feffbfff-7224-43e0-9115-cadf13d2fefa" "172.16.0.1:8443" "127.0.0.1:8080"
+[2026-03-04T18:28:05.106Z] "POST /dataservice/smartLicensing/uploadAck HTTP/1.1" 0 DC 1036 0 10010 - "172.16.1.1" "python-requests/2.31.0" "feffbff1-8f4a-4639-a6eb-fbe4979f9f67" "172.16.0.1:8443" "-"
+[2026-03-04T18:28:05.541Z] "POST /cmd.gz/cmd.jsp HTTP/1.1" 200 - 6 63 7 - "172.16.1.1" "python-requests/2.31.0" "feffbff2-088a-4a44-84a1-b8388a8ee19e" "172.16.0.1:8443" "127.0.0.1:8080"

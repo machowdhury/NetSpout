@@ -309,5 +309,486 @@
       "aruba:rap:syslog"
     ],
     "totalSourcetypes": 10
+  },
+  {
+    "id": "network_01_campus_link",
+    "filename": "scenario_network_01_campus_link.yml",
+    "name": "Campus link failure/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_02_vlan_trunk",
+    "filename": "scenario_network_02_vlan_trunk.yml",
+    "name": "VLAN/trunk misconfiguration",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_03_stp_storm",
+    "filename": "scenario_network_03_stp_storm.yml",
+    "name": "STP loop/broadcast storm",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_04_wan_brownout",
+    "filename": "scenario_network_04_wan_brownout.yml",
+    "name": "WAN latency/jitter/packet-loss brownout",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_05_dual_isp",
+    "filename": "scenario_network_05_dual_isp.yml",
+    "name": "Dual-ISP failover/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_06_bgp_flap",
+    "filename": "scenario_network_06_bgp_flap.yml",
+    "name": "BGP neighbor flap/route withdrawal",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_07_ospf_adjacency",
+    "filename": "scenario_network_07_ospf_adjacency.yml",
+    "name": "OSPF adjacency failure/reconvergence",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_08_firewall_policy",
+    "filename": "scenario_network_08_firewall_policy.yml",
+    "name": "Firewall policy misconfiguration",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_09_ddos_flood",
+    "filename": "scenario_network_09_ddos_flood.yml",
+    "name": "DDoS/traffic flood/mitigation",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_10_dns_failure",
+    "filename": "scenario_network_10_dns_failure.yml",
+    "name": "DNS resolver failure/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_11_dhcp_exhaustion",
+    "filename": "scenario_network_11_dhcp_exhaustion.yml",
+    "name": "DHCP pool exhaustion/recovery",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_12_dc_congestion",
+    "filename": "scenario_network_12_dc_congestion.yml",
+    "name": "Data-center congestion/queue drops",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_13_mtu_pmtud",
+    "filename": "scenario_network_13_mtu_pmtud.yml",
+    "name": "MTU mismatch/PMTUD failure",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_14_wireless_outage",
+    "filename": "scenario_network_14_wireless_outage.yml",
+    "name": "Wireless controller/AP outage",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_15_device_resources",
+    "filename": "scenario_network_15_device_resources.yml",
+    "name": "Device CPU/memory exhaustion",
+    "group": "Network Incident Packs",
+    "description": "Seeded finite incident: baseline, impact, intervention and recovery. Synthetic vendor-style logs and supported gauges.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_01_ran_cell",
+    "filename": "scenario_telco_01_ran_cell.yml",
+    "name": "5G RAN cell degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_02_registration_auth",
+    "filename": "scenario_telco_02_registration_auth.yml",
+    "name": "5G registration/authentication failure",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_03_slice_sla",
+    "filename": "scenario_telco_03_slice_sla.yml",
+    "name": "5G network slice SLA violation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_04_ims_volte",
+    "filename": "scenario_telco_04_ims_volte.yml",
+    "name": "IMS/VoLTE call-quality degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_05_mobile_transport",
+    "filename": "scenario_telco_05_mobile_transport.yml",
+    "name": "Mobile transport/fronthaul congestion",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_06_broadband_cpe",
+    "filename": "scenario_telco_06_broadband_cpe.yml",
+    "name": "Broadband CPE service outage",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_07_sdwan_service",
+    "filename": "scenario_telco_07_sdwan_service.yml",
+    "name": "SD-WAN service degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_08_roaming_mobility",
+    "filename": "scenario_telco_08_roaming_mobility.yml",
+    "name": "Roaming/mobility failure",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_09_core_user_plane",
+    "filename": "scenario_telco_09_core_user_plane.yml",
+    "name": "5G core user-plane degradation",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "telco_10_cross_layer",
+    "filename": "scenario_telco_10_cross_layer.yml",
+    "name": "Cross-layer telecom service outage and SLA impact",
+    "group": "Telecommunications & 5G",
+    "description": "Synthetic telecom service assurance: finite seeded logs/KPIs, simulated alarms and operator actions. No real subscriber data or equipment signaling.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:telecom:log",
+      "netspout:telecom:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_16_retail_uplink",
+    "filename": "scenario_network_16_retail_uplink.yml",
+    "name": "Retail branch uplink flap and checkout interruption",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_17_hospital_mac_auth",
+    "filename": "scenario_network_17_hospital_mac_auth.yml",
+    "name": "Hospital access MAC instability and login retries",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_18_payment_deny",
+    "filename": "scenario_network_18_payment_deny.yml",
+    "name": "Perimeter deny burst and payment availability loss",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_19_ips_service",
+    "filename": "scenario_network_19_ips_service.yml",
+    "name": "IPS attack burst and legitimate-session degradation",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_20_backend_link",
+    "filename": "scenario_network_20_backend_link.yml",
+    "name": "Distribution-link loss and backend monitor failure",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_21_partial_pool",
+    "filename": "scenario_network_21_partial_pool.yml",
+    "name": "Partial load-balancer pool outage with perimeter demand",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED cross-system incident; owned PulseForge telemetry, not vendor-native or TA-verified.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_22_authentication_storm",
+    "filename": "scenario_network_22_authentication_storm.yml",
+    "name": "Campus authentication retry storm at perimeter",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_23_containment_request",
+    "filename": "scenario_network_23_containment_request.yml",
+    "name": "Simulated NAC containment request and service-access change",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_24_policy_disagreement",
+    "filename": "scenario_network_24_policy_disagreement.yml",
+    "name": "Multi-firewall path-policy disagreement",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_25_mpls_recovery",
+    "filename": "scenario_network_25_mpls_recovery.yml",
+    "name": "Primary MPLS path-change observation and branch SLA recovery",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_26_maintenance",
+    "filename": "scenario_network_26_maintenance.yml",
+    "name": "Planned maintenance versus unplanned service outage",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
+  },
+  {
+    "id": "network_27_stale_sessions",
+    "filename": "scenario_network_27_stale_sessions.yml",
+    "name": "Authentication recovery with stale perimeter sessions",
+    "group": "Correlated Incident Packs",
+    "description": "SIMULATED correlated lifecycle; owned PulseForge telemetry, no native TA or enforcement claim.",
+    "defaultWorkers": 1,
+    "sourcetypes": [
+      "netspout:network:syslog",
+      "netspout:network:metric"
+    ],
+    "totalSourcetypes": 2
   }
 ]

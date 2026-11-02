@@ -1,6 +1,6 @@
 /**
- * TA-datablaster React + Tailwind CSS Dashboard UI
- * Splunk App: TA-datablaster
+ * NetSpout PulseForge React + Tailwind CSS Dashboard UI
+ * Splunk App: NetSpout PulseForge (netspout)
  * 
  * Compliant with Splunk Web Framework & AppInspect.
  * Implements:
@@ -236,7 +236,7 @@
         const stored = localStorage.getItem("datablaster_hec_token");
         if (stored) return stored;
       } catch(e) {}
-      return "00000000-0000-0000-0000-000000000000";
+      return "";
     })();
 
     const [hecUrl, setHecUrl] = useState(defaultHec);
@@ -430,8 +430,8 @@
       setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "sending" }));
       const blastPayload = {
         action: "blast_single_device",
-        hec: hecUrl,
-        token: hecToken,
+
+
         device_info: {
           name: node.customName,
           vendor: node.vendor,
@@ -455,7 +455,7 @@
           setTimeout(() => setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "idle" })), 2200);
           setConsoleLogs((prev) => [
             ...prev,
-            `[SINGLE-BLAST] ⚡ Blasted 1 test event from ${node.vendor} (${node.customName}) -> ${node.index} (${node.sourcetype}) [HTTP 200 OK]`
+            `[SINGLE-BLAST] Request completed for ${node.customName}; delivery, HEC acceptance and indexing are unverified.`
           ]);
         })
         .catch(() => {
@@ -463,7 +463,7 @@
           setTimeout(() => setNodeBlastStatus((prev) => ({ ...prev, [node.id]: "idle" })), 2200);
           setConsoleLogs((prev) => [
             ...prev,
-            `[SINGLE-BLAST] ⚡ Blasted 1 test event from ${node.vendor} (${node.customName}) -> ${node.index} (${node.sourcetype}) [Simulated 200 OK]`
+            `[SINGLE-BLAST] Request failed or response unavailable for ${node.customName}; delivery UNKNOWN. No acceptance or indexing confirmed.`
           ]);
         });
     };
@@ -490,8 +490,8 @@
 
         const streamPayload = {
           action: "stream_canvas_topology",
-          hec: hecUrl,
-          token: hecToken,
+
+
           eps: targetEps,
           nodes: canvasNodes,
           links: canvasLinks
@@ -510,18 +510,18 @@
       fetch("/services/datablaster/execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "test_hec", hec: hecUrl, token: hecToken })
+        body: JSON.stringify({ action: "test_hec" })
       })
       .then(r => r.json())
       .then(data => {
         if (data.status === "success") {
-          const lat = data.latency_ms || 14;
+          const lat = Number.isFinite(data.latency_ms) ? data.latency_ms : null;
           setPreflightLatency(lat);
           setPreflightStatus("success");
           setConsoleLogs((prev) => [
             ...prev,
-            `[PREFLIGHT] ✅ HEC Endpoint Reachable (${hecUrl}, HTTP 200 OK, latency ${lat}ms)`,
-            `[PREFLIGHT] ✅ Token Authorization verified: ${data.message}`,
+            `[PREFLIGHT] Server reported probe success; HTTP status ${Number.isInteger(data.http_status) ? data.http_status : "unavailable"}, latency ${lat === null ? "unavailable" : lat + "ms"}.`,
+            `[PREFLIGHT] Delivery, HEC acceptance and Splunk indexing are unverified by this console.`,
             `[PREFLIGHT] Ready to construct environment topology.`
           ]);
         } else {
@@ -544,14 +544,14 @@
     // Simulation Execution State
     const [isRunning, setIsRunning] = useState(false);
     const [activePid, setActivePid] = useState(null);
-    const [totalEventsSent, setTotalEventsSent] = useState(148200);
-    const [indexedEvents, setIndexedEvents] = useState(147980);
-    const [currentEps, setCurrentEps] = useState(2485);
-    const [epsHistory, setEpsHistory] = useState([2100, 2350, 2420, 2490, 2480, 2510, 2485]);
+    const [totalEventsSent, setTotalEventsSent] = useState(0);
+    const [indexedEvents, setIndexedEvents] = useState(0);
+    const [currentEps, setCurrentEps] = useState(0);
+    const [epsHistory, setEpsHistory] = useState([]);
     const [consoleLogs, setConsoleLogs] = useState([]);
     const [autoScrollConsole, setAutoScrollConsole] = useState(true);
     const [hostPlatform, setHostPlatform] = useState("Enterprise Linux / Container");
-    const [binaryPath, setBinaryPath] = useState("$SPLUNK_HOME/etc/apps/TA-network-data-blaster/bin/data-blaster");
+    const [binaryPath, setBinaryPath] = useState("$SPLUNK_HOME/etc/apps/netspout/bin/data-blaster");
 
     const consoleEndRef = useRef(null);
 
@@ -577,13 +577,15 @@
         })
         .catch(() => {});
       // Determine base path for manifests
-      const appName = window.location.pathname.includes("/TA-network-data-blaster/")
+      const appName = window.location.pathname.includes("/netspout/")
+        ? "netspout"
+        : window.location.pathname.includes("/TA-network-data-blaster/")
         ? "TA-network-data-blaster"
         : window.location.pathname.includes("/network-data-blaster/")
         ? "network-data-blaster"
         : window.location.pathname.includes("/TA-datablaster/")
         ? "TA-datablaster"
-        : "TA-network-data-blaster";
+        : "netspout";
       const basePath = window.location.pathname.includes("/app/")
         ? `/static/app/${appName}/`
         : "./";
@@ -598,7 +600,7 @@
           }
         })
         .catch((err) => {
-          console.warn("[Network Data Blaster] Failed to load scenarios manifest:", err);
+          console.warn("[NetSpout PulseForge] Failed to load scenarios manifest:", err);
         });
 
       // Load Samples
@@ -615,12 +617,12 @@
           }
         })
         .catch((err) => {
-          console.warn("[Network Data Blaster] Failed to load samples manifest:", err);
+          console.warn("[NetSpout PulseForge] Failed to load samples manifest:", err);
         });
 
       // Initialize Console Logs
       setConsoleLogs([
-        `[INFO] TA-network-data-blaster initialized at ${new Date().toISOString()}`,
+        `[INFO] NetSpout PulseForge initialized at ${new Date().toISOString()}`,
         `[INFO] Target platform detected: ${navigator.platform}`,
         `[INFO] AppInspect-compliant subprocess runner ready (shell=False)`,
         `[INFO] REST Endpoint configured: /services/datablaster/execute`,
@@ -642,13 +644,13 @@
 
           setCurrentEps(instantEps);
           setTotalEventsSent((prev) => prev + deltaEvents);
-          setIndexedEvents((prev) => prev + deltaIndexed);
+          // No independent indexing evidence is available.
           setEpsHistory((prev) => [...prev.slice(-15), instantEps]);
 
           // Append simulated output event to console
           const logLines = [
-            `[BLASTER] Sent batch: ${deltaEvents} events to ${hecUrl} (HTTP 200 OK, latency: ${(12 + Math.random() * 8).toFixed(1)}ms)`,
-            `[HEC] Indexer ack received: tokens=${deltaIndexed} events committed to ${activeRule.recommendedIndex}`,
+            `[DEMO ONLY] Simulated ${deltaEvents} events; no delivery request was made.`,
+            `[DEMO ONLY] Collector acceptance and indexing are unverified.`,
           ];
           setConsoleLogs((prev) => [...prev.slice(-150), ...logLines]);
         }, 800);
@@ -697,9 +699,9 @@
         ...prev,
         `========================================================================`,
         `[START] Simulation session initiated for scenario: ${activeScenario.filename}`,
-        `[CMD] python3 bin/run_simulation.py --scenario ${activeScenario.filename} --eps ${targetEps} --hec ${hecUrl} --token [REDACTED]`,
-        `[SECURITY] Executing subprocess with shell=False, PID=${fakePid}`,
-        `[LOG] Writing stream to $SPLUNK_HOME/var/log/splunk/ta_datablaster_orchestration.log`,
+        `[DEMO COMMAND, NOT EXECUTED] python3 bin/run_simulation.py --scenario ${activeScenario.filename} --eps ${targetEps} --hec ${hecUrl} --token [REDACTED]`,
+        `[DEMO ONLY] No backend process launched; simulated session ${fakePid}`,
+        `[DEMO ONLY] Browser preview; no server log or delivery evidence.`,
         `========================================================================`,
       ]);
     };
@@ -708,8 +710,8 @@
       setIsRunning(false);
       setConsoleLogs((prev) => [
         ...prev,
-        `[STOP] Termination signal SIGTERM sent to process PID ${activePid}`,
-        `[STATUS] Simulation stopped successfully. Buffer flushed.`,
+        `[DEMO ONLY] Stopped browser preview session ${activePid}`,
+        `[DEMO ONLY] No server process or delivery buffer was managed.`,
       ]);
       setActivePid(null);
     };
@@ -737,11 +739,11 @@
             e(
               "div",
               { className: "flex items-center gap-2" },
-              e("h1", { className: "text-2xl font-black tracking-tight text-white" }, "Network Data Blaster Studio"),
+              e("h1", { className: "text-2xl font-black tracking-tight text-white" }, "NetSpout PulseForge Studio"),
               e(
                 "span",
                 { className: "px-2 py-0.5 text-xs font-semibold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 font-mono" },
-                "TA-network-data-blaster v2.4.0"
+                "NetSpout PulseForge"
               ),
               e(
                 "span",
@@ -768,7 +770,7 @@
             "div",
             { className: "bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 flex items-center gap-2 hidden md:flex" },
             e("span", { className: "text-slate-400" }, "Host Binary:"),
-            e("span", { className: "font-mono text-cyan-300 font-medium" }, "data-blaster-mac-2022-03-22")
+            e("span", { className: "font-mono text-cyan-300 font-medium" }, "Legacy external engine (unverified)")
           )
         )
       ),
@@ -818,7 +820,7 @@
               value: hecToken,
               onChange: (e) => setHecToken(e.target.value),
               className: "w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500",
-              placeholder: "00000000-0000-0000-0000-000000000000"
+              placeholder: "Enter HEC token"
             })
           ),
 
@@ -1121,9 +1123,9 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Total Events Sent"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Demo Events (not sent)"),
                       e("div", { className: "text-2xl font-black text-white font-mono tracking-tight" }, totalEventsSent.toLocaleString()),
-                      e("div", { className: "text-[11px] text-cyan-400 mt-1 flex items-center gap-1" }, "▲ Active Stream"),
+                      e("div", { className: "text-[11px] text-cyan-400 mt-1 flex items-center gap-1" }, "Simulation only"),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-cyan-500/10 rounded-full blur-xl" })
                     ),
 
@@ -1131,9 +1133,9 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Indexed Events"),
-                      e("div", { className: "text-2xl font-black text-emerald-400 font-mono tracking-tight" }, indexedEvents.toLocaleString()),
-                      e("div", { className: "text-[11px] text-emerald-500 mt-1" }, "99.85% Ack Rate"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Indexing Evidence"),
+                      e("div", { className: "text-2xl font-black text-emerald-400 font-mono tracking-tight" }, "Not verified"),
+                      e("div", { className: "text-[11px] text-emerald-500 mt-1" }, "No collector acknowledgement"),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-emerald-500/10 rounded-full blur-xl" })
                     ),
 
@@ -1141,7 +1143,7 @@
                     e(
                       "div",
                       { className: "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl relative overflow-hidden" },
-                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Current EPS"),
+                      e("div", { className: "text-slate-400 text-xs font-semibold uppercase tracking-wider mb-1" }, "Demo EPS"),
                       e("div", { className: "text-2xl font-black text-amber-400 font-mono tracking-tight" }, currentEps.toLocaleString()),
                       e("div", { className: "text-[11px] text-slate-500 mt-1" }, `Target: ${targetEps.toLocaleString()}`),
                       e("div", { className: "absolute -right-2 -bottom-2 w-12 h-12 bg-amber-500/10 rounded-full blur-xl" })
@@ -1512,7 +1514,7 @@
                       "div",
                       { className: "grid grid-cols-1 sm:grid-cols-4 gap-2 text-center text-xs font-semibold" },
                       e("div", { className: "p-3 bg-slate-950 rounded-xl border border-slate-800" },
-                        e("div", { className: "text-cyan-400 mb-1" }, "1. DATA-BLASTER"),
+                        e("div", { className: "text-cyan-400 mb-1" }, "1. PULSEFORGE"),
                         e("div", { className: "text-slate-400 text-[11px]" }, "Native Executable (Go)"),
                         e("div", { className: "text-slate-500 text-[10px] mt-1 font-mono" }, "15 Generator Threads")
                       ),
@@ -2241,7 +2243,7 @@
                               "ℹ️ Search Head Deployment Prerequisites"
                             ),
                             e("p", null,
-                              "When running on a Splunk Search Head, Network Data Blaster orchestrates execution while streaming high-velocity payloads over HTTP Event Collector (HEC) directly to indexers. HEC must be enabled and whitelisted for target indexes."
+                              "When running on a Splunk Search Head, NetSpout PulseForge orchestrates execution while streaming high-velocity payloads over HTTP Event Collector (HEC) directly to indexers. HEC must be enabled and whitelisted for target indexes."
                             ),
                             e("div", { className: "flex flex-wrap items-center gap-1.5 pt-1 font-mono text-[11px]" },
                               e("span", { className: "text-slate-400" }, "Required Target Indexes:"),
@@ -2272,7 +2274,7 @@
                                   value: hecToken,
                                   onChange: (e) => setHecToken(e.target.value),
                                   className: "w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:border-cyan-500 focus:outline-none",
-                                  placeholder: "00000000-0000-0000-0000-000000000000"
+                                  placeholder: "Enter HEC token"
                                 })
                               ),
                               e(
@@ -2669,7 +2671,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_multivendor_enterprise",
+                          href: "/app/netspout/studio_multivendor_enterprise",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "px-3.5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl flex items-center gap-1.5 shadow-lg shadow-cyan-500/20 cursor-pointer text-xs"
@@ -2737,7 +2739,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_multivendor_enterprise",
+                          href: "/app/netspout/studio_multivendor_enterprise",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"
@@ -2796,7 +2798,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_roce_ai_fabric",
+                          href: "/app/netspout/studio_roce_ai_fabric",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"
@@ -2855,7 +2857,7 @@
                       e(
                         "a",
                         {
-                          href: "/app/TA-network-data-blaster/studio_cross_domain_triage",
+                          href: "/app/netspout/studio_cross_domain_triage",
                           target: "_blank",
                           rel: "noopener noreferrer",
                           className: "block text-center py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 font-bold text-xs transition-colors border border-slate-700 cursor-pointer"

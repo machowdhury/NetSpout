@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Starts the PulseForge engine. Everything is configurable; nothing is tied to a repository checkout or a fixed port.
+#   PULSEFORGE_ENV_FILE      env file to load first (default /etc/pulseforge/engine.env, ignored when absent)
+#   PULSEFORGE_ENGINE_HOME   package root holding backend/ src/ catalog/ (default: two levels above this script, deploy/engine/..)
+#   PULSEFORGE_PYTHON        interpreter (default $PULSEFORGE_ENGINE_HOME/venv/bin/python, else python3)
+#   PULSEFORGE_ENGINE_HOST / PULSEFORGE_ENGINE_PORT   bind address (default 127.0.0.1:8081; the Splunk gateway reads NETSPOUT_BACKEND_URL)
+#   PULSEFORGE_STATE_DIR     Connection Center config and run state (default ~/.pulseforge); secrets are never written there
+# Secrets are read from the environment (NETSPOUT_HEC_TOKEN, NETSPOUT_SPLUNK_PASSWORD or NETSPOUT_SPLUNK_TOKEN), normally from the env file with mode 600.
+set -euo pipefail
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+env_file="${PULSEFORGE_ENV_FILE:-/etc/pulseforge/engine.env}"
+if [ -f "$env_file" ]; then set -a; . "$env_file"; set +a; fi
+home="${PULSEFORGE_ENGINE_HOME:-$(cd "$here/../.." && pwd)}"
+py="${PULSEFORGE_PYTHON:-$home/venv/bin/python}"
+[ -x "$py" ] || py="$(command -v python3)"
+state="${PULSEFORGE_STATE_DIR:-$HOME/.pulseforge}"
+mkdir -p "$state"
+export NETSPOUT_CONFIG_DIR="${NETSPOUT_CONFIG_DIR:-$state}"
+export NETSPOUT_REPLAY_STATE="${NETSPOUT_REPLAY_STATE:-$NETSPOUT_CONFIG_DIR/replay_sessions.json}"
+export NETSPOUT_RUNS_STATE="${NETSPOUT_RUNS_STATE:-$NETSPOUT_CONFIG_DIR/runs.json}"
+exec "$py" "$home/backend/run.py" --host "${PULSEFORGE_ENGINE_HOST:-127.0.0.1}" --port "${PULSEFORGE_ENGINE_PORT:-8081}"

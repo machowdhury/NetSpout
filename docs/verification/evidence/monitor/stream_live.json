@@ -1,0 +1,134 @@
+{
+ "generated_utc": "2026-10-31T18:01Z",
+ "lab": "isolated Docker Splunk Enterprise 10.2.7",
+ "results": [
+  {
+   "name": "continuous_native",
+   "target": "cisco:dc:aci:class",
+   "run_id": "run-7ee56a5ea824",
+   "source_mode": "native",
+   "mode": "continuous",
+   "attempts_over_intervals": [
+    20,
+    40,
+    59,
+    79
+   ],
+   "counters": {
+    "generated": 105,
+    "attempts": 104,
+    "accepted": 104,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 1,
+    "indexed": 104
+   },
+   "final_state": "STOPPED",
+   "grew_each_interval": true,
+   "held_while_paused": true,
+   "resumed": true,
+   "no_growth_after_stop": true,
+   "active_runs_after": 0,
+   "verification": "VERIFIED",
+   "indexed": 104,
+   "progress_pct_while_unbounded": null,
+   "ok": true
+  },
+  {
+   "name": "count_native",
+   "run_id": "run-4dcda820dbc8",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": 25
+   },
+   "verification": "VERIFIED",
+   "ok": true
+  },
+  {
+   "name": "duration_native",
+   "run_id": "run-cadd98ddd4b2",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 50,
+    "attempts": 50,
+    "accepted": 50,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": 50
+   },
+   "verification": "VERIFIED",
+   "ok": true
+  },
+  {
+   "name": "continuous_grounded_sample",
+   "target": "arista:eos:syslog",
+   "run_id": "run-c26b013a7ad4",
+   "source_mode": "grounded_sample",
+   "mode": "continuous",
+   "attempts_over_intervals": [
+    20,
+    39,
+    59,
+    79
+   ],
+   "counters": {
+    "generated": 105,
+    "attempts": 104,
+    "accepted": 104,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 1,
+    "indexed": 104
+   },
+   "final_state": "STOPPED",
+   "grew_each_interval": true,
+   "held_while_paused": true,
+   "resumed": true,
+   "no_growth_after_stop": true,
+   "active_runs_after": 0,
+   "verification": "VERIFIED",
+   "indexed": 104,
+   "progress_pct_while_unbounded": null,
+   "ok": true
+  },
+  {
+   "name": "count_grounded_sample",
+   "run_id": "run-450cc979bd74",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 25,
+    "attempts": 25,
+    "accepted": 25,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": 25
+   },
+   "verification": "VERIFIED",
+   "ok": true
+  },
+  {
+   "name": "duration_grounded_sample",
+   "run_id": "run-7361ba58395e",
+   "state": "COMPLETED",
+   "counters": {
+    "generated": 50,
+    "attempts": 50,
+    "accepted": 50,
+    "rejected": 0,
+    "unknown": 0,
+    "pending": 0,
+    "indexed": 50
+   },
+   "verification": "VERIFIED",
+   "ok": true
+  }
+ ]
+}

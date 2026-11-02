@@ -1,0 +1,367 @@
+{
+  "run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+  "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+  "events": [
+    {
+      "event": "{\"id\":\"0123a45b-6c7d-8900-e12f-3456789gh0i1\",\"date_create\":1793104073,\"action\":\"user_login\",\"actor\":{\"type\":\"user\",\"user\":{\"id\":\"W123AB456\",\"name\":\"Charlie Parker\",\"email\":\"bird@slack.com\"}},\"entity\":{\"type\":\"user\",\"user\":{\"id\":\"W123AB456\",\"name\":\"Charlie Parker\",\"email\":\"bird@slack.com\"}},\"context\":{\"location\":{\"type\":\"enterprise\",\"id\":\"E1701NCCA\",\"name\":\"Birdland\",\"domain\":\"birdland\"},\"ua\":\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36\",\"ip_address\":\"203.0.113.66\"}}",
+      "sourcetype": "slack:audit",
+      "host": "ub4-slack",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"id\":\"16f5fb41-c67c-4cf5-a5c4-d90cb58dd5f9\",\"date_create\":1793104073,\"action\":\"anomaly\",\"actor\":{\"type\":\"user\",\"user\":{\"id\":\"e65b0f5c\",\"name\":\"roy\",\"email\":\"aaron@demo.com\"}},\"entity\":{\"type\":\"user\",\"user\":{\"id\":\"asdfasdf\",\"name\":\"Joe Bob\",\"email\":\"jbob@example.com\",\"team\":\"T234SAH2\"}},\"context\":{\"location\":{\"type\":\"workspace\",\"id\":\"e65b11aa\",\"name\":\"Docker\",\"domain\":\"Docker\"},\"ua\":\"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:23.0) Gecko/20131011 Firefox/23.0\",\"ip_address\":\"203.0.113.66\"},\"details\":{\"action_timestamp\":1673631621862,\"location\":\"England, GB\",\"previous_ip_address\":\"175.16.199.64\",\"previous_ua\":\"\",\"reason\":[\"asn\",\"ip_address\"]}}",
+      "sourcetype": "slack:audit",
+      "host": "ub4-slack",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-BASELINE-2",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"action\":\"file_malicious_content_detected\",\"actor\":{\"type\":\"user\",\"user\":{\"email\":\"XXXXXXX@elastic.co\",\"id\":\"U01MF9XXXX\",\"name\":\"XXXXXx\",\"team\":\"T0CUXXXXX\"}},\"context\":{\"ip_address\":\"203.0.113.66\",\"location\":{\"domain\":\"elastic\",\"id\":\"XXXXXX\",\"name\":\"Elastic\",\"type\":\"workspace\"},\"session_id\":5458207163185,\"ua\":\"Mozilla/5.0 (Windows NT 10.0.19045; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Slack/4.36.140 Chrome/120.0.6099.227 Electron/28.2.0 Safari/537.36 OS_Product/Workstation Servicing_Channel/SAC Sonic Slack_SSB/4.36.140\"},\"date_create\":1793104073,\"details\":{\"md5_hash\":\"7e2b2819a67bb11b0ca280c1d0646f42\"},\"entity\":{\"file\":{\"filetype\":\"\",\"id\":\"F06XXXXXXX\",\"name\":\"mimi.zip\",\"title\":\"\"},\"type\":\"file\"},\"id\":\"bbcf1d28-4012-4771-8179-8a59c6f2bffa\"}",
+      "sourcetype": "slack:audit",
+      "host": "ub4-slack",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-BASELINE-3",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-BASELINE-2"
+      }
+    },
+    {
+      "event": "{\"@timestamp\":1793104073899,\"action\":\"user.login\",\"active\":true,\"actor\":\"john_doe\",\"actor_id\":12345,\"actor_location\":{\"country_name\":\"USA\",\"ip\":\"203.0.113.66\"},\"org_id\":67890,\"org\":\"tech-corp\",\"user_id\":12345,\"business_id\":56789,\"business\":\"tech-enterprise\",\"message\":\"User logged in successfully.\",\"name\":\"John Doe\",\"device\":\"laptop\",\"login_method\":\"password\"}",
+      "sourcetype": "github:enterprise:audit",
+      "host": "ub4-github",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-OBSERVE-1",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-BASELINE-3"
+      }
+    },
+    {
+      "event": "{\"@timestamp\":1793104073899,\"action\":\"repo.merge\",\"active\":true,\"actor\":\"developer2\",\"actor_id\":67890,\"actor_location\":{\"country_name\":\"India\",\"ip\":\"203.0.113.66\"},\"org_id\":90123,\"org\":\"merge-team\",\"repository\":\"project-y\",\"source_branch\":\"feature-x\",\"target_branch\":\"main\",\"business\":\"merge-solutions\",\"message\":\"Feature branch merged into main.\"}",
+      "sourcetype": "github:enterprise:audit",
+      "host": "ub4-github",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-OBSERVE-2",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-OBSERVE-1"
+      }
+    },
+    {
+      "event": "{\"severity\":\"INFO\",\"time\":\"2026-10-27T12:27:53.899Z\",\"correlation_id\":\"01HXHSTQ5A02PJVVW2H8FZZ77A\",\"meta.caller_id\":\"SessionsController#create\",\"meta.remote_ip\":\"203.0.113.66\",\"meta.feature_category\":\"system_access\",\"meta.user\":\"root\",\"meta.user_id\":1,\"meta.client_id\":\"user/1\",\"author_id\":1,\"author_name\":\"Administrator\",\"entity_id\":1,\"entity_type\":\"User\",\"created_at\":\"2026-10-27T12:27:53.899+00:00\",\"with\":\"standard\",\"target_id\":1,\"target_type\":\"User\",\"target_details\":\"Administrator\"}",
+      "sourcetype": "gitlab:audit:json",
+      "host": "ub4-gitlab",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-VALIDATE-1",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-OBSERVE-2"
+      }
+    },
+    {
+      "event": "{\"severity\":\"INFO\",\"time\":\"2026-10-27T12:27:53.899Z\",\"correlation_id\":\"01HXHSTQ5A02PJVVW2H8FZZ77C\",\"meta.caller_id\":\"GitOperationsHandler\",\"meta.remote_ip\":\"203.0.113.66\",\"meta.feature_category\":\"source_code_management\",\"author_id\":4,\"author_name\":\"Git User\",\"entity_id\":5,\"entity_type\":\"Project\",\"created_at\":\"2026-10-27T12:27:53.899+00:00\",\"target_id\":5,\"target_type\":\"Project\",\"target_details\":\"namespace/my-project\",\"details\":{\"custom_message\":{\"protocol\":\"http\",\"action\":\"git-upload-pack\"}}}",
+      "sourcetype": "gitlab:audit:json",
+      "host": "ub4-gitlab",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_saas_collaboration_audit",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_saas_collaboration_audit-VALIDATE-2",
+        "netspout_parent_event_id": "ub4_saas_collaboration_audit-VALIDATE-1"
+      }
+    },
+    {
+      "event": "{\"simpleValues\":{\"hasRansomwareSuspendedProcesses\":{\"totalValues\":1,\"values\":[\"false\"]},\"decisionFeatureSet\":{\"totalValues\":1,\"values\":[\"Process.maliciousByCodeInjection(Malop decision)\"]},\"decisionFeature\":{\"totalValues\":1,\"values\":[\"Process.maliciousByCodeInjection(Malop decision)\"]},\"detectionType\":{\"totalValues\":1,\"values\":[\"PROCESS_INJECTION\"]},\"malopActivityTypes\":{\"totalValues\":2,\"values\":[\"NONE_MALOP_ACTIVITY_TYPE\",\"MALICIOUS_INFECTION\"]},\"creationTime\":{\"totalValues\":1,\"values\":[\"1793104073899\"]},\"isBlocked\":{\"totalValues\":1,\"values\":[\"false\"]},\"rootCauseElementTypes\":{\"totalValues\":1,\"values\":[\"Process\"]},\"rootCauseElementCompanyProduct\":{\"totalValues\":1,\"values\":[\"product\"]},\"rootCauseElementHashes\":{\"totalValues\":1,\"values\":[\"nbvgyui765tghnxxx\"]},\"iconBase64\":{\"totalValues\":1,\"values\":[\"base\"]},\"malopStartTime\":{\"totalValues\":1,\"values\":[\"1793103942754\"]},\"rootCauseElementNames\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]},\"totalNumberOfIncomingConnections\":{\"totalValues\":1,\"values\":[768]},\"totalNumberOfOutgoingConnections\":{\"totalValues\":1,\"values\":[23]},\"totalReceivedBytes\":{\"totalValues\":1,\"values\":[76]},\"totalTransmittedBytes\":{\"totalValues\":1,\"values\":[90]},\"malopLastUpdateTime\":{\"totalValues\":1,\"values\":[\"1793104199183\"]},\"allRansomwareProcessesSuspended\":{\"totalValues\":1,\"values\":[\"false\"]}},\"elementValues\":{\"suspects\":{\"totalValues\":10,\"elementValues\":[{\"elementType\":\"Process\",\"guid\":\"zpP735vQl83mbAFk\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{\"type\":\"suspects\"},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP735vQl83mbAFk\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP733MJZQ5ua9PD\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP733MJZQ5ua9PD\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73wfcKRFKvnZa\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wfcKRFKvnZa\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73yUewMOXCNBN\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73yUewMOXCNBN\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73wdciiw3CcZ9\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wdciiw3CcZ9\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73-slLQbqr1eb\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73-slLQbqr1eb\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73xTlNawf6qox\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73xTlNawf6qox\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP736adtvfQP86p\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP736adtvfQP86p\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP732Q23xdwLJhh\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP732Q23xdwLJhh\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73zlRSCV3N9Si\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":true,\"hasMalops\":true,\"elementValues\":{},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"true\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73zlRSCV3N9Si\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}}],\"totalSuspicious\":10,\"totalMalicious\":10,\"guessedTotal\":0},\"filesToRemediate\":{\"totalValues\":1,\"elementValues\":[{\"elementType\":\"File\",\"guid\":\"zpP7358Lbsf7z787\",\"name\":\"x64cymulateprocesshider.exe\",\"hasSuspicions\":true,\"hasMalops\":false,\"elementValues\":{\"files\":\"remediate\"},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"false\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP7358Lbsf7z787\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"true\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"x64cymulateprocesshider.exe\"]}}}],\"totalSuspicious\":1,\"totalMalicious\":0,\"guessedTotal\":0},\"primaryRootCauseElements\":{\"totalValues\":10,\"elementValues\":[{\"elementType\":\"Process\",\"guid\":\"zpP73wfcKRFKvnZa\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wfcKRFKvnZa\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73yUewMOXCNBN\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{\"values\":\"primaryroot\"},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73yUewMOXCNBN\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73wdciiw3CcZ9\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wdciiw3CcZ9\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73zALshBfA7mQ\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73zALshBfA7mQ\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP736Yq9t-ujawF\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP736Yq9t-ujawF\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP736adtvfQP86p\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP736adtvfQP86p\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73yUHiaZd-JI6\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73yUHiaZd-JI6\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP733Hfwc2Ol2KV\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP733Hfwc2Ol2KV\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73zlRSCV3N9Si\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73zlRSCV3N9Si\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73-Mvct_YhLo2\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73-Mvct_YhLo2\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}}],\"totalSuspicious\":0,\"totalMalicious\":0,\"guessedTotal\":0},\"affectedUsers\":{\"totalValues\":1,\"elementValues\":[{\"elementType\":\"User\",\"guid\":\"AAAAGAJYAICT5xYW\",\"name\":\"cybereason\\\\theavengers\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{\"values\":\"element\"},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"false\"]},\"guid\":{\"totalValues\":1,\"values\":[\"AAAAGAJYAICT5xYW\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"false\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"cybereason\\\\theavengers\"]}}}],\"totalSuspicious\":0,\"totalMalicious\":0,\"guessedTotal\":0},\"rootCauseElements\":{\"totalValues\":10,\"elementValues\":[{\"elementType\":\"Process\",\"guid\":\"zpP735vQl83mbAFk\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{\"element\":\"root\"},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP735vQl83mbAFk\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP733MJZQ5ua9PD\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP733MJZQ5ua9PD\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73wfcKRFKvnZa\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wfcKRFKvnZa\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73yUewMOXCNBN\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73yUewMOXCNBN\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73wdciiw3CcZ9\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73wdciiw3CcZ9\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73-slLQbqr1eb\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73-slLQbqr1eb\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73xTlNawf6qox\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73xTlNawf6qox\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP736adtvfQP86p\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP736adtvfQP86p\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP732Q23xdwLJhh\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP732Q23xdwLJhh\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}},{\"elementType\":\"Process\",\"guid\":\"zpP73zlRSCV3N9Si\",\"name\":\"injected (chain of injections)\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{},\"simpleValues\":{\"guid\":{\"totalValues\":1,\"values\":[\"zpP73zlRSCV3N9Si\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"injected (chain of injections)\"]}}}],\"totalSuspicious\":0,\"totalMalicious\":0,\"guessedTotal\":0},\"affectedMachines\":{\"totalValues\":1,\"elementValues\":[{\"elementType\":\"Machine\",\"guid\":\"zpP73xCi55eyTiwX\",\"name\":\"cybereason\",\"hasSuspicions\":false,\"hasMalops\":false,\"elementValues\":{\"element\":\"values\"},\"simpleValues\":{\"hasMalops\":{\"totalValues\":1,\"values\":[\"false\"]},\"guid\":{\"totalValues\":1,\"values\":[\"zpP73xCi55eyTiwX\"]},\"hasSuspicions\":{\"totalValues\":1,\"values\":[\"false\"]},\"group\":{\"totalValues\":1,\"values\":[\"72a61eac-6f79-4670-8607-a1334ddd2ff0\"]},\"elementDisplayName\":{\"totalValues\":1,\"values\":[\"cybereason\"]}}}],\"totalSuspicious\":0,\"totalMalicious\":0,\"guessedTotal\":0}},\"suspicions\":{\"connectingToBlackListAddressSuspicion\":1799575138314},\"filterData\":{\"sortInGroupValue\":\"hello\",\"groupByValue\":\"NONE_MALOP_ACTIVITY_TYPE\"},\"isMalicious\":false,\"suspicionCount\":0,\"guidString\":\"AAAA0xquIk3X9oQ_\",\"labelsIds\":\"lbl2\",\"malopPriority\":\"LOW\",\"suspect\":false,\"malicious\":false}",
+      "sourcetype": "cybereason:malops",
+      "host": "ub4-cybereason",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"agentDetectionInfo\":{\"accountId\":\"1234567890123456789\",\"accountName\":\"Default\",\"agentDetectionState\":null,\"agentDomain\":\"WORKGROUP\",\"agentIpV4\":\"203.0.113.66\",\"agentIpV6\":\"2a02:cf40:add:4002:91f2:a9b2:e09a:6fc6\",\"agentLastLoggedInUpn\":null,\"agentLastLoggedInUserMail\":null,\"agentLastLoggedInUserName\":\"\",\"agentMitigationMode\":\"protect\",\"agentOsName\":\"linux\",\"agentOsRevision\":\"1234\",\"agentRegisteredAt\":\"2022-04-06T08:26:45.515278Z\",\"agentUuid\":\"fwfbxxxxxxxxxxqcfjfnxxxxxxxxx\",\"agentVersion\":\"21.x.x\",\"cloudProviders\":{},\"externalIp\":\"81.2.69.143\",\"groupId\":\"1234567890123456789\",\"groupName\":\"Default Group\",\"siteId\":\"1234567890123456789\",\"siteName\":\"Default site\"},\"agentRealtimeInfo\":{\"accountId\":\"1234567890123456789\",\"accountName\":\"Default\",\"activeThreats\":7,\"agentComputerName\":\"test-LINUX\",\"agentDecommissionedAt\":null,\"agentDomain\":\"WORKGROUP\",\"agentId\":\"1234567890123456789\",\"agentInfected\":true,\"agentIsActive\":true,\"agentIsDecommissioned\":false,\"agentMachineType\":\"server\",\"agentMitigationMode\":\"detect\",\"agentNetworkStatus\":\"connected\",\"agentOsName\":\"linux\",\"agentOsRevision\":\"1234\",\"agentOsType\":\"linux\",\"agentUuid\":\"fwfbxxxxxxxxxxqcfjfnxxxxxxxxx\",\"agentVersion\":\"21.x.x.1234\",\"groupId\":\"1234567890123456789\",\"groupName\":\"Default Group\",\"networkInterfaces\":[{\"id\":\"1234567890123456789\",\"inet\":[\"10.0.0.1\"],\"inet6\":[\"2a02:cf40:add:4002:91f2:a9b2:e09a:6fc6\"],\"name\":\"Ethernet\",\"physical\":\"00-00-5E-00-53-00\"}],\"operationalState\":\"na\",\"rebootRequired\":false,\"scanAbortedAt\":null,\"scanFinishedAt\":\"2022-04-06T09:18:21.090855Z\",\"scanStartedAt\":\"2022-04-06T08:26:52.838047Z\",\"scanStatus\":\"finished\",\"siteId\":\"1234567890123456789\",\"siteName\":\"Default site\",\"storageName\":null,\"storageType\":null,\"userActionsNeeded\":[]},\"containerInfo\":{\"id\":null,\"image\":null,\"labels\":null,\"name\":null},\"id\":\"1234567890123456789\",\"indicators\":[],\"kubernetesInfo\":{\"cluster\":null,\"controllerKind\":null,\"controllerLabels\":null,\"controllerName\":null,\"namespace\":null,\"namespaceLabels\":null,\"node\":null,\"pod\":null,\"podLabels\":null},\"mitigationStatus\":[{\"action\":\"unquarantine\",\"actionsCounters\":{\"failed\":0,\"notFound\":0,\"pendingReboot\":0,\"success\":1,\"total\":1},\"agentSupportsReport\":true,\"groupNotFound\":false,\"lastUpdate\":\"2022-04-06T08:54:17.198002Z\",\"latestReport\":\"/threats/mitigation-report\",\"mitigationEndedAt\":\"2022-04-06T08:54:17.101000Z\",\"mitigationStartedAt\":\"2022-04-06T08:54:17.101000Z\",\"status\":\"success\"},{\"action\":\"kill\",\"actionsCounters\":null,\"agentSupportsReport\":true,\"groupNotFound\":false,\"lastUpdate\":\"2022-04-06T08:45:55.303355Z\",\"latestReport\":null,\"mitigationEndedAt\":\"2022-04-06T08:45:55.297364Z\",\"mitigationStartedAt\":\"2022-04-06T08:45:55.297363Z\",\"status\":\"success\"}],\"threatInfo\":{\"analystVerdict\":\"undefined\",\"analystVerdictDescription\":\"Undefined\",\"automaticallyResolved\":false,\"browserType\":null,\"certificateId\":\"\",\"classification\":\"Trojan\",\"classificationSource\":\"Cloud\",\"cloudFilesHashVerdict\":\"black\",\"collectionId\":\"1234567890123456789\",\"confidenceLevel\":\"malicious\",\"createdAt\":\"2026-10-27T12:27:53.899539Z\",\"detectionEngines\":[{\"key\":\"sentinelone_cloud\",\"title\":\"SentinelOne Cloud\"}],\"detectionType\":\"static\",\"engines\":[\"SentinelOne Cloud\"],\"externalTicketExists\":false,\"externalTicketId\":null,\"failedActions\":false,\"fileExtension\":\"EXE\",\"fileExtensionType\":\"Executable\",\"filePath\":\"default.exe\",\"fileSize\":1234,\"fileVerificationType\":\"NotSigned\",\"identifiedAt\":\"2026-10-27T12:27:53.347551Z\",\"incidentStatus\":\"unresolved\",\"incidentStatusDescription\":\"Unresolved\",\"initiatedBy\":\"agent_policy\",\"initiatedByDescription\":\"Agent Policy\",\"initiatingUserId\":null,\"initiatingUsername\":null,\"isFileless\":false,\"isValidCertificate\":false,\"maliciousProcessArguments\":null,\"md5\":null,\"mitigatedPreemptively\":false,\"mitigationStatus\":\"not_mitigated\",\"mitigationStatusDescription\":\"Not mitigated\",\"originatorProcess\":\"default.exe\",\"pendingActions\":false,\"processUser\":\"test user\",\"publisherName\":\"\",\"reachedEventsLimit\":false,\"rebootRequired\":false,\"sha1\":\"aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\",\"sha256\":null,\"storyline\":\"D0XXXXXXXXXXAF4D\",\"threatId\":\"1234567890123456789\",\"threatName\":\"default.exe\",\"updatedAt\":\"2026-10-27T12:36:16.573673Z\"},\"whiteningOptions\":[\"hash\"]}",
+      "sourcetype": "sentinelone:channel:threats",
+      "host": "ub4-sentinelone",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-BASELINE-2",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"agentDetectionInfo\":{\"accountId\":\"1341089495639497756\",\"accountName\":\"MyAccountName\",\"agentDetectionState\":\"full_mode\",\"agentDomain\":\"domain.local\",\"agentIpV4\":\"203.0.113.66\",\"agentIpV6\":\"\",\"agentLastLoggedInUpn\":\"name.surname@xxx.xxx\",\"agentLastLoggedInUserMail\":null,\"agentLastLoggedInUserName\":\"username\",\"agentMitigationMode\":\"protect\",\"agentOsName\":\"Windows 11 Enterprise\",\"agentOsRevision\":\"22631\",\"agentRegisteredAt\":\"2023-06-01T08:01:56.832409Z\",\"agentUuid\":\"7faaf3df17314exxx8c063de167b0e416\",\"agentVersion\":\"24.1.5.277\",\"assetVersion\":\"277\",\"cloudProviders\":{},\"externalIp\":\"81.2.69.144\",\"groupId\":\"1341132821935792047\",\"groupName\":\"Default Group\",\"siteId\":\"1341132821910626222\",\"siteName\":\"windows\"},\"agentRealtimeInfo\":{\"accountId\":\"1341089495639499999\",\"accountName\":\"MyAccountName\",\"activeThreats\":0,\"agentComputerName\":\"99999\",\"agentDecommissionedAt\":null,\"agentDomain\":\"domain.local\",\"agentId\":\"1697667xxx483013694\",\"agentInfected\":false,\"agentIsActive\":true,\"agentIsDecommissioned\":false,\"agentMachineType\":\"laptop\",\"agentMitigationMode\":\"protect\",\"agentNetworkStatus\":\"connected\",\"agentOsName\":\"Windows 11 Enterprise\",\"agentOsRevision\":\"22631\",\"agentOsType\":\"windows\",\"agentUuid\":\"7faaf3df17314exxx8c063de167b0e416\",\"agentVersion\":\"24.1.5.277\",\"groupId\":\"1341132xxx935792047\",\"groupName\":\"Default Group\",\"networkInterfaces\":[{\"id\":\"2122017713487462603\",\"inet\":[\"10.239.153.8\"],\"inet6\":[],\"name\":\"Wi-Fi\",\"physical\":\"70:d8:23:8e:9c:22\"}],\"operationalState\":\"na\",\"rebootRequired\":false,\"scanAbortedAt\":null,\"scanFinishedAt\":\"2024-07-12T11:06:37.830732Z\",\"scanStartedAt\":\"2024-07-12T10:01:50.384501Z\",\"scanStatus\":\"finished\",\"siteId\":\"13411xxx21910626222\",\"siteName\":\"windows\",\"storageName\":null,\"storageType\":null,\"userActionsNeeded\":[]},\"containerInfo\":{\"id\":null,\"image\":null,\"isContainerQuarantine\":null,\"labels\":null,\"name\":null},\"ecsInfo\":{\"clusterName\":null,\"serviceArn\":null,\"serviceName\":null,\"taskArn\":null,\"taskAvailabilityZone\":null,\"taskDefinitionArn\":null,\"taskDefinitionFamily\":null,\"taskDefinitionRevision\":null,\"type\":null,\"version\":null},\"id\":\"2188336463262791521\",\"indicators\":[],\"kubernetesInfo\":{\"cluster\":null,\"controllerKind\":null,\"controllerLabels\":null,\"controllerName\":null,\"isContainerQuarantine\":null,\"namespace\":null,\"namespaceLabels\":null,\"node\":null,\"nodeLabels\":null,\"pod\":null,\"podLabels\":null},\"mitigationStatus\":[{\"action\":\"kill\",\"actionsCounters\":null,\"agentSupportsReport\":true,\"groupNotFound\":false,\"lastUpdate\":\"2025-04-08T07:53:55.153478Z\",\"latestReport\":null,\"mitigationEndedAt\":\"2025-04-08T07:53:55.143102Z\",\"mitigationStartedAt\":\"2025-04-08T07:53:55.143101Z\",\"reportId\":\"2188336463849994086\",\"status\":\"success\"},{\"action\":\"quarantine\",\"actionsCounters\":{\"failed\":0,\"notFound\":0,\"pendingReboot\":0,\"success\":1,\"total\":1},\"agentSupportsReport\":true,\"groupNotFound\":false,\"lastUpdate\":\"2025-04-08T07:53:55.242007Z\",\"latestReport\":\"/threats/mitigation-report/21883xxxx4596580203\",\"mitigationEndedAt\":\"2025-04-08T07:53:54.996000Z\",\"mitigationStartedAt\":\"2025-04-08T07:53:54.996000Z\",\"reportId\":\"21883xxx4596580203\",\"status\":\"success\"}],\"threatInfo\":{\"analystVerdict\":\"true_positive\",\"analystVerdictDescription\":\"True positive\",\"automaticallyResolved\":false,\"browserType\":null,\"certificateId\":\"\",\"classification\":\"Malware\",\"classificationSource\":\"Static\",\"cloudFilesHashVerdict\":\"black\",\"collectionId\":\"2134739034820830297\",\"confidenceLevel\":\"malicious\",\"createdAt\":\"2026-10-27T12:27:53.899539Z\",\"detectionEngines\":[{\"key\":\"sentinelone_cloud\",\"title\":\"SentinelOne Cloud\"}],\"detectionType\":\"static\",\"engines\":[\"SentinelOne Cloud\"],\"externalTicketExists\":false,\"externalTicketId\":null,\"failedActions\":false,\"fileExtension\":\"RBF\",\"fileExtensionType\":\"Unknown\",\"filePath\":\"\\\\\\\\Device\\\\\\\\HarddiskVolume3\\\\\\\\Config.Msi\\\\\\\\44371a.rbf\",\"fileSize\":177664,\"fileVerificationType\":\"NotSigned\",\"identifiedAt\":\"2026-10-27T12:27:53.797171Z\",\"incidentStatus\":\"resolved\",\"incidentStatusDescription\":\"Resolved\",\"initiatedBy\":\"agent_policy\",\"initiatedByDescription\":\"Agent Policy\",\"initiatingUserId\":null,\"initiatingUsername\":null,\"isFileless\":false,\"isValidCertificate\":false,\"macroModules\":null,\"maliciousProcessArguments\":null,\"md5\":null,\"mitigatedPreemptively\":false,\"mitigationStatus\":\"mitigated\",\"mitigationStatusDescription\":\"Mitigated\",\"originatorProcess\":\"msiexec.exe\",\"pendingActions\":false,\"processUser\":\"domain.local\\\\\\\\username\",\"publisherName\":\"\",\"reachedEventsLimit\":false,\"rebootRequired\":false,\"rootProcessUpn\":null,\"sha1\":\"b648fe6b2eb07c08f14cbb67e6ad272b0d119295\",\"sha256\":\"ce6a1603ea351a8989ddb1ca1521212c9388b740ff8e3347f2768dae0fa95d3f\",\"storyline\":\"A423EDD7DE41BB8B\",\"threatId\":\"2188336463262xxx521\",\"threatName\":\"44371a.rbf\",\"updatedAt\":\"2026-10-27T12:51:58.438539Z\"},\"whiteningOptions\":[\"hash\"]}",
+      "sourcetype": "sentinelone:channel:threats",
+      "host": "ub4-sentinelone",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-BASELINE-3",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-BASELINE-2"
+      }
+    },
+    {
+      "event": "{\"id\":1,\"MacAddress\":\"00-00-5E-00-53-00\",\"MacOrganization\":\"VMware, Inc.\",\"IpAddress\":\"203.0.113.66\",\"NatIpAddress\":\"203.0.113.66\",\"HostName\":\"otelco7_46.test.local\",\"Labels\":\"\",\"Locations\":\"\",\"TaniumComputerId\":1558993994,\"Ports\":\"22,41000\",\"Os\":\"Linux\",\"OsGeneration\":null,\"Managed\":1,\"Unmanageable\":0,\"Arp\":0,\"Nmap\":0,\"Ping\":0,\"Connected\":0,\"AwsApi\":0,\"CentralizedNmap\":0,\"SatelliteNmap\":0,\"CreatedAt\":\"2026-10-27 11:47:22 +00:00\",\"UpdatedAt\":\"2026-10-27 12:27:53 +00:00\",\"FirstManagedAt\":null,\"LastManagedAt\":\"2026-10-27 12:27:53 +00:00\",\"LastDiscoveredAt\":null,\"Profile\":null,\"SatelliteDecId\":null,\"SatelliteName\":null}",
+      "sourcetype": "tanium:discover:managed",
+      "host": "ub4-tanium",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-BASELINE-4",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-BASELINE-3"
+      }
+    },
+    {
+      "event": "{\"EPOEvents.AgentGUID\":\"11111111-2222-4333-8444-555555555501\",\"EPOEvents.Analyzer\":\"ENDP_AM_1070\",\"EPOEvents.AnalyzerDetectionMethod\":\"Exploit Prevention\",\"EPOEvents.AnalyzerHostName\":\"lab-host-nips.example.com\",\"EPOEvents.AnalyzerIPV4\":3405803842,\"EPOEvents.AnalyzerIPV6\":\"0:0:0:0:0:FFFF:C633:640A\",\"EPOEvents.AnalyzerMAC\":\"00005E005302\",\"EPOEvents.AnalyzerName\":\"Trellix Endpoint Security\",\"EPOEvents.AnalyzerVersion\":\"10.7.20.14066\",\"EPOEvents.AutoGUID\":\"AAAAAAAA-BBBB-4CCC-8DDD-EEEEEEEEEE01\",\"EPOEvents.AutoID\":10001,\"EPOEvents.DetectedUTC\":\"2026-10-27T12:27:53+00:00\",\"EPOEvents.EventTimeLocal\":\"2026-10-27T12:27:53+00:00\",\"EPOEvents.ReceivedUTC\":\"2026-10-27T12:27:58+00:00\",\"EPOEvents.ServerID\":\"epo-server-01.example.com\",\"EPOEvents.SourceIPV4\":3405803842,\"EPOEvents.SourceIPV6\":\"0:0:0:0:0:FFFF:C633:640B\",\"EPOEvents.SourceMAC\":\"00005E005304\",\"EPOEvents.TargetHostName\":\"lab-target-nips.example.com\",\"EPOEvents.TargetIPV4\":3325256724,\"EPOEvents.TargetIPV6\":\"0:0:0:0:0:FFFF:C633:6414\",\"EPOEvents.TargetMAC\":\"00005E005305\",\"EPOEvents.TargetPort\":443,\"EPOEvents.TenantId\":1,\"EPOEvents.ThreatActionTaken\":\"blocked\",\"EPOEvents.ThreatCategory\":\"hip.nips\",\"EPOEvents.ThreatEventID\":18059,\"EPOEvents.ThreatHandled\":true,\"EPOEvents.ThreatName\":\"Synthetic NIPS port scan violation\",\"EPOEvents.ThreatSeverity\":2,\"EPOEvents.ThreatType\":\"IDS_THREAT_TYPE_VALUE_NIPS\",\"EPExtendedEvent.AnalyzerContentVersion\":\"10.7.0.14078\",\"EPExtendedEvent.AnalyzerRuleID\":\"3700\",\"EPExtendedEvent.AnalyzerRuleName\":\"Synthetic TCP Port Scan\",\"EPExtendedEvent.BladeName\":\"IDS_BLADE_NAME_SPB\",\"EPExtendedEvent.EventAutoID\":10001,\"EPExtendedEvent.NaturalLangDescription\":\"Synthetic NIPS detection|ThreatActionTaken=blocked|ThreatName=Synthetic NIPS port scan violation\",\"EPExtendedEvent.SourcePort\":49152}",
+      "sourcetype": "trellix_epo:threat_events",
+      "host": "ub4-trellix",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-1",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-BASELINE-4"
+      }
+    },
+    {
+      "event": "{\"EPOEvents.AgentGUID\":\"55555555-6666-4777-8888-999999999905\",\"EPOEvents.AnalyzerDetectionMethod\":\"Access Protection\",\"EPOEvents.AnalyzerHostName\":\"lab-host-process.example.com\",\"EPOEvents.AnalyzerIPV4\":3405803842,\"EPOEvents.AnalyzerMAC\":\"00005e005303\",\"EPOEvents.AnalyzerName\":\"Trellix Endpoint Security\",\"EPOEvents.AnalyzerVersion\":\"10.7.20.14066\",\"EPOEvents.AutoGUID\":\"EEEEEEEE-FFFF-4000-8000-222222222205\",\"EPOEvents.AutoID\":10005,\"EPOEvents.DetectedUTC\":\"2026-10-27T12:27:53+00:00\",\"EPOEvents.ReceivedUTC\":\"2026-10-27T12:27:58+00:00\",\"EPOEvents.ServerID\":\"epo-server-01.example.com\",\"EPOEvents.SourceProcessName\":\"example-process.exe\",\"EPOEvents.SourceUserName\":\"EXAMPLE\\\\process_user\",\"EPOEvents.TargetFileName\":\"C:\\\\Program Files\\\\ExampleApp\\\\blocked-process-target.exe\",\"EPOEvents.ThreatActionTaken\":\"blocked\",\"EPOEvents.ThreatCategory\":\"hip.process\",\"EPOEvents.ThreatEventID\":18061,\"EPOEvents.ThreatHandled\":true,\"EPOEvents.ThreatName\":\"Synthetic blocked process access\",\"EPOEvents.ThreatSeverity\":2,\"EPOEvents.ThreatType\":\"IDS_THREAT_TYPE_VALUE_BOP\",\"EPExtendedEvent.AnalyzerRuleID\":\"proc-rule-001\",\"EPExtendedEvent.AnalyzerRuleName\":\"Synthetic process access rule\",\"EPExtendedEvent.EventAutoID\":10005,\"EPExtendedEvent.NaturalLangDescription\":\"Synthetic process access blocked\",\"EPExtendedEvent.SourceFilePath\":\"C:\\\\Program Files\\\\ExampleApp\",\"EPExtendedEvent.SourceProcessHash\":\"d4e5f6789012345678901234abcdef01\",\"EPExtendedEvent.SourceProcessSigned\":true,\"EPExtendedEvent.SourceProcessSigner\":\"C=US, O=Example Corp, CN=Example Windows\",\"EPExtendedEvent.TargetAccessTime\":\"2026-01-15T09:58:00+00:00\",\"EPExtendedEvent.TargetCreateTime\":\"2025-05-01T08:00:00+00:00\",\"EPExtendedEvent.TargetFileSize\":204800,\"EPExtendedEvent.TargetHash\":\"E5F6789012345678901234ABCDEF0123\",\"EPExtendedEvent.TargetModifyTime\":\"2025-05-01T08:00:00+00:00\",\"EPExtendedEvent.TargetName\":\"blocked-process-target.exe\",\"EPExtendedEvent.TargetPath\":\"C:\\\\Program Files\\\\ExampleApp\",\"EPExtendedEvent.TargetSigned\":false}",
+      "sourcetype": "trellix_epo:threat_events",
+      "host": "ub4-trellix",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-2",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-1"
+      }
+    },
+    {
+      "event": "{\"EPOEvents.AgentGUID\":\"33333333-4444-4555-8666-777777777712\",\"EPOEvents.AnalyzerDetectionMethod\":\"Access Protection\",\"EPOEvents.AnalyzerHostName\":\"lab-host-nips.example.com\",\"EPOEvents.AnalyzerIPV4\":3405803842,\"EPOEvents.AnalyzerMAC\":\"00005E005306\",\"EPOEvents.AnalyzerName\":\"Trellix Endpoint Security\",\"EPOEvents.AnalyzerVersion\":\"10.7.20.14066\",\"EPOEvents.AutoGUID\":\"CCCCCCCC-DDDD-4EEE-8FFF-000000000012\",\"EPOEvents.AutoID\":10012,\"EPOEvents.DetectedUTC\":\"2026-10-27T12:27:53+00:00\",\"EPOEvents.ReceivedUTC\":\"2026-10-27T12:27:58+00:00\",\"EPOEvents.ServerID\":\"epo-server-01.example.com\",\"EPOEvents.SourceProcessName\":\"explorer.exe\",\"EPOEvents.SourceUserName\":\"EXAMPLE\\\\admin_user\",\"EPOEvents.TargetUserName\":\"SYSTEM\",\"EPOEvents.ThreatActionTaken\":\"IDS_ACTION_WOULD_BLOCK\",\"EPOEvents.ThreatCategory\":\"hip.nips\",\"EPOEvents.ThreatEventID\":18060,\"EPOEvents.ThreatName\":\"Network intrusion signature - would block\",\"EPOEvents.ThreatSeverity\":2,\"EPExtendedEvent.EventAutoID\":10012,\"EPExtendedEvent.NaturalLangDescription\":\"Synthetic NIPS signature match in observe mode\",\"EPOEvents.ThreatHandled\":false,\"EPOEvents.ThreatType\":\"IDS_THREAT_TYPE_VALUE_NIPS\",\"EPOEvents.SourceHostName\":\"source-host-nips.example.com\",\"EPOEvents.SourceIPV4\":3405803842,\"EPOEvents.SourceMAC\":\"00005E005307\",\"EPOEvents.TargetHostName\":\"lab-host-nips.example.com\",\"EPOEvents.TargetIPV4\":3325256724,\"EPOEvents.TargetPort\":445,\"EPOEvents.TargetProtocol\":\"TCP\"}",
+      "sourcetype": "trellix_epo:threat_events",
+      "host": "ub4-trellix",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-3",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-2"
+      }
+    },
+    {
+      "event": "{\"computer_name\":\"FC-EXCHANGE-01\",\"computer_fqdn\":\"fc-exchange-01.fc.dom\",\"computer_ip\":\"203.0.113.66\",\"computer_id\":\"59b7d9bfa849af3a1465b7e4\",\"product_installed\":\"BEST\",\"aph_type\":\"phishing\",\"url\":\"http://example.com/account/support/\",\"status\":\"aph_blocked\",\"last_blocked\":\"2026-10-27T12:27:53.899Z\",\"count\":1,\"companyId\":\"623c18fb12fb8700396d6375\",\"module\":\"aph\",\"_testEvent_\":true}",
+      "sourcetype": "bitdefender:gz",
+      "host": "ub4-bitdefender",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-VALIDATE-1",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-OBSERVE-3"
+      }
+    },
+    {
+      "event": "{\"computer_name\":\"FC-WIN7-X64-01\",\"computer_fqdn\":\"fc-win7-x64-01\",\"computer_ip\":\"203.0.113.66\",\"computer_id\":\"59a1604e60369e06733f8abb\",\"product_installed\":\"BEST\",\"malware_type\":\"file\",\"malware_name\":\"EICAR-Test-File (not a virus)\",\"file_path\":\"C:\\\\eicar0000001.txt\",\"hash\":\"8b3f191819931d1f2cef7289239b5f77c00b079847b9c2636e56854d1e5eff71\",\"final_status\":\"deleted\",\"timestamp\":\"2026-10-27T12:27:53.899Z\",\"companyId\":\"623c18fb12fb8700396d6375\",\"module\":\"av\",\"_testEvent_\":true}",
+      "sourcetype": "bitdefender:gz",
+      "host": "ub4-bitdefender",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-VALIDATE-2",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-VALIDATE-1"
+      }
+    },
+    {
+      "event": "{\"computer_name\":\"FC-WIN7-X64-01\",\"computer_fqdn\":\"fc-win7-x64-01\",\"computer_ip\":\"203.0.113.66\",\"computer_id\":\"59a1604e60369e06733f8abb\",\"product_installed\":\"BEST\",\"status\":\"portscan_blocked\",\"protocol_id\":\"6\",\"source_ip\":\"192.168.0.2\",\"last_blocked\":\"2026-10-27T12:27:53.899Z\",\"count\":1,\"companyId\":\"623c18fb12fb8700396d6375\",\"module\":\"fw\",\"_testEvent_\":true}",
+      "sourcetype": "bitdefender:gz",
+      "host": "ub4-bitdefender",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_endpoint_threat_pipeline",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_endpoint_threat_pipeline-VALIDATE-3",
+        "netspout_parent_event_id": "ub4_endpoint_threat_pipeline-VALIDATE-2"
+      }
+    },
+    {
+      "event": "{\"Action\":\"login\",\"Date\":\"2026-10-27T12:27:53Z\",\"Details\":\"user_logged in\",\"Module\":\"auth\",\"User IP\":\"203.0.113.66\",\"User Name\":\"saand_rn\",\"User Role\":\"Manager\"}",
+      "sourcetype": "qualys:activityLog",
+      "host": "ub4-qualys",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_exposure_infra_logging-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"Action\":\"set\",\"Date\":\"2026-10-27T12:27:53Z\",\"Details\":\"comment=[vvv] for 11.11.11.4\",\"Module\":\"host_attribute\",\"User IP\":\"203.0.113.66\",\"User Name\":\"saand_rn\",\"User Role\":\"Manager\"}",
+      "sourcetype": "qualys:activityLog",
+      "host": "ub4-qualys",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_exposure_infra_logging-BASELINE-2",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-BASELINE-1"
+      }
+    },
+    {
+      "event": "{\"assessed_for_policies\":false,\"assessed_for_vulnerabilities\":true,\"credential_assessments\":[],\"critical_vulnerabilities\":5,\"exploits\":0,\"host_name\":\"ub22-50-6-126\",\"id\":\"8babcdef-5678-5678-1234-cabcdef0123e-default-asset-7\",\"ip\":\"203.0.113.66\",\"last_assessed_for_vulnerabilities\":\"2026-10-27T12:27:53.900Z\",\"last_scan_end\":\"2026-10-27T12:27:53.900Z\",\"last_scan_start\":\"2026-10-27T12:26:53.900Z\",\"mac\":\"00:00:5E:00:53:01\",\"malware_kits\":0,\"moderate_vulnerabilities\":1,\"os_architecture\":\"x86_64\",\"os_description\":\"Ubuntu Linux 22.04\",\"os_family\":\"Linux\",\"os_name\":\"Linux\",\"os_system_name\":\"Ubuntu Linux\",\"os_type\":\"\",\"os_vendor\":\"Ubuntu\",\"os_version\":\"22.04\",\"risk_score\":5656,\"severe_vulnerabilities\":6,\"tags\":[{\"name\":\"rapid7 insight agents\",\"type\":\"SITE\"}],\"total_vulnerabilities\":12,\"type\":\"guest\",\"unique_identifiers\":[{\"id\":\"B7123456-5678-1234-ABCD-6F6ABCDEFA91\",\"source\":\"dmidecode\"},{\"id\":\"cababcdefabcd0123456789f16d7061a\",\"source\":\"R7 Agent\"},{\"id\":\"cab682b411e200123456789ab6d7061a\",\"source\":\"Endpoint Agent\"}],\"vulnerability\":{\"check_id\":null,\"first_found\":\"2025-05-14T13:52:10Z\",\"key\":\"/root/infaagent/jdk/lib/jrt-fs.jar\",\"last_found\":\"2025-05-27T19:54:43.777Z\",\"nic\":null,\"port\":null,\"proof\":\"<p><p>Vulnerable OS: Ubuntu Linux 22.04<p></p></p><p>Vulnerable software installed: Azul Systems JRE 17.54.22 (/root/infaagent/jdk/lib/jrt-fs.jar)</p></p>\",\"protocol\":null,\"reintroduced\":null,\"solution_fix\":\"<p>\\n    Download and upgrade to the latest version of Azul Zulu from <a href=\\\"https://www.azul.com/downloads/\\\">here.</a></p>\",\"solution_id\":\"azul-zulu-upgrade-latest\",\"solution_summary\":\"Upgrade Azul Zulu to the latest version\",\"solution_type\":\"workaround\",\"status\":\"VULNERABLE_VERS\",\"vulnerability_id\":\"azul-zulu-cve-2025-21502\",\"added\":\"2025-02-05T00:00:00Z\",\"categories\":\"Azul Systems,Azul Zulu,Java,Web\",\"cves\":\"CVE-2025-21502\",\"cvss_v2_access_complexity\":\"high\",\"cvss_v2_access_vector\":\"network\",\"cvss_v2_authentication\":\"none\",\"cvss_v2_availability_impact\":\"none\",\"cvss_v2_confidentiality_impact\":\"partial\",\"cvss_v2_exploit_score\":4.927999973297119,\"cvss_v2_impact_score\":4.938243839970231,\"cvss_v2_integrity_impact\":\"partial\",\"cvss_v2_score\":4,\"cvss_v2_vector\":\"(AV:N/AC:H/Au:N/C:P/I:P/A:N)\",\"cvss_v3_attack_complexity\":\"high\",\"cvss_v3_attack_vector\":\"network\",\"cvss_v3_availability_impact\":\"none\",\"cvss_v3_confidentiality_impact\":\"low\",\"cvss_v3_exploit_score\":2.2211673,\"cvss_v3_impact_score\":2.5140719999999996,\"cvss_v3_integrity_impact\":\"low\",\"cvss_v3_privileges_required\":\"none\",\"cvss_v3_scope\":\"unchanged\",\"cvss_v3_score\":4.8,\"cvss_v3_user_interaction\":\"none\",\"cvss_v3_vector\":\"CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N\",\"denial_of_service\":false,\"description\":\"Vulnerability in the Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition product of Oracle Java SE (component: Hotspot). Supported versions that are affected are Oracle Java SE: 8u431-perf, 11.0.25, 17.0.13, 21.0.5, 23.0.1; Oracle GraalVM for JDK: 17.0.13, 21.0.5, 23.0.1; Oracle GraalVM Enterprise Edition: 20.3.16 and 21.3.12. Difficult to exploit vulnerability allows unauthenticated attacker with network access via multiple protocols to compromise Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition. Successful attacks of this vulnerability can result in unauthorized update, insert or delete access to some of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data as well as unauthorized read access to a subset of Oracle Java SE, Oracle GraalVM for JDK, Oracle GraalVM Enterprise Edition accessible data. Note: This vulnerability can be exploited by using APIs in the specified Component, e.g., through a web service which supplies data to the APIs. This vulnerability also applies to Java deployments, typically in clients running sandboxed Java Web Start applications or sandboxed Java applets, that load and run untrusted code (e.g., code that comes from the internet) and rely on the Java sandbox for security. CVSS 3.1 Base Score 4.8 (Confidentiality and Integrity impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N).\",\"exploits\":[],\"id\":\"azul-zulu-cve-2025-21502\",\"links\":[{\"href\":\"http://nvd.nist.gov/vuln/detail/CVE-2025-21502\",\"id\":\"CVE-2025-21502\",\"source\":\"cve\"},{\"href\":\"https://www.azul.com/downloads/\",\"id\":\"https://www.azul.com/downloads/\",\"source\":\"url\"}],\"malware_kits\":[],\"modified\":\"2025-02-18T00:00:00Z\",\"pci_cvss_score\":4,\"pci_fail\":true,\"pci_severity_score\":3,\"pci_special_notes\":\"\",\"pci_status\":\"fail\",\"published\":\"2025-01-21T00:00:00Z\",\"references\":\"cve:CVE-2025-21502,url:https://www.azul.com/downloads/\",\"risk_score\":321,\"severity\":\"low\",\"severity_score\":4,\"title\":\"Azul Zulu: CVE-2025-21502: Vulnerability in the Azul Zulu OpenJDK component\"}}",
+      "sourcetype": "rapid7:insightvm:asset:vulnerability_finding",
+      "host": "ub4-rapid7",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "BASELINE",
+        "netspout_event_id": "ub4_exposure_infra_logging-BASELINE-3",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-BASELINE-2"
+      }
+    },
+    {
+      "event": "{\"assessed_for_policies\":false,\"assessed_for_vulnerabilities\":true,\"credential_assessments\":[{\"port\":135,\"protocol\":\"TCP\",\"status\":\"NO_CREDS_SUPPLIED\"},{\"port\":445,\"protocol\":\"TCP\",\"status\":\"NO_CREDS_SUPPLIED\"}],\"critical_vulnerabilities\":119,\"exploits\":4,\"host_name\":\"Win11-50-13-52\",\"id\":\"81234561-1234-5678-abcd-c4aabcdef84e-default-asset-1\",\"ip\":\"203.0.113.66\",\"last_assessed_for_vulnerabilities\":\"2026-10-27T12:27:53.900Z\",\"last_scan_end\":\"2026-10-27T12:27:53.900Z\",\"last_scan_start\":\"2026-10-27T12:26:53.900Z\",\"mac\":\"00:00:5E:00:53:00\",\"malware_kits\":0,\"moderate_vulnerabilities\":8,\"os_architecture\":\"x86_64\",\"os_description\":\"Microsoft Windows 11 22H2\",\"os_family\":\"Windows\",\"os_name\":\"Windows 11\",\"os_system_name\":\"Microsoft Windows\",\"os_type\":\"Workstation\",\"os_vendor\":\"Microsoft\",\"os_version\":\"22H2\",\"risk_score\":181622,\"severe_vulnerabilities\":241,\"tags\":[{\"name\":\"USA\",\"type\":\"LOCATION\"},{\"name\":\"test\",\"type\":\"SITE\"},{\"name\":\"rapid7 insight agents\",\"type\":\"SITE\"}],\"total_vulnerabilities\":368,\"type\":\"guest\",\"unique_identifiers\":[{\"id\":\"F0ABCDE2-ABCD-EFAB-1234-1BABCDEFE050\",\"source\":\"CSPRODUCT\"},{\"id\":\"c5cf46abcdef0123456789291c7d554a\",\"source\":\"R7 Agent\"}],\"vulnerability\":{\"check_id\":null,\"first_found\":\"2025-04-30T06:21:05Z\",\"key\":\"\",\"last_found\":\"2025-05-27T19:54:43.777Z\",\"nic\":null,\"port\":3389,\"proof\":\"<p><p>The subject common name found in the X.509 certificate does not seem to match the scan target:<ul><li>Subject CN Win11-50-13-52.testad.local does not match target name specified in the site.</li></ul></p></p>\",\"protocol\":\"TCP\",\"reintroduced\":\"2025-05-27T13:34:19Z\",\"solution_fix\":\"<p>\\n        The subject&#39;s common name (CN) field in the X.509 certificate should be fixed\\nto reflect the name of the entity presenting the certificate (e.g., the\\nhostname). This is done by generating a new certificate usually signed by a\\nCertification Authority (CA) trusted by both the client and server.\\n      </p>\",\"solution_id\":\"certificate-common-name-mismatch\",\"solution_summary\":\"Fix the subject's Common Name (CN) field in the certificate\",\"solution_type\":\"workaround\",\"status\":\"VULNERABLE_EXPL\",\"vulnerability_id\":\"certificate-common-name-mismatch\",\"added\":\"2007-08-03T00:00:00Z\",\"categories\":\"CVSS Score Predicted with Rapid7 AI,HTTP,Web\",\"cves\":\"\",\"cvss_v2_access_complexity\":\"high\",\"cvss_v2_access_vector\":\"network\",\"cvss_v2_authentication\":\"none\",\"cvss_v2_availability_impact\":\"none\",\"cvss_v2_confidentiality_impact\":\"complete\",\"cvss_v2_exploit_score\":4.927999973297119,\"cvss_v2_impact_score\":7.843935219030975,\"cvss_v2_integrity_impact\":\"partial\",\"cvss_v2_score\":6.1,\"cvss_v2_vector\":\"(AV:N/AC:H/Au:N/C:C/I:P/A:N)\",\"cvss_v3_attack_complexity\":\"high\",\"cvss_v3_attack_vector\":\"network\",\"cvss_v3_availability_impact\":\"none\",\"cvss_v3_confidentiality_impact\":\"high\",\"cvss_v3_exploit_score\":2.2211673,\"cvss_v3_impact_score\":5.177088,\"cvss_v3_integrity_impact\":\"high\",\"cvss_v3_privileges_required\":\"none\",\"cvss_v3_scope\":\"unchanged\",\"cvss_v3_score\":7.4,\"cvss_v3_user_interaction\":\"none\",\"cvss_v3_vector\":\"CVSS:3.0/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N\",\"denial_of_service\":false,\"description\":\"The subject common name (CN) field in the X.509 certificate does not match the name of the entity presenting the certificate.\\n\\nBefore issuing a certificate, a Certification Authority (CA) must check the identity of the entity requesting the certificate, as specified in the CA's Certification Practice Statement (CPS). Thus, standard certificate validation procedures require the subject CN field of a certificate to match the actual name of the entity presenting the certificate. For example, in a certificate presented by \\\"https://www.example.com/\\\", the CN should be \\\"www.example.com\\\". \\n\\nIn order to detect and prevent active eavesdropping attacks, the validity of a certificate must be verified, or else an attacker could then launch a man-in-the-middle attack and gain full control of the data stream. Of particular importance is the validity of the subject's CN, that should match the name of the entity (hostname).\\n\\nA CN mismatch most often occurs due to a configuration error, though it can also indicate that a man-in-the-middle attack is being conducted.\",\"exploits\":[],\"id\":\"certificate-common-name-mismatch\",\"links\":[],\"malware_kits\":[],\"modified\":\"2025-02-18T00:00:00Z\",\"pci_cvss_score\":6.1,\"pci_fail\":true,\"pci_severity_score\":4,\"pci_special_notes\":\"\",\"pci_status\":\"fail\",\"published\":\"2007-08-03T00:00:00Z\",\"references\":\"\",\"risk_score\":495,\"severity\":\"none\",\"severity_score\":6,\"title\":\"X.509 Certificate Subject CN Does Not Match the Entity Name\"}}",
+      "sourcetype": "rapid7:insightvm:asset:vulnerability_finding",
+      "host": "ub4-rapid7",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_exposure_infra_logging-OBSERVE-1",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-BASELINE-3"
+      }
+    },
+    {
+      "event": "{\"last_persisted_time\":1793608410564,\"username_count\":0,\"description\":\"Unknown log event\\n\",\"rules\":[{\"type\":\"CRE_RULE\",\"owner\":\"admin\",\"identifier\":\"SYSTEM-1443\",\"base_host_id\":0,\"capacity_timestamp\":0,\"origin\":\"SYSTEM\",\"creation_date\":1273171233573,\"rule_type\":\"EVENT\",\"enabled\":false,\"modification_date\":1756982944636,\"linked_rule_identifier\":null,\"name\":\"Devices with High Event Rates\",\"average_capacity\":0,\"id\":100408,\"base_capacity\":0}],\"event_count\":1,\"flow_count\":0,\"assigned_to\":\"temp_user\",\"security_category_count\":1,\"follow_up\":false,\"source_address_ids\":[12],\"source_count\":1,\"inactive\":true,\"protected\":false,\"closing_user\":null,\"destination_networks\":[\"other\"],\"source_network\":\"other\",\"category_count\":1,\"close_time\":null,\"remote_destination_count\":1,\"start_time\":1793104073900,\"magnitude\":1,\"last_updated_time\":1793104073900,\"credibility\":1,\"id\":14,\"categories\":[\"Unknown Generic Log Event\"],\"severity\":1,\"policy_category_count\":0,\"log_sources\":[{\"type_name\":\"GenericLogDSM\",\"type_id\":67,\"name\":\"SIM Generic Log DSM-7 :: qradardev522\",\"id\":62}],\"closing_reason_id\":null,\"device_count\":1,\"first_persisted_time\":1756378369000,\"offense_type\":0,\"relevance\":0,\"domain_id\":0,\"offense_source\":\"203.0.113.66\",\"local_destination_address_ids\":[],\"local_destination_count\":0,\"status\":\"OPEN\"}",
+      "sourcetype": "ibm:qradar:offense",
+      "host": "ub4-ibm_qradar",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_exposure_infra_logging-OBSERVE-2",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-OBSERVE-1"
+      }
+    },
+    {
+      "event": "{\"last_persisted_time\":1793274371298,\"username_count\":0,\"description\":\"SOC Insights\\n\",\"rules\":[{\"type\":\"CRE_RULE\",\"owner\":\"admin\",\"identifier\":\"SYSTEM-1431\",\"base_host_id\":53,\"capacity_timestamp\":1758169912974,\"origin\":\"SYSTEM\",\"creation_date\":1186670307862,\"rule_type\":\"EVENT\",\"enabled\":true,\"modification_date\":1756982945360,\"linked_rule_identifier\":null,\"name\":\"Excessive Database Connections\",\"average_capacity\":1252897,\"id\":100356,\"base_capacity\":1252897}],\"event_count\":3,\"flow_count\":0,\"assigned_to\":null,\"security_category_count\":1,\"follow_up\":true,\"source_address_ids\":[5],\"source_count\":1,\"inactive\":true,\"protected\":false,\"closing_user\":\"admin\",\"destination_networks\":[\"other\"],\"source_network\":\"other\",\"category_count\":1,\"close_time\":1756363117000,\"remote_destination_count\":1,\"start_time\":1793104073900,\"magnitude\":1,\"last_updated_time\":1793111275360,\"credibility\":2,\"id\":7,\"categories\":[\"Messages\"],\"severity\":2,\"policy_category_count\":0,\"log_sources\":[{\"type_name\":\"InfobloxCustom\",\"type_id\":4007,\"name\":\"Infoblox\",\"id\":862}],\"closing_reason_id\":2,\"device_count\":1,\"first_persisted_time\":1756193307000,\"offense_type\":52,\"relevance\":0,\"domain_id\":0,\"offense_source\":\"e57f3cba-a64f-49ae-8d82-b3d4422c6e58\",\"local_destination_address_ids\":[],\"local_destination_count\":0,\"status\":\"CLOSED\"}",
+      "sourcetype": "ibm:qradar:offense",
+      "host": "ub4-ibm_qradar",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "OBSERVE",
+        "netspout_event_id": "ub4_exposure_infra_logging-OBSERVE-3",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-OBSERVE-2"
+      }
+    },
+    {
+      "event": "{\"last_persisted_time\":1793536831125,\"username_count\":1,\"description\":\"User Login\\n\",\"rules\":[{\"type\":\"CRE_RULE\",\"owner\":\"admin\",\"identifier\":\"SYSTEM-1219\",\"base_host_id\":0,\"capacity_timestamp\":0,\"origin\":\"SYSTEM\",\"creation_date\":1133309726396,\"rule_type\":\"EVENT\",\"enabled\":false,\"modification_date\":1756983618804,\"linked_rule_identifier\":null,\"name\":\"Anomaly: Excessive Firewall Accepts Across Multiple Hosts\",\"average_capacity\":0,\"id\":100407,\"base_capacity\":0}],\"event_count\":2,\"flow_count\":0,\"assigned_to\":null,\"security_category_count\":1,\"follow_up\":false,\"source_address_ids\":[10],\"source_count\":1,\"inactive\":true,\"protected\":false,\"closing_user\":null,\"destination_networks\":[\"Net-10-172-192.Net_10_0_0_0\"],\"source_network\":\"Net-10-172-192.Net_172_16_0_0\",\"category_count\":1,\"close_time\":null,\"remote_destination_count\":0,\"start_time\":1793104073900,\"magnitude\":2,\"last_updated_time\":1793104073900,\"credibility\":4,\"id\":12,\"categories\":[\"SIM User Authentication\"],\"severity\":5,\"policy_category_count\":0,\"log_sources\":[{\"type_name\":\"SIMAudit\",\"type_id\":105,\"name\":\"SIM Audit-2 :: qradardev522\",\"id\":64}],\"closing_reason_id\":null,\"device_count\":1,\"first_persisted_time\":1756363563000,\"offense_type\":0,\"relevance\":0,\"domain_id\":0,\"offense_source\":\"203.0.113.66\",\"local_destination_address_ids\":[2],\"local_destination_count\":1,\"status\":\"OPEN\"}",
+      "sourcetype": "ibm:qradar:offense",
+      "host": "ub4-ibm_qradar",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_exposure_infra_logging-VALIDATE-1",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-OBSERVE-3"
+      }
+    },
+    {
+      "event": "{\"@timestamp\":\"2026-10-27T12:27:53.900Z\",\"log.level\":\"INFO\",\"message\":\"[.ds-.logs-deprecation.elasticsearch-default-2022.09.04-000001] creating index, cause [initialize_data_stream], templates [.deprecation-indexing-template], shards [1]/[1]\",\"ecs.version\":\"1.2.0\",\"service.name\":\"ES_ECS\",\"event.dataset\":\"elasticsearch.server\",\"process.thread.name\":\"elasticsearch[16f5806fc421][masterService#updateTask][T#1]\",\"log.logger\":\"org.elasticsearch.cluster.metadata.MetadataCreateIndexService\",\"elasticsearch.cluster.uuid\":\"sh0FdC0tRUGgzD6U7OsO3g\",\"elasticsearch.node.id\":\"rsRsMdvhREeQqLkk3twtqA\",\"elasticsearch.node.name\":\"16f5806fc421\",\"elasticsearch.cluster.name\":\"elasticsearch\"}",
+      "sourcetype": "elasticsearch:json",
+      "host": "ub4-elasticsearch",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_exposure_infra_logging-VALIDATE-2",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-VALIDATE-1"
+      }
+    },
+    {
+      "event": "{\"@timestamp\":\"2026-10-27T12:27:53.900Z\",\"log.level\":\"INFO\",\"message\":\"[0] with UUID [ucaHOD8fRH6f0PfuHnk7_Q] bootstrapping [SEARCH_ONLY] shard on primary term [1] with [stateless_commit_154][1][154] and latest uploaded [term=1, gen=154] from indexing shard (peer recovery from es-es-index-5bfdf695cc-t8mxb)\",\"ecs.version\":\"1.2.0\",\"service.name\":\"ES_ECS\",\"event.dataset\":\"elasticsearch.server\",\"process.thread.name\":\"elasticsearch[es-es-search-54845b5cf-qbcjq][generic][T#5]\",\"log.logger\":\"co.elastic.elasticsearch.stateless.StatelessIndexEventListener\",\"elasticsearch.cluster.uuid\":\"saa-yNQ6Q7iunpSFDnNxOA\",\"elasticsearch.node.id\":\"vn1CC_lLQ3CKan1N5O3xUg\",\"elasticsearch.node.name\":\"es-es-search-54845b5cf-qbcjq\",\"elasticsearch.cluster.name\":\"es\"}",
+      "sourcetype": "elasticsearch:json",
+      "host": "ub4-elasticsearch",
+      "source": "pulseforge:universe:raw-check:pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+      "index": "idx_ta_ise_test",
+      "fields": {
+        "netspout_run_id": "pf-ub4-current-968320c3-bfa6-4355-b827-9613d4625d41",
+        "netspout_scenario_id": "ub4_exposure_infra_logging",
+        "netspout_phase": "VALIDATE",
+        "netspout_event_id": "ub4_exposure_infra_logging-VALIDATE-3",
+        "netspout_parent_event_id": "ub4_exposure_infra_logging-VALIDATE-2"
+      }
+    }
+  ]
+}

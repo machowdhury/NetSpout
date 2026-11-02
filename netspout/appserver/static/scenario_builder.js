@@ -1,5 +1,5 @@
 /*
- * Splunk App: NetSpout (TA-network-data-blaster)
+ * Splunk App: NetSpout PulseForge (netspout)
  * View Script: scenario_builder.js
  * Scenario Builder, OpenConfig MDT Telemetry Emitter & Path Orchestrator
  */
@@ -1026,7 +1026,7 @@ require([
     var cfg = {};
     try { cfg = JSON.parse(localStorage.getItem('datablaster_config') || '{}'); } catch(e) {}
     var hecUrl = cfg.hec_url || "https://127.0.0.1:8088/services/collector";
-    var token = cfg.hec_token || "00000000-0000-0000-0000-000000000000";
+    var token = cfg.hec_token || "";
     var sslVerify = cfg.ssl_verify || false;
 
     var payload = {
@@ -1037,8 +1037,8 @@ require([
       host: host,
       ip: ip,
       count: count || 1,
-      hec: hecUrl,
-      token: token,
+
+
       ssl_verify: sslVerify
     };
 

@@ -24,19 +24,62 @@ SPLUNK_CORE_DIR = os.path.join(SPLUNK_BIN_DIR, "netspout_core")
 BACKEND_APP_DIR = os.path.join(REPO_ROOT, "backend", "app")
 
 CORE_MODULES = [
+    "credential_transitions.py",
+    "transport_credential_updates.py",
+    "telemetry_config_api.py",
     "models.py",
     "graph_engine.py",
     "log_engine.py",
+    "universe_batch1_engine.py",
+    "universe_batch2_engine.py",
+    "universe_batch3_engine.py",
+    "universe_batch4_engine.py",
+    "universe_batch5_engine.py",
+    "universe_batch6_engine.py",
+    "universe_batch7_engine.py",
+    "sample_replay.py",
+    "replay_service.py",
+    "replay_packs.py",
+    "delivery_monitor.py",
+    "universal_search.py",
+    "hec_connection_test.py",
+    "incident_packs.py",
+    "netflow_solution.py",
+    "netflow_wire.py",
     "scenario_runner.py",
     "snmp_engine.py",
+    "snmp_metrics.py",
+    "panos_generator.py",
     "gnmi_engine.py",
     "fault_injection_engine.py",
     "telemetry_dispatcher.py",
     "cisco_sample_provider.py",
     "spl_engine.py",
     "use_case_repo.py",
+    "use_case_explorer.py",
     "noc_soc_metrics.py",
     "catalog.py",
+    "catalog_contracts.py",
+    "pack_contracts.py",
+    "phase8c_reference_packs.py",
+    "phase9_security_packs.py",
+    "phase12_security_packs.py",
+    "wave1_authentic_engine.py",
+    "wave2_authentic_engine.py",
+    "wave3_authentic_engine.py",
+    "authentic_scenario_packs.py",
+    "release_candidate.py",
+    "security_content_lab.py",
+    "industry_packs.py",
+    "dashboard_recipes.py",
+    "security_state.py",
+    "security_analytics.py",
+    "dns_wire.py",
+    "unified_generation.py",
+    "native_runtime.py",
+    "scenario_studio.py",
+    "vendor_coverage.py",
+    "cisco_scenario_factory.py",
     "vendor_catalog.py",
     "exporter_session.py",
     "netflow_v9_encoder.py",
@@ -75,6 +118,10 @@ GNMI_SUBPACKAGE_FILES = [
 
 CANONICAL_CATALOG_DIR = os.path.join(REPO_ROOT, "catalog")
 VENDOR_STATIC_JSON = os.path.join(REPO_ROOT, "netspout", "appserver", "static", "vendor_catalog.json")
+EXTERNAL_METADATA_CATALOGS = {
+    "phase13a_splunk_security_content.json",
+    "phase13a_security_content_coverage.json",
+}
 
 GENERATED_HEADER = """# =========================================================================
 # AUTO-GENERATED PACKAGED COPY — DO NOT EDIT DIRECTLY!
@@ -84,17 +131,21 @@ GENERATED_HEADER = """# ========================================================
 """
 
 
-def sync_core():
+def sync_core(modules=None):
+    selected_modules = CORE_MODULES if modules is None else modules
+    if any(mod not in CORE_MODULES for mod in selected_modules):
+        raise ValueError("Unknown core module")
     print(f"⚡ NetSpout: Synchronizing Canonical Core from {SRC_CORE_DIR}...")
     os.makedirs(SPLUNK_CORE_DIR, exist_ok=True)
 
     # 1. Sync __init__.py into SPLUNK_CORE_DIR
     src_init = os.path.join(SRC_CORE_DIR, "__init__.py")
     dst_init = os.path.join(SPLUNK_CORE_DIR, "__init__.py")
-    shutil.copy2(src_init, dst_init)
+    if modules is None:
+        shutil.copy2(src_init, dst_init)
 
     # 2. Sync exact canonical modules into netspout/bin/netspout_core/
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         if not os.path.exists(src_path):
             print(f"❌ Error: Missing canonical module {src_path}")
@@ -104,7 +155,7 @@ def sync_core():
         print(f"  [CORE_COPY] {mod} -> netspout/bin/netspout_core/{mod}")
 
     # 2b. Sync gnmi/ subpackage into netspout/bin/netspout_core/gnmi/ and backend/app/gnmi/
-    for rel_file in GNMI_SUBPACKAGE_FILES:
+    for rel_file in (GNMI_SUBPACKAGE_FILES if modules is None else []):
         src_path = os.path.join(SRC_CORE_DIR, rel_file)
         if not os.path.exists(src_path):
             print(f"❌ Error: Missing canonical gNMI subpackage file {src_path}")
@@ -119,7 +170,7 @@ def sync_core():
             print(f"  [GNMI_COPY] {rel_file} -> {label}/{rel_file}")
 
     # 3. Generate packaged copies in netspout/bin/ with auto-generated header
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         dst_path = os.path.join(SPLUNK_BIN_DIR, mod)
         with open(src_path, "r", encoding="utf-8") as f:
@@ -130,7 +181,7 @@ def sync_core():
         print(f"  [SPLUNK_COPY] netspout/bin/{mod}")
 
     # 4. Generate runtime copies in backend/app/ with auto-generated header
-    for mod in CORE_MODULES:
+    for mod in selected_modules:
         src_path = os.path.join(SRC_CORE_DIR, mod)
         dst_path = os.path.join(BACKEND_APP_DIR, mod)
         with open(src_path, "r", encoding="utf-8") as f:
@@ -139,6 +190,10 @@ def sync_core():
         with open(dst_path, "w", encoding="utf-8") as f:
             f.write(header + code)
         print(f"  [BACKEND_COPY] backend/app/{mod}")
+
+    if modules is not None:
+        print("✅ Selected core module synchronization complete.")
+        return
 
     # 5. Sync Canonical Catalog JSON files
     catalog_targets = [
@@ -152,10 +207,32 @@ def sync_core():
         for target in catalog_targets:
             os.makedirs(target, exist_ok=True)
             for jf in json_files:
+                if (
+                    jf in EXTERNAL_METADATA_CATALOGS
+                    and target not in {SPLUNK_BIN_DIR + "/catalog_data", BACKEND_APP_DIR + "/catalog_data"}
+                ):
+                    continue
                 src_json = os.path.join(CANONICAL_CATALOG_DIR, jf)
                 dst_json = os.path.join(target, jf)
                 shutil.copy2(src_json, dst_json)
-            print(f"  [CATALOG_SYNC] {len(json_files)} catalog JSONs -> {os.path.relpath(target, REPO_ROOT)}")
+            copied = sum(
+                jf not in EXTERNAL_METADATA_CATALOGS
+                or target in {SPLUNK_BIN_DIR + "/catalog_data", BACKEND_APP_DIR + "/catalog_data"}
+                for jf in json_files
+            )
+            print(f"  [CATALOG_SYNC] {copied} catalog JSONs -> {os.path.relpath(target, REPO_ROOT)}")
+
+    # 5b. Ship the authentic recordings the replay registry points at: the deployed app has no repository checkout to read them from
+    registry = os.path.join(CANONICAL_CATALOG_DIR, "replay_sources.json")
+    if os.path.isfile(registry):
+        import json as _json
+        with open(registry, encoding="utf-8") as fh:
+            files = sorted({src["file"] for src in _json.load(fh)["sources"]})
+        for rel in files:
+            dest = os.path.join(REPO_ROOT, "netspout", rel)
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            shutil.copyfile(os.path.join(REPO_ROOT, rel), dest)
+        print(f"  [REPLAY_SAMPLES] {len(files)} recorded sample files -> netspout/catalog/raw_reference")
 
     # 6. Generate netspout/appserver/static/vendor_catalog.json from Canonical Catalog
     try:
@@ -175,5 +252,33 @@ def sync_core():
     print("✅ Canonical Core synchronization complete.")
 
 
+def sync_discovery():
+    """Refresh the existing recipe mirrors and its native browser projection."""
+    import importlib.util
+    path = os.path.join(REPO_ROOT, "scripts", "build_discovery_catalog.py")
+    spec = importlib.util.spec_from_file_location("pulseforge_discovery_build", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for target in (os.path.join(SPLUNK_CORE_DIR, "catalog_data"),
+                   os.path.join(SPLUNK_BIN_DIR, "catalog_data"),
+                   os.path.join(BACKEND_APP_DIR, "catalog_data"),
+                   os.path.join(REPO_ROOT, "netspout", "catalog")):
+        shutil.copy2(os.path.join(CANONICAL_CATALOG_DIR, "dashboard_recipes.json"), target)
+    module.generate()
+    print("✅ Native discovery projection, dashboards and recipe mirrors synchronized.")
+
+
 if __name__ == "__main__":
-    sync_core()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--modules', nargs='+', choices=CORE_MODULES,
+                        help='Sync only selected modules; leave catalogs and other files untouched')
+    parser.add_argument('--discovery', action='store_true',
+                        help='Sync only native discovery projection and recipe catalogs')
+    args = parser.parse_args()
+    if args.discovery:
+        sync_discovery()
+    else:
+        sync_core(args.modules)
+        if args.modules is None:
+            sync_discovery()

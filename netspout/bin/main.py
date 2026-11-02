@@ -11,7 +11,7 @@ import csv
 import io
 import os
 from typing import List, Dict, Set
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query, Response
+from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, Query, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
@@ -22,6 +22,13 @@ from app.models import (
     ZoneAnnotation, NodePowerState, NodeHardware,
     TelemetryTransportConfig, SyslogTestRequest,
     FaultScenarioType, FaultInjectionRequest, FaultRecoveryRequest, FaultEventRecord
+)
+from app.transport_credential_updates import (
+    CredentialUpdateError, update_shared_transport,
+)
+from app.telemetry_config_api import (
+    TelemetryConfigRoute, TelemetryConfigUpdate, CONFIG_UPDATE_RESPONSES,
+    invalid_update_error,
 )
 from app.telemetry_dispatcher import dispatcher
 from app.scenario_runner import ScenarioRunner
@@ -529,16 +536,29 @@ async def get_telemetry_config():
     }
 
 
-@app.post("/api/telemetry/config")
-async def set_telemetry_config(config: TelemetryTransportConfig):
+telemetry_config_router = APIRouter(route_class=TelemetryConfigRoute)
+
+
+@telemetry_config_router.post("/api/telemetry/config", responses=CONFIG_UPDATE_RESPONSES)
+async def set_telemetry_config(config: TelemetryConfigUpdate):
     global current_topology
-    current_topology.global_transport = config
+    try:
+        payload = (config.model_dump(exclude_unset=True) if hasattr(config, "model_dump")
+                   else config.dict(exclude_unset=True))
+        candidate = update_shared_transport(
+            current_topology.global_transport, payload, TelemetryTransportConfig
+        )
+    except CredentialUpdateError:
+        raise invalid_update_error() from None
+    current_topology.global_transport = candidate
     return {
         "status": "success",
         "message": "Telemetry transport updated",
         "global_transport": current_topology.global_transport
     }
 
+
+app.include_router(telemetry_config_router)
 
 @app.post("/api/faults/inject")
 async def inject_fault_endpoint(req: FaultInjectionRequest):

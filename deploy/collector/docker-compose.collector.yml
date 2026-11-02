@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   init-volume:
-    image: busybox:1.36
+    image: busybox:1.36@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
     container_name: netspout-flow-init
     command: ["sh", "-c", "chmod 777 /flows && touch /flows/flows.json && chmod 666 /flows/flows.json"]
     volumes:
@@ -10,7 +10,7 @@ services:
     restart: "no"
 
   netspout-flow-collector:
-    image: netsampler/goflow2:v2.2.5
+    image: netsampler/goflow2:v2.2.5@sha256:780f95c076bd3eb94d578d3f11c93ad289997edebdd8e48c9ce4801d160f238a
     user: "100:65533"
     container_name: netspout-flow-collector
     cap_drop:
@@ -19,7 +19,8 @@ services:
       - no-new-privileges:true
     command:
       - -listen
-      - netflow://:2055,netflow://:4739
+      # workers=1: with several workers sharing one socket, a data datagram can reach a worker that never saw the template and is dropped ("template error")
+      - netflow://:2055?workers=1,netflow://:4739?workers=1
       - -format
       - json
       - -transport
@@ -35,6 +36,12 @@ services:
     depends_on:
       init-volume:
         condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/store"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -53,9 +60,10 @@ services:
     security_opt:
       - no-new-privileges:true
     environment:
-      - SPLUNK_HEC_URL=https://host.docker.internal:8888/services/collector/event
-      - SPLUNK_HEC_TOKEN=00000000-0000-0000-0000-000000000000
-      - SPLUNK_INDEX=idx_network_ops
+      - SPLUNK_HEC_URL=${SPLUNK_HEC_URL:-https://host.docker.internal:8888/services/collector/event}
+      - SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?Set SPLUNK_HEC_TOKEN before starting the collector}
+      - SPLUNK_HEC_ALLOW_INSECURE_TLS=${SPLUNK_HEC_ALLOW_INSECURE_TLS:-false}
+      - SPLUNK_INDEX=${SPLUNK_INDEX:-idx_network_ops}
       - SPLUNK_SOURCETYPE=netflow:collector
       - FLOW_FILE=/flows/flows.json
       - STATUS_PORT=8082
@@ -69,7 +77,13 @@ services:
       init-volume:
         condition: service_completed_successfully
       netspout-flow-collector:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8082/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
     logging:
       driver: "json-file"

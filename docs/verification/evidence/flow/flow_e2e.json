@@ -1,0 +1,57 @@
+{
+ "generated_utc": "2026-10-31T00:50Z",
+ "collector": "netsampler/goflow2:v2.2.5 (independent, third-party decoder)",
+ "exporter": "PulseForge NetFlow v9 and IPFIX encoders over UDP",
+ "lab": "isolated Docker Splunk Enterprise 10.2.7",
+ "passed": 5,
+ "failed": [],
+ "checks": {
+  "01_collector_decoded_every_datagram": {
+   "pass": true,
+   "sent": 6,
+   "decoded": 6
+  },
+  "02_decoded_fields_equal_the_records_sent_v9_and_ipfix": {
+   "pass": true,
+   "mismatches": [],
+   "fields": [
+    "type",
+    "src_addr",
+    "dst_addr",
+    "src_port",
+    "dst_port",
+    "proto",
+    "bytes",
+    "packets",
+    "etype",
+    "in_if",
+    "out_if"
+   ]
+  },
+  "03_template_then_data_semantics_both_protocols": {
+   "pass": true,
+   "types": [
+    "IPFIX",
+    "NETFLOW_V9"
+   ]
+  },
+  "04_forwarder_delivered_every_decoded_flow_to_hec": {
+   "pass": true,
+   "delivered": 6
+  },
+  "05_splunk_holds_the_decoded_flows_per_protocol": {
+   "pass": true,
+   "indexed": {
+    "IPFIX": 3,
+    "NETFLOW_V9": 3
+   }
+  }
+ },
+ "not_claimed": [
+  "sFlow",
+  "J-Flow beyond NetFlow v9 compatibility",
+  "IPv6 flows",
+  "Cisco Flexible NetFlow templates beyond the encoder's standard fields",
+  "Splunk Stream or other vendor flow add-ons"
+ ]
+}

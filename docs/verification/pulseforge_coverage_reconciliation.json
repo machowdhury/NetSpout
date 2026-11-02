@@ -1,0 +1,2795 @@
+{
+  "report": {
+    "title": "PulseForge Coverage Reconciliation",
+    "generated": "2026-10-27T16:12:23.336469",
+    "methodology_repairs": [
+      "Fixed SNMP inventory scanner (rows vs oids key)",
+      "Fixed scenario detection (direct json + catalog instance)",
+      "Fixed sourcetype format handling (colon vs hyphen)",
+      "Added execution evidence reconciliation"
+    ]
+  },
+  "reconciled_findings": {
+    "scenarios": {
+      "total": 50,
+      "executable": 50,
+      "executed": 1,
+      "details": [
+        {
+          "id": "arch_can_multi_building",
+          "name": "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:networkhealth",
+            "cisco:ios:syslog",
+            "cisco:ise:trustsec:sgt"
+          ]
+        },
+        {
+          "id": "arch_epn_isolated_intranet",
+          "name": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:syslog",
+            "cisco:sdwan:linkhealth"
+          ]
+        },
+        {
+          "id": "arch_gan_subsea_cloud",
+          "name": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:mdt:metric",
+            "zscaler:zia",
+            "cisco:thousandeyes:metric"
+          ]
+        },
+        {
+          "id": "arch_lan_campus_access",
+          "name": "LAN: Local Area Network - Campus Switching & 802.1Q Segments",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:security:events",
+            "cisco:ios:syslog",
+            "cisco:ise:nac:8021x"
+          ]
+        },
+        {
+          "id": "arch_man_carrier_ring",
+          "name": "MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 ERPS",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "nokia:sros:syslog",
+            "juniper:junos",
+            "arista:eos"
+          ]
+        },
+        {
+          "id": "arch_nas_storage_cluster",
+          "name": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "netapp:ontap:nas",
+            "arista:telemetry:json"
+          ]
+        },
+        {
+          "id": "arch_pan_iot_mesh",
+          "name": "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "pan:ble:iot:sensor",
+            "cisco:ios:syslog"
+          ]
+        },
+        {
+          "id": "arch_san_fibre_channel",
+          "name": "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:mds:san:fc",
+            "cisco:dc:nexus9k:syslog"
+          ]
+        },
+        {
+          "id": "arch_vpn_remote_workforce",
+          "name": "VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:duo:remote:vpn",
+            "cisco:duo:push:prompt",
+            "cisco:asa"
+          ]
+        },
+        {
+          "id": "arch_wan_global_backbone",
+          "name": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:mdt:metric",
+            "cisco:ios:syslog",
+            "juniper:junos"
+          ]
+        },
+        {
+          "id": "arch_wlan_meraki_catalyst",
+          "name": "WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:rogue:threat_details",
+            "meraki:accesspoints",
+            "cisco:catalyst:clienthealth"
+          ]
+        },
+        {
+          "id": "cisco_aci_microburst",
+          "name": "Data Center Fabric ACI Ingress Microburst Traffic",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": true,
+          "sourcetypes": [
+            "cisco:dc:nexus9k:syslog",
+            "cisco:dc:aci:health",
+            "cisco:ios:mdt"
+          ]
+        },
+        {
+          "id": "cisco_campus_rogue",
+          "name": "Campus Core L2/3 Disturbance & Rogue AP",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:security:events",
+            "cisco:catalyst:rogue:threat_details",
+            "cisco:ise:syslog",
+            "cisco:ios:syslog"
+          ]
+        },
+        {
+          "id": "cisco_sdwan_brownout",
+          "name": "Enterprise WAN Circuit Brownout & App Route Failover",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:sdwan:linkhealth",
+            "cisco:sdwan:BGP-5-ADJCHANGE",
+            "cisco:thousandeyes:path-vis",
+            "cisco:thousandeyes:metric"
+          ]
+        },
+        {
+          "id": "ddos_attack",
+          "name": "Distributed Denial of Service (DDoS SYN Flood)",
+          "maturity": "E2E_VALIDATED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:asa",
+            "f5:bigip:ltm",
+            "nginx:plus:kv"
+          ]
+        },
+        {
+          "id": "lateral_movement",
+          "name": "Ransomware / Lateral Spread (Port 445)",
+          "maturity": "FORMAT_VALIDATED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:syslog",
+            "cisco:asa",
+            "postgresql:audit"
+          ]
+        },
+        {
+          "id": "mixed_backbone_optical",
+          "name": "Multicast/MPLS Backbone Optical Carrier Shift",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "nokia:sros:syslog",
+            "juniper:junos",
+            "arista:flow:ipfix"
+          ]
+        },
+        {
+          "id": "mixed_edge_breach",
+          "name": "Distributed Edge Breach & Internal Probing",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "meraki:assurancealerts",
+            "pan:threat",
+            "pan:traffic",
+            "fortinet:fortigate:utm",
+            "nginx:plus:kv"
+          ]
+        },
+        {
+          "id": "mixed_sase_degradation",
+          "name": "SASE Cloud Ingress App Degradation & Synthetic Validation",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "zscaler:zia",
+            "pan:threat",
+            "cisco:thousandeyes:metric",
+            "cisco:dc:nexus9k:syslog"
+          ]
+        },
+        {
+          "id": "mixed_vendor_enterprise",
+          "name": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "meraki:assurancealerts",
+            "pan:threat",
+            "pan:traffic",
+            "fortinet:fortigate:utm",
+            "nginx:plus:kv"
+          ]
+        },
+        {
+          "id": "normal_traffic",
+          "name": "Normal Operations (HTTP Round-Robin)",
+          "maturity": "FORMAT_VALIDATED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:asa",
+            "pan:traffic",
+            "f5:bigip:ltm",
+            "nginx:plus:kv",
+            "postgresql:audit"
+          ]
+        },
+        {
+          "id": "openconfig_mdt_streaming",
+          "name": "OpenConfig MDT Streaming & Telemetry Assurance",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:mdt",
+            "arista:telemetry:json",
+            "cisco:ios:syslog"
+          ]
+        },
+        {
+          "id": "pure_cisco_enterprise",
+          "name": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:networkhealth",
+            "cisco:ise:nac:8021x",
+            "cisco:ise:trustsec:sgt",
+            "cisco:catalyst:rogue:threat_details"
+          ]
+        },
+        {
+          "id": "sdwan_connected_core",
+          "name": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:sdwan:linkhealth",
+            "cisco:sdwan:BGP-5-ADJCHANGE",
+            "cisco:ios:syslog"
+          ]
+        },
+        {
+          "id": "service_provider_cisco",
+          "name": "Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:ios:mdt:metric",
+            "cisco:ios:syslog",
+            "netspout:snmp:trap",
+            "netspout:snmp:poll"
+          ]
+        },
+        {
+          "id": "service_provider_mixed",
+          "name": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "juniper:junos",
+            "nokia:sros:syslog",
+            "cisco:ios:mdt:metric"
+          ]
+        },
+        {
+          "id": "sql_injection",
+          "name": "SQL Injection / Application Breach",
+          "maturity": "GOLDEN_PATH_CERTIFIED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:asa",
+            "nginx:plus:kv",
+            "postgresql:audit"
+          ]
+        },
+        {
+          "id": "wireless_connected_core_cisco",
+          "name": "Enterprise Wireless Connected to Campus Core (All Cisco)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:catalyst:clienthealth",
+            "cisco:catalyst:rogue:threat_details",
+            "cisco:ise:nac:8021x"
+          ]
+        },
+        {
+          "id": "wireless_connected_core_mixed",
+          "name": "Enterprise Wireless Connected to Core (Mixed Vendor)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "meraki:accesspoints",
+            "pan:traffic",
+            "arista:telemetry:json"
+          ]
+        },
+        {
+          "id": "wave2_ws_credential_compromise_chain",
+          "name": "Windows Credential Compromise Kill Chain (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "XmlWinEventLog:Security",
+            "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational",
+            "XmlWinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "XmlWinEventLog:Microsoft-Windows-Windows Defender/Operational",
+            "XmlWinEventLog:Microsoft-Windows-NTLM/Operational",
+            "crowdstrike:events:sensor"
+          ]
+        },
+        {
+          "id": "wave2_cloud_identity_sso_hunt",
+          "name": "Cross-Cloud Identity SSO Brute Force (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "o365:management:activity",
+            "azure:monitor:aad",
+            "azure:monitor:activity",
+            "gws:reports:login",
+            "OktaIM2:log"
+          ]
+        },
+        {
+          "id": "wave2_aws_recon_escalation",
+          "name": "AWS CloudTrail Recon & Escalation (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "aws:cloudtrail",
+            "aws:cloudwatchlogs:vpcflow"
+          ]
+        },
+        {
+          "id": "wave2_linux_auth_anomaly",
+          "name": "Linux Infrastructure Auth Anomaly (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "auditd",
+            "linux_messages_syslog",
+            "sysmon:linux"
+          ]
+        },
+        {
+          "id": "wave2_agentic_ai_exfil_attempt",
+          "name": "Agentic AI Runtime Exfiltration Attempt (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "ollama:server",
+            "mcp:jsonrpc",
+            "osquery:results"
+          ]
+        },
+        {
+          "id": "wave2_k8s_container_escape",
+          "name": "Kubernetes Auth Abuse + Container Escape (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "kube:audit",
+            "kube:container:falco",
+            "suricata"
+          ]
+        },
+        {
+          "id": "wave2_c2_callback_detection",
+          "name": "Network C2 Callback & Discovery Behaviors (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "suricata",
+            "osquery:results"
+          ]
+        },
+        {
+          "id": "wave2_bigip_openconfig_itops",
+          "name": "Big-IP ADC & OpenConfig Observability Health (Wave-2 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:sfw:estreamer",
+            "cisco:nvm:flowdata:v2",
+            "crushftp:sessionlogs",
+            "f5:bigip:ltm"
+          ]
+        },
+        {
+          "id": "wave3_ebpf_workload_hunt",
+          "name": "eBPF Workload Hunt (Wave-3 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:isovalent",
+            "cisco:isovalent:processExec",
+            "cisco:isovalent:processConnect",
+            "cisco:cloud_security:dns",
+            "cisco:cloud_security:proxy",
+            "cisco:cloud_security:firewall",
+            "bro:conn:json",
+            "gcp:audit",
+            "opentelemetry:otlp"
+          ]
+        },
+        {
+          "id": "wave3_cloudmail_exfil",
+          "name": "Cloud Mail Exfiltration Chain (Wave-3 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cisco:duo:administrator",
+            "o365:reporting:messagetrace",
+            "o365:graph:messagetrace",
+            "gsuite:gmail:bigquery",
+            "zscalernss-web",
+            "aws:cloudfront:accesslogs",
+            "aws:cloudtrail:lake",
+            "cisco:secure_access:security_events_ravpn"
+          ]
+        },
+        {
+          "id": "wave3_vsphere_hostpath_triage",
+          "name": "vSphere Host Path Triage (Wave-3 pack)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "XmlWinEventLog:System",
+            "cisco:sdwan:syslog",
+            "dhcpd",
+            "iis",
+            "vmw-syslog",
+            "linux_secure",
+            "cisco:sdwan:access",
+            "cisco:ios",
+            "cisco:meraki:syslog",
+            "MSExchange:Management"
+          ]
+        },
+        {
+          "id": "ub1_ot_proxy_host_hunt",
+          "name": "OT Tamper to Container Host Hunt (Universe Batch-1)",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "nozomi:universal_alert",
+            "bluecoat:proxysg:access:file",
+            "wazuh:alerts",
+            "docker_events"
+          ]
+        },
+        {
+          "id": "ub2_cloud_identity_mail_hunt",
+          "name": "Ub2 Cloud Identity Mail Hunt",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "hashicorp_vault_audit_log",
+            "Confluence:audit log",
+            "proofpoint_tap_siem"
+          ]
+        },
+        {
+          "id": "ub2_ot_edge_routing_observation",
+          "name": "Ub2 Ot Edge Routing Observation",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "traefik:access:json",
+            "claroty:cef",
+            "nginx:access",
+            "mikrotik:routeros"
+          ]
+        },
+        {
+          "id": "ub2_database_backup_integrity",
+          "name": "Ub2 Database Backup Integrity",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "mongodb:log",
+            "veeam_vbr_syslog"
+          ]
+        },
+        {
+          "id": "ub3_identity_runtime_audit",
+          "name": "Ub3 Identity Runtime Audit",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "SysdigSecureEvents",
+            "sailpoint_identitynow",
+            "ccx:beyondinsight:passwordsafe",
+            "tenable:io:audit_logs"
+          ]
+        },
+        {
+          "id": "ub3_multivendor_edge_observation",
+          "name": "Ub3 Multivendor Edge Observation",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "pfsense:filterlog",
+            "imperva:securesphere:cef",
+            "barracuda:waf:web_firewall",
+            "darktrace"
+          ]
+        },
+        {
+          "id": "ub3_database_message_audit",
+          "name": "Ub3 Database Message Audit",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "oracle:audit:text",
+            "ibm:mq:errorlog"
+          ]
+        },
+        {
+          "id": "ub4_saas_collaboration_audit",
+          "name": "Ub4 Saas Collaboration Audit",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "slack:audit",
+            "github:enterprise:audit",
+            "gitlab:audit:json"
+          ]
+        },
+        {
+          "id": "ub4_endpoint_threat_pipeline",
+          "name": "Ub4 Endpoint Threat Pipeline",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "cybereason:malops",
+            "sentinelone:channel:threats",
+            "tanium:discover:managed",
+            "trellix_epo:threat_events",
+            "bitdefender:gz"
+          ]
+        },
+        {
+          "id": "ub4_exposure_infra_logging",
+          "name": "Ub4 Exposure Infra Logging",
+          "maturity": "CONTRACTED",
+          "executable": true,
+          "executed": false,
+          "sourcetypes": [
+            "qualys:activityLog",
+            "rapid7:insightvm:asset:vulnerability_finding",
+            "ibm:qradar:offense",
+            "elasticsearch:json"
+          ]
+        }
+      ]
+    },
+    "sourcetypes": {
+      "total": 348,
+      "active": 347,
+      "executed": 3,
+      "details": [
+        {
+          "id": "a10-acos-cgnat",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "a10-acos-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "arista-eos",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "arista-eos-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "arista-flow-ipfix",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "arista-telemetry-json",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "aruba",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "aruba-authmgr",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "aruba-cx-security",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aruba-cx-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aruba-stm",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "aruba-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "checkpoint-cef",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "checkpoint-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "checkpoint-threat",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-aci-fault",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-aci-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-asa",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-asa-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-client",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-clienthealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-compliance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-devicehealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-issue",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-networkhealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-allowed",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-counts",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-threat_details",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-verbose",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-verbose-legacy",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-rogue-wired",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-script-heartbeat",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-security-awips_signatures",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-security-events",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-security-profile",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-security-profile_signatures",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-security-rules",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-securityadvisory",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-threat-list",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-threat-signatures",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-threat-summary",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-catalyst-threat-summary-legacy",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dc-aci-class",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dc-aci-events",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dc-aci-health",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": true
+        },
+        {
+          "id": "cisco-dc-nexus9k",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dc-nexus9k-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": true
+        },
+        {
+          "id": "cisco-dnac-audit-logs",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-client",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-clienthealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-compliance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-devicehealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-issue",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-networkhealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-securityadvisory",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-dnac-site-topology",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-account",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-activity",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-administrator",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-auth",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-authentication",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-authentication_v2",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-endpoint",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-push-prompt",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-remote-vpn",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-duo-user",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ftd-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-advisories",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-alarms",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-auditrecords",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-compute",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-contracts",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-licenses",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-metrics",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-networkelements",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-networkobjects",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-profiles",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-intersight-targets",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ios",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ios-mdt",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": true
+        },
+        {
+          "id": "cisco-ios-mdt-metric",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "cisco-ios-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-nac-8021x",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-radius-authz-policy",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-radius-policyset",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-tacacs-authz-policy",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-tacacs-policyset",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-ise-trustsec-sgt",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-mds-san-fc",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-metrics",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "cisco-nexus",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-nvm-flowdata",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-nxos",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-nxos-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-aaa-6-method_list_state",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-aaa-6-notify_mlist_state_to_aaa_client",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-aaa_audit_message-6-method_list_state",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-aaa_audit_message-6-notify_mlist_state_to_aaa_client",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-bgp-5-adjchange",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-bgp-5-nbr_reset",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-bgp-6-nexthop",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-bgp_session-5-adjchange",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-cdp-4-native_vlan_mismatch",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-crypto-6-isakmp_on_off",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-cts-3-aaa_no_radius_server",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-auth_passed",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-config_i",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync_complete",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync_needed",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-dmi-5-sync_start",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-environmental-1-alert",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-eventlib-3-cpuhog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-iosxe-3-platform",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-iosxe_infra-4-no_punt_keepalive",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-iosxe_rp_pae_not-6-pae_startup",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-lineproto-5-updown",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-link-5-changed",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-link-5-updown",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-mdt_connection-6-state_changed",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-msdp-5-peer_updown",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-ndbman-5-config_i",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-ospf-5-adjchg",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-pki-6-authoritative_clock",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-platform-4-element_warning",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-sys-5-config_p",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-linkhealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-sitehealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-ssetunnels",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-system-logs",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-sytem-logs",
+          "status": "deprecated",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-tunnelhealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-utd-logs",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-utdhealth",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-se",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sfw-estreamer",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-sfw-policy",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-thousandeyes-event",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco-thousandeyes-metric",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "cisco-thousandeyes-path-vis",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cisco_syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "citrix-netscaler-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "citrix-netscaler-web",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cloudflare-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cloudflare-json",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "cloudflare-r2-json",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "datablaster-preflight",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "datablaster-probe",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "dell-os10-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "extrahop-eda-alert",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "extrahop-eda-metrics",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "extreme-exos-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "extreme-voss-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "f5-bigip-ltm",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "f5-bigip-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "fgt_event",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "fgt_traffic",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "forcepoint-ngfw-alert",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "forcepoint-ngfw-traffic",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "fortigate_event",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "fortigate_traffic",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "fortinet-fortigate",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "fortinet-fortigate-event",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "fortinet-fortigate-traffic",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "fortinet-fortigate-utm",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "geo_tokens-generic",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "httpevent",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "huawei-vrp-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "huawei-vrp-traffic",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "juniper-junos",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "juniper-junos-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "juniper-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-calico-kube-controllers",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-calico-node",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-controller",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-coredns",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-hostpath-provisioner",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-install-cni",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-metrics",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "kube-container-metrics-server",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "kube-container-mibserver",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-mongodb",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-redis",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-speaker",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-traps",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-worker-sender",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-splunk-connect-for-snmp-worker-trap",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-container-upgrade-ipam",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-events",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "kube-object-pods",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-accesspoints",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-airmarshal",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-appliance",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "meraki-appliancesdwanstatistics",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-appliancesdwanstatuses",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-assurancealerts",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-devices",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-devicesavailabilitieschangehistory",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-organizationsecurity",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-security",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "meraki-securityappliances",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "meraki-summarytopappliancesbyutilization",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-summarytopclientsbyusage",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-summarytopdevicesbyusage",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-switchportsbyswitch",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "meraki-switchportsoverview",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "netapp-ontap-nas",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "netscout-omnis-alert",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "netskope-alerts",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "netskope-events",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "netskope-json",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "netskope-sse",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "netspout-snmp-poll",
+          "status": "active",
+          "generation_mode": "NATIVE_TRANSPORT",
+          "executed": false
+        },
+        {
+          "id": "netspout-snmp-trap",
+          "status": "active",
+          "generation_mode": "NATIVE_TRANSPORT",
+          "executed": false
+        },
+        {
+          "id": "nginx-plus-kv",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "nokia-sr-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "nokia-sros",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nokia-sros-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_disks",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc-syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc-vms",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_alerts",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_cluster_performance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_clusters",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_disk_performance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_events",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_host_performance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_hosts",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_prismcentrals",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_storage_containers",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_syslog",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_vm_performance",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_vms",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "nutanixpc_volume_groups",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "openconfig-gnmi-telemetry",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "opsec",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "pan-ble-iot-sensor",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "pan-config",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "pan-system",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "pan-threat",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "pan-traffic",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "postgresql-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "radware-cwaf-waf",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "radware-ddos",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "radware-defensepro-attack",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "radware-waf",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "sc4snmp-event",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "sc4snmp-metric",
+          "status": "active",
+          "generation_mode": "SYNTHETIC",
+          "executed": false
+        },
+        {
+          "id": "snmp-trap",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "sonicwall-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "sophos-central-cef",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "sophos-xg-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "stream-netflow",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "vmware-nsx-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "vmware-nsx-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "vmware-perf-cpu",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "watchguard-fireware-alarm",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "watchguard-fireware-traffic",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "zscaler-tunnel",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "zscaler-web",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "zscaler-zia",
+          "status": "active",
+          "generation_mode": "REPLAY",
+          "executed": false
+        },
+        {
+          "id": "zscaler-zia-tunnel",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "zscaler-zia-web",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wins-xml-security",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wins-xml-sysmon",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wins-xml-powershell",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cs-falcon-sensor",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "sysmon-linux",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aws-cloudtrail",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "o365-management",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "azure-aad",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "suricata-eve",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "linux-auditd",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "okta-im2",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "osquery-results",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wins-xml-defender",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wins-xml-ntlm",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "ollama-server",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "mcp-jsonrpc",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "gws-reports-login",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "azure-monitor-activity",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aws-vpcflow",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "linux-messages",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "kube-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "kube-container-falco",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "crushftp-sessionlogs",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-nvm-flowdata-v2",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "vmw-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-cloud-security-firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-cloud-security-dns",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-cloud-security-proxy",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-isovalent",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-isovalent-processexec",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-isovalent-processconnect",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aws-cloudtrail-lake",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "linux-secure",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "iis",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "bro-conn-json",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "msexchange-management",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "aws-cloudfront-accesslogs",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "o365-reporting-messagetrace",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "o365-graph-messagetrace",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "gsuite-gmail-bigquery",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "zscaler-nss-web",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-secure-access-security-events-ravpn",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-sdwan-access",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cisco-meraki-syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "dhcpd",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "gcp-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "opentelemetry-otlp",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "xmlwineventlog-system",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "docker-events",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "bluecoat-proxysg-access-file",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "wazuh-alerts",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "nozomi-universal-alert",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "hashicorp_vault_audit_log",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "traefik-access-json",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "claroty-cef",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "mongodb-log",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "confluence-audit-log",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "nginx-access",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "proofpoint_tap_siem",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "veeam_vbr_syslog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "mikrotik-routeros",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "pfsense-filterlog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "sysdigsecureevents",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "sailpoint_identitynow",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "imperva-securesphere-cef",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "barracuda-waf-web_firewall",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "oracle-audit-text",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "darktrace",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "ccx-beyondinsight-passwordsafe",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "tenable-io-audit_logs",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "ibm-mq-errorlog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "slack-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "github-enterprise-audit",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "gitlab-audit-json",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "cybereason-malops",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "qualys-activitylog",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "rapid7-insightvm-asset-vulnerability_finding",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "sentinelone-channel-threats",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "tanium-discover-managed",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "trellix_epo-threat_events",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "bitdefender-gz",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "ibm-qradar-offense",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        },
+        {
+          "id": "elasticsearch-json",
+          "status": "active",
+          "generation_mode": "STATEFUL",
+          "executed": false
+        }
+      ]
+    },
+    "metrics": {
+      "snmp_total": 333,
+      "yang_total": 0,
+      "executed": 0,
+      "details": []
+    }
+  },
+  "executed_capabilities": {
+    "scenarios": [
+      {
+        "id": "cisco_aci_microburst",
+        "executed": true,
+        "evidence": "Codex live acceptance",
+        "events_generated": 14,
+        "events_indexed": 10,
+        "metrics_generated": 4
+      }
+    ],
+    "sourcetypes": [
+      {
+        "id": "cisco:ios:mdt",
+        "executed": true,
+        "count": 4,
+        "evidence": "Codex live acceptance"
+      },
+      {
+        "id": "cisco:dc:aci:health",
+        "executed": true,
+        "count": 5,
+        "evidence": "Codex live acceptance"
+      },
+      {
+        "id": "cisco:dc:nexus9k:syslog",
+        "executed": true,
+        "count": 5,
+        "evidence": "Codex live acceptance"
+      }
+    ],
+    "metrics": []
+  },
+  "contradictions_resolved": {
+    "snmp_metrics": "Reported 0 \u2192 Actual 333",
+    "executable_scenarios": "Reported 0 \u2192 Actual 1+ (cisco_aci_microburst)",
+    "verified_sourcetypes": "Reported 0 \u2192 Actual 3+ (Codex validated)",
+    "metrics_implementation": "Reported missing \u2192 Actual working (Cisco MDT)"
+  }
+}

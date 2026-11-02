@@ -1,0 +1,134 @@
+[
+  {
+    "id": "slack",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/slack/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/slack.bin",
+    "bytes": 6529,
+    "sha256": "9c85b612dd8ab09e64e31dc7cb7519568ff0297aa73439a33a0a79ebb61ff568",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "github",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-json.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/github.bin",
+    "bytes": 7151,
+    "sha256": "b5c7dbb8429d8a5a2e9216064def7829f05336d44c700dcd4c0cf45a70dd2842",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "gitlab",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/gitlab/data_stream/audit/_dev/test/pipeline/test-audit.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/gitlab.bin",
+    "bytes": 1804,
+    "sha256": "fbe75a3d0d47bb1aaddd3d92435a53c9acce60b245ba5ebcd5ce0c145e737caa",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "cybereason",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/cybereason/data_stream/malop_process/_dev/test/pipeline/test-malop-process.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/cybereason.bin",
+    "bytes": 16314,
+    "sha256": "6792557b2e51c91e266046a9a91285ff65f393dbde636f82bbfba77c1a69088e",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "qualys",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/qualys_vmdr/data_stream/user_activity/_dev/test/pipeline/test-yes-preserve-custom.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/qualys.bin",
+    "bytes": 2017,
+    "sha256": "57a5994480679e437d1bfbf1ba1951b37c48d2eda72893e1a792ca6b318e986e",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "rapid7",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/rapid7_insightvm/data_stream/asset_vulnerability/_dev/test/pipeline/test-asset-vulnerability.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/rapid7.bin",
+    "bytes": 118769,
+    "sha256": "f654d06b5655941f606bf9afd91672253c137b25e62a93220d3109a709710611",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "sentinelone",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/sentinel_one/data_stream/threat/_dev/test/pipeline/test-pipeline-threat.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/sentinelone.bin",
+    "bytes": 39014,
+    "sha256": "f5fdd8eac662dd4eda40b044207633574b5cef5f82df3eefdcc80bbf4c8f8d3a",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "tanium",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/tanium/data_stream/discover/_dev/test/pipeline/test-discover.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/tanium.bin",
+    "bytes": 623,
+    "sha256": "4a0ae021b06e8fcec7cb73ff5408126aa8d9408d23ee8b4455e9fbc94a27b5e7",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "trellix",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/trellix_epo_on_prem/data_stream/threat_event/_dev/test/pipeline/test-threat-event.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/trellix.bin",
+    "bytes": 22217,
+    "sha256": "aa8bc37aedefcd6028bd949197cfe4c6977070389e8c0931cc36b0237622f00e",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "bitdefender",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/bitdefender/data_stream/push_notifications/_dev/test/pipeline/test-push-notification.json",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/bitdefender.bin",
+    "bytes": 14714,
+    "sha256": "ec544919eb1c3d01bd9e6946d12396b9195081392370edfb3d3ba995f5d463ad",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "ibm_qradar",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/ibm_qradar/data_stream/offense/_dev/test/pipeline/test-offense.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/ibm_qradar.bin",
+    "bytes": 3939,
+    "sha256": "f7c78f74dbe528e4f1c9ef8890bd21a1d99075ff0b3f100fc9c22d432f8a6e8c",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  },
+  {
+    "id": "elasticsearch",
+    "url": "https://raw.githubusercontent.com/elastic/integrations/37ef1a028f3cc4b049779fa20578f7ee6f3cddbe/packages/elasticsearch/data_stream/server/_dev/test/pipeline/test-server-logs.log",
+    "pinned_commit": "37ef1a028f3cc4b049779fa20578f7ee6f3cddbe",
+    "upstream": "elastic/integrations",
+    "raw_reference_file": "catalog/raw_reference/universe_batch4/elasticsearch.bin",
+    "bytes": 3392,
+    "sha256": "25e3e959a2b8e4a9fa8c81201229483d0468536438ec347adb7ef0367358bede",
+    "evidence_level": "INTEGRATION_TEST_RAW",
+    "limitation": "Public integration test reference, not a production capture or installed Splunk TA validation."
+  }
+]

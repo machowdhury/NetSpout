@@ -80,6 +80,8 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
                 return _reply(413, {"detail": "Request body too large"})
             hdrs = request.get("headers") or []  # persistconn sends a list of [name, value] pairs
             headers = {k: v for k, v in (hdrs.items() if isinstance(hdrs, dict) else hdrs) if k.lower() in FORWARD_HEADERS}
+            if os.environ.get("PULSEFORGE_GATEWAY_KEY"):  # shared secret the engine checks when it is configured with the same key
+                headers["X-PulseForge-Gateway-Key"] = os.environ["PULSEFORGE_GATEWAY_KEY"]
             req = urllib.request.Request(url, data=raw.encode() if method == "POST" else None, headers=headers, method=method)
             try:
                 with urllib.request.urlopen(req, timeout=120) as r:

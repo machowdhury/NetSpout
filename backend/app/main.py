@@ -118,6 +118,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def _require_gateway_key(request, call_next):
+    """Opt-in: with PULSEFORGE_GATEWAY_KEY set, only the Splunk gateway (which holds the key) may call the engine,
+    so Splunk authentication and roles cannot be bypassed by reaching the engine port. /api/health stays open for health checks."""
+    key = os.environ.get("PULSEFORGE_GATEWAY_KEY", "")
+    if key and request.url.path != "/api/health":
+        import hmac
+        if not hmac.compare_digest(request.headers.get("x-pulseforge-gateway-key", ""), key):
+            return Response(content='{"detail":"Engine requests must come through the Splunk gateway"}', status_code=401, media_type="application/json")
+    return await call_next(request)
+
+
 # Include destination router
 app.include_router(destination_router)
 

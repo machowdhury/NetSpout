@@ -1,0 +1,25 @@
+# PulseForge engine for an EXISTING Splunk. The engine is published on loopback only; the Splunk app's gateway
+# (NETSPOUT_BACKEND_URL) is the only intended client. Secrets come from the environment, never this file.
+#   NETSPOUT_HEC_TOKEN=... NETSPOUT_SPLUNK_PASSWORD=... docker compose -f deploy/docker/docker-compose.engine.yml up -d --build
+# This does not configure the Splunk side: install netspout.spl, point NETSPOUT_BACKEND_URL at this engine, authorize indexes in Connection Center.
+name: pulseforge-engine
+services:
+  engine:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.engine
+    environment:
+      NETSPOUT_HEC_TOKEN: ${NETSPOUT_HEC_TOKEN:-}
+      NETSPOUT_SPLUNK_PASSWORD: ${NETSPOUT_SPLUNK_PASSWORD:-}
+      PULSEFORGE_GATEWAY_KEY: ${PULSEFORGE_GATEWAY_KEY:-}
+    ports:
+      - "127.0.0.1:${PULSEFORGE_ENGINE_PORT:-8081}:8081"
+    volumes:
+      - engine_state:/var/lib/pulseforge
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+volumes:
+  engine_state:

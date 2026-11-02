@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-02",
+ "image": "deploy/docker/Dockerfile.engine (python:3.13-slim) via deploy/docker/docker-compose.engine.yml, project pf-install-test, host port 18093",
+ "result": {
+  "build": "ok",
+  "health": "healthy (container healthcheck)",
+  "search_NF-SEC-06": "1 result with relation label 'NetFlow profile of SEC-P9-A-TRAFFIC-FLOOD'",
+  "user": "uid 10001",
+  "root_fs": "read-only (write to /app refused)",
+  "restart": "healthy again; marker file in the state volume survived",
+  "published_ports": "127.0.0.1 only"
+ },
+ "defect_found_and_fixed": "first build failed search: network_incidents/telecom_incidents (in netspout/bin) were not copied; Dockerfile now copies them",
+ "not_tested": [
+  "Splunk app talking to this engine",
+  "HEC/search against a Splunk",
+  "all-in-one image (a second Splunk was not started: the demo lab was running)"
+ ],
+ "cleanup": "project and volume removed"
+}

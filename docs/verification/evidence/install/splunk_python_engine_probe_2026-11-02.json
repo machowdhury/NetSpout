@@ -1,0 +1,52 @@
+{
+ "date": "2026-11-02",
+ "splunk_image": "splunk/splunk:10.2 (Splunk 10.2.7), linux/amd64, throwaway container, splunkd not started",
+ "bundled_python": [
+  "3.9",
+  "3.13"
+ ],
+ "bundled_packages_in_splunk_python": {
+  "grpcio": "1.74.0",
+  "protobuf": "6.32.0",
+  "cryptography": "44.0.2"
+ },
+ "missing_in_splunk_python": [
+  "fastapi",
+  "pydantic",
+  "pydantic_core",
+  "httpx",
+  "uvicorn",
+  "websockets"
+ ],
+ "engine_pins": {
+  "grpcio": "1.84.0",
+  "protobuf": "7.36.2",
+  "cryptography": "50.0.2",
+  "pydantic": "2.14.0",
+  "fastapi": "0.143.0"
+ },
+ "vendored_for_probe": {
+  "wheels": 18,
+  "wheel_size": "3.8 MB",
+  "unpacked": "13 MB",
+  "compiled_extensions": [
+   "pydantic_core (cp313 manylinux x86_64)",
+   "websockets (cp313 manylinux x86_64)"
+  ]
+ },
+ "result": {
+  "import_app_main": "ok (0.8 s)",
+  "api_health": "healthy",
+  "api_search_NF-SEC-06": "total 1",
+  "gnmi_server_module_import": "ok (against Splunk's bundled grpc 1.74 / protobuf 6.32)"
+ },
+ "not_tested": [
+  "running the gNMI server on the bundled grpc",
+  "Python 3.9",
+  "aarch64 / macOS / Windows",
+  "engine running as a Splunk-managed process",
+  "long-running runs inside a persistent REST handler",
+  "AppInspect on a package that bundles compiled wheels"
+ ],
+ "note": "Feasibility only. This is not an installable single-package app."
+}

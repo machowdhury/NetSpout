@@ -65,3 +65,19 @@ Rebuild, reinstall with `update=true`; restart splunkd when the REST handler or 
 
 ## Troubleshooting
 See [09 Troubleshooting](09_TROUBLESHOOTING.md).
+
+## Developer and advanced installation
+
+For contributors and for deployments that cannot use the Docker options. Not the customer path.
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
+PYTHONPATH=src:backend .venv/bin/python scripts/build_splunk_package.py     # writes netspout.spl
+.venv/bin/python scripts/build_engine_package.py                            # writes pulseforge-engine.tar.gz
+export NETSPOUT_HEC_TOKEN='<your-hec-token>' NETSPOUT_SPLUNK_PASSWORD='<your-splunk-password>'
+cd backend && PYTHONPATH=../src:. ../.venv/bin/python run.py --host 127.0.0.1 --port 8081
+```
+
+The Splunk gateway finds the engine through `NETSPOUT_BACKEND_URL` (one `KEY=value` per line in `splunk-launch.conf`); the default is `http://127.0.0.1:8081`, or `host.docker.internal:8081` inside a container. To stop other clients from calling the engine directly, set the same `PULSEFORGE_GATEWAY_KEY` for the engine and for splunkd (opt-in; the engine then answers 401 to requests without the key, except `/api/health`). Do not use port 8081 if another engine owns it.
+
+Engine-only Docker (existing Splunk, or the Cloud edition): `NETSPOUT_HEC_TOKEN=... NETSPOUT_SPLUNK_PASSWORD=... docker compose -f deploy/docker/docker-compose.engine.yml up -d --build`. It publishes the engine on `127.0.0.1` only, runs as a non-root user on a read-only root filesystem and keeps state in a named volume.

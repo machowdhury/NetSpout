@@ -2,6 +2,9 @@
 
 **Status: USER VALIDATION PENDING.** The maintainers did not connect to, install into or test any Splunk Cloud stack, and nothing here is a certification.
 
+## Scope: dashboards plus a customer-hosted engine
+This is **two parts, not a seamless single app**. `netspout_cloud.spl` delivers dashboards only; generation runs in an engine you host (engine-only Docker: `deploy/docker/docker-compose.engine.yml`). A single full package for Splunk Cloud is not feasible: Cloud vetting prohibits programmatic UDP and the engine hosts listeners. Evidence and the Enterprise single-package plan: [install architecture decision](../architecture/PULSEFORGE_INSTALL_ARCHITECTURE_DECISION.md). Nothing here is Splunk Cloud approval.
+
 ## Why there is a separate Cloud edition
 `netspout.spl` (Enterprise app) was inspected with Splunk AppInspect 4.4.0 using the Splunk Cloud ruleset (`--mode precert --included-tags cloud`), evidence `docs/verification/evidence/appinspect/cloud.json`: **0 errors, 8 failures, 11 warnings, 137 passed**. The failures: UDP network communications in the engine modules (25 findings: SNMP, syslog, flow), a modular input and REST handlers without the required `python.version`/`python.required` settings, illegal `indexes.conf` properties, `is_configured = 1`, and a missing `[triggers]` stanza. Splunk Cloud cannot run a customer collector and prohibits programmatic UDP, so the engine cannot live in the app.
 

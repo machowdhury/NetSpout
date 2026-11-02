@@ -29,32 +29,29 @@ Search → Select → Preview → Configure → Generate / Stream → Live Monit
 
 ## Quick start
 
-**Prerequisites:** Splunk Enterprise with admin access and an HEC token (tested on 10.2.7); an event index **you create yourself** (PulseForge never creates indexes); Python 3.11+ for the engine. Docker is a validated *lab* option, not a requirement.
+You use PulseForge through **Splunk Web** with your Splunk login. The engine is an internal component; you never open its port. Two ways to install:
 
-The shortest verified path (full steps and troubleshooting: [Installation guide](docs/guides/03_INSTALLATION.md)):
-
+### 1. Install with Docker (evaluation, bundled Splunk Enterprise)
 ```bash
-# 1. Build the Splunk app and the engine package from this repository
-python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
-PYTHONPATH=src:backend .venv/bin/python scripts/build_splunk_package.py     # writes netspout.spl
-.venv/bin/python scripts/build_engine_package.py                            # writes pulseforge-engine.tar.gz
-
-# 2. Install netspout.spl in Splunk (Apps > Manage Apps > Install app from file), then RESTART splunkd
-
-# 3. Start the engine (secrets come from the environment, never from files in this repo)
-export NETSPOUT_HEC_TOKEN='<your-hec-token>' NETSPOUT_SPLUNK_PASSWORD='<your-splunk-password>'
-cd backend && PYTHONPATH=../src:. ../.venv/bin/python run.py --host 127.0.0.1 --port 8081
-
-# 4. In Splunk Web open the app > Use Case Explorer, finish Connection Center (HEC URL, search URL, authorized indexes), and run something
+cp .env.example .env        # set SPLUNK_PASSWORD and SPLUNK_HEC_TOKEN to your own values
+docker compose up -d --build
 ```
+Open <http://localhost:8000>, sign in with the Splunk credentials you set, and launch **NetSpout PulseForge** from the Apps menu. This starts Splunk Enterprise 10.2 with the app and the engine in one container.
+**Status:** validated in an isolated lab in earlier phases; **not re-run for this revision**. Known gaps (hardening planned, see the [architecture decision](docs/architecture/PULSEFORGE_INSTALL_ARCHITECTURE_DECISION.md)): the engine port is still published on loopback, and the collector and OTel services are not yet optional. For an existing Splunk, use the engine-only deployment in the [installation guide](docs/guides/03_INSTALLATION.md#c-the-engine-customer-hosted-no-repository-checkout-needed).
 
-The first run: search for `cloudtrail` (a sourcetype) or `5G core user-plane degradation` (a scenario), press **Run**, wait for **READY**, open the dashboard. Step-by-step tutorials: [User guide](docs/guides/05_USER_GUIDE.md).
+### 2. Install into Splunk (existing Splunk Enterprise)
+Install `netspout.spl` (Apps > Manage Apps > Install app from file), restart Splunk, and open the app.
+**Status: not yet a single package.** Today the app also needs the PulseForge engine as a separate, customer-run service (engine-only Docker image or `pulseforge-engine.tar.gz`). A single-package Enterprise install is **feasible but not built**: a feasibility probe ran the real engine inside Splunk's own Python with vendored packages, and a phased plan with acceptance tests is in the [architecture decision](docs/architecture/PULSEFORGE_INSTALL_ARCHITECTURE_DECISION.md). Do not expect it from this release.
+
+**Splunk Cloud:** `netspout_cloud.spl` is **dashboards only** (no generation). A full single-package Cloud app is not feasible (Cloud prohibits the UDP and listener functionality). The honest Cloud offering is dashboards plus a customer-hosted engine; Splunk Cloud validation has not been done and this is not an approval claim.
+
+After installing, open **Use Case Explorer**, finish **Connection Center** (HEC URL, search URL, event and metrics indexes you have authorized; PulseForge never creates indexes), then search `cloudtrail` or `5G core user-plane degradation`, press **Run**, wait for **READY**, and open the dashboard. Tutorials: [User guide](docs/guides/05_USER_GUIDE.md). Building from source and running the engine by hand are developer tasks: [developer and advanced installation](docs/guides/03_INSTALLATION.md#developer-and-advanced-installation).
 
 | Deployment | What it is | Status |
 |---|---|---|
-| Splunk Enterprise app + engine | `netspout.spl` + engine on a host you control | validated in an isolated lab |
-| Docker lab | `docker compose up -d` (`.env.example` → `.env`) | validated lab option, not a dependency |
-| Standalone engine | `pulseforge-engine.tar.gz` + `deploy/engine/install.sh` | packaged; see [installation, section C](docs/guides/03_INSTALLATION.md) |
+| Docker, bundled Splunk | `docker compose up -d --build` | validated lab option, not re-run for this revision |
+| Splunk Enterprise app + engine | `netspout.spl` + engine you run | validated in an isolated lab; single package is a plan, not a feature |
+| Engine only (existing Splunk or Cloud edition) | `deploy/docker/docker-compose.engine.yml` or `pulseforge-engine.tar.gz` | engine Docker image verified 2026-11-02; no Splunk attached in that test |
 | Splunk Cloud dashboards | `netspout_cloud.spl`: **dashboards only**, no engine, no generation | built; **Splunk Cloud validation is not done**; not an approval claim |
 
 ## What you can do

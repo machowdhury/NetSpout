@@ -1,0 +1,18 @@
+# PulseForge engine only (no Splunk). For an existing Splunk Enterprise (the app talks to it through the gateway)
+# or for the Splunk Cloud dashboards edition. Built from the repository root: docker build -f deploy/docker/Dockerfile.engine .
+FROM python:3.13-slim
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/app/src:/app/backend
+RUN useradd --system --uid 10001 --home-dir /var/lib/pulseforge pulseforge && install -d -o pulseforge /var/lib/pulseforge
+WORKDIR /app/backend
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+COPY src /app/src
+COPY backend /app/backend
+COPY catalog /app/catalog
+# the incident-pack generators live in the Splunk app's bin; the engine finds them under <root>/netspout/bin
+COPY netspout/bin/network_incidents.py netspout/bin/telecom_incidents.py /app/netspout/bin/
+USER pulseforge
+ENV NETSPOUT_CONFIG_DIR=/var/lib/pulseforge/config NETSPOUT_REPLAY_STATE=/var/lib/pulseforge/replay_sessions.json FAST_SIMULATION_HOST=0.0.0.0
+EXPOSE 8081
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=5 CMD python -c "import urllib.request,sys;sys.exit(0 if b'healthy' in urllib.request.urlopen('http://127.0.0.1:8081/api/health',timeout=4).read() else 1)"
+CMD ["python", "run.py", "--host", "0.0.0.0", "--port", "8081"]

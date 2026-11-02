@@ -310,5 +310,10 @@ def test_preview_states_phases_volume_and_blockers():
     p = main.explorer_preview('op:incident:telco_09_core_user_plane')
     assert p['runnable'] and p['volume']['events'] == 30 and p['volume']['metric_events'] == 10 and 'BASELINE' in [x['phase'] for x in p['volume']['phases']]
     assert p['dashboard']['view'] == 'pf_telco_09_core_user_plane' and 'Timing varies' in p['timing']['note']
-    b = main.explorer_preview('op:runner:arch_can_multi_building')   # still contract-only: a genuinely blocked scenario
+    # every defined scenario is runnable now, so exercise the blocked path with an entry that is made non-runnable for the test
+    real = main._explorer().get('op:contract:lateral_movement')
+    blocked = dict(real, runnable=False, blocked_reason='test: pretend this scenario has no executable telemetry', dashboard=None, scenario_id='no_such_scenario_for_preview')
+    from types import SimpleNamespace
+    with patch.object(main, '_explorer', return_value=SimpleNamespace(get=lambda _id: blocked)):
+        b = main.explorer_preview('op:contract:lateral_movement')
     assert not b['runnable'] and b['blockers'] and b['volume']['events'] is None and b['dashboard'] is None

@@ -141,6 +141,7 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_nas_storage_cluster",
     "openconfig_mdt_streaming"
    ],
    "status": "active"
@@ -506,7 +507,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "arch_wlan_meraki_catalyst"
+    "arch_wlan_meraki_catalyst",
+    "wireless_connected_core_cisco"
    ],
    "status": "active"
   },
@@ -607,7 +609,10 @@
    ],
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
-   "scenarios": [],
+   "scenarios": [
+    "arch_can_multi_building",
+    "pure_cisco_enterprise"
+   ],
    "status": "active"
   },
   {
@@ -678,7 +683,9 @@
    "cim_validated": false,
    "scenarios": [
     "arch_wlan_meraki_catalyst",
-    "cisco_campus_rogue"
+    "cisco_campus_rogue",
+    "pure_cisco_enterprise",
+    "wireless_connected_core_cisco"
    ],
    "status": "active"
   },
@@ -1167,6 +1174,7 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_san_fibre_channel",
     "cisco_aci_microburst",
     "mixed_sase_degradation"
    ],
@@ -2038,8 +2046,10 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_can_multi_building",
     "arch_epn_isolated_intranet",
     "arch_lan_campus_access",
+    "arch_pan_iot_mesh",
     "arch_wan_global_backbone",
     "cisco_campus_rogue",
     "lateral_movement",

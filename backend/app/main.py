@@ -2971,6 +2971,7 @@ def _explorer() -> UseCaseExplorer:
         pack_scenario_ids=SCENARIO_PACK_IDS,
         runner_scenario_ids=SUPPORTED_SCENARIO_IDS,
         contract_scenario_ids=__import__("netspout_core.scenario_contracts", fromlist=["ids"]).ids(),
+        contract_rows=__import__("netspout_core.scenario_contracts", fromlist=["catalog"]).catalog(),
         incident_packs=incident_catalog(),
         replay_packs=__import__('netspout_core.replay_packs', fromlist=['packs']).packs(),
         netflow_packs=__import__('netspout_core.netflow_solution', fromlist=['catalog']).catalog(),

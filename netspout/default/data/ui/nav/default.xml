@@ -26,74 +26,276 @@
     <collection label="Operational">
       <view name="pf_telco_09_core_user_plane" label="5G core user-plane degradation"/>
       <view name="pf_telco_03_slice_sla" label="5G network slice SLA violation"/>
+      <view name="pf_UCR-21.8.8" label="5G NR gNodeB Performance Monitoring"/>
       <view name="pf_telco_01_ran_cell" label="5G RAN cell degradation"/>
       <view name="pf_telco_02_registration_auth" label="5G registration/authentication failure"/>
+      <view name="pf_UCR-21.12.18" label="911 call answer time SLA"/>
+      <view name="pf_C100-DC-007" label="ACI Contract Policy Denial"/>
+      <view name="pf_C100-DC-006" label="ACI Endpoint Movement Anomaly"/>
+      <view name="pf_C100-DC-005" label="ACI Leaf-Spine Link Failure"/>
       <view name="pf_ind_agri_edge_gateway_health" label="Agritech: edge gateway routing observation and Linux gateway authentication anomaly"/>
+      <view name="pf_C100-DC-019" label="AI Cluster Network Telemetry Gap"/>
+      <view name="pf_UCR-13.4.5" label="AI/LLM Gateway Rate-Limit Breaches, Quota Burn, Tenant-Fairness Starvation, and 429 Class Attribution (Azure OpenAI, AWS Bedrock, OpenAI, Anthropic, vLLM/Ollama, Kong/Tyk/Apigee proxies)"/>
+      <view name="pf_UCR-21.7.3" label="Aircraft Turnaround Time Monitoring (A-CDM)"/>
+      <view name="pf_UCR-21.7.10" label="Airport SCADA Alarm Monitoring"/>
+      <view name="pf_UCR-21.13.12" label="Alumni donation portal anomaly"/>
+      <view name="pf_C100-DC-016" label="Application Tier Fabric Isolation"/>
+      <view name="pf_C100-SEC-003" label="ASA Remote Access Failure"/>
+      <view name="pf_UCR-21.11.13" label="ATM usage pattern anomaly"/>
       <view name="pf_network_27_stale_sessions" label="Authentication recovery with stale perimeter sessions"/>
+      <view name="pf_UCR-4.2.19" label="Azure Front Door / CDN Origin Errors and Cache Hit"/>
+      <view name="pf_UCR-21.7.1" label="Baggage Handling System Throughput and Misroute Detection"/>
       <view name="pf_network_06_bgp_flap" label="BGP neighbor flap/route withdrawal"/>
+      <view name="pf_C100-SP-006" label="BGP Path Preference Shift"/>
+      <view name="pf_C100-SP-003" label="BGP Peer Session Instability"/>
+      <view name="pf_C100-SP-004" label="BGP Route Withdrawal Propagation"/>
       <view name="pf_wave2_bigip_openconfig_itops" label="Big-IP ADC &amp; OpenConfig Observability Health (Wave-2 pack)"/>
+      <view name="pf_UCR-21.3.4" label="Blood Bank Refrigerator Temperature Compliance"/>
+      <view name="pf_C100-ENT-019" label="Branch Application Path Regression"/>
+      <view name="pf_C100-ENT-008" label="Branch Route Withdrawal"/>
+      <view name="pf_C100-ENT-004" label="Branch WAN Packet Loss"/>
       <view name="pf_telco_06_broadband_cpe" label="Broadband CPE service outage"/>
+      <view name="pf_UCR-21.12.21" label="Building permit inspection scheduling gap"/>
+      <view name="pf_UCR-21.8.20" label="Call Failure Root Cause Correlation (SIP + CDR + Element Logs)"/>
       <view name="pf_C100-ENT-001" label="Campus Access Link Degradation — IOS XE Reference"/>
       <view name="pf_network_22_authentication_storm" label="Campus authentication retry storm at perimeter"/>
       <view name="pf_cisco_campus_rogue" label="Campus Core L2/3 Disturbance &amp; Rogue AP"/>
+      <view name="pf_C100-ENT-011" label="Campus DHCP Dependency Failure"/>
+      <view name="pf_C100-ENT-012" label="Campus DNS Path Degradation"/>
       <view name="pf_network_01_campus_link" label="Campus link failure/recovery"/>
+      <view name="pf_UCR-21.12.11" label="Campus network outage academic impact"/>
+      <view name="pf_C100-ENT-003" label="Campus Oversubscription Congestion"/>
+      <view name="pf_C100-ENT-015" label="Campus Path Asymmetry"/>
+      <view name="pf_C100-ENT-007" label="Campus Routing Adjacency Instability"/>
+      <view name="pf_arch_can_multi_building" label="CAN: Campus Area Network - Multi-Building Backbone &amp; Catalyst Center"/>
+      <view name="pf_C100-SP-018" label="Carrier Control-Plane Resource Pressure"/>
+      <view name="pf_C100-SP-013" label="Carrier Core Congestion"/>
+      <view name="pf_C100-SP-002" label="Carrier Interface Error Burst"/>
+      <view name="pf_C100-ENT-017" label="Catalyst Center Assurance Data Gap"/>
+      <view name="pf_C100-ENT-016" label="Catalyst Configuration Drift"/>
       <view name="pf_ub6_catalyst_wireless_rogue_threat" label="Catalyst Wireless Rogue And Threat Summary"/>
+      <view name="pf_UCR-21.10.8" label="Catastrophe Event Claims Surge Capacity Monitoring"/>
+      <view name="pf_UCR-5.9.32" label="CDN Edge Network Performance"/>
+      <view name="pf_UCR-5.8.26" label="CDN Origin Hit Rate and Cache Efficiency (CloudFront / Akamai / Fastly)"/>
       <view name="pf_ub5_cisco_change_induced_outage" label="Cisco Change-Induced Outage"/>
       <view name="pf_test-correlated-interface-degradation" label="Cisco IOS XR Interface Degradation — Golden Scenario"/>
       <view name="pf_ub5_cisco_nac_radius_outage" label="Cisco NAC RADIUS Outage"/>
+      <view name="pf_C100-CRI-015" label="Cisco Network and Microsoft Identity Correlation"/>
       <view name="pf_ub5_cisco_platform_health_degradation" label="Cisco Platform Health Degradation"/>
+      <view name="pf_C100-SEC-016" label="Cisco XDR Cross-Signal Incident Candidate"/>
+      <view name="pf_UCR-21.10.9" label="Claims Leakage and Overpayment Detection"/>
+      <view name="pf_UCR-21.10.1" label="Claims Processing Cycle Time Monitoring"/>
+      <view name="pf_UCR-21.13.17" label="Classroom AV system uptime"/>
+      <view name="pf_UCR-21.6.5" label="Click-and-Collect Order Fulfillment Cycle Time"/>
+      <view name="pf_UCR-21.3.2" label="Clinical Application Uptime SLA Tracking"/>
+      <view name="pf_UCR-4.3.15" label="Cloud CDN Cache Hit Ratio and Egress"/>
+      <view name="pf_UCR-22.20.4" label="CMMC AU.L2-3.3.2 — User-to-action traceability on CUI systems"/>
+      <view name="pf_UCR-22.20.6" label="CMMC CM.L2-3.4.1 — Baseline configuration drift detection on CUI systems"/>
+      <view name="pf_UCR-22.20.7" label="CMMC IR.L2-3.6.1 — Incident response lifecycle tracking for CUI incidents"/>
+      <view name="pf_UCR-22.20.8" label="CMMC SC.L2-3.13.8 — Cryptographic protection of CUI in transit"/>
+      <view name="pf_UCR-21.4.10" label="Cold Chain Temperature Excursion for Perishable Goods"/>
+      <view name="pf_UCR-14.3.9" label="Cold Storage Room Temperature Excursion Alert"/>
+      <view name="pf_UCR-21.11.1" label="Consumer credit card transaction monitoring"/>
+      <view name="pf_UCR-8.3.1" label="Consumer Lag Monitoring"/>
+      <view name="pf_UCR-21.2.12" label="Conveyor Belt Speed and Jam Detection"/>
+      <view name="pf_UCR-21.8.2" label="Core Network Element Health (MME, SGW, PGW)"/>
+      <view name="pf_C100-CRI-012" label="Critical Communications Path Congestion"/>
+      <view name="pf_C100-CRI-018" label="Cross-Domain DNS Dependency Failure"/>
       <view name="pf_telco_10_cross_layer" label="Cross-layer telecom service outage and SLA impact"/>
+      <view name="pf_C100-SEC-018" label="Cyber Vision OT Asset Anomaly Candidate"/>
+      <view name="pf_C100-DC-008" label="Data Center East-West Congestion"/>
       <view name="pf_cisco_aci_microburst" label="Data Center Fabric ACI Ingress Microburst Traffic"/>
       <view name="pf_network_12_dc_congestion" label="Data-center congestion/queue drops"/>
       <view name="pf_network_09_ddos_flood" label="DDoS/traffic flood/mitigation"/>
       <view name="pf_network_15_device_resources" label="Device CPU/memory exhaustion"/>
       <view name="pf_network_11_dhcp_exhaustion" label="DHCP pool exhaustion/recovery"/>
+      <view name="pf_C100-CRI-013" label="Distributed Government Site Outage"/>
+      <view name="pf_UCR-21.9.3" label="Distribution System Pressure Zone Monitoring"/>
+      <view name="pf_C100-ENT-002" label="Distribution Uplink Failure"/>
       <view name="pf_network_20_backend_link" label="Distribution-link loss and backend monitor failure"/>
       <view name="pf_network_10_dns_failure" label="DNS resolver failure/recovery"/>
+      <view name="pf_UCR-21.13.18" label="Dormitory environmental safety sensor"/>
       <view name="pf_network_05_dual_isp" label="Dual-ISP failover/recovery"/>
+      <view name="pf_C100-SEC-015" label="Duo Authentication Anomaly"/>
+      <view name="pf_UCR-21.6.6" label="E-Commerce Platform Checkout Funnel Latency"/>
+      <view name="pf_UCR-21.3.1" label="EHR System Response Time Monitoring"/>
+      <view name="pf_UCR-14.1.37" label="Elevator Door Fault Frequency and Prediction"/>
+      <view name="pf_UCR-21.3.12" label="Emergency Department Wait Time Tracking"/>
+      <view name="pf_UCR-21.12.17" label="Emergency services CAD dispatch latency"/>
+      <view name="pf_C100-CRI-004" label="Energy Pipeline Remote-Site Isolation"/>
+      <view name="pf_C100-ENT-020" label="Enterprise Telemetry Blind Spot"/>
       <view name="pf_cisco_sdwan_brownout" label="Enterprise WAN Circuit Brownout &amp; App Route Failover"/>
+      <view name="pf_wireless_connected_core_cisco" label="Enterprise Wireless Connected to Campus Core (All Cisco)"/>
       <view name="pf_wireless_connected_core_mixed" label="Enterprise Wireless Connected to Core (Mixed Vendor)"/>
       <view name="pf_arch_epn_isolated_intranet" label="EPN: Enterprise Private Network - Isolated Corporate Intranet &amp; Multi-Cloud VPC"/>
+      <view name="pf_C100-DC-003" label="EVPN Route Withdrawal"/>
+      <view name="pf_UCR-21.11.10" label="Failed trade settlement ML prediction"/>
+      <view name="pf_UCR-21.13.1" label="FERPA student record unauthorized access"/>
       <view name="pf_payment_processing_degradation" label="Financial Services Payment Application Degradation"/>
+      <view name="pf_C100-CRI-001" label="Financial Trading Campus-to-Data-Center Latency"/>
+      <view name="pf_UCR-14.1.42" label="Fire Alarm Panel Zone Health and Event Monitoring"/>
       <view name="pf_network_08_firewall_policy" label="Firewall policy misconfiguration"/>
+      <view name="pf_C100-SEC-004" label="Firewall Rulebase Drift"/>
+      <view name="pf_UCR-21.10.2" label="First Notice of Loss Channel Analysis"/>
+      <view name="pf_UCR-21.4.1" label="Fleet Vehicle GPS Tracking and Geofence Alerting"/>
+      <view name="pf_UCR-21.7.5" label="Flight Information Display System (FIDS) Health"/>
+      <view name="pf_C100-SEC-002" label="FTD Access-Control Policy Denial"/>
       <view name="pf_arch_gan_subsea_cloud" label="GAN: Global Area Network - Worldwide Multi-Cloud &amp; Subsea Cable Transit"/>
+      <view name="pf_UCR-22.1.5" label="GDPR Consent Management Audit Trail"/>
+      <view name="pf_UCR-22.1.16" label="GDPR Consent Withdrawal Processing Enforcement"/>
+      <view name="pf_UCR-22.1.4" label="GDPR Data Retention Policy Enforcement"/>
+      <view name="pf_UCR-21.1.8" label="Generator Trip Event Correlation"/>
+      <view name="pf_UCR-21.14.1" label="Genesys Cloud integration health"/>
+      <view name="pf_C100-DC-017" label="GPU Fabric East-West Congestion Candidate"/>
+      <view name="pf_UCR-14.3.11" label="Greenhouse Humidity &amp; Growth Optimization"/>
+      <view name="pf_UCR-5.4.30" label="Guest Network Access Patterns and Usage (Meraki MR)"/>
+      <view name="pf_UCR-17.1.4" label="Guest Network Usage"/>
+      <view name="pf_C100-CRI-006" label="Healthcare Clinical Application Path Failure"/>
+      <view name="pf_UCR-21.12.10" label="Higher-ed FERPA student record access audit"/>
       <view name="pf_network_17_hospital_mac_auth" label="Hospital access MAC instability and login retries"/>
       <view name="pf_ind_health_clinical_network_edge" label="Hospital network: edge and DNS/proxy health with wireless threat"/>
+      <view name="pf_UCR-8.1.1" label="HTTP Error Rate Monitoring"/>
+      <view name="pf_UCR-14.1.1" label="HVAC Performance Monitoring"/>
+      <view name="pf_UCR-14.1.29" label="HVAC Setpoint Override Frequency and Duration"/>
+      <view name="pf_C100-DC-014" label="Hybrid Cloud Data Path Degradation"/>
+      <view name="pf_C100-CRI-016" label="Hybrid Hospital Wireless and Cloud Dependency"/>
       <view name="pf_telco_04_ims_volte" label="IMS/VoLTE call-quality degradation"/>
+      <view name="pf_UCR-21.6.3" label="In-Store Wi-Fi and Network Infrastructure Health"/>
+      <view name="pf_C100-CRI-017" label="Industrial Site Security and Availability Incident"/>
+      <view name="pf_UCR-21.10.6" label="Insurance Fraud Ring Detection"/>
+      <view name="pf_C100-SP-017" label="Inter-AS Routing Leak Candidate"/>
+      <view name="pf_C100-DC-013" label="Intersight Managed-System Visibility Gap"/>
+      <view name="pf_C100-SP-016" label="IOS XR Model-Driven Telemetry Loss"/>
       <view name="pf_network_19_ips_service" label="IPS attack burst and legitimate-session degradation"/>
+      <view name="pf_C100-SEC-005" label="ISE Authentication Failure Spike"/>
+      <view name="pf_C100-SEC-006" label="ISE Policy Authorization Mismatch"/>
+      <view name="pf_UCR-3.2.7" label="Kubernetes Control Plane Health (apiserver, etcd, scheduler, controller-manager)"/>
       <view name="pf_arch_lan_campus_access" label="LAN: Local Area Network - Campus Switching &amp; 802.1Q Segments"/>
+      <view name="pf_UCR-21.4.9" label="Last-Mile Delivery SLA Compliance"/>
+      <view name="pf_UCR-21.12.1" label="Law enforcement accident reconstruction"/>
+      <view name="pf_UCR-21.12.2" label="Law enforcement active investigation timeline"/>
+      <view name="pf_UCR-22.7.44" label="Legal Hold Population — Elevated File Export Activity"/>
+      <view name="pf_UCR-21.13.2" label="LMS (Canvas/Blackboard) login anomaly"/>
       <view name="pf_ind_transport_fleet_network_change" label="Logistics network: change-induced outage and edge routing observation"/>
+      <view name="pf_C100-DC-018" label="Lossless Ethernet Pause Propagation Candidate"/>
       <view name="pf_arch_man_carrier_ring" label="MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring &amp; G.8032 ERPS"/>
+      <view name="pf_C100-CRI-005" label="Manufacturing Cell Network Congestion"/>
+      <view name="pf_C100-ENT-018" label="Meraki Multi-Site Reachability Degradation"/>
+      <view name="pf_UCR-22.5.2" label="MiFID II Communications Recording and Retention Audit"/>
+      <view name="pf_UCR-22.5.15" label="MiFID II Conflicts of Interest — Personal Account Dealing Near Client Block Trades"/>
+      <view name="pf_UCR-22.5.16" label="MiFID II Conflicts of Interest — Research Analyst vs Trading Desk Information Barrier Violations"/>
+      <view name="pf_UCR-21.11.18" label="MiFID II transaction reporting compliance"/>
+      <view name="pf_C100-CRI-014" label="Mixed-Vendor Application Delivery Degradation"/>
       <view name="pf_mixed_vendor_enterprise" label="Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)"/>
+      <view name="pf_UCR-21.11.2" label="Mobile device payment monitoring"/>
+      <view name="pf_UCR-21.6.10" label="Mobile POS Device Battery and Connectivity"/>
       <view name="pf_telco_05_mobile_transport" label="Mobile transport/fronthaul congestion"/>
       <view name="pf_rfc5424-link-state-lifecycle" label="Modeled Link-State Lifecycle"/>
+      <view name="pf_C100-SP-008" label="MPLS Label-Switched Path Degradation"/>
+      <view name="pf_C100-SP-009" label="MPLS VPN Reachability Loss"/>
       <view name="pf_network_13_mtu_pmtud" label="MTU mismatch/PMTUD failure"/>
+      <view name="pf_C100-SP-019" label="Multi-Domain Path Failover"/>
+      <view name="pf_C100-DC-020" label="Multi-Fabric Data Center Service Impact"/>
       <view name="pf_network_24_policy_disagreement" label="Multi-firewall path-policy disagreement"/>
       <view name="pf_mixed_backbone_optical" label="Multicast/MPLS Backbone Optical Carrier Shift"/>
+      <view name="pf_arch_nas_storage_cluster" label="NAS: Network-Attached Storage - NetApp ONTAP &amp; PowerScale Clusters"/>
+      <view name="pf_C100-CRI-020" label="National Critical Infrastructure Evidence Gap"/>
+      <view name="pf_C100-ENT-013" label="Network Access Authentication Delay"/>
+      <view name="pf_C100-ENT-014" label="Network Access Authorization Drift"/>
+      <view name="pf_UCR-21.8.4" label="Network Capacity Planning (Spectrum Utilization Trending)"/>
       <view name="pf_network_security_correlation" label="Network Degradation With Security Correlation"/>
       <view name="pf_C100-DC-001" label="Nexus Fabric Uplink Degradation — NX-OS Reference"/>
+      <view name="pf_C100-DC-002" label="Nexus vPC Member Failure"/>
       <view name="pf_normal_traffic" label="Normal Operations (HTTP Round-Robin)"/>
+      <view name="pf_UCR-21.3.3" label="Nurse Call System Response Time"/>
       <view name="pf_openconfig_mdt_streaming" label="OpenConfig MDT Streaming &amp; Telemetry Assurance"/>
+      <view name="pf_C100-SP-015" label="Optical Transport Dependency Degradation"/>
       <view name="pf_network_07_ospf_adjacency" label="OSPF adjacency failure/reconvergence"/>
+      <view name="pf_UCR-21.8.6" label="OSS/BSS System Integration Health"/>
+      <view name="pf_C100-CRI-010" label="OT/IT Segmentation Policy Drift"/>
+      <view name="pf_UCR-21.1.12" label="Outage Management System vs SCADA State Correlation"/>
+      <view name="pf_UCR-21.2.1" label="Overall Equipment Effectiveness (OEE) Calculation"/>
+      <view name="pf_C100-DC-010" label="Overlay-Underlay Correlation Gap"/>
+      <view name="pf_arch_pan_iot_mesh" label="PAN: Personal Area Network - IoT Sensor Cluster &amp; Bluetooth Mesh"/>
       <view name="pf_network_21_partial_pool" label="Partial load-balancer pool outage with perimeter demand"/>
+      <view name="pf_UCR-21.7.9" label="Passenger Flow and Terminal Capacity"/>
+      <view name="pf_UCR-21.11.21" label="PCI Edge Processor cardholder filter"/>
+      <view name="pf_C100-SP-020" label="PE-CE Policy Mismatch"/>
       <view name="pf_network_18_payment_deny" label="Perimeter deny burst and payment availability loss"/>
+      <view name="pf_UCR-21.3.5" label="Pharmaceutical Cold Chain Deviation Alerting"/>
+      <view name="pf_UCR-21.5.1" label="Pipeline Pressure and Flow Rate Anomaly Detection"/>
       <view name="pf_network_26_maintenance" label="Planned maintenance versus unplanned service outage"/>
       <view name="pf_ind_mfg_plant_network_health" label="Plant network: platform degradation and change-induced outage"/>
+      <view name="pf_UCR-14.2.1" label="PLC/RTU Health Monitoring"/>
+      <view name="pf_UCR-21.10.5" label="Policy Underwriting Decision Audit Trail"/>
+      <view name="pf_UCR-21.6.1" label="POS Terminal Transaction Response Time Monitoring"/>
+      <view name="pf_C100-SEC-020" label="Potential Exfiltration Path Correlation"/>
       <view name="pf_network_25_mpls_recovery" label="Primary MPLS path-change observation and branch SLA recovery"/>
+      <view name="pf_UCR-14.2.2" label="Process Variable Anomalies"/>
+      <view name="pf_UCR-21.2.3" label="Production Batch Yield Tracking"/>
       <view name="pf_ind_realestate_building_exposure" label="Property technology: exposure management and collaboration audit"/>
+      <view name="pf_C100-SP-005" label="Provider Edge Access Link Failure"/>
+      <view name="pf_C100-SP-014" label="Provider Traffic Engineering Imbalance"/>
+      <view name="pf_UCR-21.12.19" label="Public health outbreak reporting timeliness"/>
+      <view name="pf_C100-CRI-008" label="Public Sector Identity and Network Access Failure"/>
+      <view name="pf_pure_cisco_enterprise" label="Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)"/>
+      <view name="pf_UCR-21.2.4" label="Quality SPC Chart Monitoring"/>
+      <view name="pf_UCR-21.4.6" label="Rail Signaling System Health Monitoring"/>
+      <view name="pf_UCR-21.8.1" label="RAN Cell Site Availability"/>
+      <view name="pf_C100-SEC-019" label="Reconnaissance and Firewall Correlation"/>
+      <view name="pf_C100-CRI-009" label="Remote Infrastructure Telemetry Blackout"/>
+      <view name="pf_UCR-21.12.12" label="Research grant expenditure anomaly"/>
+      <view name="pf_UCR-21.11.14" label="Retail banking transaction end-to-end trace"/>
       <view name="pf_network_16_retail_uplink" label="Retail branch uplink flap and checkout interruption"/>
       <view name="pf_telco_08_roaming_mobility" label="Roaming/mobility failure"/>
+      <view name="pf_UCR-21.2.11" label="Robotic Cell Cycle Time Deviation"/>
+      <view name="pf_C100-SP-007" label="Route Reflector Propagation Delay"/>
+      <view name="pf_UCR-21.7.7" label="Runway and Taxiway Lighting System Status"/>
+      <view name="pf_UCR-21.5.8" label="Safety Instrumented System Trip Event Analysis"/>
+      <view name="pf_arch_san_fibre_channel" label="SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel &amp; NVMe-oF"/>
       <view name="pf_mixed_sase_degradation" label="SASE Cloud Ingress App Degradation &amp; Synthetic Validation"/>
+      <view name="pf_UCR-21.1.1" label="SCADA Alarm Rate Monitoring and Alarm Flooding Detection"/>
+      <view name="pf_UCR-21.9.6" label="SCADA RTU Communication Health Across Remote Sites"/>
+      <view name="pf_C100-ENT-006" label="SD-WAN Brownout Before Failover"/>
+      <view name="pf_C100-ENT-005" label="SD-WAN Preferred-Path Change"/>
       <view name="pf_telco_07_sdwan_service" label="SD-WAN service degradation"/>
+      <view name="pf_C100-SEC-007" label="Secure Access Policy Block"/>
+      <view name="pf_C100-SEC-014" label="Secure Client Posture Failure"/>
+      <view name="pf_C100-SEC-011" label="Secure Endpoint Isolation Impact"/>
+      <view name="pf_C100-SEC-010" label="Secure Endpoint Malware Activity Candidate"/>
+      <view name="pf_C100-SEC-012" label="Secure Network Analytics Beaconing Candidate"/>
+      <view name="pf_C100-SEC-013" label="Secure Network Analytics Lateral Movement Candidate"/>
+      <view name="pf_C100-SEC-017" label="Secure Workload Policy Violation Candidate"/>
+      <view name="pf_UCR-21.7.2" label="Security Lane Processing Time and Queue Length"/>
+      <view name="pf_C100-SP-010" label="Segment Routing Policy Path Change"/>
+      <view name="pf_UCR-21.6.2" label="Self-Checkout Lane Availability and Error Rate"/>
       <view name="pf_sdwan_connected_core" label="Separate SD-WAN Environment Connected to Core Backbone (All Cisco)"/>
+      <view name="pf_UCR-21.8.5" label="Service Activation and Billing Mediation Latency"/>
       <view name="pf_service_provider_cisco" label="Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)"/>
       <view name="pf_service_provider_mixed" label="Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)"/>
+      <view name="pf_UCR-21.9.4" label="Sewer Overflow Early Warning"/>
       <view name="pf_network_23_containment_request" label="Simulated NAC containment request and service-access change"/>
+      <view name="pf_UCR-22.8.7" label="SOC 2 Privacy — Consent Log Integrity and Downstream Propagation Checks"/>
+      <view name="pf_UCR-21.12.20" label="Social services case management backlog"/>
+      <view name="pf_C100-CRI-011" label="Sovereign Cloud Interconnect Degradation"/>
+      <view name="pf_C100-CRI-019" label="Sovereign Multi-Region Routing Instability"/>
+      <view name="pf_C100-SP-011" label="SR-MPLS Constraint Violation"/>
+      <view name="pf_C100-SP-012" label="SRv6 Service Path Interruption"/>
+      <view name="pf_C100-DC-015" label="Storage Network Dependency Congestion"/>
       <view name="pf_network_03_stp_storm" label="STP loop/broadcast storm"/>
+      <view name="pf_UCR-21.12.13" label="Student information system login geo-velocity"/>
+      <view name="pf_UCR-21.8.3" label="Subscriber Provisioning Workflow Completion Rate"/>
       <view name="pf_ind_energy_substation_edge_observation" label="Substation edge: OT routing observation and network platform health"/>
+      <view name="pf_UCR-21.1.2" label="Substation RTU Communication Failure"/>
       <view name="pf_ind_telco_change_induced_outage" label="Telecom NOC: change-induced SD-WAN outage, then edge threat pipeline"/>
       <view name="pf_ind_telco_access_and_wireless_health" label="Telecom NOC: RADIUS/NAC outage, platform degradation and rogue wireless threat"/>
       <view name="pf_C100-CRI-002" label="Telecom Operations Network Degradation — Correlated Reference"/>
+      <view name="pf_UCR-21.13.10" label="Telehealth student health portal latency"/>
+      <view name="pf_UCR-21.13.13" label="Title IX case management timeline SLA"/>
+      <view name="pf_UCR-21.4.12" label="Traffic Management System Sensor Availability"/>
+      <view name="pf_UCR-21.1.7" label="Transformer Dissolved Gas Analysis (DGA) Trending"/>
+      <view name="pf_C100-CRI-007" label="Transportation Control-Site Failover"/>
+      <view name="pf_UCR-21.9.1" label="Treatment Plant Process Parameter Monitoring"/>
       <view name="pf_ub2_database_backup_integrity" label="Ub2 Database Backup Integrity"/>
       <view name="pf_ub2_ot_edge_routing_observation" label="Ub2 Ot Edge Routing Observation"/>
       <view name="pf_ub3_database_message_audit" label="Ub3 Database Message Audit"/>
@@ -101,14 +303,27 @@
       <view name="pf_ub3_multivendor_edge_observation" label="Ub3 Multivendor Edge Observation"/>
       <view name="pf_ub4_exposure_infra_logging" label="Ub4 Exposure Infra Logging"/>
       <view name="pf_ub4_saas_collaboration_audit" label="Ub4 Saas Collaboration Audit"/>
+      <view name="pf_C100-DC-011" label="UCS Fabric Interconnect Degradation"/>
+      <view name="pf_C100-DC-012" label="UCS Service Profile Drift"/>
+      <view name="pf_C100-SEC-008" label="Umbrella DNS Abuse Indicator"/>
+      <view name="pf_C100-SEC-009" label="Umbrella DNS Tunneling Candidate"/>
+      <view name="pf_C100-DC-009" label="Underlay Routing Instability"/>
       <view name="pf_ind_insurance_underwriting_exposure" label="Underwriting data platform: exposure management, vault and identity audit"/>
+      <view name="pf_UCR-21.2.2" label="Unplanned Downtime Root Cause Correlation"/>
+      <view name="pf_C100-CRI-003" label="Utility Substation WAN Loss"/>
+      <view name="pf_UCR-21.4.4" label="Vehicle Diagnostic Trouble Code Monitoring"/>
       <view name="pf_network_02_vlan_trunk" label="VLAN/trunk misconfiguration"/>
+      <view name="pf_UCR-21.12.16" label="Voting system audit log integrity (where applicable)"/>
       <view name="pf_arch_vpn_remote_workforce" label="VPN: Virtual Private Network - Cisco AnyConnect &amp; Site-to-Site IPsec"/>
       <view name="pf_wave3_vsphere_hostpath_triage" label="vSphere Host Path Triage (Wave-3 pack)"/>
+      <view name="pf_C100-DC-004" label="VXLAN Tunnel Endpoint Reachability Loss"/>
       <view name="pf_network_04_wan_brownout" label="WAN latency/jitter/packet-loss brownout"/>
       <view name="pf_arch_wan_global_backbone" label="WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone &amp; Optical DWDM"/>
+      <view name="pf_C100-ENT-010" label="Wireless Capacity Saturation"/>
+      <view name="pf_C100-ENT-009" label="Wireless Client Roaming Failure"/>
       <view name="pf_network_14_wireless_outage" label="Wireless controller/AP outage"/>
       <view name="pf_arch_wlan_meraki_catalyst" label="WLAN: Wireless Local Area Network - Catalyst 9800 &amp; Meraki Wi-Fi 6E/7"/>
+      <view name="pf_UCR-15.3.36" label="Workspace Utilization and Ghost Booking Detection"/>
     </collection>
     <collection label="Security">
       <view name="pf_AI-005" label="A2A Delegation Abuse"/>

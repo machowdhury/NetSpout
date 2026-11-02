@@ -39,7 +39,11 @@ logger = logging.getLogger("netspout.generator_modes")
 
 
 def _find_samples_dirs() -> List[str]:
+    here = os.path.dirname(os.path.abspath(__file__))
     candidates = [
+        os.path.join(here, "..", "appserver", "static", "samples"),          # Splunk app layout: <app>/bin/netspout_core/ -> <app>/appserver/static/samples
+        os.path.join(here, "..", "..", "appserver", "static", "samples"),    # <app>/bin/ -> <app>/appserver/static/samples
+        os.path.join(os.environ.get("SPLUNK_HOME", "/opt/splunk"), "etc", "apps", "netspout", "appserver", "static", "samples"),
         os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "appserver", "static", "samples"),
         os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "netspout", "samples"),
         os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "samples"),
@@ -79,8 +83,10 @@ class TelemetryGeneratorService:
         # 1. Check samples registered in catalog._samples
         for sm in self.catalog._samples:
             if sm.get("sourcetype") == sourcetype:
-                cand_path = os.path.join(self._repo_root, sm.get("sample_path", ""))
-                if os.path.isfile(cand_path):
+                # sample_path is relative to the directory that contains the `netspout` app: the repo root in development, <splunk>/etc/apps when installed
+                roots = [self._repo_root, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))]
+                cand_path = next((c for c in (os.path.join(r, sm.get("sample_path", "")) for r in roots) if os.path.isfile(c)), "")
+                if cand_path and os.path.isfile(cand_path):
                     parsed = self._parse_sample_file(cand_path)
                     if parsed:
                         events = parsed

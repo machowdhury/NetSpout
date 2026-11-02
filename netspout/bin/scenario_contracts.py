@@ -24,19 +24,23 @@ import inspect
 import json
 import random
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 try:
     from netspout_core.log_engine import SplunkLogEngine
     from netspout_core.models import LogEntry, Node, NodeType
+    from netspout_core import modeled_telemetry
 except ImportError:  # pragma: no cover
     try:
         from app.log_engine import SplunkLogEngine
         from app.models import LogEntry, Node, NodeType
+        from app import modeled_telemetry
     except ImportError:
         from log_engine import SplunkLogEngine
         from models import LogEntry, Node, NodeType
+        import modeled_telemetry
 
 _HERE = Path(__file__).resolve().parent
 MAX_EVENTS = 5000
@@ -69,11 +73,33 @@ def get(contract_id: str) -> Dict[str, Any]:
         raise ContractError("unknown scenario contract: " + contract_id) from None
 
 
+def grounded_sample(device: Node, sourcetype: str, vendor_id: str, sample_index: int = 0) -> LogEntry:
+    """A verbatim vendor sample for a sourcetype that has recorded samples but no formatter. The raw event is NOT rewritten (so it cannot carry the contract's
+    entities); it is tagged with the node it is attributed to, and the contract must not claim entity correlation through it."""
+    try:
+        from netspout_core.generator_modes import generator_service
+    except ImportError:  # pragma: no cover
+        from app.generator_modes import generator_service
+    samples, _, _ = generator_service.get_grounded_samples(sourcetype, vendor_id=vendor_id)
+    if not samples:
+        raise ContractError("no verified sample exists for %s" % sourcetype)
+    return LogEntry(timestamp=datetime.now(timezone.utc).isoformat(), device_id=device.name, src_ip=device.ip_address, dest_ip=device.ip_address, protocol="n/a", duration="0ms",
+                    action="streamed", signature="GROUNDED_SAMPLE", status="normal", raw_log=samples[int(sample_index) % len(samples)], node_type=device.type.value, node_id=device.id,
+                    vendor=vendor_id, sourcetype=sourcetype)
+
+
 def formatter(name: str):
-    fn = getattr(SplunkLogEngine, name, None)
-    if not name.startswith("format_") or not callable(fn):
+    """A SplunkLogEngine vendor formatter, the verbatim grounded-sample replay, or the labeled modeled-state generator (modeled_telemetry)."""
+    fn = grounded_sample if name == "grounded_sample" else (modeled_telemetry.FORMATTERS.get(name) or getattr(SplunkLogEngine, name, None))
+    if not (name.startswith("format_") or name == "grounded_sample") or not callable(fn):
         raise ContractError("formatter %r is not a SplunkLogEngine format_* generator" % name)
     return fn
+
+
+def fidelity(contract: Dict[str, Any]) -> str:
+    """VENDOR_NATIVE (only vendor formatters), MODELED (only the modeled schema) or MIXED. Derived from the streams, never declared."""
+    modeled = {s["formatter"] in modeled_telemetry.FORMATTERS for s in contract["streams"]}
+    return "MODELED" if modeled == {True} else "VENDOR_NATIVE" if modeled == {False} else "MIXED"
 
 
 def _node(n: Dict[str, Any]) -> Node:
@@ -221,5 +247,5 @@ def catalog() -> List[Dict[str, Any]]:
     for cid, c in sorted(contracts().items()):
         rows.append({"scenario_id": cid, "title": c["title"], "description": c["description"], "category": c.get("category", ""), "vendors": c.get("vendors", []),
                      "sourcetypes": sourcetypes(c), "phases": [p["id"] for p in c["phases"]], "nodes": len(c["nodes"]), "generator_family": c.get("generator_family", "scenario_contract"),
-                     "assumptions": c.get("assumptions", []), "kind": c.get("kind", "operational")})
+                     "assumptions": c.get("assumptions", []), "kind": c.get("kind", "operational"), "fidelity": fidelity(c), "source": c.get("source", "authored")})
     return rows

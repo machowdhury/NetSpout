@@ -11,7 +11,7 @@ Generated 2026-11-02 by `scripts/generate_reference_docs.py` from `catalog/sourc
 | Recorded replay source (authentic recording, continuous replay) | 9 |
 | TA parsing checked in an isolated lab | 6 |
 | CIM validated | 0 (no CIM data model is installed in any lab) |
-| Referenced by at least one dashboard-backed scenario | 152 |
+| Referenced by at least one dashboard-backed scenario | 153 |
 
 Columns are separate evidence. A sample-replay catalog entry is **not** a native generator; a recorded replay source is **not** coverage of the catalog sourcetype unless its sourcetype name matches. `TA` shows the add-on named by the catalog (`verified` = Splunkbase declares that exact sourcetype for the app; declaration only). `TA lab` means parsing was exercised with the installed package; nothing else was.
 
@@ -26,14 +26,14 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:asa` | Cisco ASA Firewall Connection & Policy | event | syslog | G | - | - | - | Splunk Add-on for Cisco ASA | - | 5 | vendored replay sample cisco-asa.yml |
 | `cisco:asa:syslog` | Cisco ASA Syslog Message Stream | event | syslog | R | - | - | - | Splunk Add-on for Cisco ASA | - | - | vendored replay sample cisco-asa-syslog.yml |
 | `cisco:catalyst:client` | Cisco Catalyst Client | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-client.yml |
-| `cisco:catalyst:clienthealth` | Cisco Catalyst Clienthealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-catalyst-clienthealth.yml |
+| `cisco:catalyst:clienthealth` | Cisco Catalyst Clienthealth | event | syslog | G | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 2 | vendored replay sample cisco-catalyst-clienthealth.yml |
 | `cisco:catalyst:compliance` | Cisco Catalyst Compliance | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-compliance.yml |
 | `cisco:catalyst:devicehealth` | Cisco Catalyst Devicehealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-devicehealth.yml |
 | `cisco:catalyst:issue` | Cisco Catalyst Issue | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-issue.yml |
-| `cisco:catalyst:networkhealth` | Cisco Catalyst Networkhealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-catalyst-networkhealth.yml |
+| `cisco:catalyst:networkhealth` | Cisco Catalyst Networkhealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 2 | vendored replay sample cisco-catalyst-networkhealth.yml |
 | `cisco:catalyst:rogue:allowed` | Cisco Catalyst Rogue Allowed | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-allowed.yml |
 | `cisco:catalyst:rogue:counts` | Cisco Catalyst Rogue Counts | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-counts.yml |
-| `cisco:catalyst:rogue:threat_details` | Cisco Catalyst Rogue Threat Details | event | syslog | G | - | - | - | - | - | 2 | vendored replay sample cisco-catalyst-rogue-threat-details.yml |
+| `cisco:catalyst:rogue:threat_details` | Cisco Catalyst Rogue Threat Details | event | syslog | G | - | - | - | - | - | 4 | vendored replay sample cisco-catalyst-rogue-threat-details.yml |
 | `cisco:catalyst:rogue:verbose` | Cisco Catalyst Rogue Verbose | event | syslog | G | Y | Y | - | - | - | 3 | universe_batch6.json: Captured records in netspout/appserver/static/sa |
 | `cisco:catalyst:rogue:verbose:legacy` | Cisco Catalyst Rogue Verbose Legacy | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-verbose-legacy.yml |
 | `cisco:catalyst:rogue:wired` | Cisco Catalyst Rogue Wired | event | syslog | R | - | - | - | - | - | - | vendored replay sample cisco-catalyst-rogue-wired.yml |
@@ -56,7 +56,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:dc:aci:events` | Cisco ACI Fabric State Events | event | syslog | R | - | - | - | Cisco ACI Add-on for Splunk Enterprise | - | - | vendored replay sample cisco-dc-aci-events.yml |
 | `cisco:dc:aci:health` | Cisco Dc Aci Bridge Domain | event | syslog | G | - | Y | - | - | - | 1 | vendored replay sample cisco-dc-aci-bridge-domain.yml |
 | `cisco:dc:nexus9k` | Cisco Dc Nexus9K | event | syslog | G | Y | Y | - | - | - | - | universe_batch6.json: Captured records in netspout/appserver/static/sa |
-| `cisco:dc:nexus9k:syslog` | Cisco Dc Nexus9K Syslog | event | syslog | G | - | Y | - | - | - | 2 | vendored replay sample cisco-dc-nexus9k-syslog.yml |
+| `cisco:dc:nexus9k:syslog` | Cisco Dc Nexus9K Syslog | event | syslog | G | - | Y | - | - | - | 3 | vendored replay sample cisco-dc-nexus9k-syslog.yml |
 | `cisco:dnac:audit:logs` | Cisco Dnac Audit Logs | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-audit-logs.yml |
 | `cisco:dnac:client` | Cisco Dnac Client | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-client.yml |
 | `cisco:dnac:clienthealth` | Cisco Dnac Clienthealth | event | syslog | R | - | - | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | - | vendored replay sample cisco-dnac-clienthealth.yml |
@@ -81,7 +81,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `cisco:ios` | Cisco Ios | event | syslog | G | Y | Y | - | Cisco Enterprise Networking Add-on for Splunk (verified) | - | 1 | vendored replay sample cisco-ios.yml |
 | `cisco:ios:mdt` | Cisco Ios Mdt | event | syslog | G | - | Y | - | - | - | 2 | none recorded |
 | `cisco:ios:mdt:metric` | Cisco IOS-XE / IOS-XR Model-Driven Telemetry (gRPC/JSON) | metric | hec | G | - | - | - | Splunk Add-on for Cisco IOS | - | 4 | vendored replay sample cisco-ios-mdt-metric.yml |
-| `cisco:ios:syslog` | Cisco IOS System Syslog Facility | event | syslog | G | - | - | - | Splunk Add-on for Cisco IOS | - | 8 | vendored replay sample cisco-ios-syslog.yml |
+| `cisco:ios:syslog` | Cisco IOS System Syslog Facility | event | syslog | G | - | - | - | Splunk Add-on for Cisco IOS | - | 10 | vendored replay sample cisco-ios-syslog.yml |
 | `cisco:ise:nac:8021x` | Cisco Ise Nac 8021X | event | syslog | - | - | - | - | - | - | 1 | none recorded |
 | `cisco:ise:radius:authz:policy` | Cisco Ise Radius Authz Policy | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-radius-authz-policy.yml |
 | `cisco:ise:radius:policyset` | Cisco Ise Radius Policyset | event | syslog | R | - | - | - | Splunk Add-on for Cisco ISE | - | - | vendored replay sample cisco-ise-radius-policyset.yml |
@@ -324,7 +324,7 @@ Legend: **G** native generator, **R** sample-replay catalog only, **-** none; **
 | `arista:eos` | Arista EOS Core Switching | event | syslog | R | - | - | - | Arista Networks App for Splunk | - | 1 | vendored replay sample arista-eos.yml |
 | `arista:eos:syslog` | Arista Eos Syslog | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | - | vendored replay sample arista-eos-syslog.yml |
 | `arista:flow:ipfix` | Arista Flow Ipfix | event | syslog | G | - | - | - | - | - | 1 | none recorded |
-| `arista:telemetry:json` | Arista Metrics Telemetry | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | 1 | vendored replay sample arista-metrics-telemetry.yml |
+| `arista:telemetry:json` | Arista Metrics Telemetry | event | syslog | R | - | - | - | Arista Networks Telemetry for Splunk | - | 2 | vendored replay sample arista-metrics-telemetry.yml |
 
 ## Linux Infrastructure (4)
 

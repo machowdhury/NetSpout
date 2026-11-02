@@ -35,6 +35,12 @@ Run the browser flow once beforehand: `cd frontend && LAB_ENV_DIR=tests/lab/phas
 
 Dashboard URL pattern: `http://localhost:18000/en-US/app/netspout/pf_<SCENARIO_ID>?form.run_tok=<run id>`.
 
+## Lab limits found in the Nov 2 rehearsal
+
+- **Do not demo the 37 telecom/industry incident packs in this lab.** They also emit gauge metrics, and the phase4e Splunk has no metrics index (PulseForge never creates indexes), so the run is refused with "Metric index is not authorized by Connection Center (HTTP 403)". Use scenarios whose preview shows no metrics index in its Destination line (the NetFlow `NF-*` set and the sourcetype streams were rehearsed); check the preview before the demo.
+- The start script writes `indexes: [idx_network_ops]` only; that is intended.
+- A browser check that fails once under machine load (for example a Stop click that records no POST) should be rerun alone before it is called a regression. Close other heavy processes before the demo.
+
 ## What not to claim
 
 - Flow data has no TTL (NOC-03 shows loop *indicators* only), cannot separate routing asymmetry from sampling/coverage (NOC-04), says nothing about latency (NOC-05), shows volume not theft (SEC-08), regularity not malice (SEC-09), and no DNS query names (SEC-10).

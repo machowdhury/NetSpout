@@ -1,0 +1,99 @@
+{
+ "date": "2026-11-02",
+ "splunk": "Splunk Enterprise 10.6.1.1 (build b2ae2962645c), single node, Ubuntu 24.04 x86_64, AWS EC2 t3.xlarge us-east-1, no inbound access, SSM only",
+ "note": "TEST-ONLY packages; released artifacts untouched. Plan said 10.2.7; the user-supplied installer was 10.6.1.1, so every result below is for 10.6.1.1. Browser steps ran headless on the instance, text-level assertions only (no screenshots reviewed). Instance, volume, security group and bucket deleted after the test.",
+ "packages": {
+  "build1": "458efa165fc5ba9f48f9adfb1c14041723c9f63933446689a2076117e01a53eb",
+  "build2": "ae22415f3708e697e1ccb865f2e8c2b0a0fe130ffd5ef877ffd01a3ca177d2e8",
+  "build3": "40a3a5b92fdd775f44a7d2a916a09a2decdd2e90bf55ca231db52b6dfdd4169e",
+  "build4_final": "32b610b41e431a30b51b95dc2fa4988dd8baf6239ac65479d7e711e68bf011bf"
+ },
+ "original_failures_preserved": [
+  {
+   "build": "build1",
+   "failure": "splunkd never scheduled the launcher: its inputs.conf.spec stanza had only python.version, so no scheme was defined (no 'Found external scheme definition' log line, no process, no state dir)",
+   "fix": "engine_mode parameter in the spec and stanza"
+  },
+  {
+   "build": "build2",
+   "failure": "gateway returned 500 for every user: splunkd imports the handler by file path without bin/ on sys.path, so 'import pulseforge_ipc' failed (bad character in reply size)",
+   "fix": "sys.path insert in netspout_gateway.py"
+  },
+  {
+   "build": "build2",
+   "failure": "splunk stop left launcher (ppid 1) and engine running; next start refused by the lock and the orphan kept serving, unmanaged",
+   "fix": "launcher watches splunkd.pid file; waits up to 30 s for the lock"
+  },
+  {
+   "build": "build3",
+   "failure": "SIGKILL of the launcher left the engine orphaned and splunkd did not restart the launcher ('Killed' logged only)",
+   "fix": "engine exits itself when its parent changes"
+  }
+ ],
+ "splunkd_facts": [
+  "splunkd logs: Ignoring parameter interval for modular input ... potentially Splunk won't be restarting it in case it gets terminated",
+  "python.required=3.13 honoured: launcher ran under /opt/splunk/bin/python3.13",
+  "splunk stop does not signal the launcher and it is reparented to PID 1",
+  "remove app (no restart) stopped launcher and engine within 20 s, status record 'stopped'",
+  "current-context returns capabilities as a list",
+  "bundled python3.13 cannot import grpc on this image: libcares.so.2 missing (gNMI untested)"
+ ],
+ "results": {
+  "PASS": [
+   "install; app enabled and visible",
+   "launcher started by splunkd under python3.13 (builds 3,4)",
+   "vendored deps load",
+   "gateway to engine over Unix socket",
+   "no engine TCP listener, nothing on 8081",
+   "exactly one engine",
+   "engine crash restart (kill -9 -> new pid in ~4 s)",
+   "splunk stop leaves no orphan (build 3)",
+   "splunkd SIGKILL leaves no orphan",
+   "splunk restart restores one engine; config dir survives",
+   "interrupted run reported INTERRUPTED, not resumed, no resend (51 indexed vs 50 counted: one event in flight at SIGKILL)",
+   "socket 0600, dir 0700, key 0600",
+   "no key / wrong key 401, valid key 200 (engine direct)",
+   "WebSocket without valid key 403, with key 101",
+   "POST needs netspout_admin, GET needs netspout_view; viewer read-only; no-capability user 403; unauthenticated 401",
+   "revocation takes effect after ~30 s (cache)",
+   "HEC token and password absent from splunk logs, engine state and GET responses",
+   "Connection Center setup via gateway; test-connection ACCEPTED and VERIFIED",
+   "bounded NetFlow run NF-NOC-01-ELEPHANT: 224 accepted, 224 indexed by independent search on netspout_run_id",
+   "upgrade build2->build3->build4 in place",
+   "uninstall stops engine; index data kept (278 before and after)",
+   "single package, no separate engine install"
+  ],
+  "PARTIAL": [
+   "Browser: Splunk Web login, Command Center, Use Case Explorer React UI (inside iframe) and pf_NF-NOC-01-ELEPHANT load with no error banner; screenshots not reviewed, panel values not checked, Connection Center filled through the API not by clicks"
+  ],
+  "FAIL_OR_LIMIT": [
+   "secrets are NOT retained across an engine restart: hec_token_configured/search_secret_configured false after restart; Phase 3 (storage/passwords) still needed",
+   "a killed launcher is not restarted by splunkd until Splunk restarts or the input reloads",
+   "state dir (key, config) remains after uninstall",
+   "AppInspect: 9 failures unchanged"
+  ],
+  "NOT_RUN": [
+   "Splunk Web access from a remote browser (no Session Manager plugin)",
+   "gNMI under bundled grpc",
+   "aarch64 variant",
+   "Splunk 10.2.7",
+   "duplicate-telemetry check beyond the interrupt test",
+   "non-admin UI sessions in a browser"
+  ]
+ },
+ "appinspect": {
+  "version": "4.4.0",
+  "package": "build3 (40a3a5b9...), not re-run on build4",
+  "summary": {
+   "error": 0,
+   "failure": 9,
+   "warning": 12,
+   "success": 139
+  }
+ },
+ "cost": {
+  "instance_hours": 0.7,
+  "estimate_usd": 0.15,
+  "cap_usd": 1.5
+ }
+}

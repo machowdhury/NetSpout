@@ -10,11 +10,15 @@ port. Splunk authenticates the session (requireAuthentication); this handler add
 import json
 import os
 import ssl
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 
-import pulseforge_ipc as ipc  # Unix-socket channel to the Splunk-managed engine (same bin directory)
+BIN_DIR = os.path.dirname(os.path.abspath(__file__))
+if BIN_DIR not in sys.path:  # splunkd loads this file by path without adding bin/ to sys.path
+    sys.path.insert(0, BIN_DIR)
+import pulseforge_ipc as ipc  # noqa: E402  Unix-socket channel to the Splunk-managed engine (same bin directory)
 
 try:
     from splunk.persistconn.application import PersistentServerConnectionApplication

@@ -164,3 +164,13 @@ Phase 2 as authorized ("prove it in a clean Splunk") needs a new Splunk containe
 | Tests | 286 targeted tests pass (launcher, key, capabilities, surface, monitor, NetFlow, dashboards, incident packs) |
 
 Phase 2 container steps are exactly section 11, with these additions: confirm the process tree shows one engine under splunkd; record what signal the engine receives on `splunk stop` and on disabling the input; confirm `current-context` returns capabilities; run the AppInspect command above again on the built package; decide per-architecture packaging.
+
+## 14. Phase 2 on a real Splunk Enterprise (AWS EC2, 2026-11-02)
+
+Evidence: `docs/verification/evidence/install/single_package_aws_ec2_2026-11-02.json`. Splunk Enterprise **10.6.1.1**, one throwaway Ubuntu 24.04 x86_64 host, no inbound access. The plan named 10.2.7; results apply to 10.6.1.1 only.
+
+**What the first real run exposed (all four defects fixed here, original failures kept in the evidence file):** the launcher's spec had no parameter of its own, so splunkd never defined the scheme; the gateway imported a sibling module that splunkd's by-path loader does not make importable; `splunk stop` neither signals the launcher nor leaves it a parent, so launcher and engine survived as orphans; a killed launcher is not restarted and left the engine orphaned. splunkd itself logs that it ignores `interval` for modular inputs, so `interval = 0` is not a restart guarantee.
+
+**Verified:** splunkd starts the managed engine under `python3.13` from one package; one engine; no TCP listener; capability RBAC (admin and power read/write, viewer read-only, no-capability and unauthenticated refused; revocation lags up to 30 s); WebSocket and HTTP key enforcement; crash restart; clean stop/start; upgrade in place; Connection Center setup, a bounded NetFlow run with 224 accepted and 224 indexed by independent search; interrupted runs are not resumed or resent; uninstall stops the engine and keeps index data.
+
+**Not solved:** secrets do not survive an engine restart (Phase 3, `storage/passwords`); a killed launcher stays down until Splunk restarts; state directory remains after uninstall; AppInspect still reports 9 failures (one packaging, eight existing); gNMI untested (bundled grpc needs `libcares.so.2` on this OS); only x86_64, only Splunk 10.6.1.1. Browser checks were headless text-level checks on the host. No Cloud claim, no AppInspect approval, no Python 3.9 support.

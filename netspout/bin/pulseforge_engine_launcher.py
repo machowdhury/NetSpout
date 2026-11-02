@@ -7,7 +7,7 @@ Unix socket and stops it when splunkd stops it. Lifecycle:
   start    create the state directory, a persistent per-install key (0600) and a lock (one launcher per host), spawn the engine
   health   probe GET /api/health over the socket; the status record engine.json carries state, pid, restarts and the last error
   restart  engine exits or stops answering -> restart with backoff (1, 2, 4 ... 30 s; the counter resets after 60 s of health)
-  stop     SIGTERM/SIGINT or splunkd gone -> SIGTERM the engine (it finishes in-flight deliveries and persists counters), kill after
+  stop     SIGTERM/SIGINT or splunkd stopped (its pid file gone or changed) -> SIGTERM the engine (it finishes in-flight deliveries and persists counters), kill after
            the grace period, remove the socket, record "stopped"
 
 Nothing is resumed after a restart: active runs are reported INTERRUPTED by the engine and never re-sent. Configuration lives in the
@@ -63,12 +63,13 @@ def engine_python():
 
 
 class Supervisor:
-    def __init__(self, directory, command=None, grace=15, healthy_after=60, probe_every=2, parent_pid=None):
+    def __init__(self, directory, command=None, grace=15, healthy_after=60, probe_every=2, parent_pid=None, splunkd_pid_file=None, lock_wait=0):
         self.dir = Path(directory)
         self.sock = self.dir / ipc.SOCKET_FILE
         self.command = command or [engine_python(), str(Path(__file__).resolve().parent / "pulseforge_engine_main.py"), "--uds", str(self.sock)]
         self.grace, self.healthy_after, self.probe_every = grace, healthy_after, probe_every
         self.parent_pid = parent_pid
+        self.pid_file, self.lock_wait, self.splunkd_pid = splunkd_pid_file, lock_wait, None
         self.proc = None
         self.info = {"state": "stopped", "pid": None, "restarts": 0, "last_error": None, "transport": "uds", "socket": str(self.sock)}
         self._stop = False
@@ -87,11 +88,40 @@ class Supervisor:
         os.chmod(self.dir, 0o700)
         (self.dir / "config").mkdir(exist_ok=True)
         self._lock = open(self.dir / "launcher.lock", "w")
-        try:
-            fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError:
-            raise SystemExit("another PulseForge launcher already owns %s" % self.dir)
+        end = time.monotonic() + self.lock_wait  # a restarting splunkd may start us while the previous launcher is still shutting down
+        while True:
+            try:
+                fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except OSError:
+                if time.monotonic() >= end:
+                    raise SystemExit("another PulseForge launcher already owns %s" % self.dir)
+                time.sleep(0.5)
+        self.splunkd_pid = self._read_splunkd_pid()
         self.key = ensure_key(self.dir)
+
+    def _read_splunkd_pid(self):
+        try:
+            return int(Path(self.pid_file).read_text().split()[0]) if self.pid_file else None
+        except (OSError, ValueError, IndexError):
+            return None
+
+    def splunkd_gone(self):
+        """Observed on Splunk 10.6.1.1: `splunk stop` neither signals this launcher nor leaves it a parent to watch (it is reparented to
+        PID 1), so liveness is taken from splunkd's own pid file: gone, changed or dead pid means splunkd stopped or restarted."""
+        if self.parent_pid and os.getppid() != self.parent_pid:
+            return True
+        if not self.splunkd_pid:
+            return False
+        if self._read_splunkd_pid() != self.splunkd_pid:
+            return True
+        try:
+            os.kill(self.splunkd_pid, 0)
+        except ProcessLookupError:
+            return True
+        except PermissionError:
+            pass
+        return False
 
     def _env(self):
         env = {k: os.environ[k] for k in PASS_ENV if k in os.environ}
@@ -133,8 +163,8 @@ class Supervisor:
         try:
             self._spawn()
             while not self._stop:
-                if self.parent_pid and os.getppid() != self.parent_pid:
-                    break  # splunkd went away; do not leave an orphan engine
+                if self.splunkd_gone():
+                    break  # splunkd stopped or restarted; do not leave an orphan engine
                 time.sleep(self.probe_every)
                 code = self.proc.poll()
                 if code is not None:
@@ -169,7 +199,8 @@ def main(argv):
         return 0
     if "--validate-arguments" in argv:
         return 0
-    sup = Supervisor(ipc.state_dir(), parent_pid=os.getppid())
+    pid_file = Path(os.environ.get("SPLUNK_HOME", "/opt/splunk")) / "var" / "run" / "splunk" / "splunkd.pid"
+    sup = Supervisor(ipc.state_dir(), parent_pid=os.getppid(), splunkd_pid_file=pid_file if pid_file.is_file() else None, lock_wait=30)
     for s in (signal.SIGTERM, signal.SIGINT):
         signal.signal(s, lambda *_: sup.stop())
     sup.run()

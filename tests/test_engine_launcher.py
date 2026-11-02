@@ -189,3 +189,57 @@ def test_engine_interpreter_prefers_splunks_python313_and_refuses_old_pythons(tm
     monkeypatch.setattr(sys, "version_info", (3, 9, 0, "final", 0))
     with pytest.raises(SystemExit):
         launcher.engine_python()
+
+
+def test_gateway_loads_the_way_splunkd_loads_it_without_bin_on_sys_path():
+    """Found on a real Splunk 10.6.1.1: splunkd imports the handler by file path, so a sibling import must not rely on bin/ being on sys.path."""
+    code = ("import importlib.util,sys;s=importlib.util.spec_from_file_location('x',%r);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);print(hasattr(m,'NetSpoutGateway'))" % str(BIN / "netspout_gateway.py"))
+    r = subprocess.run([sys.executable, "-I", "-c", code], cwd="/", capture_output=True, text=True, timeout=30)
+    assert r.stdout.strip() == "True", r.stderr
+
+
+def test_launcher_stops_when_the_splunkd_pid_file_disappears_or_changes(state, tmp_path):
+    pidf = tmp_path / "splunkd.pid"
+    pidf.write_text("%d\n%d\n" % (os.getpid(), os.getpid()))
+    sup = launcher.Supervisor(state, grace=20, probe_every=0.3, splunkd_pid_file=pidf)
+    t = threading.Thread(target=sup.run, daemon=True)
+    t.start()
+    assert _wait(lambda: sup.info["state"] == "healthy"), sup.info
+    pid = sup.info["pid"]
+    pidf.unlink()                                     # what `splunk stop` does
+    t.join(60)
+    assert not t.is_alive() and sup.info["state"] == "stopped"
+    with pytest.raises(ProcessLookupError):
+        os.kill(pid, 0)
+
+
+def test_a_restarting_launcher_waits_for_the_previous_one_to_release_the_lock(state):
+    a = launcher.Supervisor(state)
+    a.prepare()
+    threading.Timer(1.0, lambda: a._lock.close()).start()
+    b = launcher.Supervisor(state, lock_wait=10)
+    b.prepare()                                       # does not raise: acquired after the first launcher let go
+
+
+def test_engine_exits_by_itself_when_its_launcher_is_killed(state):
+    """Found on a real Splunk 10.6.1.1: a killed launcher is not restarted and used to leave the engine running as an orphan."""
+    sock = os.path.join(state, "engine.sock")
+    parent = subprocess.Popen([sys.executable, "-c", "import subprocess,sys,time,os;p=subprocess.Popen([sys.executable,%r,'--uds',%r]);print(p.pid,flush=True);time.sleep(300)" % (str(BIN / "pulseforge_engine_main.py"), sock)],
+                              env={**os.environ, "PULSEFORGE_GATEWAY_KEY": "k"}, stdout=subprocess.PIPE, text=True)
+    child = int(parent.stdout.readline())
+    try:
+        assert _wait(lambda: os.path.exists(sock), 60)
+        parent.kill()
+        def gone():
+            try:
+                os.kill(child, 0)
+                return False
+            except ProcessLookupError:
+                return True
+        assert _wait(gone, 30), "engine still running after its launcher was killed"
+    finally:
+        parent.kill()
+        try:
+            os.kill(child, signal.SIGKILL)
+        except ProcessLookupError:
+            pass

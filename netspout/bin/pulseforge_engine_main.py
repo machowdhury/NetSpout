@@ -12,7 +12,10 @@ mandatory: without one this process exits instead of serving an unauthenticated 
 import argparse
 import os
 import platform
+import signal
 import sys
+import threading
+import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -31,6 +34,16 @@ def bootstrap_paths():
             sys.path.insert(0, str(p))
             added.append(str(p))
     return added
+
+
+def exit_when_orphaned(parent_pid, poll=2.0):
+    """splunkd does not restart a launcher that is killed (observed on Splunk 10.6.1.1), and a surviving engine would be an unsupervised orphan
+    that a later launcher could duplicate; so the engine shuts itself down gracefully (SIGTERM) as soon as its launcher is gone."""
+    def watch():
+        while os.getppid() == parent_pid:
+            time.sleep(poll)
+        os.kill(os.getpid(), signal.SIGTERM)
+    threading.Thread(target=watch, daemon=True).start()
 
 
 def main(argv=None):
@@ -63,6 +76,8 @@ def main(argv=None):
         kwargs = {"fd": sock.fileno()}
     else:
         kwargs = {"host": a.host, "port": a.port}
+    if a.uds:
+        exit_when_orphaned(os.getppid())
     uvicorn.run(app, log_level="warning", **kwargs)  # uvicorn turns SIGTERM into a graceful shutdown (runs the app's lifespan exit)
     return 0
 

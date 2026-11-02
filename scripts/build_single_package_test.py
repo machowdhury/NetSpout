@@ -36,6 +36,7 @@ python.version = python3
 python.required = 3.13
 
 [pulseforge_engine_launcher://default]
+engine_mode = managed
 disabled = 0
 interval = 0
 """

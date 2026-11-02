@@ -17,6 +17,7 @@ services:
       - SPLUNK_HEC_PORT=8088
       - SPLUNK_ROLE=splunk_standalone
       - FAST_SIMULATION_PORT=8081
+      - NETSPOUT_BACKEND_URL=http://127.0.0.1:8081 # the engine runs inside this container; do not rely on host.docker.internal
       - SPLUNK_HEC_URL=https://splunk-netspout:8088/services/collector
       - OTEL_ENDPOINT=http://otel-collector:4318
       - NETSPOUT_COLLECTOR_HOST=netspout-flow-collector
@@ -31,8 +32,6 @@ services:
     ports:
       - "127.0.0.1:8000:8000" # Splunk Web UI
       - "127.0.0.1:8088:8088" # Splunk HEC
-      - "127.0.0.1:8089:8089" # Splunk Management REST API
-      - "127.0.0.1:8081:8081" # Local-only Studio, simulation REST, and WebSocket API
       - "127.0.0.1:514:514/udp" # Local lab Syslog UDP
       - "127.0.0.1:514:514/tcp" # Local lab Syslog TCP
     volumes:

@@ -1,6 +1,6 @@
 # Scenario Coverage Reference
 
-Generated 2026-11-01 by `scripts/generate_reference_docs.py` from the Use Case Explorer registry (all scenario registries merged and deduplicated by scenario id). Machine-readable: `scenario_coverage.json` / `scenario_coverage.csv`.
+Generated 2026-11-02 by `scripts/generate_reference_docs.py` from the Use Case Explorer registry (all scenario registries merged and deduplicated by scenario id). Machine-readable: `scenario_coverage.json` / `scenario_coverage.csv`.
 
 | Measure | Count |
 |---|---|

@@ -26,6 +26,7 @@ except ImportError:  # unit tests / non-Splunk import
     class PersistentServerConnectionApplication:
         pass
 
+MANAGED_PACKAGE = os.path.exists(os.path.join(BIN_DIR, "MANAGED_ENGINE"))  # written only by the single-package build
 ADMIN_CAPABILITY = "netspout_admin"   # POST: run, stop, configure (granted by default to admin, sc_admin and power in authorize.conf)
 VIEW_CAPABILITY = "netspout_view"     # GET: read-only use (granted to the `user` role and so inherited by power and admin)
 CAPS_TTL = 30
@@ -97,7 +98,9 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             query = request.get("query") or []
             pairs = query.items() if isinstance(query, dict) else query
             qs = urllib.parse.urlencode([(k, v) for k, v in pairs])
-            managed = None if os.environ.get("NETSPOUT_BACKEND_URL") else ipc.engine_info()  # an explicit URL wins; else the managed engine
+            if MANAGED_PACKAGE and not ipc.engine_info():  # single-package build: the engine is Splunk-managed, there is no TCP engine to fall back to
+                return _reply(503, {"detail": "PulseForge engine is not running yet; it is started by Splunk (check Settings > Data inputs > PulseForge engine, or restart Splunk)"})
+            managed = None if os.environ.get("NETSPOUT_BACKEND_URL") and not MANAGED_PACKAGE else ipc.engine_info()  # external-engine installs: an explicit URL wins
             url = backend_url() + sub + ("?" + qs if qs else "")
             raw = request.get("payload") or ""
             if len(raw) > MAX_BODY:

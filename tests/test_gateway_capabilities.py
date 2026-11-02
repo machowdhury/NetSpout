@@ -54,3 +54,17 @@ def test_capability_lookup_is_cached_by_hash_and_never_stores_the_raw_token(monk
     assert g._capabilities("raw-session-token") == {"netspout_view"}
     assert g._capabilities("raw-session-token") == {"netspout_view"}
     assert len(calls) == 1 and "raw-session-token" not in "".join(map(str, g._caps_cache))
+
+
+def test_managed_package_never_falls_back_to_a_tcp_engine(tmp_path, monkeypatch):
+    """Single-package build (MANAGED_ENGINE marker): no engine status record means a clear 503, never a call to 127.0.0.1:8081."""
+    import json
+    import netspout_gateway as g
+    monkeypatch.setattr(g, "MANAGED_PACKAGE", True)
+    monkeypatch.setattr(g, "_capabilities", lambda _k: {"netspout_view"})
+    monkeypatch.setenv("PULSEFORGE_STATE_DIR", str(tmp_path))
+    monkeypatch.setenv("NETSPOUT_BACKEND_URL", "http://127.0.0.1:8081")   # even an explicit URL is ignored in this build
+    called = []
+    monkeypatch.setattr(g.urllib.request, "urlopen", lambda *a, **k: called.append(a) or (_ for _ in ()).throw(AssertionError("TCP fallback used")))
+    r = g.NetSpoutGateway().handle(json.dumps({"method": "GET", "path_info": "/api/health", "session": {"authtoken": "s"}}))
+    assert r["status"] == 503 and not called

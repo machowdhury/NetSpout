@@ -168,8 +168,12 @@ def test_phase13_api_never_returns_submitted_secrets(monkeypatch, tmp_path):
 
 def test_distribution_defaults_bind_administrative_ports_to_loopback():
     compose = (ROOT / "docker-compose.yml").read_text(encoding="utf-8")
-    for port in ("8000", "8081", "8088", "8089", "514"):
+    for port in ("8000", "8088", "514"):
         assert f'127.0.0.1:{port}:' in compose
+    published = [l.strip() for l in compose.splitlines() if l.strip().startswith('- "') and ":" in l and l.split('"')[1][0].isdigit()]
+    assert published and all(l.startswith('- "127.0.0.1:') for l in published)   # nothing is published beyond loopback
+    assert "8081:8081" not in compose and "8089:8089" not in compose              # the engine and Splunk management are not published at all
+    assert "NETSPOUT_BACKEND_URL=http://127.0.0.1:8081" in compose                # in-container engine, no host.docker.internal dependency
     assert "SPLUNK_PASSWORD=${SPLUNK_PASSWORD:?" in compose
     assert "SPLUNK_HEC_TOKEN=${SPLUNK_HEC_TOKEN:?" in compose
     assert 'FAST_SIMULATION_HOST", "127.0.0.1"' in (

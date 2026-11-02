@@ -1,71 +1,33 @@
-# NetSpout — Security & Deployment Profiles
+# Security
 
-NetSpout provides two distinct, explicitly separated deployment profiles to safeguard production enterprise environments while offering zero-friction local evaluations.
+## Who signs in and who may act
+PulseForge uses **Splunk** for sign-in, sessions and password rules. It has no login of its own and stores no user accounts. Every request from the app passes through a Splunk REST handler that checks the Splunk session and then a capability:
 
-> **CRITICAL SECURITY REQUIREMENT**: Never commit production credentials to source repositories. Never log HEC tokens or passwords in cleartext. Never silently fall back to demo credentials when running in SECURE profile.
+| Capability | Allows |
+|---|---|
+| `netspout_view` | Read-only use (default: the `user` role) |
+| `netspout_admin` | Start and stop runs, change settings (default: `admin`, `sc_admin`, `power`) |
 
----
+Any error while checking is a refusal. After a role change, access can take about 30 seconds to update.
 
-## 1. Profiles Overview
+## The engine is not a second front door
+- **Splunk Enterprise package:** Splunk starts the engine. It listens only on a private Unix socket (owner-only permissions), not on a TCP port. Requests need an internal key that the Splunk handler adds; requests to the engine without it, including WebSocket requests, are refused. The key is service-to-service protection, not user authentication. Anyone who can run commands as the Splunk operating-system user could read it, which is the same trust level as Splunk itself.
+- **Docker:** the engine runs inside the container and is not published. Published ports are bound to `127.0.0.1`.
+- You never need port 8081.
 
-| Dimension | `DEMO` (Default for local lab) | `SECURE` / `EXTERNAL` (Production / Enterprise) |
-| :--- | :--- | :--- |
-| **Intended Target** | Local development, sandbox evaluation, quickstart Docker | Production networks, shared staging labs, remote Splunk Cloud |
-| **UI Badge** | `DEMO / LOCAL LAB` (Prominently displayed in TopBar) | `SECURE / EXTERNAL` |
-| **Credentials** | Disposable lab credentials accepted (`0000...`, `<your-splunk-admin-password>`) | User-supplied/generated secrets **strictly required** |
-| **Fallback Policy** | Allows automatic fallback to demo credentials if unspecified | **Fails fast with error** if demo secrets or empty tokens are passed |
-| **Token Logging** | Strictly masked (`0000****0000`) | Strictly masked (`****`); secrets are never logged in cleartext |
-| **Network Bind** | Local loopback / container network | Explicit target host/ports with TLS verification options |
+## Credentials
+- Your Splunk login belongs to Splunk. Do not reuse a production password for the evaluation Docker environment.
+- HEC tokens and search credentials you enter for PulseForge are optional integration settings, separate from your Splunk login. They are held by the engine in memory, never written to its settings files or logs, and never returned by the API. Enter them again after the engine restarts. In Docker they come from `.env`.
+- Docker: you choose the initial `admin` password in `.env` (git-ignored). Change it after first login ([INSTALL](INSTALL.md#a-docker)).
+- No credential is shipped in the packages or this repository.
 
----
+## Ports (Docker defaults, all on `127.0.0.1`)
+Splunk Web 8000, HEC 8088, syslog 514, OTLP 4317/4318, collector metrics 8889 and 13133, flow collectors 2055 and 4739, 8080. The engine (8081) and Splunk management (8089) are not published.
 
-## 2. Profile Activation
+## What is not covered
+- The Enterprise package has not passed Splunk AppInspect; it is not vetted for Splunk Cloud.
+- Parameterized GET endpoints, log contents and WebSocket frames were not exhaustively scanned for secrets; the parameterless GET endpoints were.
+- No third-party penetration test has been done. Dependencies bundled in the package were checked against known-vulnerability data on the build date, with none found.
 
-The active deployment profile is configured via the `NETSPOUT_PROFILE` environment variable.
-
-### Activating the Demo Profile (Default)
-```bash
-export NETSPOUT_PROFILE="demo"
-# or simply leave unset: defaults to demo
-```
-
-### Activating the Secure / External Profile
-```bash
-export NETSPOUT_PROFILE="secure"
-# or: export NETSPOUT_PROFILE="external"
-```
-
----
-
-## 3. Configuration in Secure Mode
-
-When `NETSPOUT_PROFILE=secure` or `NETSPOUT_PROFILE=external`:
-
-1. **HEC Token Enforcement:**
-   - Must be explicitly passed via `NETSPOUT_HEC_TOKEN` or configured in the connection UI.
-   - NetSpout **rejects** the disposable demo token (`00000000-0000-0000-0000-000000000000`) with a fatal configuration error.
-
-2. **Splunk Management Password Enforcement:**
-   - Must be explicitly passed via `NETSPOUT_SPLUNK_PASSWORD`.
-   - NetSpout **rejects** the retired disposable lab default (placeholder only: `<your-splunk-admin-password>`).
-
-3. **Example Secure Launch:**
-   ```bash
-   export NETSPOUT_PROFILE="secure"
-   export NETSPOUT_HEC_URL="https://splunk.corp.internal:8088/services/collector/event"
-   export NETSPOUT_HEC_TOKEN="00000000-0000-0000-0000-000000000000"
-   export NETSPOUT_SPLUNK_USER="svc_netspout"
-   export NETSPOUT_SPLUNK_PASSWORD="<from-your-secret-manager>"
-   export NETSPOUT_HEC_SSL_VERIFY="true"
-
-   docker compose -f docker-compose.prod.yml up -d
-   ```
-
----
-
-## 4. Secret Masking & Redaction
-
-NetSpout enforces strict secret masking across all logs, REST API payloads, UI state, and evidence records:
-- Tokens and passwords longer than 8 characters are masked as `prefix****suffix` (e.g. `e983****9931`).
-- Tokens 8 characters or fewer are completely obscured as `********`.
-- HTTP authorization headers are never persisted into collector evidence ledgers or Splunk dispatch receipts.
+## Reporting
+Please report a vulnerability privately: on GitHub, *Security → Report a vulnerability* for this repository. If that option is not available to you, open an issue asking for a private contact and include no details.

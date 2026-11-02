@@ -2398,13 +2398,14 @@ class GnmiSplunkE2EOrchestrator:
             }
 
             # --- Failure D: Invalid gNMI credentials ---
+            lab_password = __import__("secrets").token_urlsafe(18)  # per-run value for this loopback lab server and its collector
             auth_srv = NativeGnmiServer(
                 NativeGnmiServerConfig(
                     bind_address="127.0.0.1",
                     bind_port=0,
                     require_metadata_auth=True,
                     username="netspout-lab",
-                    password="correct-password",
+                    password=lab_password,
                 ),
                 state_store=state_store,
             )

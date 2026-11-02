@@ -1,6 +1,6 @@
 # Sourcetype Coverage Reference
 
-Generated 2026-11-01 by `scripts/generate_reference_docs.py` from `catalog/sourcetypes.json`, the coverage evidence and the replay registry. Machine-readable: `sourcetype_coverage.json` / `sourcetype_coverage.csv`.
+Generated 2026-11-02 by `scripts/generate_reference_docs.py` from `catalog/sourcetypes.json`, the coverage evidence and the replay registry. Machine-readable: `sourcetype_coverage.json` / `sourcetype_coverage.csv`.
 
 | Measure | Count |
 |---|---|

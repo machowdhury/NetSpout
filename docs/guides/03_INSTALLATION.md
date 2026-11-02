@@ -1,4 +1,6 @@
-# 03 Installation
+# 03 Installation (advanced: separately run engine)
+
+> **Customer installation is in [docs/INSTALL.md](../INSTALL.md).** This guide covers the earlier layout in which the engine is run separately; use it only for development or if you cannot use either install choice.
 
 Procedure A (Docker-hosted Splunk Enterprise) is the one that was actually run and verified (isolated lab, Splunk Enterprise 10.2.7, engine on the macOS host). Procedure B differs only where marked and has **not** been executed on a VM.
 

@@ -1,0 +1,64 @@
+{
+ "date": "2026-11-02",
+ "candidate": {
+  "package": "build/single_package_test/netspout_single_test.spl (git-ignored)",
+  "sha256": "9a590d866d3746fa16d1488e2c6c04f3b7c43ba33384ef8ccbba5036cb01ca35",
+  "bytes": 14244720,
+  "variants": [
+   "py313-linux-x86_64"
+  ],
+  "validated_on_real_splunk": false,
+  "note": "Differs from the AWS-validated build4 (32b610b4...) by: gateway MANAGED_ENGINE 503 path, inert AppInspect config edits, random per-run gNMI lab password, x86_64-only. It has NOT been run on a real Splunk; re-validate before release."
+ },
+ "validated_build": "32b610b41e431a30b51b95dc2fa4988dd8baf6239ac65479d7e711e68bf011bf (Splunk 10.6.1.1, evidence single_package_aws_ec2_2026-11-02.json)",
+ "appinspect": {
+  "version": "4.4.0",
+  "mode": "precert",
+  "summary": {
+   "error": 0,
+   "failure": 6,
+   "warning": 12,
+   "success": 142
+  },
+  "fixed_vs_previous_9": [
+   "inputs python.version generic stanza",
+   "[triggers] in app.conf",
+   "is_configured=0"
+  ],
+  "remaining": {
+   "check_aarch64_compatibility": "x86_64 .so files; cannot pass with any compiled x86_64 binaries in the package",
+   "check_modular_inputs_python_required": "python.required not set for netspout_streamer/pulseforge_spool; not changed because it changes the Python used and cannot be re-proven today",
+   "check_indexes_conf_properties": "maxTotalDataSizeMB caps; removing changes retention behaviour",
+   "check_rest_handler_python_executable_exists + check_script_restmap_conf_python_required": "contradictory pair; needs a Python-selection decision validated on Splunk",
+   "check_for_python_udp_network_communications": "25 findings; syslog/SNMP/NetFlow UDP is Enterprise functionality kept deliberately; incompatible with restricted Splunk Cloud"
+  }
+ },
+ "security": {
+  "pip_audit_vendored_wheels": "18 wheels, no known vulnerabilities",
+  "private_key_files": 0,
+  "hardcoded_lab_password_in_gnmi_splunk_e2e": "replaced by per-run random value",
+  "gateway_tcp_fallback": "removed in the single-package build (MANAGED_ENGINE marker -> 503)",
+  "executable_files": "4 python scripts mode 755 (datablaster_executor, datablaster_rest, pulseforge_spool, run_simulation); left as in the release app",
+  "certifi cacert.pem": "public CA bundle"
+ },
+ "docker": {
+  "compose_config_valid": true,
+  "changes": [
+   "NETSPOUT_BACKEND_URL=http://127.0.0.1:8081 inside the container",
+   "engine 8081 and Splunk management 8089 no longer published"
+  ],
+  "clean_checkout_run": "NOT RUN: needs a Splunk container; not allowed before the Nov 3 demo"
+ },
+ "tests": {
+  "regression_set": "404 passed (launcher, gateway, capabilities, surface, secrets, monitor, NetFlow, dashboard, incident, release, customer docs)",
+  "preexisting_failure": "tests/test_gate13d_gnmi_splunk_e2e.py::test_01 fails identically on the previous commit (needs live Splunk and gnmic)"
+ },
+ "docs": [
+  "README.md",
+  "docs/INSTALL.md",
+  "docs/QUICKSTART.md",
+  "docs/SCENARIOS.md (generated)",
+  "docs/TELEMETRY_COVERAGE.md (generated)",
+  "docs/SECURITY.md"
+ ]
+}

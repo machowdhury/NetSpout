@@ -90,6 +90,7 @@ def build(variants):
                                    "compiled": sorted({p.name for p in target.rglob("*.so")})[:12]}
     (app / "bin" / "lib").mkdir(exist_ok=True)
     (app / "bin" / "lib" / "MANIFEST.json").write_text(json.dumps(manifest, indent=1))
+    (app / "bin" / "MANAGED_ENGINE").write_text("This build runs the engine under splunkd; the gateway never falls back to a TCP engine.\n")
     inputs = app / "default" / "inputs.conf"
     inputs.write_text(inputs.read_text() + LAUNCHER_STANZA)
     OUT.mkdir(parents=True, exist_ok=True)

@@ -174,3 +174,12 @@ Evidence: `docs/verification/evidence/install/single_package_aws_ec2_2026-11-02.
 **Verified:** splunkd starts the managed engine under `python3.13` from one package; one engine; no TCP listener; capability RBAC (admin and power read/write, viewer read-only, no-capability and unauthenticated refused; revocation lags up to 30 s); WebSocket and HTTP key enforcement; crash restart; clean stop/start; upgrade in place; Connection Center setup, a bounded NetFlow run with 224 accepted and 224 indexed by independent search; interrupted runs are not resumed or resent; uninstall stops the engine and keeps index data.
 
 **Not solved:** secrets do not survive an engine restart (Phase 3, `storage/passwords`); a killed launcher stays down until Splunk restarts; state directory remains after uninstall; AppInspect still reports 9 failures (one packaging, eight existing); gNMI untested (bundled grpc needs `libcares.so.2` on this OS); only x86_64, only Splunk 10.6.1.1. Browser checks were headless text-level checks on the host. No Cloud claim, no AppInspect approval, no Python 3.9 support.
+
+## 15. Release closeout (2026-11-02)
+
+Evidence: `docs/verification/evidence/install/release_closeout_2026-11-02.json`. Scope was hardening and documentation; no new architecture.
+
+- **Candidate package** `9a590d86…` (x86_64 only, 14.2 MB) is **not** the build validated on AWS (`32b610b4…`). It adds the single-package 503 path (no TCP fallback), inert AppInspect config fixes, and a random per-run lab password in `gnmi/splunk_e2e.py`. It needs one more real-Splunk run before release; none is possible without new infrastructure.
+- **AppInspect 4.4.0:** 9 → 6 failures (0 errors, 12 warnings, 142 passed). Remaining: x86_64 binaries (cannot pass while compiled x86_64 files are bundled), `python.required` and REST-handler Python settings (contradictory checks; changing them alters the Python used), index size caps, and programmatic UDP (kept; Enterprise functionality).
+- **Credential persistence** is not a release blocker and no storage subsystem was added. Secrets entered in the UI stay in engine memory; Docker takes them from `.env`.
+- **Docker:** Compose validated; the engine and management ports are no longer published and the in-container gateway no longer depends on `host.docker.internal`. Clean-checkout run is pending until after the demo.

@@ -81,6 +81,10 @@ Discover what a run produced, then rate a counter. `<metric>` and the index are 
 The `if` drops a negative step (a counter reset) instead of plotting it. Cumulative octets are never bits per second. Existing incident dashboards use `mstats avg(_value) ... span=1s` on gauges, with `fillnull value=0` for missing samples, so a gap shows as zero. Syntax reference: <https://docs.splunk.com/Documentation/Splunk/8.2.12/Metrics/Search>.
 
 ### Remote `test_metrics` status
-Nov 2 2026 (`docs/verification/evidence/metrics/remote_test_metrics_2026-11-02.json`): 5 uniquely tagged synthetic metrics were sent to `test_metrics` on the Splunk Cloud HEC endpoint. HEC health was 200 and the 5 metrics were **accepted** (HTTP 200, `Success`; 0 rejected, 0 unknown). **Indexing is unverified**: the independent `mstats` search could not run because the Splunk Cloud search API (port 8089) answered `401 Unauthorized` to the supplied search login. The vendor sample, incident pack and metrics dashboard checks were therefore not run against the remote destination.
+Nov 2 2026, Splunk Cloud 10.4 (`docs/verification/evidence/metrics/remote_test_metrics_2026-11-02.json`):
+- **Five-metric test: PASS.** 5 uniquely tagged synthetic metrics were accepted over HEC (0 rejected) and then found independently with `mstats` and `mcatalog`, with their run id and dimensions.
+- **Incident pack, metrics side: PASS.** `telco_09_core_user_plane` gauges (10 records, 30 datapoints) were accepted and found by `mstats` with the expected counts. The four `mstats` searches of `pf_telco_09_core_user_plane` all return data for that run in Cloud.
+- **Not tested:** the pack's 30 log records (the metrics HEC token is refused on event indexes: `Incorrect index`, so the mixed event-plus-metrics path was not exercised), the engine run path and Live Delivery Monitor against Cloud, a rendered dashboard (the app is not installed in Cloud), and any vendor/OpenConfig sample.
+- `mstats` needs a `metric_name` predicate in its `WHERE` clause (for example `metric_name=*`); without one, one query returned no rows even though the data was present.
 
-The isolated Docker lab has no metrics index (none was created), so metric-bearing runs are refused there. Offline checks that did pass: the incident-pack payload is a valid metric payload and the metrics-related unit tests pass (118 passed).
+The isolated Docker lab has no metrics index (none was created), so metric-bearing runs are refused there. The Cloud result is a bounded check, not production certification.

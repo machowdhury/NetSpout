@@ -1,0 +1,222 @@
+{
+ "environment": "isolated lab Splunk Web (docker splunk/splunk:10.2), headless Chromium via Playwright",
+ "rendered": 12,
+ "rows": [
+  {
+   "scenario_id": "lateral_movement",
+   "run_id": "run-b4a0d30146b5",
+   "title": "PulseForge \u00b7 Ransomware / Lateral Spread (Port 445) | Splunk 10.2.7",
+   "tabs": [
+    "Overview",
+    "Investigation",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Overview.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Investigation.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/lateral_movement__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 14015
+  },
+  {
+   "scenario_id": "arch_gan_subsea_cloud",
+   "run_id": "run-38dafe68f8bf",
+   "title": "PulseForge \u00b7 GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_gan_subsea_cloud__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13228
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "run_id": "run-f4ceb0b30c72",
+   "title": "PulseForge \u00b7 CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_can_multi_building__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11857
+  },
+  {
+   "scenario_id": "normal_traffic",
+   "run_id": "run-fa38f5604172",
+   "title": "PulseForge \u00b7 Normal Operations (HTTP Round-Robin) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11609
+  },
+  {
+   "scenario_id": "pure_cisco_enterprise",
+   "run_id": "run-8c31dc8192d7",
+   "title": "PulseForge \u00b7 Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/pure_cisco_enterprise__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12135
+  },
+  {
+   "scenario_id": "C100-ENT-002",
+   "run_id": "run-7899dc4dfcb9",
+   "title": "PulseForge \u00b7 Distribution Uplink Failure | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-ENT-002__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13099
+  },
+  {
+   "scenario_id": "C100-SEC-005",
+   "run_id": "run-bd7a6d93b592",
+   "title": "PulseForge \u00b7 ISE Authentication Failure Spike | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-SEC-005__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13292
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "run_id": "run-33c3bde72892",
+   "title": "PulseForge \u00b7 BGP Peer Session Instability | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-SP-003__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 12868
+  },
+  {
+   "scenario_id": "C100-CRI-001",
+   "run_id": "run-436dab3be3f7",
+   "title": "PulseForge \u00b7 Financial Trading Campus-to-Data-Center Latency | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/C100-CRI-001__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 14103
+  },
+  {
+   "scenario_id": "UCR-14.3.9",
+   "run_id": "run-0a5666010c13",
+   "title": "PulseForge \u00b7 Cold Storage Room Temperature Excursion Alert | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13518
+  },
+  {
+   "scenario_id": "UCR-22.1.5",
+   "run_id": "run-ed70bed254ad",
+   "title": "PulseForge \u00b7 GDPR Consent Management Audit Trail | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-22.1.5__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13869
+  },
+  {
+   "scenario_id": "UCR-8.1.1",
+   "run_id": "run-f48a727b969d",
+   "title": "PulseForge \u00b7 HTTP Error Rate Monitoring | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-8.1.1__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13119
+  }
+ ]
+}

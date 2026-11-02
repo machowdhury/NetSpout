@@ -1,0 +1,4273 @@
+{
+ "summary": {
+  "scenarios_audited": 214,
+  "by_fidelity": {
+   "MIXED": 31,
+   "MODELED": 183
+  },
+  "mixed_with_native_or_sample_streams": 31,
+  "modeled_only": 183,
+  "modeled_only_with_stronger_generator_available": 54,
+  "missing_generators_by_sourcetype": {
+   "cisco:ise:trustsec:sgt": 2,
+   "netapp:ontap:nas": 1,
+   "pan:ble:iot:sensor": 1,
+   "cisco:mds:san:fc": 1,
+   "cisco:ise:nac:8021x": 1
+  },
+  "technologies_with_no_generator_mapping": {
+   "Cisco Industrial Networking": 6,
+   "Cisco Wireless": 4,
+   "Cisco 8000": 4,
+   "Cisco Cyber Vision": 3,
+   "AWS": 2,
+   "Cisco UCS": 2,
+   "Catalyst Center": 2,
+   "Cisco FMC": 2,
+   "Cisco Secure Network Analytics": 2,
+   "Cisco Campus": 1,
+   "Palo Alto Networks": 1,
+   "F5": 1,
+   "Cisco Network": 1,
+   "Microsoft Identity": 1,
+   "Microsoft Azure": 1,
+   "Cisco Security": 1,
+   "Cisco FTD": 1,
+   "Cisco ASA": 1,
+   "Cisco Secure Access": 1,
+   "Cisco Secure Client": 1,
+   "Cisco XDR": 1,
+   "Cisco Secure Workload": 1
+  }
+ },
+ "rows": [
+  {
+   "scenario_id": "C100-CRI-001",
+   "title": "Financial Trading Campus-to-Data-Center Latency",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:thousandeyes:metric",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-CRI-003",
+   "title": "Utility Substation WAN Loss",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco Industrial Networking"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Industrial Networking"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-004",
+   "title": "Energy Pipeline Remote-Site Isolation",
+   "intended_vendor_or_technology": [
+    "Cisco Industrial Networking",
+    "IOS XE"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Industrial Networking"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-005",
+   "title": "Manufacturing Cell Network Congestion",
+   "intended_vendor_or_technology": [
+    "Cisco Industrial Networking",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Industrial Networking"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-006",
+   "title": "Healthcare Clinical Application Path Failure",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco Wireless"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Wireless"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-007",
+   "title": "Transportation Control-Site Failover",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:sdwan:linkhealth",
+    "cisco:sdwan:BGP-5-ADJCHANGE"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-008",
+   "title": "Public Sector Identity and Network Access Failure",
+   "intended_vendor_or_technology": [
+    "Cisco ISE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ise:syslog",
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-009",
+   "title": "Remote Infrastructure Telemetry Blackout",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco Industrial Networking"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Industrial Networking"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-010",
+   "title": "OT/IT Segmentation Policy Drift",
+   "intended_vendor_or_technology": [
+    "Cisco Cyber Vision",
+    "Cisco Secure Firewall"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ftd:syslog",
+    "cisco:asa"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Cyber Vision"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-011",
+   "title": "Sovereign Cloud Interconnect Degradation",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus",
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:thousandeyes:metric",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:dc:nexus9k:syslog",
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-CRI-012",
+   "title": "Critical Communications Path Congestion",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "IOS XE"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-013",
+   "title": "Distributed Government Site Outage",
+   "intended_vendor_or_technology": [
+    "Cisco SD-WAN",
+    "IOS XE"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:sdwan:linkhealth",
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-014",
+   "title": "Mixed-Vendor Application Delivery Degradation",
+   "intended_vendor_or_technology": [
+    "Cisco Campus",
+    "Palo Alto Networks",
+    "F5",
+    "AWS"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:thousandeyes:metric",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Campus",
+    "Palo Alto Networks",
+    "F5",
+    "AWS"
+   ],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-CRI-015",
+   "title": "Cisco Network and Microsoft Identity Correlation",
+   "intended_vendor_or_technology": [
+    "Cisco Network",
+    "Microsoft Identity"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Network",
+    "Microsoft Identity"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-016",
+   "title": "Hybrid Hospital Wireless and Cloud Dependency",
+   "intended_vendor_or_technology": [
+    "Cisco Wireless",
+    "Microsoft Azure"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Wireless",
+    "Microsoft Azure"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-017",
+   "title": "Industrial Site Security and Availability Incident",
+   "intended_vendor_or_technology": [
+    "Cisco Cyber Vision",
+    "Cisco Secure Firewall",
+    "Cisco Industrial Networking"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ftd:syslog",
+    "cisco:asa"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Cyber Vision",
+    "Cisco Industrial Networking"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-018",
+   "title": "Cross-Domain DNS Dependency Failure",
+   "intended_vendor_or_technology": [
+    "Cisco Umbrella",
+    "IOS XE",
+    "AWS"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:cloud_security:dns",
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "AWS"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-CRI-019",
+   "title": "Sovereign Multi-Region Routing Instability",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:mdt:metric",
+    "cisco:sdwan:linkhealth",
+    "cisco:sdwan:BGP-5-ADJCHANGE"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-CRI-020",
+   "title": "National Critical Infrastructure Evidence Gap",
+   "intended_vendor_or_technology": [
+    "Cisco Industrial Networking",
+    "Cisco Security"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Industrial Networking",
+    "Cisco Security"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-002",
+   "title": "Nexus vPC Member Failure",
+   "intended_vendor_or_technology": [
+    "NX-OS",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:nxos:syslog",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-003",
+   "title": "EVPN Route Withdrawal",
+   "intended_vendor_or_technology": [
+    "NX-OS",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:nxos:syslog",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-004",
+   "title": "VXLAN Tunnel Endpoint Reachability Loss",
+   "intended_vendor_or_technology": [
+    "NX-OS",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:nxos:syslog",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-005",
+   "title": "ACI Leaf-Spine Link Failure",
+   "intended_vendor_or_technology": [
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:dc:aci:health",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-DC-006",
+   "title": "ACI Endpoint Movement Anomaly",
+   "intended_vendor_or_technology": [
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:health",
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-007",
+   "title": "ACI Contract Policy Denial",
+   "intended_vendor_or_technology": [
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:health",
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-008",
+   "title": "Data Center East-West Congestion",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus",
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:dc:nexus9k:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:health",
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-DC-009",
+   "title": "Underlay Routing Instability",
+   "intended_vendor_or_technology": [
+    "NX-OS",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:nxos:syslog",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-DC-010",
+   "title": "Overlay-Underlay Correlation Gap",
+   "intended_vendor_or_technology": [
+    "NX-OS",
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:nxos:syslog",
+    "cisco:dc:aci:health",
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-011",
+   "title": "UCS Fabric Interconnect Degradation",
+   "intended_vendor_or_technology": [
+    "Cisco UCS"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco UCS"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-012",
+   "title": "UCS Service Profile Drift",
+   "intended_vendor_or_technology": [
+    "Cisco UCS"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco UCS"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-013",
+   "title": "Intersight Managed-System Visibility Gap",
+   "intended_vendor_or_technology": [
+    "Cisco Intersight"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:intersight:alarms"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-014",
+   "title": "Hybrid Cloud Data Path Degradation",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus",
+    "Cisco Intersight"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:nexus9k:syslog",
+    "cisco:intersight:alarms"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-015",
+   "title": "Storage Network Dependency Congestion",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:dc:nexus9k:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-DC-016",
+   "title": "Application Tier Fabric Isolation",
+   "intended_vendor_or_technology": [
+    "Cisco ACI"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:health",
+    "cisco:dc:aci:class"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-017",
+   "title": "GPU Fabric East-West Congestion Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-018",
+   "title": "Lossless Ethernet Pause Propagation Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-019",
+   "title": "AI Cluster Network Telemetry Gap",
+   "intended_vendor_or_technology": [
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-DC-020",
+   "title": "Multi-Fabric Data Center Service Impact",
+   "intended_vendor_or_technology": [
+    "Cisco ACI",
+    "Cisco Nexus"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:dc:aci:health",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:dc:aci:class",
+    "cisco:dc:nexus9k:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-002",
+   "title": "Distribution Uplink Failure",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-003",
+   "title": "Campus Oversubscription Congestion",
+   "intended_vendor_or_technology": [
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-004",
+   "title": "Branch WAN Packet Loss",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:sdwan:linkhealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:sdwan:BGP-5-ADJCHANGE"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-005",
+   "title": "SD-WAN Preferred-Path Change",
+   "intended_vendor_or_technology": [
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:linkhealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 2
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-006",
+   "title": "SD-WAN Brownout Before Failover",
+   "intended_vendor_or_technology": [
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:linkhealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 2
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-007",
+   "title": "Campus Routing Adjacency Instability",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-008",
+   "title": "Branch Route Withdrawal",
+   "intended_vendor_or_technology": [
+    "IOS XE"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-009",
+   "title": "Wireless Client Roaming Failure",
+   "intended_vendor_or_technology": [
+    "Cisco Wireless"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:catalyst:clienthealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Wireless"
+   ],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-010",
+   "title": "Wireless Capacity Saturation",
+   "intended_vendor_or_technology": [
+    "Cisco Wireless"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:catalyst:clienthealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Wireless"
+   ],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-011",
+   "title": "Campus DHCP Dependency Failure",
+   "intended_vendor_or_technology": [
+    "Catalyst Switching",
+    "IOS XE"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-012",
+   "title": "Campus DNS Path Degradation",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-013",
+   "title": "Network Access Authentication Delay",
+   "intended_vendor_or_technology": [
+    "Cisco ISE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ise:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-014",
+   "title": "Network Access Authorization Drift",
+   "intended_vendor_or_technology": [
+    "Cisco ISE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ise:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-015",
+   "title": "Campus Path Asymmetry",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-016",
+   "title": "Catalyst Configuration Drift",
+   "intended_vendor_or_technology": [
+    "Catalyst Switching",
+    "Catalyst Center"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Catalyst Center"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-017",
+   "title": "Catalyst Center Assurance Data Gap",
+   "intended_vendor_or_technology": [
+    "Catalyst Center"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Catalyst Center"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-018",
+   "title": "Meraki Multi-Site Reachability Degradation",
+   "intended_vendor_or_technology": [
+    "Cisco Meraki"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:meraki:syslog",
+    "meraki:accesspoints"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-ENT-019",
+   "title": "Branch Application Path Regression",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Cisco SD-WAN"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:sdwan:linkhealth",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:sdwan:BGP-5-ADJCHANGE"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-ENT-020",
+   "title": "Enterprise Telemetry Blind Spot",
+   "intended_vendor_or_technology": [
+    "IOS XE",
+    "Catalyst Switching"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-002",
+   "title": "FTD Access-Control Policy Denial",
+   "intended_vendor_or_technology": [
+    "Cisco FTD",
+    "Cisco FMC"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco FTD",
+    "Cisco FMC"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-003",
+   "title": "ASA Remote Access Failure",
+   "intended_vendor_or_technology": [
+    "Cisco ASA"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco ASA"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-004",
+   "title": "Firewall Rulebase Drift",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Firewall",
+    "Cisco FMC"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ftd:syslog",
+    "cisco:asa"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco FMC"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-005",
+   "title": "ISE Authentication Failure Spike",
+   "intended_vendor_or_technology": [
+    "Cisco ISE"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ise:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SEC-006",
+   "title": "ISE Policy Authorization Mismatch",
+   "intended_vendor_or_technology": [
+    "Cisco ISE"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ise:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SEC-007",
+   "title": "Secure Access Policy Block",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Access"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Secure Access"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-008",
+   "title": "Umbrella DNS Abuse Indicator",
+   "intended_vendor_or_technology": [
+    "Cisco Umbrella"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:cloud_security:dns"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-009",
+   "title": "Umbrella DNS Tunneling Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Umbrella"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:cloud_security:dns"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-010",
+   "title": "Secure Endpoint Malware Activity Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Endpoint"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:se"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-011",
+   "title": "Secure Endpoint Isolation Impact",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Endpoint"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:se"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-012",
+   "title": "Secure Network Analytics Beaconing Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Network Analytics"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Secure Network Analytics"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-013",
+   "title": "Secure Network Analytics Lateral Movement Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Network Analytics"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Secure Network Analytics"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-014",
+   "title": "Secure Client Posture Failure",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Client"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Secure Client"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-015",
+   "title": "Duo Authentication Anomaly",
+   "intended_vendor_or_technology": [
+    "Cisco Duo"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:duo:remote:vpn",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:duo:authentication"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SEC-016",
+   "title": "Cisco XDR Cross-Signal Incident Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco XDR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco XDR"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-017",
+   "title": "Secure Workload Policy Violation Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Workload"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Secure Workload"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-018",
+   "title": "Cyber Vision OT Asset Anomaly Candidate",
+   "intended_vendor_or_technology": [
+    "Cisco Cyber Vision"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco Cyber Vision"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-019",
+   "title": "Reconnaissance and Firewall Correlation",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Firewall"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ftd:syslog",
+    "cisco:asa"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SEC-020",
+   "title": "Potential Exfiltration Path Correlation",
+   "intended_vendor_or_technology": [
+    "Cisco Secure Firewall",
+    "Cisco Umbrella"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ftd:syslog",
+    "cisco:asa",
+    "cisco:cloud_security:dns"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-002",
+   "title": "Carrier Interface Error Burst",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "Cisco 8000"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco 8000"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "title": "BGP Peer Session Instability",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SP-004",
+   "title": "BGP Route Withdrawal Propagation",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SP-005",
+   "title": "Provider Edge Access Link Failure",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "Cisco 8000"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco 8000"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-006",
+   "title": "BGP Path Preference Shift",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SP-007",
+   "title": "Route Reflector Propagation Delay",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-008",
+   "title": "MPLS Label-Switched Path Degradation",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-009",
+   "title": "MPLS VPN Reachability Loss",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-010",
+   "title": "Segment Routing Policy Path Change",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-011",
+   "title": "SR-MPLS Constraint Violation",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-012",
+   "title": "SRv6 Service Path Interruption",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-013",
+   "title": "Carrier Core Congestion",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "Cisco 8000"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco 8000"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-014",
+   "title": "Provider Traffic Engineering Imbalance",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-015",
+   "title": "Optical Transport Dependency Degradation",
+   "intended_vendor_or_technology": [
+    "IOS XR",
+    "Cisco 8000"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [
+    "Cisco 8000"
+   ],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-016",
+   "title": "IOS XR Model-Driven Telemetry Loss",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-017",
+   "title": "Inter-AS Routing Leak Candidate",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-018",
+   "title": "Carrier Control-Plane Resource Pressure",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "C100-SP-019",
+   "title": "Multi-Domain Path Failover",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "modeled": 2,
+    "vendor_native": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": true
+  },
+  {
+   "scenario_id": "C100-SP-020",
+   "title": "PE-CE Policy Mismatch",
+   "intended_vendor_or_technology": [
+    "IOS XR"
+   ],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [
+    "cisco:ios:syslog",
+    "cisco:ios:mdt:metric"
+   ],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-13.4.5",
+   "title": "AI/LLM Gateway Rate-Limit Breaches, Quota Burn, Tenant-Fairness Starvation, and 429 Class Attribution (Azure OpenAI, AWS Bedrock, OpenAI, Anthropic, vLLM/Ollama, Kong/Tyk/Apigee proxies)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.1.1",
+   "title": "HVAC Performance Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.1.29",
+   "title": "HVAC Setpoint Override Frequency and Duration",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.1.37",
+   "title": "Elevator Door Fault Frequency and Prediction",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.1.42",
+   "title": "Fire Alarm Panel Zone Health and Event Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.2.1",
+   "title": "PLC/RTU Health Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.2.2",
+   "title": "Process Variable Anomalies",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.3.11",
+   "title": "Greenhouse Humidity & Growth Optimization",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-14.3.9",
+   "title": "Cold Storage Room Temperature Excursion Alert",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-15.3.36",
+   "title": "Workspace Utilization and Ghost Booking Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-17.1.4",
+   "title": "Guest Network Usage",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.1.1",
+   "title": "SCADA Alarm Rate Monitoring and Alarm Flooding Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.1.12",
+   "title": "Outage Management System vs SCADA State Correlation",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.1.2",
+   "title": "Substation RTU Communication Failure",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.1.7",
+   "title": "Transformer Dissolved Gas Analysis (DGA) Trending",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.1.8",
+   "title": "Generator Trip Event Correlation",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.1",
+   "title": "Claims Processing Cycle Time Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.2",
+   "title": "First Notice of Loss Channel Analysis",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.5",
+   "title": "Policy Underwriting Decision Audit Trail",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.6",
+   "title": "Insurance Fraud Ring Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.8",
+   "title": "Catastrophe Event Claims Surge Capacity Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.10.9",
+   "title": "Claims Leakage and Overpayment Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.1",
+   "title": "Consumer credit card transaction monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.10",
+   "title": "Failed trade settlement ML prediction",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.13",
+   "title": "ATM usage pattern anomaly",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.14",
+   "title": "Retail banking transaction end-to-end trace",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.18",
+   "title": "MiFID II transaction reporting compliance",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.2",
+   "title": "Mobile device payment monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.11.21",
+   "title": "PCI Edge Processor cardholder filter",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.1",
+   "title": "Law enforcement accident reconstruction",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.10",
+   "title": "Higher-ed FERPA student record access audit",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.11",
+   "title": "Campus network outage academic impact",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.12",
+   "title": "Research grant expenditure anomaly",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.13",
+   "title": "Student information system login geo-velocity",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.16",
+   "title": "Voting system audit log integrity (where applicable)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.17",
+   "title": "Emergency services CAD dispatch latency",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.18",
+   "title": "911 call answer time SLA",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.19",
+   "title": "Public health outbreak reporting timeliness",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.2",
+   "title": "Law enforcement active investigation timeline",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.20",
+   "title": "Social services case management backlog",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.12.21",
+   "title": "Building permit inspection scheduling gap",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.1",
+   "title": "FERPA student record unauthorized access",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.10",
+   "title": "Telehealth student health portal latency",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.12",
+   "title": "Alumni donation portal anomaly",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.13",
+   "title": "Title IX case management timeline SLA",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.17",
+   "title": "Classroom AV system uptime",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.18",
+   "title": "Dormitory environmental safety sensor",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.13.2",
+   "title": "LMS (Canvas/Blackboard) login anomaly",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.14.1",
+   "title": "Genesys Cloud integration health",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.1",
+   "title": "Overall Equipment Effectiveness (OEE) Calculation",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.11",
+   "title": "Robotic Cell Cycle Time Deviation",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.12",
+   "title": "Conveyor Belt Speed and Jam Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.2",
+   "title": "Unplanned Downtime Root Cause Correlation",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.3",
+   "title": "Production Batch Yield Tracking",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.2.4",
+   "title": "Quality SPC Chart Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.1",
+   "title": "EHR System Response Time Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.12",
+   "title": "Emergency Department Wait Time Tracking",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.2",
+   "title": "Clinical Application Uptime SLA Tracking",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.3",
+   "title": "Nurse Call System Response Time",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.4",
+   "title": "Blood Bank Refrigerator Temperature Compliance",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.3.5",
+   "title": "Pharmaceutical Cold Chain Deviation Alerting",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.1",
+   "title": "Fleet Vehicle GPS Tracking and Geofence Alerting",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.10",
+   "title": "Cold Chain Temperature Excursion for Perishable Goods",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.12",
+   "title": "Traffic Management System Sensor Availability",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.4",
+   "title": "Vehicle Diagnostic Trouble Code Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.6",
+   "title": "Rail Signaling System Health Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.4.9",
+   "title": "Last-Mile Delivery SLA Compliance",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.5.1",
+   "title": "Pipeline Pressure and Flow Rate Anomaly Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.5.8",
+   "title": "Safety Instrumented System Trip Event Analysis",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.1",
+   "title": "POS Terminal Transaction Response Time Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.10",
+   "title": "Mobile POS Device Battery and Connectivity",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.2",
+   "title": "Self-Checkout Lane Availability and Error Rate",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.3",
+   "title": "In-Store Wi-Fi and Network Infrastructure Health",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.5",
+   "title": "Click-and-Collect Order Fulfillment Cycle Time",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.6.6",
+   "title": "E-Commerce Platform Checkout Funnel Latency",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.1",
+   "title": "Baggage Handling System Throughput and Misroute Detection",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.10",
+   "title": "Airport SCADA Alarm Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.2",
+   "title": "Security Lane Processing Time and Queue Length",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.3",
+   "title": "Aircraft Turnaround Time Monitoring (A-CDM)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.5",
+   "title": "Flight Information Display System (FIDS) Health",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.7",
+   "title": "Runway and Taxiway Lighting System Status",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.7.9",
+   "title": "Passenger Flow and Terminal Capacity",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.1",
+   "title": "RAN Cell Site Availability",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.2",
+   "title": "Core Network Element Health (MME, SGW, PGW)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.20",
+   "title": "Call Failure Root Cause Correlation (SIP + CDR + Element Logs)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.3",
+   "title": "Subscriber Provisioning Workflow Completion Rate",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.4",
+   "title": "Network Capacity Planning (Spectrum Utilization Trending)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.5",
+   "title": "Service Activation and Billing Mediation Latency",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.6",
+   "title": "OSS/BSS System Integration Health",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.8.8",
+   "title": "5G NR gNodeB Performance Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.9.1",
+   "title": "Treatment Plant Process Parameter Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.9.3",
+   "title": "Distribution System Pressure Zone Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.9.4",
+   "title": "Sewer Overflow Early Warning",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-21.9.6",
+   "title": "SCADA RTU Communication Health Across Remote Sites",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.1.16",
+   "title": "GDPR Consent Withdrawal Processing Enforcement",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.1.4",
+   "title": "GDPR Data Retention Policy Enforcement",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.1.5",
+   "title": "GDPR Consent Management Audit Trail",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.20.4",
+   "title": "CMMC AU.L2-3.3.2 \u2014 User-to-action traceability on CUI systems",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.20.6",
+   "title": "CMMC CM.L2-3.4.1 \u2014 Baseline configuration drift detection on CUI systems",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.20.7",
+   "title": "CMMC IR.L2-3.6.1 \u2014 Incident response lifecycle tracking for CUI incidents",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.20.8",
+   "title": "CMMC SC.L2-3.13.8 \u2014 Cryptographic protection of CUI in transit",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.5.15",
+   "title": "MiFID II Conflicts of Interest \u2014 Personal Account Dealing Near Client Block Trades",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.5.16",
+   "title": "MiFID II Conflicts of Interest \u2014 Research Analyst vs Trading Desk Information Barrier Violations",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.5.2",
+   "title": "MiFID II Communications Recording and Retention Audit",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.7.44",
+   "title": "Legal Hold Population \u2014 Elevated File Export Activity",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-22.8.7",
+   "title": "SOC 2 Privacy \u2014 Consent Log Integrity and Downstream Propagation Checks",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-3.2.7",
+   "title": "Kubernetes Control Plane Health (apiserver, etcd, scheduler, controller-manager)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-4.2.19",
+   "title": "Azure Front Door / CDN Origin Errors and Cache Hit",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-4.3.15",
+   "title": "Cloud CDN Cache Hit Ratio and Egress",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-5.4.30",
+   "title": "Guest Network Access Patterns and Usage (Meraki MR)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-5.8.26",
+   "title": "CDN Origin Hit Rate and Cache Efficiency (CloudFront / Akamai / Fastly)",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-5.9.32",
+   "title": "CDN Edge Network Performance",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-8.1.1",
+   "title": "HTTP Error Rate Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "UCR-8.3.1",
+   "title": "Consumer Lag Monitoring",
+   "intended_vendor_or_technology": [],
+   "emitted_sourcetypes": [
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MODELED",
+   "streams": {
+    "modeled": 2
+   },
+   "recognizable_to_product_admins": "no: modeled state events only",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "title": "CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center",
+   "intended_vendor_or_technology": [
+    "cisco"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:catalyst:networkhealth",
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "vendor_native": 1,
+    "grounded_sample": 1,
+    "modeled": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [
+    "cisco:ise:trustsec:sgt"
+   ],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "title": "NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters",
+   "intended_vendor_or_technology": [
+    "netapp",
+    "arista"
+   ],
+   "emitted_sourcetypes": [
+    "arista:telemetry:json",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "grounded_sample": 1,
+    "modeled": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [
+    "netapp:ontap:nas"
+   ],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "arch_pan_iot_mesh",
+   "title": "PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh",
+   "intended_vendor_or_technology": [
+    "cisco"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:ios:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "vendor_native": 1,
+    "modeled": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [
+    "pan:ble:iot:sensor"
+   ],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "arch_san_fibre_channel",
+   "title": "SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF",
+   "intended_vendor_or_technology": [
+    "cisco"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:dc:nexus9k:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "vendor_native": 1,
+    "modeled": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [
+    "cisco:mds:san:fc"
+   ],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  },
+  {
+   "scenario_id": "pure_cisco_enterprise",
+   "title": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
+   "intended_vendor_or_technology": [
+    "cisco"
+   ],
+   "emitted_sourcetypes": [
+    "cisco:catalyst:networkhealth",
+    "cisco:catalyst:rogue:threat_details",
+    "cisco:ise:syslog",
+    "netspout:scenario:state"
+   ],
+   "fidelity": "MIXED",
+   "streams": {
+    "vendor_native": 2,
+    "grounded_sample": 1,
+    "modeled": 1
+   },
+   "recognizable_to_product_admins": "partly: native or recorded vendor events plus a modeled context stream",
+   "stronger_existing_generator_available": [],
+   "missing_generator_sourcetypes": [
+    "cisco:ise:nac:8021x",
+    "cisco:ise:trustsec:sgt"
+   ],
+   "technologies_with_no_generator_mapping": [],
+   "upgraded": false
+  }
+ ]
+}

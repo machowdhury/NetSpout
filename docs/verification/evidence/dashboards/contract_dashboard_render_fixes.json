@@ -1,0 +1,60 @@
+{
+ "environment": "isolated lab Splunk Web (docker splunk/splunk:10.2), headless Chromium via Playwright",
+ "rendered": 3,
+ "rows": [
+  {
+   "scenario_id": "normal_traffic",
+   "run_id": "run-fa38f5604172",
+   "title": "PulseForge \u00b7 Normal Operations (HTTP Round-Robin) | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic_fixes__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic_fixes__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/normal_traffic_fixes__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11584
+  },
+  {
+   "scenario_id": "UCR-14.3.9",
+   "run_id": "run-0a5666010c13",
+   "title": "PulseForge \u00b7 Cold Storage Room Temperature Excursion Alert | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9_fixes__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9_fixes__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/UCR-14.3.9_fixes__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 13803
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "run_id": "run-17f8798ea5fb",
+   "title": "PulseForge \u00b7 NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters | Splunk 10.2.7",
+   "tabs": [
+    "NOC",
+    "Engineer",
+    "Evidence"
+   ],
+   "screenshots": [
+    "docs/verification/evidence/dashboards/screens_contract/arch_nas_storage_cluster_fixes__NOC.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_nas_storage_cluster_fixes__Engineer.jpg",
+    "docs/verification/evidence/dashboards/screens_contract/arch_nas_storage_cluster_fixes__Evidence.jpg"
+   ],
+   "no_results_text": 0,
+   "error_text": 0,
+   "page_text_chars": 11221
+  }
+ ]
+}

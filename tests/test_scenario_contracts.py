@@ -1,6 +1,7 @@
 """Declarative scenario contracts: every contract is validated, generated, previewed and run through the monitored run path. A registry flag is not evidence;
 these tests execute each scenario. Parameterized so a new contract is covered the moment it is added to catalog/scenario_contracts.json."""
 import ipaddress
+import json
 import re
 import sys
 from pathlib import Path
@@ -140,7 +141,8 @@ def test_dashboard_exists_is_valid_and_bound_to_the_run(cid):
     assert all('netspout_scenario_id="%s"' % cid in q for q in srcs.values())                       # every search is scoped to this scenario
     assert all("$run_tok$" in q for k, q in srcs.items() if k != "ds_runs")                         # ... and to the chosen run (ds_runs is the run picker)
     titles = " ".join(v.get("title", "") for v in d["visualizations"].values())
-    assert "Status by phase" in titles and "What each phase reported" in titles                    # the contract-specific panels are present
+    steady = len({e.status for e in sc.generate(cid, "t")}) < 2
+    assert ("Events by phase and source (steady-state" if steady else "Status by phase") in titles and "What each phase reported" in titles   # the contract-specific panels are present
     assert len({v.get("title") for v in d["visualizations"].values()}) > 8                         # not a one-panel placeholder
 
 
@@ -155,3 +157,13 @@ def test_explorer_registers_the_contract_as_runnable_with_its_dashboard(cid):
     e = next(x for x in main._explorer().all_entries() if x["scenario_id"] == cid and x["kind"] == "operational")
     assert e["engine"] == "scenario_contract" and e["runnable"] and not e["blocked_reason"]
     assert e["dashboard"] and e["dashboard"]["splunk_view"] == "pf_" + cid
+
+
+@pytest.mark.parametrize("cid", IDS)
+def test_dashboard_charts_the_modeled_measure_and_does_not_mislabel_a_steady_state(cid):
+    d = _view(cid)
+    titles = [v.get("title", "") for v in d["visualizations"].values()]
+    has_measure = any("metric_name" in json.dumps(st) for st in sc.get(cid)["streams"] if st["formatter"] == "format_modeled_state_event")
+    assert ("Measured indicator by phase (modeled values)" in titles) == has_measure          # a modeled measure is charted, and only then
+    if len({e.status for e in sc.generate(cid, "t")}) < 2:                                     # steady state: no "During incident" bucket
+        assert "Before / during / after by source" not in titles and any(t.startswith("Events by source (steady-state") for t in titles)

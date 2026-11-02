@@ -63,7 +63,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `AI-004` | Agent Identity and Privilege Drift | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-004 | DATA_VALIDATED |
 | `AI-005` | A2A Delegation Abuse | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-005 | DATA_VALIDATED |
 | `AI-006` | Multi-Agent Incident | native (unified_generation) | security | technology-saas | 1 | Y | pf_AI-006 | DATA_VALIDATED |
-| `C100-CRI-001` | Financial Trading Campus-to-Data-Center Latency | native (scenario_contract) | operational | banking-financial-services | 1 | - | pf_C100-CRI-001 | IMPLEMENTED |
+| `C100-CRI-001` | Financial Trading Campus-to-Data-Center Latency | native (scenario_contract) | operational | banking-financial-services | 2 | - | pf_C100-CRI-001 | IMPLEMENTED |
 | `C100-CRI-002` | Telecom Operations Network Degradation — Correlated Reference | native (unified_generation) | operational | banking-financial-services, energy-utilities, government-public-sector | 2 | Y | pf_C100-CRI-002 | DATA_VALIDATED |
 | `C100-CRI-003` | Utility Substation WAN Loss | native (scenario_contract) | operational | energy-utilities, government-public-sector | 1 | - | pf_C100-CRI-003 | IMPLEMENTED |
 | `C100-CRI-004` | Energy Pipeline Remote-Site Isolation | native (scenario_contract) | operational | energy-utilities, government-public-sector | 1 | - | pf_C100-CRI-004 | IMPLEMENTED |
@@ -73,62 +73,62 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `C100-CRI-008` | Public Sector Identity and Network Access Failure | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-008 | IMPLEMENTED |
 | `C100-CRI-009` | Remote Infrastructure Telemetry Blackout | native (scenario_contract) | operational | energy-utilities | 1 | - | pf_C100-CRI-009 | IMPLEMENTED |
 | `C100-CRI-010` | OT/IT Segmentation Policy Drift | native (scenario_contract) | operational | manufacturing, energy-utilities | 1 | - | pf_C100-CRI-010 | IMPLEMENTED |
-| `C100-CRI-011` | Sovereign Cloud Interconnect Degradation | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-011 | IMPLEMENTED |
+| `C100-CRI-011` | Sovereign Cloud Interconnect Degradation | native (scenario_contract) | operational | government-public-sector | 2 | - | pf_C100-CRI-011 | IMPLEMENTED |
 | `C100-CRI-012` | Critical Communications Path Congestion | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-012 | IMPLEMENTED |
 | `C100-CRI-013` | Distributed Government Site Outage | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-013 | IMPLEMENTED |
-| `C100-CRI-014` | Mixed-Vendor Application Delivery Degradation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-CRI-014 | IMPLEMENTED |
+| `C100-CRI-014` | Mixed-Vendor Application Delivery Degradation | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-CRI-014 | IMPLEMENTED |
 | `C100-CRI-015` | Cisco Network and Microsoft Identity Correlation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-CRI-015 | IMPLEMENTED |
 | `C100-CRI-016` | Hybrid Hospital Wireless and Cloud Dependency | native (scenario_contract) | operational | healthcare | 1 | - | pf_C100-CRI-016 | IMPLEMENTED |
 | `C100-CRI-017` | Industrial Site Security and Availability Incident | native (scenario_contract) | operational | manufacturing, energy-utilities | 1 | - | pf_C100-CRI-017 | IMPLEMENTED |
 | `C100-CRI-018` | Cross-Domain DNS Dependency Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-CRI-018 | IMPLEMENTED |
-| `C100-CRI-019` | Sovereign Multi-Region Routing Instability | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-019 | IMPLEMENTED |
+| `C100-CRI-019` | Sovereign Multi-Region Routing Instability | native (scenario_contract) | operational | government-public-sector | 2 | - | pf_C100-CRI-019 | IMPLEMENTED |
 | `C100-CRI-020` | National Critical Infrastructure Evidence Gap | native (scenario_contract) | operational | government-public-sector | 1 | - | pf_C100-CRI-020 | IMPLEMENTED |
 | `C100-DC-001` | Nexus Fabric Uplink Degradation — NX-OS Reference | native (unified_generation) | operational | manufacturing | 1 | Y | pf_C100-DC-001 | VISUALLY_VERIFIED |
 | `C100-DC-002` | Nexus vPC Member Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-002 | IMPLEMENTED |
 | `C100-DC-003` | EVPN Route Withdrawal | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-003 | IMPLEMENTED |
 | `C100-DC-004` | VXLAN Tunnel Endpoint Reachability Loss | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-004 | IMPLEMENTED |
-| `C100-DC-005` | ACI Leaf-Spine Link Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-005 | IMPLEMENTED |
+| `C100-DC-005` | ACI Leaf-Spine Link Failure | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-DC-005 | IMPLEMENTED |
 | `C100-DC-006` | ACI Endpoint Movement Anomaly | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-006 | IMPLEMENTED |
 | `C100-DC-007` | ACI Contract Policy Denial | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-007 | IMPLEMENTED |
-| `C100-DC-008` | Data Center East-West Congestion | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-008 | IMPLEMENTED |
-| `C100-DC-009` | Underlay Routing Instability | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-009 | IMPLEMENTED |
+| `C100-DC-008` | Data Center East-West Congestion | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-DC-008 | IMPLEMENTED |
+| `C100-DC-009` | Underlay Routing Instability | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-DC-009 | IMPLEMENTED |
 | `C100-DC-010` | Overlay-Underlay Correlation Gap | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-010 | IMPLEMENTED |
 | `C100-DC-011` | UCS Fabric Interconnect Degradation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-011 | IMPLEMENTED |
 | `C100-DC-012` | UCS Service Profile Drift | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-012 | IMPLEMENTED |
 | `C100-DC-013` | Intersight Managed-System Visibility Gap | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-013 | IMPLEMENTED |
 | `C100-DC-014` | Hybrid Cloud Data Path Degradation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-014 | IMPLEMENTED |
-| `C100-DC-015` | Storage Network Dependency Congestion | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-015 | IMPLEMENTED |
+| `C100-DC-015` | Storage Network Dependency Congestion | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-DC-015 | IMPLEMENTED |
 | `C100-DC-016` | Application Tier Fabric Isolation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-016 | IMPLEMENTED |
 | `C100-DC-017` | GPU Fabric East-West Congestion Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-017 | IMPLEMENTED |
 | `C100-DC-018` | Lossless Ethernet Pause Propagation Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-018 | IMPLEMENTED |
 | `C100-DC-019` | AI Cluster Network Telemetry Gap | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-019 | IMPLEMENTED |
-| `C100-DC-020` | Multi-Fabric Data Center Service Impact | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-DC-020 | IMPLEMENTED |
+| `C100-DC-020` | Multi-Fabric Data Center Service Impact | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-DC-020 | IMPLEMENTED |
 | `C100-ENT-001` | Campus Access Link Degradation — IOS XE Reference | native (unified_generation) | operational | healthcare | 1 | Y | pf_C100-ENT-001 | DATA_VALIDATED |
 | `C100-ENT-002` | Distribution Uplink Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-002 | IMPLEMENTED |
 | `C100-ENT-003` | Campus Oversubscription Congestion | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-003 | IMPLEMENTED |
-| `C100-ENT-004` | Branch WAN Packet Loss | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-004 | IMPLEMENTED |
-| `C100-ENT-005` | SD-WAN Preferred-Path Change | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-005 | IMPLEMENTED |
-| `C100-ENT-006` | SD-WAN Brownout Before Failover | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-006 | IMPLEMENTED |
-| `C100-ENT-007` | Campus Routing Adjacency Instability | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-007 | IMPLEMENTED |
-| `C100-ENT-008` | Branch Route Withdrawal | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-008 | IMPLEMENTED |
-| `C100-ENT-009` | Wireless Client Roaming Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-009 | IMPLEMENTED |
-| `C100-ENT-010` | Wireless Capacity Saturation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-010 | IMPLEMENTED |
+| `C100-ENT-004` | Branch WAN Packet Loss | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-004 | IMPLEMENTED |
+| `C100-ENT-005` | SD-WAN Preferred-Path Change | native (scenario_contract) | operational | not mapped | 3 | - | pf_C100-ENT-005 | IMPLEMENTED |
+| `C100-ENT-006` | SD-WAN Brownout Before Failover | native (scenario_contract) | operational | not mapped | 3 | - | pf_C100-ENT-006 | IMPLEMENTED |
+| `C100-ENT-007` | Campus Routing Adjacency Instability | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-007 | IMPLEMENTED |
+| `C100-ENT-008` | Branch Route Withdrawal | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-008 | IMPLEMENTED |
+| `C100-ENT-009` | Wireless Client Roaming Failure | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-009 | IMPLEMENTED |
+| `C100-ENT-010` | Wireless Capacity Saturation | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-010 | IMPLEMENTED |
 | `C100-ENT-011` | Campus DHCP Dependency Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-011 | IMPLEMENTED |
 | `C100-ENT-012` | Campus DNS Path Degradation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-012 | IMPLEMENTED |
-| `C100-ENT-013` | Network Access Authentication Delay | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-013 | IMPLEMENTED |
-| `C100-ENT-014` | Network Access Authorization Drift | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-014 | IMPLEMENTED |
+| `C100-ENT-013` | Network Access Authentication Delay | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-013 | IMPLEMENTED |
+| `C100-ENT-014` | Network Access Authorization Drift | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-014 | IMPLEMENTED |
 | `C100-ENT-015` | Campus Path Asymmetry | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-015 | IMPLEMENTED |
 | `C100-ENT-016` | Catalyst Configuration Drift | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-016 | IMPLEMENTED |
 | `C100-ENT-017` | Catalyst Center Assurance Data Gap | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-017 | IMPLEMENTED |
 | `C100-ENT-018` | Meraki Multi-Site Reachability Degradation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-018 | IMPLEMENTED |
-| `C100-ENT-019` | Branch Application Path Regression | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-019 | IMPLEMENTED |
+| `C100-ENT-019` | Branch Application Path Regression | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-ENT-019 | IMPLEMENTED |
 | `C100-ENT-020` | Enterprise Telemetry Blind Spot | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-ENT-020 | IMPLEMENTED |
 | `C100-SEC-001` | Secure Firewall Suspicious Connection Burst — ASA Reference | native (unified_generation) | security | not mapped | 1 | Y | pf_C100-SEC-001 | DATA_VALIDATED |
 | `C100-SEC-002` | FTD Access-Control Policy Denial | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-002 | IMPLEMENTED |
 | `C100-SEC-003` | ASA Remote Access Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-003 | IMPLEMENTED |
 | `C100-SEC-004` | Firewall Rulebase Drift | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-004 | IMPLEMENTED |
-| `C100-SEC-005` | ISE Authentication Failure Spike | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-005 | IMPLEMENTED |
-| `C100-SEC-006` | ISE Policy Authorization Mismatch | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-006 | IMPLEMENTED |
+| `C100-SEC-005` | ISE Authentication Failure Spike | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-SEC-005 | IMPLEMENTED |
+| `C100-SEC-006` | ISE Policy Authorization Mismatch | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-SEC-006 | IMPLEMENTED |
 | `C100-SEC-007` | Secure Access Policy Block | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-007 | IMPLEMENTED |
 | `C100-SEC-008` | Umbrella DNS Abuse Indicator | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-008 | IMPLEMENTED |
 | `C100-SEC-009` | Umbrella DNS Tunneling Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-009 | IMPLEMENTED |
@@ -137,17 +137,17 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `C100-SEC-012` | Secure Network Analytics Beaconing Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-012 | IMPLEMENTED |
 | `C100-SEC-013` | Secure Network Analytics Lateral Movement Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-013 | IMPLEMENTED |
 | `C100-SEC-014` | Secure Client Posture Failure | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-014 | IMPLEMENTED |
-| `C100-SEC-015` | Duo Authentication Anomaly | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-015 | IMPLEMENTED |
+| `C100-SEC-015` | Duo Authentication Anomaly | native (scenario_contract) | operational | not mapped | 2 | - | pf_C100-SEC-015 | IMPLEMENTED |
 | `C100-SEC-016` | Cisco XDR Cross-Signal Incident Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-016 | IMPLEMENTED |
 | `C100-SEC-017` | Secure Workload Policy Violation Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-017 | IMPLEMENTED |
 | `C100-SEC-018` | Cyber Vision OT Asset Anomaly Candidate | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-018 | IMPLEMENTED |
 | `C100-SEC-019` | Reconnaissance and Firewall Correlation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-019 | IMPLEMENTED |
 | `C100-SEC-020` | Potential Exfiltration Path Correlation | native (scenario_contract) | operational | not mapped | 1 | - | pf_C100-SEC-020 | IMPLEMENTED |
 | `C100-SP-002` | Carrier Interface Error Burst | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-002 | IMPLEMENTED |
-| `C100-SP-003` | BGP Peer Session Instability | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-003 | IMPLEMENTED |
-| `C100-SP-004` | BGP Route Withdrawal Propagation | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-004 | IMPLEMENTED |
+| `C100-SP-003` | BGP Peer Session Instability | native (scenario_contract) | operational | telecommunications | 2 | - | pf_C100-SP-003 | IMPLEMENTED |
+| `C100-SP-004` | BGP Route Withdrawal Propagation | native (scenario_contract) | operational | telecommunications | 2 | - | pf_C100-SP-004 | IMPLEMENTED |
 | `C100-SP-005` | Provider Edge Access Link Failure | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-005 | IMPLEMENTED |
-| `C100-SP-006` | BGP Path Preference Shift | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-006 | IMPLEMENTED |
+| `C100-SP-006` | BGP Path Preference Shift | native (scenario_contract) | operational | telecommunications | 2 | - | pf_C100-SP-006 | IMPLEMENTED |
 | `C100-SP-007` | Route Reflector Propagation Delay | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-007 | IMPLEMENTED |
 | `C100-SP-008` | MPLS Label-Switched Path Degradation | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-008 | IMPLEMENTED |
 | `C100-SP-009` | MPLS VPN Reachability Loss | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-009 | IMPLEMENTED |
@@ -160,7 +160,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `C100-SP-016` | IOS XR Model-Driven Telemetry Loss | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-016 | IMPLEMENTED |
 | `C100-SP-017` | Inter-AS Routing Leak Candidate | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-017 | IMPLEMENTED |
 | `C100-SP-018` | Carrier Control-Plane Resource Pressure | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-018 | IMPLEMENTED |
-| `C100-SP-019` | Multi-Domain Path Failover | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-019 | IMPLEMENTED |
+| `C100-SP-019` | Multi-Domain Path Failover | native (scenario_contract) | operational | telecommunications | 2 | - | pf_C100-SP-019 | IMPLEMENTED |
 | `C100-SP-020` | PE-CE Policy Mismatch | native (scenario_contract) | operational | telecommunications | 1 | - | pf_C100-SP-020 | IMPLEMENTED |
 | `NF-NOC-01-ELEPHANT` | NetFlow: bandwidth saturation and elephant flows | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-01-ELEPHANT | VISUALLY_VERIFIED |
 | `NF-NOC-02-DSCP` | NetFlow: QoS and DSCP marking validation | native (netflow_solution) | - | not mapped | 1 | Y | pf_NF-NOC-02-DSCP | VISUALLY_VERIFIED |
@@ -377,7 +377,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `openconfig_mdt_streaming` | OpenConfig MDT Streaming & Telemetry Assurance | native (scenario_runner) | operational | not mapped | 3 | Y | pf_openconfig_mdt_streaming | DATA_VALIDATED |
 | `paloalto_threat_investigation` | Palo Alto Networks Threat Investigation | native (scenario_runner) | security | not mapped | 3 | Y | pf_paloalto_threat_investigation | VISUALLY_VERIFIED |
 | `payment_processing_degradation` | Financial Services Payment Application Degradation | native (scenario_runner) | operational | banking-financial-services | 5 | Y | pf_payment_processing_degradation | DATA_VALIDATED |
-| `pure_cisco_enterprise` | Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DN | native (scenario_contract) | operational | not mapped | 3 | - | pf_pure_cisco_enterprise | IMPLEMENTED |
+| `pure_cisco_enterprise` | Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DN | native (scenario_contract) | operational | not mapped | 4 | - | pf_pure_cisco_enterprise | IMPLEMENTED |
 | `rfc5424-link-state-lifecycle` | Modeled Link-State Lifecycle | native (unified_generation) | operational | not mapped | 1 | Y | pf_rfc5424-link-state-lifecycle | DATA_VALIDATED |
 | `rp_agentic_ai_mcp_runtime_hybrid` | Agentic AI: recorded MCP server log plus native exfiltration attempt ( | hybrid (replay_pack) | security | technology-saas, legal-compliance-professional-services | 3 | Y | pf_rp_agentic_ai_mcp_runtime_hybrid | DATA_VALIDATED |
 | `rp_cloud_control_plane_activity` | AWS control-plane activity (replayed CloudTrail) | replay (replay_pack) | security | technology-saas, insurance-insurtech, media-entertainment | 1 | Y | pf_rp_cloud_control_plane_activity | DATA_VALIDATED |

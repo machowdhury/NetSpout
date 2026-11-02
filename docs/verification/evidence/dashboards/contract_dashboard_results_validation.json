@@ -1,0 +1,2944 @@
+{
+ "validator": "searches executed in Splunk over the run's indexed events",
+ "dashboards": 25,
+ "rows": [
+  {
+   "scenario_id": "lateral_movement",
+   "run_id": "run-b4a0d30146b5",
+   "searches": 16,
+   "searches_with_rows": 16,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "blocked",
+      "degraded",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 14,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 57,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 57,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 4,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "mixed_vendor_enterprise",
+   "run_id": "run-48187614ed89",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "blocked",
+      "degraded",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 23,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 4,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 52,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 64,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "normal_traffic",
+   "run_id": "run-fa38f5604172",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "phase_report": {
+     "rows": 15,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 15,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 55,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 55,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "service_provider_mixed",
+   "run_id": "run-efe0c7f449e6",
+   "searches": 20,
+   "searches_with_rows": 20,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "degraded",
+      "mitigated",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 19,
+     "errors": []
+    },
+    "ds_18": {
+     "http": 200,
+     "rows": 25,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "arch_gan_subsea_cloud",
+   "run_id": "run-38dafe68f8bf",
+   "searches": 20,
+   "searches_with_rows": 20,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "degraded",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 5,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 15,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 11,
+     "errors": []
+    },
+    "ds_18": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "arch_can_multi_building",
+   "run_id": "run-f4ceb0b30c72",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "mitigated",
+      "normal",
+      "recovering",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 15,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 15,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 33,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 42,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "arch_nas_storage_cluster",
+   "run_id": "run-17f8798ea5fb",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "normal",
+      "recovering"
+     ]
+    },
+    "phase_report": {
+     "rows": 10,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 22,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 28,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "pure_cisco_enterprise",
+   "run_id": "run-8c31dc8192d7",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "mitigated",
+      "normal",
+      "recovering",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 20,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 4,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 4,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 61,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 76,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-ENT-002",
+   "run_id": "run-7899dc4dfcb9",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "healthy",
+      "impaired"
+     ]
+    },
+    "phase_report": {
+     "rows": 6,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 6,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-SP-008",
+   "run_id": "run-076ed2bfa725",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "healthy",
+      "impaired"
+     ]
+    },
+    "phase_report": {
+     "rows": 6,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 6,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-CRI-018",
+   "run_id": "run-03b8a9c20401",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "healthy",
+      "impaired"
+     ]
+    },
+    "phase_report": {
+     "rows": 6,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 6,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-DC-012",
+   "run_id": "run-254042825a68",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "healthy",
+      "impaired"
+     ]
+    },
+    "phase_report": {
+     "rows": 6,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 6,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-SEC-005",
+   "run_id": "run-bd7a6d93b592",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 32,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 40,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-SEC-006",
+   "run_id": "run-70b7d1c68484",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 28,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-SP-003",
+   "run_id": "run-33c3bde72892",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 21,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 27,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-ENT-005",
+   "run_id": "run-693c341549dd",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 12,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 12,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 29,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 37,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-DC-008",
+   "run_id": "run-87221bbef649",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 21,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 27,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-SEC-015",
+   "run_id": "run-13a591a30641",
+   "searches": 18,
+   "searches_with_rows": 18,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "degraded",
+      "healthy",
+      "impaired",
+      "normal",
+      "restored"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 26,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 34,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "C100-CRI-001",
+   "run_id": "run-436dab3be3f7",
+   "searches": 20,
+   "searches_with_rows": 20,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 3,
+     "status_columns": [
+      "healthy",
+      "impaired"
+     ]
+    },
+    "phase_report": {
+     "rows": 6,
+     "phases_covered": 3
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 6,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 10,
+     "errors": []
+    },
+    "ds_18": {
+     "http": 200,
+     "rows": 14,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-14.3.9",
+   "run_id": "run-0a5666010c13",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "excursion",
+      "mitigating",
+      "normal",
+      "recovered"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 3,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-8.1.1",
+   "run_id": "run-f48a727b969d",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "elevated_errors",
+      "mitigating",
+      "normal",
+      "recovered"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-22.1.5",
+   "run_id": "run-ed70bed254ad",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "compliant",
+      "mitigating",
+      "recovered",
+      "violation"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-21.1.1",
+   "run_id": "run-df8c6ba789b9",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "elevated_errors",
+      "mitigating",
+      "normal",
+      "recovered"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-21.11.1",
+   "run_id": "run-e2fc27f90bde",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "available",
+      "degraded_availability",
+      "mitigating",
+      "recovered"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  },
+  {
+   "scenario_id": "UCR-13.4.5",
+   "run_id": "run-64942895db67",
+   "searches": 19,
+   "searches_with_rows": 19,
+   "searches_empty": [],
+   "searches_failed": [],
+   "phase_story": {
+    "status_by_phase": {
+     "phases": 5,
+     "status_columns": [
+      "alert_acknowledged",
+      "alert_cleared",
+      "alert_firing",
+      "elevated_errors",
+      "mitigating",
+      "normal",
+      "recovered"
+     ]
+    },
+    "phase_report": {
+     "rows": 9,
+     "phases_covered": 5
+    }
+   },
+   "detail": {
+    "ds_1": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_2": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_3": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_4": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_5": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_6": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_7": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_8": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_9": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_10": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_11": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_12": {
+     "http": 200,
+     "rows": 1,
+     "errors": []
+    },
+    "ds_13": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_14": {
+     "http": 200,
+     "rows": 9,
+     "errors": []
+    },
+    "ds_15": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    },
+    "ds_16": {
+     "http": 200,
+     "rows": 20,
+     "errors": []
+    },
+    "ds_17": {
+     "http": 200,
+     "rows": 23,
+     "errors": []
+    },
+    "ds_runs": {
+     "http": 200,
+     "rows": 2,
+     "errors": []
+    },
+    "ds_phase_list": {
+     "http": 200,
+     "rows": 5,
+     "errors": []
+    }
+   }
+  }
+ ]
+}

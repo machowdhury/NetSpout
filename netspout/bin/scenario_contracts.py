@@ -205,8 +205,9 @@ def generate(contract_id: str, run_id: Optional[str] = None, seed: Optional[int]
                 for s in c["streams"]:
                     if not _active(s, phase["id"]):
                         continue
-                    for k in range(int(s.get("per_round", 1))):
-                        entry = formatter(s["formatter"])(device=built[s["node"]], **_params(s, phase["id"], nodes, r * int(s.get("per_round", 1)) + k))
+                    count = int(s.get("phase_per_round", {}).get(phase["id"], s.get("per_round", 1)))   # a stream can run hotter in one phase (a spike)
+                    for k in range(count):
+                        entry = formatter(s["formatter"])(device=built[s["node"]], **_params(s, phase["id"], nodes, r * count + k))
                         if entry.sourcetype != s["sourcetype"]:
                             raise ContractError("stream %s declares %s but the formatter emitted %s" % (s["id"], s["sourcetype"], entry.sourcetype))
                         eid = "%s-%s-%d" % (contract_id, phase["id"], len(out) + 1)

@@ -409,7 +409,7 @@
     "viz_17": {
       "type": "splunk.markdown",
       "options": {
-        "markdown": "### Provenance and contract\n**Scenario:** `C100-CRI-019`  \n**Execution:** contract  \n**Telemetry:** Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.  \n**Sourcetypes:** `netspout:scenario:state`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
+        "markdown": "### Provenance and contract\n**Scenario:** `C100-CRI-019`  \n**Execution:** contract  \n**Telemetry:** Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.  \n**Sourcetypes:** `cisco:ios:syslog`, `netspout:scenario:state`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
         "fontColor": "#ececea",
         "backgroundColor": "#22262a"
       }

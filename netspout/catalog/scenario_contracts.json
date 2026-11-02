@@ -2711,8 +2711,9 @@
    ],
    "generator_family": "cisco_campus_mixed",
    "assumptions": [
-    "cisco:ise:nac:8021x and cisco:ise:trustsec:sgt have no formatter or verified sample in this release: access-control behavior is a MODELED stand-in (netspout:scenario:state), so those sourcetypes are not emitted.",
-    "cisco:catalyst:networkhealth is a verbatim vendor sample replayed unmodified (no contract entities)."
+    "cisco:catalyst:networkhealth is a verbatim vendor sample replayed unmodified (no contract entities).",
+    "802.1X authentication behavior is emitted as native Cisco ISE syslog (cisco:ise:syslog: CISE_Passed_Authentications / CISE_Failed_Attempts), the real source of ISE authentication records in Splunk. The catalog's cisco:ise:nac:8021x has no generator, so that sourcetype name is not emitted.",
+    "cisco:ise:trustsec:sgt has no formatter or verified sample: SGT propagation remains a MODELED stand-in (netspout:scenario:state)."
    ],
    "nodes": [
     {
@@ -2801,54 +2802,6 @@
      "per_round": 1
     },
     {
-     "id": "nac",
-     "sourcetype": "netspout:scenario:state",
-     "formatter": "format_modeled_state_event",
-     "node": "ise",
-     "params": {
-      "scenario_id": "pure_cisco_enterprise",
-      "entity": "Cisco-ISE-PSN1",
-      "component": "dot1x_authentication",
-      "state": "HEALTHY",
-      "previous_state": "HEALTHY",
-      "severity": "info",
-      "message": "802.1X authentications are succeeding normally."
-     },
-     "phase_params": {
-      "BASELINE": {
-       "state": "HEALTHY",
-       "previous_state": "HEALTHY",
-       "severity": "info",
-       "message": "802.1X authentications are succeeding normally."
-      },
-      "ONSET": {
-       "state": "DEGRADED",
-       "previous_state": "HEALTHY",
-       "severity": "warning",
-       "message": "Unknown client attempting 802.1X on the guest SSID."
-      },
-      "ESCALATION": {
-       "state": "DEGRADED",
-       "previous_state": "DEGRADED",
-       "severity": "warning",
-       "message": "Repeated 802.1X failures from the unknown client."
-      },
-      "MITIGATION": {
-       "state": "RECOVERING",
-       "previous_state": "DEGRADED",
-       "severity": "notice",
-       "message": "Unknown client quarantined by policy."
-      },
-      "RECOVERY": {
-       "state": "HEALTHY",
-       "previous_state": "RECOVERING",
-       "severity": "info",
-       "message": "802.1X authentications are succeeding normally."
-      }
-     },
-     "per_round": 1
-    },
-    {
      "id": "sgt",
      "sourcetype": "netspout:scenario:state",
      "formatter": "format_modeled_state_event",
@@ -2895,6 +2848,64 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "nac",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
+     "node": "ise",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
+      ],
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "ONSET": {
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures from an unknown client"
+      },
+      "ESCALATION": {
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures from an unknown client"
+      },
+      "MITIGATION": {
+       "auth_status": "PASSED",
+       "profile": "Quarantine",
+       "action": "allowed",
+       "status": "mitigated",
+       "signature": "Unknown client placed in the quarantine profile"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2,
+     "phase_per_round": {
+      "ESCALATION": 4
+     }
     }
    ],
    "correlation": [],
@@ -2938,7 +2949,7 @@
    ],
    "generator_family": "cisco_wireless_mixed",
    "assumptions": [
-    "cisco:ise:nac:8021x has no formatter or verified sample in this release: authentication behavior is a MODELED stand-in (netspout:scenario:state), so that sourcetype is not emitted."
+    "802.1X authentication behavior is emitted as native Cisco ISE syslog (cisco:ise:syslog: CISE_Passed_Authentications / CISE_Failed_Attempts), the real source of ISE authentication records in Splunk. The catalog's cisco:ise:nac:8021x has no generator, so that sourcetype name is not emitted."
    ],
    "nodes": [
     {
@@ -3056,84 +3067,61 @@
     },
     {
      "id": "nac",
-     "sourcetype": "netspout:scenario:state",
-     "formatter": "format_modeled_state_event",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
      "node": "ise",
      "params": {
-      "scenario_id": "wireless_connected_core_cisco",
-      "entity": "Cisco-ISE-PSN1",
-      "component": "dot1x_authentication",
-      "state": "HEALTHY",
-      "previous_state": "HEALTHY",
-      "severity": "info",
-      "message": "802.1X authentications are succeeding normally.",
-      "metric_name": "auth_latency_ms",
-      "metric_value": [
-       85,
-       90,
-       88
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
       ],
-      "unit": "ms"
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
      },
      "phase_params": {
-      "BASELINE": {
-       "state": "HEALTHY",
-       "previous_state": "HEALTHY",
-       "severity": "info",
-       "message": "802.1X authentications are succeeding normally.",
-       "metric_name": "auth_latency_ms",
-       "metric_value": [
-        85,
-        90,
-        88
-       ],
-       "unit": "ms"
-      },
+      "BASELINE": {},
       "ONSET": {
-       "state": "HEALTHY",
-       "previous_state": "HEALTHY",
-       "severity": "info",
-       "message": "802.1X authentications are succeeding normally.",
-       "metric_value": [
-        110,
-        130,
-        150
-       ]
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures from an unknown client"
       },
       "ESCALATION": {
-       "state": "DEGRADED",
-       "previous_state": "HEALTHY",
-       "severity": "warning",
-       "message": "802.1X authentication latency is high.",
-       "metric_value": [
-        420,
-        610,
-        780
-       ]
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures from an unknown client"
       },
       "MITIGATION": {
-       "state": "RECOVERING",
-       "previous_state": "DEGRADED",
-       "severity": "notice",
-       "message": "802.1X latency recovering.",
-       "metric_value": [
-        210,
-        120
-       ]
+       "auth_status": "PASSED",
+       "profile": "Quarantine",
+       "action": "allowed",
+       "status": "mitigated",
+       "signature": "Unknown client placed in the quarantine profile"
       },
       "RECOVERY": {
-       "state": "HEALTHY",
-       "previous_state": "RECOVERING",
-       "severity": "info",
-       "message": "802.1X authentications are succeeding normally.",
-       "metric_value": [
-        88,
-        86,
-        90
-       ]
+       "status": "restored"
       }
      },
-     "per_round": 1
+     "per_round": 2,
+     "phase_per_round": {
+      "ESCALATION": 4
+     }
     }
    ],
    "correlation": [],
@@ -3431,7 +3419,7 @@
     "IOS XE",
     "Cisco SD-WAN"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A branch WAN path develops progressive packet loss. Business impact: Branch users experience unstable access to shared services. A fictional test enterprise experiences branch wan packet loss. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for branch wan packet loss, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -3439,7 +3427,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XE, Cisco SD-WAN) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:sdwan:linkhealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -3546,6 +3535,53 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "sdwan",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "n1",
+     "params": {
+      "remote_system_ip": "10.90.9.9",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel within SLA"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        140.0,
+        220.0,
+        310.0
+       ],
+       "jitter_ms": [
+        22.0,
+        35.0,
+        48.0
+       ],
+       "loss_pct": [
+        2.5,
+        5.0,
+        9.0
+       ],
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN SLA violated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -3556,7 +3592,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "sdwan"
      ]
     }
    ]
@@ -3571,7 +3608,7 @@
    "technologies": [
     "Cisco SD-WAN"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Policy or path health causes a preferred-path transition. Business impact: Applications may move to a higher-latency or lower-capacity circuit. A fictional test enterprise experiences sd-wan preferred-path change. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for sd-wan preferred-path change, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -3579,7 +3616,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco SD-WAN) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:sdwan:BGP-5-ADJCHANGE, cisco:sdwan:linkhealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -3686,6 +3724,85 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "sdwan",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "n1",
+     "params": {
+      "remote_system_ip": "10.90.9.9",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel within SLA"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        140.0,
+        220.0,
+        310.0
+       ],
+       "jitter_ms": [
+        22.0,
+        35.0,
+        48.0
+       ],
+       "loss_pct": [
+        2.5,
+        5.0,
+        9.0
+       ],
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN SLA violated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
+    },
+    {
+     "id": "sdwan-bgp",
+     "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+     "formatter": "format_cisco_sdwan_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "state_change": "UP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "BGP adjacency up"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "state_change": [
+        "DOWN",
+        "UP"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP failover"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 2
+     }
     }
    ],
    "correlation": [
@@ -3696,7 +3813,9 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "sdwan",
+      "sdwan-bgp"
      ]
     }
    ]
@@ -3711,7 +3830,7 @@
    "technologies": [
     "Cisco SD-WAN"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A transport degrades before the failover threshold is crossed. Business impact: Application quality falls before redundancy restores service. A fictional test enterprise experiences sd-wan brownout before failover. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for sd-wan brownout before failover, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -3719,7 +3838,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco SD-WAN) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:sdwan:BGP-5-ADJCHANGE, cisco:sdwan:linkhealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -3826,6 +3946,85 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "sdwan",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "n1",
+     "params": {
+      "remote_system_ip": "10.90.9.9",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel within SLA"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        140.0,
+        220.0,
+        310.0
+       ],
+       "jitter_ms": [
+        22.0,
+        35.0,
+        48.0
+       ],
+       "loss_pct": [
+        2.5,
+        5.0,
+        9.0
+       ],
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN SLA violated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
+    },
+    {
+     "id": "sdwan-bgp",
+     "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+     "formatter": "format_cisco_sdwan_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "state_change": "UP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "BGP adjacency up"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "state_change": [
+        "DOWN",
+        "UP"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP failover"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 2
+     }
     }
    ],
    "correlation": [
@@ -3836,7 +4035,9 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "sdwan",
+      "sdwan-bgp"
      ]
     }
    ]
@@ -3852,7 +4053,7 @@
     "IOS XE",
     "Catalyst Switching"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A routed campus adjacency repeatedly changes state. Business impact: Route convergence disrupts access across campus segments. A fictional test enterprise experiences campus routing adjacency instability. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for campus routing adjacency instability, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -3860,7 +4061,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XE, Catalyst Switching) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -3967,6 +4169,40 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "BGP_UP",
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -3977,7 +4213,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -3992,7 +4229,7 @@
    "technologies": [
     "IOS XE"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A branch prefix is withdrawn from the enterprise routing domain. Business impact: Central services lose reachability to a remote site. A fictional test enterprise experiences branch route withdrawal. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for branch route withdrawal, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -4000,7 +4237,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XE) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -4107,6 +4345,38 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -4117,7 +4387,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -4132,7 +4403,7 @@
    "technologies": [
     "Cisco Wireless"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A client transition between access points does not preserve service. Business impact: Mobile users lose sessions while moving through the campus. A fictional test enterprise experiences wireless client roaming failure. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for wireless client roaming failure, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -4140,7 +4411,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Wireless) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:catalyst:clienthealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -4247,6 +4519,48 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "wlan",
+     "sourcetype": "cisco:catalyst:clienthealth",
+     "formatter": "format_cisco_catalyst_wlan_rf_log",
+     "node": "n1",
+     "params": {
+      "channel": 36,
+      "util_pct": 32.0,
+      "noise_floor": -95,
+      "event_type": "RF_NORMAL",
+      "action": "allowed",
+      "status": "normal",
+      "sourcetype": "cisco:catalyst:clienthealth",
+      "signature": "Channel utilization nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "util_pct": [
+        71.0,
+        88.0,
+        94.0
+       ],
+       "noise_floor": [
+        -88,
+        -85,
+        -82
+       ],
+       "event_type": "RF_UTILIZATION_HIGH",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Channel utilization high"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -4257,7 +4571,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "wlan"
      ]
     }
    ]
@@ -4272,7 +4587,7 @@
    "technologies": [
     "Cisco Wireless"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Client density drives airtime contention. Business impact: High-density users experience low throughput and latency. A fictional test enterprise experiences wireless capacity saturation. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for wireless capacity saturation, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -4280,7 +4595,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Wireless) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:catalyst:clienthealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -4387,6 +4703,48 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "wlan",
+     "sourcetype": "cisco:catalyst:clienthealth",
+     "formatter": "format_cisco_catalyst_wlan_rf_log",
+     "node": "n1",
+     "params": {
+      "channel": 36,
+      "util_pct": 32.0,
+      "noise_floor": -95,
+      "event_type": "RF_NORMAL",
+      "action": "allowed",
+      "status": "normal",
+      "sourcetype": "cisco:catalyst:clienthealth",
+      "signature": "Channel utilization nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "util_pct": [
+        71.0,
+        88.0,
+        94.0
+       ],
+       "noise_floor": [
+        -88,
+        -85,
+        -82
+       ],
+       "event_type": "RF_UTILIZATION_HIGH",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Channel utilization high"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -4397,7 +4755,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "wlan"
      ]
     }
    ]
@@ -4695,7 +5054,7 @@
     "Cisco ISE",
     "Catalyst Switching"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Network access decisions exceed expected latency. Business impact: Users and devices experience delayed or failed onboarding. A fictional test enterprise experiences network access authentication delay. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for network access authentication delay, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -4703,7 +5062,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ISE, Catalyst Switching) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ise:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -4810,6 +5170,51 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "ise",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
+     "node": "n1",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
+      ],
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2,
+     "phase_per_round": {
+      "INCIDENT": 6
+     }
     }
    ],
    "correlation": [
@@ -4820,7 +5225,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "ise"
      ]
     }
    ]
@@ -4836,7 +5242,7 @@
     "Cisco ISE",
     "Catalyst Switching"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Enforcement state diverges from intended authorization. Business impact: Devices receive incorrect access or segmentation policy. A fictional test enterprise experiences network access authorization drift. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for network access authorization drift, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -4844,7 +5250,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ISE, Catalyst Switching) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ise:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -4951,6 +5358,49 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "ise",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
+     "node": "n1",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
+      ],
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "auth_status": "PASSED",
+       "profile": "Guest-Access",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Authorization profile differs from policy"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2
     }
    ],
    "correlation": [
@@ -4961,7 +5411,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "ise"
      ]
     }
    ]
@@ -5539,7 +5990,7 @@
     "IOS XE",
     "Cisco SD-WAN"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A path change raises application latency without total outage. Business impact: Transaction response times breach user expectations. A fictional test enterprise experiences branch application path regression. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for branch application path regression, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -5547,7 +5998,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XE, Cisco SD-WAN) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:sdwan:linkhealth are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -5654,6 +6106,53 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "sdwan",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "n1",
+     "params": {
+      "remote_system_ip": "10.90.9.9",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel within SLA"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        140.0,
+        220.0,
+        310.0
+       ],
+       "jitter_ms": [
+        22.0,
+        35.0,
+        48.0
+       ],
+       "loss_pct": [
+        2.5,
+        5.0,
+        9.0
+       ],
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN SLA violated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -5664,7 +6163,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "sdwan"
      ]
     }
    ]
@@ -5961,7 +6461,7 @@
    "technologies": [
     "IOS XR"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A peering session repeatedly changes state. Business impact: Route availability and convergence become unstable. A fictional test enterprise experiences bgp peer session instability. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for bgp peer session instability, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -5969,7 +6469,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XR) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -6076,6 +6577,40 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "BGP_UP",
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -6086,7 +6621,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -6101,7 +6637,7 @@
    "technologies": [
     "IOS XR"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A reachable prefix is withdrawn across provider edges. Business impact: Customers lose reachability until an alternate route converges. A fictional test enterprise experiences bgp route withdrawal propagation. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for bgp route withdrawal propagation, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -6109,7 +6645,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XR) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -6216,6 +6753,38 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -6226,7 +6795,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -6382,7 +6952,7 @@
    "technologies": [
     "IOS XR"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Routing policy selects a different available path. Business impact: Traffic moves to a path with different latency or capacity. A fictional test enterprise experiences bgp path preference shift. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for bgp path preference shift, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -6390,7 +6960,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XR) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -6497,6 +7068,39 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "TI_LFA_REROUTE"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -6507,7 +7111,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -8204,7 +8809,7 @@
    "technologies": [
     "IOS XR"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A service fails over across multiple routing domains. Business impact: Customer traffic experiences a cross-domain path transition. A fictional test enterprise experiences multi-domain path failover. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for multi-domain path failover, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -8212,7 +8817,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XR) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -8319,6 +8925,39 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "TI_LFA_REROUTE"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -8329,7 +8968,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -8907,7 +9547,7 @@
    "technologies": [
     "Cisco ACI"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A leaf-to-spine path fails. Business impact: Fabric convergence may affect tenant application paths. A fictional test enterprise experiences aci leaf-spine link failure. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for aci leaf-spine link failure, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -8915,7 +9555,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ACI) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:dc:aci:health are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -9022,6 +9663,39 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "aci",
+     "sourcetype": "cisco:dc:aci:health",
+     "formatter": "format_cisco_aci_health_log",
+     "node": "n1",
+     "params": {
+      "fabric_health": 98,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ACI fabric health nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "fabric_health": [
+        74,
+        62,
+        55
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ACI fabric health score dropped"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "fabric_health": 97
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -9032,7 +9706,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "aci"
      ]
     }
    ]
@@ -9328,7 +10003,7 @@
     "Cisco Nexus",
     "Cisco ACI"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "East-west demand exceeds a fabric path. Business impact: Distributed application latency and retransmission increase. A fictional test enterprise experiences data center east-west congestion. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for data center east-west congestion, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -9336,7 +10011,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Nexus, Cisco ACI) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:dc:nexus9k:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -9443,6 +10119,47 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "nexus",
+     "sourcetype": "cisco:dc:nexus9k:syslog",
+     "formatter": "format_cisco_aci_nexus_log",
+     "node": "n1",
+     "params": {
+      "asic_interface": "Ethernet1/12",
+      "buffer_util_pct": 35.0,
+      "dropped_packets": 0,
+      "fabric_health": "healthy",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Fabric port nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "buffer_util_pct": [
+        68.0,
+        85.0,
+        93.0
+       ],
+       "dropped_packets": [
+        12,
+        140,
+        410
+       ],
+       "fabric_health": "degraded",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Fabric port congested"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -9453,7 +10170,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "nexus"
      ]
     }
    ]
@@ -9469,7 +10187,7 @@
     "NX-OS",
     "Cisco Nexus"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Fabric underlay adjacencies become unstable. Business impact: Overlay reachability fluctuates across multiple tenants. A fictional test enterprise experiences underlay routing instability. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for underlay routing instability, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -9477,7 +10195,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (NX-OS, Cisco Nexus) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -9584,6 +10303,40 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "BGP_UP",
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -9594,7 +10347,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]
@@ -10311,7 +11065,7 @@
    "technologies": [
     "Cisco Nexus"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Storage traffic contends for constrained network capacity. Business impact: Application I/O latency and recovery times increase. A fictional test enterprise experiences storage network dependency congestion. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for storage network dependency congestion, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -10319,7 +11073,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Nexus) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:dc:nexus9k:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -10426,6 +11181,47 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "nexus",
+     "sourcetype": "cisco:dc:nexus9k:syslog",
+     "formatter": "format_cisco_aci_nexus_log",
+     "node": "n1",
+     "params": {
+      "asic_interface": "Ethernet1/12",
+      "buffer_util_pct": 35.0,
+      "dropped_packets": 0,
+      "fabric_health": "healthy",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Fabric port nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "buffer_util_pct": [
+        68.0,
+        85.0,
+        93.0
+       ],
+       "dropped_packets": [
+        12,
+        140,
+        410
+       ],
+       "fabric_health": "degraded",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Fabric port congested"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -10436,7 +11232,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "nexus"
      ]
     }
    ]
@@ -11012,7 +11809,7 @@
     "Cisco ACI",
     "Cisco Nexus"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A dependency spanning fabrics degrades. Business impact: A distributed service experiences failures across data-center boundaries. A fictional test enterprise experiences multi-fabric data center service impact. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for multi-fabric data center service impact, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -11020,7 +11817,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ACI, Cisco Nexus) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:dc:aci:health are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -11127,6 +11925,39 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "aci",
+     "sourcetype": "cisco:dc:aci:health",
+     "formatter": "format_cisco_aci_health_log",
+     "node": "n1",
+     "params": {
+      "fabric_health": 98,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ACI fabric health nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "fabric_health": [
+        74,
+        62,
+        55
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ACI fabric health score dropped"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "fabric_health": 97
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -11137,7 +11968,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "aci"
      ]
     }
    ]
@@ -11574,7 +12406,7 @@
    "technologies": [
     "Cisco ISE"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Network authentication failures rise sharply. Business impact: Users and devices cannot obtain expected access. A fictional test enterprise experiences ise authentication failure spike. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for ise authentication failure spike, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -11582,7 +12414,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ISE) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ise:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -11689,6 +12522,51 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "ise",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
+     "node": "n1",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
+      ],
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "auth_status": "FAILED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "802.1X authentication failures"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2,
+     "phase_per_round": {
+      "INCIDENT": 6
+     }
     }
    ],
    "correlation": [
@@ -11699,7 +12577,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "ise"
      ]
     }
    ]
@@ -11714,7 +12593,7 @@
    "technologies": [
     "Cisco ISE"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Authorization outcomes diverge from intended policy. Business impact: Devices receive inappropriate or insufficient access. A fictional test enterprise experiences ise policy authorization mismatch. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for ise policy authorization mismatch, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -11722,7 +12601,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco ISE) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ise:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -11829,6 +12709,49 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "ise",
+     "sourcetype": "cisco:ise:syslog",
+     "formatter": "format_cisco_ise_log",
+     "node": "n1",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee",
+       "mchan"
+      ],
+      "client_mac": [
+       "00:1A:2B:3C:4D:5E",
+       "00:1A:2B:3C:4D:5F",
+       "00:1A:2B:3C:4D:60"
+      ],
+      "client_ip": [
+       "10.10.30.50",
+       "10.10.30.51",
+       "10.10.30.52"
+      ],
+      "auth_status": "PASSED",
+      "profile": "Corporate-Access",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "802.1X authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "auth_status": "PASSED",
+       "profile": "Guest-Access",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Authorization profile differs from policy"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2
     }
    ],
    "correlation": [
@@ -11839,7 +12762,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "ise"
      ]
     }
    ]
@@ -12974,7 +13898,7 @@
    "technologies": [
     "Cisco Duo"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Authentication behavior deviates from the expected user pattern. Business impact: Credential misuse or account compromise may be present. A fictional test enterprise experiences duo authentication anomaly. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for duo authentication anomaly, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -12982,7 +13906,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Duo) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:duo:remote:vpn are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -13089,6 +14014,52 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "duo",
+     "sourcetype": "cisco:duo:remote:vpn",
+     "formatter": "format_cisco_duo_vpn_log",
+     "node": "n1",
+     "params": {
+      "user": [
+       "jdoe",
+       "asmith",
+       "rlee"
+      ],
+      "client_ip": [
+       "198.51.100.20",
+       "198.51.100.21"
+      ],
+      "factor": "push",
+      "result": "approved",
+      "reason": "user_approved",
+      "country": "US",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Duo VPN authentication"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "client_ip": [
+        "203.0.113.77",
+        "203.0.113.78"
+       ],
+       "result": "denied",
+       "reason": "user_marked_fraud",
+       "country": "RO",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Duo authentication anomaly"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 2,
+     "phase_per_round": {
+      "INCIDENT": 4
+     }
     }
    ],
    "correlation": [
@@ -13099,7 +14070,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "duo"
      ]
     }
    ]
@@ -13816,7 +14788,7 @@
     "IOS XE",
     "Cisco Nexus"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Latency rises across campus and data-center dependencies. Business impact: Time-sensitive trading workflows miss execution objectives. A fictional test enterprise experiences financial trading campus-to-data-center latency. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for financial trading campus-to-data-center latency, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -13824,7 +14796,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XE, Cisco Nexus) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:thousandeyes:metric are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -13931,6 +14904,51 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "te",
+     "sourcetype": "cisco:thousandeyes:metric",
+     "formatter": "format_cisco_thousandeyes_log",
+     "node": "n1",
+     "params": {
+      "target_url": "https://trading.example.test/health",
+      "latency_ms": 32.0,
+      "packet_loss_pct": 0.0,
+      "http_code": 200,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ThousandEyes synthetic nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        185.0,
+        250.0,
+        310.0
+       ],
+       "packet_loss_pct": [
+        8.5,
+        14.5,
+        22.0
+       ],
+       "http_code": [
+        200,
+        504,
+        504
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ThousandEyes synthetic degraded"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -13941,7 +14959,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "te"
      ]
     }
    ]
@@ -15085,7 +16104,7 @@
     "Cisco Nexus",
     "IOS XR"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A regulated cloud interconnect develops latency or loss. Business impact: Data-residency workloads lose predictable connectivity. A fictional test enterprise experiences sovereign cloud interconnect degradation. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for sovereign cloud interconnect degradation, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -15093,7 +16112,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Nexus, IOS XR) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:thousandeyes:metric are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -15200,6 +16220,51 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "te",
+     "sourcetype": "cisco:thousandeyes:metric",
+     "formatter": "format_cisco_thousandeyes_log",
+     "node": "n1",
+     "params": {
+      "target_url": "https://sovereign.example.test/health",
+      "latency_ms": 32.0,
+      "packet_loss_pct": 0.0,
+      "http_code": 200,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ThousandEyes synthetic nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        185.0,
+        250.0,
+        310.0
+       ],
+       "packet_loss_pct": [
+        8.5,
+        14.5,
+        22.0
+       ],
+       "http_code": [
+        200,
+        504,
+        504
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ThousandEyes synthetic degraded"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -15210,7 +16275,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "te"
      ]
     }
    ]
@@ -15510,7 +16576,7 @@
     "F5",
     "AWS"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "A multi-vendor application path degrades. Business impact: Users experience service impact spanning ownership boundaries. A fictional test enterprise experiences mixed-vendor application delivery degradation. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for mixed-vendor application delivery degradation, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -15518,7 +16584,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (Cisco Campus, Palo Alto Networks, F5, AWS) label the scenario; no device-native log of those products is emitted.",
-    "No dependency relationship is stated; the first entity is treated as the dependent."
+    "No dependency relationship is stated; the first entity is treated as the dependent.",
+    "Fidelity upgrade: cisco:thousandeyes:metric are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -15646,6 +16713,51 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "te",
+     "sourcetype": "cisco:thousandeyes:metric",
+     "formatter": "format_cisco_thousandeyes_log",
+     "node": "n4",
+     "params": {
+      "target_url": "https://app.example.test/health",
+      "latency_ms": 32.0,
+      "packet_loss_pct": 0.0,
+      "http_code": 200,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ThousandEyes synthetic nominal"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "latency_ms": [
+        185.0,
+        250.0,
+        310.0
+       ],
+       "packet_loss_pct": [
+        8.5,
+        14.5,
+        22.0
+       ],
+       "http_code": [
+        200,
+        504,
+        504
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ThousandEyes synthetic degraded"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -15656,7 +16768,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "te"
      ]
     }
    ]
@@ -16238,7 +17351,7 @@
     "IOS XR",
     "Cisco SD-WAN"
    ],
-   "generator_family": "modeled_state_progression",
+   "generator_family": "modeled_state_progression_with_native_streams",
    "kind": "operational",
    "source": "generated:cisco_100_scenarios.json",
    "description": "Routing instability spans regulated geographic regions. Business impact: Critical services experience intermittent cross-region reachability. A fictional test enterprise experiences sovereign multi-region routing instability. Operators must establish a coherent timeline without inferring unsupported telemetry. Model the state progression for sovereign multi-region routing instability, identify affected entities, and determine which evidence is required for defensible investigation.",
@@ -16246,7 +17359,8 @@
     "Telemetry is MODELED (sourcetype netspout:scenario:state): the catalog entry specifies a state progression and expected observations but defines no vendor log format, so none is invented.",
     "Entities are the catalog's fictional names; their addresses are deterministic private addresses.",
     "Technologies named by the catalog (IOS XR, Cisco SD-WAN) label the scenario; no device-native log of those products is emitted.",
-    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent."
+    "Ordering follows the catalog relationship 'site depends on affected service path': the dependency changes state first, then the dependent.",
+    "Fidelity upgrade: cisco:ios:syslog are produced by existing vendor-native formatters on the dependency entity affected-service.example; the modeled state streams remain as scenario context. The native device name is the catalog's fictional entity name."
    ],
    "nodes": [
     {
@@ -16353,6 +17467,40 @@
       }
      },
      "per_round": 1
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "n1",
+     "params": {
+      "neighbor_ip": "198.51.100.1",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "10.200.0.0/16",
+      "signature": "BGP peer established"
+     },
+     "phase_params": {
+      "BASELINE": {},
+      "INCIDENT": {
+       "event_type": [
+        "BGP_DOWN",
+        "BGP_UP",
+        "BGP_DOWN"
+       ],
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP adjacency change"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     },
+     "per_round": 1,
+     "phase_per_round": {
+      "INCIDENT": 3
+     }
     }
    ],
    "correlation": [
@@ -16363,7 +17511,8 @@
      ],
      "streams": [
       "dependency",
-      "dependent"
+      "dependent",
+      "bgp"
      ]
     }
    ]

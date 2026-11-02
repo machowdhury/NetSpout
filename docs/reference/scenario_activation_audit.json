@@ -6,12 +6,13 @@
  "newly_activated": 224,
  "activation": {
   "by_fidelity": {
-   "MODELED": 209,
-   "MIXED": 6,
-   "VENDOR_NATIVE": 9
+   "MIXED": 31,
+   "MODELED": 183,
+   "VENDOR_NATIVE": 10
   },
   "by_generator_family": {
-   "modeled_state_progression": 95,
+   "modeled_state_progression_with_native_streams": 26,
+   "modeled_state_progression": 69,
    "modeled_use_case_archetype": 114,
    "cisco_campus_mixed": 2,
    "cisco_ios_sdwan": 1,

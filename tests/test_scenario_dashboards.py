@@ -77,7 +77,12 @@ def test_security_dashboards_state_detection_status_and_never_claim_a_verified_d
         text = json.dumps(spec(x['id'])[1])
         assert 'Detection status: **NOT VERIFIED**' in text and 'Severity:** not asserted' in text and 'Original analytics (Splunk Security Content)' in text
     ops = [x for x in SOURCES if x['kind'] == 'operational']
-    assert len(ops) == 77 + sum(1 for r in _sc.catalog() if r['kind'] != 'security') and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
+    steady = {x['id'] for x in ops if x['family'] == 'contract' and len({e.status for e in _sc.generate(x['id'], 't')}) < 2}   # no incident: labelled differently on purpose
+    assert len(ops) == 77 + sum(1 for r in _sc.catalog() if r['kind'] != 'security')
+    for x in ops:
+        text = json.dumps(spec(x['id'])[1])
+        assert 'Recovery / validation evidence' in text
+        assert ('Events by source (steady-state scenario: no incident)' in text) if x['id'] in steady else ('Before / during / after' in text)
 
 
 def test_palette_follows_the_figma_v2_tokens_and_perspective_tabs_exist():

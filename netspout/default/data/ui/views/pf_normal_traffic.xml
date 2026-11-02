@@ -313,19 +313,23 @@
     "viz_13": {
       "type": "splunk.column",
       "options": {
-        "stackMode": "stacked",
         "seriesColors": [
+          "#d4764f",
           "#6f9db5",
           "#c9a24a",
-          "#6fa387"
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
         ],
-        "legendDisplay": "bottom",
+        "legendDisplay": "off",
         "backgroundColor": "#22262a",
         "xAxisLabelRotation": -30,
         "yAxisTitleText": "Events"
       },
-      "title": "Before / during / after by source",
-      "description": "Events per source before the incident, during it and during recovery/validation (phase names from the scenario).",
+      "title": "Events by source (steady-state scenario: no incident)",
+      "description": "Every event in this scenario is normal; the chart shows how much each source reports.",
       "dataSources": {
         "primary": "ds_12"
       },
@@ -350,8 +354,8 @@
         "xAxisLabelRotation": -30,
         "yAxisTitleText": "Events"
       },
-      "title": "Status by phase (how the story progresses)",
-      "description": "Each phase of the scenario contract with the status values its events carry (for example normal, degraded, blocked, mitigated, restored).",
+      "title": "Events by phase and source (steady-state scenario)",
+      "description": "This scenario has no fault: every event is normal. The chart shows how much each source reports in each load phase.",
       "dataSources": {
         "primary": "ds_13"
       },
@@ -527,16 +531,16 @@
     },
     "ds_12": {
       "type": "ds.search",
-      "name": "Before / during / after by source",
+      "name": "Events by source (steady-state scenario: no incident)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"normal_traffic\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | chart count over pf_st by pf_class | addtotals fieldname=_total | sort - _total | head 8 | fields - _total | rename pf_st as sourcetype"
+        "query": "index=$index_tok$ netspout_scenario_id=\"normal_traffic\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | chart count over pf_st | rename pf_st as sourcetype"
       }
     },
     "ds_13": {
       "type": "ds.search",
-      "name": "Status by phase (how the story progresses)",
+      "name": "Events by phase and source (steady-state scenario)",
       "options": {
-        "query": "index=$index_tok$ netspout_scenario_id=\"normal_traffic\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"STEADY\",1,pf_phase=\"PEAK\",2,pf_phase=\"COOLDOWN\",3,true(),99) | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by status"
+        "query": "index=$index_tok$ netspout_scenario_id=\"normal_traffic\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | eval pf_ord=case(pf_phase=\"STEADY\",1,pf_phase=\"PEAK\",2,pf_phase=\"COOLDOWN\",3,true(),99) | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by pf_st"
       }
     },
     "ds_14": {

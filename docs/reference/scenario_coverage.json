@@ -1746,6 +1746,7 @@
    "sourcetypes": [
     "cisco:catalyst:networkhealth",
     "cisco:catalyst:rogue:threat_details",
+    "cisco:ise:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -1939,7 +1940,7 @@
    "sourcetypes": [
     "cisco:catalyst:clienthealth",
     "cisco:catalyst:rogue:threat_details",
-    "netspout:scenario:state"
+    "cisco:ise:syslog"
    ],
    "phases": [
     "BASELINE",
@@ -10471,6 +10472,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:sdwan:linkhealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10486,7 +10488,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-004\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10505,6 +10507,8 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:linkhealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10520,7 +10524,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-005\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10539,6 +10543,8 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:sdwan:BGP-5-ADJCHANGE",
+    "cisco:sdwan:linkhealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10554,7 +10560,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-006\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10573,6 +10579,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10588,7 +10595,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-007\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10607,6 +10614,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10622,7 +10630,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-008\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10641,6 +10649,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:catalyst:clienthealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10656,7 +10665,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-009\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10675,6 +10684,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:catalyst:clienthealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10690,7 +10700,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-010\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10777,6 +10787,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ise:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10792,7 +10803,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-013\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10811,6 +10822,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ise:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10826,7 +10838,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-014\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -10981,6 +10993,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:sdwan:linkhealth",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -10996,7 +11009,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-ENT-019\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11091,6 +11104,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11106,7 +11120,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SP-003\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11129,6 +11143,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11144,7 +11159,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SP-004\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11205,6 +11220,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11220,7 +11236,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SP-006\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11699,6 +11715,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11714,7 +11731,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SP-019\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11873,6 +11890,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:dc:aci:health",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11888,7 +11906,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-DC-005\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -11975,6 +11993,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:dc:nexus9k:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -11990,7 +12009,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-DC-008\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12009,6 +12028,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12024,7 +12044,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-DC-009\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12213,6 +12233,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:dc:nexus9k:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12228,7 +12249,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-DC-015\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12383,6 +12404,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:dc:aci:health",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12398,7 +12420,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-DC-020\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12519,6 +12541,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ise:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12534,7 +12557,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SEC-005\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12553,6 +12576,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ise:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12568,7 +12592,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SEC-006\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -12859,6 +12883,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:duo:remote:vpn",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -12874,7 +12899,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-SEC-015\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -13067,6 +13092,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:thousandeyes:metric",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -13082,7 +13108,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-CRI-001\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -13414,6 +13440,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:thousandeyes:metric",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -13429,7 +13456,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-CRI-011\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -13524,6 +13551,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:thousandeyes:metric",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -13539,7 +13567,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-CRI-014\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
@@ -13707,6 +13735,7 @@
     "cisco"
    ],
    "sourcetypes": [
+    "cisco:ios:syslog",
     "netspout:scenario:state"
    ],
    "phases": [
@@ -13722,7 +13751,7 @@
    "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
    "detection_prerequisites": "Operational scenario: no detection claimed.",
-   "provenance": "Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "provenance": "Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
    "verification_spl": "index=<index> netspout_scenario_id=\"C100-CRI-019\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {

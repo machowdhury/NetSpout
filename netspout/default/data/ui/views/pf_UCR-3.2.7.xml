@@ -383,6 +383,31 @@
       ]
     },
     "viz_16": {
+      "type": "splunk.line",
+      "options": {
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "xAxisLabelRotation": -30,
+        "yAxisTitleText": "Value"
+      },
+      "title": "Measured indicator by phase (modeled values)",
+      "description": "The indicator this scenario models, averaged in each phase. The values are modeled (netspout:scenario:state), not measurements of any product.",
+      "dataSources": {
+        "primary": "ds_15"
+      },
+      "showProgressBar": true
+    },
+    "viz_17": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -390,7 +415,7 @@
       },
       "title": "Impact events (everything after the baseline; click a row for the raw event search)",
       "dataSources": {
-        "primary": "ds_15"
+        "primary": "ds_16"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -406,7 +431,7 @@
         }
       ]
     },
-    "viz_17": {
+    "viz_18": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Provenance and contract\n**Scenario:** `UCR-3.2.7`  \n**Execution:** contract  \n**Telemetry:** Declarative scenario contract (modeled_use_case_archetype): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.  \n**Sourcetypes:** `netspout:scenario:state`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
@@ -414,7 +439,7 @@
         "backgroundColor": "#22262a"
       }
     },
-    "viz_18": {
+    "viz_19": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Detection and verification status\n**Detection:** not applicable to this operational scenario; none is claimed.\n\nVerification search:\n\n    index=YOUR_INDEX netspout_scenario_id=\"UCR-3.2.7\" netspout_run_id=RUN_ID\n    | stats count by netspout_phase, sourcetype\n\nMaturity is recorded in the PulseForge evidence store, not on this page.",
@@ -422,7 +447,7 @@
         "backgroundColor": "#22262a"
       }
     },
-    "viz_19": {
+    "viz_20": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -430,7 +455,7 @@
       },
       "title": "Raw event evidence for the run (click a row for the search)",
       "dataSources": {
-        "primary": "ds_16"
+        "primary": "ds_17"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -548,12 +573,19 @@
     },
     "ds_15": {
       "type": "ds.search",
+      "name": "Measured indicator by phase (modeled values)",
+      "options": {
+        "query": "index=$index_tok$ netspout_scenario_id=\"UCR-3.2.7\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\" | search sourcetype=\"netspout:scenario:state\" | spath input=_raw | where isnotnull(metric_value) | eval pf_ord=case(pf_phase=\"BASELINE\",1,pf_phase=\"DEVIATION\",2,pf_phase=\"ESCALATION\",3,pf_phase=\"RESPONSE\",4,pf_phase=\"RECOVERY\",5,true(),99) | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart avg(metric_value) as value over step by metric_name"
+      }
+    },
+    "ds_16": {
+      "type": "ds.search",
       "name": "Impact events (everything after the baseline; click a row for the raw event search)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"UCR-3.2.7\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | search pf_class!=\"1 Before incident\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
       }
     },
-    "ds_16": {
+    "ds_17": {
       "type": "ds.search",
       "name": "Raw event evidence for the run (click a row for the search)",
       "options": {
@@ -708,7 +740,7 @@
         "type": "absolute",
         "options": {
           "width": 1460,
-          "height": 1130,
+          "height": 1450,
           "display": "auto-scale",
           "backgroundColor": "#17191b"
         },
@@ -770,6 +802,16 @@
               "x": 20,
               "y": 770,
               "w": 1420,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_17",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1090,
+              "w": 1420,
               "h": 340
             }
           }
@@ -795,7 +837,7 @@
             }
           },
           {
-            "item": "viz_17",
+            "item": "viz_18",
             "type": "block",
             "position": {
               "x": 20,
@@ -805,7 +847,7 @@
             }
           },
           {
-            "item": "viz_18",
+            "item": "viz_19",
             "type": "block",
             "position": {
               "x": 740,
@@ -815,7 +857,7 @@
             }
           },
           {
-            "item": "viz_19",
+            "item": "viz_20",
             "type": "block",
             "position": {
               "x": 20,

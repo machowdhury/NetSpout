@@ -507,6 +507,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-ENT-009",
+    "C100-ENT-010",
     "arch_wlan_meraki_catalyst",
     "wireless_connected_core_cisco"
    ],
@@ -1126,6 +1128,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-DC-005",
+    "C100-DC-020",
     "cisco_aci_microburst"
    ],
    "status": "active"
@@ -1174,6 +1178,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-DC-008",
+    "C100-DC-015",
     "arch_san_fibre_channel",
     "cisco_aci_microburst",
     "mixed_sase_degradation"
@@ -1619,6 +1625,7 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-SEC-015",
     "arch_vpn_remote_workforce"
    ],
    "status": "active"
@@ -2046,6 +2053,14 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-CRI-019",
+    "C100-DC-009",
+    "C100-ENT-007",
+    "C100-ENT-008",
+    "C100-SP-003",
+    "C100-SP-004",
+    "C100-SP-006",
+    "C100-SP-019",
     "arch_can_multi_building",
     "arch_epn_isolated_intranet",
     "arch_lan_campus_access",
@@ -2159,7 +2174,13 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "cisco_campus_rogue"
+    "C100-ENT-013",
+    "C100-ENT-014",
+    "C100-SEC-005",
+    "C100-SEC-006",
+    "cisco_campus_rogue",
+    "pure_cisco_enterprise",
+    "wireless_connected_core_cisco"
    ],
    "status": "active"
   },
@@ -2501,6 +2522,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-ENT-005",
+    "C100-ENT-006",
     "cisco_sdwan_brownout",
     "ind_mfg_plant_network_health",
     "ind_telco_change_induced_outage",
@@ -3224,6 +3247,10 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-ENT-004",
+    "C100-ENT-005",
+    "C100-ENT-006",
+    "C100-ENT-019",
     "arch_epn_isolated_intranet",
     "cisco_sdwan_brownout",
     "sdwan_connected_core"
@@ -3556,6 +3583,9 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "C100-CRI-001",
+    "C100-CRI-011",
+    "C100-CRI-014",
     "arch_gan_subsea_cloud",
     "cisco_sdwan_brownout",
     "mixed_sase_degradation"

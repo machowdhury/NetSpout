@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-11-02T19:12:17Z",
+ "generated_utc": "2026-11-02T20:48:53Z",
  "scale": "DASHBOARD_SPECIFIED < DASHBOARD_IMPLEMENTED < DASHBOARD_DATA_VALIDATED < DASHBOARD_VISUALLY_VERIFIED",
  "note": "Offline evidence only: JSON and structural SPL checks. No Splunk instance was used.",
  "dashboards": {
@@ -14,7 +14,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "C100-CRI-003": {
@@ -140,7 +140,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "C100-CRI-012": {
@@ -182,7 +182,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "C100-CRI-015": {
@@ -1344,7 +1344,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.1.1": {
@@ -1358,7 +1358,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.1.29": {
@@ -1372,7 +1372,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.1.37": {
@@ -1386,7 +1386,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.1.42": {
@@ -1400,7 +1400,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.2.1": {
@@ -1414,7 +1414,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.2.2": {
@@ -1428,7 +1428,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.3.11": {
@@ -1442,7 +1442,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-14.3.9": {
@@ -1456,7 +1456,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-15.3.36": {
@@ -1470,7 +1470,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-17.1.4": {
@@ -1484,7 +1484,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.1.1": {
@@ -1498,7 +1498,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.1.12": {
@@ -1512,7 +1512,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.1.2": {
@@ -1526,7 +1526,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.1.7": {
@@ -1540,7 +1540,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.1.8": {
@@ -1554,7 +1554,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.1": {
@@ -1568,7 +1568,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.2": {
@@ -1582,7 +1582,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.5": {
@@ -1596,7 +1596,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.6": {
@@ -1610,7 +1610,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.8": {
@@ -1624,7 +1624,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.10.9": {
@@ -1638,7 +1638,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.1": {
@@ -1652,7 +1652,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.10": {
@@ -1666,7 +1666,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.13": {
@@ -1680,7 +1680,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.14": {
@@ -1694,7 +1694,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.18": {
@@ -1708,7 +1708,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.2": {
@@ -1722,7 +1722,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.11.21": {
@@ -1736,7 +1736,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.1": {
@@ -1750,7 +1750,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.10": {
@@ -1764,7 +1764,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.11": {
@@ -1778,7 +1778,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.12": {
@@ -1792,7 +1792,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.13": {
@@ -1806,7 +1806,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.16": {
@@ -1820,7 +1820,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.17": {
@@ -1834,7 +1834,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.18": {
@@ -1848,7 +1848,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.19": {
@@ -1862,7 +1862,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.2": {
@@ -1876,7 +1876,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.20": {
@@ -1890,7 +1890,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.12.21": {
@@ -1904,7 +1904,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.1": {
@@ -1918,7 +1918,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.10": {
@@ -1932,7 +1932,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.12": {
@@ -1946,7 +1946,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.13": {
@@ -1960,7 +1960,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.17": {
@@ -1974,7 +1974,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.18": {
@@ -1988,7 +1988,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.13.2": {
@@ -2002,7 +2002,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.14.1": {
@@ -2016,7 +2016,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.1": {
@@ -2030,7 +2030,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.11": {
@@ -2044,7 +2044,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.12": {
@@ -2058,7 +2058,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.2": {
@@ -2072,7 +2072,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.3": {
@@ -2086,7 +2086,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.2.4": {
@@ -2100,7 +2100,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.1": {
@@ -2114,7 +2114,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.12": {
@@ -2128,7 +2128,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.2": {
@@ -2142,7 +2142,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.3": {
@@ -2156,7 +2156,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.4": {
@@ -2170,7 +2170,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.3.5": {
@@ -2184,7 +2184,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.1": {
@@ -2198,7 +2198,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.10": {
@@ -2212,7 +2212,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.12": {
@@ -2226,7 +2226,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.4": {
@@ -2240,7 +2240,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.6": {
@@ -2254,7 +2254,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.4.9": {
@@ -2268,7 +2268,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.5.1": {
@@ -2282,7 +2282,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.5.8": {
@@ -2296,7 +2296,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.1": {
@@ -2310,7 +2310,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.10": {
@@ -2324,7 +2324,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.2": {
@@ -2338,7 +2338,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.3": {
@@ -2352,7 +2352,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.5": {
@@ -2366,7 +2366,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.6.6": {
@@ -2380,7 +2380,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.1": {
@@ -2394,7 +2394,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.10": {
@@ -2408,7 +2408,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.2": {
@@ -2422,7 +2422,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.3": {
@@ -2436,7 +2436,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.5": {
@@ -2450,7 +2450,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.7": {
@@ -2464,7 +2464,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.7.9": {
@@ -2478,7 +2478,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.1": {
@@ -2492,7 +2492,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.2": {
@@ -2506,7 +2506,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.20": {
@@ -2520,7 +2520,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.3": {
@@ -2534,7 +2534,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.4": {
@@ -2548,7 +2548,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.5": {
@@ -2562,7 +2562,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.6": {
@@ -2576,7 +2576,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.8.8": {
@@ -2590,7 +2590,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.9.1": {
@@ -2604,7 +2604,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.9.3": {
@@ -2618,7 +2618,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.9.4": {
@@ -2632,7 +2632,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-21.9.6": {
@@ -2646,7 +2646,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.1.16": {
@@ -2660,7 +2660,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.1.4": {
@@ -2674,7 +2674,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.1.5": {
@@ -2688,7 +2688,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.20.4": {
@@ -2702,7 +2702,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.20.6": {
@@ -2716,7 +2716,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.20.7": {
@@ -2730,7 +2730,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.20.8": {
@@ -2744,7 +2744,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.5.15": {
@@ -2758,7 +2758,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.5.16": {
@@ -2772,7 +2772,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.5.2": {
@@ -2786,7 +2786,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.7.44": {
@@ -2800,7 +2800,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-22.8.7": {
@@ -2814,7 +2814,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-3.2.7": {
@@ -2828,7 +2828,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-4.2.19": {
@@ -2842,7 +2842,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-4.3.15": {
@@ -2856,7 +2856,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-5.4.30": {
@@ -2870,7 +2870,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-5.8.26": {
@@ -2884,7 +2884,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-5.9.32": {
@@ -2898,7 +2898,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-8.1.1": {
@@ -2912,7 +2912,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "UCR-8.3.1": {
@@ -2926,7 +2926,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "arch_can_multi_building": {
@@ -2968,7 +2968,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "arch_nas_storage_cluster": {
@@ -2982,7 +2982,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "arch_pan_iot_mesh": {
@@ -2996,7 +2996,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "arch_san_fibre_channel": {
@@ -3010,7 +3010,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 19,
    "family": "contract"
   },
   "arch_wan_global_backbone": {
@@ -3024,7 +3024,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "lateral_movement": {
@@ -3108,7 +3108,7 @@
    "data_validated": false,
    "browser_render_checks_pass": false,
    "screenshot_inspected": false,
-   "searches": 18,
+   "searches": 20,
    "family": "contract"
   },
   "wireless_connected_core_cisco": {

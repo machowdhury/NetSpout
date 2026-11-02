@@ -61,6 +61,14 @@
         "token": "index_tok",
         "defaultValue": "dev_test_replay"
       }
+    },
+    "input_mindex": {
+      "type": "input.text",
+      "title": "Metric index",
+      "options": {
+        "token": "mindex_tok",
+        "defaultValue": "dev_test_replay_metrics"
+      }
     }
   },
   "defaults": {
@@ -383,6 +391,49 @@
       ]
     },
     "viz_16": {
+      "type": "splunk.line",
+      "options": {
+        "seriesColors": [
+          "#d4764f",
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387",
+          "#a79fc4",
+          "#c9786f",
+          "#8fb0a8",
+          "#b8b09a"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "yAxisTitleText": "Value"
+      },
+      "title": "Health and performance metrics over the run (mstats)",
+      "description": "Gauge metrics recorded by the incident: loss, latency, error rate, availability.",
+      "dataSources": {
+        "primary": "ds_15"
+      },
+      "showProgressBar": true
+    },
+    "viz_17": {
+      "type": "splunk.column",
+      "options": {
+        "seriesColors": [
+          "#6f9db5",
+          "#c9a24a",
+          "#6fa387"
+        ],
+        "legendDisplay": "bottom",
+        "backgroundColor": "#22262a",
+        "xAxisLabelRotation": -30
+      },
+      "title": "Metrics before / during / after (average)",
+      "description": "Average of each gauge in the baseline, the incident and recovery phases: the before/after comparison.",
+      "dataSources": {
+        "primary": "ds_16"
+      },
+      "showProgressBar": true
+    },
+    "viz_18": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -390,7 +441,7 @@
       },
       "title": "Impact events (everything after the baseline; click a row for the raw event search)",
       "dataSources": {
-        "primary": "ds_15"
+        "primary": "ds_17"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -406,15 +457,15 @@
         }
       ]
     },
-    "viz_17": {
+    "viz_19": {
       "type": "splunk.markdown",
       "options": {
-        "markdown": "### Provenance and contract\n**Scenario:** `C100-CRI-011`  \n**Execution:** contract  \n**Telemetry:** Declarative scenario contract (modeled_state_progression): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.  \n**Sourcetypes:** `netspout:scenario:state`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
+        "markdown": "### Provenance and contract\n**Scenario:** `C100-CRI-011`  \n**Execution:** contract  \n**Telemetry:** Declarative scenario contract (modeled_state_progression_with_native_streams): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.  \n**Sourcetypes:** `cisco:thousandeyes:metric`, `netspout:scenario:state`\n\n**Correlation:** only what the source telemetry itself carries; nothing is added by PulseForge.",
         "fontColor": "#ececea",
         "backgroundColor": "#22262a"
       }
     },
-    "viz_18": {
+    "viz_20": {
       "type": "splunk.markdown",
       "options": {
         "markdown": "### Detection and verification status\n**Detection:** not applicable to this operational scenario; none is claimed.\n\nVerification search:\n\n    index=YOUR_INDEX netspout_scenario_id=\"C100-CRI-011\" netspout_run_id=RUN_ID\n    | stats count by netspout_phase, sourcetype\n\nMaturity is recorded in the PulseForge evidence store, not on this page.",
@@ -422,7 +473,7 @@
         "backgroundColor": "#22262a"
       }
     },
-    "viz_19": {
+    "viz_21": {
       "type": "splunk.table",
       "options": {
         "count": 8,
@@ -430,7 +481,7 @@
       },
       "title": "Raw event evidence for the run (click a row for the search)",
       "dataSources": {
-        "primary": "ds_16"
+        "primary": "ds_18"
       },
       "showProgressBar": true,
       "eventHandlers": [
@@ -548,12 +599,26 @@
     },
     "ds_15": {
       "type": "ds.search",
+      "name": "Health and performance metrics over the run (mstats)",
+      "options": {
+        "query": "| mstats avg(_value) as value WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"C100-CRI-011\" AND netspout_run_id=\"$run_tok$\" BY metric_name span=1s | xyseries _time metric_name value | fillnull value=0"
+      }
+    },
+    "ds_16": {
+      "type": "ds.search",
+      "name": "Metrics before / during / after (average)",
+      "options": {
+        "query": "| mstats avg(_value) as v WHERE index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id=\"C100-CRI-011\" AND netspout_run_id=\"$run_tok$\" BY metric_name, netspout_phase | eval pf_phase=netspout_phase | eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | stats avg(v) as v by metric_name, pf_class | xyseries metric_name pf_class v"
+      }
+    },
+    "ds_17": {
+      "type": "ds.search",
       "name": "Impact events (everything after the baseline; click a row for the raw event search)",
       "options": {
         "query": "index=$index_tok$ netspout_scenario_id=\"C100-CRI-011\" netspout_run_id=\"$run_tok$\"| eval pf_phase=coalesce(netspout_pack_phase, netspout_phase), pf_host=mvindex(host,-1), pf_st=mvindex(sourcetype,0) | search pf_phase=\"$phase_tok$\"| eval pf_class=case(match(pf_phase,\"(?i)^BASELINE\"),\"1 Before incident\", match(pf_phase,\"(?i)RECOVER|VALIDATE|VERIFIED|CONTAIN|RESPONSE\"),\"3 Recovery / validation\", true(),\"2 During incident\") | search pf_class!=\"1 Before incident\" | sort 0 _time | eval time=strftime(_time,\"%H:%M:%S\"), message=substr(_raw,1,200) | table time pf_phase pf_host pf_st message | rename pf_host as host, pf_st as sourcetype | head 200"
       }
     },
-    "ds_16": {
+    "ds_18": {
       "type": "ds.search",
       "name": "Raw event evidence for the run (click a row for the search)",
       "options": {
@@ -580,7 +645,8 @@
       "input_global_time",
       "input_run",
       "input_phase",
-      "input_index"
+      "input_index",
+      "input_mindex"
     ],
     "layoutDefinitions": {
       "layout_noc": {
@@ -708,7 +774,7 @@
         "type": "absolute",
         "options": {
           "width": 1460,
-          "height": 1130,
+          "height": 1450,
           "display": "auto-scale",
           "backgroundColor": "#17191b"
         },
@@ -769,6 +835,26 @@
             "position": {
               "x": 20,
               "y": 770,
+              "w": 710,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_17",
+            "type": "block",
+            "position": {
+              "x": 750,
+              "y": 770,
+              "w": 690,
+              "h": 300
+            }
+          },
+          {
+            "item": "viz_18",
+            "type": "block",
+            "position": {
+              "x": 20,
+              "y": 1090,
               "w": 1420,
               "h": 340
             }
@@ -795,7 +881,7 @@
             }
           },
           {
-            "item": "viz_17",
+            "item": "viz_19",
             "type": "block",
             "position": {
               "x": 20,
@@ -805,7 +891,7 @@
             }
           },
           {
-            "item": "viz_18",
+            "item": "viz_20",
             "type": "block",
             "position": {
               "x": 740,
@@ -815,7 +901,7 @@
             }
           },
           {
-            "item": "viz_19",
+            "item": "viz_21",
             "type": "block",
             "position": {
               "x": 20,

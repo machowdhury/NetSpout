@@ -16,9 +16,9 @@ Each is a declarative contract (`catalog/scenario_contracts.json`): shared topol
 
 | Fidelity | Meaning | Scenarios |
 |---|---|---|
-| VENDOR_NATIVE | Only vendor formatters from the engine | 9 |
-| MIXED | Native formatters or verbatim samples plus a labeled modeled stand-in for a sourcetype with no generator | 6 |
-| MODELED | Only the labeled NetSpout schema `netspout:scenario:state` (a state progression or monitoring use case, not a vendor log format) | 209 |
+| VENDOR_NATIVE | Only vendor formatters from the engine | 10 |
+| MIXED | Native formatters or verbatim samples plus a labeled modeled stand-in for a sourcetype with no generator | 31 |
+| MODELED | Only the labeled NetSpout schema `netspout:scenario:state` (a state progression or monitoring use case, not a vendor log format) | 183 |
 
 | Generator family | Scenarios |
 |---|---|
@@ -34,7 +34,8 @@ Each is a declarative contract (`catalog/scenario_contracts.json`): shared topol
 | firewall_lb_web_db | 1 |
 | iot_mixed | 1 |
 | meraki_palo_alto | 1 |
-| modeled_state_progression | 95 |
+| modeled_state_progression | 69 |
+| modeled_state_progression_with_native_streams | 26 |
 | modeled_use_case_archetype | 114 |
 | palo_alto_fortinet_nginx_meraki | 1 |
 | storage_mixed | 1 |

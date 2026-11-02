@@ -1,0 +1,1985 @@
+{
+ "schema_version": "1.0.0",
+ "note": "Declarative scenario contracts: shared nodes, ordered phases, and streams binding an existing SplunkLogEngine formatter to a node with per-phase parameters. See src/netspout_core/scenario_contracts.py.",
+ "contracts": [
+  {
+   "id": "arch_epn_isolated_intranet",
+   "title": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
+   "category": "NETWORK_OPERATIONS",
+   "vendors": [
+    "cisco"
+   ],
+   "description": "A branch access switch, provider-edge router, SD-WAN edge and cloud VPC gateway form a private QinQ/MPLS intranet. A double-tagged 802.1ad frame (VLAN hopping attempt) hits the branch access port; the outer S-VLAN is stripped and a hardware ACL drops the inner encapsulation while the SD-WAN path stays healthy.",
+   "assumptions": [
+    "Topology names and addresses are fictional (RFC 1918 / documentation ranges).",
+    "Event text for the QinQ attempt is scenario-authored and passed through the Cisco formatter's signature field; the surrounding log structure is the formatter's."
+   ],
+   "nodes": [
+    {
+     "id": "branch-sw",
+     "name": "Cisco-C9300-Branch1",
+     "type": "SWITCH",
+     "ip": "10.50.1.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "pe-1",
+     "name": "Cisco-ASR1001X-PE1",
+     "type": "ROUTER",
+     "ip": "10.50.0.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "sdwan-edge",
+     "name": "Cisco-C8500-SDWAN-Edge1",
+     "type": "ROUTER",
+     "ip": "10.50.2.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "vpc-gw",
+     "name": "Cisco-C8000V-VPC-GW1",
+     "type": "ROUTER",
+     "ip": "10.50.3.1",
+     "vendor": "cisco"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal operation",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Fault or attack begins",
+     "rounds": 3
+    },
+    {
+     "id": "ESCALATION",
+     "label": "Impact grows",
+     "rounds": 3
+    },
+    {
+     "id": "MITIGATION",
+     "label": "Defense engages",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Return to normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_ios_sdwan",
+   "streams": [
+    {
+     "id": "access",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_router_switch_log",
+     "node": "branch-sw",
+     "params": {
+      "src_ip": "@branch-sw",
+      "dest_ip": "@pe-1",
+      "interface": "TenGigabitEthernet1/0/1",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Branch access uplink nominal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Double-tagged 802.1ad frame received on access port Te1/0/1 (outer S-VLAN 100, inner C-VLAN 200)"
+      },
+      "ESCALATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Repeated double-tagged QinQ frames on Te1/0/1: VLAN hopping attempt continuing"
+      },
+      "MITIGATION": {
+       "action": "dropped",
+       "status": "blocked",
+       "signature": "Outer S-VLAN stripped; hardware ACL dropped inner-encapsulated frame on Te1/0/1"
+      },
+      "RECOVERY": {
+       "action": "allowed",
+       "status": "restored",
+       "signature": "Branch access port QinQ ACL counters stable, uplink nominal"
+      }
+     }
+    },
+    {
+     "id": "pe",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_router_switch_log",
+     "node": "pe-1",
+     "params": {
+      "src_ip": "@pe-1",
+      "dest_ip": "@vpc-gw",
+      "interface": "HundredGigE0/0/0/1",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "MPLS pseudo-wire to VPC gateway up"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "signature": "MPLS pseudo-wire to VPC gateway up; no inner-tag leakage observed at PE"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "MPLS pseudo-wire to VPC gateway up"
+      }
+     }
+    },
+    {
+     "id": "sdwan",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "sdwan-edge",
+     "params": {
+      "remote_system_ip": "@vpc-gw",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel to cloud VPC within SLA"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "latency_ms": 27.0,
+       "jitter_ms": 3.0,
+       "signature": "SD-WAN tunnel to cloud VPC within SLA during branch L2 attack"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "cloud VPC gateway",
+     "tokens": [
+      "10.50.3.1",
+      "Cisco-C8000V-VPC-GW1"
+     ],
+     "streams": [
+      "pe",
+      "sdwan"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "arch_gan_subsea_cloud",
+   "title": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
+   "category": "NETWORK_OPERATIONS",
+   "vendors": [
+    "cisco",
+    "zscaler",
+    "thousandeyes"
+   ],
+   "description": "A subsea landing-station router carries traffic between AWS Direct Connect and Azure ExpressRoute edges. An undersea seismic event degrades optical signal quality on the lambda; interface throughput falls, Zscaler inspection latency and ThousandEyes probe latency and loss climb, and a fast-protection switch moves traffic to the terrestrial fallback before service returns to normal.",
+   "assumptions": [
+    "Interface counters, latencies and loss percentages are modeled values chosen to show degradation and recovery.",
+    "Optical bit-error rate has no field in the Cisco MDT stream formatter, so the degradation is represented by throughput, CPU and status; no BER value is fabricated."
+   ],
+   "nodes": [
+    {
+     "id": "landing",
+     "name": "Cisco-NCS5504-LandingStn1",
+     "type": "ROUTER",
+     "ip": "10.60.0.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "aws-edge",
+     "name": "Cisco-ASR9K-AWS-DX-Edge",
+     "type": "ROUTER",
+     "ip": "10.60.1.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "azure-edge",
+     "name": "Cisco-ASR9K-Azure-ER-Edge",
+     "type": "ROUTER",
+     "ip": "10.60.2.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "sase",
+     "name": "Zscaler-ZIA-Edge-FRA",
+     "type": "SASE_PROXY",
+     "ip": "10.60.3.1",
+     "vendor": "zscaler"
+    },
+    {
+     "id": "probe",
+     "name": "ThousandEyes-Agent-SIN",
+     "type": "CLIENT_EXTERNAL",
+     "ip": "10.60.4.10",
+     "vendor": "cisco"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal operation",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Fault or attack begins",
+     "rounds": 3
+    },
+    {
+     "id": "ESCALATION",
+     "label": "Impact grows",
+     "rounds": 3
+    },
+    {
+     "id": "MITIGATION",
+     "label": "Defense engages",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Return to normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_mdt_sase",
+   "streams": [
+    {
+     "id": "mdt",
+     "sourcetype": "cisco:ios:mdt:metric",
+     "formatter": "format_mdt_stream",
+     "node": "landing",
+     "params": {
+      "interface_name": "HundredGigE0/0/0/3",
+      "in_octets": 840291000,
+      "out_octets": 795810200,
+      "cpu_pct": 22.0,
+      "memory_pct": 36.0,
+      "action": "allowed",
+      "status": "normal",
+      "sourcetype": "cisco:ios:mdt:metric"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "in_octets": 512000000,
+       "out_octets": 498000000,
+       "cpu_pct": 31.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "ESCALATION": {
+       "in_octets": 96000000,
+       "out_octets": 88000000,
+       "cpu_pct": 47.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "MITIGATION": {
+       "in_octets": 420000000,
+       "out_octets": 410000000,
+       "cpu_pct": 38.0,
+       "action": "allowed",
+       "status": "mitigated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    },
+    {
+     "id": "zia",
+     "sourcetype": "zscaler:zia",
+     "formatter": "format_zscaler_zia_log",
+     "node": "sase",
+     "params": {
+      "client_ip": "@probe",
+      "dest_url": "https://erp.cloud-enterprise.corp/healthz",
+      "latency_ms": 28,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SASE Zscaler Cloud Edge Inspection Baseline"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "latency_ms": 120,
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Zscaler ZIA Cloud Edge TLS Inspection Latency Surge"
+      },
+      "ESCALATION": {
+       "latency_ms": 465,
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Zscaler ZIA Cloud Edge TLS Inspection Latency Surge"
+      },
+      "MITIGATION": {
+       "latency_ms": 90,
+       "status": "degraded"
+      },
+      "RECOVERY": {
+       "latency_ms": 31,
+       "status": "restored",
+       "signature": "Zscaler ZIA Cloud Edge Inspection Latency Normalized"
+      }
+     }
+    },
+    {
+     "id": "te",
+     "sourcetype": "cisco:thousandeyes:metric",
+     "formatter": "format_cisco_thousandeyes_log",
+     "node": "probe",
+     "params": {
+      "target_url": "https://erp.cloud-enterprise.corp",
+      "latency_ms": 32.0,
+      "packet_loss_pct": 0.0,
+      "http_code": 200,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "ThousandEyes synthetic latency nominal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "latency_ms": 185.0,
+       "packet_loss_pct": 8.5,
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ThousandEyes synthetic latency elevated"
+      },
+      "ESCALATION": {
+       "latency_ms": 250.0,
+       "packet_loss_pct": 22.0,
+       "http_code": 504,
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "ThousandEyes SASE Cloud Path Degraded (High TTFB)"
+      },
+      "MITIGATION": {
+       "latency_ms": 95.0,
+       "packet_loss_pct": 2.0,
+       "status": "degraded"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "ThousandEyes synthetic latency nominal"
+      }
+     }
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "service erp.cloud-enterprise.corp",
+     "tokens": [
+      "erp.cloud-enterprise.corp"
+     ],
+     "streams": [
+      "zia",
+      "te"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "arch_wan_global_backbone",
+   "title": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
+   "category": "WAN",
+   "vendors": [
+    "cisco",
+    "juniper"
+   ],
+   "description": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.",
+   "assumptions": [
+    "Prefixes use documentation ranges (198.51.100.0/24, 203.0.113.0/24) and private AS numbers in the signature text.",
+    "The hijack indicator is carried as BGP event text through the IOS-XR BGP formatter; no BGP UPDATE wire format is claimed.",
+    "The Cisco PE in New York peers with the Juniper core router in London (route-reflector style); the Juniper LSP next hops are the New York and Frankfurt PEs, so both vendors' events name the same routers."
+   ],
+   "nodes": [
+    {
+     "id": "pe-nyc",
+     "name": "Cisco-ASR9K-PE-NYC",
+     "type": "ROUTER",
+     "ip": "10.70.1.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "pe-fra",
+     "name": "Cisco-ASR9K-PE-FRA",
+     "type": "ROUTER",
+     "ip": "10.70.2.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "p-lon",
+     "name": "Juniper-PTX1000-P-LON",
+     "type": "ROUTER",
+     "ip": "10.70.3.1",
+     "vendor": "juniper"
+    },
+    {
+     "id": "peer",
+     "name": "Transit-Peer-AS64500",
+     "type": "ROUTER",
+     "ip": "198.51.100.1",
+     "vendor": "generic"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal operation",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Fault or attack begins",
+     "rounds": 3
+    },
+    {
+     "id": "ESCALATION",
+     "label": "Impact grows",
+     "rounds": 3
+    },
+    {
+     "id": "MITIGATION",
+     "label": "Defense engages",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Return to normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_bgp_mdt_junos",
+   "streams": [
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_cisco_ios_xr_bgp_log",
+     "node": "pe-nyc",
+     "params": {
+      "neighbor_ip": "@p-lon",
+      "event_type": "ROUTE_STABLE",
+      "action": "allowed",
+      "status": "normal",
+      "prefix": "203.0.113.0/24",
+      "signature": "BGP peer AS64500 established, prefixes nominal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "event_type": "PREFIX_CHANGE",
+       "action": "alerted",
+       "status": "degraded",
+       "prefix": "203.0.113.0/25",
+       "signature": "More-specific prefix 203.0.113.0/25 announced by AS64500 (origin change from AS64496)"
+      },
+      "ESCALATION": {
+       "event_type": "BGP_DOWN",
+       "action": "alerted",
+       "status": "degraded",
+       "prefix": "203.0.113.0/25",
+       "signature": "BGP peer AS64500 flapping while hijack candidate prefix is active"
+      },
+      "MITIGATION": {
+       "event_type": "ROUTE_FILTERED",
+       "action": "blocked",
+       "status": "mitigated",
+       "prefix": "203.0.113.0/25",
+       "signature": "Prefix 203.0.113.0/25 rejected by origin-validation policy"
+      },
+      "RECOVERY": {
+       "event_type": "ROUTE_STABLE",
+       "status": "restored",
+       "prefix": "203.0.113.0/24",
+       "signature": "BGP peer AS64500 established, prefixes nominal"
+      }
+     }
+    },
+    {
+     "id": "mdt",
+     "sourcetype": "cisco:ios:mdt:metric",
+     "formatter": "format_mdt_stream",
+     "node": "pe-fra",
+     "params": {
+      "interface_name": "HundredGigE0/0/0/1",
+      "in_octets": 840291000,
+      "out_octets": 795810200,
+      "cpu_pct": 22.0,
+      "memory_pct": 36.0,
+      "action": "allowed",
+      "status": "normal",
+      "sourcetype": "cisco:ios:mdt:metric"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "in_octets": 610000000,
+       "cpu_pct": 34.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "ESCALATION": {
+       "in_octets": 240000000,
+       "out_octets": 231000000,
+       "cpu_pct": 58.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "MITIGATION": {
+       "in_octets": 520000000,
+       "out_octets": 505000000,
+       "cpu_pct": 41.0,
+       "status": "mitigated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    },
+    {
+     "id": "junos",
+     "sourcetype": "juniper:junos",
+     "formatter": "format_juniper_junos_log",
+     "node": "p-lon",
+     "params": {
+      "lsp_name": "LSP-CORE-NYC-FRA-01",
+      "primary_nh": "@pe-nyc",
+      "bypass_nh": "@pe-fra",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Juniper Junos MPLS RSVP-TE LSP up on primary path"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Juniper Junos MPLS RSVP-TE FRR Switchover"
+      },
+      "MITIGATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Juniper Junos MPLS RSVP-TE FRR Switchover"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "Juniper Junos MPLS RSVP-TE Reverted to Primary LSP"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "ESCALATION",
+      "MITIGATION",
+      "RECOVERY"
+     ]
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "New York PE",
+     "tokens": [
+      "Cisco-ASR9K-PE-NYC",
+      "10.70.1.1"
+     ],
+     "streams": [
+      "bgp",
+      "junos"
+     ]
+    },
+    {
+     "entity": "London core router",
+     "tokens": [
+      "Juniper-PTX1000-P-LON",
+      "10.70.3.1"
+     ],
+     "streams": [
+      "bgp",
+      "junos"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lateral_movement",
+   "title": "Ransomware / Lateral Spread (Port 445)",
+   "category": "SECURITY",
+   "vendors": [
+    "cisco",
+    "postgresql"
+   ],
+   "kind": "security",
+   "description": "A compromised application server tries to spread over SMB (TCP/445) to other internal servers while privileged catalog queries appear against the database. A segmentation ASA denies the cross-subnet SMB flows, the core switch records the denied traffic, and database access returns to normal application queries.",
+   "assumptions": [
+    "The compromised host and targets are fictional internal addresses.",
+    "Credential-theft activity is represented by the SQL statement text and ASA/switch deny events only; no malware payload content is generated."
+   ],
+   "nodes": [
+    {
+     "id": "sw-core",
+     "name": "Cisco-C9300-Core1",
+     "type": "SWITCH",
+     "ip": "10.30.0.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "fw-seg",
+     "name": "Cisco-ASA5555-SegFW",
+     "type": "FIREWALL",
+     "ip": "10.30.0.2",
+     "vendor": "cisco"
+    },
+    {
+     "id": "app-1",
+     "name": "app-server-01",
+     "type": "WEB_SERVER",
+     "ip": "10.30.10.21",
+     "vendor": "generic"
+    },
+    {
+     "id": "app-2",
+     "name": "app-server-02",
+     "type": "WEB_SERVER",
+     "ip": "10.30.10.22",
+     "vendor": "generic"
+    },
+    {
+     "id": "app-3",
+     "name": "app-server-03",
+     "type": "WEB_SERVER",
+     "ip": "10.30.10.23",
+     "vendor": "generic"
+    },
+    {
+     "id": "db-1",
+     "name": "pg-primary-01",
+     "type": "DATABASE",
+     "ip": "10.30.20.5",
+     "vendor": "generic"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal application traffic",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Compromised host probes SMB",
+     "rounds": 3
+    },
+    {
+     "id": "SPREAD",
+     "label": "Lateral spread attempts",
+     "rounds": 4
+    },
+    {
+     "id": "CONTAINMENT",
+     "label": "Segmentation blocks spread",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Normal traffic resumes",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_asa_postgres",
+   "streams": [
+    {
+     "id": "asa",
+     "sourcetype": "cisco:asa",
+     "formatter": "format_cisco_asa_log",
+     "node": "fw-seg",
+     "params": {
+      "src_ip": "@app-1",
+      "dest_ip": "@db-1",
+      "src_port": 49152,
+      "dest_port": 5432,
+      "proto": "TCP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Permitted application to database session"
+     },
+     "per_round": 2,
+     "phase_params": {
+      "ONSET": {
+       "dest_ip": [
+        "@app-2",
+        "@app-3"
+       ],
+       "dest_port": 445,
+       "action": "blocked",
+       "status": "blocked",
+       "signature": "Denied inbound SMB 445 across segment boundary (segmentation policy)"
+      },
+      "SPREAD": {
+       "dest_ip": [
+        "@app-2",
+        "@app-3",
+        "@db-1"
+       ],
+       "dest_port": 445,
+       "action": "blocked",
+       "status": "blocked",
+       "signature": "Repeated SMB 445 denies from app-server-01: lateral movement attempt"
+      },
+      "CONTAINMENT": {
+       "dest_ip": [
+        "@app-2",
+        "@app-3"
+       ],
+       "dest_port": 445,
+       "action": "blocked",
+       "status": "blocked",
+       "signature": "Source app-server-01 isolated; SMB flows denied"
+      },
+      "RECOVERY": {
+       "src_ip": "@app-2",
+       "status": "restored",
+       "signature": "Permitted application to database session"
+      }
+     }
+    },
+    {
+     "id": "switch",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_router_switch_log",
+     "node": "sw-core",
+     "params": {
+      "src_ip": "@app-1",
+      "dest_ip": "@sw-core",
+      "interface": "TenGigabitEthernet1/0/10",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Core access port traffic nominal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Elevated TCP/445 flow count from app-server-01 on Te1/0/10"
+      },
+      "SPREAD": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Sustained SMB fan-out from app-server-01 on Te1/0/10"
+      },
+      "CONTAINMENT": {
+       "action": "dropped",
+       "status": "blocked",
+       "signature": "Port Te1/0/10 shut by containment action"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "Core access port traffic nominal"
+      }
+     }
+    },
+    {
+     "id": "pg",
+     "sourcetype": "postgresql:audit",
+     "formatter": "format_postgres_db_log",
+     "node": "db-1",
+     "params": {
+      "src_ip": "@app-1",
+      "dest_ip": "@db-1",
+      "sql_statement": "SELECT * FROM catalog WHERE item_id = 101",
+      "action": "allowed",
+      "signature": "PostgreSQL Parameterized Query Executed",
+      "status": "normal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "SPREAD": {
+       "sql_statement": "SELECT usename, passwd FROM pg_shadow",
+       "action": "alerted",
+       "signature": "Privileged catalog query from application host",
+       "status": "degraded"
+      },
+      "CONTAINMENT": {
+       "src_ip": "@app-2"
+      },
+      "RECOVERY": {
+       "src_ip": "@app-2",
+       "status": "restored"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "SPREAD",
+      "CONTAINMENT",
+      "RECOVERY"
+     ]
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "compromised host app-server-01",
+     "tokens": [
+      "10.30.10.21"
+     ],
+     "streams": [
+      "asa",
+      "switch",
+      "pg"
+     ]
+    },
+    {
+     "entity": "database pg-primary-01",
+     "tokens": [
+      "10.30.20.5"
+     ],
+     "streams": [
+      "asa",
+      "pg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mixed_vendor_enterprise",
+   "title": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
+   "category": "NETWORK_OPERATIONS",
+   "vendors": [
+    "palo_alto",
+    "fortinet",
+    "nginx",
+    "meraki"
+   ],
+   "description": "A perimeter scan and an application exploit attempt hit a multi-vendor enterprise: the Palo Alto firewall records the scan and blocks the exploit, the Fortinet firewall logs the same source in correlated flows, the nginx web tier shows the attempted request, and a Meraki access point raises a wireless alert from the same period. Normal traffic then resumes.",
+   "assumptions": [
+    "Only the sourcetypes with generators in this release are produced (Palo Alto, Fortinet, nginx Plus, Meraki); Arista, Aruba and Juniper devices named in the title are not generated here.",
+    "The attacker address is a documentation address (198.51.100.42)."
+   ],
+   "nodes": [
+    {
+     "id": "pan-fw",
+     "name": "PA-5220-Perimeter",
+     "type": "FIREWALL",
+     "ip": "10.80.0.1",
+     "vendor": "palo_alto"
+    },
+    {
+     "id": "forti-fw",
+     "name": "FortiGate-600F-DC",
+     "type": "FIREWALL",
+     "ip": "10.80.0.2",
+     "vendor": "fortinet"
+    },
+    {
+     "id": "web-1",
+     "name": "nginx-web-01",
+     "type": "WEB_SERVER",
+     "ip": "10.80.10.11",
+     "vendor": "generic"
+    },
+    {
+     "id": "ap-1",
+     "name": "Meraki-MR56-Lobby",
+     "type": "WIRELESS_AP",
+     "ip": "10.80.30.5",
+     "vendor": "cisco"
+    },
+    {
+     "id": "attacker",
+     "name": "scanner-198-51-100-42",
+     "type": "CLIENT_EXTERNAL",
+     "ip": "198.51.100.42",
+     "vendor": "generic"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal traffic",
+     "rounds": 3
+    },
+    {
+     "id": "RECON",
+     "label": "Perimeter port scan",
+     "rounds": 3
+    },
+    {
+     "id": "EXPLOIT",
+     "label": "Application exploit attempt",
+     "rounds": 3
+    },
+    {
+     "id": "DEFENSE",
+     "label": "Perimeter blocks and correlates",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Normal traffic resumes",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "palo_alto_fortinet_nginx_meraki",
+   "streams": [
+    {
+     "id": "pan-traffic",
+     "sourcetype": "pan:traffic",
+     "formatter": "format_palo_alto_log",
+     "node": "pan-fw",
+     "params": {
+      "src_ip": "203.0.113.20",
+      "dest_ip": "@web-1",
+      "src_port": 52341,
+      "dest_port": 443,
+      "proto": "TCP",
+      "action": "allowed",
+      "signature": "PANOS-APP-HTTP-PERMIT",
+      "status": "normal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "RECON": {
+       "src_ip": "@attacker",
+       "dest_port": [
+        22,
+        23,
+        3389,
+        445,
+        8080
+       ],
+       "action": "allowed",
+       "signature": "PAN-OS connection attempts to many ports from one source",
+       "status": "degraded"
+      },
+      "EXPLOIT": {
+       "src_ip": "@attacker",
+       "dest_port": 443,
+       "signature": "PAN-OS HTTPS session to web tier",
+       "status": "degraded"
+      },
+      "DEFENSE": {
+       "src_ip": "@attacker",
+       "action": "allowed",
+       "status": "blocked",
+       "signature": "PAN-OS session closed after threat verdict"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "PAN-OS Clean Traffic Flow"
+      }
+     }
+    },
+    {
+     "id": "pan-threat",
+     "sourcetype": "pan:threat",
+     "formatter": "format_palo_alto_threat_log",
+     "node": "pan-fw",
+     "params": {
+      "src_ip": "@attacker",
+      "dest_ip": "@web-1",
+      "src_port": 49152,
+      "dest_port": 443,
+      "threat_name": "Scan: TCP Port Scan / Lateral Probing",
+      "threat_id": 80012,
+      "action": "blocked",
+      "status": "blocked"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "RECON": {
+       "dest_port": [
+        22,
+        23,
+        3389,
+        445,
+        8080
+       ]
+      },
+      "EXPLOIT": {
+       "threat_name": "CVE-2024-Unchecked-Perimeter-Bypass Lateral Breach",
+       "threat_id": 99001,
+       "action": "allowed",
+       "status": "degraded"
+      },
+      "DEFENSE": {
+       "threat_name": "CVE-2024-Unchecked-Perimeter-Bypass Lateral Breach",
+       "threat_id": 99001,
+       "action": "blocked",
+       "status": "blocked"
+      }
+     },
+     "phases": [
+      "RECON",
+      "EXPLOIT",
+      "DEFENSE"
+     ]
+    },
+    {
+     "id": "forti",
+     "sourcetype": "fortinet:fortigate:utm",
+     "formatter": "format_fortinet_ips_log",
+     "node": "forti-fw",
+     "params": {
+      "src_ip": "@attacker",
+      "dest_ip": "@web-1",
+      "src_port": 52341,
+      "dest_port": 443,
+      "attack": "FortiGate IPS correlated flow",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "FortiGate UTM Policy Permit"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "RECON": {
+       "dest_port": [
+        22,
+        445,
+        8080
+       ],
+       "attack": "Perimeter.Port.Scan.Activity",
+       "action": "dropped",
+       "status": "blocked",
+       "signature": "FortiGate IPS Exploit Attempt Denied"
+      },
+      "EXPLOIT": {
+       "attack": "Perimeter.Exploit.Attempt",
+       "action": "dropped",
+       "status": "blocked",
+       "signature": "FortiGate IPS Exploit Attempt Denied"
+      },
+      "DEFENSE": {
+       "attack": "Perimeter.Blacklist.Quarantine.Active",
+       "action": "dropped",
+       "status": "blocked",
+       "signature": "FortiGate Source IP Dynamic Quarantine Applied"
+      },
+      "RECOVERY": {
+       "src_ip": "203.0.113.20",
+       "status": "restored"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "RECON",
+      "EXPLOIT",
+      "DEFENSE",
+      "RECOVERY"
+     ]
+    },
+    {
+     "id": "nginx",
+     "sourcetype": "nginx:plus:kv",
+     "formatter": "format_nginx_web_log",
+     "node": "web-1",
+     "params": {
+      "src_ip": "203.0.113.20",
+      "dest_ip": "@web-1",
+      "method": "GET",
+      "uri": "/api/catalog/items?id=101",
+      "http_code": 200,
+      "bytes_sent": 4500,
+      "action": "allowed",
+      "signature": "HTTP-REQUEST-OK",
+      "status": "normal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "EXPLOIT": {
+       "src_ip": "@attacker",
+       "method": "POST",
+       "uri": "/api/v1/admin/exploit",
+       "http_code": 403,
+       "bytes_sent": 182,
+       "action": "blocked",
+       "signature": "Exploit request refused at web tier",
+       "status": "blocked"
+      },
+      "DEFENSE": {
+       "src_ip": "@attacker",
+       "http_code": 403,
+       "action": "blocked",
+       "status": "blocked",
+       "signature": "Request from quarantined source refused"
+      }
+     }
+    },
+    {
+     "id": "meraki",
+     "sourcetype": "meraki:assurancealerts",
+     "formatter": "format_meraki_alert_log",
+     "node": "ap-1",
+     "params": {
+      "client_mac": "E0:D5:5E:11:22:33",
+      "alert_type": "client_health_report",
+      "channel": 36,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Meraki MR56 Client Health Status Nominal",
+      "sourcetype": "meraki:assurancealerts"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "EXPLOIT": {
+       "alert_type": "air_marshal_rogue_detected",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Meraki Air Marshal Rogue SSID Detected"
+      },
+      "DEFENSE": {
+       "alert_type": "Air Marshal Rogue Containment Probe",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Meraki Air Marshal Containment Audit Complete"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "attacker",
+     "tokens": [
+      "198.51.100.42"
+     ],
+     "streams": [
+      "pan-traffic",
+      "pan-threat",
+      "forti",
+      "nginx"
+     ]
+    },
+    {
+     "entity": "web tier",
+     "tokens": [
+      "10.80.10.11"
+     ],
+     "streams": [
+      "pan-traffic",
+      "pan-threat",
+      "forti",
+      "nginx"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "normal_traffic",
+   "title": "Normal Operations (HTTP Round-Robin)",
+   "category": "NETWORK_OPERATIONS",
+   "vendors": [
+    "cisco",
+    "palo_alto",
+    "f5",
+    "nginx",
+    "postgresql"
+   ],
+   "description": "Legitimate external clients make distributed HTTP requests through a Cisco ASA, a Palo Alto firewall and an F5 load balancer to an nginx web tier backed by PostgreSQL. All events are normal: traffic is permitted, balanced across web nodes, and queries are parameterized.",
+   "assumptions": [
+    "Baseline scenario: there is no attack or fault, so every phase carries normal status; the phases are load levels (steady, peak, steady)."
+   ],
+   "nodes": [
+    {
+     "id": "asa",
+     "name": "Cisco-ASA5555-Edge",
+     "type": "FIREWALL",
+     "ip": "10.0.0.2",
+     "vendor": "cisco"
+    },
+    {
+     "id": "pan",
+     "name": "PA-3260-Inline",
+     "type": "FIREWALL",
+     "ip": "10.0.0.3",
+     "vendor": "palo_alto"
+    },
+    {
+     "id": "lb",
+     "name": "F5-BIGIP-LTM-01",
+     "type": "LOAD_BALANCER",
+     "ip": "10.0.1.5",
+     "vendor": "f5"
+    },
+    {
+     "id": "web-1",
+     "name": "nginx-web-01",
+     "type": "WEB_SERVER",
+     "ip": "10.0.1.10",
+     "vendor": "generic"
+    },
+    {
+     "id": "web-2",
+     "name": "nginx-web-02",
+     "type": "WEB_SERVER",
+     "ip": "10.0.1.11",
+     "vendor": "generic"
+    },
+    {
+     "id": "db",
+     "name": "pg-primary-01",
+     "type": "DATABASE",
+     "ip": "10.0.2.50",
+     "vendor": "generic"
+    },
+    {
+     "id": "client",
+     "name": "client-198-51-100-42",
+     "type": "CLIENT_EXTERNAL",
+     "ip": "198.51.100.42",
+     "vendor": "generic"
+    }
+   ],
+   "phases": [
+    {
+     "id": "STEADY",
+     "label": "Steady load",
+     "rounds": 3
+    },
+    {
+     "id": "PEAK",
+     "label": "Peak load",
+     "rounds": 5
+    },
+    {
+     "id": "COOLDOWN",
+     "label": "Load subsides",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "firewall_lb_web_db",
+   "streams": [
+    {
+     "id": "asa",
+     "sourcetype": "cisco:asa",
+     "formatter": "format_cisco_asa_log",
+     "node": "asa",
+     "params": {
+      "src_ip": "@client",
+      "dest_ip": "@lb",
+      "src_port": [
+       52341,
+       52342,
+       52343
+      ],
+      "dest_port": 80,
+      "proto": "TCP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Permitted inbound HTTP to load balancer"
+     },
+     "per_round": 1
+    },
+    {
+     "id": "pan",
+     "sourcetype": "pan:traffic",
+     "formatter": "format_palo_alto_log",
+     "node": "pan",
+     "params": {
+      "src_ip": "@client",
+      "dest_ip": "@lb",
+      "src_port": [
+       54321,
+       54322
+      ],
+      "dest_port": 80,
+      "proto": "TCP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "PANOS-APP-HTTP-PERMIT"
+     },
+     "per_round": 1
+    },
+    {
+     "id": "lb",
+     "sourcetype": "f5:bigip:ltm",
+     "formatter": "format_f5_lb_log",
+     "node": "lb",
+     "params": {
+      "src_ip": "@client",
+      "dest_ip": "@lb",
+      "backend_ip": [
+       "@web-1",
+       "@web-2"
+      ],
+      "backend_port": "80",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "F5-LTM-ROUND-ROBIN"
+     },
+     "per_round": 1
+    },
+    {
+     "id": "nginx",
+     "sourcetype": "nginx:plus:kv",
+     "formatter": "format_nginx_web_log",
+     "node": "web-1",
+     "params": {
+      "src_ip": "@client",
+      "dest_ip": "@web-1",
+      "method": [
+       "GET",
+       "GET",
+       "POST"
+      ],
+      "uri": [
+       "/api/catalog/items?id=101",
+       "/",
+       "/api/cart"
+      ],
+      "http_code": 200,
+      "bytes_sent": 4500,
+      "action": "allowed",
+      "signature": "HTTP-REQUEST-OK",
+      "status": "normal"
+     },
+     "per_round": 1
+    },
+    {
+     "id": "pg",
+     "sourcetype": "postgresql:audit",
+     "formatter": "format_postgres_db_log",
+     "node": "db",
+     "params": {
+      "src_ip": "@web-1",
+      "dest_ip": "@db",
+      "sql_statement": "SELECT * FROM catalog WHERE item_id = 101",
+      "action": "allowed",
+      "signature": "PostgreSQL Parameterized Query Executed",
+      "status": "normal"
+     },
+     "per_round": 1
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "client",
+     "tokens": [
+      "198.51.100.42"
+     ],
+     "streams": [
+      "asa",
+      "pan",
+      "lb",
+      "nginx"
+     ]
+    },
+    {
+     "entity": "web node 1",
+     "tokens": [
+      "10.0.1.10"
+     ],
+     "streams": [
+      "lb",
+      "nginx",
+      "pg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sdwan_connected_core",
+   "title": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
+   "category": "WAN",
+   "vendors": [
+    "cisco"
+   ],
+   "description": "A Catalyst SD-WAN branch edge peers with a Catalyst 9600 campus core. A transport brownout raises latency, jitter and loss on the primary circuit, the BGP session to the core flaps, application-aware routing steers traffic to the secondary circuit, and the tunnel SLA recovers.",
+   "assumptions": [
+    "Latency, jitter and loss values are modeled to cross and then return within SLA; the sla_status text follows the formatter's convention."
+   ],
+   "nodes": [
+    {
+     "id": "branch-edge",
+     "name": "Cisco-C8300-Branch-Edge1",
+     "type": "ROUTER",
+     "ip": "10.90.1.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "core",
+     "name": "Cisco-C9606R-Core1",
+     "type": "SWITCH",
+     "ip": "10.90.0.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "hub",
+     "name": "Cisco-C8500-Hub1",
+     "type": "ROUTER",
+     "ip": "198.51.100.1",
+     "vendor": "cisco"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal operation",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Fault or attack begins",
+     "rounds": 3
+    },
+    {
+     "id": "ESCALATION",
+     "label": "Impact grows",
+     "rounds": 3
+    },
+    {
+     "id": "MITIGATION",
+     "label": "Defense engages",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Return to normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_sdwan",
+   "streams": [
+    {
+     "id": "link",
+     "sourcetype": "cisco:sdwan:linkhealth",
+     "formatter": "format_cisco_sdwan_linkhealth_log",
+     "node": "branch-edge",
+     "params": {
+      "remote_system_ip": "@hub",
+      "latency_ms": 24.0,
+      "jitter_ms": 2.0,
+      "loss_pct": 0.1,
+      "sla_status": "OK",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "SD-WAN tunnel within SLA"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "latency_ms": 140.0,
+       "jitter_ms": 22.0,
+       "loss_pct": 2.5,
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN Tunnel SLA Threshold Violated"
+      },
+      "ESCALATION": {
+       "latency_ms": 310.0,
+       "jitter_ms": 48.0,
+       "loss_pct": 9.0,
+       "sla_status": "VIOLATED",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "SD-WAN Tunnel SLA Threshold Violated"
+      },
+      "MITIGATION": {
+       "latency_ms": 38.0,
+       "jitter_ms": 4.0,
+       "loss_pct": 0.3,
+       "sla_status": "OK",
+       "status": "mitigated",
+       "signature": "AAR steered application traffic to secondary circuit; tunnel within SLA"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    },
+    {
+     "id": "bgp",
+     "sourcetype": "cisco:sdwan:BGP-5-ADJCHANGE",
+     "formatter": "format_cisco_sdwan_bgp_log",
+     "node": "branch-edge",
+     "params": {
+      "neighbor_ip": "@hub",
+      "state_change": "UP",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "BGP Peer Adjacency Established"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "state_change": "DOWN",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "BGP Peer Adjacency Down"
+      },
+      "MITIGATION": {
+       "neighbor_ip": "198.51.100.2",
+       "state_change": "UP",
+       "status": "mitigated",
+       "signature": "BGP Failover Adjacency Established"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "BGP Peer Adjacency Restored"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "ESCALATION",
+      "MITIGATION",
+      "RECOVERY"
+     ]
+    },
+    {
+     "id": "core",
+     "sourcetype": "cisco:ios:syslog",
+     "formatter": "format_router_switch_log",
+     "node": "core",
+     "params": {
+      "src_ip": "@core",
+      "dest_ip": "@branch-edge",
+      "interface": "TenGigabitEthernet1/0/24",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Campus core uplink to SD-WAN handoff nominal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Route to branch withdrawn from core table after SD-WAN BGP adjacency loss"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "Route to branch restored in core table"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "ESCALATION",
+      "RECOVERY"
+     ]
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "branch edge",
+     "tokens": [
+      "10.90.1.1",
+      "Cisco-C8300-Branch-Edge1"
+     ],
+     "streams": [
+      "link",
+      "bgp",
+      "core"
+     ]
+    },
+    {
+     "entity": "hub",
+     "tokens": [
+      "198.51.100.1"
+     ],
+     "streams": [
+      "link",
+      "bgp"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "service_provider_mixed",
+   "title": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
+   "category": "SERVICE_PROVIDER",
+   "vendors": [
+    "cisco",
+    "juniper",
+    "nokia"
+   ],
+   "description": "A Tier-1 transit core interconnects Cisco 8000, Juniper PTX and Nokia 7750 routers. A BGP peering de-synchronization across the vendor boundary causes an optical carrier loss on the Nokia port and an LSP fast-reroute on the Juniper router while Cisco telemetry shows the traffic shift; graceful restart and BFD dampening then stabilize the routing table.",
+   "assumptions": [
+    "Router names and LSP names are fictional.",
+    "Cross-vendor correlation is by shared LSP name, port and node names appearing in each vendor's own event text."
+   ],
+   "nodes": [
+    {
+     "id": "cisco-8k",
+     "name": "Cisco-8201-Core1",
+     "type": "ROUTER",
+     "ip": "10.100.1.1",
+     "vendor": "cisco"
+    },
+    {
+     "id": "ptx",
+     "name": "Juniper-PTX10001-Core2",
+     "type": "ROUTER",
+     "ip": "10.100.2.1",
+     "vendor": "juniper"
+    },
+    {
+     "id": "nokia",
+     "name": "Nokia-7750-SR12-Core3",
+     "type": "ROUTER",
+     "ip": "10.100.3.1",
+     "vendor": "nokia"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal operation",
+     "rounds": 3
+    },
+    {
+     "id": "ONSET",
+     "label": "Fault or attack begins",
+     "rounds": 3
+    },
+    {
+     "id": "ESCALATION",
+     "label": "Impact grows",
+     "rounds": 3
+    },
+    {
+     "id": "MITIGATION",
+     "label": "Defense engages",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Return to normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "cisco_juniper_nokia_core",
+   "streams": [
+    {
+     "id": "nokia",
+     "sourcetype": "nokia:sros:syslog",
+     "formatter": "format_nokia_sros_log",
+     "node": "nokia",
+     "params": {
+      "port_id": "1/1/c1",
+      "lsp_name": "LSP-CORE-CHI-NYC-01",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Nokia SR-OS 100G Coherent Optical Interface Up"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Nokia SR-OS Optical DWDM Loss of Signal (LOS)"
+      },
+      "ESCALATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Nokia SR-OS Optical DWDM Loss of Signal (LOS)"
+      },
+      "MITIGATION": {
+       "action": "allowed",
+       "status": "mitigated",
+       "signature": "Nokia SR-OS 100G Coherent Optical Interface Up"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "Nokia SR-OS Optical DWDM Carrier Signal Restored"
+      }
+     }
+    },
+    {
+     "id": "junos",
+     "sourcetype": "juniper:junos",
+     "formatter": "format_juniper_junos_log",
+     "node": "ptx",
+     "params": {
+      "lsp_name": "LSP-CORE-CHI-NYC-01",
+      "primary_nh": "10.200.0.1",
+      "bypass_nh": "10.200.0.10",
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Juniper Junos MPLS RSVP-TE LSP up on primary path"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ESCALATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Juniper Junos MPLS RSVP-TE FRR Switchover"
+      },
+      "MITIGATION": {
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Juniper Junos MPLS RSVP-TE FRR Switchover"
+      },
+      "RECOVERY": {
+       "status": "restored",
+       "signature": "Juniper Junos MPLS RSVP-TE Reverted to Primary LSP"
+      }
+     },
+     "phases": [
+      "BASELINE",
+      "ESCALATION",
+      "MITIGATION",
+      "RECOVERY"
+     ]
+    },
+    {
+     "id": "mdt",
+     "sourcetype": "cisco:ios:mdt:metric",
+     "formatter": "format_mdt_stream",
+     "node": "cisco-8k",
+     "params": {
+      "interface_name": "HundredGigE0/0/0/1",
+      "in_octets": 840291000,
+      "out_octets": 795810200,
+      "cpu_pct": 22.0,
+      "memory_pct": 36.0,
+      "action": "allowed",
+      "status": "normal",
+      "sourcetype": "cisco:ios:mdt:metric"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "ONSET": {
+       "in_octets": 700000000,
+       "cpu_pct": 30.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "ESCALATION": {
+       "in_octets": 1210000000,
+       "out_octets": 1180000000,
+       "cpu_pct": 52.0,
+       "action": "alerted",
+       "status": "degraded"
+      },
+      "MITIGATION": {
+       "in_octets": 910000000,
+       "out_octets": 890000000,
+       "cpu_pct": 35.0,
+       "status": "mitigated"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    }
+   ],
+   "correlation": [
+    {
+     "entity": "LSP LSP-CORE-CHI-NYC-01",
+     "tokens": [
+      "LSP-CORE-CHI-NYC-01"
+     ],
+     "streams": [
+      "nokia",
+      "junos"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wireless_connected_core_mixed",
+   "title": "Enterprise Wireless Connected to Core (Mixed Vendor)",
+   "category": "WIRELESS",
+   "vendors": [
+    "cisco",
+    "palo_alto"
+   ],
+   "description": "A Meraki access point serves corporate and guest clients behind a Palo Alto firewall. A guest client attempts to pivot toward data-center assets: the AP reports a rogue-probe alert, the firewall records the guest-to-datacenter attempts and applies its zero-trust deny, and guest traffic returns to normal internet-only flows.",
+   "assumptions": [
+    "Only Meraki and Palo Alto streams are generated; the Aruba APs and Arista 7280 core named by the definition have no generator for their sourcetypes here, except that Arista telemetry is not produced.",
+    "Client MAC and addresses are fictional."
+   ],
+   "nodes": [
+    {
+     "id": "ap-1",
+     "name": "Meraki-MR56-Guest01",
+     "type": "WIRELESS_AP",
+     "ip": "10.20.10.60",
+     "vendor": "cisco"
+    },
+    {
+     "id": "pan-fw",
+     "name": "PA-3260-Campus",
+     "type": "FIREWALL",
+     "ip": "10.20.0.1",
+     "vendor": "palo_alto"
+    },
+    {
+     "id": "guest",
+     "name": "guest-client-01",
+     "type": "CLIENT_EXTERNAL",
+     "ip": "10.20.50.77",
+     "vendor": "generic"
+    },
+    {
+     "id": "dc-app",
+     "name": "dc-app-01",
+     "type": "WEB_SERVER",
+     "ip": "10.128.2.10",
+     "vendor": "generic"
+    }
+   ],
+   "phases": [
+    {
+     "id": "BASELINE",
+     "label": "Normal guest and corporate use",
+     "rounds": 3
+    },
+    {
+     "id": "PROBE",
+     "label": "Guest client probes the network",
+     "rounds": 3
+    },
+    {
+     "id": "PIVOT",
+     "label": "Pivot attempt toward data center",
+     "rounds": 3
+    },
+    {
+     "id": "ENFORCEMENT",
+     "label": "Zero-trust policy denies",
+     "rounds": 2
+    },
+    {
+     "id": "RECOVERY",
+     "label": "Guest traffic normal",
+     "rounds": 3
+    }
+   ],
+   "generator_family": "meraki_palo_alto",
+   "streams": [
+    {
+     "id": "ap",
+     "sourcetype": "meraki:accesspoints",
+     "formatter": "format_meraki_alert_log",
+     "node": "ap-1",
+     "params": {
+      "client_mac": "E0:D5:5E:11:22:33",
+      "alert_type": "client_health_report",
+      "channel": 36,
+      "action": "allowed",
+      "status": "normal",
+      "signature": "Meraki MR56 Client Health Status Nominal",
+      "sourcetype": "meraki:accesspoints"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "PROBE": {
+       "client_mac": "44:65:0E:12:34:56",
+       "alert_type": "air_marshal_rogue_detected",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Meraki Air Marshal Rogue SSID Detected"
+      },
+      "PIVOT": {
+       "client_mac": "44:65:0E:12:34:56",
+       "alert_type": "air_marshal_rogue_detected",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Meraki Air Marshal Rogue SSID Detected"
+      },
+      "ENFORCEMENT": {
+       "client_mac": "44:65:0E:12:34:56",
+       "alert_type": "Air Marshal Rogue Containment Probe",
+       "action": "alerted",
+       "status": "degraded",
+       "signature": "Meraki Air Marshal Containment Audit Complete"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    },
+    {
+     "id": "pan",
+     "sourcetype": "pan:traffic",
+     "formatter": "format_palo_alto_log",
+     "node": "pan-fw",
+     "params": {
+      "src_ip": "@guest",
+      "dest_ip": "165.225.10.1",
+      "src_port": 54321,
+      "dest_port": 443,
+      "proto": "TCP",
+      "action": "allowed",
+      "signature": "PAN-OS Clean Traffic Flow",
+      "status": "normal"
+     },
+     "per_round": 1,
+     "phase_params": {
+      "PROBE": {
+       "dest_ip": [
+        "@dc-app",
+        "10.128.2.11"
+       ],
+       "dest_port": [
+        22,
+        445
+       ],
+       "action": "allowed",
+       "signature": "PAN-OS guest zone connection attempts to data-center zone",
+       "status": "degraded"
+      },
+      "PIVOT": {
+       "dest_ip": "@dc-app",
+       "dest_port": [
+        445,
+        3389,
+        22
+       ],
+       "action": "allowed",
+       "signature": "PAN-OS repeated guest-to-data-center attempts",
+       "status": "degraded"
+      },
+      "ENFORCEMENT": {
+       "dest_ip": "@dc-app",
+       "dest_port": 445,
+       "action": "allowed",
+       "status": "blocked",
+       "signature": "PAN-OS zero-trust policy: guest to data-center denied"
+      },
+      "RECOVERY": {
+       "status": "restored"
+      }
+     }
+    },
+    {
+     "id": "threat",
+     "sourcetype": "pan:traffic",
+     "formatter": "format_palo_alto_log",
+     "node": "pan-fw",
+     "params": {
+      "src_ip": "@guest",
+      "dest_ip": "@dc-app",
+      "src_port": 49152,
+      "dest_port": 445,
+      "proto": "TCP",
+      "action": "allowed",
+      "signature": "PAN-OS threat verdict",
+      "status": "blocked"
+     },
+     "per_round": 1,
+     "phases": [
+      "ENFORCEMENT"
+     ]
+    }
+   ],
+   "correlation": [],
+   "correlation_limit": "The Meraki alert formatter carries the client MAC but not its IP, and the firewall log carries the IP but not the MAC, so the guest client is correlated across the two sourcetypes by phase and time, not by a shared identifier."
+  }
+ ]
+}

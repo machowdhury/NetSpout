@@ -146,6 +146,14 @@ def sources(include_blocked=False):
                     "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
                     "provenance": "Unified-generation scenario (%s); modeled and documented payloads as declared by its source contracts." % u.get("category", "").replace("_", " ").title().lower(),
                     "category": u.get("category")})
+    from netspout_core import scenario_contracts   # declarative contracts: events are indexed with netspout_run_id / netspout_scenario_id / netspout_phase
+    for row in scenario_contracts.catalog():
+        sid, sec = row["scenario_id"], row["kind"] == "security"
+        out.append({"id": sid, "title": row["title"], "kind": "security" if sec else "operational", "family": "contract", "key_field": "netspout_run_id", "scenario_value": sid,
+                    "industries": ind_map.get(sid, []), "subindustry": None, "objective": row["description"], "phases": [{"id": p, "source": {"kind": "native", "pack": sid}} for p in row["phases"]],
+                    "required_sourcetypes": row["sourcetypes"], "metric": False, "detection_prerequisites": SEC_PREREQ if sec else "Operational scenario: no detection claimed.",
+                    "provenance": "Declarative scenario contract (%s): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase." % row["generator_family"],
+                    "category": row["category"]})
     return out
 
 
@@ -296,6 +304,21 @@ def impact_tab(d):
           handlers=[search_drill(b + ' | eval pf_phase=coalesce(netspout_pack_phase, netspout_phase) | search pf_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)])
 
 
+def contract_panels(d, tab, y):
+    """Panels for declarative-contract scenarios: the phase story lives in the indexed status / action / signature fields (raw vendor text is fixed), shown in the contract's own phase order."""
+    s, b = d.src, d.base
+    order = "case(" + ",".join('pf_phase="%s",%d' % (p["id"], i + 1) for i, p in enumerate(s["phases"])) + ",true(),99)"
+    d.add(tab, "splunk.column", "Status by phase (how the story progresses)", 20, y, 700, 300,
+          query=b + PHASE + " | eval pf_ord=" + order + " | eval step=printf(\"%d %s\", pf_ord, pf_phase) | chart count over step by status",
+          options={"stackMode": "stacked", "seriesColors": SERIES, "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
+          description="Each phase of the scenario contract with the status values its events carry (for example normal, degraded, blocked, mitigated, restored).")
+    d.add(tab, "splunk.table", "What each phase reported (action and signature by device)", 740, y, 700, 300,
+          query=b + PHASE + " | eval pf_ord=" + order + " | stats count as events by pf_ord, pf_phase, pf_host, action, signature | sort pf_ord, - events | fields - pf_ord | head 40",
+          options={"count": 8, "backgroundColor": C["card"]}, handlers=[search_drill(b + ' netspout_phase="$row.pf_phase.value$" | sort 0 _time' + DRILL)],
+          description="The signature text each device reported in each phase; click a row to open the events of that phase.")
+    return y + 320
+
+
 def build_operational(s, probe):
     d = Dash(s)
     b = d.base
@@ -322,6 +345,8 @@ def build_operational(s, probe):
           options={"stackMode": "stacked", "seriesColors": [C["blue"], C["amber"], C["green"]], "legendDisplay": "bottom", "backgroundColor": C["card"], "xAxisLabelRotation": -30, "yAxisTitleText": "Events"},
           description="Events per source before the incident, during it and during recovery/validation (phase names from the scenario).")
     y = 450
+    if s["family"] == "contract":
+        y = contract_panels(d, "engineer", y)
     if s["metric"]:
         mb = 'index=$mindex_tok$ AND metric_name=* AND netspout_scenario_id="%s" AND netspout_run_id="$run_tok$"' % s["scenario_value"]
         d.add("engineer", "splunk.line", "Health and performance metrics over the run (mstats)", 20, y, 710, 300,
@@ -371,6 +396,8 @@ def build_security(s, probe):
     md(d, "overview", amd, 740, 590, 700, 300)
     asset_tables(d, "investigation", 130, True)
     y = 470
+    if s["family"] == "contract":
+        y = contract_panels(d, "investigation", y)
     if probe.get("users"):
         d.add("investigation", "splunk.table", "Users and accounts seen in the events", 20, y, 700, 300,
               query=b + PHASE + " | eval who=coalesce(user, User, src_user, TargetUserName, SubjectUserName, Account_Name, 'userIdentity.userName', 'actor.alternateId') | stats count as events, dc(pf_host) as hosts by who | where isnotnull(who) | sort - events | head 25",

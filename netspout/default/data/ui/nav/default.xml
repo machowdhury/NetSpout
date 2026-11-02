@@ -52,8 +52,11 @@
       <view name="pf_network_10_dns_failure" label="DNS resolver failure/recovery"/>
       <view name="pf_network_05_dual_isp" label="Dual-ISP failover/recovery"/>
       <view name="pf_cisco_sdwan_brownout" label="Enterprise WAN Circuit Brownout &amp; App Route Failover"/>
+      <view name="pf_wireless_connected_core_mixed" label="Enterprise Wireless Connected to Core (Mixed Vendor)"/>
+      <view name="pf_arch_epn_isolated_intranet" label="EPN: Enterprise Private Network - Isolated Corporate Intranet &amp; Multi-Cloud VPC"/>
       <view name="pf_payment_processing_degradation" label="Financial Services Payment Application Degradation"/>
       <view name="pf_network_08_firewall_policy" label="Firewall policy misconfiguration"/>
+      <view name="pf_arch_gan_subsea_cloud" label="GAN: Global Area Network - Worldwide Multi-Cloud &amp; Subsea Cable Transit"/>
       <view name="pf_network_17_hospital_mac_auth" label="Hospital access MAC instability and login retries"/>
       <view name="pf_ind_health_clinical_network_edge" label="Hospital network: edge and DNS/proxy health with wireless threat"/>
       <view name="pf_telco_04_ims_volte" label="IMS/VoLTE call-quality degradation"/>
@@ -61,6 +64,7 @@
       <view name="pf_arch_lan_campus_access" label="LAN: Local Area Network - Campus Switching &amp; 802.1Q Segments"/>
       <view name="pf_ind_transport_fleet_network_change" label="Logistics network: change-induced outage and edge routing observation"/>
       <view name="pf_arch_man_carrier_ring" label="MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring &amp; G.8032 ERPS"/>
+      <view name="pf_mixed_vendor_enterprise" label="Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)"/>
       <view name="pf_telco_05_mobile_transport" label="Mobile transport/fronthaul congestion"/>
       <view name="pf_rfc5424-link-state-lifecycle" label="Modeled Link-State Lifecycle"/>
       <view name="pf_network_13_mtu_pmtud" label="MTU mismatch/PMTUD failure"/>
@@ -68,6 +72,7 @@
       <view name="pf_mixed_backbone_optical" label="Multicast/MPLS Backbone Optical Carrier Shift"/>
       <view name="pf_network_security_correlation" label="Network Degradation With Security Correlation"/>
       <view name="pf_C100-DC-001" label="Nexus Fabric Uplink Degradation — NX-OS Reference"/>
+      <view name="pf_normal_traffic" label="Normal Operations (HTTP Round-Robin)"/>
       <view name="pf_openconfig_mdt_streaming" label="OpenConfig MDT Streaming &amp; Telemetry Assurance"/>
       <view name="pf_network_07_ospf_adjacency" label="OSPF adjacency failure/reconvergence"/>
       <view name="pf_network_21_partial_pool" label="Partial load-balancer pool outage with perimeter demand"/>
@@ -80,7 +85,9 @@
       <view name="pf_telco_08_roaming_mobility" label="Roaming/mobility failure"/>
       <view name="pf_mixed_sase_degradation" label="SASE Cloud Ingress App Degradation &amp; Synthetic Validation"/>
       <view name="pf_telco_07_sdwan_service" label="SD-WAN service degradation"/>
+      <view name="pf_sdwan_connected_core" label="Separate SD-WAN Environment Connected to Core Backbone (All Cisco)"/>
       <view name="pf_service_provider_cisco" label="Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv6)"/>
+      <view name="pf_service_provider_mixed" label="Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)"/>
       <view name="pf_network_23_containment_request" label="Simulated NAC containment request and service-access change"/>
       <view name="pf_network_03_stp_storm" label="STP loop/broadcast storm"/>
       <view name="pf_ind_energy_substation_edge_observation" label="Substation edge: OT routing observation and network platform health"/>
@@ -99,6 +106,7 @@
       <view name="pf_arch_vpn_remote_workforce" label="VPN: Virtual Private Network - Cisco AnyConnect &amp; Site-to-Site IPsec"/>
       <view name="pf_wave3_vsphere_hostpath_triage" label="vSphere Host Path Triage (Wave-3 pack)"/>
       <view name="pf_network_04_wan_brownout" label="WAN latency/jitter/packet-loss brownout"/>
+      <view name="pf_arch_wan_global_backbone" label="WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone &amp; Optical DWDM"/>
       <view name="pf_network_14_wireless_outage" label="Wireless controller/AP outage"/>
       <view name="pf_arch_wlan_meraki_catalyst" label="WLAN: Wireless Local Area Network - Catalyst 9800 &amp; Meraki Wi-Fi 6E/7"/>
     </collection>
@@ -147,6 +155,7 @@
       <view name="pf_ind_bank_payments_edge_defense" label="Payments edge: WAF/IDS/firewall observation then cloud control-plane reconnaissance"/>
       <view name="pf_SEC-P9-C-BEACONING" label="Periodic External Communication Indicators"/>
       <view name="pf_ind_mfg_it_ot_convergence" label="Plant: OT proxy and edge routing observation, then command-and-control callback"/>
+      <view name="pf_lateral_movement" label="Ransomware / Lateral Spread (Port 445)"/>
       <view name="pf_SC-004" label="Repository Automation Abuse"/>
       <view name="pf_ind_bank_account_takeover_resilience" label="Retail banking: workstation credential compromise, cloud SSO abuse, backup integrity check"/>
       <view name="pf_ind_retail_pos_edge_defense" label="Retail stores: edge defense observation and endpoint threat pipeline"/>

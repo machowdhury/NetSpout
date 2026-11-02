@@ -16,7 +16,12 @@ def test_cloud_edition_contains_only_dashboards_navigation_and_metadata():
     views = [n for n in names if re.search(r'default/data/ui/views/pf_.*\.xml$', n)]
     maturity = json.loads((ROOT / 'docs/verification/evidence/dashboards/dashboard_maturity.json').read_text())['dashboards']
     maturity = {**maturity, **json.loads((ROOT / 'docs/verification/evidence/netflow/dashboard_maturity.json').read_text())['dashboards']}   # NetFlow solution views carry their own maturity evidence
-    assert len(views) == len(maturity) == len(list((ROOT / 'netspout/default/data/ui/views').glob('pf_*.xml')))
+    contract = json.loads((ROOT / 'docs/verification/evidence/dashboards/contract_dashboard_maturity.json').read_text())['dashboards']   # offline-only evidence (IMPLEMENTED)
+    on_disk = {p.stem[3:] for p in (ROOT / 'netspout/default/data/ui/views').glob('pf_*.xml')}
+    packaged = {re.search(r'pf_(.*)\.xml$', n).group(1) for n in views}
+    assert len(views) == len(maturity) and packaged == set(maturity)       # the released package is exactly the evidence-backed views it was built with
+    assert on_disk == set(maturity) | set(contract)                         # every view in the repo has maturity evidence of some level
+    assert on_disk - packaged == set(contract)                              # views newer than the released package are contract views, pending the next package build
     assert '[id]' in app_conf and 'is_configured' not in app_conf
 
 

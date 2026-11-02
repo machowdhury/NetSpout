@@ -429,6 +429,8 @@
    "scenarios": [
     "arch_vpn_remote_workforce",
     "ddos_attack",
+    "lateral_movement",
+    "normal_traffic",
     "sql_injection"
    ],
    "status": "active"
@@ -2008,7 +2010,10 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "service_provider_cisco"
+    "arch_gan_subsea_cloud",
+    "arch_wan_global_backbone",
+    "service_provider_cisco",
+    "service_provider_mixed"
    ],
    "status": "active"
   },
@@ -2033,9 +2038,13 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_epn_isolated_intranet",
     "arch_lan_campus_access",
+    "arch_wan_global_backbone",
     "cisco_campus_rogue",
+    "lateral_movement",
     "openconfig_mdt_streaming",
+    "sdwan_connected_core",
     "service_provider_cisco"
    ],
    "status": "active"
@@ -2486,6 +2495,7 @@
     "ind_mfg_plant_network_health",
     "ind_telco_change_induced_outage",
     "ind_transport_fleet_network_change",
+    "sdwan_connected_core",
     "ub5_cisco_change_induced_outage"
    ],
    "status": "active"
@@ -3204,7 +3214,9 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "cisco_sdwan_brownout"
+    "arch_epn_isolated_intranet",
+    "cisco_sdwan_brownout",
+    "sdwan_connected_core"
    ],
    "status": "active"
   },
@@ -3534,6 +3546,7 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_gan_subsea_cloud",
     "cisco_sdwan_brownout",
     "mixed_sase_degradation"
    ],
@@ -3887,7 +3900,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "ddos_attack"
+    "ddos_attack",
+    "normal_traffic"
    ],
    "status": "active"
   },
@@ -4152,7 +4166,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "mixed_edge_breach"
+    "mixed_edge_breach",
+    "mixed_vendor_enterprise"
    ],
    "status": "active"
   },
@@ -4270,7 +4285,9 @@
    "cim_validated": false,
    "scenarios": [
     "arch_man_carrier_ring",
-    "mixed_backbone_optical"
+    "arch_wan_global_backbone",
+    "mixed_backbone_optical",
+    "service_provider_mixed"
    ],
    "status": "active"
   },
@@ -4757,7 +4774,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "arch_wlan_meraki_catalyst"
+    "arch_wlan_meraki_catalyst",
+    "wireless_connected_core_mixed"
    ],
    "status": "active"
   },
@@ -4882,7 +4900,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
-    "mixed_edge_breach"
+    "mixed_edge_breach",
+    "mixed_vendor_enterprise"
    ],
    "status": "active"
   },
@@ -5347,6 +5366,8 @@
    "scenarios": [
     "ddos_attack",
     "mixed_edge_breach",
+    "mixed_vendor_enterprise",
+    "normal_traffic",
     "sql_injection"
    ],
    "status": "active"
@@ -5419,7 +5440,8 @@
    "cim_validated": false,
    "scenarios": [
     "arch_man_carrier_ring",
-    "mixed_backbone_optical"
+    "mixed_backbone_optical",
+    "service_provider_mixed"
    ],
    "status": "active"
   },
@@ -5941,6 +5963,7 @@
    "scenarios": [
     "mixed_edge_breach",
     "mixed_sase_degradation",
+    "mixed_vendor_enterprise",
     "network_security_correlation",
     "paloalto_threat_investigation",
     "payment_processing_degradation"
@@ -5971,9 +5994,12 @@
    "cim_validated": false,
    "scenarios": [
     "mixed_edge_breach",
+    "mixed_vendor_enterprise",
     "network_security_correlation",
+    "normal_traffic",
     "paloalto_threat_investigation",
-    "payment_processing_degradation"
+    "payment_processing_degradation",
+    "wireless_connected_core_mixed"
    ],
    "status": "active"
   },
@@ -5998,6 +6024,8 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "lateral_movement",
+    "normal_traffic",
     "sql_injection"
    ],
    "status": "active"
@@ -6447,6 +6475,7 @@
    "ta_parsing_checked_in_lab": false,
    "cim_validated": false,
    "scenarios": [
+    "arch_gan_subsea_cloud",
     "mixed_sase_degradation"
    ],
    "status": "active"

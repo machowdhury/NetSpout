@@ -901,15 +901,15 @@
   {
    "scenario_id": "arch_epn_isolated_intranet",
    "title": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "NETWORK_OPERATIONS",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Private multi-tenant enterprise intranet connecting physical branches and cloud VPCs via private QinQ 802.1ad and MPLS pseudo-wires.",
-   "objective": null,
+   "objective": "A branch access switch, provider-edge router, SD-WAN edge and cloud VPC gateway form a private QinQ/MPLS intranet. A double-tagged 802.1ad frame (VLAN hopping attempt) hits the branch access port; the outer S-VLAN is stripped and a hardware ACL drops the inner encapsulation while the SD-WAN path stays healthy.",
    "vendors": [
     "cisco",
     "palo_alto",
@@ -919,30 +919,36 @@
     "cisco:ios:syslog",
     "cisco:sdwan:linkhealth"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_arch_epn_isolated_intranet",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (cisco_ios_sdwan): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"arch_epn_isolated_intranet\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "arch_gan_subsea_cloud",
    "title": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "NETWORK_OPERATIONS",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Trans-continental global network connecting AWS Direct Connect, Azure ExpressRoute, and subsea cable landing stations.",
-   "objective": null,
+   "objective": "A subsea landing-station router carries traffic between AWS Direct Connect and Azure ExpressRoute edges. An undersea seismic event degrades optical signal quality on the lambda; interface throughput falls, Zscaler inspection latency and ThousandEyes probe latency and loss climb, and a fast-protection switch moves traffic to the terrestrial fallback before service returns to normal.",
    "vendors": [
     "cisco",
     "palo_alto",
@@ -953,17 +959,23 @@
     "zscaler:zia",
     "cisco:thousandeyes:metric"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_arch_gan_subsea_cloud",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (cisco_mdt_sase): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"arch_gan_subsea_cloud\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "arch_lan_campus_access",
@@ -1187,15 +1199,15 @@
   {
    "scenario_id": "arch_wan_global_backbone",
    "title": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "WAN",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Inter-continental enterprise WAN with BGP EVPN, segment routing SRv6, and MPLS traffic engineering tunnels.",
-   "objective": null,
+   "objective": "Inter-continental provider-edge routers (Cisco IOS-XR) and a Juniper core router carry a BGP/MPLS L3VPN backbone. Trans-oceanic latency rises while a suspicious more-specific prefix announcement appears at a peer; an MPLS RSVP-TE fast-reroute on the Juniper core moves the LSP to the bypass path and the backbone returns to its primary path.",
    "vendors": [
     "cisco",
     "palo_alto",
@@ -1206,17 +1218,23 @@
     "cisco:ios:syslog",
     "juniper:junos"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_arch_wan_global_backbone",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (cisco_bgp_mdt_junos): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"arch_wan_global_backbone\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "arch_wlan_meraki_catalyst",
@@ -1409,15 +1427,15 @@
   {
    "scenario_id": "lateral_movement",
    "title": "Ransomware / Lateral Spread (Port 445)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "SECURITY",
-   "kind": null,
+   "kind": "security",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Malware attempts lateral propagation between internal servers across subnet boundaries using SMB Port 445.",
-   "objective": null,
+   "objective": "A compromised application server tries to spread over SMB (TCP/445) to other internal servers while privileged catalog queries appear against the database. A segmentation ASA denies the cross-subnet SMB flows, the core switch records the denied traffic, and database access returns to normal application queries.",
    "vendors": [
     "cisco",
     "palo_alto",
@@ -1428,17 +1446,23 @@
     "cisco:asa",
     "postgresql:audit"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "SPREAD",
+    "CONTAINMENT",
+    "RECOVERY"
+   ],
    "maturity_tier": "FORMAT_VALIDATED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_lateral_movement",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "No vendor add-on, CIM or Enterprise Security content is installed in any lab, so no detection is claimed. Detection work needs the add-ons for the constituent sourcetypes plus reviewed SPL; the constituent contracts list their own expectations.",
+   "provenance": "Declarative scenario contract (cisco_asa_postgres): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"lateral_movement\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "mixed_backbone_optical",
@@ -1562,15 +1586,15 @@
   {
    "scenario_id": "mixed_vendor_enterprise",
    "title": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "NETWORK_OPERATIONS",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Heterogeneous multi-vendor infrastructure with best-of-breed routing, switching, and firewall appliances.",
-   "objective": null,
+   "objective": "A perimeter scan and an application exploit attempt hit a multi-vendor enterprise: the Palo Alto firewall records the scan and blocks the exploit, the Fortinet firewall logs the same source in correlated flows, the nginx web tier shows the attempted request, and a Meraki access point raises a wireless alert from the same period. Normal traffic then resumes.",
    "vendors": [
     "palo_alto",
     "fortinet",
@@ -1585,30 +1609,36 @@
     "fortinet:fortigate:utm",
     "nginx:plus:kv"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "RECON",
+    "EXPLOIT",
+    "DEFENSE",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_mixed_vendor_enterprise",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (palo_alto_fortinet_nginx_meraki): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"mixed_vendor_enterprise\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "normal_traffic",
    "title": "Normal Operations (HTTP Round-Robin)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "NETWORK_OPERATIONS",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Legitimate external clients make distributed HTTP requests passing through Firewall and Load Balancer to Web tier.",
-   "objective": null,
+   "objective": "Legitimate external clients make distributed HTTP requests through a Cisco ASA, a Palo Alto firewall and an F5 load balancer to an nginx web tier backed by PostgreSQL. All events are normal: traffic is permitted, balanced across web nodes, and queries are parameterized.",
    "vendors": [
     "cisco",
     "palo_alto",
@@ -1621,17 +1651,21 @@
     "nginx:plus:kv",
     "postgresql:audit"
    ],
-   "phases": [],
+   "phases": [
+    "STEADY",
+    "PEAK",
+    "COOLDOWN"
+   ],
    "maturity_tier": "FORMAT_VALIDATED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_normal_traffic",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (firewall_lb_web_db): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"normal_traffic\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "openconfig_mdt_streaming",
@@ -1706,15 +1740,15 @@
   {
    "scenario_id": "sdwan_connected_core",
    "title": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "WAN",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Catalyst SD-WAN fabric peering dynamically with Catalyst 9600 campus core.",
-   "objective": null,
+   "objective": "A Catalyst SD-WAN branch edge peers with a Catalyst 9600 campus core. A transport brownout raises latency, jitter and loss on the primary circuit, the BGP session to the core flaps, application-aware routing steers traffic to the secondary circuit, and the tunnel SLA recovers.",
    "vendors": [
     "pure_cisco"
    ],
@@ -1723,17 +1757,23 @@
     "cisco:sdwan:BGP-5-ADJCHANGE",
     "cisco:ios:syslog"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_sdwan_connected_core",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (cisco_sdwan): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"sdwan_connected_core\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "service_provider_cisco",
@@ -1777,10 +1817,10 @@
   {
    "scenario_id": "service_provider_mixed",
    "title": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "SERVICE_PROVIDER",
-   "kind": null,
+   "kind": "operational",
    "industries": [
     "telecommunications"
    ],
@@ -1789,7 +1829,7 @@
    ],
    "subindustry": null,
    "summary": "Tier-1 carrier transit core with Cisco, Juniper, and Nokia interconnects.",
-   "objective": null,
+   "objective": "A Tier-1 transit core interconnects Cisco 8000, Juniper PTX and Nokia 7750 routers. A BGP peering de-synchronization across the vendor boundary causes an optical carrier loss on the Nokia port and an LSP fast-reroute on the Juniper router while Cisco telemetry shows the traffic shift; graceful restart and BFD dampening then stabilize the routing table.",
    "vendors": [
     "mixed_vendor"
    ],
@@ -1798,17 +1838,23 @@
     "nokia:sros:syslog",
     "cisco:ios:mdt:metric"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "ONSET",
+    "ESCALATION",
+    "MITIGATION",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_service_provider_mixed",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (cisco_juniper_nokia_core): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"service_provider_mixed\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "sql_injection",
@@ -1881,15 +1927,15 @@
   {
    "scenario_id": "wireless_connected_core_mixed",
    "title": "Enterprise Wireless Connected to Core (Mixed Vendor)",
-   "engine": "scenario_runner",
-   "execution": "none",
+   "engine": "scenario_contract",
+   "execution": "native",
    "category": "WIRELESS",
-   "kind": null,
+   "kind": "operational",
    "industries": [],
    "industry_basis": [],
    "subindustry": null,
    "summary": "Meraki and Aruba APs routing through Palo Alto NGFW into Arista 7280 core.",
-   "objective": null,
+   "objective": "A Meraki access point serves corporate and guest clients behind a Palo Alto firewall. A guest client attempts to pivot toward data-center assets: the AP reports a rogue-probe alert, the firewall records the guest-to-datacenter attempts and applies its zero-trust deny, and guest traffic returns to normal internet-only flows.",
    "vendors": [
     "mixed_vendor"
    ],
@@ -1898,17 +1944,23 @@
     "pan:traffic",
     "arista:telemetry:json"
    ],
-   "phases": [],
+   "phases": [
+    "BASELINE",
+    "PROBE",
+    "PIVOT",
+    "ENFORCEMENT",
+    "RECOVERY"
+   ],
    "maturity_tier": "CONTRACTED",
-   "runnable": false,
-   "blocked_reason": "Contract only in this release: no executable telemetry is implemented for this scenario",
+   "runnable": true,
+   "blocked_reason": null,
    "independently_indexed": false,
-   "dashboard": null,
-   "dashboard_maturity": null,
+   "dashboard": "pf_wireless_connected_core_mixed",
+   "dashboard_maturity": "DASHBOARD_IMPLEMENTED",
    "legacy_dashboard_verified": false,
-   "detection_prerequisites": null,
-   "provenance": null,
-   "verification_spl": null
+   "detection_prerequisites": "Operational scenario: no detection claimed.",
+   "provenance": "Declarative scenario contract (meraki_palo_alto): existing vendor formatters called with a shared topology and ordered phases. Events carry fixed vendor text plus the indexed fields action, status and signature that show each phase.",
+   "verification_spl": "index=<index> netspout_scenario_id=\"wireless_connected_core_mixed\" netspout_run_id=<run id> | stats count by netspout_phase, sourcetype"
   },
   {
    "scenario_id": "wave2_ws_credential_compromise_chain",

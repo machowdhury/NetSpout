@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REF = ROOT / "docs" / "reference"
 VIEWS = ROOT / "netspout" / "default" / "data" / "ui" / "views"
 ENGINE_LABEL = {"scenario_pack": "Scenario pack", "incident_pack": "Incident pack", "replay_pack": "Replay pack (recorded data)", "netflow_solution": "NetFlow / IPFIX",
-                "scenario_runner": "Scenario runner", "unified_generation": "Unified generation"}
+                "scenario_runner": "Scenario runner", "unified_generation": "Unified generation", "scenario_contract": "Declarative scenario contract"}
 TIER_NOTE = {"CERTIFIED": "certified golden path", "VALIDATED": "validated", "CONTRACTED": "contract only", "FORMAT_VALIDATED": "format validated", "NOT_ESTABLISHED": "not established"}
 
 
@@ -132,9 +132,25 @@ def telemetry_doc(srows, trows):
     return "\n".join(L)
 
 
+def update_readme(srows, trows):
+    """The README's three coverage bullets are owned by this generator, so the numbers cannot drift from the registries."""
+    import re
+    f = ROOT / "README.md"
+    t = f.read_text()
+    run = sum(r["runnable"] for r in srows)
+    dash = [r for r in srows if r.get("dashboard")]
+    vis = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_VISUALLY_VERIFIED")
+    dv = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_DATA_VALIDATED")
+    impl = sum(1 for r in dash if r.get("dashboard_maturity") == "DASHBOARD_IMPLEMENTED")
+    t = re.sub(r"- \*\*\d+ runnable scenarios\*\* \(\d+ defined\):.*", "- **%d runnable scenarios** (%d defined): incident packs, NetFlow/IPFIX, replayed recordings, security and operational scenarios. The other %d are documented but not runnable yet, each with the reason. See [SCENARIOS](docs/SCENARIOS.md)." % (run, len(srows), len(srows) - run), t)
+    t = re.sub(r"- \*\*\d+ Dashboard Studio dashboards\*\*.*", "- **%d Dashboard Studio dashboards**, one per runnable scenario: %d data-validated against indexed data (%d of those also visually verified) and %d implemented but not yet validated against data." % (len(dash), dv + vis, vis, impl), t)
+    f.write_text(t)
+
+
 if __name__ == "__main__":
     _, srows = load("scenario_coverage.json")
     _, trows = load("sourcetype_coverage.json")
     (ROOT / "docs" / "SCENARIOS.md").write_text(scenarios_doc(srows, trows))
     (ROOT / "docs" / "TELEMETRY_COVERAGE.md").write_text(telemetry_doc(srows, trows))
+    update_readme(srows, trows)
     print("wrote docs/SCENARIOS.md and docs/TELEMETRY_COVERAGE.md")

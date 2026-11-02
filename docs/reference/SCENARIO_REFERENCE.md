@@ -5,10 +5,10 @@ Generated 2026-11-02 by `scripts/generate_reference_docs.py` from the Use Case E
 | Measure | Count |
 |---|---|
 | Unique operational scenario definitions | 372 |
-| Runnable (a real generator and run path exist) | 148 |
+| Runnable (a real generator and run path exist) | 157 |
 | Cataloged candidates only (documented, not executable) | 209 |
 | Independently indexed in an isolated lab | 148 |
-| With a Dashboard Studio dashboard | 148 |
+| With a Dashboard Studio dashboard | 157 |
 | Dashboards DATA_VALIDATED or better | 148 |
 | Dashboards VISUALLY_VERIFIED | 20 |
 | Detection verified | 0 (no add-on, CIM or Enterprise Security content installed) |
@@ -23,12 +23,12 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 
 | Group | Count | Meaning |
 |---|---|---|
-| Runnable | 148 | A real generator and run path exist; every one has a Dashboard Studio dashboard |
-| Contract only | 15 | A topology or format contract exists but no executable telemetry (reason recorded per scenario) |
+| Runnable | 157 | A real generator and run path exist; every one has a Dashboard Studio dashboard |
+| Contract only | 6 | A topology or format contract exists but no executable telemetry (reason recorded per scenario) |
 | Cataloged only | 209 | Documented candidates with no execution path |
 | Total | 372 | The three groups above are mutually exclusive and add up to the total |
 
-**Overlapping attributes** (not additional groups): *independently indexed* (148) is a subset of the runnable group, i.e. runnable scenarios whose events from a fresh run were read back from Splunk by an independent search in an isolated lab (scenario-level live checks, dashboard data validation, the monitored runs and the flow scenarios); 0 runnable scenarios lack that proof. Earlier status reports counted 76 because they used only the scenario-level live-equality evidence; the dashboard data validation (a fresh run per scenario, read back from Splunk by run id, KPIs equal to separately written searches) extends the same kind of proof to every runnable scenario, which is why the figure is now higher. The two numbers measure different evidence, not different scenarios. *Tier* (CERTIFIED, VALIDATED, CONTRACTED, ...) is the maturity recorded by the catalog and is never upgraded by indexing.
+**Overlapping attributes** (not additional groups): *independently indexed* (148) is a subset of the runnable group, i.e. runnable scenarios whose events from a fresh run were read back from Splunk by an independent search in an isolated lab (scenario-level live checks, dashboard data validation, the monitored runs and the flow scenarios); 9 runnable scenarios lack that proof. Earlier status reports counted 76 because they used only the scenario-level live-equality evidence; the dashboard data validation (a fresh run per scenario, read back from Splunk by run id, KPIs equal to separately written searches) extends the same kind of proof to every runnable scenario, which is why the figure is now higher. The two numbers measure different evidence, not different scenarios. *Tier* (CERTIFIED, VALIDATED, CONTRACTED, ...) is the maturity recorded by the catalog and is never upgraded by indexing.
 
 ## Coverage by approved industry
 
@@ -39,7 +39,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | Retail and E-commerce | 12 | 6 | 6 | 6 | 6 |
 | Manufacturing | 18 | 6 | 6 | 6 | 6 |
 | Energy and Utilities | 22 | 6 | 6 | 6 | 6 |
-| Telecommunications | 43 | 15 | 15 | 15 | 15 |
+| Telecommunications | 43 | 16 | 15 | 16 | 15 |
 | Government and Public Sector | 25 | 5 | 5 | 5 | 5 |
 | Transportation and Logistics | 13 | 2 | 2 | 2 | 2 |
 | Education | 13 | 4 | 4 | 4 | 4 |
@@ -90,9 +90,12 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `SEC-P9-D-INTERNAL-RECON` | Internal Reconnaissance Indicators | native (unified_generation) | security | not mapped | 1 | Y | pf_SEC-P9-D-INTERNAL-RECON | DATA_VALIDATED |
 | `SEC-P9-E-DNS-TUNNEL` | DNS Tunneling and Exfiltration Indicators | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-E-DNS-TUNNEL | DATA_VALIDATED |
 | `SEC-P9-F-CROSS-SOURCE` | Cross-Source DNS, Beaconing, and Reconnaissance Incident | native (unified_generation) | security | not mapped | 2 | Y | pf_SEC-P9-F-CROSS-SOURCE | VISUALLY_VERIFIED |
+| `arch_epn_isolated_intranet` | EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi- | native (scenario_contract) | operational | not mapped | 2 | - | pf_arch_epn_isolated_intranet | IMPLEMENTED |
+| `arch_gan_subsea_cloud` | GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transi | native (scenario_contract) | operational | not mapped | 3 | - | pf_arch_gan_subsea_cloud | IMPLEMENTED |
 | `arch_lan_campus_access` | LAN: Local Area Network - Campus Switching & 802.1Q Segments | native (scenario_runner) | operational | not mapped | 3 | Y | pf_arch_lan_campus_access | DATA_VALIDATED |
 | `arch_man_carrier_ring` | MAN: Metropolitan Area Network - 100G Carrier Ethernet Ring & G.8032 E | native (scenario_runner) | operational | telecommunications | 3 | Y | pf_arch_man_carrier_ring | DATA_VALIDATED |
 | `arch_vpn_remote_workforce` | VPN: Virtual Private Network - Cisco AnyConnect & Site-to-Site IPsec | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 3 | Y | pf_arch_vpn_remote_workforce | DATA_VALIDATED |
+| `arch_wan_global_backbone` | WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM | native (scenario_contract) | operational | not mapped | 3 | - | pf_arch_wan_global_backbone | IMPLEMENTED |
 | `arch_wlan_meraki_catalyst` | WLAN: Wireless Local Area Network - Catalyst 9800 & Meraki Wi-Fi 6E/7 | native (scenario_runner) | operational | education, hospitality-travel, retail-ecommerce | 3 | Y | pf_arch_wlan_meraki_catalyst | DATA_VALIDATED |
 | `cisco_aci_microburst` | Data Center Fabric ACI Ingress Microburst Traffic | native (scenario_runner) | operational | not mapped | 3 | Y | pf_cisco_aci_microburst | VISUALLY_VERIFIED |
 | `cisco_campus_rogue` | Campus Core L2/3 Disturbance & Rogue AP | native (scenario_runner) | operational | education, hospitality-travel | 4 | Y | pf_cisco_campus_rogue | DATA_VALIDATED |
@@ -124,9 +127,11 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `ind_telco_access_and_wireless_health` | Telecom NOC: RADIUS/NAC outage, platform degradation and rogue wireles | native (replay_pack) | operational | telecommunications | 16 | Y | pf_ind_telco_access_and_wireless_health | DATA_VALIDATED |
 | `ind_telco_change_induced_outage` | Telecom NOC: change-induced SD-WAN outage, then edge threat pipeline | native (replay_pack) | operational | telecommunications | 15 | Y | pf_ind_telco_change_induced_outage | VISUALLY_VERIFIED |
 | `ind_transport_fleet_network_change` | Logistics network: change-induced outage and edge routing observation | native (replay_pack) | operational | transportation-logistics | 16 | Y | pf_ind_transport_fleet_network_change | DATA_VALIDATED |
+| `lateral_movement` | Ransomware / Lateral Spread (Port 445) | native (scenario_contract) | security | not mapped | 3 | - | pf_lateral_movement | IMPLEMENTED |
 | `mixed_backbone_optical` | Multicast/MPLS Backbone Optical Carrier Shift | native (scenario_runner) | operational | not mapped | 3 | Y | pf_mixed_backbone_optical | DATA_VALIDATED |
 | `mixed_edge_breach` | Distributed Edge Breach & Internal Probing | native (scenario_runner) | security | not mapped | 5 | Y | pf_mixed_edge_breach | DATA_VALIDATED |
 | `mixed_sase_degradation` | SASE Cloud Ingress App Degradation & Synthetic Validation | native (scenario_runner) | operational | legal-compliance-professional-services, technology-saas | 4 | Y | pf_mixed_sase_degradation | DATA_VALIDATED |
+| `mixed_vendor_enterprise` | Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, J | native (scenario_contract) | operational | not mapped | 5 | - | pf_mixed_vendor_enterprise | IMPLEMENTED |
 | `network_01_campus_link` | Campus link failure/recovery | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_01_campus_link | DATA_VALIDATED |
 | `network_02_vlan_trunk` | VLAN/trunk misconfiguration | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_02_vlan_trunk | DATA_VALIDATED |
 | `network_03_stp_storm` | STP loop/broadcast storm | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_03_stp_storm | DATA_VALIDATED |
@@ -155,6 +160,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `network_26_maintenance` | Planned maintenance versus unplanned service outage | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_26_maintenance | DATA_VALIDATED |
 | `network_27_stale_sessions` | Authentication recovery with stale perimeter sessions | native (incident_pack) | operational | not mapped | 2 | Y | pf_network_27_stale_sessions | DATA_VALIDATED |
 | `network_security_correlation` | Network Degradation With Security Correlation | native (scenario_runner) | operational | not mapped | 5 | Y | pf_network_security_correlation | DATA_VALIDATED |
+| `normal_traffic` | Normal Operations (HTTP Round-Robin) | native (scenario_contract) | operational | not mapped | 5 | - | pf_normal_traffic | IMPLEMENTED |
 | `openconfig_mdt_streaming` | OpenConfig MDT Streaming & Telemetry Assurance | native (scenario_runner) | operational | not mapped | 3 | Y | pf_openconfig_mdt_streaming | DATA_VALIDATED |
 | `paloalto_threat_investigation` | Palo Alto Networks Threat Investigation | native (scenario_runner) | security | not mapped | 3 | Y | pf_paloalto_threat_investigation | VISUALLY_VERIFIED |
 | `payment_processing_degradation` | Financial Services Payment Application Degradation | native (scenario_runner) | operational | banking-financial-services | 5 | Y | pf_payment_processing_degradation | DATA_VALIDATED |
@@ -166,7 +172,9 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `rp_web_exploitation_recordings` | Web exploitation observed from three recordings (aligned in time only) | replay (replay_pack) | security | retail-ecommerce, hospitality-travel, government-public-sector | 3 | Y | pf_rp_web_exploitation_recordings | DATA_VALIDATED |
 | `rp_windows_endpoint_process_chain` | Windows endpoint process and network activity (replayed Sysmon) | replay (replay_pack) | security | healthcare, manufacturing, education | 1 | Y | pf_rp_windows_endpoint_process_chain | DATA_VALIDATED |
 | `rp_workload_sysmon_ebpf_hybrid` | Linux workload: recorded Sysmon-for-Linux plus native eBPF hunt (hybri | hybrid (replay_pack) | security | technology-saas, telecommunications, transportation-logistics | 10 | Y | pf_rp_workload_sysmon_ebpf_hybrid | DATA_VALIDATED |
+| `sdwan_connected_core` | Separate SD-WAN Environment Connected to Core Backbone (All Cisco) | native (scenario_contract) | operational | not mapped | 3 | - | pf_sdwan_connected_core | IMPLEMENTED |
 | `service_provider_cisco` | Service Provider Network - All Cisco (Cisco 8000, NCS 5500, IOS-XR SRv | native (scenario_runner) | operational | telecommunications | 4 | Y | pf_service_provider_cisco | DATA_VALIDATED |
+| `service_provider_mixed` | Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Noki | native (scenario_contract) | operational | telecommunications | 3 | - | pf_service_provider_mixed | IMPLEMENTED |
 | `sql_injection` | SQL Injection / Application Breach | native (scenario_runner) | security | not mapped | 3 | Y | pf_sql_injection | DATA_VALIDATED |
 | `telco_01_ran_cell` | 5G RAN cell degradation | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_01_ran_cell | DATA_VALIDATED |
 | `telco_02_registration_auth` | 5G registration/authentication failure | native (incident_pack) | operational | telecommunications | 2 | Y | pf_telco_02_registration_auth | DATA_VALIDATED |
@@ -205,6 +213,7 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `wave3_cloudmail_exfil` | Cloud Mail Exfiltration Chain (Wave-3 pack) | native (scenario_pack) | security | not mapped | 8 | Y | pf_wave3_cloudmail_exfil | VISUALLY_VERIFIED |
 | `wave3_ebpf_workload_hunt` | eBPF Workload Hunt (Wave-3 pack) | native (scenario_pack) | security | not mapped | 9 | Y | pf_wave3_ebpf_workload_hunt | DATA_VALIDATED |
 | `wave3_vsphere_hostpath_triage` | vSphere Host Path Triage (Wave-3 pack) | native (scenario_pack) | operational | not mapped | 10 | Y | pf_wave3_vsphere_hostpath_triage | DATA_VALIDATED |
+| `wireless_connected_core_mixed` | Enterprise Wireless Connected to Core (Mixed Vendor) | native (scenario_contract) | operational | not mapped | 3 | - | pf_wireless_connected_core_mixed | IMPLEMENTED |
 
 ## Not runnable
 
@@ -420,17 +429,8 @@ The original 100 financial-services and 100 telecom use-case libraries were not 
 | `UCR-8.1.1` | HTTP Error Rate Monitoring | CATALOGED | Cataloged candidate: a documented definition exists but NetSpout has no generator or scenario contract for it. |
 | `UCR-8.3.1` | Consumer Lag Monitoring | CATALOGED | Cataloged candidate: a documented definition exists but NetSpout has no generator or scenario contract for it. |
 | `arch_can_multi_building` | CAN: Campus Area Network - Multi-Building Backbone & Catalyst Center | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `arch_epn_isolated_intranet` | EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi- | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `arch_gan_subsea_cloud` | GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transi | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
 | `arch_nas_storage_cluster` | NAS: Network-Attached Storage - NetApp ONTAP & PowerScale Clusters | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
 | `arch_pan_iot_mesh` | PAN: Personal Area Network - IoT Sensor Cluster & Bluetooth Mesh | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
 | `arch_san_fibre_channel` | SAN: Storage Area Network - Cisco MDS 9700 Fibre Channel & NVMe-oF | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `arch_wan_global_backbone` | WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `mixed_vendor_enterprise` | Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, J | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
 | `pure_cisco_enterprise` | Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DN | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `sdwan_connected_core` | Separate SD-WAN Environment Connected to Core Backbone (All Cisco) | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `service_provider_mixed` | Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Noki | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
 | `wireless_connected_core_cisco` | Enterprise Wireless Connected to Campus Core (All Cisco) | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `wireless_connected_core_mixed` | Enterprise Wireless Connected to Core (Mixed Vendor) | CONTRACTED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `lateral_movement` | Ransomware / Lateral Spread (Port 445) | FORMAT_VALIDATED | Contract only in this release: no executable telemetry is implemented for this scenario |
-| `normal_traffic` | Normal Operations (HTTP Round-Robin) | FORMAT_VALIDATED | Contract only in this release: no executable telemetry is implemented for this scenario |

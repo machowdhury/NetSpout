@@ -71,12 +71,13 @@ def test_incident_dashboards_use_only_real_fields_and_mstats_with_the_metric_ind
 
 def test_security_dashboards_state_detection_status_and_never_claim_a_verified_detection():
     sec = [x for x in SOURCES if x['kind'] == 'security']
-    assert len(sec) == 61
+    from netspout_core import scenario_contracts as _sc
+    assert len(sec) == 61 + sum(1 for r in _sc.catalog() if r['kind'] == 'security')   # 61 evidence-backed security views + declarative-contract security views
     for x in sec:
         text = json.dumps(spec(x['id'])[1])
         assert 'Detection status: **NOT VERIFIED**' in text and 'Severity:** not asserted' in text and 'Original analytics (Splunk Security Content)' in text
     ops = [x for x in SOURCES if x['kind'] == 'operational']
-    assert len(ops) == 77 and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
+    assert len(ops) == 77 + sum(1 for r in _sc.catalog() if r['kind'] != 'security') and all('Before / during / after' in json.dumps(spec(x['id'])[1]) and 'Recovery / validation evidence' in json.dumps(spec(x['id'])[1]) for x in ops)
 
 
 def test_palette_follows_the_figma_v2_tokens_and_perspective_tabs_exist():
@@ -104,7 +105,9 @@ def test_maturity_is_assembled_from_evidence_and_visual_claims_need_an_inspected
     insp = json.loads((EV / 'visual_inspection.json').read_text())['inspected']
     data = json.loads((EV / 'data_validation.json').read_text())['dashboards']
     inst = json.loads((EV / 'install.json').read_text())['views']
-    assert set(m) == {x['id'] for x in SOURCES} and all(v['maturity'] in LEVELS for v in m.values())
+    cm = json.loads((EV / 'contract_dashboard_maturity.json').read_text())['dashboards']   # offline-only evidence: contract views are IMPLEMENTED at most
+    assert set(m) | set(cm) == {x['id'] for x in SOURCES} and not set(m) & set(cm)
+    assert all(v['maturity'] in LEVELS for v in {**m, **cm}.values()) and all(v['maturity'] == 'DASHBOARD_IMPLEMENTED' and not v['data_validated'] for v in cm.values())
     for pid, v in m.items():
         if v['maturity'] == 'DASHBOARD_VISUALLY_VERIFIED':
             assert pid in insp and list((EV / 'screens').glob(f'{pid}__*.jpg')) and v['data_validated'] and v['browser_render_checks_pass']
@@ -118,6 +121,7 @@ def test_explorer_links_every_scenario_with_a_view_to_it_with_the_run_as_context
     client = TestClient(main.app)
     m = json.loads((EV / 'dashboard_maturity.json').read_text())['dashboards']
     m.update(json.loads((EV.parent / 'netflow' / 'dashboard_maturity.json').read_text())['dashboards'])   # NetFlow views carry their own maturity evidence
+    m.update(json.loads((EV / 'contract_dashboard_maturity.json').read_text())['dashboards'])   # declarative-contract views: offline evidence
     ex = main._explorer()
     linked = [e for e in ex.all_entries() if e['kind'] == 'operational' and e.get('dashboard') and e['dashboard'].get('scale')]
     LEGACY = {'SEC-P9-B-DNS-ANOMALY'}   # also has an earlier DASHBOARD_READY recipe view, kept as `alternate_view`

@@ -1,15 +1,15 @@
 {
  "defined": 372,
- "runnable": 148,
- "non_runnable": 224,
+ "runnable": 157,
+ "non_runnable": 215,
  "classes": {
   "D": 208,
-  "C": 16
+  "C": 7
  },
  "newly_activated": 0,
  "dashboards": {
-  "dashboard_views": 148,
-  "structural_spl_ok": 148,
+  "dashboard_views": 157,
+  "structural_spl_ok": 157,
   "structural_spl_failed": [],
   "data_validated_or_better": 148,
   "visually_verified": 20
@@ -27,33 +27,6 @@
     "cisco:ise:trustsec:sgt"
    ],
    "summary": "Multi-building campus network with redundant Catalyst 9600 cores, 100G fiber interconnects, and DNA Center automated assurance.",
-   "source": null
-  },
-  {
-   "scenario_id": "arch_epn_isolated_intranet",
-   "title": "EPN: Enterprise Private Network - Isolated Corporate Intranet & Multi-Cloud VPC",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:ios:syslog",
-    "cisco:sdwan:linkhealth"
-   ],
-   "summary": "Private multi-tenant enterprise intranet connecting physical branches and cloud VPCs via private QinQ 802.1ad and MPLS pseudo-wires.",
-   "source": null
-  },
-  {
-   "scenario_id": "arch_gan_subsea_cloud",
-   "title": "GAN: Global Area Network - Worldwide Multi-Cloud & Subsea Cable Transit",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:ios:mdt:metric",
-    "zscaler:zia",
-    "cisco:thousandeyes:metric"
-   ],
-   "summary": "Trans-continental global network connecting AWS Direct Connect, Azure ExpressRoute, and subsea cable landing stations.",
    "source": null
   },
   {
@@ -96,66 +69,6 @@
    "source": null
   },
   {
-   "scenario_id": "arch_wan_global_backbone",
-   "title": "WAN: Wide Area Network - Global BGP/MPLS L3VPN Backbone & Optical DWDM",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:ios:mdt:metric",
-    "cisco:ios:syslog",
-    "juniper:junos"
-   ],
-   "summary": "Inter-continental enterprise WAN with BGP EVPN, segment routing SRv6, and MPLS traffic engineering tunnels.",
-   "source": null
-  },
-  {
-   "scenario_id": "lateral_movement",
-   "title": "Ransomware / Lateral Spread (Port 445)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:ios:syslog",
-    "cisco:asa",
-    "postgresql:audit"
-   ],
-   "summary": "Malware attempts lateral propagation between internal servers across subnet boundaries using SMB Port 445.",
-   "source": null
-  },
-  {
-   "scenario_id": "mixed_vendor_enterprise",
-   "title": "Mixed-Vendor Enterprise Network (Cisco, Arista, Palo Alto, Fortinet, Juniper, Aruba)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities. The same sourcetypes are emitted by runnable `mixed_edge_breach`, which is a different scenario, so aliasing would only relabel it.",
-   "sourcetypes": [
-    "meraki:assurancealerts",
-    "pan:threat",
-    "pan:traffic",
-    "fortinet:fortigate:utm",
-    "nginx:plus:kv"
-   ],
-   "summary": "Heterogeneous multi-vendor infrastructure with best-of-breed routing, switching, and firewall appliances.",
-   "source": null
-  },
-  {
-   "scenario_id": "normal_traffic",
-   "title": "Normal Operations (HTTP Round-Robin)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:asa",
-    "pan:traffic",
-    "f5:bigip:ltm",
-    "nginx:plus:kv",
-    "postgresql:audit"
-   ],
-   "summary": "Legitimate external clients make distributed HTTP requests passing through Firewall and Load Balancer to Web tier.",
-   "source": null
-  },
-  {
    "scenario_id": "pure_cisco_enterprise",
    "title": "Pure Cisco Enterprise Fabric (Catalyst 9600, 9500, 9300, 9800, ISE, DNA-C)",
    "engine": "scenario_runner",
@@ -171,34 +84,6 @@
    "source": null
   },
   {
-   "scenario_id": "sdwan_connected_core",
-   "title": "Separate SD-WAN Environment Connected to Core Backbone (All Cisco)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "cisco:sdwan:linkhealth",
-    "cisco:sdwan:BGP-5-ADJCHANGE",
-    "cisco:ios:syslog"
-   ],
-   "summary": "Catalyst SD-WAN fabric peering dynamically with Catalyst 9600 campus core.",
-   "source": null
-  },
-  {
-   "scenario_id": "service_provider_mixed",
-   "title": "Service Provider Network - Mixed Vendor (Cisco 8000, Juniper PTX, Nokia 7750)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "juniper:junos",
-    "nokia:sros:syslog",
-    "cisco:ios:mdt:metric"
-   ],
-   "summary": "Tier-1 carrier transit core with Cisco, Juniper, and Nokia interconnects.",
-   "source": null
-  },
-  {
    "scenario_id": "wireless_connected_core_cisco",
    "title": "Enterprise Wireless Connected to Campus Core (All Cisco)",
    "engine": "scenario_runner",
@@ -210,20 +95,6 @@
     "cisco:ise:nac:8021x"
    ],
    "summary": "Catalyst 9800 WLC trunking wireless VLANs directly into Catalyst 9600 core switches.",
-   "source": null
-  },
-  {
-   "scenario_id": "wireless_connected_core_mixed",
-   "title": "Enterprise Wireless Connected to Core (Mixed Vendor)",
-   "engine": "scenario_runner",
-   "class": "C",
-   "reason": "Every sourcetype has a generator, but this definition has no executable layer: it needs per-phase telemetry with shared hosts and identities, and generators run separately do not share entities.",
-   "sourcetypes": [
-    "meraki:accesspoints",
-    "pan:traffic",
-    "arista:telemetry:json"
-   ],
-   "summary": "Meraki and Aruba APs routing through Palo Alto NGFW into Arista 7280 core.",
    "source": null
   },
   {

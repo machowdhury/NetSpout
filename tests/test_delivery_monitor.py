@@ -310,5 +310,5 @@ def test_preview_states_phases_volume_and_blockers():
     p = main.explorer_preview('op:incident:telco_09_core_user_plane')
     assert p['runnable'] and p['volume']['events'] == 30 and p['volume']['metric_events'] == 10 and 'BASELINE' in [x['phase'] for x in p['volume']['phases']]
     assert p['dashboard']['view'] == 'pf_telco_09_core_user_plane' and 'Timing varies' in p['timing']['note']
-    b = main.explorer_preview('op:runner:normal_traffic')
+    b = main.explorer_preview('op:runner:arch_can_multi_building')   # still contract-only: a genuinely blocked scenario
     assert not b['runnable'] and b['blockers'] and b['volume']['events'] is None and b['dashboard'] is None

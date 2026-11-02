@@ -100,6 +100,12 @@ async def lifespan(_: FastAPI):
     finally:
         if simulation_task:
             simulation_task.cancel()
+        # Graceful stop: finish in-flight deliveries and persist final counters. Nothing is resumed or re-sent on the next start.
+        for stop_all in (lambda: run_monitor.stop_all(5), replay_service.stop_all):
+            try:
+                stop_all()
+            except Exception:
+                pass
 
 
 app = FastAPI(
@@ -118,16 +124,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.middleware("http")
-async def _require_gateway_key(request, call_next):
-    """Opt-in: with PULSEFORGE_GATEWAY_KEY set, only the Splunk gateway (which holds the key) may call the engine,
-    so Splunk authentication and roles cannot be bypassed by reaching the engine port. /api/health stays open for health checks."""
-    key = os.environ.get("PULSEFORGE_GATEWAY_KEY", "")
-    if key and request.url.path != "/api/health":
-        import hmac
-        if not hmac.compare_digest(request.headers.get("x-pulseforge-gateway-key", ""), key):
-            return Response(content='{"detail":"Engine requests must come through the Splunk gateway"}', status_code=401, media_type="application/json")
-    return await call_next(request)
+from app.gateway_auth import GatewayKeyMiddleware
+app.add_middleware(GatewayKeyMiddleware)   # outermost: unauthenticated connections never reach CORS or a route
 
 
 # Include destination router

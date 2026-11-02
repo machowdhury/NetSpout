@@ -14,6 +14,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import pulseforge_ipc as ipc  # Unix-socket channel to the Splunk-managed engine (same bin directory)
+
 try:
     from splunk.persistconn.application import PersistentServerConnectionApplication
 except ImportError:  # unit tests / non-Splunk import
@@ -74,12 +76,19 @@ class NetSpoutGateway(PersistentServerConnectionApplication):
             query = request.get("query") or []
             pairs = query.items() if isinstance(query, dict) else query
             qs = urllib.parse.urlencode([(k, v) for k, v in pairs])
+            managed = None if os.environ.get("NETSPOUT_BACKEND_URL") else ipc.engine_info()  # an explicit URL wins; else the managed engine
             url = backend_url() + sub + ("?" + qs if qs else "")
             raw = request.get("payload") or ""
             if len(raw) > MAX_BODY:
                 return _reply(413, {"detail": "Request body too large"})
             hdrs = request.get("headers") or []  # persistconn sends a list of [name, value] pairs
             headers = {k: v for k, v in (hdrs.items() if isinstance(hdrs, dict) else hdrs) if k.lower() in FORWARD_HEADERS}
+            if managed:  # Splunk-managed engine: Unix socket plus the per-install key, no TCP port
+                try:
+                    status, data = ipc.request(method, sub + ("?" + qs if qs else ""), body=raw.encode() if method == "POST" else None, headers=headers, timeout=120)
+                    return _reply(status, data.decode())
+                except OSError as e:
+                    return _reply(502, {"detail": "PulseForge engine is not running (managed engine socket: " + type(e).__name__ + ")"})
             if os.environ.get("PULSEFORGE_GATEWAY_KEY"):  # shared secret the engine checks when it is configured with the same key
                 headers["X-PulseForge-Gateway-Key"] = os.environ["PULSEFORGE_GATEWAY_KEY"]
             req = urllib.request.Request(url, data=raw.encode() if method == "POST" else None, headers=headers, method=method)

@@ -428,6 +428,13 @@ class RunMonitorService:
                 tmp.write_text(json.dumps(data))
                 tmp.replace(self._state)
 
+    def stop_all(self, timeout=5):
+        """Graceful shutdown: stop every active run so in-flight deliveries finish and the final counters are persisted."""
+        for r in list(self._runs.values()):
+            if r.state in ACTIVE:
+                r.stop(timeout)
+        self._save()
+
     def start(self, run: DeliveryRun, max_active=4) -> DeliveryRun:
         if sum(1 for r in self._runs.values() if r.state in ACTIVE) >= max_active:
             raise ValueError("too many active runs (limit %d)" % max_active)

@@ -1,6 +1,8 @@
-"""Opt-in gateway key: the engine refuses direct calls when PULSEFORGE_GATEWAY_KEY is set; the Splunk gateway forwards it."""
+"""Gateway key: the engine refuses direct HTTP and WebSocket connections without it (opt-in, or mandatory in the managed architecture); the Splunk gateway forwards it."""
 import json
 import sys
+
+import pytest
 import urllib.request
 from pathlib import Path
 
@@ -45,3 +47,34 @@ def test_gateway_forwards_the_key_only_when_configured(monkeypatch):
     monkeypatch.setenv("PULSEFORGE_GATEWAY_KEY", "k-test")
     netspout_gateway.NetSpoutGateway().handle(req)
     assert "X-pulseforge-gateway-key" not in seen[0] and seen[1]["X-pulseforge-gateway-key"] == "k-test"
+
+
+def test_managed_mode_fails_closed_without_a_key_and_with_a_wrong_one(monkeypatch):
+    monkeypatch.delenv("PULSEFORGE_GATEWAY_KEY", raising=False)
+    monkeypatch.setenv("PULSEFORGE_REQUIRE_GATEWAY_KEY", "1")
+    c = TestClient(main.app)
+    assert c.get("/api/search", params={"q": "x"}).status_code == 401           # no key configured: nothing is served
+    assert c.get("/api/search", params={"q": "x"}, headers={"X-PulseForge-Gateway-Key": ""}).status_code == 401
+    assert c.get("/api/health").status_code == 200                                 # health stays open for supervision
+
+
+def test_websockets_need_the_key_too(monkeypatch):
+    from starlette.websockets import WebSocketDisconnect
+    monkeypatch.setenv("PULSEFORGE_GATEWAY_KEY", "k-test")
+    c = TestClient(main.app)
+    for path in ("/ws/logs", "/ws/run-progress"):
+        with pytest.raises(WebSocketDisconnect):
+            with c.websocket_connect(path):
+                pass
+    with pytest.raises(WebSocketDisconnect):
+        with c.websocket_connect("/ws/logs", headers={"X-PulseForge-Gateway-Key": "wrong"}):
+            pass
+
+
+def test_key_comparison_is_constant_time_and_the_key_is_never_echoed(monkeypatch):
+    import inspect
+    from app import gateway_auth
+    assert "compare_digest" in inspect.getsource(gateway_auth)
+    monkeypatch.setenv("PULSEFORGE_GATEWAY_KEY", "k-secret-value")
+    body = TestClient(main.app).get("/api/search", params={"q": "x"}, headers={"X-PulseForge-Gateway-Key": "nope"}).text
+    assert "k-secret-value" not in body and "nope" not in body

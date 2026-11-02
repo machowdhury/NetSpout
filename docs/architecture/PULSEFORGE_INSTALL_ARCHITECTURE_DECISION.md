@@ -92,3 +92,56 @@ Option C and A mechanisms inside a running splunkd; gNMI on bundled grpc; Python
 ## 9. Packages in this branch
 
 `netspout_gateway.py` and `backend/app/main.py` changed (opt-in key). The committed `netspout.spl`, `netspout_cloud.spl` and the engine package were **not rebuilt** (the Nov 3 demo packages stay as released), so `netspout.spl` no longer matches the gateway source on this branch. Rebuild only when this work is released.
+
+## 10. Phase 1 offline prototype (done 2026-11-02; no Splunk was started)
+
+Implemented in the app's `bin/` (not enabled by default; no `default/inputs.conf` stanza; the committed packages were not rebuilt):
+
+| File | Role |
+|---|---|
+| `pulseforge_engine_launcher.py` | modular input and supervisor: single-instance lock, persistent per-install key, spawn, health probe, restart with backoff (1 to 30 s), graceful stop, orphan guard (exits if splunkd is gone), status record `engine.json` |
+| `pulseforge_engine_main.py` | engine bootstrap: picks vendored dependencies from `bin/lib/<py313-linux-x86_64>`, binds a Unix socket created at mode 0600, refuses any non-loopback host, **refuses to start without the key** |
+| `pulseforge_ipc.py` | gateway-to-engine channel over the socket; key from the environment or the 0600 key file |
+| `backend/app/gateway_auth.py` | pure ASGI key check for **HTTP and WebSocket**; `PULSEFORGE_REQUIRE_GATEWAY_KEY=1` makes it mandatory and fail-closed |
+| `netspout_gateway.py` | uses the managed engine when `NETSPOUT_BACKEND_URL` is unset and the launcher's status record exists; otherwise unchanged |
+| `delivery_monitor.stop_all` + lifespan | on shutdown, active runs are stopped and final counters persisted |
+
+Findings, each backed by `tests/test_engine_launcher.py` and `tests/test_gateway_key.py` (278 targeted tests pass together with the NetFlow, dashboard, monitor and incident-pack suites):
+
+- The existing FastAPI engine initializes with no virtual environment, from vendored packages plus the interpreter's own (earlier probe) and now starts as a supervised subprocess from the bootstrap.
+- **Private boundary:** the socket is 0600 inside a 0700 directory, no TCP listener exists for the engine process (checked with `lsof`), and a request without or with a wrong key gets 401 while `/api/health` stays open for supervision. **Defect found and fixed:** uvicorn chmods a socket it creates to 0666; the bootstrap now binds the socket itself and passes the file descriptor.
+- **Authentication is mandatory in the managed architecture.** The earlier opt-in key remains for standalone and lab engines (unchanged behaviour when neither variable is set, so the demo lab is unaffected). WebSocket connections (`/ws/logs`, `/ws/run-progress`) are rejected without the key; the browser never reaches the engine anyway (the gateway proxies GET and POST only). Comparison is `hmac.compare_digest`; the key and the supplied value are never echoed in responses.
+- The shared key is **not** user authorization. Splunk authentication and the gateway's role check still gate every call (a request with no Splunk session is refused before the engine is contacted: tested). Remaining weakness: the role check is by role name, and GET is open to any authenticated user (Phase 3).
+- **Lifecycle:** start, health, crash restart (new pid, restart count, last error recorded), graceful stop (engine gone, socket removed, state `stopped`), and a second launcher on the same state directory is refused. The key survives a launcher restart.
+- **Active runs and restart:** shutdown stops active runs and persists counters; a run found active in persisted state after a restart is reported INTERRUPTED and nothing is re-sent (existing engine behaviour, now tested end to end). Replay sessions follow the same rule.
+- **Configuration persistence:** `NETSPOUT_CONFIG_DIR`, replay and run state live in the state directory under `$SPLUNK_HOME/var/lib/netspout`, outside the app directory (so an app upgrade keeps them). Persistence across a *Splunk* restart is not yet tested.
+- **Credentials:** the engine still reads the HEC token and search password from the launcher's environment, which a Splunk-managed process does not have. Phase 3 must read them from Splunk `storage/passwords` through the modular input's session key. Until then the managed engine cannot deliver to HEC from a pure app install. This is the largest functional gap.
+
+Still not tested offline, and so open: splunkd actually starting, stopping and restarting the modular input; Splunk's bundled Python running the launcher; gNMI on the bundled grpc; the vendored `bin/lib` layout inside a built package; AppInspect on the result; behaviour on Python 3.9 and non-x86_64 Splunk.
+
+## 11. Post-demo clean-container acceptance plan (not run)
+
+Run in a new, isolated container project on a free port set, only after the demo. A step passes only with recorded output.
+
+1. Build a prototype package (not `netspout.spl`) that includes `bin/lib/py313-linux-x86_64`, `bin/engine`, the three new scripts, and a `default/inputs.conf` stanza for the launcher. Run AppInspect (Enterprise tags); record every failure.
+2. Fresh `splunk/splunk:10.2`; install the single package; restart; wait for `engine.json` `state: healthy`.
+3. From the host: the engine socket and key file are not reachable; no new listening port beyond 8000/8088/8089 (`ss -ltn` inside the container).
+4. Log in to Splunk Web; open PulseForge; a user without write role cannot POST (403); an unauthenticated request to the gateway gets 401.
+5. Direct request to the engine socket without the key: 401; WebSocket without the key: closed 1008.
+6. Configure authorized indexes and HEC in Connection Center (with Phase 3 credential storage); execute a bounded stream (30 events).
+7. Independent indexing check by an `index=... netspout_run_id=...` search; accepted equals indexed.
+8. Restart splunkd mid-run: the run is INTERRUPTED, counters are final, no events are sent after the restart, the engine returns healthy.
+9. Kill the engine process: it restarts, the UI recovers on refresh.
+10. Upgrade: install a newer package over the old one; key, configuration and run history survive; the engine runs the new code after restart.
+11. Uninstall: the engine process stops, no orphan; document what remains in `var/lib/netspout` and how to remove it.
+
+## 12. Post-demo Docker fix plan (not started; the running stack is untouched)
+
+| Problem | Fix | Test |
+|---|---|---|
+| Engine port 8081 published | stop publishing it; the gateway reaches the engine inside the container | `docker port` shows no 8081; UI works |
+| Gateway default URL is Docker Desktop specific | set `NETSPOUT_BACKEND_URL=http://127.0.0.1:8081` in the compose service, or (after Phase 1) use the managed engine socket | works on a Linux host without `host.docker.internal` |
+| Collector and OTel not optional; UDP 514 published | compose `profiles: [netflow]` and `[otel]`; drop the 514 mapping from the default | default `up` starts one service; `--profile netflow` adds the collector |
+| Nothing restarts the engine | supervise it (the Phase 1 launcher, or a minimal wrapper loop) and make the container healthcheck fail when the engine is down | kill the engine: it returns and health recovers |
+
+Do each in a fresh isolated project and re-run the all-in-one image there before trusting it.

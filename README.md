@@ -72,7 +72,7 @@ The first run: search for `cloudtrail` (a sourcetype) or `5G core user-plane deg
 | Standalone engine package, index allowlist, secrets only in the environment | supported |
 | SNMPv3, sFlow, gRPC dial-out MDT, J-Flow-specific export, IPv6 flow | **not implemented** |
 | CIM validation of sourcetypes, security detection verification | **not done** (0 sourcetypes CIM-validated, 0 detections verified) |
-| Splunk Cloud HEC | **not tested** (no credentials were available) |
+| Splunk Cloud HEC | **metrics only, bounded:** 5 synthetic metrics and one incident pack's gauges (30 datapoints) were accepted into a remote `test_metrics` index and independently found with `mstats`/`mcatalog` (Nov 2). Event-index delivery, the engine run path against Cloud, a rendered dashboard and vendor samples were **not** tested; see [telemetry guide](docs/guides/06_NETWORK_TELEMETRY_GUIDE.md#remote-test_metrics-status) |
 
 Not every cataloged sourcetype or scenario is executable. Catalog-only entries are labelled and never offered a Run button.
 

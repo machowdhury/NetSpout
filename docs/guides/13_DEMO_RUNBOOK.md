@@ -41,6 +41,10 @@ Dashboard URL pattern: `http://localhost:18000/en-US/app/netspout/pf_<SCENARIO_I
 - The start script writes `indexes: [idx_network_ops]` only; that is intended.
 - A browser check that fails once under machine load (for example a Stop click that records no POST) should be rerun alone before it is called a regression. Close other heavy processes before the demo.
 
+## Optional: remote metrics proof (evidence only, not a live step)
+
+If asked whether metrics reach a real metrics index: on Nov 2 five synthetic metrics and one incident pack's gauges (30 datapoints) were accepted into `test_metrics` on Splunk Cloud 10.4 and found independently with `mstats` and `mcatalog`. Evidence: `docs/verification/evidence/metrics/remote_test_metrics_2026-11-02.json`. Say plainly what it does not cover: no remote event-index delivery, no engine run or monitor against Cloud, no rendered dashboard, no vendor/gNMI sample, and the data is synthetic. Do not run it live (it needs a token that is never typed into a shared terminal).
+
 ## What not to claim
 
 - Flow data has no TTL (NOC-03 shows loop *indicators* only), cannot separate routing asymmetry from sampling/coverage (NOC-04), says nothing about latency (NOC-05), shows volume not theft (SEC-08), regularity not malice (SEC-09), and no DNS query names (SEC-10).

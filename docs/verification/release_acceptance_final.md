@@ -41,7 +41,7 @@ A real defect was found and fixed during this pass: the run-bound dashboard link
 
 ## Not done / blocked
 
-* Cloud HEC: **BLOCKED BY MISSING LOCAL CREDENTIAL** (no `NETSPOUT_HEC_TOKEN`); nothing sent to Cloud, the Cloud app not touched. `netspout_cloud.spl` is dashboards only and was built, not installed anywhere.
+* Cloud HEC (as of the Nov 1 acceptance run; superseded for metrics by `docs/verification/evidence/metrics/remote_test_metrics_2026-11-02.json`): **BLOCKED BY MISSING LOCAL CREDENTIAL** (no `NETSPOUT_HEC_TOKEN`); nothing sent to Cloud, the Cloud app not touched. `netspout_cloud.spl` is dashboards only and was built, not installed anywhere.
 * No Classic Simple XML dashboards; the NetFlow views are Dashboard Studio JSON.
 * No CIM data model or detection validation.
 * Manual opening of a dashboard shows the `dev_test_replay` default in its Index input; set it to your index.

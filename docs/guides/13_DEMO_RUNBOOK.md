@@ -52,5 +52,12 @@ Dashboard URL pattern: `http://localhost:18000/en-US/app/netspout/pf_<SCENARIO_I
 | Native collector unavailable | Demo with wire off (untick **IPFIX UDP export**): the HEC-delivered normalized events and all ten dashboards work without the collector. |
 | Engine not answering | `scripts/start_lab_engine.sh` again; state is in `.lab_engine_cfg/`. |
 | A dashboard panel is empty | Check the run token and time range (default 24 h); re-run the scenario; the panel SQL is validated in `docs/verification/evidence/netflow/dashboard_validation.json`. |
+| Dashboard says "No search results returned" | The **Index** input defaults to `dev_test_replay`. Run-bound links from the monitor set it for you; if you opened the view by hand, set Index to the run's index (`idx_network_ops`). |
+| Splunk Web unavailable | `docker ps` for `netspout_phase4e_splunk`; `tests/lab/phase4e/lab.sh up`; wait for `(healthy)`, then port 18000. |
+| Search says "Search failed (404)" / gateway unreachable | The gateway reads `NETSPOUT_BACKEND_URL` from `splunk-launch.conf` (inside the container). It must be `http://host.docker.internal:8091`, on its own line (not appended to another line); restart splunkd afterwards. |
+| Engine will not start: `.venv/bin/python: No such file` | Create `.venv` per the README, or `PULSEFORGE_PYTHON=/path/to/python scripts/start_lab_engine.sh`. |
+| HEC destination missing or "index not permitted" | Connection Center > **Test HEC connection**. The destination must list `idx_network_ops`; PulseForge never creates indexes, so the token must be allowed to write to it. |
+| NetFlow stage shows `COLLECTOR_UNREACHABLE` | The collector is not running (pre-demo item 8). Start it, or untick **IPFIX UDP export**; the HEC-delivered dashboards do not need it. |
+| Collector decodes less than it received (`template error` in the GoFlow2 log) | GoFlow2 needs `workers=1` on each listener (already set in `deploy/collector/docker-compose.collector.yml`; an externally started GoFlow2 needs the same). Recreate the collector. |
 
 Evidence: [NetFlow verification](../verification/netflow_solution_verification.md), [Live monitor and HEC test](11_LIVE_DELIVERY_MONITOR_AND_HEC_TEST.md), [Limitations](10_LIMITATIONS_AND_STATUS.md).

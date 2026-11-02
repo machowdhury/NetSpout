@@ -1,0 +1,276 @@
+{
+ "generated_utc": "2026-11-02T12:20:30.497Z",
+ "splunk_web": "isolated lab, installed app",
+ "results": {
+  "NF-SEC-06-DDOS": {
+   "scenario_id": "NF-SEC-06-DDOS",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: volumetric DDoS indicators (SYN flood and UDP) NF-SEC-06-DDOS · netflow_solution · dashboard ",
+   "config_shown": true,
+   "config_for": "Configure SEC-06",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (100) → syn-flood (560) → udp-flood (160) Volume 820 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_",
+   "monitor_title": "NetFlow: volumetric DDoS indicators (SYN flood and UDP)",
+   "monitor_run": "run-41ff3797e6ad",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 820 Deterministic synthetic flow records UDP exported (IPFIX) 0 COLLECTOR_UNREACHABLE → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded n/a GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 5 What this monitor counts · netflow:collector GoFlow2 metrics endpoint did not answer; no UDP was sent. The normaliz",
+   "readiness_states": [
+    "DELIVERING",
+    "INDEXING",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: volumetric DDoS indicators (SYN flood and UDP) · run run-41ff3797e6ad · 820 events indexed · 0m 18s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-41ff3797e6ad&form.index_tok=idx_network_ops&form.global_time.earliest=1793621684&form.global_time.latest=1793622306",
+   "counters": "Generated 820 Attempts 820 HEC accepted 820 Rejected 0 Unknown 0 Pending 0 Indexed (verified) Not verified EPS now / avg 0 / 46.59 Elapsed 0m 18s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-NOC-01-ELEPHANT": {
+   "scenario_id": "NF-NOC-01-ELEPHANT",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: bandwidth saturation and elephant flows NF-NOC-01-ELEPHANT · netflow_solution · dashboard ava",
+   "config_shown": true,
+   "config_for": "Configure NOC-01",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (220) → elephant (4) Volume 224 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.0.1:18088",
+   "monitor_title": "NetFlow: bandwidth saturation and elephant flows",
+   "monitor_run": "run-b7052460b396",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 224 Deterministic synthetic flow records UDP exported (IPFIX) 224 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 224 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 14 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: bandwidth saturation and elephant flows · run run-b7052460b396 · 224 events indexed · 0m 5s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-NOC-01-ELEPHANT?form.run_tok=run-b7052460b396&form.index_tok=idx_network_ops&form.global_time.earliest=1793545695&form.global_time.latest=1793546305",
+   "counters": "Generated 224 Attempts 224 HEC accepted 224 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 202 EPS now / avg 0 / 47.1 Elapsed 0m 5s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-NOC-02-DSCP": {
+   "scenario_id": "NF-NOC-02-DSCP",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: QoS and DSCP marking validation NF-NOC-02-DSCP · netflow_solution · dashboard available · ind",
+   "config_shown": true,
+   "config_for": "Configure NOC-02",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (80) → voice-video (260) Volume 340 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.0.1:1",
+   "monitor_title": "NetFlow: QoS and DSCP marking validation",
+   "monitor_run": "run-918b3b59fe50",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 340 Deterministic synthetic flow records UDP exported (IPFIX) 340 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 340 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 15 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "INDEXING",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: QoS and DSCP marking validation · run run-918b3b59fe50 · 340 events indexed · 0m 7s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-NOC-02-DSCP?form.run_tok=run-918b3b59fe50&form.index_tok=idx_network_ops&form.global_time.earliest=1793545760&form.global_time.latest=1793546370",
+   "counters": "Generated 340 Attempts 340 HEC accepted 340 Rejected 0 Unknown 0 Pending 0 Indexed (verified) Not verified EPS now / avg 0 / 46.42 Elapsed 0m 7s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-NOC-03-ROUTING-LOOP": {
+   "scenario_id": "NF-NOC-03-ROUTING-LOOP",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: routing-loop indicators (flow-only) NF-NOC-03-ROUTING-LOOP · netflow_solution · dashboard ava",
+   "config_shown": true,
+   "config_for": "Configure NOC-03",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (160) → repeat-observation (120) Volume 280 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127",
+   "monitor_title": "NetFlow: routing-loop indicators (flow-only)",
+   "monitor_run": "run-9a5f6740fe5d",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 280 Deterministic synthetic flow records UDP exported (IPFIX) 280 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 280 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 16 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: routing-loop indicators (flow-only) · run run-9a5f6740fe5d · 280 events indexed · 0m 6s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-NOC-03-ROUTING-LOOP?form.run_tok=run-9a5f6740fe5d&form.index_tok=idx_network_ops&form.global_time.earliest=1793545806&form.global_time.latest=1793546418",
+   "counters": "Generated 280 Attempts 280 HEC accepted 280 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 246 EPS now / avg 0 / 47.3 Elapsed 0m 6s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-NOC-04-ASYMMETRY": {
+   "scenario_id": "NF-NOC-04-ASYMMETRY",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: asymmetric-routing indicators NF-NOC-04-ASYMMETRY · netflow_solution · dashboard available · ",
+   "config_shown": true,
+   "config_for": "Configure NOC-04",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases paired (102) → reverse-elsewhere (12) Volume 114 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.",
+   "monitor_title": "NetFlow: asymmetric-routing indicators",
+   "monitor_run": "run-eecc9d584c18",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 114 Deterministic synthetic flow records UDP exported (IPFIX) 114 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 114 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 15 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: asymmetric-routing indicators · run run-eecc9d584c18 · 114 events indexed · 0m 2s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-NOC-04-ASYMMETRY?form.run_tok=run-eecc9d584c18&form.index_tok=idx_network_ops&form.global_time.earliest=1793545853&form.global_time.latest=1793546461",
+   "counters": "Generated 114 Attempts 114 HEC accepted 114 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 108 EPS now / avg 0 / 47.05 Elapsed 0m 2s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-NOC-05-BASELINE-DRIFT": {
+   "scenario_id": "NF-NOC-05-BASELINE-DRIFT",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: application baseline and duration drift NF-NOC-05-BASELINE-DRIFT · netflow_solution · dashboa",
+   "config_shown": true,
+   "config_for": "Configure NOC-05",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases baseline (373) → drift (47) Volume 420 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.0.1:18088 ",
+   "monitor_title": "NetFlow: application baseline and duration drift",
+   "monitor_run": "run-4e72e362d823",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 420 Deterministic synthetic flow records UDP exported (IPFIX) 420 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 420 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 15 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: application baseline and duration drift · run run-4e72e362d823 · 420 events indexed · 0m 9s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-NOC-05-BASELINE-DRIFT?form.run_tok=run-4e72e362d823&form.index_tok=idx_network_ops&form.global_time.earliest=1793545895&form.global_time.latest=1793546507",
+   "counters": "Generated 420 Attempts 420 HEC accepted 420 Rejected 0 Unknown 0 Pending 0 Indexed (verified) Not verified EPS now / avg 0 / 46.55 Elapsed 0m 9s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-SEC-07-PORTSCAN": {
+   "scenario_id": "NF-SEC-07-PORTSCAN",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: network reconnaissance and port scanning NF-SEC-07-PORTSCAN · netflow_solution · dashboard av",
+   "config_shown": true,
+   "config_for": "Configure SEC-07",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (162) → horizontal-scan (60) → vertical-scan (40) Volume 262 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination",
+   "monitor_title": "NetFlow: network reconnaissance and port scanning",
+   "monitor_run": "run-29ded2aa12c9",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 262 Deterministic synthetic flow records UDP exported (IPFIX) 262 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 262 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 16 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: network reconnaissance and port scanning · run run-29ded2aa12c9 · 262 events indexed · 0m 6s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-SEC-07-PORTSCAN?form.run_tok=run-29ded2aa12c9&form.index_tok=idx_network_ops&form.global_time.earliest=1793545998&form.global_time.latest=1793546609",
+   "counters": "Generated 262 Attempts 262 HEC accepted 262 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 242 EPS now / avg 0 / 46.24 Elapsed 0m 6s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-SEC-08-EXFIL": {
+   "scenario_id": "NF-SEC-08-EXFIL",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: outbound data-exfiltration indicators NF-SEC-08-EXFIL · netflow_solution · dashboard availabl",
+   "config_shown": true,
+   "config_for": "Configure SEC-08",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (200) → outbound-transfer (12) Volume 212 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0",
+   "monitor_title": "NetFlow: outbound data-exfiltration indicators",
+   "monitor_run": "run-0eb7163d3e7e",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 212 Deterministic synthetic flow records UDP exported (IPFIX) 212 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 212 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 15 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: outbound data-exfiltration indicators · run run-0eb7163d3e7e · 212 events indexed · 0m 5s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-SEC-08-EXFIL?form.run_tok=run-0eb7163d3e7e&form.index_tok=idx_network_ops&form.global_time.earliest=1793546064&form.global_time.latest=1793546674",
+   "counters": "Generated 212 Attempts 212 HEC accepted 212 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 198 EPS now / avg 0 / 47.33 Elapsed 0m 5s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-SEC-09-BEACON": {
+   "scenario_id": "NF-SEC-09-BEACON",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: command-and-control beaconing indicators NF-SEC-09-BEACON · netflow_solution · dashboard avai",
+   "config_shown": true,
+   "config_for": "Configure SEC-09",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases traffic (212) → beacon (9) Volume 221 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.0.1:18088 ·",
+   "monitor_title": "NetFlow: command-and-control beaconing indicators",
+   "monitor_run": "run-a32b3040ba42",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 221 Deterministic synthetic flow records UDP exported (IPFIX) 221 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 221 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 16 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: command-and-control beaconing indicators · run run-a32b3040ba42 · 221 events indexed · 0m 5s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-SEC-09-BEACON?form.run_tok=run-a32b3040ba42&form.index_tok=idx_network_ops&form.global_time.earliest=1793546109&form.global_time.latest=1793546719",
+   "counters": "Generated 221 Attempts 221 HEC accepted 221 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 185 EPS now / avg 0 / 47.43 Elapsed 0m 5s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  },
+  "NF-SEC-10-DNS-FLOW": {
+   "scenario_id": "NF-SEC-10-DNS-FLOW",
+   "search_hit": "SCENARIO RUNNABLE NetFlow: DNS-tunneling indicators (flow-only, limited evidence) NF-SEC-10-DNS-FLOW · netflow_solution ",
+   "config_shown": true,
+   "config_for": "Configure SEC-10",
+   "preview_shown": true,
+   "preview_text": "What this run will do Telemetry netflow:collector Phases dns (440) → dns-heavy (280) Volume 720 events (deterministic flow generator at default settings (duration 180 s, scale 1.0); scale and duration change the count) Destination DOCKER_LAB · 127.0.0.1:18088 ",
+   "monitor_title": "NetFlow: DNS-tunneling indicators (flow-only, limited evidence)",
+   "monitor_run": "run-21672c8d10a0",
+   "wire_panel": "NetFlow/IPFIX stages Stage Records Meaning Generated flows 720 Deterministic synthetic flow records UDP exported (IPFIX) 720 COLLECTOR_DECODED → 127.0.0.1:4739; the OS accepted the datagrams Collector decoded 720 GoFlow2 record counter delta; not HEC and not indexing HEC accepted (normalized events) 15 What this monitor counts · netflow:collector collector_decoded is the GoFlow2 data-record counter delta during this ",
+   "readiness_states": [
+    "DELIVERING",
+    "INDEXING",
+    "PARTIALLY_READY",
+    "READY"
+   ],
+   "toast": "Your scenario data is ready in Splunk.\nNetFlow: DNS-tunneling indicators (flow-only, limited evidence) · run run-21672c8d10a0 · 720 events indexed · 0m 16s\nOpen dashboard\nView evidence\nDismiss",
+   "href": "/en-US/app/netspout/pf_NF-SEC-10-DNS-FLOW?form.run_tok=run-21672c8d10a0&form.index_tok=idx_network_ops&form.global_time.earliest=1793546153&form.global_time.latest=1793546775",
+   "counters": "Generated 720 Attempts 720 HEC accepted 720 Rejected 0 Unknown 0 Pending 0 Indexed (verified) 720 EPS now / avg 0 / 46.18 Elapsed 0m 16s ETA 0m 0s",
+   "dashboard": {
+    "run_id_visible": true,
+    "no_results_panels": 0,
+    "errors": 0
+   },
+   "title_matches": true,
+   "config_matches": true,
+   "ok": true
+  }
+ }
+}

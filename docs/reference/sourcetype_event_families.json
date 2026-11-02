@@ -1,0 +1,288 @@
+{
+ "Confluence:audit log": [
+  "space_created",
+  "group_membership_added"
+ ],
+ "SysdigSecureEvents": [
+  "runtime_activity",
+  "kubernetes_audit"
+ ],
+ "barracuda:waf:web_firewall": [
+  "parameter_profile_violation",
+  "url_profile_violation"
+ ],
+ "bitdefender:gz": [
+  "phishing_blocked",
+  "av_malware_detected",
+  "firewall_portscan_blocked"
+ ],
+ "bluecoat:proxysg:access:file": [
+  "proxy_observed",
+  "proxy_denied"
+ ],
+ "ccx:beyondinsight:passwordsafe": [
+  "secret_folder_added"
+ ],
+ "cisco:catalyst:rogue:verbose": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:catalyst:security:profile_signatures": [
+  "captured_1"
+ ],
+ "cisco:catalyst:threat:summary": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:catalyst:threat:summary:legacy": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:dc:aci:class": [
+  "captured_1"
+ ],
+ "cisco:dc:nexus9k": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:AAA-6-METHOD_LIST_STATE": [
+  "dead",
+  "alive"
+ ],
+ "cisco:sdwan:AAA-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT": [
+  "dead",
+  "alive"
+ ],
+ "cisco:sdwan:AAA_AUDIT_MESSAGE-6-METHOD_LIST_STATE": [
+  "captured_1"
+ ],
+ "cisco:sdwan:AAA_AUDIT_MESSAGE-6-NOTIFY_MLIST_STATE_TO_AAA_CLIENT": [
+  "captured_1"
+ ],
+ "cisco:sdwan:BGP-5-ADJCHANGE": [
+  "vrf_down",
+  "up"
+ ],
+ "cisco:sdwan:BGP-5-NBR_RESET": [
+  "peer_closed"
+ ],
+ "cisco:sdwan:BGP-6-NEXTHOP": [
+  "captured_1"
+ ],
+ "cisco:sdwan:BGP_SESSION-5-ADJCHANGE": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:CDP-4-NATIVE_VLAN_MISMATCH": [
+  "vlan_mismatch"
+ ],
+ "cisco:sdwan:CRYPTO-6-ISAKMP_ON_OFF": [
+  "captured_1"
+ ],
+ "cisco:sdwan:CTS-3-AAA_NO_RADIUS_SERVER": [
+  "captured_1"
+ ],
+ "cisco:sdwan:DMI-5-AUTH_PASSED": [
+  "captured_1"
+ ],
+ "cisco:sdwan:DMI-5-CONFIG_I": [
+  "captured_1"
+ ],
+ "cisco:sdwan:DMI-5-SYNC_COMPLETE": [
+  "captured_1"
+ ],
+ "cisco:sdwan:DMI-5-SYNC_NEEDED": [
+  "sync_needed"
+ ],
+ "cisco:sdwan:DMI-5-SYNC_START": [
+  "captured_1"
+ ],
+ "cisco:sdwan:ENVIRONMENTAL-1-ALERT": [
+  "temperature"
+ ],
+ "cisco:sdwan:EVENTLIB-3-CPUHOG": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:IOSXE-3-PLATFORM": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:IOSXE_INFRA-4-NO_PUNT_KEEPALIVE": [
+  "captured_1"
+ ],
+ "cisco:sdwan:IOSXE_RP_PAE_NOT-6-PAE_STARTUP": [
+  "captured_1"
+ ],
+ "cisco:sdwan:LINEPROTO-5-UPDOWN": [
+  "line_protocol"
+ ],
+ "cisco:sdwan:LINK-5-CHANGED": [
+  "admin_down"
+ ],
+ "cisco:sdwan:LINK-5-UPDOWN": [
+  "link_state"
+ ],
+ "cisco:sdwan:MDT_CONNECTION-6-STATE_CHANGED": [
+  "connection_state"
+ ],
+ "cisco:sdwan:MSDP-5-PEER_UPDOWN": [
+  "peer_state"
+ ],
+ "cisco:sdwan:NDBMAN-5-CONFIG_I": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:OSPF-5-ADJCHG": [
+  "adjacency"
+ ],
+ "cisco:sdwan:PKI-6-AUTHORITATIVE_CLOCK": [
+  "captured_1"
+ ],
+ "cisco:sdwan:PLATFORM-4-ELEMENT_WARNING": [
+  "load_average"
+ ],
+ "cisco:sdwan:SYS-5-CONFIG_P": [
+  "captured_1"
+ ],
+ "cisco:sdwan:ssetunnels": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:sytem:logs": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:utd:logs": [
+  "captured_1",
+  "captured_2"
+ ],
+ "cisco:sdwan:utdhealth": [
+  "captured_1",
+  "captured_2"
+ ],
+ "claroty:cef": [
+  "new_asset",
+  "asset_information_change",
+  "health"
+ ],
+ "cybereason:malops": [
+  "malop_process_injection"
+ ],
+ "darktrace": [
+  "uncommon_outbound_model",
+  "antigena_internal_transfer"
+ ],
+ "docker_events": [
+  "container_lifecycle",
+  "network_connect"
+ ],
+ "elasticsearch:json": [
+  "data_stream_provisioning",
+  "shard_bootstrapping"
+ ],
+ "github:enterprise:audit": [
+  "enterprise_user_login",
+  "repository_merge"
+ ],
+ "gitlab:audit:json": [
+  "session_login",
+  "git_operation"
+ ],
+ "hashicorp_vault_audit_log": [
+  "audit_request",
+  "audit_response"
+ ],
+ "ibm:mq:errorlog": [
+  "queue_manager_created",
+  "control_command_issued"
+ ],
+ "ibm:qradar:offense": [
+  "generic_log_offense",
+  "message_offense",
+  "authentication_offense"
+ ],
+ "imperva:securesphere:cef": [
+  "administrator_login",
+  "database_audit"
+ ],
+ "mikrotik:routeros": [
+  "administrator_login",
+  "ospf_hello_sent"
+ ],
+ "mongodb:log": [
+  "server_start",
+  "index_build"
+ ],
+ "nginx:access": [
+  "http_access"
+ ],
+ "nginx:plus:access": [
+  "captured_1",
+  "captured_2",
+  "captured_3",
+  "captured_4",
+  "captured_5"
+ ],
+ "nozomi:universal_alert": [
+  "ot_ids_program_change"
+ ],
+ "oracle:audit:text": [
+  "sql_select_audit"
+ ],
+ "pfsense:filterlog": [
+  "ipv4_tcp_block",
+  "ipv4_udp_pass",
+  "ipv6_udp_block"
+ ],
+ "proofpoint_tap_siem": [
+  "malware_message_blocked",
+  "phishing_message_blocked"
+ ],
+ "qualys:activityLog": [
+  "console_login",
+  "configuration_change"
+ ],
+ "rapid7:insightvm:asset:vulnerability_finding": [
+  "steady_state_asset_exposure",
+  "critical_findings_asset_exposure"
+ ],
+ "sailpoint_identitynow": [
+  "password_update",
+  "machine_identity_created"
+ ],
+ "sentinelone:channel:threats": [
+  "threat_trojan_detected",
+  "threat_malware_agent_reported"
+ ],
+ "slack:audit": [
+  "user_login",
+  "admin_console_anomaly",
+  "malicious_file_detected"
+ ],
+ "tanium:discover:managed": [
+  "managed_endpoint_inventory"
+ ],
+ "tenable:io:audit_logs": [
+  "password_authentication_failure",
+  "session_created",
+  "session_deleted"
+ ],
+ "traefik:access:json": [
+  "http_access"
+ ],
+ "trellix_epo:threat_events": [
+  "nips_port_scan_handled",
+  "blocked_process_access",
+  "nids_would_block_unhandled"
+ ],
+ "veeam_vbr_syslog": [
+  "backup_job_started",
+  "backup_job_completed",
+  "malware_detected"
+ ],
+ "wazuh:alerts": [
+  "rootcheck_hidden_process",
+  "rootcheck_hidden_file"
+ ]
+}

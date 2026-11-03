@@ -56,6 +56,7 @@ class SplunkLogEngine:
         src_interface: str = "outside",
         dest_interface: str = "inside",
         bytes_count: int = 0,
+        direction: str = "inbound",
     ) -> LogEntry:
         now_ts = SplunkLogEngine.current_timestamp_iso()
         now_syslog = SplunkLogEngine.current_timestamp_syslog()
@@ -64,7 +65,7 @@ class SplunkLogEngine:
         # Cisco ASA 302013/14 (TCP), 302015/16 (UDP), 106023 (deny).
         # Simulation annotations remain on LogEntry, never inside the vendor body.
         protocol = proto.upper()
-        if protocol not in {"TCP", "UDP"} or event_type not in {"build", "teardown"}:
+        if protocol not in {"TCP", "UDP"} or event_type not in {"build", "teardown"} or direction not in {"inbound", "outbound"}:
             raise ValueError("Unsupported ASA connection event")
         if connection_id is None:
             identity = f"{device.id}|{src_ip}|{src_port}|{dest_ip}|{dest_port}|{protocol}"
@@ -87,7 +88,7 @@ class SplunkLogEngine:
         else:
             code = 302013 if protocol == "TCP" else 302015
             # Identity translation unless explicit mapped socket values are supplied.
-            message = (f"%ASA-6-{code}: Built inbound {protocol} connection {connection_id} "
+            message = (f"%ASA-6-{code}: Built {direction} {protocol} connection {connection_id} "
                        f"for {source} ({mapped_src or f'{src_ip}/{src_port}'}) "
                        f"to {destination} ({mapped_dest or f'{dest_ip}/{dest_port}'})")
         raw = f"{now_syslog} {dev_id} {message}"

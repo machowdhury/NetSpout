@@ -1,0 +1,16 @@
+{
+ "_comment": "Message templates from the Cisco Secure Firewall ASA syslog guide (302013/302014/302015/302016/106023), written as regexes. 'documented_examples' reproduce the template shape (connection id shared by build and teardown, duration hh:mm:ss, 'TCP FINs' reason) as shown in Cisco's ASA FAQ 116149; they are shape fixtures, not captures from a production ASA.",
+ "header": "^[A-Z][a-z]{2} [ \\d]\\d \\d{2}:\\d{2}:\\d{2} \\S+ %ASA-\\d-\\d{6}: ",
+ "formats": {
+  "302013": "%ASA-6-302013: Built (inbound|outbound) TCP connection (\\d+) for (\\w+):([\\d.]+)/(\\d+) \\(([\\d.]+)/(\\d+)\\) to (\\w+):([\\d.]+)/(\\d+) \\(([\\d.]+)/(\\d+)\\)$",
+  "302014": "%ASA-6-302014: Teardown TCP connection (\\d+) for (\\w+):([\\d.]+)/(\\d+) to (\\w+):([\\d.]+)/(\\d+) duration (\\d+:\\d{2}:\\d{2}) bytes (\\d+)( [A-Za-z0-9 -]+)?$",
+  "302015": "%ASA-6-302015: Built (inbound|outbound) UDP connection (\\d+) for (\\w+):([\\d.]+)/(\\d+) \\(([\\d.]+)/(\\d+)\\) to (\\w+):([\\d.]+)/(\\d+) \\(([\\d.]+)/(\\d+)\\)$",
+  "302016": "%ASA-6-302016: Teardown UDP connection (\\d+) for (\\w+):([\\d.]+)/(\\d+) to (\\w+):([\\d.]+)/(\\d+) duration (\\d+:\\d{2}:\\d{2}) bytes (\\d+)$",
+  "106023": "%ASA-4-106023: Deny (tcp|udp|icmp) src (\\w+):([\\d.]+)/(\\d+) dst (\\w+):([\\d.]+)/(\\d+) by access-group \"[^\"]+\" \\[0x[0-9a-f]+, 0x[0-9a-f]+\\]$"
+ },
+ "documented_examples": [
+  "Nov  3 10:00:00 asa-fw-01 %ASA-6-302013: Built outbound TCP connection 8 for outside:198.51.100.80/80 (198.51.100.80/80) to inside:10.20.10.45/51360 (203.0.113.9/51360)",
+  "Nov  3 10:00:53 asa-fw-01 %ASA-6-302014: Teardown TCP connection 8 for outside:198.51.100.80/80 to inside:10.20.10.45/51360 duration 0:00:53 bytes 2436 TCP FINs",
+  "Nov  3 10:01:02 asa-fw-01 %ASA-4-106023: Deny tcp src outside:203.0.113.88/44820 dst inside:10.20.10.5/22 by access-group \"outside_access_in\" [0x8f2a1b9c, 0x0]"
+ ]
+}

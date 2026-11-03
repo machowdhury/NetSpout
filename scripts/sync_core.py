@@ -30,6 +30,7 @@ CORE_MODULES = [
     "models.py",
     "graph_engine.py",
     "log_engine.py",
+    "asa_generator.py",
     "universe_batch1_engine.py",
     "universe_batch2_engine.py",
     "universe_batch3_engine.py",

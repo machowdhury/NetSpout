@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from netspout_core.catalog import NetSpoutCatalog
 from netspout_core.log_engine import SplunkLogEngine
+from netspout_core.asa_generator import SOURCETYPE as ASA_SOURCETYPE, generate_asa_entries
 from netspout_core.vendor_catalog import get_vendor_by_id
 from netspout_core.models import (
     EcosystemMode,
@@ -45,6 +46,27 @@ def _find_samples_dirs() -> List[str]:
         "/opt/splunk/etc/apps/netspout/appserver/static/samples"
     ]
     return [c for c in candidates if os.path.isdir(c)]
+
+
+MDT_METRIC_SOURCETYPE = "cisco:ios:mdt:metric"
+
+
+def _mdt_metric_entries(count: int) -> List[LogEntry]:
+    """Interface and platform counters as OpenConfig MDT records, one per interface in turn; delivered as HEC metrics (metric_name:* fields)."""
+    rng = random.Random()
+    dev = Node(id="ncs-edge-01", name="ncs-edge-01", type=NodeType.ROUTER, x=0, y=0, ip_address="10.200.1.1", vendor="cisco_ios", sourcetype=MDT_METRIC_SOURCETYPE)
+    ifs = ["GigabitEthernet0/0/0", "GigabitEthernet0/0/1", "TenGigE0/0/0/1"]
+    base = {i: rng.randint(10**7, 10**9) for i in ifs}
+    out = []
+    for n in range(count):
+        i = ifs[n % len(ifs)]
+        base[i] += rng.randint(10**5, 5 * 10**6)
+        out.append(SplunkLogEngine.format_mdt_stream(dev, interface_name=i, in_octets=base[i], out_octets=int(base[i] * 1.2), cpu_pct=round(rng.uniform(5, 60), 1),
+                                                     memory_pct=round(rng.uniform(20, 70), 1), sourcetype=MDT_METRIC_SOURCETYPE))
+    return out
+
+
+_NATIVE = {ASA_SOURCETYPE: generate_asa_entries, MDT_METRIC_SOURCETYPE: _mdt_metric_entries}
 
 
 class TelemetryGeneratorService:
@@ -285,6 +307,13 @@ class TelemetryGeneratorService:
                         index=index or 'idx_network_ops', host=entry.device_id, raw=entry.raw_log,
                         provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
                         dispatched=dispatch, dispatch_result=result)
+        if sourcetype in _NATIVE:
+            e = _NATIVE[sourcetype](1)[0]
+            target_index = index or "idx_network_ops"
+            res = dispatcher.dispatch_log(e, transport_config or TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_index=target_index)) if dispatch else None
+            return {"mode": "SINGLE_EVENT", "status": "GROUNDED", "event_id": e.netspout_event_id, "vendor_id": vendor_id, "sourcetype": sourcetype, "event_name": event_name or "Event",
+                    "index": target_index, "host": e.device_id, "raw": e.raw_log, "provenance": self._NATIVE_PROVENANCE[sourcetype], "dispatched": dispatch, "dispatch_result": res}
+        self._reject_non_ta_name(sourcetype)
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -380,6 +409,9 @@ class TelemetryGeneratorService:
                         rate_eps=rate_eps, index=index or 'idx_network_ops', event_families=families,
                         provenance=dict(classification=source.get('evidence_level', 'VENDOR_DOCUMENTED'), source=reference),
                         sample_preview=[entry.raw_log for entry in entries[:3]])
+        if sourcetype in _NATIVE:
+            return self._native_batch(vendor_id, sourcetype, count, rate_eps, dispatch, transport_config, index)
+        self._reject_non_ta_name(sourcetype)
         samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
         if not samples:
             return {
@@ -451,6 +483,30 @@ class TelemetryGeneratorService:
             "sample_preview": events_generated[:3]
         }
 
+    _NATIVE_PROVENANCE = {
+        ASA_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "netspout_core/asa_generator.py; message formats per Cisco ASA syslog guide (302013-302016, 106023); sourcetype declared by Splunk Add-on for Cisco ASA (Splunkbase 1620); TA parsing NOT verified"},
+        MDT_METRIC_SOURCETYPE: {"classification": "VENDOR_DOCUMENTED", "source": "SplunkLogEngine.format_mdt_stream (OpenConfig interface and platform counters); delivered as Splunk HEC metrics"},
+    }
+
+    @staticmethod
+    def _reject_non_ta_name(sourcetype: str):
+        if sourcetype == "cisco:asa:syslog":
+            raise ValueError("NON_CANONICAL_SOURCETYPE: 'cisco:asa:syslog' is not a Splunk Add-on for Cisco ASA sourcetype; use 'cisco:asa'")
+
+    def _native_batch(self, vendor_id, sourcetype, count, rate_eps, dispatch, transport_config, index):
+        target_index = index or "idx_network_ops"
+        entries = _NATIVE[sourcetype](count)
+        cfg = transport_config or TelemetryTransportConfig(hec_url="https://127.0.0.1:8088/services/collector", hec_index=target_index)
+        sent = 0
+        for e in entries:
+            e.netspout_event_id = e.netspout_event_id or str(uuid.uuid4())
+            e.netspout_ground_truth = "true"
+            if dispatch:
+                res = dispatcher.dispatch_log(e, cfg)
+                sent += bool(res.get("hec", {}).get("success") or res.get("syslog", {}).get("success"))
+        return {"mode": "SOURCETYPE_BATCH", "status": "GROUNDED", "vendor_id": vendor_id, "sourcetype": sourcetype, "count_requested": count, "count_generated": len(entries),
+                "count_dispatched": sent, "rate_eps": rate_eps, "index": target_index, "provenance": self._NATIVE_PROVENANCE[sourcetype], "sample_preview": [e.raw_log for e in entries[:3]]}
+
     def prepare_sourcetype_entries(self, vendor_id: str, sourcetype: str, count: int, event_families: Optional[List[str]] = None,
                                    run_id: Optional[str] = None):
         """Build (not send) the LogEntry list for one sourcetype so a monitored run can deliver them with exact per-event accounting.
@@ -465,7 +521,14 @@ class TelemetryGeneratorService:
                 raise ValueError("Unsupported native event family")
             entries = [self._universe_entry(source, vendor_id, families[i % len(families)]) for i in range(count)]
             prov = dict(classification=source.get("evidence_level", "VENDOR_DOCUMENTED"), source=reference, mode="native")
+        elif sourcetype in _NATIVE:
+            entries = _NATIVE[sourcetype](count)
+            for e in entries:
+                e.netspout_event_id = e.netspout_event_id or str(uuid.uuid4())
+                e.netspout_ground_truth = "true"
+            prov = dict(self._NATIVE_PROVENANCE[sourcetype], mode="native")
         else:
+            self._reject_non_ta_name(sourcetype)
             samples, prov_class, source_ref = self.get_grounded_samples(sourcetype, vendor_id=vendor_id)
             if not samples:
                 raise ValueError("TELEMETRY_NOT_GROUNDED: no authoritative vendor log schema or verified sample exists for " + sourcetype)

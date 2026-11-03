@@ -1,0 +1,3841 @@
+{
+ "summary": {
+  "files_found": 171,
+  "symlinks_skipped": 0,
+  "inspected": 171,
+  "failed": 0,
+  "no_app_found": 0,
+  "byte_identical_duplicates": 11,
+  "unique_files_by_sha256": 160,
+  "distinct_app_identities_id_version": 162,
+  "distinct_app_ids": 162,
+  "total_bytes": 1943366270
+ },
+ "packages": [
+  {
+   "filename": "acunetix-360-add-on_175.tgz",
+   "bytes": 6209258,
+   "sha256": "50f46bbb25298725427b111ffa3f7f61c028bbb2d121b2512e63f50cb6c0e386",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-acunetix-360-add-on-for-splunk-cloud",
+     "label": "Acunetix 360 Add-On For Splunk Cloud",
+     "version": "1.7.5",
+     "publisher": "Acunetix Ltd",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "add-on-for-bluecat-ipam-new_320.tar.gz",
+   "bytes": 2671305,
+   "sha256": "a1b0a675161cb0b14e8a168e4350ee83ac5cd60dd5b2aac0baf960ecc9288b1a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-bluecat_ipam",
+     "label": "Add-on for BlueCat Address Manager",
+     "version": "3.2.0",
+     "publisher": "caldwell@gwu.edu",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "add-on-for-paloalto-dlp_200.tgz",
+   "bytes": 1574002,
+   "sha256": "9792a43fb56922d3e8f9fd3e90a137eb5dbd49b435d2d2eccb7b57f14862c578",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-paloalto-dlp",
+     "label": "Add-on for Paloalto DLP",
+     "version": "2.0.0",
+     "publisher": "Rotimi Akinbobola",
+     "type": "sourcetype definitions",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "add-on-for-proofpoint-incidents_301.tar.gz",
+   "bytes": 18265558,
+   "sha256": "97c5ffe48f6a952213c88fadbd0f34b567a6774c5bd810a34b61877234a430fa",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-proofpoint-incidents",
+     "label": "Add-on for Proofpoint incidents",
+     "version": "3.0.1",
+     "publisher": "Rotimi",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "add-on-for-sophos-central-cef_100.tar.gz",
+   "bytes": 6547,
+   "sha256": "397a0c9c11f40a47827887c9620de8145253c6878471cb8ab512ca045706fc4e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-sophos-central-cef",
+     "label": "Binary Global Add-on for Sophos Central CEF",
+     "version": "1.0.0",
+     "publisher": "Binary Global",
+     "type": "TA",
+     "sourcetypes": 9,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "akamai-guardicore-add-on-for-splunk_310.tgz",
+   "bytes": 7743628,
+   "sha256": "73c82a50c84a06ae46962e300525f5e95f289df2b7361e34c4beb34ad28d7fa7",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-akamai-centra-add-on-for-splunk",
+     "label": "Akamai Guardicore Add-on For Splunk",
+     "version": "3.1.0",
+     "publisher": "Akamai Technologies",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "arista-networks-telemetry-for-splunk_202.tgz",
+   "bytes": 66079,
+   "sha256": "7072ffc24501425cec502771157d08699601c6b74f5663e48b4e08189da4ad5d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "aristanetworks",
+     "label": "Arista Networks 2.0.2",
+     "version": "2.0.2",
+     "publisher": "Arista EOS+ <eosplus@arista.com>",
+     "type": "TA",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "aruba-networks-add-on-for-splunk_112.tgz",
+   "bytes": 18756,
+   "sha256": "077f71d89dec7abeddf0dc84d045deafea4f028091b723f99334b13a2cc20650",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-aruba_networks",
+     "label": "Aruba Networks Add-on for Splunk",
+     "version": "1.1.2",
+     "publisher": "diogofgm",
+     "type": "TA",
+     "sourcetypes": 31,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "auvik-networks-add-on-for-splunk_104.tar.gz",
+   "bytes": 1896361,
+   "sha256": "0da111b3b81673527ebf5b67cb963dabf9035606148796bf678d01c5215e75d5",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-auvik-networks-add-on-for-splunk",
+     "label": "Auvik Networks Add-on for Splunk",
+     "version": "1.0.4",
+     "publisher": "Data Elicit Solutions",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "aviatrix-add-on-for-splunk_201.tar.gz",
+   "bytes": 21055,
+   "sha256": "347dacba558c1426e57beea87961aa95002e24798f0a6a8ed253f1df660d26ae",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-aviatrix",
+     "label": "Aviatrix Add-on for Splunk",
+     "version": "2.0.1",
+     "publisher": "Aviatrix",
+     "type": "TA",
+     "sourcetypes": 8,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "bigid-audit-logs-add-on-for-splunk_200.spl",
+   "bytes": 3457886,
+   "sha256": "5342089ef70489ea9c22d7a893f111f0d59f74d357ba8d7c0160d82dfbdb2ece",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-bigid-audits",
+     "label": "BigID Audit logs",
+     "version": "2.0.0",
+     "publisher": "BigID",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "bitbucket-add-on-for-splunk_1015.tgz",
+   "bytes": 5857453,
+   "sha256": "c4e2d366ae552327b23e80b8073e1ffff9e18abd21c1fdc07151e910902d8f47",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "bitbucket_addon_for_splunk",
+     "label": "Bitbucket Add-on for Splunk",
+     "version": "1.0.15",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 18,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "bluecat-dns-edge-technical-add-on-for-splunk_155.tgz",
+   "bytes": 374195,
+   "sha256": "72868e2b7a2d3b43e917bc13c1beb7b61557c6e4167004b218786cb41620cc17",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_BlueCat_dns_edge",
+     "label": "BlueCat DNS Edge Technology Add-on for Splunk",
+     "version": "1.5.5",
+     "publisher": "BlueCat",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "bxti-add-on-for-proofpoint-ser_102.tar.gz",
+   "bytes": 2788578,
+   "sha256": "e63599dc1428fc98f955605c1f91608b9c5f7b1dbed25fb5ba7ca4250dffc57b",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-bxti-proofpoint-ser",
+     "label": "BXTI Add-on for Proofpoint SER",
+     "version": "1.0.2",
+     "publisher": "BXTI",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 12,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-abnormal-security-products-email-security_103.tgz",
+   "bytes": 18508,
+   "sha256": "be853e5284d1ff6a0c5f5e66ef1eb4b5d76e547343c71358420ce97a45ac2973",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Abnormal_Security",
+     "label": "CCX Add-on for Abnormal Security Products",
+     "version": "1.0.3",
+     "publisher": "CyberCX",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-auth0_108.tar.gz",
+   "bytes": 21810,
+   "sha256": "736e2d35bdbf1e4c1a071b980c8cca9eef001f934f18fdb2da0b641723a5e840",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Auth0",
+     "label": "CCX Add-on for Auth0",
+     "version": "1.0.8",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-imperva-waf-incapsula-flexprotect_106.tgz",
+   "bytes": 18313,
+   "sha256": "8375aaf35fdb200396c88bb652efd94c69dcd9e00bff4671ee783c48e94b1db4",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Imperva_WAF",
+     "label": "CCX Add-on for Imperva WAF",
+     "version": "1.0.6",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-lacework-products_103 (1).tgz",
+   "bytes": 18149,
+   "sha256": "dc044a8b3a40b9077ea449f61f0bb2173348be0aea0a8309a220a06988583317",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Lacework_Products",
+     "label": "CCX Add-on for Lacework",
+     "version": "1.0.3",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-lacework-products_103.tgz",
+   "bytes": 18149,
+   "sha256": "dc044a8b3a40b9077ea449f61f0bb2173348be0aea0a8309a220a06988583317",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "ccx-add-on-for-lacework-products_103 (1).tgz",
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Lacework_Products",
+     "label": "CCX Add-on for Lacework",
+     "version": "1.0.3",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-netsuite-products_102.tgz",
+   "bytes": 16392,
+   "sha256": "9fcdd63d332d13437351a82e43f1ee081e931809b096793bf8367141b8a11dc7",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_NetSuite_Products",
+     "label": "CCX Add-on for NetSuite Products",
+     "version": "1.0.2",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-snowflake_105.tar.gz",
+   "bytes": 18110,
+   "sha256": "d9fae23a525c31cbafe3e736e1abbbaed734b9258a271edc0538a07b36da3a6d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Snowflake_CIM_Support",
+     "label": "CCX Add-on for Snowflake",
+     "version": "1.0.5",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 8,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-suricata_101.tgz",
+   "bytes": 19347,
+   "sha256": "c0fad6b6400fd3d4948284e2d42554d8668f5ab68a3067fea3657f5a272ddc72",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Suricata",
+     "label": "CCX Add-on for Suricata",
+     "version": "1.0.1",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-add-on-for-symantec-bluecoat-proxysg-extensions_102.tgz",
+   "bytes": 16730,
+   "sha256": "5ae53e8dfdb6f0cf7f9e38df3661fea20ccb39ce406e65a53ab6a1bdf36074f1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Symantec_BlueCoat_ProxySG_Extensions",
+     "label": "CCX Symantec BlueCoat ProxySG Extension",
+     "version": "1.0.2",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ccx-unified-splunk-add-on-for-trend-micro_108.tgz",
+   "bytes": 32600,
+   "sha256": "18503d94a2153423f3366c043ab45aec100087335469a5125982cd8ce65e8ab5",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CCX_Unified_Trend_Micro",
+     "label": "CCX Unified Add-On for Trend Micro",
+     "version": "1.0.8",
+     "publisher": "CyberCX",
+     "type": "TA",
+     "sourcetypes": 31,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-endpoint-security-analytics-cesa-add-on-for-splunk_407.tgz",
+   "bytes": 9419337,
+   "sha256": "55d26467bfea9ca4225eb0c789a05cfddfc2d4fbb74c7a7b4f206786e7111e42",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Cisco-NVM",
+     "label": "Cisco NVM Add-on for Splunk",
+     "version": "4.0.7",
+     "publisher": "Cisco Systems, Inc.",
+     "type": "TA",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+   "bytes": 52763218,
+   "sha256": "bbf2ace479e3fc9b15fbe5c8c30b212fdf474931a7b428f361219e6c19a1172d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_cisco_catalyst",
+     "label": "Cisco Enterprise Networking Add-on for Splunk",
+     "version": "4.0.60",
+     "publisher": "Cisco Systems",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 112,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk_TA_stream"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-enterprise-networking-netflow-add-on-for-splunk_400.tgz",
+   "bytes": 40511,
+   "sha256": "94722579e0f120e0b5c93c9eac2873fb94f4749134b08652f578bb398803fc52",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "splunk_app_stream_ipfix_cisco_hsl",
+     "label": "Cisco Enterprise Networking NetFlow Add-on for Splunk",
+     "version": "4.0.0",
+     "publisher": "Cisco Systems, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-intersight-add-on-for-splunk_322.spl",
+   "bytes": 4214160,
+   "sha256": "5046084bbe9d0ce76dcdd442e1b231f9f0a86cc5aef5bb3536d0e73b2c333a5f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_Cisco_Intersight",
+     "label": "Cisco Intersight Add-On for Splunk",
+     "version": "3.2.2",
+     "publisher": "Cisco Systems, Inc",
+     "type": "mixed (TA, modular input, app UI)",
+     "sourcetypes": 21,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk_TA_Cisco_Intersight"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-meraki-add-on-for-splunk_350.tgz",
+   "bytes": 28854766,
+   "sha256": "edd12274203a367e73c8f3ae2115ad18008b6f20f46614602b724fc7758ac8e8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco_meraki",
+     "label": "Cisco Meraki Add-on for Splunk",
+     "version": "3.5.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 44,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-secure-access-add-on-for-splunk_1057.tar.gz",
+   "bytes": 20337207,
+   "sha256": "1c7811dd49976f4a923321f3c02a0dfd04dca1411d66f4c846750f5dffdf13f9",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-cisco-cloud-security-addon",
+     "label": "Cisco Secure Access Add-on for Splunk",
+     "version": "1.0.57",
+     "publisher": "Cisco",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 28,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-security-cloud_373.tar.gz",
+   "bytes": 36173570,
+   "sha256": "92cee92aec07cf397b5ba266f2749cb4fee9b5a4b8f13dc6bb3b005c2541cb53",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "CiscoSecurityCloud",
+     "label": "Cisco Security Cloud",
+     "version": "3.7.3",
+     "publisher": "Cisco Security",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 82,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cisco-thousandeyes-app-for-splunk_090.tar.gz",
+   "bytes": 9429427,
+   "sha256": "2206fe9a288060a0a8d4e780cbba8c56ecd1c18cf53c965b60b505c3524cf6af",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "ta_cisco_thousandeyes",
+     "label": "Cisco ThousandEyes App for Splunk",
+     "version": "0.9.0",
+     "publisher": "Cisco ThousandEyes Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cloudflare-app-for-splunk_231.tar.gz",
+   "bytes": 37121,
+   "sha256": "f0b1340e2ce9112db50d554ad9dddde7d12dca58ece8c23eaa57f5718771dd94",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "cloudflare",
+     "label": "Cloudflare App for Splunk",
+     "version": "2.3.1",
+     "publisher": "Cloudflare Inc.",
+     "type": "TA",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cloudflare-r2-log-ingestion-add-on-for-splunk_110.tar.gz",
+   "bytes": 4776972,
+   "sha256": "d30c8324f41320e2df50c0bba8ce363450e5697f41bc5ccd6982dc57f7cdefaa",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_cloudflare_r2",
+     "label": "Cloudflare R2 Log Ingestion",
+     "version": "1.1.0",
+     "publisher": "Cloudflare, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cms-technical-add-on-for-splunk_120.tar.gz",
+   "bytes": 38720,
+   "sha256": "2de7e9abbd55ef2a11a86cdf8571b5626d10c821c1398f142066a792870ba8b6",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "ta_cisco_meeting_server_add_on_for_splunk",
+     "label": "CMS Technical Add-on for Splunk",
+     "version": "1.2.0",
+     "publisher": "CMS Engineering Team",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cofense-triage-add-on_217.spl",
+   "bytes": 4384437,
+   "sha256": "fea30102921f37f97173aea0f382d62ee78743c1ee07b3c0d39b98a2ced1063d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-cofense-triage-add-on-for-splunk",
+     "label": "Cofense Triage Add-On",
+     "version": "2.1.7",
+     "publisher": "Cofense Inc.",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cohesity-add-on-for-splunk_120 (1).tar.gz",
+   "bytes": 4871733,
+   "sha256": "1e2f395255f45e83ab2a9cc26c3ec80fc7d8d4b08c74f1fefbce3f7da9b7706a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-cohesity-add-on-for-splunk",
+     "label": "Cohesity Add-on for Splunk",
+     "version": "1.2.0",
+     "publisher": "Cohesity",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cohesity-add-on-for-splunk_120.tar.gz",
+   "bytes": 4871733,
+   "sha256": "1e2f395255f45e83ab2a9cc26c3ec80fc7d8d4b08c74f1fefbce3f7da9b7706a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "cohesity-add-on-for-splunk_120 (1).tar.gz",
+   "apps": [
+    {
+     "id": "TA-cohesity-add-on-for-splunk",
+     "label": "Cohesity Add-on for Splunk",
+     "version": "1.2.0",
+     "publisher": "Cohesity",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "confluence-and-jira-audit-add-on-for-splunk_1015.tar.gz",
+   "bytes": 16874703,
+   "sha256": "f5a7e9fe3af65d22c563af14fae41d8f04cf0b4e36028990372ac5443655a8bb",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "confluence_and_jira_audit_addon_for_splunk",
+     "label": "Confluence and Jira Audit Addon for Splunk",
+     "version": "1.0.15",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "crowdstrike-falcon-detections-technical-add-on_210.tar.gz",
+   "bytes": 2769333,
+   "sha256": "a93ae0e01e588d28912875272fb732712f4ea408d11af2ef697c23a6bf52a803",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_crowdstrike_falcon_detections",
+     "label": "CrowdStrike Falcon Detections",
+     "version": "2.1.0",
+     "publisher": "CrowdStrike",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "crowdstrike-falcon-discover-add-on-for-splunk_102.tgz",
+   "bytes": 3381716,
+   "sha256": "5b92c84c12777cb290620f1320aa98f8e353e2ee7b2b00faa52f1f618a8aeafd",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-crowdstrike_falcon_discover",
+     "label": "CrowdStrike Falcon Discover Add-on for Splunk",
+     "version": "1.0.2",
+     "publisher": "Stjubit",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "crowdstrike-falcon-event-streams-technical-add-on_372.tar.gz",
+   "bytes": 7317845,
+   "sha256": "5495c9cf121e692842b1925bb3af12b69ba5c539b7a2196a1dad1578195bc4b0",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-crowdstrike-falcon-event-streams",
+     "label": "CrowdStrike Falcon Event Streams",
+     "version": "3.7.2",
+     "publisher": "CrowdStrike",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "cyberhaven-data-security-add-on-for-splunk_100.spl",
+   "bytes": 9286511,
+   "sha256": "cd7b4c2a64832a95eb7492d0512de9128398b49af6b58f383daebfc2f3f4eb68",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-CYBERHAVEN",
+     "label": "Cyberhaven Data Security Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Cyberhaven Inc.",
+     "type": "TA",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "databricks-add-on-for-splunk_144.spl",
+   "bytes": 6396663,
+   "sha256": "80fb9137f492f4e13d6d6530c54a63ce273cdb8489653f1b7141454d077c6b4d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Databricks",
+     "label": "Databricks Add-on For Splunk",
+     "version": "1.4.4",
+     "publisher": "Databricks, Inc.",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "datarunk-add-on-for-barracuda-email-gateway-defense_200.tar.gz",
+   "bytes": 34840,
+   "sha256": "75ec7ef096af45f6dd1293928803df2b0e7883231fbc709a0dd04cfe05095676",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "BarracudaEGD",
+     "label": "Barracuda Email Gateway Defense",
+     "version": "2.0.0",
+     "publisher": "Levi Greter (DataRunk)",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "docker-monitoring-add-on-for-splunk_3015.tgz",
+   "bytes": 5357205,
+   "sha256": "7fececfd632f16286b00fadd49d6e77528634665fd9232fd2b18c7774eeb87c6",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-docker-add-on-for-splunk",
+     "label": "Docker Add-on For Splunk",
+     "version": "3.0.15",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "dragos-ot-add-on-for-splunk_117.tgz",
+   "bytes": 5046333,
+   "sha256": "8193f09e488cb67f8f059e2b935cae53d5e46535fd64d01f2485a4c9f606bdf8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_dragos_ot_add_on",
+     "label": "Dragos OT Add-on",
+     "version": "1.1.7",
+     "publisher": "Dragos",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "dynatrace-add-on-for-splunk_218.tar.gz",
+   "bytes": 2324290,
+   "sha256": "ed076847d1db289c03747904ba13bf4b88cdad57efc1a6b0f716ea9980872f61",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_Dynatrace",
+     "label": "Splunk Add-on for DynaTrace",
+     "version": "2.1.8",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 10,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "elastic-search-add-on-for-splunk_100.tgz",
+   "bytes": 7080936,
+   "sha256": "c5f34e12246a15603b1b5c6b055a70cb247fa2db74bd2e994d8e49df2722f154",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-elastic-search",
+     "label": "Elastic Search Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Vatsal Jagani",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ensign-akamai-web-security-add-on_200 (1).tar.gz",
+   "bytes": 5226067,
+   "sha256": "17a0d079e62493d3141c837a674b66fd864d10cac5368c4c9ac05046c8287a69",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-ensign_waf_akamaisiem",
+     "label": "Ensign Akamai Web Security Add-on",
+     "version": "2.0.0",
+     "publisher": "Ensign Infosecurity Indonesia",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ensign-akamai-web-security-add-on_200.tar.gz",
+   "bytes": 5226067,
+   "sha256": "17a0d079e62493d3141c837a674b66fd864d10cac5368c4c9ac05046c8287a69",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "ensign-akamai-web-security-add-on_200 (1).tar.gz",
+   "apps": [
+    {
+     "id": "TA-ensign_waf_akamaisiem",
+     "label": "Ensign Akamai Web Security Add-on",
+     "version": "2.0.0",
+     "publisher": "Ensign Infosecurity Indonesia",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "entrust-identity-as-a-service-add-on-for-splunk_162.tgz",
+   "bytes": 4003318,
+   "sha256": "ead13117d584270630429bc228052385bf4548b545cfed4b89f95c7c4cc9e6d1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-entrust-datacard-intellitrust-add-on-for-splunk",
+     "label": "Entrust Identity as a Service Add-on for Splunk",
+     "version": "1.6.2",
+     "publisher": "Entrust",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "extrahop-add-on-for-splunk_270.spl",
+   "bytes": 3372529,
+   "sha256": "d65791f559140911695b81b7566217d67d943d4f677524e52a260722caaa6ef1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-extrahop_addon",
+     "label": "ExtraHop Add-On for Splunk",
+     "version": "2.7.0",
+     "publisher": "ExtraHop Networks",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "flashpoint-add-on-for-splunk_252.spl",
+   "bytes": 3366966,
+   "sha256": "511438a755d17a591e12c5a2761a865ea2ed0d89b1f56217affe6552416f9998",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-flashpoint-intelligence",
+     "label": "Flashpoint Intelligence Add-on",
+     "version": "2.5.2",
+     "publisher": "Flashpoint",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 8,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "forescout-technology-add-on-for-splunk_307.tar.gz",
+   "bytes": 63395,
+   "sha256": "08a3c125f48c155cf508d4ffc37f65713c61a2d57d4c5f7b7f4e4fb491eb5229",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-forescout",
+     "label": "Forescout Technology Add-on for Splunk",
+     "version": "3.0.7",
+     "publisher": "fs_splunk_app@forescout.com",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "fortindr-cloud-add-on-for-splunk_117.spl",
+   "bytes": 4939713,
+   "sha256": "d98a4b5a647dce0c98a0b55b3166fedaa72ed595950e152eefc67b573fb7d35b",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_fortindr_cloud_add_on_for_splunk",
+     "label": "FortiNDR Cloud Add-on for Splunk",
+     "version": "1.1.7",
+     "publisher": "Fortinet Inc.",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "fortinet-fortigate-add-on-for-splunk_1610.tar.gz",
+   "bytes": 121342,
+   "sha256": "9b6d1ce5ef29c978eff9b417dda1924658d1d4364c5d254aadef4a518de5705f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_fortinet_fortigate",
+     "label": "Fortinet Fortigate Add-on for Splunk",
+     "version": "1.6.10",
+     "publisher": "splunk_app@fortinet.com",
+     "type": "TA",
+     "sourcetypes": 11,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "genesys-cloud-add-on-for-splunk_043.tar.gz",
+   "bytes": 17774727,
+   "sha256": "d9a7601436717ad931f2c853857a296e251095781c039882106428a038dedf14",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "genesys_cloud_ta",
+     "label": "Genesys Cloud Add-on for Splunk",
+     "version": "0.4.3",
+     "publisher": "FDSE",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "gitlab-add-on-for-splunk_3215.tgz",
+   "bytes": 5335528,
+   "sha256": "faafd2e3caeda31a0fdc70c5ffc8b78b812c6379116d1eb7f7afa03a21818cab",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-gitlab-add-on-for-splunk",
+     "label": "GitLab Add-on for Splunk",
+     "version": "3.2.15",
+     "publisher": "Avotrix",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "gitlab-saas-add-on-for-splunk_2015.tgz",
+   "bytes": 6658006,
+   "sha256": "ab7f2c32eeb530b1bef727eee181ceb326f9bec4ec0f1461b3291199664487c4",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-gitlab-saas-add-on-for-splunk",
+     "label": "GitLab Saas Add-on for Splunk",
+     "version": "2.0.15",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "gitlab-self-managed-add-on-for-splunk-cim_100.tgz",
+   "bytes": 2951,
+   "sha256": "3e7979ce0643317ae7b001dac6dce38cc93de9ed1c1ee6d84fb19989d9acf636",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_gitlab",
+     "label": "GitLab Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Cyberfox",
+     "type": "TA",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "google-chrome-add-on-for-splunk_213.tar.gz",
+   "bytes": 15493458,
+   "sha256": "16c101aa7e5b409a93d7c16400017d8c4431387ac392d97d8dbe9a2984a81416",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_google_chrome",
+     "label": "Google Chrome Add-on for Splunk",
+     "version": "2.1.3",
+     "publisher": "Splunk Field Solutions",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "guardium-api-add-on-for-splunk_101.tgz",
+   "bytes": 3404061,
+   "sha256": "1702196702785681e026710f024f9d2fac244b5cfca4491c93d7cead17bb8c17",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-guardium",
+     "label": "TA-guardium",
+     "version": "1.0.1",
+     "publisher": "Efheem",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ibm-datapower-add-on-for-splunk_102.tar.gz",
+   "bytes": 39239,
+   "sha256": "0dfe83d2b49a5423f818bebac4919ef6bb04539a1d6a21a95e3a823d9567c76f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-ibm_datapower",
+     "label": "IBM DataPower Add-on for Splunk",
+     "version": "1.0.2",
+     "publisher": "diogofgm",
+     "type": "TA",
+     "sourcetypes": 27,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "illumio-technology-add-on-for-splunk_413.tar.gz",
+   "bytes": 328139,
+   "sha256": "946d545db90f0e76e1db1f6550c83fee9b2fe12710e314fe996f9589fe2af54f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Illumio",
+     "label": "Illumio Add-on for Splunk",
+     "version": "4.1.3",
+     "publisher": "Illumio Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "invicti-platform-add-on_100.spl",
+   "bytes": 8037455,
+   "sha256": "c17d2f1b3c2735d4791a6660f16c7198882f0a1b3d1da7caf17711d5966f5bdf",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-invicti-platform",
+     "label": "Invicti Platform Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Invicti Security",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ivanti-service-manager-add-on-for-splunk_142.tgz",
+   "bytes": 4745969,
+   "sha256": "ffd9dd5af722fdc9a4ec1f4dcc5f846b19211a5fea3db9fb8cec0d9ab3ae839c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-ivanti-ism",
+     "label": "Ivanti Service Manager Add-On for Splunk",
+     "version": "1.4.2",
+     "publisher": "Greg Ford",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "jamf-protect-add-on_206.tgz",
+   "bytes": 36897,
+   "sha256": "7b43370cf2267520e2a25b3005ba9bd0dccecc8db7173ceb6dff33e750862d8d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-JamfProtect",
+     "label": "Jamf Protect",
+     "version": "2.0.6",
+     "publisher": "Jamf Software",
+     "type": "TA",
+     "sourcetypes": 64,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "lansweeper-add-on-for-splunk_135.tgz",
+   "bytes": 3727480,
+   "sha256": "c14e6a73ca3fb296f538d02c52462cf69f5b7451776213dc1f58fea9ff7f026a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-lansweeper-add-on-for-splunk",
+     "label": "Lansweeper Add-on for Splunk",
+     "version": "1.3.5",
+     "publisher": "Crossrealms International Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "manageengine-endpoint-central-add-on_112.tgz",
+   "bytes": 7377015,
+   "sha256": "2cd69aa59789476d3e8dda6b6c0545f1a2f28d410f8de82d185717de4ea82a94",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-manageengine-endpoint-central-add-on",
+     "label": "ManageEngine Endpoint Central Add-on",
+     "version": "1.1.2",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "manageengine-site24x7-add-on-for-splunk_300.tgz",
+   "bytes": 4828015,
+   "sha256": "db9a06dc657fdff57ad5e8f43d35048c38e2c03573ca810ef88fc488cb3af02c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-site24x7",
+     "label": "site24x7",
+     "version": "3.0.0",
+     "publisher": "manageengine site24x7",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "manageengine-vulnerability-manager-plus-add-on_106.tgz",
+   "bytes": 7370013,
+   "sha256": "1b842f88da17c39f42b3f7399efd5cd90efe0848be4000142c822e1f12b900bd",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-manageengine-vulnerability-manager-plus-add-on",
+     "label": "ManageEngine Vulnerability Manager Plus Add-on",
+     "version": "1.0.6",
+     "publisher": "ManageEngine",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "mandiant-digital-threat-monitoring-add-on-for-splunk_101.tgz",
+   "bytes": 3796093,
+   "sha256": "9ca91464c32696aa6a54ed8b861066237c2897a7b971456e629be5f5c8fa1c81",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-mandiant-digital-threat-monitoring",
+     "label": "Mandiant Digital Threat Monitoring",
+     "version": "1.0.1",
+     "publisher": "Mandiant",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "menlo-security-technology-add-on_253.tgz",
+   "bytes": 7113673,
+   "sha256": "1751bf4317792c96a3c82923d753cd70262ef9378540a78b57fa2b31e146bdc1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_menlosecurity_api_inputs",
+     "label": "Menlo Security API inputs",
+     "version": "2.5.3",
+     "publisher": "Menlo Security",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 12,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "microsoft-365-defender-threat-vulnerability-add-on-for-splunk_202.tar.gz",
+   "bytes": 13176608,
+   "sha256": "e23670fc13597469dfa0ef2a98da395f31a59f5371a5459fa26a42771f9d5f2e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-microsoft-defender-threat-vulnerability-add-on",
+     "label": "Microsoft Defender Threat & Vulnerability Add-on for Splunk",
+     "version": "2.0.2",
+     "publisher": "Thomas Hilles\u00f8y",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "microsoft-graph-security-score-add-on_130.tgz",
+   "bytes": 4773927,
+   "sha256": "a414ee5c1f02d2dab036cff0698e17aae86833554351c910a386b88c9693b466",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-microsoft-graph-security-score",
+     "label": "Microsoft Graph Security Score Add-on",
+     "version": "1.3.0",
+     "publisher": "CrossRealms International",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "microsoft-teams-add-on-for-splunk_201.tar.gz",
+   "bytes": 14660438,
+   "sha256": "5e33d7ac68d5c6f29b2ae2be3aa0c25fc74680d8ae2c60d0dec55333612ae162",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_MS_Teams",
+     "label": "Microsoft Teams Add-on for Splunk",
+     "version": "2.0.1",
+     "publisher": "Splunk Works",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "netscout-omnis-streamer-add-on_210.tar.gz",
+   "bytes": 10809,
+   "sha256": "1cccdfd7fcb9f03c6528964e1b0a2b51b3bfb9f19492044175d3c234cb4d9471",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Omnis_Streamer-TA",
+     "label": "Omnis Streamer Add-on",
+     "version": "2.1.0",
+     "publisher": "Netscout Systems",
+     "type": "sourcetype definitions",
+     "sourcetypes": 20,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "netskope-add-on-for-splunk_460.spl",
+   "bytes": 52619700,
+   "sha256": "c594a5dfb45a291b03b9e2b865014b8196286683e460da63a30df90bb7e42979",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-NetSkopeAppForSplunk",
+     "label": "NetSkope Add-on For Splunk",
+     "version": "4.6.0",
+     "publisher": "Netskope, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 25,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "oracle-cloud-infrastructure-add-on-for-splunk_100.spl",
+   "bytes": 38628,
+   "sha256": "a76dc09cc692ad1b91dd337c1a6c22bc004bb86663e42571947a5b8ed0960c52",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Oracle-OCI",
+     "label": "Oracle Cloud Infrastructure Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Helmi | Nexagate Sdn Bhd.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ot-security-add-on-for-splunk_302.tar.gz",
+   "bytes": 10901891,
+   "sha256": "d425852826ecac86b404954b7b63920f19a6b559179563e8fb2599ff01098a19",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "DA-ESS-OTSecurity",
+     "label": "Splunk for OT Security",
+     "version": "3.0.2",
+     "publisher": "Splunk",
+     "type": "sourcetype definitions",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "postfix-mail-add-on-for-splunk_100.tgz",
+   "bytes": 24966,
+   "sha256": "59ea0adb32c198309c843c9279d17c2ae0a785f16d978e9e0683e3084390f1b2",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-postfix-mail",
+     "label": "Postfix Mail Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Cyberfox",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "process-it-add-on-for-stormshield_171.tgz",
+   "bytes": 20323,
+   "sha256": "c011eaf6c32c471edf4ff5cf812326528dcf748e67b29d26d450c57870dd26d0",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_Stormshield",
+     "label": "Stormshield Add-on",
+     "version": "1.7.1",
+     "publisher": "Romain Caputi",
+     "type": "TA",
+     "sourcetypes": 24,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "proofpoint-casb-add-on-for-splunk_1118 (1).tgz",
+   "bytes": 6838738,
+   "sha256": "bf553e6223d618bc932d708503482671612e4319cc05cfaca3aa5a735434fef8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-proofpoint-casb-addon-for-splunk",
+     "label": "Proofpoint CASB Add-on for Splunk",
+     "version": "1.1.18",
+     "publisher": "Proofpoint",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "proofpoint-casb-add-on-for-splunk_1118.tgz",
+   "bytes": 6838738,
+   "sha256": "bf553e6223d618bc932d708503482671612e4319cc05cfaca3aa5a735434fef8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "proofpoint-casb-add-on-for-splunk_1118 (1).tgz",
+   "apps": [
+    {
+     "id": "TA-proofpoint-casb-addon-for-splunk",
+     "label": "Proofpoint CASB Add-on for Splunk",
+     "version": "1.1.18",
+     "publisher": "Proofpoint",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "proofpoint-on-demand-email-security-add-on_280 (1).spl",
+   "bytes": 6322764,
+   "sha256": "06cbb7f607120a7a488d1d6535c65795c8dac86944d0e55ad84b03bb8ea3c0f8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-pps_ondemand",
+     "label": "Proofpoint On Demand Email Security Add On",
+     "version": "2.8.0",
+     "publisher": "Proofpoint Inc",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "proofpoint-on-demand-email-security-add-on_280.spl",
+   "bytes": 6322764,
+   "sha256": "06cbb7f607120a7a488d1d6535c65795c8dac86944d0e55ad84b03bb8ea3c0f8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "proofpoint-on-demand-email-security-add-on_280 (1).spl",
+   "apps": [
+    {
+     "id": "TA-pps_ondemand",
+     "label": "Proofpoint On Demand Email Security Add On",
+     "version": "2.8.0",
+     "publisher": "Proofpoint Inc",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "qualys-universal-technology-add-on-ta-for-splunk_100.tar.gz",
+   "bytes": 4981516,
+   "sha256": "8781226e04f797cd06d594c1649333531beb7256a6d0cdd80b25332cac072d8a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Qualys-Cloud-Connector",
+     "label": "Qualys Universal Technology Add-on (TA) for Splunk",
+     "version": "1.0.0",
+     "publisher": "",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "rapid7-insightappsec-add-on_103.tgz",
+   "bytes": 4038969,
+   "sha256": "97f740cd2dbf4564551ac3ea7322422a3596f65f6b84e2d8afc0bd4f3f721b73",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-insightappsec",
+     "label": "Rapid7 InsightAppSec Technology Add-On for Splunk",
+     "version": "1.0.3",
+     "publisher": "hn07er",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "rapid7-insightvm-technology-add-on-for-splunk_152.tgz",
+   "bytes": 7482340,
+   "sha256": "d51a568ced78466826553ee466458e19957022a157d3af27d6f7338e8caabb00",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-rapid7-insightvm",
+     "label": "Rapid7 InsightVM",
+     "version": "1.5.2",
+     "publisher": "Rapid7",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "red-hat-event-driven-ansible-add-on-for-splunk_120.tar.gz",
+   "bytes": 10382804,
+   "sha256": "83e7a084ef70d055bd579095efc04795940c266710d147891a9b85b966098718",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "ansible_addon_for_splunk",
+     "label": "Event-Driven Ansible Add-on for Splunk",
+     "version": "1.2.0",
+     "publisher": "",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "rubric-protocol-add-on-for-splunk_100.tar.gz",
+   "bytes": 3205,
+   "sha256": "12d2f9326e9d128eebb9c715e51d319efc8480bb30df96ed968e910a22d9505c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-rubric-protocol",
+     "label": "Rubric Protocol Add-on",
+     "version": "1.0.0",
+     "publisher": "Echelon Intelligence Group LLC",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sailpoint-identity-security-cloud-auditevent-add-on_300.tar.gz",
+   "bytes": 14635353,
+   "sha256": "9eab85cdd5b0d73793bf6ffbb95e81ac2fb48017f3251bb3624e45427ab512da",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-sailpoint-identitynow-auditevent-add-on",
+     "label": "SailPoint Identity Security Cloud AuditEvent Add-on",
+     "version": "3.0.0",
+     "publisher": "SailPoint Technologies",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "saviynt-events-add-on_124.tgz",
+   "bytes": 6196115,
+   "sha256": "34c004aece5d7b637055c8413bdb9ca61d77693395639ffb611a5e9874c8add8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-saviyntevents",
+     "label": "SaviyntEvents",
+     "version": "1.2.4",
+     "publisher": "Saviynt",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "securelink-add-on-for-syslog_121.tgz",
+   "bytes": 13651,
+   "sha256": "0a43400bcd923505ac9db6d03b584408302b9ead5d6936f69bcf9a3ce2bdc985",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-securelink",
+     "label": "SecureLink Add-On",
+     "version": "1.2.1",
+     "publisher": "TekStream Solutions",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "servicenow-add-on-for-windows-and-linux-assets_105.tar.gz",
+   "bytes": 8758,
+   "sha256": "ae536752f288ef62722df65d6cc07fc429072bdebc6757c22d299784a1ccea7c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "ServiceNow_TA_windows_linux_assets",
+     "label": "ServiceNow Add-on for Windows and Linux Assets",
+     "version": "1.0.5",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {
+       "Splunk_TA_nix": {
+        "version": ">=9.0.0"
+       },
+       "Splunk_TA_windows": {
+        "version": ">=8.9.0"
+       }
+      },
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "siemplify-add-on-for-splunk_431.spl",
+   "bytes": 7013252,
+   "sha256": "969ec6e5c5a17fd794201a2aa24196ff0e4e37c28435ea917fefaa792f30fa9f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-siemplify",
+     "label": "Siemplify",
+     "version": "4.3.1",
+     "publisher": "Rob Becker",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "slack-add-on-for-splunk_300.tgz",
+   "bytes": 11126625,
+   "sha256": "17e9cc5a38e592b724fd20c439f2f63de933d9c3304b53197349a3c9f8255679",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-slack-add-on-for-splunk",
+     "label": "Slack Add-on for Splunk",
+     "version": "3.0.0",
+     "publisher": "",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sonicwall-sma-1000-technical-add-on-for-splunk_200.tgz",
+   "bytes": 407661,
+   "sha256": "3b7c653d359134875187ac40839c66eec22b904e148e6863b76ebdeee1c36ace",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "sonicwall_sma1000_ta",
+     "label": "SonicWall SMA1000 Technical Add-on for Splunk",
+     "version": "2.0.0",
+     "publisher": "SonicWall, Inc",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 10,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sophos-email-security-add-on_100 (1).tgz",
+   "bytes": 6357162,
+   "sha256": "ddd918aa722bbaed8f644ec39d85cee0f8856208e9262672732b336063f9a1c1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-sophos-email-security",
+     "label": "Splunk Add-on for Sophos Email Security",
+     "version": "1.0.0",
+     "publisher": "CrossRealms International",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sophos-email-security-add-on_100.tgz",
+   "bytes": 6357162,
+   "sha256": "ddd918aa722bbaed8f644ec39d85cee0f8856208e9262672732b336063f9a1c1",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "sophos-email-security-add-on_100 (1).tgz",
+   "apps": [
+    {
+     "id": "TA-sophos-email-security",
+     "label": "Splunk Add-on for Sophos Email Security",
+     "version": "1.0.0",
+     "publisher": "CrossRealms International",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sophos-next-gen-firewall_102.tgz",
+   "bytes": 13118,
+   "sha256": "73c169e942b23c8c1b758de90496f8676ea78a1417ad9b6d8901108d91d348be",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-sophos_xg_firewall",
+     "label": "Sophos XG Firewall Add-on For Splunk",
+     "version": "1.0.2",
+     "publisher": "Sophos",
+     "type": "TA",
+     "sourcetypes": 15,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "spaces-add-on-for-splunk_2020.tgz",
+   "bytes": 3983556,
+   "sha256": "b98bb349568eeae3df9b27ccedbaca06374386b99dcfcb87e8a2f6456a7fd07e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "ta_cisco_spaces",
+     "label": "Cisco Spaces Add-on for Splunk",
+     "version": "2.0.20",
+     "publisher": "Simon Light",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-admon-enrichment_113.tgz",
+   "bytes": 29125,
+   "sha256": "5c148de501d03c6d9f6f53214d7149923244106eb5cb92864ddaacd2e6bd35b7",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "SA-admon",
+     "label": "Splunk Add-on for Admon Enrichment",
+     "version": "1.1.3",
+     "publisher": "dluxton@splunk.com",
+     "type": "sourcetype definitions",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-amazon-web-services-aws_831.spl",
+   "bytes": 93747459,
+   "sha256": "65050984e991d4992dd4534e86d6b7b5da4d316bc1d13db5be959f628d36df0c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_aws",
+     "label": "Splunk Add-on for AWS",
+     "version": "8.3.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 39,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-apache-web-server_300.spl",
+   "bytes": 224485,
+   "sha256": "cd9b7b0f4aaddcae1a777055e6e9174fb27f651868df1e3a2039360239146852",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_apache",
+     "label": "Splunk Add-on for Apache Web Server",
+     "version": "3.0.0",
+     "publisher": "Splunk LLC",
+     "type": "TA",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-aws-security-hub_113.tgz",
+   "bytes": 9082025,
+   "sha256": "f8ff2a4b074e912b56bd3b6383d1bb5b5f4aae6342d5580920efcda69da5df27",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "SA-aws_security_hub",
+     "label": "Splunk Add-on for AWS Security Hub",
+     "version": "1.1.3",
+     "publisher": "Splunk",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-carbon-black_301.spl",
+   "bytes": 47038,
+   "sha256": "a55119a8f838534c01ed758f1fd62a16378808d4501d64fad41add921f4100f7",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_bit9-carbonblack",
+     "label": "Splunk Add-on for Carbon Black",
+     "version": "3.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cisco-asa_612.spl",
+   "bytes": 71033,
+   "sha256": "dbe93977b84b05c609665d3ec5db3297aae80f3b2d67b6645c3a763a7257d7fa",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco-asa",
+     "label": "Splunk Add-on for Cisco ASA",
+     "version": "6.1.2",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cisco-esa_180.spl",
+   "bytes": 64901,
+   "sha256": "486010da6765b8eb63b616912b38a0186c80c95ef7dc3f74e19592346bdb1a5a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco-esa",
+     "label": "Splunk Add-on for Cisco ESA",
+     "version": "1.8.0",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 15,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cisco-identity-services_501.spl",
+   "bytes": 85951,
+   "sha256": "4ece73ae658a76d2141b562c3e30a1a9dbbfbbdd2f30091fc8ce716f5c28865b",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco-ise",
+     "label": "Splunk Add-on for Cisco ISE",
+     "version": "5.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cisco-ucs_500.spl",
+   "bytes": 5164878,
+   "sha256": "dbda2c808b0cd56881e34b43c07ccfb0d6de4ec8623e9ffc6d6356efae181570",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco-ucs",
+     "label": "Splunk Add-on for Cisco UCS",
+     "version": "5.0.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cisco-wsa_500.tgz",
+   "bytes": 47988,
+   "sha256": "7656262355aac65d1e5cf4dac3499ca3864b7e90258a82207265db404465454d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cisco-wsa",
+     "label": "Splunk Add-on for Cisco WSA",
+     "version": "5.0.0",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-citrix-netscaler_825.spl",
+   "bytes": 10312862,
+   "sha256": "48c971024a7d421d913f9c56c5cf4b369d2a9188854f03b3e1f7ce2c80cad917",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_citrix-netscaler",
+     "label": "Splunk Add-on for Citrix NetScaler",
+     "version": "8.2.5",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-crowdstrike-fdr_320.spl",
+   "bytes": 70216343,
+   "sha256": "78ab6b4e4869c4305b70a53239a395b1c4e08a9441437ba5c9b46b952d26262e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_CrowdStrike_FDR",
+     "label": "Splunk Add-on for CrowdStrike FDR",
+     "version": "3.2.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 9,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cyberark-epm_501.spl",
+   "bytes": 5170358,
+   "sha256": "a88c8e3d4c1f1364aa8b51ce6c21f74772a7d3866598945fa2311561e19a8540",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cyberark_epm",
+     "label": "Splunk Add-on for CyberArk EPM",
+     "version": "5.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 9,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-cyberark_200.spl",
+   "bytes": 47830,
+   "sha256": "85e0d4ad06698bb15af3b71592b5afde5675df0358ead9042df0d7982d2718a8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_cyberark",
+     "label": "Splunk Add-on for CyberArk",
+     "version": "2.0.0",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-f5-big-ip_701.spl",
+   "bytes": 2061141,
+   "sha256": "58e944757d21d29376c8bd5d5173c54d21f40faa7a5a3c26a2609af5badc99d9",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_f5-bigip",
+     "label": "Splunk Add-on for F5 BIG-IP",
+     "version": "7.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 59,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-google-cloud-platform_520 (1).spl",
+   "bytes": 81251296,
+   "sha256": "9950029e45f44c7bcfcbc479ad702a8e55efd897a4ab7b2342f59e77de880223",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_google-cloudplatform",
+     "label": "Splunk Add-on for Google Cloud Platform",
+     "version": "5.2.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 21,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-google-cloud-platform_520 (2).spl",
+   "bytes": 81251296,
+   "sha256": "9950029e45f44c7bcfcbc479ad702a8e55efd897a4ab7b2342f59e77de880223",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "splunk-add-on-for-google-cloud-platform_520 (1).spl",
+   "apps": [
+    {
+     "id": "Splunk_TA_google-cloudplatform",
+     "label": "Splunk Add-on for Google Cloud Platform",
+     "version": "5.2.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 21,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-google-cloud-platform_520.spl",
+   "bytes": 81251296,
+   "sha256": "9950029e45f44c7bcfcbc479ad702a8e55efd897a4ab7b2342f59e77de880223",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "splunk-add-on-for-google-cloud-platform_520 (1).spl",
+   "apps": [
+    {
+     "id": "Splunk_TA_google-cloudplatform",
+     "label": "Splunk Add-on for Google Cloud Platform",
+     "version": "5.2.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 21,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-google-workspace_510.spl",
+   "bytes": 47936017,
+   "sha256": "7858530f1ed7e3aa1b49e4b8e1ddf51401968a2407e5ea099cfceeae02b3eeee",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_Google_Workspace",
+     "label": "Splunk Add-on for Google Workspace",
+     "version": "5.1.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 24,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-infoblox_221.spl",
+   "bytes": 43332,
+   "sha256": "cef4c3e3001bde1045c50616fbd289f1f11a7ca35045384e3dcc7ca5daf907dd",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_infoblox",
+     "label": "Splunk Add-on for Infoblox",
+     "version": "2.2.1",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-juniper_161.spl",
+   "bytes": 46957,
+   "sha256": "ba264a62ad1f34c660752108096da86ec4cfc9b308006df47796e39c635e867a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_juniper",
+     "label": "Splunk Add-on for Juniper",
+     "version": "1.6.1",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 9,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-azure_420.tgz",
+   "bytes": 5053285,
+   "sha256": "7289833f9d888ee9110a7e3874758b29eb553d16179a0dd61163864e3847ec76",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-MS-AAD",
+     "label": "Splunk Add-on for Microsoft Azure",
+     "version": "4.2.0",
+     "publisher": "Splunk Works",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 35,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-cloud-services_633.spl",
+   "bytes": 47426681,
+   "sha256": "96a86a72d85cff94c84bf5fb8067d5cc911e5fea2f67d21e9c6b865e3ba7ec2c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_microsoft-cloudservices",
+     "label": "Splunk Add-on for Microsoft Cloud Services",
+     "version": "6.3.3",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 32,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-office-365_611 (1).spl",
+   "bytes": 46314374,
+   "sha256": "eb60f816dac8bc25f2151da9486b80b60b3f91a36baf46ce335c19ea303cc7aa",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "splunk_ta_o365",
+     "label": "Splunk Add-on for Microsoft Office 365",
+     "version": "6.1.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 10,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-office-365_611.spl",
+   "bytes": 46314374,
+   "sha256": "eb60f816dac8bc25f2151da9486b80b60b3f91a36baf46ce335c19ea303cc7aa",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "splunk-add-on-for-microsoft-office-365_611 (1).spl",
+   "apps": [
+    {
+     "id": "splunk_ta_o365",
+     "label": "Splunk Add-on for Microsoft Office 365",
+     "version": "6.1.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 10,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-security_400.spl",
+   "bytes": 23165598,
+   "sha256": "be92b9aa4347f9a2aee33f8a090105d45cdea265ba0f299e24062533724f3f08",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_MS_Security",
+     "label": "Splunk Add-on for Microsoft Security",
+     "version": "4.0.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 21,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-microsoft-windows_1200.spl",
+   "bytes": 240062,
+   "sha256": "685971810d9e5dfa0db2b9737feb6aaee07957b79fdd3aef62329c7fdcb49723",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_windows",
+     "label": "Splunk Add-on for Microsoft Windows",
+     "version": "12.0.0",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 144,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-mysql_320.tgz",
+   "bytes": 104666,
+   "sha256": "35fb5c496eeb2b847b35ddaedbd40a9c2ba8e180dbee28fcde61fe091168d4c9",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_mysql",
+     "label": "Splunk Add-on for MySQL",
+     "version": "3.2.0",
+     "publisher": "Splunk",
+     "type": "TA",
+     "sourcetypes": 18,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-netapp-data-ontap-extractions_303.tgz",
+   "bytes": 173095,
+   "sha256": "024d9facf59b07070317ab909abd858d71bb1acfe9efcda1e368a2873808196d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-ONTAP-FieldExtractions",
+     "label": "Add-on for NetApp Data ONTAP Extractions",
+     "version": "3.0.3",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-nginx_332.spl",
+   "bytes": 9758849,
+   "sha256": "b52abbab26b3feabf38b6681d11eacc9809a384ec8702a7c18bf216705899101",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_nginx",
+     "label": "Splunk Add-on for Nginx",
+     "version": "3.3.2",
+     "publisher": "Splunk Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-okta-identity-cloud_510.spl",
+   "bytes": 13003137,
+   "sha256": "40d785137f4e0e4c9105089b564bb82b0a5502b54cb7bec63f59f997e23b08e9",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_okta_identity_cloud",
+     "label": "Splunk Add-on for Okta Identity Cloud",
+     "version": "5.1.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 6,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-opentelemetry-collector-for-windows-x86_64_01640.tgz",
+   "bytes": 159460277,
+   "sha256": "90b46980ec5794c2fd9b172f98c860dd978682ef117f50ff0528ffaa4e219191",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_otel_windows_x86_64",
+     "label": "Splunk Add-on for OpenTelemetry Collector",
+     "version": "0.164.0",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-palo-alto-networks_400.spl",
+   "bytes": 49489678,
+   "sha256": "4bd1698c8150488bf0686c1a15abe1e2603c6af8ee58601f0a24cc2c984c1c6d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_paloalto_networks",
+     "label": "Splunk Add-on for Palo Alto Networks",
+     "version": "4.0.0",
+     "publisher": "Splunk LLC.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 38,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-salesforce_702.spl",
+   "bytes": 49178802,
+   "sha256": "06c924a97ced19782f885e814759cf7cfb64bfbd7d4055e34a8c2e04dba176d8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_salesforce",
+     "label": "Splunk Add-on for Salesforce",
+     "version": "7.0.2",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 9,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-servicenow_1121.spl",
+   "bytes": 49502316,
+   "sha256": "328b3260e0afef0f534fbd1d8ada94ae824eea556f9ba427531f2a6c9c829070",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_snow",
+     "label": "Splunk Add-on for ServiceNow",
+     "version": "11.2.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 24,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-stream-forwarders_817.tar.gz",
+   "bytes": 102538151,
+   "sha256": "455e34ad2ab7012d34e498dbeb2f40e994327ec2504f45b4248bb2402572a146",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_stream",
+     "label": "Splunk Stream Add-on",
+     "version": "8.1.7",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk_TA_stream"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-stream-wire-data_817.tgz",
+   "bytes": 30704,
+   "sha256": "2734916023b526d49a37977219e2c309cfe60231f4383ebd3a5814abfa904d6e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_stream_wire_data",
+     "label": "Splunk Stream Knowledge Objects for Wire Data",
+     "version": "8.1.7",
+     "publisher": "Splunk, Inc.",
+     "type": "TA",
+     "sourcetypes": 18,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-symantec-blue-coat-proxysg_390.tgz",
+   "bytes": 40958,
+   "sha256": "d813322ae328b30c9cdb1994c645e3905b4dd5068ad56bb1f184d862df21cb12",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_bluecoat-proxysg",
+     "label": "Splunk Add-on for Blue Coat ProxySG",
+     "version": "3.9.0",
+     "publisher": "Splunk LLC.",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-symantec-endpoint-protection_401 (1).spl",
+   "bytes": 59270,
+   "sha256": "3c7049cffc6ec0bc040ba06d5e886d8ec0a30ed1851ff6ac919e31eddea585eb",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_symantec-ep",
+     "label": "Splunk Add-on for Symantec Endpoint Protection",
+     "version": "4.0.1",
+     "publisher": "Splunk LLC.",
+     "type": "TA",
+     "sourcetypes": 25,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-symantec-endpoint-protection_401.spl",
+   "bytes": 59270,
+   "sha256": "3c7049cffc6ec0bc040ba06d5e886d8ec0a30ed1851ff6ac919e31eddea585eb",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "splunk-add-on-for-symantec-endpoint-protection_401 (1).spl",
+   "apps": [
+    {
+     "id": "Splunk_TA_symantec-ep",
+     "label": "Splunk Add-on for Symantec Endpoint Protection",
+     "version": "4.0.1",
+     "publisher": "Splunk LLC.",
+     "type": "TA",
+     "sourcetypes": 25,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-sysmon_501 (1).spl",
+   "bytes": 42063,
+   "sha256": "e02c0a5801b714f5be4f570348727c3ba60d2b332d6e810d3ea8f5e568c7fe38",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_microsoft_sysmon",
+     "label": "Splunk Add-on for Sysmon",
+     "version": "5.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "sourcetype definitions",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-unix-and-linux_1034.spl",
+   "bytes": 138383,
+   "sha256": "9bfb2061b55961841d5babba04ead35509730dc73a7b6bfbc676a7216e7f1ca2",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_TA_nix",
+     "label": "Splunk Add-on for Unix and Linux",
+     "version": "10.3.4",
+     "publisher": "Splunk LLC.",
+     "type": "TA",
+     "sourcetypes": 43,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-vmware-metrics_501.tgz",
+   "bytes": 2789553,
+   "sha256": "c5f7b66a7f94a61c6cdddf98b900005be84f577dd0ee18e63d44370427574e16",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "SA-Hydra-inframon",
+     "label": "SA-Hydra-inframon",
+     "version": "5.0.1",
+     "publisher": "Splunk",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    },
+    {
+     "id": "Splunk_TA_vmware_inframon",
+     "label": "Add-on for VMware Metrics",
+     "version": "5.0.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 7,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk_TA_vmware_inframon"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-add-on-for-vmware_421.tgz",
+   "bytes": 2399137,
+   "sha256": "89d007007f74d8110dbcd1aa5747d0c5e053f22582124a2cdfda7088d7344eb6",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "SA-Hydra",
+     "label": "SA-Hydra",
+     "version": "4.3.0",
+     "publisher": "Splunk",
+     "type": "sourcetype definitions",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    },
+    {
+     "id": "Splunk_TA_vmware",
+     "label": "Add-on for VMware",
+     "version": "4.2.1",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 27,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk_TA_vmware"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-db-connect_430.tgz",
+   "bytes": 137997789,
+   "sha256": "3c047864cb243a1a79226440dbf798fb9eee2ccc6866e567ad3e95b363edb473",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "splunk_app_db_connect",
+     "label": "Splunk DB Connect",
+     "version": "4.3.0",
+     "publisher": "Splunk, Inc.",
+     "type": "mixed (modular input, app UI)",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-dbx-add-on-for-athena-jdbc_102.spl",
+   "bytes": 37911254,
+   "sha256": "d0cec9f77a092b0cbdd69ce6412119557b05d751e3ed21d1bbed80a7d6a1b51f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_JDBC_athena",
+     "label": "Splunk DBX Add-on for Amazon Athena JDBC",
+     "version": "1.0.2",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-dbx-add-on-for-microsoft-sql-server-jdbc_132.tgz",
+   "bytes": 6001516,
+   "sha256": "bd35b20798a5265bb4aca8187fde98f38575761065cebdff8309740209097bd8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_JDBC_mssql",
+     "label": "Splunk DBX Add-on for Microsoft SQL Server JDBC",
+     "version": "1.3.2",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-dbx-add-on-for-mysql-jdbc_113.tgz",
+   "bytes": 4287769,
+   "sha256": "171078377014cfde832edb729a721b56647d5a53f4307c2c59fd1904ca956bf9",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_JDBC_mysql",
+     "label": "Splunk DBX Add-on for MySql JDBC",
+     "version": "1.1.3",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "splunk-dbx-add-on-for-oracle-jdbc_222.tgz",
+   "bytes": 6827238,
+   "sha256": "38f19d862108316c7c790b7e65decb6a1db03d435e3e2a79392cc9a3023f56cd",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Splunk_JDBC_oracle",
+     "label": "Splunk DBX Add-on for Oracle DB JDBC",
+     "version": "2.2.2",
+     "publisher": "Splunk, Inc.",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "swift-agi-add-on-for-splunk_100.tgz",
+   "bytes": 30318,
+   "sha256": "ebd5c1c2a371531aafc16efa082b66776cd7e204ce604d6e077da8451d32b720",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-swift_agi",
+     "label": "SWIFT AGI Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "Homeostase",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "sysdig-add-on-for-splunk_113.tar.gz",
+   "bytes": 26642,
+   "sha256": "70167c68be49ad604aed05b174e77d8d1ea87aa685ec9a1b2269d708a7d02fed",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Sysdig",
+     "label": "Sysdig Add-on for Splunk",
+     "version": "1.1.3",
+     "publisher": "Sysdig, Inc.",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ta-osquery_105.tgz",
+   "bytes": 13513,
+   "sha256": "00dcf28a1a9721992cf96f1c1cb7aae5057f0f36f79d916ae576ebed18a3d87c",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-OSqueryv1",
+     "label": "TA-Osqueryv1",
+     "version": "1.0.5",
+     "publisher": "Jose Hernandez",
+     "type": "TA",
+     "sourcetypes": 5,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "ta-tanium_175.tgz",
+   "bytes": 15240,
+   "sha256": "dad34e333d2077ebb31d60160120151482443c6ad993c1594177b55677be558d",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Tanium",
+     "label": "Tanium Technology Add-on",
+     "version": "1.7.5",
+     "publisher": "Tanium",
+     "type": "TA",
+     "sourcetypes": 37,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "teamviewer-add-on-for-splunk_100.tar.gz",
+   "bytes": 9230,
+   "sha256": "dd0598938029cf67f0f09ba0728f2528413d5ec625ec26081cc54568d62fd998",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_teamviewer",
+     "label": "TeamViewer Add-on for Splunk",
+     "version": "1.0.0",
+     "publisher": "NetbyteSEC Sdn Bhd",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "technology-add-on-for-macos_100.tgz",
+   "bytes": 7092,
+   "sha256": "492bd90ef48322109af737c7f4c7b006ebe918bcd62633264cfc524dda698eb7",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-macOS",
+     "label": "TA-macOS",
+     "version": "1.0.0",
+     "publisher": "Travis Lelle",
+     "type": "TA",
+     "sourcetypes": 2,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "technology-add-on-for-vectra-detect-json_146.tar.gz",
+   "bytes": 119046,
+   "sha256": "6e24b8c5d3c2b6df7fb5a5de15ab95fe2022a9ccfa13ac962169038c605c5131",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_vectra_detect_json",
+     "label": "Technology Add-on for Vectra Detect (JSON)",
+     "version": "1.4.6",
+     "publisher": "Vectra AI",
+     "type": "TA",
+     "sourcetypes": 11,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "technology-add-on-for-vmware-esxi-syslog-community_030.tgz",
+   "bytes": 5900,
+   "sha256": "15e7b0a299f02461d8c704e530259468b347701df93f8dc6fbc815f76bfdb5cb",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-vmware_esxi_syslog",
+     "label": "Technology Add-on for VMware ESXi Syslog (Community)",
+     "version": "0.3.0",
+     "publisher": "You",
+     "type": "TA",
+     "sourcetypes": 3,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "tenable-add-on-for-splunk_804.spl",
+   "bytes": 8100589,
+   "sha256": "1e61b2b5fee57914d570efd719cff244bf1e08f09a6f8fe2a810ec2e48d8260a",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-tenable",
+     "label": "Tenable Add-On for Splunk",
+     "version": "8.0.4",
+     "publisher": "Tenable Inc.",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 25,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "trellix-mvision-epo-add-on-for-splunk_107.tgz",
+   "bytes": 3388177,
+   "sha256": "391c596acb289e0a1c7da35b8afdfee549fda2acdf3d2bcb1963661b1a83d6ca",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "Trellix_Splunk",
+     "label": "Trellix MVision EPO Add-on for Splunk",
+     "version": "1.0.7",
+     "publisher": "Leonardo Godoy",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "unifi-network-add-on-for-splunk_340.tar.gz",
+   "bytes": 4701197,
+   "sha256": "778454020ca553561173f7b0ebb7636d4b38691bf341cd7d3fa3e84f577eace8",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA_unifi_ng",
+     "label": "UniFi Network Add-on for Splunk",
+     "version": "3.4.0",
+     "publisher": "Hans-Henning Gehrts",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 25,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "varonis-technology-add-on-for-splunk_2016 (1).tgz",
+   "bytes": 50742,
+   "sha256": "7a15bdb967b2e8ce8bb2e8adb9b9e94213cb73c001643041808a311c94b3b09f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Varonis-DatAlert",
+     "label": "Technology Add-on for Varonis DatAlert",
+     "version": "2.0.16",
+     "publisher": "Varonis Developers",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "varonis-technology-add-on-for-splunk_2016.tgz",
+   "bytes": 50742,
+   "sha256": "7a15bdb967b2e8ce8bb2e8adb9b9e94213cb73c001643041808a311c94b3b09f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": "varonis-technology-add-on-for-splunk_2016 (1).tgz",
+   "apps": [
+    {
+     "id": "TA-Varonis-DatAlert",
+     "label": "Technology Add-on for Varonis DatAlert",
+     "version": "2.0.16",
+     "publisher": "Varonis Developers",
+     "type": "modular input",
+     "sourcetypes": 0,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": [
+       "Splunk Common Information Model"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "filename": "vmware-nsx-add-on_105.tgz",
+   "bytes": 2175,
+   "sha256": "3733e7f808d75955fa80e31107737e3a1b91c8a8605496489971072050f2695f",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-nsx",
+     "label": "NSX syslog add-on",
+     "version": "1.0.5",
+     "publisher": "Martin Hettervik",
+     "type": "TA",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "vmware-vision-ingestion-add-on_201.tar.gz",
+   "bytes": 34769,
+   "sha256": "a10c41647d0e722881d34e11b479f8d55df3e310cce743303124fe1eb00619eb",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-vmware-vision",
+     "label": "VMware Vision Technical Add-on",
+     "version": "2.0.1",
+     "publisher": "Majid Ershadi",
+     "type": "TA",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "wiz-add-on-for-splunk_148.tar.gz",
+   "bytes": 4608701,
+   "sha256": "92d0233057173b3f93ed7944c14aab33a9623df4ff2c1d21762b71ced78badff",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-wiz-addon-for-splunk",
+     "label": "Wiz Add-on For Splunk",
+     "version": "1.4.8",
+     "publisher": "Wiz",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 4,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "zabbix-add-on-for-splunk_205.tar.gz",
+   "bytes": 1918310,
+   "sha256": "33e1d1a3586410fc7d6743ec44cd152dddeb340bbe95f7a6d0ca84e0a48b1baf",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-zabbix-add-on-for-splunk",
+     "label": "Zabbix Add-on for Splunk",
+     "version": "2.0.5",
+     "publisher": "Data Elicit Solutions Pvt. Ltd.(splunk.support@dataelicit.com)",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "zero-networks-add-on-for-splunk_209.spl",
+   "bytes": 3393600,
+   "sha256": "0dde300f3781635b84d829f7f5f494b452189bb0a5c57c61eecc742988eaee1e",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-zero-networks-add-on-for-splunk",
+     "label": "Zero Networks Add-on for Splunk",
+     "version": "2.0.9",
+     "publisher": "Zero Networks",
+     "type": "mixed (sourcetype definitions, modular input)",
+     "sourcetypes": 1,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  },
+  {
+   "filename": "zscaler-technical-add-on-for-splunk_415.tar.gz",
+   "bytes": 3256714,
+   "sha256": "cb63e14369b7887828e4199b53f61bbfc8828c69e4148b3452c98b433a60ce08",
+   "status": "INSPECTED",
+   "reason": null,
+   "duplicate_of": null,
+   "apps": [
+    {
+     "id": "TA-Zscaler_CIM",
+     "label": "Zscaler Technical Add-On for Splunk",
+     "version": "4.1.5",
+     "publisher": "Zscaler Inc",
+     "type": "mixed (TA, modular input)",
+     "sourcetypes": 30,
+     "dependencies": {
+      "manifest": {},
+      "mentions_other_apps_in_readme": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,4100 @@
+[
+ {
+  "app_id": "BarracudaEGD",
+  "version": "2.0.0",
+  "label": "Barracuda Email Gateway Defense",
+  "vendor_group": "Barracuda",
+  "package_type": "TA",
+  "files": [
+   "datarunk-add-on-for-barracuda-email-gateway-defense_200.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "CiscoSecurityCloud",
+  "version": "3.7.3",
+  "label": "Cisco Security Cloud",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "cisco-security-cloud_373.tar.gz"
+  ],
+  "sourcetypes": 82,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_sma_input)",
+   "modular input (sbg_ai_defense_input)",
+   "modular input (sbg_cii_aws_s3_input)",
+   "modular input (sbg_cii_input)",
+   "modular input (sbg_cvi_input)",
+   "modular input (sbg_duo_input)",
+   "modular input (sbg_etd_input)",
+   "modular input (sbg_fw_estreamer_input)",
+   "modular input (sbg_isovalent_edge_processor_input)",
+   "modular input (sbg_isovalent_input)",
+   "modular input (sbg_multicloud_defense_input)",
+   "modular input (sbg_nvm_input)",
+   "modular input (sbg_se_input)",
+   "modular input (sbg_sfw_api_input)",
+   "modular input (sbg_sfw_asa_syslog_input)",
+   "modular input (sbg_sfw_syslog_input)",
+   "modular input (sbg_sna_input)",
+   "modular input (sbg_sw_input)",
+   "modular input (sbg_xdr_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "DA-ESS-OTSecurity",
+  "version": "3.0.2",
+  "label": "Splunk for OT Security",
+  "vendor_group": "Splunk",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "ot-security-add-on-for-splunk_302.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Omnis_Streamer-TA",
+  "version": "2.1.0",
+  "label": "Omnis Streamer Add-on",
+  "vendor_group": "Cisco",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "netscout-omnis-streamer-add-on_210.tar.gz"
+  ],
+  "sourcetypes": 20,
+  "mechanisms_declared_in_config": [
+   "file monitoring"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "SA-Hydra",
+  "version": "4.3.0",
+  "label": "SA-Hydra",
+  "vendor_group": "VMware",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "splunk-add-on-for-vmware_421.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "scripted input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "SA-Hydra-inframon",
+  "version": "5.0.1",
+  "label": "SA-Hydra-inframon",
+  "vendor_group": "VMware",
+  "package_type": "modular input",
+  "files": [
+   "splunk-add-on-for-vmware-metrics_501.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "SA-admon",
+  "version": "1.1.3",
+  "label": "Splunk Add-on for Admon Enrichment",
+  "vendor_group": "Microsoft",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "splunk-add-on-for-admon-enrichment_113.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "SA-aws_security_hub",
+  "version": "1.1.3",
+  "label": "Splunk Add-on for AWS Security Hub",
+  "vendor_group": "Amazon",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-aws-security-hub_113.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (export_to_aws_security_hub)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "ServiceNow_TA_windows_linux_assets",
+  "version": "1.0.5",
+  "label": "ServiceNow Add-on for Windows and Linux Assets",
+  "vendor_group": "ServiceNow",
+  "package_type": "modular input",
+  "files": [
+   "servicenow-add-on-for-windows-and-linux-assets_105.tar.gz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_JDBC_athena",
+  "version": "1.0.2",
+  "label": "Splunk DBX Add-on for Amazon Athena JDBC",
+  "vendor_group": "Splunk",
+  "package_type": "modular input",
+  "files": [
+   "splunk-dbx-add-on-for-athena-jdbc_102.spl"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_JDBC_mssql",
+  "version": "1.3.2",
+  "label": "Splunk DBX Add-on for Microsoft SQL Server JDBC",
+  "vendor_group": "Splunk",
+  "package_type": "modular input",
+  "files": [
+   "splunk-dbx-add-on-for-microsoft-sql-server-jdbc_132.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "database"
+  ],
+  "categories": [
+   "database (JDBC/DB Connect)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "NOT_EMULATED",
+  "netspout_delivery_note": "database input"
+ },
+ {
+  "app_id": "Splunk_JDBC_mysql",
+  "version": "1.1.3",
+  "label": "Splunk DBX Add-on for MySql JDBC",
+  "vendor_group": "Splunk",
+  "package_type": "modular input",
+  "files": [
+   "splunk-dbx-add-on-for-mysql-jdbc_113.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "database"
+  ],
+  "categories": [
+   "database (JDBC/DB Connect)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "NOT_EMULATED",
+  "netspout_delivery_note": "database input"
+ },
+ {
+  "app_id": "Splunk_JDBC_oracle",
+  "version": "2.2.2",
+  "label": "Splunk DBX Add-on for Oracle DB JDBC",
+  "vendor_group": "Splunk",
+  "package_type": "modular input",
+  "files": [
+   "splunk-dbx-add-on-for-oracle-jdbc_222.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "database"
+  ],
+  "categories": [
+   "database (JDBC/DB Connect)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "NOT_EMULATED",
+  "netspout_delivery_note": "database input"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Abnormal_Security",
+  "version": "1.0.3",
+  "label": "CCX Add-on for Abnormal Security Products",
+  "vendor_group": "Abnormal Security",
+  "package_type": "modular input",
+  "files": [
+   "ccx-add-on-for-abnormal-security-products-email-security_103.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Auth0",
+  "version": "1.0.8",
+  "label": "CCX Add-on for Auth0",
+  "vendor_group": "Okta/Auth0",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-auth0_108.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Imperva_WAF",
+  "version": "1.0.6",
+  "label": "CCX Add-on for Imperva WAF",
+  "vendor_group": "Imperva",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-imperva-waf-incapsula-flexprotect_106.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Lacework_Products",
+  "version": "1.0.3",
+  "label": "CCX Add-on for Lacework",
+  "vendor_group": "Lacework",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-lacework-products_103 (1).tgz",
+   "ccx-add-on-for-lacework-products_103.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_NetSuite_Products",
+  "version": "1.0.2",
+  "label": "CCX Add-on for NetSuite Products",
+  "vendor_group": "Oracle NetSuite",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-netsuite-products_102.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Snowflake_CIM_Support",
+  "version": "1.0.5",
+  "label": "CCX Add-on for Snowflake",
+  "vendor_group": "Snowflake",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-snowflake_105.tar.gz"
+  ],
+  "sourcetypes": 8,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "hec"
+  ],
+  "categories": [
+   "HEC",
+   "cloud service pull"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Suricata",
+  "version": "1.0.1",
+  "label": "CCX Add-on for Suricata",
+  "vendor_group": "OISF/Suricata",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-suricata_101.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Symantec_BlueCoat_ProxySG_Extensions",
+  "version": "1.0.2",
+  "label": "CCX Symantec BlueCoat ProxySG Extension",
+  "vendor_group": "Broadcom/Symantec",
+  "package_type": "TA",
+  "files": [
+   "ccx-add-on-for-symantec-bluecoat-proxysg-extensions_102.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_CCX_Unified_Trend_Micro",
+  "version": "1.0.8",
+  "label": "CCX Unified Add-On for Trend Micro",
+  "vendor_group": "Trend Micro",
+  "package_type": "TA",
+  "files": [
+   "ccx-unified-splunk-add-on-for-trend-micro_108.tgz"
+  ],
+  "sourcetypes": 31,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_Cisco_Intersight",
+  "version": "3.2.2",
+  "label": "Cisco Intersight Add-On for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input, app UI)",
+  "files": [
+   "cisco-intersight-add-on-for-splunk_322.spl"
+  ],
+  "sourcetypes": 21,
+  "mechanisms_declared_in_config": [
+   "modular input (audit_alarms)",
+   "modular input (custom_input)",
+   "modular input (inventory)",
+   "modular input (metrics)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_CrowdStrike_FDR",
+  "version": "3.2.0",
+  "label": "Splunk Add-on for CrowdStrike FDR",
+  "vendor_group": "CrowdStrike",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-crowdstrike-fdr_320.spl"
+  ],
+  "sourcetypes": 9,
+  "mechanisms_declared_in_config": [
+   "modular input (device_api_inventory_sync_service)",
+   "modular input (fdr_s3bucket_monitor_service)",
+   "modular input (inventory_sync_service)",
+   "modular input (managed_consumer_input)",
+   "modular input (simple_consumer_input)",
+   "modular input (sqs_based_manager)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_Dynatrace",
+  "version": "2.1.8",
+  "label": "Splunk Add-on for DynaTrace",
+  "vendor_group": "Dynatrace",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "dynatrace-add-on-for-splunk_218.tar.gz"
+  ],
+  "sourcetypes": 10,
+  "mechanisms_declared_in_config": [
+   "modular input (dynatrace_api_v2)",
+   "modular input (dynatrace_entity)",
+   "modular input (dynatrace_problem)",
+   "modular input (dynatrace_timeseries_metrics)",
+   "modular input (dynatrace_timeseries_metrics_v2)",
+   "modular input (dynatrace_timeseries_single_metric)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_Google_Workspace",
+  "version": "5.1.0",
+  "label": "Splunk Add-on for Google Workspace",
+  "vendor_group": "Google",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-google-workspace_510.spl"
+  ],
+  "sourcetypes": 24,
+  "mechanisms_declared_in_config": [
+   "modular input (activity_report)",
+   "modular input (gws_alert_center)",
+   "modular input (gws_gmail_logs)",
+   "modular input (gws_gmail_logs_migrated)",
+   "modular input (gws_usage_report)",
+   "modular input (gws_user_identity)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_MS_Security",
+  "version": "4.0.0",
+  "label": "Splunk Add-on for Microsoft Security",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-microsoft-security_400.spl"
+  ],
+  "sourcetypes": 21,
+  "mechanisms_declared_in_config": [
+   "modular input (microsoft_365_defender_endpoint_incidents)",
+   "modular input (microsoft_defender_endpoint_atp_alerts)",
+   "modular input (microsoft_defender_endpoint_machines)",
+   "modular input (microsoft_defender_endpoint_simulations)",
+   "modular input (microsoft_defender_event_hub)",
+   "modular input (microsoft_defender_threat_intelligence_datasets)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull",
+   "scripted input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_apache",
+  "version": "3.0.0",
+  "label": "Splunk Add-on for Apache Web Server",
+  "vendor_group": "Apache (open source)",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-apache-web-server_300.spl"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_aws",
+  "version": "8.3.1",
+  "label": "Splunk Add-on for AWS",
+  "vendor_group": "Amazon",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-amazon-web-services-aws_831.spl"
+  ],
+  "sourcetypes": 39,
+  "mechanisms_declared_in_config": [
+   "metrics (metric index or metric schema)",
+   "modular input (aws_billing)",
+   "modular input (aws_billing_cur)",
+   "modular input (aws_cloudtrail)",
+   "modular input (aws_cloudtrail_lake)",
+   "modular input (aws_cloudwatch)",
+   "modular input (aws_cloudwatch_logs)",
+   "modular input (aws_config)",
+   "modular input (aws_config_rule)",
+   "modular input (aws_description)",
+   "modular input (aws_inspector)",
+   "modular input (aws_inspector_v2)",
+   "modular input (aws_kinesis)",
+   "modular input (aws_metadata)",
+   "modular input (aws_s3)",
+   "modular input (aws_sqs_based_s3)",
+   "modular input (splunk_ta_aws_logs)",
+   "modular input (splunk_ta_aws_sqs)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull",
+   "metrics"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": true,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_bit9-carbonblack",
+  "version": "3.0.1",
+  "label": "Splunk Add-on for Carbon Black",
+  "vendor_group": "VMware/Carbon Black",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-carbon-black_301.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_bluecoat-proxysg",
+  "version": "3.9.0",
+  "label": "Splunk Add-on for Blue Coat ProxySG",
+  "vendor_group": "Broadcom/Symantec",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-symantec-blue-coat-proxysg_390.tgz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cisco-asa",
+  "version": "6.1.2",
+  "label": "Splunk Add-on for Cisco ASA",
+  "vendor_group": "Cisco",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-cisco-asa_612.spl"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cisco-esa",
+  "version": "1.8.0",
+  "label": "Splunk Add-on for Cisco ESA",
+  "vendor_group": "Cisco",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-cisco-esa_180.spl"
+  ],
+  "sourcetypes": 15,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cisco-ise",
+  "version": "5.0.1",
+  "label": "Splunk Add-on for Cisco ISE",
+  "vendor_group": "Cisco",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-cisco-identity-services_501.spl"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cisco-ucs",
+  "version": "5.0.0",
+  "label": "Splunk Add-on for Cisco UCS",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "splunk-add-on-for-cisco-ucs_500.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_ucs_task)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_cisco-wsa",
+  "version": "5.0.0",
+  "label": "Splunk Add-on for Cisco WSA",
+  "vendor_group": "Cisco",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-cisco-wsa_500.tgz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cisco_meraki",
+  "version": "3.5.0",
+  "label": "Cisco Meraki Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "cisco-meraki-add-on-for-splunk_350.tgz"
+  ],
+  "sourcetypes": 44,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_meraki_accesspoints)",
+   "modular input (cisco_meraki_airmarshal)",
+   "modular input (cisco_meraki_api_request_history)",
+   "modular input (cisco_meraki_api_request_overview)",
+   "modular input (cisco_meraki_api_request_response_code)",
+   "modular input (cisco_meraki_appliance_vpn_stats)",
+   "modular input (cisco_meraki_appliance_vpn_statuses)",
+   "modular input (cisco_meraki_assurance_alerts)",
+   "modular input (cisco_meraki_audit)",
+   "modular input (cisco_meraki_cameras)",
+   "modular input (cisco_meraki_custom_api)",
+   "modular input (cisco_meraki_device_availabilities_change_history)",
+   "modular input (cisco_meraki_device_uplink_addresses_by_device)",
+   "modular input (cisco_meraki_devices)",
+   "modular input (cisco_meraki_devices_availabilities)",
+   "modular input (cisco_meraki_devices_uplinks_loss_and_latency)",
+   "modular input (cisco_meraki_firmware_upgrades)",
+   "modular input (cisco_meraki_licenses_coterm_licenses)",
+   "modular input (cisco_meraki_licenses_overview)",
+   "modular input (cisco_meraki_licenses_subscription_entitlements)",
+   "modular input (cisco_meraki_licenses_subscriptions)",
+   "modular input (cisco_meraki_organization_networks)",
+   "modular input (cisco_meraki_organizations)",
+   "modular input (cisco_meraki_organizationsecurity)",
+   "modular input (cisco_meraki_power_modules_statuses_by_device)",
+   "modular input (cisco_meraki_securityappliances)",
+   "modular input (cisco_meraki_sensor_readings_history)",
+   "modular input (cisco_meraki_summary_appliances_top_by_utilization)",
+   "modular input (cisco_meraki_summary_switch_power_history)",
+   "modular input (cisco_meraki_summary_top_clients_by_usage)",
+   "modular input (cisco_meraki_summary_top_devices_by_usage)",
+   "modular input (cisco_meraki_summary_top_switches_by_energy_usage)",
+   "modular input (cisco_meraki_switch_port_overview)",
+   "modular input (cisco_meraki_switch_ports_by_switch)",
+   "modular input (cisco_meraki_switch_ports_transceivers_readings_history_by_switch)",
+   "modular input (cisco_meraki_switch_xcvr_readings_history)",
+   "modular input (cisco_meraki_switches)",
+   "modular input (cisco_meraki_webhook)",
+   "modular input (cisco_meraki_webhook_logs)",
+   "modular input (cisco_meraki_wireless_controller_availabilities_change_history)",
+   "modular input (cisco_meraki_wireless_controller_devices_interfaces_packets_overview_by_device)",
+   "modular input (cisco_meraki_wireless_controller_devices_interfaces_usage_history_by_interval)",
+   "modular input (cisco_meraki_wireless_devices_by_wlc)",
+   "modular input (cisco_meraki_wireless_devices_ethernet_statuses)",
+   "modular input (cisco_meraki_wireless_devices_wireless_controllers_by_device)",
+   "modular input (cisco_meraki_wireless_packet_loss_by_device)",
+   "modular input (cisco_meraki_wlc_avail_change_history)",
+   "modular input (cisco_meraki_wlc_iface_pkts_overview)",
+   "modular input (cisco_meraki_wlc_iface_usage_history)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_citrix-netscaler",
+  "version": "8.2.5",
+  "label": "Splunk Add-on for Citrix NetScaler",
+  "vendor_group": "Citrix",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-citrix-netscaler_825.spl"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (citrix_netscaler)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_cyberark",
+  "version": "2.0.0",
+  "label": "Splunk Add-on for CyberArk",
+  "vendor_group": "CyberArk",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-cyberark_200.spl"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_cyberark_epm",
+  "version": "5.0.1",
+  "label": "Splunk Add-on for CyberArk EPM",
+  "vendor_group": "CyberArk",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-cyberark-epm_501.spl"
+  ],
+  "sourcetypes": 9,
+  "mechanisms_declared_in_config": [
+   "modular input (account_admin_audit_logs)",
+   "modular input (admin_audit_logs)",
+   "modular input (inbox_events)",
+   "modular input (policies_and_computers)",
+   "modular input (policy_audit_events)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_f5-bigip",
+  "version": "7.0.1",
+  "label": "Splunk Add-on for F5 BIG-IP",
+  "vendor_group": "F5",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-f5-big-ip_701.spl"
+  ],
+  "sourcetypes": 59,
+  "mechanisms_declared_in_config": [
+   "modular input (f5_task)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_fortinet_fortigate",
+  "version": "1.6.10",
+  "label": "Fortinet Fortigate Add-on for Splunk",
+  "vendor_group": "Fortinet",
+  "package_type": "TA",
+  "files": [
+   "fortinet-fortigate-add-on-for-splunk_1610.tar.gz"
+  ],
+  "sourcetypes": 11,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_google-cloudplatform",
+  "version": "5.2.0",
+  "label": "Splunk Add-on for Google Cloud Platform",
+  "vendor_group": "Google",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-google-cloud-platform_520 (1).spl",
+   "splunk-add-on-for-google-cloud-platform_520 (2).spl",
+   "splunk-add-on-for-google-cloud-platform_520.spl"
+  ],
+  "sourcetypes": 21,
+  "mechanisms_declared_in_config": [
+   "modular input (google_cloud_billing)",
+   "modular input (google_cloud_bucket_metadata)",
+   "modular input (google_cloud_monitor)",
+   "modular input (google_cloud_pubsub)",
+   "modular input (google_cloud_pubsub_based_bucket)",
+   "modular input (google_cloud_pubsub_lite)",
+   "modular input (google_cloud_resource_metadata)",
+   "modular input (google_cloud_resource_metadata_cloud_storage)",
+   "modular input (google_cloud_resource_metadata_kubernetes)",
+   "modular input (google_cloud_resource_metadata_vpc_access)",
+   "modular input (script)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input",
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_infoblox",
+  "version": "2.2.1",
+  "label": "Splunk Add-on for Infoblox",
+  "vendor_group": "Infoblox",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-infoblox_221.spl"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_juniper",
+  "version": "1.6.1",
+  "label": "Splunk Add-on for Juniper",
+  "vendor_group": "Juniper",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-juniper_161.spl"
+  ],
+  "sourcetypes": 9,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_microsoft-cloudservices",
+  "version": "6.3.3",
+  "label": "Splunk Add-on for Microsoft Cloud Services",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-microsoft-cloud-services_633.spl"
+  ],
+  "sourcetypes": 32,
+  "mechanisms_declared_in_config": [
+   "metrics (metric index or metric schema)",
+   "modular input (mscs_azure_audit)",
+   "modular input (mscs_azure_consumption)",
+   "modular input (mscs_azure_event_hub)",
+   "modular input (mscs_azure_kql)",
+   "modular input (mscs_azure_metrics)",
+   "modular input (mscs_azure_resource)",
+   "modular input (mscs_storage_blob)",
+   "modular input (mscs_storage_table)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull",
+   "metrics"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": true,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_microsoft_sysmon",
+  "version": "5.0.1",
+  "label": "Splunk Add-on for Sysmon",
+  "vendor_group": "Microsoft",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "splunk-add-on-for-sysmon_501 (1).spl"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "Windows event log input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_mysql",
+  "version": "3.2.0",
+  "label": "Splunk Add-on for MySQL",
+  "vendor_group": "MySQL/Oracle",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-mysql_320.tgz"
+  ],
+  "sourcetypes": 18,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_nginx",
+  "version": "3.3.2",
+  "label": "Splunk Add-on for Nginx",
+  "vendor_group": "F5",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-nginx_332.spl"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [
+   "modular input (nginx_status)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_nix",
+  "version": "10.3.4",
+  "label": "Splunk Add-on for Unix and Linux",
+  "vendor_group": "Unix/Linux (open source)",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-unix-and-linux_1034.spl"
+  ],
+  "sourcetypes": 43,
+  "mechanisms_declared_in_config": [
+   "file monitoring",
+   "metrics (metric index or metric schema)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "metrics",
+   "scripted input",
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": true,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_okta_identity_cloud",
+  "version": "5.1.0",
+  "label": "Splunk Add-on for Okta Identity Cloud",
+  "vendor_group": "Okta",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-okta-identity-cloud_510.spl"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (okta_identity_cloud)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_otel_windows_x86_64",
+  "version": "0.164.0",
+  "label": "Splunk Add-on for OpenTelemetry Collector",
+  "vendor_group": "Splunk/OpenTelemetry",
+  "package_type": "modular input",
+  "files": [
+   "splunk-add-on-for-opentelemetry-collector-for-windows-x86_64_01640.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (Splunk_TA_otel)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_paloalto_networks",
+  "version": "4.0.0",
+  "label": "Splunk Add-on for Palo Alto Networks",
+  "vendor_group": "Palo Alto Networks",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-palo-alto-networks_400.spl"
+  ],
+  "sourcetypes": 38,
+  "mechanisms_declared_in_config": [
+   "modular input (palo_cortex_xdr)",
+   "modular input (palo_data_security)",
+   "modular input (palo_iot_security)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_salesforce",
+  "version": "7.0.2",
+  "label": "Splunk Add-on for Salesforce",
+  "vendor_group": "Salesforce",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-salesforce_702.spl"
+  ],
+  "sourcetypes": 9,
+  "mechanisms_declared_in_config": [
+   "modular input (sfdc_event_log)",
+   "modular input (sfdc_object)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_snow",
+  "version": "11.2.1",
+  "label": "Splunk Add-on for ServiceNow",
+  "vendor_group": "ServiceNow",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-servicenow_1121.spl"
+  ],
+  "sourcetypes": 24,
+  "mechanisms_declared_in_config": [
+   "modular input (snow)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_stream",
+  "version": "8.1.7",
+  "label": "Splunk Stream Add-on",
+  "vendor_group": "Splunk",
+  "package_type": "modular input",
+  "files": [
+   "splunk-add-on-for-stream-forwarders_817.tar.gz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [
+   "modular input (streamfwd)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_stream_wire_data",
+  "version": "8.1.7",
+  "label": "Splunk Stream Knowledge Objects for Wire Data",
+  "vendor_group": "Splunk",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-stream-wire-data_817.tgz"
+  ],
+  "sourcetypes": 18,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_symantec-ep",
+  "version": "4.0.1",
+  "label": "Splunk Add-on for Symantec Endpoint Protection",
+  "vendor_group": "Broadcom/Symantec",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-symantec-endpoint-protection_401 (1).spl",
+   "splunk-add-on-for-symantec-endpoint-protection_401.spl"
+  ],
+  "sourcetypes": 25,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Splunk_TA_vmware",
+  "version": "4.2.1",
+  "label": "Add-on for VMware",
+  "vendor_group": "VMware",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "splunk-add-on-for-vmware_421.tgz"
+  ],
+  "sourcetypes": 27,
+  "mechanisms_declared_in_config": [
+   "modular input (ta_vmware_collection_scheduler)",
+   "modular input (ta_vmware_collection_worker)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_vmware_inframon",
+  "version": "5.0.1",
+  "label": "Add-on for VMware Metrics",
+  "vendor_group": "VMware",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "splunk-add-on-for-vmware-metrics_501.tgz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [
+   "metrics (metric index or metric schema)",
+   "modular input (ta_vmware_collection_scheduler_inframon)",
+   "modular input (ta_vmware_collection_worker_inframon)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "metrics",
+   "scripted input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": true,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "Splunk_TA_windows",
+  "version": "12.0.0",
+  "label": "Splunk Add-on for Microsoft Windows",
+  "vendor_group": "Microsoft",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-microsoft-windows_1200.spl"
+  ],
+  "sourcetypes": 144,
+  "mechanisms_declared_in_config": [
+   "Windows event log input",
+   "Windows file monitor",
+   "Windows performance counters",
+   "Windows registry monitor",
+   "file monitoring",
+   "metrics (metric index or metric schema)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "metrics",
+   "scripted input",
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": true,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-CYBERHAVEN",
+  "version": "1.0.0",
+  "label": "Cyberhaven Data Security Add-on for Splunk",
+  "vendor_group": "Cyberhaven",
+  "package_type": "TA",
+  "files": [
+   "cyberhaven-data-security-add-on-for-splunk_100.spl"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec",
+   "rest_api"
+  ],
+  "categories": [
+   "HEC",
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-Cisco-NVM",
+  "version": "4.0.7",
+  "label": "Cisco NVM Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "TA",
+  "files": [
+   "cisco-endpoint-security-analytics-cesa-add-on-for-splunk_407.tgz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-Databricks",
+  "version": "1.4.4",
+  "label": "Databricks Add-on For Splunk",
+  "vendor_group": "Databricks",
+  "package_type": "TA",
+  "files": [
+   "databricks-add-on-for-splunk_144.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-Illumio",
+  "version": "4.1.3",
+  "label": "Illumio Add-on for Splunk",
+  "vendor_group": "Illumio",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "illumio-technology-add-on-for-splunk_413.tar.gz"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [
+   "modular input (illumio)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "rest_api",
+   "syslog",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-JamfProtect",
+  "version": "2.0.6",
+  "label": "Jamf Protect",
+  "vendor_group": "Jamf",
+  "package_type": "TA",
+  "files": [
+   "jamf-protect-add-on_206.tgz"
+  ],
+  "sourcetypes": 64,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-MS-AAD",
+  "version": "4.2.0",
+  "label": "Splunk Add-on for Microsoft Azure",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-microsoft-azure_420.tgz"
+  ],
+  "sourcetypes": 35,
+  "mechanisms_declared_in_config": [
+   "modular input (MS_AAD_app)",
+   "modular input (MS_AAD_audit)",
+   "modular input (MS_AAD_device)",
+   "modular input (MS_AAD_group)",
+   "modular input (MS_AAD_identity_protection)",
+   "modular input (MS_AAD_signins)",
+   "modular input (MS_AAD_user)",
+   "modular input (azure_comp)",
+   "modular input (azure_consumption)",
+   "modular input (azure_kql)",
+   "modular input (azure_metrics)",
+   "modular input (azure_reservation_recommendation)",
+   "modular input (azure_resource_graph)",
+   "modular input (azure_resource_group)",
+   "modular input (azure_security_center_input)",
+   "modular input (azure_subscription)",
+   "modular input (azure_topology_automatic)",
+   "modular input (azure_topology_man)",
+   "modular input (azure_virtual_network)",
+   "modular input (ms_graph_security)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-NetSkopeAppForSplunk",
+  "version": "4.6.0",
+  "label": "NetSkope Add-on For Splunk",
+  "vendor_group": "Netskope",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "netskope-add-on-for-splunk_460.spl"
+  ],
+  "sourcetypes": 25,
+  "mechanisms_declared_in_config": [
+   "modular input (netskope_alerts_multi_iterator)",
+   "modular input (netskope_alerts_v2)",
+   "modular input (netskope_alerts_v2_csv)",
+   "modular input (netskope_clients)",
+   "modular input (netskope_clients_iterator)",
+   "modular input (netskope_events_multi_iterator)",
+   "modular input (netskope_events_v2)",
+   "modular input (netskope_events_v2_csv)",
+   "modular input (netskope_webtransactions)",
+   "modular input (netskope_webtransactions_v2)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull",
+   "scripted input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-ONTAP-FieldExtractions",
+  "version": "3.0.3",
+  "label": "Add-on for NetApp Data ONTAP Extractions",
+  "vendor_group": "NetApp",
+  "package_type": "TA",
+  "files": [
+   "splunk-add-on-for-netapp-data-ontap-extractions_303.tgz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-OSqueryv1",
+  "version": "1.0.5",
+  "label": "TA-Osqueryv1",
+  "vendor_group": "osquery (open source)",
+  "package_type": "TA",
+  "files": [
+   "ta-osquery_105.tgz"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "cloud service pull"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-Oracle-OCI",
+  "version": "1.0.0",
+  "label": "Oracle Cloud Infrastructure Add-on for Splunk",
+  "vendor_group": "Oracle Cloud Infrastructure",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "oracle-cloud-infrastructure-add-on-for-splunk_100.spl"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (oci_stream)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec",
+   "rest_api"
+  ],
+  "categories": [
+   "HEC",
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-Qualys-Cloud-Connector",
+  "version": "1.0.0",
+  "label": "Qualys Universal Technology Add-on (TA) for Splunk",
+  "vendor_group": "Qualys",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "qualys-universal-technology-add-on-ta-for-splunk_100.tar.gz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (vmdr)",
+   "modular input (was)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-Sysdig",
+  "version": "1.1.3",
+  "label": "Sysdig Add-on for Splunk",
+  "vendor_group": "Sysdig",
+  "package_type": "TA",
+  "files": [
+   "sysdig-add-on-for-splunk_113.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-Tanium",
+  "version": "1.7.5",
+  "label": "Tanium Technology Add-on",
+  "vendor_group": "Tanium",
+  "package_type": "TA",
+  "files": [
+   "ta-tanium_175.tgz"
+  ],
+  "sourcetypes": 37,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-Varonis-DatAlert",
+  "version": "2.0.16",
+  "label": "Technology Add-on for Varonis DatAlert",
+  "vendor_group": "Varonis",
+  "package_type": "modular input",
+  "files": [
+   "varonis-technology-add-on-for-splunk_2016 (1).tgz",
+   "varonis-technology-add-on-for-splunk_2016.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-Zscaler_CIM",
+  "version": "4.1.5",
+  "label": "Zscaler Technical Add-On for Splunk",
+  "vendor_group": "Zscaler",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "zscaler-technical-add-on-for-splunk_415.tar.gz"
+  ],
+  "sourcetypes": 30,
+  "mechanisms_declared_in_config": [
+   "modular input (zscaler_audit_logs)",
+   "modular input (zscaler_sandbox_events)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-acunetix-360-add-on-for-splunk-cloud",
+  "version": "1.7.5",
+  "label": "Acunetix 360 Add-On For Splunk Cloud",
+  "vendor_group": "Acunetix",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "acunetix-360-add-on_175.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (vulnerabilitiesfoundbyacunetix)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-akamai-centra-add-on-for-splunk",
+  "version": "3.1.0",
+  "label": "Akamai Guardicore Add-on For Splunk",
+  "vendor_group": "Akamai",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "akamai-guardicore-add-on-for-splunk_310.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (akamai_guardicore)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-aruba_networks",
+  "version": "1.1.2",
+  "label": "Aruba Networks Add-on for Splunk",
+  "vendor_group": "HPE Aruba",
+  "package_type": "TA",
+  "files": [
+   "aruba-networks-add-on-for-splunk_112.tgz"
+  ],
+  "sourcetypes": 31,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-auvik-networks-add-on-for-splunk",
+  "version": "1.0.4",
+  "label": "Auvik Networks Add-on for Splunk",
+  "vendor_group": "Auvik",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "auvik-networks-add-on-for-splunk_104.tar.gz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [
+   "modular input (alert_history)",
+   "modular input (billing)",
+   "modular input (component)",
+   "modular input (device)",
+   "modular input (entity_audit)",
+   "modular input (interface)",
+   "modular input (network)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-aviatrix",
+  "version": "2.0.1",
+  "label": "Aviatrix Add-on for Splunk",
+  "vendor_group": "Aviatrix",
+  "package_type": "TA",
+  "files": [
+   "aviatrix-add-on-for-splunk_201.tar.gz"
+  ],
+  "sourcetypes": 8,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec",
+   "syslog"
+  ],
+  "categories": [
+   "HEC",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-bigid-audits",
+  "version": "2.0.0",
+  "label": "BigID Audit logs",
+  "vendor_group": "BigID",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "bigid-audit-logs-add-on-for-splunk_200.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (bigid_audit_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-bluecat_ipam",
+  "version": "3.2.0",
+  "label": "Add-on for BlueCat Address Manager",
+  "vendor_group": "BlueCat",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "add-on-for-bluecat-ipam-new_320.tar.gz"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [
+   "modular input (get_ipam_data)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-bxti-proofpoint-ser",
+  "version": "1.0.2",
+  "label": "BXTI Add-on for Proofpoint SER",
+  "vendor_group": "Proofpoint",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "bxti-add-on-for-proofpoint-ser_102.tar.gz"
+  ],
+  "sourcetypes": 12,
+  "mechanisms_declared_in_config": [
+   "modular input (proofpoint_ser)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-cisco-cloud-security-addon",
+  "version": "1.0.57",
+  "label": "Cisco Secure Access Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "cisco-secure-access-add-on-for-splunk_1057.tar.gz"
+  ],
+  "sourcetypes": 28,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_cloud_security_addon)",
+   "modular input (granular_event_processing)",
+   "modular input (migration)",
+   "modular input (s3_auto_cronjob)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-cofense-triage-add-on-for-splunk",
+  "version": "2.1.7",
+  "label": "Cofense Triage Add-On",
+  "vendor_group": "Cofense",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "cofense-triage-add-on_217.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (cofense_triage)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-cohesity-add-on-for-splunk",
+  "version": "1.2.0",
+  "label": "Cohesity Add-on for Splunk",
+  "vendor_group": "Cohesity",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "cohesity-add-on-for-splunk_120 (1).tar.gz",
+   "cohesity-add-on-for-splunk_120.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (cohesity_alerts)",
+   "modular input (cohesity_audit_logs)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-crowdstrike-falcon-event-streams",
+  "version": "3.7.2",
+  "label": "CrowdStrike Falcon Event Streams",
+  "vendor_group": "CrowdStrike",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "crowdstrike-falcon-event-streams-technical-add-on_372.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (crowdstrike_event_streams)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-crowdstrike_falcon_discover",
+  "version": "1.0.2",
+  "label": "CrowdStrike Falcon Discover Add-on for Splunk",
+  "vendor_group": "CrowdStrike",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "crowdstrike-falcon-discover-add-on-for-splunk_102.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (input_cs_applications)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-docker-add-on-for-splunk",
+  "version": "3.0.15",
+  "label": "Docker Add-on For Splunk",
+  "vendor_group": "Docker",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "docker-monitoring-add-on-for-splunk_3015.tgz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (containers_images)",
+   "modular input (containers_list)",
+   "modular input (containers_network)",
+   "modular input (containers_stats)",
+   "modular input (system_info)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-elastic-search",
+  "version": "1.0.0",
+  "label": "Elastic Search Add-on for Splunk",
+  "vendor_group": "Elastic",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "elastic-search-add-on-for-splunk_100.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (elastic_data_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-ensign_waf_akamaisiem",
+  "version": "2.0.0",
+  "label": "Ensign Akamai Web Security Add-on",
+  "vendor_group": "Akamai",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "ensign-akamai-web-security-add-on_200 (1).tar.gz",
+   "ensign-akamai-web-security-add-on_200.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (akamai_siem_source)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-entrust-datacard-intellitrust-add-on-for-splunk",
+  "version": "1.6.2",
+  "label": "Entrust Identity as a Service Add-on for Splunk",
+  "vendor_group": "Entrust",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "entrust-identity-as-a-service-add-on-for-splunk_162.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (intellitrust)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-extrahop_addon",
+  "version": "2.7.0",
+  "label": "ExtraHop Add-On for Splunk",
+  "vendor_group": "ExtraHop",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "extrahop-add-on-for-splunk_270.spl"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (detection)",
+   "modular input (extrahop)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api",
+   "syslog"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-flashpoint-intelligence",
+  "version": "2.5.2",
+  "label": "Flashpoint Intelligence Add-on",
+  "vendor_group": "Flashpoint",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "flashpoint-add-on-for-splunk_252.spl"
+  ],
+  "sourcetypes": 8,
+  "mechanisms_declared_in_config": [
+   "modular input (flashpoint_intelligence)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-forescout",
+  "version": "3.0.7",
+  "label": "Forescout Technology Add-on for Splunk",
+  "vendor_group": "Forescout",
+  "package_type": "TA",
+  "files": [
+   "forescout-technology-add-on-for-splunk_307.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-gitlab-add-on-for-splunk",
+  "version": "3.2.15",
+  "label": "GitLab Add-on for Splunk",
+  "vendor_group": "GitLab",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "gitlab-add-on-for-splunk_3215.tgz"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [
+   "modular input (gitlab_commit)",
+   "modular input (gitlab_event)",
+   "modular input (gitlab_merge_request)",
+   "modular input (gitlab_user)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-gitlab-saas-add-on-for-splunk",
+  "version": "2.0.15",
+  "label": "GitLab Saas Add-on for Splunk",
+  "vendor_group": "GitLab",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "gitlab-saas-add-on-for-splunk_2015.tgz"
+  ],
+  "sourcetypes": 5,
+  "mechanisms_declared_in_config": [
+   "modular input (gitlab_saas_commits)",
+   "modular input (gitlab_saas_events)",
+   "modular input (gitlab_saas_merge_requests)",
+   "modular input (gitlab_saas_users)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-guardium",
+  "version": "1.0.1",
+  "label": "TA-guardium",
+  "vendor_group": "IBM",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "guardium-api-add-on-for-splunk_101.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (guardium_online_report)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-ibm_datapower",
+  "version": "1.0.2",
+  "label": "IBM DataPower Add-on for Splunk",
+  "vendor_group": "IBM",
+  "package_type": "TA",
+  "files": [
+   "ibm-datapower-add-on-for-splunk_102.tar.gz"
+  ],
+  "sourcetypes": 27,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-insightappsec",
+  "version": "1.0.3",
+  "label": "Rapid7 InsightAppSec Technology Add-On for Splunk",
+  "vendor_group": "Rapid7",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "rapid7-insightappsec-add-on_103.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (insightappsec_apps)",
+   "modular input (insightappsec_findings)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-invicti-platform",
+  "version": "1.0.0",
+  "label": "Invicti Platform Add-on for Splunk",
+  "vendor_group": "Invicti",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "invicti-platform-add-on_100.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (invicti_vulnerabilities)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-ivanti-ism",
+  "version": "1.4.2",
+  "label": "Ivanti Service Manager Add-On for Splunk",
+  "vendor_group": "Ivanti",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "ivanti-service-manager-add-on-for-splunk_142.tgz"
+  ],
+  "sourcetypes": 6,
+  "mechanisms_declared_in_config": [
+   "modular input (ism_changes_input)",
+   "modular input (ism_incidents_input)",
+   "modular input (ism_problems_input)",
+   "modular input (ism_service_requests_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-lansweeper-add-on-for-splunk",
+  "version": "1.3.5",
+  "label": "Lansweeper Add-on for Splunk",
+  "vendor_group": "Lansweeper",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "lansweeper-add-on-for-splunk_135.tgz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (lansweeper_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "database",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "database (JDBC/DB Connect)"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-macOS",
+  "version": "1.0.0",
+  "label": "TA-macOS",
+  "vendor_group": "Apple",
+  "package_type": "TA",
+  "files": [
+   "technology-add-on-for-macos_100.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "file monitoring"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-manageengine-endpoint-central-add-on",
+  "version": "1.1.2",
+  "label": "ManageEngine Endpoint Central Add-on",
+  "vendor_group": "ManageEngine (Zoho)",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "manageengine-endpoint-central-add-on_112.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (endpointcentral_actionlog)",
+   "modular input (endpointcentral_vulnerability)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-manageengine-vulnerability-manager-plus-add-on",
+  "version": "1.0.6",
+  "label": "ManageEngine Vulnerability Manager Plus Add-on",
+  "vendor_group": "ManageEngine (Zoho)",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "manageengine-vulnerability-manager-plus-add-on_106.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (vmp_actionlog)",
+   "modular input (vmp_vulnerability)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-mandiant-digital-threat-monitoring",
+  "version": "1.0.1",
+  "label": "Mandiant Digital Threat Monitoring",
+  "vendor_group": "Google (Mandiant)",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "mandiant-digital-threat-monitoring-add-on-for-splunk_101.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (dtm_alerts)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-microsoft-defender-threat-vulnerability-add-on",
+  "version": "2.0.2",
+  "label": "Microsoft Defender Threat & Vulnerability Add-on for Splunk",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "microsoft-365-defender-threat-vulnerability-add-on-for-splunk_202.tar.gz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (ms_defender_cve_descriptions)",
+   "modular input (ms_defender_machines)",
+   "modular input (ms_defender_vulnerabilities)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-microsoft-graph-security-score",
+  "version": "1.3.0",
+  "label": "Microsoft Graph Security Score Add-on",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "microsoft-graph-security-score-add-on_130.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (graph_security_score_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-nsx",
+  "version": "1.0.5",
+  "label": "NSX syslog add-on",
+  "vendor_group": "VMware",
+  "package_type": "TA",
+  "files": [
+   "vmware-nsx-add-on_105.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-paloalto-dlp",
+  "version": "2.0.0",
+  "label": "Add-on for Paloalto DLP",
+  "vendor_group": "Palo Alto Networks",
+  "package_type": "sourcetype definitions",
+  "files": [
+   "add-on-for-paloalto-dlp_200.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-postfix-mail",
+  "version": "1.0.0",
+  "label": "Postfix Mail Add-on for Splunk",
+  "vendor_group": "Postfix (open source)",
+  "package_type": "TA",
+  "files": [
+   "postfix-mail-add-on-for-splunk_100.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-pps_ondemand",
+  "version": "2.8.0",
+  "label": "Proofpoint On Demand Email Security Add On",
+  "vendor_group": "Proofpoint",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "proofpoint-on-demand-email-security-add-on_280 (1).spl",
+   "proofpoint-on-demand-email-security-add-on_280.spl"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (proofpoint_audit_log)",
+   "modular input (proofpoint_mail_log)",
+   "modular input (proofpoint_message_log)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-proofpoint-casb-addon-for-splunk",
+  "version": "1.1.18",
+  "label": "Proofpoint CASB Add-on for Splunk",
+  "vendor_group": "Proofpoint",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "proofpoint-casb-add-on-for-splunk_1118 (1).tgz",
+   "proofpoint-casb-add-on-for-splunk_1118.tgz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (proofpoint_casb_activitylog)",
+   "modular input (proofpoint_casb_alerts)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-proofpoint-incidents",
+  "version": "3.0.1",
+  "label": "Add-on for Proofpoint incidents",
+  "vendor_group": "Proofpoint",
+  "package_type": "modular input",
+  "files": [
+   "add-on-for-proofpoint-incidents_301.tar.gz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [
+   "modular input (proofpoint_incidents)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-rapid7-insightvm",
+  "version": "1.5.2",
+  "label": "Rapid7 InsightVM",
+  "vendor_group": "Rapid7",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "rapid7-insightvm-technology-add-on-for-splunk_152.tgz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (insightvm_asset_import)",
+   "modular input (insightvm_vulnerability_definition_import)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-rubric-protocol",
+  "version": "1.0.0",
+  "label": "Rubric Protocol Add-on",
+  "vendor_group": "Rubric Protocol",
+  "package_type": "TA",
+  "files": [
+   "rubric-protocol-add-on-for-splunk_100.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-sailpoint-identitynow-auditevent-add-on",
+  "version": "3.0.0",
+  "label": "SailPoint Identity Security Cloud AuditEvent Add-on",
+  "vendor_group": "SailPoint",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "sailpoint-identity-security-cloud-auditevent-add-on_300.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (sailpoint_identitynow_auditevent)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-saviyntevents",
+  "version": "1.2.4",
+  "label": "SaviyntEvents",
+  "vendor_group": "Saviynt",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "saviynt-events-add-on_124.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (saviynt)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-securelink",
+  "version": "1.2.1",
+  "label": "SecureLink Add-On",
+  "vendor_group": "SecureLink",
+  "package_type": "TA",
+  "files": [
+   "securelink-add-on-for-syslog_121.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-siemplify",
+  "version": "4.3.1",
+  "label": "Siemplify",
+  "vendor_group": "Google (Siemplify)",
+  "package_type": "modular input",
+  "files": [
+   "siemplify-add-on-for-splunk_431.spl"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-site24x7",
+  "version": "3.0.0",
+  "label": "site24x7",
+  "vendor_group": "ManageEngine (Zoho)",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "manageengine-site24x7-add-on-for-splunk_300.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (site24x7_api_site24x7)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-slack-add-on-for-splunk",
+  "version": "3.0.0",
+  "label": "Slack Add-on for Splunk",
+  "vendor_group": "Slack",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "slack-add-on-for-splunk_300.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (slack_audit_logs)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-sophos-central-cef",
+  "version": "1.0.0",
+  "label": "Binary Global Add-on for Sophos Central CEF",
+  "vendor_group": "Sophos",
+  "package_type": "TA",
+  "files": [
+   "add-on-for-sophos-central-cef_100.tar.gz"
+  ],
+  "sourcetypes": 9,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-sophos-email-security",
+  "version": "1.0.0",
+  "label": "Splunk Add-on for Sophos Email Security",
+  "vendor_group": "Sophos",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "sophos-email-security-add-on_100 (1).tgz",
+   "sophos-email-security-add-on_100.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (sophos_email)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-sophos_xg_firewall",
+  "version": "1.0.2",
+  "label": "Sophos XG Firewall Add-on For Splunk",
+  "vendor_group": "Sophos",
+  "package_type": "TA",
+  "files": [
+   "sophos-next-gen-firewall_102.tgz"
+  ],
+  "sourcetypes": 15,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-swift_agi",
+  "version": "1.0.0",
+  "label": "SWIFT AGI Add-on for Splunk",
+  "vendor_group": "SWIFT",
+  "package_type": "TA",
+  "files": [
+   "swift-agi-add-on-for-splunk_100.tgz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-tenable",
+  "version": "8.0.4",
+  "label": "Tenable Add-On for Splunk",
+  "vendor_group": "Tenable",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "tenable-add-on-for-splunk_804.spl"
+  ],
+  "sourcetypes": 25,
+  "mechanisms_declared_in_config": [
+   "modular input (tenable_asm)",
+   "modular input (tenable_io)",
+   "modular input (tenable_io_audit_logs)",
+   "modular input (tenable_io_compliance)",
+   "modular input (tenable_ot_security_icp)",
+   "modular input (tenable_securitycenter)",
+   "modular input (tenable_securitycenter_mobile)",
+   "modular input (tenable_was)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-vmware-vision",
+  "version": "2.0.1",
+  "label": "VMware Vision Technical Add-on",
+  "vendor_group": "VMware",
+  "package_type": "TA",
+  "files": [
+   "vmware-vision-ingestion-add-on_201.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-vmware_esxi_syslog",
+  "version": "0.3.0",
+  "label": "Technology Add-on for VMware ESXi Syslog (Community)",
+  "vendor_group": "VMware",
+  "package_type": "TA",
+  "files": [
+   "technology-add-on-for-vmware-esxi-syslog-community_030.tgz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA-wiz-addon-for-splunk",
+  "version": "1.4.8",
+  "label": "Wiz Add-on For Splunk",
+  "vendor_group": "Wiz",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "wiz-add-on-for-splunk_148.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [
+   "modular input (detections_input)",
+   "modular input (issues_input)",
+   "modular input (user_audit_logs)",
+   "modular input (vulnerabilities_input)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-zabbix-add-on-for-splunk",
+  "version": "2.0.5",
+  "label": "Zabbix Add-on for Splunk",
+  "vendor_group": "Zabbix",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "zabbix-add-on-for-splunk_205.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (zabbix_audit_logs)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA-zero-networks-add-on-for-splunk",
+  "version": "2.0.9",
+  "label": "Zero Networks Add-on for Splunk",
+  "vendor_group": "Zero Networks",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "zero-networks-add-on-for-splunk_209.spl"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (zero_networks_audit)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_BlueCat_dns_edge",
+  "version": "1.5.5",
+  "label": "BlueCat DNS Edge Technology Add-on for Splunk",
+  "vendor_group": "BlueCat",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "bluecat-dns-edge-technical-add-on-for-splunk_155.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (bluecat_dns_edge)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_MS_Teams",
+  "version": "2.0.1",
+  "label": "Microsoft Teams Add-on for Splunk",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "microsoft-teams-add-on-for-splunk_201.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [
+   "modular input (teams_call_record)",
+   "modular input (teams_call_records)",
+   "modular input (teams_subscription)",
+   "modular input (teams_user_report)",
+   "modular input (teams_webhook)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_Stormshield",
+  "version": "1.7.1",
+  "label": "Stormshield Add-on",
+  "vendor_group": "Stormshield",
+  "package_type": "TA",
+  "files": [
+   "process-it-add-on-for-stormshield_171.tgz"
+  ],
+  "sourcetypes": 24,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA_cisco_catalyst",
+  "version": "4.0.60",
+  "label": "Cisco Enterprise Networking Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "cisco-enterprise-networking-add-on-for-splunk_4060.tgz"
+  ],
+  "sourcetypes": 112,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_catalyst_center_reports)",
+   "modular input (cisco_catalyst_cybervision_activities)",
+   "modular input (cisco_catalyst_cybervision_api)",
+   "modular input (cisco_catalyst_cybervision_components)",
+   "modular input (cisco_catalyst_cybervision_devices)",
+   "modular input (cisco_catalyst_cybervision_events)",
+   "modular input (cisco_catalyst_cybervision_flows)",
+   "modular input (cisco_catalyst_cybervision_vulnerabilities)",
+   "modular input (cisco_catalyst_dnac_ap_positions)",
+   "modular input (cisco_catalyst_dnac_api)",
+   "modular input (cisco_catalyst_dnac_application_traffic)",
+   "modular input (cisco_catalyst_dnac_audit_logs)",
+   "modular input (cisco_catalyst_dnac_client)",
+   "modular input (cisco_catalyst_dnac_clienthealth)",
+   "modular input (cisco_catalyst_dnac_compliance)",
+   "modular input (cisco_catalyst_dnac_devicehealth)",
+   "modular input (cisco_catalyst_dnac_events)",
+   "modular input (cisco_catalyst_dnac_interface_stats)",
+   "modular input (cisco_catalyst_dnac_issue)",
+   "modular input (cisco_catalyst_dnac_networkhealth)",
+   "modular input (cisco_catalyst_dnac_securityadvisory)",
+   "modular input (cisco_catalyst_dnac_site_topology)",
+   "modular input (cisco_catalyst_dnac_sitehealth)",
+   "modular input (cisco_catalyst_dnac_swim)",
+   "modular input (cisco_catalyst_ise_administrative_input)",
+   "modular input (cisco_catalyst_ise_analytics_reports)",
+   "modular input (cisco_catalyst_ise_api)",
+   "modular input (cisco_catalyst_ise_data_connect)",
+   "modular input (cisco_catalyst_ise_endpoint_context)",
+   "modular input (cisco_catalyst_ise_ers)",
+   "modular input (cisco_catalyst_ise_guest)",
+   "modular input (cisco_catalyst_ise_monitoring)",
+   "modular input (cisco_catalyst_ise_pxgrid)",
+   "modular input (cisco_catalyst_ise_threat)",
+   "modular input (cisco_catalyst_ise_vulnerability)",
+   "modular input (cisco_catalyst_sdwan_api)",
+   "modular input (cisco_catalyst_sdwan_audit_logs)",
+   "modular input (cisco_catalyst_sdwan_energy_stats)",
+   "modular input (cisco_catalyst_sdwan_health)",
+   "modular input (cisco_catalyst_sdwan_insecure_config)",
+   "modular input (cisco_catalyst_sdwan_realtime)",
+   "modular input (cisco_catalyst_sdwan_security_advisory)",
+   "modular input (cisco_catalyst_sdwan_site_and_tunnel_health)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec",
+   "netflow_ipfix",
+   "rest_api",
+   "syslog",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "HEC",
+   "NetFlow/IPFIX",
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_cloudflare_r2",
+  "version": "1.1.0",
+  "label": "Cloudflare R2 Log Ingestion",
+  "vendor_group": "Cloudflare",
+  "package_type": "modular input",
+  "files": [
+   "cloudflare-r2-log-ingestion-add-on-for-splunk_110.tar.gz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [
+   "modular input (cloudflare_r2)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull",
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "cloud service pull"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_crowdstrike_falcon_detections",
+  "version": "2.1.0",
+  "label": "CrowdStrike Falcon Detections",
+  "vendor_group": "CrowdStrike",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "crowdstrike-falcon-detections-technical-add-on_210.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (crowdstrike_falcon_detections)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_dragos_ot_add_on",
+  "version": "1.1.7",
+  "label": "Dragos OT Add-on",
+  "vendor_group": "Dragos",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "dragos-ot-add-on-for-splunk_117.tgz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [
+   "modular input (addresses)",
+   "modular input (asset_data)",
+   "modular input (asset_zones)",
+   "modular input (iocs)",
+   "modular input (notifications)",
+   "modular input (vulnerabilities)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_fortindr_cloud_add_on_for_splunk",
+  "version": "1.1.7",
+  "label": "FortiNDR Cloud Add-on for Splunk",
+  "vendor_group": "Fortinet",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "fortindr-cloud-add-on-for-splunk_117.spl"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (fortindr_cloud_detections)",
+   "modular input (fortindr_cloud_entities)",
+   "modular input (fortindr_cloud_events)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_gitlab",
+  "version": "1.0.0",
+  "label": "GitLab Add-on for Splunk",
+  "vendor_group": "GitLab",
+  "package_type": "TA",
+  "files": [
+   "gitlab-self-managed-add-on-for-splunk-cim_100.tgz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [
+   "file monitoring"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA_google_chrome",
+  "version": "2.1.3",
+  "label": "Google Chrome Add-on for Splunk",
+  "vendor_group": "Google",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "google-chrome-add-on-for-splunk_213.tar.gz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (google_chrome_lookup_create)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_menlosecurity_api_inputs",
+  "version": "2.5.3",
+  "label": "Menlo Security API inputs",
+  "vendor_group": "Menlo Security",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "menlo-security-technology-add-on_253.tgz"
+  ],
+  "sourcetypes": 12,
+  "mechanisms_declared_in_config": [
+   "modular input (menlo_log_api)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_teamviewer",
+  "version": "1.0.0",
+  "label": "TeamViewer Add-on for Splunk",
+  "vendor_group": "TeamViewer",
+  "package_type": "TA",
+  "files": [
+   "teamviewer-add-on-for-splunk_100.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "universal_forwarder_files"
+  ],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "TA_unifi_ng",
+  "version": "3.4.0",
+  "label": "UniFi Network Add-on for Splunk",
+  "vendor_group": "Ubiquiti",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "unifi-network-add-on-for-splunk_340.tar.gz"
+  ],
+  "sourcetypes": 25,
+  "mechanisms_declared_in_config": [
+   "modular input (unifi_ingest)",
+   "modular input (unifi_inventory)",
+   "modular input (unifi_reference)",
+   "modular input (unifi_telemetry)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "TA_vectra_detect_json",
+  "version": "1.4.6",
+  "label": "Technology Add-on for Vectra Detect (JSON)",
+  "vendor_group": "Vectra AI",
+  "package_type": "TA",
+  "files": [
+   "technology-add-on-for-vectra-detect-json_146.tar.gz"
+  ],
+  "sourcetypes": 11,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "Trellix_Splunk",
+  "version": "1.0.7",
+  "label": "Trellix MVision EPO Add-on for Splunk",
+  "vendor_group": "Trellix",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "trellix-mvision-epo-add-on-for-splunk_107.tgz"
+  ],
+  "sourcetypes": 1,
+  "mechanisms_declared_in_config": [
+   "modular input (trellix_events)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "ansible_addon_for_splunk",
+  "version": "1.2.0",
+  "label": "Event-Driven Ansible Add-on for Splunk",
+  "vendor_group": "Red Hat",
+  "package_type": "modular input",
+  "files": [
+   "red-hat-event-driven-ansible-add-on-for-splunk_120.tar.gz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "aristanetworks",
+  "version": "2.0.2",
+  "label": "Arista Networks 2.0.2",
+  "vendor_group": "Arista Networks",
+  "package_type": "TA",
+  "files": [
+   "arista-networks-telemetry-for-splunk_202.tgz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUPPORTED_DELIVERY",
+  "netspout_delivery_note": "no API/agent input declared; the operator chooses syslog, file or HEC"
+ },
+ {
+  "app_id": "bitbucket_addon_for_splunk",
+  "version": "1.0.15",
+  "label": "Bitbucket Add-on for Splunk",
+  "vendor_group": "Atlassian",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "bitbucket-add-on-for-splunk_1015.tgz"
+  ],
+  "sourcetypes": 18,
+  "mechanisms_declared_in_config": [
+   "modular input (bitbucket_audit_log)",
+   "modular input (bitbucket_branch)",
+   "modular input (bitbucket_commits)",
+   "modular input (bitbucket_deployments)",
+   "modular input (bitbucket_pipelines)",
+   "modular input (bitbucket_project_group_permissions)",
+   "modular input (bitbucket_project_user_permissions)",
+   "modular input (bitbucket_projects)",
+   "modular input (bitbucket_pullrequests)",
+   "modular input (bitbucket_pullrequests_activity)",
+   "modular input (bitbucket_repository)",
+   "modular input (bitbucket_repository_group_permissions)",
+   "modular input (bitbucket_repository_user_permissions)",
+   "modular input (bitbucket_repository_webhooks)",
+   "modular input (bitbucket_user)",
+   "modular input (bitbucket_workspace)",
+   "modular input (bitbucket_workspace_user_permissions)",
+   "modular input (bitbucket_workspace_webhooks)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "cloudflare",
+  "version": "2.3.1",
+  "label": "Cloudflare App for Splunk",
+  "vendor_group": "Cloudflare",
+  "package_type": "TA",
+  "files": [
+   "cloudflare-app-for-splunk_231.tar.gz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "cloud_pull"
+  ],
+  "categories": [
+   "cloud service pull"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "confluence_and_jira_audit_addon_for_splunk",
+  "version": "1.0.15",
+  "label": "Confluence and Jira Audit Addon for Splunk",
+  "vendor_group": "Atlassian",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "confluence-and-jira-audit-add-on-for-splunk_1015.tar.gz"
+  ],
+  "sourcetypes": 2,
+  "mechanisms_declared_in_config": [
+   "modular input (confluence)",
+   "modular input (jira)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "genesys_cloud_ta",
+  "version": "0.4.3",
+  "label": "Genesys Cloud Add-on for Splunk",
+  "vendor_group": "Genesys",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "genesys-cloud-add-on-for-splunk_043.tar.gz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (actions_metrics)",
+   "modular input (audit_query)",
+   "modular input (conversations_details)",
+   "modular input (conversations_metrics)",
+   "modular input (edges_metrics)",
+   "modular input (edges_phones)",
+   "modular input (edges_trunks_metrics)",
+   "modular input (queue_observations)",
+   "modular input (status_page_metrics)",
+   "modular input (user_aggregates)",
+   "modular input (user_routing_status)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "sonicwall_sma1000_ta",
+  "version": "2.0.0",
+  "label": "SonicWall SMA1000 Technical Add-on for Splunk",
+  "vendor_group": "SonicWall",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "sonicwall-sma-1000-technical-add-on-for-splunk_200.tgz"
+  ],
+  "sourcetypes": 10,
+  "mechanisms_declared_in_config": [
+   "modular input (sma1000_api_poller)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "syslog"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "text events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "splunk_app_db_connect",
+  "version": "4.3.0",
+  "label": "Splunk DB Connect",
+  "vendor_group": "Splunk",
+  "package_type": "mixed (modular input, app UI)",
+  "files": [
+   "splunk-db-connect_430.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [
+   "modular input (dbx_db_input)",
+   "modular input (dbx_db_output)",
+   "modular input (dbxquery)",
+   "modular input (server)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "database",
+   "rest_api"
+  ],
+  "categories": [
+   "REST/API modular input",
+   "database (JDBC/DB Connect)"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "splunk_app_stream_ipfix_cisco_hsl",
+  "version": "4.0.0",
+  "label": "Cisco Enterprise Networking NetFlow Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "modular input",
+  "files": [
+   "cisco-enterprise-networking-netflow-add-on-for-splunk_400.tgz"
+  ],
+  "sourcetypes": 0,
+  "mechanisms_declared_in_config": [],
+  "mechanisms_only_mentioned_in_readme": [
+   "netflow_ipfix"
+  ],
+  "categories": [
+   "NetFlow/IPFIX"
+  ],
+  "payload_shape": "not declared",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "NOT_EMULATED",
+  "netspout_delivery_note": "flow-collector template; defines no sourcetypes"
+ },
+ {
+  "app_id": "splunk_ta_o365",
+  "version": "6.1.1",
+  "label": "Splunk Add-on for Microsoft Office 365",
+  "vendor_group": "Microsoft",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "splunk-add-on-for-microsoft-office-365_611 (1).spl",
+   "splunk-add-on-for-microsoft-office-365_611.spl"
+  ],
+  "sourcetypes": 10,
+  "mechanisms_declared_in_config": [
+   "modular input (script)",
+   "modular input (splunk_ta_o365_cloud_app_security)",
+   "modular input (splunk_ta_o365_graph_api)",
+   "modular input (splunk_ta_o365_management_activity)",
+   "modular input (splunk_ta_o365_message_trace)",
+   "modular input (splunk_ta_o365_microsoft_entra_id_metadata)",
+   "modular input (splunk_ta_o365_service_message)",
+   "modular input (splunk_ta_o365_service_status)",
+   "scripted input"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input",
+   "scripted input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "ta_cisco_meeting_server_add_on_for_splunk",
+  "version": "1.2.0",
+  "label": "CMS Technical Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (sourcetype definitions, modular input)",
+  "files": [
+   "cms-technical-add-on-for-splunk_120.tar.gz"
+  ],
+  "sourcetypes": 4,
+  "mechanisms_declared_in_config": [
+   "modular input (cms_cdr_receiver)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec",
+   "syslog"
+  ],
+  "categories": [
+   "HEC",
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "ta_cisco_spaces",
+  "version": "2.0.20",
+  "label": "Cisco Spaces Add-on for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "spaces-add-on-for-splunk_2020.tgz"
+  ],
+  "sourcetypes": 3,
+  "mechanisms_declared_in_config": [
+   "modular input (cisco_spaces_firehose)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [],
+  "categories": [
+   "REST/API modular input"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ },
+ {
+  "app_id": "ta_cisco_thousandeyes",
+  "version": "0.9.0",
+  "label": "Cisco ThousandEyes App for Splunk",
+  "vendor_group": "Cisco",
+  "package_type": "mixed (TA, modular input)",
+  "files": [
+   "cisco-thousandeyes-app-for-splunk_090.tar.gz"
+  ],
+  "sourcetypes": 7,
+  "mechanisms_declared_in_config": [
+   "file monitoring",
+   "modular input (activity_logs_stream)",
+   "modular input (alerts_stream)",
+   "modular input (event)",
+   "modular input (test_metrics_stream)",
+   "modular input (test_traces_stream)",
+   "modular input (thousandeyes_refresh_tokens)"
+  ],
+  "mechanisms_only_mentioned_in_readme": [
+   "hec"
+  ],
+  "categories": [
+   "HEC",
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "payload_shape": "JSON events",
+  "metric_definitions_in_package": false,
+  "metric_indexes_declared": [],
+  "netspout_delivery": "SUBSTITUTE_VIA_HEC",
+  "netspout_delivery_note": "the add-on pulls from a vendor API or service; NetSpout does not emulate it, it can only deliver equivalent events over HEC if their payload matches the API output"
+ }
+]

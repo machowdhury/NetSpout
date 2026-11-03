@@ -1,0 +1,280 @@
+[
+ {
+  "vendor_id": "cisco_sdwan",
+  "vendor": "Cisco Systems",
+  "ta_app_id": "TA_cisco_catalyst",
+  "ta_label": "Cisco Enterprise Networking Add-on for Splunk",
+  "package_version": "4.0.60",
+  "package_file": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+  "score": 16.4,
+  "exact_sourcetypes_ready": [
+   "cisco:sdwan:linkhealth",
+   "cisco:sdwan:sitehealth",
+   "cisco:sdwan:ssetunnels",
+   "cisco:sdwan:syslog",
+   "cisco:sdwan:tunnelhealth",
+   "cisco:sdwan:utd:logs",
+   "cisco:sdwan:utdhealth"
+  ],
+  "exact_ready_count": 7,
+  "format_verified_count": 2,
+  "scenario_references": 14,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "HEC",
+   "NetFlow/IPFIX",
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [
+   "JSON structure only; field names not yet compared to the add-on"
+  ],
+  "evidence": "exact names defined at default/props.conf:[cisco:sdwan:linkhealth] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (2 FORMAT_VERIFIED, 5 partial/structure-only)",
+  "rank": 1
+ },
+ {
+  "vendor_id": "palo_alto",
+  "vendor": "Palo Alto Networks",
+  "ta_app_id": "Splunk_TA_paloalto_networks",
+  "ta_label": "Splunk Add-on for Palo Alto Networks",
+  "package_version": "4.0.0",
+  "package_file": "splunk-add-on-for-palo-alto-networks_400.spl",
+  "score": 13.9,
+  "exact_sourcetypes_ready": [
+   "pan:system",
+   "pan:threat"
+  ],
+  "exact_ready_count": 2,
+  "format_verified_count": 2,
+  "scenario_references": 9,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "REST/API modular input"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [],
+  "evidence": "exact names defined at default/props.conf:[pan_system] rename in splunk-add-on-for-palo-alto-networks_400.spl; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (2 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 2
+ },
+ {
+  "vendor_id": "aruba_cx",
+  "vendor": "Aruba / HPE",
+  "ta_app_id": "TA-aruba_networks",
+  "ta_label": "Aruba Networks Add-on for Splunk",
+  "package_version": "1.1.2",
+  "package_file": "aruba-networks-add-on-for-splunk_112.tgz",
+  "score": 13.0,
+  "exact_sourcetypes_ready": [
+   "aruba",
+   "aruba:authmgr",
+   "aruba:stm"
+  ],
+  "exact_ready_count": 3,
+  "format_verified_count": 2,
+  "scenario_references": 0,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [
+   "the add-on defines no extraction rules to check against for some sourcetypes"
+  ],
+  "evidence": "exact names defined at default/props.conf:[aruba:syslog] rename in aruba-networks-add-on-for-splunk_112.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (2 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 3
+ },
+ {
+  "vendor_id": "cisco_ise",
+  "vendor": "Cisco Systems",
+  "ta_app_id": "TA_cisco_catalyst",
+  "ta_label": "Cisco Enterprise Networking Add-on for Splunk",
+  "package_version": "4.0.60",
+  "package_file": "cisco-enterprise-networking-add-on-for-splunk_4060.tgz",
+  "score": 12.7,
+  "exact_sourcetypes_ready": [
+   "cisco:ise:radius:authz:policy",
+   "cisco:ise:radius:policyset",
+   "cisco:ise:syslog",
+   "cisco:ise:tacacs:authz:policy",
+   "cisco:ise:tacacs:policyset"
+  ],
+  "exact_ready_count": 5,
+  "format_verified_count": 1,
+  "scenario_references": 7,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "HEC",
+   "NetFlow/IPFIX",
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [
+   "some sourcetypes emit fewer columns than the add-on lists"
+  ],
+  "evidence": "exact names defined at default/props.conf:[cisco:ise:radius:authz:policy] in cisco-enterprise-networking-add-on-for-splunk_4060.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 4 partial/structure-only)",
+  "rank": 4
+ },
+ {
+  "vendor_id": "cisco_asa",
+  "vendor": "Cisco Systems",
+  "ta_app_id": "CiscoSecurityCloud",
+  "ta_label": "Cisco Security Cloud",
+  "package_version": "3.7.3",
+  "package_file": "cisco-security-cloud_373.tar.gz",
+  "score": 10.0,
+  "exact_sourcetypes_ready": [
+   "cisco:ftd:syslog"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 1,
+  "scenario_references": 0,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "REST/API modular input",
+   "syslog/file"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [],
+  "evidence": "exact names defined at default/props.conf:[cisco:ftd:syslog] in cisco-security-cloud_373.tar.gz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 5
+ },
+ {
+  "vendor_id": "fortinet",
+  "vendor": "Fortinet",
+  "ta_app_id": "Splunk_TA_fortinet_fortigate",
+  "ta_label": "Fortinet Fortigate Add-on for Splunk",
+  "package_version": "1.6.10",
+  "package_file": "fortinet-fortigate-add-on-for-splunk_1610.tar.gz",
+  "score": 10.0,
+  "exact_sourcetypes_ready": [
+   "fortigate_event"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 1,
+  "scenario_references": 0,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [],
+  "evidence": "exact names defined at default/props.conf:[fortigate_event] in fortinet-fortigate-add-on-for-splunk_1610.tar.gz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 6
+ },
+ {
+  "vendor_id": "nginx_f5",
+  "vendor": "NGINX (F5)",
+  "ta_app_id": "Splunk_TA_nginx",
+  "ta_label": "Splunk Add-on for Nginx",
+  "package_version": "3.3.2",
+  "package_file": "splunk-add-on-for-nginx_332.spl",
+  "score": 9.0,
+  "exact_sourcetypes_ready": [
+   "nginx:plus:access"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 1,
+  "scenario_references": 0,
+  "shipped_yaml_sample": false,
+  "ingestion": [
+   "REST/API modular input"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [],
+  "evidence": "exact names defined at default/props.conf:[nginx:plus:access] in splunk-add-on-for-nginx_332.spl; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 7
+ },
+ {
+  "vendor_id": "cisco_intersight",
+  "vendor": "Cisco Systems",
+  "ta_app_id": "Splunk_TA_Cisco_Intersight",
+  "ta_label": "Cisco Intersight Add-On for Splunk",
+  "package_version": "3.2.2",
+  "package_file": "cisco-intersight-add-on-for-splunk_322.spl",
+  "score": 8.0,
+  "exact_sourcetypes_ready": [
+   "cisco:intersight:advisories",
+   "cisco:intersight:alarms",
+   "cisco:intersight:auditrecords",
+   "cisco:intersight:contracts",
+   "cisco:intersight:licenses",
+   "cisco:intersight:networkelements",
+   "cisco:intersight:networkobjects",
+   "cisco:intersight:profiles"
+  ],
+  "exact_ready_count": 9,
+  "format_verified_count": 1,
+  "scenario_references": 0,
+  "shipped_yaml_sample": true,
+  "ingestion": [
+   "REST/API modular input"
+  ],
+  "delivery": "SUBSTITUTE_VIA_HEC",
+  "estimated_complexity": "Medium",
+  "risks": [
+   "JSON structure only; field names not yet compared to the add-on",
+   "the add-on's real input is an API/agent/script: NetSpout can only deliver the events over HEC"
+  ],
+  "evidence": "exact names defined at default/props.conf:[cisco:intersight:advisories] in cisco-intersight-add-on-for-splunk_322.spl; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 8 partial/structure-only)",
+  "rank": 8
+ },
+ {
+  "vendor_id": "broadcom_symantec",
+  "vendor": "Symantec (Broadcom), Web & Network Security",
+  "ta_app_id": "Splunk_TA_bluecoat-proxysg",
+  "ta_label": "Splunk Add-on for Blue Coat ProxySG",
+  "package_version": "3.9.0",
+  "package_file": "splunk-add-on-for-symantec-blue-coat-proxysg_390.tgz",
+  "score": 7.3,
+  "exact_sourcetypes_ready": [
+   "bluecoat:proxysg:access:file"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 1,
+  "scenario_references": 3,
+  "shipped_yaml_sample": false,
+  "ingestion": [
+   "not declared by the package (operator chooses syslog, file or HEC)"
+  ],
+  "delivery": "SUPPORTED_DELIVERY",
+  "estimated_complexity": "Low",
+  "risks": [],
+  "evidence": "exact names defined at default/props.conf:[bluecoat:proxysg:access:file] in splunk-add-on-for-symantec-blue-coat-proxysg_390.tgz; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 9
+ },
+ {
+  "vendor_id": "okta",
+  "vendor": "Okta",
+  "ta_app_id": "Splunk_TA_okta_identity_cloud",
+  "ta_label": "Splunk Add-on for Okta Identity Cloud",
+  "package_version": "5.1.0",
+  "package_file": "splunk-add-on-for-okta-identity-cloud_510.spl",
+  "score": 5.6,
+  "exact_sourcetypes_ready": [
+   "OktaIM2:log"
+  ],
+  "exact_ready_count": 1,
+  "format_verified_count": 1,
+  "scenario_references": 6,
+  "shipped_yaml_sample": false,
+  "ingestion": [
+   "REST/API modular input"
+  ],
+  "delivery": "SUBSTITUTE_VIA_HEC",
+  "estimated_complexity": "Medium",
+  "risks": [
+   "the add-on's real input is an API/agent/script: NetSpout can only deliver the events over HEC"
+  ],
+  "evidence": "exact names defined at default/props.conf:[OktaIM2:log] in splunk-add-on-for-okta-identity-cloud_510.spl; NetSpout generator output produced for each; rendered events checked against the add-on's own extractions (1 FORMAT_VERIFIED, 0 partial/structure-only)",
+  "rank": 10
+ }
+]

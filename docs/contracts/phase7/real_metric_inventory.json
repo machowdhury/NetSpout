@@ -1,0 +1,105 @@
+{
+ "index": "cisco_metrics",
+ "datatype": "metric",
+ "total_events_all_time": 15997060265,
+ "window": "primary 2026-02-01..2026-03-31; data actually present 2026-03-10 00:00 EDT .. 2026-03-26 (first/last day buckets via mstats span=1d)",
+ "metric_names_in_window": 330,
+ "families": {
+  "Cisco-IOS-XR-* native YANG (module:path.leaf)": 164,
+  "interface_status.* (flat)": 128,
+  "isis_neighbors.* (flat)": 20,
+  "interface_generic_counters.* (flat)": 11,
+  "other flat (bgp_status, fib_summary, rib_ipv4_status, rib_ipv6_status)": 7
+ },
+ "representative_names": [
+  "Cisco-IOS-XR-infra-statsd-oper:infra-statistics/interfaces/interface/latest/generic-counters.bytes_received",
+  "Cisco-IOS-XR-wdsysmon-fd-oper:system-monitoring/cpu-utilization.total_cpu_one_minute",
+  "Cisco-IOS-XR-nto-misc-oper:memory-summary/nodes/node/summary.free_physical_memory",
+  "Cisco-IOS-XR-shellutil-oper:system-time/uptime.uptime",
+  "interface_generic_counters.bytes_received",
+  "interface_status.interface_xr/interface/data_rates/input_data_rate",
+  "isis_neighbors.neighbor/neighbor_uptime",
+  "bgp_status.session_state",
+  "rib_ipv4_status.current_prefix_count",
+  "fib_summary.routes"
+ ],
+ "dimensions_union": [
+  "Interface",
+  "NextHop",
+  "address",
+  "identifier",
+  "instance_name",
+  "interface/name",
+  "interface_name",
+  "location",
+  "locator",
+  "locator_name",
+  "logical_slot",
+  "name",
+  "neighbor_address",
+  "node_name",
+  "openconfig-network-instance:/network-instances/network-instance/protocols/protocol/name",
+  "owner/owner",
+  "path",
+  "pem",
+  "protocol_name",
+  "sensor",
+  "sid",
+  "sid_behavior/description",
+  "sid_behavior/type",
+  "sid_context/key/u_n_psp_usd/u_n_base_ctx/table_id",
+  "sid_opcode",
+  "state",
+  "subscription",
+  "system_id",
+  "tableid",
+  "type_set_name",
+  "vrf_name"
+ ],
+ "dimensions_by_metric": {
+  "interface_generic_counters.bytes_received": [
+   "interface_name",
+   "path"
+  ],
+  "Cisco-IOS-XR-wdsysmon-fd-oper:...total_cpu_one_minute": [
+   "node_name",
+   "path",
+   "subscription"
+  ],
+  "bgp_status.session_state": [
+   "identifier",
+   "name",
+   "neighbor_address",
+   "openconfig-network-instance:/network-instances/network-instance/protocols/protocol/name"
+  ]
+ },
+ "sources": "device management IPs from one private /24 (10 devices) plus 6 short router hostnames (16 distinct source values; values redacted)",
+ "host": "single HEC front end (ip:8088); not a device",
+ "sourcetype": "httpevent (metrics delivered over HEC)",
+ "values": "cumulative counters, e.g. interface_generic_counters.bytes_received 37,558,365 on a 40GE port, 0 on idle ports; not rates",
+ "volume": "interface_generic_counters.bytes_received: 64,869,523 datapoints over 2026-03-10..03-26, ~3.9-4.3M/day",
+ "all_metric_indexes": {
+  "with_data": [
+   "cisco_metrics",
+   "em_metrics",
+   "itsi_summary_metrics"
+  ],
+  "empty": [
+   "cisco_xr",
+   "itsi_im_metrics",
+   "network_telemetry",
+   "sdwan_metrics",
+   "thousandeyes_metrics",
+   "vmware-perf-metrics"
+  ],
+  "inspected": [
+   "cisco_metrics"
+  ]
+ },
+ "commands": {
+  "mpreview": "DENIED: role lacks capability",
+  "mcatalog": "works with values() only",
+  "mstats": "requires a metric_name filter; listing a dimension a metric lacks silently drops its rows"
+ },
+ "full_name_list": "not transcribed; reproduce with: | mcatalog values(metric_name) as metric_name where index=cisco_metrics | mvexpand metric_name (earliest=2026-02-01 latest=2026-03-31)"
+}

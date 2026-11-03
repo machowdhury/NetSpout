@@ -1,0 +1,548 @@
+{
+ "source": "splunk MCP tstats via tstats count by index sourcetype",
+ "server_tz": "America/New_York (EST -0500 / EDT -0400)",
+ "primary_window": "2026-02-01 00:00:00 EST to 2026-03-31 00:00:00 EDT (upper bound exclusive)",
+ "limitations": [
+  "em_logs kube:* (18 names) and meraki:* (23 names in main) collapsed to one row each; only top rows shown",
+  "cisco:sdwan:<FACILITY-SEV-MNEMONIC> family: 75 distinct sourcetypes, 114,869 events in primary window (catalyst+sdwan), collapsed",
+  "main and netflow both report 40,719,386 stream:netflow events in the primary window; the duplication is unexplained",
+  "tstats not run for itsi_*, em_metrics, summary, or other ITSI-internal indexes (not relevant to NetSpout)",
+  "cisco_metrics is a metric index; tstats returns no event rows for it (expected)"
+ ],
+ "rows": [
+  {
+   "index": "netflow",
+   "sourcetype": "stream:netflow",
+   "count": 40719386,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "stream:netflow",
+   "count": 40719386,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:sytem:logs",
+   "count": 30302516,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:linkhealth",
+   "count": 3957136,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:sdwan:sytem:logs",
+   "count": 1779364,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:compliance",
+   "count": 1393530,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:audit:logs",
+   "count": 1382843,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:utd:logs",
+   "count": 854404,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:devicehealth",
+   "count": 795263,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:securityadvisory",
+   "count": 657458,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:clienthealth",
+   "count": 402630,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:networkhealth",
+   "count": 195761,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:issue",
+   "count": 178866,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:tunnelhealth",
+   "count": 96263,
+   "window": "primary"
+  },
+  {
+   "index": "netops",
+   "sourcetype": "cisco:ios",
+   "count": 72973,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:utdhealth",
+   "count": 67647,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:account",
+   "count": 32259,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:site:topology",
+   "count": 25571,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:sitehealth",
+   "count": 11152,
+   "window": "primary"
+  },
+  {
+   "index": "sdwan",
+   "sourcetype": "cisco:sdwan:ssetunnels",
+   "count": 8940,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:dnac:client",
+   "count": 8135,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "telegraf",
+   "count": 5361,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:administrator",
+   "count": 5512,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:activity",
+   "count": 5125,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:endpoint",
+   "count": 1803,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_sfw_ftd_syslog",
+   "sourcetype": "cisco:ftd:syslog",
+   "count": 867,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:authentication",
+   "count": 783,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:catalyst:threat:summary",
+   "count": 591,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:catalyst:rogue:verbose",
+   "count": 291,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:catalyst:threat:list",
+   "count": 115,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:catalyst:rogue:threat_details",
+   "count": 51,
+   "window": "primary"
+  },
+  {
+   "index": "catalyst",
+   "sourcetype": "cisco:catalyst:threat:summary:legacy",
+   "count": 40,
+   "window": "primary"
+  },
+  {
+   "index": "netops",
+   "sourcetype": "sc4snmp:traps",
+   "count": 10,
+   "window": "primary"
+  },
+  {
+   "index": "osnix",
+   "sourcetype": "nix:syslog",
+   "count": 51793588,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_secure_fw",
+   "sourcetype": "cisco:sfw:estreamer",
+   "count": 18875997,
+   "window": "primary"
+  },
+  {
+   "index": "em_logs",
+   "sourcetype": "kube:* (18 names)",
+   "count": null,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dc:nexus9k",
+   "count": 5476405,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:ise:syslog",
+   "count": 5309302,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:compliance",
+   "count": 652670,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:ios",
+   "count": 406955,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:organizationsecurity",
+   "count": 384287,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:devicehealth",
+   "count": 380370,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:securityadvisory",
+   "count": 201328,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:clienthealth",
+   "count": 146880,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dc:aci:class",
+   "count": 144712,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:issue",
+   "count": 91869,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dc:aci:health",
+   "count": 86789,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dnac:networkhealth",
+   "count": 77716,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:securityappliances",
+   "count": 65702,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dc:aci:stats",
+   "count": 35315,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:accesspoints",
+   "count": 26803,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:airmarshal",
+   "count": 10782,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:firmwareupgrades",
+   "count": 5051,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "cisco:dc:aci:authentication",
+   "count": 2567,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "sc4s:events",
+   "count": 2366,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "syslog",
+   "count": 2361,
+   "window": "primary"
+  },
+  {
+   "index": "main",
+   "sourcetype": "meraki:* (23 names)",
+   "count": null,
+   "window": "primary"
+  },
+  {
+   "index": "anomaly_detection",
+   "sourcetype": "stash",
+   "count": 23626,
+   "window": "primary"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:user",
+   "count": 315345,
+   "window": "all-time 2025-01-14..2026-11-03"
+  },
+  {
+   "index": "cisco_duo",
+   "sourcetype": "cisco:duo:authentication_v2",
+   "count": 3909,
+   "window": "all-time 2025-01-07..2026-11-03"
+  },
+  {
+   "index": "netops",
+   "sourcetype": "cisco:viptela",
+   "count": 4,
+   "window": "all-time 2025-12-18"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:test",
+   "count": 7554615,
+   "window": "all-time 2025-05-21..2025-07-10"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:path-vis",
+   "count": 392626,
+   "window": "all-time 2025-05-21..2025-08-13"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:metric",
+   "count": 12189,
+   "window": "all-time 2025-08-13..2025-08-22"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:event",
+   "count": 97,
+   "window": "all-time 2025-05-23..2025-07-17"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:activity",
+   "count": 45,
+   "window": "all-time"
+  },
+  {
+   "index": "thousandeyes_logs",
+   "sourcetype": "cisco:thousandeyes:account-group",
+   "count": 37,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:vm",
+   "count": 1140163,
+   "window": "all-time 2025-05-02..2025-08-22"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:hierarchy",
+   "count": 229425,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:datastore",
+   "count": 87913,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:resourcepool",
+   "count": 71513,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:clustercomputeresource",
+   "count": 36613,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-inv",
+   "sourcetype": "vmware:inv:hostsystem",
+   "count": 22271,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:sys",
+   "count": 8414374,
+   "window": "all-time 2025-05-02..2025-08-22"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:cpu",
+   "count": 8372719,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:datastore",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:disk",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:hbr",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:mem",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:net",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:power",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:rescpu",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:storageAdapter",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:storagePath",
+   "count": 8325805,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-perf",
+   "sourcetype": "vmware:perf:clusterServices",
+   "count": 32730,
+   "window": "all-time"
+  },
+  {
+   "index": "vmware-taskevent",
+   "sourcetype": "vmware:events",
+   "count": 3114666,
+   "window": "all-time 2025-05-02..2025-08-22"
+  },
+  {
+   "index": "vmware-taskevent",
+   "sourcetype": "vmware:tasks",
+   "count": 19329,
+   "window": "all-time"
+  },
+  {
+   "index": "webex_devices",
+   "sourcetype": "httpevent",
+   "count": 792842,
+   "window": "all-time 2025-06-17..2025-08-22"
+  },
+  {
+   "index": "catalyst+sdwan",
+   "sourcetype": "cisco:sdwan:<FACILITY-SEV-MNEMONIC> (75 names)",
+   "count": 114869,
+   "window": "primary"
+  }
+ ]
+}

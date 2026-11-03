@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { DOMAINS, type AppRoute, type DomainId, type ExperienceMode } from '../../app/navigation';
 import { fetchJson } from '../../lib/api';
+import { listRuns, type RunSnapshot } from '../../lib/runsApi';
 import {
   Panel,
   ProvenanceBadge,
@@ -43,6 +44,7 @@ interface RuntimeSnapshot {
   state: 'loading' | 'ready' | 'degraded' | 'error';
   backend?: ServiceHealth;
   pipelines?: PipelineHealth;
+  latestRun?: RunSnapshot;
   error?: string;
 }
 
@@ -59,6 +61,20 @@ const WORKFLOW = [
   { label: 'Correlate', detail: 'Relate state, behavior, and telemetry.' },
   { label: 'Investigate', detail: 'Confirm observations in Splunk.' },
 ];
+
+function observationStatus(run: RunSnapshot): string {
+  const v = run.verification;
+  if (!v || v.status === 'NOT_RUN') return 'NOT VERIFIED';
+  if (v.status === 'VERIFIED' && v.indexed != null && v.indexed >= (v.accepted ?? 0)) return 'VERIFIED';
+  return v.indexed != null ? 'PARTIAL' : 'DEGRADED';
+}
+
+function observationDetail(run: RunSnapshot): string {
+  const v = run.verification;
+  const name = run.title || run.target || run.run_id;
+  if (!v || v.status === 'NOT_RUN') return `${name}: ${run.counters.accepted} accepted, not yet verified in Splunk.`;
+  return `${name}: ${v.indexed ?? 'n/a'} of ${v.accepted ?? run.counters.accepted} accepted events indexed in ${run.destination?.index ?? 'its index'}.`;
+}
 
 export function HomeView({
   domain,
@@ -78,7 +94,8 @@ export function HomeView({
     Promise.allSettled([
       fetchJson<ServiceHealth>('/health'),
       fetchJson<PipelineHealth>('/api/health/pipelines'),
-    ]).then(([backendResult, pipelineResult]) => {
+      listRuns(),
+    ]).then(([backendResult, pipelineResult, runsResult]) => {
       if (!active) return;
 
       const backend =
@@ -98,6 +115,7 @@ export function HomeView({
         state: backend && pipelines ? 'ready' : 'degraded',
         backend,
         pipelines,
+        latestRun: runsResult.status === 'fulfilled' ? [...runsResult.value].filter((r) => r.counters.accepted > 0).sort((a, b) => (b.started_at ?? '').localeCompare(a.started_at ?? ''))[0] : undefined,
       });
     });
 
@@ -262,11 +280,26 @@ export function HomeView({
               </div>
               <div>
                 <span>Splunk observation</span>
-                <StatusBadge status="NOT AVAILABLE" />
+                {runtime.latestRun ? (
+                  <>
+                    <StatusBadge status={observationStatus(runtime.latestRun)} />
+                    <span className="table-subtext" data-testid="splunk-observation-detail">
+                      {observationDetail(runtime.latestRun)}
+                    </span>
+                  </>
+                ) : (
+                  <StatusBadge status="NOT AVAILABLE" />
+                )}
               </div>
               <div>
-                <span>Detection evaluation</span>
-                <StatusBadge status="NOT CONFIGURED" />
+                <span>Latest run</span>
+                {runtime.latestRun ? (
+                  <button type="button" className="button button--quiet" onClick={() => onNavigate('/investigate')}>
+                    {runtime.latestRun.title || runtime.latestRun.target} · Investigate
+                  </button>
+                ) : (
+                  <span className="table-subtext">No run yet. Choose a scenario to start one.</span>
+                )}
               </div>
             </div>
           )}

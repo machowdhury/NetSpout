@@ -16,7 +16,7 @@ async function runSource(
   screenshot: string,
   observationScreenshot?: string,
 ) {
-  await page.goto('/#/observe/live-runs');
+  await page.goto('/#/generate/unified');
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Choose what to generate' })).toBeVisible();
   await page.locator('.generation-mode-card').filter({ hasText: 'Data Source' }).click();
@@ -77,7 +77,7 @@ test.describe('Phase 5 live Docker evidence', () => {
     await page.getByRole('button', { name: 'Splunk Lens' }).click();
     await shot(page, '05-splunk-lens');
 
-    await page.goto('/#/observe/live-runs');
+    await page.goto('/#/generate/unified');
     await page.locator('.scenario-card').filter({
       hasText: 'Test Enterprise Interface Degradation',
     }).click();

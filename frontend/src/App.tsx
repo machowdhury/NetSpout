@@ -20,6 +20,7 @@ import { GuidedScenarioLab } from './components/generation/GuidedScenarioLab';
 import { ScenarioStudio } from './components/studio/ScenarioStudio';
 import { IndustryStudio } from './components/industry/IndustryStudio';
 import { HomeView } from './components/home/HomeView';
+import { RunsView } from './components/runs/RunsView';
 import { UseCaseExplorer } from './components/explorer/UseCaseExplorer';
 import { ProvenanceView } from './components/catalog/ProvenanceView';
 import { SplunkIntegrationsView } from './components/catalog/SplunkIntegrationsView';
@@ -77,6 +78,8 @@ const ROUTE_TO_MODE: Partial<Record<AppRoute, AppViewMode>> = {
   '/build/industry-studio': 'workflow',
   '/build/scenario-builder': 'advanced',
   '/observe/live-runs': 'workflow',
+  '/investigate': 'workflow',
+  '/generate/unified': 'workflow',
   '/observe/dashboards': 'operations',
   '/observe/pipeline-health': 'operations',
 };
@@ -87,35 +90,6 @@ const MODE_TO_ROUTE: Record<AppViewMode, AppRoute> = {
   advanced: '/build/scenario-builder',
   operations: '/observe/pipeline-health',
   catalog: '/catalog/provenance',
-};
-
-const ROUTE_STATES: Partial<
-  Record<AppRoute, { maturity: ProductMaturity; description: string; phase?: string }>
-> = {
-  '/observe/telemetry': {
-    maturity: 'PLANNED',
-    description:
-      'A unified telemetry inspector requires catalog-backed payload and evidence APIs before it can present runtime data.',
-    phase: 'PHASE 2+',
-  },
-  '/investigate/timeline': {
-    maturity: 'PLANNED',
-    description:
-      'The incident timeline will render measured run evidence after the shared run contract is integrated.',
-    phase: 'PHASE 4',
-  },
-  '/investigate/incident': {
-    maturity: 'PLANNED',
-    description:
-      'Investigation workflows require correlated run identity and verified Splunk observation.',
-    phase: 'PHASE 4',
-  },
-  '/investigate/security-intelligence': {
-    maturity: 'RESEARCH REQUIRED',
-    description:
-      'Splunk Security Content, Sigma, ATT&CK, and YARA mappings must be researched before claims are shown.',
-    phase: 'PHASE 5',
-  },
 };
 
 export const App: React.FC = () => {
@@ -726,8 +700,16 @@ export const App: React.FC = () => {
       return <GuidedScenarioLab experienceMode={experienceMode} />;
     }
 
-    if (route === '/observe/live-runs') {
+    if (route === '/generate/unified') {
       return <GenerationLab experienceMode={experienceMode} initialMode="SCENARIO" />;
+    }
+
+    if (route === '/observe/live-runs') {
+      return <RunsView mode="observe" onNavigate={navigate} />;
+    }
+
+    if (route === '/investigate') {
+      return <RunsView mode="investigate" onNavigate={navigate} />;
     }
 
     if (route === '/observe/pipeline-health') {
@@ -825,16 +807,11 @@ export const App: React.FC = () => {
       );
     }
 
-    const routeState = ROUTE_STATES[route] ?? {
-      maturity: 'PLANNED' as ProductMaturity,
-      description: 'This unified workspace does not yet have a supported runtime contract.',
-    };
     return (
       <ProductStateView
         title={ROUTE_TITLES[route]}
-        maturity={routeState.maturity}
-        description={routeState.description}
-        nextPhase={routeState.phase}
+        maturity={'PLANNED' as ProductMaturity}
+        description="This unified workspace does not yet have a supported runtime contract."
         onNavigate={navigate}
       />
     );

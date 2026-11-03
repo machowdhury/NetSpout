@@ -1,0 +1,94 @@
+{
+ "overview_runtime": "Runtime evidence States below come from the current backend response; missing stages remain explicit. Refresh Backend READY Splunk observation NOT AVAILABLE Detection evaluation NOT CONFIGURED No evidence The backend returned no pipeline records. Telemetry trust Operational claims remain bounded by their source evidence. Native contract What the technology actually produces. STANDARD VERIFIED Splunk contract How Splu",
+ "Live Runs": {
+  "url": "/observe/live-runs",
+  "text": "UNIFIED GENERATION EXPERIENCE Choose, generate, and prove telemetry One catalog-driven workflow from contract selection through Splunk investigation. 25 runnable scenario 13 runnable source FAIL CLOSED 1 CHOOSE 2 PREVIEW 3 CONFIGURE 4 RUN 5 OBSERVE 6 INVESTIGATE STEP 1 Choose what to generate Only validated catalog capabilities can run. Other entries remain inspectable. Scenario Generate one correlated modeled incide",
+  "links": [],
+  "buttons": [
+   "1 CHOOSE",
+   "2 PREVIEW",
+   "3 CONFIGURE",
+   "4 RUN",
+   "5 OBSERVE",
+   "6 INVESTIGATE",
+   "Scenario Generate one correlated modeled",
+   "Data Source Generate one catalog source ",
+   "Sourcetype / Event Family Generate a sup",
+   "Single Event Generate and send exactly o",
+   "Modeled Link-State Lifecycle  A standard",
+   "Cisco IOS XR Interface Degradation \u2014 Gol",
+   "Campus Access Link Degradation \u2014 IOS XE ",
+   "Nexus Fabric Uplink Degradation \u2014 NX-OS "
+  ]
+ },
+ "Dashboard Studio": {
+  "url": "/observe/dashboards",
+  "text": "SCENARIO-AWARE OPERATIONS Dashboard Gallery Select an eligible scenario to generate topology, investigations, and evidence from its verified contracts. 0 dashboard ready 27 eligible scenarios VALIDATED SCENARIO REFERENCES Five Cisco Golden scenarios Scenario and dashboard maturity remain independent. C100-ENT-001 Campus Access Link Degradation NOT STARTED C100-DC-001 Nexus Fabric Uplink Degradation NOT STARTED C100-S",
+  "links": [],
+  "buttons": [
+   "C100-ENT-001 Campus Access Link Degradat",
+   "C100-DC-001 Nexus Fabric Uplink Degradat",
+   "C100-SEC-001 Secure Firewall Suspicious ",
+   "C100-CRI-002 Telecom Operations Network ",
+   "C100-SP-001 IOS XR Interface Degradation",
+   "Validated",
+   "Recently used",
+   "",
+   "",
+   "View missing evidence",
+   "View missing evidence",
+   "Open dashboard",
+   "Open dashboard",
+   "Open dashboard"
+  ]
+ },
+ "Incident Timeline": {
+  "url": "/investigate/timeline",
+  "text": "PLANNED PHASE 4 Incident Timeline The incident timeline will render measured run evidence after the shared run contract is integrated. PLANNED This experience is planned and has no supported runtime path. Return to overview",
+  "links": [],
+  "buttons": [
+   "Return to overview"
+  ]
+ },
+ "Incident Investigation": {
+  "url": "/investigate/incident",
+  "text": "PLANNED PHASE 4 Incident Investigation Investigation workflows require correlated run identity and verified Splunk observation. PLANNED This experience is planned and has no supported runtime path. Return to overview",
+  "links": [],
+  "buttons": [
+   "Return to overview"
+  ]
+ },
+ "Security Intelligence": {
+  "url": "/investigate/security-intelligence",
+  "text": "RESEARCH REQUIRED PHASE 5 Security Intelligence Splunk Security Content, Sigma, ATT&CK, and YARA mappings must be researched before claims are shown. RESEARCH REQUIRED Authoritative source research is required before this capability can be enabled. Return to overview",
+  "links": [],
+  "buttons": [
+   "Return to overview"
+  ]
+ },
+ "Telemetry Explorer": {
+  "url": "/observe/telemetry",
+  "text": "PLANNED PHASE 2+ Telemetry Explorer A unified telemetry inspector requires catalog-backed payload and evidence APIs before it can present runtime data. PLANNED This experience is planned and has no supported runtime path. Return to overview",
+  "links": [],
+  "buttons": [
+   "Return to overview"
+  ]
+ },
+ "Pipeline Health": {
+  "url": "/observe/pipeline-health",
+  "text": "Pipeline Health Runtime states are shown exactly as reported. Process availability is not treated as receipt or Splunk observation. Refresh COMPONENT RUNTIME PROTOCOL CHANNEL DIAGNOSTIC syslog receiver SYSLOG READY SYSLOG Receiver started and bound an ephemeral UDP socket. snmp receiver SNMP READY SNMP Receiver started and bound an ephemeral UDP socket. gnmi subscriber GNMI READY GNMI Server and bundled subscriber co",
+  "links": [],
+  "buttons": [
+   "Refresh"
+  ]
+ },
+ "Guided Workflow": {
+  "url": "/guided-workflow",
+  "text": "Guided Workflow WebSocket status: Disconnected \u2717 Use real-time progress tracking (WebSocket) Shows live progress during execution with WebSocket updates Scenario Select executable scenario Destination Select destination Preview TelemetryExecute with Progress Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+  "links": [],
+  "buttons": [
+   "Preview Telemetry",
+   "Execute with Progress"
+  ]
+ }
+}

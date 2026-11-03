@@ -1,11 +1,10 @@
 <nav search_view="search">
-  <view name="pulseforge_command_center" default="true" label="PulseForge Command Center"/>
-  <view name="use_case_explorer" label="Use Case Explorer"/>
-  <view name="guided_onboarding" label="PulseForge Onboarding"/>
-  <view name="pulseforge_discovery" label="Use Cases &amp; Dashboards"/>
-  <view name="scenario_builder" label="Scenario Builder"/>
-  <view name="netspout_canvas" label="Canvas Orchestrator"/>
-  <view name="security_content_lab" label="Security Content Lab"/>
+  <view name="pulseforge_command_center" default="true" label="Overview"/>
+  <view name="use_case_explorer" label="Scenarios"/>
+  <view name="pulseforge_live_runs" label="Live Runs"/>
+  <view name="pulseforge_investigate" label="Investigate"/>
+  <collection label="Dashboards">
+  <view name="pulseforge_dashboards" label="Dashboard Gallery"/>
   <collection label="PulseForge Dashboards">
     <view name="pulseforge_dns_anomaly_studio" label="Operational: DNS Anomaly (Dashboard Studio)"/>
     <view name="pulseforge_security" label="Security Simulation"/>
@@ -390,7 +389,6 @@
       <view name="pf_rp_windows_endpoint_process_chain" label="Windows endpoint process and network activity (replayed Sysmon)"/>
     </collection>
   </collection>
-  <view name="spl_playground" label="SPL Playground"/>
   <collection label="NetFlow / IPFIX">
     <view name="pf_NF-NOC-01-ELEPHANT" label="Bandwidth saturation and elephant flows"/>
     <view name="pf_NF-NOC-02-DSCP" label="QoS and DSCP marking validation"/>
@@ -403,10 +401,19 @@
     <view name="pf_NF-SEC-09-BEACON" label="Command-and-control beaconing indicators"/>
     <view name="pf_NF-SEC-10-DNS-FLOW" label="DNS-tunneling indicators (flow-only, limited evidence)"/>
   </collection>
+  </collection>
+  <collection label="More">
+  <view name="guided_onboarding" label="PulseForge Onboarding"/>
+  <view name="pulseforge_discovery" label="Use Cases &amp; Dashboards"/>
+  <view name="scenario_builder" label="Scenario Builder"/>
+  <view name="netspout_canvas" label="Canvas Orchestrator"/>
+  <view name="security_content_lab" label="Security Content Lab"/>
+  <view name="spl_playground" label="SPL Playground"/>
   <collection label="Operations">
     <view name="datablaster_console" label="PulseForge Run Console"/>
     <view name="configuration" label="PulseForge Setup &amp; Preflight"/>
     <view name="help" label="PulseForge Help &amp; Guide"/>
   </collection>
   <view name="search" label="Search"/>
+  </collection>
 </nav>

@@ -246,9 +246,15 @@ test('supports navigation, domains, and experience modes', async ({ page }) => {
   await expect(page).toHaveURL(/#\/generate\/quick$/);
   await expect(page.getByRole('heading', { name: 'Quick Generate', exact: true })).toBeVisible();
 
-  await page.getByRole('button', { name: /Telemetry Explorer/ }).click();
-  await expect(page).toHaveURL(/#\/observe\/telemetry$/);
-  await expect(page.getByText('PLANNED').first()).toBeVisible();
+  // The sidebar offers the five destinations and no placeholder pages; a bookmarked placeholder route lands on the page that replaced it.
+  for (const retired of ['Telemetry Explorer', 'Incident Timeline', 'Incident Investigation', 'Security Intelligence']) {
+    await expect(page.getByRole('button', { name: retired })).toHaveCount(0);
+  }
+  for (const destination of ['Overview', 'Live Runs', 'Investigate a Run', 'Dashboard Studio']) {
+    await expect(page.locator('.app-nav').getByRole('button', { name: destination, exact: true })).toBeVisible();
+  }
+  await page.goto('/#/investigate/incident');
+  await expect(page.getByTestId('runs-investigate').or(page.getByText('Investigate a run').first())).toBeVisible();
 });
 
 test('renders responsive navigation without replacing Phase 1 evidence', async ({ page }) => {

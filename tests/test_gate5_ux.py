@@ -53,7 +53,12 @@ class TestGate5UX(unittest.TestCase):
         self.assertIn("'/build/scenario-builder'", app)
         self.assertIn("Quick Generate", navigation)
         self.assertIn("Pipeline Health", navigation)
-        self.assertIn("Security Intelligence", navigation)
+        # the five destinations are offered, and no page without a runtime path is (retired placeholders only redirect)
+        for destination in ("Investigate a Run", "Live Runs", "Dashboard Studio"):
+            self.assertIn(destination, navigation)
+        nav_body = navigation[navigation.index("export const NAVIGATION"):navigation.index("export const LEGACY_REDIRECTS")]
+        self.assertNotIn("Security Intelligence", nav_body)
+        self.assertNotIn("PLANNED", nav_body)
 
     def test_03_use_cases_from_canonical_metadata(self):
         """3. Verify use cases load from canonical metadata with expected categories."""

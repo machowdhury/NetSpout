@@ -1,0 +1,104 @@
+{
+ "run_id": "run-26badae191ba",
+ "splunk_by_index_sourcetype": [
+  {
+   "index": "dev_test_replay",
+   "sourcetype": "netflow:collector",
+   "count": "820"
+  }
+ ],
+ "search_href": "/en-US/app/search/search?q=search%20index%3D%22dev_test_replay%22%20sourcetype%3D%22netflow%3Acollector%22%20netspout_run_id%3D%22run-26badae191ba%22%20%7C%20sort%200%20_time&earliest=1793669907&latest=now",
+ "dashboard_href": "/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-26badae191ba&form.index_tok=dev_test_replay&form.global_time.earliest=1793669907&form.global_time.latest=1793670579",
+ "checks": [
+  {
+   "check": "Splunk bar shows the five primary destinations plus More",
+   "ok": true,
+   "detail": "['Dashboards', 'Investigate', 'Live Runs', 'More', 'Overview', 'Scenarios']"
+  },
+  {
+   "check": "the destinations sit in a single row",
+   "ok": true,
+   "detail": "[4]"
+  },
+  {
+   "check": "monitor shows 820 generated, accepted and indexed (verified)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "monitor shows no stale 'Engine unreachable' banner for the finished run",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "an independent Splunk search finds 820 events for the run (index, sourcetype recorded)",
+   "ok": true,
+   "detail": "[{'index': 'dev_test_replay', 'sourcetype': 'netflow:collector', 'count': '820'}]"
+  },
+  {
+   "check": "Overview 'Splunk observation' reflects the run (VERIFIED, 820 of 820)",
+   "ok": true,
+   "detail": "Splunk observation VERIFIED NetFlow: volumetric DDoS indicators (SYN flood and UDP): 820 of 820 accepted events indexed in dev_test_replay. Latest run NetFlow: volumetric DDoS indicators (SYN flood and UDP) \u00b7 Investigate No evidence The backend returned no pipeline records. Telemetry trust Operation"
+  },
+  {
+   "check": "Live Runs lists the run with 820 / 820 / 820",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Investigate validation states the verified evidence",
+   "ok": true,
+   "detail": "Validation VERIFIED Verified by an independent Splunk search: 820 of 820 accepted events are indexed. Verify in Splunk Open in Splunk These links open Splunk Web in this window with the search alre"
+  },
+  {
+   "check": "the search link carries the run's index, run id and time range",
+   "ok": true,
+   "detail": "/en-US/app/search/search?q=search index=\"dev_test_replay\" sourcetype=\"netflow:collector\" netspout_run_id=\"run-26badae191ba\" | sort 0 _time&earliest=1793669907&latest=now"
+  },
+  {
+   "check": "Splunk Search opens and shows the run's 820 events",
+   "ok": true,
+   "detail": "820 events"
+  },
+  {
+   "check": "dashboard link carries run_tok and index_tok of the same run",
+   "ok": true,
+   "detail": "/en-US/app/netspout/pf_NF-SEC-06-DDOS?form.run_tok=run-26badae191ba&form.index_tok=dev_test_replay&form.global_time.earliest=1793669907&form.global_time.latest=1793670579"
+  },
+  {
+   "check": "dashboard is bound to the run and shows its 820 flows",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Observe step proves SPLUNK OBSERVED without a manual refresh",
+   "ok": true,
+   "detail": "SPLUNK OBSERVED 6 PROVEN Authenticated Splunk search proved indexed observation."
+  },
+  {
+   "check": "the guided investigation query uses the run's actual index",
+   "ok": true,
+   "detail": "search index=\"dev_test_replay\" sourcetype=\"netspout:rfc5424\" netspout_run_id=\"694c93a5-aa77-4ed2-aad2-0540637a26b7\" | sort 0 _time"
+  },
+  {
+   "check": "Run in Splunk returns results (no false success)",
+   "ok": true,
+   "detail": "694c93a5-aa77-4ed2-aad2-0540637a26b7\" | sort 0 _time Run in SplunkOpen in Splunk Search SUCCEEDED \u00b7 6 results Splunk returned the investigation result. Evidence"
+  },
+  {
+   "check": "an 'Open in Splunk Search' link is offered",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "Guided Workflow loads without the 'Unexpected token <' error",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "sidebar offers no PLANNED / RESEARCH REQUIRED placeholder pages",
+   "ok": true,
+   "detail": "OVERVIEW Overview SCENARIOS Use Case Explorer BETA Quick Generate Guided Scenarios Run in 6 Steps Scenario Studio Industry Studio LIVE RUNS Live Runs Pipeline Health INVESTIGATE Investigate a Run Dete"
+  }
+ ]
+}

@@ -974,7 +974,10 @@ class UnifiedGenerationService:
                 resolved.get("scenario"), evidence, channel_results
             ),
             integration_readiness=resolved["integration_readiness"],
-            investigations=resolved["investigations"],
+            investigations=[
+                self._bind_investigation(item, transport_config.hec_index)
+                for item in resolved["investigations"]
+            ],
             limitations=(
                 [
                     "Native channel success is limited to its independently proven evidence stages.",
@@ -1313,17 +1316,49 @@ class UnifiedGenerationService:
         )
         if not recipe:
             raise ValueError("investigation recipe is not attached to this run")
-        query = recipe["spl"].replace("$run_id$", run_id)
+        query = self._bind_investigation(recipe, transport_config.hec_index)["spl"].replace("$run_id$", run_id)
         count, detail = self._execute_splunk_search(query, transport_config)
+        status = "FAILED" if detail is not None else ("SUCCEEDED" if count else "NO_RESULTS")
         return {
             "run_id": run_id,
             "recipe_id": recipe_id,
             "portability": recipe["portability"],
             "query": query,
-            "status": "SUCCEEDED" if detail is None else "FAILED",
+            "index": transport_config.hec_index,
+            "search_path": self._search_path(query, run.started_at),
+            "status": status,
             "result_count": count,
-            "detail": detail or "Splunk returned the investigation result.",
+            "detail": detail
+            or (
+                "Splunk returned the investigation result."
+                if count
+                else "The search ran but returned 0 results. Check that index {} holds this run and that the time range covers it.".format(
+                    transport_config.hec_index
+                )
+            ),
         }
+
+    @staticmethod
+    def _bind_investigation(recipe: Dict[str, Any], index: str) -> Dict[str, Any]:
+        """Recipes name the lab default index; a run is investigated in the index it was delivered to."""
+        bound = dict(recipe)
+        bound["spl"] = re.sub(
+            r'\bindex=(?:"[^"]*"|[A-Za-z0-9_\-]+)', 'index="{}"'.format(index), recipe["spl"]
+        )
+        return bound
+
+    @staticmethod
+    def _search_path(query: str, started_at: Optional[str]) -> str:
+        """Locale-free Splunk Web path that opens this exact search with a time range covering the run."""
+        from urllib.parse import quote
+
+        try:
+            start = datetime.fromisoformat((started_at or "").replace("Z", "+00:00")).timestamp()
+            earliest = str(int(start) - 300)
+        except ValueError:
+            earliest = "-24h@h"
+        q = query if query.lstrip().startswith(("search", "|")) else "search " + query
+        return "/app/search/search?q={}&earliest={}&latest=now".format(quote(q, safe=""), earliest)
 
     def _resolve(self, request: UnifiedGenerationRequest) -> Dict[str, Any]:
         capabilities = self.capabilities(include_runtime_health=False)

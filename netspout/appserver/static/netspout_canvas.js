@@ -27,9 +27,9 @@ require([
     var localeMatch = window.location.pathname.match(/^\/([a-zA-Z]{2}-[a-zA-Z]{2})\//);
     var locale = localeMatch ? localeMatch[1] : 'en-US';
     // API calls go through the app's authenticated REST gateway on this origin (no backend port in the browser).
-    // The view name selects the React route: Command Center = home, Use Case Explorer = #/explore.
+    // The view name selects the React route: Overview = home, Scenarios = #/explore, Live Runs, Investigate and Dashboard Gallery open their own routes.
     var view = (window.location.pathname.match(/\/app\/netspout\/([^/?#]+)/) || [])[1] || '';
-    var route = { pulseforge_command_center: '#/', use_case_explorer: '#/explore' }[view] || '';
+    var route = { pulseforge_command_center: '#/', use_case_explorer: '#/explore', pulseforge_live_runs: '#/observe/live-runs', pulseforge_investigate: '#/investigate', pulseforge_dashboards: '#/observe/dashboards' }[view] || '';
     var canvasUrl = '/' + locale + '/static/app/netspout/dist/index.html' + route;
 
     var iframe = $('<iframe>', {
